@@ -18,7 +18,7 @@ The XML Security dataformat supports the following options which are listed belo
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **xmlCipherAlgorithm** (common) | `AES-256-GCM` | `Enum` | 
+| **xmlCipherAlgorithm** (common) | `AES_256_GCM` | `Enum` | 
 The cipher algorithm to be used for encryption/decryption of the XML message content.
 
 Enum values:

@@ -330,7 +330,7 @@ Which to choose:
 | Latency | a network round-trip per exchange | in-process |
 | Unreachable decision point | a real failure mode | cannot happen |
 
-`serverUrl`, `bearerToken` and `failOpen` have no meaning in `wasm` mode — there is no server to address, authenticate to, or fail to reach — and no health check is registered, because there is nothing to probe. An absent health check is not a healthy one.
+`serverUrl` and `bearerToken` have no meaning in `wasm` mode — there is no server to address or authenticate to, and the endpoint warns at startup if either was set — and no health check is registered, because there is nothing to probe. An absent health check is not a healthy one. `failOpen` still applies: a `wasm` evaluation can fail (a busy pool, a bad bundle), and `failOpen` governs whether that failure denies the exchange or lets it through, exactly as in `rest` mode.
 
 The decision contract is identical in both modes: the same headers, the same `allowKey` handling, and an undefined decision fails closed the same way. A route does not need to know which engine evaluated it.
 
@@ -384,7 +384,7 @@ Camel disables producer health checks by default; turn them on with `camel.healt
 
 `OpaSecurityPolicy` registers an equivalent check, under an id starting `security-policy:opa-`. It is arguably the more important of the two: a denied producer merely records a verdict the route can inspect, while the policy throws `CamelAuthorizationException` and stops the exchange, so an unreachable server there fails every message outright. That is why the policy’s check is on by default rather than opt-in like the producer’s. Set `healthCheckEnabled=false` on the policy for a route that should stay ready regardless — one running `failOpen`, say — in preference to hiding the check with `camel.health.exclude-pattern`.
 
-Neither check is registered when an `opaClient` was injected: that client may point anywhere and neither the endpoint nor the policy has a way to ask it where, so probing the configured `serverUrl` would report on a server they may never talk to. The endpoint check is also skipped when no `serverUrl` was given.
+Neither check is registered when an `opaClient` was injected: that client may point anywhere and neither the endpoint nor the policy has a way to ask it where, so probing the configured `serverUrl` would report on a server they may never talk to. The endpoint check is also skipped when no `serverUrl` was given, and in `wasm` mode, where the policy is evaluated in-process and there is no server to probe.
 
 ## Security notes
 

@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.22 to 4.23
 
+### camel-oauth
+
+OAuth client credentials token caching now distinguishes profiles by client secret and requested scope, in addition to token endpoint and client ID. Profiles with different credentials or scopes request separate tokens instead of reusing the same cached token. Applications using such profiles may make additional token requests after upgrading.
+
 ### Circuit Breaker EIP
 
 The exchange property `CamelCircuitBreakerResponseRejected` is now also set inside the `onFallback`, in both `camel-resilience4j` and `camel-microprofile-fault-tolerance`: `true` when the call was not attempted because the breaker was open or the bulkhead was full, `false` when the call was made and failed or timed out. Prior to Camel 4.23 the property was only set when there was no fallback and was absent inside the fallback, so a fallback that tested it for `null` must now test for `true` or `false` instead. `CamelCircuitBreakerResponseShortCircuited` is unchanged and remains `true` whenever the fallback runs, whatever the cause.
@@ -79,6 +83,8 @@ A `GroovyShellFactory` is now looked up in the registry once per `CamelContext`,
 The `exchangeProperties`, `exchangeProperty`, `variables`, `variable` and `attachments` script variables are now read from the exchange the first time the script uses them instead of being copied before the script runs. A script that changes a property or variable through `exchange` and then reads one of these variables for the first time now sees its own change where it previously saw the state from before the script ran.
 
 Groovy scripts now have a `message` variable for the current message (`exchange.getMessage()`), the name the other script languages and the Camel 4 API use; `request` and `in` stay as its older names. A `GroovyShellFactory` that provided its own global variable named `message` is now hidden by the exchange variable, like the other exchange variable names.
+
+The Groovy script compiler now runs the registered ``org.apache.camel.spi.CompilePostProcessor`s on a compiled class that has class-level annotations, with a new instance of the class, as the Java DSL loader does for `.java`` sources. In the Camel CLI this binds a `@BindToRegistry` class and registers a `@Converter` class (and handles the Spring and Quarkus annotations) from a `.groovy` file, and binds it again on a reload in dev mode. A Groovy class without annotations, and a Groovy script, is not instantiated, as before.
 
 ### camel-djl (Breaking change)
 
@@ -442,6 +448,10 @@ The Camel Maven archetypes now generate a `README.md` instead of the previous `R
 
 The `camel-archetype-api-component` archetype also generates its readme again: the file was declared in the wrong file set and was therefore silently skipped.
 
+### camel-debezium-oracle (breaking change)
+
+The parameters `logMiningBufferEhcacheRollbacksConfig`, `logMiningBufferInfinispanCacheRollbacks` have been removed due to the upgrade of Debezium to 3.6.3.Final.
+
 ### camel-docling
 
 A `String` message body is no longer interpreted as a location by default. Previously the producer inspected the body and, when it started with `http://` or `https://`, handed it to Docling as a remote URL to fetch; when it started with `/` or contained `\`, it read it from the local filesystem; otherwise it converted it as document content.
@@ -551,6 +561,8 @@ The YAML that `camel init` writes (`camel init foo.yaml`, and the Integration an
 
 `camel run` now looks up a `classpath:` or `file:` resource that is not found in the directories of the route files (the working directory first), the way it already did under `--source-dir`. A script next to the route is found as `resource:classpath:mapping.groovy`, the reference that also works in the project `camel export` writes, where before only `resource:file:mapping.groovy` worked in the CLI. A resource that exists nowhere fails as before, named as written.
 
+`camel run` adds `camel-groovy` as a dependency when a `.groovy` file is given, so the file is compiled without `--dep=camel-groovy`; before, the file was silently ignored unless the dependency was added. The dependency is also written to the run settings, so `camel export` includes it.
+
 ### camel-jbang (MCP servers)
 
 The Camel authoring tools for AI agents are now defined once, in `camel-jbang-core`, and exposed under the same `camel_` names by both MCP servers, `camel mcp` and `camel tui --mcp`: `camel_catalog_doc`, `camel_catalog_find`, `camel_validate_source`, `camel_get_files`, `camel_write_file`, `camel_run`, `camel_control`, `camel_get_log`, `camel_get_errors`, `camel_eval_expression` and `camel_error_diagnose`.
@@ -589,6 +601,40 @@ The F8 AI panel now sends only a core subset of its `tui_*` tools to local provi
 ### camel-yaml-dsl - the canonical schema requires route:
 
 A top-level `- from:` without `- route:` is the compact notation of a route, and the canonical schema (`camelYamlDsl-canonical.json`) no longer lists `from` among its top-level entries: a route is written under `route:`, as an XML route is always a `<route>`, and as Kaoto and Karavan write it. `camel validate yaml --canonical` now reports a top-level `from:` with the form to write, the way it reports the other compact shapes, and `camel validate normalize` rewrites it. The Integration template of `camel init` writes its flows in the `- route:` form as well; a Kamelet’s `template:` keeps its `from:`, which is the Kamelet spec’s shape. The classic schema and `camel run` are unchanged: the file keeps working, with the compact notation warning `camel run` already logged for it.
+
+### camel-yaml-dsl - Pipe (kind: Pipe) support is deprecated
+
+Loading Camel K `kind: Pipe` resources (formerly `KameletBinding`), typically from a `.pipe.yaml` file, is deprecated in the YAML DSL and will be removed in a future release. Loading such a file now logs a deprecation warning.
+
+Write a plain Camel route instead, which is more expressive (any EIP, multiple routes per file, error handling and route configuration) and is what the tooling, catalog and validator work on. For example, a Pipe with a source, a step and a sink:
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Pipe
+metadata:
+  name: my-pipe
+spec:
+  source:
+    uri: timer:tick
+  steps:
+    - uri: "https://my-service/api"
+  sink:
+    uri: log:result
+```
+
+becomes:
+
+```yaml
+- route:
+    id: my-pipe
+    from:
+      uri: timer:tick
+      steps:
+        - to:
+            uri: "https://my-service/api"
+        - to:
+            uri: log:result
+```
 
 ### camel-mail
 
@@ -1387,7 +1433,11 @@ A route that relied on either header must set the corresponding option on the en
 
 Opting back in is not quite the previous behaviour. `SqlHelper.resolveQuery` applied placeholder resolution only to a value that had a scheme, so a schemeless header template used to reach the database untouched; it now always goes through `SqlHelper.resolvePlaceholders`, which drops `--` comment lines and blank lines and re-joins the rest with newlines. That is immaterial for the single-line call syntax a stored-procedure template normally uses, but a route passing a multi-line commented template through the header will see the comments stripped.
 
-Additionally, `camel-sql-stored` with `useMessageBodyForTemplate=true` now uses the message body verbatim as the stored-procedure template text and no longer resolves it through `SqlHelper.resolveQuery`. A body beginning with `file:`, `http:`, `https:` or `classpath:` is therefore treated as literal template text instead of being fetched as a resource, consistent with how `camel-sql` already treats the body under `useMessageBodyForSql=true`. A route that relied on the body being a resource location must resolve it to the template text before the `sql-stored` endpoint. === camel-core - the inheritErrorHandler attribute on circuitBreaker and failoverLoadBalancer is now a String
+Additionally, `camel-sql-stored` with `useMessageBodyForTemplate=true` now uses the message body verbatim as the stored-procedure template text and no longer resolves it through `SqlHelper.resolveQuery`. A body beginning with `file:`, `http:`, `https:` or `classpath:` is therefore treated as literal template text instead of being fetched as a resource, consistent with how `camel-sql` already treats the body under `useMessageBodyForSql=true`. A route that relied on the body being a resource location must resolve it to the template text before the `sql-stored` endpoint.
+
+Observability follows the gate. The `db.statement` span tag set by the `sql` span decorator (camel-telemetry and the deprecated camel-tracing) is now taken from the `CamelSqlQuery` header only when the endpoint sets `allowQueryFromHeader=true`; otherwise the tag is omitted rather than reporting a statement that was never executed. A route that reads `db.statement` from a `sql:` span and relies on the header value must set `allowQueryFromHeader=true`.
+
+### camel-core - the inheritErrorHandler attribute on circuitBreaker and failoverLoadBalancer is now a String
 
 `CircuitBreakerDefinition.inheritErrorHandler` and `FailoverLoadBalancerDefinition.inheritErrorHandler` are now declared as `String` instead of `Boolean`, the same way nearly every other scalar attribute in the Camel model is declared. This allows a property placeholder to be used, which is resolved when the route starts:
 

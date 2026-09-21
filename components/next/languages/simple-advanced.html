@@ -70,7 +70,7 @@
       - to:
           uri: kafka:welcome
       - log:
-          message: "Sending welcome email to customer with status ${variable.level}"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Notice how we can refer to the variable (<code>$level</code>) in the log statement using the standard <code>${variable.xxx}</code> syntax.</p> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> Instead of inlining the simple script in the route, you can externalize this to a source file such as <code>mymapping.txt</code> and then refer to the file such as <code>resource:classpath:mymapping.txt</code> where the file is located in the root classpath (can also be located in sub packages). </td> </tr> </table></div> </div> <div class="sect2"> <h3 id="_init_blocks_with_custom_functions"><a class="anchor" href="#_init_blocks_with_custom_functions"></a>Init Blocks with custom functions</h3> <div class="paragraph"> <p>You can also declare custom functions using</p> </div> <div class="paragraph"> <p>Inside the init block, it is a lso possible to define custom functions in the syntax <code>$nane ~:= &lt;statement&gt;;</code> where you can then use simple language to declare the structure of the function. Then you can later use these custom functions in your simple language expressions.</p> </div> <div class="paragraph"> <p>For example to create a function that can cleanup a <code>String</code> value:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">$init{
+          message: "Sending welcome email to customer with status ${variable.level}"</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>Notice how we can refer to the variable (<code>$level</code>) in the log statement using the standard <code>${variable.xxx}</code> syntax.</p> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> Instead of inlining the simple script in the route, you can externalize this to a source file such as <code>mymapping.txt</code> and then refer to the file such as <code>resource:classpath:mymapping.txt</code> where the file is located in the root classpath (can also be located in sub packages). </td> </tr> </table></div> </div> <div class="sect2"> <h3 id="_init_blocks_with_custom_functions"><a class="anchor" href="#_init_blocks_with_custom_functions"></a>Init Blocks with custom functions</h3> <div class="paragraph"> <p>Inside the init block, it is also possible to define custom functions in the syntax <code>$name ~:= &lt;statement&gt;;</code> where you can then use simple language to declare the structure of the function. Then you can later use these custom functions in your simple language expressions.</p> </div> <div class="paragraph"> <p>For example to create a function that can cleanup a <code>String</code> value:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">$init{
   $cleanUp ~:= ${trim()} ~&gt; ${normalizeWhitespace()} ~&gt; ${uppercase()};
 }init$</code></pre> </div> </div> <div class="paragraph"> <p>The function will by default use the message body as the input, such that the following:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">simple("Incoming message: $cleanUp()");</code></pre> </div> </div> <div class="paragraph"> <p>Would then call the <em>clean</em> function with the message body as the input, which will then be used for trim, normalize and upper-casing.</p> </div> <div class="paragraph"> <p>A custom function can also use a <strong>single</strong> parameter, however then the syntax must use <code>${name(&#8230;&#8203;)}</code> style, such as:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">simple("Incoming message: ${cleanUp('  Please   clean  this   text for    me ')}");</code></pre> </div> </div> <div class="paragraph"> <p>Here the parameter is a fixed <code>String</code> but you can also pass in other type of value such as a number, boolean, or even a nested function.</p> </div> <div class="sect3"> <h4 id="_calling_custom_functions_from_custom_functions"><a class="anchor" href="#_calling_custom_functions_from_custom_functions"></a>Calling custom functions from custom functions</h4> <div class="paragraph"> <p>It is also possible to reuse custom functions from other functions using <code>${function(name)}</code>, such shown:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-text hljs" data-lang="text">$init{
   $cleanUp ~:= ${trim()} ~&gt; ${normalizeWhitespace()} ~&gt; ${uppercase()};
@@ -308,7 +308,68 @@ reg.addFunction("bar", bar);</code></pre> </div> </div> <div class="paragraph"> 
     }
 }</code></pre> </div> </div> <div class="paragraph"> <p>This gives you the full power to implement the function logic in standard Java.</p> </div> <div class="paragraph"> <p>This function can be added programmatically:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: adding a SimpleFunction to the registry</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">SimpleFunctionRegistry reg = PluginHelper.getSimpleFunctionRegistry(getCamelContext());
 
-reg.addFunction(new FooSimpleFunction());</code></pre> </div> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> The custom function can then be made discoverable by Camel by dependency injection. If you use standalone Camel you can add <code>@BindToRegistry("foo-function")</code> to the class. For Spring Boot use <code>@Component</code> or <code>@Service</code> and Quarkus you can for example use <code>@ApplicationScoped</code>. </td> </tr> </table></div> </div> </div> </div> <div class="sect1"> <h2 id="_javascript_validator"><a class="anchor" href="#_javascript_validator"></a>JavaScript Validator</h2> <div class="sectionbody"> <div class="paragraph"> <p>The <code>camel-catalog</code> JAR includes a self-contained JavaScript validator for the Simple language. It can syntax-check expressions and predicates in any browser or Node.js environment — no Java backend required.</p> </div> <div class="paragraph"> <p>The files are located in the JAR under:</p> </div> <div class="listingblock"> <div class="content"> <pre>org/apache/camel/catalog/simple/camel-simple-validator.js
+reg.addFunction(new FooSimpleFunction());</code></pre> </div> </div> <div class="admonitionblock tip"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-tip" title="Tip"></i> </td> <td class="content"> The custom function can then be made discoverable by Camel by dependency injection. If you use standalone Camel you can add <code>@BindToRegistry("foo-function")</code> to the class. For Spring Boot use <code>@Component</code> or <code>@Service</code> and Quarkus you can for example use <code>@ApplicationScoped</code>. </td> </tr> </table></div> </div> <div class="sect2"> <h3 id="_custom_functions_in_groovy_with_camel_cli"><a class="anchor" href="#_custom_functions_in_groovy_with_camel_cli"></a>Custom functions in Groovy with Camel CLI</h3> <div class="paragraph"> <p>With the <a href="../../../manual/camel-jbang.html" class="xref page">Camel CLI</a> the function does not have to be Java: the same class can be a Groovy source file next to the route, and Camel CLI compiles it and honours <code>@BindToRegistry</code>.</p> </div> <div class="listingblock"> <div class="title"><em>MaskEmailFunction.groovy</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-groovy hljs" data-lang="groovy">import org.apache.camel.BindToRegistry
+import org.apache.camel.Exchange
+import org.apache.camel.spi.SimpleFunction
+
+@BindToRegistry("mask-email-function")
+class MaskEmailFunction implements SimpleFunction {
+
+    String getName() { 'maskEmail' }
+
+    Object apply(Exchange exchange, Object input) {
+        def email = input.toString().trim()
+        int at = email.indexOf('@')
+        if (at &lt;= 0 || at == email.length() - 1) return '***'
+        return email[0] + '***' + email.substring(at)
+    }
+}</code></pre> </div> </div> <div class="paragraph"> <p>The name returned by <code>getName()</code> is the function name in simple, the value of <code>@BindToRegistry</code> is only the bean id:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: timer:demo
+      parameters:
+        repeatCount: 1
+      steps:
+        - setHeader:
+            name: customerEmail
+            expression:
+              constant:
+                expression: "john.doe@example.com"
+        - setBody:
+            expression:
+              simple:
+                expression: "Contact: ${maskEmail(${header.customerEmail})}"
+        - log:
+            message: "${body}"</code></pre> </div> </div> <div class="paragraph"> <p>Run both files together (no <code>--dep</code> is needed, Camel CLI adds <code>camel-groovy</code> when a <code>.groovy</code> file is given):</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-bash hljs" data-lang="bash">camel run route.camel.yaml MaskEmailFunction.groovy --dev</code></pre> </div> </div> <div class="paragraph"> <p>The function can also be a bean in the YAML file itself, created by a Groovy script, so the whole example is one file. A Groovy map with the two methods of <code>SimpleFunction</code> is coerced to the interface with <code>as SimpleFunction</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- beans:
+    - name: mask-email-function
+      scriptLanguage: groovy
+      script: |
+        import org.apache.camel.spi.SimpleFunction
+        return [
+          getName: { 'maskEmail' },
+          apply: { exchange, input -&gt;
+            def email = input.toString().trim()
+            int at = email.indexOf('@')
+            if (at &lt;= 0 || at == email.length() - 1) return '***'
+            return email[0] + '***' + email.substring(at)
+          }
+        ] as SimpleFunction
+- route:
+    from:
+      uri: timer:demo
+      parameters:
+        repeatCount: 1
+      steps:
+        - setHeader:
+            name: customerEmail
+            expression:
+              constant:
+                expression: "john.doe@example.com"
+        - setBody:
+            expression:
+              simple:
+                expression: "Contact: ${maskEmail(${header.customerEmail})}"
+        - log:
+            message: "${body}"</code></pre> </div> </div> <div class="paragraph"> <p>In dev mode (<code>--dev</code>) an edit of the function, in the <code>.groovy</code> file or in the YAML bean, is picked up on the next message: the bean is created again on reload and the simple expression resolves the function again per evaluation when the <code>dev</code> profile is active.</p> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> The <code>@BindToRegistry</code> binding of a <code>.groovy</code> file is done by the Camel CLI. In a project created with <code>camel export</code> the file is compiled, but the class is not bound as a bean, so the function is unknown. For a project that is exported, use the inline YAML bean shown above, which works in every runtime, or write the function in Java. </td> </tr> </table></div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_javascript_validator"><a class="anchor" href="#_javascript_validator"></a>JavaScript Validator</h2> <div class="sectionbody"> <div class="paragraph"> <p>The <code>camel-catalog</code> JAR includes a self-contained JavaScript validator for the Simple language. It can syntax-check expressions and predicates in any browser or Node.js environment — no Java backend required.</p> </div> <div class="paragraph"> <p>The files are located in the JAR under:</p> </div> <div class="listingblock"> <div class="content"> <pre>org/apache/camel/catalog/simple/camel-simple-validator.js
 org/apache/camel/catalog/simple/camel-simple-validator.html</pre> </div> </div> <div class="paragraph"> <p>The <code>.js</code> file is auto-generated from <code>simple.json</code> during the Maven build, so its list of functions and operators always matches the current Camel version.</p> </div> <div class="sect2"> <h3 id="_api"><a class="anchor" href="#_api"></a>API</h3> <div class="paragraph"> <p>The validator exposes these functions:</p> </div> <div class="ulist"> <ul> <li> <p><code>validate(input, mode)</code> — validate a Simple expression or predicate. <code>mode</code> is <code>'expression'</code> (default) or <code>'predicate'</code>. Returns <code>{ valid: boolean, diagnostics: [&#8230;&#8203;] }</code>.</p> </li> <li> <p><code>complete(input, pos)</code> — return completion suggestions at the given cursor position.</p> </li> <li> <p><code>getFunctions()</code> — return the list of known Simple function names.</p> </li> <li> <p><code>getOperators()</code> — return the list of known Simple operators with their kind and description.</p> </li> </ul> </div> </div> <div class="sect2"> <h3 id="_usage_in_node_js"><a class="anchor" href="#_usage_in_node_js"></a>Usage in Node.js</h3> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-javascript hljs" data-lang="javascript">const { validate, complete } = require('./camel-simple-validator.js');
 
 const result = validate("${body} == 'hello'", 'predicate');

@@ -822,3 +822,9 @@ YamlValidator canonicalValidator = new YamlValidator(true);
 You can find a set of examples using `main-yaml` in [Camel Examples](https://github.com/apache/camel-examples) which demonstrate creating Camel Routes with YAML.
 
 Another way to find examples of YAML DSL is to look in [Camel Kamelets](https://github.com/apache/camel-kamelets) where each Kamelet is defined using YAML.
+
+## Deprecated: Pipe (kind: Pipe) support
+
+The YAML DSL can load Camel K `kind: Pipe` resources (formerly `KameletBinding`), typically from a `.pipe.yaml` file, converting the source, steps and sink into a regular route when the file is loaded.
+
+This is deprecated and will be removed in a future release. Loading a Pipe file now logs a deprecation warning. Write a plain Camel route instead, which is more expressive (any EIP, multiple routes per file, error handling and route configuration) and is what the tooling, catalog and validator work on. See the [Camel 4.23 upgrade guide](../../../manual/camel-4x-upgrade-guide-4_23.md) for an example of the equivalent route.

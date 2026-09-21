@@ -51,6 +51,41 @@ These Jakarta/MicroProfile annotations work in Camel standalone (no Quarkus cont
 -   `@Produces` on a method — creates a bean (`@Named` specifies the bean id)
     
 
+## Using Groovy source files
+
+A bean can be a Groovy source file instead of a Java one. The CLI adds `camel-groovy` and compiles the `.groovy` files given to `camel run`, and the class-level annotations above (`@BindToRegistry`, `@Converter`, and the Spring and Quarkus equivalents) work the same as in a Java file:
+
+```groovy
+import org.apache.camel.BindToRegistry
+import org.apache.camel.Exchange
+import org.apache.camel.spi.SimpleFunction
+
+@BindToRegistry("mask-email-function")
+class MaskEmailFunction implements SimpleFunction {
+
+    String getName() { 'maskEmail' }
+
+    Object apply(Exchange exchange, Object input) {
+        def email = input.toString().trim()
+        int at = email.indexOf('@')
+        if (at <= 0 || at == email.length() - 1) return '***'
+        return email[0] + '***' + email.substring(at)
+    }
+}
+```
+
+```bash
+camel run route.camel.yaml MaskEmailFunction.groovy --dev
+```
+
+In dev mode a saved `.groovy` file is recompiled and its beans are bound again, so the change takes effect without a restart. See [Simple Advanced Features](../components/4.22.x/languages/simple-advanced.md) for using this as a custom simple function.
+
+> **Note**
+> A `.groovy` file is compiled after the beans of the YAML and XML files have been created, so a `- beans:` entry cannot refer to a Groovy class by its `type`; use `@BindToRegistry` on the class instead, or create the bean with an inline Groovy `script` in the `- beans:` entry.
+
+> **Note**
+> The annotations on a `.groovy` file are handled by the Camel CLI only. In a project created with `camel export` the file is compiled, but the class is not bound as a bean. For a project that is exported, create the bean with an inline Groovy `script` in a `- beans:` entry, which works in every runtime, or write it in Java.
+
 ## Defining beans in XML DSL
 
 When using [XML DSL](../components/4.22.x/others/java-xml-io-dsl.md), you can declare beans that are added to the [Registry](registry.md):

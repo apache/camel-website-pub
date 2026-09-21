@@ -987,6 +987,10 @@ from("direct:start")
 > **Important**
 > Camel does not perform any validation in access token. It’s up to the underlying service to validate it.
 
+### Vault-backed credential rotation
+
+When using vault-backed property placeholders (e.g. `{{aws:mySecret/password}}`) with `DefaultContextReloadStrategy`, rotated credentials are picked up automatically because Camel rebuilds all routes and their endpoints from the updated component configuration after each reload event. No special configuration is needed for `camel-http`: the fresh endpoints created during the route restart carry the newly resolved credentials.
+
 ### Advanced Usage
 
 If you need more control over the HTTP producer, you should use the `HttpComponent` where you can set various classes to give you custom behavior.

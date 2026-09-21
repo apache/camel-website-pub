@@ -235,7 +235,11 @@ camel-spring-boot - Upgrade to SB 3.5.15
 
 Upgrade JSch to 2.28.2 (RSA certificate authentication fix)
 
-### Improvement (46)
+### Improvement (47)
+
+[CAMEL-24877](https://issues.apache.org/jira/browse/CAMEL-24877)
+
+Spring Boot Camel SFTP Consumer: How to apply setgid permissions to all directories created by SFTP autoCreate?
 
 [CAMEL-23803](https://issues.apache.org/jira/browse/CAMEL-23803)
 
