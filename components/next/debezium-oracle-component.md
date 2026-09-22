@@ -104,7 +104,6 @@ The Debezium Oracle Connector component supports the following options which are
 | **databaseConnectionAdapter** (oracle) | The adapter to use when capturing changes from the database. Options include: 'LogMiner': (the default) to capture changes using native Oracle LogMiner with buffered transactions; 'LogMiner\_Unbuffered': to capture changes using native Oracle LogMiner without buffering; 'XStream': to capture changes using Oracle XStreams; 'OLR': to capture changes using OpenLogReplicator. | LogMiner | String |
 | **databaseDbname** (oracle) | The name of the database from which the connector should capture changes. |  | String |
 | **databaseHostname** (oracle) | Resolvable hostname or IP address of the database server. |  | String |
-| **databaseOutServerName** (oracle) | Name of the XStream Outbound server to connect to. |  | String |
 | **databasePassword** (oracle) | **Required** Password of the database user to be used when connecting to the database. |  | String |
 | **databasePdbName** (oracle) | Name of the pluggable database when working with a multi-tenant set-up. The CDB name must be given via database.dbname in this case. |  | String |
 | **databasePort** (oracle) | Port of the database server. | 1528 | int |
@@ -299,7 +298,6 @@ Enum values:
 | **databaseConnectionAdapter** (oracle) | The adapter to use when capturing changes from the database. Options include: 'LogMiner': (the default) to capture changes using native Oracle LogMiner with buffered transactions; 'LogMiner\_Unbuffered': to capture changes using native Oracle LogMiner without buffering; 'XStream': to capture changes using Oracle XStreams; 'OLR': to capture changes using OpenLogReplicator. | LogMiner | String |
 | **databaseDbname** (oracle) | The name of the database from which the connector should capture changes. |  | String |
 | **databaseHostname** (oracle) | Resolvable hostname or IP address of the database server. |  | String |
-| **databaseOutServerName** (oracle) | Name of the XStream Outbound server to connect to. |  | String |
 | **databasePassword** (oracle) | **Required** Password of the database user to be used when connecting to the database. |  | String |
 | **databasePdbName** (oracle) | Name of the pluggable database when working with a multi-tenant set-up. The CDB name must be given via database.dbname in this case. |  | String |
 | **databasePort** (oracle) | Port of the database server. | 1528 | int |

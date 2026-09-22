@@ -21,6 +21,7 @@ The Groovy language supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **resultType** (common) |  | `String` | The class of the result type (type from output). |
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
+| **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
 ## Usage
 
@@ -147,7 +148,7 @@ Because this class-loader is required to be in use for being able to load the gr
 
 However, there may be some features in Camel where this may not work (yet).
 
-A compiled class with class-level annotations is handed to the registered ``org.apache.camel.spi.CompilePostProcessor`s with a new instance, as the Java DSL does for `.java`` sources. With Camel CLI (`camel run`) that binds a `@BindToRegistry` class in the Registry and registers a `@Converter` class as type converters (the Spring and Quarkus annotations are supported as well), so a Groovy source can provide a bean such as a custom [simple function](simple-advanced.md). Plain classes without annotations are not instantiated.
+A compiled class with class-level annotations is handed to the ``org.apache.camel.spi.CompilePostProcessor`s with a new instance, as the Java DSL does for `.java`` sources. The processors in the Registry are used when there are any (Camel CLI registers processors that also handle the Spring and Quarkus annotations); otherwise the built-in processors for the Camel annotations are used. So in every runtime a `@BindToRegistry` class is bound in the Registry, a `@Converter` class is registered as type converters, and an `EventNotifier` class is added, and a Groovy source can provide a bean such as a custom [simple function](simple-advanced.md). Plain classes without annotations are not instantiated.
 
 > **Important**
 > This feature is only intended to include smaller groovy sources as small functions, DTOs that makes it easier to use together with Camel for low-code integrations. It is not intended to support Groovy as a general purpose programming language for Camel. For this kind then you can use groovy and Java together and follow best practices for this, such as using the joint-compilation via Maven / Gradle plugins during build.

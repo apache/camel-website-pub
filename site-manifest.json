@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790025875236,
+  "generated": 1790087067341,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -587,12 +587,6 @@
               "path": "running/self-managed.adoc",
               "url": "/camel-k/next/running/self-managed.html",
               "title": "Self Managed Build Integrations"
-            },
-            {
-              "module": "ROOT",
-              "path": "running/synthetic.adoc",
-              "url": "/camel-k/next/running/synthetic.html",
-              "title": "Synthetic Integrations"
             },
             {
               "module": "ROOT",
@@ -20953,6 +20947,12 @@
               "path": "openai-responses.adoc",
               "url": "/components/next/others/openai-responses.html",
               "title": "OpenAI - Responses API Operation"
+            },
+            {
+              "module": "others",
+              "path": "openai-webhooks.adoc",
+              "url": "/components/next/others/openai-webhooks.html",
+              "title": "OpenAI - Webhook Events"
             },
             {
               "module": "others",

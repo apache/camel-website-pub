@@ -2,7 +2,7 @@
 
 **Since Camel 4.17**
 
-**Only producer is supported**
+**Both producer and consumer are supported**
 
 The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, content moderation, audio transcription, audio translation, text-to-speech, and image generation and editing using the official openai-java SDK.
 
@@ -62,6 +62,8 @@ See [Batch API operations](others/openai-batch.md) for usage (building the input
     
 -   `image-edit` - Edit an existing image, optionally through a mask, from a text prompt
     
+-   `webhook` - Receive the events OpenAI sends when a background response, a batch or a job finishes. It is a consumer: it is used in a `from`, see [Webhook Events](others/openai-webhooks.md)
+    
 
 ## Configuring Options
 
@@ -115,12 +117,13 @@ The OpenAI component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **apiKey** (producer) | Default API key for all endpoints. |  | String |
-| **audioModel** (producer) | Default model for audio transcription endpoints. |  | String |
-| **baseUrl** (producer) | Default base URL for all endpoints. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
-| **embeddingModel** (producer) | Default model for embeddings endpoints. |  | String |
+| **apiKey** (common) | Default API key for all endpoints. |  | String |
+| **audioModel** (common) | Default model for audio transcription endpoints. |  | String |
+| **baseUrl** (common) | Default base URL for all endpoints. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
+| **embeddingModel** (common) | Default model for embeddings endpoints. |  | String |
+| **model** (common) | Default model for chat completion endpoints. |  | String |
+| **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **model** (producer) | Default model for chat completion endpoints. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 
@@ -137,8 +140,8 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **operation** (producer) | 
-**Required** The operation to perform: 'chat-completion', 'responses', 'responses-retrieve', 'responses-cancel', 'batch', 'batch-retrieve', 'batch-cancel', 'batch-results', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', or 'image-edit'.
+| **operation** (common) | 
+**Required** The operation to perform: 'chat-completion', 'responses', 'responses-retrieve', 'responses-cancel', 'batch', 'batch-retrieve', 'batch-cancel', 'batch-results', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', 'image-edit', or 'webhook' (a consumer).
 
 Enum values:
 
@@ -174,6 +177,8 @@ Enum values:
     
 -   image-edit
     
+-   webhook
+    
 
 
 
@@ -186,11 +191,11 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **additionalBodyProperty** (producer) | Additional JSON properties to include in the request body (e.g. additionalBodyProperty.traceId=123). This is a multi-value option with prefix: additionalBodyProperty. |  | Map |
-| **additionalHeader** (producer) | Additional HTTP request headers to send with every API call (e.g. additionalHeader.OpenAI-Organization=my-org or additionalHeader.api-key=secret). Values may contain secrets. This is a multi-value option with prefix: additionalHeader. |  | Map |
-| **additionalResponseHeader** (producer) | Map additional fields from the response message to Camel headers. The key is the field name in the API response, the value is the Camel header name (e.g. additionalResponseHeader.reasoning\_content=MyReasoningHeader). This is a multi-value option with prefix: additionalResponseHeader. |  | Map |
-| **apiKey** (producer) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. |  | String |
-| **audioChunkingStrategy** (producer) | 
+| **additionalBodyProperty** (common) | Additional JSON properties to include in the request body (e.g. additionalBodyProperty.traceId=123). This is a multi-value option with prefix: additionalBodyProperty. |  | Map |
+| **additionalHeader** (common) | Additional HTTP request headers to send with every API call (e.g. additionalHeader.OpenAI-Organization=my-org or additionalHeader.api-key=secret). Values may contain secrets. This is a multi-value option with prefix: additionalHeader. |  | Map |
+| **additionalResponseHeader** (common) | Map additional fields from the response message to Camel headers. The key is the field name in the API response, the value is the Camel header name (e.g. additionalResponseHeader.reasoning\_content=MyReasoningHeader). This is a multi-value option with prefix: additionalResponseHeader. |  | Map |
+| **apiKey** (common) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. |  | String |
+| **audioChunkingStrategy** (common) | 
 Chunking strategy for diarized transcription models such as gpt-4o-transcribe-diarize.
 
 Enum values:
@@ -205,15 +210,15 @@ Enum values:
 
 
  |  | String |
-| **audioInclude** (producer) | Comma-separated extra response fields to include (e.g. logprobs). |  | String |
-| **audioKeywords** (producer) | Comma-separated keywords to improve transcription accuracy. |  | String |
-| **audioKnownSpeakerNames** (producer) | Comma-separated known speaker names for diarized transcription. |  | String |
-| **audioKnownSpeakerReferences** (producer) | Comma-separated known speaker reference audio file ids for diarized transcription. |  | String |
-| **audioLanguage** (producer) | The language of the input audio in ISO-639-1 format (e.g., 'en'). Improves accuracy and latency. |  | String |
-| **audioLanguages** (producer) | Comma-separated input audio languages (ISO-639-1 or ISO-639-3). |  | String |
-| **audioModel** (producer) | The model to use for audio transcription (e.g., whisper-1, gpt-4o-transcribe). |  | String |
-| **audioPrompt** (producer) | Optional text to guide the model’s style or continue a previous audio segment. |  | String |
-| **audioResponseFormat** (producer) | 
+| **audioInclude** (common) | Comma-separated extra response fields to include (e.g. logprobs). |  | String |
+| **audioKeywords** (common) | Comma-separated keywords to improve transcription accuracy. |  | String |
+| **audioKnownSpeakerNames** (common) | Comma-separated known speaker names for diarized transcription. |  | String |
+| **audioKnownSpeakerReferences** (common) | Comma-separated known speaker reference audio file ids for diarized transcription. |  | String |
+| **audioLanguage** (common) | The language of the input audio in ISO-639-1 format (e.g., 'en'). Improves accuracy and latency. |  | String |
+| **audioLanguages** (common) | Comma-separated input audio languages (ISO-639-1 or ISO-639-3). |  | String |
+| **audioModel** (common) | The model to use for audio transcription (e.g., whisper-1, gpt-4o-transcribe). |  | String |
+| **audioPrompt** (common) | Optional text to guide the model’s style or continue a previous audio segment. |  | String |
+| **audioResponseFormat** (common) | 
 
 The format of the transcription output.
 
@@ -237,12 +242,12 @@ Enum values:
 
 
  | json | String |
-| **audioTemperature** (producer) | Sampling temperature for transcription (0.0 to 1.0). |  | Double |
-| **audioTimestampGranularities** (producer) | Comma-separated timestamp granularities: 'word', 'segment', or 'word,segment'. Only applicable with verbose\_json response format. |  | String |
-| **autoToolExecution** (producer) | When true and MCP servers are configured, automatically execute tool calls and loop back to the model. When false, tool calls are returned as the message body for manual handling. | true | boolean |
-| **background** (producer) | Run the model response in the background (Responses API only). The exchange completes as soon as the response is queued, with an empty body and the CamelOpenAIResponseStatus header, and the response is stored so that it can be retrieved later. Cannot be combined with automatic tool execution. | false | boolean |
-| **baseUrl** (producer) | Base URL for OpenAI API. Defaults to OpenAI’s official endpoint. Can be used for local or third-party providers. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
-| **batchEndpoint** (producer) | 
+| **audioTemperature** (common) | Sampling temperature for transcription (0.0 to 1.0). |  | Double |
+| **audioTimestampGranularities** (common) | Comma-separated timestamp granularities: 'word', 'segment', or 'word,segment'. Only applicable with verbose\_json response format. |  | String |
+| **autoToolExecution** (common) | When true and MCP servers are configured, automatically execute tool calls and loop back to the model. When false, tool calls are returned as the message body for manual handling. | true | boolean |
+| **background** (common) | Run the model response in the background (Responses API only). The exchange completes as soon as the response is queued, with an empty body and the CamelOpenAIResponseStatus header, and the response is stored so that it can be retrieved later. Cannot be combined with automatic tool execution. | false | boolean |
+| **baseUrl** (common) | Base URL for OpenAI API. Defaults to OpenAI’s official endpoint. Can be used for local or third-party providers. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
+| **batchEndpoint** (common) | 
 
 The endpoint every request in a batch calls. Required by the batch operation, which validates it against the endpoints the Batch API supports.
 
@@ -270,8 +275,8 @@ Enum values:
 
 
  |  | String |
-| **batchMetadata** (producer) | Metadata to attach to a batch, used to find it again later (e.g. batchMetadata.job=nightly-enrichment). This is a multi-value option with prefix: batchMetadata. |  | Map |
-| **batchResultsFile** (producer) | 
+| **batchMetadata** (common) | Metadata to attach to a batch, used to find it again later (e.g. batchMetadata.job=nightly-enrichment). This is a multi-value option with prefix: batchMetadata. |  | Map |
+| **batchResultsFile** (common) | 
 
 Which result file the batch-results operation downloads: the output file holding the results of the successful requests, or the error file holding the failed ones.
 
@@ -287,15 +292,15 @@ Enum values:
 
 
  | output | String |
-| **builtinTools** (producer) | Comma-separated hosted tools for the Responses API: web\_search, file\_search, code\_interpreter. |  | String |
-| **connectTimeout** (producer) | Timeout in milliseconds for establishing the TCP connection to the API. A connect timeout means the endpoint was unreachable, so the request never ran and is safe to retry. When 0 or negative, the SDK default (1 minute) is used. | 0 | long |
-| **conversationHistoryProperty** (producer) | Exchange property name for storing conversation history. | CamelOpenAIConversationHistory | String |
-| **conversationId** (producer) | Id of a conversation created with the OpenAI Conversations API to run the request in. The conversation keeps its items across exchanges. Cannot be combined with previousResponseId (Responses API only). |  | String |
-| **conversationMemory** (producer) | Enable conversation memory per Exchange. The chat-completion operation keeps the message history in the conversationHistoryProperty exchange property. The responses operation keeps the conversation on the server, stores the last response id in that property and sends it as previous\_response\_id, which requires a server that stores responses. | false | boolean |
-| **developerMessage** (producer) | Developer message to prepend before user messages. |  | String |
-| **dimensions** (producer) | Number of dimensions for the embedding output. Only supported by text-embedding-3 models. Reducing dimensions can lower costs and improve performance without significant quality loss. |  | Integer |
-| **embeddingModel** (producer) | The model to use for embeddings. |  | String |
-| **encodingFormat** (producer) | 
+| **builtinTools** (common) | Comma-separated hosted tools for the Responses API: web\_search, file\_search, code\_interpreter. |  | String |
+| **connectTimeout** (common) | Timeout in milliseconds for establishing the TCP connection to the API. A connect timeout means the endpoint was unreachable, so the request never ran and is safe to retry. When 0 or negative, the SDK default (1 minute) is used. | 0 | long |
+| **conversationHistoryProperty** (common) | Exchange property name for storing conversation history. | CamelOpenAIConversationHistory | String |
+| **conversationId** (common) | Id of a conversation created with the OpenAI Conversations API to run the request in. The conversation keeps its items across exchanges. Cannot be combined with previousResponseId (Responses API only). |  | String |
+| **conversationMemory** (common) | Enable conversation memory per Exchange. The chat-completion operation keeps the message history in the conversationHistoryProperty exchange property. The responses operation keeps the conversation on the server, stores the last response id in that property and sends it as previous\_response\_id, which requires a server that stores responses. | false | boolean |
+| **developerMessage** (common) | Developer message to prepend before user messages. |  | String |
+| **dimensions** (common) | Number of dimensions for the embedding output. Only supported by text-embedding-3 models. Reducing dimensions can lower costs and improve performance without significant quality loss. |  | Integer |
+| **embeddingModel** (common) | The model to use for embeddings. |  | String |
+| **encodingFormat** (common) | 
 
 The format for embedding output: 'float' for list of floats, 'base64' for compressed format.
 
@@ -311,8 +316,8 @@ Enum values:
 
 
  | base64 | String |
-| **fileSearchVectorStoreIds** (producer) | Comma-separated vector store ids required when builtinTools includes file\_search. |  | String |
-| **hallucinatedToolNameStrategy** (producer) | 
+| **fileSearchVectorStoreIds** (common) | Comma-separated vector store ids required when builtinTools includes file\_search. |  | String |
+| **hallucinatedToolNameStrategy** (common) | 
 
 Strategy for handling tool names hallucinated by the model (tool not found in any MCP server). 'failExchange' (default) throws an IllegalStateException, failing the exchange immediately. 'repromptModel' sends a corrective tool result listing the available tools so the model can self-correct and retry. The maxToolIterations option bounds retries.
 
@@ -328,8 +333,8 @@ Enum values:
 
 
  | failExchange | HallucinatedToolNameStrategy |
-| **hostedMcpTools** (producer) | JSON array of hosted MCP tool definitions passed to the Responses API as OpenAI mcp tools. Every field of the API is sent, such as server\_label, server\_url, require\_approval, allowed\_tools, headers and authorization. Marked secret because it can carry credentials. |  | String |
-| **imageBackground** (producer) | 
+| **hostedMcpTools** (common) | JSON array of hosted MCP tool definitions passed to the Responses API as OpenAI mcp tools. Every field of the API is sent, such as server\_label, server\_url, require\_approval, allowed\_tools, headers and authorization. Marked secret because it can carry credentials. |  | String |
+| **imageBackground** (common) | 
 
 The background of the generated image. Only supported by the GPT image models, and a transparent background requires the png or webp output format.
 
@@ -347,8 +352,8 @@ Enum values:
 
 
  |  | String |
-| **imageCount** (producer) | The number of images to generate, between 1 and 10. dall-e-3 only supports 1. |  | Integer |
-| **imageInputFidelity** (producer) | 
+| **imageCount** (common) | The number of images to generate, between 1 and 10. dall-e-3 only supports 1. |  | Integer |
+| **imageInputFidelity** (common) | 
 
 How closely the edit must match the style and features of the input image. Only supported by the image-edit operation on gpt-image-1 and gpt-image-1.5.
 
@@ -364,8 +369,8 @@ Enum values:
 
 
  |  | String |
-| **imageModel** (producer) | The model to use for image generation or editing (e.g., gpt-image-1, gpt-image-1-mini, gpt-image-1.5, gpt-image-2). Required for the image-generation and image-edit operations, because the model determines which of the other image options are accepted. The DALL-E models are no longer offered by OpenAI, but remain valid values for OpenAI-compatible providers. |  | String |
-| **imageModeration** (producer) | 
+| **imageModel** (common) | The model to use for image generation or editing (e.g., gpt-image-1, gpt-image-1-mini, gpt-image-1.5, gpt-image-2). Required for the image-generation and image-edit operations, because the model determines which of the other image options are accepted. The DALL-E models are no longer offered by OpenAI, but remain valid values for OpenAI-compatible providers. |  | String |
+| **imageModeration** (common) | 
 
 The content moderation level applied to image generation. Only supported by the GPT image models.
 
@@ -381,8 +386,8 @@ Enum values:
 
 
  |  | String |
-| **imageOutputCompression** (producer) | The compression level from 0 to 100 for the webp and jpeg output formats. Only supported by the GPT image models. |  | Integer |
-| **imageOutputFormat** (producer) | 
+| **imageOutputCompression** (common) | The compression level from 0 to 100 for the webp and jpeg output formats. Only supported by the GPT image models. |  | Integer |
+| **imageOutputFormat** (common) | 
 
 The output format of the generated image. Only supported by the GPT image models, which default to png.
 
@@ -400,8 +405,8 @@ Enum values:
 
 
  |  | String |
-| **imagePrompt** (producer) | The prompt describing the image to generate, or the edit to apply. For image-generation the message body is used when this is not set; for image-edit the body carries the input image, so the prompt must come from this option or from the CamelOpenAIImagePrompt header. |  | String |
-| **imageQuality** (producer) | 
+| **imagePrompt** (common) | The prompt describing the image to generate, or the edit to apply. For image-generation the message body is used when this is not set; for image-edit the body carries the input image, so the prompt must come from this option or from the CamelOpenAIImagePrompt header. |  | String |
+| **imageQuality** (common) | 
 
 The quality of the generated image. GPT image models accept auto, high, medium and low; hd and standard are DALL-E values kept for OpenAI-compatible providers.
 
@@ -425,7 +430,7 @@ Enum values:
 
 
  |  | String |
-| **imageResponseFormat** (producer) | 
+| **imageResponseFormat** (common) | 
 
 The response format of the generated image. The OpenAI images endpoint rejects this option: the GPT image models always return base64, and the DALL-E models that used to accept it are no longer offered. It is only sent when explicitly set, and is kept for OpenAI-compatible providers that still implement the older images API.
 
@@ -441,8 +446,8 @@ Enum values:
 
 
  |  | String |
-| **imageSize** (producer) | The size of the generated image (e.g., 1024x1024, 1536x1024, 1024x1536, auto). The accepted values depend on the model. |  | String |
-| **imageStyle** (producer) | 
+| **imageSize** (common) | The size of the generated image (e.g., 1024x1024, 1536x1024, 1024x1536, auto). The accepted values depend on the model. |  | String |
+| **imageStyle** (common) | 
 
 The style of the generated image. A dall-e-3 option, so only useful with OpenAI-compatible providers.
 
@@ -458,29 +463,29 @@ Enum values:
 
 
  |  | String |
-| **jsonSchema** (producer) | JSON schema for structured output validation. |  | String |
-| **maxAgenticTokens** (producer) | Maximum cumulative prompt plus completion tokens allowed across the MCP agentic loop. When 0 or negative, no token budget is enforced. Enforcement runs after each API call that requests further tool execution, so actual spend may exceed the configured budget by up to one call (typically the largest, as the prompt grows each iteration). A final text response is returned even when cumulative usage exceeds the budget. | 0 | long |
-| **maxHistoryMessages** (producer) | When conversationMemory is enabled, retain at most this many messages in the exchange conversation history. System and developer messages are prepended separately and are not stored in history. Assistant tool-call blocks are kept intact and may retain slightly more than this limit to preserve tool result pairing. When 0, no message limit is applied. | 0 | int |
-| **maxHistoryTokens** (producer) | When conversationMemory is enabled, trim conversation history using a token estimate (character count / 4, including image payload size for multi-modal user messages). Oldest segments are dropped first until the estimated tokens are within this limit. Assistant tool-call blocks are removed as a unit with their tool results. The most recent segment is always retained, even when it alone exceeds this limit. When 0, no token limit is applied. | 0 | int |
-| **maxRetries** (producer) | Maximum number of times the OpenAI SDK client retries failed requests. The SDK retry is rate-limit aware (honors Retry-After on 429). | 2 | int |
-| **maxTokens** (producer) | Maximum number of tokens to generate. |  | Integer |
-| **maxToolIterations** (producer) | Maximum number of tool call loop iterations to prevent infinite loops. | 50 | int |
-| **mcpProtocolVersions** (producer) | Comma-separated list of MCP protocol versions to advertise when connecting to MCP servers using Streamable HTTP transport. When not set, the SDK default is used. Example: 2024-11-05,2025-03-26,2025-06-18. |  | String |
-| **mcpReconnect** (producer) | Automatically reconnect to MCP servers when a tool call fails due to a transport error, and retry the call once. | true | boolean |
-| **mcpServer** (producer) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdiossestreamableHttp, (Note that sse is deprecated) mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth), mcpServer..toolNames= (optional include list to restrict which tools are registered from this server). This is a multi-value option with prefix: mcpServer. |  | Map |
-| **mcpTimeout** (producer) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
-| **mcpToolRefresh** (producer) | Refresh the advertised tool list when an MCP server notifies that its tools changed. Set to false to keep the tool list fixed to what was listed when the endpoint started, for deployments that require a deterministic set of tools. | true | boolean |
-| **model** (producer) | The model to use for chat completion. |  | String |
-| **moderationModel** (producer) | The model to use for moderation. | omni-moderation-latest | String |
-| **outputClass** (producer) | Fully qualified class name for structured output using response format. |  | String |
-| **parallelToolExecution** (producer) | Execute the tool calls returned by the model in a single response concurrently instead of sequentially. Tool calls in the same batch are independent by design, so this reduces the latency of a batch to that of its slowest tool. Results are always fed back to the model in the original tool call order. Note that with toolExecutionErrorStrategy=failExchange the sibling tool calls already dispatched complete before the exchange fails. | false | boolean |
-| **parallelToolTimeout** (producer) | Timeout in milliseconds for a batch of parallel tool calls, so that one slow tool cannot block the whole batch. The timeout applies to the batch as a whole, not per tool call. A tool call that exceeds it is cancelled and handled according to toolExecutionErrorStrategy. The default of 0 disables the batch timeout and relies on mcpTimeout, which already bounds each individual MCP request. Only used when parallelToolExecution=true. | 0 | long |
-| **previousResponseId** (producer) | Previous response id for OpenAI server-side conversation state (Responses API only). |  | String |
-| **readTimeout** (producer) | Timeout in milliseconds for reading the response. A read timeout means the model was slow mid-generation, so the request may have been processed. When 0 or negative, requestTimeout applies. | 0 | long |
-| **requestTimeout** (producer) | Overall HTTP request timeout in milliseconds for the OpenAI SDK client. When 0 or negative, the SDK default (10 minutes) is used. Acts as the fallback for readTimeout and writeTimeout when those are not set. | 0 | long |
-| **speechInstructions** (producer) | Optional instructions to control the voice of the generated audio. Does not work with tts-1 or tts-1-hd. |  | String |
-| **speechModel** (producer) | The model to use for text-to-speech (e.g., gpt-4o-mini-tts, tts-1, tts-1-hd). |  | String |
-| **speechResponseFormat** (producer) | 
+| **jsonSchema** (common) | JSON schema for structured output validation. |  | String |
+| **maxAgenticTokens** (common) | Maximum cumulative prompt plus completion tokens allowed across the MCP agentic loop. When 0 or negative, no token budget is enforced. Enforcement runs after each API call that requests further tool execution, so actual spend may exceed the configured budget by up to one call (typically the largest, as the prompt grows each iteration). A final text response is returned even when cumulative usage exceeds the budget. | 0 | long |
+| **maxHistoryMessages** (common) | When conversationMemory is enabled, retain at most this many messages in the exchange conversation history. System and developer messages are prepended separately and are not stored in history. Assistant tool-call blocks are kept intact and may retain slightly more than this limit to preserve tool result pairing. When 0, no message limit is applied. | 0 | int |
+| **maxHistoryTokens** (common) | When conversationMemory is enabled, trim conversation history using a token estimate (character count / 4, including image payload size for multi-modal user messages). Oldest segments are dropped first until the estimated tokens are within this limit. Assistant tool-call blocks are removed as a unit with their tool results. The most recent segment is always retained, even when it alone exceeds this limit. When 0, no token limit is applied. | 0 | int |
+| **maxRetries** (common) | Maximum number of times the OpenAI SDK client retries failed requests. The SDK retry is rate-limit aware (honors Retry-After on 429). | 2 | int |
+| **maxTokens** (common) | Maximum number of tokens to generate. |  | Integer |
+| **maxToolIterations** (common) | Maximum number of tool call loop iterations to prevent infinite loops. | 50 | int |
+| **mcpProtocolVersions** (common) | Comma-separated list of MCP protocol versions to advertise when connecting to MCP servers using Streamable HTTP transport. When not set, the SDK default is used. Example: 2024-11-05,2025-03-26,2025-06-18. |  | String |
+| **mcpReconnect** (common) | Automatically reconnect to MCP servers when a tool call fails due to a transport error, and retry the call once. | true | boolean |
+| **mcpServer** (common) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdiossestreamableHttp, (Note that sse is deprecated) mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth), mcpServer..toolNames= (optional include list to restrict which tools are registered from this server). This is a multi-value option with prefix: mcpServer. |  | Map |
+| **mcpTimeout** (common) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
+| **mcpToolRefresh** (common) | Refresh the advertised tool list when an MCP server notifies that its tools changed. Set to false to keep the tool list fixed to what was listed when the endpoint started, for deployments that require a deterministic set of tools. | true | boolean |
+| **model** (common) | The model to use for chat completion. |  | String |
+| **moderationModel** (common) | The model to use for moderation. | omni-moderation-latest | String |
+| **outputClass** (common) | Fully qualified class name for structured output using response format. |  | String |
+| **parallelToolExecution** (common) | Execute the tool calls returned by the model in a single response concurrently instead of sequentially. Tool calls in the same batch are independent by design, so this reduces the latency of a batch to that of its slowest tool. Results are always fed back to the model in the original tool call order. Note that with toolExecutionErrorStrategy=failExchange the sibling tool calls already dispatched complete before the exchange fails. | false | boolean |
+| **parallelToolTimeout** (common) | Timeout in milliseconds for a batch of parallel tool calls, so that one slow tool cannot block the whole batch. The timeout applies to the batch as a whole, not per tool call. A tool call that exceeds it is cancelled and handled according to toolExecutionErrorStrategy. The default of 0 disables the batch timeout and relies on mcpTimeout, which already bounds each individual MCP request. Only used when parallelToolExecution=true. | 0 | long |
+| **previousResponseId** (common) | Previous response id for OpenAI server-side conversation state (Responses API only). |  | String |
+| **readTimeout** (common) | Timeout in milliseconds for reading the response. A read timeout means the model was slow mid-generation, so the request may have been processed. When 0 or negative, requestTimeout applies. | 0 | long |
+| **requestTimeout** (common) | Overall HTTP request timeout in milliseconds for the OpenAI SDK client. When 0 or negative, the SDK default (10 minutes) is used. Acts as the fallback for readTimeout and writeTimeout when those are not set. | 0 | long |
+| **speechInstructions** (common) | Optional instructions to control the voice of the generated audio. Does not work with tts-1 or tts-1-hd. |  | String |
+| **speechModel** (common) | The model to use for text-to-speech (e.g., gpt-4o-mini-tts, tts-1, tts-1-hd). |  | String |
+| **speechResponseFormat** (common) | 
 
 The audio format for text-to-speech output.
 
@@ -504,15 +509,15 @@ Enum values:
 
 
  | mp3 | String |
-| **speechSpeed** (producer) | The speed of the generated audio, from 0.25 to 4.0 where 1.0 is normal speed. |  | Double |
-| **speechVoice** (producer) | The voice to use for text-to-speech (e.g., alloy, echo, fable, onyx, nova, shimmer). See the OpenAI documentation for the full list of supported voices. | alloy | String |
-| **storeFullResponse** (producer) | Store the full SDK response in non-streaming mode: chat-completion uses exchange property 'CamelOpenAIResponse'; responses uses 'CamelOpenAIResponsesResponse'; moderation uses 'CamelOpenAIModerationResponse'; image-generation and image-edit use 'CamelOpenAIImageResponse'; embeddings uses 'CamelOpenAIEmbeddingsResponse'; audio transcription uses 'CamelOpenAIAudioTranscriptionResponse'; audio translation uses 'CamelOpenAIAudioTranslationResponse'. | false | boolean |
-| **streaming** (producer) | Enable streaming responses. | false | boolean |
-| **stripThinking** (producer) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
-| **systemMessage** (producer) | System message to prepend. When set and conversationMemory is enabled, the conversation history is reset. |  | String |
-| **tags** (producer) | Comma-separated tags for discovering route-based tools registered via the ai-tool component. When set, matching tools from the shared AiToolRegistry are exposed to the model alongside MCP tools. |  | String |
-| **temperature** (producer) | Temperature for response generation (0.0 to 2.0). |  | Double |
-| **toolExecutionErrorStrategy** (producer) | 
+| **speechSpeed** (common) | The speed of the generated audio, from 0.25 to 4.0 where 1.0 is normal speed. |  | Double |
+| **speechVoice** (common) | The voice to use for text-to-speech (e.g., alloy, echo, fable, onyx, nova, shimmer). See the OpenAI documentation for the full list of supported voices. | alloy | String |
+| **storeFullResponse** (common) | Store the full SDK response in non-streaming mode: chat-completion uses exchange property 'CamelOpenAIResponse'; responses uses 'CamelOpenAIResponsesResponse'; moderation uses 'CamelOpenAIModerationResponse'; image-generation and image-edit use 'CamelOpenAIImageResponse'; embeddings uses 'CamelOpenAIEmbeddingsResponse'; audio transcription uses 'CamelOpenAIAudioTranscriptionResponse'; audio translation uses 'CamelOpenAIAudioTranslationResponse'. | false | boolean |
+| **streaming** (common) | Enable streaming responses. | false | boolean |
+| **stripThinking** (common) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
+| **systemMessage** (common) | System message to prepend. When set and conversationMemory is enabled, the conversation history is reset. |  | String |
+| **tags** (common) | Comma-separated tags for discovering route-based tools registered via the ai-tool component. When set, matching tools from the shared AiToolRegistry are exposed to the model alongside MCP tools. |  | String |
+| **temperature** (common) | Temperature for response generation (0.0 to 2.0). |  | Double |
+| **toolExecutionErrorStrategy** (common) | 
 
 Strategy for handling exceptions thrown during MCP tool execution. 'failExchange' (default) propagates the exception to the Camel exchange so that standard Camel error handling (onException, dead-letter channel) can process it. This is the safer default because 'repromptModel' sends raw exception messages (which may contain connection strings, hostnames, or internal paths) to a third-party LLM provider. 'repromptModel' catches the error and sends it back to the model as a tool result so the model can attempt to recover.
 
@@ -528,9 +533,31 @@ Enum values:
 
 
  | failExchange | ToolExecutionErrorStrategy |
-| **topP** (producer) | Top P for response generation (0.0 to 1.0). |  | Double |
-| **userMessage** (producer) | Default user message text to use when no prompt is provided. |  | String |
-| **writeTimeout** (producer) | Timeout in milliseconds for writing the request body, which matters for large payloads such as audio and image uploads. When 0 or negative, requestTimeout applies. | 0 | long |
+| **topP** (common) | Top P for response generation (0.0 to 1.0). |  | Double |
+| **userMessage** (common) | Default user message text to use when no prompt is provided. |  | String |
+| **writeTimeout** (common) | Timeout in milliseconds for writing the request body, which matters for large payloads such as audio and image uploads. When 0 or negative, requestTimeout applies. | 0 | long |
+| **httpServerComponent** (consumer) | The component, or the bean, that serves the HTTP endpoint of the webhook operation. It must implement RestConsumerFactory, for example platform-http, which is used when it is on the classpath. Also read from the rest configuration when not set. |  | String |
+| **webhookMaxPayloadSize** (consumer) | The largest webhook request body that is read, in bytes. A bigger request is answered with 413 and is not verified. | 1048576 | int |
+| **webhookPath** (consumer) | The HTTP path the webhook operation listens on. | /openai/webhook | String |
+| **webhookSecret** (consumer) | The webhook signing secret of the OpenAI dashboard (it starts with whsec\_), used to verify the signature of the events. Required by the webhook operation. |  | String |
+| **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
+| **exchangePattern** (consumer (advanced)) | 
+
+Sets the exchange pattern when the consumer creates an exchange.
+
+Enum values:
+
+-   InOnly
+    
+-   InOut
+    
+
+
+
+
+
+ |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used instead of apiKey. Requires camel-oauth on the classpath. The profile properties are resolved from camel.oauth..client-id, camel.oauth..client-secret, and camel.oauth..token-endpoint. |  | String |
 | **sslContextParameters** (security) | SSLContextParameters to use for configuring SSL/TLS. When set, takes precedence over the individual sslTruststore, sslKeystore, and sslProtocol options. |  | SSLContextParameters |
@@ -553,111 +580,115 @@ The OpenAI component supports the following message header(s), which is/are list
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelOpenAIUserMessage** (producer) Constant: [`USER_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#USER_MESSAGE) | The user message to send to the OpenAI chat completion API. |  | String |
-| **CamelOpenAISystemMessage** (producer) Constant: [`SYSTEM_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SYSTEM_MESSAGE) | The system message to provide context and instructions to the model. |  | String |
-| **CamelOpenAIDeveloperMessage** (producer) Constant: [`DEVELOPER_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#DEVELOPER_MESSAGE) | The developer message to provide additional instructions to the model. |  | String |
-| **CamelOpenAIModel** (producer) Constant: [`MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODEL) | The model to use for chat completion. |  | String |
-| **CamelOpenAITemperature** (producer) Constant: [`TEMPERATURE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TEMPERATURE) | Controls randomness in the response. Higher values (e.g., 0.8) make output more random, lower values (e.g., 0.2) make it more deterministic. |  | Double |
-| **CamelOpenAITopP** (producer) Constant: [`TOP_P`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOP_P) | An alternative to temperature for controlling randomness. Uses nucleus sampling where the model considers tokens with top\_p probability mass. |  | Double |
-| **CamelOpenAIMaxTokens** (producer) Constant: [`MAX_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MAX_TOKENS) | The maximum number of tokens to generate in the completion. |  | Integer |
-| **CamelOpenAIPreviousResponseId** (producer) Constant: [`PREVIOUS_RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PREVIOUS_RESPONSE_ID) | Previous response id for server-side conversation state on the Responses API. |  | String |
-| **CamelOpenAIConversationId** (producer) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#CONVERSATION_ID) | The id of a conversation created with the Conversations API to run the Responses API request in. |  | String |
-| **CamelOpenAIStreaming** (producer) Constant: [`STREAMING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STREAMING) | Whether to stream the response back incrementally. |  | Boolean |
-| **CamelOpenAIOutputClass** (producer) Constant: [`OUTPUT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#OUTPUT_CLASS) | The Java class name (FQCN) to use for structured output parsing. |  | String |
-| **CamelOpenAIJsonSchema** (producer) Constant: [`JSON_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA) | The JSON schema to use for structured output validation. |  | String |
-| **CamelOpenAIStripThinking** (producer) Constant: [`STRIP_THINKING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STRIP_THINKING) | Whether to strip …​ blocks from the response body. |  | Boolean |
-| **CamelOpenAIMediaType** (producer) Constant: [`MEDIA_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MEDIA_TYPE) | The MIME type of the message body when sending a file or binary content (File, WrappedFile, byte or InputStream) to the model. Takes precedence over component content-type headers and automatic MIME type detection. |  | String |
-| **CamelOpenAIThinkingContent** (producer) Constant: [`THINKING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#THINKING_CONTENT) | The thinking content extracted from …​ blocks in the model response. |  | String |
-| **CamelOpenAIReasoningContent** (producer) Constant: [`REASONING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REASONING_CONTENT) | The reasoning content from the model response reasoning\_content field, used by thinking models like Qwen3 and DeepSeek-R1. |  | String |
-| **CamelOpenAIResponseModel** (producer) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_MODEL) | The model used for the completion response. |  | String |
-| **CamelOpenAIResponseId** (producer) Constant: [`RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ID) | The unique identifier for the completion response. The responses-retrieve and responses-cancel operations read the id of the response to act on from this header. |  | String |
-| **CamelOpenAIFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#FINISH_REASON) | The reason the completion finished (e.g., stop, length, content\_filter). |  | String |
-| **CamelOpenAIPromptTokens** (producer) Constant: [`PROMPT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PROMPT_TOKENS) | The number of tokens used in the prompt for the latest API call. |  | Long |
-| **CamelOpenAICompletionTokens** (producer) Constant: [`COMPLETION_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#COMPLETION_TOKENS) | The number of tokens used in the completion for the latest API call. |  | Long |
-| **CamelOpenAITotalTokens** (producer) Constant: [`TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOTAL_TOKENS) | The total number of tokens used (prompt completion) for the latest API call. |  | Long |
-| **CamelOpenAIResponseAnnotations** (producer) Constant: [`RESPONSE_ANNOTATIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ANNOTATIONS) | The annotations attached to the output text of a Responses API answer, such as the url\_citation and file\_citation citations of web\_search and file\_search. Each entry is a map of the API fields. |  | List |
-| **CamelOpenAIResponseStatus** (producer) Constant: [`RESPONSE_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_STATUS) | The status of a Responses API response: completed, failed, in\_progress, cancelled, queued or incomplete. |  | String |
-| **CamelOpenAIToolIterations** (producer) Constant: [`TOOL_ITERATIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOOL_ITERATIONS) | Number of tool call iterations performed in the agentic loop. |  | Integer |
-| **CamelOpenAIMcpToolCalls** (producer) Constant: [`MCP_TOOL_CALLS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MCP_TOOL_CALLS) | List of tool names called during the agentic loop. |  | List |
-| **CamelOpenAIMcpReturnDirect** (producer) Constant: [`MCP_RETURN_DIRECT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MCP_RETURN_DIRECT) | Whether the response came directly from a tool with returnDirect=true, rather than from the LLM. |  | Boolean |
-| **CamelOpenAIAgenticPromptTokens** (producer) Constant: [`AGENTIC_PROMPT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_PROMPT_TOKENS) | Cumulative prompt tokens consumed across all agentic loop iterations. |  | Long |
-| **CamelOpenAIAgenticCompletionTokens** (producer) Constant: [`AGENTIC_COMPLETION_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_COMPLETION_TOKENS) | Cumulative completion tokens consumed across all agentic loop iterations. |  | Long |
-| **CamelOpenAIAgenticTotalTokens** (producer) Constant: [`AGENTIC_TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_TOTAL_TOKENS) | Cumulative total tokens consumed across all agentic loop iterations. |  | Long |
-| **CamelOpenAIResponse** (producer) Constant: [`RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE) | The complete OpenAI chat completion response object. |  | ChatCompletion |
-| **CamelOpenAIResponsesResponse** (producer) Constant: [`RESPONSES_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSES_RESPONSE) | The complete OpenAI Responses API response object. |  | Response |
-| **CamelOpenAIModerationResponse** (producer) Constant: [`MODERATION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE) | The complete OpenAI moderation response object. |  | ModerationCreateResponse |
-| **CamelOpenAIImageResponse** (producer) Constant: [`IMAGE_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESPONSE) | The complete OpenAI image generation or edit response object. |  | ImagesResponse |
-| **CamelOpenAIEmbeddingsResponse** (producer) Constant: [`EMBEDDINGS_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDINGS_RESPONSE) | The complete OpenAI embeddings response object. |  | CreateEmbeddingResponse |
-| **CamelOpenAIAudioTranscriptionResponse** (producer) Constant: [`AUDIO_TRANSCRIPTION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TRANSCRIPTION_RESPONSE) | The complete OpenAI audio transcription response object. |  | TranscriptionCreateResponse |
-| **CamelOpenAIAudioTranslationResponse** (producer) Constant: [`AUDIO_TRANSLATION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TRANSLATION_RESPONSE) | The complete OpenAI audio translation response object. |  | TranslationCreateResponse |
-| **CamelOpenAIBatchId** (producer) Constant: [`BATCH_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ID) | The id of the batch to act on. Set by the batch operation, and read by batch-retrieve, batch-cancel and batch-results. |  | String |
-| **CamelOpenAIBatchEndpoint** (producer) Constant: [`BATCH_ENDPOINT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ENDPOINT) | The endpoint every request in the batch calls, such as /v1/chat/completions. Overrides the batchEndpoint option. |  | String |
-| **CamelOpenAIBatchMetadata** (producer) Constant: [`BATCH_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_METADATA) | Metadata to attach to the batch. Overrides the batchMetadata option. |  | Map |
-| **CamelOpenAIBatchCustomId** (producer) Constant: [`BATCH_CUSTOM_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_CUSTOM_ID) | The custom\_id of the request that OpenAIBatchAggregationStrategy builds from this message. Defaults to the message id. |  | String |
-| **CamelOpenAIBatchResultsFile** (producer) Constant: [`BATCH_RESULTS_FILE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_RESULTS_FILE) | Which result file the batch-results operation downloads: 'output' or 'error'. Overrides the batchResultsFile option. |  | String |
-| **CamelOpenAIBatchStatus** (producer) Constant: [`BATCH_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_STATUS) | The status of the batch: validating, failed, in\_progress, finalizing, completed, expired, cancelling or cancelled. |  | String |
-| **CamelOpenAIBatchInputFileId** (producer) Constant: [`BATCH_INPUT_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_INPUT_FILE_ID) | The id of the uploaded input file of the batch. |  | String |
-| **CamelOpenAIBatchOutputFileId** (producer) Constant: [`BATCH_OUTPUT_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_OUTPUT_FILE_ID) | The id of the file holding the results of the successful requests. |  | String |
-| **CamelOpenAIBatchErrorFileId** (producer) Constant: [`BATCH_ERROR_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ERROR_FILE_ID) | The id of the file holding the results of the failed requests. |  | String |
-| **CamelOpenAIBatchRequestCountTotal** (producer) Constant: [`BATCH_REQUEST_COUNT_TOTAL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_TOTAL) | Total number of requests in the batch. |  | Long |
-| **CamelOpenAIBatchRequestCountCompleted** (producer) Constant: [`BATCH_REQUEST_COUNT_COMPLETED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_COMPLETED) | Number of requests in the batch that completed successfully. |  | Long |
-| **CamelOpenAIBatchRequestCountFailed** (producer) Constant: [`BATCH_REQUEST_COUNT_FAILED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_FAILED) | Number of requests in the batch that failed. |  | Long |
-| **CamelOpenAIBatchErrors** (producer) Constant: [`BATCH_ERRORS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ERRORS) | The errors that made the batch fail validation, each a map of the code, message, param and line fields of the API. |  | List |
-| **CamelOpenAIBatchResponse** (producer) Constant: [`BATCH_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_RESPONSE) | The complete OpenAI batch object. |  | Batch |
-| **CamelOpenAIEmbeddingModel** (producer) Constant: [`EMBEDDING_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_MODEL) | The model to use for embeddings. |  | String |
-| **CamelOpenAIEmbeddingDimensions** (producer) Constant: [`EMBEDDING_DIMENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_DIMENSIONS) | Number of output dimensions. |  | Integer |
-| **CamelOpenAIEmbeddingResponseModel** (producer) Constant: [`EMBEDDING_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_RESPONSE_MODEL) | The embedding model used in the response. |  | String |
-| **CamelOpenAIEmbeddingCount** (producer) Constant: [`EMBEDDING_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_COUNT) | Number of embeddings returned. |  | Integer |
-| **CamelOpenAIEmbeddingVectorSize** (producer) Constant: [`EMBEDDING_VECTOR_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_VECTOR_SIZE) | Vector dimensions of the embeddings. |  | Integer |
-| **CamelOpenAIReferenceEmbedding** (producer) Constant: [`REFERENCE_EMBEDDING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REFERENCE_EMBEDDING) | Reference embedding vector for similarity comparison. |  | List |
-| **CamelOpenAISimilarityScore** (producer) Constant: [`SIMILARITY_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SIMILARITY_SCORE) | Calculated cosine similarity score (0.0 to 1.0). |  | Double |
-| **CamelOpenAIOriginalText** (producer) Constant: [`ORIGINAL_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#ORIGINAL_TEXT) | Original text content when embeddings operation is used. |  | String or List |
-| **CamelOpenAIModerationModel** (producer) Constant: [`MODERATION_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_MODEL) | The model to use for moderation (e.g., omni-moderation-latest). |  | String |
-| **CamelOpenAIModerationText** (producer) Constant: [`MODERATION_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_TEXT) | Text to moderate together with an image body, such as the caption the image was posted with. The text and the image are scored as one input and share a single verdict. Ignored when the body is not an image. |  | String |
-| **CamelOpenAIModerationFlagged** (producer) Constant: [`MODERATION_FLAGGED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_FLAGGED) | Whether the moderation API flagged the input as violating the usage policies. For a batch of inputs this is true when at least one input was flagged. |  | Boolean |
-| **CamelOpenAIModerationResults** (producer) Constant: [`MODERATION_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESULTS) | One verdict per moderated input, in the order of the inputs. Each entry holds the keys 'input', 'flagged', 'categories', 'categoryScores' and, when the provider reports it, 'categoryAppliedInputTypes', so a batch can be split and routed per item. |  | List |
-| **CamelOpenAIModerationCategories** (producer) Constant: [`MODERATION_CATEGORIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_CATEGORIES) | The moderation categories and whether each one was violated, for a single input. Not set for a list body, where 'CamelOpenAIModerationResults' carries the verdicts. |  | Map |
-| **CamelOpenAIModerationCategoryScores** (producer) Constant: [`MODERATION_CATEGORY_SCORES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_CATEGORY_SCORES) | The moderation confidence score per category, for a single input. Not set for a list body, where 'CamelOpenAIModerationResults' carries the verdicts. |  | Map |
-| **CamelOpenAIModerationResponseModel** (producer) Constant: [`MODERATION_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE_MODEL) | The moderation model used in the response. |  | String |
-| **CamelOpenAIAudioModel** (producer) Constant: [`AUDIO_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_MODEL) | The model to use for audio transcription. |  | String |
-| **CamelOpenAIAudioLanguage** (producer) Constant: [`AUDIO_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_LANGUAGE) | The language of the input audio (ISO-639-1). |  | String |
-| **CamelOpenAIAudioResponseFormat** (producer) Constant: [`AUDIO_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_RESPONSE_FORMAT) | The response format for audio transcription (json, text, srt, verbose\_json, vtt, diarized\_json). |  | String |
-| **CamelOpenAIAudioTemperature** (producer) Constant: [`AUDIO_TEMPERATURE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TEMPERATURE) | Sampling temperature for audio transcription (0.0 to 1.0). |  | Double |
-| **CamelOpenAIAudioPrompt** (producer) Constant: [`AUDIO_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_PROMPT) | Optional text to guide the model’s style or continue a previous audio segment. |  | String |
-| **CamelOpenAIAudioTimestampGranularities** (producer) Constant: [`AUDIO_TIMESTAMP_GRANULARITIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TIMESTAMP_GRANULARITIES) | Comma-separated timestamp granularities: word, segment, or word,segment (verbose\_json only). |  | String |
-| **CamelOpenAIAudioChunkingStrategy** (producer) Constant: [`AUDIO_CHUNKING_STRATEGY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_CHUNKING_STRATEGY) | Chunking strategy for diarized transcription models: auto or vad. |  | String |
-| **CamelOpenAIAudioKnownSpeakerNames** (producer) Constant: [`AUDIO_KNOWN_SPEAKER_NAMES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KNOWN_SPEAKER_NAMES) | Comma-separated known speaker names for diarized transcription. |  | String |
-| **CamelOpenAIAudioKnownSpeakerReferences** (producer) Constant: [`AUDIO_KNOWN_SPEAKER_REFERENCES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KNOWN_SPEAKER_REFERENCES) | Comma-separated known speaker reference audio file ids for diarized transcription. |  | String |
-| **CamelOpenAIAudioKeywords** (producer) Constant: [`AUDIO_KEYWORDS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KEYWORDS) | Comma-separated keywords to improve transcription accuracy. |  | String |
-| **CamelOpenAIAudioLanguages** (producer) Constant: [`AUDIO_LANGUAGES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_LANGUAGES) | Comma-separated input audio languages (ISO-639-1 or ISO-639-3). |  | String |
-| **CamelOpenAIAudioInclude** (producer) Constant: [`AUDIO_INCLUDE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_INCLUDE) | Comma-separated extra response fields to include (e.g. logprobs). |  | String |
-| **CamelOpenAIAudioDuration** (producer) Constant: [`AUDIO_DURATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DURATION) | Duration of the audio in seconds (verbose\_json or diarized\_json). |  | Double |
-| **CamelOpenAIAudioDiarizedSegments** (producer) Constant: [`AUDIO_DIARIZED_SEGMENTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DIARIZED_SEGMENTS) | Speaker-labelled segments from diarized\_json transcription. |  | List |
-| **CamelOpenAIAudioDetectedLanguage** (producer) Constant: [`AUDIO_DETECTED_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DETECTED_LANGUAGE) | Language detected in the audio (verbose\_json only). |  | String |
-| **CamelOpenAISpeechModel** (producer) Constant: [`SPEECH_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_MODEL) | The model to use for text-to-speech (e.g., gpt-4o-mini-tts, tts-1, tts-1-hd). |  | String |
-| **CamelOpenAISpeechVoice** (producer) Constant: [`SPEECH_VOICE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_VOICE) | The voice to use for the generated audio (e.g., alloy, echo, fable, onyx, nova, shimmer). |  | String |
-| **CamelOpenAISpeechResponseFormat** (producer) Constant: [`SPEECH_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_RESPONSE_FORMAT) | The audio format for text-to-speech output (mp3, opus, aac, flac, wav, pcm). |  | String |
-| **CamelOpenAISpeechSpeed** (producer) Constant: [`SPEECH_SPEED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_SPEED) | The speed of the generated audio (0.25 to 4.0, where 1.0 is normal speed). |  | Double |
-| **CamelOpenAISpeechInstructions** (producer) Constant: [`SPEECH_INSTRUCTIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_INSTRUCTIONS) | Optional instructions to control the voice of the generated audio (does not work with tts-1 or tts-1-hd). |  | String |
-| **CamelOpenAIImageModel** (producer) Constant: [`IMAGE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MODEL) | The model to use for image generation or editing (e.g., gpt-image-1, dall-e-3, dall-e-2). |  | String |
-| **CamelOpenAIImagePrompt** (producer) Constant: [`IMAGE_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_PROMPT) | The prompt describing the image to generate, or the edit to apply. Takes precedence over the imagePrompt endpoint option and, for image-generation, over the message body. |  | String |
-| **CamelOpenAIImageSize** (producer) Constant: [`IMAGE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_SIZE) | The size of the generated image (e.g., 1024x1024, 1536x1024, auto). |  | String |
-| **CamelOpenAIImageQuality** (producer) Constant: [`IMAGE_QUALITY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_QUALITY) | The quality of the generated image (auto, high, medium, low for GPT image models; hd, standard for dall-e-3; standard for dall-e-2). |  | String |
-| **CamelOpenAIImageResponseFormat** (producer) Constant: [`IMAGE_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESPONSE_FORMAT) | The response format of the generated image (url or b64\_json). Only supported by dall-e-2 and dall-e-3; GPT image models always return base64. |  | String |
-| **CamelOpenAIImageCount** (producer) Constant: [`IMAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_COUNT) | The number of images to generate. |  | Integer |
-| **CamelOpenAIImageBackground** (producer) Constant: [`IMAGE_BACKGROUND`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_BACKGROUND) | The background of the generated image (transparent, opaque, auto). Only supported by GPT image models. |  | String |
-| **CamelOpenAIImageOutputFormat** (producer) Constant: [`IMAGE_OUTPUT_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_FORMAT) | The output format of the generated image (png, jpeg, webp). Only supported by GPT image models. |  | String |
-| **CamelOpenAIImageOutputCompression** (producer) Constant: [`IMAGE_OUTPUT_COMPRESSION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_COMPRESSION) | The compression level (0-100) for the webp or jpeg output formats. Only supported by GPT image models. |  | Integer |
-| **CamelOpenAIImageStyle** (producer) Constant: [`IMAGE_STYLE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_STYLE) | The style of the generated image (vivid or natural). Only supported by dall-e-3. |  | String |
-| **CamelOpenAIImageModeration** (producer) Constant: [`IMAGE_MODERATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MODERATION) | The content moderation level for image generation (low or auto). Only supported by GPT image models. |  | String |
-| **CamelOpenAIImageInputFidelity** (producer) Constant: [`IMAGE_INPUT_FIDELITY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_INPUT_FIDELITY) | How closely the edit must match the style and features of the input image (high or low). Only supported by the image-edit operation on gpt-image-1 and gpt-image-1.5. |  | String |
-| **CamelOpenAIImageMask** (producer) Constant: [`IMAGE_MASK`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MASK) | An optional PNG mask for the image-edit operation, where the fully transparent areas indicate where the image should be edited. |  | InputStream |
-| **CamelOpenAIImageResultCount** (producer) Constant: [`IMAGE_RESULT_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESULT_COUNT) | The number of images returned in the response. |  | Integer |
-| **CamelOpenAIImageRevisedPrompt** (producer) Constant: [`IMAGE_REVISED_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_REVISED_PROMPT) | The prompt as revised by the model, when a single image is returned (dall-e-3). |  | String |
-| **CamelOpenAIImageRevisedPrompts** (producer) Constant: [`IMAGE_REVISED_PROMPTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_REVISED_PROMPTS) | The prompts as revised by the model, one entry per returned image (dall-e-3). |  | List |
-| **CamelOpenAIImageInputTokens** (producer) Constant: [`IMAGE_INPUT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_INPUT_TOKENS) | The number of input tokens billed for the image request. Only reported by GPT image models. |  | Long |
-| **CamelOpenAIImageOutputTokens** (producer) Constant: [`IMAGE_OUTPUT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_TOKENS) | The number of output tokens billed for the image request. Only reported by GPT image models. |  | Long |
-| **CamelOpenAIImageTotalTokens** (producer) Constant: [`IMAGE_TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_TOTAL_TOKENS) | The total number of tokens billed for the image request. Only reported by GPT image models. |  | Long |
+| **CamelOpenAIWebhookEventType** (consumer) Constant: [`WEBHOOK_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#WEBHOOK_EVENT_TYPE) | The type of the webhook event, such as response.completed or batch.completed. |  | String |
+| **CamelOpenAIWebhookEventId** (consumer) Constant: [`WEBHOOK_EVENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#WEBHOOK_EVENT_ID) | The id of the webhook event. |  | String |
+| **CamelOpenAIWebhookObjectId** (consumer) Constant: [`WEBHOOK_OBJECT_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#WEBHOOK_OBJECT_ID) | The id of the object the event is about, such as the response id of response.completed, which the responses-retrieve operation takes. |  | String |
+| **CamelOpenAIWebhookCreatedAt** (consumer) Constant: [`WEBHOOK_CREATED_AT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#WEBHOOK_CREATED_AT) | When the event was created, in seconds since the epoch. |  | Long |
+| **CamelOpenAIUserMessage** (common) Constant: [`USER_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#USER_MESSAGE) | The user message to send to the OpenAI chat completion API. |  | String |
+| **CamelOpenAISystemMessage** (common) Constant: [`SYSTEM_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SYSTEM_MESSAGE) | The system message to provide context and instructions to the model. |  | String |
+| **CamelOpenAIDeveloperMessage** (common) Constant: [`DEVELOPER_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#DEVELOPER_MESSAGE) | The developer message to provide additional instructions to the model. |  | String |
+| **CamelOpenAIModel** (common) Constant: [`MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODEL) | The model to use for chat completion. |  | String |
+| **CamelOpenAITemperature** (common) Constant: [`TEMPERATURE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TEMPERATURE) | Controls randomness in the response. Higher values (e.g., 0.8) make output more random, lower values (e.g., 0.2) make it more deterministic. |  | Double |
+| **CamelOpenAITopP** (common) Constant: [`TOP_P`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOP_P) | An alternative to temperature for controlling randomness. Uses nucleus sampling where the model considers tokens with top\_p probability mass. |  | Double |
+| **CamelOpenAIMaxTokens** (common) Constant: [`MAX_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MAX_TOKENS) | The maximum number of tokens to generate in the completion. |  | Integer |
+| **CamelOpenAIPreviousResponseId** (common) Constant: [`PREVIOUS_RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PREVIOUS_RESPONSE_ID) | Previous response id for server-side conversation state on the Responses API. |  | String |
+| **CamelOpenAIConversationId** (common) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#CONVERSATION_ID) | The id of a conversation created with the Conversations API to run the Responses API request in. |  | String |
+| **CamelOpenAIStreaming** (common) Constant: [`STREAMING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STREAMING) | Whether to stream the response back incrementally. |  | Boolean |
+| **CamelOpenAIOutputClass** (common) Constant: [`OUTPUT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#OUTPUT_CLASS) | The Java class name (FQCN) to use for structured output parsing. |  | String |
+| **CamelOpenAIJsonSchema** (common) Constant: [`JSON_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA) | The JSON schema to use for structured output validation. |  | String |
+| **CamelOpenAIStripThinking** (common) Constant: [`STRIP_THINKING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STRIP_THINKING) | Whether to strip …​ blocks from the response body. |  | Boolean |
+| **CamelOpenAIMediaType** (common) Constant: [`MEDIA_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MEDIA_TYPE) | The MIME type of the message body when sending a file or binary content (File, WrappedFile, byte or InputStream) to the model. Takes precedence over component content-type headers and automatic MIME type detection. |  | String |
+| **CamelOpenAIThinkingContent** (common) Constant: [`THINKING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#THINKING_CONTENT) | The thinking content extracted from …​ blocks in the model response. |  | String |
+| **CamelOpenAIReasoningContent** (common) Constant: [`REASONING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REASONING_CONTENT) | The reasoning content from the model response reasoning\_content field, used by thinking models like Qwen3 and DeepSeek-R1. |  | String |
+| **CamelOpenAIResponseModel** (common) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_MODEL) | The model used for the completion response. |  | String |
+| **CamelOpenAIResponseId** (common) Constant: [`RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ID) | The unique identifier for the completion response. The responses-retrieve and responses-cancel operations read the id of the response to act on from this header. |  | String |
+| **CamelOpenAIFinishReason** (common) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#FINISH_REASON) | The reason the completion finished (e.g., stop, length, content\_filter). |  | String |
+| **CamelOpenAIPromptTokens** (common) Constant: [`PROMPT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PROMPT_TOKENS) | The number of tokens used in the prompt for the latest API call. |  | Long |
+| **CamelOpenAICompletionTokens** (common) Constant: [`COMPLETION_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#COMPLETION_TOKENS) | The number of tokens used in the completion for the latest API call. |  | Long |
+| **CamelOpenAITotalTokens** (common) Constant: [`TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOTAL_TOKENS) | The total number of tokens used (prompt completion) for the latest API call. |  | Long |
+| **CamelOpenAIResponseAnnotations** (common) Constant: [`RESPONSE_ANNOTATIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ANNOTATIONS) | The annotations attached to the output text of a Responses API answer, such as the url\_citation and file\_citation citations of web\_search and file\_search. Each entry is a map of the API fields. |  | List |
+| **CamelOpenAIResponseStatus** (common) Constant: [`RESPONSE_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_STATUS) | The status of a Responses API response: completed, failed, in\_progress, cancelled, queued or incomplete. |  | String |
+| **CamelOpenAIToolIterations** (common) Constant: [`TOOL_ITERATIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOOL_ITERATIONS) | Number of tool call iterations performed in the agentic loop. |  | Integer |
+| **CamelOpenAIMcpToolCalls** (common) Constant: [`MCP_TOOL_CALLS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MCP_TOOL_CALLS) | List of tool names called during the agentic loop. |  | List |
+| **CamelOpenAIMcpReturnDirect** (common) Constant: [`MCP_RETURN_DIRECT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MCP_RETURN_DIRECT) | Whether the response came directly from a tool with returnDirect=true, rather than from the LLM. |  | Boolean |
+| **CamelOpenAIAgenticPromptTokens** (common) Constant: [`AGENTIC_PROMPT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_PROMPT_TOKENS) | Cumulative prompt tokens consumed across all agentic loop iterations. |  | Long |
+| **CamelOpenAIAgenticCompletionTokens** (common) Constant: [`AGENTIC_COMPLETION_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_COMPLETION_TOKENS) | Cumulative completion tokens consumed across all agentic loop iterations. |  | Long |
+| **CamelOpenAIAgenticTotalTokens** (common) Constant: [`AGENTIC_TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AGENTIC_TOTAL_TOKENS) | Cumulative total tokens consumed across all agentic loop iterations. |  | Long |
+| **CamelOpenAIResponse** (common) Constant: [`RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE) | The complete OpenAI chat completion response object. |  | ChatCompletion |
+| **CamelOpenAIResponsesResponse** (common) Constant: [`RESPONSES_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSES_RESPONSE) | The complete OpenAI Responses API response object. |  | Response |
+| **CamelOpenAIModerationResponse** (common) Constant: [`MODERATION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE) | The complete OpenAI moderation response object. |  | ModerationCreateResponse |
+| **CamelOpenAIImageResponse** (common) Constant: [`IMAGE_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESPONSE) | The complete OpenAI image generation or edit response object. |  | ImagesResponse |
+| **CamelOpenAIEmbeddingsResponse** (common) Constant: [`EMBEDDINGS_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDINGS_RESPONSE) | The complete OpenAI embeddings response object. |  | CreateEmbeddingResponse |
+| **CamelOpenAIAudioTranscriptionResponse** (common) Constant: [`AUDIO_TRANSCRIPTION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TRANSCRIPTION_RESPONSE) | The complete OpenAI audio transcription response object. |  | TranscriptionCreateResponse |
+| **CamelOpenAIAudioTranslationResponse** (common) Constant: [`AUDIO_TRANSLATION_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TRANSLATION_RESPONSE) | The complete OpenAI audio translation response object. |  | TranslationCreateResponse |
+| **CamelOpenAIBatchId** (common) Constant: [`BATCH_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ID) | The id of the batch to act on. Set by the batch operation, and read by batch-retrieve, batch-cancel and batch-results. |  | String |
+| **CamelOpenAIBatchEndpoint** (common) Constant: [`BATCH_ENDPOINT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ENDPOINT) | The endpoint every request in the batch calls, such as /v1/chat/completions. Overrides the batchEndpoint option. |  | String |
+| **CamelOpenAIBatchMetadata** (common) Constant: [`BATCH_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_METADATA) | Metadata to attach to the batch. Overrides the batchMetadata option. |  | Map |
+| **CamelOpenAIBatchCustomId** (common) Constant: [`BATCH_CUSTOM_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_CUSTOM_ID) | The custom\_id of the request that OpenAIBatchAggregationStrategy builds from this message. Defaults to the message id. |  | String |
+| **CamelOpenAIBatchResultsFile** (common) Constant: [`BATCH_RESULTS_FILE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_RESULTS_FILE) | Which result file the batch-results operation downloads: 'output' or 'error'. Overrides the batchResultsFile option. |  | String |
+| **CamelOpenAIBatchStatus** (common) Constant: [`BATCH_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_STATUS) | The status of the batch: validating, failed, in\_progress, finalizing, completed, expired, cancelling or cancelled. |  | String |
+| **CamelOpenAIBatchInputFileId** (common) Constant: [`BATCH_INPUT_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_INPUT_FILE_ID) | The id of the uploaded input file of the batch. |  | String |
+| **CamelOpenAIBatchOutputFileId** (common) Constant: [`BATCH_OUTPUT_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_OUTPUT_FILE_ID) | The id of the file holding the results of the successful requests. |  | String |
+| **CamelOpenAIBatchErrorFileId** (common) Constant: [`BATCH_ERROR_FILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ERROR_FILE_ID) | The id of the file holding the results of the failed requests. |  | String |
+| **CamelOpenAIBatchRequestCountTotal** (common) Constant: [`BATCH_REQUEST_COUNT_TOTAL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_TOTAL) | Total number of requests in the batch. |  | Long |
+| **CamelOpenAIBatchRequestCountCompleted** (common) Constant: [`BATCH_REQUEST_COUNT_COMPLETED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_COMPLETED) | Number of requests in the batch that completed successfully. |  | Long |
+| **CamelOpenAIBatchRequestCountFailed** (common) Constant: [`BATCH_REQUEST_COUNT_FAILED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_REQUEST_COUNT_FAILED) | Number of requests in the batch that failed. |  | Long |
+| **CamelOpenAIBatchErrors** (common) Constant: [`BATCH_ERRORS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_ERRORS) | The errors that made the batch fail validation, each a map of the code, message, param and line fields of the API. |  | List |
+| **CamelOpenAIBatchResponse** (common) Constant: [`BATCH_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#BATCH_RESPONSE) | The complete OpenAI batch object. |  | Batch |
+| **CamelOpenAIEmbeddingModel** (common) Constant: [`EMBEDDING_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_MODEL) | The model to use for embeddings. |  | String |
+| **CamelOpenAIEmbeddingDimensions** (common) Constant: [`EMBEDDING_DIMENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_DIMENSIONS) | Number of output dimensions. |  | Integer |
+| **CamelOpenAIEmbeddingResponseModel** (common) Constant: [`EMBEDDING_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_RESPONSE_MODEL) | The embedding model used in the response. |  | String |
+| **CamelOpenAIEmbeddingCount** (common) Constant: [`EMBEDDING_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_COUNT) | Number of embeddings returned. |  | Integer |
+| **CamelOpenAIEmbeddingVectorSize** (common) Constant: [`EMBEDDING_VECTOR_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#EMBEDDING_VECTOR_SIZE) | Vector dimensions of the embeddings. |  | Integer |
+| **CamelOpenAIReferenceEmbedding** (common) Constant: [`REFERENCE_EMBEDDING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REFERENCE_EMBEDDING) | Reference embedding vector for similarity comparison. |  | List |
+| **CamelOpenAISimilarityScore** (common) Constant: [`SIMILARITY_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SIMILARITY_SCORE) | Calculated cosine similarity score (0.0 to 1.0). |  | Double |
+| **CamelOpenAIOriginalText** (common) Constant: [`ORIGINAL_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#ORIGINAL_TEXT) | Original text content when embeddings operation is used. |  | String or List |
+| **CamelOpenAIModerationModel** (common) Constant: [`MODERATION_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_MODEL) | The model to use for moderation (e.g., omni-moderation-latest). |  | String |
+| **CamelOpenAIModerationText** (common) Constant: [`MODERATION_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_TEXT) | Text to moderate together with an image body, such as the caption the image was posted with. The text and the image are scored as one input and share a single verdict. Ignored when the body is not an image. |  | String |
+| **CamelOpenAIModerationFlagged** (common) Constant: [`MODERATION_FLAGGED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_FLAGGED) | Whether the moderation API flagged the input as violating the usage policies. For a batch of inputs this is true when at least one input was flagged. |  | Boolean |
+| **CamelOpenAIModerationResults** (common) Constant: [`MODERATION_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESULTS) | One verdict per moderated input, in the order of the inputs. Each entry holds the keys 'input', 'flagged', 'categories', 'categoryScores' and, when the provider reports it, 'categoryAppliedInputTypes', so a batch can be split and routed per item. |  | List |
+| **CamelOpenAIModerationCategories** (common) Constant: [`MODERATION_CATEGORIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_CATEGORIES) | The moderation categories and whether each one was violated, for a single input. Not set for a list body, where 'CamelOpenAIModerationResults' carries the verdicts. |  | Map |
+| **CamelOpenAIModerationCategoryScores** (common) Constant: [`MODERATION_CATEGORY_SCORES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_CATEGORY_SCORES) | The moderation confidence score per category, for a single input. Not set for a list body, where 'CamelOpenAIModerationResults' carries the verdicts. |  | Map |
+| **CamelOpenAIModerationResponseModel** (common) Constant: [`MODERATION_RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MODERATION_RESPONSE_MODEL) | The moderation model used in the response. |  | String |
+| **CamelOpenAIAudioModel** (common) Constant: [`AUDIO_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_MODEL) | The model to use for audio transcription. |  | String |
+| **CamelOpenAIAudioLanguage** (common) Constant: [`AUDIO_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_LANGUAGE) | The language of the input audio (ISO-639-1). |  | String |
+| **CamelOpenAIAudioResponseFormat** (common) Constant: [`AUDIO_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_RESPONSE_FORMAT) | The response format for audio transcription (json, text, srt, verbose\_json, vtt, diarized\_json). |  | String |
+| **CamelOpenAIAudioTemperature** (common) Constant: [`AUDIO_TEMPERATURE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TEMPERATURE) | Sampling temperature for audio transcription (0.0 to 1.0). |  | Double |
+| **CamelOpenAIAudioPrompt** (common) Constant: [`AUDIO_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_PROMPT) | Optional text to guide the model’s style or continue a previous audio segment. |  | String |
+| **CamelOpenAIAudioTimestampGranularities** (common) Constant: [`AUDIO_TIMESTAMP_GRANULARITIES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_TIMESTAMP_GRANULARITIES) | Comma-separated timestamp granularities: word, segment, or word,segment (verbose\_json only). |  | String |
+| **CamelOpenAIAudioChunkingStrategy** (common) Constant: [`AUDIO_CHUNKING_STRATEGY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_CHUNKING_STRATEGY) | Chunking strategy for diarized transcription models: auto or vad. |  | String |
+| **CamelOpenAIAudioKnownSpeakerNames** (common) Constant: [`AUDIO_KNOWN_SPEAKER_NAMES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KNOWN_SPEAKER_NAMES) | Comma-separated known speaker names for diarized transcription. |  | String |
+| **CamelOpenAIAudioKnownSpeakerReferences** (common) Constant: [`AUDIO_KNOWN_SPEAKER_REFERENCES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KNOWN_SPEAKER_REFERENCES) | Comma-separated known speaker reference audio file ids for diarized transcription. |  | String |
+| **CamelOpenAIAudioKeywords** (common) Constant: [`AUDIO_KEYWORDS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_KEYWORDS) | Comma-separated keywords to improve transcription accuracy. |  | String |
+| **CamelOpenAIAudioLanguages** (common) Constant: [`AUDIO_LANGUAGES`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_LANGUAGES) | Comma-separated input audio languages (ISO-639-1 or ISO-639-3). |  | String |
+| **CamelOpenAIAudioInclude** (common) Constant: [`AUDIO_INCLUDE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_INCLUDE) | Comma-separated extra response fields to include (e.g. logprobs). |  | String |
+| **CamelOpenAIAudioDuration** (common) Constant: [`AUDIO_DURATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DURATION) | Duration of the audio in seconds (verbose\_json or diarized\_json). |  | Double |
+| **CamelOpenAIAudioDiarizedSegments** (common) Constant: [`AUDIO_DIARIZED_SEGMENTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DIARIZED_SEGMENTS) | Speaker-labelled segments from diarized\_json transcription. |  | List |
+| **CamelOpenAIAudioDetectedLanguage** (common) Constant: [`AUDIO_DETECTED_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#AUDIO_DETECTED_LANGUAGE) | Language detected in the audio (verbose\_json only). |  | String |
+| **CamelOpenAISpeechModel** (common) Constant: [`SPEECH_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_MODEL) | The model to use for text-to-speech (e.g., gpt-4o-mini-tts, tts-1, tts-1-hd). |  | String |
+| **CamelOpenAISpeechVoice** (common) Constant: [`SPEECH_VOICE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_VOICE) | The voice to use for the generated audio (e.g., alloy, echo, fable, onyx, nova, shimmer). |  | String |
+| **CamelOpenAISpeechResponseFormat** (common) Constant: [`SPEECH_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_RESPONSE_FORMAT) | The audio format for text-to-speech output (mp3, opus, aac, flac, wav, pcm). |  | String |
+| **CamelOpenAISpeechSpeed** (common) Constant: [`SPEECH_SPEED`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_SPEED) | The speed of the generated audio (0.25 to 4.0, where 1.0 is normal speed). |  | Double |
+| **CamelOpenAISpeechInstructions** (common) Constant: [`SPEECH_INSTRUCTIONS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#SPEECH_INSTRUCTIONS) | Optional instructions to control the voice of the generated audio (does not work with tts-1 or tts-1-hd). |  | String |
+| **CamelOpenAIImageModel** (common) Constant: [`IMAGE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MODEL) | The model to use for image generation or editing (e.g., gpt-image-1, dall-e-3, dall-e-2). |  | String |
+| **CamelOpenAIImagePrompt** (common) Constant: [`IMAGE_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_PROMPT) | The prompt describing the image to generate, or the edit to apply. Takes precedence over the imagePrompt endpoint option and, for image-generation, over the message body. |  | String |
+| **CamelOpenAIImageSize** (common) Constant: [`IMAGE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_SIZE) | The size of the generated image (e.g., 1024x1024, 1536x1024, auto). |  | String |
+| **CamelOpenAIImageQuality** (common) Constant: [`IMAGE_QUALITY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_QUALITY) | The quality of the generated image (auto, high, medium, low for GPT image models; hd, standard for dall-e-3; standard for dall-e-2). |  | String |
+| **CamelOpenAIImageResponseFormat** (common) Constant: [`IMAGE_RESPONSE_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESPONSE_FORMAT) | The response format of the generated image (url or b64\_json). Only supported by dall-e-2 and dall-e-3; GPT image models always return base64. |  | String |
+| **CamelOpenAIImageCount** (common) Constant: [`IMAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_COUNT) | The number of images to generate. |  | Integer |
+| **CamelOpenAIImageBackground** (common) Constant: [`IMAGE_BACKGROUND`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_BACKGROUND) | The background of the generated image (transparent, opaque, auto). Only supported by GPT image models. |  | String |
+| **CamelOpenAIImageOutputFormat** (common) Constant: [`IMAGE_OUTPUT_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_FORMAT) | The output format of the generated image (png, jpeg, webp). Only supported by GPT image models. |  | String |
+| **CamelOpenAIImageOutputCompression** (common) Constant: [`IMAGE_OUTPUT_COMPRESSION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_COMPRESSION) | The compression level (0-100) for the webp or jpeg output formats. Only supported by GPT image models. |  | Integer |
+| **CamelOpenAIImageStyle** (common) Constant: [`IMAGE_STYLE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_STYLE) | The style of the generated image (vivid or natural). Only supported by dall-e-3. |  | String |
+| **CamelOpenAIImageModeration** (common) Constant: [`IMAGE_MODERATION`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MODERATION) | The content moderation level for image generation (low or auto). Only supported by GPT image models. |  | String |
+| **CamelOpenAIImageInputFidelity** (common) Constant: [`IMAGE_INPUT_FIDELITY`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_INPUT_FIDELITY) | How closely the edit must match the style and features of the input image (high or low). Only supported by the image-edit operation on gpt-image-1 and gpt-image-1.5. |  | String |
+| **CamelOpenAIImageMask** (common) Constant: [`IMAGE_MASK`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_MASK) | An optional PNG mask for the image-edit operation, where the fully transparent areas indicate where the image should be edited. |  | InputStream |
+| **CamelOpenAIImageResultCount** (common) Constant: [`IMAGE_RESULT_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_RESULT_COUNT) | The number of images returned in the response. |  | Integer |
+| **CamelOpenAIImageRevisedPrompt** (common) Constant: [`IMAGE_REVISED_PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_REVISED_PROMPT) | The prompt as revised by the model, when a single image is returned (dall-e-3). |  | String |
+| **CamelOpenAIImageRevisedPrompts** (common) Constant: [`IMAGE_REVISED_PROMPTS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_REVISED_PROMPTS) | The prompts as revised by the model, one entry per returned image (dall-e-3). |  | List |
+| **CamelOpenAIImageInputTokens** (common) Constant: [`IMAGE_INPUT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_INPUT_TOKENS) | The number of input tokens billed for the image request. Only reported by GPT image models. |  | Long |
+| **CamelOpenAIImageOutputTokens** (common) Constant: [`IMAGE_OUTPUT_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_OUTPUT_TOKENS) | The number of output tokens billed for the image request. Only reported by GPT image models. |  | Long |
+| **CamelOpenAIImageTotalTokens** (common) Constant: [`IMAGE_TOTAL_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#IMAGE_TOTAL_TOKENS) | The total number of tokens billed for the image request. Only reported by GPT image models. |  | Long |
 
 ## Usage
 
@@ -1844,6 +1875,8 @@ For more details on specific features, see:
 -   [OpenAI-Compatible Providers](others/openai-providers.md) - Using Ollama, LM Studio, vLLM, and OpenRouter as alternative backends
     
 -   [Embeddings, Moderation, Audio and Image Operations](others/openai-operations.md) - Text embeddings, vector database integration, content moderation, audio transcription, and image generation
+    
+-   [Webhook Events](others/openai-webhooks.md) - Receiving the events OpenAI sends when a background response, a batch or a job finishes
     
 
 ## Error Handling

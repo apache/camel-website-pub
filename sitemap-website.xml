@@ -2,16 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/categories/AI/</loc>
+    <lastmod>2026-09-22T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
+    <lastmod>2026-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/</loc>
+    <lastmod>2026-09-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Tooling/</loc>
+    <lastmod>2026-09-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camelbee-route-observability/</loc>
     <lastmod>2026-09-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Community/</loc>
-    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/</loc>
     <lastmod>2026-09-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.22.1/</loc>
@@ -20,17 +29,11 @@
     <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-09-21T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Tooling/</loc>
-    <lastmod>2026-09-21T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camel-simple-customfunction/</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Howtos/</loc>
     <lastmod>2026-09-20T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/AI/</loc>
-    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>

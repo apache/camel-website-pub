@@ -1,14 +1,15 @@
-urls[869]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-09-21T00:00:00+00:00
+urls[870]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-09-22T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-09-22T00:00:00+00:00
+  https://camel.apache.org/,2026-09-22T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/,2026-09-22T00:00:00+00:00
+  https://camel.apache.org/categories/Tooling/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camelbee-route-observability/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-09-21T00:00:00+00:00
-  https://camel.apache.org/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.22.1/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/releases/,2026-09-21T00:00:00+00:00
-  https://camel.apache.org/categories/Tooling/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-simple-customfunction/,2026-09-20T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-09-20T00:00:00+00:00
-  https://camel.apache.org/categories/AI/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/categories/Camel/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/,2026-09-17T00:00:00+00:00

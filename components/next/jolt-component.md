@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The Jolt component allows you to process a JSON messages using a [JOLT](https://github.com/bazaarvoice/jolt) specification. This can be ideal when doing JSON to JSON transformation.
+The Jolt component allows you to process a JSON messages using a [JOLT](https://github.com/jolt-community/jolt-community) specification. This can be ideal when doing JSON to JSON transformation.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 

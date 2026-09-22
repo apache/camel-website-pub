@@ -3624,7 +3624,7 @@ string | To configure under which service port name the http container port is t
 | `name`  
 string | The main container name. It’s named `integration` by default. |
 | `image`  
-string | The main container image to use for the Integration. When using this parameter the operator will create a synthetic IntegrationKit which won’t be able to execute traits requiring CamelCatalog. If the container image you’re using is coming from an IntegrationKit, use instead Integration `.spec.integrationKit` parameter. If you’re moving the Integration across environments, you will also need to create an "external" IntegrationKit. |
+string | The main container image to use for the Integration. When using this parameter, any trait requiring a CamelCatalog won’t be able to execute. If the container image you’re using is coming from an IntegrationKit, use instead Integration `.spec.integrationKit` parameter. If you’re moving the Integration across environments, you will also need to create an "external" IntegrationKit. |
 | `imagePullPolicy`  
 **[Kubernetes core/v1.PullPolicy](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.37/#pullpolicy-v1-core)** | The pull policy: Always|Never|IfNotPresent |
 | `runAsUser`  

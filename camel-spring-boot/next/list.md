@@ -1457,6 +1457,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [OpenAI - Embeddings, Moderation, Audio and Image Operations](../../components/next/others/openai-operations.md) | undefined-starter |  |  |  |
 | [OpenAI - MCP Tool Calling](../../components/next/others/openai-mcp.md) | undefined-starter |  |  |  |
 | [OpenAI - Responses API Operation](../../components/next/others/openai-responses.md) | undefined-starter |  |  |  |
+| [OpenAI - Webhook Events](../../components/next/others/openai-webhooks.md) | undefined-starter |  |  |  |
 | [Openapi Java](../../components/next/others/openapi-java.md) | camel-openapi-java-starter | Stable | 3.1 | Rest DSL support for using OpenApi doc |
 | [Openapi Validator](../../components/next/others/openapi-validator.md) | camel-openapi-validator-starter | Stable | 4.7 | OpenAPI validator for Camel Rest DSL |
 | [OpenTelemetry](../../components/next/others/opentelemetry.md) | camel-opentelemetry-starter | Stable-deprecated | 3.5 | Distributed tracing using OpenTelemetry |

@@ -84,7 +84,7 @@ In dev mode a saved `.groovy` file is recompiled and its beans are bound again, 
 > A `.groovy` file is compiled after the beans of the YAML and XML files have been created, so a `- beans:` entry cannot refer to a Groovy class by its `type`; use `@BindToRegistry` on the class instead, or create the bean with an inline Groovy `script` in the `- beans:` entry.
 
 > **Note**
-> The annotations on a `.groovy` file are handled by the Camel CLI only. In a project created with `camel export` the file is compiled, but the class is not bound as a bean. For a project that is exported, create the bean with an inline Groovy `script` in a `- beans:` entry, which works in every runtime, or write it in Java.
+> The Camel annotations (`@BindToRegistry`, `@Configuration`, `@Converter`) on a `.groovy` file keep working in a project created with `camel export`, as the Groovy compiler in camel-groovy handles them itself in every runtime; the Spring and Quarkus annotations are handled by the Camel CLI only. The bean lives in Camel’s registry, not in the Spring or CDI container.
 
 ## Defining beans in XML DSL
 

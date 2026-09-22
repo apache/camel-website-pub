@@ -220,6 +220,8 @@ The `maxAgenticTokens` option (default: `0`, unlimited) caps cumulative prompt p
 
 During the agentic loop, `CamelOpenAIAgenticPromptTokens`, `CamelOpenAIAgenticCompletionTokens`, and `CamelOpenAIAgenticTotalTokens` expose cumulative usage across all iterations. The per-call headers `CamelOpenAIPromptTokens`, `CamelOpenAICompletionTokens`, and `CamelOpenAITotalTokens` reflect only the latest API call.
 
+The [responses operation](openai-responses.md) runs the same loop over the Responses API, with the same budget, headers, trace and events.
+
 Set `autoToolExecution=false` to disable the agentic loop and receive raw tool calls in the message body instead:
 
 -   Java

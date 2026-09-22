@@ -84,7 +84,11 @@ The `exchangeProperties`, `exchangeProperty`, `variables`, `variable` and `attac
 
 Groovy scripts now have a `message` variable for the current message (`exchange.getMessage()`), the name the other script languages and the Camel 4 API use; `request` and `in` stay as its older names. A `GroovyShellFactory` that provided its own global variable named `message` is now hidden by the exchange variable, like the other exchange variable names.
 
-The Groovy script compiler now runs the registered ``org.apache.camel.spi.CompilePostProcessor`s on a compiled class that has class-level annotations, with a new instance of the class, as the Java DSL loader does for `.java`` sources. In the Camel CLI this binds a `@BindToRegistry` class and registers a `@Converter` class (and handles the Spring and Quarkus annotations) from a `.groovy` file, and binds it again on a reload in dev mode. A Groovy class without annotations, and a Groovy script, is not instantiated, as before.
+The Groovy script compiler now runs the ``org.apache.camel.spi.CompilePostProcessor`s on a compiled class that has class-level annotations, with a new instance of the class, as the Java DSL loader does for `.java`` sources. The processors in the registry are used when there are any (the Camel CLI registers processors that also handle the Spring and Quarkus annotations); otherwise built-in processors for the Camel annotations are used. So in every runtime (camel-main, Spring Boot, Quarkus) a `@BindToRegistry` or `@Configuration` class from a `.groovy` file is bound in Camel’s registry, a `@Converter` class is registered as type converters, and an `EventNotifier` class is added to the management strategy; in the Camel CLI the bean is bound again on a reload in dev mode. A Groovy class without annotations, and a Groovy script, is not instantiated, as before.
+
+The Camel-annotation compile post-processors that camel-kamelet-main used internally are now public classes in camel-support: `org.apache.camel.support.compile.BindToRegistryCompilePostProcessor`, `TypeConverterCompilePostProcessor` and `EventNotifierCompilePostProcessor`.
+
+A lazy `@BindToRegistry` class from a compiled `.java` or `.groovy` source (`lazy = true`, or `camel run --lazy-bean` in the Camel CLI) is now bound with the name from the annotation, or else the simple class name, the same as an eager `@BindToRegistry` class. Before, the bean was bound with the fully qualified class name and the annotation value was ignored, so a class in a package, or with a name in the annotation, was not found by the expected name.
 
 ### camel-djl (Breaking change)
 
@@ -346,6 +350,8 @@ Documents carrying an internal DTD subset still parse: `disallow-doctype-decl` i
 
 When a route file is reloaded in dev mode (`camel run --dev`, or the route watcher reload strategy in general) and the new content fails to load, the routes that ran before are restored right away, without the routes of the failed file, and a WARN says so. Before, the previous routes stayed stopped until the next successful reload, so a mistake in one file left the application without routes. The failed file loads again on its next save. The `CamelContextReloadFailure` event and the reload error log line are unchanged.
 
+A project whose routes are all in one file is covered too: the content that last loaded is kept in memory, so the broken save goes back to the version that was running, and the log says how many routes came from it. The file on disk is untouched; its next save is loaded as usual.
+
 ### camel-core - the recursive file watcher watches directories created while it runs
 
 The file watcher reload strategy (`camel run --dev`, the route watcher reload strategy with a recursive directory) registered the directory tree once at start: a directory created afterwards, such as `src/main/java/com/acme` for a Java class added to a running project, was never watched and its files never reloaded. A directory created under a watched one is now registered as it appears, with the files already in it reloaded. The watcher also ignores the compile work directory (`camel.main.compileWorkDir`, `.camel-jbang/compile` for the CLI), where the runtime writes the class files it compiles, so a compiled source no longer triggers a reload of its own.
@@ -568,6 +574,8 @@ The YAML that `camel init` writes (`camel init foo.yaml`, and the Integration an
 The Camel authoring tools for AI agents are now defined once, in `camel-jbang-core`, and exposed under the same `camel_` names by both MCP servers, `camel mcp` and `camel tui --mcp`: `camel_catalog_doc`, `camel_catalog_find`, `camel_validate_source`, `camel_get_files`, `camel_write_file`, `camel_run`, `camel_control`, `camel_get_log`, `camel_get_errors`, `camel_eval_expression` and `camel_error_diagnose`.
 
 The `camel_write_file` tool, when an integration of the project is selected and runs in dev mode, waits up to eight seconds for the reload of the written file and answers with its outcome (`reload.status` reloaded, failed with the cause and the validator’s report, properties, or unknown), so an agent does not go on with a route that did not load. A write with no selected integration answers as before.
+
+The `validate` argument of `camel_write_file` is gone: the write always validates the content and refuses an invalid file. A model given the switch turned it off on its own, and the file then failed to load.
 
 The `camel_run` tool, when no files are named, starts the project with `camel run --source-dir=.` instead of listing the directory’s files: the directory is watched, so a file added afterwards (a bean file, a Java class under `src/main/java`) is part of the app and reloaded in dev mode, and a `restart` starts the same way. Naming files keeps the previous behaviour. The `camel_control` tool gets a `reload` action, what `camel cmd reload` does.
 
@@ -1385,6 +1393,20 @@ This only affects configurations that use the default XML reader. Configurations
 
 To restore the previous behaviour and allow external entity resolution, set the new `allowExternalEntities` option to `true` on the data format or on the endpoint (`smooks:config.xml?allowExternalEntities=true`).
 
+### camel-core - resolveResource option on expressions
+
+Every expression has a new option `resolveResource` (default `false`). When `true` and the expression’s result is a String starting with `resource:`, the named resource is loaded and its content is the result, so a script can choose a file or a template per message and hand its content on:
+
+```yaml
+- setBody:
+    expression:
+      groovy:
+        expression: "counter == 1 ? 'resource:file:order.json' : 'resource:file:order-bad-email.json'"
+        resolveResource: true
+```
+
+A name without a scheme, `resource:orderTemplate.json`, is a classpath resource. The loaded content is the final value and is not evaluated again. Nothing changes without the option: the `resource:` prefix on the expression text itself is resolved as before, and a returned value that happens to start with `resource:` stays as it is.
+
 ### camel-core - the required attribute on rest param and route template parameter is now a String
 
 `ParamDefinition.required` (the rest DSL `param`) and `RouteTemplateParameterDefinition.required` (the `templateParameter` of a route template) are now declared as `String` instead of `Boolean`, the same way nearly every other scalar attribute in the Camel model is declared. This allows a property placeholder to be used, which is resolved when the route starts:
@@ -1477,3 +1499,23 @@ This is a bug fix (CAMEL-24747). Routes that relied on `toD` passing the encoded
 ### camel-elasticsearch, camel-opensearch - the maxRetryTimeout option is deprecated
 
 The `maxRetryTimeout` endpoint and component option is deprecated in both `camel-elasticsearch` and `camel-opensearch`. It was a leftover from the old low-level Elasticsearch REST client (`setMaxRetryTimeoutMillis`), which no longer exists in the client these components use today, so setting it had no effect. The option is kept for backward compatibility of existing endpoint URIs but is marked deprecated and will be removed in a future release. Routes that set `maxRetryTimeout` can simply drop it; behaviour is unchanged.
+
+### camel-saxon - external XML entity resolution disabled by default in XQuery
+
+The XQuery language and the `xquery` component now build their default Saxon `Configuration` with a hardened XML parser that does not accept a `DOCTYPE` declaration and does not resolve external general or parameter entities or external DTDs. This aligns XQuery with the parser configuration already applied to the `String`, `byte[]` and `InputStream` body paths through Camel’s `XmlConverter`, and with `camel-xslt-saxon` (which already defaults `secureProcessing` to `true`).
+
+Previously, when a message body reached XQuery as an already-built `javax.xml.transform.Source` (for example after a `convertBodyTo(Source.class)`), it was parsed with the Saxon parser defaults, which resolved external entities. A body carrying a `DOCTYPE` declaration on that path is now rejected with a parse error. Bodies without a `DOCTYPE` are unaffected.
+
+A deployment that genuinely needs to parse documents with a `DOCTYPE` or external entities can supply its own pre-configured Saxon `Configuration` through the `configuration` option of the `xquery` endpoint or language (or `XQueryBuilder.setConfiguration(…​)`); a user-supplied `Configuration` is used as-is and is not modified.
+
+### camel-debezium-oracle - the databaseOutServerName option is removed
+
+`databaseOutServerName` is gone from the `debezium-oracle` endpoint and component options. It mapped to Debezium’s `database.out.server.name`, which Debezium deprecated in favour of `xstream.out.server.name`.
+
+Camel already drops the options that Debezium deprecates, but the filter only recognised the ones the connector declares as a `Field`, so this one - declared as a plain `String` constant - slipped through and was published as a second, undocumented spelling of the same setting. Routes that set `databaseOutServerName` should use `xstreamOutServerName` instead; it configures the same XStream outbound server and is unchanged.
+
+### camel-jolt - switch from unmaintained bazaarvoice jolt to the jolt-community fork
+
+The JOLT library dependency has been migrated from `com.bazaarvoice.jolt:jolt-core` to `io.github.jolt-community.jolt:jolt-community-core`. See [JOLT (Community Edition)](https://github.com/jolt-community/jolt-community).
+
+Due to the package rename from `com.bazaarvoice.jolt` to `io.joltcommunity.jolt`, users who plug custom `Transform` or `ContextualTransform` classes into a Chainr spec need to update their imports to `io.joltcommunity.jolt.Transform` and `io.joltcommunity.jolt.ContextualTransform`. Users referencing `Removr` directly also need to update their import to `io.joltcommunity.jolt.removr.Removr`.
