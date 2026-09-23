@@ -17,7 +17,7 @@ Camel supports two re-sequencing algorithms:
 -   [Stream Resequencing](streamConfig-eip.md) - re-orders (continuous) message streams based on the detection of gaps between messages.
     
 
-By default, the Resequencer does not support duplicate messages and will only keep the last message, in case a message arrives with the same message expression. However, in the batch mode you can enable it to allow duplicates.
+By default, the Resequencer does not support duplicate messages. If a message arrives with the same message expression as a message the Resequencer already holds, it keeps the message that arrived first and drops the later one. However, in the batch mode you can enable it to allow duplicates.
 
 ## Options
 
@@ -178,7 +178,7 @@ This reorders messages using a custom sequence number with the header name mySeq
 
 ### Allow Duplicates
 
-When allowing duplicates, then the resequencer retains the duplicate message instead of keeping only the last duplicated message.
+When allowing duplicates, then the resequencer retains the duplicate message instead of keeping only the first message.
 
 In batch mode, you can turn on duplicates as follows:
 

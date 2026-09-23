@@ -32,7 +32,7 @@ At runtime, the `jms-pooled-apache-artemis-sink` Kamelet relies upon the presenc
     
 -   mvn:org.apache.activemq:artemis-jakarta-client-all:2.57.0
     
--   mvn:org.messaginghub:pooled-jms:3.2.4
+-   mvn:org.messaginghub:pooled-jms:3.2.5
     
 
 ## Camel JBang usage

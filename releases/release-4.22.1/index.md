@@ -91,11 +91,7 @@ git checkout camel-4.22.1
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (85)
-
-[CAMEL-24776](https://issues.apache.org/jira/browse/CAMEL-24776)
-
-camel-jbang run does not auto-load camel-kubernetes for secret property functions
+### Bug (84)
 
 [CAMEL-24729](https://issues.apache.org/jira/browse/CAMEL-24729)
 
