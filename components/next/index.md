@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 384 in 311 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 385 in 312 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -415,6 +415,7 @@ Number of Non-Core Components: 384 in 311 JAR artifacts (4 deprecated)
 | [Twitter Direct Message](twitter-directmessage-component.md) | camel-twitter | Stable | 2.10 | Send and receive Twitter direct messages. |
 | [Twitter Search](twitter-search-component.md) | camel-twitter | Stable | 2.10 | Access Twitter Search. |
 | [Twitter Timeline](twitter-timeline-component.md) | camel-twitter | Stable | 2.10 | Send tweets and receive tweets from user’s timeline. |
+| [TypeSafe AI](typesafe-ai-component.md) | camel-typesafe-ai | Preview | 4.23 | Evaluate text and structured state with the TypeSafe AI decision API. |
 | [Undertow](undertow-component.md) | camel-undertow | Stable | 2.16 | Expose HTTP and WebSocket endpoints and access external HTTP/WebSocket servers. |
 | [Velocity](velocity-component.md) | camel-velocity | Stable | 1.2 | Transform messages using a Velocity template. |
 | [Vert.x](vertx-component.md) | camel-vertx | Stable | 2.12 | Send and receive messages to/from Vert.x Event Bus. |

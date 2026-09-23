@@ -19,6 +19,21 @@ Where the `rightValue` can be a string literal enclosed in `' '`, `null`, a cons
 
 Camel will automatically type convert the rightValue type to the leftValue type, so it is able to e.g., convert a string into a numeric, so you can use `>` comparison for numeric values.
 
+### Where the operators go
+
+An operator can be written inside `${ }` or outside it:
+
+```text
+${body != null && body.size() > 0}     (1)
+${body} != null && ${body.size()} > 0  (2)
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>the braces hold a predicate, and answer whether it matches</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>the operators are between the functions, and the whole text is the predicate</td></tr></tbody></table>
+
+Both mean the same thing. Inside the braces the answer is a value, so it can be used in a template as well: `Over three: ${header.n > 3}` gives `Over three: true`.
+
+An operator is only an operator when whitespace surrounds it, which is what keeps a name such as `${header.Content-Length}` and a pattern such as `${date:now:yyyy-MM-dd}` a plain function.
+
 ### Comparison Operators
 
 The following comparison operators are supported:
@@ -109,6 +124,12 @@ The syntax for the ternary operator is:
 
 ```text
 ${leftValue OP rightValue ? trueValue : falseValue}
+```
+
+The condition may be several comparisons joined by `&&` or `||`:
+
+```text
+${header.age > 18 && header.country == 'DK' ? 'yes' : 'no'}
 ```
 
 The whole ternary must be inside a single `${ }`. Outside `${ }` a Simple expression is a template, so a `?` and a `:` there are literal text and the operator is not evaluated. For example:

@@ -176,6 +176,7 @@ The OPA component supports the following message header(s), which is/are listed 
 | **CamelOpaDecisionAllow** (producer) Constant: [`DECISION_ALLOW`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION_ALLOW) | The allow/deny verdict of the policy evaluation. Always overwritten by the component, so a value set by an inbound message never survives into the route. |  | Boolean |
 | **CamelOpaDecision** (producer) Constant: [`DECISION`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION) | The raw decision document returned by OPA. Useful for policies that return more than a boolean, such as obligations, row filters or deny reasons. |  | Object |
 | **CamelOpaPolicyPath** (producer) Constant: [`POLICY_PATH`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#POLICY_PATH) | The policy path that was evaluated. Set by the component for observability; it is not read as an input and cannot be used to select a different policy. |  | String |
+| **CamelOpaDecisionFailedOpen** (producer) Constant: [`DECISION_FAILED_OPEN`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION_FAILED_OPEN) | Set to true only when the exchange proceeded because failOpen is enabled and the policy could not be evaluated - nothing authorized it. Absent on every decision an actual policy made, so a route or an audit trail can tell the two apart rather than seeing the same CamelOpaDecisionAllow=true for both. |  | Boolean |
 
 ## Usage
 
@@ -374,6 +375,20 @@ The component fails closed. If the policy cannot be evaluated at all — the OPA
 
 Setting `failOpen=true` reverses this and lets the exchange proceed when the policy cannot be evaluated. It exists for development and for non-critical policies, and should not be enabled in production.
 
+An exchange that proceeds that way carries `CamelOpaDecisionFailedOpen=true`. `CamelOpaDecisionAllow` is `true` in both cases, and on its own it cannot tell "a policy allowed this" from "no policy ran and we were told to proceed" — which is exactly the distinction an audit trail needs. The marker is set only on the fail-open path, so a route can branch on it and an operator can alert on its presence:
+
+```java
+from("platform-http:/orders")
+    .to("opa:authz/orders/allow?failOpen=true")
+    .choice()
+        .when(header(OpaConstants.DECISION_FAILED_OPEN).isEqualTo(true))
+            .to("log:unauthorized?level=WARN")
+    .end()
+    .to("direct:orders")
+```
+
+Like the other decision headers it is cleared before every evaluation, so a message cannot arrive claiming `CamelOpaDecisionFailedOpen=false` and disguise an unauthorized exchange as one a policy allowed.
+
 Note that OPA reports an **undefined** decision — no rule matched and the policy declares no default — as an error rather than as a deny, so it fails closed as well. Give every decision rule a default, as in the example above, so the policy always returns a verdict.
 
 ## Health check
@@ -382,7 +397,7 @@ Because the component fails closed, an OPA server that cannot be reached fails *
 
 Camel disables producer health checks by default; turn them on with `camel.health.producersEnabled=true`, or per component with `healthCheckProducerEnabled`. The check reports DOWN with the underlying reason — an unreachable server and a server answering its health endpoint with an error are reported differently, so a deny is never confused with an outage.
 
-`OpaSecurityPolicy` registers an equivalent check, under an id starting `security-policy:opa-`. It is arguably the more important of the two: a denied producer merely records a verdict the route can inspect, while the policy throws `CamelAuthorizationException` and stops the exchange, so an unreachable server there fails every message outright. That is why the policy’s check is on by default rather than opt-in like the producer’s. Set `healthCheckEnabled=false` on the policy for a route that should stay ready regardless — one running `failOpen`, say — in preference to hiding the check with `camel.health.exclude-pattern`.
+`OpaSecurityPolicy` registers an equivalent check, under an id starting `security-policy:opa-`. It is arguably the more important of the two: a denied producer merely records a verdict the route can inspect, while the policy throws `CamelAuthorizationException` and stops the exchange, so an unreachable server there fails every message outright. That is why the policy’s check is on by default rather than opt-in like the producer’s. Set `healthCheckEnabled=false` on the policy for a route that should stay ready regardless — one running `failOpen`, say — in preference to hiding the check with `camel.health.exclude-pattern`. A policy running `failOpen` marks the exchanges it let through with `CamelOpaDecisionFailedOpen`, exactly as the producer does; the evaluator is shared, so everything in [Failure handling](#failure-handling) about that header applies to `.policy(…​)` too.
 
 Neither check is registered when an `opaClient` was injected: that client may point anywhere and neither the endpoint nor the policy has a way to ask it where, so probing the configured `serverUrl` would report on a server they may never talk to. The endpoint check is also skipped when no `serverUrl` was given, and in `wasm` mode, where the policy is evaluated in-process and there is no server to probe.
 

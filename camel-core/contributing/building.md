@@ -137,3 +137,32 @@ For instance, if you do some code changes in the camel-ftp component, following 
 cd camel-ftp
 mvn clean install -Psourcecheck
 ```
+
+## Checking dependency hygiene
+
+The opt-in `-Pdep-check` profile leverages [`pilot:dependencies`](https://github.com/maveniverse/pilot) for bytecode-level detection of **used-but-undeclared** and **unused-but-declared** dependencies. It is non-blocking by default (report mode), so it only prints findings without failing the build.
+
+The mojo requires compiled classes. Run `compile` first (test-scope analysis is skipped by default, since many modules depend on `camel-test-spring-junit6` which is not resolvable in a clean checkout without a prior install):
+
+```bash
+# Full reactor — report mode (default, compile-scope only)
+mvn compile eu.maveniverse.maven.plugins:pilot-plugin:0.4.0:dependencies -Pdep-check -Dpilot.skipTestScope=true -Dlicense.skip -Dquickly
+
+# Single module — includes test-scope (camel-test-spring-junit6 is available after a local install)
+mvn test-compile eu.maveniverse.maven.plugins:pilot-plugin:0.4.0:dependencies -Pdep-check
+```
+
+Or on a single module:
+
+```bash
+cd components/camel-ftp
+mvn compile eu.maveniverse.maven.plugins:pilot-plugin:0.4.0:dependencies -Pdep-check -Dpilot.skipTestScope=true
+```
+
+To fail the build on findings:
+
+```bash
+mvn compile eu.maveniverse.maven.plugins:pilot-plugin:0.4.0:dependencies -Pdep-check -Dpilot.skipTestScope=true -Dpilot.action=check
+```
+
+CI also runs this profile automatically on pull requests targeting `main` (see the **Dependency Analysis** workflow).

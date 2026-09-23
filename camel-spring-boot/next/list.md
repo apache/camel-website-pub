@@ -1239,6 +1239,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Twitter Direct Message](../../components/next/twitter-directmessage-component.md) | camel-twitter-starter | Stable | 2.10 | Send and receive Twitter direct messages. |
 | [Twitter Search](../../components/next/twitter-search-component.md) | camel-twitter-starter | Stable | 2.10 | Access Twitter Search. |
 | [Twitter Timeline](../../components/next/twitter-timeline-component.md) | camel-twitter-starter | Stable | 2.10 | Send tweets and receive tweets from user’s timeline. |
+| [TypeSafe AI](../../components/next/typesafe-ai-component.md) | camel-typesafe-ai-starter | Preview | 4.23 | Evaluate text and structured state with the TypeSafe AI decision API. |
 | [Undertow](../../components/next/undertow-component.md) | camel-undertow-starter | Stable | 2.16 | Expose HTTP and WebSocket endpoints and access external HTTP/WebSocket servers. |
 | [Validator](../../components/next/validator-component.md) | camel-validator-starter | Stable | 1.1 | Validate the payload using XML Schema and JAXP Validation. |
 | [Velocity](../../components/next/velocity-component.md) | camel-velocity-starter | Stable | 1.2 | Transform messages using a Velocity template. |
@@ -1376,6 +1377,7 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [Simple - OGNL Expressions](../../components/next/languages/simple-ognl.md) | undefined-starter |  |  |  |
 | [SpEL](../../components/next/languages/spel-language.md) | camel-spring-starter | Stable | 2.7 | Evaluates a Spring expression (SpEL) |
 | [Tokenize](../../components/next/languages/tokenize-language.md) | camel-core-languages-starter | Stable | 2.0 | Tokenize text payloads using delimiter patterns |
+| [TypeSafe AI](../../components/next/languages/typesafe-ai-language.md) | camel-typesafe-ai-starter | Preview | 4.23 | Evaluate a Noul question with the TypeSafe AI decision API |
 | [Variable](../../components/next/languages/variable-language.md) | camel-core-languages-starter | Stable | 4.4 | Gets a variable |
 | [Wasm](../../components/next/languages/wasm-language.md) | camel-wasm-starter | Experimental | 4.5 | Call a wasm (web assembly) function |
 | [XML Tokenize](../../components/next/languages/xtokenize-language.md) | camel-stax-starter | Stable | 2.14 | Tokenize XML payloads |

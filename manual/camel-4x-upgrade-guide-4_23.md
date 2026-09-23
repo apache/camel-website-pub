@@ -11,6 +11,14 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 OAuth client credentials token caching now distinguishes profiles by client secret and requested scope, in addition to token endpoint and client ID. Profiles with different credentials or scopes request separate tokens instead of reusing the same cached token. Applications using such profiles may make additional token requests after upgrading.
 
+### Simple language
+
+`${ }` may now hold a predicate, as the braces do in Jakarta EL, Groovy and a JavaScript template: `${body != null && body.size() > 0}` answers whether it matches, instead of being refused with _Operators go outside the function_. The form with the operators outside the braces (`${body} != null && ${body.size()} > 0`) means the same and is unchanged, and the ternary keeps working as before.
+
+An operator counts only when whitespace surrounds it outside quotes, so a name such as `${header.Content-Length}` and a pattern such as `${date:now:yyyy-MM-dd}` are read as they were. Only expressions that used to throw can now return a value: every one of the 804 distinct simple expressions in camel, camel-kamelets, camel-examples and camel-jbang-examples parses to what it parsed to before.
+
+The simple language reads a `Map` with a dot as well as with a key: `${body.sku}` answers the `sku` entry of a map body when the map has no `sku()` method, the same value `${body[sku]}` gives. A method of the map still wins, so `${body.size}` calls `size()` as before, and a name that is neither a method nor a key still fails. Only expressions that used to throw can now return a value.
+
 ### Circuit Breaker EIP
 
 The exchange property `CamelCircuitBreakerResponseRejected` is now also set inside the `onFallback`, in both `camel-resilience4j` and `camel-microprofile-fault-tolerance`: `true` when the call was not attempted because the breaker was open or the bulkhead was full, `false` when the call was made and failed or timed out. Prior to Camel 4.23 the property was only set when there was no fallback and was absent inside the fallback, so a fallback that tested it for `null` must now test for `true` or `false` instead. `CamelCircuitBreakerResponseShortCircuited` is unchanged and remains `true` whenever the fallback runs, whatever the cause.
@@ -576,6 +584,10 @@ The Camel authoring tools for AI agents are now defined once, in `camel-jbang-co
 The `camel_write_file` tool, when an integration of the project is selected and runs in dev mode, waits up to eight seconds for the reload of the written file and answers with its outcome (`reload.status` reloaded, failed with the cause and the validator’s report, properties, or unknown), so an agent does not go on with a route that did not load. A write with no selected integration answers as before.
 
 The `validate` argument of `camel_write_file` is gone: the write always validates the content and refuses an invalid file. A model given the switch turned it off on its own, and the file then failed to load.
+
+The authoring set has a new tool, `camel_edit_file`: it replaces one snippet of a file, given the exact text to find and what to put there, and validates and reloads the result as a write does. A model that rewrites a whole file to change one step corrupts the lines it did not mean to touch, so this is the tool for a change to an existing file; `camel_write_file` writes a new one.
+
+`camel_eval_expression` evaluates any language, not only the ones on the server’s own classpath: the component of a language such as `jsonpath`, `jq` or `xpath` is downloaded on first use, as `camel run` downloads what a route needs, and the answer names it in `downloaded`. A failing expression also carries the catalog’s syntax error and the position where it breaks.
 
 The `camel_run` tool, when no files are named, starts the project with `camel run --source-dir=.` instead of listing the directory’s files: the directory is watched, so a file added afterwards (a bean file, a Java class under `src/main/java`) is part of the app and reloaded in dev mode, and a `restart` starts the same way. Naming files keeps the previous behaviour. The `camel_control` tool gets a `reload` action, what `camel cmd reload` does.
 
@@ -1407,6 +1419,10 @@ Every expression has a new option `resolveResource` (default `false`). When `tru
 
 A name without a scheme, `resource:orderTemplate.json`, is a classpath resource. The loaded content is the final value and is not evaluated again. Nothing changes without the option: the `resource:` prefix on the expression text itself is resolved as before, and a returned value that happens to start with `resource:` stays as it is.
 
+### camel-platform-http-vertx - a path parameter wins over an incoming header of the same name
+
+A REST endpoint with a path parameter, `/stock/{sku}`, sets the header `sku` from the path. When the request also carried an HTTP header of that name, the two were merged and `${header.sku}` was a `List` such as `[X, CAMEL-MUG]`, so a route that read it failed even when the path value was correct. The value from the path is used now; a query parameter may still repeat and is still collected into a list.
+
 ### camel-core - the required attribute on rest param and route template parameter is now a String
 
 `ParamDefinition.required` (the rest DSL `param`) and `RouteTemplateParameterDefinition.required` (the `templateParameter` of a route template) are now declared as `String` instead of `Boolean`, the same way nearly every other scalar attribute in the Camel model is declared. This allows a property placeholder to be used, which is resolved when the route starts:
@@ -1519,3 +1535,27 @@ Camel already drops the options that Debezium deprecates, but the filter only re
 The JOLT library dependency has been migrated from `com.bazaarvoice.jolt:jolt-core` to `io.github.jolt-community.jolt:jolt-community-core`. See [JOLT (Community Edition)](https://github.com/jolt-community/jolt-community).
 
 Due to the package rename from `com.bazaarvoice.jolt` to `io.joltcommunity.jolt`, users who plug custom `Transform` or `ContextualTransform` classes into a Chainr spec need to update their imports to `io.joltcommunity.jolt.Transform` and `io.joltcommunity.jolt.ContextualTransform`. Users referencing `Removr` directly also need to update their import to `io.joltcommunity.jolt.removr.Removr`.
+
+### camel-mustache, camel-chunk - potential breaking change
+
+The Exchange header constants in `MustacheConstants` and `ChunkConstants` have been renamed to follow the Camel naming convention used across the rest of the component catalog (so that they are handled consistently by `DefaultHeaderFilterStrategy`, like the other template components). The Java field names are unchanged; only the header string values have changed.
+
+`MustacheConstants`:
+
+  
+| Constant | Previous value | New value |
+| --- | --- | --- |
+| `MustacheConstants.MUSTACHE_RESOURCE_URI` | `MustacheResourceUri` | `CamelMustacheResourceUri` |
+| `MustacheConstants.MUSTACHE_TEMPLATE` | `MustacheTemplate` | `CamelMustacheTemplate` |
+
+`ChunkConstants`:
+
+  
+| Constant | Previous value | New value |
+| --- | --- | --- |
+| `ChunkConstants.CHUNK_RESOURCE_URI` | `ChunkResourceUri` | `CamelChunkResourceUri` |
+| `ChunkConstants.CHUNK_TEMPLATE` | `ChunkTemplate` | `CamelChunkTemplate` |
+
+Both components read these headers only when `allowTemplateFromHeader=true`. Because the old names sat outside the `Camel` namespace, `DefaultHeaderFilterStrategy` did not strip them, so such a header arriving from an untrusted sender reached the producer; with the `Camel` prefix the headers are now filtered at the component boundary, so the template or resource can only come from the route. For that reason the old names should not simply be restored.
+
+Routes that reference the constants (for example `setHeader(MustacheConstants.MUSTACHE_TEMPLATE, …​)`) are unaffected. Routes that set the header by its literal string name, or that use `allowTemplateFromHeader=true` with the old header names, must switch to the new `Camel`\-prefixed names.

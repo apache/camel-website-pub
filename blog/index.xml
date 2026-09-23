@@ -9,6 +9,13 @@
     <lastBuildDate>Tue, 22 Sep 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>B.Y.O.A. — Bring Your Own Agent to Camel TUI and Build Integrations with Camel Kit</title>
+      <link>https://camel.apache.org/blog/2026/09/camel-tui-byoa/</link>
+      <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/camel-tui-byoa/</guid>
+      <description>The next Apache Camel release, 4.23, is shaping up to be a great release, packed with new features. One I worked on is support for coding agents in Camel TUI through the Agent Client Protocol, or ACP.&#xA;It lets you use your coding agent directly in the TUI, with its existing setup and tools. The same agent can build an integration, inspect its live behaviour, fix a route, and verify the next message—all in one conversation.</description>
+    </item>
+    <item>
       <title>Round 2: a real-world example set, a step-by-step benchmark, and 31 more Camel fixes</title>
       <link>https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/</link>
       <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>

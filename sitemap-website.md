@@ -1,5 +1,6 @@
-urls[870]{loc,lastmod}:
+urls[871]{loc,lastmod}:
   https://camel.apache.org/categories/AI/,2026-09-22T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/camel-tui-byoa/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/,2026-09-22T00:00:00+00:00

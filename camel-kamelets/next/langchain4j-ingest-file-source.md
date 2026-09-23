@@ -18,7 +18,9 @@ The following table summarizes the configuration options available for the `lang
 | **directory** | Directory | **Required** The directory to ingest documents from. | string |  |  |
 | **charset** | Charset | Character set for reading text documents, for example UTF-8. Leave unset when the source feeds a parser action (tika-extract-text-action or docling-convert-action), which must receive the raw bytes - a charset conversion would corrupt a binary document such as a PDF. | string |  |  |
 | **delay** | Delay | Milliseconds between directory polls; the file endpoint’s default is 500ms, which is aggressive for a knowledge-base directory. | integer |  |  |
+| **exclude** | Exclude | Comma-separated Ant-style patterns for files to skip, for example `***/draft-**`. Exclusion wins over inclusion. | string |  |  |
 | **idempotentRepository** | Idempotent Repository | An IdempotentRepository bean remembering already consumed files, as a `#bean:name` reference; the register is keyed on path, modification time and size, so an edited file is consumed again. When unset, the file endpoint’s default in-memory register (1000 entries) applies - eviction on a large directory re-ingests files, so supply a sized or persistent repository for a real knowledge base. | string |  |  |
+| **include** | Include | Comma-separated Ant-style patterns for files to ingest, matched on the path relative to the directory, for example `**/**.pdf,**/**.md`. When unset, every file is ingested. | string |  |  |
 | **recursive** | Recursive | Whether subdirectories are ingested too. | boolean | true |  |
 
 ## Dependencies

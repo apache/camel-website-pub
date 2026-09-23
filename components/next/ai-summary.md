@@ -130,6 +130,10 @@ Spring AI Vector Store
 
 Provide access to TensorFlow Serving model servers to run inference with TensorFlow saved models remotely
 
+[TypeSafe AI](typesafe-ai-component.md)
+
+Evaluate text and structured state with the TypeSafe AI decision API.
+
 [weaviate](weaviate-component.md)
 
 Perform operations on the Weaviate Vector Database.

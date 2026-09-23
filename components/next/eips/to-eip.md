@@ -104,18 +104,15 @@ For example, if you’re using a Freemarker producer and the template location i
 >
 > This snippet is not valid code. Read on.
 
--   Java
-    
--   XML
-    
--   YAML
-    
+Java
 
 ```java
 from("file:messages/foo")
     .to("freemarker://templateHome/${body.templateName}.ftl")
     .to("jms:queue:foo");
 ```
+
+XML
 
 ```xml
 <route>
@@ -124,6 +121,8 @@ from("file:messages/foo")
     <to uri="jms:queue:foo"/>
 </route>
 ```
+
+YAML
 
 ```yaml
 - route:

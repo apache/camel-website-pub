@@ -713,7 +713,7 @@ The camel.lra supports 5 options, which are listed below.
 
 ### Camel Error Registry configurations
 
-The camel.errorRegistry supports 8 options, which are listed below.
+The camel.errorRegistry supports 9 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -725,6 +725,7 @@ The camel.errorRegistry supports 8 options, which are listed below.
 | `camel.errorRegistry.includeExchangeProperties` | Whether to include the exchange properties in the captured error data. | true | boolean |
 | `camel.errorRegistry.includeExchangeVariables` | Whether to include the exchange variables in the captured error data. | true | boolean |
 | `camel.errorRegistry.maximumEntries` | The maximum number of error entries to keep in the registry. When the limit is exceeded, the oldest entries are evicted. | 100 | int |
+| `camel.errorRegistry.maximumEntriesPerKind` | The maximum number of error entries of the same kind (same route, node and exception type) to keep, so a storm of one failure does not evict all the other errors. The counter of that kind keeps rising even when its older entries are evicted. | 3 | int |
 | `camel.errorRegistry.timeToLiveSeconds` | The time-to-live in seconds for error entries. Entries older than this are evicted. The default value is 0 (disabled). | 0 | int |
 
 ### Camel GenAI Observability configurations

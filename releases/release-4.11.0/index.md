@@ -595,7 +595,11 @@ Create an IBM Secrets Manager component
 
 camel-salesforce: Maven plugin: Support JWT Client Credentials flow
 
-### Task (14)
+### Task (15)
+
+[CAMEL-22967](https://issues.apache.org/jira/browse/CAMEL-22967)
+
+\[build\] Add the dependency analyze maven feature
 
 [CAMEL-21874](https://issues.apache.org/jira/browse/CAMEL-21874)
 

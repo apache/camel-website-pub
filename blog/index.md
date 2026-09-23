@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[247]{title,link,pubDate,description}:
+posts[248]{title,link,pubDate,description}:
+  B.Y.O.A. — Bring Your Own Agent to Camel TUI and Build Integrations with Camel Kit|https://camel.apache.org/blog/2026/09/camel-tui-byoa/index.md|Tue, 22 Sep 2026 00:00:00 +0000|The next Apache Camel release, 4.23, is shaping up to be a great release, packed with new features. One I worked on is support for coding agents in Camel TUI through the Agent Client Protocol, or ACP.
   Round 2: a real-world example set, a step-by-step benchmark, and 31 more Camel fixes|https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/index.md|Tue, 22 Sep 2026 00:00:00 +0000|Two weeks ago we let a frontier model coach a small local model through Camel and fixed Camel between every run: twelve of thirteen beginner examples in the end, and 99 findings that were wrong for hu
   CamelBee: Route Topology and Message Tracing for Deployed Camel Applications|https://camel.apache.org/blog/2026/09/camelbee-route-observability/index.md|Mon, 21 Sep 2026 00:00:00 +0000|Apache Camel keeps raising the floor of what ships in the box. Route topology diagrams and the Camel TUI both arrived in 4.21, and both are very good at what they are for: understanding a route while 
   Extending Apache Camel Simple with Your Own Functions|https://camel.apache.org/blog/2026/09/camel-simple-customfunction/index.md|Sun, 20 Sep 2026 00:00:00 +0000|Apache Camel&rsquo;s Simple language is surprisingly powerful. It can access message bodies, headers, variables and exchange properties, work with strings and numbers, evaluate conditions, process dat

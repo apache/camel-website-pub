@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790087067341,
+  "generated": 1790170074771,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -20536,6 +20536,12 @@
             },
             {
               "module": "languages",
+              "path": "typesafe-ai-language.adoc",
+              "url": "/components/next/languages/typesafe-ai-language.html",
+              "title": "TypeSafe AI"
+            },
+            {
+              "module": "languages",
               "path": "variable-language.adoc",
               "url": "/components/next/languages/variable-language.html",
               "title": "Variable"
@@ -23509,6 +23515,12 @@
               "path": "twitter-timeline-component.adoc",
               "url": "/components/next/twitter-timeline-component.html",
               "title": "Twitter Timeline"
+            },
+            {
+              "module": "ROOT",
+              "path": "typesafe-ai-component.adoc",
+              "url": "/components/next/typesafe-ai-component.html",
+              "title": "TypeSafe AI"
             },
             {
               "module": "ROOT",
