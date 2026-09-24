@@ -303,6 +303,7 @@ The tools an agent needs to build and edit an integration are defined once, in t
 | Tool | Description |
 | --- | --- |
 | `camel_route_context` | Given a Camel route (YAML, XML, or Java DSL), extracts all components and EIPs used, looks up their documentation from the catalog, and returns structured context. |
+| `camel_route_cost_estimate` | Estimates the API cost of a route from the components it uses, for the ones with pay-per-use pricing: Bedrock (runtime and agent-runtime), Textract, S3, SQS, SNS, Kinesis, OpenAI, LangChain4j (chat and embeddings) and Docling (free, self-hosted). Returns a per-execution estimate and a monthly projection at a given throughput. The cost data is approximate, from published AWS pricing (2025-Q2). |
 
 ### Test Scaffolding
 
@@ -311,6 +312,13 @@ The tools an agent needs to build and edit an integration are defined once, in t
 | --- | --- |
 | `camel_route_test_scaffold` | Generates a JUnit 5 test skeleton from a Camel route definition (YAML or XML). Accepts an optional `format` (`yaml` or `xml`, default `yaml`) and `runtime` (`main` or `spring-boot`, default `main`). For `main` runtime, the generated test extends `CamelTestSupport`; for `spring-boot`, it uses `@CamelSpringBootTest` with `@SpringBootTest`. The tool replaces non-trivial producer endpoints with mock endpoints, generates `@RegisterExtension` stubs for infrastructure components (Kafka, JMS/Artemis, MongoDB, PostgreSQL, Cassandra, Elasticsearch, Redis, RabbitMQ, FTP, Consul, NATS, Pulsar, CouchDB, Infinispan, MinIO, Solr), and produces a `NotifyBuilder` pattern for timer-based routes or `template.sendBody()` for direct/seda consumers. Returns the generated test code, detected components, mock endpoint mappings, test-infra services, and required Maven test dependencies. |
 
+### AI Pipelines
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_ai_pipeline_scaffold` | Generates a YAML DSL route for an AI document-processing pipeline, combining a document processor (Docling for open-source or on-premise, Textract for AWS-managed) with Bedrock LLM services for summarization, extraction, RAG or classification. Returns a runnable route and a matching `application.properties` template. |
+
 ### Security Analysis
 
  
@@ -318,6 +326,8 @@ The tools an agent needs to build and edit an integration are defined once, in t
 | --- | --- |
 | `camel_route_harden_context` | Analyzes a route for security concerns. Identifies security-sensitive components, assigns risk levels, detects issues like hardcoded credentials or plain-text protocols, and returns structured security findings alongside best practices and the known published CVE advisories affecting the components used by the route at the given Camel version. |
 | `camel_security_advisories` | Lists the published Apache Camel CVE security advisories (the data behind [camel.apache.org/security](/security/)), optionally filtered by Camel version, component and severity. Each advisory includes the summary, affected and fixed versions, mitigation, and a best-effort verdict on whether the given Camel version is affected. Use it to answer questions such as "is my Camel 4.10.1 project affected by known CVEs?". |
+| `camel_security_scan` | Scans a route for security anti-patterns by static analysis: secrets exposed in URIs, insecure configuration options (`trustAllCertificates`, `allowJavaSerializedObject` and the like), missing `Camel*` header filters on consumers, unencrypted protocols and other violations of the Camel security model. Each finding carries a severity, a line number and remediation guidance. Distinct from `camel_route_harden_context`, which gives general security context and the CVE advisories. |
+| `camel_dependency_security_audit` | Audits a project’s dependencies for known vulnerabilities: cross-references the `pom.xml` with the Camel security advisory database for the CVEs affecting each artifact at the project’s Camel version, and reports severity, affected and fixed version ranges, and whether the vulnerable component is actually used (reachable) or only a transitive dependency. The POM content is sanitized to mask sensitive data. |
 
 #### Security advisory data
 
@@ -404,6 +414,7 @@ Since Camel 4.6, the recommended approach for building REST APIs from OpenAPI sp
 | `camel_runtime_route_source` | Get the source code of routes in the running Camel application. Supports wildcard filtering. |
 | `camel_runtime_route_dump` | Dump route definitions in XML or YAML format. |
 | `camel_runtime_route_structure` | Show the route structure as a tree of processors. |
+| `camel_runtime_processor_detail` | Show the configured options of every processor in a route: each processor’s type, id, and configured options (attributes and expressions). With `includeDocs=true` each EIP option and component endpoint option is enriched with its documentation from the Camel catalog. |
 | `camel_runtime_route_control` | Control a route: start, stop, suspend, or resume it by route ID. |
 | `camel_runtime_route_topology` | Get the inter-route topology showing how routes connect to each other and to external endpoints. Returns nodes and edges describing the route graph. |
 
@@ -419,6 +430,7 @@ Since Camel 4.6, the recommended approach for building REST APIs from OpenAPI sp
 | `camel_runtime_top` | Show top processor statistics: which processors are slowest and most active. |
 | `camel_runtime_memory` | Show JVM memory usage (heap/non-heap), garbage collection stats, and thread counts. |
 | `camel_runtime_heap_histogram` | Get a class-level heap histogram showing instance counts and byte usage per class. Useful for diagnosing memory leaks and understanding which classes dominate heap usage. |
+| `camel_runtime_heap_dump` | Write a heap dump (`.hprof`) from a running integration for deep memory analysis with tools such as Eclipse MAT, VisualVM or jhat. The dump is written to the process working directory. |
 | `camel_runtime_memory_leak` | Diagnose memory leaks in a running Camel integration using Java Flight Recorder (JFR). Use command 'start' to begin recording, 'stop' to get results, 'status' to check state, and 'query' to retrieve cached results. Supports dual-recording mode for trend comparison. |
 | `camel_runtime_history` | Get the message history trace of the last completed exchange. Shows the route path, processors visited, headers, body, and timing. |
 | `camel_runtime_thread_dump` | Get a JVM thread dump showing thread names, states, and stack traces. |
@@ -456,6 +468,7 @@ Since Camel 4.6, the recommended approach for building REST APIs from OpenAPI sp
 | --- | --- |
 | `camel_runtime_send` | Send a test message to a Camel endpoint in the running application. |
 | `camel_runtime_trace` | Enable, disable, or dump message tracing for the running Camel application. |
+| `camel_runtime_ai_trace` | Trace the AI-specific exchange flow of a running application: token usage, model ids, guardrail outcomes, completion reasons, streaming chunk counts and per-component latency for the AI components (Bedrock, LangChain4j, Docling, Textract, OpenAI, KServe, DJL, TensorFlow Serving, HuggingFace). It combines the message history with the processor statistics, filtered to the AI steps. |
 | `camel_runtime_browse` | Browse messages in a Camel endpoint (e.g., messages queued in a SEDA endpoint). |
 | `camel_runtime_receive` | Receive (poll) a message from a Camel endpoint in the running application. Consumes one message from the endpoint. |
 

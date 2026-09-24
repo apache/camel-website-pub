@@ -45,7 +45,7 @@ All the file tokens use the same expression name as the method on the `java.io.F
 | file:absolute.path | String | yes | no | no | no | refers to the absolute file path |
 | file:length | Long | yes | no | yes | no | refers to the file length returned as a Long type |
 | file:size | Long | yes | no | yes | no | refers to the file length returned as a Long type |
-| file:modified | Date | yes | no | yes | no | Refers to the file last modified returned as a Date type |
+| file:modified | Long | yes | no | yes | no | Refers to the file last modified returned as a Long (millis since epoch) |
 | date:\_command:pattern\_ | String | yes | yes | yes | yes | for date formatting using the `java.text.SimpleDateFormat` patterns. Is an **extension** to the [Simple](simple-language.md) language. Additional command is: **file** (consumers only) for the last modified timestamp of the file. Notice: all the commands from the [Simple](simple-language.md) language can also be used. |
 
 ## File token example

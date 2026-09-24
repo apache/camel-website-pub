@@ -3563,6 +3563,8 @@ string | The runtime provider to use for the integration. (Default, plain Quarku
 string | The runtime version to use for the integration. It overrides the default version set in the Integration Platform. You can use a fixed version (for example "3.2.3") or a semantic version (for example "3.x") which will try to resolve to the best matching Catalog existing on the cluster (Default, the one provided by the operator version). |
 | `properties`  
 \[\]string | A list of properties to be provided to the Integration runtime |
+| `skipObservabilityServices`  
+bool | Whether to skip the default Camel Observability Services dependency |
 
 ### Configuration
 

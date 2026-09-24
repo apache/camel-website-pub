@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790191535313,
+  "generated": 1790244940533,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -16449,6 +16449,12 @@
               "path": "starters/twitter.adoc",
               "url": "/camel-spring-boot/next/starters/twitter.html",
               "title": "Twitter Direct Message"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/typesafe-ai.adoc",
+              "url": "/camel-spring-boot/next/starters/typesafe-ai.html",
+              "title": "TypeSafe AI"
             },
             {
               "module": "ROOT",

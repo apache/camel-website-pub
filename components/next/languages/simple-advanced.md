@@ -25,7 +25,7 @@ Notice how the block uses the `$init{` …​ `}init$` markers to indicate the s
 Inside the init block, then you can assign local variables in the syntax `$key := <statement>;` where you can then use simple language to compute the value of the variable.
 
 > **Important**
-> Each statement must end with semicolon and new-line (`;\n`). You can only have 1 statement per line. This makes the init block more similar to Java programming language, and it was also necessary to make this work for the internal simple parser used by Camel.
+> Each statement must end with a semicolon (`;`). Statements are usually one per line, but several statements can also be on one line when separated by a space, such as `$init{ $a := 1; $b := 2; }init$`. This makes the init block more similar to Java programming language, and it was also necessary to make this work for the internal simple parser used by Camel.
 
 Here are a couple of examples:
 

@@ -79,6 +79,7 @@ The TypeSafe AI component supports the following options which are listed below.
 | **maxConcurrentRequests** (common) | Maximum concurrent evaluations per endpoint, shared by producers and predicates. Excess requests fail immediately with RejectedExecutionException without being queued or sent. Must be positive. | 64 | int |
 | **model** (common) | The model ID or alias. Use a versioned ID to pin decision behavior. | jev-latest | String |
 | **questions** (common) | A JSON object mapping question names to Noul, Choice or Score question objects. When set, producers evaluate the selected message state; otherwise the body must contain a complete request map. |  | String |
+| **questionsResource** (common) | Camel resource URI for a UTF-8 JSON object mapping question names to Noul, Choice or Score questions. Loaded and validated when the endpoint starts. Cannot be combined with questions. |  | String |
 | **requestTimeout** (common) | The timeout in milliseconds for the complete HTTP request and response body. Must be positive. | 30000 | long |
 | **state** (common) | The Simple expression selecting state for configured producer questions and the TypeSafe AI language. If not set, the message body is used. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -127,6 +128,7 @@ With the following _path_ and _query_ parameters:
 | **maxConcurrentRequests** (common) | Maximum concurrent evaluations per endpoint, shared by producers and predicates. Excess requests fail immediately with RejectedExecutionException without being queued or sent. Must be positive. | 64 | int |
 | **model** (common) | The model ID or alias. Use a versioned ID to pin decision behavior. | jev-latest | String |
 | **questions** (common) | A JSON object mapping question names to Noul, Choice or Score question objects. When set, producers evaluate the selected message state; otherwise the body must contain a complete request map. |  | String |
+| **questionsResource** (common) | Camel resource URI for a UTF-8 JSON object mapping question names to Noul, Choice or Score questions. Loaded and validated when the endpoint starts. Cannot be combined with questions. |  | String |
 | **requestTimeout** (common) | The timeout in milliseconds for the complete HTTP request and response body. Must be positive. | 30000 | long |
 | **state** (common) | The Simple expression selecting state for configured producer questions and the TypeSafe AI language. If not set, the message body is used. |  | String |
 | **resultProperty** (producer) | Store the producer response in this exchange property, preserving the original message body. |  | String |
@@ -185,12 +187,53 @@ camel.component.typesafe-ai.result-property=evaluation
 from("direct:route")
     .to("typesafe-ai:refund")
     .choice()
-        .when(simple("${exchangeProperty.evaluation[answers][refund][noul]} >= 0.8"))
+        .when(simple("${exchangeProperty.evaluation[answers][refund][noul]} >= '0.8'"))
             .to("direct:refund-handler")
         .otherwise().to("direct:general-handler");
 ```
 
-No manually registered beans are needed. `state` is a Simple expression, defaulting to `${body}`. For an `InputStream`, use `${bodyAs(String)}`. Only the selected state is sent. Without `resultProperty`, the response replaces the message body.
+No manually registered beans are needed. `state` is a Simple expression, defaulting to `${body}`. For an `InputStream`, use `${bodyAs(String)}`. Only the selected state is sent. Without `resultProperty`, the response replaces the message body. Quote fractional thresholds in Simple predicates as shown, so Camel compares them as decimals instead of first coercing both operands to integers.
+
+### Questions from a JSON resource
+
+Use `questionsResource` when the question set is too large for a property value. It accepts a Camel resource URI, including `classpath:` and `file:`, and contains only the named questions. The component reads and validates the UTF-8 JSON once when the endpoint starts. The resource is limited to 4 MB. `questions` and `questionsResource` cannot be used together. An invalid or missing resource prevents the endpoint from starting.
+
+```json
+{
+  "department": {
+    "type": "choice",
+    "instructions": "Which team should handle this request?",
+    "criteria": {
+      "billing": "Payments and refunds",
+      "technical": "Bugs and outages",
+      "sales": "Pricing and new accounts"
+    }
+  },
+  "refund_requested": {
+    "type": "noul",
+    "instructions": "Does the customer explicitly request a refund?"
+  }
+}
+```
+
+Put this file at `src/main/resources/typesafe/triage-questions.json` and configure the endpoint and state through properties:
+
+```properties
+camel.component.typesafe-ai.questions-resource=classpath:typesafe/triage-questions.json
+camel.component.typesafe-ai.state=${body}
+camel.component.typesafe-ai.result-property=evaluation
+```
+
+```java
+from("direct:triage")
+    .to("typesafe-ai:triage")
+    .choice()
+        .when(simple("${exchangeProperty.evaluation[answers][department][choice]} == 'billing'"))
+            .to("direct:billing")
+        .otherwise().to("direct:other");
+```
+
+The resource shape is the `questions` object from the TypeSafe AI System One request; it has no outer `state`, `questions`, or `model` fields. The component validates the question types, criteria and JSON values at startup using the same rules as inline `questions`. For editor validation, use the Camel-maintained JSON Schema in `schema/typesafe-ai-questions.schema.json` from this component’s JAR.
 
 ## Producer request and response
 

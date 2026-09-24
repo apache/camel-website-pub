@@ -132,5 +132,10 @@ Disable any inner core processors (any core DSL processor provided in the route,
 If set to `true`, adds the generated telemetry `CAMEL_TRACE_ID` and `CAMEL_SPAN_ID` Exchange headers.
 
  | `boolean` | `false` |
+| `[quarkus.camel.opentelemetry2.trace-custom-id-only](#quarkus-camel-opentelemetry2-trace-custom-id-only)`
+
+If set to `true`, only creates trace spans for routes and nodes that have a custom id assigned.
+
+ | `boolean` | `false` |
 
 Configuration property fixed at build time. All other configuration properties are overridable at runtime.

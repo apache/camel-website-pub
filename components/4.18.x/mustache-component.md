@@ -116,8 +116,8 @@ The Mustache component supports 2 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **MustacheResourceUri** (producer) Constant: [`MUSTACHE_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_RESOURCE_URI) | A URI for the template resource to use instead of the endpoint. |  | String |
-| **MustacheTemplate** (producer) Constant: [`MUSTACHE_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
+| **CamelMustacheResourceUri** (producer) Constant: [`MUSTACHE_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_RESOURCE_URI) | A URI for the template resource to use instead of the endpoint. |  | String |
+| **CamelMustacheTemplate** (producer) Constant: [`MUSTACHE_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
 
 ## Usage
 

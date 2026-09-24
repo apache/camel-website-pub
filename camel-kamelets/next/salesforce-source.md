@@ -15,10 +15,12 @@ The following table summarizes the configuration options available for the `sale
 | --- | --- | --- | --- | --- | --- |
 | **clientId** | Consumer Key | **Required** The Salesforce application consumer key. | string |  |  |
 | **clientSecret** | Consumer Secret | **Required** The Salesforce application consumer secret. | string |  |  |
-| **password** | Password | **Required** The Salesforce user password. | string |  |  |
 | **query** | Query | **Required** The query to execute on Salesforce. | string |  | SELECT Id, Name, Email, Phone FROM Contact |
 | **topicName** | Topic Name | **Required** The name of the topic or channel. | string |  | ContactTopic |
-| **userName** | Username | **Required** The Salesforce username. | string |  |  |
+| **authenticationType** | Authentication Type | Authentication type to use. USERNAME\_PASSWORD needs userName and password, CLIENT\_CREDENTIALS needs only the consumer key and secret, REFRESH\_TOKEN needs refreshToken, JWT needs keystore and jwtAudience. Enum values: \* USERNAME\_PASSWORD \* CLIENT\_CREDENTIALS \* REFRESH\_TOKEN \* JWT | string | USERNAME\_PASSWORD |  |
+| **instanceUrl** | Instance URL | Salesforce instance URL, needed when the authentication response does not carry one. | string |  | https://myinstance.my.salesforce.com |
+| **jwtAudience** | JWT Audience | Audience claim for the JWT authentication type, usually the login URL of the target org. | string |  | https://login.salesforce.com |
+| **keystore** | Keystore | Reference to a registry bean of type org.apache.camel.support.jsse.KeyStoreParameters, written as "#bean:myBeanName", holding the certificate that signs the JWT. Required by the JWT authentication type and ignored by the others. | string |  | #bean:myKeystore |
 | **loginUrl** | Login URL | The Salesforce instance login URL. | string | [https://login.salesforce.com](https://login.salesforce.com) |  |
 | **notifyForFields** | Notify For Fields | Notify for fields. Enum values: \* ALL \* REFERENCED \* SELECT \* WHERE | string | ALL |  |
 | **notifyForOperationCreate** | Notify Operation Create | Notify for create operation. | boolean | true |  |
@@ -26,8 +28,11 @@ The following table summarizes the configuration options available for the `sale
 | **notifyForOperationUndelete** | Notify Operation Undelete | Notify for undelete operation. | boolean | false |  |
 | **notifyForOperationUpdate** | Notify Operation Update | Notify for update operation. | boolean | false |  |
 | **operation** | Operation | The operation to use. | string | subscribe |  |
+| **password** | Password | The Salesforce user password. | string |  |  |
 | **rawPayload** | Raw Payload | Use raw payload String for request and response (either JSON or XML depending on format), instead of DTOs, false by default. | boolean | false |  |
+| **refreshToken** | Refresh Token | Refresh token used by the REFRESH\_TOKEN authentication type. | string |  |  |
 | **replayId** | Replay Id | The replayId value to use when subscribing to the Streaming API. | long |  |  |
+| **userName** | Username | The Salesforce username. | string |  |  |
 
 ## Dependencies
 

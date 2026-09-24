@@ -7,6 +7,38 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.22 to 4.23
 
+### camel-core - Exchange Pooling deprecated
+
+Exchange pooling (`exchangeFactory=pooled`) is deprecated and will be removed in a future release. The following classes are deprecated:
+
+-   `org.apache.camel.PooledExchange`
+    
+-   `org.apache.camel.support.DefaultPooledExchange`
+    
+-   `org.apache.camel.impl.engine.PooledExchangeFactory`
+    
+-   `org.apache.camel.impl.engine.PooledProcessorExchangeFactory`
+    
+-   `org.apache.camel.processor.PooledExchangeTask`
+    
+-   `org.apache.camel.processor.PooledExchangeTaskFactory`
+    
+-   `org.apache.camel.processor.PooledTaskFactory`
+    
+-   `org.apache.camel.impl.engine.CamelInternalPooledTaskFactory`
+    
+
+The following `camel.main` configuration properties are deprecated:
+
+-   `camel.main.exchange-factory` (value `pooled`)
+    
+-   `camel.main.exchange-factory-capacity`
+    
+-   `camel.main.exchange-factory-statistics-enabled`
+    
+
+To migrate, remove the `camel.main.exchange-factory=pooled` property (and any related capacity/statistics properties) from your `application.properties`. Camel will use the default prototype mode which creates a new exchange per message. A `WARN` is logged at startup if pooled mode is still configured.
+
 ### camel-oauth
 
 OAuth client credentials token caching now distinguishes profiles by client secret and requested scope, in addition to token endpoint and client ID. Profiles with different credentials or scopes request separate tokens instead of reusing the same cached token. Applications using such profiles may make additional token requests after upgrading.
@@ -19,9 +51,44 @@ An operator counts only when whitespace surrounds it outside quotes, so a name s
 
 The simple language reads a `Map` with a dot as well as with a key: `${body.sku}` answers the `sku` entry of a map body when the map has no `sku()` method, the same value `${body[sku]}` gives. A method of the map still wins, so `${body.size}` calls `size()` as before, and a name that is neither a method nor a key still fails. Only expressions that used to throw can now return a value.
 
+The `range(max)` function now starts at 0, as documented and as `range` does in Python: `${range(5)}` returns `[0, 1, 2, 3, 4]` where it used to return `[1, 2, 3, 4]`. Routes that relied on the range starting at 1 must use `${range(1,5)}` instead. The two-argument form `range(min,max)` is unchanged.
+
+A review of the simple language fixed a number of edge cases. These change what an existing expression returns:
+
+-   `split` uses the separator as plain text, not as a regular expression: `${split(${body},'.')}` splits on dots (it used to return an empty array), and `${split(${body},'|')}` splits on the bar. A route that relied on a regular expression separator such as `'\s+'` must use `${body.split('\s+')}` instead.
+    
+-   The elvis operator `?:` treats any numeric zero as falsy (such as `0L`, `0.0` or `BigDecimal.ZERO`), not only `0` as an `Integer`.
+    
+-   `++` and `--` keep decimals: `1.5` becomes `2.5` (it used to be `2.0`).
+    
+-   `safeQuote` escapes double quotes, backslashes and control characters in the value, so the result is a valid JSON string. A `BigDecimal` is a number, so it is not quoted.
+    
+-   `kindOfType` returns `object` for a `Map` (it used to return `array`).
+    
+-   A name glued to a function prefix is an unknown function instead of being read as that function, such as `${headerfoo}` (which returned the header `foo`), `${uuidv7}` or `${exceptionInfo}`. Use `${header.foo}`.
+    
+-   A hidden file name has no extension: for `.bashrc` then `${file:name.ext}` is `null` (it used to be `bashrc`), and for `.route.yaml` then `${file:name.noext}` is `.route`. This comes from `FileUtil.onlyExt` and `FileUtil.stripExt`.
+    
+-   The chain operator `~>` needs a space on both sides, as the other operators do, so `A~>B` is text.
+    
+-   Inside `${ }` the ternary `?` and `:` need whitespace around them, so `${bean:svc?method=at(10:30)}` is not a ternary.
+    
+
+The simple catalog (`simple.json`) now spells these functions as they are written: `hostname` (was `hostName`), `exception.stacktrace` (was `exception.stackTrace`), `throwException(msg,type)` (was `throwException(type,msg)`, the order the function has always used), `not(exp)`, and `setAttachment(key,exp)`.
+
+### camel-core - internal processor advices
+
+When a `CamelInternalProcessorAdvice` fails in its `before` method, then the `after` method is now executed for the advices whose `before` was already executed. Previously they were skipped, which could leave the exchange counted as inflight and its unit of work not done. The same now happens when the debugger skips over a processor.
+
+An exception thrown from the `after` method of an advice no longer replaces the exception the exchange has already failed with. Instead, it is added as a suppressed exception to the existing exception.
+
 ### Circuit Breaker EIP
 
 The exchange property `CamelCircuitBreakerResponseRejected` is now also set inside the `onFallback`, in both `camel-resilience4j` and `camel-microprofile-fault-tolerance`: `true` when the call was not attempted because the breaker was open or the bulkhead was full, `false` when the call was made and failed or timed out. Prior to Camel 4.23 the property was only set when there was no fallback and was absent inside the fallback, so a fallback that tested it for `null` must now test for `true` or `false` instead. `CamelCircuitBreakerResponseShortCircuited` is unchanged and remains `true` whenever the fallback runs, whatever the cause.
+
+### Weighted Load Balancer EIP
+
+The distribution ratios of the weighted load balancer are now validated when the route starts. A negative ratio, ratios that are all `0`, or ratios whose sum is greater than `2147483647` now fail the route at startup with an `IllegalArgumentException`. Previously such a route started, but sending to it could hang the caller, spin a CPU, or send every message to the same endpoint.
 
 ### Context reload now re-applies placeholder based component options
 
@@ -78,11 +145,42 @@ The `aws2-ddb:application-json` data type transformer no longer overwrites a `Ca
 
 If a route sets `CamelAwsDdbReturnValues` before the transformer runs and relies on it being discarded, remove the header instead.
 
+### camel-aws2-s3
+
+The producer no longer evaluates the S3 object key or bucket name taken from a message header as a Simple expression. `AWS2S3Utils.determineKey()` and `determineBucketName()` evaluate the Simple language only for the values configured on the endpoint (`keyName` and `bucketName`); a key supplied through the `CamelAwsS3Key` header, or a bucket name supplied through the `CamelAwsS3OverrideBucketName` header, is now used literally. The `CamelAwsS3Key` header carries message content — for example the name of a consumed object, which the consumer sets on the exchange — whereas a dynamic key or bucket is a route authoring feature.
+
+Configured dynamic keys and buckets are unchanged:
+
+```java
+from("direct:start")
+    .to("aws2-s3://mybucket?keyName=RAW(${date:now:yyyyMMdd}/file.txt)");
+```
+
+A route that needs a dynamic value on the header must evaluate it in the route, so the header already holds the resolved value when it reaches the producer:
+
+```java
+from("direct:start")
+    .setHeader(AWS2S3Constants.KEY, simple("${date:now:yyyyMMdd}/file.txt"))
+    .to("aws2-s3://mybucket");
+```
+
+A header that carries a literal `${…​}` string is now used as the object key verbatim instead of being evaluated.
+
+A configured `keyName` or `bucketName` whose Simple expression resolves to `null` now fails with an `IllegalArgumentException` at the producer, instead of passing a `null` key/bucket on to the AWS SDK.
+
 ### camel-console
 
 The `context` developer console no longer counts routes created by Kamelets in its `routesTotal` and `routesStarted` statistics (nor in the `Routes:` line of its text output). A Kamelet is implemented as a route inside the Kamelet, and such routes are not registered with JMX by default, so the `route` developer console never listed them; the counts now agree with that list. This affects consumers of the context status, such as the Camel JBang status document (`~/.camel/<pid>-status.json`) and the Camel TUI. If the management agent is configured to register Kamelet routes (`registerRoutesCreateByKamelet=true`), they are counted as before. The JMX `ManagedCamelContext` MBean attributes `TotalRoutes` and `StartedRoutes` are unchanged and still count every route.
 
 The `route-topology` developer console (used by `camel cmd route-topology` and the Camel TUI diagram) no longer includes routes created by Kamelets, as these are an implementation detail of the Kamelet and were already hidden from the route console. Set the `kamelets=true` option (or `--kamelets` on the CLI) to include them.
+
+The `inflight` and `blocked` developer consoles now carry a `nodeSource` field per entry, saying where the node the exchange sits at is in the source (such as `orders.camel.yaml:18`). It is `null` when message history or source location is disabled. Existing fields are unchanged.
+
+### camel-management
+
+The JMX `browse` operation of the `DefaultInflightRepository` MBean and the `listAwaitThreads` data of the `DefaultAsyncProcessorAwaitManager` MBean gained a `nodeSource` column, saying where the node is in the source (such as `orders.camel.yaml:18`), next to the existing `nodeId`. It is `null` when message history or source location is disabled. Clients that read the row by item name are unaffected; a client that assumes a fixed number of columns should be reviewed.
+
+`InflightRepository.InflightExchange` and `AsyncProcessorAwaitManager.AwaitThread` gained a `getNodeSource()` method for the same value. Both are `default` methods returning `null`, so existing implementations continue to compile.
 
 ### camel-groovy
 
@@ -353,6 +451,31 @@ Like `toD` and `enrich`, `pollEnrich` resolves its static endpoint URI at build 
 It previously set only `FEATURE_SECURE_PROCESSING` and `external-general-entities=false`, while `createDocumentBuilderFactory()` in the same class already blocked external resource resolution more thoroughly. Both factories are reachable from a converted message body — `toSAXSource` is a registered converter, and the SAXSource route is tried first for bodies reaching camel-xslt — so the two should not disagree.
 
 Documents carrying an internal DTD subset still parse: `disallow-doctype-decl` is deliberately not set here, because that would reject input that parses today. Routes that genuinely need to resolve an external DTD or parameter entity through this converter must supply their own `SAXParserFactory`.
+
+### camel-core - type converter
+
+Several bugs in the type converter have been fixed, and some of the fixes change behavior:
+
+-   Converting to a primitive type (such as `int.class`) now returns the matching wrapper type. Before, an `Integer` or `Long` value was returned as-is for any primitive type, so `convertTo(int.class, 5L)` returned a `Long`. For example, a bean method with an `int` parameter failed with `argument type mismatch` when the message body was a `Long`.
+    
+-   `tryConvertTo(boolean.class, value)` returns `null` instead of throwing an exception when the value cannot be converted.
+    
+-   When no type converter can convert a pair of types, the registry records a miss so it does not search for a converter again. Fallback type converters are now still tried for such a pair, because a fallback converter can convert depending on the value. Recorded misses are also cleared when a type converter or fallback type converter is added.
+    
+-   When there is no type converter for the exact type of the value, the registry uses a type converter for a super type. This used to depend on the iteration order of an internal map, which could change between JVM restarts. The nearest super type now wins: the type hierarchy is walked breadth-first, interfaces are tried before the super class at each level, and `java.lang.Object` is tried last.
+    
+-   Converting a `String` to a `Number` now returns an `Integer` for all values within the `Integer` range (including `Integer.MAX_VALUE`, which returned a `Long` before), and supports exponent notation such as `1e5`.
+    
+-   Converting a `BigDecimal`, or a `double` larger than a `long`, to `BigInteger` no longer loses precision.
+    
+-   Converting a `byte[]` to `char` no longer sign-extends bytes above 127.
+    
+-   Converting a `String` to `ByteBuffer` now uses the charset from the `CamelCharsetName` header or exchange property (like the other converters), and falls back to the default charset.
+    
+-   Converting an array to a `Set` no longer returns a `List`.
+    
+-   Enum conversion prefers a constant that matches exactly before matching case-insensitively.
+    
 
 ### camel-core - a failed route reload restores the previous routes
 
@@ -661,6 +784,8 @@ becomes:
 `MimeMultipartDataFormat` now uses `MailHeaderFilterStrategy` instead of a plain `DefaultHeaderFilterStrategy` when `headersInline` unmarshal copies the remaining MIME headers onto the Camel message. That strategy filters the `mail.smtp.` and `mail.smtps.` prefixes on the inbound path in addition to `Camel*`/`camel*`, so the data format now filters the same namespace the mail consumer has filtered since 4.14.9/4.18.4/4.22.0.
 
 Routes that relied on `mail.smtp.*` or `mail.smtps.*` headers arriving on the exchange from an unmarshalled MIME message must set those values explicitly on the route instead. Ordinary application headers are unaffected.
+
+`MailBinding` now parses the content type returned by a custom `ContentTypeResolver` before adding the attachment file name as a quoted parameter, instead of concatenating the file name into the header - closing a header-injection vector via a crafted file name. As a side effect, a `ContentTypeResolver` that returns an unparsable content type now fails fast with a `ParseException` at marshal time, where before the invalid value was written into the `Content-Type` header as-is. Ensure a custom `ContentTypeResolver` returns a valid MIME type.
 
 ### camel-netty - object codecs apply a deserialization filter by default
 
@@ -1559,3 +1684,13 @@ The Exchange header constants in `MustacheConstants` and `ChunkConstants` have b
 Both components read these headers only when `allowTemplateFromHeader=true`. Because the old names sat outside the `Camel` namespace, `DefaultHeaderFilterStrategy` did not strip them, so such a header arriving from an untrusted sender reached the producer; with the `Camel` prefix the headers are now filtered at the component boundary, so the template or resource can only come from the route. For that reason the old names should not simply be restored.
 
 Routes that reference the constants (for example `setHeader(MustacheConstants.MUSTACHE_TEMPLATE, …​)`) are unaffected. Routes that set the header by its literal string name, or that use `allowTemplateFromHeader=true` with the old header names, must switch to the new `Camel`\-prefixed names.
+
+### camel-seda - purging the queue completes the discarded exchanges
+
+When a SEDA queue is purged (with `purgeWhenStopping=true` or the `purgeQueue` JMX operation), the discarded exchanges are now failed with a `RejectedExecutionException` and their on completions are executed. A producer waiting for the reply of a discarded exchange (`waitForTaskToComplete`) is released with that exception, instead of waiting until its `timeout`, or forever when the timeout is disabled. On completions handed over to a discarded InOnly exchange, such as the commit or rollback of the consumer that received the message, now run as a failure, where previously they never ran.
+
+### camel-core - Recipient List releases the producers of recipients it did not send to
+
+The Recipient List acquires a producer for every recipient before it starts sending. When it completes before it has sent to every recipient (for example with `stopOnException` or a `timeout`), it now releases the producers of the recipients it did not send to. Previously these producers were never released: a pooled (non-singleton) producer was not returned to its pool, and with `cacheSize(-1)` the prototype endpoint and its producer were never stopped.
+
+With `parallelProcessing`, a recipient whose task had not started yet when the Recipient List completed is now skipped instead of being sent to afterwards. As before, recipients that had already started keep running.

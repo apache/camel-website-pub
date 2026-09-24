@@ -116,8 +116,8 @@ The Mustache component supports the following message header(s), which is/are li
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **MustacheResourceUri** (producer) Constant: [`MUSTACHE_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_RESOURCE_URI) | A URI for the template resource to use instead of the endpoint. |  | String |
-| **MustacheTemplate** (producer) Constant: [`MUSTACHE_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
+| **CamelMustacheResourceUri** (producer) Constant: [`MUSTACHE_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_RESOURCE_URI) | A URI for the template resource to use instead of the endpoint. |  | String |
+| **CamelMustacheTemplate** (producer) Constant: [`MUSTACHE_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
 
 ## Usage
 
@@ -220,14 +220,14 @@ It’s possible to specify what template the component should use dynamically vi
 
 ```java
 from("direct:in")
-    .setHeader("MustacheResourceUri").constant("path/to/my/template.mustache")
+    .setHeader("CamelMustacheResourceUri").constant("path/to/my/template.mustache")
     .to("mustache:dummy?allowTemplateFromHeader=true");
 ```
 
 ```xml
 <route>
   <from uri="direct:in"/>
-  <setHeader name="MustacheResourceUri">
+  <setHeader name="CamelMustacheResourceUri">
     <constant>path/to/my/template.mustache</constant>
   </setHeader>
   <to uri="mustache:dummy?allowTemplateFromHeader=true"/>
@@ -240,7 +240,7 @@ from("direct:in")
       uri: direct:in
       steps:
         - setHeader:
-            name: MustacheResourceUri
+            name: CamelMustacheResourceUri
             expression:
               constant:
                 expression: path/to/my/template.mustache

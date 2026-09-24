@@ -50,11 +50,11 @@ quarkus.camel.micrometer-observability.trace-headers-inclusion=true
 
 Sets whether to disable tracing for endpoint URIs or Processor ids that match the given comma separated patterns. The pattern can take the following forms:
 
-1.  An exact match on the endpoint URI, e.g., {@code platform-http:/some/path}
+1.  An exact match on the endpoint URI, e.g., `platform-http:/some/path`
     
-2.  A wildcard match, e.g., {@code platform-http:\*}
+2.  A wildcard match, e.g., `platform-http:*`
     
-3.  A regular expression matching the endpoint URI, e.g., {@code platform-http:/prefix/.\*}
+3.  A regular expression matching the endpoint URI, e.g., `platform-http:/prefix/.*`
     
 
 
@@ -69,19 +69,24 @@ Sets include pattern(s) that will explicitly enable tracing for Camel processors
  | `string` |  |
 | `[quarkus.camel.micrometer-observability.trace-processors](#quarkus-camel-micrometer-observability-trace-processors)`
 
-Sets whether to create new spans for each Camel Processor. Use the {@code excludePatterns} property to filter out specific processors.
+Sets whether to create new spans for each Camel Processor. Use the `excludePatterns` property to filter out specific processors.
 
 When enabled, this generates much more detailed traces but also increases overhead.
 
  | `boolean` | `false` |
 | `[quarkus.camel.micrometer-observability.disable-core-processors](#quarkus-camel-micrometer-observability-disable-core-processors)`
 
-Disable tracing of inner core processors (any core DSL processor provided in the route, for example {@code bean}, {@code log}, …​).
+Disable tracing of inner core processors (any core DSL processor provided in the route, for example `bean`, `log`, …​).
 
  | `boolean` | `false` |
 | `[quarkus.camel.micrometer-observability.trace-headers-inclusion](#quarkus-camel-micrometer-observability-trace-headers-inclusion)`
 
-If set to {@code true}, adds the generated telemetry {@code CAMEL\_TRACE\_ID} and {@code CAMEL\_SPAN\_ID} Exchange headers.
+If set to `true`, adds the generated telemetry `CAMEL_TRACE_ID` and `CAMEL_SPAN_ID` Exchange headers.
+
+ | `boolean` | `false` |
+| `[quarkus.camel.micrometer-observability.trace-custom-id-only](#quarkus-camel-micrometer-observability-trace-custom-id-only)`
+
+If set to `true`, only creates trace spans for routes and nodes that have a custom id assigned.
 
  | `boolean` | `false` |
 

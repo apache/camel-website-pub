@@ -15,15 +15,20 @@ The following table summarizes the configuration options available for the `sale
 | --- | --- | --- | --- | --- | --- |
 | **clientId** | Consumer Key | **Required** The Salesforce application consumer key. | string |  |  |
 | **clientSecret** | Consumer Secret | **Required** The Salesforce application consumer secret. | string |  |  |
-| **password** | Password | **Required** The Salesforce user password. | string |  |  |
 | **topic** | Topic | **Required** The Pub/Sub channel to subscribe to. | string |  | /event/BatchApexErrorEvent |
-| **userName** | Username | **Required** The Salesforce username. | string |  |  |
+| **authenticationType** | Authentication Type | Authentication type to use. USERNAME\_PASSWORD needs userName and password, CLIENT\_CREDENTIALS needs only the consumer key and secret, REFRESH\_TOKEN needs refreshToken, JWT needs keystore and jwtAudience. Enum values: \* USERNAME\_PASSWORD \* CLIENT\_CREDENTIALS \* REFRESH\_TOKEN \* JWT | string | USERNAME\_PASSWORD |  |
 | **batchSize** | Batch Size | The number of events requested from the Pub/Sub API in a single fetch. | integer | 100 |  |
 | **deserializeType** | Deserialize Type | How to deserialise the received events. This Kamelet defaults to JSON so the body is usable downstream without further decoding; the component’s own default is AVRO, which emits binary. Use POJO together with pojoClass to deserialise into a generated class. Enum values: \* AVRO \* SPECIFIC\_RECORD \* GENERIC\_RECORD \* POJO \* JSON | string | JSON |  |
+| **instanceUrl** | Instance URL | Salesforce instance URL, needed when the authentication response does not carry one. | string |  | https://myinstance.my.salesforce.com |
+| **jwtAudience** | JWT Audience | Audience claim for the JWT authentication type, usually the login URL of the target org. | string |  | https://login.salesforce.com |
+| **keystore** | Keystore | Reference to a registry bean of type org.apache.camel.support.jsse.KeyStoreParameters, written as "#bean:myBeanName", holding the certificate that signs the JWT. Required by the JWT authentication type and ignored by the others. | string |  | #bean:myKeystore |
 | **loginUrl** | Login URL | The Salesforce instance used to authenticate. | string | [https://login.salesforce.com](https://login.salesforce.com) |  |
+| **password** | Password | The Salesforce user password. | string |  |  |
 | **pojoClass** | POJO Class | The fully qualified class name to deserialise into. Only used when deserializeType is POJO. | string |  |  |
+| **refreshToken** | Refresh Token | Refresh token used by the REFRESH\_TOKEN authentication type. | string |  |  |
 | **replayId** | Replay Id | The replay id to resume from. Only used when replayPreset is CUSTOM. | string |  |  |
 | **replayPreset** | Replay Preset | Where to start reading the channel. LATEST receives only new events, EARLIEST replays from the retention window, CUSTOM starts from replayId. Enum values: \* LATEST \* EARLIEST \* CUSTOM | string | LATEST |  |
+| **userName** | Username | The Salesforce username. | string |  |  |
 
 ## Dependencies
 

@@ -109,8 +109,8 @@ The Chunk component supports 2 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **ChunkResourceUri** (producer) Constant: [`CHUNK_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-chunk/latest/org/apache/camel/component/chunk/ChunkConstants.html#CHUNK_RESOURCE_URI) | A URI for the template resource to use instead of the endpoint configured. |  | String |
-| **ChunkTemplate** (producer) Constant: [`CHUNK_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-chunk/latest/org/apache/camel/component/chunk/ChunkConstants.html#CHUNK_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
+| **CamelChunkResourceUri** (producer) Constant: [`CHUNK_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-chunk/latest/org/apache/camel/component/chunk/ChunkConstants.html#CHUNK_RESOURCE_URI) | A URI for the template resource to use instead of the endpoint configured. |  | String |
+| **CamelChunkTemplate** (producer) Constant: [`CHUNK_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-chunk/latest/org/apache/camel/component/chunk/ChunkConstants.html#CHUNK_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
 
 Chunk component will look for a specific template in the _themes_ folder with extensions _.chtml_ or \_.cxml. \_If you need to specify a different folder or extensions, you will need to use the specific options listed above.
 

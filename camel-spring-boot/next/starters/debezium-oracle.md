@@ -20,7 +20,7 @@ Please refer to the above links for usage and configuration details.
 
 ## Spring Boot Auto-Configuration
 
-The starter supports 161 options, which are listed below.
+The starter supports 160 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -43,7 +43,6 @@ The starter supports 161 options, which are listed below.
 | camel.component.debezium-oracle.database-connection-adapter | The adapter to use when capturing changes from the database. Options include: 'LogMiner': (the default) to capture changes using native Oracle LogMiner with buffered transactions; 'LogMiner\_Unbuffered': to capture changes using native Oracle LogMiner without buffering; 'XStream': to capture changes using Oracle XStreams; 'OLR': to capture changes using OpenLogReplicator | LogMiner | String |
 | camel.component.debezium-oracle.database-dbname | The name of the database from which the connector should capture changes |  | String |
 | camel.component.debezium-oracle.database-hostname | Resolvable hostname or IP address of the database server. |  | String |
-| camel.component.debezium-oracle.database-out-server-name | Name of the XStream Outbound server to connect to. |  | String |
 | camel.component.debezium-oracle.database-password | Password of the database user to be used when connecting to the database. |  | String |
 | camel.component.debezium-oracle.database-pdb-name | Name of the pluggable database when working with a multi-tenant set-up. The CDB name must be given via database.dbname in this case. |  | String |
 | camel.component.debezium-oracle.database-port | Port of the database server. | 1528 | Integer |
