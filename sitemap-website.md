@@ -1,14 +1,15 @@
-urls[871]{loc,lastmod}:
+urls[872]{loc,lastmod}:
+  https://camel.apache.org/releases/ckc-4.22.0/,2026-09-24T00:00:00+00:00
+  https://camel.apache.org/,2026-09-24T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-tui-byoa/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/,2026-09-22T00:00:00+00:00
-  https://camel.apache.org/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camelbee-route-observability/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.22.1/,2026-09-21T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-simple-customfunction/,2026-09-20T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-09-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/,2026-09-17T00:00:00+00:00

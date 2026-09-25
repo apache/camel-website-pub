@@ -86,6 +86,14 @@ An exception thrown from the `after` method of an advice no longer replaces the 
 
 The exchange property `CamelCircuitBreakerResponseRejected` is now also set inside the `onFallback`, in both `camel-resilience4j` and `camel-microprofile-fault-tolerance`: `true` when the call was not attempted because the breaker was open or the bulkhead was full, `false` when the call was made and failed or timed out. Prior to Camel 4.23 the property was only set when there was no fallback and was absent inside the fallback, so a fallback that tested it for `null` must now test for `true` or `false` instead. `CamelCircuitBreakerResponseShortCircuited` is unchanged and remains `true` whenever the fallback runs, whatever the cause.
 
+### Error handler - onException when the exception changes during redelivery
+
+When a redelivery attempt fails with a different exception than the previous attempt, the error handler now uses the `onException` that matches the new exception. If no `onException` matches it, the error handler’s own settings apply, for example moving the message to the dead letter channel.
+
+Prior to Camel 4.23 the error handler kept using the `onException` matched by the earlier exception, including its `handled`, `continued`, redelivery and `onRedelivery` settings. So a new exception with no `onException` of its own could be routed and handled by the earlier exception’s `onException`, and was not seen by the caller or the dead letter channel.
+
+The redelivery counter is not reset when the exception changes, so the new `onException` measures its `maximumRedeliveries` against the attempts already made. A route whose `onException(IOException.class)` allows 5 redeliveries and which fails 4 times before the exception changes leaves the new policy a counter of 4, so an `onException(IllegalArgumentException.class).maximumRedeliveries(2)` is already exhausted and the message goes to the dead letter channel on the next failure.
+
 ### Weighted Load Balancer EIP
 
 The distribution ratios of the weighted load balancer are now validated when the route starts. A negative ratio, ratios that are all `0`, or ratios whose sum is greater than `2147483647` now fail the route at startup with an `IllegalArgumentException`. Previously such a route started, but sending to it could hang the caller, spin a CPU, or send every message to the same endpoint.
@@ -523,6 +531,12 @@ KafkaManualCommit manual = exchange.getMessage().getHeader(KafkaConstants.MANUAL
 ```
 
 The message of the part is copied into the child exchange, so the exchanges in the original list are left untouched and remain usable after the split, for example by the batching consumer that owns them. Exchange properties of the part are not carried over to the child exchange, as is already the case for `Message` parts.
+
+### camel-core - Idempotent Consumer no longer stops its repository when the route is stopped
+
+Stopping a route with an Idempotent Consumer (for example with `stopRoute` on the route controller, over JMX, or when a supervising route controller restarts the route) used to stop the idempotent repository as well. The in-memory repositories clear their data when stopped: `MemoryIdempotentRepository`, and a `KeyValueIdempotentRepository` over a `MemoryKeyValueRepository`, which clears the whole store. A repository that other routes were still using was therefore wiped, and so was the data of any other EIP sharing the same `KeyValueRepository` (for example the Aggregate EIP, when the `KeyValueRepository` is auto-discovered from the registry).
+
+The repository is now only stopped when the route is removed or when `CamelContext` is stopped. A route that is stopped and started again therefore keeps the message ids that its in-memory repository has seen, and a repository backed by a remote store keeps its connection while the route is stopped. To forget the ids, clear the repository with `IdempotentRepository.clear()` (or the `clear` JMX operation of the Idempotent Consumer).
 
 ### Component deprecation
 
@@ -1504,6 +1518,10 @@ A REST producer that resolves to `vertx-http` and does not configure its own `he
 
 Routes that relied on one of those headers reaching the wire must set it through the endpoint configuration or supply a `headerFilterStrategy` that permits it.
 
+### camel-seda - an interrupted producer fails the exchange
+
+A SEDA producer whose thread is interrupted while it waits now fails the exchange, where previously it reported the send as successful. When it waits for space in a full queue (`blockWhenFull=true`, with or without `offerTimeout`, or `discardWhenFull=true`), the exchange fails with a `RejectedExecutionException` caused by the `InterruptedException`, as the message was not added to the queue. When it waits for the reply without a timeout (`waitForTaskToComplete` with `timeout=0`), the exchange fails with the `InterruptedException`, instead of returning the request as the reply. Camel itself interrupts such threads when a route is forced to stop after the graceful shutdown timeout.
+
 ### camel-servlet, camel-jetty - the multipart upload whitelist is enforced against the submitted file name
 
 `fileNameExtWhitelist` accepts file name extensions, but ``camel-servlet’s `AttachmentHttpBinding`` checked it against `Part.getName()`, which is the multipart **field** name rather than the submitted file name. A field named `file` carries no extension, so the check found nothing to compare and every upload was accepted. The option is now checked against `Part.getSubmittedFileName()`, which is what `camel-platform-http-vertx` already does.
@@ -1521,6 +1539,10 @@ The `camel-jetty` binding also stored the attachment under the multipart field n
 The gRPC channel and its stubs are built once in `TensorFlowServingEndpoint.doInit()` from `configuration.getTarget()` and `configuration.getCredentials()`, so a per-exchange override supplied as a header cannot take effect. A route that set either header was silently ignored. The sibling `camel-kserve` component declares neither.
 
 Configure the `target` and `credentials` endpoint options instead, or route to a different endpoint with `toD` when the destination varies per message. The constants remain in place for backwards compatibility and are now marked deprecated in the component metadata.
+
+### camel-seda - purgeWhenStopping no longer purges when suspending
+
+A SEDA consumer with `purgeWhenStopping=true` no longer discards the pending messages on its queue when its route (or the CamelContext) is suspended; like any other SEDA consumer it completes them before the route is suspended. The queue is still purged when the route is stopped. To support this, `org.apache.camel.spi.ShutdownAware` has a new default method `getPendingExchangesSize(boolean suspendOnly)`, which the shutdown strategy now calls instead of `getPendingExchangesSize()`. It delegates to `getPendingExchangesSize()` by default.
 
 ### camel-smooks - external XML entity resolution disabled by default
 
@@ -1575,6 +1597,10 @@ The accessors changed accordingly:
     
 
 The fluent builder `ParamDefinition.required(Boolean)` is unchanged, and a `required(String)` overload was added for placeholders. Routes written in XML, YAML or the Java DSL do not need any change.
+
+### camel-seda - stopping a suspended route does not wait for its pending messages
+
+Stopping a suspended SEDA route, or stopping the CamelContext while such a route is suspended, no longer waits for the messages that were sent to it while it was suspended. A suspended consumer does not consume them, so previously the stop always ran into the graceful shutdown timeout and was then forced (or aborted). The messages are now kept on the queue (or purged with `purgeWhenStopping=true`), and are processed if the route is started again while the queue still exists.
 
 ### camel-sql, camel-sql-stored - the query/template override headers are gated
 
@@ -1689,8 +1715,16 @@ Routes that reference the constants (for example `setHeader(MustacheConstants.MU
 
 When a SEDA queue is purged (with `purgeWhenStopping=true` or the `purgeQueue` JMX operation), the discarded exchanges are now failed with a `RejectedExecutionException` and their on completions are executed. A producer waiting for the reply of a discarded exchange (`waitForTaskToComplete`) is released with that exception, instead of waiting until its `timeout`, or forever when the timeout is disabled. On completions handed over to a discarded InOnly exchange, such as the commit or rollback of the consumer that received the message, now run as a failure, where previously they never ran.
 
+### camel-seda - multipleConsumers broadcasts to consumers with different uri options
+
+With `multipleConsumers=true` every consumer of a SEDA queue now receives a copy of each message, also when the consumers use the same queue name with different consumer options, such as `seda:foo?multipleConsumers=true` and `seda:foo?multipleConsumers=true&concurrentConsumers=5`. Previously each distinct endpoint uri only multicast to its own consumers, so such consumers silently competed for the messages instead of each receiving a copy.
+
 ### camel-core - Recipient List releases the producers of recipients it did not send to
 
 The Recipient List acquires a producer for every recipient before it starts sending. When it completes before it has sent to every recipient (for example with `stopOnException` or a `timeout`), it now releases the producers of the recipients it did not send to. Previously these producers were never released: a pooled (non-singleton) producer was not returned to its pool, and with `cacheSize(-1)` the prototype endpoint and its producer were never stopped.
 
 With `parallelProcessing`, a recipient whose task had not started yet when the Recipient List completed is now skipped instead of being sent to afterwards. As before, recipients that had already started keep running.
+
+## ThrottlingExceptionRoutePolicy
+
+`ThrottlingExceptionRoutePolicy.setKeepOpen(true)` now opens the circuit immediately and synchronously (the consumer is suspended before the setter returns) rather than waiting for the next `onExchangeDone()` callback. This is the intended behaviour and makes the `keepOpen` toggle deterministic, but callers that previously relied on the setter being inert until an exchange arrived must be aware of the change. Setting `keepOpen` back to `false` remains deferred: the half-open timer attempts to close the circuit on its next tick (after `halfOpenAfter` milliseconds, default 30 s).

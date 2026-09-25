@@ -437,6 +437,7 @@ Every release of every Camel project, newest first. Supported releases are on th
 
 | Version | Release date | Description |
 | --- | --- | --- |
+| [4.22.0](../releases/ckc-4.22.0/) | 2026-09-24 |  |
 | [4.14.5](../releases/ckc-4.14.5/) | 2026-03-30 |  |
 | [4.18.0](../releases/ckc-4.18.0/) | 2026-03-30 |  |
 | [4.14.0](../releases/ckc-4.14.0/) | 2025-09-29 |  |
