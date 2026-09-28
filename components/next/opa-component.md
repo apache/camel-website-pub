@@ -78,6 +78,7 @@ The OPA component supports the following options which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **allowKey** (producer) | The key to read the allow/deny verdict from when the policy returns an object rather than a plain boolean. For a policy returning \\{allow: true, reasons: } the default value of allow is what you want. A dotted path reaches a verdict nested inside the document: \\{code allowKey=result.allow} reads \\{result: \\{allow: true}}. A key with no dot is looked up directly at the top level. | allow | String |
+| **batch** (producer) | Authorize a whole collection in one call. When enabled the producer expects a List body, evaluates one input document per element - each element as the body, sharing the exchange’s headers and properties - and returns the per-element verdicts in the CamelOpaBatchDecision header, a List parallel to the input. An element whose evaluation could not be reached is denied, unless failOpen is set; the batch is never allowed or denied as a whole because one element failed. Only for \\{code evaluationMode=rest}: it saves the per-element HTTP round-trip via OPA’s batch API, which has no meaning for in-process wasm. | false | boolean |
 | **configuration** (producer) | The component configuration. |  | OpaConfiguration |
 | **entrypoint** (producer) | The compiled entrypoint to evaluate in wasm mode. This is not the same thing as the policy path: an entrypoint is fixed when the bundle is built, with \\{code opa build -e}. Defaults to the endpoint’s policy path, which is the name \\{code opa build} gives it. |  | String |
 | **evaluationMode** (producer) | 
@@ -135,6 +136,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **allowKey** (producer) | The key to read the allow/deny verdict from when the policy returns an object rather than a plain boolean. For a policy returning \\{allow: true, reasons: } the default value of allow is what you want. A dotted path reaches a verdict nested inside the document: \\{code allowKey=result.allow} reads \\{result: \\{allow: true}}. A key with no dot is looked up directly at the top level. | allow | String |
+| **batch** (producer) | Authorize a whole collection in one call. When enabled the producer expects a List body, evaluates one input document per element - each element as the body, sharing the exchange’s headers and properties - and returns the per-element verdicts in the CamelOpaBatchDecision header, a List parallel to the input. An element whose evaluation could not be reached is denied, unless failOpen is set; the batch is never allowed or denied as a whole because one element failed. Only for \\{code evaluationMode=rest}: it saves the per-element HTTP round-trip via OPA’s batch API, which has no meaning for in-process wasm. | false | boolean |
 | **entrypoint** (producer) | The compiled entrypoint to evaluate in wasm mode. This is not the same thing as the policy path: an entrypoint is fixed when the bundle is built, with \\{code opa build -e}. Defaults to the endpoint’s policy path, which is the name \\{code opa build} gives it. |  | String |
 | **evaluationMode** (producer) | 
 How the policy is evaluated. rest (the default) calls a running OPA server over its Data API. wasm evaluates a WebAssembly bundle in-process, with no server involved - so there is no network hop and no unreachable decision point, at the cost of the policy being a build-time artefact rather than something a server distributes and updates. serverUrl, bearerToken and failOpen do not apply in wasm mode.
@@ -177,6 +179,7 @@ The OPA component supports the following message header(s), which is/are listed 
 | **CamelOpaDecision** (producer) Constant: [`DECISION`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION) | The raw decision document returned by OPA. Useful for policies that return more than a boolean, such as obligations, row filters or deny reasons. |  | Object |
 | **CamelOpaPolicyPath** (producer) Constant: [`POLICY_PATH`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#POLICY_PATH) | The policy path that was evaluated. Set by the component for observability; it is not read as an input and cannot be used to select a different policy. |  | String |
 | **CamelOpaDecisionFailedOpen** (producer) Constant: [`DECISION_FAILED_OPEN`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION_FAILED_OPEN) | Set to true only when the exchange proceeded because failOpen is enabled and the policy could not be evaluated - nothing authorized it. Absent on every decision an actual policy made, so a route or an audit trail can tell the two apart rather than seeing the same CamelOpaDecisionAllow=true for both. |  | Boolean |
+| **CamelOpaBatchDecision** (producer) Constant: [`BATCH_DECISION`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#BATCH_DECISION) | The per-element allow/deny verdicts of a batch evaluation (batch=true), as a List of Boolean parallel to the List body. Always overwritten by the component. An element whose evaluation could not be reached is denied, unless failOpen is set. |  | List |
 
 ## Usage
 
@@ -208,6 +211,21 @@ from("platform-http:/orders")
 ```
 
 The decision headers are set here too, so an `onException(CamelAuthorizationException.class)` handler can read `CamelOpaDecision` to build a meaningful error response.
+
+The policy can also evaluate a WebAssembly bundle in-process, which is the mode to prefer for a hot path such as authorizing an AI tool call, where a network hop per decision is not wanted:
+
+```java
+OpaSecurityPolicy opaPolicy = new OpaSecurityPolicy();
+opaPolicy.setPolicyPath("authz/orders/allow");
+opaPolicy.setEvaluationMode("wasm");
+opaPolicy.setPolicyBundle("classpath:orders-bundle.tar.gz");
+
+from("platform-http:/orders")
+    .policy(opaPolicy)
+        .to("direct:handleOrder");
+```
+
+The decision contract is identical to `rest` mode - the same `CamelOpaDecision` headers, and a `CamelAuthorizationException` on a deny - so a route need not know which engine evaluated it. `serverUrl`, `bearerToken` and the readiness check do not apply in `wasm` mode; the **Evaluation modes** section below covers building a bundle and what each mode gives up.
 
 ## The input document
 
@@ -261,6 +279,24 @@ The component’s own `CamelOpa*` decision headers are never sent back to OPA, s
     
 
 Both headers are written on every evaluation, so a verdict set by an inbound message never survives into the route.
+
+## Batch evaluation
+
+A route that splits a payload and authorizes each element pays one OPA round-trip per element. Set `batch=true` and hand the producer a `List` instead: it builds one input document per element - each element as the `body`, sharing the exchange’s headers and properties - and evaluates them in a single call through OPA’s batch API (the SDK falls back to sequential requests when the server does not implement it).
+
+```java
+from("direct:orders")
+    // the body is a List of orders to authorize
+    .to("opa:authz/orders/allow?batch=true")
+    // CamelOpaBatchDecision is now a List<Boolean> parallel to the body
+    .process(dropTheDeniedOrders);
+```
+
+The per-element verdicts arrive in `CamelOpaBatchDecision`, a `List<Boolean>` parallel to the input list: element _i_ is allowed when entry _i_ is `true`. Neither `CamelOpaDecisionAllow` nor `CamelOpaDecision` is set in batch mode - there is no single verdict, and no single decision document - and both are cleared on entry like the other decision headers, so a value an inbound message supplied never survives. `CamelOpaPolicyPath` **is** set, to the same value a single evaluation records, so tooling can read it either way.
+
+Fail-closed applies **per element**: an element whose evaluation could not be reached is denied (`false`), or allowed when `failOpen` is set, while every other element decides normally. The batch is never denied as a whole because one element failed, nor allowed because most of it succeeded. A call that fails entirely - the server could not be reached at all - fails the exchange rather than denying each element: it carries no verdict at all, not a list of `false`. Under `failOpen` that same failure allows every element instead.
+
+`batch` requires `evaluationMode=rest`: it saves the per-element HTTP round-trip, which has no meaning for in-process `wasm` evaluation, and the endpoint rejects the combination at startup.
 
 ## Authorizing an identity
 

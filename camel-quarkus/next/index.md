@@ -35,4 +35,4 @@ Compatibility between Camel Quarkus and dependencies
 | Camel Quarkus Version | Camel Version | Quarkus Version | GraalVM Version | LTS Until | Branch |
 | --- | --- | --- | --- | --- | --- |
 | [Next (Pre-release)](index.md) | [4.22.1](../../components/4.22.x/index.md) | [3.40.0](https://quarkus.io/guides) | [25.0.4.1](https://www.graalvm.org/jdk21/docs/) |  | [main](https://github.com/apache/camel-quarkus) |
-| [3.33.x](../3.33.x/index.md) | [4.18.4](../../components/4.18.x/index.md) | [3.33.3.2](https://quarkus.io/guides) | [23.1.2](https://www.graalvm.org/jdk21/docs/) |  | [3.33.x](https://github.com/apache/camel-quarkus/tree/3.33.x) |
+| [3.33.x](../3.33.x/index.md) | [4.18.4](../../components/4.18.x/index.md) | [3.33.4](https://quarkus.io/guides) | [23.1.2](https://www.graalvm.org/jdk21/docs/) |  | [3.33.x](https://github.com/apache/camel-quarkus/tree/3.33.x) |

@@ -6,6 +6,8 @@
 
 The TypeSafe AI component evaluates explicit state against Noul (yes/no), Choice (one category), and Score (ordered rubric) questions using [TypeSafe AI’s HTTP API](https://docs.typesafe.ai/api). Jev is the default model; the `model` option can select another model supported by the API. It calls the service directly using the JDK HTTP client and Camel JSON utilities. For semantic conditions in Java, XML and YAML, use the [TypeSafe AI language](languages/typesafe-ai-language.md) supplied by this component.
 
+This component also advertises an adapter for the [Semantic language](languages/semantic-language.md). Named boolean, choice and score questions use the common contract and inherit this component’s credentials, model and transport settings without requiring a TypeSafe AI endpoint in the route.
+
 ```xml
 <dependency>
     <groupId>org.apache.camel</groupId>

@@ -1,10 +1,12 @@
-urls[872]{loc,lastmod}:
+urls[874]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-09-24T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.22.0/,2026-09-24T00:00:00+00:00
+  https://camel.apache.org/categories/EIP/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/releases/,2026-09-24T00:00:00+00:00
-  https://camel.apache.org/categories/AI/,2026-09-22T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-tui-byoa/,2026-09-22T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camelbee-route-observability/,2026-09-21T00:00:00+00:00

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790321722243,
+  "generated": 1790586290246,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -3604,6 +3604,12 @@
               "path": "user-guide/getting-started/try-it-out-locally.adoc",
               "url": "/camel-kafka-connector/next/user-guide/getting-started/try-it-out-locally.html",
               "title": "Try it out locally"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/getting-started/try-it-out-on-docker.adoc",
+              "url": "/camel-kafka-connector/next/user-guide/getting-started/try-it-out-on-docker.html",
+              "title": "Try it out on Docker"
             },
             {
               "module": "ROOT",
@@ -20497,6 +20503,12 @@
               "path": "ref-language.adoc",
               "url": "/components/next/languages/ref-language.html",
               "title": "Ref"
+            },
+            {
+              "module": "languages",
+              "path": "semantic-language.adoc",
+              "url": "/components/next/languages/semantic-language.html",
+              "title": "Semantic Evaluation"
             },
             {
               "module": "languages",

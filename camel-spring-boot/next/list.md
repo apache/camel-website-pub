@@ -1372,6 +1372,7 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [Python 3](../../components/next/languages/python3-language.md) | camel-python3-starter | Preview | 4.23 | Evaluates a Python 3 expression |
 | [QuickJS](../../components/next/languages/quickjs-language.md) | camel-quickjs-starter | Preview | 4.23 | Evaluates a JavaScript expression using QuickJS4J |
 | [Ref](../../components/next/languages/ref-language.md) | camel-core-languages-starter | Stable | 2.8 | Uses an existing expression from the registry |
+| [Semantic Evaluation](../../components/next/languages/semantic-language.md) | camel-semantic-starter | Preview | 4.23 | Evaluate named questions about message content to produce boolean decisions, categories and scores through provider adapters |
 | [Simple](../../components/next/languages/simple-language.md) | camel-core-languages-starter | Stable | 1.1 | Evaluates a Camel simple expression |
 | [Simple - Advanced Features](../../components/next/languages/simple-advanced.md) | undefined-starter |  |  |  |
 | [Simple - Built-in Functions](../../components/next/languages/simple-functions.md) | undefined-starter |  |  |  |

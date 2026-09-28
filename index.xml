@@ -16,6 +16,13 @@
       <description>This release is the new Camel Kafka Connector 4.22.0 release.</description>
     </item>
     <item>
+      <title>TypeSafe Jev meets Apache Camel: semantic decisions in Camel routes</title>
+      <link>https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/</link>
+      <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/</guid>
+      <description>Jev is gaining momentum, and there is a reason why: it addresses a practical problem in automation. Many workflows need a model to make a small, specific judgment:&#xA;Which team should handle this request? How severe is this reported issue? Does this action fit the approved task? TypeSafe AI built Jev as a System One model, designed for fast, structured decisions. Give it the relevant state and a question, and it returns a category, a score or a probability that your application can use directly.</description>
+    </item>
+    <item>
       <title>B.Y.O.A. — Bring Your Own Agent to Camel TUI and Build Integrations with Camel Kit</title>
       <link>https://camel.apache.org/blog/2026/09/camel-tui-byoa/</link>
       <pubDate>Tue, 22 Sep 2026 00:00:00 +0000</pubDate>

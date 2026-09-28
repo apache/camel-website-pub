@@ -126,12 +126,12 @@ Enum values:
  | None | CompressionAlgorithm |
 | **configuration** (common) | Allows to pre-configure the Iggy component with common options that the endpoints will reuse. |  | IggyConfiguration |
 | **host** (common) | Iggy server hostname or IP address. | localhost | String |
+| **iggyHeaderOptions** (common) | Options provided when creating a topic. |  | Map |
 | **maxTopicSize** (common) | Maximum topic size in bytes (0 means unlimited). | 0 | Long |
 | **messageExpiry** (common) | Message expiry time in seconds (0 means no expiry). | 0 | Long |
 | **partitionsCount** (common) | Number of partitions for the topic. | 1 | Long |
 | **password** (common) | Iggy password. |  | String |
 | **port** (common) | Iggy server port number. | 8090 | int |
-| **replicationFactor** (common) | Replication factor for the topic. |  | Short |
 | **streamId** (common) | Stream identifier. |  | Long |
 | **streamName** (common) | Stream name. |  | String |
 | **autoCommit** (consumer) | Controls message acknowledgment behavior. When true, messages are automatically marked as processed after consumption. When false, enables manual offset management and allows setting a custom starting offset position. | true | boolean |
@@ -223,12 +223,12 @@ Enum values:
 
  | None | CompressionAlgorithm |
 | **host** (common) | Iggy server hostname or IP address. | localhost | String |
+| **iggyHeaderOptions** (common) | Options provided when creating a topic. |  | Map |
 | **maxTopicSize** (common) | Maximum topic size in bytes (0 means unlimited). | 0 | Long |
 | **messageExpiry** (common) | Message expiry time in seconds (0 means no expiry). | 0 | Long |
 | **partitionsCount** (common) | Number of partitions for the topic. | 1 | Long |
 | **password** (common) | Iggy password. |  | String |
 | **port** (common) | Iggy server port number. | 8090 | int |
-| **replicationFactor** (common) | Replication factor for the topic. |  | Short |
 | **streamId** (common) | Stream identifier. |  | Long |
 | **streamName** (common) | Stream name. |  | String |
 | **autoCommit** (consumer) | Controls message acknowledgment behavior. When true, messages are automatically marked as processed after consumption. When false, enables manual offset management and allows setting a custom starting offset position. | true | boolean |

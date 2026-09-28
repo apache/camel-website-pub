@@ -330,7 +330,7 @@ And an example with regex, testing if the number header is a 4-digit value:
 simple("${header.number} regex '\\d{4}'")
 ```
 
-And finally an example if the header equals any of the values in the list. Each element must be separated by comma, and no space around. This also works for numbers etc., as Camel will convert each element into the type of the left-hand side.
+And finally an example if the header equals any of the values in the list. Each element must be separated by comma, and no space around. This also works for numbers etc., as Camel will convert each element into the type of the left-hand side. When the left-hand side is a number, each element is compared by its numeric value, so an `Integer` header with value `2` is not in `'2.5,3.5'`, and it is in `'2.0,3.0'`.
 
 ```java
 simple("${header.type} in 'gold,silver'")

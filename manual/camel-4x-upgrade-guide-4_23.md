@@ -71,6 +71,8 @@ A review of the simple language fixed a number of edge cases. These change what 
     
 -   The chain operator `~>` needs a space on both sides, as the other operators do, so `A~>B` is text.
     
+-   Comparing two numbers of different types, such as a `Double` or `BigDecimal` header and an integer literal, no longer drops the decimals: `${header.amount} > 100` is `true` for a `BigDecimal` of `100.50` (it used to be `false`), `${header.price} == 2` is `false` for a `Double` of `2.5`, and `${header.price} range '1..2'` is `false` for `2.5`. The same applies to two `BigDecimal` or two `BigInteger` values, to a number compared with a numeric `String`, and to the Java DSL predicates such as `header("amount").isGreaterThan(100)`. Two `BigDecimal` values with a different scale, such as `2.50` and `2.5`, are now equal. The `in` and `!in` operators (and the Java DSL `in`) compare the same way when the left value is a number: each element of the list is no longer converted to the type of the left value first, which dropped its decimals or failed. `${header.n} in '2.5,3.5'` is `false` for an `Integer` of `2` (it used to fail with a `TypeConversionException`), `${header.n} in '2.0'` is `true`, as `${header.n} == 2.0` is, and `header("n").in(2.5)` and `header("n").in(4294967298L)` are `false` (they used to be `true`).
+    
 -   Inside `${ }` the ternary `?` and `:` need whitespace around them, so `${bean:svc?method=at(10:30)}` is not a ternary.
     
 
@@ -82,9 +84,25 @@ When a `CamelInternalProcessorAdvice` fails in its `before` method, then the `af
 
 An exception thrown from the `after` method of an advice no longer replaces the exception the exchange has already failed with. Instead, it is added as a suppressed exception to the existing exception.
 
+### @PropertyInject - an invalid property value is an error (Breaking change)
+
+When a property injected with `@PropertyInject` has a value that cannot be converted to the type of the field or parameter, the injection now fails. Prior to Camel 4.23 the `defaultValue` was silently used instead, so a mistake in the configured value (such as `port=80a` for an `int`) went unnoticed. The `defaultValue` is still used when the property does not exist.
+
+This can break an application that has such an invalid value configured and worked because the `defaultValue` was good enough, as it now fails when starting. To keep the previous result, correct the configured value, or remove the property so the `defaultValue` is used.
+
+### Aggregate EIP - optimistic locking retry delay
+
+When optimistic locking is enabled without configuring an `optimisticLockRetryPolicy`, the retry delay between attempts is now capped at 1 second, which is the documented default of `maximumRetryDelay`. Prior to Camel 4.23 the delay was not capped in that case and doubled on every attempt, so after a few failed attempts an exchange could wait minutes or hours before trying again. To keep an uncapped delay, configure an `optimisticLockRetryPolicy` with `maximumRetryDelay` set to `0`.
+
 ### Circuit Breaker EIP
 
 The exchange property `CamelCircuitBreakerResponseRejected` is now also set inside the `onFallback`, in both `camel-resilience4j` and `camel-microprofile-fault-tolerance`: `true` when the call was not attempted because the breaker was open or the bulkhead was full, `false` when the call was made and failed or timed out. Prior to Camel 4.23 the property was only set when there was no fallback and was absent inside the fallback, so a fallback that tested it for `null` must now test for `true` or `false` instead. `CamelCircuitBreakerResponseShortCircuited` is unchanged and remains `true` whenever the fallback runs, whatever the cause.
+
+### Convert Body, Convert Header and Convert Variable EIPs
+
+When a charset is configured, such as `convertBodyTo(String.class, "UTF-8")`, then the conversion now uses that charset also when the message has a `CamelCharsetName` header. Previously the header took precedence, so the configured charset was ignored. The header is kept on the message unchanged.
+
+The `CamelCharsetName` exchange property is now also restored when the conversion fails. Previously the configured charset was left on the exchange, where the error handler would use it.
 
 ### Error handler - onException when the exception changes during redelivery
 
@@ -98,6 +116,21 @@ The redelivery counter is not reset when the exception changes, so the new `onEx
 
 The distribution ratios of the weighted load balancer are now validated when the route starts. A negative ratio, ratios that are all `0`, or ratios whose sum is greater than `2147483647` now fail the route at startup with an `IllegalArgumentException`. Previously such a route started, but sending to it could hang the caller, spin a CPU, or send every message to the same endpoint.
 
+### Resequencer EIP - stream resequencing and route stop
+
+When a route with the stream resequencer stops, a caller that is blocked because the resequencer is full (`capacity`) now fails with a `java.util.concurrent.RejectedExecutionException`. Prior to Camel 4.23 such a caller stayed blocked, also after the route was stopped.
+
+### Tokenize language
+
+-   A message without a body (or a `source` that has no value) now has no tokens, the same as an empty body. Prior to Camel 4.23 the tokenizer failed with a `NullPointerException`.
+    
+-   `skipFirst` now also skips the first token in `xml` mode and in pair mode (`endToken`). Prior to Camel 4.23 the option was ignored in those modes.
+    
+-   In pair mode with `group` and `includeTokens`, the grouped pairs are now joined without a delimiter (as in `xml` mode), unless `groupDelimiter` is set. Prior to Camel 4.23 the start token was inserted between them, so a group of `<a>1</a>` and `<a>2</a>` became `<a>1</a><a><a>2</a>`. Without `includeTokens` the start token is still used as the delimiter between the grouped values.
+    
+-   A pair with the same start and end token is now refused when the route is created. Prior to Camel 4.23 it silently had no tokens.
+    
+
 ### Context reload now re-applies placeholder based component options
 
 When a context reload is triggered, for example by one of the vault components detecting that a secret was rotated, Camel now also re-applies the `camel.component.`, `camel.dataformat.` and `camel.language.` options whose configured value is a property placeholder, and notifies any bean implementing the new `org.apache.camel.spi.SecretRotationAware` SPI. Previously only the property placeholders and the routes were reloaded, so a rotated secret never reached a component option that had been resolved at bootstrap.
@@ -105,6 +138,19 @@ When a context reload is triggered, for example by one of the vault components d
 Re-applying such an option removes the component and resolves it again, as it already does when the option changes in a watched properties file. The component is stopped either way, and what comes back depends on how it was registered: a component auto-detected from the classpath is replaced by a new instance, while a component registered as a bean is the same instance, re-configured and started again. A component that holds a connection will therefore close it on reload.
 
 Only options whose value is a placeholder are affected, and only when running with Camel Main, Camel Spring Boot or Camel Quarkus. If a component must not be stopped on reload, configure it programmatically rather than with a placeholder based property.
+
+### Languages - less than with two null values, and a source from a variable
+
+-   The `<` operator (in the Simple language and the Java DSL `isLessThan`) is now `false` when both sides are `null`, as the `>` operator already was. Prior to Camel 4.23, `${header.a} < ${header.b}` was `true` when neither header existed. The `⇐` and `>=` operators are unchanged and are `true` in that case.
+    
+-   A language that reads its input from a `source` of `variable:name` now fails with `NoSuchVariableException` when the variable does not exist, as it does with `NoSuchHeaderException` for `header:name`. From Camel 4.4 to 4.22 a missing variable was used as a `null` input. This also applies to a `source` without a prefix, as a plain name refers to a variable (`source="myVar"`), and to the `source` option of the `xslt`, `xslt-saxon` and `xquery` endpoints.
+    
+
+### ClusteredRoutePolicy - routes are started and stopped on the policy thread
+
+When the leadership changes, `ClusteredRoutePolicy` now starts and stops its routes on its own thread, instead of on the thread that fires the leadership event while it holds the lock of the cluster view. This fixes a deadlock between a leadership change that is starting routes and a CamelContext stop or a route removal. The thread only exists while there is a leadership change to apply, and exits when idle, so a policy per route (`ClusteredRoutePolicyFactory`) does not keep a thread per route. Leadership changes that reach the policy thread while the CamelContext is stopping are ignored, as the CamelContext is stopping all the routes.
+
+Most cluster services fire leadership events from their own threads, but some fire them on the calling thread, for example when a view starts or a listener is added. In all cases the routes are now started and stopped on the policy thread, shortly after the event. Code that fires the event itself, for example a custom `CamelClusterView` in a test, can no longer expect the routes to be started or stopped when the event returns, and should wait for the route status instead. Likewise, `isLeader()` of the policy (JMX attribute `Leader`) reflects the view right away, and the routes follow asynchronously.
 
 ### Apache Avro trusted packages
 
@@ -139,6 +185,10 @@ If you use `camel-avro-rpc`, Camel automatically trusts `org.apache.avro`, which
 
 Do not use `*`, as it disables Avro’s class-loading protection.
 
+### Rest DSL - consumes and produces from the binding mode of the rest configuration
+
+When a verb has `type` or `outType` and the binding mode is `json`, `xml` or `json_xml`, the verb’s `consumes` and `produces` are set to the matching media types if they are not already set. This now also happens when the binding mode is only set with `restConfiguration()`, as it already did when it is set on the `rest` or the verb. With `clientRequestValidation` enabled, such a verb now rejects a request with another `Content-Type` (415) or `Accept` (406) header.
+
 ### CamelEvent JSON serialization
 
 `CamelEvent` now provides `asJSon()` and `toJSon(int indent)` with default implementations that return a minimal JSON map (`type`, optional `timestamp`, and `message`). Camel’s built-in event classes override these methods to include structured metadata such as exchange, route, and exception details.
@@ -146,6 +196,15 @@ Do not use `*`, as it disables Avro’s class-loading protection.
 Custom `CamelEvent` implementations continue to compile without changes. Override the new methods only if you need richer JSON output than the default `type`/`timestamp`/`message` map.
 
 The Event developer console now exposes the full structured JSON payload in the `details` field of each event entry, while keeping the existing flat `type`, `timestamp`, `exchangeId`, and `message` fields for backwards compatibility.
+
+### Route templates
+
+-   When both the route template (`configure`) and the `TemplatedRouteBuilder` (`configure`) have a configurer, then both are now called (the template first). Prior to Camel 4.23 only the configurer of the template was called.
+    
+-   Two routes created from a template with the same `prefixId` and a hardcoded node id are now reported as a duplicate id. Prior to Camel 4.23 they were accepted, and both processors had the same id at runtime.
+    
+-   A hardcoded node id in a route template no longer clashes with the same id in a regular route, as the ids of the route created from the template are prefixed.
+    
 
 ### camel-aws2-ddb
 
@@ -183,6 +242,10 @@ The `context` developer console no longer counts routes created by Kamelets in i
 The `route-topology` developer console (used by `camel cmd route-topology` and the Camel TUI diagram) no longer includes routes created by Kamelets, as these are an implementation detail of the Kamelet and were already hidden from the route console. Set the `kamelets=true` option (or `--kamelets` on the CLI) to include them.
 
 The `inflight` and `blocked` developer consoles now carry a `nodeSource` field per entry, saying where the node the exchange sits at is in the source (such as `orders.camel.yaml:18`). It is `null` when message history or source location is disabled. Existing fields are unchanged.
+
+### Error handler - redelivery options of onException
+
+An `onException` that sets some of the redelivery options (such as `maximumRedeliveries`) now inherits the options it does not set from the error handler, as documented. Prior to Camel 4.23 (since Camel 3.17) the options it did not set were reset to their defaults: for example with `errorHandler(defaultErrorHandler().redeliveryDelay(0))` and `onException(IOException.class).maximumRedeliveries(3)`, the redeliveries were delayed 1 second each and not 0.
 
 ### camel-management
 
@@ -225,6 +288,10 @@ The option is annotated `security = "insecure:dev"`, so with `camel.main.profile
 Two alternatives avoid the flag entirely. A control message may still name a `predicateBean`, which selects a `Predicate` that the route author bound in the registry; that path is unchanged. The control endpoint may also carry `predicate` and `expressionLanguage` as URI parameters, in which case every subscription made through that endpoint uses the route author’s expression. Subscription parameters that the control message does not carry now fall back to the values configured on the endpoint.
 
 The `dynamic-router` endpoint gained an `allowedSchemes` option, an optional comma-separated allow-list of component schemes that a subscription destination may resolve to. It is unset by default, which allows any scheme, matching the previous behaviour.
+
+### camel-management - JMX tabular data
+
+Some tabular data returned by the JMX MBeans had a key that was not unique, so the operation failed with `KeyAlreadyExistsException`. The tabular data of the Choice EIP and doTry EIP `extendedInformation` and of `listTasks` of the task manager registry now have an `index` item as their key, the exchange factories of `listStatistics` are keyed by `url` and `routeId`, and endpoints that only differ in a secret (which is masked) are shown once.
 
 ### camel-exec
 
@@ -435,6 +502,23 @@ Normalization is now always order-independent. As part of the fix, the encoding 
 
 Code that asserts a literal, fully-normalized endpoint URI string containing one of those characters in a query value may need to update the expected string to the (now consistently) unencoded form.
 
+### camel-core - masking of sensitive values in endpoint URIs
+
+`URISupport.sanitizeUri()`, which masks secrets in endpoint URIs shown in logs, events, JMX names and error messages, now masks some values it used to miss, so the masked form of a URI can differ from earlier releases:
+
+-   option names are matched ignoring dashes, so `access-key` is masked like `accessKey`
+    
+-   a `RAW(…​)` or `RAW{…​}` value is masked up to the bracket that ends it, also when the value contains that bracket
+    
+-   the userinfo password of every URI in a text is masked, not only the last one
+    
+-   the `Unknown parameters=[…​]` message of an endpoint that cannot be created masks the values of sensitive parameters
+    
+
+The keywords added with `camel.main.additionalSensitiveKeywords` (or `URISupport.addSanitizeKeywords()`) now apply to every matching parameter, not only the first one, and they are added to the keywords configured earlier instead of replacing them. The keywords apply to the whole JVM and cannot be removed.
+
+`SensitiveUtils.maskUserInfoCredentials()`, used when masking log messages, uses the same userinfo rule: the userinfo ends at the last `@` before the path, so a password may contain `@`, and an `@` in the query of a URI is no longer taken as the end of a password.
+
 ### camel-core - property placeholders in pollEnrich
 
 Camel 4.22 stopped resolving property placeholders (`{{…​}}`) on the _per-message evaluated_ recipient for `toD` and `enrich`, and said that aligning `pollEnrich` was deferred to a follow-up. This is that follow-up: a `{{…​}}` token that appears only in the value produced at runtime by the `pollEnrich` expression is now treated as a literal part of the endpoint URI instead of being expanded.
@@ -446,6 +530,12 @@ Like `toD` and `enrich`, `pollEnrich` resolves its static endpoint URI at build 
 ```
 
 `recipientList`, `routingSlip` and `dynamicRouter` are unchanged. Their recipient is supplied entirely at runtime and may legitimately carry a placeholder that comes from configuration, so they continue to resolve `{{…​}}` in the computed recipient.
+
+### camel-core - a circular reference through an optional property placeholder is an error
+
+A property placeholder that refers back to itself through an optional placeholder, such as `timeout={{?timeout:5000}}`, or two optional placeholders that refer to each other (`a={{?b}}` and `b={{?a}}`), now fail with the same `Circular reference detected` error as a circular reference through required placeholders. Before, resolving such a placeholder never returned, and the thread (for example the one starting the `CamelContext`) kept running at full CPU without any log. No configuration that worked before is affected.
+
+To take a value from somewhere else and otherwise a default, use another key for the override, such as `timeout={{?timeout.override:5000}}`.
 
 ### camel-core - XmlConverter SAX parser factory
 
@@ -514,6 +604,12 @@ Such a declaration previously failed, as there was no constructor to call, so no
 A bean whose class has neither a public no-arg constructor nor a builder now fails with a message naming the ways it can be created (its constructors for `constructors`, its static factory methods for `factoryMethod`, or a builder class of its own), instead of the `NoSuchMethodException` or `IllegalAccessException` of the reflection call, and an unknown property of a bean created through its builder names the properties the builder and the bean accept. `camel validate` and the `camel_validate_source` MCP tool report the same for the classes they can load.
 
 `PropertyBindingSupport.setPropertiesOnTarget` now reports an unknown property with the property name and value, as it rethrew the `PropertyBindingException` with its null cause since 4.21, which surfaced as `NullPointerException: e`.
+
+### camel-core - Claim Check EIP - exchange copies get their own claim check repository
+
+The Claim Check EIP keeps its claim checks in a repository that belongs to the exchange. The javadoc of `ClaimCheckProcessor` already says that the repository is "not shared among Exchanges", but a copy of an exchange used the same repository instance as the exchange it was copied from. This only happened when the exchange had used the Claim Check before the copy was made, because the repository is created on first use. The exchanges created by the Splitter, Multicast, Recipient List and Wire Tap EIPs, and the exchanges sent to a SEDA or Disruptor queue, then shared the repository of the parent, so with parallel processing a Get or Pop could return the message of another part.
+
+Such a copy now gets its own copy of the repository. It starts with the claim checks of the parent, so a part can still get what the parent stored, but what a part stores, removes, pushes or pops is no longer visible to the parent or to the other parts. After a Multicast or Recipient List, the parent continues with the repository of the result exchange (the exchange that the aggregation strategy returned), as it already did for the other exchange properties.
 
 ### camel-core - Splitter unwraps Exchange parts
 
@@ -599,6 +695,12 @@ The Camel Maven archetypes now generate a `README.md` instead of the previous `R
 
 The `camel-archetype-api-component` archetype also generates its readme again: the file was declared in the wrong file set and was therefore silently skipped.
 
+### camel-bean - parameter values in the method name
+
+A parameter value in the method name that is a Simple expression, such as `bean(MyBean.class, "process(${body})")` or `to("bean:foo?method=check(${header.ETag})")`, is now passed to the method as-is. Previously, when the value was a String that started and ended with the same quote (single or double), the quotes were removed, and a value that was the text `null` was passed as a Java `null`. For example the `ETag` value `"33a64df5"` was passed as `33a64df5`.
+
+Quoted String parameters such as `process('World')` still have their quotes removed, and the parameter `null` still passes `null`, as before. An expression that evaluates to `null` also still passes `null`. If a method relied on the old behavior for a value from an expression, then it must remove the quotes, or check for the text `null`, itself.
+
 ### camel-debezium-oracle (breaking change)
 
 The parameters `logMiningBufferEhcacheRollbacksConfig`, `logMiningBufferInfinispanCacheRollbacks` have been removed due to the upgrade of Debezium to 3.6.3.Final.
@@ -620,7 +722,11 @@ The `CamelDoclingInputFilePath` header is unchanged and still accepts a path wit
 
 A new `inputBaseDirectory` option is also available. When set, every local input path - from the header, from a file path body, and from the batch operations - must resolve inside that directory once normalized. It is unset by default, which keeps the previous behaviour of accepting any path.
 
-Additionally, a local input path that does not exist is now reported as a `File not found` `IOException` before Docling is invoked. Previously the size check silently skipped a path that resolved to nothing and the failure surfaced later, from the Docling process or API call. === camel-azure-eventgrid
+Additionally, a local input path that does not exist is now reported as a `File not found` `IOException` before Docling is invoked. Previously the size check silently skipped a path that resolved to nothing and the failure surfaced later, from the Docling process or API call.
+
+The `CamelDoclingOutputFilePath` header, which selects the CLI output directory, is now normalized lexically (redundant separators and `.`/`..` segments are resolved) before it is passed to Docling; a header value without such segments is still used as given. A new `outputBaseDirectory` option additionally confines the header the same way `inputBaseDirectory` confines input paths - when set, an output path that resolves outside it, including an absolute path, is rejected with an `IOException`. `outputBaseDirectory` is unset by default.
+
+### camel-azure-eventgrid
 
 The `CamelAzureEventGridDataVersion` header (`EventGridConstants.DATA_VERSION`) has been removed. The component publishes events in the CloudEvents schema, which has no `dataVersion` attribute (that field belongs to the legacy Event Grid event schema), so the header was read but never applied to the published event. Remove any use of that header; there is no CloudEvents equivalent.
 
@@ -633,6 +739,14 @@ The default whitelists the class name prefixes `java.`, `javax.`, `org.apache.ca
 Applications that aggregate classes outside the default whitelist through the replicated repository without supplying their own `hazelcastInstance` must now provide a `Config` with a `JavaSerializationFilterConfig` covering their class names.
 
 The same default is now also applied to the `ClientConfig` that Camel builds for `hazelcastMode=client` endpoints, when neither a referenced `ClientConfig` nor `hazelcastConfigUri` is supplied. Client mode previously behaved differently from node mode for an otherwise identical endpoint configuration.
+
+### camel-netty - NettyConverter.toByteArray returns a copy of the buffer’s readable bytes
+
+The `ByteBuf` to `byte[]` type converter (`NettyConverter.toByteArray`, also used when converting a Netty HTTP response body and by `camel-hl7`, `camel-lumberjack` and `camel-syslog`) now always returns a copy of exactly the buffer’s readable region (`readerIndex()`..`readableBytes()`).
+
+Previously, for an array-backed (heap) buffer it returned the buffer’s whole backing array directly. That could include bytes outside the readable region and, for a pooled buffer, bytes belonging to other allocations; the returned array was also a live reference into a buffer that could later be recycled.
+
+If your code relied on mutating the returned `byte[]` to write through to the original `ByteBuf`, that no longer has any effect. The converter now behaves consistently for heap and direct, pooled and unpooled buffers.
 
 ### camel-http, camel-http-common, camel-netty-http, camel-undertow, camel-vertx-http - property placeholders in HTTP URI override headers
 
@@ -661,6 +775,10 @@ The affected sites, all of which resolved a header-derived or endpoint-derived v
     
 
 Where the value came from the endpoint rather than a header it was already resolved at build time, so removing the per-message resolution does not change those routes.
+
+### camel-iggy - breaking change
+
+Client dependency has been upgraded to 0.9.0. The URI parameter `replicationFactor` has been removed. It was removed from Iggy API. It wasn’t used anyway in Iggy code. New parameter `iggyHeaderOptions` has been added. Each key is specific to the implementation chosen and there is no API or documentation for them. So providing the possibility to use it but you have to look to the internals of Iggy.
 
 ### camel-console - variables dev console JSON response shape
 
@@ -1188,6 +1306,12 @@ That fallback applied to every saga service, including the default `InMemorySaga
 
 A custom `CamelSagaService` that relies on the header to join sagas started by another participant must override the new method. Everything else is unaffected: the header is still set on the exchange, and routes reading it continue to work.
 
+### camel-saga
+
+The `saga:complete` and `saga:compensate` endpoints now follow the same rule as the Saga EIP: when the exchange is not bound to a saga, the `Long-Running-Action` message header is consulted only if the configured `CamelSagaService` returns `true` from `isLongRunningActionHeaderSupported()`, as `LRASagaService` does. With the default `InMemorySagaService` the header is ignored, and sending an exchange that is not bound to a saga to these endpoints fails with `IllegalStateException`.
+
+Exchanges created inside a saga, including copies made by EIPs such as Wire Tap, Multicast or SEDA, stay bound to it and are not affected. A route that completes or compensates an in-memory saga from an unrelated exchange must bind it explicitly from trusted code, for example with `exchange.getExchangeExtension().setSagaLongRunningAction(id)`.
+
 ### camel-microprofile-health
 
 The `error.stacktrace` entry of a failed health check is now only included in the response when `camel.health.exposure-level` is `full`. At the `default` level the check still reports `error.message`, but no longer serialises the whole cause chain of the exception into the health response. The trace is unchanged in the application log.
@@ -1496,6 +1620,12 @@ The `CamelInfinispanIgnoreReturnValues` header is now documented as a producer h
 
 Downloads to a configured `localWorkDirectory` now resolve existing filesystem path segments before checking that the destination remains inside that directory. Downloads through a symbolic link that resolves outside the `localWorkDirectory` are rejected. Valid nested download paths continue to work.
 
+### camel-file, camel-ftp, camel-smb, camel-mina-sftp and camel-azure-files - a file whose download fails is retried by idempotent consumers
+
+When the consumer cannot download a file (for example a FTP, SFTP or SMB transfer fails with a socket timeout or a connection reset), the file is now retried on the next poll also when the consumer is idempotent, which includes every consumer with `noop=true`. Consumers that are not idempotent already retried such a file. Previously the idempotent key, which is added when the file is polled (`idempotentEager=true`, the default), was kept, so the file was skipped until the application was restarted, or for good with a persistent idempotent repository. The exclusive read lock acquired for the file is now released as well.
+
+A poll in which the download of every file failed now counts as an idle poll, the same as a poll in which no read lock could be acquired. This affects `backoffIdleThreshold`, `sendEmptyMessageWhenIdle` (an empty message is sent) and `greedy` (the consumer does not poll again immediately).
+
 ### camel-infinispan - the aggregation repository keeps completed exchanges for recovery
 
 `InfinispanAggregationRepository` implements `RecoverableAggregationRepository`, but it had no recovery store: `remove` deleted the completed exchange outright, `confirm` removed the exchange id from a cache keyed by correlation key, and `scan` returned the correlation keys of the aggregations still in progress. The recovery task therefore re-delivered aggregations that were still accumulating, marked them `CamelRedelivered`, and sent them to the dead letter channel once `maximumRedeliveries` was reached, while exchanges that genuinely failed after completion could never be recovered.
@@ -1517,6 +1647,10 @@ Both operations now use the header when it is present, and fall back to the `Cam
 A REST producer that resolves to `vertx-http` and does not configure its own `headerFilterStrategy` now filters the common HTTP headers on the outbound direction, as the other HTTP components already did. A message header named `Content-Length`, `Content-Type`, `Host`, `Cache-Control`, `Connection`, `Date`, `Pragma`, `Trailer`, `Transfer-Encoding`, `Upgrade`, `Via` or `Warning` is no longer copied onto the outgoing request; the `Content-Type` of the request is still taken from the exchange as before. Headers consumed by the URI template or the query parameters continue to be filtered, and a custom `headerFilterStrategy` is used as-is and is unaffected.
 
 Routes that relied on one of those headers reaching the wire must set it through the endpoint configuration or supply a `headerFilterStrategy` that permits it.
+
+### camel-disruptor - an interrupted request/reply producer fails the exchange
+
+A Disruptor producer whose thread is interrupted while it waits for the reply without a timeout (`waitForTaskToComplete` with `timeout=0`) now fails the exchange with the `InterruptedException`, where previously it reported the exchange as successful and returned the request as the reply. A reply that arrives after the producer timed out, or was interrupted, is now ignored; previously it could still be copied into the caller’s exchange after the producer had returned.
 
 ### camel-seda - an interrupted producer fails the exchange
 
@@ -1624,7 +1758,7 @@ Opting back in is not quite the previous behaviour. `SqlHelper.resolveQuery` app
 
 Additionally, `camel-sql-stored` with `useMessageBodyForTemplate=true` now uses the message body verbatim as the stored-procedure template text and no longer resolves it through `SqlHelper.resolveQuery`. A body beginning with `file:`, `http:`, `https:` or `classpath:` is therefore treated as literal template text instead of being fetched as a resource, consistent with how `camel-sql` already treats the body under `useMessageBodyForSql=true`. A route that relied on the body being a resource location must resolve it to the template text before the `sql-stored` endpoint.
 
-Observability follows the gate. The `db.statement` span tag set by the `sql` span decorator (camel-telemetry and the deprecated camel-tracing) is now taken from the `CamelSqlQuery` header only when the endpoint sets `allowQueryFromHeader=true`; otherwise the tag is omitted rather than reporting a statement that was never executed. A route that reads `db.statement` from a `sql:` span and relies on the header value must set `allowQueryFromHeader=true`.
+Observability follows the gate. The `db.statement` span tag set by the `sql` span decorator (camel-telemetry and the deprecated camel-tracing) is now taken from the `CamelSqlQuery` header only when the endpoint sets `allowQueryFromHeader=true`; otherwise the tag is omitted rather than reporting a statement that was never executed. A route that reads `db.statement` from a `sql:` span and relies on the header value must set `allowQueryFromHeader=true`. The same gate applies to the `sql-trace` developer console, which reports the endpoint-configured query instead of the header when the header is not honoured. Note that `useMessageBodyForSql=true` takes precedence over `allowQueryFromHeader`, because the producer reads the statement from the message body before it looks at the header; with both options enabled the header is therefore still not reported.
 
 ### camel-core - the inheritErrorHandler attribute on circuitBreaker and failoverLoadBalancer is now a String
 
@@ -1681,6 +1815,14 @@ A deployment that genuinely needs to parse documents with a `DOCTYPE` or externa
 
 Camel already drops the options that Debezium deprecates, but the filter only recognised the ones the connector declares as a `Field`, so this one - declared as a plain `String` constant - slipped through and was published as a second, undocumented spelling of the same setting. Routes that set `databaseOutServerName` should use `xstreamOutServerName` instead; it configures the same XStream outbound server and is unchanged.
 
+### camel-pulsar - the producer no longer replaces the body with the message id
+
+After sending, the producer used to overwrite the message body with the `MessageId` returned by the broker, so every step after the `to("pulsar:…​")` saw a `MessageId` instead of the payload, and a route such as `.to("pulsar:a").to("pulsar:b")` published a Java-serialized `MessageId` to the second topic. That behaviour dates from the asynchronous send added in 3.20 (CAMEL-16030).
+
+The body is now left untouched, and the assigned id is reported on the new `CamelPulsarProducerMessageId` header instead.
+
+A route that read the `MessageId` from the body must read that header instead.
+
 ### camel-jolt - switch from unmaintained bazaarvoice jolt to the jolt-community fork
 
 The JOLT library dependency has been migrated from `com.bazaarvoice.jolt:jolt-core` to `io.github.jolt-community.jolt:jolt-community-core`. See [JOLT (Community Edition)](https://github.com/jolt-community/jolt-community).
@@ -1711,6 +1853,22 @@ Both components read these headers only when `allowTemplateFromHeader=true`. Bec
 
 Routes that reference the constants (for example `setHeader(MustacheConstants.MUSTACHE_TEMPLATE, …​)`) are unaffected. Routes that set the header by its literal string name, or that use `allowTemplateFromHeader=true` with the old header names, must switch to the new `Camel`\-prefixed names.
 
+### camel-crypto
+
+Three changes to `CryptoDataFormat`, none of which affects the format of data already written.
+
+**A per-message initialization vector when inlining.** `marshal` used to throw `Inlining cannot be performed, as no initialization vector was specified` when `shouldInlineInitializationVector` was set without a statically configured vector — which pushed routes into reusing one vector for every message, the thing inlining exists to avoid. A fresh vector is now generated per message when none is supplied. Because the vector is written into the message, readers pick it up from the stream and need no change. A vector supplied explicitly, by configuration or by the `CamelCryptoInitVector` header, is still used as given.
+
+**Authentication failures report uniformly.** A tampered message previously surfaced two distinguishable outcomes: `Given final block not properly padded` from the cipher, or `Expected mac did not match actual mac` from the MAC check. A caller able to submit ciphertext and observe which one came back can use that distinction to recover plaintext. Both now report `Message authentication failed`, and the message no longer includes the expected and computed MAC values — the computed one is `HMAC_k` over the plaintext just produced. Code matching on the old text must be updated.
+
+**The inlined vector length is bounded.** The length prefix is read from the message and used to size an allocation; a declared length outside 0–1024 is now rejected instead of attempted.
+
+Not changed: the HMAC key is still derived from the same key material as the cipher. Separating them would change the MAC written into the message and so could not be read by earlier versions; that is tracked separately. === camel-debezium - a failed embedded engine is now reported
+
+The Debezium consumers now register a `CompletionCallback` on the embedded engine. When the engine stops with an error - for example because the connector cannot reach the database, or the offset store cannot be read - the failure is passed to the consumer’s `ExceptionHandler`, and the consumer’s health check reports `DOWN` with that error.
+
+Previously the engine reported such failures only through its own logger, so the route stayed started and healthy while no longer receiving any change event. Deployments that use readiness or liveness probes will now see a Debezium route whose engine has died reported as `DOWN`, where it was previously reported as `UP`. The engine is still not restarted automatically.
+
 ### camel-seda - purging the queue completes the discarded exchanges
 
 When a SEDA queue is purged (with `purgeWhenStopping=true` or the `purgeQueue` JMX operation), the discarded exchanges are now failed with a `RejectedExecutionException` and their on completions are executed. A producer waiting for the reply of a discarded exchange (`waitForTaskToComplete`) is released with that exception, instead of waiting until its `timeout`, or forever when the timeout is disabled. On completions handed over to a discarded InOnly exchange, such as the commit or rollback of the consumer that received the message, now run as a failure, where previously they never ran.
@@ -1725,6 +1883,22 @@ The Recipient List acquires a producer for every recipient before it starts send
 
 With `parallelProcessing`, a recipient whose task had not started yet when the Recipient List completed is now skipped instead of being sent to afterwards. As before, recipients that had already started keep running.
 
+### camel-xmlsecurity, camel-avro - data format options now carry their security metadata
+
+The `security` and `secret` attributes of `@Metadata` were never written to the generated metadata of data format, language and model options, only to that of component options. They are now generated for all of them.
+
+Two data formats are affected. On `xmlSecurity` the `passPhrase`, `passPhraseByte` and `keyPassword` options are now reported as secret, and on `avro` the `serializablePackages` option is now reported under the `insecure:serialization` category. No option changed its default or its meaning.
+
+This is visible in two places. `passPhraseByte` is now masked as `xxxxxx` wherever Camel sanitizes values, such as in logged endpoint URIs and route dumps; `passPhrase` and `keyPassword` were already masked because other components declare options with the same names. The YAML DSL JSON schema now also marks `passPhrase` and `keyPassword` with `"format": "password"`, so editors that consume the schema render them as password fields.
+
 ## ThrottlingExceptionRoutePolicy
 
 `ThrottlingExceptionRoutePolicy.setKeepOpen(true)` now opens the circuit immediately and synchronously (the consumer is suspended before the setter returns) rather than waiting for the next `onExchangeDone()` callback. This is the intended behaviour and makes the `keepOpen` toggle deterministic, but callers that previously relied on the setter being inert until an exchange arrived must be aware of the change. Setting `keepOpen` back to `false` remains deferred: the half-open timer attempts to close the circuit on its next tick (after `halfOpenAfter` milliseconds, default 30 s).
+
+## Route reload
+
+Dev-mode route reloading now finds changed files by scanning the watched folder on an interval and comparing each file’s modification time and length with the previous scan, instead of using the JDK `WatchService`. A scan reports all the files of one save together, which is what a reload needs: a route is built with the properties of the moment, so a route and a property saved together must be reloaded together. It also removes the macOS penalty, where Java has no native file notification and the watch service fell back to a poll of about ten seconds.
+
+A dot directory under the watched folder is no longer scanned. `.camel-jbang`, where `camel run` keeps the properties of the run it is doing, was reloading the routes whenever it was written, and `.git` or `.idea` were walked on every scan for nothing. A route file inside a dot directory is therefore no longer watched.
+
+`FileWatcherResourceReloadStrategy.setPollTimeout` is now how often the folder is scanned. Its default is unchanged at 2000 milliseconds, so on Linux and Windows a change is noticed within two seconds rather than immediately, and on macOS within two seconds rather than up to ten. A new `setStableTimeout` (default 200 milliseconds) leaves a file that was only just modified for the next scan, so a save still being written is not reloaded half-finished.

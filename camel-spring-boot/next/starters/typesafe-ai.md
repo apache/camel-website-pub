@@ -22,7 +22,22 @@ Please refer to the above links for usage and configuration details.
 
 ## Spring Boot Auto-Configuration
 
-The starter supports 20 options, which are listed below.
+The starter auto-configures both the TypeSafe AI component (`camel.component.typesafe-ai.`**) and the TypeSafe AI language (`camel.language.typesafe-ai.`**). Component properties configure the API client and producer defaults. Language properties configure the `typesafe-ai` language independently: `endpoint`, `threshold`, `uncertainty`, `uncertainty-policy`, and `state`.
+
+```properties
+camel.component.typesafe-ai.base-url=https://api.typesafe.ai
+camel.component.typesafe-ai.model=jev-latest
+camel.component.typesafe-ai.api-key=test-key
+camel.component.typesafe-ai.threshold=0.75
+
+camel.language.typesafe-ai.endpoint=direct:ai-test
+camel.language.typesafe-ai.threshold=0.85
+camel.language.typesafe-ai.uncertainty=0.15
+camel.language.typesafe-ai.uncertainty-policy=NonMatch
+camel.language.typesafe-ai.state=active
+```
+
+The starter supports 23 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -44,6 +59,9 @@ The starter supports 20 options, which are listed below.
 | camel.component.typesafe-ai.uncertainty | Default half-width of the inclusive uncertainty band for the TypeSafe AI language. Zero disables the band. |  | Double |
 | camel.component.typesafe-ai.uncertainty-policy | Default action for the TypeSafe AI language within the uncertainty band: NonMatch or Fail. | nonmatch | TypeSafeAiLanguage$UncertaintyPolicy |
 | camel.language.typesafe-ai.enabled | Whether to enable auto configuration of the typesafe-ai language. This is enabled by default. |  | Boolean |
+| camel.language.typesafe-ai.endpoint | Target endpoint URI for TypeSafe AI processing. |  | String |
 | camel.language.typesafe-ai.language | The name of the language to use. |  | String |
-| camel.language.typesafe-ai.resolve-resource | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. | false | Boolean |
-| camel.language.typesafe-ai.trim | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. | true | Boolean |
+| camel.language.typesafe-ai.state | Simple expression selecting state for the TypeSafe AI language. |  | String |
+| camel.language.typesafe-ai.threshold | Minimum confidence threshold for the TypeSafe AI language. Must be within \[0,1\]. |  | Double |
+| camel.language.typesafe-ai.uncertainty | Half-width of the inclusive uncertainty band for the TypeSafe AI language. |  | Double |
+| camel.language.typesafe-ai.uncertainty-policy | Action for the TypeSafe AI language within the uncertainty band. |  | String |

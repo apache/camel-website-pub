@@ -75,7 +75,15 @@ public class Routes extends RouteBuilder {
 }
 ```
 
-If you are using the JSON binding mode in the Camel REST DSL and want to use the Quarkus Jackson `ObjectMapper`, it can be achieved as follows.
+If you are using the JSON binding mode in the Camel REST DSL and want to use the Quarkus Jackson `ObjectMapper`, it can be achieved by setting `autoDiscoverObjectMapper=true`.
+
+In `application.properties`:
+
+```properties
+camel.rest.data-format-properties[autoDiscoverObjectMapper] = true
+```
+
+Or via the Java DSL:
 
 ```java
 import org.apache.camel.builder.RouteBuilder;

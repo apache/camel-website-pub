@@ -234,6 +234,8 @@ _Java-only: bean binding with Simple expression parameter_
 
 The syntax of the parameters is using the [Simple](../components/4.22.x/languages/simple-language.md) language so we have to use `${ }` placeholders in the body to refer to the message body.
 
+The value of a Simple expression such as `${body}` or `${header.foo}` is passed to the method as-is. Quotes in the value are kept, and a value that is the text `null` is passed as that text. Only a parameter written as a quoted String, such as `'World'`, has its quotes removed, and only the parameter `null` (without quotes) is a `null` value.
+
 If you want to pass in a `null` value, then you can explicitly define this in the method option as shown below:
 
 _Java-only: bean binding with null parameter_

@@ -31,6 +31,18 @@ Both components read these headers only when `allowTemplateFromHeader=true`. Bec
 
 Routes that reference the constants (for example `setHeader(MustacheConstants.MUSTACHE_TEMPLATE, …​)`) are unaffected. Routes that set the header by its literal string name, or that use `allowTemplateFromHeader=true` with the old header names, must switch to the new `Camel`\-prefixed names.
 
+### camel-debezium - a failed embedded engine is now reported
+
+The Debezium consumers now register a `CompletionCallback` on the embedded engine. When the engine stops with an error - for example because the connector cannot reach the database, or the offset store cannot be read - the failure is passed to the consumer’s `ExceptionHandler`, and the consumer’s health check reports `DOWN` with that error.
+
+Previously the engine reported such failures only through its own logger, so the route stayed started and healthy while no longer receiving any change event. Deployments that use readiness or liveness probes will now see a Debezium route whose engine has died reported as `DOWN`, where it was previously reported as `UP`. The engine is still not restarted automatically.
+
+### camel-saga
+
+The `saga:complete` and `saga:compensate` endpoints now follow the same rule as the Saga EIP: when the exchange is not bound to a saga, the `Long-Running-Action` message header is consulted only if the configured `CamelSagaService` returns `true` from `isLongRunningActionHeaderSupported()`, as `LRASagaService` does. With the default `InMemorySagaService` the header is ignored, and sending an exchange that is not bound to a saga to these endpoints fails with `IllegalStateException`.
+
+Exchanges created inside a saga, including copies made by EIPs such as Wire Tap, Multicast or SEDA, stay bound to it and are not affected. A route that completes or compensates an in-memory saga from an unrelated exchange must bind it explicitly from trusted code, for example with `exchange.getExchangeExtension().setSagaLongRunningAction(id)`.
+
 ## Upgrading from 4.22.0 to 4.22.1
 
 ### camel-docling
@@ -1359,6 +1371,29 @@ The `camel-jetty` binding also stored the attachment under the multipart field n
 The gRPC channel and its stubs are built once in `TensorFlowServingEndpoint.doInit()` from `configuration.getTarget()` and `configuration.getCredentials()`, so a per-exchange override supplied as a header cannot take effect. A route that set either header was silently ignored. The sibling `camel-kserve` component declares neither.
 
 Configure the `target` and `credentials` endpoint options instead, or route to a different endpoint with `toD` when the destination varies per message. The constants remain in place for backwards compatibility and are now marked deprecated in the component metadata.
+
+### camel-aws2-s3
+
+The producer no longer evaluates the S3 object key or bucket name taken from a message header as a Simple expression. `AWS2S3Utils.determineKey()` and `determineBucketName()` evaluate the Simple language only for the values configured on the endpoint (`keyName` and `bucketName`); a key supplied through the `CamelAwsS3Key` header, or a bucket name supplied through the `CamelAwsS3OverrideBucketName` header, is now used literally. The `CamelAwsS3Key` header carries message content — for example the name of a consumed object, which the consumer sets on the exchange — whereas a dynamic key or bucket is a route authoring feature.
+
+Configured dynamic keys and buckets are unchanged:
+
+```java
+from("direct:start")
+    .to("aws2-s3://mybucket?keyName=RAW(${date:now:yyyyMMdd}/file.txt)");
+```
+
+A route that needs a dynamic value on the header must evaluate it in the route, so the header already holds the resolved value when it reaches the producer:
+
+```java
+from("direct:start")
+    .setHeader(AWS2S3Constants.KEY, simple("${date:now:yyyyMMdd}/file.txt"))
+    .to("aws2-s3://mybucket");
+```
+
+A header that carries a literal `${…​}` string is now used as the object key verbatim instead of being evaluated.
+
+A configured `keyName` or `bucketName` whose Simple expression resolves to `null` now fails with an `IllegalArgumentException` at the producer, instead of passing a `null` key/bucket on to the AWS SDK.
 
 ### camel-hazelcast - ReplicatedHazelcastAggregationRepository now applies the default serialization filter
 
