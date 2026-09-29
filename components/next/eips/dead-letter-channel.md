@@ -348,6 +348,13 @@ Configuring this from Spring XML is done with the `onPrepareFailureRef` to refer
       onPrepareFailureRef: myPrepare
 ```
 
+If the `onPrepareFailure` processor throws an exception, then the Exchange is **not** sent to the dead letter queue, and the exception is regarded as a new exception that occurred during the dead letter channel, which is handled according to the `deadLetterHandleNewException` option:
+
+-   `deadLetterHandleNewException=true` (default): the new exception is logged at `WARN` level and handled, and the Exchange completes without an exception.
+    
+-   `deadLetterHandleNewException=false`: the Exchange fails with the new exception, which has the original caught exception attached as a suppressed exception.
+    
+
 ### Calling a processor when an exception occurred
 
 With the `onExceptionOccurred` you can call a custom processor right after an exception was thrown, and the Dead Letter Channel is about to decide what to do (either to schedule a redelivery, or move the message into the dead letter queue).

@@ -16,7 +16,7 @@ The `PropertyBindingSupport` class supports binding String valued properties to 
     
 -   _map_ - Properties can lookup in Map’s using map syntax, eg `foo[bar]` where foo is the name of the property that is a Map instance, and bar is the name of the key.
     
--   _list_ - Properties can refer or add to in List’s using list syntax, eg `foo[0]` where foo is the name of the property that is a List instance, and 0 is the index. To refer to the last element, then use `last` as key.
+-   _list_ - Properties can refer or add to in List’s using list syntax, eg `foo[0]` where foo is the name of the property that is a List instance, and 0 is the index. To refer to the last element, then use `last` as key (for a List, not an array). An index beyond the end of the list pads the list with `null` elements up to the index, also when the element is created for a nested key such as `foo[3].name`, so `foo[1].name` and `foo[2].name` without `foo[0]` give a list whose first element is `null`.
     
 -   _reference by property placeholder id_ - Values can refer to a property placeholder key with `#property:myKey`
     

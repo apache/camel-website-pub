@@ -65,7 +65,7 @@ The JSSE configuration utility provides an easy-to-use builder for configuring t
     
     secureSocketProtocol
     
-    The optional secure socket protocol. See [Java Security Standard Algorithm Names](https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.md) for information about standard protocol names. If omitted, TLS is used by default. Note that this property is related to but distinctly different from the secureSocketProtocols and secureSocketProtocolsFilter properties.
+    The optional secure socket protocol. See [Java Security Standard Algorithm Names](https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.md) for information about standard protocol names. If omitted, TLSv1.3 is used by default. Note that this property is related to but distinctly different from the secureSocketProtocols and secureSocketProtocolsFilter properties.
     
     certAlias
     
@@ -81,12 +81,12 @@ The JSSE configuration utility provides an easy-to-use builder for configuring t
     
     cipherSuitesFilter
     
-    This optional property represents a collection of include and exclude patterns for cipher suites to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available cipher suites. The excludes patterns have precedence over the includes patterns. If no cipherSuites and no cipherSuitesFilter are present, the default patterns applied are:
+    This optional property represents a collection of include and exclude patterns for cipher suites to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available cipher suites. The excludes patterns have precedence over the includes patterns. A filter with only excludes patterns includes all the other available values (this applies to all the filters). If no cipherSuites and no cipherSuitesFilter are present, the default patterns applied are:
     
 
 ```text
 Includes .\*;
-Excludes .*_NULL_.*, .\*_anon_.*, .\*DES.*, .\*EXPORT.*, .\*MD5, .*RC4.*
+Excludes .*_NULL_.*, .\*_anon_.*, .\*_EXPORT_.*, .\*_DES_.*, .\*_3DES_.*, .\*MD5, .*RC4.*
 ```
 
 secureSocketProtocols
@@ -99,7 +99,10 @@ This optional property represents a collection of include and exclude patterns f
 
 ```text
 Includes .*
+Excludes SSL.*, TLSv1, TLSv1\.1
 ```
+
+This means TLSv1.2 is the minimum protocol by default. To enable an older protocol (not recommended) it must be configured explicitly in secureSocketProtocols.
 
 namedGroups
 
@@ -361,7 +364,7 @@ SSLContextClientParameters contains the following elements:
     
     signatureSchemesFilter
     
-    This optional property represents a collection of include and exclude patterns for signature schemes to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available signature schemes. The excludes patterns have precedence over the includes patterns. No default filtering is applied to signature schemes.
+    This optional property represents a collection of include and exclude patterns for signature schemes to enable on both the client and server side as well as in the SSLEngine. The patterns are applied over only the available signature schemes. The excludes patterns have precedence over the includes patterns. No default filtering is applied to signature schemes. Some JVMs (such as JDK 25 and older) do not provide their default signature schemes, and then the filter cannot be applied (a WARN is logged) and the defaults of the JVM are used; configure signatureSchemes explicitly instead.
     
 
 ### Configuring SSLContextParameters in XML and YAML DSL
@@ -463,8 +466,8 @@ camel.ssl.enabled = true
 # Explicit named groups ordering (PQC-first)
 camel.ssl.namedGroups = X25519MLKEM768,x25519,secp256r1,secp384r1
 
-# Explicit signature schemes (if your JDK supports PQC signatures)
-camel.ssl.signatureSchemes = ML-DSA,ECDSA,RSA
+# Explicit signature schemes (using the JSSE names of the signature schemes)
+camel.ssl.signatureSchemes = ecdsa_secp256r1_sha256,rsa_pss_rsae_sha256,ed25519
 ```
 
 You can also use include/exclude filters instead of explicit lists:
@@ -501,7 +504,7 @@ SSLContextParameters scp = new SSLContextParameters();
 scp.setKeyManagers(kmp);
 scp.setNamedGroups(ngp);
 
-SSLContext context = scp.createSSLContext();
+SSLContext context = scp.createSSLContext(camelContext);
 ```
 
 ### Disabling PQC Auto-Configuration
@@ -577,7 +580,7 @@ SSLContextParameters scp = new SSLContextParameters();
 scp.setServerParameters(scsp);
 scp.setKeyManagers(kmp);
 
-SSLContext context = scp.createSSLContext();
+SSLContext context = scp.createSSLContext(camelContext);
 SSLEngine engine = scp.createSSLEngine();
 ```
 
@@ -609,6 +612,6 @@ SSLContextParameters scp = new SSLContextParameters();
 scp.setClientParameters(sccp);
 scp.setKeyManagers(kmp);
 
-SSLContext context = scp.createSSLContext();
+SSLContext context = scp.createSSLContext(camelContext);
 SSLEngine engine = scp.createSSLEngine();
 ```

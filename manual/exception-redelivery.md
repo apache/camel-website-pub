@@ -10,6 +10,9 @@
 
 By default, any [Exception Clause](exception-clause.md) will **not** redeliver! (as it sets the `maximumRedeliveries` option to 0).
 
+> **Note**
+> When any redelivery option is configured on the **`onException`** (such as `redeliveryDelay`, `logStackTrace` or `retryAttemptedLogLevel`), then its redelivery policy is based on the redelivery policy of the error handler, and the `maximumRedeliveries` of the error handler is used (unless `maximumRedeliveries` is also configured on the **`onException`**).
+
 Sometimes you want to configure the redelivery policy on a per exception type basis. By default in the top examples, if an **`org.apache.camel.ValidationException`** occurs then the message will not be redelivered; however if some other exception occurs, e.g., **`IOException`** or whatever, the route will be retried according to the settings from the [Dead Letter Channel](../components/4.22.x/eips/dead-letter-channel.md).
 
 However if you want to customize any methods on the [RedeliveryPolicy](https://www.javadoc.io/doc/org.apache.camel/camel-base/current/org/apache/camel/processor/errorhandler/RedeliveryPolicy.md) object, you can do this via the fluent API. So lets retry in case of **`org.apache.camel.ValidationException`** up till two times.

@@ -14,6 +14,7 @@ The following table summarizes the configuration options available for the `kafk
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **bootstrapServers** | Bootstrap Servers | **Required** Comma separated list of Kafka Broker URLs. | string |  |  |
+| **saslAuthType** | Authentication Type | **Required** Authentication type to use. This has no default and must be set explicitly. Use NONE for no authentication, which leaves the broker connection plaintext and unauthenticated, PLAIN or SCRAM\_SHA\_256/SCRAM\_SHA\_512 for username/password, SSL for certificate-based, OAUTH for OAuth 2.0, AWS\_MSK\_IAM for MSK, or KERBEROS for Kerberos. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string |  |  |
 | **topic** | Topic Names | **Required** Comma separated list of Kafka topic names. | string |  |  |
 | **allowManualCommit** | Allow Manual Commit | Whether to allow doing manual commits. | boolean | false |  |
 | **autoCommitEnable** | Auto Commit Enable | If true, periodically commit to ZooKeeper the offset of messages already fetched by the consumer. | boolean | true |  |
@@ -25,7 +26,6 @@ The following table summarizes the configuration options available for the `kafk
 | **oauthScope** | OAuth Scope | OAuth scope. Optional when saslAuthType is OAUTH. | string |  |  |
 | **oauthTokenEndpointUri** | OAuth Token Endpoint | OAuth token endpoint URI. Required when saslAuthType is OAUTH. | string |  |  |
 | **pollOnError** | Poll On Error Behavior | What to do if kafka threw an exception while polling for new messages. There are 5 enums and the value can be one of DISCARD, ERROR\_HANDLER, RECONNECT, RETRY, STOP. | string | ERROR\_HANDLER |  |
-| **saslAuthType** | Authentication Type | Authentication type to use. Use NONE for no authentication, PLAIN or SCRAM\_SHA\_256/SCRAM\_SHA\_512 for username/password, SSL for certificate-based, OAUTH for OAuth 2.0, AWS\_MSK\_IAM for MSK, or KERBEROS for Kerberos. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string | NONE |  |
 | **saslPassword** | Password | Password for SASL authentication. Required when saslAuthType is PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. | string |  |  |
 | **saslUsername** | Username | Username for SASL authentication. Required when saslAuthType is PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. | string |  |  |
 | **sslKeyPassword** | SSL Key Password | The password of the private key in the key store file. | string |  |  |
@@ -84,7 +84,7 @@ camel run route.yaml
 
 ### Authentication
 
-Authentication is selected with `saslAuthType`, which defaults to `NONE`, so out of the box the Kamelet connects to an unauthenticated broker. The accepted values are `NONE`, `PLAIN`, `SCRAM_SHA_256`, `SCRAM_SHA_512`, `SSL`, `OAUTH`, `AWS_MSK_IAM` and `KERBEROS`.
+Authentication is selected with `saslAuthType`, which is required and has no default, so the choice is always explicit. The accepted values are `NONE`, `PLAIN`, `SCRAM_SHA_256`, `SCRAM_SHA_512`, `SSL`, `OAUTH`, `AWS_MSK_IAM` and `KERBEROS`. `NONE` is a valid choice and connects to an unauthenticated broker over a plaintext connection — it just has to be asked for rather than inherited.
 
 Which other properties are needed depends on that choice:
 
@@ -101,13 +101,13 @@ Resolve credentials through a Camel vault rather than plaintext properties where
 
 ### Configuration
 
-Only `topic` and `bootstrapServers` are required. The Kamelet supports:
+`topic`, `bootstrapServers` and `saslAuthType` are required. The Kamelet supports:
 
 -   **topic**: Comma-separated list of Kafka topic names to consume from (required)
     
 -   **bootstrapServers**: Comma-separated list of Kafka bootstrap servers (required)
     
--   **saslAuthType**: Authentication mechanism, default `NONE`
+-   **saslAuthType**: Authentication mechanism, no default (required)
     
 -   **saslUsername** / **saslPassword**: Credentials for the username and password mechanisms
     

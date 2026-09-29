@@ -97,7 +97,7 @@ With the following _path_ and _query_ parameters:
 | **host** (common) | **Required** Name of the javax.jcr.Repository to lookup from the Camel registry to be used. |  | String |
 | **base** (common) | Get the base node when accessing the repository. |  | String |
 
-### Query Parameters (14 parameters)
+### Query Parameters (15 parameters)
 
    
 | Name | Description | Default | Type |
@@ -130,6 +130,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **headerFilterStrategy** (filter) | To use a custom org.apache.camel.spi.HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 
 ## Message Headers
 

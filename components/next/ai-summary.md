@@ -4,13 +4,13 @@ The Camel AI components are a group of components for applying Apache Camel to v
 
 ## Getting started with LLMs
 
-New to Camel AI? Start with the [LLM Integration Guide](ai-llm-integration-guide.md) — it explains when to use [OpenAI](openai-component.md) vs [LangChain4j Chat](langchain4j-chat-component.md), structured JSON extraction, streaming to browsers, dynamic prompts, and prompt management patterns.
+New to Camel AI? Start with the [LLM Integration Guide](ai-llm-integration-guide.md) — it explains when to use [LLM (OpenAI-compatible)](openai-component.md) vs [LangChain4j Chat](langchain4j-chat-component.md), structured JSON extraction, streaming to browsers, dynamic prompts, and prompt management patterns.
 
 ## Choosing the Right AI Component
 
 Camel offers two main paths for integrating Large Language Models (LLMs) into routes:
 
--   **[OpenAI](openai-component.md)** — talks directly to OpenAI and any OpenAI-compatible API (OpenRouter, Ollama, vLLM, LM Studio). Native support for streaming, structured output (`outputClass` / `jsonSchema`), MCP tool calling, conversation memory, and the Responses API. Best when you are committed to the OpenAI ecosystem or using an OpenAI-compatible gateway.
+-   **[LLM (OpenAI-compatible)](openai-component.md)** — uses the `llm:` URI scheme (with `openai:` as a backward-compatible alias) to talk to OpenAI and any OpenAI-compatible API (OpenRouter, Ollama, vLLM, LM Studio). Native support for streaming, structured output (`outputClass` / `jsonSchema`), MCP tool calling, conversation memory, and the Responses API. Best when you are committed to the OpenAI ecosystem or using an OpenAI-compatible gateway.
     
 -   **[LangChain4j Chat](langchain4j-chat-component.md)** — abstracts through [LangChain4j](https://github.com/langchain4j/langchain4j) so you can switch LLM providers (OpenAI, Anthropic, Google Gemini, Mistral, Ollama, and others) by swapping a dependency. Also provides prompt templates with variables, RAG integration via the Content Enricher pattern, and multi-message conversation history.
     
@@ -96,7 +96,7 @@ Perform operations on the Neo4j Graph Database
 
 [OpenAI](openai-component.md)
 
-OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech.
+LLM endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech using OpenAI-compatible APIs. The openai scheme is a supported alias.
 
 [PGVector](pgvector-component.md)
 

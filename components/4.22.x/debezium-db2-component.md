@@ -8,6 +8,8 @@ The Debezium db2 component is wrapper around [Debezium](https://debezium.io/) us
 
 > **Note**
 > **Note on handling failures:** per [Debezium Embedded Engine](https://debezium.io/documentation/reference/1.9/development/engine.html#_handling_failures) documentation, the engines are actively recording source offsets and periodically flush these offsets to a persistent storage. Therefore, when the application is restarted or crashed, the engine will resume from the last recorded offset. This means that, at normal operation, your downstream routes will receive each event exactly once. However, in case of an application crash (not having a graceful shutdown), the application will resume from the last recorded offset, which may result in receiving duplicate events immediately after the restart. Therefore, your downstream routes should be tolerant enough of such a case and deduplicate events if needed.
+>
+> If the embedded engine stops with an error, for example because the connector cannot reach the database or the offset store cannot be read, it is not restarted: the route stays started but receives no further events. The failure is reported to the consumer exception handler and turns the route health check `DOWN`, so it can be picked up by a readiness probe.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component.
 

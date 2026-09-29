@@ -1,9 +1,11 @@
-# OpenAI
+# LLM
 
-OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech.
+LLM endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech using OpenAI-compatible APIs. The openai scheme is a supported alias.
 
 ## What’s inside
 
+-   [LLM component](../../../components/next/openai-component.md), URI syntax: `llm:operation`
+    
 -   [OpenAI component](../../../components/next/openai-component.md), URI syntax: `openai:operation`
     
 

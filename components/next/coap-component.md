@@ -115,6 +115,7 @@ Enum values:
 
 
  |  | String |
+| **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side, the 5.00 (Internal Server Error) response sent to the client won’t contain the exception’s message. | true | boolean |
 | **observable** (consumer) | Make CoAP resource observable for source endpoint, based on RFC 7641. | false | boolean |
 | **observe** (consumer) | Send an observe request from a source endpoint, based on RFC 7641. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -222,6 +223,12 @@ The following rules determine which request method the CoAP producer will use to
     
 4.  `GET` otherwise.
     
+
+### Error responses from the CoAP consumer
+
+When the exchange fails, the CoAP consumer answers the request with `5.00 Internal Server Error`. The same applies when the response cannot be built once the route has completed, for example when the body cannot be converted to the response payload.
+
+By default the error response has no payload, so the exception’s message is not sent to the client. Set `muteException=false` on the endpoint to send the exception’s message as the payload instead.
 
 ## Configuring COAP Server
 

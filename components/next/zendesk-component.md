@@ -1816,7 +1816,7 @@ The 287 method(s) is(are) listed in the table below, followed by detailed syntax
 | [**verifyUserIdentity**](#_api_DEFAULT_method_verifyUserIdentity) |  | 
 
  |
-| [**warmUp**](#_api_DEFAULT_method_warmUp) |  | Prepares authentication up front, so the first request does not pay for it: a client-credentials client mints an access token here |
+| [**warmUp**](#_api_DEFAULT_method_warmUp) |  | Prepares authentication up front, so the first request does not pay for it: a client using a TokenProvider asks it for a token here, which mints one if none is cached |
 
 #### Method addTagToOrganisations
 

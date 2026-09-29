@@ -4,7 +4,9 @@
 
 **Both producer and consumer are supported**
 
-The OpenAI component provides integration with OpenAI and OpenAI-compatible APIs for chat completion, text embeddings, content moderation, audio transcription, audio translation, text-to-speech, and image generation and editing using the official openai-java SDK.
+The LLM component provides integration with OpenAI and OpenAI-compatible APIs (Ollama, vLLM, LM Studio, OpenRouter, Azure OpenAI, and others) for chat completion, text embeddings, content moderation, audio transcription, audio translation, text-to-speech, and image generation and editing using the official openai-java SDK.
+
+The Maven artifact remains `camel-openai`. Routes may use either the `llm:` or the `openai:` scheme.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -20,8 +22,13 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 ## URI Format
 
 ```none
-openai:operation[?options]
+llm:operation[?options]
 ```
+
+The `openai:` scheme is a supported alias (`openai:operation[?options]`) for existing routes.
+
+> **Tip**
+> Prefer `llm:` in new routes for discoverability. Examples below use `openai:` for backward compatibility; substitute `llm:` in the operation URI when starting a new integration.
 
 Supported operations:
 

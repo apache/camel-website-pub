@@ -193,7 +193,7 @@ Camel uses the following rules to determine if it’s a parameter value in the m
     
 -   The value is null which denotes a `null` value
     
--   It can be evaluated using the [Simple](../components/4.22.x/languages/simple-language.md) language, which means you can use, e.g., `${body}`, `${header.foo}` and others [Simple](../components/4.22.x/languages/simple-language.md) tokens. Notice the tokens must be enclosed with `${ }`.
+-   It can be evaluated using the [Simple](../components/4.22.x/languages/simple-language.md) language, which means you can use, e.g., `${body}`, `${header.foo}` and others [Simple](../components/4.22.x/languages/simple-language.md) tokens. Notice the tokens must be enclosed with `${ }`. A comma inside the `${ }`, such as in `${body.substring(0, 3)}`, is part of the parameter.
     
 -   The value ends with `.class` then it’s a type declaration instead - see the next section about specifying types for overloaded methods.
     

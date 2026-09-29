@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790589023275,
+  "generated": 1790682483934,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -15848,7 +15848,7 @@
               "module": "ROOT",
               "path": "starters/openai.adoc",
               "url": "/camel-spring-boot/next/starters/openai.html",
-              "title": "OpenAI"
+              "title": "LLM"
             },
             {
               "module": "ROOT",
