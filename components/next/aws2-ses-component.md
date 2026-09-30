@@ -460,7 +460,7 @@ The `#client` refers to a `SesClient` in the Registry.
 ```java
 from("direct:start")
     .setHeader(SesConstants.SUBJECT, constant("This is my subject"))
-    .setHeader(SesConstants.TO, constant(Collections.singletonList("to@example.com"))
+    .setHeader(SesConstants.TO, constant(Collections.singletonList("to@example.com")))
     .setBody(constant("This is my message text."))
     .to("aws2-ses://from@example.com?accessKey=xxx&secretKey=yyy");
 ```

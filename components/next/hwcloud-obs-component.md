@@ -283,7 +283,7 @@ from("direct:triggerRoute")
 
 ```java
 from("direct:triggerRoute")
- .setBody("{\"bucketName\":\"Bucket name\",\"location\":\"Bucket location\"}")
+ .setBody(constant("{\"bucketName\":\"Bucket name\",\"location\":\"Bucket location\"}"))
  .to("hwcloud-obs:createBucket?region=cn-north-4&accessKey=********&secretKey=********")
 ```
 
@@ -331,7 +331,7 @@ from("direct:triggerRoute")
 
 ```java
 from("direct:triggerRoute")
- .setBody("{\"bucketName\":\"Bucket name\",\"maxKeys\":1000}")
+ .setBody(constant("{\"bucketName\":\"Bucket name\",\"maxKeys\":1000}"))
  .to("hwcloud-obs:listObjects?region=cn-north-4&accessKey=********&secretKey=********")
 ```
 

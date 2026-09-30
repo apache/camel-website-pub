@@ -197,7 +197,7 @@ _Java-only: requires SDK CreateInstanceRequestBody builder_
 
 ```java
 from("direct:triggerRoute")
- .setBody(new CreateInstanceRequestBody().withName("new-instance").withDescription("description").with*) // add remaining options
+ .setBody(constant(new CreateInstanceRequestBody().withName("new-instance").withDescription("description").with*)) // add remaining options
  .to("hwcloud-dms:createInstance?region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
 ```
 
@@ -210,7 +210,7 @@ from("direct:triggerRoute")
 
 ```java
 from("direct:triggerRoute")
- .setBody("{\"name\":\"new-instance\",\"description\":\"description\"}") // add remaining options
+ .setBody(constant("{\"name\":\"new-instance\",\"description\":\"description\"}")) // add remaining options
  .to("hwcloud-dms:createInstance?region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
 ```
 
@@ -248,7 +248,7 @@ _Java-only: requires SDK UpdateInstanceRequestBody builder_
 
 ```java
 from("direct:triggerRoute")
- .setBody(new UpdateInstanceRequestBody().withName("new-instance").withDescription("description").with*) // add remaining options
+ .setBody(constant(new UpdateInstanceRequestBody().withName("new-instance").withDescription("description").with*)) // add remaining options
  .to("hwcloud-dms:updateInstance?instanceId=******&region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
 ```
 
@@ -261,7 +261,7 @@ from("direct:triggerRoute")
 
 ```java
 from("direct:triggerRoute")
- .setBody("{\"name\":\"new-instance\",\"description\":\"description\"}") // add remaining options
+ .setBody(constant("{\"name\":\"new-instance\",\"description\":\"description\"}")) // add remaining options
  .to("hwcloud-dms:updateInstance?instanceId=******&region=cn-north-4&accessKey=********&secretKey=********&projectId=*******")
 ```
 

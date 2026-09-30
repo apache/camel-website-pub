@@ -60,6 +60,8 @@ camel.resource.http.read-timeout = 30000
 
 OAuth client credentials token caching now distinguishes profiles by client secret and requested scope, in addition to token endpoint and client ID. Profiles with different credentials or scopes request separate tokens instead of reusing the same cached token. Applications using such profiles may make additional token requests after upgrading.
 
+The post login url of the authorization code flow is now always built from the origin (`scheme://host[:port]`) of the configured `camel.oauth.redirect-uri`, plus the requested path. `OAuthCodeFlowProcessor` previously rebuilt that url from the `X-Forwarded-Proto` / `X-Forwarded-Host` / `X-Forwarded-Port` request headers, or from the `Host` header behind `CamelHttpUrl` when those were absent. All of those are set by the caller, so a request could point the post login redirect at any origin. A deployment behind an ingress or an OpenShift Route still redirects to its externally reachable address, because `camel.oauth.redirect-uri` is the address the identity provider sends the browser back to. Deployments whose external address differs from that property must set it to the address the browser actually reaches; a request announcing another origin is now redirected to the configured one and a warning is logged.
+
 ### Simple language
 
 `${ }` may now hold a predicate, as the braces do in Jakarta EL, Groovy and a JavaScript template: `${body != null && body.size() > 0}` answers whether it matches, instead of being refused with _Operators go outside the function_. The form with the operators outside the braces (`${body} != null && ${body.size()} > 0`) means the same and is unchanged, and the ternary keeps working as before.
@@ -119,6 +121,14 @@ When optimistic locking is enabled without configuring an `optimisticLockRetryPo
 
 The exchange property `CamelCircuitBreakerResponseRejected` is now also set inside the `onFallback`, in both `camel-resilience4j` and `camel-microprofile-fault-tolerance`: `true` when the call was not attempted because the breaker was open or the bulkhead was full, `false` when the call was made and failed or timed out. Prior to Camel 4.23 the property was only set when there was no fallback and was absent inside the fallback, so a fallback that tested it for `null` must now test for `true` or `false` instead. `CamelCircuitBreakerResponseShortCircuited` is unchanged and remains `true` whenever the fallback runs, whatever the cause.
 
+### camel-resilience4j - bulkhead together with timeout
+
+When the Circuit Breaker EIP with resilience4j has both `bulkheadEnabled` and `timeoutEnabled`, the bulkhead permit is now held until the protected call has ended, also when the call has timed out and the fallback has already been used. Prior to Camel 4.23 the permit was released when the timeout fired, while the call kept running on the timeout thread pool, so `bulkheadMaxConcurrentCalls` did not limit the calls running against a slow service. This applies to both the synchronous and the `asynchronous` mode, and matches the decorator order recommended by resilience4j (the bulkhead inside the time limiter) and the behaviour of `camel-microprofile-fault-tolerance`.
+
+As a result, while calls that timed out are still running, further calls are rejected by the bulkhead (and answered by the fallback, with `CamelCircuitBreakerResponseRejected` set to `true`), where before they were started. A call that never ends keeps its permit.
+
+In the synchronous mode the resilience4j `TimeLimiter` now also sees a call that the bulkhead rejects (as an error with a `BulkheadFullException`), so the events and metrics of resilience4j itself count such a call as a `TimeLimiter` error. The Camel circuit breaker counters are not affected.
+
 ### Convert Body, Convert Header and Convert Variable EIPs
 
 When a charset is configured, such as `convertBodyTo(String.class, "UTF-8")`, then the conversion now uses that charset also when the message has a `CamelCharsetName` header. Previously the header took precedence, so the configured charset was ignored. The header is kept on the message unchanged.
@@ -138,6 +148,20 @@ The redelivery counter is not reset when the exception changes, so the new `onEx
 When the aggregator uses optimistic locking together with `completionTimeoutExpression`, a group now records its completion timeout in the `CamelAggregatedTimeout` exchange property of the aggregated exchange stored in the aggregation repository, and a group only completes by timeout when it has this property. This prevents the timeout of an already completed group from completing a new group for the same correlation key.
 
 A group that was persisted in the aggregation repository before the upgrade does not have this property, so it does not complete by timeout until another exchange that has a completion timeout arrives for the group. A custom `AggregationRepository` that does not keep exchange properties never completes a group by timeout. This only affects optimistic locking combined with `completionTimeoutExpression`.
+
+### Aggregate EIP - stream caching with spooling to disk
+
+When stream caching spools message bodies to disk, the aggregator now keeps the spool files of the bodies it aggregates until the aggregated exchange is done. Prior to Camel 4.23 a spool file was deleted as soon as the incoming exchange was done, so the aggregated exchange could fail to read the bodies with a `NoSuchFileException`.
+
+With the default `MemoryAggregationRepository` (without optimistic locking) the spool files of all exchanges of a group are now kept until the group completes and the aggregated exchange is done, so more disk space can be used in the spool directory than before. For example `UseLatestAggregationStrategy` with a large `completionSize` now keeps a spool file for every exchange of the group, although only the last body is used. A group that never completes keeps its spool files until the aggregator is shut down, such as when the route is removed or `CamelContext` is stopped.
+
+With optimistic locking, or a persistent aggregation repository, the spool file of an exchange is released when the exchange has been added to the repository (a persistent repository has read the body at that time), and only the spool file of the exchange that completes a group is kept until the aggregated exchange is done.
+
+### camel-sql - JdbcAggregationRepository with optimistic locking
+
+With optimistic locking, `JdbcAggregationRepository` (and `ClusteredJdbcAggregationRepository`, `PostgresAggregationRepository` and `ClusteredPostgresAggregationRepository`) now fails with an `OptimisticLockingException`, so that the aggregator retries, when a message was aggregated on a group that another thread or Camel instance completed meanwhile. Prior to Camel 4.23 the completed group was stored again together with the new message, so its messages were sent a second time, or a new group of the same correlation key was overwritten and its messages were lost.
+
+A new group now starts with a random positive version instead of `1`, so that a version read from an earlier group of the same correlation key never matches it. The `version` column must therefore be a 64-bit integer, as in the documented `version BIGINT NOT NULL`. Groups stored before the upgrade keep their version.
 
 ### Variable Receive
 
@@ -220,6 +244,19 @@ Do not use `*`, as it disables Avro’s class-loading protection.
 
 When a verb has `type` or `outType` and the binding mode is `json`, `xml` or `json_xml`, the verb’s `consumes` and `produces` are set to the matching media types if they are not already set. This now also happens when the binding mode is only set with `restConfiguration()`, as it already did when it is set on the `rest` or the verb. With `clientRequestValidation` enabled, such a verb now rejects a request with another `Content-Type` (415) or `Accept` (406) header.
 
+### Rest DSL - client validation, verb ids and inlined routes
+
+-   `clientResponseValidation` now also validates the response when the binding mode is `off`, the response has no body, or binding was skipped because of an error code (`skipBindingOnErrorCode`). Before, the response was only validated after the body was marshalled.
+    
+-   The headers of a `responseMessage` are only required on the responses with that code (or on the responses of the `default` response message when the code has none). Before, the headers of all the response messages were required on every response.
+    
+-   A verb with `type` gets a body parameter that is required (unless the body parameter, whatever its name, is declared with `required=false`). With `clientRequestValidation` enabled, a request without a body is now rejected (400), as the body was already marked as required in the OpenAPI specification.
+    
+-   Two verbs with the same `id` now fail with a duplicate route id error. Before, the second verb silently got a generated route id. A verb with the same `id` as a route that is not a rest verb (such as the `direct` route it calls) still gets a generated route id, as before.
+    
+-   A `direct` route that more than one rest service calls is no longer inlined (with `inlineRoutes` enabled, which is the default). It stays a route of its own, and the rest services call it. Before, its outputs were inlined into all the rest services, which then shared the same EIP definitions.
+    
+
 ### CamelEvent JSON serialization
 
 `CamelEvent` now provides `asJSon()` and `toJSon(int indent)` with default implementations that return a minimal JSON map (`type`, optional `timestamp`, and `message`). Camel’s built-in event classes override these methods to include structured metadata such as exchange, route, and exception details.
@@ -227,6 +264,27 @@ When a verb has `type` or `outType` and the binding mode is `json`, `xml` or `js
 Custom `CamelEvent` implementations continue to compile without changes. Override the new methods only if you need richer JSON output than the default `type`/`timestamp`/`message` map.
 
 The Event developer console now exposes the full structured JSON payload in the `details` field of each event entry, while keeping the existing flat `type`, `timestamp`, `exchangeId`, and `message` fields for backwards compatibility.
+
+### Intercept Send To Endpoint EIP
+
+The interceptors of `interceptSendToEndpoint` are now registered by each route while it is running, on an endpoint that is wrapped once:
+
+-   Each route uses its own interceptor. Before, the endpoint was wrapped by the interceptor of one of the routes (which one depended on the order of an unordered set), and all the routes used that one.
+    
+-   Removing a route no longer breaks the other routes that send to the intercepted endpoint (they failed with `RejectedExecutionException` when the route whose interceptor wrapped the endpoint was removed).
+    
+-   The interception is kept when the `CamelContext` is restarted.
+    
+-   The interceptor of a stopped route is no longer used.
+    
+-   Interceptors from two ``RouteBuilder`s for the same endpoint are both used, each by the routes of its own `RouteBuilder``. Before, only the one that wrapped the endpoint first was used.
+    
+-   `mockEndpoints` together with an `interceptSendToEndpoint` on the same endpoint now both run, in a fixed order: the interceptors of the route that is sending first, and then the mock. Before, only the one that wrapped the endpoint first was used.
+    
+-   When an interceptor applies to several routes (such as one defined in a `RouteBuilder` with several routes), the `CamelInterceptedRouteId` and `CamelInterceptedParentEndpointUri` exchange properties are those of the route that sends to the endpoint. Before, they were always those of the first route of the `RouteBuilder`.
+    
+
+The `org.apache.camel.processor.InterceptSendToEndpointCallback` class is deprecated, as it is no longer used.
 
 ### Route templates
 
@@ -291,6 +349,8 @@ The JMX `browse` operation of the `DefaultInflightRepository` MBean and the `lis
 
 `InflightRepository.InflightExchange` and `AsyncProcessorAwaitManager.AwaitThread` gained a `getNodeSource()` method for the same value. Both are `default` methods returning `null`, so existing implementations continue to compile.
 
+The `Redeliveries` statistic now also counts a redelivery attempt that succeeds, and it is only counted where the redelivery happened. For a processor it is the number of redelivery attempts of that processor. For a route it is the number of exchanges that were redelivered by a processor of that route, and for the CamelContext the number of exchanges that were redelivered. Before, only redelivery attempts that failed were counted (so a processor that succeeded on its second redelivery reported 1 instead of 2, and a route whose exchange was redelivered and then completed reported 0), and a processor or route that the exchange went through after a redelivery could count that redelivery as well.
+
 ### camel-groovy
 
 A `GroovyShellFactory` is now looked up in the registry once per `CamelContext`, when the first groovy expression is evaluated, instead of on every evaluation. A factory bound to the registry after that point is no longer used; bind it before the context starts.
@@ -329,7 +389,9 @@ The `dynamic-router` endpoint gained an `allowedSchemes` option, an optional com
 
 ### camel-management - JMX tabular data
 
-Some tabular data returned by the JMX MBeans had a key that was not unique, so the operation failed with `KeyAlreadyExistsException`. The tabular data of the Choice EIP and doTry EIP `extendedInformation` and of `listTasks` of the task manager registry now have an `index` item as their key, the exchange factories of `listStatistics` are keyed by `url` and `routeId`, and endpoints that only differ in a secret (which is masked) are shown once.
+Some tabular data returned by the JMX MBeans had a key that was not unique, so the operation failed with `KeyAlreadyExistsException`. The tabular data of the Choice EIP and doTry EIP `extendedInformation` and of `listTasks` of the task manager registry now have an `index` item as their key, the exchange factories of `listStatistics` are keyed by `url` and `routeId`, and endpoints that only differ in a secret (which is masked) are shown once. The `listEndpointServices` operation of the endpoint service registry is keyed by `routeId` as well, so two routes that consume from the same service are both listed.
+
+The notification types advertised by the event notifier MBean (`getNotificationInfo`) are now the types that `JmxNotificationEventNotifier` sends, which is the simple class name of the event (such as `ExchangeCompletedEvent`), and the notification class is `javax.management.Notification`. Before, the advertised types used a `org.apache.camel.management.event.` prefix and several events were missing.
 
 ### camel-exec
 
@@ -342,6 +404,10 @@ When the flag is `false` (the default), any remaining `CamelExecCommand*`, `Came
 The syslog data format and the `SyslogMessage` type converter decoded every byte of a message as one ISO-8859-1 character, so any text outside US-ASCII (for example the UTF-8 that RFC 5424 specifies for MSG and for structured data values) came out as two to four wrong characters. The text is now decoded with the charset of the exchange (the `CamelCharsetName` header or exchange property, which the `encoding` option of camel-netty and camel-mina sets), and UTF-8 when none is set. A MSG that starts with the UTF-8 byte order mark is decoded as UTF-8 and the byte order mark is no longer part of the log message. The data format also writes the message with the charset of the exchange when it marshals.
 
 US-ASCII messages are parsed as before. A route that repaired the wrongly decoded text itself must stop doing so.
+
+### camel-bindy - fixed-length records with characters outside the BMP
+
+Since Camel 3.1 a fixed-length record is read by counting code points (or graphemes with `@FixedLengthRecord(countGrapheme = true)`), but it was written by counting UTF-16 chars, so a field with a character outside the Basic Multilingual Plane (such as an emoji) was written one padding character short and the following fields were read shifted. Marshal now pads and clips each field with the same count as unmarshal, and the record `length` is checked with that count too. A field with such characters (or, with `countGrapheme = true`, with combining characters) is padded to its length in code points (or graphemes), so it gets one padding character more than before for each extra UTF-16 char (or code point). Text in the Basic Multilingual Plane without combining characters is written and read as before. A record with such characters written by an older Camel version is too short by that count, so it now fails the record `length` check (unless `ignoreMissingChars = true`) instead of being read with shifted fields. A system that reads these records by counting UTF-16 chars must count code points (or graphemes) instead.
 
 ### Components and Language removal
 
@@ -714,6 +780,12 @@ The Minio GitHub repository has been archived on the 25th April 2026. The contai
 
 MinIO is S3-compatible, so existing deployments can migrate to the `camel-aws2-s3` component by pointing it at the MinIO server, for example: `aws2-s3://mybucket?overrideEndpoint=true&uriEndpointOverride=http://localhost:9000&forcePathStyle=true&accessKey=…​&secretKey=…​`
 
+### camel-sjms - request/reply completes the exchange once when the send fails
+
+When the send of an InOut message fails, the pending reply is now cancelled, so the request timeout no longer completes the exchange a second time with an `ExchangeTimedOutException` after it has already failed with the send exception. When the send fails after the request timeout, or the reply, has already completed the exchange (for example a send that blocks longer than `requestTimeout` and then fails), the exchange keeps the outcome of the timeout or the reply, and the send failure is logged at WARN level.
+
+`org.apache.camel.component.sjms.reply.ReplyManager` has a new default method `boolean cancelCorrelationId(String)`, which `ReplyManagerSupport` implements. A custom `ReplyManager` implementation that does not override it keeps the previous behaviour.
+
 ### camel-tika
 
 The Tika dependency has been upgraded from 3.x to 4.x. Tika 4 removed the `TikaConfig` class and XML configuration support in favor of `TikaLoader` and JSON configuration. Consequently, the deprecated `tikaConfig` and `tikaConfigUri` options have been removed. Use `tikaLoader` to provide an `org.apache.tika.config.loader.TikaLoader`, or `tikaConfigFile` to load a JSON configuration file. Applications using either removed option must migrate their Tika configuration; see the [Tika 4 migration guide](https://tika.apache.org/docs/4.0.x/migration-to-4x/migrating-to-4x.md) for the configuration and metadata-key changes.
@@ -821,7 +893,13 @@ The `CamelAzureEventGridDataVersion` header (`EventGridConstants.DATA_VERSION`) 
 
 The `ssl` option is now marked `insecure:ssl`, so setting it to `false` in the configuration is reported by the [security policy](security-policy.md) check: a warning by default, and a startup failure with the `prod` profile or `camel.security.insecureSslPolicy = fail`.
 
-The check matches a configuration property by its option name, not by its component. It therefore also applies when `ssl=false` is set on the other components that have an `ssl` option: `camel-clickhouse`, `camel-netty`, `camel-netty-http` and `camel-oaipmh`, for example `camel.component.netty.ssl = false` in `application.properties`. The `tls` option of `camel-pinecone` already worked this way for `tls=false`. To keep such a setting under a `fail` policy, list it in `camel.security.allowedProperties`.
+This applies only to `camel-hivemq`: setting `ssl=false` on the other components that have an `ssl` option (such as `camel.component.netty.ssl = false`) is not reported, see the `camel-main` section about the security policy check below. To keep `camel.component.hivemq.ssl = false` under a `fail` policy, list it in `camel.security.allowedProperties`.
+
+### camel-main - security policy check matches component options by component
+
+The [security policy](security-policy.md) check matched an insecure option by its name only, so an option of one component that is marked insecure was also reported for any other component, data format or language with an option of the same name. For example `tls=false` was reported for every component because of the `tls` option of `camel-pinecone`.
+
+A property that configures a component, data format or language (`camel.component.<name>.<option>`, `camel.dataformat.<name>.<option>` and `camel.language.<name>.<option>`) is now only checked against the options of that component, data format or language. This means fewer properties are reported: a setting that was reported only because another component has an insecure option of the same name no longer triggers a warning, or a startup failure with the `prod` profile. Other properties, such as `camel.ssl.trustAllCertificates`, are still checked by the option name.
 
 ### camel-hazelcast
 
@@ -1067,6 +1145,10 @@ from("spring-redis://localhost:6379?command=SUBSCRIBE&channels=myChannel"
 ```
 
 Setting the `serializer` option to a custom `RedisSerializer` bypasses the filter entirely, since Camel then no longer controls how the payload is read.
+
+### camel-spring-redis - SpringRedisIdempotentRepository.remove returns false for a missing key
+
+`SpringRedisIdempotentRepository.remove` now returns `false` when the key was not in the repository, as documented by `IdempotentRepository`. It previously returned `true` for any key. The Idempotent Consumer does not use the returned value.
 
 ### camel-langchain4j
 
@@ -1759,6 +1841,14 @@ A completed exchange is now kept in the same cache under a `camel-recovery:<exch
 
 Routes that set `useRecovery=false` are unaffected. Routes that left recovery enabled, which is the default, stop seeing in-progress aggregations re-delivered, and start seeing genuine recovery. The cache now also holds one entry per completed and not yet confirmed exchange; those entries are removed on confirmation.
 
+### camel-caffeine, camel-ehcache - the aggregation repositories keep completed exchanges for recovery
+
+`CaffeineAggregationRepository` and `EhcacheAggregationRepository` implement `RecoverableAggregationRepository`, but like the Infinispan repository before 4.23 they had no recovery store: `remove` deleted the completed exchange, `confirm` removed the exchange id from a cache keyed by correlation key, and `scan` returned the correlation keys of the aggregations still in progress. The recovery task therefore sent aggregations that were still in progress (marked `CamelRedelivered`, and to the dead letter channel once `maximumRedeliveries` was reached), while exchanges that failed after completion could never be recovered.
+
+A completed exchange is now kept in the same cache under a `camel-recovery:<exchange id>` key until it is confirmed, which is what `scan` reports and `recover` reads. `getKeys` reports only the aggregations in progress.
+
+Routes that set `useRecovery=false` are unaffected. Routes that left recovery enabled, which is the default, no longer see aggregations in progress sent by the recovery task, and a completed exchange whose processing failed is now recovered. The cache now also holds one entry per completed and not yet confirmed exchange; those entries are removed on confirmation. A cache with a size limit or an expiry applies it to these entries as well.
+
 ### camel-qdrant - the PayloadSelector header is now honoured
 
 `QdrantHeaders.PAYLOAD_SELECTOR` (`CamelQdrantPointsPayloadSelector`) was declared and advertised in the component metadata but never read. The `RETRIEVE` and `SIMILARITY_SEARCH` operations only honoured the `CamelQdrantWithPayload` boolean, so a route that set a `Points.WithPayloadSelector` to request specific payload fields was silently given the whole payload.
@@ -2103,6 +2193,20 @@ The `acquireLockInterval` of the file lock cluster service must now be at least 
 
 Previously a `keyId` such as `tenant-a/signing` resolved into a subdirectory of the key directory. Deployments that organised keys that way must switch to a flat `keyId` (for example `tenant-a-signing`). Only the file-based manager is affected; the in-memory and cloud-backed managers were never file-path based.
 
+### camel-pqc - Bouncy Castle 1.86 (Breaking change)
+
+Camel now uses Bouncy Castle 1.86, which removes the legacy implementations of several post-quantum algorithms from the `BCPQC` provider.
+
+**Picnic removed.** Bouncy Castle 1.86 no longer ships Picnic, so the `PICNIC` value of the `signatureAlgorithm` option, the `PQCSignatureAlgorithms.PICNIC` constant and `PQCDefaultPicnicMaterial` have been removed. Routes signing with Picnic must move to another signature algorithm, such as `MLDSA` or `SLHDSA`.
+
+**Classic McEliece and FrodoKEM use the `BC` provider.** `CMCE` and `FRODO` are now served by the Classic McEliece and FrodoKEM implementations of the `BC` provider (JCA names `CMCE` and `FrodoKEM`) instead of `BCPQC`. That implementation has no `mceliece348864` or `frodokem640` parameter sets: the `parameterSpec` option rejects them, and the default parameter sets of the key lifecycle managers changed from `mceliece348864` to `mceliece460896` and from `frodokem640aes` to `frodokem976aes`.
+
+**Stored keys must be generated again.** The `BC` provider rejects the algorithm identifier of Classic McEliece and FrodoKEM keys generated by the removed `BCPQC` implementations, and Picnic keys can no longer be read at all. Keys of these algorithms held by a key lifecycle manager, a key store or the registry have to be regenerated, and the peers they are shared with updated.
+
+**`parameterSpec` for `DILITHIUM`, `SPHINCSPLUS` and `KYBER`.** These algorithms generate ML-DSA, SLH-DSA and ML-KEM keys, so `parameterSpec` now takes the standardized parameter-set names, for example `ML-DSA-65`, `SLH-DSA-SHA2-128S` or `ML-KEM-768`. The `dilithium2`, `dilithium3` and `dilithium5` names are no longer accepted, while `kyber512`, `kyber768`, `kyber1024` and SPHINCS+ names such as `sha2-128s` still are. With Bouncy Castle 1.85 a `DILITHIUM` or `SPHINCSPLUS` endpoint configured with a `parameterSpec` already failed to generate its key.
+
+Code that creates key material itself has to follow the same move: the `CMCEParameterSpec`, `FrodoParameterSpec`, `KyberParameterSpec`, `DilithiumParameterSpec`, `SPHINCSPlusParameterSpec` and `PicnicParameterSpec` classes of `org.bouncycastle.pqc.jcajce.spec` no longer exist. Use `CMCEParameterSpec`, `FrodoKEMParameterSpec`, `MLKEMParameterSpec`, `MLDSAParameterSpec` and `SLHDSAParameterSpec` of `org.bouncycastle.jcajce.spec` with the `BC` provider instead.
+
 ### camel-crypto
 
 Three changes to `CryptoDataFormat`, none of which affects the format of data already written.
@@ -2287,6 +2391,15 @@ This also affects a **relative** `document()` when the stylesheet itself was loa
 `camel-xslt-saxon` is affected in the same way: `XsltSaxonEndpoint` sets the same deny-all attribute, Saxon reports it through `getAttribute`, and `XsltSaxonBuilder` extends `XsltBuilder`.
 
 If a route legitimately needs `document()` to read an external resource, supply a custom `TransformerFactory` via the `transformerFactory` option whose `ACCESS_EXTERNAL_STYLESHEET` permits the required protocols (set the attribute to a comma-separated protocol list such as `file` or `http,https`, or to `all`). Camel’s internal `classpath:`, `ref:` and `bean:` schemes are outside the JAXP external-access model and remain resolvable. Stylesheet `xsl:include` / `xsl:import` references are resolved at compile time (they are part of the route definition, authored by the route author) and are unaffected by this change.
+
+### camel-openapi-validator - repeated request headers are validated value by value
+
+A header that occurs more than once in a request used to be passed to the request validator as the text of the Java collection holding its values, such as `[a, b]`. The values are now passed as they were sent. As a result:
+
+-   A header that the contract declares as a single value (not an array) and that occurs more than once is now rejected with `400`, where it was accepted before.
+    
+-   A header that the contract declares as an array may be repeated. This is treated like one header with the values joined by commas (RFC 9110, section 5.3), and each value is checked against the item schema of the array. This applies to OpenAPI 3.0 contracts: for an OpenAPI 3.1 contract the validator does not recognise a header parameter as an array, so a repeated header is rejected like a single-value one.
+    
 
 ## ThrottlingExceptionRoutePolicy
 

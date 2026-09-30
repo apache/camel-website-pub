@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 385 in 312 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 386 in 313 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -328,6 +328,7 @@ Number of Non-Core Components: 385 in 312 JAR artifacts (4 deprecated)
 | [OPC UA Client](milo-client-component.md) | camel-milo | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](milo-server-component.md) | camel-milo | Stable | 2.19 | Make telemetry data available as an OPC UA server. |
 | [OpenAI](openai-component.md) | camel-openai | Stable | 4.17 | LLM endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech using OpenAI-compatible APIs. The openai scheme is a supported alias. |
+| [OpenFGA](openfga-component.md) | camel-openfga | Preview | 4.23 | Authorize an Exchange against an OpenFGA relationship graph, and maintain the relationship tuples it is authorized against. |
 | [OpenSearch](opensearch-component.md) | camel-opensearch | Stable | 4.0 | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](openshift-build-configs-component.md) | camel-kubernetes | Stable | 2.17 | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](openshift-builds-component.md) | camel-kubernetes | Stable | 2.17 | Perform operations on OpenShift Builds. |

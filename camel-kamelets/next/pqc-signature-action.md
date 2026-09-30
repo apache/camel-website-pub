@@ -14,13 +14,13 @@ The following table summarizes the configuration options available for the `pqc-
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **operation** | PQC Signature Operation | **Required** The PQC Signature Operation to be performed. Enum values: \* sign \* verify | string |  |  |
-| **signatureAlgorithm** | PQC Signature Algorithm | **Required** The PQC Signature Algorithm to be used. Enum values: \* MLDSA" \* SLHDSA \* LMS \* XMSS \* FALCON \* PICNIC | string |  |  |
+| **signatureAlgorithm** | PQC Signature Algorithm | **Required** The PQC Signature Algorithm to be used. Enum values: \* MLDSA \* SLHDSA \* LMS \* XMSS \* FALCON | string |  |  |
 
 ## Dependencies
 
 At runtime, the `pqc-signature-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:http
+-   camel:pqc
     
 -   camel:kamelet
     

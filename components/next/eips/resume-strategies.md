@@ -97,7 +97,7 @@ _Java-only: enabling intermittent mode on resumable_
 
 ```java
 from("some:component")
-.resumable(new MyTestResumeStrategy()).intermittent(true)
+.resumable().resumeStrategy(new MyTestResumeStrategy()).intermittent(true)
 .process(this::process)
 ```
 

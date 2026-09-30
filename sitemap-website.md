@@ -1,10 +1,15 @@
-urls[874]{loc,lastmod}:
+urls[877]{loc,lastmod}:
+  https://camel.apache.org/security/CVE-2026-88789.md,2026-09-30T09:39:19+01:00
+  https://camel.apache.org/,2026-09-30T09:39:19+01:00
+  https://camel.apache.org/security/,2026-09-30T09:39:19+01:00
+  https://camel.apache.org/blog/,2026-09-30T00:00:00+00:00
+  https://camel.apache.org/blog/2026/09/camel-quarkus-release-3.40.0/,2026-09-30T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-09-30T00:00:00+00:00
+  https://camel.apache.org/releases/q-3.40.0/,2026-09-28T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-09-28T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-09-24T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.22.0/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/categories/EIP/,2026-09-24T00:00:00+00:00
-  https://camel.apache.org/,2026-09-24T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-tui-byoa/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/,2026-09-22T00:00:00+00:00
@@ -20,7 +25,6 @@ urls[874]{loc,lastmod}:
   https://camel.apache.org/releases/q-3.33.3/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.22.1/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/,2026-09-17T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/categories/Security/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-website-rebuilt/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark/,2026-09-15T00:00:00+00:00
@@ -29,7 +33,6 @@ urls[874]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-80351.md,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-80352.md,2026-09-08T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-80354.md,2026-09-08T11:00:00+02:00
-  https://camel.apache.org/security/,2026-09-08T11:00:00+02:00
   https://camel.apache.org/blog/2026/09/camel-k-2-11/,2026-09-08T00:00:00+00:00
   https://camel.apache.org/releases/k-2.11.0/,2026-09-07T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-spiffe-workload-identity/,2026-09-07T00:00:00+00:00

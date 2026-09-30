@@ -24,7 +24,7 @@ Camel JQ leverages `camel-jackson` for type conversion. To enable camel-jackson 
 
 ### Using header as input
 
-By default, JQ uses the message body as the input source. However, you can also use a header as input by specifying the `headerName` option.
+By default, JQ uses the message body as the input source. However, you can also use a header, property or variable as input by specifying the `source` option, such as `header:books`.
 
 For example, to count the number of books from a JSON document that was stored in a header named `books` you can do:
 
@@ -32,8 +32,8 @@ _Java-only: using header as JQ input source_
 
 ```java
 from("direct:start")
-    .setHeader("numberOfBooks")
-        .jq(".store.books | length", int.class, "books")
+    .setHeader("numberOfBooks",
+        expression().jq(".store.books | length").resultType(int.class).source("header:books").end())
     .to("mock:result");
 ```
 

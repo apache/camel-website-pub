@@ -14,6 +14,8 @@ The framework checks four categories of security concerns:
 | `insecure:serialization` | Enabling Java object deserialization, a known attack vector | `allowJavaSerializedObject=true`, `transferException=true` |
 | `insecure:dev` | Development or debug features that should not be enabled in production | `devConsoleEnabled=true`, `uploadEnabled=true` |
 
+The insecure options are the component, data format and language options that are marked with a security category in their metadata. A property that configures a component, data format or language (such as `camel.component.netty.ssl`) is only checked against the options of that component, data format or language, so an option that merely has the same name as an insecure option of another component (such as the `ssl` option of camel-hivemq) is not flagged. Any other property (such as `camel.ssl.trustAllCertificates`) is checked by the option name.
+
 ## Policy levels
 
 Each category can be set to one of three enforcement levels:
@@ -40,7 +42,7 @@ camel.security.insecureSerializationPolicy = fail
 camel.security.insecureDevPolicy = allow
 
 # Exempt specific properties from all checks
-camel.security.allowedProperties = camel.component.http.trustAllCertificates
+camel.security.allowedProperties = camel.component.aws2-s3.trustAllCertificates
 ```
 
   
@@ -94,7 +96,7 @@ camel.main.profile = prod
 # Implicit: camel.security.policy = fail
 
 # Allow one specific exception where self-signed certs are needed
-camel.security.allowedProperties = camel.component.https.trustAllCertificates
+camel.security.allowedProperties = camel.component.aws2-s3.trustAllCertificates
 ```
 
 With this configuration, the application will refuse to start if any plain-text secret, insecure SSL setting, unsafe deserialization option, or dev feature is detected — except the one explicitly allowed property.

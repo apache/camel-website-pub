@@ -172,7 +172,7 @@ _Java-only: uses GoogleBigQueryConstants to set the table suffix header_
 
 ```java
 from("direct:start")
-  .header(GoogleBigQueryConstants.TABLE_SUFFIX, "_${date:now:yyyyMMdd}")
+  .setHeader(GoogleBigQueryConstants.TABLE_SUFFIX, simple("_${date:now:yyyyMMdd}"))
   .to("google-bigquery:sampleDataset:sampleTable")
 ```
 

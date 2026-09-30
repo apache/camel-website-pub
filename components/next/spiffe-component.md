@@ -104,6 +104,24 @@ Enum values:
 | **workloadApiClient** (advanced) | **Autowired** An existing WorkloadApiClient to use. When set, the component does not create or close its own client and spiffeSocketPath is ignored. |  | WorkloadApiClient |
 | **allowOperationHeader** (security) | Whether the CamelSpiffeOperation header may override the configured operation. Disabled by default: the operation decides whether this endpoint validates a token or mints one, so a message that can set it can turn a validator into an endpoint that hands out this workload’s own JWT-SVID. Enable it only on routes whose input is trusted. | false | boolean |
 | **spiffeSocketPath** (security) | The address of the SPIFFE Workload API endpoint (for example \\{code unix:///tmp/agent.sock} or \\{code tcp://127.0.0.1:8082}). When not set, the SPIFFE\_ENDPOINT\_SOCKET environment variable is used. |  | String |
+| **x509Response** (security) | 
+
+What the fetchX509Svid operation returns in the message body. Defaults to chain: the X.509 certificate chain without the private key, so a route never handles key material unless it asks for it. Choose svid to get the whole X509Svid including the private key (needed for programmatic mTLS), or id to leave the body untouched. The SPIFFE ID and expiry are exposed through the CamelSpiffeSpiffeId and CamelSpiffeExpiry headers in every case.
+
+Enum values:
+
+-   svid
+    
+-   chain
+    
+-   id
+    
+
+
+
+
+
+ | chain | SpiffeX509Response |
 
 ## Endpoint Options
 
@@ -147,6 +165,24 @@ Enum values:
 | **workloadApiClient** (advanced) | **Autowired** An existing WorkloadApiClient to use. When set, the component does not create or close its own client and spiffeSocketPath is ignored. |  | WorkloadApiClient |
 | **allowOperationHeader** (security) | Whether the CamelSpiffeOperation header may override the configured operation. Disabled by default: the operation decides whether this endpoint validates a token or mints one, so a message that can set it can turn a validator into an endpoint that hands out this workload’s own JWT-SVID. Enable it only on routes whose input is trusted. | false | boolean |
 | **spiffeSocketPath** (security) | The address of the SPIFFE Workload API endpoint (for example \\{code unix:///tmp/agent.sock} or \\{code tcp://127.0.0.1:8082}). When not set, the SPIFFE\_ENDPOINT\_SOCKET environment variable is used. |  | String |
+| **x509Response** (security) | 
+
+What the fetchX509Svid operation returns in the message body. Defaults to chain: the X.509 certificate chain without the private key, so a route never handles key material unless it asks for it. Choose svid to get the whole X509Svid including the private key (needed for programmatic mTLS), or id to leave the body untouched. The SPIFFE ID and expiry are exposed through the CamelSpiffeSpiffeId and CamelSpiffeExpiry headers in every case.
+
+Enum values:
+
+-   svid
+    
+-   chain
+    
+-   id
+    
+
+
+
+
+
+ | chain | SpiffeX509Response |
 
 ## Message Headers
 
@@ -159,7 +195,7 @@ The SPIFFE component supports the following message header(s), which is/are list
 | **CamelSpiffeAudience** (producer) Constant: [`AUDIENCE`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#AUDIENCE) | The comma-separated audience(s) for the fetchJwtSvid operation. Ignored by validateJwtSvid, which always validates against the configured audience: there the audience is the check that binds the token to this workload, not a parameter. |  | String |
 | **CamelSpiffeToken** (producer) Constant: [`TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#TOKEN) | The JWT-SVID token to validate, for the validateJwtSvid operation. |  | String |
 | **CamelSpiffeSpiffeId** (producer) Constant: [`SPIFFE_ID`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#SPIFFE_ID) | The SPIFFE ID of the returned SVID. |  | String |
-| **CamelSpiffeExpiry** (producer) Constant: [`EXPIRY`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#EXPIRY) | The expiry of the returned JWT-SVID. |  | Date |
+| **CamelSpiffeExpiry** (producer) Constant: [`EXPIRY`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#EXPIRY) | The expiry of the returned SVID: the token expiry for fetchJwtSvid, or the leaf certificate’s notAfter for fetchX509Svid. |  | Date |
 
 ## Workload API endpoint
 
@@ -169,15 +205,15 @@ The address of the SPIFFE Workload API is taken from the `spiffeSocketPath` opti
 
 The component supports the following producer operations:
 
--   `fetchX509Svid` — fetches the default X.509-SVID from the Workload API. The message body is set to the `io.spiffe.svid.x509svid.X509Svid` (certificate chain, private key and SPIFFE ID) and the `CamelSpiffeSpiffeId` header to its SPIFFE ID.
+-   `fetchX509Svid` — fetches the default X.509-SVID from the Workload API. By default (`x509Response=chain`) the message body is set to the certificate chain only (a `List<java.security.cert.X509Certificate>`, without the private key), so a route never handles key material unless it asks for it. Set `x509Response=svid` to get the whole `io.spiffe.svid.x509svid.X509Svid` including the private key (needed for programmatic mTLS), or `x509Response=id` to leave the body untouched. In every case the `CamelSpiffeSpiffeId` and `CamelSpiffeExpiry` (the leaf certificate’s expiry) headers carry the identity.
     
 -   `fetchJwtSvid` — fetches a JWT-SVID for the configured `audience` (or the `CamelSpiffeAudience` header). The message body is set to the JWT token string, with the `CamelSpiffeSpiffeId` and `CamelSpiffeExpiry` headers.
     
--   `validateJwtSvid` — validates the JWT-SVID passed in the `CamelSpiffeToken` header (or the body) against the `audience`. When several audiences are configured the token is accepted if it matches **any** of them — the Workload API validates one audience at a time, so each is tried in turn. The message body is set to the validated `io.spiffe.svid.jwtsvid.JwtSvid`.
+-   `validateJwtSvid` — validates a JWT-SVID against the `audience`. The token is taken from the first of: the `CamelSpiffeToken` header, an `Authorization: Bearer <token>` header (the scheme matched case-insensitively), or the message body. The `Authorization` header is tried **before** the body so a request payload on a `POST`/`PUT` is not mistaken for the token; this lets a `platform-http` route validate an incoming bearer token without a bean to strip the scheme. On success the message body is set to the validated `io.spiffe.svid.jwtsvid.JwtSvid`, so a route that needs the original request payload afterwards must keep a copy before validating (or validate a bodiless request). When several audiences are configured the token is accepted if it matches **any** of them — the Workload API validates one audience at a time, so each is tried in turn.
     
 
 > **Note**
-> The `fetchX509Svid` and `fetchJwtSvid` operations place sensitive key material on the message: the `X509Svid` carries the workload’s private key, and the JWT-SVID is a bearer token. Route authors are trusted with Exchange contents, but you should avoid logging or tracing the message body for these operations — for example via the `log`/`trace` components or the message-history / breadcrumb EIPs — to prevent accidental disclosure of the key or token.
+> The `fetchX509Svid` and `fetchJwtSvid` operations place sensitive key material on the message: the `X509Svid` carries the workload’s private key, and the JWT-SVID is a bearer token. Route authors are trusted with Exchange contents, but you should avoid logging or tracing the message body for these operations — for example via the `log`/`trace` components or the message-history / breadcrumb EIPs — to prevent accidental disclosure of the key or token. `fetchX509Svid` only puts the private key on the body when `x509Response=svid` is set explicitly; the default (`chain`) and `id` keep the key off the message entirely.
 
 ## Example
 
@@ -189,6 +225,23 @@ from("direct:start")
     .setHeader("Authorization", simple("Bearer ${body}"))
     .to("http://backend.example.org/api");
 ```
+
+Validate an incoming bearer token on a `platform-http` route, without a bean to strip the scheme:
+
+```yaml
+- from:
+    uri: "platform-http:/api"
+    steps:
+      # the Authorization: Bearer <token> header is picked up automatically; validation replaces the body with the
+      # JwtSvid, so this fits a request whose payload is not needed afterwards
+      - to: "spiffe:auth?operation=validateJwtSvid&audience=spiffe://example.org/api"
+      # the token is a credential; drop it before the exchange goes further
+      - removeHeaders:
+          pattern: "Authorization"
+      - to: "direct:handleRequest"
+```
+
+A missing token fails with `IllegalArgumentException`; a rejected one (invalid, expired, or a wrong audience) fails with `io.spiffe.exception.JwtSvidException`. Catch both — `onException(io.spiffe.exception.JwtSvidException.class, IllegalArgumentException.class)` — to answer `401`.
 
 ## Mutual TLS with SPIFFE (SSLContextParameters)
 

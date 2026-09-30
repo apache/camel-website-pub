@@ -2,7 +2,7 @@
 
 We offer several examples in [Camel Quarkus examples repository](https://github.com/apache/camel-quarkus-examples). To learn how to use them, please follow the [First steps](first-steps.md) chapter of the User guide.
 
-Number of Examples: 35
+Number of Examples: 36
 
  
 | Example | Description |
@@ -26,6 +26,7 @@ Number of Examples: 35
 | [JTA and JPA](https://github.com/apache/camel-quarkus-examples/tree/main/jta-jpa) | Shows how to run a Camel Quarkus application that supports JTA transactions on two external transactional resources: a database (MySQL) and a simulate XAResource which can demonstrate the commit, rollback and crash recovery. |
 | [Kafka example](https://github.com/apache/camel-quarkus-examples/tree/main/kafka) | Shows how to produce and consume messages in a Kafka topic, using Strimzi Operator |
 | [Kamelet Chuck Norris](https://github.com/apache/camel-quarkus-examples/tree/main/kamelet-chucknorris) | Shows how you can build a simple Kamelet and use with your Camel applications. |
+| [LangChain4j Ingest RAG](https://github.com/apache/camel-quarkus-examples/tree/main/langchain4j-ingest-rag) | Shows how to build a RAG document Q&A where a folder of documents is ingested into a vector store by the langchain4j-ingest extension and an AI service answers questions grounded in them |
 | [Leader election in Kubernetes: A Camel Quarkus Master example](https://github.com/apache/camel-quarkus-examples/tree/main/cluster-leader-election) | Shows how to use Camel master component. |
 | [Message Bridge](https://github.com/apache/camel-quarkus-examples/tree/main/message-bridge) | Shows how to configure AMQ and IBM MQ clients to use the connection pooling and XA transactions. |
 | [Observability](https://github.com/apache/camel-quarkus-examples/tree/main/observability) | Demonstrates how to add support for metrics, health checks and distributed tracing |

@@ -273,8 +273,6 @@ Enum values:
     
 -   FALCON
     
--   PICNIC
-    
 -   SNOVA
     
 -   MAYO
@@ -549,8 +547,6 @@ Enum values:
     
 -   FALCON
     
--   PICNIC
-    
 -   SNOVA
     
 -   MAYO
@@ -673,14 +669,15 @@ Experimental and non-standardized
     
 -   Falcon
     
--   Picnic
-    
 -   SNOVA
     
 -   MAYO
     
 -   SPHINCS+
     
+
+> **Note**
+> `DILITHIUM` and `SPHINCSPLUS` are kept for backward compatibility: they generate ML-DSA and SLH-DSA keys, the standardized versions of these algorithms.
 
 ## Parameter Sets (NIST Security Levels)
 
@@ -705,17 +702,16 @@ Values are the BouncyCastle parameter-set names, resolved case-insensitively. Th
 | `MLKEM` | `ML-KEM-512` (default), `ML-KEM-768`, `ML-KEM-1024` |
 | `SLHDSA` | `SLH-DSA-SHA2-128S`, `SLH-DSA-SHAKE-256F`, …​ (see `SLHDSAParameterSpec`) |
 | `FALCON` | `FALCON-512`, `FALCON-1024` |
-| `DILITHIUM` | `DILITHIUM2`, `DILITHIUM3`, `DILITHIUM5` |
-| `SPHINCSPLUS` | `sha2-128s`, …​ (see `SPHINCSPlusParameterSpec`) |
-| `PICNIC` | `picnicl1fs`, …​ (see `PicnicParameterSpec`) |
-| `KYBER` | `kyber512`, `kyber768`, `kyber1024` |
+| `DILITHIUM` | `ML-DSA-44`, `ML-DSA-65`, `ML-DSA-87` (default) |
+| `SPHINCSPLUS` | The `SLHDSA` parameter sets, for example `SLH-DSA-SHA2-128S` (default) |
+| `KYBER` | `ML-KEM-512`, `ML-KEM-768`, `ML-KEM-1024` (default); `kyber512`, `kyber768` and `kyber1024` are accepted as aliases |
 | `NTRU` | `ntruhps2048509`, …​ (see `NTRUParameterSpec`) |
 | `NTRULPRime` | `ntrulpr653`, …​ (see `NTRULPRimeParameterSpec`) |
 | `SNTRUPrime` | `sntrup761`, …​ (see `SNTRUPrimeParameterSpec`) |
 | `BIKE` | `bike128`, `bike192`, `bike256` |
 | `HQC` | `hqc128`, `hqc192`, `hqc256` |
-| `CMCE` | `mceliece348864`, …​ (see `CMCEParameterSpec`) |
-| `FRODO` | `frodokem640aes`, …​ (see `FrodoParameterSpec`) |
+| `CMCE` | `mceliece460896`, `mceliece8192128f` (default), …​ (see `org.bouncycastle.jcajce.spec.CMCEParameterSpec`) |
+| `FRODO` | `frodokem976aes` (default), `frodokem1344shake`, …​ (see `org.bouncycastle.jcajce.spec.FrodoKEMParameterSpec`) |
 | `SABER` | `lightsaberkem128r3`, …​ (see `SABERParameterSpec`) |
 
 The `parameterSpec` option is also honoured by the `generateKeyPair` lifecycle operation, which then generates the key at the configured security level.
@@ -945,10 +941,9 @@ All other signature algorithms follow the exact same route pattern shown above f
 | XMSS | `XMSS` | XMSS | BCPQC | Tree height 10, SHA-256 | `PQCDefaultXMSSMaterial` |
 | XMSSMT | `XMSSMT` | XMSSMT | BCPQC | XMSSMT-SHA2-20d2-256 | `PQCDefaultXMSSMTMaterial` |
 | HSS | `HSS` | HSS | BC | LMS-SHA256-N32-H5 | `PQCDefaultHSSMaterial` |
-| Dilithium | `DILITHIUM` | Dilithium | BCPQC | dilithium2 | `PQCDefaultDilithiumMaterial` |
+| Dilithium | `DILITHIUM` | ML-DSA | BC | ML-DSA-87 | `PQCDefaultDILITHIUMMaterial` |
 | Falcon | `FALCON` | Falcon | BCPQC | falcon\_512 | `PQCDefaultFalconMaterial` |
-| SPHINCS+ | `SPHINCSPLUS` | SPHINCS+ | BCPQC | sha2\_128s | `PQCDefaultSPHINCSPlusMaterial` |
-| Picnic | `PICNIC` | Picnic | BCPQC | picnicl1fs | `PQCDefaultPicknicMaterial` |
+| SPHINCS+ | `SPHINCSPLUS` | SLH-DSA | BC | SLH-DSA-SHA2-128s | `PQCDefaultSPHINCSPLUSMaterial` |
 
 To use any algorithm, set `signatureAlgorithm` in the URI (e.g., `signatureAlgorithm=SLHDSA`). Alternatively, register a KeyPair and Signature in the registry using the JCA Algorithm Name and Provider from the table above.
 

@@ -461,7 +461,7 @@ _Java-only: uses setHeader with Java constant_
 
 ```java
 from("direct:...")
-    .setHeader("CamelOlingo2.$top", "5");
+    .setHeader("CamelOlingo2.$top", constant("5"))
     .to("olingo2://read/Manufacturers?orderBy=Name%20asc");
 ```
 

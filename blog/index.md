@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[249]{title,link,pubDate,description}:
+posts[250]{title,link,pubDate,description}:
+  Camel Quarkus 3.40.0 Released|https://camel.apache.org/blog/2026/09/camel-quarkus-release-3.40.0/index.md|Wed, 30 Sep 2026 00:00:00 +0000|Camel Quarkus 3.40.0 release
   TypeSafe Jev meets Apache Camel: semantic decisions in Camel routes|https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/index.md|Thu, 24 Sep 2026 00:00:00 +0000|Jev is gaining momentum, and there is a reason why: it addresses a practical problem in automation. Many workflows need a model to make a small, specific judgment: Which team should handle this reques
   B.Y.O.A. — Bring Your Own Agent to Camel TUI and Build Integrations with Camel Kit|https://camel.apache.org/blog/2026/09/camel-tui-byoa/index.md|Tue, 22 Sep 2026 00:00:00 +0000|The next Apache Camel release, 4.23, is shaping up to be a great release, packed with new features. One I worked on is support for coding agents in Camel TUI through the Agent Client Protocol, or ACP.
   Round 2: a real-world example set, a step-by-step benchmark, and 31 more Camel fixes|https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/index.md|Tue, 22 Sep 2026 00:00:00 +0000|Two weeks ago we let a frontier model coach a small local model through Camel and fixed Camel between every run: twelve of thirteen beginner examples in the end, and 99 findings that were wrong for hu

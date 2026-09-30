@@ -283,7 +283,7 @@ Be aware that adding a thread pool to a SEDA endpoint by doing something like:
 _Java-only: thread pool added to SEDA endpoint_
 
 ```java
-from("seda:stageName").thread(5).process(...)
+from("seda:stageName").threads(5).process(...)
 ```
 
 Can wind up with two `BlockQueues`: one from the SEDA endpoint, and one from the work queue of the thread pool, which may not be what you want. Instead, you might wish to configure a [Direct](direct-component.md) endpoint with a thread pool, which can process messages both synchronously and asynchronously. For example:
@@ -291,7 +291,7 @@ Can wind up with two `BlockQueues`: one from the SEDA endpoint, and one from the
 _Java-only: thread pool on a Direct endpoint_
 
 ```java
-from("direct:stageName").thread(5).process(...)
+from("direct:stageName").threads(5).process(...)
 ```
 
 You can also directly configure number of threads that process messages on a SEDA endpoint using the `concurrentConsumers` option.

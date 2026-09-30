@@ -21,7 +21,7 @@ The following table summarizes the configuration options available for the `pqc-
 
 At runtime, the `pqc-kem-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:http
+-   camel:pqc
     
 -   camel:kamelet
     

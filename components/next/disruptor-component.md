@@ -320,7 +320,7 @@ Be aware that adding a thread pool to a Disruptor endpoint by doing something li
 _Java-only: incomplete route (thread pool example)_
 
 ```java
-from("disruptor:stageName").thread(5).process(...)
+from("disruptor:stageName").threads(5).process(...)
 ```
 
 Can wind up with adding a normal [BlockingQueue](http://docs.oracle.com/javase/1.5.0/docs/api/java/util/concurrent/BlockingQueue.md) to be used in conjunction with the Disruptor, effectively negating part of the performance gains achieved by using the Disruptor. Instead, it is advices to directly configure the number of threads that process messages on a Disruptor endpoint using the concurrentConsumers option.

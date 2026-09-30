@@ -1,0 +1,27 @@
+# camel overview
+
+High-level overview of the integrations in a project, optionally explained by AI/LLM
+
+## Usage
+
+```bash
+camel overview [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--ai` | Ask an LLM to explain the project (an overview, the capabilities, labels and notes of routes that have none) and save it in camel-summary.md, marked as AI-assisted |  | boolean |
+| `--api-key` | API key for authentication. Also reads ANTHROPIC\_API\_KEY, OPENAI\_API\_KEY, WATSONX\_APIKEY, or LLM\_API\_KEY env vars |  | String |
+| `--api-type` | API type: 'ollama', 'openai' (OpenAI-compatible), 'anthropic' (Anthropic/Vertex AI), or 'watsonx' (IBM watsonx.ai) |  | ApiType |
+| `--apply-descriptions` | Put the AI-assisted route descriptions and notes of camel-summary.md into the route sources, so they become part of the routes |  | boolean |
+| `--format` | Output format (markdown, json) | markdown | String |
+| `--model` | Model to use | DEFAULT\_MODEL | String |
+| `--save` | Save the overview as camel-summary.md in the project directory, keeping its AI-assisted sections |  | boolean |
+| `--show-prompt` | Show the prompt sent to the LLM |  | boolean |
+| `--temperature` | Temperature for response generation (0.0-2.0) | 0.3 | double |
+| `--timeout` | Timeout in seconds for LLM response | 300 | int |
+| `--url` | LLM API endpoint URL. Auto-detected from 'camel infra' for Ollama if not specified. Also reads AZURE\_OPENAI\_ENDPOINT or WATSONX\_URL env vars |  | String |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

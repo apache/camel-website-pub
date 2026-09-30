@@ -274,7 +274,7 @@ Each of the rest services becomes a Camel route, and this means, that if the res
 When you use `direct` endpoints then you can enable Rest DSL to automatically _inline_ the direct route in the rest route, meaning that there is only one route per rest service.
 
 > **Warning**
-> When using inline-routes, then each REST endpoint should link 1:1 to a unique `direct` endpoint. The linked _direct_ routes are inlined and therefore does not **exists** as independent routes, and they cannot be called from other regular Camel routes. In other words the inlined routes are essentially moved inside the rest-dsl and does not exist as a route. See more detils further below.
+> When using inline-routes, then each REST endpoint should link 1:1 to a unique `direct` endpoint. The linked _direct_ routes are inlined and therefore does not **exists** as independent routes, and they cannot be called from other regular Camel routes. In other words the inlined routes are essentially moved inside the rest-dsl and does not exist as a route. See more detils further below. A `direct` route that is linked from more than one REST endpoint is not inlined, but stays a route of its own that the REST endpoints call.
 
 To do this you **MUST** use `direct` endpoints, and each endpoint must be unique name per service. And the option `inlineRoutes` must be enabled.
 

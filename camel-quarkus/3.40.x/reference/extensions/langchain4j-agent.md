@@ -1,0 +1,58 @@
+# LangChain4j Agent
+
+JVM since3.26.0 Native since3.27.0
+
+LangChain4j Agent component
+
+## What’s inside
+
+-   [LangChain4j Agent component](../../../../components/4.22.x/langchain4j-agent-component.md), URI syntax: `langchain4j-agent:agentId`
+    
+
+Please refer to the above link for usage and configuration details.
+
+## Maven coordinates
+
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-langchain4j-agent)
+
+Or add the coordinates to your existing project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-langchain4j-agent</artifactId>
+</dependency>
+```
+
+Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
+
+## Camel Quarkus limitations
+
+The `sse` MCP transport type is not available. It is backed by `HttpMcpTransport`, which was removed in LangChain4j 1.19.0. Use the `streamableHttp` transport type instead.
+
+## LangChain4j usage
+
+### Dependency management
+
+In order to ensure alignment across all Quarkus and LangChain4j related dependencies, it is recommended to import the LangChain4j BOM as below:
+
+```xml
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-bom</artifactId>
+      <version>1.19.3</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+  ...
+</dependencyManagement>
+```
+
+Note that the import order is paramount when using maven `dependencyManagement`. As such, one might need to import the `langchain4j-bom` before other related Camel and Quarkus BOMs.
+
+### Quarkus LangChain4j support
+
+This extension is designed and tested to work together with [Quarkus LangChain4j](https://docs.quarkiverse.io/quarkus-langchain4j/dev/index.md).

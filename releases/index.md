@@ -210,6 +210,7 @@ Every release of every Camel project, newest first. Supported releases are on th
 
 | Version | Release date | Description |
 | --- | --- | --- |
+| [3.40.0](../releases/q-3.40.0/) LTS | 2026-09-28 |  |
 | [3.33.3](../releases/q-3.33.3/) LTS | 2026-09-17 |  |
 | [3.39.0](../releases/q-3.39.0/) | 2026-08-24 |  |
 | [3.38.0](../releases/q-3.38.0/) | 2026-07-29 |  |

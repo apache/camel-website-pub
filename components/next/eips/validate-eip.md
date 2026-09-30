@@ -38,7 +38,7 @@ The route below will read the file contents and validate the message body agains
 
 ```java
 from("file:inbox")
-  .validate(body(String.class).regex("^\\w{10}\\,\\d{2}\\,\\w{24}$"))
+  .validate(bodyAs(String.class).regex("^\\w{10}\\,\\d{2}\\,\\w{24}$"))
   .to("bean:myServiceBean.processLine");
 ```
 

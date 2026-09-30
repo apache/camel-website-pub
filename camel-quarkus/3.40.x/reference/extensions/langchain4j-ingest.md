@@ -1,0 +1,208 @@
+# LangChain4j Ingest
+
+JVM since3.39.0 Native since3.39.0 🧪Experimental
+
+Declarative AI document ingestion: point a knowledge base at a folder via configuration; splitting, embedding and storing are handled under the hood
+
+## Maven coordinates
+
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-langchain4j-ingest)
+
+Or add the coordinates to your existing project:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-langchain4j-ingest</artifactId>
+</dependency>
+```
+
+Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
+
+## Usage
+
+### Ingesting a directory
+
+Point a pipeline at a folder and the files in it become a knowledge base. No route, no ingestion code:
+
+```properties
+quarkus.camel.langchain4j.ingest.products.source.directory=/var/data/product-docs
+quarkus.camel.langchain4j.ingest.products.embedding-store=products
+quarkus.camel.langchain4j.ingest.products.embedding-model=my-model
+```
+
+Each file is read as UTF-8 text — there is no format parsing, so convert a PDF or DOCX before it reaches the pipeline — split into overlapping segments (`max-segment-size`, `max-overlap-size`), embedded in batches and written to the store; a document is held in memory whole while it is split. `embedding-store` and `embedding-model` name CDI beans and may be omitted when the application has exactly one of each. Every segment carries `camel_ingest_pipeline` and `camel_ingest_document_id` metadata, so retrieval can cite which document an answer came from (up to 3.39.x the keys were `camel_quarkus_pipeline` and `camel_quarkus_document_id` — see the migration guide). Apart from `enabled` and the `source.*` settings shown here, properties are fixed at build time. A pipeline declared through runtime properties alone — nothing but a `source.directory`, say — is invisible to build-time validation; its checks, including the clash with an equally named `@Ingest` pipeline, report at startup instead.
+
+> **Note**
+> This experimental extension keeps no record of what it wrote: an edited document re-ingests on top of its old segments, and removing a document from the source removes nothing from the store. Replace and delete arrive with the synchronising engine in a later release. What is remembered is which documents were already ingested — the idempotent repository below.
+
+### The idempotent repository
+
+A directory pipeline registers what it ingested, keyed on the file’s path, modification time and size: unchanged files are skipped, edited files re-ingest (their previous segments remain, see the note above). The default register is in-memory (100,000 keys) and is there for the poll loop, not for restarts: the consumer re-scans the directory on every poll, so without a register a running application would re-embed the whole directory every few seconds. A restart loses it and re-ingests the directory once; a persistent repository makes restarts free. `source.idempotent-repository` names an `IdempotentRepository` bean to use instead:
+
+```properties
+quarkus.camel.langchain4j.ingest.products.source.idempotent-repository=productsRegister
+```
+
+The bean can be provided three ways.
+
+**Auto-created**: an in-memory register (100,000 keys) is created and bound under the configured name — no bean definition needed, still lost on restart. If a bean with the name already exists, the existing bean wins:
+
+```properties
+quarkus.camel.langchain4j.ingest.products.source.idempotent-repository=productsRegister
+quarkus.camel.langchain4j.ingest.products.source.idempotent-repository-auto-create=true
+```
+
+**Defined in properties** through Camel’s `camel.beans.` syntax — here a file-backed register that survives restarts (camel-core, no extra dependency). Use a name without dashes; Camel normalises dashed `camel.beans.` keys to camelCase:
+
+```properties
+camel.beans.productsRegister=#class:org.apache.camel.support.processor.idempotent.FileIdempotentRepository
+camel.beans.productsRegister.fileStore=/var/data/ingest/register.dat
+camel.beans.productsRegister.cacheSize=100000
+# keys beyond this size are dropped oldest-first and their files re-ingest (32 MB here)
+camel.beans.productsRegister.maxFileStoreSize=33554432
+```
+
+`#class:` beans are created reflectively. For native mode the extension registers the camel-core repositories shown here and every `IdempotentRepository` implementation found in the Jandex index — application classes always, component-provided ones through their jar’s index. A class from a jar without an index needs `@RegisterForReflection(targets = …​)` or a `quarkus.index-dependency.*` entry.
+
+**Defined as a CDI producer** — needed when construction takes other beans. A JDBC register also deduplicates across instances: reliably for consumer-fed pipelines keyed on the document id, for directory pipelines only when all instances see identical paths and modification times:
+
+```java
+@Produces @Singleton @Named("productsRegister")
+IdempotentRepository productsRegister(DataSource dataSource) {
+    return new JdbcMessageIdRepository(dataSource, "ingest-products"); // camel-quarkus-sql
+}
+```
+
+More repository types — Caffeine, Infinispan, MongoDB, Cassandra, Hazelcast, Kafka and others, each provided by its component’s extension — along with the pattern’s details are covered in the [Idempotent Consumer EIP guide](../../../../components/4.22.x/eips/idempotentConsumer-eip.md).
+
+Sizing. An in-memory register smaller than the directory evicts keys and re-ingests those files during normal operation — hence the 100,000 default. `FileIdempotentRepository` falls back to its file store on a cache miss, so `cacheSize` is a performance setting; the correctness limit is `maxFileStoreSize`: the default of about 1 MB holds roughly 10–17 thousand of these keys, beyond it the oldest 1000 are dropped with a warning. A JDBC register has no size limit. Every edit adds a new key and old keys are never removed, so a persistent register grows under churn until the synchronising engine arrives. There is no size option; size the bean. Use one register per pipeline — keys are source-derived, and pipelines sharing a register over the same directory skip each other’s work.
+
+The register cannot be switched off: the consumer leaves files in place (`noop`), so without a register every poll would re-ingest the directory. To force a full re-ingest, restart (default register) or clear the persistent one. A pipeline that should consume its source — move or delete files after ingestion — uses `source.uri` (for example `file:/inbox?delete=true&idempotent=false` with `source.document-id=CamelFileName`), where all consumer options are available.
+
+On a consumer-fed pipeline (`source.uri` or `@Ingest`), a configured register deduplicates deliveries by document id: a redelivered record or re-listed object ingests once, and a request-reply caller receives `skipped` instead of `ingested`. First write wins per id — an update with the same id is skipped, not replaced; streams that carry updates need a version-aware `source.document-id`. Only a delivery that wrote segments claims its id: a blank document answers `empty` and releases the claim, so an object created empty and populated later under the same id still ingests the content. With eager idempotency, a duplicate racing an in-flight first delivery is answered `skipped` even if that delivery then fails and releases the key.
+
+### Other sources, declared in Java
+
+Any Camel consumer can feed a pipeline — the roughly 300 components, each with its own options and its own documentation. Such a pipeline is declared in Java with `@Ingest` and the Camel Endpoint DSL:
+
+```java
+@Ingest("events")
+IngestPipeline events() {
+    return IngestPipeline.from(Source.endpoint(dsl -> dsl.kafka("ingest-events").groupId("ingest"))
+                    .documentId("CamelKafkaKey"))
+            .embeddingStore("events");
+}
+```
+
+Typing `dsl.` lists a factory for every component, each completing its own typed options. The method runs once at startup; it must return `IngestPipeline`, take no parameters and use a name no configured pipeline uses. `enabled=false` in configuration switches a Java-declared pipeline off. A component missing from the classpath fails at startup with an error naming the extension artifact that provides it — the DSL compiles regardless, since its factories all ship in one artifact.
+
+Ingestion needs a stable id per document, and where it lives is the consumer’s business: `documentId` names the header — the record key `CamelKafkaKey` above, `CamelAwsS3Key` for S3 — or gives a simple-language expression. Without it, the pipeline expects the `CamelLangChain4jIngestDocumentId` header — the `camel-langchain4j-ingest` component’s convention; the 3.39 name `CamelIngestDocumentId` is still read as a fallback, see the migration guide — and fails the exchange when both are absent. Mind each component’s own defaults, too: the `aws2-s3` consumer **deletes objects after reading them** unless `deleteAfterRead(false)` is set — a knowledge base reads its source, it does not consume it.
+
+After such a pipeline ingests a document, the exchange body is replaced with the `IngestResult`, so a request-reply caller receives the outcome of its call.
+
+The same pipeline can be declared purely in properties: `source.uri` takes the consumer URI as written, `source.document-id` the header name — or a simple-language expression written `$simple{...}`, the one form MicroProfile Config leaves untouched. The URI is fixed at build time by design — a runtime-overridable consumer URI would be arbitrary component invocation — while property placeholders inside it still resolve at startup, keeping credentials and endpoints runtime configuration. Treat runtime configuration as the trust boundary it is: the directory and the id expression decide what the process reads into an often external store.
+
+```properties
+quarkus.camel.langchain4j.ingest.s3docs.source.uri=aws2-s3://product-docs?region=eu-west-1&deleteAfterRead=false
+quarkus.camel.langchain4j.ingest.s3docs.source.document-id=CamelAwsS3Key
+quarkus.camel.langchain4j.ingest.s3docs.embedding-store=products
+```
+
+### When ingestion fails
+
+A failure while splitting, embedding or storing — a rate-limited model, an unreachable store — propagates to the consumer; there is no dead-letter channel in this increment. For a directory pipeline the file stays where it is and is retried on the next poll, because the duplicate-protection key is only committed on success — which also means a permanently failing file is retried forever, loudly. For a consumer-fed pipeline the component’s own error handling applies: a request-reply caller receives the exception, while a Kafka consumer with default settings logs the failure and commits the offset, so the record is **dropped** — and since this engine keeps no record either, nothing remembers it. A record whose configured `document-id` resolves to nothing (a Kafka record without a key, say) fails the same way, one exchange at a time.
+
+## LangChain4j usage
+
+### Dependency management
+
+In order to ensure alignment across all Quarkus and LangChain4j related dependencies, it is recommended to import the LangChain4j BOM as below:
+
+```xml
+<dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>dev.langchain4j</groupId>
+      <artifactId>langchain4j-bom</artifactId>
+      <version>1.19.3</version>
+      <type>pom</type>
+      <scope>import</scope>
+    </dependency>
+  </dependencies>
+  ...
+</dependencyManagement>
+```
+
+Note that the import order is paramount when using maven `dependencyManagement`. As such, one might need to import the `langchain4j-bom` before other related Camel and Quarkus BOMs.
+
+### Quarkus LangChain4j support
+
+> **Warning**
+> At present, this extension is neither tested with nor intended to be used in conjunction with any Quarkus LangChain4j extensions. Consequently, both JVM and native modes may exhibit unexpected behaviour or fail to function correctly in such configurations.
+
+The `EmbeddingStore` and `EmbeddingModel` beans used by an ingestion pipeline are regular CDI beans, so they can be shared with Quarkus LangChain4j. This includes embedding stores configured through Quarkus LangChain4j.
+
+Combined with the [RAG augmentor bridge](langchain4j-embeddingstore.html#extensions-langchain4j-embeddingstore-usage-retrieval-augmentors-for-registeraiservice), an `@RegisterAiService` interface can retrieve content from the embedding store populated by a pipeline.
+
+## Additional Camel Quarkus configuration
+
+  
+| Configuration property | Type | Default |
+| --- | --- | --- |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".source.uri](#quarkus-camel-langchain4j-ingest-pipeline-name-source-uri)`
+The Camel consumer URI feeding this pipeline: any component, with its own options. Setting it is what makes the pipeline consume from that component; leaving it unset makes the pipeline read the directory named by the runtime `source.directory` property instead. Fixed at build time by design — a runtime-overridable consumer URI would be arbitrary component invocation. Property placeholders inside it still resolve at startup, so credentials and endpoints remain runtime configuration.
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".embedding-store](#quarkus-camel-langchain4j-ingest-pipeline-name-embedding-store)`
+
+Name of the `EmbeddingStore` bean to write to. When not set, the only one present is used.
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".embedding-model](#quarkus-camel-langchain4j-ingest-pipeline-name-embedding-model)`
+
+Name of the `EmbeddingModel` bean to embed with. When not set, the only one present is used.
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".max-segment-size](#quarkus-camel-langchain4j-ingest-pipeline-name-max-segment-size)`
+
+Maximum size of one segment, in characters.
+
+ | `int` | `500` |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".max-overlap-size](#quarkus-camel-langchain4j-ingest-pipeline-name-max-overlap-size)`
+
+How much of the previous segment each segment repeats, in characters. Overlap keeps a sentence split across a boundary retrievable from either side.
+
+ | `int` | `50` |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".enabled](#quarkus-camel-langchain4j-ingest-pipeline-name-enabled)`
+
+Whether this pipeline starts. Useful to switch ingestion off in dev mode.
+
+ | `boolean` | `true` |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".source.directory](#quarkus-camel-langchain4j-ingest-pipeline-name-source-directory)`
+
+The directory to ingest documents from, for a pipeline that has no `source.uri`. A path is a deployment concern, so unlike the URI it stays runtime configuration. Setting both is an error.
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".source.recursive](#quarkus-camel-langchain4j-ingest-pipeline-name-source-recursive)`
+
+Whether subdirectories are ingested too, when reading a directory.
+
+ | `boolean` | `true` |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".source.idempotent-repository](#quarkus-camel-langchain4j-ingest-pipeline-name-source-idempotent-repository)`
+
+Name of the `IdempotentRepository` bean remembering already ingested documents, instead of the built-in in-memory one (100 000 keys, lost on restart). Looked up by name only. On a pipeline consuming from a component it deduplicates deliveries by document id, first write wins.
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".source.idempotent-repository-auto-create](#quarkus-camel-langchain4j-ingest-pipeline-name-source-idempotent-repository-auto-create)`
+
+When `true`, an in-memory register (100 000 keys) is created and bound under the `idempotent-repository` name, unless a bean with that name exists — the existing bean wins.
+
+ | `boolean` | `false` |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".source.document-id](#quarkus-camel-langchain4j-ingest-pipeline-name-source-document-id)`
+
+Where the document id lives in the exchange the consumer delivers: normally the name of a header, such as `CamelAwsS3Key` for an S3 consumer or `CamelKafkaKey` for a Kafka one. For an id that is not a plain header, write a simple-language expression in the `$simple{...}` form — MicroProfile Config passes it through untouched, while a `${...}` in a properties file would be consumed as a config expansion before Camel ever saw it. When not set, a pipeline reading a directory uses the file name, and one consuming from a component uses the `CamelLangChain4jIngestDocumentId` header (the deprecated 3.39 name `CamelIngestDocumentId` is still read as a fallback).
+
+ | `string` |  |
+
+Configuration property fixed at build time. All other configuration properties are overridable at runtime.

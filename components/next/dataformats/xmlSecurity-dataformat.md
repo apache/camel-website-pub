@@ -146,7 +146,7 @@ Key key = keyGenerator.generateKey();
 
 from("direct:start")
     .marshal().xmlSecurity(key.getEncoded())
-    .unmarshal().xmlSecurity(key.getEncoded()
+    .unmarshal().xmlSecurity(key.getEncoded())
     .to("direct:end");
 ```
 
@@ -215,7 +215,7 @@ A namespace prefix defined as part of the `camelContext` definition can be re-us
 
 ```java
 from("direct:start")
-    .marshal().xmlSecurity("//cheese:cheesesites/italy", true)
+    .marshal().xmlSecurity("//cheese:cheesesites/italy", true, "Just another 32 Byte key for AES")
     .to("...");
 ```
 
@@ -227,7 +227,8 @@ from("direct:start")
         <from uri="direct://start"/>
             <marshal>
                 <xmlSecurity secureTag="//cheese:cheesesites/italy"
-                           secureTagContents="true"/>
+                           secureTagContents="true"
+                           passPhrase="Just another 32 Byte key for AES"/>
             </marshal>
             ...
 ```
@@ -241,6 +242,7 @@ from("direct:start")
             xmlSecurity:
               secureTag: "//cheese:cheesesites/italy"
               secureTagContents: true
+              passPhrase: "Just another 32 Byte key for AES"
 ```
 
 ### Asymmetric Key Encryption

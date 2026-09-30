@@ -78,7 +78,7 @@ The OPA component supports the following options which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **allowKey** (producer) | The key to read the allow/deny verdict from when the policy returns an object rather than a plain boolean. For a policy returning \\{allow: true, reasons: } the default value of allow is what you want. A dotted path reaches a verdict nested inside the document: \\{code allowKey=result.allow} reads \\{result: \\{allow: true}}. A key with no dot is looked up directly at the top level. | allow | String |
-| **batch** (producer) | Authorize a whole collection in one call. When enabled the producer expects a List body, evaluates one input document per element - each element as the body, sharing the exchange’s headers and properties - and returns the per-element verdicts in the CamelOpaBatchDecision header, a List parallel to the input. An element whose evaluation could not be reached is denied, unless failOpen is set; the batch is never allowed or denied as a whole because one element failed. Only for \\{code evaluationMode=rest}: it saves the per-element HTTP round-trip via OPA’s batch API, which has no meaning for in-process wasm. | false | boolean |
+| **batch** (producer) | Authorize a whole collection in one call. When enabled the producer expects a List body, evaluates one input document per element - each element as the body, sharing the exchange’s headers and properties - and returns the per-element verdicts in the CamelOpaBatchDecision header, a List parallel to the input. An element whose evaluation failed is denied, unless failOpen is set and its decision point was unavailable; the batch is never allowed or denied as a whole because one element failed. Only for \\{code evaluationMode=rest}: it saves the per-element HTTP round-trip via OPA’s batch API, which has no meaning for in-process wasm. | false | boolean |
 | **configuration** (producer) | The component configuration. |  | OpaConfiguration |
 | **entrypoint** (producer) | The compiled entrypoint to evaluate in wasm mode. This is not the same thing as the policy path: an entrypoint is fixed when the bundle is built, with \\{code opa build -e}. Defaults to the endpoint’s policy path, which is the name \\{code opa build} gives it. |  | String |
 | **evaluationMode** (producer) | 
@@ -111,7 +111,7 @@ Enum values:
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
 | **bearerToken** (security) | Bearer token sent to the OPA server in the Authorization header, for an OPA instance that has its API authentication enabled. |  | String |
-| **failOpen** (security) | Whether to allow the exchange to proceed when the policy cannot be evaluated at all, for example because the OPA server is unreachable. Disabled by default so that an unreachable policy decision point denies rather than grants access. Do not enable this in production. | false | boolean |
+| **failOpen** (security) | Whether to allow the exchange to proceed when the policy decision point is unavailable: in rest mode the OPA server cannot be reached, times out, or a gateway in front of it answers 502, 503, 504 or 429; in wasm mode no instance frees up within borrowTimeout. It never applies to an answer: an undefined decision, a rejected request (400, or any other 4xx such as a wrong or expired bearer token) and an error evaluating the policy (500) fail closed even when this is set. Disabled by default so that an unavailable policy decision point denies rather than grants access. Do not enable this in production. | false | boolean |
 | **sslContextParameters** (security) | TLS configuration for the connection to the OPA server in rest mode. Needed to trust a server whose certificate comes from a private CA, and to present a client certificate to a server that requires mutual TLS - a SPIFFE X.509-SVID, for instance, so the workload authenticates to the policy decision point as itself. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 
@@ -136,7 +136,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **allowKey** (producer) | The key to read the allow/deny verdict from when the policy returns an object rather than a plain boolean. For a policy returning \\{allow: true, reasons: } the default value of allow is what you want. A dotted path reaches a verdict nested inside the document: \\{code allowKey=result.allow} reads \\{result: \\{allow: true}}. A key with no dot is looked up directly at the top level. | allow | String |
-| **batch** (producer) | Authorize a whole collection in one call. When enabled the producer expects a List body, evaluates one input document per element - each element as the body, sharing the exchange’s headers and properties - and returns the per-element verdicts in the CamelOpaBatchDecision header, a List parallel to the input. An element whose evaluation could not be reached is denied, unless failOpen is set; the batch is never allowed or denied as a whole because one element failed. Only for \\{code evaluationMode=rest}: it saves the per-element HTTP round-trip via OPA’s batch API, which has no meaning for in-process wasm. | false | boolean |
+| **batch** (producer) | Authorize a whole collection in one call. When enabled the producer expects a List body, evaluates one input document per element - each element as the body, sharing the exchange’s headers and properties - and returns the per-element verdicts in the CamelOpaBatchDecision header, a List parallel to the input. An element whose evaluation failed is denied, unless failOpen is set and its decision point was unavailable; the batch is never allowed or denied as a whole because one element failed. Only for \\{code evaluationMode=rest}: it saves the per-element HTTP round-trip via OPA’s batch API, which has no meaning for in-process wasm. | false | boolean |
 | **entrypoint** (producer) | The compiled entrypoint to evaluate in wasm mode. This is not the same thing as the policy path: an entrypoint is fixed when the bundle is built, with \\{code opa build -e}. Defaults to the endpoint’s policy path, which is the name \\{code opa build} gives it. |  | String |
 | **evaluationMode** (producer) | 
 How the policy is evaluated. rest (the default) calls a running OPA server over its Data API. wasm evaluates a WebAssembly bundle in-process, with no server involved - so there is no network hop and no unreachable decision point, at the cost of the policy being a build-time artefact rather than something a server distributes and updates. serverUrl, bearerToken and failOpen do not apply in wasm mode.
@@ -165,7 +165,7 @@ Enum values:
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
 | **bearerToken** (security) | Bearer token sent to the OPA server in the Authorization header, for an OPA instance that has its API authentication enabled. |  | String |
-| **failOpen** (security) | Whether to allow the exchange to proceed when the policy cannot be evaluated at all, for example because the OPA server is unreachable. Disabled by default so that an unreachable policy decision point denies rather than grants access. Do not enable this in production. | false | boolean |
+| **failOpen** (security) | Whether to allow the exchange to proceed when the policy decision point is unavailable: in rest mode the OPA server cannot be reached, times out, or a gateway in front of it answers 502, 503, 504 or 429; in wasm mode no instance frees up within borrowTimeout. It never applies to an answer: an undefined decision, a rejected request (400, or any other 4xx such as a wrong or expired bearer token) and an error evaluating the policy (500) fail closed even when this is set. Disabled by default so that an unavailable policy decision point denies rather than grants access. Do not enable this in production. | false | boolean |
 | **sslContextParameters** (security) | TLS configuration for the connection to the OPA server in rest mode. Needed to trust a server whose certificate comes from a private CA, and to present a client certificate to a server that requires mutual TLS - a SPIFFE X.509-SVID, for instance, so the workload authenticates to the policy decision point as itself. |  | SSLContextParameters |
 
 ## Message Headers
@@ -294,7 +294,7 @@ from("direct:orders")
 
 The per-element verdicts arrive in `CamelOpaBatchDecision`, a `List<Boolean>` parallel to the input list: element _i_ is allowed when entry _i_ is `true`. Neither `CamelOpaDecisionAllow` nor `CamelOpaDecision` is set in batch mode - there is no single verdict, and no single decision document - and both are cleared on entry like the other decision headers, so a value an inbound message supplied never survives. `CamelOpaPolicyPath` **is** set, to the same value a single evaluation records, so tooling can read it either way.
 
-Fail-closed applies **per element**: an element whose evaluation could not be reached is denied (`false`), or allowed when `failOpen` is set, while every other element decides normally. The batch is never denied as a whole because one element failed, nor allowed because most of it succeeded. A call that fails entirely - the server could not be reached at all - fails the exchange rather than denying each element: it carries no verdict at all, not a list of `false`. Under `failOpen` that same failure allows every element instead.
+Fail-closed applies **per element**: an element whose evaluation failed is denied (`false`) while every other element decides normally; `failOpen` allows it only when its decision point was unavailable (see [Failure handling](#failure-handling)). The batch is never denied as a whole because one element failed, nor allowed because most of it succeeded. A call that fails entirely - the server could not be reached at all - fails the exchange rather than denying each element: it carries no verdict at all, not a list of `false`. Under `failOpen` a call that could not reach the server allows every element instead.
 
 `batch` requires `evaluationMode=rest`: it saves the per-element HTTP round-trip, which has no meaning for in-process `wasm` evaluation, and the endpoint rejects the combination at startup.
 
@@ -367,7 +367,7 @@ Which to choose:
 | Latency | a network round-trip per exchange | in-process |
 | Unreachable decision point | a real failure mode | cannot happen |
 
-`serverUrl` and `bearerToken` have no meaning in `wasm` mode — there is no server to address or authenticate to, and the endpoint warns at startup if either was set — and no health check is registered, because there is nothing to probe. An absent health check is not a healthy one. `failOpen` still applies: a `wasm` evaluation can fail (a busy pool, a bad bundle), and `failOpen` governs whether that failure denies the exchange or lets it through, exactly as in `rest` mode.
+`serverUrl` and `bearerToken` have no meaning in `wasm` mode — there is no server to address or authenticate to, and the endpoint warns at startup if either was set — and no health check is registered, because there is nothing to probe. An absent health check is not a healthy one. `failOpen` still applies: a `wasm` pool can stay busy past `borrowTimeout`, and `failOpen` governs whether that denies the exchange or lets it through, as it does for an unreachable server in `rest` mode.
 
 The decision contract is identical in both modes: the same headers, the same `allowKey` handling, and an undefined decision fails closed the same way. A route does not need to know which engine evaluated it.
 
@@ -409,7 +409,25 @@ None of this applies in `wasm` mode, where there is no server to reach.
 
 The component fails closed. If the policy cannot be evaluated at all — the OPA server is unreachable, times out, or answers with an error — the producer throws an `OpaPolicyEvaluationException` and `OpaSecurityPolicy` throws a `CamelAuthorizationException`; in neither case does the message proceed as allowed. This is deliberately different from a deny, which is a decision rather than a failure, so a route can tell "denied" from "no policy decision point available".
 
-Setting `failOpen=true` reverses this and lets the exchange proceed when the policy cannot be evaluated. It exists for development and for non-critical policies, and should not be enabled in production.
+Setting `failOpen=true` reverses this, but only for a policy decision point that is **unavailable**:
+
+-   in `rest` mode, the OPA server cannot be reached or times out (see `connectionTimeout` and `requestTimeout`), or a gateway in front of it answers `502`, `503`, `504` or `429`;
+    
+-   in `wasm` mode, no evaluation instance frees up within `borrowTimeout`.
+    
+
+A decision point that **answered** still fails closed, because each of these answers is a policy saying no or a request that could never be decided, not an outage:
+
+-   an undefined decision - for example `opa:authz/allow` against a policy with no `default allow := false`, for an input the rule does not match;
+    
+-   a rejected request - `400`, or any other `4xx` such as a missing or expired `bearerToken` (`401`/`403`) or a wrong `policyPath` prefix (`404`);
+    
+-   an error evaluating the policy against this input - OPA answers `500`, as for a conflict between rule outputs;
+    
+-   an input document that cannot be serialized.
+    
+
+The input document is built from the message, so a sender can influence all of these. Were they covered, a crafted message could turn a policy’s "no" into "yes". `failOpen` exists for development and for non-critical policies, and should not be enabled in production.
 
 An exchange that proceeds that way carries `CamelOpaDecisionFailedOpen=true`. `CamelOpaDecisionAllow` is `true` in both cases, and on its own it cannot tell "a policy allowed this" from "no policy ran and we were told to proceed" — which is exactly the distinction an audit trail needs. The marker is set only on the fail-open path, so a route can branch on it and an operator can alert on its presence:
 

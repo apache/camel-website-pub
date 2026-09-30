@@ -442,7 +442,7 @@ _Java-only: uses Java constants for header names and enum values_
 from("direct:start")
   .setHeader(TranslateConstants.SOURCE_LANGUAGE, TranslateLanguageEnum.ITALIAN)
   .setHeader(TranslateConstants.TARGET_LANGUAGE, TranslateLanguageEnum.GERMAN)
-  .setBody("Ciao")
+  .setBody(constant("Ciao"))
   .to("aws2-translate://test?translateClient=#amazonTranslateClient&operation=translateText");
 ```
 

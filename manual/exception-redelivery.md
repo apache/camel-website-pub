@@ -82,10 +82,12 @@ _Java-only: redelivery starts at the point of failure_
 
 ```java
 onException(ConnectException.class)
-    .from("direct:start")
+    .maximumRedeliveries(3);
+
+from("direct:start")
     .process("processor1")
     .process("processor2") // <--- throws a ConnectException
-    .to("mock:theEnd")
+    .to("mock:theEnd");
 ```
 
 Will retry from **`processor2`** - not the complete route.

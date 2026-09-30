@@ -275,7 +275,7 @@ For example, you can do:
 ```java
 errorHandler(deadLetterChannel("jms:queue:dead")
   .maximumRedeliveries(3)
-  .onRedeliver(new MyOnRedeliveryProcessor());
+  .onRedelivery(new MyOnRedeliveryProcessor()));
 ```
 
 And in XML DSL, you specify a bean id via `onRedeliveryRef` on the `<errorHandler>` as shown:

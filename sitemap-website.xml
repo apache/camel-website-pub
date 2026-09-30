@@ -2,22 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/categories/AI/</loc>
-    <lastmod>2026-09-24T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/security/CVE-2026-88789.html</loc>
+    <lastmod>2026-09-30T09:39:19+01:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-09-30T09:39:19+01:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/</loc>
+    <lastmod>2026-09-30T09:39:19+01:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2026-09-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/09/camel-quarkus-release-3.40.0/</loc>
+    <lastmod>2026-09-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
+    <lastmod>2026-09-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.40.0/</loc>
+    <lastmod>2026-09-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-09-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/AI/</loc>
     <lastmod>2026-09-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/ckc-4.22.0/</loc>
     <lastmod>2026-09-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/EIP/</loc>
-    <lastmod>2026-09-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/</loc>
-    <lastmod>2026-09-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-09-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/</loc>
@@ -65,9 +80,6 @@
     <loc>https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
-    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/categories/Security/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
@@ -90,9 +102,6 @@
     <lastmod>2026-09-08T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-80354.html</loc>
-    <lastmod>2026-09-08T11:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-09-08T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camel-k-2-11/</loc>

@@ -63,7 +63,7 @@ Enable intermittent mode to avoid updating the offset for every exchange:
 
 ```java
 from("some:component")
-    .resumable(new MyTestResumeStrategy()).intermittent(true)
+    .resumable().resumeStrategy(new MyTestResumeStrategy()).intermittent(true)
     .process(this::process);
 ```
 

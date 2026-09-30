@@ -57,8 +57,8 @@ The JSON Jackson 3 dataformat supports the following options which are listed be
 | **useList** (common) | `false` | `Boolean` | To unmarshal to a List of Map or a List of Pojo. |
 | **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules com.fasterxml.jackson.databind.Module specified as a String with FQN class names. Multiple classes can be separated by comma. |
 | **moduleRefs** (advanced) |  | `String` | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |
-| **enableFeatures** (advanced) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. Multiple features can be separated by comma. |
-| **disableFeatures** (advanced) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. Multiple features can be separated by comma. |
+| **enableFeatures** (advanced) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. Multiple features can be separated by comma. When using Jackson 3, a feature can be qualified with its enum class name (e.g. SerializationFeature.WRAP\_ROOT\_VALUE) to tell apart features with the same name. |
+| **disableFeatures** (advanced) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. Multiple features can be separated by comma. When using Jackson 3, a feature can be qualified with its enum class name (e.g. SerializationFeature.WRAP\_ROOT\_VALUE) to tell apart features with the same name. |
 | **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson is allowed to attempt to use the CamelJacksonUnmarshalType header during the unmarshalling. This should only be enabled when desired to be used. |
 | **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
 | **schemaResolver** (advanced) |  | `Object` | Optional schema resolver used to lookup schemas for the data in transit. |

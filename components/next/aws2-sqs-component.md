@@ -748,7 +748,7 @@ SQS does not allow selectors, but you can effectively achieve this by using the 
 
 ```java
 from("aws2-sqs://MyQueue?amazonSQSClient=#client&defaultVisibilityTimeout=5000&deleteIfFiltered=false&deleteAfterRead=false")
-.filter("${header.login} == true")
+.filter(simple("${header.login} == true"))
   .setProperty("CamelAwsSqsDeleteFiltered", constant(true))
   .to("mock:filter");
 ```

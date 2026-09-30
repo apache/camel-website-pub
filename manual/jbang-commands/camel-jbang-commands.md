@@ -33,6 +33,7 @@ This page provides a reference for all Camel CLI commands.
 | [camel jolokia](camel-jbang-jolokia.md) | Attach Jolokia JVM Agent to a running Camel integration |
 | [camel log](camel-jbang-log.md) | Tail logs from running Camel integrations |
 | [camel nano](camel-jbang-nano.md) | Nano editor to edit file |
+| [camel overview](camel-jbang-overview.md) | High-level overview of the integrations in a project, optionally explained by AI/LLM |
 | [camel plugin](camel-jbang-plugin.md) | Manage plugins that add sub-commands to this CLI |
 | [camel ps](camel-jbang-ps.md) | List running Camel integrations |
 | [camel restart](camel-jbang-restart.md) | Restarts running Camel integrations (stop + re-launch) |

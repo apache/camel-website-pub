@@ -160,7 +160,7 @@ from("direct:triggerRoute")
 
 ```java
 from("direct:triggerRoute")
- .setBody("{\"name\":\"user\",\"description\":\"employee\",\"email\":\"user@email.com\"}")
+ .setBody(constant("{\"name\":\"user\",\"description\":\"employee\",\"email\":\"user@email.com\"}"))
  .to("hwcloud-iam:updateUser?userId=********&region=cn-north-4&accessKey=********&secretKey=********")
 ```
 
@@ -209,7 +209,7 @@ from("direct:triggerRoute")
 
 ```java
 from("direct:triggerRoute")
- .setBody("{\"name\":\"group\",\"description\":\"employees\",\"domain_id\":\"1234\"}")
+ .setBody(constant("{\"name\":\"group\",\"description\":\"employees\",\"domain_id\":\"1234\"}"))
  .to("hwcloud-iam:updateUser?groupId=********&region=cn-north-4&accessKey=********&secretKey=********")
 ```
 

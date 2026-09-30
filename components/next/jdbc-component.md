@@ -180,7 +180,7 @@ In the given route below, we want to get all the projects from the `projects` ta
 from("direct:projects")
     .setHeader("lic", constant("ASF"))
     .setHeader("min", constant(123))
-    .setBody("select * from projects where license = :?lic and id > :?min order by id")
+    .setBody(constant("select * from projects where license = :?lic and id > :?min order by id"))
     .to("jdbc:myDataSource?useHeadersAsParameters=true");
 ```
 

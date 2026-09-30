@@ -212,7 +212,7 @@ During development, you can use `missingOperation` to ignore this as shown:
     
 
 ```java
-    rest().openApi("petstore-v3.json").missingOperation("ignore");
+    rest().openApi().specification("petstore-v3.json").missingOperation("ignore");
 ```
 
 ```xml
@@ -242,7 +242,7 @@ This is similar to ignoring missing API operations, as you can tell Camel to moc
     
 
 ```java
-    rest().openApi("petstore-v3.json").missingOperation("mock");
+    rest().openApi().specification("petstore-v3.json").missingOperation("mock");
 ```
 
 ```xml
@@ -294,7 +294,7 @@ And the Camel route:
 ```java
 restConfiguration().clientRequestValidation(true);
 
-rest().openApi("petstore-v3.json").missingOperation("mock");
+rest().openApi().specification("petstore-v3.json").missingOperation("mock");
 ```
 
 ```xml

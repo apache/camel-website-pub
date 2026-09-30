@@ -472,7 +472,7 @@ _Java-only: uses setHeader with Java constant_
 
 ```java
 from("direct:...")
-    .setHeader("CamelOlingo4.$top", "5");
+    .setHeader("CamelOlingo4.$top", constant("5"))
     .to("olingo4://read/People?orderBy=FirstName%20asc");
 ```
 

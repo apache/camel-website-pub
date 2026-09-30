@@ -74,7 +74,7 @@ For instance to mark all **`ValidationException`** as being handled we can do th
     
 
 ```java
-onException(ValidationException)
+onException(ValidationException.class)
     .handled(true);
 ```
 

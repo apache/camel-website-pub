@@ -209,6 +209,22 @@ Enum values:
 | **kind** (advanced) | The type of the k8s resource referenced by the endpoint. |  | String |
 | **name** (advanced) | The name of the k8s resource referenced by the endpoint. |  | String |
 
+## Message Headers
+
+The Knative component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelCloudEventID** (common) Constant: [`CLOUD_EVENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_ID) | The event ID. The producer uses the exchange ID when not set. |  | String |
+| **CamelCloudEventSource** (common) Constant: [`CLOUD_EVENT_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_SOURCE) | The event source. The producer uses the route ID when not set. |  | String |
+| **CamelCloudEventVersion** (common) Constant: [`CLOUD_EVENT_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_VERSION) | The CloudEvents specification version. The producer uses the configured version when not set. |  | String |
+| **CamelCloudEventType** (common) Constant: [`CLOUD_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_TYPE) | The event type. On a knative event endpoint with a type ID in the URI, the type ID takes precedence over this header. |  | String |
+| **CamelCloudEventDataContentType** (common) Constant: [`CLOUD_EVENT_DATA_CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_DATA_CONTENT_TYPE) | The content type of the event data. |  | String |
+| **CamelCloudEventSchemaURL** (common) Constant: [`CLOUD_EVENT_SCHEMA_URL`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_SCHEMA_URL) | The URI of the schema that the event data adheres to. |  | String |
+| **CamelCloudEventSubject** (common) Constant: [`CLOUD_EVENT_SUBJECT`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_SUBJECT) | The subject of the event in the context of the event source. |  | String |
+| **CamelCloudEventTime** (common) Constant: [`CLOUD_EVENT_TIME`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_TIME) | The time the event occurred. The producer uses the exchange creation time when not set. |  | String |
+
 ## Usage
 
 ### Supported Knative resources
