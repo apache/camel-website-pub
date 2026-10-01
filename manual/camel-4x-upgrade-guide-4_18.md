@@ -7,6 +7,16 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.18.4 to 4.18.5
 
+### camel-zipfile, camel-tarfile - a maxDecompressedSize of 2 GiB or more is now enforced
+
+The `maxDecompressedSize` option of the Zip File and Tar File data formats (and of `ZipSplitter`) was not enforced when set to 2 GiB (`Integer.MAX_VALUE` bytes) or more, because the byte count behind the check wrapped around. The limit is now enforced for any value: unmarshalling an entry that decompresses to more than the configured `maxDecompressedSize` fails with an `IOException`, as documented. The default limit (1 GiB) is unchanged, and `-1` still disables the limit.
+
+`IOHelper.copy(InputStream, OutputStream, int, boolean, long)` now returns `Integer.MAX_VALUE`, instead of a negative number, when it copies more than `Integer.MAX_VALUE` bytes.
+
+### camel-oauth - the post login url is confined to the configured redirect uri origin
+
+The post login url of the authorization code flow is now always built from the origin (`scheme://host[:port]`) of the configured `camel.oauth.redirect-uri`, plus the requested path. `OAuthCodeFlowProcessor` previously rebuilt that url from the `X-Forwarded-Proto` / `X-Forwarded-Host` / `X-Forwarded-Port` request headers, or from the `Host` header behind `CamelHttpUrl` when those were absent. All of those are set by the caller, so a request could point the post login redirect at any origin. A deployment behind an ingress or an OpenShift Route still redirects to its externally reachable address, because `camel.oauth.redirect-uri` is the address the identity provider sends the browser back to. Deployments whose external address differs from that property must set it to the address the browser actually reaches; a request announcing another origin is now redirected to the configured one and a warning is logged.
+
 ### camel-core - masking of sensitive values in endpoint URIs
 
 `URISupport.sanitizeUri()`, which masks secrets in endpoint URIs shown in logs, events, JMX names and error messages, now masks some values it used to miss, so the masked form of a URI can differ from earlier releases:
@@ -43,7 +53,9 @@ The `CamelDoclingInputFilePath` header is unchanged and still accepts a path wit
 
 A new `inputBaseDirectory` option is also available. When set, every local input path - from the header, from a file path body, and from the batch operations - must resolve inside that directory once normalized. It is unset by default, which keeps the previous behaviour of accepting any path.
 
-Additionally, a local input path that does not exist is now reported as a `File not found` `IOException` before Docling is invoked. Previously the size check silently skipped a path that resolved to nothing and the failure surfaced later, from the Docling process or API call. === camel-dynamic-router
+Additionally, a local input path that does not exist is now reported as a `File not found` `IOException` before Docling is invoked. Previously the size check silently skipped a path that resolved to nothing and the failure surfaced later, from the Docling process or API call.
+
+### camel-dynamic-router
 
 The `dynamic-router-control` endpoint no longer takes the subscription `predicate`, or the `expressionLanguage` used to compile it, from the incoming control message. A control message that supplies either is now rejected with an `IllegalArgumentException`.
 

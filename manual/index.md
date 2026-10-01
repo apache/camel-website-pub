@@ -187,6 +187,9 @@ For a deeper and better understanding of Apache Camel, an [Introduction](faq/wha
     
 -   [Stream caching](stream-caching.md)
     
+    -   [Large payloads](large-payloads.md)
+        
+    
 -   [Threading Model](threading-model.md)
     
 -   [Tracer](tracer.md)

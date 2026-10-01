@@ -104,7 +104,7 @@ The TUI organizes information into tabs. Press number keys **1** through **0** t
 | Key | Tab | What It Shows |
 | --- | --- | --- |
 | 1 | Overview | All running integrations and infrastructure services. Start here. |
-| 2 | Source | File explorer for your project code with syntax highlighting and inline Camel documentation. |
+| 2 | Source | File explorer and editor for your project code, with Camel checks, completion and documentation. |
 | 3 | Log | Real-time application logs with search and filtering. |
 | 4 | Activity | Live exchange activity with elapsed times, endpoint sends, and failure tracking. |
 | 5 | Diagram | Visual route topology with drill-down into individual routes. |
@@ -137,63 +137,11 @@ Two panels can be opened on top of any tab: **F6** opens an [embedded shell](#_e
 
 ## Source Code Browser
 
-The Source tab (Tab 2) gives you a file explorer into your project code. The left panel shows a navigable file tree of the integration’s source directory. Select any file to view it in the right panel with full syntax highlighting.
+The Source tab (Tab 2) is a file explorer and editor for your project code that knows Camel. It checks your YAML, Java and XML routes as you type, completes endpoint options from the Camel catalog, explains the line the cursor is on, fixes problems for you (or asks the AI to), and shows the exchanges and failures of each line of the running integration next to the code.
 
-For Camel source files (YAML, XML, Java routes, and `application.properties`), press **i** to toggle inline documentation. The TUI uses the Camel catalog to look up every component, EIP, language, and data format used in your route and shows their documentation right next to the source code. For properties files, it resolves `camel.component.*` and `camel.main.*` keys to their catalog descriptions. This makes it easy to understand unfamiliar routes without leaving the terminal.
+![Live run data in the source editor](_images/jbang/camel-tui-source-live-run-data.png)
 
-Additional features:
-
--   **Format cycling** — press **Space** to convert Camel routes between YAML, Java, and XML DSL formats
-    
--   **Search** — press **/** to search within the source code, **n**/**N** to jump between matches
-    
--   **Highlight** — press **h** to highlight text occurrences
-    
--   **Go to node** — press **Ctrl+G** to open a fuzzy-search popup showing the route tree structure, matching the diagram panel format (`route[id]`, `├─to[uri]`, etc.). Select a node to jump to its source line.
-    
--   **Resizable panels** — drag the split border with the mouse to resize the file list and viewer
-    
-
-### Source Editor
-
-Press **F4** to enter edit mode for YAML routes, `application.properties`, and other local files. The editor provides a plain-text editing experience with features designed for working with Camel routes:
-
--   **Undo / Redo** — **Ctrl+Z** to undo, **Ctrl+Y** to redo
-    
--   **Block operations** — **Alt+Up/Down** to move YAML list blocks up/down, **Ctrl+D** to duplicate a block
-    
--   **Delete line** — **Ctrl+K** to delete the current line
-    
--   **Word navigation** — **Ctrl+Left/Right** to jump by word
-    
--   **Smart Home** — **Home** key alternates between content indent and column 0
-    
--   **Tab completion** — press **Tab** for context-aware completion:
-    
-    -   In `application.properties`: Camel configuration options (`camel.main.*`, `camel.component.*`, etc.) and Spring Boot auto-configuration properties (`server.*`, `spring.*`, `management.*`, etc.) resolved from starter JARs in the local Maven repository — works even for stopped projects
-        
-    -   In YAML DSL routes: EIP names, component URIs, option keys and values
-        
-    
-
-The editor shows **gutter change markers** — a green background on line numbers that have been modified or added since the file was opened. This gives an at-a-glance view of what you’ve changed.
-
-Press **F7** to open a **diff view** showing all unsaved changes in a unified diff format with red/green background coloring (like `git diff`). Line numbers correspond to the actual source file positions. Press **Esc** or **F7** to return to editing.
-
-Press **F5** to save and close, or **Shift+F5** to save and continue editing.
-
-### Validate on Save
-
-When saving, the editor validates the content before writing to disk. If validation fails, the file is not saved and errors are displayed in a popup. This catches mistakes early:
-
--   **YAML schema validation** — checks the YAML DSL structure against the Camel schema
-    
--   **Endpoint URI validation** — validates component URIs, option names, and values against the Camel catalog
-    
--   **Simple expression validation** — validates Simple language expressions for syntax errors, detecting the correct context (predicate vs expression) from the parent EIP
-    
-
-Validation can be toggled off in the Settings (F2 > Settings).
+See [Camel TUI Source Editor](camel-jbang-tui-source-editor.md) for all its features and keys.
 
 ## Activity
 
@@ -626,41 +574,7 @@ Both panels accept text pasted from the terminal (for example a model name such 
 
 ### Source Tab
 
- 
-| Key | Action |
-| --- | --- |
-| **Up/Down** | Navigate files (left panel) or scroll source (right panel) |
-| **Enter** | Open file or directory |
-| **Backspace** | Go to parent directory |
-| **Tab** | Toggle focus between file list and source viewer |
-| **Space** | Cycle format (YAML/Java/XML) for Camel routes |
-| **i** | Toggle inline Camel documentation |
-| **/** | Search in source |
-| **h** | Highlight text |
-| **n** / **N** | Next / previous search match |
-| **w** | Toggle word wrap |
-| **p** | Toggle plain mode (borderless) |
-| **Ctrl+G** | Go to node (fuzzy search popup) |
-| **Esc** / **c** | Close source viewer |
-| **F4** | Enter edit mode |
-
-#### Edit Mode
-
- 
-| Key | Action |
-| --- | --- |
-| **Ctrl+Z** | Undo |
-| **Ctrl+Y** | Redo |
-| **Alt+Up/Down** | Move YAML block up/down |
-| **Ctrl+D** | Duplicate block |
-| **Ctrl+K** | Delete current line |
-| **Ctrl+Left/Right** | Word navigation |
-| **Home** | Smart home (content indent / column 0) |
-| **Tab** | Context-aware completion |
-| **F7** | Diff view (unsaved changes) |
-| **F5** | Save and close |
-| **Shift+F5** | Save and continue editing |
-| **Esc** | Cancel (discard prompt if unsaved changes) |
+See the [keyboard shortcuts](camel-jbang-tui-source-editor.html#_keyboard_shortcuts) of the Source Editor.
 
 ### Diagram Tab
 
@@ -1035,7 +949,7 @@ An integration started with `--runtime=spring-boot` or `--runtime=quarkus` runs 
 
 Every write is confirmed in the TUI first: a dialog names the file, the directory and the size of the change (`+3 -1` lines); press **d** to see the change as a unified diff, with removed lines on red and added lines on green like the Source tab’s **F7** diff, and scroll it with the arrow keys; **Enter**, **Esc** or **d** returns to the summary. In the summary **Enter** applies the write and **Esc** rejects it, in which case the agent is told that the file is unchanged and not to retry. The dialog cannot be skipped by the agent on its own: `confirm=false` is honoured only after you switched to `/write auto` in the AI panel (the default `/write confirm` shows the dialog for every write, whatever the agent passes). Only plain file names in the source directory are accepted; the tool cannot write elsewhere, and there is no git integration, so the worst case is a wrong route file in a folder you are watching.
 
-Before writing, an agent can check its content with `camel_validate_source`, which runs the same checks as the Source tab’s save: YAML routes against the Camel YAML DSL schema (a misspelled option such as `logLevel` instead of `loggingLevel` is reported) plus endpoint URIs and simple expressions, and `.properties` files against the catalog of `camel.*` and Spring Boot options. `camel_write_file` runs that validation itself and refuses to write an invalid file, returning the errors instead, so a model fixes them rather than the user finding them in the log after the reload. Both tools are part of the core tool set, so local models (Ollama) get them as well.
+Before writing, an agent can check its content with `camel_validate_source`, which runs the same checks as the Source tab’s save: YAML routes against the Camel YAML DSL schema (a misspelled option such as `logLevel` instead of `loggingLevel` is reported) plus endpoint URIs and simple expressions, Java and XML routes read into the Camel model with the same endpoint and simple checks, and `.properties` files against the catalog of `camel.*` and Spring Boot options. `camel_write_file` runs that validation itself and refuses to write an invalid file, returning the errors instead, so a model fixes them rather than the user finding them in the log after the reload. Both tools are part of the core tool set, so local models (Ollama) get them as well.
 
 Simple expressions get two more helpers, because they are what a small model gets wrong most often (functions belong inside the `${…​}` placeholder, operators between placeholders: `${header.user} ?: 'Guest'`, not `${header.user ?: 'Guest'}`). `camel_catalog_doc` for the `simple` language returns those syntax rules together with the catalog’s functions and operators (their count and names by group, or with `optionsFilter` the matching ones with parameters and examples), and `docPage` serves the operators, functions, OGNL and advanced documentation pages. `camel_eval_expression` evaluates an expression inside the running integration, like `camel cmd eval`, or locally when no integration is selected, and returns the value or the parser error, so the agent can try an expression before it answers or writes it. Component lookups get the same treatment for endpoint URIs: every endpoint option says whether it is part of the URI path or a query parameter, and the result spells out the URI rules for that component (its path options, the `?option=value&option=value` form, the YAML `uri` plus `parameters` form, placeholders, `RAW()`, and that component options belong in `application.properties`). With `endpoint` the same tool checks a URI against the catalog, the way the YAML validator does on a write: unknown options with the closest real names, values that are not among the allowed ones, missing path parts, consumer options on a producer endpoint and the like, plus the options the URI uses with their documentation, so the agent can check an endpoint before it answers or writes it.
 

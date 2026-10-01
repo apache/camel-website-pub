@@ -107,6 +107,12 @@ An exception thrown from the `after` method of an advice no longer replaces the 
 
 A header whose name is the name of a Camel constant in another case, such as `content-type` for `Exchange.CONTENT_TYPE` (`Content-Type`) or `camelfilename`, keeps the name it was set with, as it did in Camel 4.20 and older. From Camel 4.21 to 4.22 the header map stored such a header under the name of the constant, so a header set or received as `content-type` was sent on as `Content-Type`. Looking up a header is case-insensitive as before, and the first name a header is set with is the one that is kept. Code that iterates the headers and compares their names case-sensitively, such as `Exchange.CONTENT_TYPE.equals(key)` or `key.startsWith("Camel")`, no longer matches `content-type` or `camelfilename`, as before Camel 4.21.
 
+### camel-core - stream caching deletes a spooled file after the other on completions
+
+When stream caching spools a message body to disk, the temporary file is deleted by an on completion (`Synchronization`) of the exchange. This on completion now has the order `Ordered.LOWEST`, instead of the default order `0`, so it runs after the other on completions of the exchange. The file is therefore deleted later than before, never earlier. On completions with the same order (such as the disconnect of the FTP and SMB consumers, and the close of a JPA `EntityManager`) still run in the reverse order in which they were added.
+
+The `onCompletion` EIP in the default mode (`modeAfterConsumer`) now uses the order `Ordered.LOWEST - 1`, so it runs just before the file is deleted, and its copy of the exchange holds its own reference to a spooled body. An onCompletion can therefore read a spooled body, also with `parallelProcessing`. Previously it failed with a `NoSuchFileException`, and a parallel onCompletion stopped at the first step that read the body. As a side effect, an on completion with the order `Ordered.LOWEST` that was added after the onCompletion EIP (for example the close of a JPA `EntityManager` used later in the route) used to run before the onCompletion, and now runs after it.
+
 ### @PropertyInject - an invalid property value is an error (Breaking change)
 
 When a property injected with `@PropertyInject` has a value that cannot be converted to the type of the field or parameter, the injection now fails. Prior to Camel 4.23 the `defaultValue` was silently used instead, so a mistake in the configured value (such as `port=80a` for an `int`) went unnoticed. The `defaultValue` is still used when the property does not exist.
@@ -408,6 +414,14 @@ US-ASCII messages are parsed as before. A route that repaired the wrongly decode
 ### camel-bindy - fixed-length records with characters outside the BMP
 
 Since Camel 3.1 a fixed-length record is read by counting code points (or graphemes with `@FixedLengthRecord(countGrapheme = true)`), but it was written by counting UTF-16 chars, so a field with a character outside the Basic Multilingual Plane (such as an emoji) was written one padding character short and the following fields were read shifted. Marshal now pads and clips each field with the same count as unmarshal, and the record `length` is checked with that count too. A field with such characters (or, with `countGrapheme = true`, with combining characters) is padded to its length in code points (or graphemes), so it gets one padding character more than before for each extra UTF-16 char (or code point). Text in the Basic Multilingual Plane without combining characters is written and read as before. A record with such characters written by an older Camel version is too short by that count, so it now fails the record `length` check (unless `ignoreMissingChars = true`) instead of being read with shifted fields. A system that reads these records by counting UTF-16 chars must count code points (or graphemes) instead.
+
+### camel-hl7 - character sets from MSH-18
+
+The HL7 data format now maps the MSH-18 values `8859/6`, `8859/7`, `8859/8` and `8859/9` to ISO-8859-6 .. ISO-8859-9, `8859/15` to ISO-8859-15, and `GB 18030-2000` to GB18030, as in HL7 table 0211 (and as camel-mllp already does). Before, the first five fell back to the charset of the exchange (UTF-8 by default), and `GB 18030-2000` failed with `UnsupportedEncodingException`. Messages with these MSH-18 values are now read and written in the named charset, and unmarshal sets `CamelCharsetName` to it. A message whose MSH-18 names one of these charsets but that is actually encoded in another one (such as UTF-8) is now decoded in the charset it names.
+
+### camel-platform-http-vertx - String response in the charset of the Content-Type
+
+A `String` response body was always written as UTF-8, even when the response `Content-Type` declared another charset (for example `text/plain; charset=ISO-8859-1`, set by the route or kept from the request). It is now written in the charset that the `Content-Type` declares, so the bytes match the header. Responses without a charset in the `Content-Type`, or with UTF-8, are written as before, and so are bodies that are not a `String`. A client that ignored the declared charset and read such a response as UTF-8 must now use the declared charset, and characters that the declared charset cannot represent are written as `?`.
 
 ### Components and Language removal
 
@@ -1002,6 +1016,8 @@ The YAML that `camel init` writes (`camel init foo.yaml`, and the Integration an
 `camel run` now looks up a `classpath:` or `file:` resource that is not found in the directories of the route files (the working directory first), the way it already did under `--source-dir`. A script next to the route is found as `resource:classpath:mapping.groovy`, the reference that also works in the project `camel export` writes, where before only `resource:file:mapping.groovy` worked in the CLI. A resource that exists nowhere fails as before, named as written.
 
 `camel run` adds `camel-groovy` as a dependency when a `.groovy` file is given, so the file is compiled without `--dep=camel-groovy`; before, the file was silently ignored unless the dependency was added. The dependency is also written to the run settings, so `camel export` includes it.
+
+`camel validate source`, and the `camel_validate_source` and `camel_write_file` MCP tools, now check the routes of Java and XML DSL files as they check YAML routes: the endpoint URIs against the catalog (also those built with the endpoint DSL or from a constant), simple expressions, and a `to` whose URI holds `${...}` and should be a `toD`. A Java file used to be checked only by the compiler and an XML file only for being well formed, so a file that validated before can now report errors, and `camel_write_file` refuses to write it until they are fixed. In the TUI Source tab an XML route file with such problems is not saved, as a YAML file; a Java file is saved and its problems are shown.
 
 ### camel-jbang (MCP servers)
 
@@ -2400,6 +2416,12 @@ A header that occurs more than once in a request used to be passed to the reques
     
 -   A header that the contract declares as an array may be repeated. This is treated like one header with the values joined by commas (RFC 9110, section 5.3), and each value is checked against the item schema of the array. This applies to OpenAPI 3.0 contracts: for an OpenAPI 3.1 contract the validator does not recognise a header parameter as an array, so a repeated header is rejected like a single-value one.
     
+
+### camel-jms - request/reply completes the exchange once when a send fails late
+
+An InOut exchange whose JMS send fails after the request timeout, or the reply, has already completed the exchange (for example a send that blocks longer than `requestTimeout` and then fails) is no longer completed a second time with the send exception. The send failure is logged at WARN level instead, and the exchange keeps the outcome of the timeout or the reply.
+
+The `cancelCorrelationId` method of `org.apache.camel.component.jms.reply.ReplyManager` (added in 4.22) now returns a `boolean`: `true` if the pending reply was cancelled, `false` if the request timeout or the reply had already taken it. A custom `ReplyManager` implementation has to change the return type.
 
 ## ThrottlingExceptionRoutePolicy
 

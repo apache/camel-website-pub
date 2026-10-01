@@ -2,4 +2,4 @@ Canonical: https://camel.apache.com/.well-known/security.txt
 Contact: mailto:security@apache.org
 Encryption: https://www.apache.org/security/KEYS.txt
 Policy: https://www.apache.org/security/
-Expires: 2027-10-01T05:18:29Z
+Expires: 2027-10-01T12:35:37Z

@@ -4,6 +4,9 @@ While stream types (like `StreamSource`, `InputStream` and `Reader`) are commonl
 
 Streams are cached in memory. However, for large stream messages, you can set `spoolEnabled=true` and then large message (over 128 KB) will be cached in a temporary file instead. Camel itself will handle deleting the temporary file once the cached stream is no longer necessary.
 
+> **Tip**
+> For routes that move large payloads, such as big files, see [Large payloads](large-payloads.md).
+
 ## Why is my message empty?
 
 In Camel the message body can be of any types. Some types are safely readable multiple times, and therefore do not _suffer_ from becoming _empty_.

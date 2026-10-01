@@ -8,7 +8,7 @@ This guide outlines various ways to create a new Camel Quarkus application.
     
 -   An IDE
     
--   JDK 17+ with `JAVA_HOME` configured appropriately
+-   JDK 21+ with `JAVA_HOME` configured appropriately
     
 -   Apache Maven 3.8.2+ (3.9.16 is recommended)
     

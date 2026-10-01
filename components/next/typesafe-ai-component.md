@@ -76,7 +76,8 @@ The TypeSafe AI component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **baseUrl** (common) | The API base URL. The client appends /v1/systemone. Redirects are not followed. | [https://api.typesafe.ai](https://api.typesafe.ai) | String |
+| **apiPath** (common) | The API path appended to baseUrl. A leading slash is optional. Must be a non-blank path without a scheme, authority, query or fragment. The service must implement the supported TypeSafe AI request and response schema. | /v1/systemone | String |
+| **baseUrl** (common) | The API base URL. The client appends apiPath, preserving any base path. Redirects are not followed. | [https://api.typesafe.ai](https://api.typesafe.ai) | String |
 | **configuration** (producer) | Default configuration shared by TypeSafe AI endpoints. |  | TypeSafeAiConfiguration |
 | **maxConcurrentRequests** (common) | Maximum concurrent evaluations per endpoint, shared by producers and predicates. Excess requests fail immediately with RejectedExecutionException without being queued or sent. Must be positive. | 64 | int |
 | **model** (common) | The model ID or alias. Use a versioned ID to pin decision behavior. | jev-latest | String |
@@ -126,7 +127,8 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **baseUrl** (common) | The API base URL. The client appends /v1/systemone. Redirects are not followed. | [https://api.typesafe.ai](https://api.typesafe.ai) | String |
+| **apiPath** (common) | The API path appended to baseUrl. A leading slash is optional. Must be a non-blank path without a scheme, authority, query or fragment. The service must implement the supported TypeSafe AI request and response schema. | /v1/systemone | String |
+| **baseUrl** (common) | The API base URL. The client appends apiPath, preserving any base path. Redirects are not followed. | [https://api.typesafe.ai](https://api.typesafe.ai) | String |
 | **maxConcurrentRequests** (common) | Maximum concurrent evaluations per endpoint, shared by producers and predicates. Excess requests fail immediately with RejectedExecutionException without being queued or sent. Must be positive. | 64 | int |
 | **model** (common) | The model ID or alias. Use a versioned ID to pin decision behavior. | jev-latest | String |
 | **questions** (common) | A JSON object mapping question names to Noul, Choice or Score question objects. When set, producers evaluate the selected message state; otherwise the body must contain a complete request map. |  | String |
@@ -165,9 +167,22 @@ camel.component.typesafe-ai.request-timeout=30000
 camel.component.typesafe-ai.max-concurrent-requests=64
 ```
 
-`apiKey` is a secret option. `baseUrl` defaults to `[https://api.typesafe.ai](https://api.typesafe.ai)`; the client appends `/v1/systemone`. A base path can address a proxy. HTTP redirects are not followed. Use HTTPS for the service; HTTP is useful for local testing.
+`apiKey` is a secret option. `baseUrl` defaults to `[https://api.typesafe.ai](https://api.typesafe.ai)`; the client appends `apiPath`, which defaults to `/v1/systemone`. A base path can address a proxy. HTTP redirects are not followed. Use HTTPS for the service; HTTP is useful for local testing.
 
 `model` defaults to `jev-latest`. Pin a version when tuning thresholds; aliases can change behavior without a route change. The request map may explicitly override the endpoint’s model for that request. The response’s `model` identifies the model that answered. See [available models](https://docs.typesafe.ai/models).
+
+### Custom API path
+
+Set `apiPath` when a service or gateway exposes the supported TypeSafe AI request and response schema at a different path:
+
+```properties
+camel.component.typesafe-ai.base-url=http://localhost:8100
+camel.component.typesafe-ai.api-path=/v1/decision
+```
+
+The resulting request URL is `[http://localhost:8100/v1/decision](http://localhost:8100/v1/decision)`. A path prefix in `baseUrl` is preserved: `[http://localhost:8100/gateway/](http://localhost:8100/gateway/)` produces `[http://localhost:8100/gateway/v1/decision](http://localhost:8100/gateway/v1/decision)`. The leading slash in `apiPath` is optional. The path must not be blank or include a scheme, authority, query or fragment.
+
+An endpoint can override the component setting with `typesafe-ai:refund?apiPath=/v1/decision`. The Semantic language’s TypeSafe AI adapter inherits the component setting even when the route contains no `typesafe-ai` endpoint. Changing the path does not change the required request and response schema.
 
 ### Concurrent requests
 

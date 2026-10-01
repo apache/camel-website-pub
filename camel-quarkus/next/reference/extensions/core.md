@@ -392,7 +392,7 @@ Configuration property fixed at build time. All other configuration properties a
 > **Note**
 > About the Duration format
 >
-> To write duration values, use the standard `java.time.Duration` format. See the [Duration#parse() Java API documentation](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html#parse\(java.lang.CharSequence\)) for more information.
+> To write duration values, use the standard `java.time.Duration` format. See the [Duration#parse() Java API documentation](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html#parse\(java.lang.CharSequence\)) for more information.
 >
 > You can also use a simplified format, starting with a number:
 >

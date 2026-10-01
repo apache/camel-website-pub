@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790831839419,
+  "generated": 1790858062619,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -18726,6 +18726,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/openfga.adoc",
+              "url": "/camel-spring-boot/next/starters/openfga.html",
+              "title": "OpenFGA"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/opensearch.adoc",
               "url": "/camel-spring-boot/next/starters/opensearch.html",
               "title": "OpenSearch"
@@ -35396,6 +35402,12 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-tui-source-editor.adoc",
+              "url": "/manual/camel-jbang-tui-source-editor.html",
+              "title": "Camel TUI Source Editor"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-tui.adoc",
               "url": "/manual/camel-jbang-tui.html",
               "title": "Camel TUI"
@@ -36581,6 +36593,12 @@
               "path": "languages.adoc",
               "url": "/manual/languages.html",
               "title": "Languages"
+            },
+            {
+              "module": "ROOT",
+              "path": "large-payloads.adoc",
+              "url": "/manual/large-payloads.html",
+              "title": "Large payloads"
             },
             {
               "module": "ROOT",

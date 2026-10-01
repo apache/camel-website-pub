@@ -40,7 +40,7 @@ kamel run run-hello.yaml
 Camel K integrations follow a lifecycle composed of several steps before getting into the `Running` state. You can check the status of all integrations by executing the following command:
 
 ```none
-kamel get
+kubectl get integrations
 ```
 
 ## Log the standard output

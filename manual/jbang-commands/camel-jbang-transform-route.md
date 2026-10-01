@@ -13,6 +13,7 @@ camel transform route [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--compile` | Compile and run Java routes to transform them. By default Java routes are read without compiling them, and compiled only when a route cannot be read that way | false | boolean |
 | `--download` | Whether to allow automatic downloading JAR dependencies (over the internet) | true | boolean |
 | `--format` | Output format (xml, yaml), if only yaml files are provided, the format defaults to xml and vice versa |  | String |
 | `--fresh` | Make sure we use fresh (i.e. non-cached) resources | false | boolean |

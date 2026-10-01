@@ -36,7 +36,7 @@ The LDAP component supports property-based configuration in addition to plain Ca
 quarkus.camel.ldap.dir-contexts.<dirContextName>.<property>
 ```
 
-For more details, refer to the dirContext [Javadoc](https://docs.oracle.com/en/java/javase/17/docs/api/java.naming/javax/naming/directory/DirContext.md). The following options are available:
+For more details, refer to the dirContext [Javadoc](https://docs.oracle.com/en/java/javase/21/docs/api/java.naming/javax/naming/directory/DirContext.md). The following options are available:
 
 -   initial-context-factory
     

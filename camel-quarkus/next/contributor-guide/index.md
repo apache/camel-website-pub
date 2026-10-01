@@ -8,7 +8,7 @@
     
 -   If you are on Linux, `docker` or `podman` is sufficient for the native mode too. Use `-Pnative,docker` instead of `-Pnative` if you choose this option.
     
--   Java 17 or higher (Java 11 is only for Camel Quarkus < 3.0.0).
+-   Java 21 or higher.
     
 -   Maven 3.8.2+ (unless you use the Maven Wrapper, a.k.a. `mvnw` available in the source tree).
     
