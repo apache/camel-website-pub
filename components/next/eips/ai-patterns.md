@@ -17,7 +17,7 @@ See also the full [Enterprise Integration Patterns](enterprise-integration-patte
 | Split / Chunk | [Splitter](split-eip.md) | Break a message into smaller pieces for individual processing. |
 | Merge | [Aggregator](aggregate-eip.md) | Merge multiple messages into one using a correlation key and aggregation strategy. |
 | Filter | [Message Filter](filter-eip.md) | Discard messages that do not match a predicate. |
-| Router / Dispatch | [Content-Based Router](choice-eip.md), [Dynamic Router](dynamicRouter-eip.md) | Route messages to different destinations based on content or rules. |
+| Router / Dispatch | [Content-Based Router](choice-eip.md), [Switch](switch-eip.md), [Dynamic Router](dynamicRouter-eip.md) | Route messages to different destinations based on content or rules. |
 
 ## Enrichment and Context
 
@@ -87,5 +87,6 @@ See also the full [Enterprise Integration Patterns](enterprise-integration-patte
   
 | Term | Camel Component / EIP | Description |
 | --- | --- | --- |
+| Classify / Intent routing | [Semantic](../languages/semantic-language.md), [Switch](switch-eip.md) | Evaluate a Semantic choice question once and dispatch its category string through literal Switch cases. |
 | Agent-to-Agent / A2A | [A2A](../a2a-component.md) | Google’s Agent-to-Agent protocol for communication between AI agents. |
 | Tokenize / Chunk (for LLM) | [LangChain4j Tokenizer](../others/langchain4j-tokenizer.md) | Split text into tokens or chunks sized for LLM context windows, using LangChain4j tokenizer strategies. |

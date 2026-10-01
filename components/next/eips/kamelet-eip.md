@@ -148,8 +148,9 @@ from("direct:start")
 ```xml
 <route>
     <from uri="direct:start"/>
-    <kamelet name="foo"/>
-    <to uri="mock:result"/>
+    <kamelet name="foo">
+        <to uri="mock:result"/>
+    </kamelet>
 </route>
 ```
 

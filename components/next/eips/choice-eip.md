@@ -4,6 +4,9 @@ The [Content-Based Router](http://www.enterpriseintegrationpatterns.com/ContentB
 
 ![image](_images/eip/ContentBasedRouter.gif)
 
+> **Tip**
+> For a decision table based on the literal value of one expression, use [Switch](switch-eip.md). Each Switch case sends to one endpoint, with no inline processing steps. Branches can be separate routes linked through [Direct](../direct-component.md) or [SEDA](../seda-component.md). Choice supports predicates, ranges, and inline processing steps.
+
 ## Choice options
 
 The Choice eip supports the following options which are listed below.

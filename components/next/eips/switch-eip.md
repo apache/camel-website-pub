@@ -6,6 +6,9 @@ Switch selects one destination from a table declared by the route author. The se
 
 Use Switch for literal value dispatch. Use [Choice](choice-eip.md) for predicates, ranges, overlapping conditions, or nested processing steps. A case can send to a `direct:` route when more processing is needed. Use [To D](toD-eip.md) when the endpoint URI itself must be calculated dynamically.
 
+> **Tip**
+> Switch has no inline processing steps: each case sends to one endpoint. Keep each branch in its own route, linked through [Direct](../direct-component.md) or [SEDA](../seda-component.md), so it can be read and tested separately. For predicates, ranges, or inline processing steps, use [Choice](choice-eip.md).
+
 ## Options
 
 The Switch eip supports the following options which are listed below.
@@ -28,7 +31,7 @@ Map, collection and array results are rejected with an `IllegalArgumentException
 
 ### Route from a header
 
-This route reads the `department` header. The body is passed unchanged to the selected destination. The examples on this page are independent; load one at a time and connect the `direct:` destinations to your application’s handling routes.
+This route reads the `department` header. The body is passed unchanged to the selected destination. Each case has a separate `direct:` handling route. Replace the logging steps with the application’s processing. The examples on this page are independent; load one at a time.
 
 -   Java
     
@@ -44,18 +47,27 @@ from("direct:tickets")
         .doCase("technical", "direct:technical")
         .otherwise("direct:review")
     .end();
+
+from("direct:billing").log("Billing: ${body}");
+from("direct:technical").log("Technical: ${body}");
+from("direct:review").log("Review: ${body}");
 ```
 
 ```xml
-<route xmlns="http://camel.apache.org/schema/spring">
-    <from uri="direct:tickets"/>
-    <switch>
-        <selector><header>department</header></selector>
-        <case value="billing" uri="direct:billing"/>
-        <case value="technical" uri="direct:technical"/>
-        <otherwise uri="direct:review"/>
-    </switch>
-</route>
+<routes xmlns="http://camel.apache.org/schema/xml-io">
+    <route>
+        <from uri="direct:tickets"/>
+        <switch>
+            <selector><header>department</header></selector>
+            <case value="billing" uri="direct:billing"/>
+            <case value="technical" uri="direct:technical"/>
+            <otherwise uri="direct:review"/>
+        </switch>
+    </route>
+    <route><from uri="direct:billing"/><log message="Billing: ${body}"/></route>
+    <route><from uri="direct:technical"/><log message="Technical: ${body}"/></route>
+    <route><from uri="direct:review"/><log message="Review: ${body}"/></route>
+</routes>
 ```
 
 ```yaml
@@ -74,6 +86,22 @@ from("direct:tickets")
                 uri: direct:technical
             otherwise:
               uri: direct:review
+
+- route:
+    from:
+      uri: direct:billing
+      steps:
+        - log: "Billing: ${body}"
+- route:
+    from:
+      uri: direct:technical
+      steps:
+        - log: "Technical: ${body}"
+- route:
+    from:
+      uri: direct:review
+      steps:
+        - log: "Review: ${body}"
 ```
 
 Send a message to any of these equivalent routes with a `ProducerTemplate`:
@@ -92,47 +120,49 @@ template.sendBodyAndHeader("direct:tickets", "Please check this invoice",
 
 A null or unmatched result uses `otherwise`. Without `otherwise`, the exchange continues after Switch. Selector failures follow normal Camel error handling and never select the fallback. Streams are reset after selector evaluation when stream caching is enabled. Loops and retries that enter Switch again evaluate the selector again; results are not cached across entries.
 
-### Connect the example destinations
+### Use the Endpoint DSL
 
-For a local demonstration, the destination routes can simply log the message. Load these routes alongside one of the examples above; replace the logging steps with the application’s processing when integrating the example.
-
--   Java
-    
--   XML
-    
--   YAML
-    
+With an [EndpointRouteBuilder](../../../manual/Endpoint-dsl.md), cases and the fallback also accept endpoint builders. Both case forms support endpoint options, including object-valued options, just like `to(…​)`:
 
 ```java
-from("direct:billing").log("Billing: ${body}");
-from("direct:technical").log("Technical: ${body}");
-from("direct:review").log("Review: ${body}");
+from(direct("tickets"))
+    .doSwitch(header("department"))
+        .doCase("billing", direct("billing"))
+        .doCase("technical").to(direct("technical"))
+        .otherwise(direct("review"))
+    .end();
 ```
 
-```xml
-<routes xmlns="http://camel.apache.org/schema/xml-io">
-    <route><from uri="direct:billing"/><log message="Billing: ${body}"/></route>
-    <route><from uri="direct:technical"/><log message="Technical: ${body}"/></route>
-    <route><from uri="direct:review"/><log message="Review: ${body}"/></route>
-</routes>
-```
+### Classify and route with Semantic
+
+A [Semantic](../languages/semantic-language.md) choice question returns a category string that Switch can match against its literal cases. Configure `camel-semantic` and a provider as described in the language documentation. This example uses one reference, `ref:department`, to evaluate the message body once and route the result. Load it alongside the `direct:billing`, `direct:technical`, and `direct:review` handling routes shown above.
 
 ```yaml
+- semantic:
+    question:
+      department:
+        type: choice
+        instructions: Which department should handle this message?
+        criteria:
+          billing: Invoices, payments and refunds
+          technical: Bugs, outages and technical problems
+          other: Any other request
 - route:
     from:
-      uri: direct:billing
+      uri: direct:classify
       steps:
-        - log: "Billing: ${body}"
-- route:
-    from:
-      uri: direct:technical
-      steps:
-        - log: "Technical: ${body}"
-- route:
-    from:
-      uri: direct:review
-      steps:
-        - log: "Review: ${body}"
+        - switch:
+            selector:
+              language:
+                language: semantic
+                expression: ref:department
+            case:
+              - value: billing
+                uri: direct:billing
+              - value: technical
+                uri: direct:technical
+            otherwise:
+              uri: direct:review
 ```
 
 ## Destinations and management
@@ -150,5 +180,7 @@ otherwise:
   parameters:
     name: review
 ```
+
+The `route-structure` developer console shows the destination of each case, such as `case[billing → direct:billing]`, and identifies the fallback as `otherwise[direct:review]`. Sensitive URI parameters are masked in these labels.
 
 Each case has an identity for tracing, debugging and management. The Switch MBean’s `extendedInformation` table reports case IDs, literal values, destination URIs and selection counts. URIs are masked when management masking is enabled (the default). These counts indicate case selection, not successful delivery. `UnmatchedCount` also records unmatched results when no fallback is configured.
