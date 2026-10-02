@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790955404790,
+  "generated": 1790960677302,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -18681,6 +18681,12 @@
               "path": "starters/ocsf.adoc",
               "url": "/camel-spring-boot/next/starters/ocsf.html",
               "title": "OCSF"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/odata.adoc",
+              "url": "/camel-spring-boot/next/starters/odata.html",
+              "title": "OData"
             },
             {
               "module": "ROOT",

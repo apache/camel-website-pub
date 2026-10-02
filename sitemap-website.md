@@ -1,13 +1,15 @@
-urls[877]{loc,lastmod}:
+urls[878]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-10-02T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-10-02T00:00:00+00:00
+  https://camel.apache.org/categories/Community/,2026-10-02T00:00:00+00:00
+  https://camel.apache.org/,2026-10-02T00:00:00+00:00
+  https://camel.apache.org/blog/2026/10/thirty-years-of-cli/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-88789.md,2026-09-30T09:39:19+01:00
-  https://camel.apache.org/,2026-09-30T09:39:19+01:00
   https://camel.apache.org/security/,2026-09-30T09:39:19+01:00
-  https://camel.apache.org/blog/,2026-09-30T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-quarkus-release-3.40.0/,2026-09-30T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-09-30T00:00:00+00:00
   https://camel.apache.org/releases/q-3.40.0/,2026-09-28T00:00:00+00:00
   https://camel.apache.org/releases/,2026-09-28T00:00:00+00:00
-  https://camel.apache.org/categories/AI/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.22.0/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/categories/EIP/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/,2026-09-24T00:00:00+00:00
@@ -15,7 +17,6 @@ urls[877]{loc,lastmod}:
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camelbee-route-observability/,2026-09-21T00:00:00+00:00
-  https://camel.apache.org/categories/Community/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.22.1/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-simple-customfunction/,2026-09-20T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-09-20T00:00:00+00:00

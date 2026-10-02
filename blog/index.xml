@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 30 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 02 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Thirty years of command-line tools, and nobody knew them all</title>
+      <link>https://camel.apache.org/blog/2026/10/thirty-years-of-cli/</link>
+      <pubDate>Fri, 02 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/thirty-years-of-cli/</guid>
+      <description>It&amp;rsquo;s Friday afternoon, so allow me a small story and an opinion.&#xA;My Mac mini felt warm today. Not hot, just warmer than a computer doing nothing has any right to be. In the old days I would have opened Activity Monitor, squinted at it, killed something that looked suspicious, and hoped for the best. Today I typed one sentence to my AI assistant: my mac mini is warm, what is it doing?</description>
+    </item>
     <item>
       <title>Camel Quarkus 3.40.0 Released</title>
       <link>https://camel.apache.org/blog/2026/09/camel-quarkus-release-3.40.0/</link>

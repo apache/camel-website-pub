@@ -2,8 +2,8 @@
 
 ## Overview
 
--   [Security](../security/)
 -   [Blog](../blog/)
+-   [Security](../security/)
 -   [Releases archive](../releases/)
 -   [All Camel Projects](../projects/)
 -   [Apache Camel Core](../camel-core/index.md)

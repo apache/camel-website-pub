@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 416 spring boot starter json files.
+There are 417 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -578,6 +578,8 @@ oaipmh
 observation
 
 ocsf
+
+odata
 
 ognl
 
