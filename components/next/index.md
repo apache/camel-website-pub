@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 386 in 313 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 387 in 314 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -321,6 +321,7 @@ Number of Non-Core Components: 386 in 313 JAR artifacts (4 deprecated)
 | [Netty](netty-component.md) | camel-netty | Stable | 2.14 | Socket level networking using TCP or UDP with Netty 4.x. |
 | [Netty HTTP](netty-http-component.md) | camel-netty-http | Stable | 2.14 | Netty HTTP server and client using the Netty 4.x. |
 | [OAI-PMH](oaipmh-component.md) | camel-oaipmh | Stable | 3.5 | Harvest metadata using OAI-PMH protocol |
+| [OData](odata-component.md) | camel-odata | Preview | 4.23 | Camel OData Component |
 | [Olingo2](olingo2-component.md) | camel-olingo2 | Stable-deprecated | 2.14 | Communicate with OData 2.0 services using Apache Olingo. |
 | [Olingo4](olingo4-component.md) | camel-olingo4 | Stable-deprecated | 2.19 | Communicate with OData 4.0 services using Apache Olingo OData API. |
 | [OPA](opa-component.md) | camel-opa | Preview | 4.23 | Evaluate Open Policy Agent (Rego) policies against an Exchange and record the allow/deny decision on it. |

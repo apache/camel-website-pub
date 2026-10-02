@@ -50,6 +50,10 @@ json-validator tests fail in the Quarkus Platform
 
 fix: extension metadata status is a string value
 
+[#8407](https://github.com/apache/camel-quarkus/issues/8407)
+
+Provide native support for camel-pqc (Post-Quantique Crypto) component
+
 [#8377](https://github.com/apache/camel-quarkus/issues/8377)
 
 Cover (in JVM) base langchain4j tests when quarkus-langchain4j is on claspath

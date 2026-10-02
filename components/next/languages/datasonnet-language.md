@@ -38,17 +38,40 @@ The [DataSonnet](#) expression will return a `com.datasonnet.document.Document` 
     
 -   XML
     
+-   YAML
+    
 
 ```java
-datasonnet("body.foo", String.class);
+from("direct:start")
+    .setBody(datasonnet("body.foo", String.class))
+    .to("mock:result");
 ```
 
 ```xml
-<datasonnet resultType="java.lang.String">body.foo</datasonnet>
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <datasonnet resultType="java.lang.String">body.foo</datasonnet>
+  </setBody>
+  <to uri="mock:result"/>
+</route>
 ```
 
-> **Note**
-> In XML DSL you use the `resultType` attribute to provide a fully qualified class name.
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              datasonnet:
+                expression: body.foo
+                resultType: java.lang.String
+        - to:
+            uri: mock:result
+```
+
+In XML and YAML DSL, `resultType` is the fully qualified class name.
 
 If the expression results in an array, or an object, you can instruct the expression to return you `List.class` or `Map.class`, respectively. However, you must also set the output media type to `application/x-java-object`.
 

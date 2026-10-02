@@ -37,6 +37,13 @@ For example with Maven, in the `dependencies` section of your `pom.xml`:
 
 ## Usage
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 import static org.apache.camel.language.jactl.JactlLanguage.jactl;
 
@@ -48,8 +55,35 @@ public class MyRouteBuilder extends RouteBuilder {
             .to("direct:big-orders");
     }
 }
+```
 
-// Or via the Language SPI:
+```xml
+<route>
+  <from uri="direct:orders"/>
+  <filter>
+    <jactl>body.amount &gt; 100 &amp;&amp; body.status == 'NEW'</jactl>
+    <to uri="direct:big-orders"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:orders
+      steps:
+        - filter:
+            expression:
+              jactl:
+                expression: 'body.amount > 100 && body.status == ''NEW'''
+            steps:
+              - to:
+                  uri: direct:big-orders
+```
+
+Or via the Language SPI:
+
+```java
 Language jactl = camelContext.resolveLanguage("jactl");
 Predicate p    = jactl.createPredicate("body.age > 20");
 Expression e   = jactl.createExpression("'Hello ' + body.name");

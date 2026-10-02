@@ -1143,6 +1143,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Netty](../../components/next/netty-component.md) | camel-netty-starter | Stable | 2.14 | Socket level networking using TCP or UDP with Netty 4.x. |
 | [Netty HTTP](../../components/next/netty-http-component.md) | camel-netty-http-starter | Stable | 2.14 | Netty HTTP server and client using the Netty 4.x. |
 | [OAI-PMH](../../components/next/oaipmh-component.md) | camel-oaipmh-starter | Stable | 3.5 | Harvest metadata using OAI-PMH protocol |
+| [OData](../../components/next/odata-component.md) | camel-odata-starter | Preview | 4.23 | Camel OData Component |
 | [Olingo2](../../components/next/olingo2-component.md) | camel-olingo2-starter | Stable-deprecated | 2.14 | Communicate with OData 2.0 services using Apache Olingo. |
 | [Olingo4](../../components/next/olingo4-component.md) | camel-olingo4-starter | Stable-deprecated | 2.19 | Communicate with OData 4.0 services using Apache Olingo OData API. |
 | [Once](../../components/next/once-component.md) | camel-once-starter | Stable | 4.17 | Trigger a single message only once at startup (useful for development and testing purposes). |

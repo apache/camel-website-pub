@@ -96,12 +96,40 @@ from("direct:example")
 
 In the route above, notice `spel` is a static method which we need to import from `org.apache.camel.language.spel.SpelExpression.spel`, as we use `spel` as an Expression passed in as a parameter to the `setBody` method. Though if we use the fluent API, we can do this instead:
 
-_Java-only: fluent API for spel expression_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:example")
     .setBody().spel("Hello #{request.body}! What a beautiful #{request.headers['dayOrNight']}")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:example"/>
+  <setBody>
+    <spel>Hello #{request.body}! What a beautiful #{request.headers['dayOrNight']}</spel>
+  </setBody>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:example
+      steps:
+        - setBody:
+            expression:
+              spel:
+                expression: 'Hello #{request.body}! What a beautiful #{request.headers[''dayOrNight'']}'
+        - to:
+            uri: mock:result
 ```
 
 Notice we now use the `spel` method from the `setBody()` method. And this does not require us to statically import the `spel` method.

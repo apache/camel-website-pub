@@ -67,10 +67,18 @@ The option `resultType` can be used to specify the type of the value, when the v
 
 For example to set a header with `int` type you can do:
 
+-   Java
+    
 -   XML
     
 -   YAML
     
+
+```java
+from("seda:a")
+    .setHeader("zipCode", constant(90210))
+    .to("mock:b");
+```
 
 ```xml
 <route>
@@ -100,11 +108,45 @@ For example to set a header with `int` type you can do:
 ## Loading constant from external resource
 
 You can externalize the constant and have Camel load it from a resource such as `"classpath:"`, `"file:"`, or `"http:"`.  
-This is done using the following syntax: `"resource:scheme:location"`, eg to refer to a file on the classpath you can do:
+This is done using the following syntax: `"resource:scheme:location"`, eg to set the message body to the content of a file, such as a JSON document a rest service returns, you can do:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-.setHeader("myHeader").constant("resource:classpath:constant.txt")
+from("direct:stock")
+    .setBody(constant("resource:file:stock.json"))
+    .to("mock:result");
 ```
+
+```xml
+<route>
+  <from uri="direct:stock"/>
+  <setBody>
+    <constant>resource:file:stock.json</constant>
+  </setBody>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:stock
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: resource:file:stock.json
+        - to:
+            uri: mock:result
+```
+
+Use `resource:classpath:` for a file on the classpath, such as `resource:classpath:constant.txt`.
 
 ## Dependencies
 

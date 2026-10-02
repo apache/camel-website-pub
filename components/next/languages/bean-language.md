@@ -121,12 +121,42 @@ The Bean Method Language also supports invoking beans that are not registered in
 
 Camel can instantiate the bean of a given type and invoke the method or invoke the method on an already existing instance.
 
-_Java-only: invoking a bean by class type_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("activemq:topic:OrdersTopic")
   .filter().method(MyBean.class, "isGoldCustomer")
   .to("activemq:BigSpendersQueue");
+```
+
+```xml
+<route>
+  <from uri="activemq:topic:OrdersTopic"/>
+  <filter>
+    <method beanType="com.foo.MyBean" method="isGoldCustomer"/>
+    <to uri="activemq:BigSpendersQueue"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:topic:OrdersTopic
+      steps:
+        - filter:
+            expression:
+              method:
+                beanType: com.foo.MyBean
+                method: isGoldCustomer
+            steps:
+              - to:
+                  uri: activemq:BigSpendersQueue
 ```
 
 The first parameter can also be an existing instance of a Bean such as:

@@ -56,10 +56,21 @@ Enum values:
 
 The XML Tokenize language is namespace aware, so a tokenized element can be selected by its prefix. The prefix to URI mappings can be declared inline, or shared across several expressions by registering a `org.apache.camel.support.builder.Namespaces` bean and referring to it with the `namespacesRef` option:
 
+-   Java
+    
 -   XML
     
 -   YAML
     
+
+```java
+@BindToRegistry("myNamespaces")
+Namespaces myNamespaces = new Namespaces("c", "http://acme.com/cheese");
+
+from("file:inbox")
+    .split(expression().xtokenize("//c:order").namespacesRef("myNamespaces").end())
+        .to("mock:result");
+```
 
 ```xml
 <camel xmlns="http://camel.apache.org/schema/xml-io">

@@ -146,6 +146,8 @@ For Camel dependencies, use the shorthand syntax:
 camel run foo.java --dep=camel-saxon
 ```
 
+The `camel:` and `camel-` shorthand forms use the dependency coordinates in the Camel catalog when available. For artifacts absent from the catalog, they use the running Camel version. An explicit Maven coordinate keeps the version you specify.
+
 Multiple dependencies can be separated by comma:
 
 ```bash
@@ -241,10 +243,12 @@ The lookup walks up from the class name:
     
 2.  Each enclosing package in turn, `org.postgresql.ds`, then `org.postgresql`, until a key matches or no package is left. The deepest key wins, so `org.apache.activemq.artemis` is found before `org.apache.activemq`.
     
-3.  The value is a Maven coordinate. A `camel:xxx` short form becomes `org.apache.camel:camel-xxx` at the running Camel version; a `${…​}` placeholder in the hand-written file is resolved from the `camel-dependencies` POM of that version; the generated third-party file carries the versions already resolved.
+3.  The value is a Maven coordinate. A `camel:xxx` short form uses its Camel catalog coordinates when available, or the running Camel version otherwise. A `${…​}` placeholder in the hand-written file is resolved from the `camel-dependencies` POM of that version; the generated third-party file carries the versions already resolved.
     
 4.  The dependency and its transitive dependencies are downloaded and added to the classpath, and the class is loaded again.
     
+
+For an `import` in a Java or Groovy source, a Camel component is also found by its package, so importing any class of a component downloads it, not only the component class itself. For example, a route that imports `org.apache.camel.component.aws2.s3.AWS2S3Constants` for the headers of the `aws-s3-source` Kamelet gets `camel-aws2-s3` before the route is compiled. A class that is only looked up while running still needs the component class itself, so probing whether a class is present does not download a component.
 
 A dependency you declare yourself, with `--dep`, `camel.jbang.dependencies`, or in the project’s POM, is on the classpath before any lookup, so it always takes precedence. Use that when a mapped library is not the one you want, for example the ActiveMQ 5 client where the mapping picks the ActiveMQ 6 client.
 

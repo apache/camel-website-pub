@@ -128,6 +128,94 @@ A simple REST service can be defined as follows, where we use `- rest:` to defin
                 expression: Bye World
 ```
 
+## Returning an HTTP status code
+
+A rest service answers with the HTTP status `200` by default (or `204` when there is no body). To answer with another status, such as a `404` for something that is not found or a `409` for a conflict, set the `CamelHttpResponseCode` header (`Exchange.HTTP_RESPONSE_CODE` in Java) in the route the service calls; the message body becomes the response body. A path parameter such as `{sku}` arrives as a header of the same name:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+rest("/stock")
+    .get("/{sku}").to("direct:one-sku");
+
+from("direct:one-sku")
+    .choice()
+        .when(simple("${header.sku} == 'CAMEL-MUG'"))
+            .setBody(constant("{\"sku\": \"CAMEL-MUG\", \"qty\": 42}"))
+        .otherwise()
+            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(404))
+            .setBody(simple("{\"error\": \"unknown SKU ${header.sku}\"}"))
+    .end();
+```
+
+```xml
+<rest path="/stock">
+  <get path="/{sku}">
+    <to uri="direct:one-sku"/>
+  </get>
+</rest>
+
+<route>
+  <from uri="direct:one-sku"/>
+  <choice>
+    <when>
+      <simple>${header.sku} == 'CAMEL-MUG'</simple>
+      <setBody>
+        <constant>{"sku": "CAMEL-MUG", "qty": 42}</constant>
+      </setBody>
+    </when>
+    <otherwise>
+      <setHeader name="CamelHttpResponseCode">
+        <constant>404</constant>
+      </setHeader>
+      <setBody>
+        <simple>{"error": "unknown SKU ${header.sku}"}</simple>
+      </setBody>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- rest:
+    path: /stock
+    get:
+      - path: "/{sku}"
+        to: direct:one-sku
+- route:
+    from:
+      uri: direct:one-sku
+      steps:
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.sku} == 'CAMEL-MUG'"
+                steps:
+                  - setBody:
+                      expression:
+                        constant:
+                          expression: '{"sku": "CAMEL-MUG", "qty": 42}'
+            otherwise:
+              steps:
+                - setHeader:
+                    name: CamelHttpResponseCode
+                    expression:
+                      constant:
+                        expression: "404"
+                - setBody:
+                    expression:
+                      simple:
+                        expression: '{"error": "unknown SKU ${header.sku}"}'
+```
+
+When the route throws an exception that is not handled, the client gets a `500`. To answer with a specific status for an exception, handle it in `onException` and set `CamelHttpResponseCode` there.
+
 ## Using a base path
 
 The REST DSL allows defining a base path to help applying the _"don’t repeat yourself"_ (DRY) practice. For example, to define a customer path, we can set the base path in `rest("/customer")` and then provide the uri templates in the verbs, as shown below:
@@ -164,9 +252,9 @@ rest("/customers/")
 - rest:
     path: "/customers/"
     get:
-      - path: "/{id}}"
+      - path: "/{id}"
         to: "direct:customerDetails"
-      - path: "/{id}/orders}"
+      - path: "/{id}/orders"
         to: "direct:customerOrders"
     post:
       - path: "/neworder"
@@ -209,9 +297,9 @@ rest()
 ```yaml
 - rest:
     get:
-      - path: "/customers/{id}}"
+      - path: "/customers/{id}"
         to: "direct:customerDetails"
-      - path: "/customers/{id}/orders}"
+      - path: "/customers/{id}/orders"
         to: "direct:customerOrders"
     post:
       - path: "/customers/neworder"
@@ -317,9 +405,9 @@ rest("/customers/")
     inlineRoutes: true
 - rest:
     get:
-      - path: "/customers/{id}}"
+      - path: "/customers/{id}"
         to: "direct:customerDetails"
-      - path: "/customers/{id}/orders}"
+      - path: "/customers/{id}/orders"
         to: "direct:customerOrders"
     post:
       - path: "/customers/neworder"
@@ -428,9 +516,9 @@ from("kafka:new-order")
 - rest:
     path: "/customers/"
     get:
-      - path: "/{id}}"
+      - path: "/{id}"
         to: "direct:customerDetails"
-      - path: "/{id}/orders}"
+      - path: "/{id}/orders"
         to: "direct:customerOrders"
     post:
       - path: "/neworder"
@@ -492,9 +580,9 @@ rest("/customers/")
 ```yaml
 - rest:
     get:
-      - path: "/customers/{id}}"
+      - path: "/customers/{id}"
         to: "direct:customerDetails"
-      - path: "/customers/{id}/orders}"
+      - path: "/customers/{id}/orders"
         to: "direct:customerOrders"
         disabled: "{{ordersEnabled}}"
     post:

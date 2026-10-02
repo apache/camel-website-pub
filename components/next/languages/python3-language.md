@@ -68,6 +68,13 @@ camelContext.getRegistry().bind("python3", python3);
 
 ## Usage
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 import static org.apache.camel.language.python3.Python3Language.python3;
 
@@ -80,6 +87,40 @@ public class MyRouteBuilder extends RouteBuilder {
                 .otherwise().to("mock:other");
     }
 }
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <choice>
+    <when>
+      <python3>body == 'Hello'</python3>
+      <to uri="mock:hello"/>
+    </when>
+    <otherwise>
+      <to uri="mock:other"/>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            when:
+              - expression:
+                  python3:
+                    expression: 'body == ''Hello'''
+                steps:
+                  - to:
+                      uri: mock:hello
+            otherwise:
+              steps:
+                - to:
+                    uri: mock:other
 ```
 
 Python 3 syntax is supported, including f-strings:

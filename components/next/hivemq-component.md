@@ -4,7 +4,7 @@
 
 **Both producer and consumer are supported**
 
-The HiveMQ component provides connectivity to MQTT message brokers using the [HiveMQ MQTT Client](https://www.hivemq.com/) library. This component uses **MQTT 5 only**. MQTT 3.1.1 is not supported.
+The HiveMQ component provides connectivity to MQTT message brokers using the [HiveMQ MQTT Client](https://www.hivemq.com/) library. It supports both **MQTT 5** (the default) and **MQTT 3.1.1**, selected with the `mqttVersion` option.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -75,12 +75,28 @@ The HiveMQ component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **cleanStart** (common) | Whether to initiate a clean start (MQTT 5) upon connecting to the broker. | true | boolean |
+| **cleanStart** (common) | Whether to initiate a clean session upon connecting to the broker (called clean session in MQTT 3.1.1 and clean start in MQTT 5). The two protocol versions behave differently when this is false: with MQTT 3.1.1 the broker keeps the session (subscriptions and queued QoS 1/2 messages) indefinitely, while with MQTT 5 the session still expires on disconnect, since this component does not set a session expiry interval. | true | boolean |
 | **clientId** (common) | Client identifier used when connecting to the HiveMQ broker. |  | String |
 | **configuration** (common) | Component configuration. |  | HiveMQConfiguration |
 | **host** (common) | Hostname or IP address of the HiveMQ MQTT broker. | localhost | String |
+| **mqttVersion** (common) | 
+The MQTT protocol version to use when connecting to the broker.
+
+Enum values:
+
+-   MQTT\_3\_1\_1
+    
+-   MQTT\_5\_0
+    
+
+
+
+
+
+ | MQTT\_5\_0 | MqttVersion |
 | **port** (common) | Port number of the HiveMQ MQTT broker. | 1883 | int |
 | **qos** (common) | 
+
 Default Quality of Service (QoS) level to use for messages.
 
 Enum values:
@@ -125,11 +141,27 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **cleanStart** (common) | Whether to initiate a clean start (MQTT 5) upon connecting to the broker. | true | boolean |
+| **cleanStart** (common) | Whether to initiate a clean session upon connecting to the broker (called clean session in MQTT 3.1.1 and clean start in MQTT 5). The two protocol versions behave differently when this is false: with MQTT 3.1.1 the broker keeps the session (subscriptions and queued QoS 1/2 messages) indefinitely, while with MQTT 5 the session still expires on disconnect, since this component does not set a session expiry interval. | true | boolean |
 | **clientId** (common) | Client identifier used when connecting to the HiveMQ broker. |  | String |
 | **host** (common) | Hostname or IP address of the HiveMQ MQTT broker. | localhost | String |
+| **mqttVersion** (common) | 
+The MQTT protocol version to use when connecting to the broker.
+
+Enum values:
+
+-   MQTT\_3\_1\_1
+    
+-   MQTT\_5\_0
+    
+
+
+
+
+
+ | MQTT\_5\_0 | MqttVersion |
 | **port** (common) | Port number of the HiveMQ MQTT broker. | 1883 | int |
 | **qos** (common) | 
+
 Default Quality of Service (QoS) level to use for messages.
 
 Enum values:
@@ -352,6 +384,20 @@ from("hivemq:some/topic"
     .to("mock:test");
 ```
 
+### MQTT protocol version
+
+By default, the HiveMQ component connects using MQTT 5. Set `mqttVersion=MQTT_3_1_1` to connect to a broker using MQTT 3.1.1 instead:
+
+```java
+from("hivemq:some/topic"
+    + "?host=mqtt.example.com"
+    + "&port=1883"
+    + "&mqttVersion=MQTT_3_1_1")
+    .to("mock:test");
+```
+
+The `cleanStart` option behaves differently between the two protocol versions when set to `false`. With MQTT 3.1.1, the broker keeps the session (subscriptions and queued QoS 1/2 messages) indefinitely; with MQTT 5 the session still expires on disconnect, since this component does not set a session expiry interval.
+
 ### Client identifier
 
 A custom MQTT client identifier can be configured using the `clientId` option:
@@ -374,8 +420,6 @@ Incoming MQTT messages are acknowledged automatically by the HiveMQ client when 
 
 The following MQTT 5 / client features are **not** implemented and may be added in follow-up work:
 
--   MQTT 3.1.1
-    
 -   Will messages
     
 -   MQTT 5 publish properties (user properties, content type, correlation data, response topic, expiry, and similar)

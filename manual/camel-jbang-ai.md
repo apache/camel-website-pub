@@ -233,7 +233,7 @@ Every Ollama request from the CLI (`camel ask`, `camel explain`, `camel harden`)
 3.  Otherwise 64k when the model’s weights plus the KV cache of a 64k window fit the machine’s memory, judged from what `ollama show` reports about the model, else 32k. A window that does not fit makes Ollama move layers to the CPU, which slows generation far more than a smaller window costs.
     
 
-The tool-calling prompt alone is about 4.5k tokens, which is why 32k is the floor: Ollama’s own default on machines with less than 24 GB is 4k and would truncate it. Keep all your Ollama clients on the same value; if you set `OLLAMA_CONTEXT_LENGTH` for the CLI, set it for `ollama serve` too. The TUI’s Ollama tab shows the window in use, and [Working with a local Ollama model](camel-jbang-tui.html#_working_with_a_local_ollama_model) explains how the AI panel manages its history inside it.
+The tool-calling prompt alone is about 4.5k tokens, which is why 32k is the floor: Ollama’s own default on machines with less than 24 GB is 4k and would truncate it. Keep all your Ollama clients on the same value; if you set `OLLAMA_CONTEXT_LENGTH` for the CLI, set it for `ollama serve` too. The TUI’s Ollama tab shows the window in use, and [Working with a local Ollama model](camel-jbang-tui-local-models.html#_working_with_a_local_ollama_model) explains how the AI panel manages its history inside it.
 
 ### Using an OpenAI-compatible local server
 

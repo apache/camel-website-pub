@@ -15,7 +15,7 @@ camel transform [options]
 | --- | --- |
 | [dataweave](camel-jbang-transform-dataweave.md) | Convert DataWeave scripts to DataSonnet format |
 | [message](camel-jbang-transform-message.md) | Transform message from one format to another via an existing running Camel integration |
-| [route](camel-jbang-transform-route.md) | Transform Camel routes to XML or YAML format |
+| [route](camel-jbang-transform-route.md) | Transform Camel routes to XML, YAML or Java format |
 
 ## Options
 

@@ -83,6 +83,7 @@ The OpenFGA component supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **apiUrl** (producer) | The base URL of the OpenFGA HTTP API, without a trailing path. The default assumes OpenFGA running as a sidecar on its standard HTTP port. | [http://localhost:8080](http://localhost:8080) | String |
 | **authorizationModelId** (producer) | The identifier of the authorization model revision to evaluate against. Leave it empty to use whichever model the store considers latest. Pin it in production. A store keeps every model it was ever given and latest moves the moment somebody writes a new one, so an unpinned endpoint can start answering a different question than the one it was reviewed with - without any change to the route. Pinning also makes a model rollout a deliberate, reviewable configuration change. |  | String |
+| **conditionContext** (producer) | Context passed to the CEL expressions of any conditioned relation the check touches, as a map resolved from the registry - conditionContext=#myContext. A map rather than an expression on purpose: OpenFGA types every condition parameter in the authorization model (int, bool, timestamp, ipaddress), and a map lets the route author supply values of the right Java type instead of strings that the server would then reject. A mistyped value is refused with an HTTP 400, which this component treats as a denial rather than as an unavailable decision point, so the failure direction is safe either way. Like contextualTuples this is endpoint-only. A condition can decide a relation, so letting a message choose the values it is evaluated with would hand the caller the decision. |  | Map |
 | **configuration** (producer) | The component configuration. |  | OpenFgaConfiguration |
 | **consistency** (producer) | 
 The consistency the query is answered with. OpenFGA’s default, MINIMIZE\_LATENCY, may answer from a replica that has not caught up yet, which right after a revoke means a tuple that was deleted can still grant access for a moment. Set HIGHER\_CONSISTENCY on the paths where that window matters, at the cost of latency. Left unset, OpenFGA’s own default applies.
@@ -101,6 +102,7 @@ Enum values:
 
 
  |  | String |
+| **contextualTuples** (producer) | Relationship tuples supplied for the duration of one check and never stored, as semicolon-separated user,relation,object triples - for example user:$\\{exchangeProperty.authenticatedSubject},member,team:eng. Each part is evaluated as a Simple expression against the exchange, exactly as user and object are, and applies to check, batchCheck, listObjects, listRelations and listUsers. This is how a route hands OpenFGA a relationship the stored graph does not hold - a group membership that lives in the token rather than in the store, or a fact about the request such as which network it arrived on. A contextual tuple grants. It is read exactly like a stored tuple, so user:anne,owner,document:secret makes \\{code check(user:anne, owner, document:secret)} answer true whatever the store contains. That is why this option is endpoint-only and is never taken from the message: a tuple the caller could choose would let it assert the very relationship being checked. By the same token, an expression here that reads an inbound header hands the caller that power anyway - keep these literal, or derive them from something the route established rather than from what it received. A part that resolves to blank denies the exchange rather than being dropped: the route asked for a tuple it did not get, and continuing without it would answer a different question than the one configured. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **object** (producer) | The object being accessed, as an OpenFGA object identifier such as \\{code document:budget}. Evaluated as a Simple expression against each exchange, so document:$\\{header.documentId} names the resource the message is about. Unlike the subject, taking the object from a header is normal and safe: the caller is entitled to say which resource it wants, and the check is what decides whether it may have it. |  | String |
 | **relation** (producer) | The relation to demand, such as reader or owner. Evaluated as a Simple expression against each exchange, though a literal is what you usually want. The relation is the permission being demanded, so resolving it from an inbound header lets the caller pick the weakest one the model defines. Keep it literal, or derive it from something the route controls such as $\\{header.CamelHttpMethod}. |  | String |
@@ -173,6 +175,7 @@ Enum values:
 | --- | --- | --- | --- |
 | **apiUrl** (producer) | The base URL of the OpenFGA HTTP API, without a trailing path. The default assumes OpenFGA running as a sidecar on its standard HTTP port. | [http://localhost:8080](http://localhost:8080) | String |
 | **authorizationModelId** (producer) | The identifier of the authorization model revision to evaluate against. Leave it empty to use whichever model the store considers latest. Pin it in production. A store keeps every model it was ever given and latest moves the moment somebody writes a new one, so an unpinned endpoint can start answering a different question than the one it was reviewed with - without any change to the route. Pinning also makes a model rollout a deliberate, reviewable configuration change. |  | String |
+| **conditionContext** (producer) | Context passed to the CEL expressions of any conditioned relation the check touches, as a map resolved from the registry - conditionContext=#myContext. A map rather than an expression on purpose: OpenFGA types every condition parameter in the authorization model (int, bool, timestamp, ipaddress), and a map lets the route author supply values of the right Java type instead of strings that the server would then reject. A mistyped value is refused with an HTTP 400, which this component treats as a denial rather than as an unavailable decision point, so the failure direction is safe either way. Like contextualTuples this is endpoint-only. A condition can decide a relation, so letting a message choose the values it is evaluated with would hand the caller the decision. |  | Map |
 | **consistency** (producer) | 
 The consistency the query is answered with. OpenFGA’s default, MINIMIZE\_LATENCY, may answer from a replica that has not caught up yet, which right after a revoke means a tuple that was deleted can still grant access for a moment. Set HIGHER\_CONSISTENCY on the paths where that window matters, at the cost of latency. Left unset, OpenFGA’s own default applies.
 
@@ -190,6 +193,7 @@ Enum values:
 
 
  |  | String |
+| **contextualTuples** (producer) | Relationship tuples supplied for the duration of one check and never stored, as semicolon-separated user,relation,object triples - for example user:$\\{exchangeProperty.authenticatedSubject},member,team:eng. Each part is evaluated as a Simple expression against the exchange, exactly as user and object are, and applies to check, batchCheck, listObjects, listRelations and listUsers. This is how a route hands OpenFGA a relationship the stored graph does not hold - a group membership that lives in the token rather than in the store, or a fact about the request such as which network it arrived on. A contextual tuple grants. It is read exactly like a stored tuple, so user:anne,owner,document:secret makes \\{code check(user:anne, owner, document:secret)} answer true whatever the store contains. That is why this option is endpoint-only and is never taken from the message: a tuple the caller could choose would let it assert the very relationship being checked. By the same token, an expression here that reads an inbound header hands the caller that power anyway - keep these literal, or derive them from something the route established rather than from what it received. A part that resolves to blank denies the exchange rather than being dropped: the route asked for a tuple it did not get, and continuing without it would answer a different question than the one configured. |  | String |
 | **object** (producer) | The object being accessed, as an OpenFGA object identifier such as \\{code document:budget}. Evaluated as a Simple expression against each exchange, so document:$\\{header.documentId} names the resource the message is about. Unlike the subject, taking the object from a header is normal and safe: the caller is entitled to say which resource it wants, and the check is what decides whether it may have it. |  | String |
 | **relation** (producer) | The relation to demand, such as reader or owner. Evaluated as a Simple expression against each exchange, though a literal is what you usually want. The relation is the permission being demanded, so resolving it from an inbound header lets the caller pick the weakest one the model defines. Keep it literal, or derive it from something the route controls such as $\\{header.CamelHttpMethod}. |  | String |
 | **relations** (producer) | Comma-separated list of relations the listRelations operation asks about, for example reader,writer,owner. Only the ones the subject actually holds come back. |  | String |
@@ -220,7 +224,7 @@ The OpenFGA component supports the following message header(s), which is/are lis
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelOpenFgaAllowed** (producer) Constant: [`ALLOWED`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#ALLOWED) | The allow/deny verdict of the authorization check. Always overwritten by the component, so a value set by an inbound message never survives into the route. |  | Boolean |
-| **CamelOpenFgaDenyReason** (producer) Constant: [`DENY_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#DENY_REASON) | Why the exchange was denied, set only on a deny. denied when OpenFGA evaluated the relationship and answered no; missing-user, missing-object, missing-relation, wildcard-subject or invalid-identifier when the exchange never reached OpenFGA because what it carried could not be used as a subject or an object. |  | String |
+| **CamelOpenFgaDenyReason** (producer) Constant: [`DENY_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#DENY_REASON) | Why the exchange was denied, set only on a deny. denied when OpenFGA evaluated the relationship and answered no; missing-user, missing-object, missing-relation, wildcard-subject or invalid-identifier when the exchange never reached OpenFGA because what it carried could not be used as a subject or an object; invalid-contextual-tuple when a configured contextual tuple did not resolve, so the check would have asked a different question than the endpoint was configured to ask. |  | String |
 | **CamelOpenFgaFailedOpen** (producer) Constant: [`FAILED_OPEN`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#FAILED_OPEN) | Set to true only when the exchange proceeded because failOpen is enabled and OpenFGA could not be asked - nothing authorized it. Absent on every verdict OpenFGA actually gave, so a route or an audit trail can tell the two apart rather than seeing the same CamelOpenFgaAllowed=true for both. |  | Boolean |
 | **CamelOpenFgaUser** (producer) Constant: [`USER`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#USER) | The subject the check was made for, as resolved from the endpoint’s user expression. Set for observability; it is not read as an input. |  | String |
 | **CamelOpenFgaObject** (producer) Constant: [`OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#OBJECT) | The object the check was made against, as resolved from the endpoint’s object expression. Set for observability; it is not read as an input. |  | String |
@@ -408,10 +412,47 @@ The check requires the server to report `SERVING`, not merely to answer with HTT
 
 No check is registered for an injected `openFgaClient`, which can point anywhere the component has no way to ask about. Set `healthCheckProducerEnabled=false` on the component, or `healthCheckEnabled=false` on the policy, to turn them off.
 
+### Contextual tuples and condition context
+
+`contextualTuples` hands OpenFGA relationships that are true for one request and never stored — a group membership that lives in the token rather than in the graph, or a fact about the request such as which network it arrived on. It takes semicolon-separated `user,relation,object` triples, each part a Simple expression:
+
+```java
+// both the subject and the team come from exchange properties the route's own token-validating step set.
+// the object may come from the request - asking about a document is the caller's prerogative - but the
+// granting tuple must not, which is what the IMPORTANT block below is about
+to("openfga:check?storeId={{fga.store}}&relation=reader"
+   + "&user=user:${exchangeProperty.CamelKeycloakTokenSubject}"
+   + "&object=document:${header.documentId}"
+   + "&contextualTuples=user:${exchangeProperty.CamelKeycloakTokenSubject},member,"
+   + "team:${exchangeProperty.tokenTeam}");
+```
+
+It applies to `check`, `batchCheck`, `listObjects`, `listRelations` and `listUsers`. On `batchCheck` the batch fans out into one check per object and the context goes on **every** item, so each object is judged against the same facts.
+
+`OpenFgaSecurityPolicy` takes both options as well, through `setContextualTuples` and `setConditionContext`. They are no more dangerous on the policy than on an endpoint and no less: either way the value comes from whoever configured the route, never from the message.
+
+> **Note**
+> A comma inside a Simple expression
+>
+> The option is split on `,` into its three parts **before** those parts are compiled, so a Simple expression containing a comma — `${header.x.substring(0,3)}`, or a bean call with two arguments — breaks the triple. It cannot be misinterpreted silently: the split yields either the wrong number of parts, or a part that is not a parsable expression — `user:${bean:ids.pick(1,2)},member` splits into three and the first fails to compile with `missing } to close the function` — so the route fails before it carries a message rather than checking something other than what was written. Pre-compute such a value into an exchange property and reference that instead.
+
+`conditionContext` supplies the values that any conditioned relation’s CEL expression is evaluated with, as a map resolved from the registry — `conditionContext=#myContext`. A map rather than an expression on purpose: OpenFGA types every condition parameter in the authorization model (`int`, `bool`, `timestamp`, `ipaddress`), and a map lets you supply the right Java type instead of a string the server would reject.
+
+> **Important**
+> A contextual tuple grants
+>
+> A contextual tuple is read exactly like a stored one. `user:anne,owner,document:secret` makes `check(user:anne, owner, document:secret)` answer **true** whatever the store contains — it is not a hint or a filter, it is an assertion that the relationship holds.
+>
+> That is why both options are endpoint-only and are never read from the message. A contextual tuple the caller could choose would let it assert the very relationship being checked, which is the whole decision. The same reasoning applies to a condition context, because a condition can decide a relation.
+>
+> It follows that an expression here which reads an inbound header hands the caller that power anyway. Keep these literal, or derive them from something the route established — the same rule as for `user`.
+>
+> A part that resolves to blank denies the exchange with `CamelOpenFgaDenyReason=invalid-contextual-tuple` rather than being dropped. Dropping it would be the safer direction arithmetically, since losing a tuple can only make the check stricter, but it would silently answer a different question than the endpoint was configured to ask.
+
+Contextual tuples supplied by the **message** are deliberately not supported. If you need them, the tuple has to come from somewhere the caller cannot reach, which in practice means the endpoint.
+
 ## What this component does not do yet
 
--   **Contextual tuples and condition context on a check.** A contextual tuple derived from a message is a self-authorization primitive — `(user:me, owner, document:secret)` — so rather than ship a gate for it that has not been reviewed, the first release leaves it out entirely.
-    
 -   The `expand`, `readTuples` and `readChanges` operations, and store or authorization-model management.
     
 

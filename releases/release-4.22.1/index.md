@@ -91,7 +91,7 @@ git checkout camel-4.22.1
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (84)
+### Bug (83)
 
 [CAMEL-24729](https://issues.apache.org/jira/browse/CAMEL-24729)
 
@@ -136,10 +136,6 @@ camel-infinispan: the QUERY operation silently returns the input when no query b
 [CAMEL-24622](https://issues.apache.org/jira/browse/CAMEL-24622)
 
 camel-infinispan: the aggregation repository implements RecoverableAggregationRepository without a recovery store
-
-[CAMEL-24594](https://issues.apache.org/jira/browse/CAMEL-24594)
-
-RestBindingAdvice response marshalling failure is silently swallowed
 
 [CAMEL-24593](https://issues.apache.org/jira/browse/CAMEL-24593)
 

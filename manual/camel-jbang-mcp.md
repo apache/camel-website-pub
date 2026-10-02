@@ -354,7 +354,7 @@ The advisory data ships with the Camel catalog bundled in the MCP server, where 
  
 | Tool | Description |
 | --- | --- |
-| `camel_transform_route` | Assists with route DSL format transformation between YAML and XML. |
+| `camel_transform_route` | Converts routes between the YAML, XML and Java DSLs, as `camel transform route` does, without running them: routes, rests, route templates, route configurations and beans. The result is read back and compared with the source, and what differs or is not carried over is returned in `notes`. A route that cannot be converted without running it (such as a processor lambda) is refused with the reason. |
 | `camel_configuration_validate` | Validate Camel configuration property lines (e.g., from `application.properties`). Detects misspelled option names, invalid values, and returns suggestions. |
 | `camel_properties_translate` | Translate Camel configuration properties between runtimes (`main`, `spring-boot`, `quarkus`). Handles runtime-specific keys like HTTP server and management endpoint configuration. |
 

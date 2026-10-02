@@ -33,35 +33,51 @@ The catalog entry describes the generic expression model. Spring Boot’s starte
 
 Use Camel’s generic language expression. The same condition works in Filter, Choice, Validate and other EIPs accepting a predicate. A non-match retains that EIP’s normal behavior.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:filter")
     .filter().language("typesafe-ai", "Does this message request a refund?")
     .to("direct:refund-handler");
+```
 
+```xml
+<route>
+  <from uri="direct:filter"/>
+  <filter>
+    <language language="typesafe-ai">Does this message request a refund?</language>
+    <to uri="direct:refund-handler"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:filter
+      steps:
+        - filter:
+            expression:
+              language:
+                language: typesafe-ai
+                expression: "Does this message request a refund?"
+            steps:
+              - to:
+                  uri: direct:refund-handler
+```
+
+In a Choice it is a `when` like any other predicate:
+
+```java
 from("direct:route").choice()
     .when().language("typesafe-ai", "Does this message request a refund?")
         .to("direct:refund-handler")
     .otherwise().to("direct:general-handler");
-```
-
-```xml
-<filter>
-  <language language="typesafe-ai">Does this message request a refund?</language>
-  <to uri="direct:refund-handler"/>
-</filter>
-```
-
-```yaml
-- from:
-    uri: direct:filter
-    steps:
-      - filter:
-          expression:
-            language:
-              language: typesafe-ai
-              expression: "Does this message request a refund?"
-          steps:
-            - to: direct:refund-handler
 ```
 
 XML and YAML use the configured language defaults. Java callers needing per-use settings can use the Language SPI. The optional array positions are endpoint, threshold, uncertainty, uncertainty policy, and state. Null entries inherit the language settings; state can be a Simple string or a thread-safe Camel `Expression`.

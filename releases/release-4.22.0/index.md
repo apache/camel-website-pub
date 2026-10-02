@@ -1805,7 +1805,7 @@ camel-aws2-sts: throw when pojoRequest=true and the body is the wrong type
 
 Camel-PQC: Add Azure Key Vault Lifecycle Manager
 
-### Task (36)
+### Task (35)
 
 [CAMEL-24381](https://issues.apache.org/jira/browse/CAMEL-24381)
 
@@ -1814,10 +1814,6 @@ camel-jbang - Upgrade to 4.22 LTS release
 [CAMEL-24335](https://issues.apache.org/jira/browse/CAMEL-24335)
 
 Update Artemis dependency groupId from \`org.apache.activemq to org.apache.artemis\`
-
-[CAMEL-24318](https://issues.apache.org/jira/browse/CAMEL-24318)
-
-Support Maven build and test using multiple cores
 
 [CAMEL-24268](https://issues.apache.org/jira/browse/CAMEL-24268)
 

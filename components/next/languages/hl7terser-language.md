@@ -20,7 +20,12 @@ The HL7 Terser language supports the following options which are listed below.
 
 In the example below, we want to set a header with the patent id from field QRD-8 in the QRY\_A19 message:
 
-_Java-only: HL7 Terser expression builder API for extracting and filtering fields_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 import static org.apache.camel.component.hl7.HL7.hl7terser;
@@ -29,8 +34,37 @@ import static org.apache.camel.component.hl7.HL7.hl7terser;
 from("direct:test1")
    .setHeader("PATIENT_ID", hl7terser("QRD-8(0)-1"))
    .to("mock:test1");
+```
 
-// continue processing if extracted field equals a message header
+```xml
+<route>
+  <from uri="direct:test1"/>
+  <setHeader name="PATIENT_ID">
+    <hl7terser>QRD-8(0)-1</hl7terser>
+  </setHeader>
+  <to uri="mock:test1"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:test1
+      steps:
+        - setHeader:
+            name: PATIENT_ID
+            expression:
+              hl7terser:
+                expression: QRD-8(0)-1
+        - to:
+            uri: mock:test1
+```
+
+In Java DSL the expression can also be compared with the predicate builder, for example to continue processing if the extracted field equals a message header:
+
+_Java-only: HL7 Terser expression builder API for filtering_
+
+```java
 from("direct:test2")
    .filter(hl7terser("QRD-8(0)-1").isEqualTo(header("PATIENT_ID"))
    .to("mock:test2");

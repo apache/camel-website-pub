@@ -90,6 +90,8 @@ For example, you can use JSONPath in a [Predicate](../../../manual/predicate.md)
     
 -   XML DSL
     
+-   YAML
+    
 
 ```java
 from("queue:books.new")
@@ -121,6 +123,31 @@ from("queue:books.new")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            when:
+              - expression:
+                  jsonpath:
+                    expression: "$.store.book[?(@.price < 10)]"
+                steps:
+                  - to:
+                      uri: mock:cheap
+              - expression:
+                  jsonpath:
+                    expression: "$.store.book[?(@.price < 30)]"
+                steps:
+                  - to:
+                      uri: mock:average
+            otherwise:
+              steps:
+                - to:
+                    uri: mock:expensive
+```
+
 ### Supported message body types
 
 Camel JSONPath supports message body using the following types:
@@ -144,6 +171,8 @@ By default, jsonpath will throw an exception if the json payload does not have a
 -   Java
     
 -   XML DSL
+    
+-   YAML
     
 
 ```java
@@ -171,6 +200,26 @@ from("direct:start")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            when:
+              - expression:
+                  jsonpath:
+                    expression: person.middlename
+                    suppressExceptions: true
+                steps:
+                  - to:
+                      uri: mock:middle
+            otherwise:
+              steps:
+                - to:
+                    uri: mock:other
+```
+
 This option is also available on the `@JsonPath` annotation.
 
 ### Inline Simple expressions
@@ -182,6 +231,8 @@ An example is shown below:
 -   Java
     
 -   XML DSL
+    
+-   YAML
     
 
 ```java
@@ -214,19 +265,175 @@ from("direct:start")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            when:
+              - expression:
+                  jsonpath:
+                    expression: "$.store.book[?(@.price < ${header.cheap})]"
+                steps:
+                  - to:
+                      uri: mock:cheap
+              - expression:
+                  jsonpath:
+                    expression: "$.store.book[?(@.price < ${header.average})]"
+                steps:
+                  - to:
+                      uri: mock:average
+            otherwise:
+              steps:
+                - to:
+                    uri: mock:expensive
+```
+
+The inlined Simple expressions also work when the result becomes the message body, for example to filter a JSON array down to the elements matching a header, such as the path parameter of a rest service. A filter returns a list (empty when nothing matches), so set `resultType` to `java.util.List` and check its size. The element found is a `Map`, which is marshalled back to JSON:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:one-sku")
+    .setBody(constant("resource:file:stock.json"))
+    .setBody().jsonpath("$[?(@.sku == '${header.sku}')]", List.class)
+    .choice()
+        .when(simple("${body.size()} == 0"))
+            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(404))
+            .setBody(simple("unknown SKU ${header.sku}"))
+        .otherwise()
+            .setBody(simple("${body[0]}"))
+            .marshal().json()
+    .end();
+```
+
+```xml
+<route>
+  <from uri="direct:one-sku"/>
+  <setBody>
+    <constant>resource:file:stock.json</constant>
+  </setBody>
+  <setBody>
+    <jsonpath resultType="java.util.List">$[?(@.sku == '${header.sku}')]</jsonpath>
+  </setBody>
+  <choice>
+    <when>
+      <simple>${body.size()} == 0</simple>
+      <setHeader name="CamelHttpResponseCode">
+        <constant>404</constant>
+      </setHeader>
+      <setBody>
+        <simple>unknown SKU ${header.sku}</simple>
+      </setBody>
+    </when>
+    <otherwise>
+      <setBody>
+        <simple>${body[0]}</simple>
+      </setBody>
+      <marshal>
+        <json/>
+      </marshal>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:one-sku
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: resource:file:stock.json
+        - setBody:
+            expression:
+              jsonpath:
+                expression: "$[?(@.sku == '${header.sku}')]"
+                resultType: java.util.List
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${body.size()} == 0"
+                steps:
+                  - setHeader:
+                      name: CamelHttpResponseCode
+                      expression:
+                        constant:
+                          expression: "404"
+                  - setBody:
+                      expression:
+                        simple:
+                          expression: "unknown SKU ${header.sku}"
+            otherwise:
+              steps:
+                - setBody:
+                    expression:
+                      simple:
+                        expression: "${body[0]}"
+                - marshal:
+                    json: {}
+```
+
 You can turn off support for inlined Simple expression by setting the option `allowSimple` to `false` as shown:
 
 -   Java
     
--   XML DSL
+-   XML
+    
+-   YAML
     
 
 ```java
-.when().jsonpath("$.store.book[?(@.price < 10)]", false, false)
+from("direct:start")
+    .choice()
+        .when(expression().jsonpath("$.store.book[?(@.price < 10)]").allowSimple(false).end())
+            .to("mock:cheap")
+        .otherwise()
+            .to("mock:expensive");
 ```
 
 ```xml
-<jsonpath allowSimple="false">$.store.book[?(@.price &lt; 10)]</jsonpath>
+<route>
+  <from uri="direct:start"/>
+  <choice>
+    <when>
+      <jsonpath allowSimple="false">$.store.book[?(@.price &lt; 10)]</jsonpath>
+      <to uri="mock:cheap"/>
+    </when>
+    <otherwise>
+      <to uri="mock:expensive"/>
+    </otherwise>
+  </choice>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            when:
+              - expression:
+                  jsonpath:
+                    expression: "$.store.book[?(@.price < 10)]"
+                    allowSimple: false
+                steps:
+                  - to:
+                      uri: mock:cheap
+            otherwise:
+              steps:
+                - to:
+                    uri: mock:expensive
 ```
 
 ### Using variables as source
@@ -300,7 +507,12 @@ The encoding of the JSON document is detected automatically, if the document is 
 
 You can use JSONPath to split a JSON document, such as:
 
-_Java-only: Java DSL with class literal parameter_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -308,17 +520,73 @@ from("direct:start")
     .to("log:book");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <split>
+    <jsonpath resultType="java.util.List">$.store.book[*]</jsonpath>
+    <to uri="log:book"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - split:
+            expression:
+              jsonpath:
+                expression: "$.store.book[*]"
+                resultType: java.util.List
+            steps:
+              - to:
+                  uri: log:book
+```
+
 > **Important**
 > Notice how we specify `List.class` as the result-type. This is because if there is only a single element (only 1 book), then jsonpath will return the single entity as a `Map` instead of `List<Map>`. Therefore, we tell Camel that the result should always be a `List`, and Camel will then automatic wrap the single element into a new `List` object.
 
 Then each book is logged, however the message body is a `Map` instance. Sometimes you may want to output this as plain String JSON value instead, which can be done with the `writeAsString` option as shown:
 
-_Java-only: Java DSL with class literal parameter_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .split().jsonpathWriteAsString("$.store.book[*]", List.class)
     .to("log:book");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <split>
+    <jsonpath resultType="java.util.List" writeAsString="true">$.store.book[*]</jsonpath>
+    <to uri="log:book"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - split:
+            expression:
+              jsonpath:
+                expression: "$.store.book[*]"
+                resultType: java.util.List
+                writeAsString: true
+            steps:
+              - to:
+                  uri: log:book
 ```
 
 Then each book is logged as a String JSON value.
@@ -327,12 +595,42 @@ Then each book is logged as a String JSON value.
 
 It is possible to unpack a single-element array into an object:
 
-_Java-only: Java DSL with class literal parameter_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .setBody().jsonpathUnpack("$.store.book", Book.class)
     .to("log:book");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setBody>
+    <jsonpath unpackArray="true" resultType="com.example.Book">$.store.book</jsonpath>
+  </setBody>
+  <to uri="log:book"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              jsonpath:
+                expression: $.store.book
+                unpackArray: true
+                resultType: com.example.Book
+        - to:
+            uri: log:book
 ```
 
 If a book array contains only one book, it will be converted into a Book object.
@@ -343,20 +641,12 @@ By default, JSONPath uses the message body as the input source. However, you can
 
 For example, to count the number of books from a JSON document that was stored in a header named `books` you can do:
 
-_Java-only: Java fluent expression builder API_
-
-```java
-var jp = expression().jsonpath("$..store.book.length()").resultType(int.class)
-        .source("header:books").end();
-
-from("direct:start")
-    .setHeader("numberOfBooks", jp)
-    .to("mock:result");
-```
-
-And you can also inline the expression:
-
-_Java-only: Java fluent expression builder API_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -364,15 +654,6 @@ from("direct:start")
             .source("header:books").end())
     .to("mock:result");
 ```
-
-In the `jsonpath` expression above we specify the name of the header as `books`, and we also told that we wanted the result to be converted as an integer by `int.class`.
-
-> **Tip**
-> You can also use `variable:` as source prefix to refer to an Exchange variable instead of a header.
-
-The same example in XML DSL would be easier to do:
-
-_XML-only:_
 
 ```xml
 <route>
@@ -383,6 +664,27 @@ _XML-only:_
   <to uri="mock:result"/>
 </route>
 ```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: numberOfBooks
+            expression:
+              jsonpath:
+                expression: $..store.book.length()
+                source: header:books
+                resultType: int
+        - to:
+            uri: mock:result
+```
+
+Here the name of the header is `books`, and the result is converted to an integer (`resultType`).
+
+> **Tip**
+> You can also use `variable:` as source prefix to refer to an Exchange variable instead of a header.
 
 ### Transforming a JSon message
 

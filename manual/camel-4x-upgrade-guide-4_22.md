@@ -17,6 +17,16 @@ The `maxDecompressedSize` option of the Zip File and Tar File data formats (and 
 
 The post login url of the authorization code flow is now always built from the origin (`scheme://host[:port]`) of the configured `camel.oauth.redirect-uri`, plus the requested path. `OAuthCodeFlowProcessor` previously rebuilt that url from the `X-Forwarded-Proto` / `X-Forwarded-Host` / `X-Forwarded-Port` request headers, or from the `Host` header behind `CamelHttpUrl` when those were absent. All of those are set by the caller, so a request could point the post login redirect at any origin. A deployment behind an ingress or an OpenShift Route still redirects to its externally reachable address, because `camel.oauth.redirect-uri` is the address the identity provider sends the browser back to. Deployments whose external address differs from that property must set it to the address the browser actually reaches; a request announcing another origin is now redirected to the configured one and a warning is logged.
 
+### camel-spring-ws - internal Camel headers are now filtered when mapping SOAP response headers
+
+When `allowResponseHeaderOverride` is enabled, the `spring-ws` producer now applies the endpoint’s `headerFilterStrategy` to the SOAP response header attributes and elements it maps onto the message, as the `spring-ws` consumer already does for inbound SOAP headers. With the default `SpringWebserviceHeaderFilterStrategy`, attribute and element names starting with `Camel` or `camel` (case-insensitively) are no longer copied onto the message.
+
+Other SOAP response header attributes and elements are mapped as before, and the raw SOAP header is still available in the `CamelSpringWebserviceSoapHeader` header. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
+
+### camel-http-common, camel-platform-http-vertx - fileNameExtWhitelist entries are matched exactly
+
+`fileNameExtWhitelist` is now checked the same way everywhere, by one shared check in `camel-http-base`. Two places still matched each extension as a substring of the whitelist, so for example a whitelist of `txt` accepted an upload named `evil.x`: the `camel-platform-http-vertx` consumer, and `DefaultHttpBinding` in `camel-http-common` for uploads that arrive as request attributes, which also replaced the configured `fileNameExtWhitelist` with its lower-cased value. Both now compare each comma-separated entry exactly and case-insensitively. `*` still accepts every file, a file name without an extension is still accepted, and the configured value is left unchanged. An upload whose extension only matched as part of a longer entry is now rejected.
+
 ### camel-core - masking of sensitive values in endpoint URIs
 
 `URISupport.sanitizeUri()`, which masks secrets in endpoint URIs shown in logs, events, JMX names and error messages, now masks some values it used to miss, so the masked form of a URI can differ from earlier releases:

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790858062619,
+  "generated": 1790955404790,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -17436,6 +17436,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/cli-connector.adoc",
+              "url": "/camel-spring-boot/next/starters/cli-connector.html",
+              "title": "Cli Connector"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/clickhouse.adoc",
               "url": "/camel-spring-boot/next/starters/clickhouse.html",
               "title": "ClickHouse"
@@ -25813,6 +25819,12 @@
               "path": "oaipmh-component.adoc",
               "url": "/components/next/oaipmh-component.html",
               "title": "OAI-PMH"
+            },
+            {
+              "module": "ROOT",
+              "path": "odata-component.adoc",
+              "url": "/components/next/odata-component.html",
+              "title": "OData"
             },
             {
               "module": "ROOT",
@@ -35399,6 +35411,48 @@
               "path": "camel-jbang-transforming.adoc",
               "url": "/manual/camel-jbang-transforming.html",
               "title": "Camel CLI - Data Transformation"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tui-ai-agents.adoc",
+              "url": "/manual/camel-jbang-tui-ai-agents.html",
+              "title": "Camel TUI and AI Agents"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tui-ai.adoc",
+              "url": "/manual/camel-jbang-tui-ai.html",
+              "title": "Camel TUI AI Panel"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tui-diagram.adoc",
+              "url": "/manual/camel-jbang-tui-diagram.html",
+              "title": "Camel TUI Diagram"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tui-getting-started.adoc",
+              "url": "/manual/camel-jbang-tui-getting-started.html",
+              "title": "Camel TUI Getting Started"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tui-local-models.adoc",
+              "url": "/manual/camel-jbang-tui-local-models.html",
+              "title": "Camel TUI Local Models"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tui-observe.adoc",
+              "url": "/manual/camel-jbang-tui-observe.html",
+              "title": "Camel TUI Observing Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tui-settings.adoc",
+              "url": "/manual/camel-jbang-tui-settings.html",
+              "title": "Camel TUI Actions, Settings and Themes"
             },
             {
               "module": "ROOT",

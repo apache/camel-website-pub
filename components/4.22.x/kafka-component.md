@@ -86,23 +86,7 @@ The Kafka component supports the following options which are listed below.
 | **allowManualCommit** (consumer) | Whether to allow doing manual commits via KafkaManualCommit. If this option is enabled then an instance of KafkaManualCommit is stored on the Exchange message header, which allows end users to access this API and perform manual offset commits via the Kafka consumer. | false | boolean |
 | **autoCommitEnable** (consumer) | If true, periodically commit to ZooKeeper the offset of messages already fetched by the consumer. This committed offset will be used when the process fails as the position from which the new consumer will begin. | true | boolean |
 | **autoCommitIntervalMs** (consumer) | The frequency in ms that the consumer offsets are committed to zookeeper. | 5000 | Integer |
-| **autoOffsetReset** (consumer) | 
-What to do when there is no initial offset in ZooKeeper or if an offset is out of range: earliest : automatically reset the offset to the earliest offset latest: automatically reset the offset to the latest offset fail: throw exception to the consumer.
-
-Enum values:
-
--   latest
-    
--   earliest
-    
--   none
-    
-
-
-
-
-
- | latest | String |
+| **autoOffsetReset** (consumer) | Where a consumer group starts reading when it has no committed offset, or the committed offset is out of range. Valid values are: earliest (seek to the earliest available offset), latest (seek to the latest offset, the default), none (throw an exception if no previous offset is found), by\_duration: followed by an ISO-8601 duration (e.g. by\_duration:PT5M or by\_duration:P1D; requires Kafka 4.0 or later). | latest | String |
 | **batching** (consumer) | Whether to use batching for processing or streaming. The default is false, which uses streaming. In streaming mode, then a single kafka record is processed per Camel exchange in the message body. In batching mode, then Camel groups many kafka records together as a List objects in the message body. The option maxPollRecords is used to define the number of records to group together in batching mode. | false | boolean |
 | **batchingIntervalMs** (consumer) | In consumer batching mode, then this option is specifying a time in millis, to trigger batch completion eager when the current batch size has not reached the maximum size defined by maxPollRecords. Notice the trigger is not exact at the given interval, as this can only happen between kafka polls (see pollTimeoutMs option). So for example setting this to 10000, then the trigger happens in the interval 10000 pollTimeoutMs. The default value for pollTimeoutMs is 5000, so this would mean a trigger interval at about every 15 seconds. |  | Integer |
 | **breakOnFirstError** (consumer) | This options controls what happens when a consumer is processing an exchange and it fails. If the option is false then the consumer continues to the next message and processes it. If the option is true then the consumer breaks out. Using the default NoopCommitManager will cause the consumer to not commit the offset so that the message is re-attempted. The consumer should use the KafkaManualCommit to determine the best way to handle the message. Using either the SyncCommitManager or the AsyncCommitManager, the consumer will seek back to the offset of the message that caused a failure, and then re-attempt to process this message. However, this can lead to endless processing of the same message if it’s bound to fail every time, e.g., a poison message. Therefore, it’s recommended to deal with that, for example, by using Camel’s error handler. | false | boolean |
@@ -117,7 +101,6 @@ Enum values:
 | **groupId** (consumer) | A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id, multiple processes can indicate that they are all part of the same consumer group. This option is required for consumers. |  | String |
 | **groupInstanceId** (consumer) | A unique identifier of the consumer instance provided by the end user. Only non-empty strings are permitted. If set, the consumer is treated as a static member, which means that only one instance with this ID is allowed in the consumer group at any time. This can be used in combination with a larger session timeout to avoid group rebalances caused by transient unavailability (e.g., process restarts). If not set, the consumer will join the group as a dynamic member, which is the traditional behavior. |  | String |
 | **groupProtocol** (consumer) | 
-
 The consumer group protocol to use. The classic protocol uses the traditional partition assignment and rebalancing mechanism. The consumer protocol enables the new KIP-848 consumer rebalance protocol which provides faster and more efficient rebalancing. When set to consumer, classic-only properties (heartbeatIntervalMs, sessionTimeoutMs, partitionAssignor) are automatically excluded from the consumer configuration.
 
 Enum values:
@@ -384,23 +367,7 @@ With the following _path_ and _query_ parameters:
 | **allowManualCommit** (consumer) | Whether to allow doing manual commits via KafkaManualCommit. If this option is enabled then an instance of KafkaManualCommit is stored on the Exchange message header, which allows end users to access this API and perform manual offset commits via the Kafka consumer. | false | boolean |
 | **autoCommitEnable** (consumer) | If true, periodically commit to ZooKeeper the offset of messages already fetched by the consumer. This committed offset will be used when the process fails as the position from which the new consumer will begin. | true | boolean |
 | **autoCommitIntervalMs** (consumer) | The frequency in ms that the consumer offsets are committed to zookeeper. | 5000 | Integer |
-| **autoOffsetReset** (consumer) | 
-What to do when there is no initial offset in ZooKeeper or if an offset is out of range: earliest : automatically reset the offset to the earliest offset latest: automatically reset the offset to the latest offset fail: throw exception to the consumer.
-
-Enum values:
-
--   latest
-    
--   earliest
-    
--   none
-    
-
-
-
-
-
- | latest | String |
+| **autoOffsetReset** (consumer) | Where a consumer group starts reading when it has no committed offset, or the committed offset is out of range. Valid values are: earliest (seek to the earliest available offset), latest (seek to the latest offset, the default), none (throw an exception if no previous offset is found), by\_duration: followed by an ISO-8601 duration (e.g. by\_duration:PT5M or by\_duration:P1D; requires Kafka 4.0 or later). | latest | String |
 | **batching** (consumer) | Whether to use batching for processing or streaming. The default is false, which uses streaming. In streaming mode, then a single kafka record is processed per Camel exchange in the message body. In batching mode, then Camel groups many kafka records together as a List objects in the message body. The option maxPollRecords is used to define the number of records to group together in batching mode. | false | boolean |
 | **batchingIntervalMs** (consumer) | In consumer batching mode, then this option is specifying a time in millis, to trigger batch completion eager when the current batch size has not reached the maximum size defined by maxPollRecords. Notice the trigger is not exact at the given interval, as this can only happen between kafka polls (see pollTimeoutMs option). So for example setting this to 10000, then the trigger happens in the interval 10000 pollTimeoutMs. The default value for pollTimeoutMs is 5000, so this would mean a trigger interval at about every 15 seconds. |  | Integer |
 | **breakOnFirstError** (consumer) | This options controls what happens when a consumer is processing an exchange and it fails. If the option is false then the consumer continues to the next message and processes it. If the option is true then the consumer breaks out. Using the default NoopCommitManager will cause the consumer to not commit the offset so that the message is re-attempted. The consumer should use the KafkaManualCommit to determine the best way to handle the message. Using either the SyncCommitManager or the AsyncCommitManager, the consumer will seek back to the offset of the message that caused a failure, and then re-attempt to process this message. However, this can lead to endless processing of the same message if it’s bound to fail every time, e.g., a poison message. Therefore, it’s recommended to deal with that, for example, by using Camel’s error handler. | false | boolean |
@@ -414,7 +381,6 @@ Enum values:
 | **groupId** (consumer) | A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id, multiple processes can indicate that they are all part of the same consumer group. This option is required for consumers. |  | String |
 | **groupInstanceId** (consumer) | A unique identifier of the consumer instance provided by the end user. Only non-empty strings are permitted. If set, the consumer is treated as a static member, which means that only one instance with this ID is allowed in the consumer group at any time. This can be used in combination with a larger session timeout to avoid group rebalances caused by transient unavailability (e.g., process restarts). If not set, the consumer will join the group as a dynamic member, which is the traditional behavior. |  | String |
 | **groupProtocol** (consumer) | 
-
 The consumer group protocol to use. The classic protocol uses the traditional partition assignment and rebalancing mechanism. The consumer protocol enables the new KIP-848 consumer rebalance protocol which provides faster and more efficient rebalancing. When set to consumer, classic-only properties (heartbeatIntervalMs, sessionTimeoutMs, partitionAssignor) are automatically excluded from the consumer configuration.
 
 Enum values:
@@ -949,6 +915,58 @@ When the `CommitManager` is changed to either the synchronous or asynchronous ma
 **Note 1**: records from a partition must be processed and committed by the same thread as the consumer. This means that certain EIPs, async or concurrent operations in the DSL may cause the commit to fail. In such circumstances, trying to commit the transaction will cause the Kafka client to throw a `java.util.ConcurrentModificationException` exception with the message `KafkaConsumer is not safe for multi-threaded access`. To prevent this from happening, redesign your route to avoid those operations.
 
 \*Note 2: this is mostly useful with aggregation’s completion timeout strategies.
+
+### Where a new consumer group starts reading
+
+The `autoOffsetReset` option controls where a Kafka consumer group begins reading when it has **no previously committed offset** for the topic partition, or when the committed offset is no longer available on the broker (e.g. it has been deleted by retention).
+
+> **Important**
+> `autoOffsetReset` is **only consulted for new or reset consumer groups**. If the group already has a committed offset, Kafka resumes from that offset and ignores this option entirely. Setting `by_duration:PT5M` does **not** rewind an existing consumer group by 5 minutes — it only affects the very first read of a brand-new group, or a group whose offsets have expired.
+
+The available values are:
+
+`latest` (default)
+
+The consumer starts at the end of the partition (the latest offset). Messages produced before the consumer first connected are skipped.
+
+`earliest`
+
+The consumer starts at the beginning of the partition. All retained messages are replayed from the oldest available offset.
+
+`none`
+
+An exception is thrown if no previous offset is found. Use this to detect accidental group-name changes or offset expiry.
+
+`by_duration:<ISO-8601 duration>`
+
+**(Kafka 4.0+)** The consumer starts at the first offset with a timestamp at or after `now - duration`. For example, `by_duration:PT1H` starts one hour back and `by_duration:P1D` starts one day back. Like the other values, this only takes effect when the group has no committed offset.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+// New consumer group starting 1 hour back (only on first run)
+from("kafka:orders?brokers=localhost:9092&groupId=reporting&autoOffsetReset=by_duration:PT1H")
+    .log("Order received: ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:orders
+      parameters:
+        brokers: "localhost:9092"
+        groupId: reporting
+        autoOffsetReset: "by_duration:PT1H"
+      steps:
+        - log:
+            message: "Order received: ${body}"
+```
+
+> **Note**
+> If you want to reposition an **existing** consumer group on every restart, use the `seekTo` option (`BEGINNING` or `END`) instead. Unlike `autoOffsetReset`, `seekTo` applies unconditionally on each consumer start, regardless of whether committed offsets exist.
 
 ### Pausable Consumers
 

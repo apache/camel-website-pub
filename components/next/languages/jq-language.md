@@ -28,13 +28,44 @@ By default, JQ uses the message body as the input source. However, you can also 
 
 For example, to count the number of books from a JSON document that was stored in a header named `books` you can do:
 
-_Java-only: using header as JQ input source_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .setHeader("numberOfBooks",
         expression().jq(".store.books | length").resultType(int.class).source("header:books").end())
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="numberOfBooks">
+    <jq source="header:books" resultType="int">.store.books | length</jq>
+  </setHeader>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: numberOfBooks
+            expression:
+              jq:
+                expression: .store.books | length
+                resultType: int
+                source: header:books
+        - to:
+            uri: mock:result
 ```
 
 ### Camel supplied JQ Functions
@@ -57,7 +88,12 @@ The camel-jq adds the following functions:
 
 For example, to set the property foo with the value from the Message header \`MyHeader':
 
-_Java-only: using the header function_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -66,9 +102,37 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <transform>
+    <jq>.foo = header("MyHeader")</jq>
+  </transform>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - transform:
+            expression:
+              jq:
+                expression: '.foo = header("MyHeader")'
+        - to:
+            uri: mock:result
+```
+
 Or from the exchange property:
 
-_Java-only: using the property function_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -77,9 +141,37 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <transform>
+    <jq>.foo = property("MyProperty")</jq>
+  </transform>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - transform:
+            expression:
+              jq:
+                expression: '.foo = property("MyProperty")'
+        - to:
+            uri: mock:result
+```
+
 And using a constant value
 
-_Java-only: using the constant function_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -88,9 +180,37 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <transform>
+    <jq>.foo = constant("Hello World")</jq>
+  </transform>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - transform:
+            expression:
+              jq:
+                expression: '.foo = constant("Hello World")'
+        - to:
+            uri: mock:result
+```
+
 Or using an exchange variable:
 
-_Java-only: using the variable function_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -99,15 +219,66 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+  <from uri="direct:start"/>
+  <transform>
+    <jq>.foo = variable("MyVar")</jq>
+  </transform>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - transform:
+            expression:
+              jq:
+                expression: '.foo = variable("MyVar")'
+        - to:
+            uri: mock:result
+```
+
 The `header`, `property` and `variable` functions also support returning a default value in case the key does not exist, as shown in the following:
 
-_Java-only: using the header function with a default value_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .transform()
         .jq(".foo = header(\"MyHeader\", \"MyDefaultValue\")")
     .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <transform>
+    <jq>.foo = header("MyHeader", "MyDefaultValue")</jq>
+  </transform>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - transform:
+            expression:
+              jq:
+                expression: '.foo = header("MyHeader", "MyDefaultValue")'
+        - to:
+            uri: mock:result
 ```
 
 ### Transforming a JSon message

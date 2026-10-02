@@ -81,6 +81,7 @@ The JGroups component supports the following options which are listed below.
 | **enableViewMessages** (consumer) | If set to true, the consumer endpoint will receive org.jgroups.View messages as well (not only org.jgroups.Message instances). By default only regular messages are consumed by the endpoint. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **acceptAllObjects** (security) | Whether to start the consumer and accept any object deserialized from the cluster even when no pre-read deserialization control is configured. When false (the default) the consumer fails to start on an unauthenticated default channel unless a JVM-wide -Djdk.serialFilter, the JGroups jgroups.deserialization.filter system property, or an authenticated/encrypted channel is configured. Set to true to accept any serialized type and bypass the start-up guard; this also disables the post-read class check, so it is an insecure setting. | false | boolean |
 | **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the message body deserialized by org.jgroups.Message.getObject(). The pattern is evaluated after JGroups has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the JGroups receive path; to block such attacks, also configure the JVM-wide -Djdk.serialFilter and secure the channel with AUTH and encryption. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. is applied. Use to accept any type. |  | String |
 
 ## Endpoint Options
@@ -123,6 +124,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **acceptAllObjects** (security) | Whether to start the consumer and accept any object deserialized from the cluster even when no pre-read deserialization control is configured. When false (the default) the consumer fails to start on an unauthenticated default channel unless a JVM-wide -Djdk.serialFilter, the JGroups jgroups.deserialization.filter system property, or an authenticated/encrypted channel is configured. Set to true to accept any serialized type and bypass the start-up guard; this also disables the post-read class check, so it is an insecure setting. | false | boolean |
 | **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the message body deserialized by org.jgroups.Message.getObject(). The pattern is evaluated after JGroups has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the JGroups receive path; to block such attacks, also configure the JVM-wide -Djdk.serialFilter and secure the channel with AUTH and encryption. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. is applied. Use to accept any type. |  | String |
 
 ## Message Headers
@@ -145,7 +147,7 @@ The default JGroups protocol stack (`udp.xml`) multicasts over UDP and does **no
 
 -   **Authenticate and encrypt the channel.** Supply a hardened JGroups configuration through the `channelProperties` option and add the `AUTH` protocol together with `SYM_ENCRYPT` or `ASYM_ENCRYPT`, so that only trusted peers can join and message contents are protected on the wire. See the [JGroups documentation](https://www.jgroups.org) for the protocol-stack reference.
     
--   **Constrain deserialization at the JVM.** Set a JVM-wide JEP-290 serialization filter (`-Djdk.serialFilter=…​` or `ObjectInputFilter.Config.setSerialFilter(…​)`) to restrict which classes may be deserialized from the network. Because JGroups deserializes messages inside its own receive path, the JVM-wide filter is the mechanism that constrains that deserialization.
+-   **Constrain deserialization before it happens.** Set a JVM-wide JEP-290 serialization filter (`-Djdk.serialFilter=…​` or `ObjectInputFilter.Config.setSerialFilter(…​)`), or the JGroups-native `-Djgroups.deserialization.filter=…​` system property, to restrict which classes may be deserialized from the network. Because JGroups deserializes messages inside its own receive path, these filters run _before_ `readObject()` and are the mechanism that actually constrains that deserialization.
     
 -   **Restrict the accepted body types in Camel.** The consumer applies a JEP-290 `ObjectInputFilter` pattern to the type of the message body before the exchange is routed, and refuses bodies whose type is not allowed. This is a defense-in-depth allow-list applied _after_ JGroups has deserialized the message; it complements, but does not replace, the JVM-wide `jdk.serialFilter` and the channel authentication and encryption above.
     
@@ -171,6 +173,26 @@ from("jgroups:clusterName?channelProperties=secure-udp.xml&deserializationFilter
 Setting `deserializationFilter=*` accepts any type and so opts out of the check.
 
 A refused message is not routed. It is reported to the consumer’s `ExceptionHandler`, which logs it at WARN level by default, and is passed to the route error handler when `bridgeErrorHandler=true` is set.
+
+### Startup guard on the default channel
+
+Because the post-read class check above cannot prevent code that runs _during_ deserialization, the consumer refuses to start when it would deserialize cluster messages on the default, unauthenticated channel without any pre-read protection in place. A pre-read protection is any of:
+
+-   a JVM-wide `-Djdk.serialFilter` (or `ObjectInputFilter.Config.setSerialFilter`);
+    
+-   the JGroups-native `-Djgroups.deserialization.filter` system property; or
+    
+-   a channel secured with `AUTH` and/or `SYM_ENCRYPT`/`ASYM_ENCRYPT`, supplied through `channelProperties`.
+    
+
+`AUTH` alone (without encryption) satisfies the guard, since it already restricts who may join the cluster and send messages. The `deserializationFilter` option is _not_ a pre-read control: it is a defense-in-depth class check applied _after_ JGroups has already deserialized the payload, so it does not satisfy the guard. A filter installed only through a custom `jdk.serialFilterFactory` (rather than `jdk.serialFilter`) is not detected either; those deployments should set `jgroups.deserialization.filter` or `acceptAllObjects=true`.
+
+When none of these is configured, the consumer fails to start with a message pointing here. To keep the previous behaviour of accepting any serialized type without a pre-read control, set `acceptAllObjects=true` on the consumer; this opts out of the guard and also disables the post-read class check.
+
+```java
+// explicitly accept the risk (no pre-read control) - restores the old behaviour
+from("jgroups:clusterName?acceptAllObjects=true").to("seda:queue");
+```
 
 ## Usage
 

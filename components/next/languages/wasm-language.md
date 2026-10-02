@@ -136,10 +136,38 @@ pub extern fn transform(ptr: u32, len: u32) -> u64 {
 
 Supposing we have compiled a Wasm module containing the function above, then it can be called in a Camel Route by its name and module resource location:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:in")
     .transform()
         .wasm("transform", "classpath://functions.wasm");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <transform>
+    <wasm module="classpath://functions.wasm">transform</wasm>
+  </transform>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - transform:
+            expression:
+              wasm:
+                expression: transform
+                module: classpath://functions.wasm
 ```
 
 ## Dependencies

@@ -427,7 +427,7 @@ camel.security.secret-policy=fail
 To exclude specific properties from all checks, use `allowed-properties`:
 
 ```properties
-camel.security.allowed-properties=camel.component.http.trustAllCertificates,camel.component.netty.allowJavaSerializedObject
+camel.security.allowed-properties=camel.component.aws2-s3.trustAllCertificates,camel.component.netty.transferExchange
 ```
 
 ### Per-Environment Policies with Spring Profiles

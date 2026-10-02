@@ -111,23 +111,39 @@ In the example below, we use a groovy script as predicate in the message filter,
 
 -   Java
     
--   XML DSL
+-   XML
+    
+-   YAML
     
 
 ```java
-from("queue:foo")
+from("seda:foo")
     .filter(groovy("body.lineItems.any { i -> i.value > 100 }"))
-        .to("queue:bar")
+        .to("seda:bar");
 ```
 
 ```xml
 <route>
-    <from uri="queue:foo"/>
+    <from uri="seda:foo"/>
     <filter>
-        <groovy>body.lineItems.any { i -> i.value > 100 }</groovy>
-        <to uri="queue:bar"/>
+        <groovy>body.lineItems.any { i -> i.value &gt; 100 }</groovy>
+        <to uri="seda:bar"/>
     </filter>
 </route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:foo
+      steps:
+        - filter:
+            expression:
+              groovy:
+                expression: "body.lineItems.any { i -> i.value > 100 }"
+            steps:
+              - to:
+                  uri: seda:bar
 ```
 
 ## Pre compiling shared groovy scripts

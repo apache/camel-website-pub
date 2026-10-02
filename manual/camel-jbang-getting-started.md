@@ -100,6 +100,8 @@ camel run --example=rest-api --dev
 > **Tip**
 > Combine with `--dev` for live reload while exploring the example.
 
+An example runs in a folder of its own, with its files, wherever you start `camel run`. A route that reads `orders` or writes to `out/` uses the folder of the example, which `camel run` prints when it starts.
+
 ### Running multiple files
 
 You can run several files together, even mixing DSLs:
