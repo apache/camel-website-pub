@@ -6,8 +6,15 @@
     <description>Recent content in EIP on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 24 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 02 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/EIP/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>One request, several agents: semantic routing with Apache Camel and Jev</title>
+      <link>https://camel.apache.org/blog/2026/10/semantic-agent-routing/</link>
+      <pubDate>Fri, 02 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/semantic-agent-routing/</guid>
+      <description>“Will it rain in Lisbon on Tuesday, and how much is an SUV for five days?”&#xA;It is one customer message, but it needs two answers. A weather specialist can handle the first part. A pricing specialist can handle the second. Something still has to select both, call them, check their contributions, and return one useful reply.&#xA;That sounds like an integration problem to me.&#xA;Think of this as part two of my earlier post on semantic decisions in Camel.</description>
+    </item>
     <item>
       <title>TypeSafe Jev meets Apache Camel: semantic decisions in Camel routes</title>
       <link>https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/</link>

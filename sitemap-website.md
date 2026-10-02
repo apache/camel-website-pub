@@ -1,8 +1,10 @@
-urls[878]{loc,lastmod}:
+urls[879]{loc,lastmod}:
   https://camel.apache.org/categories/AI/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/blog/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-10-02T00:00:00+00:00
+  https://camel.apache.org/categories/EIP/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/,2026-10-02T00:00:00+00:00
+  https://camel.apache.org/blog/2026/10/semantic-agent-routing/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/thirty-years-of-cli/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-88789.md,2026-09-30T09:39:19+01:00
   https://camel.apache.org/security/,2026-09-30T09:39:19+01:00
@@ -11,7 +13,6 @@ urls[878]{loc,lastmod}:
   https://camel.apache.org/releases/q-3.40.0/,2026-09-28T00:00:00+00:00
   https://camel.apache.org/releases/,2026-09-28T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.22.0/,2026-09-24T00:00:00+00:00
-  https://camel.apache.org/categories/EIP/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-tui-byoa/,2026-09-22T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark-round-2/,2026-09-22T00:00:00+00:00

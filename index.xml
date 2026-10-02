@@ -9,6 +9,13 @@
     <lastBuildDate>Fri, 02 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>One request, several agents: semantic routing with Apache Camel and Jev</title>
+      <link>https://camel.apache.org/blog/2026/10/semantic-agent-routing/</link>
+      <pubDate>Fri, 02 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/semantic-agent-routing/</guid>
+      <description>“Will it rain in Lisbon on Tuesday, and how much is an SUV for five days?”&#xA;It is one customer message, but it needs two answers. A weather specialist can handle the first part. A pricing specialist can handle the second. Something still has to select both, call them, check their contributions, and return one useful reply.&#xA;That sounds like an integration problem to me.&#xA;Think of this as part two of my earlier post on semantic decisions in Camel.</description>
+    </item>
+    <item>
       <title>Thirty years of command-line tools, and nobody knew them all</title>
       <link>https://camel.apache.org/blog/2026/10/thirty-years-of-cli/</link>
       <pubDate>Fri, 02 Oct 2026 00:00:00 +0000</pubDate>

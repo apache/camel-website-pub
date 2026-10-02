@@ -11,7 +11,13 @@
     <loc>https://camel.apache.org/categories/Community/</loc>
     <lastmod>2026-10-02T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/categories/EIP/</loc>
+    <lastmod>2026-10-02T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-10-02T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/10/semantic-agent-routing/</loc>
     <lastmod>2026-10-02T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/thirty-years-of-cli/</loc>
@@ -36,9 +42,6 @@
     <lastmod>2026-09-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/ckc-4.22.0/</loc>
-    <lastmod>2026-09-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/EIP/</loc>
     <lastmod>2026-09-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/</loc>
