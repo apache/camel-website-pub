@@ -319,8 +319,6 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![json deserialize action](_images/kamelets/json-deserialize-action.svg) Json Deserialize Action](json-deserialize-action.html)
 
- [![json patch action](_images/kamelets/json-patch-action.svg) Json Patch Action](json-patch-action.html)
-
  [![json schema validator action](_images/kamelets/json-schema-validator-action.svg) Json Schema Validator Action](json-schema-validator-action.html)
 
  [![json serialize action](_images/kamelets/json-serialize-action.svg) Json Serialize Action](json-serialize-action.html)
@@ -504,10 +502,6 @@ Consult the Kamelets User Guide for information about how to use these.
  [![solr source](_images/kamelets/solr-source.svg) Solr Source](solr-source.html)
 
  [![splunk hec sink](_images/kamelets/splunk-hec-sink.svg) Splunk HEC Sink](splunk-hec-sink.html)
-
- [![splunk sink](_images/kamelets/splunk-sink.svg) Splunk Sink](splunk-sink.html)
-
- [![splunk source](_images/kamelets/splunk-source.svg) Splunk Source](splunk-source.html)
 
  [![spring rabbitmq sink](_images/kamelets/spring-rabbitmq-sink.svg) RabbitMQ Sink](spring-rabbitmq-sink.html)
 

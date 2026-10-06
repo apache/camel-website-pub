@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1791301834520,
+  "generated": 1791323042342,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4542,12 +4542,6 @@
             },
             {
               "module": "ROOT",
-              "path": "json-patch-action.adoc",
-              "url": "/camel-kamelets/next/json-patch-action.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/json-patch-action.svg\" alt=\"json patch action\"></span> Json Patch Action"
-            },
-            {
-              "module": "ROOT",
               "path": "json-schema-validator-action.adoc",
               "url": "/camel-kamelets/next/json-schema-validator-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/json-schema-validator-action.svg\" alt=\"json schema validator action\"></span> Json Schema Validator Action"
@@ -5103,18 +5097,6 @@
               "path": "splunk-hec-sink.adoc",
               "url": "/camel-kamelets/next/splunk-hec-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/splunk-hec-sink.svg\" alt=\"splunk hec sink\"></span> Splunk HEC Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "splunk-sink.adoc",
-              "url": "/camel-kamelets/next/splunk-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/splunk-sink.svg\" alt=\"splunk sink\"></span> Splunk Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "splunk-source.adoc",
-              "url": "/camel-kamelets/next/splunk-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/splunk-source.svg\" alt=\"splunk source\"></span> Splunk Source"
             },
             {
               "module": "ROOT",

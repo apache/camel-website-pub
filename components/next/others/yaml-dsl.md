@@ -787,6 +787,8 @@ YAML DSL compact notation detected in: myroute.yaml.
 It is recommended to use canonical/normalized YAML DSL notation which is more tooling and AI friendly.
 Use Camel CLI to normalize: camel validate normalize <file>
 
+The Kamelets of the Kamelet catalog (the `camel-kamelets` jar) are not warned about: they are not files of the application to normalize. Any other file, in the application’s own jar or a custom Kamelet included, is.
+
 To disable this warning, set the following property in `application.properties`:
 
 ```properties
