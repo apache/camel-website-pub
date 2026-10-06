@@ -26,7 +26,9 @@
               embeddingModel: nomic-embed-text
         - setHeader:
             name: CamelPgVectorAction
-            constant: UPSERT
+            expression:
+              constant:
+                expression: UPSERT
         - setHeader:
             name: CamelPgVectorTextContent
             expression:
@@ -46,10 +48,14 @@
               embeddingModel: nomic-embed-text
         - setHeader:
             name: CamelPgVectorAction
-            constant: SIMILARITY_SEARCH
+            expression:
+              constant:
+                expression: SIMILARITY_SEARCH
         - setHeader:
             name: CamelPgVectorQueryTopK
-            constant: 5
+            expression:
+              constant:
+                expression: 5
         - to:
             uri: pgvector:documents</code></pre> </div> </div> <div class="paragraph"> <p>The pgvector component handles table creation, HNSW indexing, upsert with conflict resolution, and similarity search with configurable distance types (cosine, euclidean, inner product). See the <a href="../pgvector-component.html" class="xref page">PGVector component documentation</a> for details.</p> </div> <div class="paragraph"> <p>For custom table schemas, complex queries (joins, CTEs), or integration with existing PostgreSQL tables, you can use <code>camel-sql</code> directly with the pgvector extension:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">steps:
   - to:
@@ -70,19 +76,26 @@ List&lt;Float&gt; normalized = SimilarityUtils.normalize(embedding);</code></pre
             .setBody(constant("Your message violates our usage policy."))
         .otherwise()
             .to("openai:chat-completion?model=gpt-5")
-    .end();</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- from:
-    uri: platform-http:/chat
-    steps:
-      - to: openai:moderation?moderationModel=omni-moderation-latest
-      - choice:
-          when:
-            - simple: "${header.CamelOpenAIModerationFlagged} == true"
+    .end();</code></pre> </div> </div> </div> <div id="_tabs_2_yaml--panel" class="tabpanel" aria-labelledby="_tabs_2_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: platform-http:/chat
+      steps:
+        - to:
+            uri: openai:moderation?moderationModel=omni-moderation-latest
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenAIModerationFlagged} == true"
+                steps:
+                  - setBody:
+                      expression:
+                        constant:
+                          expression: "Your message violates our usage policy."
+            otherwise:
               steps:
-                - setBody:
-                    constant: "Your message violates our usage policy."
-          otherwise:
-            steps:
-              - to: openai:chat-completion?model=gpt-5</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_moderating_an_image"><a class="anchor" href="#_moderating_an_image"></a>Moderating an Image</h3> <div class="paragraph"> <p>An image body is sent to the multi-modal input of the moderation API instead of being converted to text. The body is treated as an image when its MIME type is an image type, detected the same way as for the vision input of <code>chat-completion</code>: a <code>File</code>, <code>Path</code> or <code>WrappedFile</code> body from its file name or content-type header, and a <code>byte[]</code> or <code>InputStream</code> body, as produced by cloud storage components, from its content-type header. Set the <code>CamelOpenAIMediaType</code> header when the body carries no content-type metadata. A <code>byte[]</code> or <code>InputStream</code> body without an image type is still moderated as text.</p> </div> <div class="paragraph"> <p>Text posted together with the image, such as its caption, goes in the <code>CamelOpenAIModerationText</code> header. The API scores the text and the image as one input, so they share a single verdict, whose <code>input</code> key holds that text, or <code>null</code> for an image moderated on its own. The header is ignored when the body is not an image.</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("platform-http:/upload")
+                - to:
+                    uri: openai:chat-completion?model=gpt-5</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_moderating_an_image"><a class="anchor" href="#_moderating_an_image"></a>Moderating an Image</h3> <div class="paragraph"> <p>An image body is sent to the multi-modal input of the moderation API instead of being converted to text. The body is treated as an image when its MIME type is an image type, detected the same way as for the vision input of <code>chat-completion</code>: a <code>File</code>, <code>Path</code> or <code>WrappedFile</code> body from its file name or content-type header, and a <code>byte[]</code> or <code>InputStream</code> body, as produced by cloud storage components, from its content-type header. Set the <code>CamelOpenAIMediaType</code> header when the body carries no content-type metadata. A <code>byte[]</code> or <code>InputStream</code> body without an image type is still moderated as text.</p> </div> <div class="paragraph"> <p>Text posted together with the image, such as its caption, goes in the <code>CamelOpenAIModerationText</code> header. The API scores the text and the image as one input, so they share a single verdict, whose <code>input</code> key holds that text, or <code>null</code> for an image moderated on its own. The header is ignored when the body is not an image.</p> </div> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("platform-http:/upload")
     .setHeader(OpenAIConstants.MODERATION_TEXT, header("caption"))
     .to("openai:moderation?moderationModel=omni-moderation-latest")
     .choice()
@@ -90,22 +103,31 @@ List&lt;Float&gt; normalized = SimilarityUtils.normalize(embedding);</code></pre
             .setBody(constant("Your upload violates our usage policy."))
         .otherwise()
             .to("aws2-s3:uploads")
-    .end();</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- from:
-    uri: platform-http:/upload
-    steps:
-      - setHeader:
-          name: CamelOpenAIModerationText
-          simple: "${header.caption}"
-      - to: openai:moderation?moderationModel=omni-moderation-latest
-      - choice:
-          when:
-            - simple: "${header.CamelOpenAIModerationFlagged} == true"
+    .end();</code></pre> </div> </div> </div> <div id="_tabs_3_yaml--panel" class="tabpanel" aria-labelledby="_tabs_3_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: platform-http:/upload
+      steps:
+        - setHeader:
+            name: CamelOpenAIModerationText
+            expression:
+              simple:
+                expression: "${header.caption}"
+        - to:
+            uri: openai:moderation?moderationModel=omni-moderation-latest
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenAIModerationFlagged} == true"
+                steps:
+                  - setBody:
+                      expression:
+                        constant:
+                          expression: "Your upload violates our usage policy."
+            otherwise:
               steps:
-                - setBody:
-                    constant: "Your upload violates our usage policy."
-          otherwise:
-            steps:
-              - to: aws2-s3:uploads</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The image is still in the body after the operation: a stream-cached body is reset, and a plain <code>InputStream</code>, which can be read only once, is replaced by its bytes.</p> </div> <div class="paragraph"> <p>Things to keep in mind when moderating images:</p> </div> <div class="ulist"> <ul> <li> <p>The API accepts one image per request. A list body is moderated as text, and fails when it contains an image file; use the <a href="../eips/split-eip.html" class="xref page">Split</a> EIP to moderate several images.</p> </li> <li> <p>Images are scored for the <code>self-harm</code>, <code>self-harm/intent</code>, <code>self-harm/instructions</code>, <code>sexual</code>, <code>violence</code> and <code>violence/graphic</code> categories only. The <code>categoryAppliedInputTypes</code> key of each verdict lists, per category, the input types the score was computed from, so a category reported as <code>false</code> with no <code>image</code> entry was not checked against the image.</p> </li> <li> <p>Put only the content to check in the request. The text and the image are scored together, and unrelated text, such as a prompt meant for a later <code>chat-completion</code> call, lowers the scores of the content that matters.</p> </li> </ul> </div> </div> <div class="sect2"> <h3 id="_verdicts_per_input"><a class="anchor" href="#_verdicts_per_input"></a>Verdicts per Input</h3> <div class="paragraph"> <p><code>CamelOpenAIModerationResults</code> always holds one verdict per moderated input, in the order of the inputs. Each entry is a map with the keys <code>input</code>, <code>flagged</code>, <code>categories</code> and <code>categoryScores</code>, plus <code>categoryAppliedInputTypes</code> when the provider reports it, which makes a batch straightforward to split and route per item:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:moderate-batch")
+                - to:
+                    uri: aws2-s3:uploads</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The image is still in the body after the operation: a stream-cached body is reset, and a plain <code>InputStream</code>, which can be read only once, is replaced by its bytes.</p> </div> <div class="paragraph"> <p>Things to keep in mind when moderating images:</p> </div> <div class="ulist"> <ul> <li> <p>The API accepts one image per request. A list body is moderated as text, and fails when it contains an image file; use the <a href="../eips/split-eip.html" class="xref page">Split</a> EIP to moderate several images.</p> </li> <li> <p>Images are scored for the <code>self-harm</code>, <code>self-harm/intent</code>, <code>self-harm/instructions</code>, <code>sexual</code>, <code>violence</code> and <code>violence/graphic</code> categories only. The <code>categoryAppliedInputTypes</code> key of each verdict lists, per category, the input types the score was computed from, so a category reported as <code>false</code> with no <code>image</code> entry was not checked against the image.</p> </li> <li> <p>Put only the content to check in the request. The text and the image are scored together, and unrelated text, such as a prompt meant for a later <code>chat-completion</code> call, lowers the scores of the content that matters.</p> </li> </ul> </div> </div> <div class="sect2"> <h3 id="_verdicts_per_input"><a class="anchor" href="#_verdicts_per_input"></a>Verdicts per Input</h3> <div class="paragraph"> <p><code>CamelOpenAIModerationResults</code> always holds one verdict per moderated input, in the order of the inputs. Each entry is a map with the keys <code>input</code>, <code>flagged</code>, <code>categories</code> and <code>categoryScores</code>, plus <code>categoryAppliedInputTypes</code> when the provider reports it, which makes a batch straightforward to split and route per item:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:moderate-batch")
     .to("openai:moderation")
     .split(header(OpenAIConstants.MODERATION_RESULTS))
         .choice()

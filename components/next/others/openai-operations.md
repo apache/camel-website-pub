@@ -77,7 +77,9 @@ Using the [PGVector](../pgvector-component.md) component:
               embeddingModel: nomic-embed-text
         - setHeader:
             name: CamelPgVectorAction
-            constant: UPSERT
+            expression:
+              constant:
+                expression: UPSERT
         - setHeader:
             name: CamelPgVectorTextContent
             expression:
@@ -97,10 +99,14 @@ Using the [PGVector](../pgvector-component.md) component:
               embeddingModel: nomic-embed-text
         - setHeader:
             name: CamelPgVectorAction
-            constant: SIMILARITY_SEARCH
+            expression:
+              constant:
+                expression: SIMILARITY_SEARCH
         - setHeader:
             name: CamelPgVectorQueryTopK
-            constant: 5
+            expression:
+              constant:
+                expression: 5
         - to:
             uri: pgvector:documents
 ```
@@ -192,19 +198,26 @@ from("platform-http:/chat")
 ```
 
 ```yaml
-- from:
-    uri: platform-http:/chat
-    steps:
-      - to: openai:moderation?moderationModel=omni-moderation-latest
-      - choice:
-          when:
-            - simple: "${header.CamelOpenAIModerationFlagged} == true"
+- route:
+    from:
+      uri: platform-http:/chat
+      steps:
+        - to:
+            uri: openai:moderation?moderationModel=omni-moderation-latest
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenAIModerationFlagged} == true"
+                steps:
+                  - setBody:
+                      expression:
+                        constant:
+                          expression: "Your message violates our usage policy."
+            otherwise:
               steps:
-                - setBody:
-                    constant: "Your message violates our usage policy."
-          otherwise:
-            steps:
-              - to: openai:chat-completion?model=gpt-5
+                - to:
+                    uri: openai:chat-completion?model=gpt-5
 ```
 
 ### Moderating an Image
@@ -231,22 +244,31 @@ from("platform-http:/upload")
 ```
 
 ```yaml
-- from:
-    uri: platform-http:/upload
-    steps:
-      - setHeader:
-          name: CamelOpenAIModerationText
-          simple: "${header.caption}"
-      - to: openai:moderation?moderationModel=omni-moderation-latest
-      - choice:
-          when:
-            - simple: "${header.CamelOpenAIModerationFlagged} == true"
+- route:
+    from:
+      uri: platform-http:/upload
+      steps:
+        - setHeader:
+            name: CamelOpenAIModerationText
+            expression:
+              simple:
+                expression: "${header.caption}"
+        - to:
+            uri: openai:moderation?moderationModel=omni-moderation-latest
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenAIModerationFlagged} == true"
+                steps:
+                  - setBody:
+                      expression:
+                        constant:
+                          expression: "Your upload violates our usage policy."
+            otherwise:
               steps:
-                - setBody:
-                    constant: "Your upload violates our usage policy."
-          otherwise:
-            steps:
-              - to: aws2-s3:uploads
+                - to:
+                    uri: aws2-s3:uploads
 ```
 
 The image is still in the body after the operation: a stream-cached body is reset, and a plain `InputStream`, which can be read only once, is replaced by its bytes.

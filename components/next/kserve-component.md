@@ -304,10 +304,14 @@ from("direct:model-ready-with-headers")
       steps:
         - setHeader:
             name: CamelKServeModelName
-            constant: simple
+            expression:
+              constant:
+                expression: simple
         - setHeader:
             name: CamelKServeModelVersion
-            constant: "1"
+            expression:
+              constant:
+                expression: "1"
         - to:
             uri: kserve:model/ready
         - log:
@@ -391,10 +395,14 @@ from("direct:model-metadata-with-headers")
       steps:
         - setHeader:
             name: CamelKServeModelName
-            constant: simple
+            expression:
+              constant:
+                expression: simple
         - setHeader:
             name: CamelKServeModelVersion
-            constant: "1"
+            expression:
+              constant:
+                expression: "1"
         - to:
             uri: kserve:model/metadata
         - log:

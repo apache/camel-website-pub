@@ -59,7 +59,9 @@ from("timer:convert?repeatCount=1")
         repeatCount: 1
       steps:
         - setBody:
-            constant: "https://arxiv.org/pdf/2501.17887"
+            expression:
+              constant:
+                expression: "https://arxiv.org/pdf/2501.17887"
         - to:
             uri: docling:CONVERT_TO_MARKDOWN
             parameters:

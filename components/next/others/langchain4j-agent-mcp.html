@@ -131,14 +131,20 @@ context.getRegistry().bind("timeMcpClient", timeClient);</code></pre> </div> </d
       steps:
         - choice:
             when:
-              - simple: "${header.userRole} == 'readonly'"
+              - expression:
+                  simple:
+                    expression: "${header.userRole} == 'readonly'"
                 steps:
                   - setHeader:
                       name: CamelLangChain4jAgentExcludeTags
-                      constant: admin-tools
+                      expression:
+                        constant:
+                          expression: admin-tools
                   - setHeader:
                       name: CamelLangChain4jAgentExcludeMcpServers
-                      constant: filesystem
+                      expression:
+                        constant:
+                          expression: filesystem
         - to:
             uri: langchain4j-agent:assistant
             parameters:

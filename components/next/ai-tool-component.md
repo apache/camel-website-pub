@@ -273,7 +273,8 @@ Use `argSchema` when the flat `parameter.*` syntax is not expressive enough for 
             "additionalProperties": false
           }
       steps:
-        - to: direct:createOrder
+        - to:
+            uri: direct:createOrder
 ```
 
 Top-level schema properties are exposed as exchange headers. Nested values are passed as Map or List objects.
@@ -311,7 +312,9 @@ from("ai-tool:getWeather?tags=weather&description=Get weather"
         outputParameter.unit: string
       steps:
         - setBody:
-            constant: '{"temperature":21.5,"unit":"celsius"}'
+            expression:
+              constant:
+                expression: '{"temperature":21.5,"unit":"celsius"}'
 ```
 
 Flat `outputParameter.*` options use the same sub-option syntax as input `parameter.*`:
@@ -361,7 +364,8 @@ from("ai-tool:delete_order?tags=orders&description=Delete an order"
         idempotentHint: false
         openWorldHint: true
       steps:
-        - to: direct:deleteOrder
+        - to:
+            uri: direct:deleteOrder
 ```
 
 Supported options: `title`, `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`, and `returnDirect`. When a hint is omitted, it is not published; MCP clients then apply their own defaults (for example assuming destructive/open-world unless told otherwise). The `returnDirect` hint is also honoured by AI producers such as [OpenAI](../4.22.x/openai-component.md) when route tools are exposed via the `tags` option.
@@ -477,7 +481,8 @@ from("ai-tool:transferFunds?tags=banking&description=Transfer funds&authorizatio
         description: "Transfer funds"
         authorizationPolicy: "#myAuthorizationPolicy"
       steps:
-        - to: bean:ledger
+        - to:
+            uri: bean:ledger
 ```
 
 The guard runs in front of the route: it wraps the route’s outer processor, so it executes before the route’s unit of work, tracing and error handling. A denied call (`CamelAuthorizationException`) is returned to the model as a short refusal it can relay — not as a tool result and not as a stack trace — regardless of the tool-execution error strategy; the denial is logged at `WARN`, but it does not produce a route span or metric.

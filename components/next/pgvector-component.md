@@ -100,7 +100,9 @@ from("direct:search")
               embeddingModel: nomic-embed-text
         - setHeader:
             name: CamelPgVectorAction
-            constant: UPSERT
+            expression:
+              constant:
+                expression: UPSERT
         - setHeader:
             name: CamelPgVectorTextContent
             expression:
@@ -119,10 +121,14 @@ from("direct:search")
               embeddingModel: nomic-embed-text
         - setHeader:
             name: CamelPgVectorAction
-            constant: SIMILARITY_SEARCH
+            expression:
+              constant:
+                expression: SIMILARITY_SEARCH
         - setHeader:
             name: CamelPgVectorQueryTopK
-            constant: 5
+            expression:
+              constant:
+                expression: 5
         - to:
             uri: pgvector:documents
 ```
@@ -167,7 +173,9 @@ from("direct:search")
             uri: langchain4j-embeddings:embed
         - setHeader:
             name: CamelPgVectorAction
-            constant: UPSERT
+            expression:
+              constant:
+                expression: UPSERT
         - transformDataType:
             toType: "pgvector:embeddings"
         - to:
@@ -183,7 +191,9 @@ from("direct:search")
             toType: "pgvector:embeddings"
         - setHeader:
             name: CamelPgVectorAction
-            constant: SIMILARITY_SEARCH
+            expression:
+              constant:
+                expression: SIMILARITY_SEARCH
         - to:
             uri: pgvector:myCollection
         - transformDataType:

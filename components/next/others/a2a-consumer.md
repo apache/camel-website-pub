@@ -42,7 +42,9 @@ The simplest possible local A2A agent. Define your agent’s capabilities in `ag
         - log:
             message: "Received: ${body}"
         - setBody:
-            constant: "Hello from my agent!"
+            expression:
+              constant:
+                expression: "Hello from my agent!"
 ```
 
 ```java
@@ -142,7 +144,9 @@ By default, the consumer uses the REST binding (HTTP+JSON with colon-notation pa
         validateAuth: false
       steps:
         - setBody:
-            constant: "JSON-RPC response"
+            expression:
+              constant:
+                expression: "JSON-RPC response"
 ```
 
 This example is local-only because it disables operation auth. Keep `validateAuth=true` and configure a card security scheme for network-exposed agents.
@@ -192,7 +196,9 @@ Validate incoming bearer tokens via the `camel-oauth` SPI. When an `oauthProfile
         validateAuth: true
       steps:
         - setBody:
-            constant: "Authenticated response"
+            expression:
+              constant:
+                expression: "Authenticated response"
 ```
 
 Configure the OIDC provider in application properties (these properties are owned by the `camel-oauth` component — see its documentation for the canonical format):
@@ -242,7 +248,9 @@ The `apiKeyHeader` parameter controls which HTTP header carries the API key. It 
         apiKeyHeader: X-API-Key      # default is Authorization
       steps:
         - setBody:
-            constant: "API key protected response"
+            expression:
+              constant:
+                expression: "API key protected response"
 ```
 
 The agent card must declare an `apiKey` security scheme:
@@ -282,7 +290,9 @@ When the scheme declares `location=header` and `name`, that header name takes pr
         validateAuth: true
       steps:
         - setBody:
-            constant: "Bearer token protected response"
+            expression:
+              constant:
+                expression: "Bearer token protected response"
 ```
 
 The agent card must declare an `http` bearer security scheme:
@@ -331,17 +341,29 @@ For `SendStreamingMessage` and `SubscribeToTask`, the agent card must explicitly
         httpServerComponent: undertow
       steps:
         - script:
-            simple: "${a2a:emit('Connecting to database...')}"
+            expression:
+              simple:
+                expression: "${a2a:emit('Connecting to database...')}"
         - delay:
-            constant: 2000
+            expression:
+              constant:
+                expression: 2000
         - script:
-            simple: "${a2a:emit('Processing 1000 records...')}"
+            expression:
+              simple:
+                expression: "${a2a:emit('Processing 1000 records...')}"
         - delay:
-            constant: 3000
+            expression:
+              constant:
+                expression: 3000
         - script:
-            simple: "${a2a:emit('Analysis complete!')}"
+            expression:
+              simple:
+                expression: "${a2a:emit('Analysis complete!')}"
         - setBody:
-            constant: "Final analysis results: ..."
+            expression:
+              constant:
+                expression: "Final analysis results: ..."
 ```
 
 ```java
@@ -364,7 +386,9 @@ You can also emit with an explicit state:
 ```yaml
 steps:
   - script:
-      simple: "${a2a:emit(INPUT_REQUIRED, 'Please provide your address')}"
+      expression:
+        simple:
+          expression: "${a2a:emit(INPUT_REQUIRED, 'Please provide your address')}"
 ```
 
 > **Note**
@@ -402,7 +426,9 @@ Camel routes can group related work with the `a2aSubTask` EIP and emit progress 
                   ref: answerDraftingService
                   method: draft
         - setBody:
-            simple: "Final answer: ${body}"
+            expression:
+              simple:
+                expression: "Final answer: ${body}"
 ```
 
 The route examples in this section are local-only because they disable operation auth. Keep `validateAuth=true` and configure a card security scheme for network-exposed agents.
@@ -474,9 +500,13 @@ For long-running operations, enable `returnImmediately` to return a `SUBMITTED` 
         asyncTimeout: 30000          # default is 300000 (5 minutes)
       steps:
         - delay:
-            constant: 10000
+            expression:
+              constant:
+                expression: 10000
         - setBody:
-            constant: "Long computation result"
+            expression:
+              constant:
+                expression: "Long computation result"
 ```
 
 The `asyncTimeout` parameter (default: 300,000 ms / 5 minutes) controls how long the background processing can run before the task is marked `FAILED`.
@@ -541,7 +571,9 @@ Control concurrent task processing and queue overflow:
         taskQueueSize: 50
       steps:
         - setBody:
-            constant: "Processing..."
+            expression:
+              constant:
+                expression: "Processing..."
 ```
 
   
@@ -575,7 +607,9 @@ The consumer enforces `maxPayloadSize` (default 6,291,456 bytes / 6 MiB) on inco
         maxPayloadSize: 10485760
       steps:
         - setBody:
-            constant: "final response"
+            expression:
+              constant:
+                expression: "final response"
 ```
 
 ### CORS Support

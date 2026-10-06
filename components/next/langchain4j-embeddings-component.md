@@ -412,10 +412,14 @@ from("direct:store")
             uri: langchain4j-embeddings:embed
         - setHeader:
             name: CamelQdrantAction
-            constant: UPSERT
+            expression:
+              constant:
+                expression: UPSERT
         - setHeader:
             name: CamelQdrantPointId
-            constant: 1
+            expression:
+              constant:
+                expression: 1
         - transformDataType:
             toType: "qdrant:embeddings"
         - to:
@@ -452,10 +456,14 @@ from("direct:search")
             toType: "qdrant:embeddings"
         - setHeader:
             name: CamelQdrantAction
-            constant: SIMILARITY_SEARCH
+            expression:
+              constant:
+                expression: SIMILARITY_SEARCH
         - setHeader:
             name: CamelQdrantWithPayload
-            constant: true
+            expression:
+              constant:
+                expression: true
         - to:
             uri: qdrant:myCollection
         - transformDataType:
@@ -488,7 +496,9 @@ from("direct:store")
             uri: langchain4j-embeddings:embed
         - setHeader:
             name: CamelPgVectorAction
-            constant: UPSERT
+            expression:
+              constant:
+                expression: UPSERT
         - transformDataType:
             toType: "pgvector:embeddings"
         - to:
@@ -522,7 +532,9 @@ from("direct:search")
             toType: "pgvector:embeddings"
         - setHeader:
             name: CamelPgVectorAction
-            constant: SIMILARITY_SEARCH
+            expression:
+              constant:
+                expression: SIMILARITY_SEARCH
         - to:
             uri: pgvector:myCollection
         - transformDataType:

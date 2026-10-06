@@ -53,11 +53,14 @@ from("file:batches/inbox?include=.*\\.jsonl")
 ```
 
 ```yaml
-- from:
-    uri: direct:classify
-    steps:
-      - to: "openai:batch?batchEndpoint=/v1/chat/completions&model=gpt-4o-mini&systemMessage=Classify the ticket"
-      - log: "Batch ${header.CamelOpenAIBatchId} is ${header.CamelOpenAIBatchStatus}"
+- route:
+    from:
+      uri: direct:classify
+      steps:
+        - to:
+            uri: "openai:batch?batchEndpoint=/v1/chat/completions&model=gpt-4o-mini&systemMessage=Classify the ticket"
+        - log:
+            message: "Batch ${header.CamelOpenAIBatchId} is ${header.CamelOpenAIBatchStatus}"
 ```
 
 ### Building a batch from a stream of messages

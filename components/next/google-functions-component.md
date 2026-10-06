@@ -33,6 +33,51 @@ Or by setting the environment variable `GOOGLE_APPLICATION_CREDENTIALS` :
 
 export GOOGLE\_APPLICATION\_CREDENTIALS="/home/user/Downloads/my-key.json"
 
+### Application Default Credentials and GKE
+
+When `serviceAccountKey` is not configured, the component uses Google’s [Application Default Credentials (ADC)](https://cloud.google.com/docs/authentication/application-default-credentials). ADC discovers credentials from the environment, local application default credentials, or the metadata server of the Google Cloud environment. An explicitly configured `serviceAccountKey` takes precedence over ADC.
+
+On Google Kubernetes Engine (GKE), configure [Workload Identity Federation for GKE](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity) for the cluster and the node pool where the Camel pod runs. Configure the pod to use a Kubernetes ServiceAccount with the IAM permissions required for the Cloud Functions operations it performs, either through direct IAM access or by linking it to an IAM service account as described in the GKE documentation.
+
+The Google authentication library obtains credentials through the GKE metadata server. No service account key file or Camel-specific Workload Identity option is required. Leave `serviceAccountKey` unset and do not set `GOOGLE_APPLICATION_CREDENTIALS` to a credential file when using the pod’s workload identity, since ADC checks that environment variable before the metadata server.
+
+For example, this route lists functions using the pod’s identity. Unlike the examples further down, it leaves `serviceAccountKey` out; there is nothing else to configure:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:listFunctions")
+    .to("google-functions://myCamelFunction?project=myProject&location=us-central1&operation=listFunctions");
+```
+
+```xml
+<route>
+  <from uri="direct:listFunctions"/>
+  <to uri="google-functions://myCamelFunction?project=myProject&amp;location=us-central1&amp;operation=listFunctions"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:listFunctions
+      steps:
+        - to:
+            uri: google-functions://myCamelFunction
+            parameters:
+              project: myProject
+              location: us-central1
+              operation: listFunctions
+```
+
+> **Note**
+> Configuring [Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation) for an external identity provider (an explicit WIF credential configuration file for AWS, Azure or GitHub Actions), or service account impersonation, is not exposed as an endpoint option by the Google components.
+
 ## URI Format
 
 google-functions://functionName\[?options\]

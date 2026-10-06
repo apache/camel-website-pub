@@ -80,7 +80,9 @@ from("file:inbox/images?noop=true&include=.*\\.png")
       steps:
         - setHeader:
             name: CamelLangChain4jAgentUserMessage
-            constant: Describe this image
+            expression:
+              constant:
+                expression: Describe this image
         - to:
             uri: langchain4j-agent:vision
             parameters:
@@ -126,7 +128,9 @@ from("aws2-s3://my-bucket?prefix=images/&includeBody=true")
       steps:
         - setHeader:
             name: CamelLangChain4jAgentUserMessage
-            constant: "What do you see in this image?"
+            expression:
+              constant:
+                expression: "What do you see in this image?"
         - to:
             uri: langchain4j-agent:vision
             parameters:
@@ -182,10 +186,14 @@ from("direct:process-file")
       steps:
         - setHeader:
             name: CamelLangChain4jAgentUserMessage
-            constant: Analyze this document
+            expression:
+              constant:
+                expression: Analyze this document
         - setHeader:
             name: CamelLangChain4jAgentMediaType
-            constant: application/pdf
+            expression:
+              constant:
+                expression: application/pdf
         - to:
             uri: langchain4j-agent:analyzer
             parameters:
@@ -253,7 +261,9 @@ from("file:inbox/images?noop=true&include=.*\\.(png|jpg|jpeg)")
       steps:
         - setHeader:
             name: CamelLangChain4jAgentUserMessage
-            constant: "Describe what you see in this image. Be detailed but concise."
+            expression:
+              constant:
+                expression: "Describe what you see in this image. Be detailed but concise."
         - to:
             uri: langchain4j-agent:vision
             parameters:

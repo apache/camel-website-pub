@@ -19,7 +19,9 @@ The producer calls a remote A2A agent. It automatically discovers the agent card
       uri: direct:call-agent
       steps:
         - setBody:
-            constant: "What is the weather?"
+            expression:
+              constant:
+                expression: "What is the weather?"
         - to:
             uri: a2a:http://remote-agent:8080
         - log:
@@ -106,19 +108,28 @@ The exchange body is a `SseEventIterator` (implements `Iterator<StreamResponse>`
 steps:
   - setHeader:
       name: CamelA2AOperation
-      constant: MESSAGE_STREAM
-  - to: a2a:https://agent.example.com
+      expression:
+        constant:
+          expression: MESSAGE_STREAM
+  - to:
+      uri: a2a:https://agent.example.com
   - split:
-      simple: "${body}"
+      expression:
+        simple:
+          expression: "${body}"
       streaming: true
       steps:
         - choice:
             when:
-              - simple: "${body.statusUpdate} != null"
+              - expression:
+                  simple:
+                    expression: "${body.statusUpdate} != null"
                 steps:
                   - log:
                       message: "Progress: ${body.statusUpdate.status.state}"
-              - simple: "${body.message} != null"
+              - expression:
+                  simple:
+                    expression: "${body.message} != null"
                 steps:
                   - log:
                       message: "Final message received"
@@ -139,7 +150,8 @@ To buffer all events into a `List<StreamResponse>`:
 
 ```yaml
 steps:
-  - to: a2a:https://agent.example.com
+  - to:
+      uri: a2a:https://agent.example.com
   - convertBodyTo:
       type: java.util.List
 ```
@@ -161,7 +173,9 @@ steps:
         operation: MESSAGE_STREAM
   - setHeader:
       name: Content-Type
-      constant: text/event-stream
+      expression:
+        constant:
+          expression: text/event-stream
 ```
 
 ```java
@@ -178,13 +192,20 @@ Subscribe to ongoing task updates from a remote agent:
 steps:
   - setHeader:
       name: CamelA2AOperation
-      constant: TASK_SUBSCRIBE
+      expression:
+        constant:
+          expression: TASK_SUBSCRIBE
   - setHeader:
       name: CamelA2ATaskId
-      simple: "${exchangeProperty.taskId}"
-  - to: a2a:https://agent.example.com
+      expression:
+        simple:
+          expression: "${exchangeProperty.taskId}"
+  - to:
+      uri: a2a:https://agent.example.com
   - split:
-      simple: "${body}"
+      expression:
+        simple:
+          expression: "${body}"
       streaming: true
       steps:
         - log:
@@ -198,24 +219,32 @@ Streaming requests use `asyncTimeout` (default 5 minutes) instead of the standar
 ```yaml
 # Step 1: Submit the task
 - setBody:
-    constant: "Start long operation"
+    expression:
+      constant:
+        expression: "Start long operation"
 - to:
     uri: a2a:http://remote-agent:8083
     parameters:
       oauthProfile: assistant
 - setVariable:
     name: taskId
-    simple: "${header.CamelA2ATaskId}"
+    expression:
+      simple:
+        expression: "${header.CamelA2ATaskId}"
 
 # Step 2: Poll for completion
 - removeHeaders:
     pattern: "*"
 - setHeader:
     name: CamelA2AOperation
-    constant: TASK_GET
+    expression:
+      constant:
+        expression: TASK_GET
 - setHeader:
     name: CamelA2ATaskId
-    simple: "${variable.taskId}"
+    expression:
+      simple:
+        expression: "${variable.taskId}"
 - to:
     uri: a2a:http://remote-agent:8083
     parameters:
@@ -227,24 +256,36 @@ Streaming requests use `asyncTimeout` (default 5 minutes) instead of the standar
 ```yaml
 # Step 1: Submit task
 - setBody:
-    constant: "Track my package"
-- to: a2a:http://remote-agent:8085
+    expression:
+      constant:
+        expression: "Track my package"
+- to:
+    uri: a2a:http://remote-agent:8085
 - setVariable:
     name: taskId
-    simple: "${header.CamelA2ATaskId}"
+    expression:
+      simple:
+        expression: "${header.CamelA2ATaskId}"
 
 # Step 2: Register push notification webhook
 - removeHeaders:
     pattern: "*"
 - setHeader:
     name: CamelA2AOperation
-    constant: PUSH_CONFIG_CREATE
+    expression:
+      constant:
+        expression: PUSH_CONFIG_CREATE
 - setHeader:
     name: CamelA2ATaskId
-    simple: "${variable.taskId}"
+    expression:
+      simple:
+        expression: "${variable.taskId}"
 - setBody:
-    simple: "${ref:pushConfig}"
-- to: a2a:http://remote-agent:8085
+    expression:
+      simple:
+        expression: "${ref:pushConfig}"
+- to:
+    uri: a2a:http://remote-agent:8085
 ```
 
 Configure the webhook URL as a bean:
@@ -260,35 +301,54 @@ The full push notification config CRUD is also available. `PUSH_CONFIG_GET` and 
 # List push configs for a task
 - setHeader:
     name: CamelA2AOperation
-    constant: PUSH_CONFIG_LIST
+    expression:
+      constant:
+        expression: PUSH_CONFIG_LIST
 - setHeader:
     name: CamelA2ATaskId
-    simple: "${variable.taskId}"
-- to: a2a:https://agent.example.com
+    expression:
+      simple:
+        expression: "${variable.taskId}"
+- to:
+    uri: a2a:https://agent.example.com
 
 # Get a specific push config
 - setHeader:
     name: CamelA2AOperation
-    constant: PUSH_CONFIG_GET
+    expression:
+      constant:
+        expression: PUSH_CONFIG_GET
 - setHeader:
     name: CamelA2ATaskId
-    simple: "${variable.taskId}"
+    expression:
+      simple:
+        expression: "${variable.taskId}"
 - setHeader:
     name: CamelA2APushConfigId
-    simple: "${variable.configId}"
-- to: "a2a:https://agent.example.com?protocolBinding=JSONRPC"
+    expression:
+      simple:
+        expression: "${variable.configId}"
+- to:
+    uri: "a2a:https://agent.example.com?protocolBinding=JSONRPC"
 
 # Delete a push config
 - setHeader:
     name: CamelA2AOperation
-    constant: PUSH_CONFIG_DELETE
+    expression:
+      constant:
+        expression: PUSH_CONFIG_DELETE
 - setHeader:
     name: CamelA2ATaskId
-    simple: "${variable.taskId}"
+    expression:
+      simple:
+        expression: "${variable.taskId}"
 - setHeader:
     name: CamelA2APushConfigId
-    simple: "${variable.configId}"
-- to: "a2a:https://agent.example.com?protocolBinding=JSONRPC"
+    expression:
+      simple:
+        expression: "${variable.configId}"
+- to:
+    uri: "a2a:https://agent.example.com?protocolBinding=JSONRPC"
 ```
 
 ### Parallel Multicast
@@ -304,9 +364,12 @@ Call multiple agents concurrently using Camel’s `multicast` EIP:
             parallelProcessing: true
             aggregationStrategy: "#class:MyAggregator"
             steps:
-              - to: direct:call-weather
-              - to: direct:call-news
-              - to: direct:call-fortune
+              - to:
+                  uri: direct:call-weather
+              - to:
+                  uri: direct:call-news
+              - to:
+                  uri: direct:call-fortune
 
 - route:
     id: call-weather
@@ -316,7 +379,9 @@ Call multiple agents concurrently using Camel’s `multicast` EIP:
         - removeHeaders:
             pattern: "*"
         - setBody:
-            constant: "What is the weather?"
+            expression:
+              constant:
+                expression: "What is the weather?"
         - to:
             uri: a2a:http://weather-agent:8080
             parameters:
@@ -332,7 +397,8 @@ Override the remote agent’s URL from the card using `host`/`port`/`basePath` c
 
 ```yaml
 steps:
-  - to: a2a:https://agent.example.com?host=http://localhost&port=8080
+  - to:
+      uri: a2a:https://agent.example.com?host=http://localhost&port=8080
 ```
 
 Priority without producer credentials: `host` config > card’s `supportedInterfaces` URL > `agentCardSource` URL. When producer credentials are configured (`apiKey`, `bearerToken`, or `oauthProfile`) and `host` is not set, the producer sends credentialed requests only to the HTTP(S) `agentCardSource` origin. This avoids sending credentials to a URL supplied by the remote card’s `supportedInterfaces` field. The `port` and `basePath` producer overrides are applied when `host` is configured. A `host` value without a scheme is treated as HTTPS.
@@ -346,7 +412,8 @@ By default, the producer does not follow HTTP redirects to prevent credential le
 
 ```yaml
 steps:
-  - to: a2a:https://agent.example.com?followRedirects=true
+  - to:
+      uri: a2a:https://agent.example.com?followRedirects=true
 ```
 
 > **Note**

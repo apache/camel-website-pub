@@ -328,9 +328,11 @@ Example — including remote agent skills in an LLM prompt:
 ```yaml
 steps:
   - setBody:
-      simple: |
-        Generate a plan using these available skills:
-        ${a2a:card.skills}
+      expression:
+        simple:
+          expression: |
+            Generate a plan using these available skills:
+            ${a2a:card.skills}
 ```
 
 For the full text of all parts combined, use the TypeConverter:
@@ -493,9 +495,13 @@ Both streaming and async agents use the same route pattern — `setBody` is alwa
 ```yaml
 steps:
   - script:
-      simple: "${a2a:emit('progress...')}"    # optional status events
+      expression:
+        simple:
+          expression: "${a2a:emit('progress...')}"    # optional status events
   - setBody:
-      constant: "final response"              # consumer handles delivery
+      expression:
+        constant:
+          expression: "final response"              # consumer handles delivery
 ```
 
 The consumer handles delivery regardless of mechanism:
@@ -530,7 +536,9 @@ Bean reference example — useful when the card needs programmatic construction 
         agentCard: "#myCardBean"
       steps:
         - setBody:
-            constant: "final response"
+            expression:
+              constant:
+                expression: "final response"
 ```
 
 URI parameter overrides — customize base cards per environment via properties:
@@ -544,7 +552,9 @@ URI parameter overrides — customize base cards per environment via properties:
         version: "{{agent.version}}"
       steps:
         - setBody:
-            constant: "final response"
+            expression:
+              constant:
+                expression: "final response"
 ```
 
 Security schemes from the card drive auth handler selection. Config parameters (`oauthProfile`, `bearerToken`, `apiKey`) provide the runtime credentials and influence scheme priority.
@@ -599,7 +609,9 @@ Example — consumer in POJO mode for multimodal processing:
         - log:
             message: "Received ${body.parts().size()} parts"
         - setBody:
-            simple: "Processed ${body.parts()[0]}"
+            expression:
+              simple:
+                expression: "Processed ${body.parts()[0]}"
 ```
 
 Example — producer in RAW mode for proxying:
@@ -609,7 +621,8 @@ Example — producer in RAW mode for proxying:
     from:
       uri: direct:proxy
       steps:
-        - to: a2a:http://remote-agent:8080?dataFormat=RAW
+        - to:
+            uri: a2a:http://remote-agent:8080?dataFormat=RAW
         - log:
             message: "Raw JSON: ${body}"
 ```

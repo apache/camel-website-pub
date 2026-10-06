@@ -85,15 +85,18 @@ The [YAML DSL](../others/yaml-dsl.md) supports declarations alongside routes, in
                   simple:
                     expression: "${exchangeProperty.department} == 'billing'"
                 steps:
-                  - to: direct:billing
+                  - to:
+                      uri: direct:billing
               - expression:
                   simple:
                     expression: "${exchangeProperty.department} == 'technical'"
                 steps:
-                  - to: direct:technical
+                  - to:
+                      uri: direct:technical
             otherwise:
               steps:
-                - to: direct:review
+                - to:
+                    uri: direct:review
 ```
 
 Names are context-wide. Duplicate declarations across resources and unknown references fail. Reloading a resource replaces its complete set of questions, including removing declarations no longer present. Development-mode route reload also removes definitions from deleted or renamed files before parsing replacements. This replacement does not make the surrounding route reload transactional. Existing expressions resolve the current definition on their next evaluation. Reload validates the candidate declaration snapshot for initialized expressions before publishing it, including expert capabilities, boolean predicate types, Simple state selectors, and compatible batch selectors across resources. Failed validation leaves the previous declarations available. Unused declarations are validated when first referenced, as at startup. Removed declarations remain removable; an expression that still references a removed name fails when evaluated. Validation registrations are weakly held: the registry does not keep expressions or their providers alive. Constraints can remain until an unused expression is garbage-collected; stopping a route does not necessarily release an expression that is still referenced elsewhere. Loading declarations does not perform inference or start provider resources for validation.
@@ -246,10 +249,12 @@ The same expression works through the generic language integration in YAML and X
                   simple:
                     expression: "${exchangeProperty.decision[department]} == 'billing'"
                 steps:
-                  - to: direct:billing
+                  - to:
+                      uri: direct:billing
             otherwise:
               steps:
-                - to: direct:review
+                - to:
+                    uri: direct:review
 ```
 
 A result might contain `actionable → true`, `department → "billing"` and `urgency → 1.2`. Reading the stored map does not invoke the provider again. Each question retains its own threshold and uncertainty policy. There is no implicit AND/OR: batch expressions, including a batch containing one boolean question, cannot be used as predicates.

@@ -507,6 +507,14 @@ The Undertow consumer (response) and producer (request) always wrote a `String` 
 
 The `charset` parameter of a `Content-Type` was only recognized in lower case. A request with `Content-Type: text/plain; Charset=ISO-8859-1` did not set `CamelCharsetName` (so its body was read as UTF-8), and a `String` body with such a `Content-Type` was written as UTF-8. The parameter name is now matched case-insensitively (RFC 9110), as in the other HTTP components, on the consumer (request and response) and on the producer.
 
+### camel-undertow - WebSocket endpoints apply the security provider, allowed roles and handlers
+
+WebSocket endpoints (`ws://` and `wss://`) now apply the `UndertowSecurityProvider` (the `securityConfiguration` or `securityProvider` option), the `allowedRoles` option, and the `handlers` and `accessLog` options, as HTTP endpoints do. Previously these options had no effect on WebSocket endpoints. They apply to the upgrade request: a client that the security provider rejects, or that connects to an endpoint with `allowedRoles` but no security provider, now gets the same status code as on an HTTP endpoint (for example `403`) and no connection is opened. The headers that the security provider adds are set on the exchanges of the connection.
+
+All the endpoints of a WebSocket path share its connections. The settings of the consumer apply to the path, including the messages sent by producers on that path, and keep applying while the consumer is stopped; a path that only has producers applies their settings. This also applies to the `oauthProfile` option: while the consumer is stopped, upgrade requests to its path are still validated. A connection that was opened before these settings applied does not receive the messages of the producers, and it is closed when it sends a message.
+
+A WebSocket client that connected without satisfying the configured security provider or allowed roles is now rejected: it must authenticate, or the option must be removed from the WebSocket endpoint.
+
 ### camel-netty-http - String bodies in the charset of the Content-Type
 
 The Netty HTTP consumer (response) and producer (request) wrote a `String` body in the charset of the exchange (`CamelCharsetName`, UTF-8 by default), even when the `Content-Type` declared another charset (for example `text/plain; charset=ISO-8859-1` set by the route). A `String` body is now written in the charset that the `Content-Type` declares. Bodies that are not a `String`, and messages whose `Content-Type` declares no charset, are sent as before. Also, the `charset` parameter of a received `Content-Type` (a request on the consumer) is now recognized whatever its case (`Charset=ISO-8859-1`). A peer that ignored the declared charset and read such a message as UTF-8 must now use the declared charset, and characters that the declared charset cannot represent are written as `?`.
@@ -524,6 +532,10 @@ A `GET_NEXT` walk now ends at the end of the agent’s MIB view (`endOfMibView`,
 A `plc4x` producer with `autoReconnect=true` whose reconnect fails now fails the exchange with the `PlcConnectionException`. Before, it logged "Unable to reconnect, skipping request" and the exchange completed as if the values had been written. A failed write also keeps the message of the exchange (it was removed before), so that a redelivery writes the same values again.
 
 The `plc4x` polling consumer (for example `pollEnrich`) now returns an exchange that has the exception when the connection or the read fails, instead of an exchange with an empty `Map` body, and it returns `null` when the PLC does not answer within the timeout of `receive(timeout)` or `receiveNoWait()`, as other polling consumers do. With `pollEnrich` the exception fails the exchange (unless `aggregateOnException` is enabled). A route that polls a PLC periodically and should go on while the PLC is unreachable can handle the exception, for example with `onException` or `doTry`/`doCatch`.
+
+### camel-reactive-streams - stopping a consumer
+
+Stopping a `reactive-streams` consumer now routes the items it already received from the stream before the route stops, waiting up to the `shutdownAwaitTermination` of the `ExecutorServiceManager` (10 seconds by default). Before, these items were dropped, and after a restart the consumer could stop requesting items. A route that synchronously stops itself from one of its own exchanges now waits for that timeout; stop it asynchronously instead (for example with the Control Bus `async=true` option).
 
 ### camel-vertx - request/reply over the event bus
 

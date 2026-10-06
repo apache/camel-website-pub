@@ -32,15 +32,17 @@ AI-assisted development
 
 ## Camel MCP Server
 
-Connects Apache Camel to AI coding assistants through the [Model Context Protocol](https://modelcontextprotocol.io/). It gives AI tools access to Camel's component catalog, DSL documentation, and integration patterns — so they can help you write, debug, and optimize Camel routes with full context. Supported tools include Claude Code, GitHub Copilot, Gemini CLI, Cursor, Windsurf, and any MCP-compatible assistant. See the [Camel MCP Server documentation](../manual/camel-jbang-mcp.md).
+The Camel CLI's MCP server (`camel mcp`) connects Apache Camel to AI coding assistants through the [Model Context Protocol](https://modelcontextprotocol.io/). It gives AI tools access to Camel's component catalog, DSL documentation, and integration patterns — so they can help you write, debug, and optimize Camel routes with full context. Supported tools include Claude Code, GitHub Copilot, Gemini CLI, Cursor, Windsurf, and any MCP-compatible assistant. See the [Camel MCP Server documentation](../manual/camel-jbang-mcp.md).
+
+Not to be confused with the [MCP Server component](../components/latest/others/mcp-server.md), which works the other way round: it exposes your own Camel routes (`ai-tool` and `ai-resource`) as MCP tools and resources that AI agents call. The first helps you write routes; the second lets agents use them.
 
 [Camel Kit](https://github.com/luigidemasi/camel-kit)
 
-Structured slash commands for AI coding assistants that guide you through the complete integration lifecycle. Supports Claude Code, Gemini CLI, and more.
+Structured slash commands for AI coding assistants that guide you through the complete integration lifecycle. Supports IBM Bob, Claude Code, Codex, GitHub Copilot CLI, and more.
 
 [Wanaku](https://wanaku.ai)
 
-The Wanaku MCP Router is a router for AI-enabled applications powered by the Model Context Protocol and Apache Camel.
+A governed action proxy for AI agents (formerly the Wanaku MCP Router). Publish Camel routes as tools; agents call them through Wanaku, which enforces policy, identity, and audit.
 
 ## Maven Plugins
 

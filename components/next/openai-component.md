@@ -865,7 +865,9 @@ from("direct:score")
       steps:
         - setHeader:
             name: CamelOpenAIUserMessage
-            simple: "Rate 1-10 for ${header.role}: ${body}"
+            expression:
+              simple:
+                expression: "Rate 1-10 for ${header.role}: ${body}"
         - to:
             uri: openai:chat-completion
             parameters:
@@ -1046,10 +1048,14 @@ from("direct:image")
       steps:
         - setHeader:
             name: CamelOpenAIMediaType
-            constant: "image/png"
+            expression:
+              constant:
+                expression: "image/png"
         - setHeader:
             name: CamelOpenAIUserMessage
-            constant: "Describe what you see in this image"
+            expression:
+              constant:
+                expression: "Describe what you see in this image"
         - to:
             uri: openai:chat-completion
             parameters:
@@ -1184,10 +1190,14 @@ from("direct:json-schema")
       uri: direct:json-schema
       steps:
         - setBody:
-            constant: "Create a product description"
+            expression:
+              constant:
+                expression: "Create a product description"
         - setHeader:
             name: CamelOpenAIJsonSchema
-            constant: '{"type":"object","properties":{"name":{"type":"string"},"price":{"type":"number"}}}'
+            expression:
+              constant:
+                expression: '{"type":"object","properties":{"name":{"type":"string"},"price":{"type":"number"}}}'
         - to:
             uri: openai:chat-completion
         - log:
@@ -1227,7 +1237,9 @@ from("direct:json-schema-resource")
       uri: direct:json-schema-resource
       steps:
         - setBody:
-            constant: "Create a product description"
+            expression:
+              constant:
+                expression: "Create a product description"
         - to:
             uri: openai:chat-completion
             parameters:
@@ -1282,7 +1294,9 @@ from("direct:conversation")
       uri: direct:conversation
       steps:
         - setBody:
-            constant: "My name is Alice"
+            expression:
+              constant:
+                expression: "My name is Alice"
         - to:
             uri: openai:chat-completion
             parameters:
@@ -1290,7 +1304,9 @@ from("direct:conversation")
         - log:
             message: "First response: ${body}"
         - setBody:
-            constant: "What is my name?"
+            expression:
+              constant:
+                expression: "What is my name?"
         - to:
             uri: openai:chat-completion
             parameters:
@@ -1772,7 +1788,9 @@ from("direct:summarize")
       steps:
         - setHeader:
             name: CamelOpenAIUserMessage
-            simple: "Summarize this ${header.documentType} in 3 bullet points: ${body}"
+            expression:
+              simple:
+                expression: "Summarize this ${header.documentType} in 3 bullet points: ${body}"
         - to:
             uri: openai:chat-completion
         - log:

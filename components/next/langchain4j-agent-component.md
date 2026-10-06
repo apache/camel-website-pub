@@ -872,7 +872,9 @@ from("direct:chat")
         parameter.userId: string
       steps:
         - setBody:
-            constant: '{"name": "John Doe", "id": "123"}'
+            expression:
+              constant:
+                expression: '{"name": "John Doe", "id": "123"}'
 
 - route:
     from:
@@ -883,7 +885,9 @@ from("direct:chat")
         parameter.city: string
       steps:
         - setBody:
-            constant: '{"weather": "sunny", "temperature": "22°C"}'
+            expression:
+              constant:
+                expression: '{"weather": "sunny", "temperature": "22°C"}'
 
 # Agent with tools
 - route:
@@ -1305,7 +1309,9 @@ from("direct:extract-person-info")
       uri: direct:extract-person-info
       steps:
         - setBody:
-            constant: "Extract information about John Smith, a 35-year-old software engineer"
+            expression:
+              constant:
+                expression: "Extract information about John Smith, a 35-year-old software engineer"
         - to:
             uri: langchain4j-agent:structured
             parameters:

@@ -50,11 +50,15 @@ from("openai:webhook?webhookSecret={{openai.webhook.secret}}")
       steps:
         - choice:
             when:
-              - simple: "${header.CamelOpenAIWebhookEventType} == 'response.completed'"
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenAIWebhookEventType} == 'response.completed'"
                 steps:
                   - to:
                       uri: direct:response-completed
-              - simple: "${header.CamelOpenAIWebhookEventType} == 'batch.completed'"
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenAIWebhookEventType} == 'batch.completed'"
                 steps:
                   - to:
                       uri: direct:batch-completed
@@ -83,11 +87,15 @@ from("openai:webhook?webhookSecret={{openai.webhook.secret}}")
         webhookSecret: "{{openai.webhook.secret}}"
       steps:
         - filter:
-            simple: "${header.CamelOpenAIWebhookEventType} == 'response.completed'"
+            expression:
+              simple:
+                expression: "${header.CamelOpenAIWebhookEventType} == 'response.completed'"
             steps:
               - setHeader:
                   name: CamelOpenAIResponseId
-                  simple: "${header.CamelOpenAIWebhookObjectId}"
+                  expression:
+                    simple:
+                      expression: "${header.CamelOpenAIWebhookObjectId}"
               - to:
                   uri: openai:responses-retrieve
               - to:

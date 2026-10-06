@@ -83,10 +83,14 @@ void postprocess(Exchange exchange) {
       steps:
         - setHeader:
             name: CamelKServeModelName
-            constant: simple
+            expression:
+              constant:
+                expression: simple
         - setHeader:
             name: CamelKServeModelVersion
-            constant: "1"
+            expression:
+              constant:
+                expression: "1"
         - to:
             uri: kserve:model/ready
         - log:
@@ -126,10 +130,14 @@ void postprocess(Exchange exchange) {
       steps:
         - setHeader:
             name: CamelKServeModelName
-            constant: simple
+            expression:
+              constant:
+                expression: simple
         - setHeader:
             name: CamelKServeModelVersion
-            constant: "1"
+            expression:
+              constant:
+                expression: "1"
         - to:
             uri: kserve:model/metadata
         - log:

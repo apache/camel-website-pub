@@ -30,7 +30,9 @@ from("direct:search")
               embeddingModel: nomic-embed-text
         - setHeader:
             name: CamelPgVectorAction
-            constant: UPSERT
+            expression:
+              constant:
+                expression: UPSERT
         - setHeader:
             name: CamelPgVectorTextContent
             expression:
@@ -49,10 +51,14 @@ from("direct:search")
               embeddingModel: nomic-embed-text
         - setHeader:
             name: CamelPgVectorAction
-            constant: SIMILARITY_SEARCH
+            expression:
+              constant:
+                expression: SIMILARITY_SEARCH
         - setHeader:
             name: CamelPgVectorQueryTopK
-            constant: 5
+            expression:
+              constant:
+                expression: 5
         - to:
             uri: pgvector:documents</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_langchain4j_integration"><a class="anchor" href="#_langchain4j_integration"></a>LangChain4j Integration</h2> <div class="sectionbody"> <div class="paragraph"> <p>This component provides data type transformers for <a href="langchain4j-embeddings-component.html" class="xref page">LangChain4j Embeddings</a> integration:</p> </div> <div class="ulist"> <ul> <li> <p><code>pgvector:embeddings</code> - Transforms LangChain4j embedding output into a format suitable for the PGVector UPSERT action</p> </li> <li> <p><code>pgvector:rag</code> - Transforms similarity search results into a <code>List&lt;String&gt;</code> for RAG pipelines</p> </li> </ul> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Store embeddings
 from("direct:store")
@@ -75,7 +81,9 @@ from("direct:search")
             uri: langchain4j-embeddings:embed
         - setHeader:
             name: CamelPgVectorAction
-            constant: UPSERT
+            expression:
+              constant:
+                expression: UPSERT
         - transformDataType:
             toType: "pgvector:embeddings"
         - to:
@@ -91,7 +99,9 @@ from("direct:search")
             toType: "pgvector:embeddings"
         - setHeader:
             name: CamelPgVectorAction
-            constant: SIMILARITY_SEARCH
+            expression:
+              constant:
+                expression: SIMILARITY_SEARCH
         - to:
             uri: pgvector:myCollection
         - transformDataType:

@@ -88,5 +88,13 @@ See also the full [Enterprise Integration Patterns](enterprise-integration-patte
 | Term | Camel Component / EIP | Description |
 | --- | --- | --- |
 | Classify / Intent routing | [Semantic](../languages/semantic-language.md), [Switch](switch-eip.md) | Evaluate a Semantic choice question once and dispatch its category string through literal Switch cases. |
+| Guardrail / Guard decision | [Semantic](../languages/semantic-language.md), [TypeSafe AI](../typesafe-ai-component.md), [Filter](filter-eip.md), [Validate](validate-eip.md) | Ask a yes/no question about the message (is this request actionable, does this action fit the task) and filter or validate on the answer. A System One model such as Jev answers with a fast, structured decision instead of generated text. |
+| Tool / Function calling | [AI Tool](../ai-tool-component.md) | Expose a route as a tool an AI agent can call. The same route works with the LangChain4j, Spring AI and OpenAI agents. |
+| MCP server | [MCP Server](../others/mcp-server.md), [AI Resource](../ai-resource-component.md) | Expose `ai-tool` routes as MCP tools and `ai-resource` routes as MCP resources to any MCP client. |
+| MCP client | [LangChain4j Agent MCP](../others/langchain4j-agent-mcp.md), [OpenAI MCP](../others/openai-mcp.md) | Let an agent in a route call the tools of remote MCP servers. |
+| Tool authorization / Agent permissions | [AI Tool authorization](../ai-tool-component.html#_authorizing_tool_calls), [OPA](../opa-component.md), [OpenFGA](../openfga-component.md) | Authorize every tool call before it runs, on the caller identity and the tool name, never on model output. |
+| Agent identity / Workload identity | [SPIFFE](../spiffe-component.md) | Give each workload a cryptographic identity and mutual TLS, so a tool call can be authorized on who is calling. |
+| LLM observability | [AI Observability](../others/ai-observability.md) | Record an OpenTelemetry span and Micrometer metrics (model, tokens, duration) for each call of the LangChain4j, OpenAI and Spring AI chat producers, inside the route’s trace. |
+| RAG ingestion | [LangChain4j Ingest](../langchain4j-ingest-component.md) | Split, embed and store documents in an embedding store for retrieval-augmented generation. |
 | Agent-to-Agent / A2A | [A2A](../a2a-component.md) | Google’s Agent-to-Agent protocol for communication between AI agents. |
 | Tokenize / Chunk (for LLM) | [LangChain4j Tokenizer](../others/langchain4j-tokenizer.md) | Split text into tokens or chunks sized for LLM context windows, using LangChain4j tokenizer strategies. |

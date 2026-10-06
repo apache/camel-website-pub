@@ -13,11 +13,14 @@ from("direct:mixed")
 
 // a JSONL file produced elsewhere is uploaded unchanged
 from("file:batches/inbox?include=.*\\.jsonl")
-    .to("openai:batch?batchEndpoint=/v1/chat/completions");</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- from:
-    uri: direct:classify
-    steps:
-      - to: "openai:batch?batchEndpoint=/v1/chat/completions&amp;model=gpt-4o-mini&amp;systemMessage=Classify the ticket"
-      - log: "Batch ${header.CamelOpenAIBatchId} is ${header.CamelOpenAIBatchStatus}"</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_building_a_batch_from_a_stream_of_messages"><a class="anchor" href="#_building_a_batch_from_a_stream_of_messages"></a>Building a batch from a stream of messages</h3> <div class="paragraph"> <p>A stream of prompts, one per message, becomes a batch with the aggregator and <code>OpenAIBatchAggregationStrategy</code>. The body of each message is the value of its request, as for a <code>Map</code> body, and its <code>custom_id</code> is the <code>CamelOpenAIBatchCustomId</code> header when set, or the message id otherwise:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("kafka:tickets")
+    .to("openai:batch?batchEndpoint=/v1/chat/completions");</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+    from:
+      uri: direct:classify
+      steps:
+        - to:
+            uri: "openai:batch?batchEndpoint=/v1/chat/completions&amp;model=gpt-4o-mini&amp;systemMessage=Classify the ticket"
+        - log:
+            message: "Batch ${header.CamelOpenAIBatchId} is ${header.CamelOpenAIBatchStatus}"</code></pre> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_building_a_batch_from_a_stream_of_messages"><a class="anchor" href="#_building_a_batch_from_a_stream_of_messages"></a>Building a batch from a stream of messages</h3> <div class="paragraph"> <p>A stream of prompts, one per message, becomes a batch with the aggregator and <code>OpenAIBatchAggregationStrategy</code>. The body of each message is the value of its request, as for a <code>Map</code> body, and its <code>custom_id</code> is the <code>CamelOpenAIBatchCustomId</code> header when set, or the message id otherwise:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("kafka:tickets")
     .setHeader("CamelOpenAIBatchCustomId", header("kafka.KEY"))
     .aggregate(constant(true), new OpenAIBatchAggregationStrategy())
         .completionSize(1000).completionTimeout(600000)

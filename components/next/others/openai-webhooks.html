@@ -24,11 +24,15 @@
       steps:
         - choice:
             when:
-              - simple: "${header.CamelOpenAIWebhookEventType} == 'response.completed'"
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenAIWebhookEventType} == 'response.completed'"
                 steps:
                   - to:
                       uri: direct:response-completed
-              - simple: "${header.CamelOpenAIWebhookEventType} == 'batch.completed'"
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenAIWebhookEventType} == 'batch.completed'"
                 steps:
                   - to:
                       uri: direct:batch-completed</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>The <code>response.completed</code> event carries the id of the response, not the response itself: read it with the <code>responses-retrieve</code> operation, which takes that id.</p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("openai:webhook?webhookSecret={{openai.webhook.secret}}")
@@ -42,11 +46,15 @@
         webhookSecret: "{{openai.webhook.secret}}"
       steps:
         - filter:
-            simple: "${header.CamelOpenAIWebhookEventType} == 'response.completed'"
+            expression:
+              simple:
+                expression: "${header.CamelOpenAIWebhookEventType} == 'response.completed'"
             steps:
               - setHeader:
                   name: CamelOpenAIResponseId
-                  simple: "${header.CamelOpenAIWebhookObjectId}"
+                  expression:
+                    simple:
+                      expression: "${header.CamelOpenAIWebhookObjectId}"
               - to:
                   uri: openai:responses-retrieve
               - to:

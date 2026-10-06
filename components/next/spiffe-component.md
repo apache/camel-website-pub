@@ -229,16 +229,19 @@ from("direct:start")
 Validate an incoming bearer token on a `platform-http` route, without a bean to strip the scheme:
 
 ```yaml
-- from:
-    uri: "platform-http:/api"
-    steps:
-      # the Authorization: Bearer <token> header is picked up automatically; validation replaces the body with the
-      # JwtSvid, so this fits a request whose payload is not needed afterwards
-      - to: "spiffe:auth?operation=validateJwtSvid&audience=spiffe://example.org/api"
-      # the token is a credential; drop it before the exchange goes further
-      - removeHeaders:
-          pattern: "Authorization"
-      - to: "direct:handleRequest"
+- route:
+    from:
+      uri: "platform-http:/api"
+      steps:
+        # the Authorization: Bearer <token> header is picked up automatically; validation replaces the body with the
+        # JwtSvid, so this fits a request whose payload is not needed afterwards
+        - to:
+            uri: "spiffe:auth?operation=validateJwtSvid&audience=spiffe://example.org/api"
+        # the token is a credential; drop it before the exchange goes further
+        - removeHeaders:
+            pattern: "Authorization"
+        - to:
+            uri: "direct:handleRequest"
 ```
 
 A missing token fails with `IllegalArgumentException`; a rejected one (invalid, expired, or a wrong audience) fails with `io.spiffe.exception.JwtSvidException`. Catch both — `onException(io.spiffe.exception.JwtSvidException.class, IllegalArgumentException.class)` — to answer `401`.

@@ -241,7 +241,7 @@ from("undertow:http://0.0.0.0:8080/secure?oauthProfile=myprofile")
 When `oauthProfile` is set, static profile configuration is resolved and validated at route startup. Updates to OAuth profile properties require restarting the route or Camel context before they take effect. HTTP requests and WebSocket upgrade requests without a Bearer token or with an invalid token are rejected with HTTP 401 before the route is processed; missing credentials receive a `WWW-Authenticate: Bearer` response header and invalid tokens receive `WWW-Authenticate: Bearer error="invalid_token"`. Malformed `Authorization` headers are rejected with HTTP 400 and `WWW-Authenticate: Bearer error="invalid_request"`. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the token validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property. The raw `Authorization` header is removed before the route is invoked.
 
 > **Note**
-> For WebSocket consumers, the token is validated during the HTTP upgrade handshake. The validation result is available on the `ONOPEN` event exchange when `fireWebSocketChannelEvents=true`, and on subsequent message exchanges for that connection; individual WebSocket messages are not revalidated.
+> For WebSocket consumers, the token is validated during the HTTP upgrade handshake. The validation result is available on the `ONOPEN` event exchange when `fireWebSocketChannelEvents=true`, and on subsequent message exchanges for that connection; individual WebSocket messages are not revalidated. While the consumer is stopped, upgrade requests to its path are still validated, and a connection whose handshake was not validated does not receive the messages sent by producers on that path.
 
 > **Note**
 > For HTTP consumers, automatic `OPTIONS` handling still runs before OAuth validation when `optionsEnabled=false`, so unauthenticated preflight and Allow requests keep the existing Undertow behavior. If an `OPTIONS` route is explicitly enabled, that route is protected by OAuth like other methods.
@@ -398,7 +398,15 @@ To plug in a security provider for endpoint authentication, implement SPI interf
 
 Undertow component locates all implementations of `UndertowSecurityProvider` using Java SPI (Service Provider Interfaces). If there is an object passed to the component as parameter `securityConfiguration` and provider accepts it. Provider will be used for authentication of all requests.
 
-Property `requireServletContext` of security providers forces the Undertow server to start with servlet context. There will be no servlet actually handled. This feature is meant only for use with servlet filters, which needs servlet context for their functionality.
+Property `requireServletContext` of security providers forces the Undertow server to run with servlet context, as soon as an endpoint that uses such a provider, configured on the endpoint or on the component, is started. There will be no servlet actually handled. This feature is meant only for use with servlet filters, which needs servlet context for their functionality.
+
+#### WebSocket endpoints
+
+On WebSocket endpoints (`ws://` and `wss://`), the security provider and the `allowedRoles` option apply to the upgrade request that opens a connection. A request that the provider rejects, or a request to an endpoint that has `allowedRoles` but no security provider, is answered with the same status code as on an HTTP endpoint, and no connection is opened. The headers that the provider adds are set on every exchange of the connection.
+
+All the endpoints of a WebSocket path share its connections, including the producers that send to its peers. The security settings of the consumer apply to the whole path, and keep applying while the consumer is stopped. On a path that only has producers, the settings of the producers apply. A connection that was opened before the current settings applied, for example while the path only had producers without security settings, does not receive the messages of the producers, and it is closed when it sends a message.
+
+The `handlers` and `accessLog` options apply to WebSocket consumers as well, before the upgrade.
 
 ## Examples
 
