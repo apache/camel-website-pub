@@ -126,6 +126,19 @@ Enum values:
 
 If a [Route Template](../../manual/route-template.md) is not found, the **kamelet** endpoint tries to load the related **kamelet** definition from the file system (by default `classpath:kamelets`). The default resolution mechanism expects _Kamelets_ files to have the extension `.kamelet.yaml`.
 
+### Writing a custom Kamelet
+
+You can write your own Kamelets, for a piece of an integration that several routes need. A Kamelet is a `.kamelet.yaml` file with a route template and a description of its parameters, and it is one of three kinds, set by the `camel.apache.org/kamelet.type` label:
+
+-   `source`: produces messages, and is used as the start of a route (`from: kamelet:<name>`).
+    
+-   `sink`: receives the message of a route and sends it somewhere (`to: kamelet:<name>`).
+    
+-   `action`: changes the message as a step in the middle of a route (`to: kamelet:<name>`).
+    
+
+See [Writing a custom Kamelet](others/kamelet-custom.md) for the file, with an example of each kind.
+
 ### Error Handling
 
 The error handling when using kamelets are using the same error handling that are from the route where the kamelets are being used.

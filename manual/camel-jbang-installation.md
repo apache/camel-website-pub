@@ -77,29 +77,4 @@ The [Camel CLI Launcher](camel-jbang-launcher.md) is a self-contained executable
 
 ## Container image
 
-The Camel CLI is also available as a container image on [Docker Hub](https://hub.docker.com/r/apache/camel-jbang/).
-
-> **Note**
-> All examples below use `docker`. Replace with `podman` if you prefer — the commands are identical.
-
-Pull the image:
-
-```bash
-docker pull apache/camel-jbang:4.21.0
-```
-
-Verify it works:
-
-```bash
-docker run apache/camel-jbang:4.21.0 version
-```
-
-```none
-Camel CLI version: 4.21.0
-```
-
-Run a route by mounting your local directory:
-
-```bash
-docker run -v .:/integrations apache/camel-jbang:4.21.0 run /integrations/example.yaml
-```
+The Camel CLI is also available as a container image (`apache/camel-jbang` on Docker Hub), see [Container Image](camel-jbang-container.md).

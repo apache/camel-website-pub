@@ -63,7 +63,7 @@ The **More** menu (key **0**) opens a popup with tabs organized into groups:
     
 -   **AI** — Ollama (listed when an Ollama server is detected)
     
--   **Data** — JDBC DataSource, Kafka, SQL Query, SQL Trace
+-   **Data** — JDBC DataSource, Kafka, Secrets, SQL Query, SQL Trace
     
 -   **JVM** — Classpath, Heap Memory Histogram, Memory Usage, Memory Leak, Process, Startup, Threads
     

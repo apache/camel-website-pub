@@ -1438,6 +1438,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [JFR](../../components/next/others/jfr.md) | camel-jfr-starter | Stable | 3.8 | Diagnose Camel applications with Java Flight Recorder |
 | [Jsoup](../../components/next/others/jsoup.md) | camel-jsoup-starter | Preview | 4.21 | Cleanup HTML content |
 | [JTA](../../components/next/others/jta.md) | camel-jta-starter | Stable | 3.4 | Using Camel With JTA Transaction Manager |
+| [Kamelet - Writing a custom Kamelet](../../components/next/others/kamelet-custom.md) | undefined-starter |  |  |  |
 | [Kamelet Main](../../components/next/others/kamelet-main.md) | camel-kamelet-main-starter | Preview | 3.11 | Main to run Kamelet standalone |
 | [Kamelet Main Support](../../components/next/others/kamelet-main-support.md) | camel-kamelet-main-support-starter | Preview | 4.19 | Support Module for Kamelet Main |
 | [Keycloak Consumer Operations](../../components/next/others/keycloak-consumer.md) | undefined-starter |  |  |  |

@@ -230,6 +230,40 @@ During development, you can use `missingOperation` to ignore this as shown:
 
 This allows you to implement the APIs one by one over time.
 
+### Handling unmatched requests
+
+By default, requests that do not match any operation in the OpenAPI specification are answered by the HTTP layer of the runtime with HTTP `404` (unknown path) or `405` with an `Allow` header.
+
+Set `unmatchedRequestHandling` to `camel` to instead route such requests to Camel, where they are answered by an unmatched request handler (see the [rest-openapi](../components/4.22.x/rest-openapi-component.md) component documentation for how to plug in a `RestUnmatchedRequestHandler` that controls the response body):
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+    rest().openApi()
+        .specification("petstore-v3.json")
+        .missingOperation("ignore")
+        .unmatchedRequestHandling("camel");
+```
+
+```xml
+<rest>
+  <openApi specification="petstore-v3.json" missingOperation="ignore" unmatchedRequestHandling="camel"/>
+</rest>
+```
+
+```yaml
+- rest:
+    openApi:
+      specification: petstore-v3.json
+      missingOperation: ignore
+      unmatchedRequestHandling: camel
+```
+
 ### Mocking API operations
 
 This is similar to ignoring missing API operations, as you can tell Camel to mock instead, as shown:

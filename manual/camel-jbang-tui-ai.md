@@ -19,22 +19,7 @@ See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
 
 ## Choosing an AI provider
 
-Press **F8** to open the built-in AI prompt panel. The panel auto-detects a provider in this order:
-
-1.  `ANTHROPIC_API_KEY` → Anthropic Claude
-    
-2.  `CLOUD_ML_REGION` + `ANTHROPIC_VERTEX_PROJECT_ID` → Vertex AI
-    
-3.  `AZURE_OPENAI_API_KEY` + `AZURE_OPENAI_ENDPOINT` → Azure OpenAI
-    
-4.  `GEMINI_API_KEY` → Google Gemini
-    
-5.  `OPENAI_API_KEY` → OpenAI
-    
-6.  `LLM_API_KEY` + optional `LLM_BASE_URL` → any OpenAI-compatible server
-    
-7.  Ollama at `localhost:11434` → local Ollama (auto-detected, no key needed)
-    
+Press **F8** to open the built-in AI prompt panel. The panel detects the provider from the environment (`ANTHROPIC_API_KEY`, `OPENAI_API_KEY`, `GEMINI_API_KEY`, a local Ollama, and others) the same way as `camel ask`; the order is listed in [AI Providers and Local Models](camel-jbang-ai-providers.html#_choosing_a_provider).
 
 Press **Ctrl+P** inside the AI panel to switch provider or model at any time.
 
@@ -59,7 +44,7 @@ Press **Tab** to complete a command name. After `/model` **Tab** completes the m
 | `/provider` (`/p`) | Open the provider switcher. |
 | `/model [model-name]` (`/m`) | Show the current model, or switch the session model. |
 | `/write [confirm|auto|live]` (`/w`) | Show or switch how file writes by the model (`camel_write_file`) are handled. `confirm` (default) shows the confirm dialog for every write, whatever the model passes; `auto` lets the model skip the dialog with `confirm=false`; `live` replays the edit in the Source editor so you watch it happen (see below). The mode lasts for the session. |
-| `/tools [auto|core|full]` (`/t`) | Show which tool set is sent to the model, or switch it. `auto` (default) sends the core set to local providers and every tool to hosted ones; the choice is saved as `camel.tui.ai.tools`. |
+| `/tools [auto|core|full]` (`/t`) | Show which tool set is sent to the model, or switch it. `auto` (default) sends the core set to local providers and every tool to hosted ones; the choice is saved as `camel.tui.ai.tools`. With the core set it also shows the tool groups loaded for the selected integration, for example `core (26 of 60 tools), mode auto (local provider); groups: sql, resilience (from the selected integration)`, see [Tool groups](camel-jbang-tui-local-models.html#_tool_groups_from_the_selected_integration). |
 | `/context` (`/ctx`) | Show what the next request costs: provider and model, tool set, static prefix size, history size and the session total, and with Ollama the context window, the prompt size above which the history is compacted and the last measured prompt. Useful with local models, where prompt size is time. |
 | `/compact` | Shrink the conversation history sent to the model right away: older tool results are cut to their first lines and the oldest turns are dropped. With a hosted provider the panel does this automatically after each answer for all but the latest turn. With Ollama or another `localhost` provider it waits until the prompt Ollama measured passes half the context window (see [Working with a local Ollama model](camel-jbang-tui-local-models.html#_working_with_a_local_ollama_model)), then compacts thoroughly, because a local server can reuse its cached prompt only while the conversation is appended to and rewriting the history makes it process the whole prompt again. Both the command and the automatic compaction print one line with the sizes before and after and, locally, how long the next reply will take to start. |
 | `/retry` | Send the last question again, starting from a clean turn in the model history. |

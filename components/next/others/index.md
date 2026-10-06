@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 101 in 66 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 102 in 66 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -41,6 +41,7 @@ Number of Miscellaneous Components: 101 in 66 JAR artifacts (3 deprecated)
 | [JFR](jfr.md) | camel-jfr | Stable | 3.8 | Diagnose Camel applications with Java Flight Recorder |
 | [Jsoup](jsoup.md) | camel-jsoup | Preview | 4.21 | Cleanup HTML content |
 | [JTA](jta.md) | camel-jta | Stable | 3.4 | Using Camel With JTA Transaction Manager |
+| [Kamelet - Writing a custom Kamelet](kamelet-custom.md) |  |  |  |  |
 | [Kamelet Main](kamelet-main.md) | camel-kamelet-main | Preview | 3.11 | Main to run Kamelet standalone |
 | [Kamelet Main Support](kamelet-main-support.md) | camel-kamelet-main-support | Preview | 4.19 | Support Module for Kamelet Main |
 | [Keycloak Consumer Operations](keycloak-consumer.md) |  |  |  |  |

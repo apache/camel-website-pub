@@ -7,6 +7,22 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.22.1 to 4.22.2
 
+### camel-netty-http - the roles of a security constraint are matched by role name
+
+The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.
+
+### camel-azure-eventhubs
+
+The producer now leaves the Camel-internal headers (`Camel*`) out of the `EventData` application properties by default. The 4.22.0 upgrade guide already announced this, but the filter was not installed, so 4.22.0 and 4.22.1 still copied every header. Configure a custom `headerFilterStrategy` on the component to change which headers are sent.
+
+A route that consumes from one Event Hub and produces to another no longer fails, or ignores the producer configuration, because of the `CamelAzureEventHubsPartitionKey` and `CamelAzureEventHubsPartitionId` headers that the consumer sets. Such a route used to fail with `Both partitionKey and partitionId are set` for every event with a partition key, and for every event when `partitionKey` was configured, and a configured `partitionId` was replaced by the partition the event was received from. The producer now picks the partition from, in this order: a partition header set by the route, the `partitionKey` or `partitionId` endpoint option, and the partition key of the received event. It no longer reuses the partition id of the received event, so an event without a partition key is no longer sent to the partition with the same id in the target Event Hub. To keep doing so, for example when mirroring between Event Hubs that have the same partitions, remove the `CamelAzureEventHubsReceivedPartitionId` exchange property before the producer.
+
+### camel-xslt and camel-xslt-saxon - implicit DOM sources
+
+When a non-`Source` input is implicitly converted to a `DOMSource` pointing at its owner document’s root element, the Saxon-backed XSLT transformer now starts at the document node. This preserves document-root (`match="/"`) template behavior when, for example, a CXF payload is converted to a DOM source. The default JDK XSLT transformer already starts at the document node; the change also applies to `xslt:` when configured with Saxon as its transformer factory. The original DOM and source system ID are preserved. Nested and detached elements are unchanged. Explicit `Source` inputs, including a `Source` returned by the endpoint’s `source` expression, retain their selected context node, and streaming sources are unchanged.
+
+Custom implicit converters that intentionally select the document element as the XSLT context may observe different template selection. To retain element-context semantics, provide an explicit `DOMSource(element)` as the body or through the endpoint’s `source` expression.
+
 ### camel-zipfile, camel-tarfile - a maxDecompressedSize of 2 GiB or more is now enforced
 
 The `maxDecompressedSize` option of the Zip File and Tar File data formats (and of `ZipSplitter`) was not enforced when set to 2 GiB (`Integer.MAX_VALUE` bytes) or more, because the byte count behind the check wrapped around. The limit is now enforced for any value: unmarshalling an entry that decompresses to more than the configured `maxDecompressedSize` fails with an `IOException`, as documented. The default limit (1 GiB) is unchanged, and `-1` still disables the limit.
@@ -22,6 +38,12 @@ The post login url of the authorization code flow is now always built from the o
 When `allowResponseHeaderOverride` is enabled, the `spring-ws` producer now applies the endpoint’s `headerFilterStrategy` to the SOAP response header attributes and elements it maps onto the message, as the `spring-ws` consumer already does for inbound SOAP headers. With the default `SpringWebserviceHeaderFilterStrategy`, attribute and element names starting with `Camel` or `camel` (case-insensitively) are no longer copied onto the message.
 
 Other SOAP response header attributes and elements are mapped as before, and the raw SOAP header is still available in the `CamelSpringWebserviceSoapHeader` header. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
+
+### camel-spring-ws - internal Camel headers are no longer written into SOAP headers
+
+The default `messageFilter` of the `spring-ws` component, `BasicMessageFilter`, now applies the endpoint’s `headerFilterStrategy` before it writes a message header into the SOAP header, both on the request sent by the producer and on the response returned by the consumer. With the default `SpringWebserviceHeaderFilterStrategy`, message headers whose names start with `Camel` or `camel` (case-insensitively) are no longer written into the SOAP header. Other message headers are written as before.
+
+A `BasicMessageFilter` created in application code applies a `SpringWebserviceHeaderFilterStrategy` unless it is created with another strategy. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
 
 ### camel-http-common, camel-platform-http-vertx - fileNameExtWhitelist entries are matched exactly
 
@@ -97,6 +119,10 @@ coap://0.0.0.0:5683/my/resource?muteException=false
 ```
 
 For the Rest DSL, set it with `restConfiguration().endpointProperty("muteException", "false")`.
+
+### camel-docling - output path handling
+
+The `CamelDoclingOutputFilePath` header, which selects the CLI output directory, is now normalized lexically (redundant separators and `.`/`..` segments are resolved) before it is passed to Docling; a header value without such segments is still used as given. A new `outputBaseDirectory` option additionally confines the header the same way `inputBaseDirectory` confines input paths - when set, an output path that resolves outside it, including an absolute path, is rejected with an `IOException`. `outputBaseDirectory` is unset by default.
 
 ## Upgrading from 4.22.0 to 4.22.1
 
@@ -1042,6 +1068,9 @@ This is a behavior change: routes that previously completed immediately regardle
 The `azure-eventhubs` producer now applies a `DefaultHeaderFilterStrategy` to the headers copied onto `EventData` application properties. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) are no longer forwarded to Azure Event Hubs, consistent with the inbound header filtering performed by other components.
 
 Ordinary application headers are unaffected.
+
+> **Note**
+> The filter was not installed in 4.22.0 and 4.22.1, so the producer still copied every header. It is applied from 4.22.2, see the 4.22.2 entry for `camel-azure-eventhubs` (CAMEL-25227).
 
 ### camel-azure-storage-datalake - openInputStream no longer uses Blob Query API
 

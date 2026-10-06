@@ -1,0 +1,23 @@
+# camel mcp
+
+MCP server for AI coding assistants
+
+> **Note**
+> This command is provided by the `mcp` plugin. Install it with `camel plugin add mcp`.
+
+## Usage
+
+```bash
+camel mcp [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--http` | Enable HTTP transport (Streamable HTTP and SSE). Default uses STDIO transport. | false | boolean |
+| `--log-level` | Log level (ERROR, WARN, INFO, DEBUG, TRACE) | WARN | String |
+| `--port` | HTTP server port (only used with --http) | 8080 | int |
+| `--version` | Camel MCP server version to use (default: current Camel version) |  | String |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

@@ -1,6 +1,6 @@
 # Camel 3 Release Stats
 
-Published 2022-03-23 by assimbly in Camel
+Published 2022-03-23 by Assimbly in Camel
 
 Camel 3 Release Stats
 

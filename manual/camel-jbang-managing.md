@@ -5,6 +5,8 @@ Once your Camel integrations are running, the CLI provides comprehensive managem
 > **Tip**
 > Prefer a visual dashboard over individual commands? Just type `camel tui` — the plugin auto-installs on first use. It shows routes, messages, health, traces, and more in a single terminal view. See [Camel TUI](camel-jbang-tui.md) for details.
 
+For looking deeper into a misbehaving integration — captured errors, blocked messages, memory leaks, heap and thread dumps, startup timing, SQL and Kafka — see [Diagnostics](camel-jbang-diagnostics.md).
+
 ## Controlling local Camel integrations
 
 List running integrations with `ps`:
@@ -396,8 +398,6 @@ camel cmd logger --logging-level=DEBUG foo
 
 ### Per-category logging
 
-**Available since Camel 4.6**
-
 Set category-specific levels from the CLI (repeatable):
 
 ```bash
@@ -623,22 +623,10 @@ camel jolokia 62506 --stop
 > **Tip**
 > Run `camel hawtio --help` for options.
 
-## Thread dump
-
-List threads in a running Camel integration:
-
-```bash
-camel cmd thread-dump myApp
-```
-
-By default only Camel-related threads are shown. Use `--filter=all` for all JVM threads, or `--state=BLOCKED` to find blocked threads. Add `--trace` to include stack traces:
-
-```bash
-camel cmd thread-dump myApp --filter=all --state=BLOCKED --trace
-```
-
 ## See Also
 
+-   [Diagnostics](camel-jbang-diagnostics.md) — errors, memory leaks, heap and thread dumps, startup, SQL and Kafka
+    
 -   [Camel Kubernetes Plugin](camel-jbang-kubernetes.md) — deploy and manage Camel integrations on Kubernetes
     
 -   [Camel Testing Plugin](camel-jbang-test.md) — write and run automated tests with Citrus

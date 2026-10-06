@@ -127,6 +127,22 @@ Enum values:
 | **consumerComponentName** (consumer (advanced)) | Name of the Camel component that will service the requests. The component must be present in Camel registry and it must implement RestOpenApiConsumerFactory service provider interface. If not set CLASSPATH is searched for single component that implements RestOpenApiConsumerFactory SPI. Can be overridden in endpoint configuration. |  | String |
 | **mockIncludePattern** (consumer (advanced)) | Used for inclusive filtering of mock data from directories. The pattern is using Ant-path style pattern. Multiple patterns can be specified separated by comma. | classpath:camel-mock/\*\* | String |
 | **restOpenapiProcessorStrategy** (consumer (advanced)) | To use a custom strategy for how to process Rest DSL requests. |  | RestOpenapiProcessorStrategy |
+| **unmatchedRequestHandling** (consumer (advanced)) | 
+
+Who answers requests that match no operation in the OpenAPI specification: the HTTP layer (platform) or Camel via the unmatched request handler (camel). Can be overridden in endpoint configuration.
+
+Enum values:
+
+-   platform
+    
+-   camel
+    
+
+
+
+
+
+ | platform | String |
 | **host** (producer) | Scheme hostname and port to direct the HTTP requests to in the form of [https://hostname:port](https://hostname:port). Can be configured at the endpoint, component or in the corresponding REST configuration in the Camel Context. If you give this component a name (e.g. petstore) that REST configuration is consulted first, rest-openapi next, and global configuration last. If set overrides any value found in the OpenApi specification, RestConfiguration. Can be overridden in endpoint configuration. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **requestValidationEnabled** (producer) | Enable validation of requests against the configured OpenAPI specification. | false | boolean |
@@ -201,6 +217,22 @@ Enum values:
  |  | ExchangePattern |
 | **mockIncludePattern** (consumer (advanced)) | Used for inclusive filtering of mock data from directories. The pattern is using Ant-path style pattern. Multiple patterns can be specified separated by comma. | classpath:camel-mock/\*\* | String |
 | **restOpenapiProcessorStrategy** (consumer (advanced)) | To use a custom strategy for how to process Rest DSL requests. |  | RestOpenapiProcessorStrategy |
+| **unmatchedRequestHandling** (consumer (advanced)) | 
+
+Who answers requests that match no operation in the OpenAPI specification: the HTTP layer (platform) or Camel via the unmatched request handler (camel).
+
+Enum values:
+
+-   platform
+    
+-   camel
+    
+
+
+
+
+
+ | platform | String |
 | **host** (producer) | Scheme hostname and port to direct the HTTP requests to in the form of [https://hostname:port](https://hostname:port). Can be configured at the endpoint, component or in the corresponding REST configuration in the Camel Context. If you give this component a name (e.g. petstore) that REST configuration is consulted first, rest-openapi next, and global configuration last. If set overrides any value found in the OpenApi specification, RestConfiguration. Overrides all other configuration. |  | String |
 | **produces** (producer) | What payload type this component is producing. For example application/json according to the RFC7231. This equates to the value of Content-Type HTTP header. If set overrides any value present in the OpenApi specification. Overrides all other configuration. |  | String |
 | **requestValidationEnabled** (producer) | Enable validation of requests against the configured OpenAPI specification. | false | boolean |
@@ -413,8 +445,94 @@ The validator checks for the following conditions:
     
 -   query parameters - Validates whether an HTTP query parameter required by the API operation is present. The query parameter is expected to be present among the Camel message exchange headers.
     
+-   path parameters - Validates that every parameter in the path of the API operation, such as `sku` in `/stock/{sku}/reserve`, has a value: a Camel message exchange header or an exchange variable of that name. Without the check, a missing value is sent as the literal `{sku}` in the path.
+    
 
 If any of the validation checks fail, then a `RestOpenApiValidationException` is thrown. The exception object has a `getValidationErrors` method that returns the error messages from the validator.
+
+## Unmatched requests
+
+By default, an incoming request that does not match any operation in the OpenAPI specification is answered by the HTTP layer of the runtime, with HTTP 404, and a request that matches a path but not the HTTP method is answered with HTTP 405 and an `Allow` header listing the allowed methods.
+
+A request that matches an operation but whose `Content-Type` or `Accept` header does not match the `consumes` or `produces` of the operation is answered by the HTTP layer, with HTTP 415 or 406 (see the `serverRequestValidation` option of the platform-http component, enabled by default). When `unmatchedRequestHandling` is set to `camel`, some runtimes also route these requests to Camel, so the unmatched request handler answers them with the same 415 or 406 status code.
+
+To let Camel answer these requests instead, set the `unmatchedRequestHandling` option to `camel` on the rest-openapi consumer endpoint or via the rest DSL `openApi` section. The rest-openapi component then registers a catch-all for the API base path on the HTTP layer so requests that match no operation are routed to Camel, where they are answered by the unmatched request handler.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("rest-openapi:petstore-v3.json?missingOperation=ignore&unmatchedRequestHandling=camel")
+    .to("direct:businessLogic");
+
+// ... or using the rest DSL
+
+rest().openApi()
+    .specification("petstore-v3.json")
+    .missingOperation("ignore")
+    .unmatchedRequestHandling("camel");
+```
+
+```yaml
+- route:
+    from:
+      uri: rest-openapi:petstore-v3.json
+      parameters:
+        missingOperation: ignore
+        unmatchedRequestHandling: camel
+      steps:
+        - to:
+            uri: direct:businessLogic
+
+# ... or using the rest DSL
+
+- rest:
+    openApi:
+      specification: petstore-v3.json
+      missingOperation: ignore
+      unmatchedRequestHandling: camel
+```
+
+The option is supported by the built-in `platform-http` consumer component: Camel Main when using [Platform HTTP](platform-http-component.md), and Spring Boot when using the platform-http starter (`camel-platform-http-starter`). Other consumer components are not tested and can decide to handle, ignore or reject the parameter.
+
+On Camel Main and Quarkus, the catch-all route is evaluated last on the HTTP server, so it never shadows the operation routes of other APIs served by the same server, even when their base paths are nested under this API.
+
+> **Note**
+> With nested base paths (for example `/api` and `/api/v3`), the order of the catch-all follows the order in which the consumers start: `PUT /api/v3/pet/123` may get a 404 from `/api` instead of 405 with an `Allow` header from `/api/v3`. To work around this, avoid nesting the base paths of several APIs in `camel` mode, or inspect the request in a custom `RestUnmatchedRequestHandler` and determine the proper response.
+
+On Spring Boot, the catch-all is served by a Spring MVC handler mapping that is evaluated before the application’s own controller mappings and the static resources. With a base path of `/`, in `camel` mode every request unmatched by the API is answered by the unmatched request handler, so controllers and static resources are shadowed. When the application also serves MVC content, prefer to use a base path other than `/` (for example by setting `servers` in the OpenAPI specification or `contextPath` in the rest configuration), so the catch-all only claims requests under that path.
+
+If the API and Spring MVC controllers must keep responding to their own paths at a base path of `/`, you can register your own `RequestMappingHandlerMapping` bean with its order set to `-50`. This still does not work for serving static resources.
+
+When the request has been routed to Camel, the response body (and headers) can be customized by registering a bean in the [Registry](../../manual/registry.md) that implements the `RestUnmatchedRequestHandler` interface. The handler is called with the exchange, the status code (`404`, `405`, `415` or `406`) and the list of allowed HTTP methods (empty for `404`, `415` and `406`), and can then set the response body, status code and headers as needed. The handler can also be registered using a factory finder on the classpath. This is done by adding a resource file `META-INF/services/org/apache/camel/rest-unmatched-request-handler-factory` with the content `class=com.example.MyHandler`.
+
+A single handler bean in the registry takes precedence over a handler found via the factory finder, which in turn takes precedence over the default handler. Regardless of how the handler is registered **only one** handler is used: when two or more beans of this type are found in the registry, the handler from the factory finder is used (if present), otherwise the default handler is used.
+
+```java
+public class JsonErrorHandler implements RestUnmatchedRequestHandler {
+
+    @Override
+    public void handle(Exchange exchange, int statusCode, List<String> allowedMethods) {
+        String message = switch (statusCode) {
+            case 404 -> "The requested resource was not found.";
+            case 405 -> "The HTTP method is not allowed for this resource.";
+            case 415 -> "The Content-Type of the request is not supported by this resource.";
+            case 406 -> "No representation matching the Accept header can be produced for this resource.";
+            default -> "The request cannot be processed.";
+        };
+
+        exchange.getMessage().setHeader(Exchange.HTTP_RESPONSE_CODE, statusCode);
+        exchange.getMessage().setHeader(Exchange.CONTENT_TYPE, "application/json");
+        if (!allowedMethods.isEmpty()) {
+            exchange.getMessage().setHeader("Allow", String.join(", ", allowedMethods));
+        }
+        exchange.getMessage().setBody(String.format(
+                "{\"message\":\"%s\"}", message));
+    }
+}
+```
 
 ## Examples
 

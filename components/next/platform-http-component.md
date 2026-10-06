@@ -151,6 +151,22 @@ Enum values:
 
  |  | ExchangePattern |
 | **fileNameExtWhitelist** (consumer (advanced)) | A comma or whitespace separated list of file extensions. Uploads having these extensions will be stored locally. Null value or asterisk () will allow all files. |  | String |
+| **unmatchedRequestHandling** (consumer (advanced)) | 
+
+Who answers requests that match no registered operation when using rest-dsl contract-first (such as the rest-openapi component): the HTTP layer (platform) or Camel via the route (camel). When set to camel, a catch-all is registered so unmatched requests are routed to Camel. Currently supported by camel-platform-http-vertx (Camel Main, Quarkus) and the Spring Boot platform-http-starter.
+
+Enum values:
+
+-   platform
+    
+-   camel
+    
+
+
+
+
+
+ | platform | String |
 | **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter headers to and from Camel message. |  | HeaderFilterStrategy |
 | **platformHttpEngine** (advanced) | An HTTP Server engine implementation to serve the requests of this endpoint. |  | PlatformHttpEngine |
 | **oauthProfile** (security) | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. |  | String |
@@ -296,6 +312,12 @@ from("platform-http:/reverse-proxy?matchOnUriPrefix=true&stripUriPrefix=true")
 | `GET /reverse-proxy/get` | `/reverse-proxy/get` | `/get` | `[http://backend/get](http://backend/get)` |
 
 `CamelHttpUri`/`CamelHttpUrl` still hold the full original request, only `CamelHttpPath` is rewritten. This option is currently implemented in `camel-platform-http-vertx`.
+
+### Contract-first REST and unmatched requests
+
+When the consumer is used by the [rest-openapi](rest-openapi-component.md) component (rest-dsl contract-first), requests that do not match any operation of the OpenAPI specification are answered by the HTTP layer itself (status `404`/`405`).
+
+Set the `unmatchedRequestHandling` endpoint option to `camel` to instead route such requests to Camel, where they are answered by the unmatched request handler (see the rest-openapi component documentation). On Camel Main and Quarkus, `camel-platform-http-vertx` registers a catch-all route per API base path; on Spring Boot, the catch-all is registered on this component and served by the platform-http starter. The catch-all is evaluated last, so it never shadows the operations of other APIs served by the same server, even when their base paths are nested under this API.
 
 ### File Attachments handling
 

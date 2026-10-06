@@ -7,8 +7,6 @@ The Camel CLI provides built-in debugging capabilities — from Camel’s own ro
 
 ## Camel route debugging
 
-**Available since Camel 4.2**
-
 Debug Camel routes directly from the terminal:
 
 ```bash

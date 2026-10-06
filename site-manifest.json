@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1790963590870,
+  "generated": 1791289970441,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -16896,6 +16896,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jackson.adoc",
+              "url": "/camel-spring-boot/next/jackson.html",
+              "title": "Jackson 2 and Jackson 3"
+            },
+            {
+              "module": "ROOT",
               "path": "jgroups-raft-cluster-service.adoc",
               "url": "/camel-spring-boot/next/jgroups-raft-cluster-service.html",
               "title": "Jgroups Raft Cluster Service"
@@ -19576,6 +19582,12 @@
               "path": "infinispan-cluster-service.adoc",
               "url": "/camel-spring-boot/4.22.x/infinispan-cluster-service.html",
               "title": "Infinispan Cluster Service"
+            },
+            {
+              "module": "ROOT",
+              "path": "jackson.adoc",
+              "url": "/camel-spring-boot/4.22.x/jackson.html",
+              "title": "Jackson 2 and Jackson 3"
             },
             {
               "module": "ROOT",
@@ -23677,6 +23689,12 @@
               "path": "jta.adoc",
               "url": "/components/next/others/jta.html",
               "title": "JTA"
+            },
+            {
+              "module": "others",
+              "path": "kamelet-custom.adoc",
+              "url": "/components/next/others/kamelet-custom.html",
+              "title": "Kamelet - Writing a custom Kamelet"
             },
             {
               "module": "others",
@@ -35306,6 +35324,12 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-ai-providers.adoc",
+              "url": "/manual/camel-jbang-ai-providers.html",
+              "title": "Camel CLI - AI Providers and Local Models"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-ai.adoc",
               "url": "/manual/camel-jbang-ai.html",
               "title": "Camel CLI - AI Tools"
@@ -35326,7 +35350,7 @@
               "module": "ROOT",
               "path": "camel-jbang-container.adoc",
               "url": "/manual/camel-jbang-container.html",
-              "title": "Running Camel JBang in a Container"
+              "title": "Camel CLI - Container Image"
             },
             {
               "module": "ROOT",
@@ -35348,6 +35372,12 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-diagnostics.adoc",
+              "url": "/manual/camel-jbang-diagnostics.html",
+              "title": "Camel CLI - Diagnostics"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-getting-started.adoc",
               "url": "/manual/camel-jbang-getting-started.html",
               "title": "Camel CLI - Getting Started"
@@ -35360,9 +35390,15 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-kubernetes-advanced.adoc",
+              "url": "/manual/camel-jbang-kubernetes-advanced.html",
+              "title": "Camel CLI - Kubernetes Plugin Advanced Options"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-kubernetes.adoc",
               "url": "/manual/camel-jbang-kubernetes.html",
-              "title": "Camel Kubernetes plugin"
+              "title": "Camel CLI - Kubernetes Plugin"
             },
             {
               "module": "ROOT",
@@ -35404,7 +35440,7 @@
               "module": "ROOT",
               "path": "camel-jbang-test.adoc",
               "url": "/manual/camel-jbang-test.html",
-              "title": "Camel Testing plugin"
+              "title": "Camel CLI - Testing Plugin"
             },
             {
               "module": "ROOT",
@@ -35471,6 +35507,12 @@
               "path": "camel-jbang-tui.adoc",
               "url": "/manual/camel-jbang-tui.html",
               "title": "Camel TUI"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-validation.adoc",
+              "url": "/manual/camel-jbang-validation.html",
+              "title": "Camel CLI - Validation"
             },
             {
               "module": "ROOT",
@@ -35852,12 +35894,6 @@
             },
             {
               "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-cmd-jfr-old-objects.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-cmd-jfr-old-objects.html",
-              "title": "camel cmd jfr-old-objects"
-            },
-            {
-              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-cmd-load.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-load.html",
               "title": "camel cmd load"
@@ -36092,6 +36128,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-edit.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-edit.html",
+              "title": "camel edit"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-eval-expression.adoc",
               "url": "/manual/jbang-commands/camel-jbang-eval-expression.html",
               "title": "camel eval expression"
@@ -36113,6 +36155,24 @@
               "path": "jbang-commands/camel-jbang-export.adoc",
               "url": "/manual/jbang-commands/camel-jbang-export.html",
               "title": "camel export"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-generate-rest.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-generate-rest.html",
+              "title": "camel generate rest"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-generate-schema.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-generate-schema.html",
+              "title": "camel generate schema"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-generate.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-generate.html",
+              "title": "camel generate"
             },
             {
               "module": "ROOT",
@@ -36392,9 +36452,45 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-kubernetes-delete.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-kubernetes-delete.html",
+              "title": "camel kubernetes delete"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-kubernetes-export.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-kubernetes-export.html",
+              "title": "camel kubernetes export"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-kubernetes-logs.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-kubernetes-logs.html",
+              "title": "camel kubernetes logs"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-kubernetes-run.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-kubernetes-run.html",
+              "title": "camel kubernetes run"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-kubernetes.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-kubernetes.html",
+              "title": "camel kubernetes"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-log.adoc",
               "url": "/manual/jbang-commands/camel-jbang-log.html",
               "title": "camel log"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-mcp.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-mcp.html",
+              "title": "camel mcp"
             },
             {
               "module": "ROOT",
@@ -36452,6 +36548,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-route-parser.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-route-parser.html",
+              "title": "camel route-parser"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-run.adoc",
               "url": "/manual/jbang-commands/camel-jbang-run.html",
               "title": "camel run"
@@ -36479,6 +36581,18 @@
               "path": "jbang-commands/camel-jbang-stop.adoc",
               "url": "/manual/jbang-commands/camel-jbang-stop.html",
               "title": "camel stop"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test-init.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test-init.html",
+              "title": "camel test init"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test.html",
+              "title": "camel test"
             },
             {
               "module": "ROOT",
@@ -36548,6 +36662,18 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-tui-monitor.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-tui-monitor.html",
+              "title": "camel tui monitor"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-tui.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-tui.html",
+              "title": "camel tui"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-update-list.adoc",
               "url": "/manual/jbang-commands/camel-jbang-update-list.html",
               "title": "camel update list"
@@ -36569,6 +36695,18 @@
               "path": "jbang-commands/camel-jbang-validate-normalize.adoc",
               "url": "/manual/jbang-commands/camel-jbang-validate-normalize.html",
               "title": "camel validate normalize"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-validate-properties.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-validate-properties.html",
+              "title": "camel validate properties"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-validate-source.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-validate-source.html",
+              "title": "camel validate source"
             },
             {
               "module": "ROOT",

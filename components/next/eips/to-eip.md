@@ -108,7 +108,7 @@ Java
 
 ```java
 from("file:messages/foo")
-    .to("freemarker://templateHome/${body.templateName}.ftl")
+    .to("freemarker://templateHome/${header.templateName}.ftl")
     .to("jms:queue:foo");
 ```
 
@@ -117,7 +117,7 @@ XML
 ```xml
 <route>
     <from uri="file:messages/foo"/>
-    <to uri="freemarker://templateHome/${body.templateName}.ftl"/>
+    <to uri="freemarker://templateHome/${header.templateName}.ftl"/>
     <to uri="jms:queue:foo"/>
 </route>
 ```
@@ -130,7 +130,7 @@ YAML
       uri: file:messages/foo
       steps:
         - to:
-            uri: "freemarker://templateHome/${body.templateName}.ftl"
+            uri: "freemarker://templateHome/${header.templateName}.ftl"
         - to:
             uri: jms:queue:foo
 ```
@@ -155,7 +155,7 @@ Use `toD` for dynamic URIs
 
 ```java
 from("file:messages/foo")
-    .toD("freemarker://templateHome/${body.templateName}.ftl")
+    .toD("freemarker://templateHome/${header.templateName}.ftl")
     .to("jms:queue:foo");
 ```
 
@@ -164,7 +164,7 @@ Use `<toD>` for dynamic URIs
 ```xml
 <route>
     <from uri="file:messages/foo"/>
-    <toD uri="freemarker://templateHome/${body.templateName}.ftl"/>
+    <toD uri="freemarker://templateHome/${header.templateName}.ftl"/>
     <to uri="jms:queue:foo"/>
 </route>
 ```
@@ -177,7 +177,7 @@ Use `- toD:` for dynamic URIs
       uri: file:messages/foo
       steps:
         - toD:
-            uri: "freemarker://templateHome/${body.templateName}.ftl"
+            uri: "freemarker://templateHome/${header.templateName}.ftl"
         - to:
             uri: jms:queue:foo
 ```
@@ -185,7 +185,7 @@ Use `- toD:` for dynamic URIs
 When using recipient list:
 
 ```java
-.recipientList(simple("freemarker://templateHome/${body.templateName}.ftl"))
+.recipientList(simple("freemarker://templateHome/${header.templateName}.ftl"))
 ```
 
 -   Java
@@ -199,7 +199,7 @@ Use `recipientList` for more flexible and dynamic URIs
 
 ```java
 from("file:messages/foo")
-    .recipientList(simple("freemarker://templateHome/${body.templateName}.ftl"))
+    .recipientList(simple("freemarker://templateHome/${header.templateName}.ftl"))
     .to("jms:queue:foo");
 ```
 
@@ -209,7 +209,7 @@ Use `<recipientList>` for more flexible and dynamic URIs
 <route>
     <from uri="file:messages/foo"/>
     <recipientList>
-        <simple>freemarker://templateHome/${body.templateName}.ftl</simple>
+        <simple>freemarker://templateHome/${header.templateName}.ftl</simple>
     </recipientList>
     <to uri="jms:queue:foo"/>
 </route>
@@ -225,7 +225,7 @@ Use `- recipientList:` for more flexible and dynamic URIs
         - recipientList:
             expression:
               simple:
-                expression: "freemarker://templateHome/${body.templateName}.ftl"
+                expression: "freemarker://templateHome/${header.templateName}.ftl"
         - to:
             uri: jms:queue:foo
 ```

@@ -144,7 +144,7 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **headerFilterStrategy** (common) | To use a custom HeaderFilterStrategy to filter headers mapped to and from the Camel message. By default the internal Camel and camel header namespace (case-insensitive) is filtered out from inbound SOAP headers. |  | HeaderFilterStrategy |
+| **headerFilterStrategy** (common) | To use a custom HeaderFilterStrategy to filter headers mapped to and from the Camel message. By default the internal Camel and camel header namespace (case-insensitive) is filtered out from inbound SOAP headers, and the default message filter does not write it into outbound SOAP headers. |  | HeaderFilterStrategy |
 | **messageFilter** (common) | Option to provide a custom MessageFilter. For example when you want to process your headers or attachments by your own. |  | MessageFilter |
 | **messageIdStrategy** (common) | Option to provide a custom MessageIdStrategy to control generation of WS-Addressing unique message ids. |  | MessageIdStrategy |
 | **endpointDispatcher** (consumer) | Spring org.springframework.ws.server.endpoint.MessageEndpoint for dispatching messages received by Spring-WS to a Camel endpoint, to integrate with existing (legacy) endpoint mappings like PayloadRootQNameEndpointMapping, SoapActionEndpointMapping, etc. |  | CamelEndpointDispatcher |
@@ -404,6 +404,8 @@ protected void doProcessSoapAttachements(Message inOrOut, SoapMessage response) 
     // your code, no need to call super
 }
 ```
+
+The `BasicMessageFilter` that the component creates for an endpoint applies the endpoint’s `headerFilterStrategy` to the message headers it writes into the SOAP header, so by default headers whose names start with `Camel` or `camel` are not written. A message filter you provide yourself, global or local, does not know which endpoint it runs for: a `BasicMessageFilter`, or a subclass of it, created with the no-argument constructor applies a `SpringWebserviceHeaderFilterStrategy`, whatever `headerFilterStrategy` the endpoint is configured with. To apply another strategy, create it with the `BasicMessageFilter(Supplier<HeaderFilterStrategy>)` constructor, or override `getHeaderFilterStrategy()`.
 
 ### Using a custom MessageSender and MessageFactory
 

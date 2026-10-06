@@ -92,7 +92,7 @@ More information can be found in [Apache Camel JBang documentation](../../../../
 
 ### Camel JBang Kubernetes
 
-We have done many improvements and bug fixes to make camel kubernetes work well on Openshift and [Minikube](../../../../manual/camel-jbang-kubernetes.html#_minikube_deployment_tips).
+We have done many improvements and bug fixes to make camel kubernetes work well on Openshift and [Minikube](../../../../manual/camel-jbang-kubernetes.html#_minikube).
 
 The option `--name` has been added to allow the user to explicitly define the integration name. It is available on all `camel kubernetes` commands.
 

@@ -48,3 +48,19 @@ This page provides a reference for all Camel CLI commands.
 | [camel update](camel-jbang-update.md) | Update Camel project |
 | [camel version](camel-jbang-version.md) | Manage Camel versions |
 | [camel wrapper](camel-jbang-wrapper.md) | Install Camel wrapper scripts for version pinning |
+
+## Plugin commands
+
+These commands are provided by plugins. A plugin is installed with `camel plugin add <plugin>`.
+
+  
+| Command | Plugin | Description |
+| --- | --- | --- |
+| [camel edit](camel-jbang-edit.md) | `edit` | Edit Camel with suggestions and diagnostics |
+| [camel generate](camel-jbang-generate.md) | `generate` | Generate source code |
+| [camel kubernetes](camel-jbang-kubernetes.md) | `kubernetes` | Manage Camel applications running on Kubernetes |
+| [camel mcp](camel-jbang-mcp.md) | `mcp` | MCP server for AI coding assistants |
+| [camel route-parser](camel-jbang-route-parser.md) | `route-parser` | Parses Java route and dumps route structure |
+| [camel test](camel-jbang-test.md) | `test` | Manage tests for Camel applications |
+| [camel tui](camel-jbang-tui.md) | `tui` | Camel TUI |
+| [camel validate](camel-jbang-validate.md) | `validate` | Validate Camel source code |

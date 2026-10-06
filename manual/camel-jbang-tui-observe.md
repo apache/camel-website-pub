@@ -125,6 +125,14 @@ For deeper troubleshooting, press **d** on an error to see its Diagram view: the
 
 This combination of error details + visual diagram replay gives you a complete picture of what went wrong and why — without leaving the terminal.
 
+Press **Shift+F8** on an error to ask the AI to fix it: the AI panel opens with the source line of the processor the error happened at, and its exception, the same question as **Shift+F8** on a failing line in the [Source editor](camel-jbang-tui-source-editor.html#_fix_with_ai).
+
+![Shift+F8 on an error writes the question for the AI](_images/jbang/camel-tui-errors-fix-with-ai.png)
+
+The Log tab has the same key. **Shift+F8** asks the AI about the ERROR on the screen: for a failed exchange, the step that failed comes from its Message History, so the AI is asked to fix that line of the route; for a `log` with `loggingLevel: ERROR`, the logger names the source line. Any other ERROR is explained, and fixed when the cause is in the project. When different ERRORs are on the screen, a list comes up to pick one, newest first; the same error repeated is listed once.
+
+![Shift+F8 in the Log tab with two different ERRORs on the screen](_images/jbang/camel-tui-log-fix-with-ai-pick.png)
+
 ![A failed order: the path from checkout to payment-provider](_images/jbang/camel-tui-observe-error-diagram.png)
 
 ## OpenTelemetry Spans

@@ -1,4 +1,4 @@
-# Camel Testing plugin
+# Camel CLI - Testing Plugin
 
 Write and run automated tests for Camel integrations using the [Citrus](https://citrusframework.org/) test framework.
 

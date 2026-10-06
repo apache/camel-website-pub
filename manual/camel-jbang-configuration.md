@@ -113,4 +113,11 @@ camel run 'Test.java' --repos=#repos,https://packages.atlassian.com/maven-extern
 
 ## Troubleshooting
 
-JBang stores state and downloaded JARs in `~/.jbang`. Camel CLI downloads dependencies to `~/.m2`. If you encounter issues with outdated JARs, try deleting the relevant entries in these directories.
+The Camel CLI downloads dependencies to the Maven repository in `~/.m2`, and keeps the state of running integrations in `~/.camel`. When installed with JBang, JBang also keeps its state and the CLI JARs in `~/.jbang`. If you encounter issues with outdated JARs, try deleting the relevant entries in these directories.
+
+An integration that did not terminate gracefully (killed, or the machine crashed) can leave files behind in `~/.camel`. List them, and remove the ones no longer in use:
+
+```bash
+camel dirty
+camel dirty --clean
+```

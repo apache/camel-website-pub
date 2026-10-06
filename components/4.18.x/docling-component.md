@@ -113,7 +113,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The Docling component supports 49 options, which are listed below.
+The Docling component supports 50 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -220,6 +220,7 @@ Enum values:
 | **authenticationToken** (security) | Authentication token for docling-serve API (Bearer token or API key). |  | String |
 | **inputBaseDirectory** (security) | When set, every local input file path must resolve inside this directory once normalized. Applies to the CamelDoclingInputFilePath header, to file path message bodies, and to the paths used by the batch operations. When empty, no directory restriction is applied. |  | String |
 | **maxFileSize** (security) | Maximum file size in bytes for processing. | 52428800 | long |
+| **outputBaseDirectory** (security) | When set, the output directory passed to the docling CLI must resolve inside this directory once normalized. Applies to the CamelDoclingOutputFilePath header. The check is lexical and does not resolve symbolic links, matching inputBaseDirectory. When empty, no directory restriction is applied and the header value is only normalized. |  | String |
 
 ## Endpoint Options
 
@@ -236,7 +237,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **operationId** (producer) | **Required** The operation identifier. |  | String |
 
-### Query Parameters (47 parameters)
+### Query Parameters (48 parameters)
 
    
 | Name | Description | Default | Type |
@@ -341,6 +342,7 @@ Enum values:
 | **authenticationToken** (security) | Authentication token for docling-serve API (Bearer token or API key). |  | String |
 | **inputBaseDirectory** (security) | When set, every local input file path must resolve inside this directory once normalized. Applies to the CamelDoclingInputFilePath header, to file path message bodies, and to the paths used by the batch operations. When empty, no directory restriction is applied. |  | String |
 | **maxFileSize** (security) | Maximum file size in bytes for processing. | 52428800 | long |
+| **outputBaseDirectory** (security) | When set, the output directory passed to the docling CLI must resolve inside this directory once normalized. Applies to the CamelDoclingOutputFilePath header. The check is lexical and does not resolve symbolic links, matching inputBaseDirectory. When empty, no directory restriction is applied and the header value is only normalized. |  | String |
 
 ## Message Headers
 
@@ -405,10 +407,13 @@ A `String` body is ambiguous: it could be the document itself, a URL to fetch, o
 | `allowUrlSource` | `false` | A body starting with `http://` or `https://` is handed to Docling as a remote URL to fetch. |
 | `allowFilePathSource` | `false` | A body starting with `/`, or containing `\`, is read from the local filesystem. This also covers the single directory-or-file `String` body accepted by the batch operations. |
 | `inputBaseDirectory` | _(none)_ | When set, every local input path must resolve inside this directory once normalized. Applies to the `CamelDoclingInputFilePath` header, to file path bodies, and to the paths used by the batch operations. |
+| `outputBaseDirectory` | _(none)_ | When set, the output directory passed to the docling CLI must resolve inside this directory once normalized. Applies to the `CamelDoclingOutputFilePath` header. |
 
 With both options left at their defaults, a body that is neither a URL nor a path is written to a temporary file and converted as document content, exactly as before.
 
 The `CamelDoclingInputFilePath` header is an explicit "the document lives here" signal from the route, so it keeps working without `allowFilePathSource`. It is still subject to `inputBaseDirectory` when one is set. Typed bodies - `File`, `byte[]`, `InputStream`, and the explicit path collections used by the batch operations - are unambiguous and are likewise unaffected.
+
+The `CamelDoclingOutputFilePath` header, which selects the CLI `--output` directory, is normalized lexically and, when `outputBaseDirectory` is set, confined to that directory. The normalization applies unconditionally; with `outputBaseDirectory` unset, a header value without traversal segments is otherwise used as given. The containment is lexical and does not resolve symbolic links (as with `inputBaseDirectory`).
 
 ```java
 // the body is the document itself - no opt-in needed
@@ -674,7 +679,7 @@ When passing custom CLI arguments via the `CamelDoclingCustomArguments` header, 
 | Performance | `--abort-on-error`, `--no-abort-on-error`, `--profiling`, `--no-profiling`, `--save-profiling`, `--no-save-profiling` |
 | Info | `--version`, `--help`, `--logo` |
 
-The `--output` (`-o`) flag is **not permitted** because the output directory is managed by the producer. Use the `CamelDoclingOutputFilePath` header or endpoint configuration instead.
+The `--output` (`-o`) flag is **not permitted** because the output directory is managed by the producer. Use the `CamelDoclingOutputFilePath` header or endpoint configuration instead. That header is normalized and, when `outputBaseDirectory` is set, confined to that directory (see the security options above).
 
 Additionally, the following are rejected:
 

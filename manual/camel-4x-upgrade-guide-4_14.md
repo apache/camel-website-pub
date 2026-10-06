@@ -31,6 +31,9 @@ The `azure-eventhubs` producer now applies a `DefaultHeaderFilterStrategy` to th
 
 Ordinary application headers are unaffected.
 
+> **Note**
+> The filter was not installed in 4.14.9, so the producer still copied every header. It is applied from 4.18.5, 4.22.2 and 4.23.0 (CAMEL-25227).
+
 ### camel-atmosphere-websocket - potential breaking change
 
 The Exchange header constants in `WebsocketConstants` have been renamed to follow the Camel naming convention used across the rest of the component catalog. The Java field names are unchanged; only the header string values have changed:

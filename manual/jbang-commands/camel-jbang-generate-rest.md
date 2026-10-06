@@ -1,0 +1,27 @@
+# camel generate rest
+
+Generate REST DSL source code from OpenApi specification
+
+> **Note**
+> This command is provided by the `generate` plugin. Install it with `camel plugin add generate`.
+
+## Usage
+
+```bash
+camel generate rest [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--dto` | Generate Java Data Objects |  | boolean |
+| `--input` | OpenApi specification file name |  | String |
+| `--openapi-version` | Openapi specification 3.0 or 3.1 | 3.0 | String |
+| `--output` | Output REST DSL file name |  | String |
+| `--package` | Package for generated Java models | model | String |
+| `--routes` | Generate routes (only in YAML) |  | boolean |
+| `--runtime` | Runtime | quarkus | RuntimeType |
+| `--type` | REST DSL type (YAML or XML) | yaml | String |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

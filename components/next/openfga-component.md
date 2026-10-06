@@ -27,7 +27,7 @@ Maven users will need to add the following dependency to their `pom.xml`.
 
 openfga:operation\[?options\]
 
-Where `operation` is one of `check`, `batchCheck`, `listObjects`, `listRelations`, `listUsers`, `writeTuples` or `deleteTuples`.
+Where `operation` is one of `check`, `batchCheck`, `listObjects`, `listRelations`, `listUsers`, `readTuples`, `readChanges`, `expand`, `writeTuples` or `deleteTuples`.
 
 ## Configuring Options
 
@@ -103,10 +103,13 @@ Enum values:
 
  |  | String |
 | **contextualTuples** (producer) | Relationship tuples supplied for the duration of one check and never stored, as semicolon-separated user,relation,object triples - for example user:$\\{exchangeProperty.authenticatedSubject},member,team:eng. Each part is evaluated as a Simple expression against the exchange, exactly as user and object are, and applies to check, batchCheck, listObjects, listRelations and listUsers. This is how a route hands OpenFGA a relationship the stored graph does not hold - a group membership that lives in the token rather than in the store, or a fact about the request such as which network it arrived on. A contextual tuple grants. It is read exactly like a stored tuple, so user:anne,owner,document:secret makes \\{code check(user:anne, owner, document:secret)} answer true whatever the store contains. That is why this option is endpoint-only and is never taken from the message: a tuple the caller could choose would let it assert the very relationship being checked. By the same token, an expression here that reads an inbound header hands the caller that power anyway - keep these literal, or derive them from something the route established rather than from what it received. A part that resolves to blank denies the exchange rather than being dropped: the route asked for a tuple it did not get, and continuing without it would answer a different question than the one configured. |  | String |
+| **continuationToken** (producer) | The page to read from, for readTuples and readChanges. Evaluated as a Simple expression against the exchange, so a route can feed back the token the previous page returned - $\\{header.CamelOpenFgaContinuationToken} - and page through without the token being configured statically. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **object** (producer) | The object being accessed, as an OpenFGA object identifier such as \\{code document:budget}. Evaluated as a Simple expression against each exchange, so document:$\\{header.documentId} names the resource the message is about. Unlike the subject, taking the object from a header is normal and safe: the caller is entitled to say which resource it wants, and the check is what decides whether it may have it. |  | String |
+| **pageSize** (producer) | How many entries a readTuples or readChanges page returns. Left unset, OpenFGA’s own default applies. A page is one request: this bounds the answer, not the number of requests a route makes. |  | Integer |
 | **relation** (producer) | The relation to demand, such as reader or owner. Evaluated as a Simple expression against each exchange, though a literal is what you usually want. The relation is the permission being demanded, so resolving it from an inbound header lets the caller pick the weakest one the model defines. Keep it literal, or derive it from something the route controls such as $\\{header.CamelHttpMethod}. |  | String |
 | **relations** (producer) | Comma-separated list of relations the listRelations operation asks about, for example reader,writer,owner. Only the ones the subject actually holds come back. |  | String |
+| **startTime** (producer) | The earliest change readChanges returns, as an ISO-8601 timestamp such as \\{code 2026-10-01T00:00:00Z}. Without it a first read starts at the beginning of the store’s change log, which on a busy store is a lot of history to page through before reaching anything current. Parsed when the endpoint starts, so a malformed value fails there rather than on the first exchange. |  | String |
 | **storeId** (producer) | **Required** The identifier of the OpenFGA store holding the relationship tuples and the authorization model, as returned by \\{code fga store create}. The store is the relationship graph that judges the exchange, so it comes from the endpoint only and is never taken from a message header. |  | String |
 | **type** (producer) | The object type to enumerate for the listObjects operation, for example document. This is a type name from the authorization model, so it is taken literally rather than evaluated. |  | String |
 | **user** (producer) | The subject to authorize, as an OpenFGA user identifier such as \\{code user:anne}. Evaluated as a Simple expression against each exchange, so a literal is used as-is and user:$\\{exchangeProperty.CamelKeycloakTokenSubject} resolves whatever an earlier step established. Read it from an exchange property rather than a header wherever you can. An exchange property is set by the route itself - by the step that verified the caller - and nothing outside the route can set one. A header, by contrast, is often whatever the caller sent, and an endpoint configured as user:$\\{header.userId} lets the caller choose who to be. \\{code camel-keycloak}'s KeycloakSecurityPolicy already follows that reasoning: it reads the subject from the CamelKeycloakTokenSubject exchange property in preference to the header of the same name, its preferPropertyOverHeader option defaulting to true. Nothing in Camel sets the property for you, so the step that validates the token has to record it - but recording it under that name lets one identity serve both. An expression that resolves to blank, or to a bare \\{code user:} prefix, denies the exchange: an exchange carrying no identity is not authorized, and failOpen does not apply to it. |  | String |
@@ -157,6 +160,12 @@ Enum values:
     
 -   listUsers
     
+-   readTuples
+    
+-   readChanges
+    
+-   expand
+    
 -   writeTuples
     
 -   deleteTuples
@@ -194,9 +203,12 @@ Enum values:
 
  |  | String |
 | **contextualTuples** (producer) | Relationship tuples supplied for the duration of one check and never stored, as semicolon-separated user,relation,object triples - for example user:$\\{exchangeProperty.authenticatedSubject},member,team:eng. Each part is evaluated as a Simple expression against the exchange, exactly as user and object are, and applies to check, batchCheck, listObjects, listRelations and listUsers. This is how a route hands OpenFGA a relationship the stored graph does not hold - a group membership that lives in the token rather than in the store, or a fact about the request such as which network it arrived on. A contextual tuple grants. It is read exactly like a stored tuple, so user:anne,owner,document:secret makes \\{code check(user:anne, owner, document:secret)} answer true whatever the store contains. That is why this option is endpoint-only and is never taken from the message: a tuple the caller could choose would let it assert the very relationship being checked. By the same token, an expression here that reads an inbound header hands the caller that power anyway - keep these literal, or derive them from something the route established rather than from what it received. A part that resolves to blank denies the exchange rather than being dropped: the route asked for a tuple it did not get, and continuing without it would answer a different question than the one configured. |  | String |
+| **continuationToken** (producer) | The page to read from, for readTuples and readChanges. Evaluated as a Simple expression against the exchange, so a route can feed back the token the previous page returned - $\\{header.CamelOpenFgaContinuationToken} - and page through without the token being configured statically. |  | String |
 | **object** (producer) | The object being accessed, as an OpenFGA object identifier such as \\{code document:budget}. Evaluated as a Simple expression against each exchange, so document:$\\{header.documentId} names the resource the message is about. Unlike the subject, taking the object from a header is normal and safe: the caller is entitled to say which resource it wants, and the check is what decides whether it may have it. |  | String |
+| **pageSize** (producer) | How many entries a readTuples or readChanges page returns. Left unset, OpenFGA’s own default applies. A page is one request: this bounds the answer, not the number of requests a route makes. |  | Integer |
 | **relation** (producer) | The relation to demand, such as reader or owner. Evaluated as a Simple expression against each exchange, though a literal is what you usually want. The relation is the permission being demanded, so resolving it from an inbound header lets the caller pick the weakest one the model defines. Keep it literal, or derive it from something the route controls such as $\\{header.CamelHttpMethod}. |  | String |
 | **relations** (producer) | Comma-separated list of relations the listRelations operation asks about, for example reader,writer,owner. Only the ones the subject actually holds come back. |  | String |
+| **startTime** (producer) | The earliest change readChanges returns, as an ISO-8601 timestamp such as \\{code 2026-10-01T00:00:00Z}. Without it a first read starts at the beginning of the store’s change log, which on a busy store is a lot of history to page through before reaching anything current. Parsed when the endpoint starts, so a malformed value fails there rather than on the first exchange. |  | String |
 | **storeId** (producer) | **Required** The identifier of the OpenFGA store holding the relationship tuples and the authorization model, as returned by \\{code fga store create}. The store is the relationship graph that judges the exchange, so it comes from the endpoint only and is never taken from a message header. |  | String |
 | **type** (producer) | The object type to enumerate for the listObjects operation, for example document. This is a type name from the authorization model, so it is taken literally rather than evaluated. |  | String |
 | **user** (producer) | The subject to authorize, as an OpenFGA user identifier such as \\{code user:anne}. Evaluated as a Simple expression against each exchange, so a literal is used as-is and user:$\\{exchangeProperty.CamelKeycloakTokenSubject} resolves whatever an earlier step established. Read it from an exchange property rather than a header wherever you can. An exchange property is set by the route itself - by the step that verified the caller - and nothing outside the route can set one. A header, by contrast, is often whatever the caller sent, and an endpoint configured as user:$\\{header.userId} lets the caller choose who to be. \\{code camel-keycloak}'s KeycloakSecurityPolicy already follows that reasoning: it reads the subject from the CamelKeycloakTokenSubject exchange property in preference to the header of the same name, its preferPropertyOverHeader option defaulting to true. Nothing in Camel sets the property for you, so the step that validates the token has to record it - but recording it under that name lets one identity serve both. An expression that resolves to blank, or to a bare \\{code user:} prefix, denies the exchange: an exchange carrying no identity is not authorized, and failOpen does not apply to it. |  | String |
@@ -230,6 +242,7 @@ The OpenFGA component supports the following message header(s), which is/are lis
 | **CamelOpenFgaObject** (producer) Constant: [`OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#OBJECT) | The object the check was made against, as resolved from the endpoint’s object expression. Set for observability; it is not read as an input. |  | String |
 | **CamelOpenFgaRelation** (producer) Constant: [`RELATION`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#RELATION) | The relation that was checked. Set for observability; it is not read as an input and cannot be used to demand a weaker permission than the endpoint configured. |  | String |
 | **CamelOpenFgaStoreId** (producer) Constant: [`STORE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#STORE_ID) | The identifier of the OpenFGA store that was consulted, so an audit trail records which relationship graph produced the verdict. |  | String |
+| **CamelOpenFgaContinuationToken** (producer) Constant: [`CONTINUATION_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#CONTINUATION_TOKEN) | The continuation token the page came back with. Feed it back through the continuationToken option to read on. The two operations end differently: readTuples returns no token on its last page, so the header is absent once the read is done, whereas readChanges always returns a token - an empty body is what says the log has been read up to date, and that last token is what lets the next poll resume instead of replaying the whole log. |  | String |
 | **CamelOpenFgaWrittenTuples** (producer) Constant: [`WRITTEN_TUPLES`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#WRITTEN_TUPLES) | How many relationship tuples the writeTuples operation wrote. |  | Integer |
 | **CamelOpenFgaDeletedTuples** (producer) Constant: [`DELETED_TUPLES`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#DELETED_TUPLES) | How many relationship tuples the deleteTuples operation deleted. |  | Integer |
 
@@ -451,9 +464,66 @@ It applies to `check`, `batchCheck`, `listObjects`, `listRelations` and `listUse
 
 Contextual tuples supplied by the **message** are deliberately not supported. If you need them, the tuple has to come from somewhere the caller cannot reach, which in practice means the endpoint.
 
+### Reading the graph
+
+`readTuples` answers "what access exists", as opposed to ``check’s "may this subject do this". Here `user``, `relation` and `object` are a **filter** rather than a subject, and the body comes back as a list of maps keyed `user`, `relation`, `object` and `timestamp` — deliberately the keys `writeTuples` and `deleteTuples` accept, so a route can revoke what it just read without reshaping anything:
+
+```java
+from("direct:revokeEverythingBobHas")
+        .to("openfga:readTuples?storeId={{fga.store}}&object=document:&user=user:bob")
+        .to("openfga:deleteTuples?storeId={{fga.store}}");
+```
+
+> **Note**
+> What OpenFGA accepts as a read filter
+>
+> The filter is narrower than "every part is optional". Measured against OpenFGA 1.21.0:
+>
+> -   no filter at all — reads the whole store, a page at a time;
+>     
+> -   `object=document:` **plus** a `user` — reads that user’s tuples of that object type;
+>     
+> -   `object=document:budget` — reads that object’s tuples, with or without a user or relation;
+>     
+> -   `user` alone, `relation` alone, or `object=document:` alone — **rejected**, because OpenFGA requires an object type as soon as any filter is given and will not accept an empty object id and an empty user together.
+>     
+>
+> The component checks this before the call and names the option to change, rather than letting an opaque HTTP 400 through. Note this is also why a type-only `document:` is accepted here but not as an `object` anywhere else: a read filter and an identifier have different rules.
+>
+> What "optional" does **not** mean is that a part may go missing at runtime. Only an option the endpoint never set counts as "do not filter on this"; an option that **is** set and evaluates to nothing — `user=${header.who}` on a message with no `who` header — is refused. Dropping it would make the read wider than the route asked for, and with the `readTuples` → `deleteTuples` route above that turns "revoke Bob’s access" into "revoke everyone’s". A filter that silently widens when a value goes missing is the read-side form of failing open.
+
+`readChanges` reads the change log, which is the building block for keeping a cache or a projection in step with the graph. Each entry adds an `operation` of `WRITE` or `DELETE`.
+
+Both are paged. `pageSize` bounds one request, and the token the page returns arrives on `CamelOpenFgaContinuationToken`; feed it back through `continuationToken` to read on.
+
+A `readChanges` poller has to carry that token from one exchange to the **next**, which an exchange property cannot do: every timer fire is a new exchange, so a property left on the previous one is gone and each poll would start from the beginning again. Use a global variable, which outlives the exchange:
+
+```java
+from("timer:sync?period=30000")
+        .to("openfga:readChanges?storeId={{fga.store}}&type=document"
+            + "&continuationToken=${variable.global:fgaToken}")
+        .setVariable("global:fgaToken", header("CamelOpenFgaContinuationToken"))
+        .split(body()).to("direct:applyChange");
+```
+
+A global variable lives in the `CamelContext`, so it does not survive a restart. A poller that must resume across one should keep the token wherever the deployment already persists state rather than rely on it.
+
+`startTime` bounds where a first read begins — without it a first `readChanges` on a busy store pages through the whole history before reaching anything current.
+
+> **Important**
+> The two read operations signal "done" differently
+>
+> Measured against OpenFGA 1.21.0, not assumed:
+>
+> -   `readTuples` returns no token on its last page, so `CamelOpenFgaContinuationToken` is **absent** once the read is finished. Looping until the header is missing is the right way to drain it.
+>     
+> -   `readChanges` returns a token **every** time, including when nothing has happened — it hands the token you sent straight back with an empty page. Looping until the header is missing would therefore never end. The signal there is an **empty body**, and the token it keeps returning is the bookmark the next poll resumes from, which is why the component leaves it in place instead of clearing it.
+
+`expand` is the odd one out: it is the only operation that does not leave a `List` on the body, because its answer is a tree of usersets rather than a list. The `UsersetTree` goes on the body as the SDK returns it — flattening it is exactly what would destroy the information the operation exists to provide. Reach for it when a check answered something surprising and you need to see how it got there.
+
 ## What this component does not do yet
 
--   The `expand`, `readTuples` and `readChanges` operations, and store or authorization-model management.
+-   Store and authorization-model management — `createStore`, `deleteStore`, `writeAuthorizationModel` and the rest. These are administrative rather than integration operations, and a component that can delete the store it authorizes against is a different proposition from one that can only ask it questions.
     
 
 ## Examples

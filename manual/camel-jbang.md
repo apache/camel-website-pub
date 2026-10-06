@@ -18,7 +18,13 @@ Write a route in YAML, Java, or XML. Run it. Debug it. Trace messages flowing th
 
 ## Quick Start
 
-Install the CLI (requires [JBang](https://www.jbang.dev/download/)):
+Install the CLI with the installer script (Linux and macOS; see [Installing the Camel CLI Launcher](camel-jbang-launcher-install.md) for Windows):
+
+```bash
+curl -fsSL https://camel.apache.org/install.sh | sh
+```
+
+Or, if you use [JBang](https://www.jbang.dev/download/):
 
 ```bash
 jbang app install camel@apache/camel
@@ -37,25 +43,25 @@ Run in dev mode with live reload:
 camel run hello.yaml --dev
 ```
 
-> **Tip**
-> You can also install without JBang using the [Camel CLI Launcher](camel-jbang-launcher.md).
-
 ## What Can You Do
 
  
 | Area | What it covers |
 | --- | --- |
-| [Getting Started](camel-jbang-getting-started.md) | Installation, shell completion, creating and running your first route. |
-| [Installation Options](camel-jbang-installation.md) | Version-pinned installs, offline-safe setups, container images, installing without JBang. |
-| [Running Camel](camel-jbang-running.md) | Dev mode with hot reload, profiles, properties, dependency management, Kamelets, platform-http, Spring Boot and Quarkus runtimes. |
+| [Getting Started](camel-jbang-getting-started.md) | Installation, shell completion, creating and running your first route, built-in examples. |
+| [Installation Options](camel-jbang-installation.md) | Version-pinned installs, offline-safe setups, container images, the Camel CLI Launcher. |
+| [Running Camel](camel-jbang-running.md) | Dev mode with hot reload, profiles, properties, dependency management, Maven repositories and settings, Kamelets, platform-http, Spring Boot and Quarkus runtimes, running a Maven project. |
 | [Dev Services](camel-jbang-dev-services.md) | Start and manage local infrastructure services (databases, message brokers, etc.) for development and testing, powered by Camel test-infra and containers. |
 | [Data Transformation](camel-jbang-transforming.md) | Transforming messages with live reload, using expression languages, components, data formats, and converting between route DSL formats. |
-| [Development Tools](camel-jbang-devtools.md) | Sending and receiving messages, JDBC configuration, terminal scripting, IDE editing, validate plugin. |
-| [AI Tools](camel-jbang-ai.md) | Ask questions about running integrations, explain routes, and get security hardening suggestions — powered by local or cloud LLMs. |
+| [Development Tools](camel-jbang-devtools.md) | Sending and receiving messages, JDBC configuration, terminal scripting, IDE editing, updating dependencies. |
+| [Validation](camel-jbang-validation.md) | Checking routes, properties and other source files before running them, and normalizing YAML routes. |
+| [AI Tools](camel-jbang-ai.md) | Ask questions about running integrations, explain routes, a project overview, and security hardening suggestions. |
+| [AI Providers and Local Models](camel-jbang-ai-providers.md) | How the LLM provider is chosen, and running a model locally with Ollama or an OpenAI-compatible server. |
 | [Debugging](camel-jbang-debugging.md) | Camel route debugging from the CLI, IDE integration (VSCode, IDEA), Java-level debugging. |
 | [Managing Integrations](camel-jbang-managing.md) | Listing and stopping processes, route and group control, developer console, message history, log tailing, message tracing, health checks, metrics, circuit breaker status, Jolokia and Hawtio. |
+| [Diagnostics](camel-jbang-diagnostics.md) | Errors and inflight messages, memory leaks, heap and thread dumps, startup, SQL and Kafka, vault secrets. |
 | [Export to Maven](camel-jbang-projects.md) | Exporting to Spring Boot / Quarkus / Camel Main, SBOM generation, plugin management, version management, automated upgrades. |
-| [Tips and Recipes](camel-jbang-tips.md) | Run from GitHub or clipboard, stub components, inline code, interactive prompts, upload via HTTP, Maven configuration. |
+| [Tips and Recipes](camel-jbang-tips.md) | Run from GitHub or clipboard, stub components, inline code, interactive prompts, upload via HTTP. |
 | [Java Beans](camel-jbang-beans.md) | Writing and wiring Java beans into routes using Camel, Spring Boot, or Quarkus annotations. |
 | [Configuration](camel-jbang-configuration.md) | CLI configuration options, config commands, configuration precedence, troubleshooting. |
 | [Command Reference](jbang-commands/camel-jbang-commands.md) | Complete reference for all CLI commands and their options. |
@@ -66,13 +72,13 @@ camel run hello.yaml --dev
 | Extension | Description |
 | --- | --- |
 | [Camel CLI Launcher](camel-jbang-launcher.md) | Self-contained executable JAR — run the CLI without JBang. |
-| [Kubernetes Plugin](camel-jbang-kubernetes.md) | Build and deploy Camel integrations to Kubernetes. |
+| [Kubernetes Plugin](camel-jbang-kubernetes.md) | Build and deploy Camel integrations to Kubernetes and OpenShift. |
 | [Testing Plugin](camel-jbang-test.md) | Automated testing with the Citrus test framework. |
 | [Camel TUI](camel-jbang-tui.md) | Terminal dashboard for developing, monitoring, and debugging Camel integrations with a source editor, route topology, message tracing, and AI integration. |
 | [Camel MCP Server](camel-jbang-mcp.md) | Expose the Camel catalog and tools to AI coding assistants via the Model Context Protocol. |
 
 ## How It Works
 
-Camel CLI is powered by [JBang](https://www.jbang.dev/) under the hood. When you run `camel run`, JBang resolves and caches the required Camel JARs, then launches a JVM with your route. The CLI communicates with running integrations through a local connector, enabling management commands (`camel ps`, `camel get`, `camel log`, `camel trace`) to inspect and control them from a separate terminal.
+The Camel CLI is a Java application. It is installed either as the self-contained [Camel CLI Launcher](camel-jbang-launcher.md) or through [JBang](https://www.jbang.dev/). When you run `camel run`, the CLI resolves and caches the Camel JARs your routes need from Maven, and runs the routes in a JVM. The CLI communicates with running integrations through a local connector, enabling management commands (`camel ps`, `camel get`, `camel log`, `camel trace`) to inspect and control them from a separate terminal.
 
 For Spring Boot and Quarkus applications, adding the `camel-cli-connector` dependency lets the CLI manage those applications the same way.

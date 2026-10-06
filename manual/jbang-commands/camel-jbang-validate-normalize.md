@@ -1,19 +1,14 @@
 # camel validate normalize
 
-**Available as of Camel 4.20**
+Normalize YAML routes to canonical (explicit) form
 
-Normalize YAML routes to canonical (explicit) form.
-
-This command parses YAML routes and rewrites them in canonical form, expanding all shorthands and implicit expressions. For example, `log: "${body}"` becomes `log: { message: "${body}" }` and `setBody: { simple: "Hello" }` becomes `setBody: { expression: { simple: { expression: "Hello" } } }`.
-
-The normalized output is valid against both the classic and canonical schemas.
-
-See the [YAML DSL Schema Variants](../../components/4.22.x/others/yaml-dsl.md) documentation for details on the differences between the classic and canonical schemas.
+> **Note**
+> This command is provided by the `validate` plugin. Install it with `camel plugin add validate`.
 
 ## Usage
 
 ```bash
-camel validate normalize [options] <files>
+camel validate normalize [options]
 ```
 
 ## Options
@@ -21,10 +16,15 @@ camel validate normalize [options] <files>
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--download` | Whether to allow automatic downloading JAR dependencies (over the internet) | true | boolean |
+| `--fresh` | Make sure we use fresh (i.e. non-cached) resources | false | boolean |
 | `--output` | File or directory to write normalized output. If not specified, output is printed to console. |  | String |
+| `--repo,--repos` | Additional maven repositories for download on-demand (Use commas to separate multiple repositories) |  | String |
 | `-h,--help` | Display the help and sub-commands |  | boolean |
 
 ## Examples
+
+The command parses YAML routes and rewrites them in canonical form, expanding all shorthands and implicit expressions. The normalized output is valid against both the classic and canonical schemas. See [YAML DSL](../../components/4.22.x/others/yaml-dsl.md) for the differences between the classic and canonical schemas.
 
 Normalize a YAML route and print to console:
 
@@ -72,5 +72,3 @@ Running `camel validate normalize myroute.yaml` produces the canonical form:
         - log:
             message: "${body}"
 ```
-
-All shorthands and implicit expressions are expanded to their explicit equivalents. The output is valid against both the classic and canonical schemas.

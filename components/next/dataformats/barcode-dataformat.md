@@ -101,7 +101,7 @@ First, you have to initialize the barcode data format class. You can use the def
 | image type (BarcodeImageType) | PNG |
 | width | 100 px |
 | height | 100 px |
-| encoding | UTF-8 |
+| encoding | ISO-8859-1 (the ZXing default), or UTF-8 when the text has characters that ISO-8859-1 cannot represent. A `CHARACTER_SET` hint overrides it. ZXing uses the encoding for QR-Code, Aztec and PDF417 (and for Data Matrix only with the `DATA_MATRIX_COMPACT` hint). |
 | barcode format (BarcodeFormat) | QR-Code |
 
 _Java-only: Java programmatic data format instantiation_
@@ -119,7 +119,7 @@ _Java-only: Java data format configuration API_
 code.addToHintMap(DecodeHintType.TRY_HARDER, Boolean.true);
 ```
 
-For possible hints, please consult the xzing documentation.
+The hints can be added before the data format is started (for example when the route is configured). For possible hints, please consult the xzing documentation.
 
 ### Marshalling
 

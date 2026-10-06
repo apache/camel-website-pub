@@ -49,6 +49,10 @@ The JSON Gson dataformat supports the following options which are listed below.
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **dateFormatPattern** (common) |  | `String` | To configure the date format while marshall or unmarshall Date fields in JSON using Gson. |
 
+## A body that is already JSON
+
+A body that already is the JSON text is written as it is, not serialized as a Java object: a file, an `InputStream`, a `byte[]`, and a `String` whose text is a JSON object or array (it starts with `{` and ends with `}`, or `[` and `]`). So `marshal: json` after reading a JSON file, or after building the JSON with a template or a Simple expression, sends that JSON unchanged. Any other `String` is written as a JSON string, and POJOs, maps and lists are marshalled as usual. All the JSON data formats of Camel do the same.
+
 ## Dependencies
 
 To use Gson in your camel routes, you need to add the dependency on **camel-gson** which implements this data format.

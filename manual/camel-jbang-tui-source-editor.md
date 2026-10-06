@@ -10,7 +10,7 @@ The Source tab (**2**) of the [Camel TUI](camel-jbang-tui.md) is where you read 
     
 -   [**Quick fixes**](#_quick_fixes) — **Shift+F9** applies the fix a problem names, such as an option typo.
     
--   [**Fix with AI**](#_fix_with_ai) — **Shift+F8** asks the AI to fix the problem of a line; you confirm every change.
+-   [**Fix with AI**](#_fix_with_ai) — **Shift+F8** asks the AI to fix the problem of a line, or a line that fails at runtime; you confirm every change.
     
 -   [**Completion**](#_completion) — **Tab** completes components, endpoint options and their values, Java DSL chains, XML elements and attributes, and simple expressions; light help for hand-written edits, see [Known limitations](#_known_limitations).
     
@@ -76,6 +76,10 @@ The same fixes are part of the result of the `camel_validate_source` MCP tool, s
 When a problem has no quick fix, **Shift+F8** asks the AI. The file is saved as it is, and the AI panel opens with the question already written: the file, the line, the problem, and how to fix it. Press **Enter** to send it, or change it first.
 
 ![Shift+F8 writes the question for the AI](_images/jbang/camel-tui-source-fix-with-ai.png)
+
+**Shift+F8** also works on a line that fails at runtime. While the integration runs, the live run data at the end of the lines counts the failed exchanges (✗); on such a line, **Shift+F8** asks the AI with how many exchanges failed and the exception of the last one, from the integration’s errors. The cause is not always on that line (a `direct:` endpoint that no route consumes, for example), so the AI is asked to find it first. This works in the view as well as in the editor, as long as the file has no unsaved edits, and a problem on the line goes first.
+
+![Shift+F8 on a line that fails at runtime writes the question for the AI](_images/jbang/camel-tui-source-fix-runtime-failure.png)
 
 The AI changes the file with the same tools an AI agent uses over MCP, and every change waits for you: the dialog shows what the AI wants to change, **d** shows the diff, **Enter** applies it and **Esc** rejects it.
 
@@ -237,7 +241,7 @@ To convert a whole file, select it in the file list, press **F12** and pick _Con
 | **Ctrl+R** | Refactoring menu: replace URI, extract to property, extract a step to a new file (YAML, XML) |
 | **F9** | Next problem |
 | **Shift+F9** | Apply the quick fix of the problem on the line |
-| **Shift+F8** | Ask the AI to fix the problem on the line |
+| **Shift+F8** | Ask the AI to fix the problem on the line, or what fails on it at runtime |
 | **F7** | Diff view (unsaved changes) |
 | **Ctrl+S** | Save and continue editing |
 | **F5** | Save and close |

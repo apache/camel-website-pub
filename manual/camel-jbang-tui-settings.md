@@ -80,7 +80,7 @@ The Doctor checks your development environment and reports issues:
 
 ## Embedded Shell (F6)
 
-Press **F6** to open an embedded Camel JBang shell at the bottom (or top) of the screen. Any `camel` command can be run there — `camel run`, `camel infra run kafka`, `camel cmd send`, `camel get` and so on — without leaving the dashboard, and the tabs keep updating while the command runs. Press **F6** again to close the panel, **Shift+F6** to cycle its height, **PgUp**/**PgDn** to scroll the output and **↑**/**↓** to recall earlier commands (see [Input history](#_input_history)).
+Press **F6** to open an embedded Camel CLI shell at the bottom (or top) of the screen. Any `camel` command can be run there — `camel run`, `camel infra run kafka`, `camel cmd send`, `camel get` and so on — without leaving the dashboard, and the tabs keep updating while the command runs. Press **F6** again to close the panel, **Shift+F6** to cycle its height, **PgUp**/**PgDn** to scroll the output and **↑**/**↓** to recall earlier commands (see [Input history](#_input_history)).
 
 The shell and the AI prompt panel (**F8**) share the same space: opening one closes the other. Both open at the bottom by default; see **Panel Position** in [Settings](#_settings).
 
@@ -95,11 +95,27 @@ The TUI ships with 21 color themes defined as CSS stylesheets:
 
 Open the **F2** actions menu and choose **Settings…​** to switch themes, or pass `--theme=<name>` on the command line (e.g., `--theme=tokyo-night`). The CLI value overrides the persisted preference from `.camel-cli.properties`; runtime toggles and the config file still apply on later launches when `--theme` is omitted.
 
-The brand orange accent is consistent across most themes; status colors (success, warning, error) and borders adapt for readability on each palette. A few themes trade the brand accent for their own identity: Monochrome, CRT and Turbo Pascal. The Turbo Pascal theme recreates Borland’s IDE (yellow text on the blue editor field, cyan window frames, grey menu bar) and also restyles source code the way that editor did: reserved words in white, code in yellow, comments in grey. Other themes highlight code with a fixed Monokai (dark) or GitHub-inspired (light) palette.
+The brand orange accent is consistent across most themes; status colors (success, warning, error) and borders adapt for readability on each palette. A few themes trade the brand accent for their own identity: Monochrome, CRT and Turbo Pascal. The Turbo Pascal theme recreates Borland’s IDE (yellow text on the blue editor field, cyan window frames, grey menu bar) and also restyles source code the way that editor did: reserved words in white, code in yellow, comments in grey.
+
+Source code in the **Source** tab and in code blocks of AI answers is colored to match the theme. Themes based on an editor color scheme (Dracula, Nord, Solarized, Gruvbox, Catppuccin, Tokyo Night, Rosé Pine, Kanagawa and Everforest) use that scheme’s own colors for keywords, strings, comments and so on. Where a scheme’s color is too faint to read on the TUI background, it is made slightly lighter (or darker on light themes). Dark highlights code with the Monokai palette, and Light with a GitHub-inspired palette.
+
+Monochrome and CRT have no colors to spare, so they tell code apart by brightness and weight. Monochrome shows keywords in bold white and comments in italic grey. CRT looks like a green phosphor terminal of the 1980s: keywords in bold high intensity, strings in the bright glow, comments in the darker half intensity green.
 
 Your choice is remembered: it is saved as `camel.tui.theme` in `.camel-cli.properties` and restored the next time you open the TUI.
 
+### Theme examples
+
+![A YAML route in the Source tab with the Nord theme’s code colors](_images/jbang/camel-tui-theme-nord-source.png)
+
+Figure 1. Nord: a YAML route in the **Source** tab with the scheme’s own code colors
+
+![A YAML route in the Source tab with the CRT theme](_images/jbang/camel-tui-theme-crt-source.png)
+
+Figure 2. CRT: a green phosphor terminal of the 1980s, code told apart by brightness and bold
+
 ![The Overview in the Catppuccin Latte theme](_images/jbang/camel-tui-theme-latte.png)
+
+Figure 3. Catppuccin Latte: a light theme on the **Overview** tab
 
 ## Settings
 

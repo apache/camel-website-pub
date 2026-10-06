@@ -4,7 +4,21 @@ Three commands. That is all it takes to go from zero to a running integration.
 
 ## Install
 
-The Camel CLI runs on [JBang](https://www.jbang.dev/). Install JBang first (see [download instructions](https://www.jbang.dev/download/)), then install the Camel CLI:
+Install the Camel CLI with the installer script, which needs only Java 17 or later:
+
+```bash
+curl -fsSL https://camel.apache.org/install.sh | sh
+```
+
+On Windows (PowerShell):
+
+```powershell
+irm https://camel.apache.org/install.ps1 | iex
+```
+
+See [Installing the Camel CLI Launcher](camel-jbang-launcher-install.md) for upgrading and switching versions.
+
+If you use [JBang](https://www.jbang.dev/), you can install the Camel CLI with it instead:
 
 ```bash
 jbang app install camel@apache/camel
@@ -16,17 +30,13 @@ Verify that it works:
 camel version
 ```
 
-```none
-Camel CLI version: 4.21.0
-```
-
 That is it. No Maven project, no POM file, no IDE required.
 
 > **Note**
-> The CLI requires internet access to download dependencies on first use. If you are behind a proxy, see [JBang proxy configuration](https://www.jbang.dev/documentation/jbang/latest/configuration.html#proxy-configuration).
+> The CLI requires internet access to download dependencies on first use. Configure a proxy and mirrors in your Maven `settings.xml`, see [Maven configuration](camel-jbang-running.html#_maven_configuration).
 
 > **Tip**
-> For version-pinned installs, offline-safe setups, container images, or installing without JBang, see [Installation Options](camel-jbang-installation.md).
+> For version-pinned installs, offline-safe setups, or container images, see [Installation Options](camel-jbang-installation.md).
 
 ## Create your first route
 

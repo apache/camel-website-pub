@@ -208,6 +208,22 @@ Plugins extend the CLI with additional commands. List available plugins (ASF and
 camel plugin get --all
 ```
 
+The plugins of the Apache Camel project:
+
+ 
+| Plugin | Commands |
+| --- | --- |
+| `kubernetes` | `camel kubernetes`: deploy to Kubernetes, see [Kubernetes Plugin](camel-jbang-kubernetes.md) |
+| `test` | `camel test`: Citrus tests, see [Testing Plugin](camel-jbang-test.md) |
+| `validate` | `camel validate`: check source files, see [Validation](camel-jbang-validation.md) |
+| `generate` | `camel generate`: REST DSL and DTOs from OpenAPI, JSON schemas (see below) |
+| `tui` | `camel tui`: the [Camel TUI](camel-jbang-tui.md) |
+| `mcp` | `camel mcp`: the [Camel MCP Server](camel-jbang-mcp.md) |
+| `edit` | `camel edit`: edit a Camel file in the terminal with suggestions and diagnostics |
+| `route-parser` | `camel route-parser`: parse Java routes and dump their structure |
+
+Plugins bundled with the CLI, such as `tui`, are installed on first use.
+
 Add, list installed, and remove plugins:
 
 ```bash
@@ -224,7 +240,21 @@ It is possible to build custom Camel CLI plugins. We suggest to take a look at o
 > **Important**
 > The name of the plugin Maven **artifactId** must start with `camel-jbang-plugin-`. For example if the plugin is named `cheese`, then the maven artifact must be named `camel-jbang-plugin-cheese`.
 
-## Generate JSON schema plugin
+## Generate plugin
+
+### REST DSL from OpenAPI
+
+Generate the REST DSL (YAML or XML) from an OpenAPI specification, for contract-first REST development:
+
+```bash
+camel generate rest --input=petstore.yaml --output=petstore-rest.yaml
+camel generate rest --input=petstore.yaml --output=petstore-rest.yaml --routes
+camel generate rest --input=petstore.yaml --dto --runtime=quarkus --package=com.acme.model
+```
+
+`--routes` also generates a route for each operation (YAML only), and `--dto` generates Java data objects for the schemas of the specification.
+
+### JSON schema
 
 Generate JSON Schema definitions from Java objects for use with visual development tools (Kaoto, Karavan):
 

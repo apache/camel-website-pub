@@ -1,6 +1,6 @@
 # Top 10 features of Camel 3.x
 
-Published 2022-06-16 by assimbly in Camel
+Published 2022-06-16 by Assimbly in Camel
 
 Top 10 features of Camel 3.x
 

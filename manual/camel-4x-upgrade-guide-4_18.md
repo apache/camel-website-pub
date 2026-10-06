@@ -7,6 +7,16 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.18.4 to 4.18.5
 
+### camel-netty-http - the roles of a security constraint are matched by role name
+
+The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.
+
+### camel-azure-eventhubs
+
+The producer now leaves the Camel-internal headers (`Camel*`) out of the `EventData` application properties by default. The 4.18.4 upgrade guide already announced this, but the filter was not installed, so 4.18.4 and earlier 4.18 releases still copied every header. Configure a custom `headerFilterStrategy` on the component to change which headers are sent.
+
+A route that consumes from one Event Hub and produces to another no longer fails, or ignores the producer configuration, because of the `CamelAzureEventHubsPartitionKey` and `CamelAzureEventHubsPartitionId` headers that the consumer sets. Such a route used to fail with `Both partitionKey and partitionId are set` for every event with a partition key, and for every event when `partitionKey` was configured, and a configured `partitionId` was replaced by the partition the event was received from. The producer now picks the partition from, in this order: a partition header set by the route, the `partitionKey` or `partitionId` endpoint option, and the partition key of the received event. It no longer reuses the partition id of the received event, so an event without a partition key is no longer sent to the partition with the same id in the target Event Hub. To keep doing so, for example when mirroring between Event Hubs that have the same partitions, remove the `CamelAzureEventHubsReceivedPartitionId` exchange property before the producer.
+
 ### camel-zipfile, camel-tarfile - a maxDecompressedSize of 2 GiB or more is now enforced
 
 The `maxDecompressedSize` option of the Zip File and Tar File data formats (and of `ZipSplitter`) was not enforced when set to 2 GiB (`Integer.MAX_VALUE` bytes) or more, because the byte count behind the check wrapped around. The limit is now enforced for any value: unmarshalling an entry that decompresses to more than the configured `maxDecompressedSize` fails with an `IOException`, as documented. The default limit (1 GiB) is unchanged, and `-1` still disables the limit.
@@ -22,6 +32,12 @@ The post login url of the authorization code flow is now always built from the o
 When `allowResponseHeaderOverride` is enabled, the `spring-ws` producer now applies the endpoint’s `headerFilterStrategy` to the SOAP response header attributes and elements it maps onto the message, as the `spring-ws` consumer already does for inbound SOAP headers. With the default `SpringWebserviceHeaderFilterStrategy`, attribute and element names starting with `Camel` or `camel` (case-insensitively) are no longer copied onto the message.
 
 Other SOAP response header attributes and elements are mapped as before, and the raw SOAP header is still available in the `CamelSpringWebserviceSoapHeader` header. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
+
+### camel-spring-ws - internal Camel headers are no longer written into SOAP headers
+
+The default `messageFilter` of the `spring-ws` component, `BasicMessageFilter`, now applies the endpoint’s `headerFilterStrategy` before it writes a message header into the SOAP header, both on the request sent by the producer and on the response returned by the consumer. With the default `SpringWebserviceHeaderFilterStrategy`, message headers whose names start with `Camel` or `camel` (case-insensitively) are no longer written into the SOAP header. Other message headers are written as before.
+
+A `BasicMessageFilter` created in application code applies a `SpringWebserviceHeaderFilterStrategy` unless it is created with another strategy. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
 
 ### camel-http-common, camel-platform-http-vertx - fileNameExtWhitelist entries are matched exactly
 
@@ -64,6 +80,8 @@ The `CamelDoclingInputFilePath` header is unchanged and still accepts a path wit
 A new `inputBaseDirectory` option is also available. When set, every local input path - from the header, from a file path body, and from the batch operations - must resolve inside that directory once normalized. It is unset by default, which keeps the previous behaviour of accepting any path.
 
 Additionally, a local input path that does not exist is now reported as a `File not found` `IOException` before Docling is invoked. Previously the size check silently skipped a path that resolved to nothing and the failure surfaced later, from the Docling process or API call.
+
+The `CamelDoclingOutputFilePath` header, which selects the CLI output directory, is now normalized lexically (redundant separators and `.`/`..` segments are resolved) before it is passed to Docling; a header value without such segments is still used as given. A new `outputBaseDirectory` option additionally confines the header the same way `inputBaseDirectory` confines input paths - when set, an output path that resolves outside it, including an absolute path, is rejected with an `IOException`. `outputBaseDirectory` is unset by default.
 
 ### camel-dynamic-router
 
@@ -252,6 +270,9 @@ Ordinary application headers are unaffected. If a route relied on `Camel*` heade
 The `azure-eventhubs` producer now applies a `DefaultHeaderFilterStrategy` to the headers copied onto `EventData` application properties. Camel-internal headers (the `Camel*` namespace, matched case-insensitively) are no longer forwarded to Azure Event Hubs, consistent with the inbound header filtering performed by other components.
 
 Ordinary application headers are unaffected.
+
+> **Note**
+> The filter was not installed in 4.18.4, so the producer still copied every header. It is applied from 4.18.5, see the 4.18.5 entry for `camel-azure-eventhubs` (CAMEL-25227).
 
 ### camel-atmosphere-websocket - potential breaking change
 

@@ -48,6 +48,10 @@ The JSON JSON-B dataformat supports the following options which are listed below
 | **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
 
+## A body that is already JSON
+
+A body that already is the JSON text is written as it is, not serialized as a Java object: a file, an `InputStream`, a `byte[]`, and a `String` whose text is a JSON object or array (it starts with `{` and ends with `}`, or `[` and `]`). So `marshal: json` after reading a JSON file, or after building the JSON with a template or a Simple expression, sends that JSON unchanged. Any other `String` is written as a JSON string, and POJOs, maps and lists are marshalled as usual. All the JSON data formats of Camel do the same.
+
 ## Dependencies
 
 To use JSON-B in your Camel routes, you need to add the dependency on **camel-jsonb** that implements this data format.

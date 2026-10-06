@@ -19,59 +19,40 @@ See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
 
 ## Using Ollama (local, no API key)
 
-Install Ollama natively for best performance — the native binary uses GPU acceleration (Metal on macOS, CUDA/ROCm on Linux):
+Ollama at `localhost:11434` is auto-detected, so pulling a model is all it takes:
 
 ```bash
-# macOS
-brew install ollama
-
-# Linux
-curl -fsSL https://ollama.com/install.sh | sh
-
-# Pull a model — then open the TUI and press F8
 ollama pull qwen3.6:35b-a3b
 camel tui
 ```
 
-Ollama at `localhost:11434` is auto-detected. No configuration needed.
-
-> **Important**
-> The F8 AI panel works by invoking built-in tools to inspect your running Camel process. Models smaller than ~14B do not reliably call tools and answer from training knowledge instead. Use at least a 14B model. Prefer a mixture-of-experts model such as `qwen3.6:35b-a3b`: with only 3B parameters active per token it processes the tool-heavy prompt many times faster than a dense 27B/32B model, so answers start in seconds instead of a minute.
-
-**Models that work well** (tool-calling capable, ≥14B, default Q4\_K\_M quantization):
-
-  
-| Model | RAM | Notes |
-| --- | --- | --- |
-| `qwen3.6:35b-a3b` | ~23 GB | Recommended: fastest prompt processing, needs 32 GB+ |
-| `qwen2.5:14b` | ~9 GB | Minimum for 16 GB machines |
-| `qwen3.6:27b` | ~18 GB | Strong dense model, several times slower prompt processing |
-| `qwen2.5:32b` | ~20 GB | Good quality, slow prompt processing |
-| `hermes3:70b` | ~43 GB | Excellent tool calling, needs 64 GB+ |
-| `llama3.3:70b` | ~43 GB | Best open model, needs 64 GB+ |
-> **Note**
-> `camel infra run ollama` runs Ollama in Docker and bypasses GPU acceleration, making inference significantly slower. Native install is preferred for development.
-
-> **Note**
-> On Apple Silicon, use the default (GGUF) tags rather than the `-mlx` tags. The Ollama MLX engine cannot yet reuse the cached prompt for Qwen 3.x models, so every question re-processes the whole prompt, while the default engine reuses it and only processes what is new.
+Then press **F8**. How to install Ollama, which models work well (at least 14B, with tool calling; a mixture-of-experts model such as `qwen3.6:35b-a3b` is the fastest) and how the context window is chosen are described in [AI Providers and Local Models](camel-jbang-ai-providers.html#_ollama), shared with `camel ask` and the other AI commands.
 
 ## Using an OpenAI-compatible local server
 
-Set `LLM_API_KEY` and `LLM_BASE_URL` to connect to any OpenAI-compatible server (LM Studio, vLLM, llama.cpp, GPT4All, …):
-
-```bash
-export LLM_API_KEY=any-value
-export LLM_BASE_URL=http://localhost:1234
-camel tui
-```
-
-`OPENAI_BASE_URL` is also accepted as an alternative to `LLM_BASE_URL`.
+Set `LLM_API_KEY` and `LLM_BASE_URL` to connect to any OpenAI-compatible server (LM Studio, vLLM, llama.cpp, GPT4All, …​), see [OpenAI-compatible local servers](camel-jbang-ai-providers.html#_openai_compatible_local_servers).
 
 The panel uses the first model the server lists on `/v1/models`. To use another one, run `/model <name>` in the panel (`/model` alone lists what the server offers), set **AI Model** in **F2 → Settings**, or set `camel.tui.ai.model`. The model must support tool calling, otherwise the panel answers from training data instead of inspecting your integration. When a request fails, the panel shows the HTTP status and the server’s error message, for example a model that the server does not host.
 
 ## Tool set for local models
 
 Every question sends the definitions of the `tui_*` tools the model may call, and a local model pays for each of them in prompt-processing time. The panel therefore sends only the core set of tools (state, tables, logs, errors, diagrams, topology, processor details, catalog docs, traces, spans, route control, sending messages, source files, infra services, navigation, log level and filters) to Ollama and to any provider on `localhost`, which roughly halves the prompt. Hosted providers get every tool, including the drawing, animation and automation tools. Use `/tools full` in the panel to send all tools to a local model too, `/tools core` to trim the set for a hosted one, pick **AI Tools** in **F2 → Settings**, or set `camel.tui.ai.tools` in `.camel-cli.properties`. Ollama requests also ask the server to keep the model loaded for 30 minutes and for a context window of 32k or 64k (see [Working with a local Ollama model](#_working_with_a_local_ollama_model); `OLLAMA_CONTEXT_LENGTH` overrides it), so follow-up questions reuse the cached prompt instead of reloading the model.
+
+### Tool groups from the selected integration
+
+On top of the core set, the panel loads the tool groups the selected integration needs, read from the status it writes while it runs:
+
+  
+| Group | Loads when the integration has | What the model gets |
+| --- | --- | --- |
+| `sql` | a datasource, a `sql`, `sql-stored`, `jdbc`, `spring-jdbc` or `jpa` endpoint, or traced SQL statements | `tui_execute_sql` and `tui_update_row`, and a line naming the datasources and their pool; the table names come from the **SQL Trace** tab |
+| `tracing` | OpenTelemetry, enabled message tracing, or Micrometer | a line pointing at `tui_get_spans`, `tui_get_history` and the **Metrics** tab, which are core tools already |
+| `resilience` | a circuit breaker in a route, or circuit breakers in the Resilience4j or Fault Tolerance status | a line naming the routes with a circuit breaker and pointing at the **Circuit Breaker** tab |
+| `http` | Rest DSL services or platform-http endpoints, or a `platform-http`, `rest` or `rest-openapi` consumer | `tui_http_endpoints` (the served operations, optionally the OpenAPI contract) and `tui_http_request` (a request to the integration’s own server on localhost, no other host), and a line with the base URL and the contract |
+
+Each loaded group adds one line at the end of the system prompt. The groups are read again only when you select another integration or the selected one reloads its routes (after a reload the groups only grow), so the tools and the prompt stay the same from question to question and Ollama keeps reusing the cached prompt. An integration without any group yet is read again on each question, since one that just started may not have written its status completely. With all four groups the static prefix grows by about 800 tokens.
+
+The full tool set (`/tools full` and hosted providers) is not affected by the groups. `/tools` and `/context` show the loaded groups.
 
 ## Working with a local Ollama model
 

@@ -1947,7 +1947,7 @@ camel-jpa: replace Thread.sleep in tests
 
 camel-microprofile-faulttolerance: timeoutScheduledExecutorServiceRef and bulkHead\* to be deprecated ?
 
-### Test (72)
+### Test (71)
 
 [CAMEL-24323](https://issues.apache.org/jira/browse/CAMEL-24323)
 
@@ -1984,10 +1984,6 @@ Fix flaky tests - timing issues in seda, throttle, aggregation, file, and JMS te
 [CAMEL-24039](https://issues.apache.org/jira/browse/CAMEL-24039)
 
 Fix flaky core tests - seda, scheduler, and redelivery tests (batch 7)
-
-[CAMEL-24038](https://issues.apache.org/jira/browse/CAMEL-24038)
-
-Fix flaky AsyncWiretapTest in camel-telemetry and camel-telemetry-dev
 
 [CAMEL-24037](https://issues.apache.org/jira/browse/CAMEL-24037)
 

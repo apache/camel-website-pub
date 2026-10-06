@@ -14,6 +14,13 @@ camel run foo.yaml --dev
 
 This works for all DSLs (YAML, Java, XML).
 
+`camel dev` is a shortcut for `camel run --dev`, and without files it runs the current folder (as `--source-dir=.`):
+
+```bash
+camel dev
+camel dev foo.yaml
+```
+
 > **Note**
 > Live reload is for development purposes. If you encounter JVM class loading issues, restart the integration. Java files are not live-reloadable in Spring Boot runtime.
 
@@ -33,6 +40,8 @@ Use `--source-dir` for more flexibility — Camel watches the entire directory (
 ```bash
 camel run --source-dir=mycode --dev
 ```
+
+Running a directory is the same as `--source-dir`, so `camel run . --dev` and `camel run mycode --dev` also reload changed files and pick up new ones. A directory with a `pom.xml` (an existing Maven project), and the Spring Boot and Quarkus runtimes, run the files in the directory instead.
 
 Without `--source-dir`, Camel only watches the specific files you listed on the command line.
 
@@ -207,6 +216,24 @@ The value is a comma-separated list of repositories, where each entry is either 
 > **Note**
 > A custom Camel distribution can provide a baseline for this via the `camel.default.extra.repos.default.value` system property. It is only consulted when `camel.extra.repos` is not set, so setting `camel.extra.repos` replaces that baseline rather than adding to it. Apache Camel itself sets neither property.
 
+## Maven configuration
+
+By default, Camel CLI loads `~/.m2/settings.xml` for Maven mirrors, credentials, and repositories.
+
+You can override the settings file location:
+
+```bash
+camel run foo.java --maven-settings=/path/to/settings.xml --maven-settings-security=/path/to/settings-security.xml
+```
+
+Or disable Maven settings entirely:
+
+```bash
+camel run foo.java --maven-settings=false
+```
+
+For encrypted passwords in Maven settings, configure a master password with `mvn -emp`, store it in `~/.m2/settings-security.xml`, then encrypt repository passwords with `mvn -ep`. See the [Maven encryption guide](https://maven.apache.org/guides/mini/guide-encryption.md) for details.
+
 ## Downloading JARs over the internet
 
 Camel CLI automatically resolves and downloads dependencies in this order:
@@ -254,7 +281,7 @@ A dependency you declare yourself, with `--dep`, `camel.jbang.dependencies`, or 
 
 `camel validate` and the write tools of the Camel MCP server consult the same three files, so a bean whose class Camel CLI would download is not reported as missing, and the MCP tool `camel_dependency_for_class` answers the coordinates and the declaration for a class from the same mapping, with an optional Maven Central search for the rest.
 
-To add a library to the mapping, add one line to `known-third-party-libraries.properties` in `camel-kamelet-main`: the library’s own package, its `groupId:artifactId`, and a version property of `camel-parent`. The build resolves the version and fails on a property that does not exist; with `-Dcamel.known-dependencies.verify=true` it also resolves every JAR and checks that the package is in it.
+A library that is missing from the mapping can be added in `known-third-party-libraries.properties` of `camel-kamelet-main` in the Camel source; the file explains the format.
 
 ## Runtimes
 
@@ -294,7 +321,19 @@ camel run foo.camel.yaml --runtime=spring-boot --spring-boot-version=3.2.3 --cam
 camel run foo.camel.yaml --runtime=quarkus --quarkus-version=3.9.4
 ```
 
-When running an existing Maven project (`camel run pom.xml`) the runtime is detected from the `pom.xml`, as such a project cannot run in-process. The application logs to a file in `~/.camel` so `camel log` and the TUI can read the logs; see [Running a Maven based project](camel-jbang-tips.html#_running_a_maven_based_project).
+When running an existing Maven project (`camel run pom.xml`) the runtime is detected from the `pom.xml`, as such a project cannot run in-process. The application logs to a file in `~/.camel` so `camel log` and the TUI can read the logs; see [Running a Maven based project](#_running_a_maven_based_project).
+
+## Running a Maven based project
+
+Camel CLI can run an existing Maven-based project:
+
+```bash
+camel run pom.xml
+```
+
+The runtime is detected from the `pom.xml` (Spring Boot, Quarkus, or Camel Main), and the project is built and run with Maven (`spring-boot:run`, `quarkus:dev` with `--dev` or `quarkus:run`, and `camel:run`). The project itself is not modified: the `camel-cli-connector` dependency is injected into a temporary `camel-jbang-run-pom.xml`, so the application shows up in `camel ps`, and the application logs to a file in `~/.camel` so `camel log`, the TUI and the MCP server can read the logs the same as for any other `camel run`: `<pid>.log` for Spring Boot, and `<name>.log` for Quarkus and Camel Main, whose logging is configured before the process id is known (`<name>` is `camel.main.name` from the project’s `application.properties`, or else the Maven artifactId, and is passed to the application as its name). The temporary files are removed when the application stops.
+
+The options `--profile`, `--port`, `--prop`, `--max-seconds`, `--max-messages`, `--max-idle-seconds`, `--jvm-args` and `--jfr` are passed to the application (Camel Main runs inside the Maven JVM, so `--jvm-args` and `--jfr` are set via `MAVEN_OPTS`). A Camel Main project is expected to use log4j2 for logging (the same as `camel export --runtime=main` generates).
 
 ## Running local Kamelets
 
