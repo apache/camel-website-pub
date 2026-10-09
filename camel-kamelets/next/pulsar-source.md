@@ -43,8 +43,6 @@ At runtime, the `pulsar-source` Kamelet relies upon the presence of the followin
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

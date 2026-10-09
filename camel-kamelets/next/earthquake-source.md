@@ -26,8 +26,6 @@ At runtime, the `earthquake-source` Kamelet relies upon the presence of the foll
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jackson
     
 -   camel:jsonpath

@@ -26,8 +26,6 @@ The following table summarizes the configuration options available for the `ms-e
 
 At runtime, the `ms-exchange-online-imap-oauth-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:kamelet
     
 -   camel:mail-microsoft-oauth

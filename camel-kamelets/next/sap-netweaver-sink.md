@@ -25,8 +25,6 @@ The following table summarizes the configuration options available for the `sap-
 
 At runtime, the `sap-netweaver-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:sap-netweaver
     
 -   camel:kamelet

@@ -28,8 +28,6 @@ The following table summarizes the configuration options available for the `ibm-
 
 At runtime, the `ibm-cos-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:ibm-cos
     
 -   camel:kamelet

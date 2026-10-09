@@ -27,8 +27,6 @@ The following table summarizes the configuration options available for the `ibm-
 
 At runtime, the `ibm-watson-language-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:ibm-watson-language
     
 -   camel:kamelet

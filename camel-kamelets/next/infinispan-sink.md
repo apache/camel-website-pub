@@ -28,8 +28,6 @@ At runtime, the `infinispan-sink` Kamelet relies upon the presence of the follow
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:infinispan
     
 

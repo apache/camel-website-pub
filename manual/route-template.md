@@ -578,6 +578,8 @@ Route templates support binding locally-scoped beans that are private to each ro
 
 See [Route Template Bean Binding](route-template-bean-binding.md) for details.
 
+A bean that is bound when creating the route (`TemplatedRouteBuilder.bean` or the beans of a `templatedRoute`) takes precedence over a `templateBean` with the same name, which is then not created. This allows replacing a template bean, for example with a mock in a test. The template beans are bound to the `RouteTemplateContext` too, so when the same `RouteTemplateContext` is reused for several `addRouteFromTemplate` calls, the routes after the first share the template beans created for the first route; use a new `RouteTemplateContext` per route to get new ones.
+
 ## Configuring route templates when creating route (advanced)
 
 There may be some special situations where you want to be able to do some custom configuration/code when a route is about to be created from a route template.

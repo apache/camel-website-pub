@@ -19,8 +19,6 @@ The following table summarizes the configuration options available for the `caff
 
 At runtime, the `caffeine-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:caffeine
     
 -   camel:kamelet

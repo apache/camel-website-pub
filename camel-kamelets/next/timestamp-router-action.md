@@ -24,8 +24,6 @@ At runtime, the `timestamp-router-action` Kamelet relies upon the presence of th
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:kafka
     
 

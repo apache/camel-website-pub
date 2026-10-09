@@ -32,8 +32,6 @@ The following table summarizes the configuration options available for the `aws-
 
 At runtime, the `aws-s3-event-based-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:aws2-sqs
     
 -   camel:aws2-s3

@@ -33,8 +33,6 @@ The following table summarizes the configuration options available for the `aws-
 
 At runtime, the `aws-eventbridge-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:aws2-eventbridge
     
 -   camel:kamelet

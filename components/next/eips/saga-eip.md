@@ -339,7 +339,7 @@ It is called automatically by the Saga EIP implementation when the order should 
 
 It should not terminate with error. In case an error is thrown in the `direct:cancelOrder` route, the EIP implementation should periodically retry to execute the compensating action up to a certain limit. This means that **any compensating action must be idempotent**, so it should take into account that it may be triggered multiple times and should not fail in any case.
 
-If compensation cannot be done after all retries, a manual intervention process should be triggered by the Saga implementation.
+If compensation cannot be done after all retries, a manual intervention process should be triggered. The in-memory Saga service logs a warning, marks the Saga as failed, and keeps the exception that caused the compensation on the exchange, with the compensation failure added to it as a suppressed exception.
 
 > **Note**
 > It may happen that due to a delay in the execution of the `direct:newOrder` route the Saga is canceled by another party in the meantime. For instance, due to an error in a parallel route or a timeout at Saga level.

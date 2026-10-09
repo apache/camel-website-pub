@@ -27,13 +27,21 @@ The following variables are bound by default:
 | Variable | Type | Description |
 | --- | --- | --- |
 | body | Object | the message body |
+| header | Map | the message headers (same as `headers`) |
 | headers | Map | the message headers |
-| properties | Map | the exchange properties |
+| exchangeProperty | Map | the exchange properties (same as `exchangeProperties`) |
+| exchangeProperties | Map | the exchange properties |
+| variable | Map | the exchange variables (same as `variables`) |
+| variables | Map | the exchange variables |
 | exchangeId | String | the exchange id |
 
-By default, Python can index Java maps and lists (for example `headers['foo']`) but cannot invoke methods on host objects.
+The variables have the same names as in the [Groovy](groovy-language.md) language. In default mode only the data variables above are bound; the Camel host objects are bound only with trusted host access.
 
-`message`, `exchange`, and `context` are not bound in default mode. Scripts that refer to them raise a Python `NameError`. Those variables are available only when you opt in to trusted host access, as described in [Trusted host access](#_trusted_host_access).
+By default, Python can index Java maps and lists (for example `headers['foo']` or `variables['foo']`) but cannot invoke methods on host objects.
+
+`variables` holds the exchange-scoped variables (for example set with the [Set Variable](../eips/setVariable-eip.md) EIP). Global and route variables, such as `global:foo`, are not in this map, so in default mode a script cannot read them; with trusted host access they can be read with `exchange.getVariable(…​)`. Like `headers`, it is the exchange’s own map rather than a copy, so an assignment such as `variables['foo'] = 'bar'` updates the exchange. Such an assignment does not go through `Exchange.setVariable`, so `variables['global:foo'] = 1` sets an exchange variable named `global:foo`, not a global one. Setting a variable to `None` fails, because the variables map does not accept null values.
+
+`exchange`, `camelContext`, `message`, `request` and `exception` are not bound in default mode. Scripts that refer to them raise a Python `NameError`. Those variables are available only when you opt in to trusted host access, as described in [Trusted host access](#_trusted_host_access).
 
 ## Security
 
@@ -50,16 +58,18 @@ To allow Python to call public methods on host objects, and to expose Camel host
 This is a trusted host-access mode, **not** a sandbox. `HostAccess.ALL` lets Python call public methods and fields on bound Java objects. It does **not** enable `allowAllAccess`, Java class lookup, host IO, or process creation. Use it only when you trust the scripts.
 
 > **Warning**
-> Trusted host access lets Python call public methods on bound Camel objects such as `context`, `exchange`, and `message`. That includes destructive operations, for example `context.stop()`, `context.getRegistry().bind(…​)`, and `exchange.getContext().getExecutorService(…​)`. Enable this mode only for fully trusted scripts. Do not use it with Python code taken from untrusted or external input.
+> Trusted host access lets Python call public methods on bound Camel objects such as `camelContext`, `exchange`, and `message`. That includes destructive operations, for example `camelContext.stop()`, `camelContext.getRegistry().bind(…​)`, and `exchange.getContext().getExecutorService(…​)`. Enable this mode only for fully trusted scripts. Do not use it with Python code taken from untrusted or external input.
 
 In this mode the default variables above remain available, plus:
 
   
 | Variable | Type | Description |
 | --- | --- | --- |
-| message | Message | the message |
 | exchange | Exchange | the Exchange |
-| context | CamelContext | the CamelContext |
+| camelContext | CamelContext | the CamelContext |
+| message | Message | the message |
+| request | Message | the message (same as `message`) |
+| exception | Exception | the exception if the exchange failed (or the caught exception in an error handler), otherwise `None` |
 
 ```java
 Python3Language python3 = Python3Language.createWithHostAccess();

@@ -27,8 +27,6 @@ The following table summarizes the configuration options available for the `lang
 
 At runtime, the `langchain4j-ingest-file-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:file
     
 -   camel:kamelet

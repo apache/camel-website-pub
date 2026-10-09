@@ -39,8 +39,6 @@ At runtime, the `kafka-batch-azure-schema-registry-source` Kamelet relies upon t
 
 -   camel:kafka
     
--   camel:core
-    
 -   camel:kamelet
     
 -   camel:azure-schema-registry

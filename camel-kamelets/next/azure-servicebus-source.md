@@ -28,8 +28,6 @@ At runtime, the `azure-servicebus-source` Kamelet relies upon the presence of th
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

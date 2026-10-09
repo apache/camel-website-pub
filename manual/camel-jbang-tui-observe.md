@@ -27,6 +27,8 @@ Activity data is captured when the integration runs in development mode (the `de
 
 The top panel shows aggregated statistics: total / OK / failed exchange counts, total sends, p50 / p95 / max elapsed times, and the time window of the visible entries.
 
+![The Activity tab: the last exchanges of three Kafka routes and a file route](_images/jbang/camel-tui-observe-activity.png)
+
 Select an exchange to see its details below: exchange ID, route, elapsed time, the remote endpoints called during the exchange with individual timings, and exception details if the exchange failed.
 
 Use **s** to cycle sort order, **S** to reverse, and **F5** to clear the activity list.
@@ -238,9 +240,13 @@ When your integration includes a DataSource, two SQL tabs appear under More > Da
 -   **SQL Trace** — captures and displays SQL statements executed by your routes in real-time, showing query text, execution time, and the route that triggered them.
     
 
+![A query in the SQL Query tab against the DataSource of the integration](_images/jbang/camel-tui-observe-sql-query.png)
+
 ### Memory Leak Detection
 
 The Memory Leak tab (under More > JVM) uses Java Flight Recorder (JFR) to diagnose memory leaks in your running integration. It runs two sequential recordings and compares object retention trends, classifying each class as growing, stable, shrinking, new, or gone. This is lightweight and safe for production use.
+
+![Two recordings compared: byte arrays grow 133% and are flagged as a leak](_images/jbang/camel-tui-observe-memory-leak.png)
 
 ### JFR Runtime Profiling
 
@@ -272,6 +278,8 @@ Each snapshot is a point-in-time read — the recording keeps running, so yo
 ### Catalog
 
 The Catalog tab (under More > Project) lets you browse the full Camel component catalog from within the TUI. Search for components by name, view their documentation, options, and supported headers — useful when building routes and you need to check what options a component supports.
+
+It lists Kamelets too: the project’s own Kamelet files first, marked `project`, and the Kamelets of the catalog that the routes use (all of them with the full catalog, **a**). **f** cycles the kind, `kamelet` included, and **d** shows the properties of a Kamelet: required, type, default and description.
 
 ## Keyboard Shortcuts
 

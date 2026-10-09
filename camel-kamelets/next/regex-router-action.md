@@ -22,8 +22,6 @@ At runtime, the `regex-router-action` Kamelet relies upon the presence of the fo
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:kafka
     
 

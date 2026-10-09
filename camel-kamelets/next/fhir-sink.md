@@ -35,8 +35,6 @@ At runtime, the `fhir-sink` Kamelet relies upon the presence of the following de
 
 -   camel:fhir
     
--   camel:core
-    
 -   camel:kamelet
     
 

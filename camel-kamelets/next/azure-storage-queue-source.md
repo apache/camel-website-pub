@@ -27,8 +27,6 @@ At runtime, the `azure-storage-queue-source` Kamelet relies upon the presence of
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

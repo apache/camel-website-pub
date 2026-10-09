@@ -139,7 +139,7 @@ A [Semantic](../languages/semantic-language.md) choice question returns a catego
 
 ```yaml
 - semantic:
-    question:
+    evaluation:
       department:
         type: choice
         instructions: Which department should handle this message?

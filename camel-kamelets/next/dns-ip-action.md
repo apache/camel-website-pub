@@ -14,8 +14,6 @@ The `dns-ip-action` Kamelet does not specify any configuration options.
 
 At runtime, the `dns-ip-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:dns
     
 -   camel:kamelet

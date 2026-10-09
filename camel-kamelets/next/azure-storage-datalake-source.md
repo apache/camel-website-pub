@@ -29,10 +29,6 @@ At runtime, the `azure-storage-datalake-source` Kamelet relies upon the presence
     
 -   camel:kamelet
     
--   camel:core
-    
--   camel:timer
-    
 
 ## Camel JBang usage
 

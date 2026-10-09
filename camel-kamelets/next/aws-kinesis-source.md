@@ -37,8 +37,6 @@ At runtime, the `aws-kinesis-source` Kamelet relies upon the presence of the fol
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

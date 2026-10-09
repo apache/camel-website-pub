@@ -35,8 +35,6 @@ At runtime, the `aws-sqs-fifo-sink` Kamelet relies upon the presence of the foll
 
 -   camel:aws2-sqs
     
--   camel:core
-    
 -   camel:kamelet
     
 

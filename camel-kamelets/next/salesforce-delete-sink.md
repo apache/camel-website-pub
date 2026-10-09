@@ -32,8 +32,6 @@ At runtime, the `salesforce-delete-sink` Kamelet relies upon the presence of the
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jsonpath
     
 

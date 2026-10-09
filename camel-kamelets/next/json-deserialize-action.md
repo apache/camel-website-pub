@@ -16,8 +16,6 @@ At runtime, the `json-deserialize-action` Kamelet relies upon the presence of th
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jackson
     
 

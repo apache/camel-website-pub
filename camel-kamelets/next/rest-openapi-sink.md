@@ -29,8 +29,6 @@ At runtime, the `rest-openapi-sink` Kamelet relies upon the presence of the foll
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

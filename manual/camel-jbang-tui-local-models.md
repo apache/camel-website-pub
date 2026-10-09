@@ -94,6 +94,8 @@ For the wider picture see the blog posts [We had a frontier AI coach a small loc
 
 The Ollama tab (under More, in the **AI** group) shows how the model served by a local [Ollama](https://ollama.com) is performing, in the spirit of an LLM dashboard. It works with or without a running integration: it finds Ollama at `localhost:11434`, at the address of `camel infra run ollama`, or at the endpoint the AI panel (**F8**) is using. The tab is listed only while an Ollama server answers; the TUI checks every ten seconds, so it appears shortly after `ollama serve` starts.
 
+![The Ollama tab with qwen3.6 loaded: throughput](_images/jbang/camel-tui-ollama-tab.png)
+
 -   **Model** — the loaded model with its family, parameters, quantization, layers, experts (and how many are active per token for a mixture-of-experts model), how much of it sits in GPU memory, the allocated context length and when Ollama will unload it. With no model loaded, the installed models are listed instead.
     
 -   **Throughput** — decode and prefill tokens per second, **live** while the model is generating and otherwise from the last request; time to first token and load time (a load of a second or more is a cold start); session averages and a sparkline of the decode rate.

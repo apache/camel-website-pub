@@ -28,8 +28,6 @@ At runtime, the `dropbox-source` Kamelet relies upon the presence of the followi
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jsonpath
     
 -   camel:timer

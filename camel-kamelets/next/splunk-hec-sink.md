@@ -29,8 +29,6 @@ The following table summarizes the configuration options available for the `splu
 
 At runtime, the `splunk-hec-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:splunk-hec
     
 -   camel:kamelet

@@ -27,8 +27,6 @@ The following table summarizes the configuration options available for the `goog
 
 At runtime, the `google-vertexai-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:kamelet
     
 -   camel:google-vertexai

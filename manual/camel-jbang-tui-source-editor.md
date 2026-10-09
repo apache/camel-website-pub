@@ -22,6 +22,8 @@ The Source tab (**2**) of the [Camel TUI](camel-jbang-tui.md) is where you read 
     
 -   [**YAML, Java and XML**](#_yaml_java_and_xml) — **Space** shows a route in any of the three DSLs.
     
+-   [**Kamelets**](#_kamelets) — write your own Kamelets with the same checks, and **Tab** completes the properties of a Kamelet where a route uses it.
+    
 
 ## Browsing and Editing
 
@@ -49,7 +51,7 @@ The problems are marked as soon as a file opens, before you change anything: a r
 
 ![The problem of a YAML route marked when the file opens](_images/jbang/camel-tui-source-problems-on-open.png)
 
-In the editor, a line with a problem has a red line number, the title shows how many errors there are, and the Error panel at the bottom says what is wrong with the line the cursor is on. They are checked again as you type, and **F9** jumps to the next problem.
+In the editor, a line with a problem has a red line number, the title shows how many errors there are, and the Error panel at the bottom says what is wrong with the line the cursor is on. A note, something that works but is not right (such as a dependency a Kamelet does not use), is marked as a warning instead: a yellow `⚠`, an amber line number, and counted apart in the title as `notes`. A note does not keep the file from being saved. They are checked again as you type, and **F9** jumps to the next problem.
 
 ![A misspelled seda option marked while typing](_images/jbang/camel-tui-source-problems.png)
 
@@ -61,11 +63,11 @@ When you save, the file is checked first. A YAML or XML file with problems is no
 
 A Java file is saved anyway and its problems are reported: it is the application’s code, and a check cannot know everything a Java route computes at runtime.
 
-The checks can be turned off in the Settings (**F2** > Settings).
+The checks can be turned off in the Settings (**F2** > Settings > **Validate on Save**, or `camel.tui.validateOnSave=false`).
 
 ## Quick Fixes
 
-Many problems say how to fix them: an option typo (`siz` instead of `size`), an enum value a letter off, a `to` that should be a `toD`, `${key}` where the property placeholder `{{key}}` is meant, or a Simple function the error names the right one of (`${bdy}` for `${body}`). For these, the Error panel shows the fix, and **Shift+F9** applies it to the line:
+Many problems say how to fix them: an option typo (`siz` instead of `size`), an enum value a letter off, a `to` that should be a `toD`, `${key}` where the property placeholder `{{key}}` is meant, or a Simple function the error names the right one of (`${bdy}` for `${body}`), or a dependency a Kamelet does not use, whose line is removed. For these, the Error panel shows the fix, and **Shift+F9** applies it to the line:
 
 ![Shift+F9 fixed the option typo](_images/jbang/camel-tui-source-quick-fix.png)
 
@@ -161,15 +163,17 @@ In an XML route the panel also follows the cursor: on an attribute name or in it
 
 ## Navigation
 
--   **Jump links** — a line that sends to another route, such as `to("seda:shipping")`, shows `↵ shipping`. Press **Enter** on the line to go to that route, also when it is in another file or another DSL. A `from` shows which route calls it.
+-   **Jump links** — a line that sends to another route, such as `to("seda:shipping")`, shows `↵ shipping`. Press **Enter** on the line to go to that route, also when it is in another file or another DSL. A `from` shows which route calls it; when more than one does, it shows `↵ 2 callers`, and **Enter** opens a list of them to choose from.
     
 -   **Go to route** — **g** lists all the routes of the project; type to filter, and **Enter** opens the route.
     
 -   **Bean jumps** — a line that refers to a bean shows `↵ name`, and **Enter** goes to where the project declares it.
     
--   **Usages** — **u** on a line with an endpoint lists where it is used: the routes that consume from it and the steps that send to it, across the project and its DSLs. **Enter** goes there.
+-   **Usages** — **u** on a line with an endpoint lists where it is used: the routes that consume from it and the steps that send to it, across the project and its DSLs, without the line you are on. **Enter** goes there.
     
 -   **Go to node** — **Ctrl+G** shows the routes of the YAML, Java and XML files and their processors as a tree (the `when` and `otherwise` of a choice included). Type to filter by route ID, EIP or label, or type a line number, and **Enter** jumps there.
+    
+-   **Route tree** — **Ctrl+T** shows the tree of the route the cursor is in at the top right of the source, from its `from` through each step, with the step under the cursor marked. It follows the cursor as you move and edit, for YAML, XML and Java routes. The **Route Tree** setting says whether it is shown at first (off by default).
     
 -   **Search** — **/** searches the source, **n**/**N** go to the next and previous match, and **h** highlights a text.
     
@@ -200,6 +204,23 @@ To convert a whole file, select it in the file list, press **F12** and pick _Con
 
 ![An XML route converted to YAML](_images/jbang/camel-tui-source-convert.png)
 
+## Kamelets
+
+A Kamelet file (`name.kamelet.yaml`) in the project opens and edits like a route file, with syntax highlighting and the same checks, and more that are particular to Kamelets:
+
+-   **The shape of the file** — the properties go under `spec.definition` (with the required ones listed in `spec.definition.required`), and the template of an action or a sink starts `from: kamelet:source`, never from the Kamelet itself.
+    
+-   **Where a route uses it** — a `kamelet:` endpoint is checked against the properties of its Kamelet: a misspelled one (`tagg` for `tag`) and a required one left out are marked. The project’s own Kamelet files are read, so this works for the Kamelets you write as well as for the ones of the catalog.
+    
+-   **Dependencies** — a `camel:` dependency the template does not use, and `camel:core`, which every Camel runtime has, are marked as notes. **Shift+F9** removes the line (and the `dependencies:` key when it was the last one).
+    
+
+**Tab** under the `parameters:` of a `kamelet:` endpoint lists the properties of the Kamelet first, the required ones on top, with their type, default and description. Below a divider come the options of the kamelet component itself (`routeId`, `timeout`…​), which are for special uses only.
+
+![Tab under the parameters of a kamelet: endpoint lists the properties of the Kamelet first](_images/jbang/camel-tui-source-kamelet-completion.png)
+
+The template of a Kamelet is a route of the project: **g** lists it under the name of the Kamelet, a route’s `to: kamelet:name` has a jump link to it, and the `from` of the template links back to the routes that use it.
+
 ## Keyboard Shortcuts
 
 ### Viewing
@@ -220,6 +241,7 @@ To convert a whole file, select it in the file list, press **F12** and pick _Con
 | **p** | Toggle plain mode (borderless) |
 | **g** | Go to route |
 | **Ctrl+G** | Go to node or line |
+| **Ctrl+T** | Show or hide the route tree |
 | **u** | Usages of the endpoint of the line |
 | **F9** | Next problem |
 | **Esc** / **c** | Close source viewer |

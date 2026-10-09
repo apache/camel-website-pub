@@ -29,8 +29,6 @@ The following table summarizes the configuration options available for the `kafk
 
 At runtime, the `kafka-not-secured-apicurio-registry-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:kamelet
     
 -   camel:kafka

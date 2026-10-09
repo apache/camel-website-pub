@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 417 spring boot starter json files.
+There are 419 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -481,6 +481,8 @@ jt400
 
 jte
 
+kafka-share
+
 kafka
 
 kamelet
@@ -594,6 +596,8 @@ opa
 openai
 
 openapi-java
+
+openfeature
 
 openfga
 
@@ -1087,6 +1091,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [JT400](../../components/next/jt400-component.md) | camel-jt400-starter | Stable | 1.5 | Exchanges messages with an IBM i system using data queues, message queues, or program call. IBM i is the replacement for AS/400 and iSeries servers. |
 | [JTE](../../components/next/jte-component.md) | camel-jte-starter | Stable | 4.4 | Transform messages using a Java based template engine (JTE). |
 | [Kafka](../../components/next/kafka-component.md) | camel-kafka-starter | Stable | 2.13 | Send and receive messages to/from an Apache Kafka broker. |
+| [Kafka Share](../../components/next/kafka-share-component.md) | camel-kafka-share-starter | Preview | 4.23 | Consume messages from Apache Kafka topics as a queue, using a share group. |
 | [Kamelet](../../components/next/kamelet-component.md) | camel-kamelet-starter | Stable | 3.8 | To call Kamelets |
 | [Keycloak](../../components/next/keycloak-component.md) | camel-keycloak-starter | Stable | 4.15 | Manage Keycloak instances via Admin API. |
 | [Knative](../../components/next/knative-component.md) | camel-knative-starter | Stable | 3.15 | Send and receive events from Knative. |
@@ -1154,6 +1159,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [OPC UA Client](../../components/next/milo-client-component.md) | camel-milo-starter | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](../../components/next/milo-server-component.md) | camel-milo-starter | Stable | 2.19 | Make telemetry data available as an OPC UA server. |
 | [OpenAI](../../components/next/openai-component.md) | camel-openai-starter | Stable | 4.17 | LLM endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech using OpenAI-compatible APIs. The openai scheme is a supported alias. |
+| [OpenFeature](../../components/next/openfeature-component.md) | camel-openfeature-starter | Preview | 4.23 | Evaluate feature flags using the OpenFeature specification with flagd. |
 | [OpenFGA](../../components/next/openfga-component.md) | camel-openfga-starter | Preview | 4.23 | Authorize an Exchange against an OpenFGA relationship graph, and maintain the relationship tuples it is authorized against. |
 | [OpenSearch](../../components/next/opensearch-component.md) | camel-opensearch-starter | Stable | 4.0 | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](../../components/next/openshift-build-configs-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Build Configs. |
@@ -1374,11 +1380,12 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [JSONPath](../../components/next/languages/jsonpath-language.md) | camel-jsonpath-starter | Stable | 2.13 | Evaluates a JSONPath expression against a JSON message body |
 | [MVEL](../../components/next/languages/mvel-language.md) | camel-mvel-starter | Stable | 2.0 | Evaluates a MVEL template |
 | [OGNL](../../components/next/languages/ognl-language.md) | camel-ognl-starter | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL) |
+| [OpenFeature](../../components/next/languages/openfeature-language.md) | camel-openfeature-starter | Preview | 4.23 | Evaluate a feature flag as a boolean predicate |
 | [Python](../../components/next/languages/python-language.md) | camel-python-starter | Experimental | 3.19 | Evaluates a Python expression |
 | [Python 3](../../components/next/languages/python3-language.md) | camel-python3-starter | Preview | 4.23 | Evaluates a Python 3 expression |
 | [QuickJS](../../components/next/languages/quickjs-language.md) | camel-quickjs-starter | Preview | 4.23 | Evaluates a JavaScript expression using QuickJS4J |
 | [Ref](../../components/next/languages/ref-language.md) | camel-core-languages-starter | Stable | 2.8 | Uses an existing expression from the registry |
-| [Semantic Evaluation](../../components/next/languages/semantic-language.md) | camel-semantic-starter | Preview | 4.23 | Evaluate named questions about message content to produce boolean decisions, categories and scores through provider adapters |
+| [Semantic Evaluation](../../components/next/languages/semantic-language.md) | camel-semantic-starter | Preview | 4.23 | Invoke named evaluations of message content to produce boolean decisions, categories, scores and label sets through provider adapters |
 | [Simple](../../components/next/languages/simple-language.md) | camel-core-languages-starter | Stable | 1.1 | Evaluates a Camel simple expression |
 | [Simple - Advanced Features](../../components/next/languages/simple-advanced.md) | undefined-starter |  |  |  |
 | [Simple - Built-in Functions](../../components/next/languages/simple-functions.md) | undefined-starter |  |  |  |
@@ -1505,6 +1512,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Test Spring JUnit6](../../components/next/others/test-spring-junit6.md) | camel-test-spring-junit6-starter | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
 | [Tracing](../../components/next/others/tracing.md) | camel-tracing-starter | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
 | [Undertow Spring Security](../../components/next/others/undertow-spring-security.md) | camel-undertow-spring-security-starter | Stable | 3.3 | Spring Security Provider for camel-undertow |
+| [Wolf Defender](../../components/next/others/wolf-defender.md) | camel-wolf-defender-starter | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |
 | [Write Ahead Log Strategy for Resume API](../../components/next/others/wal.md) | camel-wal-starter | Stable | 3.20 | Write Ahead Log Strategy for Resume API |
 | [XML Io Dsl](../../components/next/others/java-xml-io-dsl.md) | camel-xml-io-dsl-starter | Stable | 3.9 | Camel DSL with XML |
 | [YAML DSL](../../components/next/others/yaml-dsl.md) | camel-yaml-dsl-starter | Stable | 3.9 | Camel YAML DSL |

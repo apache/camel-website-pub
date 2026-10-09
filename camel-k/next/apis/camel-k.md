@@ -3864,6 +3864,8 @@ The GitOps Trait is used to configure the repository where you want to push a Gi
 string | the URL of the repository where the project is stored. |
 | `secret`  
 string | the Kubernetes secret where the Git token is stored. The operator will pick up the first secret key only, whichever the name it is. |
+| `username`  
+string | the username used to authenticate against the Git server, together with the token stored in `secret` (default `camel-k`). Some Git servers validate it, for example Bitbucket Cloud access tokens require `x-token-auth`. |
 | `branch`  
 string | the git branch to check out. |
 | `tag`  

@@ -2,6 +2,13 @@
 
 **Available as of Camel 4.21**
 
+> **Note**
+> Development only
+>
+> Camel TUI is a tool for development. It is **not** for monitoring integrations in production.
+>
+> It has no security and no user permissions: the developer who runs it, or an AI agent connected to it, has full control over the local Camel integrations — running and stopping them, changing their source, sending messages to them and running commands.
+
 Camel TUI is a terminal dashboard for developing, prototyping, and understanding Camel integrations. With over 40 screens organized across tabs, it makes your entire integration visible — you can browse your project source code with inline documentation, see your route topology, watch messages flow through processors, step through exchanges like scrubbing through a video timeline, inspect Kafka topics, run SQL queries against your DataSources, audit CVE vulnerabilities, and understand what Camel actually does with your routes. No more black box.
 
 ![TUI Overview showing multiple routes](_images/jbang/camel-tui-overview.png)

@@ -28,8 +28,6 @@ The following table summarizes the configuration options available for the `aws-
 
 At runtime, the `aws-translate-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:dns
-    
 -   camel:kamelet
     
 -   camel:aws2-translate

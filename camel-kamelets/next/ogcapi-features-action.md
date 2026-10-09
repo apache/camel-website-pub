@@ -24,8 +24,6 @@ The following table summarizes the configuration options available for the `ogca
 
 At runtime, the `ogcapi-features-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:http
     
 -   camel:kamelet

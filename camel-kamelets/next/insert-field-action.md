@@ -20,8 +20,6 @@ The following table summarizes the configuration options available for the `inse
 
 At runtime, the `insert-field-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:jackson
     
 -   camel:kamelet

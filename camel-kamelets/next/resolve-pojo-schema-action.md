@@ -24,8 +24,6 @@ At runtime, the `resolve-pojo-schema-action` Kamelet relies upon the presence of
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jackson-avro
     
 -   camel:jackson-protobuf

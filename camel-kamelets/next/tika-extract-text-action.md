@@ -21,8 +21,6 @@ The following table summarizes the configuration options available for the `tika
 
 At runtime, the `tika-extract-text-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:tika
     
 -   camel:kamelet

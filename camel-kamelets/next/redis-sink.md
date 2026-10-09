@@ -25,8 +25,6 @@ At runtime, the `redis-sink` Kamelet relies upon the presence of the following d
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:spring-redis
     
 

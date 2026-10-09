@@ -29,8 +29,6 @@ At runtime, the `infinispan-source` Kamelet relies upon the presence of the foll
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:infinispan
     
 

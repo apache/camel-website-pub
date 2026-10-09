@@ -25,8 +25,6 @@ At runtime, the `extract-field-action` Kamelet relies upon the presence of the f
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jackson
     
 -   camel:kafka

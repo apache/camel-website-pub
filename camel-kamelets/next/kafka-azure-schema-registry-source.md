@@ -35,8 +35,6 @@ At runtime, the `kafka-azure-schema-registry-source` Kamelet relies upon the pre
 
 -   camel:kafka
     
--   camel:core
-    
 -   camel:kamelet
     
 -   camel:azure-schema-registry

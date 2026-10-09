@@ -28,8 +28,6 @@ At runtime, the `aws-sts-assume-role-action` Kamelet relies upon the presence of
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:aws2-sts
     
 

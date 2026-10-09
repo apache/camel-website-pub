@@ -18,8 +18,6 @@ At runtime, the `djl-image-to-text-action` Kamelet relies upon the presence of t
     
 -   mvn:ai.djl.pytorch:pytorch-model-zoo:0.29.0
     
--   camel:core
-    
 -   camel:kamelet
     
 -   camel:jackson

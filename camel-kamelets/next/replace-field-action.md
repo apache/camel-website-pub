@@ -21,8 +21,6 @@ The following table summarizes the configuration options available for the `repl
 
 At runtime, the `replace-field-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:jackson
     
 -   camel:kamelet

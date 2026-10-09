@@ -26,19 +26,23 @@ Press **F2** to open the actions menu with quick access to common operations:
  
 | Action | Description |
 | --- | --- |
+| Go to…​ (Shift+F2) | Jump to a tab by name. |
+| Switch Integration (F3) | Select another running integration. |
 | Send Message | Send a test message to any route with custom body, headers, and exchange pattern. |
-| Run an example…​ | Browse and launch built-in Camel examples from the catalog. |
+| Run an Example…​ | Browse and launch built-in Camel examples from the catalog. |
 | Open Project…​ | Open a project directory in the Source tab for browsing and editing. Run with F10. |
-| Run from folder…​ | Run routes from a local directory. |
 | Run Dev/Infra Service…​ | Start infrastructure services (Kafka, databases, etc.) in Docker. |
-| Browse Files | Browse the integration’s source files with syntax highlighting. |
-| Run Doctor | Check your environment: Java version, JBang, Maven, Docker, port conflicts, disk space. |
+| Browse Files…​ | Browse the integration’s source files with syntax highlighting. |
+| Run Doctor | Check your environment: Java, JBang, Maven, Docker, Ollama, AI and MCP, port conflicts, disk space. |
 | Reset Stats | Reset all statistics and metrics for the selected integration. |
 | Stop All | Stop running integrations and/or infrastructure services. |
-| Settings…​ | Change the theme, the starting tab, and the default run-from-folder. |
-| Take Screenshot | Export the current screen as SVG, text, or ANSI art. |
-| Start/Stop Tape Recording | Record your session as a `.tape` file for demos. |
+| Screen…​ | Take a screenshot (SVG, text, or ANSI art), record the session as a `.tape` file, show keystrokes, or add a caption, for demos. |
+| Settings…​ | Change the TUI preferences: theme, tabs, panels, editor, proxy and AI (see [Settings](#_settings)). |
+| AI & MCP…​ | AI Prompt, Setup AI and AI Log (see [AI](camel-jbang-tui-ai.md)), and MCP Info and MCP Log: the MCP server of the session and the calls agents made to it. Called AI…​ when the MCP server is off. |
+| Shell (F6) | Open the embedded Camel CLI shell. |
 | Quit | Quit the TUI, with the same confirmation as pressing **q**. The last entry of the menu, so quitting is one menu away on tabs and in input fields where **q** is taken by something else. Integrations started from the TUI keep running after it quits (until the terminal closes); when some do, the confirmation says how many, and **s** stops them and quits. |
+
+![The F2 actions menu over the Overview](_images/jbang/camel-tui-actions-menu.png)
 
 ### Sending Test Messages
 
@@ -72,6 +76,10 @@ The Doctor checks your development environment and reports issues:
 -   Maven repository connectivity
     
 -   Docker/Podman availability
+    
+-   Ollama: whether it runs, and the models it has (the AI panel needs one of 14B or more)
+    
+-   AI and MCP: the AI provider and model set up, and the MCP server of the session
     
 -   Common port conflicts (8080, 8443, 9090)
     
@@ -119,28 +127,36 @@ Figure 3. Catppuccin Latte: a light theme on the **Overview** tab
 
 ## Settings
 
-Open the **F2** actions menu and choose **Settings…​** to change TUI preferences in one place:
+Open the **F2** actions menu and choose **Settings…​** to change TUI preferences in one place. Use **↑**/**↓** to move between rows, **Space** (or **←**/**→**) to cycle a choice, type to edit a text field, **Enter** to save, and **Esc** to cancel.
 
--   **Theme** — cycle through 21 available themes (applied immediately on save).
-    
--   **Starting Tab** — the tab shown when the TUI launches; any tab (primary or under **More**) can be chosen. Defaults to **Overview**.
-    
--   **Select Tab** — the tab to switch to when selecting an integration from the Overview tab. Defaults to **Log**.
-    
--   **Confirm** — whether destructive actions (quit, stop, restart, stop/start routes) show a confirmation dialog before executing. Defaults to **on**. Kill (**X**) always confirms regardless of this setting.
-    
--   **Default Folder** — the folder pre-filled in **Run from Folder**. The most recently used folder still takes precedence; this default is used only when there is no remembered folder.
-    
--   **Panel Position** — where the shell (**F6**) and AI (**F8**) panels open: **bottom** (default) or **top**.
-    
--   **Panel Space** — whether those panels push the tab content aside (**move**, default) or are drawn on top of it (**overlay**), so the tab keeps its full height underneath.
-    
--   **AI Overview** — the [AI project overview](camel-jbang-tui-ai.html#_ai_project_overview): **manual** (default, only with `/overview`), **auto** (also when the AI panel opens and the project summary is missing or out of date), or **off** (no `/overview`, and no AI-assisted descriptions in the tabs).
-    
+Each row is stored under a `camel.tui.*` key in the Camel CLI configuration file, so the same setting can also be written there by hand:
 
-Use **↑**/**↓** to move between rows, **Space** (or **←**/**→**) to cycle the theme and tab settings, type to edit the default folder, **Enter** to save, and **Esc** to cancel.
+   
+| Setting | Key | Description | Default |
+| --- | --- | --- | --- |
+| Theme | `camel.tui.theme` | The color theme; cycle through the 21 [themes](#_theme). Applied immediately on save. | `dark` |
+| Starting Tab | `camel.tui.startTab` | The tab shown when the TUI launches. Any tab (primary or under **More**) can be chosen. | Overview |
+| Select Tab | `camel.tui.selectTab` | The tab to switch to when selecting an integration from the Overview tab. | Log |
+| Log Pin | `camel.tui.logPin` | Pin the log at the bottom of the other tabs at startup, at `25`, `50` or `75` percent of the height, or `off`. **Ctrl+L** pins and resizes the log at runtime. | `off` |
+| Rate per | `camel.tui.ratePer` | Show message rates per `seconds` or per `minutes`. | `seconds` |
+| Panel Position | `camel.tui.panelPosition` | Where the shell (**F6**) and AI (**F8**) panels open: `bottom` or `top`. | `bottom` |
+| Panel Space | `camel.tui.panelSpace` | Whether those panels push the tab content aside (`move`) or are drawn on top of it (`overlay`), so the tab keeps its full height underneath. | `move` |
+| Confirm Actions | `camel.tui.confirmActions` | Whether destructive actions (quit, stop, restart, stop/start routes) show a confirmation dialog first. Kill (**X**) always confirms regardless of this setting. | `true` |
+| Validate on Save | `camel.tui.validateOnSave` | Whether the [source editor](camel-jbang-tui-source-editor.md) checks a file when it is saved (a YAML or XML route, or a properties file, with problems is not saved; Java problems are only reported). | `true` |
+| Route Tree | `camel.tui.routeTree` | Whether the source editor shows the route tree when it opens (**Ctrl+T** shows or hides it). | `false` |
+| Default Folder | `camel.tui.defaultFolder` | The folder pre-filled in **Run from Folder**. The most recently used folder still takes precedence; this default is used only when there is no remembered folder. |  |
+| Proxy Host | `camel.tui.proxyHost` | HTTP proxy for the TUI’s own lookups, such as the [CVE Audit](camel-jbang-tui-observe.html#_cve_audit) queries to OSV.dev. When empty, the JVM default proxy settings are used. |  |
+| Proxy Port | `camel.tui.proxyPort` | Port of the proxy host. | `8080` |
+| Shell History | `camel.tui.shell.history` | How many commands the embedded shell remembers (see [Input history](#_input_history)). | `100` |
+| AI Provider | `camel.tui.ai.provider` | The [AI panel](camel-jbang-tui-ai.md) provider: `ollama`, `openai`, `anthropic`, `gemini`, `watsonx`, an [ACP coding agent](camel-jbang-tui-ai-agents.md) (`acp:claude`, `acp:codex`, `acp:bob`, `acp:qwen`, `acp:opencode`, `acp:dsh`, `acp:custom`), or `auto` to detect one. | `auto` |
+| AI Model | `camel.tui.ai.model` | The model to use. When empty, the provider’s default is picked. |  |
+| AI Base URL | `camel.tui.ai.url` | The provider’s base URL. When empty, the provider’s default is used. |  |
+| AI Tools | `camel.tui.ai.tools` | Which tools are sent to the model: `core` (troubleshooting only), `full` (all tools), or `auto` (core for a local model, full otherwise). | `auto` |
+| AI Overview | `camel.tui.ai.overview` | The [AI project overview](camel-jbang-tui-ai.html#_ai_project_overview): `manual` (only with `/overview`), `auto` (also when the AI panel opens and the project summary is missing or out of date), or `off` (no `/overview`, and no AI-assisted descriptions in the tabs). | `manual` |
+| AI History | `camel.tui.ai.promptHistory` | How many AI prompts are remembered (see [Input history](#_input_history)). | `100` |
+| ACP Command | `camel.tui.ai.acp.command` | The command line that starts the coding agent when the provider is `acp:custom`. |  |
 
-Settings are stored under `camel.tui.*` keys (`camel.tui.theme`, `camel.tui.startTab`, `camel.tui.selectTab`, `camel.tui.confirmActions`, `camel.tui.defaultFolder`, `camel.tui.panelPosition`, `camel.tui.panelSpace`, `camel.tui.shell.history`, `camel.tui.ai.provider`, `camel.tui.ai.model`, `camel.tui.ai.url`, `camel.tui.ai.tools`, `camel.tui.ai.overview`, `camel.tui.ai.promptHistory`) in the Camel CLI configuration file. Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` is treated as a project-level override and stays local, while every other key defaults to the global `~/.camel-cli.properties`. This means a project can deliberately pin a starting tab in its local config without redirecting your personal theme into the project file. See [Configuration](camel-jbang-configuration.md) for details on the global and local files.
+Each key is read from and written back to the file where it currently lives: a key present in the local `./camel-cli.properties` is treated as a project-level override and stays local, while every other key defaults to the global `~/.camel-cli.properties`. This means a project can deliberately pin a starting tab in its local config without redirecting your personal theme into the project file. See [Configuration](camel-jbang-configuration.md) for details on the global and local files.
 
 ### Input history
 

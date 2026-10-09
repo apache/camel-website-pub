@@ -26,8 +26,6 @@ At runtime, the `solr-source` Kamelet relies upon the presence of the following 
 
 -   camel:solr
     
--   camel:core
-    
 -   camel:timer
     
 -   camel:jackson

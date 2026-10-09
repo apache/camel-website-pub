@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 387 in 314 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 389 in 316 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -266,6 +266,7 @@ Number of Non-Core Components: 387 in 314 JAR artifacts (4 deprecated)
 | [JT400](jt400-component.md) | camel-jt400 | Stable | 1.5 | Exchanges messages with an IBM i system using data queues, message queues, or program call. IBM i is the replacement for AS/400 and iSeries servers. |
 | [JTE](jte-component.md) | camel-jte | Stable | 4.4 | Transform messages using a Java based template engine (JTE). |
 | [Kafka](kafka-component.md) | camel-kafka | Stable | 2.13 | Send and receive messages to/from an Apache Kafka broker. |
+| [Kafka Share](kafka-share-component.md) | camel-kafka-share | Preview | 4.23 | Consume messages from Apache Kafka topics as a queue, using a share group. |
 | [Keycloak](keycloak-component.md) | camel-keycloak | Stable | 4.15 | Manage Keycloak instances via Admin API. |
 | [Knative](knative-component.md) | camel-knative | Stable | 3.15 | Send and receive events from Knative. |
 | [Knative Http](knative-http-component.md) | camel-knative-http | Stable | 3.15 | Camel Knative HTTP |
@@ -329,6 +330,7 @@ Number of Non-Core Components: 387 in 314 JAR artifacts (4 deprecated)
 | [OPC UA Client](milo-client-component.md) | camel-milo | Stable | 2.19 | Connect to OPC UA servers using the binary protocol for acquiring telemetry data. |
 | [OPC UA Server](milo-server-component.md) | camel-milo | Stable | 2.19 | Make telemetry data available as an OPC UA server. |
 | [OpenAI](openai-component.md) | camel-openai | Stable | 4.17 | LLM endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech using OpenAI-compatible APIs. The openai scheme is a supported alias. |
+| [OpenFeature](openfeature-component.md) | camel-openfeature | Preview | 4.23 | Evaluate feature flags using the OpenFeature specification with flagd. |
 | [OpenFGA](openfga-component.md) | camel-openfga | Preview | 4.23 | Authorize an Exchange against an OpenFGA relationship graph, and maintain the relationship tuples it is authorized against. |
 | [OpenSearch](opensearch-component.md) | camel-opensearch | Stable | 4.0 | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](openshift-build-configs-component.md) | camel-kubernetes | Stable | 2.17 | Perform operations on OpenShift Build Configs. |

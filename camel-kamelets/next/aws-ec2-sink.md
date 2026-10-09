@@ -28,8 +28,6 @@ The following table summarizes the configuration options available for the `aws-
 
 At runtime, the `aws-ec2-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:aws2-ec2
     
 -   camel:kamelet

@@ -31,8 +31,6 @@ At runtime, the `kafka-apicurio-registry-not-secured-source` Kamelet relies upon
 
 -   camel:kafka
     
--   camel:core
-    
 -   camel:kamelet
     
 -   mvn:io.quarkus:quarkus-apicurio-registry-json-schema:3.15.1

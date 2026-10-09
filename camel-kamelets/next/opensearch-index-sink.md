@@ -26,8 +26,6 @@ The following table summarizes the configuration options available for the `open
 
 At runtime, the `opensearch-index-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:jackson
     
 -   camel:kamelet

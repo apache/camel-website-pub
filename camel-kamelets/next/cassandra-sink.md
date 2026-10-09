@@ -34,8 +34,6 @@ At runtime, the `cassandra-sink` Kamelet relies upon the presence of the followi
     
 -   camel:cassandraql
     
--   camel:core
-    
 
 ## Camel JBang usage
 

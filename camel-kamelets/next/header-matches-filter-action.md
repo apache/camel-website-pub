@@ -20,8 +20,6 @@ The following table summarizes the configuration options available for the `head
 
 At runtime, the `header-matches-filter-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:kamelet
     
 

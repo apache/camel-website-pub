@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.22 to 4.23
 
+### camel-management - Route group exchange counters count once per entry into the group
+
+The route group MBean (`ManagedRouteGroupMBean`) exchange counters and processing times now count each exchange once per entry into the group: calls nested inside another route of the same group are not counted again. In 4.22.1, a regression (CAMEL-24590) caused them to count once per member route instead.
+
 ### camel-core - Rest DSL response Content-Type
 
 Under json or xml binding, a response without a Content-Type header again takes it from the `produces` of the rest verb, as before Camel 4.18.4 and 4.22.0. Those releases used `application/json` (or `application/xml`) whenever the binding mode allowed it and marshalled the body, so a verb producing `text/plain` answered with a json-quoted body and a binary body failed. When `produces` lists several media types, the first json (or xml) type is used, otherwise the first one. Wildcards such as `**/**` are skipped, falling back to `application/json` or `application/xml`.
@@ -113,6 +117,14 @@ When stream caching spools a message body to disk, the temporary file is deleted
 
 The `onCompletion` EIP in the default mode (`modeAfterConsumer`) now uses the order `Ordered.LOWEST - 1`, so it runs just before the file is deleted, and its copy of the exchange holds its own reference to a spooled body. An onCompletion can therefore read a spooled body, also with `parallelProcessing`. Previously it failed with a `NoSuchFileException`, and a parallel onCompletion stopped at the first step that read the body. As a side effect, an on completion with the order `Ordered.LOWEST` that was added after the onCompletion EIP (for example the close of a JPA `EntityManager` used later in the route) used to run before the onCompletion, and now runs after it.
 
+### camel-core - routeConfiguration named onCompletion fires once per exchange in the Java DSL
+
+In the Java DSL, `routeConfiguration("myconfig").onCompletion()` previously set `routeScoped=false` unconditionally, which caused the `onCompletion` to be skipped when the opted-in route was called indirectly (for example via `direct:` from a REST DSL consumer route).
+
+The behavior is now corrected: a named route configuration (`routeConfiguration("id")`) keeps `routeScoped=true` so that the `onCompletion` fires correctly regardless of which route is the actual consumer. A per-exchange deduplication key ensures the `onCompletion` fires exactly once per exchange, even when multiple routes opt in to the same named configuration, or when the opted-in route is called several times in the same exchange.
+
+If your application relied on the (broken) behavior where `onCompletion` was silently skipped for named configurations in indirect call chains, you may now observe it firing where it did not before.
+
 ### @PropertyInject - an invalid property value is an error (Breaking change)
 
 When a property injected with `@PropertyInject` has a value that cannot be converted to the type of the field or parameter, the injection now fails. Prior to Camel 4.23 the `defaultValue` was silently used instead, so a mistake in the configured value (such as `port=80a` for an `int`) went unnoticed. The `defaultValue` is still used when the property does not exist.
@@ -185,6 +197,14 @@ The distribution ratios of the weighted load balancer are now validated when the
 
 When a route with the stream resequencer stops, a caller that is blocked because the resequencer is full (`capacity`) now fails with a `java.util.concurrent.RejectedExecutionException`. Prior to Camel 4.23 such a caller stayed blocked, also after the route was stopped.
 
+### Saga EIP - compensation and completion failures
+
+When a saga in `AUTO` completion mode fails and its compensation then fails as well, the exchange now keeps the exception that caused the compensation, and the compensation failure (a `RuntimeCamelException` with the message `Unable to compensate all required steps of the saga <id>`) is added to it as a suppressed exception. Prior to Camel 4.23 that `RuntimeCamelException`, wrapped in a `java.util.concurrent.CompletionException`, replaced the original exception. An `onException` or `doCatch` that matched the `CompletionException`, the `RuntimeCamelException` or its message must now match the original exception instead, and can find the compensation failure in its suppressed exceptions.
+
+When the completion of a saga fails, the exchange now gets the `RuntimeCamelException` with the message `Unable to complete all required steps of the saga <id>` as is. Prior to Camel 4.23 it was wrapped in a `java.util.concurrent.CompletionException`.
+
+With the in-memory saga service, a saga whose compensation or completion could not be done after all the retries now has the status `FAILED`, instead of `COMPENSATED` or `COMPLETED`: compensating or completing it again fails, instead of reporting success. When the in-memory saga service stops, it logs a warning with the ids of the sagas that are not finalized, since they will not be compensated or completed.
+
 ### Tokenize language
 
 -   A message without a body (or a `source` that has no value) now has no tokens, the same as an empty body. Prior to Camel 4.23 the tokenizer failed with a `NullPointerException`.
@@ -203,6 +223,8 @@ When a context reload is triggered, for example by one of the vault components d
 Re-applying such an option removes the component and resolves it again, as it already does when the option changes in a watched properties file. The component is stopped either way, and what comes back depends on how it was registered: a component auto-detected from the classpath is replaced by a new instance, while a component registered as a bean is the same instance, re-configured and started again. A component that holds a connection will therefore close it on reload.
 
 Only options whose value is a placeholder are affected, and only when running with Camel Main, Camel Spring Boot or Camel Quarkus. If a component must not be stopped on reload, configure it programmatically rather than with a placeholder based property.
+
+Components implementing `SecretRotationAware`, such as `camel-jdbc`, `camel-sql`, and `camel-sql-stored`, will now soft-evict their connection pool(s) on every context reload — not only on vault-detected secret rotations. This includes JMX-triggered reloads, `camel cmd reload`, and dev-mode file-watcher reloads.
 
 ### Languages - less than with two null values, and a source from a variable
 
@@ -315,6 +337,14 @@ The `org.apache.camel.processor.InterceptSendToEndpointCallback` class is deprec
     
 -   A hardcoded node id in a route template no longer clashes with the same id in a regular route, as the ids of the route created from the template are prefixed.
     
+-   A bean bound by `TemplatedRouteBuilder.bean` or in a `templatedRoute` is now used instead of a `templateBean` with the same name, which is no longer created. Prior to Camel 4.23 the template bean replaced it when both had the same type, and was used when the route looked the bean up by the type of the template bean (such as `process("myBean")`). When the same `RouteTemplateContext` is reused for several `addRouteFromTemplate` calls, the template beans bound for the first route are now kept as beans of the caller, so the later routes share these instances instead of each getting new ones. Use a new `RouteTemplateContext` per route to get new template beans for each route.
+    
+
+#### A route id that is already used (Breaking change)
+
+Creating a route from a route template (`TemplatedRouteBuilder`, `templatedRoute`, `addRouteFromTemplate`, or a Kamelet endpoint with a route id) with the id of an existing route that was not created from the same template (a regular route, or a route from another template or Kamelet) now fails with `FailedToCreateRouteFromTemplateException`. For a Kamelet endpoint this exception is wrapped in a `FailedToCreateKameletException`. Prior to Camel 4.23 the existing route was removed and replaced without notice. To replace such a route, stop and remove it first.
+
+An existing route that was created from the same template is still replaced, as before. This is how the route of a Kamelet endpoint with a route id is created again when its parent route is updated (for example by a route reload), and how a route from a template is updated with other parameters.
 
 ### camel-aws2-ddb
 
@@ -366,6 +396,10 @@ A route that consumes from one Event Hub and produces to another no longer fails
 
 The `readTimeout` and `writeTimeout` options (also on the Consul cluster service) set the connect timeout of the Consul client instead of its read and write timeouts. So the client always used the default read and write timeouts of its HTTP client (10 seconds), and the connect timeout was `writeTimeout` when it was set, otherwise `readTimeout`, otherwise `connectTimeout`. Each option now sets its own timeout: a request whose answer takes longer than a configured `readTimeout` now fails, and only `connectTimeout` sets the connect timeout. Blocking queries (`blockSeconds`) are not affected: the client computes the read timeout of a blocking query from its wait time.
 
+### camel-cm-sms - GSM 03.38 detection
+
+A message that contains `<`, `>`, `¤` or a form feed, and otherwise only GSM 03.38 characters, is now sent in the GSM encoding (160 characters, or 153 per part) instead of as unicode (70, or 67 per part), so it may be sent in fewer parts.
+
 ### camel-couchbase
 
 The `connectTimeout` option is now applied. It previously sat inside a condition that tested `queryTimeout`, so setting it on its own had no effect and the documented default of 30000 ms never reached the SDK - connections used the Couchbase SDK’s own default of 10 seconds instead. Deployments that relied on that 10 second behaviour without setting the option should now set `connectTimeout=10000` explicitly.
@@ -405,6 +439,8 @@ The `context` developer console no longer counts routes created by Kamelets in i
 
 The `route-topology` developer console (used by `camel cmd route-topology` and the Camel TUI diagram) no longer includes routes created by Kamelets, as these are an implementation detail of the Kamelet and were already hidden from the route console. Set the `kamelets=true` option (or `--kamelets` on the CLI) to include them.
 
+The route topology no longer reports a send from an `onException` clause as a call between routes. Such a send, and the dead letter uri of a dead letter channel, is now an error path: each edge has a `kind` field, `call` as before or `error`, and an error path also says what sends (`via`: `errorHandler` or `onException`) and what happens to the failure (`handling`: `handled`, the message ends there as with a dead letter channel; `continued`, the route goes on after it; or `notHandled`, the failure goes on to the caller). Error paths come only from routes whose error handler handles the failure: a route with `noErrorHandler` has none, as its failure goes back to the calling route. Before, a global `onException` that sent to another route showed up as a call from every route, the target route itself included. The diagrams (the Camel TUI, camel-diagram) draw the calls only, and the text output of the console and of `camel cmd route-topology` lists the error paths with `..>`. The `RouteTopologyDumper.TopologyEdge` record has the new `kind`, `via` and `handling` components; its four-argument constructor is kept and creates a `call` edge.
+
 The `inflight` and `blocked` developer consoles now carry a `nodeSource` field per entry, saying where the node the exchange sits at is in the source (such as `orders.camel.yaml:18`). It is `null` when message history or source location is disabled. Existing fields are unchanged.
 
 The `capacity` option of the `trace`, `receive`, `event` and `sql-trace` developer consoles, set from configuration (such as `camel.devConsole.trace.capacity`), is now applied. Prior to Camel 4.23 Camel Main set it after the console had started, so a capacity larger than the default broke the console (`Queue full` or `ArrayIndexOutOfBoundsException`), and the documented range was not checked. A capacity outside that range (50-1000 for `trace` and `receive`, 25-1000 for `event` and `sql-trace`) now fails at startup with an `IllegalArgumentException`, also when it is lower than the minimum, which was accepted before.
@@ -419,11 +455,21 @@ With `asyncDelayedRedelivery` and `allowRedeliveryWhileStopping=false`, stopping
 
 ### camel-management
 
+The thread pool MBeans of a source that creates several thread pools (such as the timeout checker and the optimistic locking pools of the Aggregate EIP) had the same name, so only the first one was registered. For a source that is not an EIP, a name or a static service, the `SourceId` attribute is now the name of the thread pool, which is also added to the MBean name: `AggregateProcessor(0x1b2c3d4e)(AggregateTimeoutChecker)` instead of `AggregateProcessor(0x1b2c3d4e)`. This also applies to the thread pools of component consumers, producers and their helper services, such as the consumer threads of `seda` (`SedaConsumer(0x1b2c3d4e)(seda://foo)`), the reply manager pools of request/reply over `jms` and `sjms` (`JmsProducer(0x1b2c3d4e)(JmsReplyManagerTimeoutChecker[bar])`), the timeout pools of `netty` request/reply and the read lock release task of `file`. The names of the thread pools of EIPs, of pools created by name and of static services do not change.
+
 The JMX `browse` operation of the `DefaultInflightRepository` MBean and the `listAwaitThreads` data of the `DefaultAsyncProcessorAwaitManager` MBean gained a `nodeSource` column, saying where the node is in the source (such as `orders.camel.yaml:18`), next to the existing `nodeId`. It is `null` when message history or source location is disabled. Clients that read the row by item name are unaffected; a client that assumes a fixed number of columns should be reviewed.
 
 `InflightRepository.InflightExchange` and `AsyncProcessorAwaitManager.AwaitThread` gained a `getNodeSource()` method for the same value. Both are `default` methods returning `null`, so existing implementations continue to compile.
 
+A CamelContext name (or management name) with `, = : " * ?` or a line feed made the CamelContext fail to start with JMX. These characters are now replaced with `_` in the management name, the `context` key of the object names (the `CamelId` attribute keeps the name). A CamelContext whose management name is already the `context` key of another CamelContext now gets the next free management name, or fails to start with a fixed management name pattern; before, both started and the second one had no MBeans for its routes, processors and services. A fixed management name pattern is a pattern without `counter` set on the `ManagementNameStrategy` (such as the `managementNamePattern` of `<camelContext>` in Spring XML); the `jmxManagementNamePattern` option of camel-main and Spring Boot (default `name`) is the pattern of the management agent, and with it the next free management name is used.
+
 The `Redeliveries` statistic now also counts a redelivery attempt that succeeds, and it is only counted where the redelivery happened. For a processor it is the number of redelivery attempts of that processor. For a route it is the number of exchanges that were redelivered by a processor of that route, and for the CamelContext the number of exchanges that were redelivered. Before, only redelivery attempts that failed were counted (so a processor that succeeded on its second redelivery reported 1 instead of 2, and a route whose exchange was redelivered and then completed reported 0), and a processor or route that the exchange went through after a redelivery could count that redelivery as well.
+
+The constructor of `org.apache.camel.management.InstrumentationInterceptStrategy` (used internally by `JmxManagementLifecycleStrategy`) now takes a map of `InstrumentationInterceptStrategy.WrappedProcessor` values and the `Route` whose processors it instruments, which must not be `null`.
+
+#### mbeansLevel=ContextOnly
+
+With `mbeansLevel=ContextOnly` the components are no longer registered as MBeans (like the endpoints, thread pools and most services, which were not registered at this level already). Prior to Camel 4.23 an MBean was registered for every component. Use `RoutesOnly` (or `Default`) to keep the component MBeans. The CamelContext, health check and route controller MBeans are still registered.
 
 ### camel-groovy
 
@@ -748,9 +794,9 @@ The deprecated classes continue to work but will be removed in a future release.
 
 `URISupport.normalizeUri()` computes the endpoint registry cache key so that two logically identical endpoint URIs (differing only in query parameter order) resolve to a single shared `Endpoint`. A fast-path optimization only re-encoded query parameter values when the parameter keys were **not** already in alphabetical order, so two semantically identical URIs could normalize to two different strings whenever a value needed encoding (for example a colon in a `host:port` value) - depending purely on whether the original, incidental parameter order happened to already be sorted. `CamelContext.getEndpoint()` would then silently create a duplicate `Endpoint` (and duplicate producers/consumers, connections, threads) instead of reusing the cached one, with no error or log warning.
 
-Normalization is now always order-independent. As part of the fix, the encoding applied when rebuilding the query string is also less aggressive: characters that are legal unescaped in a URI query per RFC 3986 (`:`, `/`, `,`, `'`, etc. - for example a MIME type such as `produces=application/json`, or a `host:port` value) are no longer percent-encoded, as long as no key or value in the query needs a percent escape. A value with `=` or `#` (for example `secretKey=abc/def==`) needs one, and then the whole query is form-encoded as in earlier releases, the same way as an endpoint URI that is already percent-encoded, so normalizing a normalized URI gives the same URI.
+Normalization is now always order-independent. As part of the fix, the encoding applied when rebuilding the query string is also less aggressive: characters that are legal unescaped in a URI query per RFC 3986 (`:`, `/`, `,`, `'`, etc. - for example a MIME type such as `produces=application/json`, or a `host:port` value) are no longer percent-encoded, as long as no key or value in the query needs a percent escape. A value with `=` or (for example `secretKey=abc/def==`) needs one, and then the whole query is form-encoded as in earlier releases, the same way as an endpoint URI that is already percent-encoded, so normalizing a normalized URI gives the same URI. Such a URI is then normalized as a whole like a percent-encoded URI, so a in the path becomes `%23`, and in a user info with more than one `@` (an email address as the user) every `@` but the last becomes `%40`, for example `sftp://me%40example.com@host/in?password=pa%3Dss`.
 
-Code that asserts a literal, fully-normalized endpoint URI string containing one of those characters in a query value may need to update the expected string to the (now consistently) unencoded form.
+Code that asserts a literal, fully-normalized endpoint URI string containing one of those characters in a query value may need to update the expected string to the form described above.
 
 ### camel-core - double && in endpoint URIs
 
@@ -828,6 +874,8 @@ Several bugs in the type converter have been fixed, and some of the fixes change
     
 -   When there is no type converter for the exact type of the value, the registry uses a type converter for a super type. This used to depend on the iteration order of an internal map, which could change between JVM restarts. The nearest super type now wins: the type hierarchy is walked breadth-first, interfaces are tried before the super class at each level, and `java.lang.Object` is tried last.
     
+-   As a last resort (after the fallback type converters), the registry uses a type converter whose types are assignable to or from the requested types. When more than one type converter matched, this also depended on the iteration order of the internal map. The nearest one now wins (the fewest levels between its types and the requested types), and the class names of its types decide between equally near ones.
+    
 -   Converting a `String` to a `Number` now returns an `Integer` for all values within the `Integer` range (including `Integer.MAX_VALUE`, which returned a `Long` before), and supports exponent notation such as `1e5`.
     
 -   Converting a `BigDecimal`, or a `double` larger than a `long`, to `BigInteger` no longer loses precision.
@@ -848,6 +896,14 @@ Several bugs in the type converter have been fixed, and some of the fixes change
 When a route file is reloaded in dev mode (`camel run --dev`, or the route watcher reload strategy in general) and the new content fails to load, the routes that ran before are restored right away, without the routes of the failed file, and a WARN says so. Before, the previous routes stayed stopped until the next successful reload, so a mistake in one file left the application without routes. The failed file loads again on its next save. The `CamelContextReloadFailure` event and the reload error log line are unchanged.
 
 A project whose routes are all in one file is covered too: the content that last loaded is kept in memory, so the broken save goes back to the version that was running, and the log says how many routes came from it. The file on disk is untouched; its next save is loaded as usual.
+
+### camel-core - an exchange cut off by a route stop or reload is logged as one WARN line
+
+When a route is stopped or reloaded (for example a save in `camel run --dev`) while an exchange is in flight, and the graceful shutdown times out, the exchange is cut off. The error handler logged this as a failed delivery: an ERROR with "Exhausted after delivery attempt", the message history and the stack trace of the `RejectedExecutionException`. It is now one line at WARN, "Exchange cut off …​: its route is being stopped or reloaded", as nothing in the route failed, and a consumer that rolls back, such as file, delivers the message again. A level lower than WARN configured for exhausted logging is kept. A forced stop of the CamelContext is logged as before. The exception set on the exchange is unchanged.
+
+### camel-core - RoutesLoader.updateRoutes runs one call at a time
+
+Concurrent `RoutesLoader.updateRoutes` calls on one CamelContext now run one at a time instead of failing with `ConcurrentModificationException`. A route whose exchange calls `updateRoutes` while another `updateRoutes` call replaces that route now makes the stop wait until the shutdown timeout, after which the route is forced to stop.
 
 ### camel-core - the recursive file watcher watches directories created while it runs
 
@@ -1045,6 +1101,18 @@ The `ssl` option is now marked `insecure:ssl`, so setting it to `false` in the c
 
 This applies only to `camel-hivemq`: setting `ssl=false` on the other components that have an `ssl` option (such as `camel.component.netty.ssl = false`) is not reported, see the `camel-main` section about the security policy check below. To keep `camel.component.hivemq.ssl = false` under a `fail` policy, list it in `camel.security.allowedProperties`.
 
+### camel-debezium-mongodb
+
+The `mongodbSslInvalidHostnameAllowed` option is now marked `insecure:ssl`. The option turns off TLS hostname verification, so setting `camel.component.debezium-mongodb.mongodbSslInvalidHostnameAllowed = true` in the configuration is reported by the [security policy](security-policy.md) check: a warning by default, and a startup failure with the `prod` profile or `camel.security.insecureSslPolicy = fail`.
+
+To keep the setting under a `fail` policy, list the property in `camel.security.allowedProperties`.
+
+### camel-mongodb
+
+The `tlsAllowInvalidHostnames` option is now marked `insecure:ssl`. The option turns off TLS hostname verification, so setting `camel.component.mongodb.tlsAllowInvalidHostnames = true` in the configuration is reported by the [security policy](security-policy.md) check: a warning by default, and a startup failure with the `prod` profile or `camel.security.insecureSslPolicy = fail`.
+
+Only the option of `camel-mongodb` is reported, see the `camel-main` section about the security policy check below. To keep `camel.component.mongodb.tlsAllowInvalidHostnames = true` under a `fail` policy, list it in `camel.security.allowedProperties`.
+
 ### camel-main - security policy check matches component options by component
 
 The [security policy](security-policy.md) check matched an insecure option by its name only, so an option of one component that is marked insecure was also reported for any other component, data format or language with an option of the same name. For example `tls=false` was reported for every component because of the `tls` option of `camel-pinecone`.
@@ -1141,9 +1209,17 @@ Values returned by a script are now converted to plain Java objects before the s
 
 `JavaScriptHelper.newContext()` is deprecated: contexts are created by the language from its shared engine.
 
+### camel-javascript, camel-python - script variables use the Groovy names
+
+The `js` and `python` languages now bind the script variables with the names the `groovy` language uses: `camelContext`, `request`, `header`, `exchangeProperty`, `exchangeProperties` and `exception` are new, next to `exchange`, `exchangeId`, `message`, `body`, `headers`, `variable` and `variables`. In `js` and `python` the `context` and `properties` variables are deprecated in favour of `camelContext` and `exchangeProperties`; they still work. The new `python3` language binds only the Groovy names, and in its default data-only mode only the data variables.
+
 ### camel-rest, camel-rest-openapi, camel-jbang - camel-http is the default REST client
 
 When a REST producer (`rest:` in producer mode, or `rest-openapi` calling an operation of a contract) has no `componentName` (`producerComponentName`) and no `RestProducerFactory` component exists in the context or the registry yet, the default components are tried in the order `http`, `vertx-http`, `undertow`, `netty-http`; before, `vertx-http` came first. An application with both camel-http and camel-vertx-http on the classpath now calls through camel-http; set `componentName=vertx-http` to keep the Vert.x client. An application with only one of them is not affected. The Camel CLI (`camel run`) now adds camel-http, not camel-vertx-http, for a rest-openapi producer without `componentName`.
+
+### camel-rest-openapi - path parameters are decoded
+
+The headers of the path parameters of a contract-first (`rest-openapi` consumer) operation now hold the decoded value, as with the Rest DSL: `/items/caf%C3%A9` sets the `id` header to `café`, not `caf%C3%A9`. Each path segment is decoded on its own (an encoded `/` stays in its parameter) and a `` ` stays a ` ``. A value with a malformed escape is kept as it is. Routes that decoded these headers themselves must no longer do so.
 
 ### camel-jbang
 
@@ -1211,6 +1287,12 @@ The F8 AI panel now sends only a core subset of its `tui_*` tools to local provi
 ### camel-yaml-dsl - the canonical schema requires route:
 
 A top-level `- from:` without `- route:` is the compact notation of a route, and the canonical schema (`camelYamlDsl-canonical.json`) no longer lists `from` among its top-level entries: a route is written under `route:`, as an XML route is always a `<route>`, and as Kaoto and Karavan write it. `camel validate yaml --canonical` now reports a top-level `from:` with the form to write, the way it reports the other compact shapes, and `camel validate normalize` rewrites it. The Integration template of `camel init` writes its flows in the `- route:` form as well; a Kamelet’s `template:` keeps its `from:`, which is the Kamelet spec’s shape. The classic schema and `camel run` are unchanged: the file keeps working, with the compact notation warning `camel run` already logged for it.
+
+### camel-yaml-dsl - endpoint parameters keep the order they are written in
+
+The endpoint uri of a YAML DSL endpoint written with `parameters:` has its query options in the order they are written, where it had them sorted by name: `uri: seda` with `name: foo`, `size: 1234` and `multipleConsumers: true` is now `seda:foo?size=1234&multipleConsumers=true`. Route dumps in YAML keep that order as well. The options of an endpoint are the same, and the endpoint resolved is the same, as Camel sorts the options when it normalizes the uri.
+
+The same applies to `EndpointUriFactory.buildUri` and the catalog `asEndpointUri` given an ordered map such as a `LinkedHashMap`: the options are in the order of the map. A map without an order, such as a `HashMap`, has its options sorted as before.
 
 ### camel-yaml-dsl - Pipe (kind: Pipe) support is deprecated
 
@@ -2031,6 +2113,10 @@ The `CamelInfinispanIgnoreReturnValues` header is now documented as a producer h
 
 Downloads to a configured `localWorkDirectory` now resolve existing filesystem path segments before checking that the destination remains inside that directory. Downloads through a symbolic link that resolves outside the `localWorkDirectory` are rejected. Valid nested download paths continue to work.
 
+### camel-file - jailStartingDirectory resolves symbolic links
+
+With `jailStartingDirectory` enabled (the default), the file consumer and producer now resolve symbolic links when checking that a file stays within the starting directory. The consumer skips a file or (with `recursive=true`) a directory that is a link resolving outside of it, and the producer fails to write through such a link or a dangling link. Links resolving inside the starting directory work as before. Set `jailStartingDirectory=false` to keep following links to other directories (this also turns off the check of `../` in producer file names). A skipped file is logged at WARN the first time and at DEBUG on later polls; this log-level change also applies to the remote file consumers, which keep their existing lexical check.
+
 ### camel-file, camel-ftp, camel-smb, camel-mina-sftp and camel-azure-files - a file whose download fails is retried by idempotent consumers
 
 When the consumer cannot download a file (for example a FTP, SFTP or SMB transfer fails with a socket timeout or a connection reset), the file is now retried on the next poll also when the consumer is idempotent, which includes every consumer with `noop=true`. Consumers that are not idempotent already retried such a file. Previously the idempotent key, which is added when the file is polled (`idempotentEager=true`, the default), was kept, so the file was skipped until the application was restarted, or for good with a persistent idempotent repository. The exclusive read lock acquired for the file is now released as well.
@@ -2224,6 +2310,30 @@ When `camel.main.autoConfigurationFailFast=false`, camel-main now logs a WARN fo
 
 When `camel.opentelemetry.` **properties are configured but OpenTelemetry is disabled (`camel.opentelemetry.enabled=false`), the `camel.opentelemetry2.`** or `camel.telemetryDev.` **properties are now used. Previously they were ignored whenever any `camel.opentelemetry.`** property was configured.
 
+### camel-main - `CAMEL_COMPONENT_*`, `CAMEL_DATAFORMAT_*`, `CAMEL_LANGUAGE_*` environment variables now take effect
+
+Two bugs in \`camel-main’s environment-variable processing were fixed and are now active.
+
+**Bug 1 — variables were silently ignored since Camel 3.9 (CAMEL-16345)**
+
+`filterEnvVariables` uppercases the variable names before comparing them against the supplied prefixes, so the prefixes themselves must be uppercase. Before this fix the code passed lowercase prefixes (`camel.component.`, etc.), causing every match to fail silently. This has been corrected: `CAMEL_COMPONENT_*`, `CAMEL_DATAFORMAT_*` and `CAMEL_LANGUAGE_*` variables are now actually read.
+
+If your deployments intentionally set such variables but relied on them being ignored (for example to pass secrets that should not reach the component), remove the variables or set `camel.main.autoConfigurationEnvironmentVariablesEnabled=false` to opt out (note: this also disables `CAMEL_MAIN_*` and all other ENV-based configuration in `BaseMainSupport`).
+
+Variables that refer to a name not present on the classpath (for example `CAMEL_COMPONENT_KAFKA_BROKERS` in an application that does not include camel-kafka) will fail the startup with an `IllegalArgumentException`. Variables with an empty value (for example `CAMEL_COMPONENT_SEDA_QUEUE_SIZE=` from an unset compose variable) will fail with _value is empty_. There is no per-variable opt-out: rename the variable, remove it, or set `camel.main.autoConfigurationEnvironmentVariablesEnabled=false` (note: this also disables `CAMEL_MAIN_*` and all other ENV-based configuration in `BaseMainSupport`).
+
+Secrets passed as component environment variables (for example `CAMEL_COMPONENT_AWS2_S3_SECRET_KEY`) will be seen by the `prod`\-profile security check as plain-text secrets and will fail the startup. The `camel.component.aws2-s3.secret-key={{env:CAMEL_COMPONENT_AWS2_S3_SECRET_KEY}}` placeholder form does not help — `filterEnvVariables` still picks up the original variable and binds its value directly. To pass a secret without triggering the security check, either rename the environment variable to a name that does not match the `CAMEL_COMPONENT_*` pattern and reference it with a placeholder (for example `camel.component.aws2-s3.secret-key={{env:MY_AWS_SECRET_KEY}}`), configure the value through a vault, or disable auto-configuration from environment variables with `camel.main.autoConfigurationEnvironmentVariablesEnabled=false` (which also turns off the `CAMEL_MAIN_*` variables).
+
+**Bug 2 — ambiguous name resolution**
+
+When the catalog contained component/dataformat/language pairs whose names were prefixes of each other (such as `netty` / `netty-http`, `js` / `jsonpath`, `avro` / `avroJackson`), the variable was randomly mapped to either name. A longest-match strategy now always selects the most specific name.
+
+**Known limitation — `rest` / `rest-api` and custom-named instances**
+
+`CAMEL_COMPONENT_REST_API_DOC=api.json` is matched to `camel.component.rest-api.doc` (the longer match), not to `camel.component.rest.apiDoc`. Use `CAMEL_COMPONENT_REST_APIDOC=api.json` instead (option names are matched case-insensitively). Note that using `camel.component.rest.apiDoc={{env:CAMEL_COMPONENT_REST_API_DOC}}` does not work as a workaround — `filterEnvVariables` still matches the original variable and binds it to `rest-api.doc` in addition to the placeholder.
+
+The same limitation affects custom-named component instances whose name starts with a catalog name. For example, with a component registered as `kafka-dr`, `CAMEL_COMPONENT_KAFKA_DR_BROKERS` is matched to `kafka` (the catalog entry) and becomes `camel.component.kafka.dr-brokers`, an unknown option that fails the startup. Configure such instances through `application.properties` instead: `camel.component.kafka-dr.brokers={{env:KAFKA_DR_BROKERS}}`.
+
 ### camel-seda - stopping a suspended route does not wait for its pending messages
 
 Stopping a suspended SEDA route, or stopping the CamelContext while such a route is suspended, no longer waits for the messages that were sent to it while it was suspended. A suspended consumer does not consume them, so previously the stop always ran into the graceful shutdown timeout and was then forced (or aborted). The messages are now kept on the queue (or purged with `purgeWhenStopping=true`), and are processed if the route is started again while the queue still exists.
@@ -2270,6 +2380,8 @@ Additionally, `camel-sql-stored` with `useMessageBodyForTemplate=true` now uses 
 Observability follows the gate. The `db.statement` span tag set by the `sql` span decorator (camel-telemetry and the deprecated camel-tracing) is now taken from the `CamelSqlQuery` header only when the endpoint sets `allowQueryFromHeader=true`; otherwise the tag is omitted rather than reporting a statement that was never executed. A route that reads `db.statement` from a `sql:` span and relies on the header value must set `allowQueryFromHeader=true`. The same gate applies to the `sql-trace` developer console, which reports the endpoint-configured query instead of the header when the header is not honoured. Note that `useMessageBodyForSql=true` takes precedence over `allowQueryFromHeader`, because the producer reads the statement from the message body before it looks at the header; with both options enabled the header is therefore still not reported.
 
 ### camel-core - doTry, doCatch and doFinally
+
+Route dumps now retain `doCatch` and `doFinally` blocks declared as properties of a `doTry` in YAML. Previously these blocks ran correctly but were omitted from the dumped route. If you compare or process route dumps, account for the previously missing exception-handling blocks in the output.
 
 A `doTry` must have one or more `doCatch` or `doFinally` blocks, otherwise the route fails to start with `doTry must have one or more doCatch or doFinally blocks`. Previously such a `doTry` was accepted (which turned off the route error handler for its steps).
 
@@ -2361,6 +2473,20 @@ When `sslContextParameters` is configured and `securityProtocol` is the default 
 ### camel-kafka - a suspended consumer keeps its partitions
 
 A route started with its consumer suspended, for example by a `ThrottlingExceptionRoutePolicy` with `keepOpen=true`, now starts its Kafka consumer: the consumer joins the consumer group and holds its assigned partitions paused until the route is resumed. Previously its fetcher thread ended at once, so it never connected, and the other members of the group consumed those partitions while the circuit was open; now they stay with this consumer, as for a route suspended while it runs. A suspended consumer also keeps its fetcher thread after a failed poll or a reconnect, and the health check reports it as recoverable.
+
+### camel-kafka - shared client code moved to camel-kafka-common
+
+The Kafka client code that the `kafka` component shares with other Kafka based components has been moved from `camel-kafka` into a new `camel-kafka-common` module. This includes `KafkaClientConfiguration` (the base class of `KafkaConfiguration`), `AbstractKafkaComponent`, `KafkaConstants`, `KafkaHeaderFilterStrategy`, the header serializers and deserializers (`org.apache.camel.component.kafka.serde`), `KafkaSecurityConfigurer` and `KafkaAuthType`, `PollExceptionStrategy`, `PollOnError`, `KafkaConsumerFatalException`, `TaskHealthState`, `consumer.support.KafkaRecordProcessor` and `consumer.support.interop.JMSDeserializer`. The packages and class names are unchanged.
+
+`camel-kafka` depends on `camel-kafka-common`, so nothing changes for applications that depend on `camel-kafka`. If you build your classpath without transitive dependencies, add the `camel-kafka-common` dependency:
+
+```xml
+<dependency>
+    <groupId>org.apache.camel</groupId>
+    <artifactId>camel-kafka-common</artifactId>
+    <version>${camel.version}</version>
+</dependency>
+```
 
 ### camel-pulsar - the producer no longer replaces the body with the message id
 
@@ -2719,3 +2845,28 @@ Route tools invoked by an agent (`camel-langchain4j-agent`, `camel-openai`, `cam
 ### camel-ai-tool - new AiToolResult.AuthorizationDenied result variant (SPI)
 
 `org.apache.camel.component.ai.tool.AiToolResult` is a sealed interface and gained a new variant, `AiToolResult.AuthorizationDenied`, returned when an `ai-tool` route’s `authorizationPolicy` denies a call. Code that consumes `AiToolResult` and handles its variants exhaustively — for example an AI adapter whose final branch casts to `AiToolResult.ExecutionError` — must add a branch for `AuthorizationDenied` and relay its `message()` to the model as a refusal (do not rethrow). The in-tree adapters (camel-openai, camel-spring-ai-chat, camel-langchain4j-agent and the MCP server bridge) already handle it.
+
+### camel-kubernetes
+
+The `kubernetes-configmaps` developer console now reports the config map names and refresh settings from `camel.vault.kubernetescm` instead of reading the Kubernetes secrets vault configuration. Its text output labels the list `Config maps in use:` instead of `Secrets in use:`. Both Kubernetes vault consoles return empty lists when no resource names are configured.
+
+### camel-datasonnet - DataWeave auto-conversion now fails fast on unsupported or malformed scripts
+
+`camel-datasonnet` can auto-convert DataWeave 2.0 expressions to DataSonnet at route startup. Two aspects of that conversion are now stricter:
+
+-   **Unsupported semantic constructs:** Previously, when the DataWeave expression contained constructs that could not be auto-converted, the language emitted a `WARN` log and continued, yielding a partially-converted (and likely broken) expression. Starting with this release, such expressions throw `DataWeaveConversionException` at expression-creation time, failing the route startup with a clear error message.
+    
+-   **Syntactically malformed scripts:** Previously, a DataWeave script with syntax errors (e.g. a missing `}`) could pass the parser and produce a garbled or partial AST, leading to unpredictable runtime behaviour. The parser now throws `DataWeaveConversionException` for any syntactically invalid input, failing fast at startup instead of silently tolerating malformed scripts.
+    
+
+In both cases the exception is thrown at expression-creation time (route startup), not at message processing time. Users who relied on the previous lenient behaviour must fix the malformed or unconvertible expressions. Scripts with unsupported DataWeave constructs must be rewritten in DataSonnet directly, or moved to a `.ds` file.
+
+The conversion also follows the DataWeave semantics more closely, which changes the result of some scripts that were converted before. For example, a selector on a missing field now gives `null` (as in DataWeave) instead of failing, `default` applies to missing fields, and a field selector on an array selects the field of every element. Unknown functions and variables are no longer passed through unchanged, but fail the conversion. The converted scripts use the new `camel-dataweave.libsonnet` library of `camel-datasonnet`, so DataSonnet scripts generated with `camel transform dataweave` need `camel-datasonnet` 4.23 or newer.
+
+### camel-datasonnet - `c.sortBy` sorts arrays of numbers and strings by the key function
+
+The `c.sortBy(arr, f)` function of `camel.libsonnet` ignored the key function `f` for an array of numbers or strings, and sorted the values themselves. It now sorts by the key function, as documented (for example `c.sortBy([1, 3, 2], function(x) -x)` gives `[3, 2, 1]`). Arrays of objects are sorted as before.
+
+### camel-jbang - `camel transform dataweave` no longer aborts on parse errors in directory mode
+
+The `camel transform dataweave` CLI command previously let a `DataWeaveConversionException` propagate out of `converter.convert()`, which caused the entire batch to stop at the first file that triggered a parse error. The command now catches the exception per file, prints `<filename>: <error message>` to standard output, continues with the remaining files, and exits non-zero when at least one file failed. Files that convert successfully are still written to the output directory.

@@ -32,8 +32,6 @@ At runtime, the `ceph-event-based-source` Kamelet relies upon the presence of th
 
 -   camel:kafka
     
--   camel:core
-    
 -   camel:jsonpath
     
 -   camel:jackson

@@ -25,8 +25,6 @@ At runtime, the `telegram-source` Kamelet relies upon the presence of the follow
     
 -   camel:telegram
     
--   camel:core
-    
 
 ## Camel JBang usage
 

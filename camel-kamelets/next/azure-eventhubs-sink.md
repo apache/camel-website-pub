@@ -23,8 +23,6 @@ The following table summarizes the configuration options available for the `azur
 
 At runtime, the `azure-eventhubs-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:azure-eventhubs
     
 -   camel:kamelet

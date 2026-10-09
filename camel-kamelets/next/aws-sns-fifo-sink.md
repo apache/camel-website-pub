@@ -33,8 +33,6 @@ At runtime, the `aws-sns-fifo-sink` Kamelet relies upon the presence of the foll
 
 -   camel:aws2-sns
     
--   camel:core
-    
 -   camel:kamelet
     
 

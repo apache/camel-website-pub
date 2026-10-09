@@ -14,8 +14,6 @@ The `is-tombstone-filter-action` Kamelet does not specify any configuration opti
 
 At runtime, the `is-tombstone-filter-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:kamelet
     
 

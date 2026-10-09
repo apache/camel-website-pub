@@ -26,8 +26,6 @@ At runtime, the `message-timestamp-router-action` Kamelet relies upon the presen
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:kafka
     
 

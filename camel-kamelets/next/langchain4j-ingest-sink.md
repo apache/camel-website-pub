@@ -34,8 +34,6 @@ The following table summarizes the configuration options available for the `lang
 
 At runtime, the `langchain4j-ingest-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:langchain4j-ingest
     
 -   camel:kamelet

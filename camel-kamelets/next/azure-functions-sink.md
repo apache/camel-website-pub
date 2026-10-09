@@ -25,8 +25,6 @@ At runtime, the `azure-functions-sink` Kamelet relies upon the presence of the f
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

@@ -30,8 +30,6 @@ At runtime, the `azure-cosmosdb-sink` Kamelet relies upon the presence of the fo
     
 -   camel:jackson
     
--   camel:core
-    
 
 ## Camel JBang usage
 

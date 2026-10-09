@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.22.1 to 4.22.2
 
+### camel-management - Route group exchange counters count once per entry into the group again
+
+In 4.22.1, the route group MBean (`ManagedRouteGroupMBean`) exchange counters and processing times counted each exchange once per member route instead of once per entry into the group. This was an unintended side effect of CAMEL-24590. The counters now count each exchange once per entry into the group again, as in 4.22.0: calls nested inside another route of the same group are not counted again.
+
 ### camel-netty-http - the roles of a security constraint are matched by role name
 
 The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.
@@ -131,6 +135,18 @@ WebSocket endpoints (`ws://` and `wss://`) now apply the `UndertowSecurityProvid
 All the endpoints of a WebSocket path share its connections. The settings of the consumer apply to the path, including the messages sent by producers on that path, and keep applying while the consumer is stopped; a path that only has producers applies their settings. This also applies to the `oauthProfile` option: while the consumer is stopped, upgrade requests to its path are still validated. A connection that was opened before these settings applied does not receive the messages of the producers, and it is closed when it sends a message.
 
 A WebSocket client that connected without satisfying the configured security provider or allowed roles is now rejected: it must authenticate, or the option must be removed from the WebSocket endpoint.
+
+### camel-crypto
+
+Three changes to `CryptoDataFormat`, none of which affects the format of data already written.
+
+**A per-message initialization vector when inlining.** `marshal` used to throw `Inlining cannot be performed, as no initialization vector was specified` when `shouldInlineInitializationVector` was set without a statically configured vector — which pushed routes into reusing one vector for every message, the thing inlining exists to avoid. A fresh vector is now generated per message when none is supplied. Because the vector is written into the message, readers pick it up from the stream and need no change. A vector supplied explicitly, by configuration or by the `CamelCryptoInitVector` header, is still used as given.
+
+**Authentication failures report uniformly.** A tampered message previously surfaced two distinguishable outcomes: `Given final block not properly padded` from the cipher, or `Expected mac did not match actual mac` from the MAC check. A caller able to submit ciphertext and observe which one came back can use that distinction to recover plaintext. Both now report `Message authentication failed`, and the message no longer includes the expected and computed MAC values — the computed one is `HMAC_k` over the plaintext just produced. Code matching on the old text must be updated.
+
+**The inlined vector length is bounded.** The length prefix is read from the message and used to size an allocation; a declared length outside 0–1024 is now rejected instead of attempted.
+
+Not changed: the HMAC key is still derived from the same key material as the cipher. Separating them would change the MAC written into the message and so could not be read by earlier versions; that is tracked separately.
 
 ## Upgrading from 4.22.0 to 4.22.1
 

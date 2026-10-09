@@ -22,8 +22,6 @@ The following table summarizes the configuration options available for the `wttr
 
 At runtime, the `wttrin-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:http
     
 -   camel:jackson

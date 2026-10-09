@@ -485,7 +485,7 @@ from("ai-tool:transferFunds?tags=banking&description=Transfer funds&authorizatio
             uri: bean:ledger
 ```
 
-The guard runs in front of the route: it wraps the route’s outer processor, so it executes before the route’s unit of work, tracing and error handling. A denied call (`CamelAuthorizationException`) is returned to the model as a short refusal it can relay — not as a tool result and not as a stack trace — regardless of the tool-execution error strategy; the denial is logged at `WARN`, but it does not produce a route span or metric.
+The guard runs in front of the route: it wraps the route’s outer processor, so it executes before the route’s unit of work, tracing and error handling. A denied call (`CamelAuthorizationException`) is returned to the model as a short refusal it can relay — not as a tool result and not as a stack trace — regardless of the tool-execution error strategy. Because the guard runs in front of the route, a denial never enters the route’s unit of work, so it does not produce a route span. It is instead observable as described in [Observing denials](#_observing_denials) below.
 
 The policy authorizes on **trustworthy** input only:
 
@@ -500,6 +500,30 @@ Which runtimes carry the caller identity:
     
 -   Over the [MCP server](others/mcp-server.md) the authenticated transport caller is carried onto the tool exchange as the `CamelMcpSecurityPrincipal` property (the raw transport principal — for the Vert.x streamable HTTP server, an `io.vertx.ext.auth.User`). A policy over MCP reads that property directly; Camel’s shipped identity/token policies (Keycloak, Spring Security, Shiro) do not read it yet, so MCP authorization needs a policy that inspects `CamelMcpSecurityPrincipal`. Exposing a runtime-neutral principal name and roles for the shipped policies is tracked as a follow-up.
     
+
+### Observing denials
+
+Because the guard runs in front of the route, a denied call is caught before the route’s unit of work and so fires no exchange-lifecycle event or route span. Every denial is instead:
+
+-   logged at `WARN`, and
+    
+-   published as an `org.apache.camel.component.ai.tool.AiToolAuthorizationDeniedEvent` — a `CamelEvent` of type `Custom` carrying the denied tool name, the tool exchange (for correlation), and the `CamelAuthorizationException` the policy raised.
+    
+
+Register an `EventNotifier` to count, log or alert on denials — for example to drive a micrometer counter — without changing what the model sees (still the short refusal):
+
+```java
+context.getManagementStrategy().addEventNotifier(new EventNotifierSupport() {
+    @Override
+    public void notify(CamelEvent event) {
+        if (event instanceof AiToolAuthorizationDeniedEvent denied) {
+            meterRegistry.counter("ai.tool.authorization.denied", "tool", denied.getToolName()).increment();
+        }
+    }
+});
+```
+
+The event is emitted best-effort: when no `EventNotifier` is registered nothing is published, and a failure to notify never affects the refusal returned to the model.
 
 ## See Also
 

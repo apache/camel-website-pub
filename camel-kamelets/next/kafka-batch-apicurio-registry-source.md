@@ -42,8 +42,6 @@ At runtime, the `kafka-batch-apicurio-registry-source` Kamelet relies upon the p
 
 -   camel:kafka
     
--   camel:core
-    
 -   camel:kamelet
     
 -   mvn:io.quarkus:quarkus-apicurio-registry-avro:3.24.2

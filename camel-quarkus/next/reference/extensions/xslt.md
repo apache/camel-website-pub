@@ -28,7 +28,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Additional Camel Quarkus configuration
 
-To optimize XSLT processing, the extension needs to know the locations of the XSLT templates at build time. The XSLT source URIs have to be passed via the `quarkus.camel.xslt.sources` property. Multiple URIs can be separated by comma.
+In native mode, XSLT templates are compiled to Java classes at build time, so the extension needs to know the locations of the XSLT templates. The XSLT source URIs have to be passed via the `quarkus.camel.xslt.sources` property. Multiple URIs can be separated by comma.
 
 ```properties
 quarkus.camel.xslt.sources = transform.xsl, classpath:path/to/my/file.xsl
@@ -37,6 +37,10 @@ quarkus.camel.xslt.sources = transform.xsl, classpath:path/to/my/file.xsl
 Scheme-less URIs are interpreted as `classpath:` URIs.
 
 Only `classpath:` URIs are supported on Quarkus native mode. `file:`, `http:` and other kinds of URIs can be used on JVM mode only.
+
+In JVM mode, templates are compiled at runtime and `quarkus.camel.xslt.sources` is not required.
+
+Compiling more than one template requires the native build to run on JDK 21.0.8 or newer.
 
 `<xsl:include>` is supported in native mode when the including stylesheet is listed in `quarkus.camel.xslt.sources` and included stylesheets are classpath-relative. Nested classpath includes are resolved at build time. `<xsl:messaging>` XSLT elements are supported in JVM mode only right now.
 
@@ -65,25 +69,22 @@ quarkus.camel.xslt.features."http\://javax.xml.XMLConstants/feature/secure-proce
 Features are applied to every template the component transforms with, whether it was compiled to a translet at build time or loaded at runtime. A feature the `TransformerFactory` does not support fails endpoint creation.
 
 > **Warning**
-> Disabling secure-processing permits templates to call Xalan extension functions, and is logged as a warning on startup. Only do this where every template the application transforms with is trusted.
+> Disabling secure-processing permits templates to call extension functions, and is logged as a warning on startup. Only do this where every template the application transforms with is trusted.
 
 ### External access
 
-The extension transforms with Xalan-J rather than the XSLT implementation built into the JDK, because translets have to be compiled ahead of time to work in native mode. Xalan-J 2.7.x predates JAXP 1.5 and cannot honour `javax.xml.XMLConstants.ACCESS_EXTERNAL_DTD` or `ACCESS_EXTERNAL_STYLESHEET`, so `setAttribute` throws for both, and its secure-processing feature restricts extension functions without implying the external access restrictions the JDK applies under the same feature. The extension applies those restrictions itself:
+The extension transforms with the XSLT implementation built into the JDK. Secure-processing is enabled and access to external DTDs and stylesheets is denied:
 
--   Documents being transformed are parsed with an `XMLReader` that does not resolve external entities or load external DTDs, so a `SYSTEM` entity in a `DOCTYPE` declaration does not expand into the result, and an external DTD or parameter entity is skipped. A `SAXSource` carrying an `XMLReader` the caller configured is used as it is.
+-   A document being transformed that reaches the transformer as a `javax.xml.transform.Source` and references an external DTD or an external entity fails the transformation.
     
--   Resources fetched at transform time by the `document()` function are denied unless a `javax.xml.transform.URIResolver` resolves them. This applies to every entry point that hands out something to transform with, so a `TransformerHandler` or an `XMLFilter` is restricted just as a `Transformer` is. The component installs a resolver on every transformer it uses, so routes resolve `document()` as they do on plain Camel.
+-   Resources referenced by `<xsl:import>`, `<xsl:include>` and the `document()` function are denied unless a `javax.xml.transform.URIResolver` resolves them. The component installs a resolver for the templates it compiles and on every transformer it uses, so routes resolve them as they do on plain Camel.
     
 
-`<xsl:import>` and `<xsl:include>` are not restricted. Xalan dereferences those hrefs itself while compiling a stylesheet, ignoring the resolver it consulted first. Stylesheets are deployment owned rather than attacker controlled, and the component resolves includes through its own unrestricted resolver in any case.
-
-> **Note**
-> This factory is registered as the JAXP default, so the restrictions above also apply to code in the application that obtains a `TransformerFactory` through `TransformerFactory.newInstance()`.
+These restrictions remain in place when secure-processing is disabled.
 
 ### Extension functions support
 
-[Xalan’s extension functions](https://xml.apache.org/xalan-j/extensions.md) do work properly only when:
+Java extension functions do work properly only when:
 
 1.  Secure-processing is disabled
     
@@ -97,13 +98,13 @@ public class FunctionsConfiguration {
 }
 
 > **Note**
-> The content of the XSLT source URIs is parsed and compiled into Java classes at build time. These Java classes are the only source of XSLT information at runtime. The XSLT source files may not be included in the application archive at all.
+> In native mode, the content of the XSLT source URIs is parsed and compiled into Java classes at build time. These Java classes are the only source of XSLT information at runtime. The XSLT source files may not be included in the application archive at all.
 
   
 | Configuration property | Type | Default |
 | --- | --- | --- |
 | `[quarkus.camel.xslt.sources](#quarkus-camel-xslt-sources)`
-A comma separated list of templates to compile.
+A comma separated list of templates to compile at build time in native mode.
 
  | List of `string` |  |
 | `[quarkus.camel.xslt.package-name](#quarkus-camel-xslt-package-name)`

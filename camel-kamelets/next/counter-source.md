@@ -23,8 +23,6 @@ At runtime, the `counter-source` Kamelet relies upon the presence of the followi
 
 -   camel:timer
     
--   camel:core
-    
 -   camel:kamelet
     
 

@@ -271,7 +271,7 @@ camel-kafka - Upgrade to 3.7.x
 
 camel-as2 - Upgrade to HttpComponents 5.x
 
-### Improvement (46)
+### Improvement (47)
 
 [CAMEL-20736](https://issues.apache.org/jira/browse/CAMEL-20736)
 
@@ -332,6 +332,10 @@ camel-jbang - Debug with doTry .. doCatch .. doFinally should only step actual u
 [CAMEL-20684](https://issues.apache.org/jira/browse/CAMEL-20684)
 
 camel-microprofile-fault-tolerance: ThreadTimer should be a singleton
+
+[CAMEL-20681](https://issues.apache.org/jira/browse/CAMEL-20681)
+
+camel-jbang - Add support for quarkus datasource
 
 [CAMEL-20675](https://issues.apache.org/jira/browse/CAMEL-20675)
 

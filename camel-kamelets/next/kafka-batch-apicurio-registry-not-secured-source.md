@@ -36,8 +36,6 @@ At runtime, the `kafka-batch-apicurio-registry-not-secured-source` Kamelet relie
 
 -   camel:kafka
     
--   camel:core
-    
 -   camel:kamelet
     
 -   mvn:io.quarkus:quarkus-apicurio-registry-avro:3.24.2

@@ -231,7 +231,7 @@ Upgrade apache directory to 2.0.0.AM27
 
 Camel-Jbang: Bump Camel Kamelets to version 4.13.0
 
-### Improvement (55)
+### Improvement (56)
 
 [CAMEL-22350](https://issues.apache.org/jira/browse/CAMEL-22350)
 
@@ -348,6 +348,10 @@ spring-rabbitmq - producer performance
 [CAMEL-22276](https://issues.apache.org/jira/browse/CAMEL-22276)
 
 Camel HTTP OAuth2 request doesn't support body authentication
+
+[CAMEL-22274](https://issues.apache.org/jira/browse/CAMEL-22274)
+
+camel-report-maven-plugin - Can we support @ParameterizedTests
 
 [CAMEL-22269](https://issues.apache.org/jira/browse/CAMEL-22269)
 

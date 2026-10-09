@@ -36,8 +36,6 @@ At runtime, the `azure-storage-blob-event-based-source` Kamelet relies upon the 
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jsonpath
     
 -   camel:jackson

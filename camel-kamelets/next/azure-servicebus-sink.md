@@ -26,8 +26,6 @@ At runtime, the `azure-servicebus-sink` Kamelet relies upon the presence of the 
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

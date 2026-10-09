@@ -34,8 +34,6 @@ The following table summarizes the configuration options available for the `couc
 
 At runtime, the `couchbase-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:couchbase
     
 -   camel:kamelet

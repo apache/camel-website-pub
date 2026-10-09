@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 102 in 66 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 103 in 67 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -108,6 +108,7 @@ Number of Miscellaneous Components: 102 in 66 JAR artifacts (3 deprecated)
 | [Test Spring JUnit6](test-spring-junit6.md) | camel-test-spring-junit6 | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
 | [Tracing](tracing.md) | camel-tracing | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
 | [Undertow Spring Security](undertow-spring-security.md) | camel-undertow-spring-security | Stable | 3.3 | Spring Security Provider for camel-undertow |
+| [Wolf Defender](wolf-defender.md) | camel-wolf-defender | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |
 | [Write Ahead Log Strategy for Resume API](wal.md) | camel-wal | Stable | 3.20 | Write Ahead Log Strategy for Resume API |
 | [XML Io Dsl](java-xml-io-dsl.md) | camel-xml-io-dsl | Stable | 3.9 | Camel DSL with XML |
 | [YAML DSL](yaml-dsl.md) | camel-yaml-dsl | Stable | 3.9 | Camel YAML DSL |

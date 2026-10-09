@@ -15,7 +15,7 @@ The Fory dataformat supports the following options which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **unmarshalType** (common) |  | `String` | Class of the java type to use when unmarshalling. |
-| **requireClassRegistration** (advanced) | `true` | `Boolean` | Whether to require register classes. |
+| **requireClassRegistration** (security) | `true` | `Boolean` | Whether to require register classes. |
 | **threadSafe** (advanced) | `true` | `Boolean` | Whether to use the threadsafe Fory. |
 | **allowAutoWiredFory** (advanced) | `true` | `Boolean` | Whether to auto-discover Fory from the registry. |
 

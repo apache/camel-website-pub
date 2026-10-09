@@ -29,8 +29,6 @@ At runtime, the `azure-storage-blob-changefeed-source` Kamelet relies upon the p
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jackson
     
 -   camel:jsonpath

@@ -26,8 +26,6 @@ The following table summarizes the configuration options available for the `mail
 
 At runtime, the `mail-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:mail
     
 -   camel:kamelet

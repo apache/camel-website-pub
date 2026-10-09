@@ -29,8 +29,6 @@ At runtime, the `ftps-sink` Kamelet relies upon the presence of the following de
 
 -   camel:ftp
     
--   camel:core
-    
 -   camel:kamelet
     
 

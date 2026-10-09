@@ -19,8 +19,6 @@ The following table summarizes the configuration options available for the `topi
 
 At runtime, the `topic-name-matches-filter-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:kamelet
     
 

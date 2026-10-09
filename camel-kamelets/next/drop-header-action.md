@@ -19,8 +19,6 @@ The following table summarizes the configuration options available for the `drop
 
 At runtime, the `drop-header-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:kamelet
     
 

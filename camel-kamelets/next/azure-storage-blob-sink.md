@@ -25,8 +25,6 @@ The following table summarizes the configuration options available for the `azur
 
 At runtime, the `azure-storage-blob-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:azure-storage-blob
     
 -   camel:kamelet

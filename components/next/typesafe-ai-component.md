@@ -6,7 +6,7 @@
 
 The TypeSafe AI component evaluates explicit state against Noul (yes/no), Choice (one category), and Score (ordered rubric) questions using [TypeSafe AI’s HTTP API](https://docs.typesafe.ai/api). Jev is the default model; the `model` option can select another model supported by the API. It calls the service directly using the JDK HTTP client and Camel JSON utilities. For semantic conditions in Java, XML and YAML, use the [TypeSafe AI language](languages/typesafe-ai-language.md) supplied by this component.
 
-This component also advertises an adapter for the [Semantic language](languages/semantic-language.md). Named boolean, choice and score questions use the common contract and inherit this component’s credentials, model and transport settings without requiring a TypeSafe AI endpoint in the route.
+This component also advertises an adapter for the [Semantic language](languages/semantic-language.md). Its static expert contract exposes `boolean`, `choice` and `score` operations. The adapter requires instructions and validates the supplied criteria or score levels before transport is initialized. For Boolean evaluations it applies the requested `threshold`, `uncertainty` and `uncertaintyPolicy` once and returns both the typed verdict and the provider probability. Omitted policy parameters use this adapter’s defaults: threshold `0.5`, no uncertainty band, and failure for uncertain results. The semantic runtime validates the result and does not apply a second policy. Named boolean, choice and score evaluations use the common contract and inherit this component’s credentials, model and transport settings without requiring a TypeSafe AI endpoint in the route.
 
 ```xml
 <dependency>

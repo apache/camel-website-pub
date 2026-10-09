@@ -20,6 +20,7 @@ The following configuration options are available:
 | `gitops.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
 | `gitops.url` | `string` | the URL of the repository where the project is stored. |
 | `gitops.secret` | `string` | the Kubernetes secret where the Git token is stored. The operator will pick up the first secret key only, whichever the name it is. |
+| `gitops.username` | `string` | the username used to authenticate against the Git server, together with the token stored in `secret` (default `camel-k`). Some Git servers validate it, for example Bitbucket Cloud access tokens require `x-token-auth`. |
 | `gitops.branch` | `string` | the git branch to check out. |
 | `gitops.tag` | `string` | the git tag to check out. |
 | `gitops.commit` | `string` | the git commit (full SHA) to check out. |

@@ -31,11 +31,7 @@ At runtime, the `azure-storage-blob-source` Kamelet relies upon the presence of 
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jsonpath
-    
--   camel:timer
     
 
 ## Camel JBang usage

@@ -30,10 +30,6 @@ At runtime, the `azure-storage-files-source` Kamelet relies upon the presence of
     
 -   camel:kamelet
     
--   camel:core
-    
--   camel:timer
-    
 
 ## Camel JBang usage
 

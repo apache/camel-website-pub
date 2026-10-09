@@ -33,8 +33,6 @@ At runtime, the `http-secured-source` Kamelet relies upon the presence of the fo
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:timer
     
 

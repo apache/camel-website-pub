@@ -1,6 +1,6 @@
 # Running a Pipe
 
-The Pipe is a concept that allows you to create a "composable" Event Driven Architecture design. The Pipe can bind **source** and **sink** endpoints where an endpoint represents a source/sink external entity (could be any Camel URI or a Kubernetes resource such as [Kamelets](../kamelets/kamelets.md), Kafka ([Strimzi](https://strimzi.io/)) or [Knative](https://knative.dev) resources).
+The Pipe is a concept that allows you to create a "composable" Event Driven Architecture design. The Pipe can bind **source** and **sink** endpoints where an endpoint represents a source/sink external entity (could be any Camel URI or a Kubernetes resource such as [Kamelets](../kamelets/kamelets.md), Kafka ([Strimzi](https://strimzi.io/)), ArkMQ ([ActiveMQ Artemis](https://arkmq.org/)) or [Knative](https://knative.dev) resources).
 
 > **Note**
 > make sure you’re familiar with the concept of [Kamelet](../kamelets/kamelets.md) before continuing.
@@ -166,6 +166,63 @@ spec:
 
 > **Note**
 > KafkaTopics require the Strimzi operator and a configured KafkaTopic\`.
+
+### Binding to ArkMQ queues
+
+A Pipe can consume or produce events directly using an ArkMQ / ActiveMQ Artemis broker (managed by [ArkMQ](https://arkmq.org/) / ActiveMQ Artemis operator).
+
+You can bind directly to the `ActiveMQArtemis` broker resource and specify the destination queue:
+
+beer-event-to-broker.yaml
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Pipe
+metadata:
+  name: beer-event-to-broker
+spec:
+  source:
+    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: beer-source
+    properties:
+      period: 5000
+  sink:
+    ref:
+      kind: ActiveMQArtemis
+      apiVersion: broker.amq.io/v1beta1
+      name: my-broker
+    properties:
+      destination: beer-events
+```
+
+Alternatively, you can bind to an `ActiveMQArtemisAddress` custom resource:
+
+beer-event-to-address.yaml
+
+```yaml
+apiVersion: camel.apache.org/v1
+kind: Pipe
+metadata:
+  name: beer-event-to-address
+spec:
+  source:
+    ref:
+      kind: Kamelet
+      apiVersion: camel.apache.org/v1alpha1
+      name: beer-source
+    properties:
+      period: 5000
+  sink:
+    ref:
+      kind: ActiveMQArtemisAddress
+      apiVersion: broker.amq.io/v1beta1
+      name: beer-events
+```
+
+> **Note**
+> ArkMQ bindings require the ActiveMQ Artemis / ArkMQ operator and an existing broker deployment.
 
 ### Binding to Knative resources
 

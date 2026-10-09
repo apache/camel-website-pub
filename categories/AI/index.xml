@@ -6,8 +6,15 @@
     <description>Recent content in AI on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 02 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 09 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/AI/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Round 3: making Kamelets AI-ready</title>
+      <link>https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/</link>
+      <pubDate>Fri, 09 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/</guid>
+      <description>This is the third post in a series. In the first a frontier model coached a small local model through thirteen beginner examples, and we fixed Camel between the runs. In the second the examples became a ladder of real-world ones, and the model worked step by step, the way developers do. Both rounds ended the same way: most of what the model tripped over was wrong or unclear for people too, and the fixes ship in Camel 4.</description>
+    </item>
     <item>
       <title>One request, several agents: semantic routing with Apache Camel and Jev</title>
       <link>https://camel.apache.org/blog/2026/10/semantic-agent-routing/</link>

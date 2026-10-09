@@ -40,8 +40,6 @@ At runtime, the `pulsar-sink` Kamelet relies upon the presence of the following 
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

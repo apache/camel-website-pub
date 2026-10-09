@@ -28,10 +28,6 @@ At runtime, the `azure-storage-datalake-sink` Kamelet relies upon the presence o
     
 -   camel:kamelet
     
--   camel:core
-    
--   camel:timer
-    
 
 ## Camel JBang usage
 

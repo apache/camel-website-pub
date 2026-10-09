@@ -34,8 +34,6 @@ The following table summarizes the configuration options available for the `sale
 
 At runtime, the `salesforce-pubsub-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:salesforce
     
 -   camel:kamelet

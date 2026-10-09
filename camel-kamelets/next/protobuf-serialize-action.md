@@ -21,8 +21,6 @@ At runtime, the `protobuf-serialize-action` Kamelet relies upon the presence of 
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jackson-protobuf
     
 

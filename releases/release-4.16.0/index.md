@@ -219,7 +219,7 @@ camel-neo4j - Upgrade to neo 6
 
 Reinstate camel-milo as milo has reached 1.0.0
 
-### Improvement (29)
+### Improvement (30)
 
 [CAMEL-22634](https://issues.apache.org/jira/browse/CAMEL-22634)
 
@@ -276,6 +276,10 @@ camel-jbang - Add CSB/CEQ imports to known dependencies
 [CAMEL-22596](https://issues.apache.org/jira/browse/CAMEL-22596)
 
 camel-pqc - Add enum values for better tooling
+
+[CAMEL-22590](https://issues.apache.org/jira/browse/CAMEL-22590)
+
+camel-jbang - Edit plugin should exclude some JARs from camel-lsp
 
 [CAMEL-22566](https://issues.apache.org/jira/browse/CAMEL-22566)
 

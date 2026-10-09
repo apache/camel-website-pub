@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1791323042342,
+  "generated": 1791529923795,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8566,6 +8566,12 @@
               "path": "migration-guide/3.40.0.adoc",
               "url": "/camel-quarkus/next/migration-guide/3.40.0.html",
               "title": "Camel Quarkus 3.40.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/4.0.0.adoc",
+              "url": "/camel-quarkus/next/migration-guide/4.0.0.html",
+              "title": "Camel Quarkus 4.0.0 Migration Guide"
             },
             {
               "module": "ROOT",
@@ -18354,6 +18360,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/kafka-share.adoc",
+              "url": "/camel-spring-boot/next/starters/kafka-share.html",
+              "title": "Kafka Share"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/kafka.adoc",
               "url": "/camel-spring-boot/next/starters/kafka.html",
               "title": "Kafka"
@@ -18723,6 +18735,12 @@
               "path": "starters/openapi-validator.adoc",
               "url": "/camel-spring-boot/next/starters/openapi-validator.html",
               "title": "Openapi Validator"
+            },
+            {
+              "module": "ROOT",
+              "path": "starters/openfeature.adoc",
+              "url": "/camel-spring-boot/next/starters/openfeature.html",
+              "title": "OpenFeature"
             },
             {
               "module": "ROOT",
@@ -23362,6 +23380,12 @@
             },
             {
               "module": "languages",
+              "path": "openfeature-language.adoc",
+              "url": "/components/next/languages/openfeature-language.html",
+              "title": "OpenFeature"
+            },
+            {
+              "module": "languages",
               "path": "python-language.adoc",
               "url": "/components/next/languages/python-language.html",
               "title": "Python"
@@ -24079,6 +24103,12 @@
               "path": "wal.adoc",
               "url": "/components/next/others/wal.html",
               "title": "Write Ahead Log Strategy for Resume API"
+            },
+            {
+              "module": "others",
+              "path": "wolf-defender.adoc",
+              "url": "/components/next/others/wolf-defender.html",
+              "title": "Wolf Defender"
             },
             {
               "module": "others",
@@ -25456,6 +25486,12 @@
             },
             {
               "module": "ROOT",
+              "path": "kafka-share-component.adoc",
+              "url": "/components/next/kafka-share-component.html",
+              "title": "Kafka Share"
+            },
+            {
+              "module": "ROOT",
               "path": "kamelet-component.adoc",
               "url": "/components/next/kamelet-component.html",
               "title": "Kamelet"
@@ -25861,6 +25897,12 @@
               "path": "openai-component.adoc",
               "url": "/components/next/openai-component.html",
               "title": "OpenAI"
+            },
+            {
+              "module": "ROOT",
+              "path": "openfeature-component.adoc",
+              "url": "/components/next/openfeature-component.html",
+              "title": "OpenFeature"
             },
             {
               "module": "ROOT",

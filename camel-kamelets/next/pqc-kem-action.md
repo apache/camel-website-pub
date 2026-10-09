@@ -25,8 +25,6 @@ At runtime, the `pqc-kem-action` Kamelet relies upon the presence of the followi
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

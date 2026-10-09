@@ -35,8 +35,6 @@ At runtime, the `sftp-sink` Kamelet relies upon the presence of the following de
 
 -   camel:ftp
     
--   camel:core
-    
 -   camel:kamelet
     
 

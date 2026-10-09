@@ -24,8 +24,6 @@ At runtime, the `mask-field-action` Kamelet relies upon the presence of the foll
     
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:kafka
     
 

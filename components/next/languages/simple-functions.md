@@ -496,6 +496,13 @@ For example when doing JSON to JSON mapping you can extract values form the sour
 }
 ```
 
+### Semantic Functions
+
+  
+| Function | Type | Description |
+| --- | --- | --- |
+| `semantic(name)` | `Object` | Invokes a named [Semantic evaluation](semantic-language.md), for example `${semantic('injection')}`. Returns its typed result, preserves the body, and publishes `CamelSemanticResult`. Each occurrence invokes the expert. Requires camel-semantic. |
+
 ### XML & JSON Functions
 
 Functions to work with XML and JSON payloads.

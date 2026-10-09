@@ -6,7 +6,7 @@ Index of Camel expression and predicate languages.
 
 Below is the list of expression languages that are provided by Apache Camel.
 
-Number of Languages: 33 in 23 JAR artifacts (1 deprecated)
+Number of Languages: 34 in 24 JAR artifacts (1 deprecated)
 
     
 | Language | Artifact | Support Level | Since | Description |
@@ -26,11 +26,12 @@ Number of Languages: 33 in 23 JAR artifacts (1 deprecated)
 | [JSONPath](jsonpath-language.md) | camel-jsonpath | Stable | 2.13 | Evaluates a JSONPath expression against a JSON message body |
 | [MVEL](mvel-language.md) | camel-mvel | Stable | 2.0 | Evaluates a MVEL template |
 | [OGNL](ognl-language.md) | camel-ognl | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL) |
+| [OpenFeature](openfeature-language.md) | camel-openfeature | Preview | 4.23 | Evaluate a feature flag as a boolean predicate |
 | [Python](python-language.md) | camel-python | Experimental | 3.19 | Evaluates a Python expression |
 | [Python 3](python3-language.md) | camel-python3 | Preview | 4.23 | Evaluates a Python 3 expression |
 | [QuickJS](quickjs-language.md) | camel-quickjs | Preview | 4.23 | Evaluates a JavaScript expression using QuickJS4J |
 | [Ref](ref-language.md) | camel-core-languages | Stable | 2.8 | Uses an existing expression from the registry |
-| [Semantic Evaluation](semantic-language.md) | camel-semantic | Preview | 4.23 | Evaluate named questions about message content to produce boolean decisions, categories and scores through provider adapters |
+| [Semantic Evaluation](semantic-language.md) | camel-semantic | Preview | 4.23 | Invoke named evaluations of message content to produce boolean decisions, categories, scores and label sets through provider adapters |
 | [Simple](simple-language.md) | camel-core-languages | Stable | 1.1 | Evaluates a Camel simple expression |
 | [Simple - Advanced Features](simple-advanced.md) |  |  |  |  |
 | [Simple - Built-in Functions](simple-functions.md) |  |  |  |  |

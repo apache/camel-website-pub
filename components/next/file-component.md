@@ -922,6 +922,10 @@ Filename can be set either using the **expression** option or as a string-based 
 
 Beware if you consume files from a folder where other applications write files too. Take a look at the different `readLock` options to see what suits your use cases. The best approach is, however, to write to another folder and, after writing, move the file in the drop folder. However, if you write files directly to the drop folder, then the option `changed` could better detect whether a file is currently being written/copied as it uses a file changed algorithm to see whether the file size / modification changes over a period of time. The other `readLock` options rely on Java File API that, sadly, is not always very good at detecting this. You may also want to look at the `doneFileName` option, which uses a marker file (_done file_) to signal when a file is done and ready to be consumed.
 
+### Symbolic links and the starting directory
+
+With `jailStartingDirectory` enabled (the default), symbolic links are resolved when checking that a file stays within the starting directory. The consumer skips a file, or with `recursive=true` a directory, that is a link resolving outside the starting directory (logged at WARN the first time), and the producer fails to write through such a link. Links that resolve inside the starting directory, and a starting directory that is itself a link, work as usual. Set `jailStartingDirectory=false` if the application relies on following links to other directories. The check and the read or write that follows are not atomic, so the permissions of the directories still matter.
+
 ### Done files
 
 #### Using done files

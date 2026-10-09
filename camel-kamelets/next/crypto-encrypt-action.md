@@ -22,8 +22,6 @@ At runtime, the `crypto-encrypt-action` Kamelet relies upon the presence of the 
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:crypto
     
 

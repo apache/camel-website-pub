@@ -31,8 +31,6 @@ At runtime, the `ftp-source` Kamelet relies upon the presence of the following d
 
 -   camel:ftp
     
--   camel:core
-    
 -   camel:kamelet
     
 

@@ -182,7 +182,7 @@ Enum values:
  | HTTPS | Protocol |
 | **region** (producer) | The region in which Transcribe client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id(). |  | String |
 | **transcribeClient** (producer) | To use a existing configured AWS Transcribe as client. |  | TranscribeClient |
-| **trustAllCertificates** (producer) | If we want to trust all certificates in case of overriding the endpoint. | true | boolean |
+| **trustAllCertificates** (producer) | If we want to trust all certificates in case of overriding the endpoint. | false | boolean |
 | **uriEndpointOverride** (producer) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **useDefaultCredentialsProvider** (producer) | Set whether the Transcribe client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | false | boolean |
 | **useProfileCredentialsProvider** (producer) | Set whether the Transcribe client should expect to load credentials through a profile credentials provider. | false | boolean |
@@ -324,7 +324,7 @@ Enum values:
  | HTTPS | Protocol |
 | **region** (producer) | The region in which Transcribe client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id(). |  | String |
 | **transcribeClient** (producer) | To use a existing configured AWS Transcribe as client. |  | TranscribeClient |
-| **trustAllCertificates** (producer) | If we want to trust all certificates in case of overriding the endpoint. | true | boolean |
+| **trustAllCertificates** (producer) | If we want to trust all certificates in case of overriding the endpoint. | false | boolean |
 | **uriEndpointOverride** (producer) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **useDefaultCredentialsProvider** (producer) | Set whether the Transcribe client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | false | boolean |
 | **useProfileCredentialsProvider** (producer) | Set whether the Transcribe client should expect to load credentials through a profile credentials provider. | false | boolean |

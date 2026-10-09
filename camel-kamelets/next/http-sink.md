@@ -24,8 +24,6 @@ At runtime, the `http-sink` Kamelet relies upon the presence of the following de
     
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

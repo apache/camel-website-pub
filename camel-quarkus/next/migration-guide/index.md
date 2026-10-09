@@ -4,6 +4,8 @@ We do frequent releases, a release almost every month, and even though we strive
 
 Listed here are guides on how to migrate between major versions and anything of significance to watch for when upgrading from minor versions.
 
+-   [Camel Quarkus 3.40.x to Camel Quarkus 4.0.0 migration guide](4.0.0.md)
+    
 -   [Camel Quarkus 3.39.x to Camel Quarkus 3.40.0 migration guide](3.40.0.md)
     
 -   [Camel Quarkus 3.38.x to Camel Quarkus 3.39.0 migration guide](3.39.0.md)

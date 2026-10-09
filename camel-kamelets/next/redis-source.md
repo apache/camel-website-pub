@@ -25,8 +25,6 @@ At runtime, the `redis-source` Kamelet relies upon the presence of the following
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:spring-redis
     
 

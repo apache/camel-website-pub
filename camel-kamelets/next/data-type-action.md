@@ -22,8 +22,6 @@ At runtime, the `data-type-action` Kamelet relies upon the presence of the follo
 
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

@@ -22,8 +22,6 @@ At runtime, the `set-kafka-key-action` Kamelet relies upon the presence of the f
 
 -   camel:kamelet
     
--   camel:core
-    
 
 ## Camel JBang usage
 

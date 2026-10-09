@@ -16,8 +16,6 @@ At runtime, the `json-serialize-action` Kamelet relies upon the presence of the 
 
 -   camel:kamelet
     
--   camel:core
-    
 -   camel:jackson
     
 

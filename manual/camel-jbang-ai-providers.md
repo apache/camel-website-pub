@@ -43,7 +43,7 @@ In the Camel TUI, press **Ctrl+P** in the AI panel to switch provider or model, 
 
 ### Ollama
 
-Install Ollama natively for the best performance — the native binary uses GPU acceleration (Metal on macOS, CUDA/ROCm on Linux). Running Ollama through Docker (`camel infra run ollama`) bypasses the GPU and makes inference much slower.
+Install Ollama natively for the best performance — the native binary uses GPU acceleration (Metal on macOS, CUDA/ROCm on Linux). Running Ollama through Docker (`camel infra run ollama`) bypasses the GPU and makes inference much slower. The model that container pulls is chosen with `camel infra run ollama --property ollama.model=…​`, as [Dev Services](camel-jbang-dev-services.html#_configuring_a_service) describes.
 
 ```bash
 # macOS

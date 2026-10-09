@@ -22,8 +22,6 @@ At runtime, the `cron-source` Kamelet relies upon the presence of the following 
 
 -   camel:quartz
     
--   camel:core
-    
 -   camel:cron
     
 -   camel:kamelet

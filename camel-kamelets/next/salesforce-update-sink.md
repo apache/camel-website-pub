@@ -28,8 +28,6 @@ The following table summarizes the configuration options available for the `sale
 
 At runtime, the `salesforce-update-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:core
-    
 -   camel:jsonpath
     
 -   camel:jackson

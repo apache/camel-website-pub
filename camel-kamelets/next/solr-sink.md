@@ -25,8 +25,6 @@ At runtime, the `solr-sink` Kamelet relies upon the presence of the following de
 
 -   camel:solr
     
--   camel:core
-    
 -   camel:jackson
     
 -   camel:kamelet
