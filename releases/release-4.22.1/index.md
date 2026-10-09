@@ -571,11 +571,7 @@ camel-azure-storage: Use symlink-aware containment for local downloads
 
 camel-hazelcast: Apply the default JavaSerializationFilterConfig to Camel-built client configurations
 
-### Test (3)
-
-[CAMEL-24597](https://issues.apache.org/jira/browse/CAMEL-24597)
-
-Fix flaky test MailAttachmentDuplicateNamesTest.testSendAndReceiveMailWithAttachmentsWithDuplicateNames <Hello World> but was: <jakarta.mail.internet.MimeMultipart@XXXXX>
+### Test (2)
 
 [CAMEL-24469](https://issues.apache.org/jira/browse/CAMEL-24469)
 

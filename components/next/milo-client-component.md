@@ -42,9 +42,9 @@ milo-client:opc.tcp://host:port/path/to/service?node=RAW(nsu=urn:foo:bar;s=item-
 
 When both styles are provided, the explicit `username`/`password` parameters take precedence over credentials embedded in the URI.
 
-All configuration options in the group client are applicable to the shared client instance. Endpoints will share client instances for each endpoint URI. So the first time a request for that endpoint URI is made, the options of the client group are applied. All further instances will be ignored.
+All configuration options in the group client are applicable to the shared client instance. Endpoints will share client instances for each endpoint URI plus `requestedPublishingInterval`. So the first time a request for that endpoint URI (plus `requestedPublishingInterval`) is made, the options of the client group are applied. All further instances will be ignored.
 
-If you need alternate options for the same endpoint URI it is possible though to set the clientId option which will by added internally to the endpoint URI in order to select a different shared connection instance. In other words, shared connections located by the combination of endpoint URI and client id.
+If you need alternate options for the same endpoint URI it is possible though to set the clientId option which will be added internally to the endpoint URI in order to select a different shared connection instance. In other words, shared connections located by the combination of endpoint URI, `requestedPublishingInterval` and client id.
 
 ## Configuring Options
 
@@ -148,7 +148,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **clientId** (common) | A virtual client id to force the creation of a new connection instance. |  | String |
-| **dataChangeFilterDeadbandType** (common) | Deadband type for MonitorFilterType DataChangeFilter. | 0 | UInteger |
+| **dataChangeFilterDeadbandType** (common) | Deadband type for MonitorFilterType DataChangeFilter. | 0 | Integer |
 | **dataChangeFilterDeadbandValue** (common) | Deadband value for MonitorFilterType DataChangeFilter. | 0.0 | Double |
 | **dataChangeFilterTrigger** (common) | 
 Data change trigger for data change monitor filter type.
@@ -187,7 +187,8 @@ Enum values:
  |  | MonitorFilterType |
 | **node** (common) | The node definition (see Node ID). |  | String |
 | **omitNullValues** (common) | Omit notifications in case of null values. | true | boolean |
-| **samplingInterval** (common) | The sampling interval in milliseconds. | 0.0 | Double |
+| **queueSize** (common) | The queue size used for OPC UA subscriptions. If not set, a queue size of 1 is requested. |  | Integer |
+| **samplingInterval** (common) | The sampling interval in milliseconds. | 1000.0 | Double |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 

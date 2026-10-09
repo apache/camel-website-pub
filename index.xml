@@ -16,6 +16,20 @@
       <description>This is the third post in a series. In the first a frontier model coached a small local model through thirteen beginner examples, and we fixed Camel between the runs. In the second the examples became a ladder of real-world ones, and the model worked step by step, the way developers do. Both rounds ended the same way: most of what the model tripped over was wrong or unclear for people too, and the fixes ship in Camel 4.</description>
     </item>
     <item>
+      <title>Apache Camel Karavan Security Advisory - CVE-2026-103412</title>
+      <link>https://camel.apache.org/security/CVE-2026-103412.html</link>
+      <pubDate>Wed, 07 Oct 2026 11:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-103412.html</guid>
+      <description>Karavan project file names escape the project directory when a project is committed to Git</description>
+    </item>
+    <item>
+      <title>Apache Camel Karavan Security Advisory - CVE-2026-103413</title>
+      <link>https://camel.apache.org/security/CVE-2026-103413.html</link>
+      <pubDate>Wed, 07 Oct 2026 11:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-103413.html</guid>
+      <description>Karavan applies unvalidated Kubernetes resources from a project&amp;rsquo;s kubernetes.yaml</description>
+    </item>
+    <item>
       <title>One request, several agents: semantic routing with Apache Camel and Jev</title>
       <link>https://camel.apache.org/blog/2026/10/semantic-agent-routing/</link>
       <pubDate>Fri, 02 Oct 2026 00:00:00 +0000</pubDate>

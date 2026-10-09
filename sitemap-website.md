@@ -1,15 +1,17 @@
-urls[880]{loc,lastmod}:
+urls[882]{loc,lastmod}:
   https://camel.apache.org/categories/AI/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/blog/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-10-09T00:00:00+00:00
+  https://camel.apache.org/security/CVE-2026-103412.md,2026-10-07T11:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-103413.md,2026-10-07T11:00:00+02:00
+  https://camel.apache.org/security/,2026-10-07T11:00:00+02:00
   https://camel.apache.org/categories/Community/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/categories/EIP/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/semantic-agent-routing/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/thirty-years-of-cli/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-88789.md,2026-09-30T09:39:19+01:00
-  https://camel.apache.org/security/,2026-09-30T09:39:19+01:00
   https://camel.apache.org/blog/2026/09/camel-quarkus-release-3.40.0/,2026-09-30T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-09-30T00:00:00+00:00
   https://camel.apache.org/releases/q-3.40.0/,2026-09-28T00:00:00+00:00
