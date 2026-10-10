@@ -698,19 +698,19 @@ Values are the BouncyCastle parameter-set names, resolved case-insensitively. Th
  
 | Algorithm | Parameter sets |
 | --- | --- |
-| `MLDSA` | `ML-DSA-44`, `ML-DSA-65` (default), `ML-DSA-87` |
-| `MLKEM` | `ML-KEM-512` (default), `ML-KEM-768`, `ML-KEM-1024` |
+| `MLDSA` | `ML-DSA-44` (lifecycle manager default), `ML-DSA-65` (component default), `ML-DSA-87` |
+| `MLKEM` | `ML-KEM-512` (component default), `ML-KEM-768` (lifecycle manager default), `ML-KEM-1024` |
 | `SLHDSA` | `SLH-DSA-SHA2-128S`, `SLH-DSA-SHAKE-256F`, …​ (see `SLHDSAParameterSpec`) |
 | `FALCON` | `FALCON-512`, `FALCON-1024` |
-| `DILITHIUM` | `ML-DSA-44`, `ML-DSA-65`, `ML-DSA-87` (default) |
+| `DILITHIUM` | `ML-DSA-44` (lifecycle manager default), `ML-DSA-65`, `ML-DSA-87` (component default) |
 | `SPHINCSPLUS` | The `SLHDSA` parameter sets, for example `SLH-DSA-SHA2-128S` (default) |
-| `KYBER` | `ML-KEM-512`, `ML-KEM-768`, `ML-KEM-1024` (default); `kyber512`, `kyber768` and `kyber1024` are accepted as aliases |
+| `KYBER` | `ML-KEM-512`, `ML-KEM-768` (lifecycle manager default), `ML-KEM-1024` (component default); `kyber512`, `kyber768` and `kyber1024` are accepted as aliases |
 | `NTRU` | `ntruhps2048509`, …​ (see `NTRUParameterSpec`) |
 | `NTRULPRime` | `ntrulpr653`, …​ (see `NTRULPRimeParameterSpec`) |
 | `SNTRUPrime` | `sntrup761`, …​ (see `SNTRUPrimeParameterSpec`) |
 | `BIKE` | `bike128`, `bike192`, `bike256` |
 | `HQC` | `hqc128`, `hqc192`, `hqc256` |
-| `CMCE` | `mceliece460896`, `mceliece8192128f` (default), …​ (see `org.bouncycastle.jcajce.spec.CMCEParameterSpec`) |
+| `CMCE` | `mceliece460896` (lifecycle manager default), `mceliece8192128f` (component default), …​ (see `org.bouncycastle.jcajce.spec.CMCEParameterSpec`) |
 | `FRODO` | `frodokem976aes` (default), `frodokem1344shake`, …​ (see `org.bouncycastle.jcajce.spec.FrodoKEMParameterSpec`) |
 | `SABER` | `lightsaberkem128r3`, …​ (see `SABERParameterSpec`) |
 
@@ -936,14 +936,14 @@ All other signature algorithms follow the exact same route pattern shown above f
      
 | Algorithm | signatureAlgorithm param | JCA Algorithm Name | Provider | Default Parameter Spec | Material Class |
 | --- | --- | --- | --- | --- | --- |
-| SLH-DSA | `SLHDSA` | SLH-DSA | BC | SLH-DSA-SHA2-128s | `PQCDefaultSLHDSAMaterial` |
+| SLH-DSA | `SLHDSA` | SLH-DSA | BC | SLH-DSA-SHA2-128S | `PQCDefaultSLHDSAMaterial` |
 | LMS | `LMS` | LMS | BC | LMS-SHA256-N32-H5 / SHA256-N32-W1 (OTS) | `PQCDefaultLMSMaterial` |
 | XMSS | `XMSS` | XMSS | BCPQC | Tree height 10, SHA-256 | `PQCDefaultXMSSMaterial` |
 | XMSSMT | `XMSSMT` | XMSSMT | BCPQC | XMSSMT-SHA2-20d2-256 | `PQCDefaultXMSSMTMaterial` |
 | HSS | `HSS` | HSS | BC | LMS-SHA256-N32-H5 | `PQCDefaultHSSMaterial` |
 | Dilithium | `DILITHIUM` | ML-DSA | BC | ML-DSA-87 | `PQCDefaultDILITHIUMMaterial` |
 | Falcon | `FALCON` | Falcon | BCPQC | falcon\_512 | `PQCDefaultFalconMaterial` |
-| SPHINCS+ | `SPHINCSPLUS` | SLH-DSA | BC | SLH-DSA-SHA2-128s | `PQCDefaultSPHINCSPLUSMaterial` |
+| SPHINCS+ | `SPHINCSPLUS` | SLH-DSA | BC | SLH-DSA-SHA2-128S | `PQCDefaultSPHINCSPLUSMaterial` |
 
 To use any algorithm, set `signatureAlgorithm` in the URI (e.g., `signatureAlgorithm=SLHDSA`). Alternatively, register a KeyPair and Signature in the registry using the JCA Algorithm Name and Provider from the table above.
 

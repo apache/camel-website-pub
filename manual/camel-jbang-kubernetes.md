@@ -23,7 +23,7 @@ camel kubernetes run * --runtime=spring-boot --name=my-app
 
 This exports a Spring Boot project named `my-app`, builds the container image, pushes it, and deploys it to the cluster `kubectl` is connected to. The runtime is one of `spring-boot`, `quarkus` (the default) or `main`.
 
-Local clusters (Kind, Minikube) and OpenShift are detected, and the image registry is configured for them. Use `--cluster-type` to set the cluster type explicitly, skipping auto-detection while still applying the cluster-specific defaults. For any other cluster, tell the plugin where to push the image:
+Minikube and OpenShift are detected, and the image build and registry are configured for them. Use `--cluster-type` to set the cluster type explicitly (for example `--cluster-type=kind`, which is not detected), skipping auto-detection while still applying the cluster-specific defaults. The image options you set yourself, such as `--image-builder` and `--image-push`, are kept. For any other cluster, tell the plugin where to push the image:
 
 ```bash
 camel kubernetes run * --runtime=spring-boot --image-registry=quay.io --image-group=my-team
@@ -38,7 +38,7 @@ Useful options of `run`:
 | `--name` | The application name, used for the image, the Deployment and all resources. Set it explicitly, otherwise it is derived from the files given. |
 | `--wait` | Wait for the deployment to become ready. |
 | `--logs` | Print the logs once the application has started. |
-| `--disable-auto` | Do not detect the cluster type (Kind, Minikube, OpenShift). |
+| `--disable-auto` | Do not detect the cluster type (Minikube, OpenShift), and do not apply the cluster-specific defaults. |
 | `--verbose` | Show the output of the Maven build and the deployment. |
 
 ### Develop against the cluster with `--dev`
@@ -220,7 +220,7 @@ eval $(minikube -p minikube docker-env)
 camel kubernetes run * --runtime=spring-boot
 ```
 
-On Minikube the image is built with Docker straight into the Minikube Docker daemon, so nothing is pushed.
+On Minikube the image is built with Docker straight into the Minikube Docker daemon, so nothing is pushed (unless you set `--image-push`). If you set another `--image-builder`, such as `jib`, the image is pushed as on any other cluster. Minikube is only detected when its Docker environment is active (`eval $(minikube docker-env)`); with `--cluster-type=minikube`, `run` prints a hint when it is not.
 
 ## Troubleshooting
 

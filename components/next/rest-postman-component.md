@@ -197,6 +197,24 @@ Enum values:
 | **oauthProfile** (security) | The OAuth profile to use for authenticating the incoming requests. The profile is enforced by the consumer component servicing the requests. |  | String |
 | **postmanApiKey** (security) | The Postman API key used to fetch the collection from the Postman cloud. This credential authenticates against Postman itself and is never sent to the API the collection describes. |  | String |
 | **postmanApiKeyHeader** (security) | The HTTP header used to send the Postman API key when fetching a collection. | X-Api-Key | String |
+| **resolveVariablesFromProperties** (security) | 
+
+Whether a \\{{variable}} placeholder that neither the collection nor the variables option defines is resolved from Camel properties, which by default also cover JVM system properties and OS environment variables. With auto, this is done for a collection read from the classpath or the file system, and not for one fetched from the Postman cloud, over HTTP or through any other resource scheme, because whoever edits or serves such a collection could otherwise copy those values into an outgoing request. Use enabled or disabled to decide explicitly for any source.
+
+Enum values:
+
+-   auto
+    
+-   enabled
+    
+-   disabled
+    
+
+
+
+
+
+ | auto | String |
 | **sslContextParameters** (security) | Customize TLS parameters used by the component. If not set defaults to the TLS parameters set in the Camel context. These parameters are used both when fetching a collection from the Postman cloud and by the delegate producer. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 | **postmanApiUrl** (security (advanced)) | The base URL of the Postman API used to fetch collections. Must use https, except for localhost, because plain http would send the Postman API key in clear text. | [https://api.getpostman.com](https://api.getpostman.com) | String |
@@ -329,6 +347,24 @@ Enum values:
 | **oauthProfile** (security) | The OAuth profile to use for authenticating the incoming requests. The profile is enforced by the consumer component servicing the requests. |  | String |
 | **postmanApiKey** (security) | The Postman API key used to fetch the collection from the Postman cloud. This credential authenticates against Postman itself and is never sent to the API the collection describes. |  | String |
 | **postmanApiKeyHeader** (security) | The HTTP header used to send the Postman API key when fetching a collection. | X-Api-Key | String |
+| **resolveVariablesFromProperties** (security) | 
+
+Whether a \\{{variable}} placeholder that neither the collection nor the variables option defines is resolved from Camel properties, which by default also cover JVM system properties and OS environment variables. With auto, this is done for a collection read from the classpath or the file system, and not for one fetched from the Postman cloud, over HTTP or through any other resource scheme, because whoever edits or serves such a collection could otherwise copy those values into an outgoing request. Use enabled or disabled to decide explicitly for any source.
+
+Enum values:
+
+-   auto
+    
+-   enabled
+    
+-   disabled
+    
+
+
+
+
+
+ | auto | String |
 | **sslContextParameters** (security) | Customize TLS parameters used by the component. If not set defaults to the TLS parameters set in the Camel context. These parameters are used both when fetching a collection from the Postman cloud and by the delegate producer. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 | **postmanApiUrl** (security (advanced)) | The base URL of the Postman API used to fetch collections. Must use https, except for localhost, because plain http would send the Postman API key in clear text. | [https://api.getpostman.com](https://api.getpostman.com) | String |
@@ -414,16 +450,24 @@ If two requests share an HTTP method and path, which is common when a collection
 
 ### Variables
 
-`{{variable}}` placeholders are resolved from the collection’s own `variable` arrays, with folder scopes overriding the collection scope, then from the endpoint’s `variables` option, then from Camel property placeholders:
+`{{variable}}` placeholders are resolved from the collection’s own `variable` arrays, with folder scopes overriding the collection scope, then from the endpoint’s `variables` option, then, for a collection read from the classpath or the file system, from Camel property placeholders:
 
 ```java
 from("direct:start")
     .to("rest-postman:petstore.json#getPetById?variable.baseUrl=https://staging.example.com/v3");
 ```
 
-Postman environment files are not supported. Unresolved placeholders are left as they are unless `failOnUnresolvedVariable=true`.
+Postman environment files are not supported. Unresolved placeholders are left as they are unless `failOnUnresolvedVariable=true`. The exception is one left in the host of the URL, a query parameter name, or the `Accept` or `Content-Type` header of a request: these become options of the delegate endpoint, where Camel would resolve the placeholder from its properties, so the producer fails to start instead.
 
-A placeholder name written in the `prefix:value` form of a Camel property placeholder function — `{{env:HOME}}`, `{{sys:user.home}}`, `{{bean:foo}}` and the vault functions among them — is deliberately **not** resolved from Camel properties. A collection is route-author configuration, but a cloud-hosted one is editable by anyone with access to the Postman workspace, and resolving those would let its content pull an environment variable into an outgoing request. Supply such values through the `variables` option instead.
+A collection fetched from the Postman cloud is editable by anyone with access to the Postman workspace, and one fetched over HTTP by whoever serves it. Camel properties by default also cover JVM system properties and OS environment variables, so resolving such a collection’s placeholders from them would let its content copy any of those values into an outgoing request. Its placeholders are therefore **not** resolved from Camel properties: only `classpath:` and `file:` sources, and names without a scheme, are. Pass a property to such a collection explicitly in the endpoint URI, or set `resolveVariablesFromProperties=enabled` if you trust its content as much as your own configuration (`disabled` turns the lookup off for a local collection too; the default, `auto`, decides by source):
+
+```java
+from("direct:start")
+    .to("rest-postman:12ece9e1-2abf-4edc-8e34-de66e74114d2#getPetById?postmanApiKey={{postman.apiKey}}"
+        + "&variable.apiToken={{petstore.token}}");
+```
+
+A placeholder name written in the `prefix:value` form of a Camel property placeholder function — `{{env:HOME}}`, `{{sys:user.home}}`, `{{bean:foo}}` and the vault functions among them — is never resolved from Camel properties, whatever the source. Supply such values through the `variables` option instead.
 
 > **Note**
 > Pre-request and test scripts in the collection’s `event` blocks are never parsed or executed.

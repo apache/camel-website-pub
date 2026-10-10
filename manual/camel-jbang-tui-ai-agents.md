@@ -4,6 +4,9 @@ The TUI is also a tool for AI coding agents: over MCP an agent sees the running 
 
 See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
 
+> **Tip**
+> Not sure whether you want the AI panel, a coding agent or an MCP server? See [Camel TUI Ways to Use AI](camel-jbang-tui-ai-ways.md) for the options side by side.
+
 ## Key Features
 
 -   [**Same view as you**](#_why_this_matters) — routes, statistics, traces, errors, logs and sources
@@ -32,6 +35,8 @@ When an AI agent connects to the TUI via MCP, it gains the same level of visibil
 -   **Self-troubleshoot** — when something fails, the AI can autonomously inspect the error, read the message trace, correlate with route statistics, and produce a diagnostic report with annotated screenshots showing exactly where and why the failure occurred
     
 
+![An agent connected over MCP explains the integration with arrows and notes on the topology and the route statistics](_images/jbang/camel-tui-ai-agent-teaching.gif)
+
 ## Enabling MCP
 
 ```bash
@@ -58,6 +63,8 @@ Every running integration keeps a full status document in `~/.camel/<pid>-status
 ## Using a coding agent (ACP)
 
 Instead of talking to a model directly, the AI panel can hand the conversation to an external coding agent that speaks the [Agent Client Protocol](https://agentclientprotocol.com) (ACP). The TUI starts the agent as a subprocess, gives it the TUI’s own MCP server, and shows the agent’s answer, tool calls and questions in the panel. The agent drives the TUI through the same `tui_*` tools that external MCP clients use, and can also read and edit your route sources with its own tools.
+
+![Claude Code picked with Ctrl+P in the AI panel answers a question about the running integration from the TUI’s tools](_images/jbang/camel-tui-ai-acp-claude-code.gif)
 
 Any agent that speaks ACP works. Press **Ctrl+P** in the AI panel and pick one of the agents known to work, or `acp:custom` to run any other ACP agent:
 
@@ -116,7 +123,7 @@ The MCP server exposes two kinds of tools. The `camel_` tools are the Camel auth
     
 -   **Annotate** — locate text and diagram nodes by coordinates, draw shapes (boxes, highlights, arrows, underlines, text labels), show captions with typewriter animation
     
--   **Present** — take screenshots, record tape sessions, control demo pacing
+-   **Present** — take screenshots, record tape sessions, control demo pacing. To record a demo as a GIF, an agent can also write a `.tape` file using the same commands and play it with `camel tui --record`, see [Scripted Recording](camel-jbang-tui-recording.html#_scripted_recording)
     
 
 ## Editing source files from an AI agent
@@ -135,7 +142,7 @@ Simple expressions get two more helpers, because they are what a small model get
 
 With `/write live` the change is not shown as a diff but replayed in the Source tab’s editor: the AI panel hides so the editor has the whole screen, the file opens in edit mode, the cursor jumps to the first change, removed lines disappear and added lines are typed at a readable pace. A large change is typed faster, so no single change takes longer than a few seconds. The AI panel comes back once you have saved or discarded. This is meant for learning Camel and the YAML DSL: you see the edit land in the full, syntax-highlighted file and can look up what the new lines mean. Every change is its own step, even when changes sit a line apart, and between them the replay pauses: **Enter** continues with the next change, **Esc** stops (what was typed stays in the editor), any other key finishes the current change at once, and **F4** (the editor’s edit key) hands the keyboard to you so you can edit yourself; **F9** then continues with the remaining changes. Those are located by their surrounding lines, so your own edits elsewhere in the file shift them rather than break them; a change whose surroundings you edited is skipped and reported to the agent. When the replay is over you review with **F7** and save with **Ctrl+S** or **F5**, which is the confirmation, or discard with **Esc**. The agent waits until then and is told what was applied, what was skipped, and the content of the saved file if you changed it. If you take longer than five minutes, the agent stops waiting and ends its turn; the edit stays in the editor, and the agent is told what became of it with your next question.
 
-An edit (`camel_edit_file`, which the agent uses to change a file without rewriting it) goes the same way: the snippet is replaced in the file’s content and the result is confirmed or replayed like any write, so what you see in the editor is the finished file either way.
+An edit (`camel_edit_file`, which the agent uses to change a file without rewriting it) goes the same way: the snippet is replaced in the file’s content and the result is confirmed or replayed like any write, so what you see in the editor is the finished file either way. An edit with several changes (`edits`) is one change to confirm.
 
 While the replay pauses you can also ask the agent about the change it just made: **F8** opens the AI panel with the question prefilled (`About edit 2 of 3:`), in a compact panel that leaves the edit in view (**Shift+F8** sizes it), you complete it and press **Enter**. The waiting `camel_write_file` call returns to the agent with the question, the edits applied so far and the editor’s content, and the agent answers in the same turn — nothing is written meanwhile. Close the panel with **F8** (or **Esc** to leave without asking) and the pause continues where it was; while the panel is open, the keys stay with it and do not reach the editor beneath. If your question makes the agent revise the change, its next `camel_write_file` of the same file continues in the editor from the current content instead of starting over. If you save or discard without the agent being involved again, it is told what became of the edit with your next question.
 

@@ -1,0 +1,29 @@
+# camel semantic audit
+
+Retrieve retained semantic audit records and linked evidence
+
+## Usage
+
+```bash
+camel semantic audit [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--action` | Filter by explicit route action, such as allow or block |  | String |
+| `--breadcrumb-id` | Filter by Camel breadcrumb ID |  | String |
+| `--category` | Filter by record category, such as evaluation, decision or request |  | String |
+| `--correlation-id` | Filter by application correlation ID |  | String |
+| `--cursor` | Opaque cursor for an older page; retain the original filters |  | String |
+| `--event-id` | Retrieve one event and its linked evidence instead of a page |  | String |
+| `--expert` | Filter by expert bean reference |  | String |
+| `--json` | Output a single JSON document |  | boolean |
+| `--limit` | Maximum records per page (1-200) | 50 | int |
+| `--namespace` | Filter by application namespace |  | String |
+| `--route-id` | Filter by route ID |  | String |
+| `--since` | Earliest timestamp, inclusive, in ISO-8601 format with a UTC offset |  | String |
+| `--timeout` | Timeout in milliseconds waiting for the integration | 60000 | long |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

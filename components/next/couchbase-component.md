@@ -109,7 +109,7 @@ With the following _path_ and _query_ parameters:
 | **consumerRetryPause** (consumer) | Define the consumer retry pause between different attempts. | 5000 | int |
 | **descending** (consumer) | Define if this operation is descending or not. | false | boolean |
 | **designDocumentName** (consumer) | **Deprecated** The design document name to use. Deprecated: use the statement option with SQL queries instead. | beer | String |
-| **fullDocument** (consumer) | If true consumer will return complete document instead data defined in view. | false | boolean |
+| **fullDocument** (consumer) | If true consumer will return complete document instead data defined in view. | true | boolean |
 | **limit** (consumer) | The output limit to use. | \-1 | int |
 | **rangeEndKey** (consumer) | Define a range for the end key. |  | String |
 | **rangeStartKey** (consumer) | Define a range for the start key. |  | String |

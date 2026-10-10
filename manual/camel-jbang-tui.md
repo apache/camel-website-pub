@@ -25,7 +25,9 @@ Camel TUI is a terminal dashboard for developing, prototyping, and understanding
     
 -   **Ask the AI** — the [AI panel](camel-jbang-tui-ai.md) (**F8**) with a hosted or a local model, and [AI coding agents](camel-jbang-tui-ai-agents.md) that see and drive the TUI over MCP and ACP.
     
--   **Make it yours** — [themes, settings](camel-jbang-tui-settings.md), the embedded shell, browser access and demo recording.
+-   **Make it yours** — [themes, settings](camel-jbang-tui-settings.md), the embedded shell and browser access.
+    
+-   **Show it** — [screenshots, captions and demo recordings](camel-jbang-tui-recording.md) as animated GIFs, scripted as a tape that you or an AI agent writes.
     
 
 ## Getting Started
@@ -68,7 +70,7 @@ The **More** menu (key **0**) opens a popup with tabs organized into groups:
     
 -   **Observability** — Circuit Breaker, Health, JFR, Metrics, Network Services, Exchange Events, Recovery Tasks, OpenTelemetry Spans
     
--   **AI** — Ollama (listed when an Ollama server is detected)
+-   **AI** — Semantic (definitions, expert contracts, relationships and sample evaluation), Ollama (listed when an Ollama server is detected)
     
 -   **Data** — JDBC DataSource, Kafka, Secrets, SQL Query, SQL Trace
     
@@ -81,7 +83,7 @@ Tabs appear dynamically based on what the integration uses. For example, the Kaf
 
 Tab badges show live counts — the Errors tab shows a red badge when errors exist and Routes shows the route count.
 
-Two panels can be opened on top of any tab: **F6** opens an [embedded shell](camel-jbang-tui-settings.html#_embedded_shell_f6) for running `camel` commands, and **F8** opens the [AI panel](camel-jbang-tui-ai.md) for asking questions about the running integrations.
+Two panels can be opened on top of any tab: **F6** opens an [embedded shell](camel-jbang-tui-settings.html#_embedded_shell_f6) for running `camel` commands, and **F8** opens the [AI panel](camel-jbang-tui-ai.md) for asking questions about the running integrations. The panel is one of several ways to use AI with the TUI; see [Ways to Use AI](camel-jbang-tui-ai-ways.md) for how they compare.
 
 ## More about the TUI
 
@@ -92,10 +94,12 @@ Two panels can be opened on top of any tab: **F6** opens an [embedded shell](cam
 | [Source Editor](camel-jbang-tui-source-editor.md) | Reading and writing routes: checks as you type, quick fixes, fix with AI, completion, quick documentation, navigation, live run data |
 | [Diagram](camel-jbang-tui-diagram.md) | The architecture, topology and route views, external endpoints, metrics |
 | [Observing Integrations](camel-jbang-tui-observe.md) | Activity, message history, errors, spans, process, HTTP probe, CVE audit, Kafka, SQL, memory leaks, JFR, catalog |
+| [Ways to Use AI](camel-jbang-tui-ai-ways.md) | The AI panel, a coding agent over ACP, your agent over MCP, and `camel mcp`, side by side with a diagram |
 | [AI Panel](camel-jbang-tui-ai.md) | AI providers, slash commands, project overview, AI log |
 | [Local Models](camel-jbang-tui-local-models.md) | Ollama and OpenAI-compatible servers, the tool set for local models, what a question costs, the Ollama tab |
 | [AI Agents](camel-jbang-tui-ai-agents.md) | MCP and ACP: what an AI agent can see and do, edits you confirm |
-| [Actions, Settings and Themes](camel-jbang-tui-settings.md) | The actions menu, embedded shell, themes, settings, browser access, recording demos |
+| [Actions, Settings and Themes](camel-jbang-tui-settings.md) | The actions menu, embedded shell, themes, settings, browser access |
+| [Screenshots and Demo Recordings](camel-jbang-tui-recording.md) | Screenshots, presenting, recording a demo from a tape and converting it to a GIF |
 
 ## Keyboard Shortcuts
 
@@ -133,7 +137,7 @@ See the [keyboard shortcuts](camel-jbang-tui-source-editor.html#_keyboard_shortc
 | `--web-port` | Port for the web terminal server. | `8090` |
 | `--refresh` | Screen refresh interval in milliseconds. | `100` |
 | `--theme` | Color theme for this session (e.g., `dark`, `tokyo-night`, `dracula`). See [Theme](camel-jbang-tui-settings.html#_theme) for the full list of 21 themes. Overrides the persisted `camel.tui.theme` preference when set. |  |
-| `--record` | Replay a `.tape` file and record the session to an Asciinema `.cast` file. |  |
+| `--record` | Play a `.tape` file in the TUI and record it to an Asciinema `.cast` file. See [Scripted Recording](camel-jbang-tui-recording.html#_scripted_recording) for the tape commands. |  |
 | `--record-size` | Size of the recorded terminal for `--record`, as `<cols>x<rows>`. | `200x50` |
 | `--record-fps` | Frames per second captured by `--record`. | `10` |
 | `--record-duration` | Maximum duration in milliseconds captured by `--record`. | `120000` |

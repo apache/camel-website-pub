@@ -75,7 +75,7 @@ The same fixes are part of the result of the `camel_validate_source` MCP tool, s
 
 ## Fix with AI
 
-When a problem has no quick fix, **Shift+F8** asks the AI. The file is saved as it is, and the AI panel opens with the question already written: the file, the line, the problem, and how to fix it. Press **Enter** to send it, or change it first.
+When a problem has no quick fix, **Shift+F8** asks the AI. The file is saved as it is, and the AI panel opens with the question already written: the file, the line, the problem, and how to fix it. The question quotes the source around the line, like a diff: the whole step the line starts (in the canonical YAML form the endpoint of a `- to:` is on the lines below it), up to 8 lines, with 2 lines of context before and after, the line marked with `>`. Press **Enter** to send it, or change it first.
 
 ![Shift+F8 writes the question for the AI](_images/jbang/camel-tui-source-fix-with-ai.png)
 
@@ -86,6 +86,10 @@ When a problem has no quick fix, **Shift+F8** asks the AI. The file is saved as 
 The AI changes the file with the same tools an AI agent uses over MCP, and every change waits for you: the dialog shows what the AI wants to change, **d** shows the diff, **Enter** applies it and **Esc** rejects it.
 
 ![The change of the AI waits for your confirmation](_images/jbang/camel-tui-source-ai-edit-confirm.png)
+
+The whole loop with a local model, from orders that fail at runtime to the fix: **Shift+F8** on the error, the question with the source around the line, the change and its diff, and dev mode reloading the route (the time the model thinks is sped up):
+
+![Shift+F8 on a failing route: a local model finds the mismatched endpoint](_images/jbang/camel-tui-fix-with-ai.gif)
 
 A file the AI writes is checked like one you save, and a write that brings new problems is refused, so the AI gets the problems back and can try again. The view shows the file as the AI wrote it as soon as you apply the change. With `/write live` in the AI panel, you can also watch the AI type its change in the editor; see [Watching the AI edit](camel-jbang-tui-ai-agents.html#_watching_the_ai_edit_live_mode).
 
@@ -121,6 +125,14 @@ What can be completed:
 ![After a split in a Java route](_images/jbang/camel-tui-source-java-completion.png)
 
 ![In the argument of a filter](_images/jbang/camel-tui-source-java-argument-completion.png)
+
+### Semantic evaluation operations
+
+In YAML `semantic.evaluation` declarations, **Tab** on `operation:` or `type:` suggests the operations declared by the selected expert in the running integration. Completion uses the `expert` in the current editor buffer, including unsaved edits: an evaluation’s expert overrides the enclosing semantic block’s expert. Without either, it uses the runtime’s configured default or automatically selected expert.
+
+Suggestions show the operation’s description and result type. For example, an expert declaring only `injection` with a boolean result offers `injection`; returning a boolean does not imply an operation named `boolean`. The `type` shorthand lowercases operation names, so case-sensitive names are offered only for `operation`.
+
+This requires a running integration, including a running process linked to a local project. If metadata is unavailable or the expert cannot be resolved, completion offers property placeholders only. It does not call the expert’s validation or inference methods. An unreadable semantic declaration must be corrected before its expert can be identified.
 
 ### Known limitations
 

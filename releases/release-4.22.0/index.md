@@ -1947,7 +1947,7 @@ camel-jpa: replace Thread.sleep in tests
 
 camel-microprofile-faulttolerance: timeoutScheduledExecutorServiceRef and bulkHead\* to be deprecated ?
 
-### Test (71)
+### Test (68)
 
 [CAMEL-24323](https://issues.apache.org/jira/browse/CAMEL-24323)
 
@@ -1956,10 +1956,6 @@ MongoDbSslConnectionIT test is broken "message":"Could not find the file / in co
 [CAMEL-24284](https://issues.apache.org/jira/browse/CAMEL-24284)
 
 SjmsConnectionRecoveryTest is very flaky on Jenkins CI
-
-[CAMEL-24229](https://issues.apache.org/jira/browse/CAMEL-24229)
-
-Fix flaky BacklogTracerActivityTest (volatile) and QuartzPersistentStore (MBean collision)
 
 [CAMEL-24053](https://issues.apache.org/jira/browse/CAMEL-24053)
 
@@ -1980,10 +1976,6 @@ Fix flaky tests in camel-core - batch 9 (resequencer, seda, aggregator, redelive
 [CAMEL-24040](https://issues.apache.org/jira/browse/CAMEL-24040)
 
 Fix flaky tests - timing issues in seda, throttle, aggregation, file, and JMS tests (batch 8)
-
-[CAMEL-24039](https://issues.apache.org/jira/browse/CAMEL-24039)
-
-Fix flaky core tests - seda, scheduler, and redelivery tests (batch 7)
 
 [CAMEL-24037](https://issues.apache.org/jira/browse/CAMEL-24037)
 
@@ -2112,10 +2104,6 @@ Flaky test: CxfConsumerPayLoadFaultMessageTest in camel-cxf-soap on JDK 25
 [CAMEL-23908](https://issues.apache.org/jira/browse/CAMEL-23908)
 
 Flaky test: BacklogTracerAggregateTest in camel-management
-
-[CAMEL-23907](https://issues.apache.org/jira/browse/CAMEL-23907)
-
-Flaky test: ThreadsRejectedExecutionTest in camel-core
 
 [CAMEL-23906](https://issues.apache.org/jira/browse/CAMEL-23906)
 

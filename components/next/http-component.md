@@ -346,6 +346,24 @@ Enum values:
 | **oauth2BodyAuthentication** (security) | Whether to use OAuth2 body authentication. | false | boolean |
 | **oauth2CachedTokensDefaultExpirySeconds** (security) | Default expiration time for cached OAuth2 tokens, in seconds. Used if token response does not contain 'expires\_in' field. | 3600 | long |
 | **oauth2CachedTokensExpirationMarginSeconds** (security) | Amount of time which is deducted from OAuth2 tokens expiry time to compensate for the time it takes OAuth2 Token Endpoint to send the token over http, in seconds. Set this parameter to high value if you OAuth2 Token Endpoint answers slowly or you tokens expire quickly. If you set this parameter to too small value, you can get 4xx http errors because camel will think that the received token is still valid, while in reality the token is expired for the Authentication server. | 5 | long |
+| **oauth2CachedTokensKey** (security) | 
+
+How cached OAuth2 tokens are shared between requests when oauth2CacheTokens is enabled. FULL\_URI uses one token per request URI including the query, HOST\_AND\_PATH one per path, and HOST\_ONLY one per scheme, host and port. The token request does not depend on the request URI, so HOST\_AND\_PATH and HOST\_ONLY request fewer tokens.
+
+Enum values:
+
+-   HOST\_ONLY
+    
+-   HOST\_AND\_PATH
+    
+-   FULL\_URI
+    
+
+
+
+
+
+ | HOST\_ONLY | OAuth2CachedTokensKey |
 | **oauth2CacheTokens** (security) | Whether to cache OAuth2 client tokens. | false | boolean |
 | **oauth2ClientId** (security) | OAuth2 client id. |  | String |
 | **oauth2ClientSecret** (security) | OAuth2 client secret. |  | String |
@@ -354,6 +372,7 @@ Enum values:
 | **oauth2TokenEndpoint** (security) | OAuth2 Resource Indicator. |  | String |
 | **sslContextParameters** (security) | To configure security using SSLContextParameters. Important: Only one instance of org.apache.camel.util.jsse.SSLContextParameters is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. |  | SSLContextParameters |
 | **x509HostnameVerifier** (security) | To use a custom X509HostnameVerifier such as DefaultHostnameVerifier or NoopHostnameVerifier. |  | HostnameVerifier |
+| **oauth2CachedTokensKeyResolver** (security (advanced)) | To use a custom strategy to compute the key of cached OAuth2 tokens when oauth2CacheTokens is enabled. When set, oauth2CachedTokensKey is not used. |  | OAuth2CachedTokensKeyResolver |
 
 ## Message Headers
 
@@ -986,6 +1005,55 @@ from("direct:start")
 
 > **Important**
 > Camel does not perform any validation in access token. It’s up to the underlying service to validate it.
+
+#### Caching tokens
+
+With `oauth2CacheTokens=true`, Camel caches the token until it expires (see `oauth2CachedTokensDefaultExpirySeconds` and `oauth2CachedTokensExpirationMarginSeconds`). The option `oauth2CachedTokensKey` decides which requests share a cached token:
+
+-   `HOST_ONLY` (default): one token shared by all requests to the same scheme, host and port.
+    
+-   `HOST_AND_PATH`: one token per path. The query is not taken into account.
+    
+-   `FULL_URI`: one token per request URI, including the query (the behaviour before Camel 4.23).
+    
+
+The client id, client secret, token endpoint, scope and resource indicator are always part of the key. The token request itself does not depend on the request URI, so the default `HOST_ONLY` does not request a new token for every new URI, for example with dynamic paths or queries in `toD`.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .toD("https://localhost:9090/event/${header.eventId}?oauth2ClientId=my-client-id&oauth2ClientSecret=my-client-secret&oauth2TokenEndpoint=https://localhost:8080/realms/master/protocol/openid-connect/token&oauth2CacheTokens=true&oauth2CachedTokensKey=HOST_ONLY");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <toD uri="https://localhost:9090/event/${header.eventId}?oauth2ClientId=my-client-id&amp;oauth2ClientSecret=my-client-secret&amp;oauth2TokenEndpoint=https://localhost:8080/realms/master/protocol/openid-connect/token&amp;oauth2CacheTokens=true&amp;oauth2CachedTokensKey=HOST_ONLY"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - toD:
+            uri: "https://localhost:9090/event/${header.eventId}"
+            parameters:
+              oauth2ClientId: my-client-id
+              oauth2ClientSecret: my-client-secret
+              oauth2TokenEndpoint: "https://localhost:8080/realms/master/protocol/openid-connect/token"
+              oauth2CacheTokens: true
+              oauth2CachedTokensKey: HOST_ONLY
+```
+
+For other rules, implement `org.apache.camel.component.http.OAuth2CachedTokensKeyResolver` and refer to it with `oauth2CachedTokensKeyResolver=#myResolver`. It takes precedence over `oauth2CachedTokensKey`. When it returns `null`, the token for that request is not cached.
 
 ### Vault-backed credential rotation
 

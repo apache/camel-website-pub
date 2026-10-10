@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1791534371865,
+  "generated": 1791644053819,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -35486,6 +35486,12 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-tui-ai-ways.adoc",
+              "url": "/manual/camel-jbang-tui-ai-ways.html",
+              "title": "Camel TUI Ways to Use AI"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-tui-ai.adoc",
               "url": "/manual/camel-jbang-tui-ai.html",
               "title": "Camel TUI AI Panel"
@@ -35513,6 +35519,12 @@
               "path": "camel-jbang-tui-observe.adoc",
               "url": "/manual/camel-jbang-tui-observe.html",
               "title": "Camel TUI Observing Integrations"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-tui-recording.adoc",
+              "url": "/manual/camel-jbang-tui-recording.html",
+              "title": "Camel TUI Screenshots and Demo Recordings"
             },
             {
               "module": "ROOT",
@@ -36593,6 +36605,30 @@
               "path": "jbang-commands/camel-jbang-script.adoc",
               "url": "/manual/jbang-commands/camel-jbang-script.html",
               "title": "camel script"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-semantic-audit.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-semantic-audit.html",
+              "title": "camel semantic audit"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-semantic-eval.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-semantic-eval.html",
+              "title": "camel semantic eval"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-semantic-get.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-semantic-get.html",
+              "title": "camel semantic get"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-semantic.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-semantic.html",
+              "title": "camel semantic"
             },
             {
               "module": "ROOT",

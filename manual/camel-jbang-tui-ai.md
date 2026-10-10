@@ -4,6 +4,9 @@ The AI panel (**F8**) lets you ask about your integrations in plain language: th
 
 See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
 
+> **Tip**
+> Not sure whether you want the AI panel, a coding agent or an MCP server? See [Camel TUI Ways to Use AI](camel-jbang-tui-ai-ways.md) for the options side by side.
+
 ## Key Features
 
 -   [**Any provider**](#_choosing_an_ai_provider) — a hosted model or a local one through Ollama or an OpenAI-compatible server

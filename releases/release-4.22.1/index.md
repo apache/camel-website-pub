@@ -91,7 +91,7 @@ git checkout camel-4.22.1
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (83)
+### Bug (82)
 
 [CAMEL-24729](https://issues.apache.org/jira/browse/CAMEL-24729)
 
@@ -144,10 +144,6 @@ camel-platform-http-starter - accepted multipart uploads are copied to the servl
 [CAMEL-24591](https://issues.apache.org/jira/browse/CAMEL-24591)
 
 camel-seda - Send fails with "No queue available" after producer route restart (regression from CAMEL-24408)
-
-[CAMEL-24590](https://issues.apache.org/jira/browse/CAMEL-24590)
-
-ManagedRouteGroupMBean.getFailuresHandled() / getLastExchangeFailureHandledTimestamp() return 0/null even though a member route recorded a handled failure
 
 [CAMEL-24585](https://issues.apache.org/jira/browse/CAMEL-24585)
 

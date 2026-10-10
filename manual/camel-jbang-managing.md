@@ -249,6 +249,87 @@ camel cmd enable-processor
 > **Tip**
 > Separate multiple IDs with commas: `--id=log1,log2,setBody2`.
 
+## Semantic definitions and evaluation
+
+The CLI can inspect and try the running application’s [semantic definitions and experts](../components/next/languages/semantic-language.md). The application must run Camel 4.23 or newer, include `camel-semantic` with the `semantic-metadata`, `semantic-evaluate` and `semantic-audit` developer consoles, and have the local CLI connector enabled. These commands use the connector; enabling the HTTP console is unnecessary.
+
+```bash
+camel semantic my-app
+camel semantic get my-app
+camel semantic get my-app --json
+camel semantic get my-app --expert=guard
+```
+
+`camel semantic` defaults to `camel semantic get`. The text output uses tables listing definition names, experts, operations, state selectors, result types and resolution errors, followed by the known experts and default expert. Listing does not require a default expert: the text output shows `Default expert: none` when automatic selection has no eligible expert or is ambiguous. Configuration and contract-resolution errors still appear as `Default expert error`. `--json` retains all default-selection diagnostics, including `defaultErrorCode` when provided by the runtime. The CLI uses that code to identify an absent or ambiguous automatic default and supports older runtimes that return only a message. `--expert` shows one expert’s operations, input and result semantics, and parameter contract. Inspection does not perform inference. Use `--json` for machine-readable output.
+
+Evaluate a named definition with a sample exchange:
+
+```bash
+camel semantic eval my-app --evaluation=safe \
+  --body='Please summarize this message' --header=subject=example \
+  --variable=language=en --json
+```
+
+The definition’s state selector reads the supplied body, headers and exchange-local variables. Variables with repository prefixes such as `global:` are rejected. The sample is evaluated directly; it is not sent through the application’s routes.
+
+Alternatively, invoke an expert operation directly. Use `semantic get --expert` to find the operation names and parameters supported by that expert:
+
+```bash
+camel semantic eval my-app --expert=guard --operation=detect \
+  --input='Please summarize this message' --json
+camel semantic eval my-app --expert=grader --operation=score \
+  --input='Sample answer' --parameter='criteria=json:["poor","good","excellent"]' --json
+```
+
+Choose either a named evaluation or a direct expert call. Direct calls require `--expert`, `--operation` and `--input`. Repeat `--header`, `--variable` or `--parameter` for multiple entries; duplicate keys are rejected.
+
+Values are text by default. Prefix a value with `json:` for a typed JSON value, for example `--parameter=threshold=json:0.7`, `--variable=enabled=json:true`, or `--input='json:["first","second"]'`. Use a JSON string to pass literal text beginning with `json:` or `file:`. `--body=file:sample.txt` and `--input=file:sample.txt` read the file as UTF-8 text.
+
+Evaluation prints the value, available probability or probabilities, confidence, provider metadata, elapsed milliseconds and any error. It invokes the configured provider and may incur charges. `--evaluation-timeout` bounds runtime evaluation (default and maximum: 50000 milliseconds). `--timeout` bounds the CLI’s wait for the reply (default: 60000 milliseconds). A CLI timeout removes its request and asks the connector to cancel unfinished work. Provider interruption is cooperative; remote or native inference may continue. Configure provider-specific request timeouts as well.
+
+Semantic commands use readable text by default: expert operations include a parameter table, evaluation results use labelled fields, and audit events show the record and linked evidence in separate sections. Add `--json` to any semantic command to receive the complete JSON response for scripts.
+
+All semantic commands accept an integration name or PID. With no name they select the only running integration; ambiguous selection fails and lists the matching PIDs. Known versions older than 4.23 fail immediately with exit code 3. If the runtime version is unavailable, the CLI attempts the request and applies the normal timeout. Each request has its own reply file, so concurrent commands do not consume each other’s results.
+
+### Semantic audit history
+
+Use `camel semantic audit` to retrieve retained history from the application’s configured audit reader. It uses the local connector and performs no inference. Capture settings remain in the semantic DSL; querying does not enable auditing or change its configuration.
+
+Stored input appears in event details and linked evaluation evidence when the expert’s semantic audit configuration explicitly enables `input.enabled`. Capture is disabled by default, bounded by `maxChars`, and can use a redactor. Human-readable output preserves multiline text; with `--event-id`, `--json` returns the stored structure and any omission reason. List queries omit input, including when `--json` is selected.
+
+```bash
+camel semantic audit my-app
+camel semantic audit my-app --category=decision --action=block --limit=20
+camel semantic audit my-app --expert=guard --since=2026-10-10T08:00:00Z --json
+camel semantic audit my-app --event-id=EVENT_ID --json
+```
+
+The default output is a table of event IDs, timestamps, categories, explicit route actions, evaluation statuses, experts, operations, targets, namespaces, reason codes and Camel breadcrumb IDs. A compact text summary reports whether capture is enabled, the reader, memory retention and dropped records. Sink or observer failures appear as separate error counts; evictions are shown below the table. An evaluation status is separate from an application’s allow/block decision. The full audit configuration and health fields are available with `--json`.
+
+`--json` returns the complete runtime response as one JSON document. `--event-id` selects one historical record and its linked evaluation evidence, including any retained provider, model, revision and result semantics. Missing linked records carry `unavailable: true`. A missing selected event returns exit code 3. Event lookup cannot be combined with list filters, `--cursor` or `--limit`.
+
+Pages are newest first, with a default limit of 50 and a maximum of 200. The exact-match filters are `--category`, `--action`, `--expert`, `--route-id`, `--breadcrumb-id`, `--namespace` and `--correlation-id`. `--since` is inclusive and accepts an ISO-8601 timestamp with a UTC offset. Supply a returned `nextCursor` using `--cursor` to retrieve an older page, retaining the same filters. Cursors are opaque and belong to the configured backend.
+
+`--breadcrumb-id` selects evaluations and route decisions with the same Camel breadcrumb. Enable `camel.main.use-breadcrumb=true` in the application to let Camel generate missing breadcrumbs on route exchanges. Audit uses this existing ID; records without one have an empty breadcrumb column.
+
+An expired cursor returns exit code 1 and `cursorExpired: true`; start a new query without `--cursor`. Backend query failures also return exit code 1 and retain the stable `audit_query_failed` error code. An empty history is a successful query: capture may be disabled, no events may match, or records may have been evicted. Retained records remain readable even when their expert or definition is no longer available.
+
+### Semantic command output and exit codes
+
+With `--json`, stdout contains exactly one JSON document. Inspection returns the runtime metadata object, including empty `evaluations` and `experts` arrays when nothing is published. Successful evaluations retain the runtime result fields. Errors use `{"status":"error","code":N,"message":"…​"}` and retain any runtime result fields, such as `error` and `elapsedMillis`. Diagnostics go to stderr.
+
+ 
+| Exit code | Meaning |
+| --- | --- |
+| 0 | Successful inspection, audit retrieval (including empty history) or evaluation, including a boolean result of `false`. |
+| 1 | The integration rejected the action, evaluation or audit query failed, or an audit cursor expired. |
+| 2 | Invalid command arguments or sample values. |
+| 3 | No matching integration, ambiguous selection, unavailable semantic tooling, expert operations or selected audit event. |
+| 4 | No reply before the CLI timeout. |
+| 70 | Unexpected local CLI error; stderr includes the stack trace. |
+
+See [camel semantic get](jbang-commands/camel-jbang-semantic-get.md), [camel semantic eval](jbang-commands/camel-jbang-semantic-eval.md) and [camel semantic audit](jbang-commands/camel-jbang-semantic-audit.md) for the complete option reference.
+
 ## Developer Console
 
 Enable the web-based developer console with `--console`:

@@ -40,6 +40,7 @@ This page provides a reference for all Camel CLI commands.
 | [camel run](camel-jbang-run.md) | Run as local Camel integration |
 | [camel sbom](camel-jbang-sbom.md) | Generate a CycloneDX or SPDX SBOM for a specific project |
 | [camel script](camel-jbang-script.md) | Run Camel integration as shell script for terminal scripting |
+| [camel semantic](camel-jbang-semantic.md) | List semantic definitions and expert contracts |
 | [camel shell](camel-jbang-shell.md) | Interactive Camel CLI shell. |
 | [camel stop](camel-jbang-stop.md) | Shuts down running Camel integrations |
 | [camel top](camel-jbang-top.md) | Top status of Camel integrations |

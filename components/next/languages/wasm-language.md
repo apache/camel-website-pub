@@ -132,6 +132,15 @@ pub extern fn transform(ptr: u32, len: u32) -> u64 {
 }
 ```
 
+### Errors and module state
+
+The module is instantiated once per `wasm` expression and that instance handles every message, one at a time, so data the module keeps in its memory or globals carries over from one message to the next.
+
+-   When the function returns with the error bit set, the error data is released with `dealloc` using its size without the error bit, the error data becomes the message of the exception, and the instance is kept.
+    
+-   When the call fails without returning, for example on a Rust `panic` or any other Wasm trap, the instance is discarded and a new one is created from the module for the next message. Whatever the failed call allocated can no longer be released, so keeping the instance would grow its memory with every failure. Any state the module kept in the discarded instance is lost. On a route where every call fails this way, the module is instantiated again for every message (its data segments are copied and any start function runs), which costs more than a call on a kept instance.
+    
+
 ## Examples
 
 Supposing we have compiled a Wasm module containing the function above, then it can be called in a Camel Route by its name and module resource location:
@@ -168,6 +177,55 @@ from("direct:in")
               wasm:
                 expression: transform
                 module: classpath://functions.wasm
+```
+
+## Using Wasm as a predicate
+
+When the function is used as a [Predicate](../../../manual/predicate.md), for example with the [Filter](../eips/filter-eip.md) EIP, its result is converted to a boolean depending on the result type:
+
+-   With the default result type (`byte[]`) or `String`, the returned bytes are read as a string and the standard Camel rules apply: `true` and `false` (in any case) are parsed, empty data is `false`, and any other value is `true`. So the function can simply return `true` or `false`.
+    
+-   With the result type `Boolean`, only `true` and `false` (in any case) are accepted: any other value, including empty data, is `false`.
+    
+-   With a Jackson `JsonNode` result type, only the JSON boolean `true` matches.
+    
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:in")
+    .filter().wasm("is_valid", "classpath://functions.wasm")
+        .to("direct:valid");
+```
+
+```xml
+<route>
+  <from uri="direct:in"/>
+  <filter>
+    <wasm module="classpath://functions.wasm">is_valid</wasm>
+    <to uri="direct:valid"/>
+  </filter>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - filter:
+            expression:
+              wasm:
+                expression: is_valid
+                module: classpath://functions.wasm
+            steps:
+              - to:
+                  uri: direct:valid
 ```
 
 ## Dependencies

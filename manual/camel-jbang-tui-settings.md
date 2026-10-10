@@ -1,6 +1,6 @@
 # Camel TUI Actions, Settings and Themes
 
-The TUI is configured from inside: the actions menu (**F2**) holds what is not tied to one tab, the settings are kept in `~/.camel-cli.properties`, and the themes change the whole look. This page also covers the embedded shell, opening the TUI in a browser, and recording demos.
+The TUI is configured from inside: the actions menu (**F2**) holds what is not tied to one tab, the settings are kept in `~/.camel-cli.properties`, and the themes change the whole look. This page also covers the embedded shell and opening the TUI in a browser.
 
 See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
 
@@ -16,7 +16,7 @@ See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
     
 -   [**Web browser access**](#_web_browser_access) — the TUI in a browser tab
     
--   [**Recording demos**](#_recording_demos) — record a session as a tape and convert it to a GIF
+-   [**Screenshots and demo recordings**](camel-jbang-tui-recording.md) — take screenshots, and record a session as a tape and convert it to a GIF
     
 
 ## Actions Menu (F2)
@@ -180,35 +180,4 @@ Like the MCP server, the web server is bound to `127.0.0.1` only — it neve
 
 ## Recording Demos
 
-The TUI can record terminal sessions for demos and documentation.
-
-### Live Recording
-
-Use the **F2** actions menu and select **Start Tape Recording** to start recording your session as a `.tape` file. Select **Stop Tape Recording** to stop. The tape captures your keystrokes with timing, producing a script that can be replayed or converted to an animated GIF.
-
-### Scripted Recording
-
-Use the `--record` flag to replay a `.tape` file in headless mode and produce an [Asciinema](https://asciinema.org/) `.cast` recording:
-
-```bash
-camel tui --record=demo.tape
-```
-
-The `.cast` file is written next to the tape, with the `.tape` suffix replaced by `.cast`. Recording is headless: the TUI is driven entirely by the tape rather than by your terminal, so no keyboard input is read and nothing is drawn on screen.
-
-The recorded terminal is 200x50 by default, which is wider than a documentation page can display. Use `--record-size` to record at a size that fits, and `--record-fps` or `--record-duration` to control the capture rate and the cut-off:
-
-```bash
-camel tui --record=demo.tape --record-size=160x44 --record-fps=15
-```
-
-`--record` cannot be combined with `--web`. Recording drives a headless TUI from the tape, and the recording configuration applies to the whole process, so every browser session would be recorded into the same `.cast` file. Camel rejects the combination with an error instead.
-
-### Converting to GIF
-
-Convert recordings using [agg](https://github.com/asciinema/agg) (for `.cast` files) or [VHS](https://github.com/charmbracelet/vhs) (for `.tape` files):
-
-```bash
-agg recording.cast out.gif  # .cast -> .gif
-vhs demo.tape               # .tape -> .gif
-```
+Screenshots, captions for a live demo, and recording a demo as an animated GIF have a page of their own: [Camel TUI Screenshots and Demo Recordings](camel-jbang-tui-recording.md).
