@@ -479,7 +479,7 @@ from("direct:start")
             uri: "{{ibm:default:route}}"
 ```
 
-Where route will be the name of the secret stored in the IBM Secrets Manager Vault instance, in the 'default' secret group.
+Where route will be the name of the secret stored in the IBM Secrets Manager Vault instance, in the 'default' secret group. The secret group can be omitted, such as `{{ibm:route}}`, and then the secret is looked up in the 'default' secret group.
 
 You could specify a default value in case the secret is not present on IBM Secrets Manager Vault instance:
 

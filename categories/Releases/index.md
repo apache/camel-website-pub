@@ -2,7 +2,8 @@
 
 Release feed for Apache Camel and related projects.
 
-releases[118]{title,link,pubDate,description}:
+releases[119]{title,link,pubDate,description}:
+  RELEASE 4.18.5|https://camel.apache.org/blog/2026/10/RELEASE-4.18.5/index.md|Sun, 11 Oct 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.5 LTS release with 116 new features and improvements. The artifacts are published and ready for you to download from the Cent
   Camel Quarkus 3.40.0 Released|https://camel.apache.org/blog/2026/09/camel-quarkus-release-3.40.0/index.md|Wed, 30 Sep 2026 00:00:00 +0000|Camel Quarkus 3.40.0 release
   Camel Quarkus 3.33.3 Released|https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/index.md|Thu, 17 Sep 2026 00:00:00 +0000|Camel Quarkus 3.33.3 release
   RELEASE 4.22.1|https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/index.md|Thu, 17 Sep 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.22.1 LTS release with 120 bug fixes and improvements. The artifacts are published and ready for you to download from the Central

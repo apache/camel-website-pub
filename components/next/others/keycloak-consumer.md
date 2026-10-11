@@ -883,7 +883,7 @@ The consumer uses fingerprint-based deduplication to prevent processing the same
 
 -   Events are uniquely identified by combining timestamp and event-specific properties
     
--   Fingerprints are cached per timestamp and cleared when moving to newer timestamps
+-   Fingerprints of the events with the latest timestamp are kept between polls, because Keycloak returns those events again on the next poll; fingerprints of older events are dropped when a newer timestamp is seen
     
 -   Maximum cache size is 1000 fingerprints to prevent memory issues
     

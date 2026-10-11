@@ -127,7 +127,7 @@ Enum values:
 
 
  | PUBLIC\_CHANNEL | ConversationType |
-| **maxResults** (consumer) | The Max Result for the poll. | 10 | String |
+| **maxResults** (consumer) | The maximum number of messages that the consumer requests from the conversation history at a time. When more new messages are available, the consumer reads the following pages in the same poll. | 10 | String |
 | **naturalOrder** (consumer) | Create exchanges in natural order (oldest to newest) or not. | false | boolean |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **serverUrl** (consumer) | The Server URL of the Slack instance. | [https://slack.com](https://slack.com) | String |
@@ -345,7 +345,7 @@ from("slack://general?token=RAW(<YOUR_TOKEN>)&maxResults=1")
             uri: mock:result
 ```
 
-This way you’ll get the last message from `general` channel. The consumer will track the timestamp of the last message consumed, and in the next poll it will consume only newer messages in the channel.
+This way you’ll get the last message from `general` channel. The consumer will track the timestamp of the last message consumed, and in the next poll it will consume only newer messages in the channel. When more than `maxResults` new messages were posted since the previous poll, the consumer reads the following pages of the conversation history in the same poll (`maxResults` messages per request), so no message is skipped. For a busy channel, set a higher `maxResults` to need fewer requests. If the request for a following page fails, for example because Slack rate limits it (some apps may send only one `conversations.history` request per minute), the consumer routes the most recent messages it has already read, as when it reads one page only, and logs a WARN that the older messages of that poll were skipped.
 
 You’ll need to create a Slack app and use it in your workspace.
 

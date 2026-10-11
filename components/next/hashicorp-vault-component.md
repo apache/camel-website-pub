@@ -679,7 +679,7 @@ where `camel.vault.hashicorp.refreshEnabled` will enable the automatic context r
 
 The secret names should use the following format: - `mysecret` or `path/to/secret` - tracks a secret in the default `secret` engine - `myengine:mysecret` or `myengine:path/to/secret` - tracks a secret in the `myengine` engine (use `:` to separate engine from path) - You can use patterns like `database*` to match multiple secrets
 
-Note that `camel.vault.hashicorp.secrets` is not mandatory: if not specified the task responsible for checking updates events will take into account all the properties with a `hashicorp:` prefix.
+Note that `camel.vault.hashicorp.secrets` is not mandatory: if not specified the task responsible for checking updates events will take into account all the properties with a `hashicorp:` prefix. Such a secret is tracked in the engine of the property, in the format above (`hashicorp:myengine:mysecret` is tracked as `myengine:mysecret`, `hashicorp:secret:mysecret` as `mysecret`), and its first check compares the version in Vault with the version that was resolved, so an update made before the first check also triggers a reload.
 
 #### How the Refresh Mechanism Works
 

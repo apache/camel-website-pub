@@ -382,6 +382,10 @@ A header that carries a literal `${…​}` string is now used as the object key
 
 A configured `keyName` or `bucketName` whose Simple expression resolves to `null` now fails with an `IllegalArgumentException` at the producer, instead of passing a `null` key/bucket on to the AWS SDK.
 
+### camel-aws2-s3 - objects in progress in the consumer
+
+With `fileName` set, the consumer now skips the object while an exchange of an earlier poll is still processing it, as it already did when listing the bucket (with `deleteAfterRead=false` it is consumed again once its exchange is done). The objects of a poll that a stopping consumer does not process are no longer kept in the `inProgressRepository`, so they are consumed when the route is started again.
+
 ### camel-aws2-sqs
 
 The `batchSeparator` option (default `,`), which splits a `String` body into the messages of the `sendBatchMessage` operation, was used as a regular expression: a separator such as `|` split the body into single characters, and `.` sent no message at all. It is now a plain string. A route that escaped a separator to work around this (for example `batchSeparator=\|`) must now use the separator itself (`batchSeparator=|`). The same applies to escape sequences, which the regular expression interpreted: `batchSeparator=\n` in an endpoint URI split the body at line breaks, and is now the two characters `\` and `n`; use the line break itself instead (for example `batchSeparator=%0A` in the endpoint URI, which works before and after this change). A separator that relied on a regular expression (such as `\s*,\s*`) is no longer supported; split the body in the route and send a `List` instead.
@@ -485,6 +489,10 @@ With `mbeansLevel=ContextOnly` the components are no longer registered as MBeans
 
 With `statementType=Insert`, `Update` or `Delete`, a `String` body (or input header) is now passed to the statement as one parameter, also when it contains commas or is blank, and so is a `byte[]`. MyBatis wraps an array parameter into a parameter map, so the statement refers to the `byte[]` as `#{array}`. Prior to Camel 4.23 the String was split at each comma and the statement ran once for each part (once for each byte of a `byte[]`, and not at all for a blank String). Collections, iterators and other arrays (including `int[]`, `long[]` and other primitive arrays) still run the statement once per element; send a `List` to run it once per value.
 
+### camel-mybatis, camel-sql - onConsume does not run for a failed or rollback only exchange (Breaking change)
+
+The camel-mybatis consumer no longer runs the `onConsume` statements for a row whose exchange failed or was marked rollback only: the row is consumed again by the next poll, so a row that always fails is now processed at every poll. Handle the exception in the route (for example with `onException(…​).handled(true)`) to consume the row anyway. The camel-sql consumer now runs `onConsumeFailed` instead of `onConsume` for a rollback only exchange (no statement when `onConsumeFailed` is not set, so the row is consumed again by the next poll). With `transacted=true` both consumers now break out of the batch at a rollback only exchange, as they do at a failed one.
+
 ### camel-groovy
 
 A `GroovyShellFactory` is now looked up in the registry once per `CamelContext`, when the first groovy expression is evaluated, instead of on every evaluation. A factory bound to the registry after that point is no longer used; bind it before the context starts.
@@ -498,6 +506,10 @@ The Groovy script compiler now runs the ``org.apache.camel.spi.CompilePostProces
 The Camel-annotation compile post-processors that camel-kamelet-main used internally are now public classes in camel-support: `org.apache.camel.support.compile.BindToRegistryCompilePostProcessor`, `TypeConverterCompilePostProcessor` and `EventNotifierCompilePostProcessor`.
 
 A lazy `@BindToRegistry` class from a compiled `.java` or `.groovy` source (`lazy = true`, or `camel run --lazy-bean` in the Camel CLI) is now bound with the name from the annotation, or else the simple class name, the same as an eager `@BindToRegistry` class. Before, the bean was bound with the fully qualified class name and the annotation value was ignored, so a class in a package, or with a name in the annotation, was not found by the expected name.
+
+### camel-hashicorp-vault - secret refresh
+
+The secret refresh task now checks a secret used as `hashicorp:myengine:mysecret` in its own engine, and names it `myengine:mysecret` in `HashicorpVaultPropertiesFunction.getSecrets()` and in the updates of the task (secrets of the `secret` engine keep their names). Before, it checked `mysecret` in the `secret` engine, so an update of a secret in any other engine never triggered a reload. The first check now also compares the version in Vault with the version the property was resolved with, so an update made between the startup and the first check triggers a reload.
 
 ### camel-djl (Breaking change)
 
@@ -616,6 +628,10 @@ The `reactive-streams` consumer is now suspendable: suspending its route (route 
 ### camel-vertx - request/reply over the event bus
 
 When a `vertx` consumer receives a message that expects a reply and the route fails, the sender now gets a failure reply (a `ReplyException` with failure type `RECIPIENT_FAILURE`, failure code 500 and the message `Exchange processing failed`; the exception of the route is not sent to the sender). Before, the consumer replied with the message body as if the route had succeeded, which usually echoed the request back. A route that ends without a body now replies with an empty (`null`) body instead of not replying, so the sender no longer waits until its reply timeout (30 seconds by default).
+
+### camel-slack - the consumer reads every new message
+
+When more messages than `maxResults` (default 10) were posted to the channel since the previous poll, the consumer routed only the most recent `maxResults` of them and skipped the older ones. It now reads the following pages of the conversation history in the same poll, so a poll can route more than `maxResults` messages, with one request per `maxResults` messages. For a busy channel, raise `maxResults` to keep the number of requests within the Slack rate limits. If the request for a following page fails (for example rate limited), the consumer routes the most recent messages it has already read, as before, and logs a WARN that the older messages of that poll were skipped.
 
 ### camel-rocketmq - a message whose route failed is consumed again
 
@@ -1512,6 +1528,10 @@ The containment check honours the existing `jailStartingDirectory` option (defau
 
 Ordinary listings are unaffected, as a listed name is normally a single path segment, and a `../` that still resolves back inside the polled directory remains accepted. Two configurations can newly see files skipped: a server that reports names navigating above the polled directory, and a `fileName` expression (used when `useList=false`) that navigates above it. Set `jailStartingDirectory=false` if such a path is intended.
 
+### camel-mina-sftp - the producer applies the charset and allowNullBody options
+
+The producer wrote a String body in the charset of the exchange (UTF-8 unless the exchange sets another one) and ignored the `charset` option of the endpoint, unless the exchange had been created by that endpoint (for example by a `ProducerTemplate` sending to it directly). It now writes the file in the configured `charset`, as camel-sftp does. A null body with `allowNullBody=true` now writes an empty file instead of failing. When `charset` is set, non-String bodies (such as `byte[]`, `InputStream` or a file) are also read in the charset of the exchange and re-encoded to that charset, where their bytes were written as they are before; do not set `charset` for binary payloads.
+
 ### camel-salesforce
 
 The `camel-salesforce-maven-plugin` now supports JWT and Client Credentials authentication in addition to the existing Username-Password flow.
@@ -1544,6 +1564,14 @@ Two further checks are applied to the delivery address regardless of the option:
 ### camel-ibm-cos
 
 The `CACHE_CONTROL` header constant’s value has been corrected from the misspelled `CamelIBMCOSContentControl` to `CamelIBMCOSCacheControl`, so the header name matches the Cache-Control metadata it carries. This is a breaking change for routes that reference the header by its literal string name: they must switch to `CamelIBMCOSCacheControl`, although the change is trivial to adapt. Routes using the `IBMCOSConstants.CACHE_CONTROL` constant are unaffected.
+
+### camel-ibm-cos - objects in progress in the consumer
+
+With `fileName` set, the consumer now skips the object while an exchange of an earlier poll is still processing it, as it already did when listing the bucket (with `deleteAfterRead=false` it is consumed again once its exchange is done). The objects of a poll that a stopping consumer does not process are no longer kept in the `inProgressRepository`, so they are consumed when the route is started again, and their content streams are closed.
+
+### camel-ibm-secrets-manager - a lookup without a secret group uses the default group
+
+The `ibm:` properties function now uses the `default` secret group when the lookup does not specify one, such as `{{ibm:route}}`. Previously such a lookup failed when it was the first one, and otherwise reused the secret group of whichever lookup ran before it (possibly from another thread). Specify the group, such as `{{ibm:mygroup:route}}`, to read a secret from another group.
 
 ### camel-knative
 
@@ -2109,6 +2137,20 @@ This affects hand-written code as well. `CamelPropertiesHelper.setCamelPropertie
 
 Local downloads configured with `fileDir` now resolve existing filesystem path segments before checking that the destination remains inside the configured directory. Downloads through a symbolic link that resolves outside `fileDir` are rejected. Valid nested download paths continue to work.
 
+### camel-azure-storage-blob - blobs whose exchange is in flight
+
+The consumer no longer consumes a blob again while an exchange of an earlier poll is still processing it, which happened with an asynchronous route (for example `to("seda:…​")`), so the next polls now skip such a blob, and no longer download it again. With `deleteAfterRead=false` and `moveAfterRead=false` the blob is consumed again by a later poll once its exchange is done, as before. A listed blob that no longer exists when it is downloaded (for example deleted by another consumer after the listing) is now skipped, and the other blobs of the poll are consumed, instead of the whole poll being dropped.
+
+### camel-huaweicloud-obs, camel-alibaba-oss and camel-aws2-s3-vectors - objects whose exchange is in flight
+
+The `camel-huaweicloud-obs` and `camel-alibaba-oss` consumers no longer consume an object again while an exchange of an earlier poll is still processing it, which happened with an asynchronous route (for example `to("seda:…​")`), so the next polls now skip such an object. With `deleteAfterRead=false` (and `moveAfterRead=false`) the object is consumed again by a later poll once its exchange is done, as before. A listed object that no longer exists when it is downloaded (for example deleted by another consumer after the listing) is now skipped instead of failing the poll.
+
+The `camel-aws2-s3-vectors` consumer with `deleteAfterRead=true` no longer consumes a vector again while its exchange is still in flight. A vector whose exchange failed is still consumed again by a later poll.
+
+### camel-google-mail - messages whose exchange is in flight
+
+The `google-mail-stream` consumer no longer consumes a message again while an exchange of an earlier poll is still processing it, which happened with an asynchronous route (for example `to("seda:…​")`) as the message is only marked as read when its exchange is done. The next polls now skip such a message (with `markAsRead=false` it is consumed again once its exchange is done).
+
 ### camel-google-sheets - custom column names of a range that does not start at column A
 
 The `google-sheets:application-x-struct` data type now maps the custom `columnNames` to the columns of the range by their position. For a range that does not start at column A every column got the first name, so with the Kamelet default `columnNames=A` and a range such as `B:E` the JSON keys change from `A` for every column (each value overwriting the previous one) to `A`, `C`, `D`, `E`. Ranges that start at column A are not affected.
@@ -2120,6 +2162,8 @@ Local downloads configured with a plain `downloadFileName` directory now resolve
 The remote object name is untrusted input, so the consumer now also checks it whatever `downloadFileName` looks like. An absolute object name (one starting with `/` or `\`, or with a drive letter such as `C:`) and an object name with a `..` path segment are rejected, even when the name would normalize back inside the download directory (for example `a/../b.txt`). When the consumer lists the bucket, a rejected object is skipped and reported to the consumer’s exception handler, which logs a warning by default, and the other objects of the poll are consumed as usual. The rejected object stays in the bucket, so it is reported again on every poll until it is removed or renamed. With `objectName`, which consumes a single object, the poll fails instead, and the failure is reported on every poll.
 
 The containment check is now also applied when `downloadFileName` is configured as a directory followed by an expression, such as `downloadFileName=/tmp/downloads/${file:name}`: the destination must stay within the static directory prefix configured before the first expression token (`/tmp/downloads` in the example). When `downloadFileName` is fully dynamic and has no static directory prefix (for example `downloadFileName=${file:name}`), a relative destination must stay within the working directory. An absolute destination that comes from the route’s own expression is not confined.
+
+The consumer no longer consumes an object again while an exchange of an earlier poll is still processing it, which happened with an asynchronous route (for example `to("seda:…​")`), so the next polls now skip such an object (with `deleteAfterRead=false` it is consumed again once its exchange is done). An object that no longer exists when its content is downloaded (for example deleted by another consumer after the listing) is now skipped instead of failing the poll.
 
 ### camel-jt400
 
@@ -2927,6 +2971,10 @@ Before, such a dump did not load in the YAML DSL.
 A route built in Java with its own error handler (`from("…​").errorHandler(deadLetterChannel("…​"))`) now has the error handler in its model, so dumping the route (as XML, YAML or Java) writes it; it was left out before. When written as Java, the error handler of an XML or YAML route is now `.errorHandler(…​)` on the route, instead of an `errorHandler(…​)` that applies to every route of the route builder.
 
 The `timeout(long)` of the Resequencer EIP in Java keeps the millis as given (`2000`), instead of a duration (`2s0ms`).
+
+A top-level `onException` (of a YAML file, or in the `configure` method of a `RouteBuilder`) is now dumped once as a top-level `onException` before the routes, instead of as a step of every route, and the `onException` of a route configuration is only dumped with the route configuration, no longer in the routes. This also applies to the dump of a single route (JMX `dumpRouteAsYaml`, the `route-dump` developer console). Before, such a dump did not load in the YAML DSL.
+
+When `camel.main.dumpRoutesOutput` is a file and the routes come from several files, they are now dumped together, so a top-level `onException` comes before the first route. When the dump is loaded, such an `onException` applies to the routes of all the files, not only to those of its own file, and a WARN is logged when the routes are dumped. Dump into a directory to keep one file per source file.
 
 ### camel-jbang-mcp - camel\_transform\_route
 

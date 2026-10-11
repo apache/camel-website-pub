@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[253]{title,link,pubDate,description}:
+posts[254]{title,link,pubDate,description}:
+  RELEASE 4.18.5|https://camel.apache.org/blog/2026/10/RELEASE-4.18.5/index.md|Sun, 11 Oct 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.5 LTS release with 116 new features and improvements. The artifacts are published and ready for you to download from the Cent
   Round 3: making Kamelets AI-ready|https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/index.md|Fri, 09 Oct 2026 00:00:00 +0000|This is the third post in a series. In the first a frontier model coached a small local model through thirteen beginner examples, and we fixed Camel between the runs. In the second the examples became
   One request, several agents: semantic routing with Apache Camel and Jev|https://camel.apache.org/blog/2026/10/semantic-agent-routing/index.md|Fri, 02 Oct 2026 00:00:00 +0000|“Will it rain in Lisbon on Tuesday, and how much is an SUV for five days?” It is one customer message, but it needs two answers. A weather specialist can handle the first part. A pricing specialist ca
   Thirty years of command-line tools, and nobody knew them all|https://camel.apache.org/blog/2026/10/thirty-years-of-cli/index.md|Fri, 02 Oct 2026 00:00:00 +0000|It&rsquo;s Friday afternoon, so allow me a small story and an opinion. My Mac mini felt warm today. Not hot, just warmer than a computer doing nothing has any right to be. In the old days I would have
