@@ -1,7 +1,11 @@
-urls[882]{loc,lastmod}:
+urls[884]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-10-11T00:00:00+00:00
+  https://camel.apache.org/,2026-10-11T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.18.5/,2026-10-11T00:00:00+00:00
+  https://camel.apache.org/blog/2026/10/RELEASE-4.18.5/,2026-10-11T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-10-11T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-10-11T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-10-09T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-10-09T00:00:00+00:00
-  https://camel.apache.org/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-103412.md,2026-10-07T11:00:00+02:00
@@ -13,9 +17,7 @@ urls[882]{loc,lastmod}:
   https://camel.apache.org/blog/2026/10/thirty-years-of-cli/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-88789.md,2026-09-30T09:39:19+01:00
   https://camel.apache.org/blog/2026/09/camel-quarkus-release-3.40.0/,2026-09-30T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-09-30T00:00:00+00:00
   https://camel.apache.org/releases/q-3.40.0/,2026-09-28T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-09-28T00:00:00+00:00
   https://camel.apache.org/releases/ckc-4.22.0/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/semantic-evaluation-system-one/,2026-09-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-tui-byoa/,2026-09-22T00:00:00+00:00
