@@ -98,7 +98,7 @@ Where `camel explain` explains one route, `camel overview` gives a high-level vi
     
 -   the **external systems** grouped by category (AI, databases, messaging, files, email, HTTP, cloud), taken from the component labels of the Camel catalog;
     
--   **findings**: a `direct` or `seda` endpoint that no route consumes, routes that call each other in a cycle, duplicate route ids, routes without a description;
+-   **findings**: a `direct`, `seda` or `disruptor` endpoint that no route consumes (by the same rules as `camel validate`), routes that call each other in a cycle, duplicate route ids, routes without a description;
     
 -   the **architecture**: the routes grouped by what they do. Routes that set `group` in the source keep it. Routes that routes of two or more groups call are **shared services**. Routes reached only while handling a failure (from a `doCatch`, an `onException` or a dead letter channel), or that only log, are **utility**. The rest is **other** until the AI groups it (see below).
     

@@ -7,6 +7,19 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.23 to 4.24
 
+### camel-jbang - camel validate and camel overview report the same endpoints no route consumes
+
+`camel validate source` and `camel overview` now use the same rules for a `direct:`, `seda:` or `disruptor:` endpoint that a route sends to and no route consumes, so they report the same endpoints on the same project:
+
+-   `disruptor:` endpoints are checked too, and `camel overview` no longer treats `disruptor:q` as `seda:q` (they are different endpoints at runtime); `vm:` and `direct-vm:`, which do not exist in Camel 4, are no longer joined with `seda:` and `direct:`.
+    
+-   `camel validate` counts a `poll` or `pollEnrich` as consuming its endpoint, and a `toD` without an expression, an `enrich` with a constant endpoint, a rest verb, and the dead letter channel of an error handler as sending to it. It reads the flows of an `Integration` resource, and stays quiet for a `Pipe`.
+    
+-   `camel overview` stays quiet, as `camel validate` does, when a route consumes an endpoint only known at runtime (`from: direct:{{name}}`), and no longer reports a `to` whose uri holds an expression.
+    
+
+So `camel validate` can report an endpoint it did not report before.
+
 ### camel-hashicorp-vault - properties without engine use the `secret` engine
 
 A `hashicorp:` property without an engine, such as `{{hashicorp:mysecret}}` or `{{hashicorp:mysecret#field}}`, now reads the secret from the `secret` engine. Before, it read from the engine of the `hashicorp:` property resolved before it (or from a `null` engine), and `{{hashicorp:mysecret#field}}` always resolved to no value. Properties with an engine, such as `{{hashicorp:secret:mysecret#field}}`, are not affected.
