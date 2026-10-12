@@ -5,11 +5,27 @@ This document is for helping you upgrade your Apache Camel application from Came
 > **Note**
 > [The Camel Upgrade Recipes project](https://github.com/apache/camel-upgrade-recipes/) provides automated assistance for some common migration tasks. Note that manual migration is still required. See the [documentation](camel-upgrade-recipes-tool.md) page for details.
 
-## Upgrading from 4.18.4 to 4.18.5
+## Upgrading from 4.18.5 to 4.18.6
 
 ### camel-netty-http - the roles of a security constraint are matched by role name
 
 The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.
+
+### camel-spring-ws - internal Camel headers are no longer written into SOAP headers
+
+The default `messageFilter` of the `spring-ws` component, `BasicMessageFilter`, now applies the endpoint’s `headerFilterStrategy` before it writes a message header into the SOAP header, both on the request sent by the producer and on the response returned by the consumer. With the default `SpringWebserviceHeaderFilterStrategy`, message headers whose names start with `Camel` or `camel` (case-insensitively) are no longer written into the SOAP header. Other message headers are written as before.
+
+A `BasicMessageFilter` created in application code applies a `SpringWebserviceHeaderFilterStrategy` unless it is created with another strategy. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
+
+### camel-undertow - WebSocket endpoints apply the security provider, allowed roles and handlers
+
+WebSocket endpoints (`ws://` and `wss://`) now apply the `UndertowSecurityProvider` (the `securityConfiguration` or `securityProvider` option), the `allowedRoles` option, and the `handlers` and `accessLog` options, as HTTP endpoints do. Previously these options had no effect on WebSocket endpoints. They apply to the upgrade request: a client that the security provider rejects, or that connects to an endpoint with `allowedRoles` but no security provider, now gets the same status code as on an HTTP endpoint (for example `403`) and no connection is opened. The headers that the security provider adds are set on the exchanges of the connection.
+
+All the endpoints of a WebSocket path share its connections. The settings of the consumer apply to the path, including the messages sent by producers on that path, and keep applying while the consumer is stopped; a path that only has producers applies their settings. A connection that was opened before these settings applied does not receive the messages of the producers, and it is closed when it sends a message.
+
+A WebSocket client that connected without satisfying the configured security provider or allowed roles is now rejected: it must authenticate, or the option must be removed from the WebSocket endpoint.
+
+## Upgrading from 4.18.4 to 4.18.5
 
 ### camel-azure-eventhubs
 
@@ -32,12 +48,6 @@ The post login url of the authorization code flow is now always built from the o
 When `allowResponseHeaderOverride` is enabled, the `spring-ws` producer now applies the endpoint’s `headerFilterStrategy` to the SOAP response header attributes and elements it maps onto the message, as the `spring-ws` consumer already does for inbound SOAP headers. With the default `SpringWebserviceHeaderFilterStrategy`, attribute and element names starting with `Camel` or `camel` (case-insensitively) are no longer copied onto the message.
 
 Other SOAP response header attributes and elements are mapped as before, and the raw SOAP header is still available in the `CamelSpringWebserviceSoapHeader` header. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
-
-### camel-spring-ws - internal Camel headers are no longer written into SOAP headers
-
-The default `messageFilter` of the `spring-ws` component, `BasicMessageFilter`, now applies the endpoint’s `headerFilterStrategy` before it writes a message header into the SOAP header, both on the request sent by the producer and on the response returned by the consumer. With the default `SpringWebserviceHeaderFilterStrategy`, message headers whose names start with `Camel` or `camel` (case-insensitively) are no longer written into the SOAP header. Other message headers are written as before.
-
-A `BasicMessageFilter` created in application code applies a `SpringWebserviceHeaderFilterStrategy` unless it is created with another strategy. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
 
 ### camel-http-common, camel-platform-http-vertx - fileNameExtWhitelist entries are matched exactly
 
@@ -219,14 +229,6 @@ coap://0.0.0.0:5683/my/resource?muteException=false
 ```
 
 For the Rest DSL, set it with `restConfiguration().endpointProperty("muteException", "false")`.
-
-### camel-undertow - WebSocket endpoints apply the security provider, allowed roles and handlers
-
-WebSocket endpoints (`ws://` and `wss://`) now apply the `UndertowSecurityProvider` (the `securityConfiguration` or `securityProvider` option), the `allowedRoles` option, and the `handlers` and `accessLog` options, as HTTP endpoints do. Previously these options had no effect on WebSocket endpoints. They apply to the upgrade request: a client that the security provider rejects, or that connects to an endpoint with `allowedRoles` but no security provider, now gets the same status code as on an HTTP endpoint (for example `403`) and no connection is opened. The headers that the security provider adds are set on the exchanges of the connection.
-
-All the endpoints of a WebSocket path share its connections. The settings of the consumer apply to the path, including the messages sent by producers on that path, and keep applying while the consumer is stopped; a path that only has producers applies their settings. A connection that was opened before these settings applied does not receive the messages of the producers, and it is closed when it sends a message.
-
-A WebSocket client that connected without satisfying the configured security provider or allowed roles is now rejected: it must authenticate, or the option must be removed from the WebSocket endpoint.
 
 ## Upgrading from 4.18.3 to 4.18.4
 

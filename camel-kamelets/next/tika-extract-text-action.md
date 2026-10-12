@@ -6,7 +6,7 @@
 
 Extract plain text from PDF, office and similar documents in-process with Apache Tika.
 
-Before the parse, the value of the `documentIdHeader` header is captured into the `CamelLangChain4jIngestDocumentId` exchange property - Tika copies document metadata over the headers, so a crafted document could otherwise forge its own identity in steps that read it later (the langchain4j-ingest sink does). The extracted text is decoded at a pinned UTF-8 (a document-injected charset header is swept before the conversion), and after the parse all non-Camel headers are removed: past this action, parsed document metadata is indistinguishable from caller headers, so it must not travel further. Each format needs its Tika parser module on the classpath; camel-tika ships the HTML and text modules, PDF needs org.apache.tika:tika-parser-pdf-module.
+Before the parse, the value of the `documentIdHeader` header is captured into the `CamelLangChain4jIngestDocumentId` exchange property - Tika copies document metadata over the headers, so a crafted document could otherwise forge its own identity in steps that read it later (the langchain4j-ingest sink does). The extracted text is decoded at a pinned UTF-8 (a document-injected charset header is swept before the conversion), and after the parse all non-Camel headers are removed: past this action, parsed document metadata is indistinguishable from caller headers, so it must not travel further. Each format needs its Tika parser module on the classpath; camel-tika ships the HTML and text modules, PDF needs org.apache.tika:tika-parser-pdf-module. With `maxDocumentSize` set, a payload larger than that many bytes fails the exchange before the parse.
 
 ## Configuration Options
 
@@ -16,6 +16,7 @@ The following table summarizes the configuration options available for the `tika
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **documentIdHeader** | Document Id Header | Name of the header carrying the stable document id, captured into the CamelLangChain4jIngestDocumentId exchange property before the parse. | string | CamelLangChain4jIngestDocumentId |  |
+| **maxDocumentSize** | Max Document Size | Maximum size of the payload in bytes, checked before the parse; a larger document fails the exchange without being parsed. 0, the default, means no limit. | integer | 0 |  |
 
 ## Dependencies
 

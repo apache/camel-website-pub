@@ -6,7 +6,7 @@
 
 Convert PDF, office and similar documents to structure-preserving markdown with Docling, OCR included.
 
-Before the conversion, the value of the `documentIdHeader` header is captured into the `CamelLangChain4jIngestDocumentId` exchange property, so a converted document cannot forge its own identity in steps that read it later (the langchain4j-ingest sink does); the body is pinned to bytes and the `CamelDocling*` control headers are swept, because none of them may be decided by a consumer-delivered payload. By default the `docling` component executes a local docling CLI; set `doclingServeUrl` to use a Docling Serve instance instead - the natural fit for self-contained Pipes.
+Before the conversion, the value of the `documentIdHeader` header is captured into the `CamelLangChain4jIngestDocumentId` exchange property, so a converted document cannot forge its own identity in steps that read it later (the langchain4j-ingest sink does); the body is pinned to bytes and the `CamelDocling*` control headers are swept, because none of them may be decided by a consumer-delivered payload. By default the `docling` component executes a local docling CLI; set `doclingServeUrl` to use a Docling Serve instance instead - the natural fit for self-contained Pipes. With `maxDocumentSize` set, a payload larger than that many bytes fails the exchange before the conversion.
 
 ## Configuration Options
 
@@ -17,6 +17,7 @@ The following table summarizes the configuration options available for the `docl
 | --- | --- | --- | --- | --- | --- |
 | **doclingServeUrl** | Docling Serve URL | Address of a Docling Serve instance to convert through, such as [http://docling-serve:5001](http://docling-serve:5001); when unset, the docling component’s own configuration applies (a local docling CLI by default). | string |  |  |
 | **documentIdHeader** | Document Id Header | Name of the header carrying the stable document id, captured into the CamelLangChain4jIngestDocumentId exchange property before the conversion. | string | CamelLangChain4jIngestDocumentId |  |
+| **maxDocumentSize** | Max Document Size | Maximum size of the payload in bytes, checked before the conversion; a larger document fails the exchange without being converted. 0, the default, means no limit. | integer | 0 |  |
 | **useDoclingServe** | Use Docling Serve | Whether to convert through a Docling Serve instance instead of a local docling CLI; set together with doclingServeUrl. | boolean |  |  |
 
 ## Dependencies

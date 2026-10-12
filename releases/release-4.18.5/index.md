@@ -91,15 +91,11 @@ git checkout camel-4.18.5
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (76)
+### Bug (75)
 
 [CAMEL-25437](https://issues.apache.org/jira/browse/CAMEL-25437)
 
 camel-jbang - camel run --prop key=value with a space is silently ignored
-
-[CAMEL-25376](https://issues.apache.org/jira/browse/CAMEL-25376)
-
-camel-netty-http - match security constraint roles by exact role name
 
 [CAMEL-25227](https://issues.apache.org/jira/browse/CAMEL-25227)
 
@@ -397,11 +393,7 @@ camel-google-mail: raw option always returns a null body and non-multipart messa
 
 camel-google-storage: producer sets wrong blob metadata and NPEs on missing objects
 
-### Improvement (34)
-
-[CAMEL-25340](https://issues.apache.org/jira/browse/CAMEL-25340)
-
-camel-spring-ws: apply the HeaderFilterStrategy to outbound SOAP headers
+### Improvement (33)
 
 [CAMEL-25225](https://issues.apache.org/jira/browse/CAMEL-25225)
 

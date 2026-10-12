@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[254]{title,link,pubDate,description}:
+posts[255]{title,link,pubDate,description}:
+  Talk to Your CRM: Connecting Local AI to Business Systems with Apache Camel and MCP|https://camel.apache.org/blog/2026/10/camel-mcp-talk-to-your-crm/index.md|Mon, 12 Oct 2026 00:00:00 +0000|What if your AI assistant could do more than answer questions—what if it could actually work with your business systems? Imagine asking an AI assistant to summarize previous customer interactions, hig
   RELEASE 4.18.5|https://camel.apache.org/blog/2026/10/RELEASE-4.18.5/index.md|Sun, 11 Oct 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.5 LTS release with 116 new features and improvements. The artifacts are published and ready for you to download from the Cent
   Round 3: making Kamelets AI-ready|https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/index.md|Fri, 09 Oct 2026 00:00:00 +0000|This is the third post in a series. In the first a frontier model coached a small local model through thirteen beginner examples, and we fixed Camel between the runs. In the second the examples became
   One request, several agents: semantic routing with Apache Camel and Jev|https://camel.apache.org/blog/2026/10/semantic-agent-routing/index.md|Fri, 02 Oct 2026 00:00:00 +0000|“Will it rain in Lisbon on Tuesday, and how much is an SUV for five days?” It is one customer message, but it needs two answers. A weather specialist can handle the first part. A pricing specialist ca

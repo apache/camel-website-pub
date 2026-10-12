@@ -1,17 +1,19 @@
-urls[884]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-10-11T00:00:00+00:00
-  https://camel.apache.org/,2026-10-11T00:00:00+00:00
+urls[885]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-10-12T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-10-12T00:00:00+00:00
+  https://camel.apache.org/categories/Community/,2026-10-12T00:00:00+00:00
+  https://camel.apache.org/,2026-10-12T00:00:00+00:00
+  https://camel.apache.org/blog/2026/10/camel-mcp-talk-to-your-crm/,2026-10-12T00:00:00+00:00
+  https://camel.apache.org/categories/Usecases/,2026-10-12T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.5/,2026-10-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.18.5/,2026-10-11T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-10-11T00:00:00+00:00
   https://camel.apache.org/releases/,2026-10-11T00:00:00+00:00
-  https://camel.apache.org/categories/AI/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-103412.md,2026-10-07T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-103413.md,2026-10-07T11:00:00+02:00
   https://camel.apache.org/security/,2026-10-07T11:00:00+02:00
-  https://camel.apache.org/categories/Community/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/categories/EIP/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/semantic-agent-routing/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/thirty-years-of-cli/,2026-10-02T00:00:00+00:00
@@ -73,7 +75,6 @@ urls[884]{loc,lastmod}:
   https://camel.apache.org/categories/Features/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-tui/,2026-07-27T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/echonect-fifteen-years-apache-camel/,2026-07-24T00:00:00+00:00
-  https://camel.apache.org/categories/Usecases/,2026-07-24T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-not-afraid-of-ai/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/07/camel-cli-launcher-installers/,2026-07-20T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.18.3/,2026-07-17T00:00:00+00:00

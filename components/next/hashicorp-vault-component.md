@@ -429,6 +429,9 @@ from("direct:start")
 
 Where route will be the name of the secret stored in the HashiCorp Vault instance, in the 'secret' engine.
 
+> **Note**
+> The engine is the part before the first `:`; for a property with a field, only the part before the `#` counts. When the property has no engine, such as `{{hashicorp:route}}` or `{{hashicorp:database#username}}`, the secret is read from the 'secret' engine. Without a field, a default value needs the engine, as in `{{hashicorp:secret:route:default}}`: in `{{hashicorp:route:default}}` the engine would be `route`. With a field it does not, as in `{{hashicorp:database#username:admin}}`.
+
 You could specify a default value in case the secret is not present on HashiCorp Vault instance:
 
 -   Java
@@ -587,14 +590,14 @@ This approach will return the RAW route secret with version '2', in the 'secret'
 
 ```java
 from("direct:start")
-    .to("{{hashicorp:route:default@2}}");
+    .to("{{hashicorp:secret:route:default@2}}");
 ```
 
 ```xml
 <camelContext>
     <route>
         <from uri="direct:start"/>
-        <to uri="{{hashicorp:route:default@2}}"/>
+        <to uri="{{hashicorp:secret:route:default@2}}"/>
     </route>
 </camelContext>
 ```
@@ -605,7 +608,7 @@ from("direct:start")
       uri: direct:start
       steps:
         - to:
-            uri: "{{hashicorp:route:default@2}}"
+            uri: "{{hashicorp:secret:route:default@2}}"
 ```
 
 This approach will return the route secret value with version '2' or default value in case the secret doesn’t exist or the version doesn’t exist (in the 'secret' engine).
