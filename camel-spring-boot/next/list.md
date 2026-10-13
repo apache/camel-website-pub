@@ -1260,7 +1260,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Vert.x](../../components/next/vertx-component.md) | camel-vertx-starter | Stable | 2.12 | Send and receive messages to/from Vert.x Event Bus. |
 | [Vert.x HTTP Client](../../components/next/vertx-http-component.md) | camel-vertx-http-starter | Stable | 3.5 | Send requests to external HTTP servers using Vert.x |
 | [Vert.x WebSocket](../../components/next/vertx-websocket-component.md) | camel-vertx-websocket-starter | Stable | 3.5 | Expose WebSocket endpoints and connect to remote WebSocket servers using Vert.x |
-| [Wasm](../../components/next/wasm-component.md) | camel-wasm-starter | Experimental | 4.4 | Invoke Wasm functions. |
+| [Wasm](../../components/next/wasm-component.md) | camel-wasm-starter | Experimental | 4.4 | Run Wasm programs (WASI Preview 1 command modules) with the message body as standard input. |
 | [Weather](../../components/next/weather-component.md) | camel-weather-starter | Stable | 2.12 | Poll the weather information from Open Weather Map. |
 | [weaviate](../../components/next/weaviate-component.md) | camel-weaviate-starter | Stable | 4.12 | Perform operations on the Weaviate Vector Database. |
 | [Web3j Ethereum Blockchain](../../components/next/web3j-component.md) | camel-web3j-starter | Stable | 2.22 | Interact with Ethereum nodes using web3j client API. |

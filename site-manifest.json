@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1791815810463,
+  "generated": 1791878474831,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -36587,12 +36587,6 @@
               "path": "jbang-commands/camel-jbang-restart.adoc",
               "url": "/manual/jbang-commands/camel-jbang-restart.html",
               "title": "camel restart"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-route-parser.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-route-parser.html",
-              "title": "camel route-parser"
             },
             {
               "module": "ROOT",

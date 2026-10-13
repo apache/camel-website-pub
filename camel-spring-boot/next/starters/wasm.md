@@ -1,10 +1,10 @@
 # Wasm
 
-Invoke Wasm functions.
+Run Wasm programs (WASI Preview 1 command modules) with the message body as standard input.
 
 ## What’s inside
 
--   [Wasm component](../../../components/next/wasm-component.md), URI syntax: `wasm:functionName`
+-   [Wasm component](../../../components/next/wasm-component.md), URI syntax: `wasm:module`
     
 -   [Wasm language](../../../components/next/languages/wasm-language.md)
     

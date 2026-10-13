@@ -61,7 +61,6 @@ These commands are provided by plugins. A plugin is installed with `camel plugin
 | [camel generate](camel-jbang-generate.md) | `generate` | Generate source code |
 | [camel kubernetes](camel-jbang-kubernetes.md) | `kubernetes` | Manage Camel applications running on Kubernetes |
 | [camel mcp](camel-jbang-mcp.md) | `mcp` | MCP server for AI coding assistants |
-| [camel route-parser](camel-jbang-route-parser.md) | `route-parser` | Parses Java route and dumps route structure |
 | [camel test](camel-jbang-test.md) | `test` | Manage tests for Camel applications |
 | [camel tui](camel-jbang-tui.md) | `tui` | Camel TUI |
 | [camel validate](camel-jbang-validate.md) | `validate` | Validate Camel source code |

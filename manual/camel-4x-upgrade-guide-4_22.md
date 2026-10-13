@@ -7,6 +7,14 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.22.1 to 4.22.2
 
+### camel-lra - only an LRA hosted by the configured coordinator is joined
+
+The LRA saga service now joins, completes or compensates an LRA only when its URL is under the configured LRA coordinator (`coordinatorUrl` followed by `coordinatorContextPath`). A message whose `Long-Running-Action` header holds the URL of another coordinator now fails, instead of the saga service calling that URL.
+
+If your participants reach the same coordinator under different URLs, for example with different host names, list the other coordinator URLs, including the context path, in the new `allowedCoordinatorUrls` option (`camel.lra.allowedCoordinatorUrls`).
+
+This also applies to the LRAs the service starts itself, which a nested saga route looks up again: when the coordinator returns LRA URLs under another base URL than `coordinatorUrl`, for example behind a proxy, add that base URL to `allowedCoordinatorUrls` as well.
+
 ### camel-management - Route group exchange counters count once per entry into the group again
 
 In 4.22.1, the route group MBean (`ManagedRouteGroupMBean`) exchange counters and processing times counted each exchange once per member route instead of once per entry into the group. This was an unintended side effect of CAMEL-24590. The counters now count each exchange once per entry into the group again, as in 4.22.0: calls nested inside another route of the same group are not counted again.
@@ -167,6 +175,12 @@ Three changes to `CryptoDataFormat`, none of which affects the format of data al
 **The inlined vector length is bounded.** The length prefix is read from the message and used to size an allocation; a declared length outside 0–1024 is now rejected instead of attempted.
 
 Not changed: the HMAC key is still derived from the same key material as the cipher. Separating them would change the MAC written into the message and so could not be read by earlier versions; that is tracked separately.
+
+### camel-aws2-s3 - a listed object that cannot be fetched is skipped
+
+When the consumer lists the bucket, a failure to get one of the listed objects (or to download its content) no longer fails the poll, as long as another object of that listing could be got: the object is skipped, the other listed objects are consumed in that poll, and the skipped object is tried again by a later poll. An object that no longer exists (for example deleted by another consumer after the listing) is skipped with a log line at `DEBUG`. Any other failure is given to the exception handler of the consumer, with the key in the message: by default that is a `WARN` with the stack trace, and with `bridgeErrorHandler=true` the route’s error handler gets it. This happens at every poll that lists an object that can never be read (for example archived, or access denied), until it can be read or is removed from the bucket. Such a poll is a successful poll, so it does not count for `backoffErrorThreshold`.
+
+The poll still fails, as before, when none of the listed objects could be got and at least one get failed with an error other than that the object no longer exists (for example expired credentials, no permission to get objects, throttling): the failure of the first object is then the failure of the poll, and `backoffErrorThreshold` applies. In both cases the objects are no longer kept in the `inProgressRepository`; before, the object (or a new object with the same key) was skipped by all later polls until the endpoint was restarted. With the `fileName` option, a failed get still fails the poll.
 
 ## Upgrading from 4.22.0 to 4.22.1
 

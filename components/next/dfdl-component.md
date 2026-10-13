@@ -110,8 +110,6 @@ Enum values:
 | **rootElement** (advanced) | The root element name of the schema to use. If not specified, the first root element in the schema will be used. |  | String |
 | **rootNamespace** (advanced) | The root namespace of the schema to use. |  | String |
 
-/ component headers: START
-
 ## DFDL Schemas
 
 Many DFDL schemas are freely available at [DFDLSchemas on GitHub](https://github.com/DFDLSchemas) including:

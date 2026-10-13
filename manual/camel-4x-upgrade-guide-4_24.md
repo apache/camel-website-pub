@@ -20,6 +20,12 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 So `camel validate` can report an endpoint it did not report before.
 
+### camel-jpa, camel-hazelcast - an exchange marked rollback only is not consumed
+
+When a route marks the exchange rollback only (for example with `markRollbackOnly()` or `markRollbackOnlyLast()`) there is no exception on the exchange, and these consumers treated it as a success. The JPA consumer deleted the entity (or called its `@Consumed` method) and committed the poll, and the transacted (`transacted=true`) Hazelcast SEDA consumer committed its transaction, so the message was removed from the queue. Now a rollback only exchange is not consumed: the JPA consumer leaves the entity in the table, so the next poll consumes it again, as long as it still matches the query. With `transacted=false` the other entities of the poll are still consumed (without logging a WARN), and so is what a `@PreConsumed` method changed before routing; with `transacted=true` the whole poll is rolled back, as for a failed exchange. The Hazelcast SEDA consumer rolls back its transaction, so the message stays in the queue.
+
+A message that the route marks rollback only every time was removed before, and is now consumed again at every poll (JPA), or taken from the queue again at once, without a delay (transacted Hazelcast SEDA, as for a failed exchange). Handle such a message in the route instead, for example by moving it aside, rather than marking it rollback only every time.
+
 ### camel-hashicorp-vault - properties without engine use the `secret` engine
 
 A `hashicorp:` property without an engine, such as `{{hashicorp:mysecret}}` or `{{hashicorp:mysecret#field}}`, now reads the secret from the `secret` engine. Before, it read from the engine of the `hashicorp:` property resolved before it (or from a `null` engine), and `{{hashicorp:mysecret#field}}` always resolved to no value. Properties with an engine, such as `{{hashicorp:secret:mysecret#field}}`, are not affected.
@@ -27,3 +33,126 @@ A `hashicorp:` property without an engine, such as `{{hashicorp:mysecret}}` or `
 A `hashicorp:` property without an engine and with a version, such as `{{hashicorp:mysecret@2}}`, now reads version 2 of the secret `mysecret` in the `secret` engine. Before, the `@2` was kept as part of the secret name.
 
 A `hashicorp:` property with a field of a secret that does not exist, such as `{{hashicorp:secret:missing#field}}`, now resolves to no value, as it already did without a field, so its default value or an optional placeholder (`{{?hashicorp:secret:missing#field}}`) applies. Before, without a default value, it failed with a `NullPointerException`.
+
+### camel-lra - only an LRA hosted by the configured coordinator is joined
+
+The LRA saga service now joins, completes or compensates an LRA only when its URL is under the configured LRA coordinator (`coordinatorUrl` followed by `coordinatorContextPath`). A message whose `Long-Running-Action` header holds the URL of another coordinator now fails, instead of the saga service calling that URL.
+
+If your participants reach the same coordinator under different URLs, for example with different host names, list the other coordinator URLs, including the context path, in the new `allowedCoordinatorUrls` option (`camel.lra.allowedCoordinatorUrls`).
+
+This also applies to the LRAs the service starts itself, which a nested saga route looks up again: when the coordinator returns LRA URLs under another base URL than `coordinatorUrl`, for example behind a proxy, add that base URL to `allowedCoordinatorUrls` as well.
+
+### camel-report-maven-plugin - Java routes are read with the Java DSL parser
+
+The `validate` and `route-coverage` goals read Java routes with the Java DSL parser of camel-java-io instead of camel-route-parser (Roaster). XML routes are read as before. The parser reads every `configure()` method of a source file, including those of a route builder created inside a test, so `validate` can find and validate endpoints it did not see before. An endpoint uri that is only a method call, such as `from(inboxQueue())`, is not validated (it was validated as a property placeholder without a component before); with `logUnparseable=true` it is logged.
+
+### camel-jbang - the route-parser plugin is removed
+
+The `route-parser` plugin (`camel route-parser`) and its `camel-jbang-plugin-route-parser` artifact are removed. Use `camel cmd route-structure MyRoute.java` instead: it prints the structure of the routes of a Java source, read without compiling it, and of YAML and XML sources too. If you installed the plugin, remove it with `camel plugin delete route-parser`.
+
+### camel-wasm - the endpoint runs WASI command modules (Breaking change)
+
+The `wasm` endpoint now runs WASI Preview 1 command modules (the body is standard input, standard output becomes the body, the exit code and standard error are in `CamelWasmExitCode` and `CamelWasmStderr`) and no longer supports the custom `alloc`/`dealloc` and JSON message ABI. The URI path is now the module (`wasm:classpath:upper.wasm`); the function name and the `module` option are removed, and a header reaches the module only when listed in `environmentHeaders`. To migrate, turn the function into a program that reads standard input and writes standard output, built for `wasm32-wasip1` (Rust) or with `GOOS=wasip1 GOARCH=wasm` (Go). The `wasm` language is unchanged.
+
+The endpoint runs every exchange on a new instance of the module, so a module can no longer keep state from one message to the next. The 4.23 note that a failed call discards the Wasm instance therefore now only applies to the `wasm` expression.
+
+The following API of `camel-wasm` is removed or changed with the old ABI:
+
+-   `WasmComponent.getModule()` and `setModule(String)`, and `WasmConfiguration.getModule()` and `setModule(String)`: the module is the path of the endpoint URI, available as `WasmEndpoint.getModule()`.
+    
+-   The `functionName` path parameter of the endpoint: the third argument of the `WasmEndpoint` constructor is now the module.
+    
+-   `WasmSupport.deserialize(byte[], Exchange)`.
+    
+-   The constructor `WasmProducer(Endpoint, String, String)` is replaced by `WasmProducer(WasmEndpoint)`.
+    
+
+### camel-vertx-http - a header with several values is sent as several headers
+
+A message header whose value is a `java.util.Collection` or an object array (as the HTTP consumers map a request header that occurs more than once) was sent as one HTTP header with the `toString()` of the value, for example `[a, b]`. The producer now sends one HTTP header per value. A collection or an object array that is empty, or that holds only null values, now sends no header (an empty List was sent as the header value `[]`).
+
+Every other value is converted to one String and sent as one header as before: a String (also when it contains commas), a `byte[]` and the other primitive arrays, a `Map`, and a Vert.x `JsonObject` or `JsonArray` (sent as JSON). A route that needs the old single header can set the header to a String, for example with `String.valueOf(list)`.
+
+### camel-knative-http - a header with several values is sent as several headers
+
+A message header whose value is a `java.util.Collection` or an object array (as the consumer maps a request header that occurs more than once) is now sent as one HTTP header per value. The Knative HTTP producer sent it as one HTTP header with the `toString()` of the value, for example `[a, b]`, and the reply of the consumer sent only its last value. A collection or an object array that is empty, or that holds only null values, sends no header (the producer sent an empty List as the header value `[]`).
+
+Every other value is one header. A String is sent as before, also when it contains commas, and the reply still sends no header for a blank String. A `byte[]` is now converted to a String with the type converter (the producer sent its `toString()`, such as `[B@1dc9f5ad`, and the reply only its last byte as a number). The producer sends a `Map` and a Vert.x `JsonObject` or `JsonArray` as before, as their `toString()` (JSON for the Vert.x types). The reply now does the same: it sent only the last entry of a `Map` or `JsonObject` in the form `key=value`, and only the last element of a `JsonArray`.
+
+A route that needs the old single header of the producer can set the header to a String, for example with `String.valueOf(list)`.
+
+### camel-dapr - the saveBulk and executeTransaction state operations are sent
+
+The `saveBulk` and `executeTransaction` operations of `dapr:state` built their request but never sent it to Dapr, so nothing was stored and the exchange completed without an error. The requests are now sent, and the producer waits for the answer like the other state operations: the states are stored, and a request that Dapr rejects (or a sidecar that cannot be reached) fails the exchange.
+
+### camel-jira - the producers wait for the answer of Jira
+
+The `addComment`, `addIssueLink`, `addWorkLog`, `attach`, `deleteIssue`, `transitionIssue` and `watchers` producers (and `addIssue` for its watchers) sent their request without waiting for the answer, so the exchange continued before Jira had done the work, and a request that Jira rejected (for example no permission, or a transition that is not allowed) was not noticed. They now wait for the answer, as `addIssue` and `updateIssue` already did, and a rejected request fails the exchange with the `RestClientException` of the Jira client. Routes that relied on such failures being ignored must handle the exception, for example with `onException(RestClientException.class).handled(true)`.
+
+A producer that sends several requests can fail after some of them were done: `transitionIssue` can fail on its comment after the transition was made, `watchers` and `addIssue` can fail after some of the watchers were changed (`addIssue` sets the created issue as the message body before it adds the watchers), and a retry or redelivery repeats the earlier requests.
+
+### camel-twitter - twitter-search applies its query options again
+
+Since Camel 4.0 (the upgrade to Twitter4J 4.1, whose `Query` is immutable) the `twitter-search` endpoint sent only the keywords. The consumer ignored `filterOld` (default `true`), `lang`, `count` and the geolocation options, so it routed the same tweets again at every poll. The producer ignored `sinceId`, `lang`, `count` and the `CamelTwitterSinceId`, `CamelTwitterMaxId`, `CamelTwitterSearchLanguage` and `CamelTwitterCount` headers. The options are applied again: a poll returns only the tweets newer than the last one consumed, and a page has `count` tweets (default 5; Twitter’s own default of 15 applied before). Raise `count` and `numberOfPages` if a search can match more tweets than that between two polls. A consumer with `type=direct` returned nothing when keywords were given, and now runs the search at startup.
+
+### camel-atom - sortEntries sorts by the updated date and routes the oldest entry first
+
+With `sortEntries=true` the `atom` consumer sorted the entries of a feed by their published date and routed them from the newest to the oldest one. With the default idempotent strategy (which skips an entry that is not newer than the one routed before it) only some entries of a feed were routed, and the others were skipped.
+
+This is fixed. The entries are now sorted by their updated date (by the published date for an entry without an updated date), which is the date the idempotent strategy compares, and they are routed from the oldest to the newest one, as camel-rss does and as Camel 3.x did. Entries are no longer skipped because of the routing order, also when an older entry was updated after newer ones were published.
+
+Routes using `sortEntries=true` with `idempotent=false` get the entries in this order too: the entry that was updated first is routed first, where the entry that was published last was routed first before.
+
+### camel-aws2-s3 - a listed object that cannot be fetched is skipped
+
+When the consumer lists the bucket, a failure to get one of the listed objects (or to download its content) no longer fails the poll, as long as another object of that listing could be got: the object is skipped, the other listed objects are consumed in that poll, and the skipped object is tried again by a later poll. An object that no longer exists (for example deleted by another consumer after the listing) is skipped with a log line at `DEBUG`. Any other failure is given to the exception handler of the consumer, with the key in the message: by default that is a `WARN` with the stack trace, and with `bridgeErrorHandler=true` the route’s error handler gets it. This happens at every poll that lists an object that can never be read (for example archived, or access denied), until it can be read or is removed from the bucket. Such a poll is a successful poll, so it does not count for `backoffErrorThreshold`.
+
+The poll still fails, as before, when none of the listed objects could be got and at least one get failed with an error other than that the object no longer exists (for example expired credentials, no permission to get objects, throttling): the failure of the first object is then the failure of the poll, and `backoffErrorThreshold` applies. In both cases the objects are no longer kept in the `inProgressRepository`; before, the object (or a new object with the same key) was skipped by all later polls until the endpoint was restarted. With the `fileName` option, a failed get still fails the poll.
+
+### camel-aws2-kinesis - the consumer continues after the last record when a shard iterator expired
+
+When a cached shard iterator has expired (an iterator is valid for 5 minutes, so after a route was suspended for longer, or with a `delay` or back-off above 5 minutes), the consumer now continues after the last record it routed from that shard. Previously it requested a new iterator of the configured `iteratorType`: with `TRIM_HORIZON` (the default) it routed all the records of the shard again, with `LATEST` it skipped the records stored meanwhile.
+
+A shard created by a split or a merge while the consumer is running is now read from its first record, whatever the `iteratorType`. Previously, with `LATEST`, the records stored in the new shard before the consumer listed it were skipped. The shards that exist when the consumer starts are read from the configured `iteratorType`, as before.
+
+### camel-servlet and camel-jetty - gzip request body that arrives after the headers
+
+The servlet and Jetty consumers uncompressed a request body with `Content-Encoding: gzip` only when some of its bytes had already arrived when the consumer started to read it. When the client sent the body later than the headers (for example a client that sends `Expect: 100-continue`), the route got the compressed bytes. Such a body is now uncompressed like any other gzip request body. A route that uncompressed the body itself in that case must no longer do so. An empty body is passed on as before, and so is the body of an exchange with the `CamelSkipGzipEncoding` property. A request with `Content-Encoding: gzip` whose body is not gzip data now fails with a `ZipException` before the route is called (Jetty answers 500) also when the body arrives after the headers, where the route got the bytes as they were sent; it already failed in this way when the body had arrived. With `disableStreamCache=true` the consumer now waits for the first bytes (the GZIP header) of a gzip request body before it calls the route; with stream caching, the default, it already read the whole body before that. The same applies to every consumer that reads the request body with `DefaultHttpBinding.parseBody` of `camel-http-common`, such as the Spring Boot `platform-http` consumer with `useStreaming=true`.
+
+### camel-github2 - consumers and items of a poll that were not routed
+
+The `github2` consumers (`commit`, `event`, `pullRequest`, `pullRequestComment`, `tag`) remembered every item of a poll as consumed before routing it. Items that were not routed because the route was suspended during the poll were never routed. They are now routed by the first poll after the route is resumed.
+
+The `commit` consumer also lost the new commits of a poll in which the GitHub lookup of an author or a committer failed (for example a 404 for a deleted account, or a server error). Such a commit is now routed, and a WARN is logged for it. Its `CamelGitHubCommitAuthor` and `CamelGitHubCommitCommitter` headers then have the name that git recorded in the commit instead of the name of the GitHub profile, and are not set when the commit has no name either.
+
+### camel-netty-http - the request body read as an InputStream
+
+The body of a request received by the consumer is a `NettyChannelBufferStreamCache`. Its `read()` method now returns a byte as a value from 0 to 255, and -1 at the end of the body, as `java.io.InputStream` requires. Before, a byte from 0x80 was returned as a negative value (0xFF as -1, which a reader takes for the end of the body), and the method threw an `IndexOutOfBoundsException` at the end. `markSupported()` now returns `false` (`mark(int)` never did anything): a reader that needs mark support has to wrap the stream, for example in a `BufferedInputStream`. `reset()` goes back to the start of the body, as before.
+
+### camel-dropbox - search and get read every page of the result
+
+The `search` operation (producer and consumer) now returns every match that the service gives. Previously it returned only the first page of the matches (the Dropbox SDK asks for 100 matches per page), and the rest was dropped without any sign. A search with many matches now sends one request per page, for the consumer at each poll. When one of these requests fails, the operation fails and no match is returned, as before.
+
+The `get` operation on a folder (producer and consumer) now downloads every file of the folder. Previously it downloaded only the files of the first page of the folder listing. As before, the content of all the files is in the message body, so a large folder needs more memory than it did when only the first page was read.
+
+### camel-box - getEnterpriseEvents returns the events of every chunk
+
+The `getEnterpriseEvents` operation of the `event-logs` API now returns all the events between `after` and `before`. Previously it returned only the first chunk of the event log (at most 500 events), and the rest was dropped without any sign. A wide `after`/`before` window now returns every event in one list: that is one request per 500 events plus one that finds the end of the log, and more memory. Narrow the window when the event log is large.
+
+### camel-telegram - a failed send fails the exchange once
+
+When Telegram answers a message with an error status (for example `400` for an unknown chat), or with a body that cannot be read, the producer now fails the exchange once and the route stops there. Previously the route first continued after the producer as if the message had been sent, and then the exchange failed as well.
+
+The exception of the exchange is the one that `process()` of the producer threw before: a `RuntimeException` that wraps an `ExecutionException`, with the `RuntimeCamelException` (status and body of the answer) as its cause, or the `IOException` when the request got no answer. The producer still waits for the answer before it returns, so the order of the messages is the same. The steps after the producer now run on the calling thread, and no longer on a thread of the HTTP client.
+
+### camel-vertx-websocket - the client consumer makes one reconnect attempt at a time
+
+When the WebSocket of a consumer with `consumeAsClient=true` is closed, the consumer now makes one reconnect attempt at a time: while an attempt waits for the server (up to the connect timeout), the next runs of `reconnectInterval` are skipped, and `maxReconnectAttempts` counts these attempts one after the other. Previously every interval started another attempt, and when the server answered late each of them opened a WebSocket, so that every message was routed once per WebSocket. A consumer that is stopped no longer reconnects.
+
+### camel-core - a route from a route template has the template’s resource as its source
+
+A route created from a route template or a Kamelet now returns the resource with the route template from `Route.getSourceResource()` (it returned null). This is the resource its source location (`Route.getSourceLocation()`) was already in, so the debugger and message history consoles show the source code of these routes too.
+
+A route created from a `templatedRoute` also remembers the resource that declares the `templatedRoute` (`Route.getTemplatedRouteResource()`, the `TemplatedRouteSource` JMX attribute, and `templatedRouteSource` in the route dev console), and the route template id is available from `Route.getRouteTemplateId()`, the `RouteTemplateId` JMX attribute, and `routeTemplateId` in the route dev console.
+
+Code that took a null source resource to mean that a route was created from a route template should use `Route.isCreatedByRouteTemplate()` instead.

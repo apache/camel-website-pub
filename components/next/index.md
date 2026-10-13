@@ -39,7 +39,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 | [Stub](stub-component.md) | camel-stub | Stable | 2.10 | Stub out any physical endpoints while in development or testing. |
 | [Timer](timer-component.md) | camel-timer | Stable | 1.0 | Generate messages in specified intervals using java.util.Timer. |
 | [Validator](validator-component.md) | camel-validator | Stable | 1.1 | Validate the payload using XML Schema and JAXP Validation. |
-| [Wasm](wasm-component.md) | camel-wasm | Experimental | 4.4 | Invoke Wasm functions. |
+| [Wasm](wasm-component.md) | camel-wasm | Experimental | 4.4 | Run Wasm programs (WASI Preview 1 command modules) with the message body as standard input. |
 | [XSLT](xslt-component.md) | camel-xslt | Stable | 1.3 | Transforms XML payload using an XSLT template. |
 | [XSLT Saxon](xslt-saxon-component.md) | camel-xslt-saxon | Stable | 3.0 | Transform XML payloads using an XSLT template using Saxon. |
 

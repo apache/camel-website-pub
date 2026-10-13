@@ -278,6 +278,8 @@ If you do not wish to delete the entity bean when it has been processed (and whe
 
 If you would rather perform some update on the entity to mark it as processed (such as to exclude it from a future query), then you can annotate a method with `@Consumed` (org.apache.camel.component.jpa.Consumed). It will be invoked on your entity bean when the entity bean has been processed (and when routing is done).
 
+An entity bean is only deleted (or `@Consumed` invoked) when its exchange completed successfully. If the route marks the exchange rollback only (for example with `markRollbackOnly()`), the entity bean is not consumed and stays in the table, so the next poll consumes it again, as long as it still matches the query. With `transacted=false` the other entity beans of the poll are still consumed, and so is what a `@PreConsumed` method changed before routing: an entity bean that `@PreConsumed` moved out of the query is not polled again. With `transacted=true` the whole poll is rolled back, the changes of `@PreConsumed` included.
+
 You can use `@PreConsumed` (org.apache.camel.component.jpa.PreConsumed) which will be invoked on your entity bean before it has been processed (before routing).
 
 If you are consuming a lot of rows (100K+) and experience `OutOfMemory` problems, you should set the `maximumResults` to a sensible value.
