@@ -15,9 +15,27 @@ If your participants reach the same coordinator under different URLs, for exampl
 
 This also applies to the LRAs the service starts itself, which a nested saga route looks up again: when the coordinator returns LRA URLs under another base URL than `coordinatorUrl`, for example behind a proxy, add that base URL to `allowedCoordinatorUrls` as well.
 
+### camel-lra - warning for unsigned participant callbacks, and reserved saga option names
+
+The LRA saga service now logs a warning at startup when no `callbackSecret` is configured: the callbacks that the LRA coordinator sends to the participant endpoints are then not verified, so these endpoints must only be reachable by the coordinator. The Saga EIP documentation describes how to sign them.
+
+A saga option named like a parameter of the participant callback URLs, in any case (`Camel-Saga-Compensate`, `Camel-Saga-Complete`, `Camel-Saga-Signature` or `Camel-Saga-Lra`), now fails the creation of its route, with or without a callback secret. The value of such an option could not be read back from the callback before.
+
 ### camel-netty-http - the roles of a security constraint are matched by role name
 
 The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.
+
+### camel-telegram - webhook requests are verified with a secret token
+
+In webhook mode, Camel now registers the webhook with a secret token, which Telegram sends in the `X-Telegram-Bot-Api-Secret-Token` header of every webhook request, and rejects a webhook request that does not carry the token with HTTP 403. The token is the value of the new `webhookSecretToken` option or, when that option is not set, a value derived from the authorization token. A client that calls the webhook endpoint directly, for example in a test, must send the header too.
+
+When Camel registers the webhook at startup (`webhookAutoRegister=true`, the default), nothing needs to change: each upgraded instance registers the webhook with the token, and the instances that are not upgraded yet ignore the header.
+
+When the webhook is registered in another way, through the `WebhookRoutePolicy` or outside Camel, the registration made with the previous version has no secret token, and the upgraded instances reject every update until the webhook is registered again with it. Register the webhook again first, then upgrade the instances that receive the updates: instances of the previous version ignore the header. With the `WebhookRoutePolicy`, run the registration with the new version. Outside Camel, set `webhookSecretToken`, and pass the same value as the `secret_token` parameter of `setWebhook`.
+
+The default webhook path is a hash of the endpoint URI, so adding an option to the URI, such as `webhookSecretToken`, changes the path. When the webhook is not registered by Camel at startup, set `webhookPath` to keep the path that is registered.
+
+To restore the previous behaviour, set `webhookSecretTokenEnabled=false`: the webhook is then registered without a secret token, and webhook requests are not verified.
 
 ### camel-spring-ws - internal Camel headers are no longer written into SOAP headers
 

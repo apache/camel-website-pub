@@ -641,11 +641,12 @@ The camel.resilience4j supports 21 options, which are listed below.
 
 ### Camel Saga EIP (Long Running Actions) configurations
 
-The camel.lra supports 5 options, which are listed below.
+The camel.lra supports 6 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **camel.lra.allowedCoordinator​Urls** | Comma-separated URLs, including the context path, of further LRA coordinators whose LRAs may be joined, completed or compensated. By default, only an LRA hosted by the configured coordinator is accepted. Use it when participants reach the same coordinator under different URLs, for example with different host names. |  | String |
 | **camel.lra.coordinatorContext​Path** | The context-path for the LRA coordinator. Is default /lra-coordinator | /lra-coordinator | String |
 | **camel.lra.coordinatorUrl** | The URL for the LRA coordinator service that orchestrates the transactions |  | String |
 | **camel.lra.enabled** | To enable Saga LRA | false | boolean |

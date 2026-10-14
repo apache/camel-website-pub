@@ -26,6 +26,18 @@ When a route marks the exchange rollback only (for example with `markRollbackOnl
 
 A message that the route marks rollback only every time was removed before, and is now consumed again at every poll (JPA), or taken from the queue again at once, without a delay (transacted Hazelcast SEDA, as for a failed exchange). Handle such a message in the route instead, for example by moving it aside, rather than marking it rollback only every time.
 
+### camel-telegram - webhook requests are verified with a secret token
+
+In webhook mode, Camel now registers the webhook with a secret token, which Telegram sends in the `X-Telegram-Bot-Api-Secret-Token` header of every webhook request, and rejects a webhook request that does not carry the token with HTTP 403. The token is the value of the new `webhookSecretToken` option or, when that option is not set, a value derived from the authorization token. A client that calls the webhook endpoint directly, for example in a test, must send the header too.
+
+When Camel registers the webhook at startup (`webhookAutoRegister=true`, the default), nothing needs to change: each upgraded instance registers the webhook with the token, and the instances that are not upgraded yet ignore the header.
+
+When the webhook is registered in another way, through the `WebhookRoutePolicy` or outside Camel, the registration made with the previous version has no secret token, and the upgraded instances reject every update until the webhook is registered again with it. Register the webhook again first, then upgrade the instances that receive the updates: instances of the previous version ignore the header. With the `WebhookRoutePolicy`, run the registration with the new version. Outside Camel, set `webhookSecretToken`, and pass the same value as the `secret_token` parameter of `setWebhook`.
+
+The default webhook path is a hash of the endpoint URI, so adding an option to the URI, such as `webhookSecretToken`, changes the path. When the webhook is not registered by Camel at startup, set `webhookPath` to keep the path that is registered.
+
+To restore the previous behaviour, set `webhookSecretTokenEnabled=false`: the webhook is then registered without a secret token, and webhook requests are not verified.
+
 ### camel-hashicorp-vault - properties without engine use the `secret` engine
 
 A `hashicorp:` property without an engine, such as `{{hashicorp:mysecret}}` or `{{hashicorp:mysecret#field}}`, now reads the secret from the `secret` engine. Before, it read from the engine of the `hashicorp:` property resolved before it (or from a `null` engine), and `{{hashicorp:mysecret#field}}` always resolved to no value. Properties with an engine, such as `{{hashicorp:secret:mysecret#field}}`, are not affected.
@@ -34,6 +46,12 @@ A `hashicorp:` property without an engine and with a version, such as `{{hashico
 
 A `hashicorp:` property with a field of a secret that does not exist, such as `{{hashicorp:secret:missing#field}}`, now resolves to no value, as it already did without a field, so its default value or an optional placeholder (`{{?hashicorp:secret:missing#field}}`) applies. Before, without a default value, it failed with a `NullPointerException`.
 
+### camel-ical - each unmarshal parses with its own calendar builder
+
+The `ical` data format used one ical4j `CalendarBuilder` for all exchanges. Two exchanges that were unmarshalled at the same time could get the events of each other, or the calendar of the other exchange. Each unmarshal now uses its own builder.
+
+A builder also has its own time zone registry, so a `VTIMEZONE` of one calendar is no longer used for the calendars unmarshalled after it. A date with a `TZID` that is not a standard time zone and that its calendar does not define is now read as a local date-time without a zone (`getDate()` returns a `LocalDateTime`); before, it was read with the definition of an earlier message, if there was one. A calendar that defines a `TZID` an earlier message has defined differently is now read with its own definition.
+
 ### camel-lra - only an LRA hosted by the configured coordinator is joined
 
 The LRA saga service now joins, completes or compensates an LRA only when its URL is under the configured LRA coordinator (`coordinatorUrl` followed by `coordinatorContextPath`). A message whose `Long-Running-Action` header holds the URL of another coordinator now fails, instead of the saga service calling that URL.
@@ -41,6 +59,35 @@ The LRA saga service now joins, completes or compensates an LRA only when its UR
 If your participants reach the same coordinator under different URLs, for example with different host names, list the other coordinator URLs, including the context path, in the new `allowedCoordinatorUrls` option (`camel.lra.allowedCoordinatorUrls`).
 
 This also applies to the LRAs the service starts itself, which a nested saga route looks up again: when the coordinator returns LRA URLs under another base URL than `coordinatorUrl`, for example behind a proxy, add that base URL to `allowedCoordinatorUrls` as well.
+
+### camel-lra - warning for unsigned participant callbacks, and reserved saga option names
+
+The LRA saga service now logs a warning at startup when no `callbackSecret` is configured: the callbacks that the LRA coordinator sends to the participant endpoints are then not verified, so these endpoints must only be reachable by the coordinator. The Saga EIP documentation describes how to sign them.
+
+A saga option named like a parameter of the participant callback URLs, in any case (`Camel-Saga-Compensate`, `Camel-Saga-Complete`, `Camel-Saga-Signature` or `Camel-Saga-Lra`), now fails the creation of its route, with or without a callback secret. The value of such an option could not be read back from the callback before.
+
+### camel-openai, camel-ai-tool - AI events now use CamelEvent.Type.Ai
+
+The events fired by the AI components now share a common contract, `org.apache.camel.ai.AiEvent` (a `CamelEvent` of the new `CamelEvent.Type.Ai`), instead of each being a component-specific `CamelEvent.Type.Custom` event. Events that relate to a single exchange implement the exchange-backed subtype `AiEvent.ExchangeAiEvent` (the root `AiEvent` itself is not an `ExchangeEvent`). This lets an `EventNotifier` recognise AI activity — and route it to metrics or tracing — by type and by the `AiEvent` sub-interfaces, without depending on an AI component.
+
+The events shipped in 4.23.0 are affected:
+
+-   `camel-ai-tool`: `AiToolAuthorizationDeniedEvent` now implements `AiEvent.ToolCallDeniedEvent`;
+    
+-   `camel-openai`: `OpenAIAgenticLoopStartedEvent`, `OpenAIAgenticToolCallExecutedEvent` and `OpenAIAgenticLoopCompletedEvent` now implement `AiEvent.AgentLoopStartedEvent`, `AiEvent.ToolCallExecutedEvent` and `AiEvent.AgentLoopCompletedEvent`.
+    
+
+Their `getType()` now returns `CamelEvent.Type.Ai` rather than `CamelEvent.Type.Custom`, and they are now ``CamelEvent.ExchangeEvent`s (via `AiEvent.ExchangeAiEvent``). An `EventNotifier` that recognised these events by `event.getType() == CamelEvent.Type.Custom` must match on `CamelEvent.Type.Ai` instead, or — preferably — on `event instanceof org.apache.camel.ai.AiEvent` (or one of its sub-interfaces), which no longer requires a dependency on the AI component. The concrete event classes and all their accessors are unchanged, so code that references them directly is not affected.
+
+Because the shipped AI events are now ``ExchangeEvent`s (via `AiEvent.ExchangeAiEvent``), a notifier that filters on `instanceof ExchangeEvent` now also receives them. AI events are their own category: a new `ignoreAiEvents` flag (`EventNotifier.setIgnoreAiEvents(boolean)`, default `false`) opts a notifier out, and `ignoreExchangeEvents` does **not** drop AI events (so an AI-observability notifier can keep `ignoreExchangeEvents=true` for performance). Camel’s own exchange-oriented notifiers (the debugger, the dev-console event ring, the micrometer and OpenTelemetry metrics exchange notifiers) set `ignoreAiEvents=true` so AI events do not reach them; a custom exchange-focused notifier that should not see AI events should do the same.
+
+### camel-oauth
+
+`OAuthBearerTokenProcessor` no longer creates or updates the OAuth session, and no longer sets the `camel.oauth.session` cookie nor the `CamelOAuthSessionId` header: a bearer token authenticates the request that carries it, and nothing else. The authenticated `UserProfile` is available in the `CamelOAuthUserProfile` exchange property (`OAuth.CAMEL_OAUTH_USER_PROFILE`). A route that read the profile from the OAuth session after `OAuthBearerTokenProcessor` must read it from that exchange property instead.
+
+When the message comes from platform-http (on Vert.x or on Spring Boot), from a servlet based HTTP consumer (camel-servlet, camel-jetty) or from camel-netty-http, the bearer token and the session cookie are now read from the `Authorization` and `Cookie` headers of the HTTP request only. A query or form parameter of the same name, which these consumers also map into the message headers, is no longer used for them, and neither is an `Authorization` or `Cookie` message header that the route sets itself. For example `.setHeader("Authorization", simple("Bearer ${header.X-Forwarded-Access-Token}"))` before `OAuthBearerTokenProcessor` now results in a 401 response. A route that takes the token from elsewhere can validate it with `OAuthHelper.validateOAuthToken` from camel-support instead.
+
+For any other message, such as one from camel-undertow, the processors keep reading the message headers, but leave out a value that also appears in the query string of the request.
 
 ### camel-report-maven-plugin - Java routes are read with the Java DSL parser
 
@@ -156,3 +203,7 @@ A route created from a route template or a Kamelet now returns the resource with
 A route created from a `templatedRoute` also remembers the resource that declares the `templatedRoute` (`Route.getTemplatedRouteResource()`, the `TemplatedRouteSource` JMX attribute, and `templatedRouteSource` in the route dev console), and the route template id is available from `Route.getRouteTemplateId()`, the `RouteTemplateId` JMX attribute, and `routeTemplateId` in the route dev console.
 
 Code that took a null source resource to mean that a route was created from a route template should use `Route.isCreatedByRouteTemplate()` instead.
+
+### camel-aws2-ddb - aws2-ddbstream consumer and a suspended route
+
+When a route is suspended (`RouteController.suspendRoute`, also when a route policy calls it, or `CamelContext.suspend()`) while the `aws2-ddbstream` consumer routes the records of a poll, the consumer stops after the record that is being routed. The other records of that poll (up to `maxResultsPerRequest`, default 100) were skipped when the route was resumed. They are now routed after the resume. A consumer that is suspended directly (`consumer.suspend()`) routes all the records of its poll and was not affected.

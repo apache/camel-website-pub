@@ -31,6 +31,9 @@ Deprecated: Use service type instead.
 | `service.type` | `github.com/apache/camel-k/v2/pkg/apis/camel/v1/trait.ServiceType` | The type of service to be used, either 'ClusterIP', 'NodePort' or 'LoadBalancer'. |
 | `service.annotations` | `map[string]string` | The annotations added to the Service object. |
 | `service.labels` | `map[string]string` | The labels added to the Service object. |
+| `service.networkPolicyEnabled` | `bool` | Enables the NetworkPolicy managed by the Service trait. Defaults to false. When enabled, at least one of the namespace or pod selectors must be configured. |
+| `service.networkPolicyNamespaceSelector` | `map[string]string` | Labels used to restrict the source namespaces allowed by the NetworkPolicy. |
+| `service.networkPolicyPodSelector` | `map[string]string` | Labels used to restrict the source pods allowed by the NetworkPolicy. |
 | `service.ports` | `[]string` | List of container ports available in the container to expose (syntax: <port-name>;<port-number>;<container-port-number>\[;<port-protocol\]). When omitted, `port-protocol` (admitted values `TCP`, `UDP` or `SCTP`) is `TCP`. Don’t use this for the primary http managed port (which is managed by container trait). Don’t use in Knative based environments. |
 > **Note**
 > the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
@@ -47,4 +50,18 @@ Deprecated: Use service type instead.
     
     ```console
     $ kamel run MyUDPServer.java -t container.ports=udp;95;UDP -t service.ports=udp;95;9095;UDP
+    ```
+    
+-   Restrict a Service with an ingress NetworkPolicy. The example allows requests only from pods labeled app: my-client in namespaces labeled kubernetes.io/metadata.name: backend:
+    
+    ```yaml
+    spec:
+      traits:
+        service:
+          enabled: true
+          network-policy-enabled: true
+          network-policy-namespace-selector:
+            kubernetes.io/metadata.name: backend
+          network-policy-pod-selector:
+            app: my-client
     ```

@@ -150,7 +150,7 @@ With the following _path_ and _query_ parameters:
 | **httpMethodRestrict** (consumer) | Used to only allow consuming if the HttpMethod matches, such as GET/POST/PUT etc. Multiple methods can be specified separated by comma. |  | String |
 | **logException** (consumer) | If enabled and an Exchange failed processing on the consumer side the exception’s stack trace will be logged when the exception stack trace is not sent in the response’s body. | false | boolean |
 | **matchOnUriPrefix** (consumer) | Whether or not the consumer should try to find a target consumer by matching the URI prefix if no exact match is found. | false | boolean |
-| **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side the response’s body won’t contain the exception’s stack trace. | false | boolean |
+| **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side the response’s body won’t contain the exception’s stack trace. | true | boolean |
 | **responseBufferSize** (consumer) | To use a custom buffer size on the jakarta.servlet.ServletResponse. |  | Integer |
 | **sendDateHeader** (consumer) | If the option is true, jetty server will send the date header to the client which sends the request. NOTE please make sure there is no any other camel-jetty endpoint is share the same port, otherwise this option may not work as expected. | false | boolean |
 | **sendServerVersion** (consumer) | If the option is true, jetty will send the server header with the jetty version information to the client which sends the request. NOTE please make sure there is no any other camel-jetty endpoint is share the same port, otherwise this option may not work as expected. | true | boolean |

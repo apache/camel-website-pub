@@ -4889,6 +4889,12 @@ Deprecated: Use service type instead.
 map\[string\]string | The annotations added to the Service object. |
 | `labels`  
 map\[string\]string | The labels added to the Service object. |
+| `networkPolicyEnabled`  
+bool | Enables the NetworkPolicy managed by the Service trait. Defaults to false. When enabled, at least one of the namespace or pod selectors must be configured. |
+| `networkPolicyNamespaceSelector`  
+map\[string\]string | Labels used to restrict the source namespaces allowed by the NetworkPolicy. |
+| `networkPolicyPodSelector`  
+map\[string\]string | Labels used to restrict the source pods allowed by the NetworkPolicy. |
 | `ports`  
 \[\]string | List of container ports available in the container to expose (syntax: <port-name>;<port-number>;<container-port-number>\[;<port-protocol\]). When omitted, `port-protocol` (admitted values `TCP`, `UDP` or `SCTP`) is `TCP`. Don’t use this for the primary http managed port (which is managed by container trait). Don’t use in Knative based environments. |
 

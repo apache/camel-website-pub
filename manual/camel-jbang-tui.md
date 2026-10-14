@@ -48,7 +48,7 @@ See [Camel TUI Getting Started](camel-jbang-tui-getting-started.md) for each way
 
 ## Tabs Overview
 
-The TUI organizes information into tabs. Press number keys **1** through **0** to jump directly to any tab, or use **Tab** / **Shift+Tab** to cycle.
+The TUI organizes information into tabs. Press number keys **1** through **0** to jump directly to any tab, or **Shift+F2** to go to a tab by name.
 
   
 | Key | Tab | What It Shows |
@@ -109,15 +109,15 @@ Two panels can be opened on top of any tab: **F6** opens an [embedded shell](cam
 | Key | Action |
 | --- | --- |
 | **1** - **0** | Jump to tab by number |
-| **Tab** / **Shift+Tab** | Next / previous tab |
+| **Shift+F2** | Go to a tab by name |
 | **F1** / **?** | Context-sensitive help (toggle) |
-| **F2** | Actions menu |
+| **F2** | Actions menu (screenshots and recordings are under **Screen…​**) |
 | **F3** | Switch between integrations (when multiple running) |
 | **Ctrl+F** | Browse the selected integration’s source files (the Overview tab also has plain **f**) |
+| **Ctrl+L** | Pin the log below the other tabs; press again to change its height, until it is unpinned |
 | **F6** / **Shift+F6** | Toggle the embedded shell panel / cycle its height |
 | **F8** / **Shift+F8** | Toggle the AI prompt panel / cycle its height |
 | **F10** | Run menu (run, stop, restart, kill) |
-| **Shift+F5** | Take screenshot |
 | **Ctrl+C** / **Q** / **F2** → Quit | Quit |
 | **Esc** | Close popup / go back / return to Overview |
 

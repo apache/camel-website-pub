@@ -263,6 +263,11 @@ The following event types are available (corresponding to `org.apache.camel.spi.
 -   `ServiceStopFailure`
     
 
+### AI Events
+
+-   `Ai` (events fired by Camel AI components, such as tool calls and agentic loops; see `org.apache.camel.ai.AiEvent`)
+    
+
 ## Wildcard Subscriptions
 
 Instead of listing each event type individually, you can use wildcard patterns with a `*` suffix to match all event types that start with a given prefix.

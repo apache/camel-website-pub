@@ -228,6 +228,8 @@ Enum values:
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 | **authorizationToken** (security) | **Required** The authorization token for using the bot (ask the BotFather). |  | String |
+| **webhookSecretToken** (security) | The secret token that Telegram sends in the X-Telegram-Bot-Api-Secret-Token header of every webhook request. In webhook mode, Camel registers the webhook with this token, and rejects a webhook request that does not carry it with HTTP 403. Only the characters A-Z, a-z, 0-9, \_ and - are allowed, up to 256 characters. When not set, a token derived from the authorization token is used. Set it when the webhook is registered outside Camel, and register the webhook with the same secret\_token. |  | String |
+| **webhookSecretTokenEnabled** (security) | Whether, in webhook mode, Camel registers the webhook with a secret token and rejects a webhook request that does not carry it. Set it to false to restore the behaviour of earlier versions, where the webhook was registered without a secret token and webhook requests were not verified. | true | boolean |
 
 ## Message Headers
 
@@ -642,3 +644,9 @@ from("webhook:telegram:bots?authorizationToken=123456789:insertYourAuthorization
 Some endpoints will be exposed by your application and Telegram will be configured to send messages to them. You need to ensure that your server is exposed to the internet and to pass the right value of the **camel.component.webhook.configuration.webhook-external-url** property.
 
 Refer to the **camel-webhook** component documentation for instructions on how to set it.
+
+Camel registers the webhook with a secret token, which Telegram sends back in the `X-Telegram-Bot-Api-Secret-Token` header of every webhook request. A webhook request that does not carry the token is rejected with HTTP 403, and does not reach the route. By default, the token is derived from the authorization token, so it stays the same across restarts and replicas. If the webhook is registered outside Camel, set the `webhookSecretToken` option, and pass the same value as the `secret_token` parameter of the `setWebhook` method of the Telegram Bot API.
+
+The default webhook path is a hash of the endpoint URI, so adding an option to the URI, such as `webhookSecretToken`, changes the path. When the webhook is registered outside Camel, set the path with the `webhookPath` option of the **camel-webhook** component.
+
+Setting `webhookSecretTokenEnabled=false` registers the webhook without a secret token, and accepts webhook requests without verifying them, as earlier versions did.

@@ -443,13 +443,13 @@ The following headers are set after the agentic loop completes:
 
 The exchange property `CamelOpenAIAgenticTrace` holds a `List<AgenticIterationTrace>` with per-iteration breakdown: iteration number, tool calls (name, truncated arguments and results, duration, success flag), token usage for that model call, and iteration duration. Downstream processors in the same route can inspect this property for debugging, auditing, or routing decisions without waiting for external observability backends.
 
-Custom `CamelEvent` instances are also emitted during the agentic loop for EventNotifier listeners:
+`org.apache.camel.ai.AiEvent` instances (a `CamelEvent` of type `Ai`) are also emitted during the agentic loop for EventNotifier listeners, so a notifier can recognise them — and route them to metrics or tracing — by their shared interface, without depending on this component:
 
--   `OpenAIAgenticLoopStartedEvent` — tool count and max iterations
+-   `OpenAIAgenticLoopStartedEvent` (an `AiEvent.AgentLoopStartedEvent`) — tool count and max iterations
     
--   `OpenAIAgenticToolCallExecutedEvent` — tool name, duration, success per tool call
+-   `OpenAIAgenticToolCallExecutedEvent` (an `AiEvent.ToolCallExecutedEvent`) — tool name, duration, success per tool call
     
--   `OpenAIAgenticLoopCompletedEvent` — iteration count, cumulative tokens, stop reason
+-   `OpenAIAgenticLoopCompletedEvent` (an `AiEvent.AgentLoopCompletedEvent`) — iteration count, cumulative tokens, stop reason
     
 
 These events provide a lightweight integration point for future OpenTelemetry GenAI instrumentation.
