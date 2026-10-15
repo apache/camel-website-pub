@@ -82,6 +82,8 @@ Properties are resolved from `camel.oauth.<profileName>.*`:
 | `camel.oauth.<profile>.cached-tokens-default-expiry-seconds` | No | Default token expiry if `expires_in` is not in the response. Default: `3600`. |
 | `camel.oauth.<profile>.cached-tokens-expiration-margin-seconds` | No | Safety margin subtracted from token expiry to refresh early. Default: `5`. |
 
+When token caching is enabled, profiles with the same token endpoint, client ID, client secret and requested scope can reuse a token across resolver instances. Different credentials or scopes use separate cache entries. Null, empty and whitespace-only scopes all omit the scope parameter and share the same cache identity; other scope values are matched exactly. Setting `cache-tokens=false` requests a fresh token on each resolution.
+
 #### Example: Multiple Identity Providers
 
 ```properties

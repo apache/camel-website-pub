@@ -26,6 +26,8 @@ ollama pull qwen3.6:35b-a3b
 camel tui
 ```
 
+On a Mac with Apple Silicon and Ollama 0.40 or later, pull the MLX build `qwen3.6:35b-mlx` instead: the same model, with faster prompt processing and answers on the M chips.
+
 Then press **F8**. How to install Ollama, which models work well (at least 14B, with tool calling; a mixture-of-experts model such as `qwen3.6:35b-a3b` is the fastest) and how the context window is chosen are described in [AI Providers and Local Models](camel-jbang-ai-providers.html#_ollama), shared with `camel ask` and the other AI commands.
 
 ## Using an OpenAI-compatible local server
@@ -109,6 +111,6 @@ The Ollama tab (under More, in the **AI** group) shows how the model served by a
 
 Two kinds of requests appear in the log. Questions asked in the AI panel with Ollama as the provider come with the timings Ollama reports for each request (prompt evaluation, generation, model load, total). Calls made by Camel routes through `camel-langchain4j-chat`, `camel-openai` or `camel-spring-ai-chat` appear when the integration runs with GenAI observability (`--observe`, or `--dep=camel:ai-observability`), tagged with the route id; Camel records tokens and duration for those, not the phase split.
 
-The live figures, the context panel and the host panel need the model runner on the same machine: Ollama starts a `llama-server` process per loaded model and the tab reads its slot state a few times a second. Against a remote or containerised Ollama the tab keeps the model, per-request and session data and says which panels are unavailable.
+The live figures, the context panel and the host panel need the model runner on the same machine: Ollama starts a `llama-server` process per loaded model and the tab reads its slot state a few times a second. Against a remote or containerised Ollama the tab keeps the model, per-request and session data and says which panels are unavailable. A model with safetensors weights that Ollama runs on MLX (Apple silicon) is served by Ollama’s own runner instead, which has no slot state: the throughput and context panels then show the figures of the last request.
 
 Press **r** to reset the request log and the session totals, **F5** to refresh immediately. The same data is available to AI agents through the `tui_get_ollama` MCP tool. For what the figures mean for the AI panel and which knobs to turn, see [Working with a local Ollama model](#_working_with_a_local_ollama_model).

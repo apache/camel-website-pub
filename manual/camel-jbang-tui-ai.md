@@ -30,6 +30,8 @@ A question can span several lines: **Ctrl+N** starts a new line (terminals deliv
 
 The same guidance, together with the provider that is currently detected, is available inside the TUI via **F2** → _AI & MCP_ → _Setup AI_. Use **F2** → _Settings_ to pin a provider, model or base URL (`camel.tui.ai.provider`, `camel.tui.ai.model`, `camel.tui.ai.url`) regardless of the environment. `camel.tui.ai.acp.command` sets the command line of the custom ACP agent (`acp:custom`).
 
+To set the panel apart from the tab under it, give it a theme of its own: **Panel Theme** in **F2** → _Settings_, or `--panel-theme=<name>` on the command line, draws the AI and shell panels in another of the themes, such as a Light panel on the Dark theme (see [Panel theme](camel-jbang-tui-settings.html#_panel_theme)).
+
 ![A local Ollama model explains why an order failed](_images/jbang/camel-tui-ai-panel-answer.png)
 
 To run the model on your own machine, with Ollama or an OpenAI-compatible server such as LM Studio, see [Camel TUI Local Models](camel-jbang-tui-local-models.md): which models work well, the tool set they get, what a question costs and the Ollama tab.
@@ -64,7 +66,7 @@ Press **Tab** to complete a command name. After `/model` **Tab** completes the m
 
 ## AI project overview
 
-A route diagram of many routes becomes spaghetti quickly, above all when the routes have no `description`. `/overview` asks the model to explain the project of the selected integration (or the folder the TUI runs in): an overview of what it does, the business capabilities its routes implement, and a description of each route that has none. The facts come from the route sources, the same ones `camel overview` prints (see [Project overview](camel-jbang-ai.html#_project_overview)): routes, entry points, how routes connect, external systems and findings. The model gets them with excerpts of the routes (values of passwords, tokens and other sensitive options masked) in one request without tools, so a local model does it as well as a hosted one. It runs in the background and the answer appears in the panel.
+A route diagram of many routes becomes spaghetti quickly, above all when the routes have no `description`. `/overview` asks the model to explain the project of the selected integration (or the folder the TUI runs in): an overview of what it does, the business capabilities its routes implement, and a description of each route that has none. The folder the TUI runs in is explained only when it is a project: not your home folder, nor a folder that holds several projects, such as a workspace with a checkout of each repository. There the panel says so, and selecting an integration explains its project. The facts come from the route sources, the same ones `camel overview` prints (see [Project overview](camel-jbang-ai.html#_project_overview)): routes, entry points, how routes connect, external systems and findings. The model gets them with excerpts of the routes (values of passwords, tokens and other sensitive options masked) in one request without tools, so a local model does it as well as a hosted one. It runs in the background and the answer appears in the panel.
 
 The answer is saved in `camel-summary.md` in the project directory, a Markdown file you can read, review and commit. The TUI treats it as the project’s generated README: `/overview show`, or **s** in the Diagram tab, opens it rendered in the document viewer (**t** lists its sections), at the routes from the topology and at the Architecture section from the architecture view. The title says when the routes changed since the AI wrote its part. A project without a summary gets the facts derived from its sources, with a note on how to add the AI part. In the Overview tab a project with a summary shows the 📖 mark, as one with a README does. Its AI-assisted sections are marked `✦ AI-assisted` and kept apart from the sections derived from the sources, and the file records the model, the date and a fingerprint of the routes, so the TUI knows when the routes changed afterwards: `/overview` then explains them again.
 
@@ -81,6 +83,23 @@ Every answer ends with a byline saying what the question cost: the time it took,
 What the model says is checked like what it writes. A file goes through the validator before `camel_write_file` writes it; the answer shown in the chat is what you copy, so its simple expressions are checked against the catalog too: the `${…​}` placeholders in the text and in Java or XML code blocks, and the `simple:` values and log messages of YAML blocks. A small model tends to put the operator inside the placeholder (`${header.user ?: 'Guest'}` instead of `${header.user} ?: 'Guest'`). When the check finds such an expression the panel sends the answer back to the model once, with what is wrong and the rule, and shows the corrected answer with `1 correction` in the byline. When the model does not fix it the answer is shown as it is with a **Simple check** line under it naming the expression and the error, and the AI log has the exchange. Placeholders that are not simple (a Maven `${camel-version}`, a shell variable) are left alone.
 
 Press **Ctrl+U** while the AI panel is open to toggle the AI Usage view. It shows token consumption from the embedded AI prompt (**TUI ask**) and from LLM calls made by the monitored integration (**integration**), the latter taken from OpenTelemetry GenAI spans when observability is enabled on the integration. The **Tokens per question** chart has one bar per question you asked, so a question that needed several tool calls shows as a single bar. The summary line splits the session time into **AI time** (waiting for the model) and **Tool time** (running the TUI tools the model called, with the number of calls), the summary line gives the average time per question (and per request in brackets), the model table has an **AVG/REQ** column with the average per request for that model, and the **Time per question** chart next to the token chart shows the two side by side for each question, so you can see whether a slow answer was the model or the tools.
+
+## What asks first
+
+Camel TUI is a developer tool: the model works on your own machine, with your own integrations, and runs the TUI’s tools without asking, so it can show and tell at once (see [Developer tools](security-model.html#_developer_tools) in the security model). It reads any tab, selects integrations and routes, starts and stops routes and infrastructure, sends test messages to the integration’s endpoints and evaluates expressions. The few calls that reach beyond the integration, may destroy data or run code ask you first, in a dialog that shows the call:
+
+-   writing a file: the diff dialog, or the live replay in the Source editor (see `/write` above);
+    
+-   sending a message to an endpoint the integration does not have, such as a file, a command, an HTTP service or another topic; a message to a route, to an endpoint the integration uses, or to an internal endpoint goes ahead. Internal is what the Camel catalog marks so: a component that stays inside the integration (`direct:`, `seda:`, `log:`, `mock:`, `stub:` and the like), with no option or feature that reaches a file or the network, even one seldom used;
+    
+-   sending a file from outside the project folder as the message body (a body that is `file:` and a path), wherever the message goes; a file in the project, such as `file:data/order.json`, goes ahead;
+    
+-   SQL other than a single `SELECT`, `SHOW` or `DESCRIBE`, and updating a row;
+    
+-   evaluating an expression in a language that runs code, such as Groovy, Java, JavaScript or Python.
+    
+
+**Enter** runs the call and **Esc** rejects it; the model is told that you rejected it. An HTTP request (`tui_http_request`) reaches only the integration’s own server on `localhost`. While a tape records, or `--record` plays one, nothing asks. The same applies to a coding agent driving the panel and to an MCP client (see [AI agents](camel-jbang-tui-ai-agents.md)).
 
 ## AI log
 

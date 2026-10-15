@@ -117,6 +117,8 @@ When the developer console is enabled (for example with `camel run --console`), 
 
 Access topology mode with `?mode=topology`. For both modes, request `?format=png` to get the legacy inline PNG image instead, or use the `ascii` / `unicode` themes for plain-text output.
 
+Add `?errors=true` to draw the error handling as well: in route mode the `onException` clauses of each route in a frame below its steps, and in topology mode the routes reached only on error in a frame below the others. See [Error Handling in a Route Diagram](#_error_handling_in_a_route_diagram) and [Error Handling in the Topology](#_error_handling_in_the_topology).
+
 ## Color Themes
 
 The following built-in themes are available:
@@ -219,6 +221,105 @@ route1
 │        log:a         │
 └──────────────────────┘
 ```
+
+## Error Handling in the Topology
+
+A topology diagram draws the happy path: how routes call each other. The error handling, the routes reached only while a failure is handled (such as the target of a dead letter channel or an `onException`), can be drawn in a frame of its own below the routes, with where the failures of each come from and how they are handled. There are no arrows into the frame: with a global error handler every route would have one. The camel-jbang monitor draws the same frame with `x`.
+
+```bash
+camel cmd route-topology error-handling.camel.yaml --theme=unicode --errors
+```
+
+```text
+╭┄ Error handling ┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄╮
+┆                                                                 ┆
+┆   ┌──────────────────────┐                                      ┆
+┆   │        parked        │                                      ┆
+┆   │   (direct:parked)    │                                      ┆
+┆   └──────────────────────┘                                      ┆
+┆   ◂ checkout: onException, handled · dead letter, handled       ┆
+┆   ⚠ own failures: onException, handled · dead letter, handled   ┆
+┆                                                                 ┆
+╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄╯
+```
+
+_handled_ means the message ends there, _continued_ that the route goes on, and _not handled_ that the failure goes on to the caller. _own failures_ says the route uses the error handling that sends to it, so a failure in it comes back to it. The error paths come from Camel 4.23 or newer.
+
+With `--external`, an external system that only the routes in the frame use, such as the folder or the queue where the failed messages end up, is drawn in the frame too, below its route, with the arrow from it.
+
+_Java-only: a topology with its error handling in a frame_
+
+```java
+List<TopologyNodeInfo> nodes = TopologyHelper.parseNodes(topologyJson);
+List<TopologyEdgeInfo> calls = TopologyHelper.parseEdges(topologyJson);
+List<TopologyEdgeInfo> errors = TopologyHelper.parseEdges(topologyJson, true).stream()
+        .filter(TopologyEdgeInfo::isErrorPath).toList();
+
+TopologyLayoutEngine engine = new TopologyLayoutEngine();
+TopologyErrorFrame.Placed placed
+        = TopologyErrorFrame.layout(engine, nodes, calls, errors, TopologyAsciiRenderer.ROW_HEIGHT);
+String text = new TopologyAsciiRenderer(engine.getNodeWidth(), true)
+        .renderDiagram(placed.layout(), placed.frame());
+```
+
+For a PNG image, lay out with `TopologyImageRenderer.rowHeight(fontSize)` and pass the frame to `TopologyImageRenderer.renderImage`.
+
+## Error Handling in a Route Diagram
+
+A route diagram draws the steps of a route. Its `onException` clauses (a global one is copied into every route) are not steps: with `--errors` they are drawn in a frame of their own below the route, with where the failures of the route go and where it is reached on error from. Without it only the steps of the route are drawn. A highlighted path (see [Path Highlighting](#_path_highlighting)) that steps into an `onException` clause draws the frame too, so the clause it took shows. The developer console takes `?errors=true`, and the web component the `errors` attribute.
+
+```bash
+camel cmd route-diagram error-handling.camel.yaml --theme=unicode --errors --filter=parked
+```
+
+The frame below the steps of the `parked` route:
+
+```text
+╭╌ Error handling ╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╮
+╎ ⚠ own failures: onException, handled · dead letter, handled                               ╎
+╎ ◂ reached when checkout handles a failure: onException, handled · dead letter, handled    ╎
+╎                                                                                           ╎
+╎                                                                                           ╎
+╎ ┌──────────────────────┐                                                                  ╎
+╎ │  onException[[java.  │                                                                  ╎
+╎ │        lang.         │                                                                  ╎
+╎ │ IllegalStateExcep... │                                                                  ╎
+╎ └──────────────────────┘                                                                  ╎
+╎             │                                                                             ╎
+╎             │                                                                             ╎
+╎             │                                                                             ╎
+╎             ▼                                                                             ╎
+╎ ┌──────────────────────┐                                                                  ╎
+╎ │   log[Payment for    │                                                                  ╎
+╎ │   ${body[orderId]}   │                                                                  ╎
+╎ │ declined:${except... │                                                                  ╎
+╎ └──────────────────────┘                                                                  ╎
+╎             │                                                                             ╎
+╎             │                                                                             ╎
+╎             │                                                                             ╎
+╎             │                                                                             ╎
+╎             ▼                                                                             ╎
+╎ ┌──────────────────────┐                                                                  ╎
+╎ │  to[direct:parked]   │                                                                  ╎
+╎ └──────────────────────┘                                                                  ╎
+╎                                                                                           ╎
+╎                                                                                           ╎
+╰╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╯
+```
+
+`▸ on failure to` names where the failures of the route go (the line in `checkout` reads `▸ on failure to parked`), `◂ reached when` the route whose failure handling sends to it, and `⚠ own failures` that the route uses the error handling that sends to it, so a failure in it comes back to it.
+
+_Java-only: a route with its error handling in a frame_
+
+```java
+RouteErrorFrame.Split split = RouteErrorFrame.split(route);
+LayoutRoute lr = engine.layoutRoute(split.happy(), RouteDiagramLayoutEngine.PADDING);
+RouteErrorFrame.add(engine, lr, split.blocks(),
+        RouteErrorFrame.lines(route.routeId, errorPaths, TopologyErrorFrame.LineStyle.UNICODE),
+        RouteDiagramAsciiRenderer.ROW_HEIGHT);
+```
+
+The error paths come from the topology (`TopologyErrorFrame.paths`); without them the frame holds the `onException` clauses only. The renderers draw the frame of each `LayoutRoute` that has one; for a PNG image, lay out with `RouteDiagramRenderer.rowHeight(fontSize)`.
 
 ## Path Highlighting
 
@@ -323,6 +424,8 @@ The `src` attribute must point to an endpoint returning the `route-topology` dev
 | `src` | URL to fetch the route-structure JSON from (required) | — |
 | `refresh` | Polling interval in milliseconds; `0` disables polling | `0` |
 | `filter` | Route ID filter, forwarded as `?filter=` query parameter | (all routes) |
+| `errors` | `true` draws the `onException` clauses of each route in a frame below its steps; otherwise only the steps of the route are drawn | `false` |
+| `topology` | URL to fetch the route-topology JSON from: with `errors`, the frame says where the failures of the route go and where it is reached on error from | — |
 
 ### Topology Diagram Attributes
 
@@ -334,6 +437,7 @@ The `src` attribute must point to an endpoint returning the `route-topology` dev
 | `external` | Include external endpoints as boundary nodes | `false` |
 | `interlink` | Collapse shared endpoints into intermediate nodes | `false` |
 | `metric` | Include exchange counters from route metrics | `false` |
+| `errors` | `true` draws the routes reached only on error in a frame below the others, with where their failures come from and the external systems only they use | `false` |
 
 ### Theming
 

@@ -45,6 +45,12 @@ Camel 4.22.2 uses Bouncy Castle 1.86, which removes the legacy implementations o
 
 Code that creates key material itself has to follow the same move: the `CMCEParameterSpec`, `FrodoParameterSpec`, `KyberParameterSpec`, `DilithiumParameterSpec`, `SPHINCSPlusParameterSpec` and `PicnicParameterSpec` classes of `org.bouncycastle.pqc.jcajce.spec` no longer exist. Use `CMCEParameterSpec`, `FrodoKEMParameterSpec`, `MLKEMParameterSpec`, `MLDSAParameterSpec` and `SLHDSAParameterSpec` of `org.bouncycastle.jcajce.spec` with the `BC` provider instead.
 
+### camel-pqc - a configured KeyGenerator or KeyAgreement is used by one exchange at a time
+
+When Camel creates the instance itself, the KEM operations of the `pqc` component (including the hybrid KEM operations) and the PQC data format now use a new `KeyGenerator`, and for the hybrid operations a new `KeyAgreement`, for every operation. A configured instance is still shared: a registry bean, which is autowired into every `pqc` endpoint, a `KeyGenerator` set on the data format, or the default material used when no key material is configured. Each operation now holds its lock from `init` until the result is returned, so concurrent exchanges that use it run one at a time.
+
+A started PQC data format no longer keeps a `KeyGenerator` of its own: `getKeyGenerator()` returns only a configured instance and, unless one is configured, the `CamelPQCKemAlgorithm` header now selects the KEM algorithm of each operation.
+
 ### camel-netty-http - the roles of a security constraint are matched by role name
 
 The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.
@@ -78,6 +84,14 @@ Custom implicit converters that intentionally select the document element as the
 The `maxDecompressedSize` option of the Zip File and Tar File data formats (and of `ZipSplitter`) was not enforced when set to 2 GiB (`Integer.MAX_VALUE` bytes) or more, because the byte count behind the check wrapped around. The limit is now enforced for any value: unmarshalling an entry that decompresses to more than the configured `maxDecompressedSize` fails with an `IOException`, as documented. The default limit (1 GiB) is unchanged, and `-1` still disables the limit.
 
 `IOHelper.copy(InputStream, OutputStream, int, boolean, long)` now returns `Integer.MAX_VALUE`, instead of a negative number, when it copies more than `Integer.MAX_VALUE` bytes.
+
+### camel-oauth - the bearer token processor is stateless and reads the HTTP request headers
+
+`OAuthBearerTokenProcessor` no longer creates or updates the OAuth session, and no longer sets the `camel.oauth.session` cookie nor the `CamelOAuthSessionId` header: a bearer token authenticates the request that carries it, and nothing else. The authenticated `UserProfile` is available in the `CamelOAuthUserProfile` exchange property (`OAuth.CAMEL_OAUTH_USER_PROFILE`). A route that read the profile from the OAuth session after `OAuthBearerTokenProcessor` must read it from that exchange property instead.
+
+When the message comes from platform-http (on Vert.x or on Spring Boot), from a servlet based HTTP consumer (camel-servlet, camel-jetty) or from camel-netty-http, the bearer token and the session cookie are now read from the `Authorization` and `Cookie` headers of the HTTP request only. A query or form parameter of the same name, which these consumers also map into the message headers, is no longer used for them, and neither is an `Authorization` or `Cookie` message header that the route sets itself. For example `.setHeader("Authorization", simple("Bearer ${header.X-Forwarded-Access-Token}"))` before `OAuthBearerTokenProcessor` now results in a 401 response. A route that takes the token from elsewhere can validate it with `OAuthHelper.validateOAuthToken` from camel-support instead.
+
+For any other message, such as one from camel-undertow, the processors keep reading the message headers, but leave out a value that also appears in the query string of the request.
 
 ### camel-oauth - the post login url is confined to the configured redirect uri origin
 

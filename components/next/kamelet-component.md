@@ -69,6 +69,7 @@ The Kamelet component supports the following options which are listed below.
 | **block** (producer) | If sending a message to a kamelet endpoint which has no active consumer, then we can tell the producer to block and wait for the consumer to become active. | true | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **timeout** (producer) | The timeout value to use if block is enabled. | 30000 | long |
+| **advancedOptions** (advanced) | Whether to forward extra URI parameters to the endpoint wrapped by the Kamelet. When enabled, parameters that are not Kamelet template properties or reserved Kamelet options are appended to the wrapped source or sink endpoint. Disabled by default. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **noErrorHandler** (advanced) | Whether kamelets should use error handling or not. By default, the Kamelet uses the same error handler as from the calling route. This means that if the calling route has error handling that performs retries, or routing to a dead letter channel, then the kamelet route will use this also. This can be turned off by setting this option to true. If off then the kamelet route is not using error handling, and any exception thrown will for source kamelets be logged by the consumer, and the sink/action kamelets will fail processing. | false | boolean |
 | **routeTemplateLoaderListener** (advanced) | **Autowired** To plugin a custom listener for when the Kamelet component is loading Kamelets from external resources. |  | RouteTemplateLoaderListener |
@@ -115,6 +116,7 @@ Enum values:
 | **failIfNoConsumers** (producer (advanced)) | Whether the producer should fail by throwing an exception, when sending to a kamelet endpoint with no active consumers. | true | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **timeout** (producer (advanced)) | The timeout value to use if block is enabled. | 30000 | long |
+| **advancedOptions** (advanced) | Whether to forward extra URI parameters to the endpoint wrapped by the Kamelet. When enabled, parameters that are not Kamelet template properties or reserved Kamelet options are appended to the wrapped source or sink endpoint. Disabled by default. | false | boolean |
 | **location** (advanced) | Location of the Kamelet to use which can be specified as a resource from file system, classpath etc. The location cannot use wildcards, and must refer to a file including extension, for example file:/etc/foo-kamelet.xml. |  | String |
 | **noErrorHandler** (advanced) | Whether kamelets should use error handling or not. By default, the Kamelet uses the same error handler as from the calling route. This means that if the calling route has error handling that performs retries, or routing to a dead letter channel, then the kamelet route will use this also. This can be turned off by setting this option to true. If off then the kamelet route is not using error handling, and any exception thrown will for source kamelets be logged by the consumer, and the sink/action kamelets will fail processing. | false | boolean |
 > **Note**
@@ -242,6 +244,55 @@ The usage of this Kamelet into a Camel route is going to be the same as any othe
 
 > **Warning**
 > beware of any potential circular reference you may introduce when using chain of Kamelets, in which case, the runtime will likely be idle consuming a high amount of resources.
+
+### Advanced component endpoint options
+
+Kamelets expose a defined set of parameters, but the underlying Camel component may support additional endpoint options. You can forward those options by enabling `advancedOptions` (disabled by default).
+
+When enabled, extra URI parameters that are not Kamelet template properties and not reserved Kamelet options (`routeId`, `templateId`, `location`, `advancedOptions`, and the other kamelet endpoint options) are appended to the endpoint wrapped by the Kamelet.
+
+Enable the feature on the component, or on a single endpoint. The endpoint setting overrides the component setting.
+
+```properties
+camel.component.kamelet.advanced-options=true
+```
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("kamelet:aws-s3-source?advancedOptions=true&bucketNameOrArn=x&maxConnections=100")
+    .to("log:info");
+```
+
+```yaml
+- route:
+    from:
+      uri: kamelet:aws-s3-source
+      parameters:
+        advancedOptions: true
+        bucketNameOrArn: x
+        maxConnections: 100
+      steps:
+        - to:
+            uri: log:info
+```
+
+In this example, `bucketNameOrArn` is a template property of the Kamelet and stays a template parameter. `maxConnections=100` is forwarded to the wrapped `aws2-s3` endpoint. If that endpoint URI already contains the same option, the advanced option overrides its existing value.
+
+Source Kamelets forward extra options to their input endpoint. Sink and action Kamelets forward extra options to the Kamelet’s main `to()` endpoint.
+
+The options are applied only when the Kamelet has exactly one eligible top-level, statically-defined `to()` destination. Kamelet endpoints and auxiliary destinations such as `wireTap()` are excluded. Nested branch destinations, such as those inside `choice()` or `doTry()`, are not considered eligible main destinations.
+
+If an action Kamelet has no wrapped endpoint, or the Kamelet contains multiple eligible top-level destinations, or it uses a dynamic destination such as `toD()`, `enrich()`, or `pollEnrich()`, startup fails with an explanatory exception when advanced options are supplied. In these cases, configure the options directly on the intended endpoint URI.
+
+Property placeholders and RAW expressions in endpoint URIs are preserved when advanced options are applied. For example, `kafka:{{topic}}` or `aws2-s3:{{bucket}}?secretKey=RAW({{secret}})` remain intact.
+
+The advanced options are forwarded as they are written in the Kamelet URI. Percent-encoded values, `RAW(…​)` values and repeated parameters reach the wrapped endpoint the same way as when the options are set on that endpoint directly.
+
+When `advancedOptions` is disabled or omitted, the Kamelet retains its existing configuration behavior.
 
 ## Examples
 

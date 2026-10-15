@@ -70,7 +70,7 @@ The **More** menu (key **0**) opens a popup with tabs organized into groups:
     
 -   **Observability** — Circuit Breaker, Health, JFR, Metrics, Network Services, Exchange Events, Recovery Tasks, OpenTelemetry Spans
     
--   **AI** — Semantic (definitions, expert contracts, relationships and sample evaluation), Ollama (listed when an Ollama server is detected)
+-   **AI** — Semantic (definitions, expert contracts, relationships, sample evaluation, Audit and Monitoring), Ollama (listed when an Ollama server is detected)
     
 -   **Data** — JDBC DataSource, Kafka, Secrets, SQL Query, SQL Trace
     
@@ -137,6 +137,7 @@ See the [keyboard shortcuts](camel-jbang-tui-source-editor.html#_keyboard_shortc
 | `--web-port` | Port for the web terminal server. | `8090` |
 | `--refresh` | Screen refresh interval in milliseconds. | `100` |
 | `--theme` | Color theme for this session (e.g., `dark`, `tokyo-night`, `dracula`). See [Theme](camel-jbang-tui-settings.html#_theme) for the full list of 21 themes. Overrides the persisted `camel.tui.theme` preference when set. |  |
+| `--panel-theme` | Color theme of the shell (**F6**) and AI (**F8**) panels for this session, or `same` for the main theme. See [Panel Theme](camel-jbang-tui-settings.html#_panel_theme). Overrides the persisted `camel.tui.panelTheme` preference when set. |  |
 | `--record` | Play a `.tape` file in the TUI and record it to an Asciinema `.cast` file. See [Scripted Recording](camel-jbang-tui-recording.html#_scripted_recording) for the tape commands. |  |
 | `--record-size` | Size of the recorded terminal for `--record`, as `<cols>x<rows>`. | `200x50` |
 | `--record-fps` | Frames per second captured by `--record`. | `10` |

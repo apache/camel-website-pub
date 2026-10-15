@@ -49,6 +49,8 @@ Use the **F2** actions menu and select **Start Tape Recording** to start recordi
 
 An AI agent connected over MCP records a tape of what it does with `tui_tape_start` and `tui_tape_stop`.
 
+While a tape records, and while `--record` plays one, actions that ask first go ahead at once: quitting, stopping an integration, a file an AI writes, a tool an ACP agent runs, deleting or converting a file. The model or the tape does everything itself, and the keys a tape plays, like those an MCP client sends, never answer a dialog that asks the user to confirm. Leaving the editor with unsaved changes still asks, so save before leaving it.
+
 ## Scripted Recording
 
 Use the `--record` flag to play a `.tape` file in the TUI and record what happens on screen:
@@ -139,7 +141,7 @@ A few tips for a tape that reads well:
     
 
 > **Tip**
-> Give each demo its own theme, so the GIFs on a page do not all look the same. `--theme` sets the theme for that run only and leaves your saved theme as it is, as in `camel tui orders --theme=tokyo-night --record=demo.tape`, and a `Theme "nord"` line in the tape switches it during the recording. Light themes such as `catppuccin-latte` stand out between dark ones. See [Theme](camel-jbang-tui-settings.html#_theme) for the list.
+> Give each demo its own theme, so the GIFs on a page do not all look the same. `--theme` sets the theme for that run only and leaves your saved theme as it is, as in `camel tui orders --theme=tokyo-night --record=demo.tape`, and a `Theme "nord"` line in the tape switches it during the recording. Light themes such as `catppuccin-latte` stand out between dark ones. See [Theme](camel-jbang-tui-settings.html#_theme) for the list. In a demo of the AI or shell panel, `--panel-theme` gives that panel a theme of its own for the run, such as `--panel-theme=light` on a dark theme, so the viewer sees where the panel starts.
 
 > **Tip**
 > An AI agent can write and run the tape itself: the commands for the TUI are the same as the [MCP tools](camel-jbang-tui-ai-agents.md) of the TUI (`tui_show_caption`, `tui_locate` with `tui_draw_shape`, `tui_navigate`, `tui_action` and `tui_set_theme`), and `tui_get_screen` tells what text to `Wait` for. Run the tape, read the `Tape:` warnings, fix the tape, and run it again.

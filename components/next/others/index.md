@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 103 in 67 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 104 in 68 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -92,6 +92,7 @@ Number of Miscellaneous Components: 103 in 67 JAR artifacts (3 deprecated)
 | [Salesforce - Reports API](salesforce-reports.md) |  |  |  |  |
 | [Salesforce - REST API](salesforce-rest-api.md) |  |  |  |  |
 | [Salesforce - Streaming and Pub/Sub](salesforce-streaming.md) |  |  |  |  |
+| [Semantic OpenAI](semantic-openai.md) | camel-semantic-openai | Preview | 4.24 | Assess text and images with typed OpenAI Decisions through Semantic experts |
 | [Shiro](shiro.md) | camel-shiro | Stable | 2.5 | Security using Shiro |
 | [Spring Cloud Config](spring-cloud-config.md) | camel-spring-cloud-config | Stable | 4.12 | Camel Spring Cloud Config support |
 | [Spring Main](spring-main.md) | camel-spring-main | Stable | 3.2 | Camel Spring Main support |

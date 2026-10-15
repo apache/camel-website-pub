@@ -103,6 +103,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **args** (producer) | The command line arguments passed to the module, separated by whitespace. Use double quotes around an argument that contains whitespace. The module receives the file name of the module (for example upper.wasm, without scheme, directories or query) as argument zero, followed by these arguments. The arguments are fixed by the route: they cannot be set from message headers. |  | String |
+| **compile** (producer) | Whether to compile the module to JVM bytecode, with the runtime compiler of Endive, instead of interpreting it. The module is compiled once per endpoint, when the first producer of the endpoint is initialized (with the route, or at the first message with lazyStartProducer), which takes time for a large module; every exchange then runs the compiled code, which is much faster than the interpreter. Stopping and starting the route does not compile the module again. All other options work the same way. The compiler generates classes at run time, so this option cannot be used in a GraalVM native image. | false | boolean |
 | **environment** (producer) | Environment variables for the module, for example environment.LOG\_LEVEL=debug. The module sees no environment variables other than these and the headers listed in environmentHeaders; the environment of the JVM is never passed on. This is a multi-value option with prefix: environment. |  | Map |
 | **environmentHeaders** (producer) | A comma separated allow-list of message headers whose values are passed to the module as environment variables of the same name. Headers usually come from whoever sent the message, so no header reaches the module unless it is listed here. A listed header that is not on the message is left unset. Camel matches header names ignoring case, so listing TENANT also passes a header named tenant, as the variable TENANT. A name may not be listed here and also be configured with environment. |  | String |
 | **failOnNonZeroExit** (producer) | Whether a module that exits with a non-zero exit code fails the exchange with a WasmExitCodeException. No new body is set then, but a body that is a stream has been read by the module: it can be read again when handling the failure if stream caching is on (the default). When false, the standard output of the module replaces the message body whatever the exit code, which is available in the CamelWasmExitCode header. | true | boolean |
@@ -162,7 +163,7 @@ Built with `GOOS=wasip1 GOARCH=wasm go build -o upper.wasm`.
 
 For every exchange the component:
 
-1.  creates a new instance of the module (the module is parsed once, when the producer starts),
+1.  creates a new instance of the module (the module is loaded once per endpoint, when its first producer is initialized),
     
 2.  runs its `_start` function with the message body as standard input, the arguments configured with `args` and the environment variables configured with `environment` and `environmentHeaders`,
     
@@ -249,7 +250,40 @@ So keep stream caching on when an `onException` or a dead letter channel needs t
 
 ### Performance
 
-Creating an instance per exchange is cheap for a small module, but the start-up code of the program itself runs for every message. Programs with a large runtime, such as standard Go programs, spend most of each run initializing that runtime; TinyGo, Rust and C programs start much faster. Modules are interpreted.
+Creating an instance per exchange is cheap for a small module, but the start-up code of the program itself runs for every message. Programs with a large runtime, such as standard Go programs, spend most of each run initializing that runtime; TinyGo, Rust and C programs start much faster.
+
+By default, a module is interpreted. With `compile=true` the module is translated to JVM bytecode with the [runtime compiler](https://endive.run/docs/execution/runtime-compiler) of Endive, and every exchange runs the compiled code on its own instance. Everything else stays the same: the headers, the errors and the limits, including `timeout` (a compiled module that never ends is interrupted like an interpreted one).
+
+```java
+from("direct:in")
+    .to("wasm:classpath:upper.wasm?compile=true");
+```
+
+Compiled code is much faster than the interpreter, most of all for modules that compute a lot per message. How much depends on the module, the message and the machine, so measure with your own module.
+
+The module is compiled once per endpoint, when the first producer of the endpoint is initialized:
+
+-   for a `to`, that is when the route is started for the first time, or at the first message when the endpoint has `lazyStartProducer=true`. Compiling takes time, which grows with the size of the module;
+    
+-   stopping and starting the route does not load or compile the module again: the endpoint keeps the compiled module for as long as it exists. The generated classes are only released when the endpoint itself is no longer used, that is when it is removed from the Camel context or the context is stopped, not when the route stops;
+    
+-   a route reload in development mode (`camel.main.routesReloadEnabled`) by default removes all routes and endpoints, so the module is read and compiled again;
+    
+-   with a dynamic endpoint (`toD`), every different URI is an endpoint of its own with its own compiled copy of the module, so many different URIs with `compile=true` make the JVM metaspace grow. Prefer a static URI and pass the values that change in headers (`environmentHeaders`) or in the body.
+    
+
+Keep the default when:
+
+-   start-up time matters more than throughput: compiling is done before the first message is processed, and compiled code is slower until the JVM has optimized it;
+    
+-   the application runs as a GraalVM native image: the compiler generates classes while the application runs, which a native image cannot load.
+    
+
+A function of the module that is too large for a JVM method (more than 64 KB of bytecode) is not compiled: it is interpreted, the rest of the module is compiled, and the component logs this once per endpoint at `WARN`. A module that the compiler cannot translate at all fails when the first producer of the endpoint is initialized, with an exception that names the module.
+
+The compiler is in the `run.endive:compiler` artifact, which `camel-wasm` depends on. If it was excluded from the classpath, an endpoint with `compile=true` fails as well, with an exception that names the missing artifact.
+
+Endive also has a [build-time compiler](https://endive.run/docs/execution/build-time-compiler), the `run.endive:endive-compiler-maven-plugin` Maven plugin, which translates a module to classes when the application is built, so that nothing is compiled when it runs. The `wasm` endpoint does not use such classes: it loads the module from its location, and interprets it or compiles it as described above.
 
 ## Examples
 

@@ -19,6 +19,29 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 </dependency>
 ```
 
+## Decisions
+
+`openai:decisions` (also `llm:decisions`) accepts a native `com.openai.models.decisions.DecisionCreateParams` body and returns a `com.openai.models.decisions.Decision` body. It uses the endpoint’s managed OpenAI client, including credentials, base URL, TLS, proxy, timeout and retry settings. Decisions does not initialize configured MCP servers or route tools. The model is taken from the `DecisionCreateParams` body; the endpoint `model` option is not applied by this producer. The Semantic adapter instead builds its request using the endpoint’s configured `model`.
+
+The producer emits GenAI observations with operation name `decisions`, request and response models, and input/output token counts when the provider returns usage. Failures are recorded through the shared GenAI error handling. Direct `OpenAIEndpoint.decide()` calls, including the Semantic adapter, do not emit these observations because they have no Exchange.
+
+```java
+var request = DecisionCreateParams.builder()
+    .model("gpt-6-luna")
+    .input("The service is unavailable for every customer")
+    .addQuestion(DecisionCreateParams.Question.Predicate.builder()
+        .name("urgent").instructions("Does this require immediate attention?").build())
+    .build();
+var response = template.requestBody("openai:decisions", request, Decision.class);
+double probability = response.answers().get(0).asPredicate().probability();
+```
+
+Use a model and API endpoint that implement Decisions. Inputs are text or native ordered text/image messages; images use inline PNG, JPEG, GIF or WebP base64 data URLs. Other input modalities and hosted image URLs are rejected by this integration. Requests contain 1–200 questions and at most 128 images. Responses are validated against the complete request before returning any result. OpenAI predicate probabilities have no built-in Boolean threshold.
+
+Refusal raises `OpenAIDecisionRefusalException`, invalid provider output raises `OpenAIDecisionResponseException`, and transport/API/client-start failures raise `OpenAIDecisionServiceException`. No failure is converted into a decision value.
+
+For named Semantic evaluations, typed Boolean/Choice/Score mapping, and body image input, add [camel-semantic-openai](others/semantic-openai.md). The OpenAI component itself has no dependency on `camel-semantic`. See the [Decisions guide](https://developers.openai.com/api/docs/guides/decisions) for the provider contract.
+
 ## URI Format
 
 ```none
@@ -33,6 +56,8 @@ The `openai:` scheme is a supported alias (`openai:operation[?options]`) for exi
 Supported operations:
 
 -   `chat-completion` - Generate chat completions using language models
+    
+-   `decisions` - Native typed predicate, choice and rubric assessments of text and images
     
 -   `responses` - Call the OpenAI Responses API (hosted tools, server-side conversation state; non-streaming)
     
@@ -148,11 +173,13 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (common) | 
-**Required** The operation to perform: 'chat-completion', 'responses', 'responses-retrieve', 'responses-cancel', 'batch', 'batch-retrieve', 'batch-cancel', 'batch-results', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', 'image-edit', or 'webhook' (a consumer).
+**Required** The operation to perform: 'chat-completion', 'decisions', 'responses', 'responses-retrieve', 'responses-cancel', 'batch', 'batch-retrieve', 'batch-cancel', 'batch-results', 'embeddings', 'tool-execution', 'audio-transcription', 'audio-translation', 'audio-speech', 'moderation', 'image-generation', 'image-edit', or 'webhook' (a consumer).
 
 Enum values:
 
 -   chat-completion
+    
+-   decisions
     
 -   responses
     
@@ -482,7 +509,7 @@ Enum values:
 | **mcpServer** (common) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdiossestreamableHttp, (Note that sse is deprecated) mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth), mcpServer..toolNames= (optional include list to restrict which tools are registered from this server). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **mcpTimeout** (common) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
 | **mcpToolRefresh** (common) | Refresh the advertised tool list when an MCP server notifies that its tools changed. Set to false to keep the tool list fixed to what was listed when the endpoint started, for deployments that require a deterministic set of tools. | true | boolean |
-| **model** (common) | The model to use for chat completion. |  | String |
+| **model** (common) | The model to use for the selected operation. |  | String |
 | **moderationModel** (common) | The model to use for moderation. | omni-moderation-latest | String |
 | **outputClass** (common) | Fully qualified class name for structured output using response format. |  | String |
 | **parallelToolExecution** (common) | Execute the tool calls returned by the model in a single response concurrently instead of sequentially. Tool calls in the same batch are independent by design, so this reduces the latency of a batch to that of its slowest tool. Results are always fed back to the model in the original tool call order. Note that with toolExecutionErrorStrategy=failExchange the sibling tool calls already dispatched complete before the exchange fails. | false | boolean |

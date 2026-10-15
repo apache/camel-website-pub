@@ -116,7 +116,7 @@ The Mail component supports the following options which are listed below.
 | **from** (producer) | The from email address. | camel@localhost | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **replyTo** (producer) | The Reply-To recipients (the receivers of the response mail). Separate multiple email addresses with a comma. |  | String |
-| **subject** (producer) | The Subject of the message being sent. Note: Setting the subject in the header takes precedence over this option. |  | String |
+| **subject** (producer) | The Subject of the message being sent. The Subject message header is ignored unless useHeaderSubject=true, in which case it overrides this option. |  | String |
 | **to** (producer) | Sets the destination email address. Separate multiple email addresses with comma. |  | String |
 | **useHeaderFrom** (producer) | Whether message headers From and Sender override the sender pre-configured in the endpoint URI. Defaults to false. Set to true to let message headers From and Sender override the endpoint URI sender. | false | boolean |
 | **useHeaderRecipients** (producer) | Whether message headers To, CC, and BCC override the recipients pre-configured in the endpoint URI. Defaults to false. Set to true to let message headers override the endpoint URI recipients. | false | boolean |
@@ -212,7 +212,7 @@ Enum values:
 | **cc** (producer) | Sets the CC email address. Separate multiple email addresses with comma. |  | String |
 | **from** (producer) | The from email address. | camel@localhost | String |
 | **replyTo** (producer) | The Reply-To recipients (the receivers of the response mail). Separate multiple email addresses with a comma. |  | String |
-| **subject** (producer) | The Subject of the message being sent. Note: Setting the subject in the header takes precedence over this option. |  | String |
+| **subject** (producer) | The Subject of the message being sent. The Subject message header is ignored unless useHeaderSubject=true, in which case it overrides this option. |  | String |
 | **to** (producer) | Sets the destination email address. Separate multiple email addresses with comma. |  | String |
 | **useHeaderFrom** (producer) | Whether message headers From and Sender override the sender pre-configured in the endpoint URI. Defaults to false. Set to true to let message headers From and Sender override the endpoint URI sender. | false | boolean |
 | **useHeaderRecipients** (producer) | Whether message headers To, CC, and BCC override the recipients pre-configured in the endpoint URI. Defaults to false. Set to true to let message headers override the endpoint URI recipients. | false | boolean |
@@ -421,7 +421,7 @@ Camel uses the message exchange’s IN body as the [MimeMessage](http://java.sun
 
 Camel copies all of the exchange’s IN headers to the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) headers.
 
-The subject of the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) can be configured using a header property on the IN message. The code below demonstrates this:
+The subject of the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) can be configured using a header property on the IN message. The `Subject` header is only used when the `useHeaderSubject=true` option is enabled on the endpoint (default `false`); otherwise the header is ignored and the `subject` endpoint option is used. The code below demonstrates this:
 
 -   Java
     
@@ -431,7 +431,7 @@ The subject of the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mai
     
 
 ```java
-from("direct:a").setHeader("subject", constant(subject)).to("smtp://james2@localhost");
+from("direct:a").setHeader("subject", constant(subject)).to("smtp://james2@localhost?useHeaderSubject=true");
 ```
 
 ```xml
@@ -440,7 +440,7 @@ from("direct:a").setHeader("subject", constant(subject)).to("smtp://james2@local
   <setHeader name="subject">
     <constant>some subject</constant>
   </setHeader>
-  <to uri="smtp://james2@localhost"/>
+  <to uri="smtp://james2@localhost?useHeaderSubject=true"/>
 </route>
 ```
 
@@ -451,12 +451,16 @@ from("direct:a").setHeader("subject", constant(subject)).to("smtp://james2@local
       steps:
         - setHeader:
             name: subject
-            constant: "some subject"
+            expression:
+              constant:
+                expression: "some subject"
         - to:
             uri: smtp://james2@localhost
+            parameters:
+              useHeaderSubject: true
 ```
 
-The same applies for other MimeMessage headers such as recipients, so you can use a header property as `To`:
+The same applies for other MimeMessage headers such as recipients, so you can use a header property as `To`. The `To`/`CC`/`BCC`, `From` and `Subject` headers are only honoured when `useHeaderRecipients=true`, `useHeaderFrom=true` and `useHeaderSubject=true` respectively are enabled on the endpoint (all default to `false`, see the `useHeader*` options table below):
 
 _Java-only: ProducerTemplate API with mail headers_
 
@@ -469,16 +473,19 @@ headers.put("CamelFileName", "fileOne");
 headers.put("org.apache.camel.test", "value");
 
 String body = "Hello Claus.\nYes it does.\n\nRegards James.";
-template.sendBodyAndHeaders("smtp://davsclaus@apache.org", body, headers);
+template.sendBodyAndHeaders("smtp://davsclaus@apache.org?useHeaderRecipients=true&useHeaderFrom=true&useHeaderSubject=true",
+        body, headers);
 ```
 
 When using the MailProducer to send the mail to server, you should be able to get the message id of the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) with the key `CamelMailMessageId` from the Camel message header.
 
-### Headers take precedence over pre-configured recipients
+### Recipient headers and pre-configured recipients
 
-The recipients specified in the message headers always take precedence over recipients pre-configured in the endpoint URI. The idea is that if you provide any recipients in the message headers, that is what you get. The recipients pre-configured in the endpoint URI are treated as a fallback.
+By default (`useHeaderRecipients=false`, the default since Camel 4.21) the `To`, `CC` and `BCC` message headers are ignored and the mail is sent to the recipients pre-configured in the endpoint URI.
 
-In the sample code below, the email message is sent to `davsclaus@apache.org`, because it takes precedence over the pre-configured recipient, `info@mycompany.com`. Any `CC` and `BCC` settings in the endpoint URI are also ignored, and those recipients will not receive any mail. The choice between headers and pre-configured settings is all or nothing: the mail component _either_ takes the recipients exclusively from the headers or exclusively from the pre-configured settings. It is not possible to mix and match headers and pre-configured settings.
+When `useHeaderRecipients=true` is set, the recipients specified in the message headers take precedence over recipients pre-configured in the endpoint URI. The idea is that if you provide any recipients in the message headers, that is what you get. The recipients pre-configured in the endpoint URI are treated as a fallback.
+
+In the sample code below, the endpoint enables `useHeaderRecipients=true`, so the email message is sent to `davsclaus@apache.org`, because it takes precedence over the pre-configured recipient, `info@mycompany.com`. Without `useHeaderRecipients=true` the `to` header would be ignored and the mail sent to `info@mycompany.com`. Any `CC` and `BCC` settings in the endpoint URI are also ignored, and those recipients will not receive any mail. The choice between headers and pre-configured settings is all or nothing: the mail component _either_ takes the recipients exclusively from the headers or exclusively from the pre-configured settings. It is not possible to mix and match headers and pre-configured settings.
 
 _Java-only: ProducerTemplate API showing header override of pre-configured recipient_
 
@@ -486,12 +493,12 @@ _Java-only: ProducerTemplate API showing header override of pre-configured recip
 Map<String, Object> headers = new HashMap<String, Object>();
 headers.put("to", "davsclaus@apache.org");
 
-template.sendBodyAndHeaders("smtp://admin@localhost?to=info@mycompany.com", "Hello World", headers);
+template.sendBodyAndHeaders("smtp://admin@localhost?to=info@mycompany.com&useHeaderRecipients=true", "Hello World", headers);
 ```
 
-#### Opting out of header overrides (trust-boundary hardening)
+#### Letting message headers override the endpoint configuration
 
-For routes where message headers originate from an untrusted source (for example messages bridged from an HTTP endpoint, a JMS queue, or a Kafka topic), allowing inbound headers to override recipients, sender, subject, or reply-to addresses can enable an attacker to redirect mail, intercept replies, forge the sender address, or inject arbitrary subjects. Four opt-in `@UriParam` options let you lock the endpoint configuration so it cannot be overridden by message headers:
+By default the recipients, sender, subject and reply-to address configured on the endpoint cannot be overridden by message headers. Four opt-in `@UriParam` options let a route allow message headers to override them:
 
   
 | Option | Default | Effect when set to `true` |
@@ -501,9 +508,11 @@ For routes where message headers originate from an untrusted source (for example
 | `useHeaderSubject` | `false` | Message Subject header can override the endpoint URI subject. |
 | `useHeaderReplyTo` | `false` | Message Reply-To header can override the endpoint URI replyTo. |
 
-All four default to `false`. Set to `true` to let message headers override the endpoint configuration.
+All four default to `false` since Camel 4.21. Set an option to `true` to let the matching message headers override the endpoint configuration.
 
-Example:
+Only enable the options a route needs, and only when the headers come from a trusted source. For routes where message headers originate from an untrusted source (for example messages bridged from an HTTP endpoint, a JMS queue, or a Kafka topic), allowing inbound headers to override recipients, sender, subject, or reply-to addresses can enable an attacker to redirect mail, intercept replies, forge the sender address, or inject arbitrary subjects. If such headers may reach the mail endpoint, leave the options disabled or remove the headers before sending.
+
+In the example below the route computes the recipients and the subject itself, so it enables `useHeaderRecipients` and `useHeaderSubject`, while the sender and reply-to address stay fixed to the endpoint configuration:
 
 -   Java
     
@@ -513,11 +522,11 @@ Example:
     
 
 ```java
-.to("smtp://relay@mailhost?to=safe@mycompany.com&from=noreply@mycompany.com&useHeaderRecipients=false&useHeaderFrom=false&useHeaderReplyTo=false");
+.to("smtp://relay@mailhost?to=safe@mycompany.com&from=noreply@mycompany.com&useHeaderRecipients=true&useHeaderSubject=true");
 ```
 
 ```xml
-<to uri="smtp://relay@mailhost?to=safe@mycompany.com&amp;from=noreply@mycompany.com&amp;useHeaderRecipients=false&amp;useHeaderFrom=false&amp;useHeaderReplyTo=false"/>
+<to uri="smtp://relay@mailhost?to=safe@mycompany.com&amp;from=noreply@mycompany.com&amp;useHeaderRecipients=true&amp;useHeaderSubject=true"/>
 ```
 
 ```yaml
@@ -530,9 +539,8 @@ Example:
             parameters:
               to: "safe@mycompany.com"
               from: "noreply@mycompany.com"
-              useHeaderRecipients: false
-              useHeaderFrom: false
-              useHeaderReplyTo: false
+              useHeaderRecipients: true
+              useHeaderSubject: true
 ```
 
 > **Note**

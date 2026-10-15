@@ -1,4 +1,4 @@
-# Stop
+# Throw Exception
 
 How can I throw an exception
 
@@ -8,7 +8,7 @@ Use a special processor to throw an exception.
 
 ## Options
 
-The Stop eip supports the following options which are listed below.
+The Throw Exception eip supports the following options which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -16,10 +16,13 @@ The Stop eip supports the following options which are listed below.
 | **note** | The note for this node. |  | String |
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
+| **message** | The message text for the exception to be thrown. Supports simple language expressions. |  | String |
+| **exceptionType** | The fully qualified class name of the exception to throw. Used together with message. |  | String |
+| **ref** | Reference to an existing exception instance to lookup from the registry and throw. |  | String |
 
 ## Exchange properties
 
-The Stop eip has no exchange properties.
+The Throw Exception eip has no exchange properties.
 
 ## Using Throw Exception
 

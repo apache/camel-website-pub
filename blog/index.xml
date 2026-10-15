@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 12 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 14 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fast and easy integration testing with the Camel CLI Test Plugin</title>
+      <link>https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/</link>
+      <pubDate>Wed, 14 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/</guid>
+      <description>Camel&amp;rsquo;s YAML DSL lets you define integration routes without writing Java. Camel JBang lets you run them without a build tool. But how do you test them? Writing a Java test class with JUnit, @QuarkusTest, and Maven feels like overkill when the route itself is a single 20-line YAML file.&#xA;Citrus is an open-source integration testing framework that works natively with Apache Camel. It supports a YAML test DSL that mirrors the same declarative approach: you define your tests in *.</description>
+    </item>
     <item>
       <title>Talk to Your CRM: Connecting Local AI to Business Systems with Apache Camel and MCP</title>
       <link>https://camel.apache.org/blog/2026/10/camel-mcp-talk-to-your-crm/</link>

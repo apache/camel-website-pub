@@ -1496,6 +1496,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Salesforce - Reports API](../../components/next/others/salesforce-reports.md) | undefined-starter |  |  |  |
 | [Salesforce - REST API](../../components/next/others/salesforce-rest-api.md) | undefined-starter |  |  |  |
 | [Salesforce - Streaming and Pub/Sub](../../components/next/others/salesforce-streaming.md) | undefined-starter |  |  |  |
+| [Semantic OpenAI](../../components/next/others/semantic-openai.md) | camel-semantic-openai-starter | Preview | 4.24 | Assess text and images with typed OpenAI Decisions through Semantic experts |
 | [Shiro](../../components/next/others/shiro.md) | camel-shiro-starter | Stable | 2.5 | Security using Shiro |
 | [Spring Cloud Config](../../components/next/others/spring-cloud-config.md) | camel-spring-cloud-config-starter | Stable | 4.12 | Camel Spring Cloud Config support |
 | [Spring Main](../../components/next/others/spring-main.md) | camel-spring-main-starter | Stable | 3.2 | Camel Spring Main support |

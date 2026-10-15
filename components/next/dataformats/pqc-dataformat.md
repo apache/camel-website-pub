@@ -181,7 +181,7 @@ from("file:encrypted")
 | symmetricKeyLength | int | 128 | Length of the symmetric key in bits (128, 192, or 256 for AES) |
 | keyPair | KeyPair | null | KeyPair to use for encryption/decryption. Can also be provided via header. |
 | provider | String | null | JCE security provider (defaults to Bouncy Castle PQC provider) |
-| keyGenerator | KeyGenerator | null | Custom KeyGenerator for KEM operations |
+| keyGenerator | KeyGenerator | null | Custom KeyGenerator for KEM operations, shared by every operation of the data format. If not set, a new one is created for every operation |
 
 ## Registering KeyPair
 
@@ -483,21 +483,9 @@ The DataFormat approach is significantly simpler and handles all KEM operations 
 
 ## Performance Considerations
 
-**1\. Caching KeyGenerator**
+**1\. KeyGenerator instances**
 
-Configure a KeyGenerator once to avoid repeated initialization:
-
-_Java-only: caching a KeyGenerator to avoid repeated initialization_
-
-```java
-@BindToRegistry("kemKeyGenerator")
-public KeyGenerator createKeyGenerator() throws Exception {
-    return KeyGenerator.getInstance("ML-KEM", "BCPQC");
-}
-
-PQCDataFormat pqcFormat = new PQCDataFormat();
-pqcFormat.setKeyGenerator(kemKeyGenerator);
-```
+A KEM `KeyGenerator` keeps the spec passed to `init()` until `generateKey()` reads it, and is not thread-safe. Unless one is configured, the data format creates a new `KeyGenerator` for every marshal and unmarshal, so concurrent exchanges never share one. A `KeyGenerator` set with `setKeyGenerator(…​)` is shared by every operation of the data format instance, and the operations then run one at a time on it, so only configure one when you need a specific instance.
 
 **2\. Large Payloads**
 

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1791964735364,
+  "generated": 1792062922216,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -23214,7 +23214,7 @@
               "module": "eips",
               "path": "throwException-eip.adoc",
               "url": "/components/next/eips/throwException-eip.html",
-              "title": "Stop"
+              "title": "Throw Exception"
             },
             {
               "module": "eips",
@@ -24001,6 +24001,12 @@
               "path": "salesforce-streaming.adoc",
               "url": "/components/next/others/salesforce-streaming.html",
               "title": "Salesforce - Streaming and Pub/Sub"
+            },
+            {
+              "module": "others",
+              "path": "semantic-openai.adoc",
+              "url": "/components/next/others/semantic-openai.html",
+              "title": "Semantic OpenAI"
             },
             {
               "module": "others",
@@ -36623,6 +36629,12 @@
               "path": "jbang-commands/camel-jbang-semantic-get.adoc",
               "url": "/manual/jbang-commands/camel-jbang-semantic-get.html",
               "title": "camel semantic get"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-semantic-monitoring.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-semantic-monitoring.html",
+              "title": "camel semantic monitoring"
             },
             {
               "module": "ROOT",

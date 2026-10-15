@@ -135,12 +135,13 @@ from(direct("tickets"))
 
 ### Classify and route with Semantic
 
-A [Semantic](../languages/semantic-language.md) choice question returns a category string that Switch can match against its literal cases. Configure `camel-semantic` and a provider as described in the language documentation. This example uses one reference, `ref:department`, to evaluate the message body once and route the result. Load it alongside the `direct:billing`, `direct:technical`, and `direct:review` handling routes shown above.
+A [Semantic](../languages/semantic-language.md) choice question returns a category string that Switch can match against its literal cases. Configure `camel-semantic` and register an expert bean named `decisions` as described in the language documentation. This example uses one reference, `ref:department`, to evaluate the message body once and route the result. Load it alongside the `direct:billing`, `direct:technical`, and `direct:review` handling routes shown above.
 
 ```yaml
 - semantic:
     evaluation:
       department:
+        expert: decisions
         type: choice
         instructions: Which department should handle this message?
         criteria:

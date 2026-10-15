@@ -48,6 +48,22 @@ Without `--source-dir`, Camel only watches the specific files you listed on the 
 > **Note**
 > You cannot combine files and source dir: `camel run abc.java --source-dir=mycode` is not allowed.
 
+### Data folders in the source directory
+
+Routes often read and write files in folders of their own, such as an `inbox` they consume and an `archive` they move the processed files to. When such a folder is in the source directory, the files the routes write there are changes too, and dev mode reloads the routes for them; the reload restarts the routes, which write again, and so on. Tell Camel which folders hold data with `--data-dir` (comma separated, relative to the source directory):
+
+```bash
+camel run --source-dir=mycode --dev --data-dir=inbox,archive
+```
+
+or in the `application.properties` of the source directory:
+
+```properties
+camel.jbang.dataDir=inbox,archive
+```
+
+Dev mode then does not watch these folders, nor the folders in them. When the routes keep reloading for files in one folder, Camel logs a warning that names the folder.
+
 ### Live reload of resource files
 
 In dev mode, Camel disables `contentCache` on resource-based components (such as `xslt`) so that edits to resource files are picked up on the next message without restarting.

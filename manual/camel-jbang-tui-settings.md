@@ -90,7 +90,7 @@ The Doctor checks your development environment and reports issues:
 
 Press **F6** to open an embedded Camel CLI shell at the bottom (or top) of the screen. Any `camel` command can be run there — `camel run`, `camel infra run kafka`, `camel cmd send`, `camel get` and so on — without leaving the dashboard, and the tabs keep updating while the command runs. Press **F6** again to close the panel, **Shift+F6** to cycle its height, **PgUp**/**PgDn** to scroll the output and **↑**/**↓** to recall earlier commands (see [Input history](#_input_history)).
 
-The shell and the AI prompt panel (**F8**) share the same space: opening one closes the other. Both open at the bottom by default; see **Panel Position** in [Settings](#_settings).
+The shell and the AI prompt panel (**F8**) share the same space: opening one closes the other. Both open at the bottom by default; see **Panel Position** in [Settings](#_settings), and [Panel theme](#_panel_theme) to draw them in a theme of their own.
 
 ## Theme
 
@@ -111,19 +111,29 @@ Monochrome and CRT have no colors to spare, so they tell code apart by brightnes
 
 Your choice is remembered: it is saved as `camel.tui.theme` in `.camel-cli.properties` and restored the next time you open the TUI.
 
+### Panel theme
+
+The shell (**F6**) and AI (**F8**) panels can be drawn in a theme of their own, so they stand apart from the tab underneath. Set **Panel Theme** in [Settings](#_settings), which previews each theme as you cycle through them, or pass `--panel-theme=<name>` on the command line. Everything inside the panel takes that theme: its frame, the text, the AI answers and their code blocks. The tabs, the footer and the dialogs that open over the screen keep the main theme, and programs run in the shell keep their own colors.
+
+A light panel on a dark theme stands out the most, for example Dark with a Light panel. Two dark themes are calmer: the panel then differs by its accent color and background, as with Dark and Tokyo Night. The choice is saved as `camel.tui.panelTheme`; `--panel-theme=same` draws the panels in the main theme for one session.
+
+![The Overview tab in the Dark theme with the AI panel below it in the Light theme](_images/jbang/camel-tui-panel-theme.png)
+
+Figure 1. Dark with a Light panel theme: the AI panel stands apart from the **Overview** tab
+
 ### Theme examples
 
 ![A YAML route in the Source tab with the Nord theme’s code colors](_images/jbang/camel-tui-theme-nord-source.png)
 
-Figure 1. Nord: a YAML route in the **Source** tab with the scheme’s own code colors
+Figure 2. Nord: a YAML route in the **Source** tab with the scheme’s own code colors
 
 ![A YAML route in the Source tab with the CRT theme](_images/jbang/camel-tui-theme-crt-source.png)
 
-Figure 2. CRT: a green phosphor terminal of the 1980s, code told apart by brightness and bold
+Figure 3. CRT: a green phosphor terminal of the 1980s, code told apart by brightness and bold
 
 ![The Overview in the Catppuccin Latte theme](_images/jbang/camel-tui-theme-latte.png)
 
-Figure 3. Catppuccin Latte: a light theme on the **Overview** tab
+Figure 4. Catppuccin Latte: a light theme on the **Overview** tab
 
 ## Settings
 
@@ -141,6 +151,7 @@ Each row is stored under a `camel.tui.*` key in the Camel CLI configuration file
 | Rate per | `camel.tui.ratePer` | Show message rates per `seconds` or per `minutes`. | `seconds` |
 | Panel Position | `camel.tui.panelPosition` | Where the shell (**F6**) and AI (**F8**) panels open: `bottom` or `top`. | `bottom` |
 | Panel Space | `camel.tui.panelSpace` | Whether those panels push the tab content aside (`move`) or are drawn on top of it (`overlay`), so the tab keeps its full height underneath. | `move` |
+| Panel Theme | `camel.tui.panelTheme` | The theme those panels are drawn with, so they stand apart from the tabs: any of the 21 themes, or the main theme. See [Panel theme](#_panel_theme). | same as Theme |
 | Confirm Actions | `camel.tui.confirmActions` | Whether destructive actions (quit, stop, restart, stop/start routes) show a confirmation dialog first. Kill (**X**) always confirms regardless of this setting. | `true` |
 | Validate on Save | `camel.tui.validateOnSave` | Whether the [source editor](camel-jbang-tui-source-editor.md) checks a file when it is saved (a YAML or XML route, or a properties file, with problems is not saved; Java problems are only reported). | `true` |
 | Route Tree | `camel.tui.routeTree` | Whether the source editor shows the route tree when it opens (**Ctrl+T** shows or hides it). | `false` |
