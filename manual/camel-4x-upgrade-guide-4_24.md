@@ -356,6 +356,12 @@ As part of this, a non-`List` `Collection` value (such as a `Set`) is now bound 
 
 This does not cover every path: Chunk re-parses any string it produces while rendering, so the output of a filter (`{$body|trim}`), a string property of a bean body (`{$body.name}`, `{$exception.message}`) and string items bound by a `{% loop %}` are still parsed as template code. Keep untrusted data to direct `{$tag}` output; do not pass untrusted values through Chunk filters, bean properties or loops. If untrusted data must go through one of those paths, remove the `{` and `}` characters from it in the route before the `chunk` endpoint (Chunk has no escape for tags inside data), for example with a processor that rewrites the body or header.
 
+### camel-azure-servicebus - the dead-letter reason and description are bounded
+
+When the consumer dead-letters a message after a failed route with `enableDeadLettering=true`, the reason and the error description it writes are now capped at 4096 characters, the limit the Azure SDKs apply to both fields. A value that was cut ends with `…​`. The description holds the stack trace, so a deep one is now truncated rather than sent in full and rejected by the broker.
+
+A settlement request the broker rejects is now reported through the consumer’s exception handler.
+
 ### camel-telegram - a failed send fails the exchange once
 
 When Telegram answers a message with an error status (for example `400` for an unknown chat), or with a body that cannot be read, the producer now fails the exchange once and the route stops there. Previously the route first continued after the producer as if the message had been sent, and then the exchange failed as well.

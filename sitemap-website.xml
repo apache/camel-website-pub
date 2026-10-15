@@ -2,10 +2,127 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/security/CVE-2026-78162.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-78163.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-78164.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-78165.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-79983.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-79984.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-79985.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-79986.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-80312.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-80343.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-80344.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-83531.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-84176.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-84178.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-84180.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-84181.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85243.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85245.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85246.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85247.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85248.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85249.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85250.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85251.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85254.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85257.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85260.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85296.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85300.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85301.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85312.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85313.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85314.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85315.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85316.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-85317.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-88901.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-91858.html</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/</loc>
+    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2026-10-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.23.0/</loc>
@@ -54,9 +171,6 @@
     <lastmod>2026-10-07T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-103413.html</loc>
-    <lastmod>2026-10-07T11:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-10-07T11:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/EIP/</loc>

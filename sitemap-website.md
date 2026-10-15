@@ -1,6 +1,45 @@
-urls[888]{loc,lastmod}:
+urls[926]{loc,lastmod}:
+  https://camel.apache.org/security/CVE-2026-78162.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-78163.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-78164.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-78165.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-79983.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-79984.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-79985.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-79986.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-80312.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-80343.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-80344.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-83531.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-84176.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-84178.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-84180.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-84181.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85243.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85245.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85246.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85247.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85248.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85249.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85250.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85251.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85254.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85257.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85260.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85296.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85300.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85301.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85312.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85313.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85314.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85315.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85316.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-85317.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-88901.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/CVE-2026-91858.md,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/security/,2026-10-15T10:00:00+02:00
   https://camel.apache.org/blog/,2026-10-15T00:00:00+00:00
-  https://camel.apache.org/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-10-15T00:00:00+00:00
@@ -17,7 +56,6 @@ urls[888]{loc,lastmod}:
   https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-103412.md,2026-10-07T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-103413.md,2026-10-07T11:00:00+02:00
-  https://camel.apache.org/security/,2026-10-07T11:00:00+02:00
   https://camel.apache.org/categories/EIP/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/semantic-agent-routing/,2026-10-02T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/thirty-years-of-cli/,2026-10-02T00:00:00+00:00

@@ -6,8 +6,274 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 15 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 15 Oct 2026 10:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-78162</title>
+      <link>https://camel.apache.org/security/CVE-2026-78162.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-78162.html</guid>
+      <description>Camel-Hazelcast: Incomplete fix for CVE-2026-43865 leaves managed instances without a Java deserialization filter, enabling remote code execution</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-78163</title>
+      <link>https://camel.apache.org/security/CVE-2026-78163.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-78163.html</guid>
+      <description>Camel-Docling: Unvalidated message body input source enables server-side request forgery and local file disclosure in DoclingProducer</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-78164</title>
+      <link>https://camel.apache.org/security/CVE-2026-78164.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-78164.html</guid>
+      <description>Camel HTTP producers: property placeholders were resolved on the message-supplied endpoint-URI override headers, so an unauthenticated sender able to influence those headers could have configuration values and vault secrets expanded into the outbound request and no-argument registry bean methods invoked</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-78165</title>
+      <link>https://camel.apache.org/security/CVE-2026-78165.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-78165.html</guid>
+      <description>Camel-Spring-Redis: The default JdkSerializationRedisSerializer deserializes Redis payloads with no ObjectInputFilter, allowing an actor who can publish to the subscribed channel to achieve remote code execution</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-79983</title>
+      <link>https://camel.apache.org/security/CVE-2026-79983.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-79983.html</guid>
+      <description>Camel-FTP: the consumer built the remote path of a polled file from the name reported in the server directory listing without constraining it to the polled directory, so a crafted listing entry could be retrieved, deleted or renamed outside it</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-79984</title>
+      <link>https://camel.apache.org/security/CVE-2026-79984.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-79984.html</guid>
+      <description>Camel-Mina-SFTP: the consumer built the remote path of a polled file from the name reported in the server directory listing without constraining it to the polled directory, so a crafted listing entry could be retrieved, deleted or renamed outside it</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-79985</title>
+      <link>https://camel.apache.org/security/CVE-2026-79985.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-79985.html</guid>
+      <description>Camel-SMB: the consumer built the remote path of a polled file from the name reported in the share listing without constraining it to the polled directory, so a crafted listing entry could be retrieved, deleted or renamed outside it</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-79986</title>
+      <link>https://camel.apache.org/security/CVE-2026-79986.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-79986.html</guid>
+      <description>Camel-Azure-Files: the consumer built the remote path of a polled file from the name reported in the share listing without constraining it to the polled directory, so a crafted listing entry could be retrieved, deleted or renamed outside it</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-80312</title>
+      <link>https://camel.apache.org/security/CVE-2026-80312.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-80312.html</guid>
+      <description>Camel-OAuth: authentication bypass - the OAuth processors returned control to the route instead of stopping it when authentication could not be completed, so a request that failed authentication was processed as if it had succeeded</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-80343</title>
+      <link>https://camel.apache.org/security/CVE-2026-80343.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-80343.html</guid>
+      <description>Camel-Netty-HTTP: security constraint bypass - the security constraint matched the request path case sensitively while dispatch to the route did not, so altering the case of a path segment skipped the constraint and still reached the endpoint</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-80344</title>
+      <link>https://camel.apache.org/security/CVE-2026-80344.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-80344.html</guid>
+      <description>Camel-AS2: server-side request forgery and credential disclosure - the asynchronous MDN delivery address supplied by the remote partner was used as the destination for the receipt, so the sender chose where the Camel instance would connect and what credentials it would present</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-83531</title>
+      <link>https://camel.apache.org/security/CVE-2026-83531.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-83531.html</guid>
+      <description>Camel-Dynamic-Router: The dynamic-router-control endpoint compiled the subscription predicate from an expression and an expression language supplied by the control message, allowing an actor who can send messages to a route that forwards them to the control endpoint to execute code in the Camel process</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-84176</title>
+      <link>https://camel.apache.org/security/CVE-2026-84176.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-84176.html</guid>
+      <description>Camel-Platform-HTTP-Vertx: cross-origin credential exposure - Access-Control-Allow-Credentials was set outside the origin check and the caller&amp;rsquo;s own Origin was reflected back when no origin list was configured, producing a credentialed any-origin CORS policy</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-84178</title>
+      <link>https://camel.apache.org/security/CVE-2026-84178.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-84178.html</guid>
+      <description>Camel-OAuth: login cross-site request forgery - the authorization code callback was not bound to the flow that started it, so a code obtained in any browser could be redeemed at the callback and bound to whichever session presented it</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-84180</title>
+      <link>https://camel.apache.org/security/CVE-2026-84180.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-84180.html</guid>
+      <description>Camel-Knative: information disclosure - a route failure was written back to the remote caller as the response body, so the exception class, message and stack trace of an internal error reached an external sender</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-84181</title>
+      <link>https://camel.apache.org/security/CVE-2026-84181.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-84181.html</guid>
+      <description>Camel-Shiro: authentication bypass - the presented credentials were not verified when the Shiro subject already bound to the thread matched the incoming principal, so a request could reuse an authentication it never performed</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85243</title>
+      <link>https://camel.apache.org/security/CVE-2026-85243.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85243.html</guid>
+      <description>Camel-Crypto-PGP: integrity verification downgrade - the modification detection code was verified only when the message used the integrity protected packet, so a sender choosing the legacy packet skipped the check entirely</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85245</title>
+      <link>https://camel.apache.org/security/CVE-2026-85245.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85245.html</guid>
+      <description>Camel-Thrift: cross-exchange data disclosure - unmarshalling deserialized into the shared defaultInstance rather than a copy, so fields set by one message remained visible to the next</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85246</title>
+      <link>https://camel.apache.org/security/CVE-2026-85246.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85246.html</guid>
+      <description>Camel-Mina: information disclosure - the consumer wrote the route&amp;rsquo;s exception straight back over the socket, handing the remote peer its class and message over a textline codec and its serialised form over the object codec</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85247</title>
+      <link>https://camel.apache.org/security/CVE-2026-85247.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85247.html</guid>
+      <description>Camel-Knative: improper certificate validation - enabling SSL without configuring a truststore fell back to trusting every certificate, so turning TLS on was the thing that turned certificate validation off</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85248</title>
+      <link>https://camel.apache.org/security/CVE-2026-85248.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85248.html</guid>
+      <description>Camel-PQC: signature verification bypass - one java.security.Signature instance was shared across concurrent exchanges without synchronization, so interleaved use could make a verification succeed for data it never covered</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85249</title>
+      <link>https://camel.apache.org/security/CVE-2026-85249.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85249.html</guid>
+      <description>Camel-Tika: header injection - metadata parsed out of the submitted document was mapped onto the Exchange as headers without filtering, so the document could set headers the route relies on, such as CamelFileName</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85250</title>
+      <link>https://camel.apache.org/security/CVE-2026-85250.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85250.html</guid>
+      <description>Camel-XPath: XML external entity processing - the documentType=InputSource option handed the payload to an XPath engine that built its own parser with JDK defaults, so a DOCTYPE refused on the default document type was accepted and its external entity resolved</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85251</title>
+      <link>https://camel.apache.org/security/CVE-2026-85251.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85251.html</guid>
+      <description>Camel-HTTP: credential disclosure - with followRedirects enabled the Authorization header was re-attached to whatever host the Location header named, so the remote server chose which host received the credentials</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85254</title>
+      <link>https://camel.apache.org/security/CVE-2026-85254.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85254.html</guid>
+      <description>Camel-Platform-HTTP: request-header echo suppression bypass - the check that stops a request header being echoed into the response compared header names case sensitively, so a differently cased name defeated it, and under HTTP/2 it never matched at all</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85257</title>
+      <link>https://camel.apache.org/security/CVE-2026-85257.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85257.html</guid>
+      <description>Camel-CXF: information disclosure - an exception thrown by the route was described back to the SOAP client in the fault, exposing internal exception types and messages that were never part of the service contract</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85260</title>
+      <link>https://camel.apache.org/security/CVE-2026-85260.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85260.html</guid>
+      <description>Camel-MLLP: protected health information disclosure - logPhi defaulted to true so HL7 payload content was written to the log out of the box, and two code paths logged it regardless of the setting</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85296</title>
+      <link>https://camel.apache.org/security/CVE-2026-85296.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85296.html</guid>
+      <description>Camel-AS2: cross-partner signing key confusion - per-request signing material was held in state shared across requests, so a receipt could be signed with the key belonging to a different trading partner</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85300</title>
+      <link>https://camel.apache.org/security/CVE-2026-85300.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85300.html</guid>
+      <description>Camel-PQC: private key disclosure - generated key material was written to disk with the process default file permissions rather than restricted to the owner, so any local account able to read the directory could read the private key</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85301</title>
+      <link>https://camel.apache.org/security/CVE-2026-85301.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85301.html</guid>
+      <description>Camel-Keycloak: issuer validation bypass - the issuer check was skipped rather than failed when the token introspection response carried no iss claim, so a token from an unintended issuer could be accepted</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85312</title>
+      <link>https://camel.apache.org/security/CVE-2026-85312.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85312.html</guid>
+      <description>Camel-Core: saga hijacking - the saga processor consulted a Long-Running-Action header that sits outside the filtered Camel namespace, so an external sender could name the saga an exchange joined</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85313</title>
+      <link>https://camel.apache.org/security/CVE-2026-85313.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85313.html</guid>
+      <description>Camel-Jetty: cross-origin credential exposure - setting enableCORS installed Jetty&amp;rsquo;s CrossOriginFilter with its allow-all defaults, so every origin was accepted and credentials were granted to all of them</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85314</title>
+      <link>https://camel.apache.org/security/CVE-2026-85314.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85314.html</guid>
+      <description>Camel-Mail: header injection - the MimeMultipart data format mapped mail.smtp headers onto the Exchange without applying the filter, leaving open the path that CVE-2026-46584 was intended to close</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85315</title>
+      <link>https://camel.apache.org/security/CVE-2026-85315.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85315.html</guid>
+      <description>Camel-gRPC: information disclosure - the route exception&amp;rsquo;s message was placed into the gRPC status description, which is transmitted to the caller, so an internal error message reached an external client</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85316</title>
+      <link>https://camel.apache.org/security/CVE-2026-85316.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85316.html</guid>
+      <description>Camel-Platform-HTTP: unintended proxy mode - proxy mode was selected by testing whether the configured path started with proxy, so any path beginning with those characters silently became a proxy endpoint</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-85317</title>
+      <link>https://camel.apache.org/security/CVE-2026-85317.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-85317.html</guid>
+      <description>Camel-HTTP: OAuth2 token confusion - the JVM-global token cache was keyed on fewer fields than shape the token, so an endpoint could be served a cached token minted for a different scope, resource or token endpoint</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-88901</title>
+      <link>https://camel.apache.org/security/CVE-2026-88901.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-88901.html</guid>
+      <description>Camel-Smooks: XML external entity processing - the Smooks data format and component parsed the incoming XML message body with the reader Smooks resolves by default, which resolves external general and parameter entities and loads external DTDs, so an external entity declared in that body could read local files or reach internal hosts</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-91858</title>
+      <link>https://camel.apache.org/security/CVE-2026-91858.html</link>
+      <pubDate>Thu, 15 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-91858.html</guid>
+      <description>Camel-FOP: XML external entity processing - FopProducer created a TransformerFactory with only secure processing enabled, so when a third-party JAXP TransformerFactory such as Saxon-HE was on the classpath, an external DTD or entity declared in the XSL-FO input was resolved and expanded</description>
+    </item>
     <item>
       <title>Release 4.23.0</title>
       <link>https://camel.apache.org/releases/release-4.23.0/</link>
