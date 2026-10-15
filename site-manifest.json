@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792082669331,
+  "generated": 1792095560458,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -35417,6 +35417,12 @@
               "path": "camel-jbang-diagnostics.adoc",
               "url": "/manual/camel-jbang-diagnostics.html",
               "title": "Camel CLI - Diagnostics"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-jbang-exit-codes.adoc",
+              "url": "/manual/camel-jbang-exit-codes.html",
+              "title": "Camel CLI - Exit Codes and Output"
             },
             {
               "module": "ROOT",

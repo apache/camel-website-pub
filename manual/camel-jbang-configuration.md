@@ -122,3 +122,5 @@ An integration that did not terminate gracefully (killed, or the machine crashed
 camel dirty
 camel dirty --clean
 ```
+
+An error is printed as one line that starts with `ERROR:`. To see the stack trace of every error, set the environment variable `CAMEL_CLI_DEBUG` to `true`. See [Exit Codes and Output](camel-jbang-exit-codes.md) for what each exit code means.

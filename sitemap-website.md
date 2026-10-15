@@ -1,4 +1,4 @@
-urls[926]{loc,lastmod}:
+urls[927]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-78162.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-78163.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-78164.md,2026-10-15T10:00:00+02:00
@@ -39,6 +39,7 @@ urls[926]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-91858.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/,2026-10-15T10:00:00+02:00
   https://camel.apache.org/security/,2026-10-15T10:00:00+02:00
+  https://camel.apache.org/blog/2026/10/camel423-whatsnew/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/,2026-10-15T00:00:00+00:00

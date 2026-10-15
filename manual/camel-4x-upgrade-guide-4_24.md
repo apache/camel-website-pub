@@ -93,6 +93,35 @@ The model gets the shared file tools (`camel_get_files`, `camel_edit_file`, `cam
 
 `camel get endpoint` replaces the `REMOTE` column with `SCOPE`, which tells three kinds of endpoint apart: `remote` (an external system, as before), `internal` (Camel plumbing that stays inside the integration, such as `direct`, `seda` or `log`, as the catalog marks its component internal) and `local` (neither, such as `exec` or `bean`). Scripts that read the `REMOTE` column of the table must read `SCOPE` instead. The `--json` output keeps `remote` and adds `internal`.
 
+### camel-jbang - exit codes, and errors on stderr
+
+The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](camel-jbang-exit-codes.md)): `0` success, `1` failed, `2` usage error, `3` not found, `70` internal error and `124` timed out. A script that checks the exit code of a command must take these changes into account:
+
+-   A command that ends with an unexpected exception exits with `70` instead of `1`, and prints `ERROR:`, the message and the stack trace on stderr. Add `--verbose` or set `CAMEL_CLI_DEBUG=true` to print the stack trace of other errors too.
+    
+-   Commands that exited with `255` now exit with `1`, `2`, `3` or `124`: `camel bind`, `camel debug`, `camel dependency update`, `camel eval expression`, `camel infra log`, `camel transform message` and `camel update run`. `camel debug` exits with the exit code of the debugged integration when it ends.
+    
+-   `camel semantic` exits with `124` instead of `4` when the integration does not reply in time.
+    
+-   `camel generate schema` exits with `2` for an empty argument, `3` when the class is not found, `1` when the schema cannot be generated and `70` for an unexpected error, instead of `4`, `2`, `3` and `4`.
+    
+-   `camel transform dataweave` exits with `2` without `--input` or `--expression`, and with `3` when the input path does not exist or holds no `.dwl` files, instead of `1`.
+    
+-   `camel cmd sql` exits with `124` instead of `1` when the query does not answer in time.
+    
+-   A file or a name that does not exist exits with `3` instead of `1`: a source file or `--source-dir` of `camel run`, the route file of `camel explain` and `camel harden` (checked before the LLM is contacted), the `pom.xml` of `camel dependency runtime`, the Kamelet of `camel init --from-kamelet`, the service of `camel infra run`, the key of `camel config get`, the name given to `camel doc`, and the plugin of `camel plugin delete`.
+    
+-   `camel cmd memory-leak` and `camel restart` exit with `3` when no running integration, or more than one, matches the name. `camel cmd memory-leak` exits with `124` when the integration does not reply in time.
+    
+-   `camel init` without a file, or with `--from-kamelet` and a file that is not a `.kamelet.yaml` file, `camel infra run` with a malformed property, and `camel kubernetes delete` without `--name` exit with `2` instead of `1`.
+    
+-   A command that runs its default sub-command (`camel config`, `camel dependency`, `camel get`, `camel infra`, `camel plugin`, `camel top`, `camel update` and `camel version`) exits with the exit code of that sub-command, instead of always `0`.
+    
+-   The first use of the command of a Camel plugin (such as `camel kubernetes`) installs the plugin and runs the command, instead of asking to run the command again and exiting with `0`.
+    
+
+Errors, warnings and tips are printed on stderr instead of stdout, so stdout only has the output of the command, such as JSON. If a script reads the error text of a command from stdout, read stderr instead. The list of plugins that are not installed, after `camel --help`, is printed on stderr, and only in an interactive terminal.
+
 ### camel-jpa, camel-hazelcast - an exchange marked rollback only is not consumed
 
 When a route marks the exchange rollback only (for example with `markRollbackOnly()` or `markRollbackOnlyLast()`) there is no exception on the exchange, and these consumers treated it as a success. The JPA consumer deleted the entity (or called its `@Consumed` method) and committed the poll, and the transacted (`transacted=true`) Hazelcast SEDA consumer committed its transaction, so the message was removed from the queue. Now a rollback only exchange is not consumed: the JPA consumer leaves the entity in the table, so the next poll consumes it again, as long as it still matches the query. With `transacted=false` the other entities of the poll are still consumed (without logging a WARN), and so is what a `@PreConsumed` method changed before routing; with `transacted=true` the whole poll is rolled back, as for a failed exchange. The Hazelcast SEDA consumer rolls back its transaction, so the message stays in the queue.
@@ -393,6 +422,10 @@ A route with `noErrorHandler` runs none of its `onException` clauses, and a glob
 A route diagram drew the `onException` clauses of a route among its steps, though they are not steps: a global `onException` is copied into every route, and runs only while a failure is handled. A route diagram now draws only the steps of the route: `camel cmd route-diagram`, the `route-diagram` dev console and its web component, and the route diagrams dumped by `DumpRoutesStrategy`. Use `--errors` (`?errors=true` in the dev console, the `errors` attribute of the `<camel-route-diagram>` web component, `errors` of `DumpRoutesStrategy` and `@EnableRouteDiagramDump`, and `dumpRouteDiagramErrors` of `@CamelMainTest`) to draw them in a frame of their own below the steps, with where the failures of the route go. A highlighted path that steps into an `onException` clause draws the frame as well.
 
 The `<camel-topology-diagram>` web component no longer draws the error paths of the route topology as calls between routes. With its new `errors` attribute it draws the routes reached only on error in a frame below the other routes.
+
+### camel-jbang - route-diagram, route-structure and route-topology read Java sources without compiling them
+
+Given Java source files, `camel cmd route-diagram`, `camel cmd route-structure` and `camel cmd route-topology` (and the `camel_render_route_diagram` MCP tool) now read the routes with the Java DSL parser, as `camel transform route` and `camel overview` do, instead of compiling the sources and loading their routes in a short-lived Camel. A step the parser cannot work out, such as a lambda or a processor, is shown as a placeholder, and the parts it could not read are listed (with `--json`, as an `unread` array in the JSON). Use the new `--compile` option to compile the sources and load their routes as before.
 
 ### camel-jbang - export to Quarkus keeps the names in `quarkus.*` keys
 

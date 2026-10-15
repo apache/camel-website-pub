@@ -275,6 +275,13 @@
       <description>Camel-FOP: XML external entity processing - FopProducer created a TransformerFactory with only secure processing enabled, so when a third-party JAXP TransformerFactory such as Saxon-HE was on the classpath, an external DTD or entity declared in the XSL-FO input was resolved and expanded</description>
     </item>
     <item>
+      <title>Apache Camel 4.23 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/10/camel423-whatsnew/</link>
+      <pubDate>Thu, 15 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/camel423-whatsnew/</guid>
+      <description>Apache Camel 4.23 has just been released.&#xA;This is the biggest Camel release in a long time. Since 4.22 we have resolved 1030 JIRA tickets (nearly twice as many as in 4.22): 503 bug fixes, 362 improvements and 53 new features, made in over 2000 commits by 63 contributors.&#xA;As in Camel 4.22, AI-assisted development is now the norm rather than the exception: almost 90% of the commits that were not made by bots were made with an AI coding assistant.</description>
+    </item>
+    <item>
       <title>Release 4.23.0</title>
       <link>https://camel.apache.org/releases/release-4.23.0/</link>
       <pubDate>Thu, 15 Oct 2026 00:00:00 +0000</pubDate>

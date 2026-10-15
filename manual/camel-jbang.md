@@ -71,6 +71,7 @@ camel run hello.yaml --dev
 | [Tips and Recipes](camel-jbang-tips.md) | Run from GitHub or clipboard, stub components, inline code, interactive prompts, upload via HTTP. |
 | [Java Beans](camel-jbang-beans.md) | Writing and wiring Java beans into routes using Camel, Spring Boot, or Quarkus annotations. |
 | [Configuration](camel-jbang-configuration.md) | CLI configuration options, config commands, configuration precedence, troubleshooting. |
+| [Exit Codes and Output](camel-jbang-exit-codes.md) | The exit codes of the commands, stdout and stderr, and stack traces, for scripts, CI and AI agents. |
 | [Command Reference](jbang-commands/camel-jbang-commands.md) | Complete reference for all CLI commands and their options. |
 
 ### Plugins and Extensions
