@@ -52,7 +52,7 @@ Number of Non-Core Components: 389 in 316 JAR artifacts (4 deprecated)
     
 | Component | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
-| [A2A](a2a-component.md) | camel-a2a | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
+| [A2A](a2a-component.md) | camel-a2a | Stable | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](activemq-component.md) | camel-activemq | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](activemq6-component.md) | camel-activemq6 | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI](ai-summary.md) |  |  |  |  |
@@ -376,7 +376,7 @@ Number of Non-Core Components: 389 in 316 JAR artifacts (4 deprecated)
 | [ServiceNow](servicenow-component.md) | camel-servicenow | Stable | 2.18 | Interact with ServiceNow via its REST API. |
 | [Servlet](servlet-component.md) | camel-servlet | Stable | 2.0 | Serve HTTP requests by a Servlet. |
 | [SFTP](sftp-component.md) | camel-ftp | Stable | 1.1 | Upload and download files to/from SFTP servers. |
-| [Shell](shell-component.md) | camel-shell | Preview | 4.21 | Camel Shell component |
+| [Shell](shell-component.md) | camel-shell | Stable | 4.21 | Camel Shell component |
 | [Simple JMS](sjms-component.md) | camel-sjms | Stable | 2.11 | Send and receive messages to/from a JMS Queue or Topic using plain JMS 1.x API. |
 | [Simple JMS2](sjms2-component.md) | camel-sjms2 | Stable | 2.19 | Send and receive messages to/from a JMS Queue or Topic using plain JMS 2.x API. |
 | [Slack](slack-component.md) | camel-slack | Stable | 2.16 | Send and receive messages to/from Slack. |

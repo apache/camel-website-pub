@@ -874,7 +874,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
     
 | Component | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
-| [A2A](../../components/next/a2a-component.md) | camel-a2a-starter | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
+| [A2A](../../components/next/a2a-component.md) | camel-a2a-starter | Stable | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](../../components/next/activemq-component.md) | camel-activemq-starter | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](../../components/next/activemq6-component.md) | camel-activemq6-starter | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI Resource](../../components/next/ai-resource-component.md) | camel-ai-resource-starter | Preview | 4.23 | Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry. |
@@ -1209,7 +1209,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [ServiceNow](../../components/next/servicenow-component.md) | camel-servicenow-starter | Stable | 2.18 | Interact with ServiceNow via its REST API. |
 | [Servlet](../../components/next/servlet-component.md) | camel-servlet-starter | Stable | 2.0 | Serve HTTP requests by a Servlet. |
 | [SFTP](../../components/next/sftp-component.md) | camel-ftp-starter | Stable | 1.1 | Upload and download files to/from SFTP servers. |
-| [Shell](../../components/next/shell-component.md) | camel-shell-starter | Preview | 4.21 | Camel Shell component |
+| [Shell](../../components/next/shell-component.md) | camel-shell-starter | Stable | 4.21 | Camel Shell component |
 | [Simple JMS](../../components/next/sjms-component.md) | camel-sjms-starter | Stable | 2.11 | Send and receive messages to/from a JMS Queue or Topic using plain JMS 1.x API. |
 | [Simple JMS2](../../components/next/sjms2-component.md) | camel-sjms2-starter | Stable | 2.19 | Send and receive messages to/from a JMS Queue or Topic using plain JMS 2.x API. |
 | [Slack](../../components/next/slack-component.md) | camel-slack-starter | Stable | 2.16 | Send and receive messages to/from Slack. |
@@ -1431,7 +1431,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Cloudevents](../../components/next/others/cloudevents.md) | camel-cloudevents-starter | Stable | 3.15 | Camel support for the CloudEvents specification |
 | [CXF Transport](../../components/next/others/cxf-transport.md) | camel-cxf-transport-starter | Stable | 2.8 | Camel Transport for Apache CXF |
 | [Debug](../../components/next/others/debug.md) | camel-debug-starter | Stable | 3.15 | Enables Camel Route Debugging |
-| [Diagram](../../components/next/others/diagram.md) | camel-diagram-starter | Preview | 4.21 | Camel Route Diagram rendering |
+| [Diagram](../../components/next/others/diagram.md) | camel-diagram-starter | Stable | 4.21 | Camel Route Diagram rendering |
 | [Docling - Asynchronous Processing](../../components/next/others/docling-async-processing.md) | undefined-starter |  |  |  |
 | [Docling - Batch Processing](../../components/next/others/docling-batch-processing.md) | undefined-starter |  |  |  |
 | [Docling - Using Docling-Serve API](../../components/next/others/docling-serve.md) | undefined-starter |  |  |  |
@@ -1443,7 +1443,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Java DSL (runtime compiled)](../../components/next/others/java-joor-dsl.md) | camel-java-joor-dsl-starter | Stable | 3.9 | Camel Java DSL with jOOR |
 | [Jaxb XML Dsl](../../components/next/others/java-xml-jaxb-dsl.md) | camel-xml-jaxb-dsl-starter | Stable | 3.9 | Camel DSL with XML using camel-jaxb |
 | [JFR](../../components/next/others/jfr.md) | camel-jfr-starter | Stable | 3.8 | Diagnose Camel applications with Java Flight Recorder |
-| [Jsoup](../../components/next/others/jsoup.md) | camel-jsoup-starter | Preview | 4.21 | Cleanup HTML content |
+| [Jsoup](../../components/next/others/jsoup.md) | camel-jsoup-starter | Stable | 4.21 | Cleanup HTML content |
 | [JTA](../../components/next/others/jta.md) | camel-jta-starter | Stable | 3.4 | Using Camel With JTA Transaction Manager |
 | [Kamelet - Writing a custom Kamelet](../../components/next/others/kamelet-custom.md) | undefined-starter |  |  |  |
 | [Kamelet Main](../../components/next/others/kamelet-main.md) | camel-kamelet-main-starter | Preview | 3.11 | Main to run Kamelet standalone |

@@ -27,7 +27,7 @@ Number of Miscellaneous Components: 105 in 69 JAR artifacts (3 deprecated)
 | [Cloudevents](cloudevents.md) | camel-cloudevents | Stable | 3.15 | Camel support for the CloudEvents specification |
 | [CXF Transport](cxf-transport.md) | camel-cxf-transport | Stable | 2.8 | Camel Transport for Apache CXF |
 | [Debug](debug.md) | camel-debug | Stable | 3.15 | Enables Camel Route Debugging |
-| [Diagram](diagram.md) | camel-diagram | Preview | 4.21 | Camel Route Diagram rendering |
+| [Diagram](diagram.md) | camel-diagram | Stable | 4.21 | Camel Route Diagram rendering |
 | [Docling - Asynchronous Processing](docling-async-processing.md) |  |  |  |  |
 | [Docling - Batch Processing](docling-batch-processing.md) |  |  |  |  |
 | [Docling - Using Docling-Serve API](docling-serve.md) |  |  |  |  |
@@ -39,7 +39,7 @@ Number of Miscellaneous Components: 105 in 69 JAR artifacts (3 deprecated)
 | [Java DSL (runtime compiled)](java-joor-dsl.md) | camel-java-joor-dsl | Stable | 3.9 | Camel Java DSL with jOOR |
 | [Jaxb XML Dsl](java-xml-jaxb-dsl.md) | camel-xml-jaxb-dsl | Stable | 3.9 | Camel DSL with XML using camel-jaxb |
 | [JFR](jfr.md) | camel-jfr | Stable | 3.8 | Diagnose Camel applications with Java Flight Recorder |
-| [Jsoup](jsoup.md) | camel-jsoup | Preview | 4.21 | Cleanup HTML content |
+| [Jsoup](jsoup.md) | camel-jsoup | Stable | 4.21 | Cleanup HTML content |
 | [JTA](jta.md) | camel-jta | Stable | 3.4 | Using Camel With JTA Transaction Manager |
 | [Kamelet - Writing a custom Kamelet](kamelet-custom.md) |  |  |  |  |
 | [Kamelet Main](kamelet-main.md) | camel-kamelet-main | Preview | 3.11 | Main to run Kamelet standalone |

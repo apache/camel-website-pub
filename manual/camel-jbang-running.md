@@ -14,6 +14,14 @@ camel run foo.yaml --dev
 
 This works for all DSLs (YAML, Java, XML).
 
+Dev mode looks for changed files every 2 seconds. To look more often, set `camel.main.routesReloadInterval` (in millis):
+
+```bash
+camel run foo.yaml --dev --prop=camel.main.routesReloadInterval=500
+```
+
+A shorter interval reloads a change sooner. A longer one groups more of one save together, such as several files an editor saves one after the other.
+
 `camel dev` is a shortcut for `camel run --dev`, and without files it runs the current folder (as `--source-dir=.`):
 
 ```bash
