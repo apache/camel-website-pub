@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 104 in 68 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 105 in 69 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -93,6 +93,8 @@ Number of Miscellaneous Components: 104 in 68 JAR artifacts (3 deprecated)
 | [Salesforce - REST API](salesforce-rest-api.md) |  |  |  |  |
 | [Salesforce - Streaming and Pub/Sub](salesforce-streaming.md) |  |  |  |  |
 | [Semantic OpenAI](semantic-openai.md) | camel-semantic-openai | Preview | 4.24 | Assess text and images with typed OpenAI Decisions through Semantic experts |
+| [Semantic TypeSafe AI](semantic-typesafe-ai.md) | camel-semantic-typesafe-ai | Preview | 4.24 | Semantic expert using the TypeSafe AI decision API |
+| [Semantic Wolf Defender](semantic-wolf-defender.md) | camel-semantic-wolf-defender | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |
 | [Shiro](shiro.md) | camel-shiro | Stable | 2.5 | Security using Shiro |
 | [Spring Cloud Config](spring-cloud-config.md) | camel-spring-cloud-config | Stable | 4.12 | Camel Spring Cloud Config support |
 | [Spring Main](spring-main.md) | camel-spring-main | Stable | 3.2 | Camel Spring Main support |
@@ -109,7 +111,6 @@ Number of Miscellaneous Components: 104 in 68 JAR artifacts (3 deprecated)
 | [Test Spring JUnit6](test-spring-junit6.md) | camel-test-spring-junit6 | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
 | [Tracing](tracing.md) | camel-tracing | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
 | [Undertow Spring Security](undertow-spring-security.md) | camel-undertow-spring-security | Stable | 3.3 | Spring Security Provider for camel-undertow |
-| [Wolf Defender](wolf-defender.md) | camel-wolf-defender | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |
 | [Write Ahead Log Strategy for Resume API](wal.md) | camel-wal | Stable | 3.20 | Write Ahead Log Strategy for Resume API |
 | [XML Io Dsl](java-xml-io-dsl.md) | camel-xml-io-dsl | Stable | 3.9 | Camel DSL with XML |
 | [YAML DSL](yaml-dsl.md) | camel-yaml-dsl | Stable | 3.9 | Camel YAML DSL |

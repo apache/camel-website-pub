@@ -1497,6 +1497,8 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Salesforce - REST API](../../components/next/others/salesforce-rest-api.md) | undefined-starter |  |  |  |
 | [Salesforce - Streaming and Pub/Sub](../../components/next/others/salesforce-streaming.md) | undefined-starter |  |  |  |
 | [Semantic OpenAI](../../components/next/others/semantic-openai.md) | camel-semantic-openai-starter | Preview | 4.24 | Assess text and images with typed OpenAI Decisions through Semantic experts |
+| [Semantic TypeSafe AI](../../components/next/others/semantic-typesafe-ai.md) | camel-semantic-typesafe-ai-starter | Preview | 4.24 | Semantic expert using the TypeSafe AI decision API |
+| [Semantic Wolf Defender](../../components/next/others/semantic-wolf-defender.md) | camel-semantic-wolf-defender-starter | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |
 | [Shiro](../../components/next/others/shiro.md) | camel-shiro-starter | Stable | 2.5 | Security using Shiro |
 | [Spring Cloud Config](../../components/next/others/spring-cloud-config.md) | camel-spring-cloud-config-starter | Stable | 4.12 | Camel Spring Cloud Config support |
 | [Spring Main](../../components/next/others/spring-main.md) | camel-spring-main-starter | Stable | 3.2 | Camel Spring Main support |
@@ -1513,7 +1515,6 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Test Spring JUnit6](../../components/next/others/test-spring-junit6.md) | camel-test-spring-junit6-starter | Stable | 4.17 | Camel unit testing with Spring and JUnit 6 |
 | [Tracing](../../components/next/others/tracing.md) | camel-tracing-starter | Stable-deprecated | 3.5 | Distributed tracing common interfaces |
 | [Undertow Spring Security](../../components/next/others/undertow-spring-security.md) | camel-undertow-spring-security-starter | Stable | 3.3 | Spring Security Provider for camel-undertow |
-| [Wolf Defender](../../components/next/others/wolf-defender.md) | camel-wolf-defender-starter | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |
 | [Write Ahead Log Strategy for Resume API](../../components/next/others/wal.md) | camel-wal-starter | Stable | 3.20 | Write Ahead Log Strategy for Resume API |
 | [XML Io Dsl](../../components/next/others/java-xml-io-dsl.md) | camel-xml-io-dsl-starter | Stable | 3.9 | Camel DSL with XML |
 | [YAML DSL](../../components/next/others/yaml-dsl.md) | camel-yaml-dsl-starter | Stable | 3.9 | Camel YAML DSL |

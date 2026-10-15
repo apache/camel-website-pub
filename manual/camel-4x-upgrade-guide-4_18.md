@@ -25,6 +25,10 @@ A saga option named like a parameter of the participant callback URLs, in any ca
 
 The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.
 
+### camel-graphql - the credentials are only sent to the authority of httpUri
+
+The `accessToken` (with its `jwtAuthorizationType`) is now added to a request only when the request goes to the scheme, host and port of `httpUri`, and the `username` and `password` are registered for that authority only. Previously neither was bound to the authority of `httpUri`. A request to another authority, including the same host with another scheme or port, is now sent without them. A route that needs to authenticate to another authority must address it in `httpUri`. When `proxyHost` is set, the `username` and `password` are no longer offered to the proxy when it asks for authentication.
+
 ### camel-telegram - webhook requests are verified with a secret token
 
 In webhook mode, Camel now registers the webhook with a secret token, which Telegram sends in the `X-Telegram-Bot-Api-Secret-Token` header of every webhook request, and rejects a webhook request that does not carry the token with HTTP 403. The token is the value of the new `webhookSecretToken` option or, when that option is not set, a value derived from the authorization token. A client that calls the webhook endpoint directly, for example in a test, must send the header too.

@@ -9,7 +9,15 @@ to("chunk:file_example?themeFolder=template&amp;themeSubfolder=subfolder&amp;ext
 Thanks for the order of {$headers.item}.
 
 Regards Camel Riders Bookstore
-{$body}</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using chunk with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+{$body}</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_security"><a class="anchor" href="#_security"></a>Security</h2> <div class="sectionbody"> <div class="paragraph"> <p>The Chunk engine renders the template provided by the route author. Message data (the body, headers and variables) that is printed with a direct tag such as <code>{$body}</code> or <code>{$headers.name}</code> is rendered literally, so template tags that appear inside that data are printed verbatim and not evaluated.</p> </div> <div class="paragraph"> <p>Chunk does, however, re-parse any string it produces while rendering. The output of a filter (<code>{$body|trim}</code>), a string property of a bean body (<code>{$body.name}</code>, <code>{$exception.message}</code>) and string items bound by a <code>{% loop %}</code> are parsed as template code. Do not pass untrusted message data through Chunk filters, bean properties or loops, and do not enable <code>allowTemplateFromHeader</code> for messages from untrusted senders.</p> </div> <div class="paragraph"> <p>Chunk has no escape for tags that appear inside data, so if untrusted data must go through one of those paths, remove the <code>{</code> and <code>}</code> characters from it in the route before the <code>chunk</code> endpoint, for example:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:start")
+    // strip Chunk tag delimiters from the untrusted body before templating
+    .process(e -&gt; {
+        String body = e.getMessage().getBody(String.class);
+        if (body != null) {
+            e.getMessage().setBody(body.replace("{", "").replace("}", ""));
+        }
+    })
+    .to("chunk:mytemplate");</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_spring_boot_auto_configuration"><a class="anchor" href="#_spring_boot_auto_configuration"></a>Spring Boot Auto-Configuration</h2> <div class="sectionbody"> <div class="paragraph"> <p>When using chunk with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
   &lt;groupId&gt;org.apache.camel.springboot&lt;/groupId&gt;
   &lt;artifactId&gt;camel-chunk-starter&lt;/artifactId&gt;
   &lt;version&gt;x.x.x&lt;/version&gt;

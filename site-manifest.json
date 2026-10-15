@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792062922216,
+  "generated": 1792067934456,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -24010,6 +24010,18 @@
             },
             {
               "module": "others",
+              "path": "semantic-typesafe-ai.adoc",
+              "url": "/components/next/others/semantic-typesafe-ai.html",
+              "title": "Semantic TypeSafe AI"
+            },
+            {
+              "module": "others",
+              "path": "semantic-wolf-defender.adoc",
+              "url": "/components/next/others/semantic-wolf-defender.html",
+              "title": "Semantic Wolf Defender"
+            },
+            {
+              "module": "others",
               "path": "shiro.adoc",
               "url": "/components/next/others/shiro.html",
               "title": "Shiro"
@@ -24109,12 +24121,6 @@
               "path": "wal.adoc",
               "url": "/components/next/others/wal.html",
               "title": "Write Ahead Log Strategy for Resume API"
-            },
-            {
-              "module": "others",
-              "path": "wolf-defender.adoc",
-              "url": "/components/next/others/wolf-defender.html",
-              "title": "Wolf Defender"
             },
             {
               "module": "others",

@@ -288,6 +288,8 @@ from("jgroups-raft:clusterName?enableRoleChangeEvents=true")
             uri: mock:mockEndpoint
 ```
 
+The role change is forwarded as a `LEADER` or `FOLLOWER` event. A `Learner` (a non-voting member that replicates the log but cannot vote or become leader) is reported as a `FOLLOWER` event, so a route may receive consecutive `FOLLOWER` events, for example when a node steps down from leader to learner and again when it becomes a voting follower.
+
 ### Keeping singleton route within the cluster
 
 The snippet below demonstrates how to keep the singleton consumer route in the cluster of Camel Contexts. As soon as the master node dies, one of the slaves will be elected as a new master and started. In this particular example, we want to keep singleton [jetty](jetty-component.md) instance listening for the requests on address\` [http://localhost:8080/orders\`](http://localhost:8080/orders`).

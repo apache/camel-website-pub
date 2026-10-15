@@ -6,7 +6,7 @@ The Semantic language invokes named evaluations through provider-independent exp
 
 ## Dependencies and providers
 
-Add `org.apache.camel:camel-semantic` and a provider, such as [TypeSafe AI](../typesafe-ai-component.md) (`camel-typesafe-ai`), using the same Camel version. The provider owns credentials, model selection, request timeout, concurrency limits and transport resources. TypeSafe AI uses `camel.component.typesafe-ai.*` settings even when a route contains no TypeSafe AI endpoint.
+Add `org.apache.camel:camel-semantic` and a provider, such as [TypeSafe AI](../others/semantic-typesafe-ai.md) (`camel-semantic-typesafe-ai`), using the same Camel version. The provider owns credentials, model selection, request timeout, concurrency limits and transport resources. TypeSafe AI uses `camel.component.typesafe-ai.*` settings even when a route contains no TypeSafe AI endpoint.
 
 An **expert** is a configured semantic evaluator, implemented by `SemanticAdapter`. It is not an autonomous agent. Every evaluation must declare `expert`, naming a registry bean. There is no language default, block-level expert inheritance, or automatic provider selection. Use plain registry names without `#bean:` or `#class:` prefixes. Property placeholders such as `expert: "{{selected.expert}}"` are supported. A missing, blank or unknown expert is a configuration error; Camel never loads a class as a fallback. Register the expert bean and configure its lifecycle through the usual Camel bean facilities.
 

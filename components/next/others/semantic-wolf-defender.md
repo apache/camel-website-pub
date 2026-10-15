@@ -1,4 +1,4 @@
-# Wolf Defender
+# Semantic Wolf Defender
 
 **Since Camel 4.23**
 
@@ -9,10 +9,14 @@ Add the following dependency:
 ```xml
 <dependency>
     <groupId>org.apache.camel</groupId>
-    <artifactId>camel-wolf-defender</artifactId>
+    <artifactId>camel-semantic-wolf-defender</artifactId>
     <version>x.x.x</version>
 </dependency>
 ```
+
+For Camel JBang, use `camel run route.yaml --dep=camel-semantic-wolf-defender`. The Java class remains `org.apache.camel.component.wolfdefender.WolfDefenderSemanticAdapter`.
+
+Only text (`String`) is accepted. Structured wrappers, explicit media parts and binary objects are rejected before inference, including direct adapter calls and batches. Ordinary text mentioning images, audio, video or URLs is still text. The existing nonblank, character and token limits apply.
 
 ## Supported artifacts and provisioning
 

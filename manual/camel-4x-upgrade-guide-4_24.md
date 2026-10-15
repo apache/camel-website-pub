@@ -7,6 +7,18 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.23 to 4.24
 
+### camel-semantic - expert artifacts
+
+TypeSafe AI Semantic applications must add `org.apache.camel:camel-semantic-typesafe-ai`. The `camel-typesafe-ai` component and TypeSafe AI language remain independently usable and no longer bring in `camel-semantic`. The new expert artifact includes both dependencies transitively. Existing bean declarations and imports for `org.apache.camel.component.typesafeai.TypeSafeAiSemanticAdapter` remain valid.
+
+Spring Boot applications using this expert must keep `camel-typesafe-ai-starter` and add `org.apache.camel:camel-semantic-typesafe-ai` at the matching Camel version. The existing starter continues configuring the component and TypeSafe AI language; register the Semantic expert explicitly as a named Spring bean. Applications using only the component or TypeSafe AI language need no new dependency.
+
+Replace `org.apache.camel:camel-wolf-defender` with `org.apache.camel:camel-semantic-wolf-defender`. The Wolf Defender Java packages, classes, model provisioning and configuration properties are unchanged. Its documentation page is now `semantic-wolf-defender.adoc`.
+
+Update Maven dependencies and Camel JBang `--dep` options to the new expert artifact names. Each Semantic evaluation still selects an explicit named registry expert. Provider identities and operation names remain `typesafe-ai` and `wolf-defender`; only the reported adapter artifact changes.
+
+TypeSafe AI now rejects explicit media parts nested in structured input, instructions or criteria, which previously could be serialized and sent to the provider. Text and JSON-compatible `Map`/`List` state remain supported. Binary objects and image, audio or video parts are rejected before HTTP; plain text and ordinary application field names do not imply media. Records such as `{type: image, url: …​, sku: 42}` and MIME metadata with a URL alone remain application state. Direct Semantic adapter calls and batches use the same validation. Wolf Defender remains text-only with its existing limits.
+
 ### camel-semantic - explicit experts
 
 Every evaluation in the preview semantic API now requires an explicit `expert` registry bean name. Move block-level `expert` values onto each evaluation in YAML and XML; in Java, move `.expert(…​)` from `SemanticEvaluationsBuilder` to each `SemanticEvaluationBuilder`.
@@ -71,11 +83,25 @@ The command now refuses to write over one of its input files (for example `--out
 
 With `--output=<file>` or without `--output`, the routes are still merged, and the command now warns, on the standard error, when the top-level `onException` of one file applies to the routes of the other files in the merged output.
 
+### camel-jbang - camel ask asks before a call that changes something, reaches out or runs code
+
+`camel ask` now asks on the terminal before a file write (showing the diff), a message to an endpoint the integration does not have, SQL that changes data, an expression in a language that runs code, stopping or restarting the integration, and a `camel` command that changes something. Without a terminal to ask on, as in a script, such a call does not run: pass `--yes` to let it run without asking.
+
+The model gets the shared file tools (`camel_get_files`, `camel_edit_file`, `camel_write_file`), which validate what they write, instead of the `read_file`, `list_files` and `write_file` tools of `camel ask`. A local model gets a core set of tools (`--tools=auto`, the default), a hosted model the full set. The default of `--max-iterations` is now 25 instead of 10, and `--model llama3.2` now selects that model also when a model better at tool calling, such as `qwen3.6`, is installed.
+
+### camel-jbang - camel get endpoint shows the scope of an endpoint
+
+`camel get endpoint` replaces the `REMOTE` column with `SCOPE`, which tells three kinds of endpoint apart: `remote` (an external system, as before), `internal` (Camel plumbing that stays inside the integration, such as `direct`, `seda` or `log`, as the catalog marks its component internal) and `local` (neither, such as `exec` or `bean`). Scripts that read the `REMOTE` column of the table must read `SCOPE` instead. The `--json` output keeps `remote` and adds `internal`.
+
 ### camel-jpa, camel-hazelcast - an exchange marked rollback only is not consumed
 
 When a route marks the exchange rollback only (for example with `markRollbackOnly()` or `markRollbackOnlyLast()`) there is no exception on the exchange, and these consumers treated it as a success. The JPA consumer deleted the entity (or called its `@Consumed` method) and committed the poll, and the transacted (`transacted=true`) Hazelcast SEDA consumer committed its transaction, so the message was removed from the queue. Now a rollback only exchange is not consumed: the JPA consumer leaves the entity in the table, so the next poll consumes it again, as long as it still matches the query. With `transacted=false` the other entities of the poll are still consumed (without logging a WARN), and so is what a `@PreConsumed` method changed before routing; with `transacted=true` the whole poll is rolled back, as for a failed exchange. The Hazelcast SEDA consumer rolls back its transaction, so the message stays in the queue.
 
 A message that the route marks rollback only every time was removed before, and is now consumed again at every poll (JPA), or taken from the queue again at once, without a delay (transacted Hazelcast SEDA, as for a failed exchange). Handle such a message in the route instead, for example by moving it aside, rather than marking it rollback only every time.
+
+### camel-sql, camel-mybatis, camel-jooq - an exchange marked rollback only last is not consumed either
+
+The SQL, MyBatis and jOOQ consumers already left a message unconsumed when the route marked the exchange rollback only with `markRollbackOnly()`. They now leave it unconsumed when the route marks it rollback only last with `markRollbackOnlyLast()` too, as the JPA and Hazelcast SEDA consumers do: the SQL consumer runs its `onConsumeFailed` statement instead of `onConsume` (and no statement when `onConsumeFailed` is not set), the MyBatis consumer does not run its `onConsume` statement, and the jOOQ consumer does not delete the entity, so the next poll reads the row again. With `transacted=true` the SQL and MyBatis consumers break out of the batch and roll back. `markRollbackOnlyLast()` reaches the consumer only when no `transacted()` EIP has consumed the flag, so the consumer’s own transaction is the last one.
 
 ### camel-telegram - webhook requests are verified with a secret token
 
@@ -139,6 +165,10 @@ Because the shipped AI events are now ``ExchangeEvent`s (via `AiEvent.ExchangeAi
 When the message comes from platform-http (on Vert.x or on Spring Boot), from a servlet based HTTP consumer (camel-servlet, camel-jetty) or from camel-netty-http, the bearer token and the session cookie are now read from the `Authorization` and `Cookie` headers of the HTTP request only. A query or form parameter of the same name, which these consumers also map into the message headers, is no longer used for them, and neither is an `Authorization` or `Cookie` message header that the route sets itself. For example `.setHeader("Authorization", simple("Bearer ${header.X-Forwarded-Access-Token}"))` before `OAuthBearerTokenProcessor` now results in a 401 response. A route that takes the token from elsewhere can validate it with `OAuthHelper.validateOAuthToken` from camel-support instead.
 
 For any other message, such as one from camel-undertow, the processors keep reading the message headers, but leave out a value that also appears in the query string of the request.
+
+### camel-platform-http-vertx - the charset parameter of the request Content-Type in any case
+
+The consumer now reads the charset parameter of the request `Content-Type` whatever the case of its name, as camel-undertow and camel-netty-http do: a body sent with `Content-Type: text/plain; Charset=ISO-8859-1` is decoded as ISO-8859-1 and `CamelCharsetName` is set. Before, only `charset=` in lower case was read and such a body was decoded as UTF-8. An empty charset parameter (`charset=` or `charset=""`) now counts as no charset, as in camel-undertow, camel-netty-http and camel-http-common (CAMEL-25355); before, converting the body to a String failed with 500.
 
 ### camel-report-maven-plugin - Java routes are read with the Java DSL parser
 
@@ -254,6 +284,10 @@ A shard created by a split or a merge while the consumer is running is now read 
 The `accessToken` (with its `jwtAuthorizationType`) is now added to a request only when the request goes to the scheme, host and port of `httpUri`, and the `username` and `password` are registered for that authority only. Previously neither was bound to the authority of `httpUri`. A request to another authority, including the same host with another scheme or port, is now sent without them. A route that needs to authenticate to another authority must address it in `httpUri`. When `proxyHost` is set, the `username` and `password` are no longer offered to the proxy when it asks for authentication.
 
 The producer also no longer takes the request URL from the `CamelHttpUri`, `CamelHttpPath`, `CamelHttpQuery` and other camel-http control headers of the message. It did so since Camel 4.19, when the component moved onto camel-http; the request now always goes to `httpUri`, as it did before. For the same reason the `CamelHttpMethod` and `CamelHttpProtocolVersion` headers no longer apply, and the request is always a POST.
+
+### camel-jetty - a multipart text field that occurs several times
+
+A text field of a `multipart/form-data` request that occurs several times (for example a group of checkboxes) is now mapped to a header whose value is the list of all its values, as a repeated query or form-urlencoded parameter already is. Before, the header had only the first value and the others were lost. Jetty also returns the query string values of the same name, so a name that is in both the query string and a multipart text field is mapped to a list of all these values too, as it already is for a form-urlencoded request.
 
 ### camel-servlet and camel-jetty - gzip request body that arrives after the headers
 
@@ -373,3 +407,11 @@ Semantic evaluations now recognize a selected `${body}` with an image `Content-T
 The additive `SemanticAdapter.getMaxImageBytes()` method exposes an expert’s configured per-image byte limit, with zero meaning no advertised limit. Image-capable adapters should advertise a positive limit and enforce it before inference. CLI and TUI local image loading now requires that metadata; the configured value appears as `maxImageBytes` in each image operation’s contract.
 
 Semantic audit backends can opt into the additive `inputType` extension. Readers that do not support it keep their existing projection. The `camel semantic audit --json` display omits image base64 and reports metadata instead. Use `--output=<new-file>` to export the full returned JSON, with `--include-input` for case/bulk requests that need captured input. Existing files are not overwritten.
+
+### camel-milo - creating and deleting the monitored items of a consumer
+
+Since 4.16, a `milo-client` consumer whose monitored item could not be created, for example because the node does not exist, received nothing. Now it receives one `DataValue` with the bad status code (when `omitNullValues=false`). The monitored item is created again when the route is restarted or when Camel rebuilds the connection to the server; unlike Camel 3.x, it is not retried every 10 seconds.
+
+The consumer now sets the `CamelMiloNodeId` header on every exchange, including a consumer with a single `node`.
+
+Stopping a consumer now deletes its monitored items. Previously they stayed on the server while another endpoint kept the shared connection open, so a restarted consumer received each value twice. While the server is unreachable, the stop waits until the client’s next attempt to reconnect has failed.

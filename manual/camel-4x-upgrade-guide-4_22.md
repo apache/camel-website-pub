@@ -55,6 +55,12 @@ A started PQC data format no longer keeps a `KeyGenerator` of its own: `getKeyGe
 
 The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.
 
+### camel-graphql - the credentials are only sent to the authority of httpUri
+
+The `accessToken` (with its `jwtAuthorizationType`) is now added to a request only when the request goes to the scheme, host and port of `httpUri`, and the `username` and `password` are registered for that authority only. Previously neither was bound to the authority of `httpUri`. A request to another authority, including the same host with another scheme or port, is now sent without them. A route that needs to authenticate to another authority must address it in `httpUri`. When `proxyHost` is set, the `username` and `password` are no longer offered to the proxy when it asks for authentication.
+
+The producer also no longer takes the request URL from the `CamelHttpUri`, `CamelHttpPath`, `CamelHttpQuery` and other camel-http control headers of the message. It did so since Camel 4.19, when the component moved onto camel-http; the request now always goes to `httpUri`, as it did before. For the same reason the `CamelHttpMethod` and `CamelHttpProtocolVersion` headers no longer apply, and the request is always a POST.
+
 ### camel-telegram - webhook requests are verified with a secret token
 
 In webhook mode, Camel now registers the webhook with a secret token, which Telegram sends in the `X-Telegram-Bot-Api-Secret-Token` header of every webhook request, and rejects a webhook request that does not carry the token with HTTP 403. The token is the value of the new `webhookSecretToken` option or, when that option is not set, a value derived from the authorization token. A client that calls the webhook endpoint directly, for example in a test, must send the header too.
@@ -96,6 +102,10 @@ For any other message, such as one from camel-undertow, the processors keep read
 ### camel-oauth - the post login url is confined to the configured redirect uri origin
 
 The post login url of the authorization code flow is now always built from the origin (`scheme://host[:port]`) of the configured `camel.oauth.redirect-uri`, plus the requested path. `OAuthCodeFlowProcessor` previously rebuilt that url from the `X-Forwarded-Proto` / `X-Forwarded-Host` / `X-Forwarded-Port` request headers, or from the `Host` header behind `CamelHttpUrl` when those were absent. All of those are set by the caller, so a request could point the post login redirect at any origin. A deployment behind an ingress or an OpenShift Route still redirects to its externally reachable address, because `camel.oauth.redirect-uri` is the address the identity provider sends the browser back to. Deployments whose external address differs from that property must set it to the address the browser actually reaches; a request announcing another origin is now redirected to the configured one and a warning is logged.
+
+### camel-oauth - client credentials tokens are cached per client secret and requested scope
+
+OAuth client credentials token caching now distinguishes profiles by client secret and requested scope, in addition to token endpoint and client ID. Profiles with different credentials or scopes request separate tokens instead of reusing the same cached token. Applications using such profiles may make additional token requests after upgrading.
 
 ### camel-spring-ws - internal Camel headers are now filtered when mapping SOAP response headers
 
