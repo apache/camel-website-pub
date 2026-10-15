@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[256]{title,link,pubDate,description}:
+posts[257]{title,link,pubDate,description}:
+  RELEASE 4.23.0|https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/index.md|Thu, 15 Oct 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.23.0 release with 1034 new features and improvements. The artifacts are published and ready for you to download from the Central
   Fast and easy integration testing with the Camel CLI Test Plugin|https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/index.md|Wed, 14 Oct 2026 00:00:00 +0000|Camel&rsquo;s YAML DSL lets you define integration routes without writing Java. Camel JBang lets you run them without a build tool. But how do you test them? Writing a Java test class with JUnit, @Qua
   Talk to Your CRM: Connecting Local AI to Business Systems with Apache Camel and MCP|https://camel.apache.org/blog/2026/10/camel-mcp-talk-to-your-crm/index.md|Mon, 12 Oct 2026 00:00:00 +0000|What if your AI assistant could do more than answer questions—what if it could actually work with your business systems? Imagine asking an AI assistant to summarize previous customer interactions, hig
   RELEASE 4.18.5|https://camel.apache.org/blog/2026/10/RELEASE-4.18.5/index.md|Sun, 11 Oct 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.18.5 LTS release with 116 new features and improvements. The artifacts are published and ready for you to download from the Cent

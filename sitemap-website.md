@@ -1,7 +1,11 @@
-urls[886]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-10-14T00:00:00+00:00
+urls[888]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-10-15T00:00:00+00:00
+  https://camel.apache.org/,2026-10-15T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.23.0/,2026-10-15T00:00:00+00:00
+  https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/,2026-10-15T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-10-15T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/,2026-10-14T00:00:00+00:00
-  https://camel.apache.org/,2026-10-14T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-10-14T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-10-14T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-10-12T00:00:00+00:00
@@ -10,8 +14,6 @@ urls[886]{loc,lastmod}:
   https://camel.apache.org/categories/Usecases/,2026-10-12T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.5/,2026-10-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.18.5/,2026-10-11T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-10-11T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-10-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-3/,2026-10-09T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-103412.md,2026-10-07T11:00:00+02:00
   https://camel.apache.org/security/CVE-2026-103413.md,2026-10-07T11:00:00+02:00
