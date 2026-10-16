@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/blog/2026/10/camel-security-advisories-4.23.0/</loc>
+    <lastmod>2026-10-16T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2026-10-16T00:00:00+00:00</lastmod>
   </url><url>
@@ -12,6 +15,9 @@
     <lastmod>2026-10-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Howtos/</loc>
+    <lastmod>2026-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Security/</loc>
     <lastmod>2026-10-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/Tooling/</loc>
@@ -234,9 +240,6 @@
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/</loc>
-    <lastmod>2026-09-17T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Security/</loc>
     <lastmod>2026-09-17T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/09/camel-website-rebuilt/</loc>

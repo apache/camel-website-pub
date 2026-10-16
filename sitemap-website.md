@@ -1,8 +1,10 @@
-urls[928]{loc,lastmod}:
+urls[929]{loc,lastmod}:
+  https://camel.apache.org/blog/2026/10/camel-security-advisories-4.23.0/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/blog/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-testing-pitfalls/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-10-16T00:00:00+00:00
+  https://camel.apache.org/categories/Security/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-78162.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-78163.md,2026-10-15T10:00:00+02:00
@@ -77,7 +79,6 @@ urls[928]{loc,lastmod}:
   https://camel.apache.org/releases/q-3.33.3/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.22.1/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/RELEASE-4.22.1/,2026-09-17T00:00:00+00:00
-  https://camel.apache.org/categories/Security/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-website-rebuilt/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-local-model-benchmark/,2026-09-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-karaf-4.18.4/,2026-09-09T00:00:00+00:00

@@ -9,6 +9,13 @@
     <lastBuildDate>Fri, 16 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Apache Camel security advisories: 38 CVEs fixed in 4.18.5, 4.22.1 and 4.23.0</title>
+      <link>https://camel.apache.org/blog/2026/10/camel-security-advisories-4.23.0/</link>
+      <pubDate>Fri, 16 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/camel-security-advisories-4.23.0/</guid>
+      <description>On 15 October we published 38 security advisories for Apache Camel. All of them are fixed in 4.22.1, 4.18.5 and 4.23.0, and we recommend upgrading.&#xA;Thirteen of the advisories are rated HIGH and twenty-five MEDIUM. Twenty-eight come from findings made by Claude as part of the Glasswing initiative at the Apache Software Foundation, and ten were reported by security researchers.&#xA;Upgrading You are on Upgrade to 4.22.x (LTS) 4.22.1 4.18.x (LTS) 4.</description>
+    </item>
+    <item>
       <title>Camel Integration Testing Pitfalls</title>
       <link>https://camel.apache.org/blog/2026/10/camel-testing-pitfalls/</link>
       <pubDate>Fri, 16 Oct 2026 00:00:00 +0000</pubDate>
