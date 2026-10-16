@@ -13,6 +13,7 @@ camel ps [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--duration` | How long to keep watching or following, in millis or as a duration such as 30s (default: until Enter is pressed) |  | long |
 | `--json` | Output in JSON Format |  | boolean |
 | `--pid` | List only pid in the output |  | boolean |
 | `--remote` | Break down counters into remote/total pairs |  | boolean |

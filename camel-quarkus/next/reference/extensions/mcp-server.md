@@ -8,7 +8,7 @@ Tool semantics — tag-based opt-in (the untagged default pool is never exposed)
 
 ## What’s inside
 
--   [MCP Server](../../../../components/4.22.x/others/mcp-server.md)
+-   [MCP Server](../../../../components/next/others/mcp-server.md)
     
 
 Please refer to the above link for usage and configuration details.

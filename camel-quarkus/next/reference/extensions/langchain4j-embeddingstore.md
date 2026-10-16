@@ -6,7 +6,7 @@ Perform operations on the LangChain4jEmbeddingStores.
 
 ## What’s inside
 
--   [LangChain4j Embedding Store component](../../../../components/4.22.x/langchain4j-embeddingstore-component.md), URI syntax: `langchain4j-embeddingstore:embeddingStoreId`
+-   [LangChain4j Embedding Store component](../../../../components/next/langchain4j-embeddingstore-component.md), URI syntax: `langchain4j-embeddingstore:embeddingStoreId`
     
 
 Please refer to the above link for usage and configuration details.

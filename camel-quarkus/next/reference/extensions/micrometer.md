@@ -6,7 +6,7 @@ Collect various metrics directly from Camel routes using the Micrometer library.
 
 ## What’s inside
 
--   [Micrometer component](../../../../components/4.22.x/micrometer-component.md), URI syntax: `micrometer:metricsType:metricsName`
+-   [Micrometer component](../../../../components/next/micrometer-component.md), URI syntax: `micrometer:metricsType:metricsName`
     
 
 Please refer to the above link for usage and configuration details.

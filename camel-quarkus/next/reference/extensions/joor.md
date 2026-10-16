@@ -1,17 +1,15 @@
 # jOOR
 
-JVM since2.0.0 Native since3.2.0 ⚠️Deprecated
+JVM since2.0.0 Native since3.2.0
 
 Evaluate a jOOR (Java compiled once at runtime) expression language.
 
 ## What’s inside
 
--   [Java language](../../../../components/4.22.x/languages/java-language.md)
-    
--   [jOOR language](../../../../components/4.22.x/languages/joor-language.md)
+-   [Java language](../../../../components/next/languages/java-language.md)
     
 
-Please refer to the above links for usage and configuration details.
+Please refer to the above link for usage and configuration details.
 
 ## Maven coordinates
 

@@ -26,6 +26,27 @@ The connector executes actions (start and stop routes, send messages, dump route
 | `file` | (default) Exchanges files in `~/.camel` with the Camel CLI (`camel get`, `camel cmd`, `camel stop`, …​). |
 | `websocket` | Dials out to a developer tool (for example an IDE) over a WebSocket. |
 
+### File transport
+
+A tool writes an action to `~/.camel/<pid>-action-<requestId>.json`, and the connector answers in `~/.camel/<pid>-output-<requestId>.json`, then deletes the action file. Every action gets an answer:
+
+```json
+// the result of the action, such as the routes of a route dump
+{"routes":[...]}
+
+// the action failed: it is unknown, threw an exception, or reported an error
+{"status":"failed","error":"No route matching: route9","reason":"not-found"}
+
+// the action has no result, such as a route stop
+{"status":"success"}
+```
+
+`reason` is `not-found` when what the action was asked to work on does not exist, such as a route id that matches no route. When the action wrote a result before it failed, the answer has it under `result`. Several problems, such as two routes that fail to stop, are joined with `;` in `error`. A result can also report a failure of its own, such as a message sent to a route that throws an exception: it is written as it is.
+
+Write the action file atomically (write a temporary file, then move it), so the connector never reads half an action. An action file that cannot be read yet is retried for two seconds. Deleting the action file before the answer is written cancels the action.
+
+The shared `~/.camel/<pid>-action.json` and `~/.camel/<pid>-output.json` are still read and written for older Camel CLI versions: an action there only gets its result, or the error when it throws an exception.
+
 ### WebSocket transport
 
 The integration connects to the tool, so the tool does not need access to the filesystem of the integration (containers, remote development clusters), and snapshots are pushed as they are collected. The integration does not open any port. The JDK WebSocket client is used by default, so no extra dependency is needed (see [WebSocket client](#_websocket_client)).
@@ -59,13 +80,13 @@ Every frame is a JSON object with a protocol version `v` and a `type`. The `acti
 // integration -> tool
 {"v":1,"type":"hello","camelVersion":"...","name":"...","transport":"jdk","runtime":{"pid":1234,"platform":"...",...}}
 {"v":1,"type":"result","requestId":"42","ok":true,"result":{...}}
-{"v":1,"type":"result","requestId":"43","ok":false,"error":"No route matching: route9","result":{}}
+{"v":1,"type":"result","requestId":"43","ok":false,"error":"No route matching: route9","reason":"not-found","result":{}}
 {"v":1,"type":"snapshot","kind":"status","data":{...}}
 ```
 
 -   `hello` is sent on every connection, once Camel has started. Actions sent before it are refused.
     
--   `result` answers each action, with the same `requestId`. `ok` is `false` when the action is unknown, fails, or reports a failure in its result (for example a message sent to a route that throws an exception).
+-   `result` answers each action, with the same `requestId`. `ok` is `false` when the action is unknown, fails, or reports a failure in its result (for example a message sent to a route that throws an exception). `reason` is `not-found` when what the action was asked to work on does not exist.
     
 -   `snapshot` kinds are `status`, `trace`, `receive`, `debug`, `history`, `error` and `activity`. `trace` and `receive` only hold the messages not sent yet on this connection, split over several frames of about 128 KB at most (many WebSocket servers refuse messages over 256 KB by default); `debug`, `history`, `error` and `activity` are only sent when they change. The `status` snapshot is sent whole: for integrations with many routes, make sure the tool accepts messages of that size.
     

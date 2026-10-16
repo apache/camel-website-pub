@@ -1,12 +1,12 @@
 # Minio
 
-JVM since1.5.0 Native since1.6.0
+JVM since1.5.0 Native since1.6.0 ⚠️Deprecated
 
 Store and retrieve objects from Minio Storage Service using Minio SDK.
 
 ## What’s inside
 
--   [Minio component](../../../../components/4.22.x/minio-component.md), URI syntax: `minio:bucketName`
+-   [Minio component](../../../../components/next/minio-component.md), URI syntax: `minio:bucketName`
     
 
 Please refer to the above link for usage and configuration details.

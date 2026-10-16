@@ -13,6 +13,7 @@ camel get endpoint [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--duration` | How long to keep watching or following, in millis or as a duration such as 30s (default: until Enter is pressed) |  | long |
 | `--filter` | Filter endpoints by URI |  | String |
 | `--filter-direction` | Filter by direction (in or out) |  | String |
 | `--filter-total` | Filter endpoints that must be higher than the given usage |  | long |

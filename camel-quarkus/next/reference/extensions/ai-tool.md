@@ -6,7 +6,7 @@ Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool
 
 ## What’s inside
 
--   [AI Tool component](../../../../components/4.22.x/ai-tool-component.md), URI syntax: `ai-tool:toolName`
+-   [AI Tool component](../../../../components/next/ai-tool-component.md), URI syntax: `ai-tool:toolName`
     
 
 Please refer to the above link for usage and configuration details.
@@ -28,7 +28,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Usage
 
-The `ai-tool` component is a framework-agnostic consumer endpoint that registers Camel routes as LLM-callable tools in a shared `AiToolRegistry`. Framework-specific extensions (such as `camel-quarkus-langchain4j-tools`, `camel-quarkus-openai`) discover and invoke these tools at runtime.
+The `ai-tool` component is a framework-agnostic consumer endpoint that registers Camel routes as LLM-callable tools in a shared `AiToolRegistry`. Framework-specific extensions (such as `camel-quarkus-langchain4j-agent`, `camel-quarkus-openai`) discover and invoke these tools at runtime.
 
 ### Defining a tool
 

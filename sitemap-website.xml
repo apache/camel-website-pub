@@ -2,6 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2026-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/10/camel-testing-pitfalls/</loc>
+    <lastmod>2026-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Howtos/</loc>
+    <lastmod>2026-10-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Tooling/</loc>
+    <lastmod>2026-10-16T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-78162.html</loc>
     <lastmod>2026-10-15T10:00:00+02:00</lastmod>
   </url><url>
@@ -116,16 +131,10 @@
     <loc>https://camel.apache.org/security/CVE-2026-91858.html</loc>
     <lastmod>2026-10-15T10:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/</loc>
-    <lastmod>2026-10-15T10:00:00+02:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-10-15T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/camel423-whatsnew/</loc>
-    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/blog/</loc>
     <lastmod>2026-10-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.23.0/</loc>
@@ -141,12 +150,6 @@
     <lastmod>2026-10-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/</loc>
-    <lastmod>2026-10-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Howtos/</loc>
-    <lastmod>2026-10-14T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Tooling/</loc>
     <lastmod>2026-10-14T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/categories/AI/</loc>

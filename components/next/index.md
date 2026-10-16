@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 389 in 316 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 390 in 317 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -133,6 +133,7 @@ Number of Non-Core Components: 389 in 316 JAR artifacts (4 deprecated)
 | [Cassandra CQL](cql-component.md) | camel-cassandraql | Stable | 2.15 | Integrate with Cassandra 2.0 using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
 | [ChatScript](chatscript-component.md) | camel-chatscript | Stable | 3.0 | Chat with a ChatScript Server. |
 | [Chunk](chunk-component.md) | camel-chunk | Stable | 2.15 | Transform messages using Chunk templating engine. |
+| [Citrus](citrus-component.md) | camel-test-citrus | Preview | 4.24 | Citrus message validation component for testing |
 | [ClickHouse](clickhouse-component.md) | camel-clickhouse | Preview | 4.22 | Interact with ClickHouse, the high-performance columnar OLAP database, for high-throughput ingestion and OLAP queries. |
 | [ClickUp](clickup-component.md) | camel-clickup | Preview | 4.9 | Receives events from ClickUp |
 | [CM SMS Gateway](cm-sms-component.md) | camel-cm-sms | Stable | 2.18 | Send SMS messages via CM SMS Gateway. |

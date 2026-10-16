@@ -15,7 +15,9 @@ camel cmd route-dump [options]
 | --- | --- | --- | --- |
 | `--filter` | Filter route by filename or route id (multiple names can be separated by comma) |  | String |
 | `--format` | Output format (xml, yaml, or java) | yaml | String |
+| `--json` | Output in JSON Format |  | boolean |
 | `--raw` | To output raw without metadata |  | boolean |
 | `--sort` | Sort route by name or id | name | String |
+| `--timeout` | How long to wait for the integration to answer, in millis or as a duration such as 30s | 10000 | long |
 | `--uri-as-parameters` | Whether to expand URIs into separated key/value parameters (only in use for YAML format) | true | boolean |
 | `-h,--help` | Display the help and sub-commands |  | boolean |

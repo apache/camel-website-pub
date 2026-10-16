@@ -62,6 +62,40 @@ An error is one line that says what went wrong, without a stack trace, unless it
 CAMEL_CLI_DEBUG=true camel run hello.yaml
 ```
 
+## JSON output
+
+The commands that print data have a `--json` option (`camel overview` has `--format=json`). With it, stdout is exactly one JSON document, also when the command fails:
+
+-   A list is a JSON array, and `[]` when there is nothing to list, such as `camel ps --json` when no integration is running.
+    
+-   An error is a JSON object, with the exit code of the command in `code`:
+    
+    ```json
+    {"status":"error","code":3,"message":"No running Camel integration matches: foo"}
+    ```
+    
+    The `ERROR:` line is printed on stderr as well, so a script that does not read stdout still sees it. An unknown option or a missing argument with `--json` prints an error document with code `2`.
+    
+
+Errors, warnings, tips and progress go to stderr, so they never break the JSON document. With `--watch`, every refresh prints one more document.
+
+```bash
+camel get route --json | jq -r '.[] | select(.status != "Started") | .routeId'
+```
+
+## Without a terminal
+
+In a script, a CI job (the environment variable `CI` is set) or an AI agent, nobody can press Enter to stop a command, so the commands do not wait for it:
+
+-   A command that watches (`--watch`) or follows (`camel log`, `camel trace`, `camel cmd receive` and `camel infra log`) shows its output once. With `--duration`, such as `--duration=30s`, it keeps watching or following for that long, and then exits with `0`. With `--follow`, it follows until it is stopped.
+    
+-   A command that only works in a terminal, such as `camel debug`, `camel shell` or `camel tui`, exits with `2`.
+    
+
+```bash
+camel log orders --duration=10s > orders.log
+```
+
 ## Using the exit codes
 
 The exit code tells a script or an AI agent what to do next:

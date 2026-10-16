@@ -162,6 +162,7 @@ Enum values:
 
 
  |  | MinaTextLineDelimiter |
+| **hostnameVerification** (security) | Whether to check that the certificate of the server matches the host Camel connects to, when SSL is used by the producer, or by the consumer in client mode. When disabled, any certificate accepted by the trust store is accepted, whatever host it was issued for. | true | boolean |
 | **sslContextParameters** (security) | To configure SSL security. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 
@@ -272,6 +273,7 @@ Enum values:
 
 
  |  | MinaTextLineDelimiter |
+| **hostnameVerification** (security) | Whether to check that the certificate of the server matches the host Camel connects to, when SSL is used by the producer, or by the consumer in client mode. When disabled, any certificate accepted by the trust store is accepted, whatever host it was issued for. | true | boolean |
 | **sslContextParameters** (security) | To configure SSL security. |  | SSLContextParameters |
 
 ## Message Headers
@@ -299,6 +301,14 @@ You can get the IoSession from the message header with this key `CamelMinaIoSess
 ### Configuring Mina filters
 
 Filters permit you to use some Mina Filters, such as `SslFilter`. You can also implement some customized filters. Please note that `codec` and `logger` are also implemented as Mina filters of the type, `IoFilter`. Any filters you may define are appended to the end of the filter chain; that is, after `codec` and `logger`.
+
+### Using SSL/TLS
+
+Set `sslContextParameters` on the endpoint, or `useGlobalSslContextParameters` on the component, to use SSL/TLS with the TCP protocol. The trust store, key store, protocols and cipher suites are configured with the [Camel JSSE Configuration Utility](../../manual/camel-configuration-utilities.md).
+
+When Camel opens the connection (the producer, or the consumer with `clientMode=true`), it checks that the certificate of the server matches the `host` of the endpoint, with the same rules as an HTTPS client. A connection to an IP address needs a certificate that lists that address as a subject alternative name. Set `hostnameVerification=false` to turn this check off; the certificate chain is still validated against the trust store.
+
+MINA keeps a failed handshake in its SSL handler instead of passing the error on, so a certificate that does not match shows up as a timeout of the producer (after `writeTimeout`, or `timeout` while waiting for a reply) rather than as an SSL error. The handshake error is logged at `ERROR` level by `org.apache.mina.filter.ssl.SslHandler`: when a producer times out after you enable SSL, check that log and the subject alternative names of the certificate.
 
 ## Examples
 

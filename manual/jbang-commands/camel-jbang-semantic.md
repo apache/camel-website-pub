@@ -25,5 +25,5 @@ camel semantic [options]
 | --- | --- | --- | --- |
 | `--expert` | Show the operations and parameter contract of this expert |  | String |
 | `--json` | Output a single JSON document |  | boolean |
-| `--timeout` | Timeout in milliseconds waiting for the integration | 60000 | long |
+| `--timeout` | Timeout waiting for the integration, in millis or as a duration such as 30s | 60000 | long |
 | `-h,--help` | Display the help and sub-commands |  | boolean |

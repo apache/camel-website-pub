@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792095560458,
+  "generated": 1792154682372,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -9136,12 +9136,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/csimple.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/csimple.html",
-              "title": "CSimple"
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/csv.adoc",
               "url": "/camel-quarkus/next/reference/extensions/csv.html",
               "title": "CSV",
@@ -9241,12 +9235,6 @@
               "path": "reference/extensions/diagram.adoc",
               "url": "/camel-quarkus/next/reference/extensions/diagram.html",
               "title": "Diagram"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/digitalocean.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/digitalocean.html",
-              "title": "DigitalOcean"
             },
             {
               "module": "ROOT",
@@ -9549,13 +9537,7 @@
               "module": "ROOT",
               "path": "reference/extensions/hazelcast.adoc",
               "url": "/camel-quarkus/next/reference/extensions/hazelcast.html",
-              "title": "Hazelcast Atomic Number"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/headersmap.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/headersmap.html",
-              "title": "Headersmap"
+              "title": "Hazelcast"
             },
             {
               "module": "ROOT",
@@ -9613,12 +9595,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/iec60870.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/iec60870.html",
-              "title": "IEC 60870 Client"
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/ignite.adoc",
               "url": "/camel-quarkus/next/reference/extensions/ignite.html",
               "title": "Ignite Cache"
@@ -9646,12 +9622,6 @@
               "attributes": {
                 "page-aliases": "extensions/influxdb.adoc"
               }
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/irc.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/irc.html",
-              "title": "IRC"
             },
             {
               "module": "ROOT",
@@ -9829,12 +9799,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/json-patch.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/json-patch.html",
-              "title": "JsonPatch"
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/json-validator.adoc",
               "url": "/camel-quarkus/next/reference/extensions/json-validator.html",
               "title": "JSON Schema Validator",
@@ -9991,12 +9955,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/langchain4j-tools.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/langchain4j-tools.html",
-              "title": "LangChain4j Tools"
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/langchain4j-web-search.adoc",
               "url": "/camel-quarkus/next/reference/extensions/langchain4j-web-search.html",
               "title": "LangChain4j Web Search"
@@ -10018,12 +9976,6 @@
               "path": "reference/extensions/ldif.adoc",
               "url": "/camel-quarkus/next/reference/extensions/ldif.html",
               "title": "LDIF"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/leveldb.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/leveldb.html",
-              "title": "LevelDB"
             },
             {
               "module": "ROOT",
@@ -10267,6 +10219,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/odata.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/odata.html",
+              "title": "OData"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/ognl.adoc",
               "url": "/camel-quarkus/next/reference/extensions/ognl.html",
               "title": "OGNL",
@@ -10464,15 +10422,6 @@
               "title": "Qute",
               "attributes": {
                 "page-aliases": "extensions/qute.adoc"
-              }
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/reactive-executor.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/reactive-executor.html",
-              "title": "Reactive Executor",
-              "attributes": {
-                "page-aliases": "extensions/reactive-executor.adoc"
               }
             },
             {
@@ -10705,12 +10654,6 @@
             },
             {
               "module": "ROOT",
-              "path": "reference/extensions/splunk.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/splunk.html",
-              "title": "Splunk"
-            },
-            {
-              "module": "ROOT",
               "path": "reference/extensions/spring-rabbitmq.adoc",
               "url": "/camel-quarkus/next/reference/extensions/spring-rabbitmq.html",
               "title": "Spring RabbitMQ"
@@ -10804,15 +10747,6 @@
               "path": "reference/extensions/telemetry-dev.adoc",
               "url": "/camel-quarkus/next/reference/extensions/telemetry-dev.html",
               "title": "Telemetry Dev"
-            },
-            {
-              "module": "ROOT",
-              "path": "reference/extensions/threadpoolfactory-vertx.adoc",
-              "url": "/camel-quarkus/next/reference/extensions/threadpoolfactory-vertx.html",
-              "title": "ThreadPoolFactory Vert.x",
-              "attributes": {
-                "page-aliases": "extensions/threadpoolfactory-vertx.adoc"
-              }
             },
             {
               "module": "ROOT",
@@ -24625,6 +24559,12 @@
               "path": "chunk-component.adoc",
               "url": "/components/next/chunk-component.html",
               "title": "Chunk"
+            },
+            {
+              "module": "ROOT",
+              "path": "citrus-component.adoc",
+              "url": "/components/next/citrus-component.html",
+              "title": "Citrus"
             },
             {
               "module": "ROOT",

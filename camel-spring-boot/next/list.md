@@ -954,6 +954,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Cassandra CQL](../../components/next/cql-component.md) | camel-cassandraql-starter | Stable | 2.15 | Integrate with Cassandra 2.0 using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
 | [ChatScript](../../components/next/chatscript-component.md) | camel-chatscript-starter | Stable | 3.0 | Chat with a ChatScript Server. |
 | [Chunk](../../components/next/chunk-component.md) | camel-chunk-starter | Stable | 2.15 | Transform messages using Chunk templating engine. |
+| [Citrus](../../components/next/citrus-component.md) | camel-test-citrus-starter | Preview | 4.24 | Citrus message validation component for testing |
 | [Class](../../components/next/class-component.md) | camel-bean-starter | Stable | 2.4 | Invoke methods of Java beans specified by class name. |
 | [ClickHouse](../../components/next/clickhouse-component.md) | camel-clickhouse-starter | Preview | 4.22 | Interact with ClickHouse, the high-performance columnar OLAP database, for high-throughput ingestion and OLAP queries. |
 | [ClickUp](../../components/next/clickup-component.md) | camel-clickup-starter | Preview | 4.9 | Receives events from ClickUp |

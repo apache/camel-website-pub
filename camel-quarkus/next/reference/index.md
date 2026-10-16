@@ -9,7 +9,7 @@
 >     
 > -   You may try your luck using the given camel component on Quarkus directly (without an extension). Most probably it will work in the JVM mode and fail in the native mode. Do not hesitate to [report](https://github.com/apache/camel-quarkus/issues) any issues you encounter.
 
-There are 344 extensions (17 deprecated, 62 JVM only)
+There are 334 extensions (5 deprecated, 59 JVM only)
 
      
 | Extension | Artifact | JVM  
@@ -89,7 +89,6 @@ level | Description |
 | [CouchDB](extensions/couchdb.md) | camel-quarkus-couchdb | 1.0.0 | 1.0.0 | Stable | Consume changesets for inserts, updates and deletes in a CouchDB database, as well as get, save, update and delete documents from a CouchDB database. |
 | [Cron](extensions/cron.md) | camel-quarkus-cron | 1.0.0 | 1.0.0 | Stable | A generic interface for triggering events at times specified through the Unix cron syntax. |
 | [Crypto (JCE)](extensions/crypto.md) | camel-quarkus-crypto | 1.1.0 | 1.2.0 | Stable | Sign and verify exchanges using the Signature Service of the Java Cryptographic Extension (JCE). |
-| [CSimple](extensions/csimple.md) | camel-quarkus-csimple | 1.5.0 | 1.5.0 | Preview Deprecated | Compiled Simple language |
 | [CSV](extensions/csv.md) | camel-quarkus-csv | 0.2.0 | 0.2.0 | Stable | Handle CSV (Comma Separated Values) payloads |
 | [CXF](extensions/cxf-soap.md) | camel-quarkus-cxf-soap | 2.12.0 | 2.12.0 | Stable | Expose SOAP WebServices using Apache CXF or connect to external WebServices using CXF WS client. |
 | [CyberArk Vault](extensions/cyberark-vault.md) | camel-quarkus-cyberark-vault | 3.31.0 | 3.31.0 | Stable | Retrieve secrets from CyberArk Conjur Vault. |
@@ -105,7 +104,6 @@ level | Description |
 | [Deep Java Library](extensions/djl.md) | camel-quarkus-djl | 1.1.0 | n/a | Preview | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
 | [DFDL](extensions/dfdl.md) | camel-quarkus-dfdl | 3.22.0 | n/a | Preview | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
 | [Diagram](extensions/diagram.md) | camel-quarkus-diagram | 3.38.0 | n/a | Preview | Camel Route Diagram rendering |
-| [DigitalOcean](extensions/digitalocean.md) | camel-quarkus-digitalocean | 1.1.0 | 2.0.0 | Stable Deprecated | Manage Droplets and resources within the DigitalOcean cloud. |
 | [Direct](extensions/direct.md) | camel-quarkus-direct | 0.0.1 | 0.0.1 | Stable | Call another endpoint from the same Camel Context synchronously. |
 | [Disruptor](extensions/disruptor.md) | camel-quarkus-disruptor | 1.1.0 | 1.2.0 | Stable | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [DNS](extensions/dns.md) | camel-quarkus-dns | 1.1.0 | n/a | Preview | Perform DNS queries using DNSJava. |
@@ -145,8 +143,7 @@ level | Description |
 | [gRPC](extensions/grpc.md) | camel-quarkus-grpc | 1.0.0 | 1.0.0 | Stable | Expose gRPC endpoints and access external gRPC endpoints. |
 | [Gson](extensions/gson.md) | camel-quarkus-gson | 1.0.0 | 1.0.0 | Stable | Marshal POJOs to JSON and back using Gson |
 | [Hashicorp Vault](extensions/hashicorp-vault.md) | camel-quarkus-hashicorp-vault | 2.11.0 | 3.15.0 | Stable | Manage secrets in HashiCorp Vault Service |
-| [Hazelcast Atomic Number](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable Deprecated | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
-| [Headersmap](extensions/headersmap.md) | camel-quarkus-headersmap | 1.2.0 | 1.2.0 | Stable Deprecated | Fast case-insensitive headers map implementation |
+| [Hazelcast](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed data structures such as map, multimap, list, set, queue, topic and ringbuffer. |
 | [HL7](extensions/hl7.md) | camel-quarkus-hl7 | 1.1.0 | 1.8.0 | Stable | Marshal and unmarshal HL7 (Health Care) model objects using the HL7 MLLP codec. |
 | [HTTP](extensions/http.md) | camel-quarkus-http | 1.0.0 | 1.0.0 | Stable | Send requests to external HTTP servers using Apache HTTP Client 5.x. |
 | [IBM Cloud Object Storage](extensions/ibm-cos.md) | camel-quarkus-ibm-cos | 3.30.0 | 3.31.0 | Stable | Store and retrieve objects from IBM Cloud Object Storage. |
@@ -154,12 +151,10 @@ level | Description |
 | [IBM Watson Discovery](extensions/ibm-watson-discovery.md) | camel-quarkus-ibm-watson-discovery | 3.30.0 | 3.35.0 | Stable | Perform document understanding and search using IBM Watson Discovery |
 | [IBM Watson Language](extensions/ibm-watson-language.md) | camel-quarkus-ibm-watson-language | 3.30.0 | 3.35.0 | Stable | Perform natural language processing using IBM Watson Natural Language Understanding |
 | [iCal](extensions/ical.md) | camel-quarkus-ical | 1.0.0 | 1.0.0 | Stable | Marshal and unmarshal iCal (\*.ics) documents to/from model objects |
-| [IEC 60870 Client](extensions/iec60870.md) | camel-quarkus-iec60870 | 1.1.0 | n/a | Preview Deprecated | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
 | [Ignite Cache](extensions/ignite.md) | camel-quarkus-ignite | 1.1.0 | n/a | Preview | Perform cache operations on an Ignite cache or consume changes from a continuous query. |
 | [Infinispan](extensions/infinispan.md) | camel-quarkus-infinispan | 0.0.1 | 0.0.1 | Stable | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [Infinispan Cluster Service](extensions/infinispan-cluster-service.md) | camel-quarkus-infinispan-cluster-service | 3.32.0 | 3.32.0 | Stable | Provides an Infinispan implementation of the Camel Cluster Service SPI |
 | [InfluxDB](extensions/influxdb.md) | camel-quarkus-influxdb | 1.0.0 | 1.0.0 | Stable | Interact with InfluxDB v1, a time series database. |
-| [IRC](extensions/irc.md) | camel-quarkus-irc | 1.1.0 | n/a | Preview Deprecated | Send and receive messages to/from an IRC chat. |
 | [ISO-8583](extensions/iso8583.md) | camel-quarkus-iso8583 | 3.26.0 | 3.26.0 | Stable | Create, edit and read ISO-8583 messages |
 | [Jackson](extensions/jackson.md) | camel-quarkus-jackson | 0.3.0 | 0.3.0 | Stable | Marshal POJOs to JSON and back using Jackson. |
 | [JacksonXML](extensions/jacksonxml.md) | camel-quarkus-jacksonxml | 1.0.0 | 1.0.0 | Stable | Unmarshal an XML payloads to POJOs and back using XMLMapper extension of Jackson |
@@ -178,7 +173,7 @@ level | Description |
 | [Jolokia](extensions/jolokia.md) | camel-quarkus-jolokia | 3.19.0 | 3.20.0 | Stable | Expose runtime metrics and management operations via JMX with Jolokia |
 | [JOLT](extensions/jolt.md) | camel-quarkus-jolt | 1.0.0 | 1.0.0 | Stable | JSON to JSON transformation using JOLT. |
 | [JOOQ](extensions/jooq.md) | camel-quarkus-jooq | 1.1.0 | n/a | Preview | Store and retrieve Java objects from an SQL database using JOOQ. |
-| [jOOR](extensions/joor.md) | camel-quarkus-joor | 2.0.0 | 3.2.0 | Stable Deprecated | Evaluate a jOOR (Java compiled once at runtime) expression language. |
+| [jOOR](extensions/joor.md) | camel-quarkus-joor | 2.0.0 | 3.2.0 | Stable | Evaluate a jOOR (Java compiled once at runtime) expression language. |
 | [JPA](extensions/jpa.md) | camel-quarkus-jpa | 1.0.0 | 1.0.0 | Stable | Store and retrieve Java objects from databases using Java Persistence API (JPA). |
 | [JQ](extensions/jq.md) | camel-quarkus-jq | 2.11.0 | 2.11.0 | Stable | Evaluates a JQ expression against a JSON message body |
 | [JSLT](extensions/jslt.md) | camel-quarkus-jslt | 1.1.0 | 1.4.0 | Stable | Query or transform JSON payloads using JSLT. |
@@ -188,7 +183,6 @@ level | Description |
 | [JSON-B](extensions/jsonb.md) | camel-quarkus-jsonb | 1.5.0 | 1.5.0 | Stable | Marshal POJOs to JSON and back using JSON-B. |
 | [JSonApi](extensions/jsonapi.md) | camel-quarkus-jsonapi | 1.1.0 | n/a | Preview | Marshal and unmarshal JSON:API resources using JSONAPI-Converter library |
 | [JSONATA](extensions/jsonata.md) | camel-quarkus-jsonata | 1.6.0 | 1.6.0 | Stable | Transforms JSON payload using JSONata transformation. |
-| [JsonPatch](extensions/json-patch.md) | camel-quarkus-json-patch | 2.7.0 | n/a | Preview Deprecated | Transforms JSON using JSON patch (RFC 6902). |
 | [Jsoup](extensions/jsoup.md) | camel-quarkus-jsoup | 3.38.0 | 3.38.0 | Stable | Cleanup HTML content |
 | [JT400](extensions/jt400.md) | camel-quarkus-jt400 | 1.1.0 | 3.8.0 | Stable | Exchanges messages with an IBM i system using data queues, message queues, or program call. IBM i is the replacement for AS/400 and iSeries servers. |
 | [JTA](extensions/jta.md) | camel-quarkus-jta | 1.0.0 | 1.0.0 | Stable | Using Camel With JTA Transaction Manager |
@@ -205,14 +199,12 @@ level | Description |
 | [LangChain4j Chat](extensions/langchain4j-chat.md) | camel-quarkus-langchain4j-chat | 3.11.0 | 3.12.0 | Preview | LangChain4j Chat component |
 | [LangChain4j Embedding Store](extensions/langchain4j-embeddingstore.md) | camel-quarkus-langchain4j-embeddingstore | 3.29.0 | 3.29.0 | Preview | Perform operations on the LangChain4jEmbeddingStores. |
 | [LangChain4j Embeddings](extensions/langchain4j-embeddings.md) | camel-quarkus-langchain4j-embeddings | 3.10.0 | 3.29.0 | Preview | LangChain4j Embeddings |
-| [LangChain4j Ingest](extensions/langchain4j-ingest.md) | camel-quarkus-langchain4j-ingest | 3.39.0 | 3.39.0 | Experimental | Declarative AI document ingestion: point a knowledge base at a folder via configuration; splitting, embedding and storing are handled under the hood |
+| [LangChain4j Ingest](extensions/langchain4j-ingest.md) | camel-quarkus-langchain4j-ingest | 3.39.0 | 3.39.0 | Experimental | Ingest documents into a LangChain4j EmbeddingStore: split, embed and store the message body. |
 | [LangChain4j Tokenizer](extensions/langchain4j-tokenizer.md) | camel-quarkus-langchain4j-tokenizer | 3.15.0 | 3.24.0 | Preview | LangChain4j Tokenizer |
-| [LangChain4j Tools](extensions/langchain4j-tools.md) | camel-quarkus-langchain4j-tools | 3.15.0 | 3.24.0 | Preview Deprecated | LangChain4j Tools and Function Calling Features |
 | [LangChain4j Web Search](extensions/langchain4j-web-search.md) | camel-quarkus-langchain4j-web-search | 3.15.0 | 3.24.0 | Preview | LangChain4j Web Search Engine |
 | [Language](extensions/language.md) | camel-quarkus-language | 1.1.0 | 2.2.0 | Stable | Execute scripts in any of the languages supported by Camel. |
 | [LDAP](extensions/ldap.md) | camel-quarkus-ldap | 1.1.0 | 3.2.0 | Stable | Perform searches on LDAP servers. |
 | [LDIF](extensions/ldif.md) | camel-quarkus-ldif | 1.1.0 | n/a | Preview | Perform updates on an LDAP server from an LDIF body content. |
-| [LevelDB](extensions/leveldb.md) | camel-quarkus-leveldb | 1.2.0 | 1.2.0 | Stable Deprecated | Using LevelDB as persistent EIP store |
 | [Log](extensions/log.md) | camel-quarkus-log | 0.0.1 | 0.0.1 | Stable | Prints data from the routed message (such as body and headers) to the logger. |
 | [LRA](extensions/lra.md) | camel-quarkus-lra | 1.2.0 | 1.8.0 | Stable | Camel saga binding for Long-Running-Action framework |
 | [Lucene](extensions/lucene.md) | camel-quarkus-lucene | 1.1.0 | n/a | Preview | Perform inserts or queries against Apache Lucene databases. |
@@ -223,7 +215,7 @@ level | Description |
 | [Management](extensions/management.md) | camel-quarkus-management | 1.1.0 | 3.2.0 | Stable | Camel Management |
 | [MapStruct](extensions/mapstruct.md) | camel-quarkus-mapstruct | 3.2.0 | 3.2.0 | Stable | Type Conversion using MapStruct |
 | [Master](extensions/master.md) | camel-quarkus-master | 1.0.0 | 1.0.0 | Stable | Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies. |
-| [MCP Server](extensions/mcp-server.md) | camel-quarkus-mcp-server | 3.39.0 | 3.39.0 | Preview | Expose ai-tool routes as MCP tools over streamable HTTP |
+| [MCP Server](extensions/mcp-server.md) | camel-quarkus-mcp-server | 3.39.0 | 3.39.0 | Preview | Expose ai-tool routes as MCP tools and ai-resource routes as MCP resources over streamable HTTP |
 | [Mdc](extensions/mdc.md) | camel-quarkus-mdc | 3.29.0 | 3.29.0 | Stable | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer](extensions/micrometer.md) | camel-quarkus-micrometer | 1.5.0 | 1.5.0 | Stable | Collect various metrics directly from Camel routes using the Micrometer library. |
 | [Micrometer Observability 2](extensions/micrometer-observability.md) | camel-quarkus-micrometer-observability | 3.39.0 | 3.39.0 | Preview | Micrometer Observability implementation of Camel Telemetry |
@@ -231,7 +223,7 @@ level | Description |
 | [MicroProfile Health](extensions/microprofile-health.md) | camel-quarkus-microprofile-health | 0.3.0 | 0.3.0 | Stable | Expose Camel health checks via MicroProfile Health |
 | [Milvus](extensions/milvus.md) | camel-quarkus-milvus | 3.10.0 | 3.33.0 | Stable | Perform operations on the Milvus Vector Database. |
 | [MINA SFTP](extensions/mina-sftp.md) | camel-quarkus-mina-sftp | 3.33.0 | 3.33.0 | Stable | Upload and download files to/from SFTP servers using Apache MINA SSHD. |
-| [Minio](extensions/minio.md) | camel-quarkus-minio | 1.5.0 | 1.6.0 | Stable | Store and retrieve objects from Minio Storage Service using Minio SDK. |
+| [Minio](extensions/minio.md) | camel-quarkus-minio | 1.5.0 | 1.6.0 | Stable Deprecated | Store and retrieve objects from Minio Storage Service using Minio SDK. |
 | [MLLP](extensions/mllp.md) | camel-quarkus-mllp | 1.1.0 | 2.0.0 | Stable | Communicate with external systems using the MLLP protocol. |
 | [Mock](extensions/mock.md) | camel-quarkus-mock | 1.0.0 | 1.0.0 | Stable | Test routes and mediation rules using mocks. |
 | [MongoDB](extensions/mongodb.md) | camel-quarkus-mongodb | 1.0.0 | 1.0.0 | Stable | Perform operations on MongoDB documents and collections. |
@@ -246,11 +238,12 @@ level | Description |
 | [Oauth](extensions/oauth.md) | camel-quarkus-oauth | 3.31.0 | 3.31.0 | Stable | Camel OAuth (Preview) |
 | [Observability Services](extensions/observability-services.md) | camel-quarkus-observability-services | 3.19.0 | 3.19.0 | Stable | Camel Observability Services |
 | [OCSF](extensions/ocsf.md) | camel-quarkus-ocsf | 3.38.0 | 3.38.0 | Stable | Marshal and unmarshal OCSF (Open Cybersecurity Schema Framework) security events to/from JSON |
+| [OData](extensions/odata.md) | camel-quarkus-odata | 4.0.0 | 4.0.0 | Preview | Camel OData Component |
 | [OGNL](extensions/ognl.md) | camel-quarkus-ognl | 1.0.0 | 3.2.0 | Stable Deprecated | Evaluates an OGNL expression (Apache Commons OGNL) |
 | [Olingo4](extensions/olingo4.md) | camel-quarkus-olingo4 | 1.0.0 | 1.0.0 | Stable Deprecated | Communicate with OData 4.0 services using Apache Olingo OData API. |
 | [Once](extensions/once.md) | camel-quarkus-once | 3.31.0 | 3.31.0 | Stable | Trigger a single message only once at startup (useful for development and testing purposes). |
 | [OPC UA Browser](extensions/milo.md) | camel-quarkus-milo | 3.31.0 | 3.31.0 | Stable | Connect to OPC UA servers using the binary protocol for browsing the node tree. |
-| [OpenAI](extensions/openai.md) | camel-quarkus-openai | 3.32.0 | 3.32.0 | Stable | OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech. |
+| [OpenAI](extensions/openai.md) | camel-quarkus-openai | 3.32.0 | 3.32.0 | Stable | LLM endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech using OpenAI-compatible APIs. The openai scheme is a supported alias. |
 | [OpenAPI Java](extensions/openapi-java.md) | camel-quarkus-openapi-java | 1.0.0 | 1.0.0 | Stable | Rest DSL support for using OpenApi doc |
 | [OpenAPI Validator](extensions/openapi-validator.md) | camel-quarkus-openapi-validator | 3.38.0 | 3.38.0 | Stable | OpenAPI validator for Camel Rest DSL |
 | [OpenSearch](extensions/opensearch.md) | camel-quarkus-opensearch | 3.8.0 | n/a | Preview | Send requests to OpenSearch via Java Client API. |
@@ -277,7 +270,6 @@ level | Description |
 | [Quartz](extensions/quartz.md) | camel-quarkus-quartz | 1.0.0 | 1.0.0 | Stable | Schedule sending of messages using the Quartz 2.x scheduler. |
 | [QuickFix](extensions/quickfix.md) | camel-quarkus-quickfix | 1.1.0 | n/a | Preview | Open a Financial Interchange (FIX) session using an embedded QuickFix/J engine. |
 | [Qute](extensions/qute.md) | camel-quarkus-qute | 1.0.0 | 1.0.0 | Stable | Transform messages using Quarkus Qute templating engine |
-| [Reactive Executor](extensions/reactive-executor.md) | camel-quarkus-reactive-executor | 0.3.0 | 0.3.0 | Stable Deprecated | Reactive Executor for camel-core using Vert.x |
 | [Reactive Streams](extensions/reactive-streams.md) | camel-quarkus-reactive-streams | 1.0.0 | 1.0.0 | Stable | Exchange messages with reactive stream processing libraries compatible with the reactive streams standard. |
 | [Redis](extensions/redis.md) | camel-quarkus-redis | 1.6.0 | n/a | Preview | Aggregation repository using Redis as datastore |
 | [Ref](extensions/ref.md) | camel-quarkus-ref | 1.0.0 | 1.0.0 | Stable | Route messages to an endpoint looked up dynamically by name in the Camel Registry. |
@@ -308,7 +300,6 @@ level | Description |
 | [SNMP](extensions/snmp.md) | camel-quarkus-snmp | 1.1.0 | n/a | Preview | Receive traps and poll SNMP (Simple Network Management Protocol) capable devices. |
 | [SOAP dataformat](extensions/soap.md) | camel-quarkus-soap | 1.0.0 | 1.0.0 | Stable | Marshal Java objects to SOAP messages and back |
 | [Solr](extensions/solr.md) | camel-quarkus-solr | 3.19.0 | 3.19.0 | Stable | Perform operations against Apache Lucene Solr. |
-| [Splunk](extensions/splunk.md) | camel-quarkus-splunk | 1.8.0 | 1.8.0 | Stable Deprecated | Publish or search for events in Splunk. |
 | [Splunk HEC](extensions/splunk-hec.md) | camel-quarkus-splunk-hec | 1.1.0 | 3.8.0 | Stable | The splunk component allows publishing events in Splunk using the HTTP Event Collector. |
 | [Spring RabbitMQ](extensions/spring-rabbitmq.md) | camel-quarkus-spring-rabbitmq | 1.7.0 | 1.7.0 | Stable | Send and receive messages from RabbitMQ using the Spring RabbitMQ client. |
 | [Spring Redis](extensions/spring-redis.md) | camel-quarkus-spring-redis | 3.6.0 | n/a | Preview | Send and receive messages from Redis. |
@@ -324,7 +315,6 @@ level | Description |
 | [Tar File](extensions/tarfile.md) | camel-quarkus-tarfile | 0.3.0 | 0.3.0 | Stable | Archive files into tarballs or extract files from tarballs |
 | [Telegram](extensions/telegram.md) | camel-quarkus-telegram | 1.0.0 | 1.0.0 | Stable | Send and receive messages using the Telegram Bot API. |
 | [Telemetry Dev](extensions/telemetry-dev.md) | camel-quarkus-telemetry-dev | 3.22.0 | 3.22.0 | Stable | Basic implementation of Camel Telemetry useful for development purposes |
-| [ThreadPoolFactory Vert.x](extensions/threadpoolfactory-vertx.md) | camel-quarkus-threadpoolfactory-vertx | 1.0.0 | 1.0.0 | Stable Deprecated | ThreadPoolFactory for camel-core using Vert.x |
 | [Thrift](extensions/thrift.md) | camel-quarkus-thrift | 1.1.0 | n/a | Preview | Call and expose remote procedures (RPC) with Apache Thrift data format and serialization mechanism. |
 | [Tika](extensions/tika.md) | camel-quarkus-tika | 1.0.0 | 1.0.0 | Stable | Parse documents and extract metadata and text using Apache Tika. |
 | [Timer](extensions/timer.md) | camel-quarkus-timer | 0.2.0 | 0.0.2 | Stable | Generate messages in specified intervals using java.util.Timer. |

@@ -1,6 +1,6 @@
 # Camel languages supported on Quarkus
 
-There are 25 languages (4 deprecated, 3 JVM only)
+There are 23 languages (1 deprecated, 3 JVM only)
 
      
 | Language | Artifact | JVM  
@@ -10,7 +10,6 @@ level | Description |
 | --- | --- | --- | --- | --- | --- |
 | [Bean Method](extensions/bean.md) | camel-quarkus-bean | 0.1.0 | 0.1.0 | Stable | Calls a Java bean method |
 | [Constant](extensions/core.md) | camel-quarkus-core | 0.0.1 | 0.0.1 | Stable | A fixed value set only once during the route startup |
-| [CSimple](extensions/csimple.md) | camel-quarkus-csimple | 1.5.0 | 1.5.0 | Stable | Evaluate a compiled simple expression |
 | [DataSonnet](extensions/datasonnet.md) | camel-quarkus-datasonnet | 2.10.0 | 2.10.0 | Stable | To use DataSonnet scripts for message transformations |
 | [ExchangeProperty](extensions/core.md) | camel-quarkus-core | 0.0.1 | 0.0.1 | Stable | Gets a property from the Exchange |
 | [File](extensions/core.md) | camel-quarkus-core | 0.0.1 | 0.0.1 | Stable | File related capabilities for the Simple language |
@@ -18,7 +17,6 @@ level | Description |
 | [Header](extensions/core.md) | camel-quarkus-core | 0.0.1 | 0.0.1 | Stable | Gets a header from the Exchange |
 | [HL7 Terser](extensions/hl7.md) | camel-quarkus-hl7 | 1.1.0 | 1.8.0 | Stable | Get the value of a HL7 message field specified by terse location specification syntax |
 | [Java](extensions/joor.md) | camel-quarkus-joor | 2.0.0 | 3.2.0 | Stable | Evaluates a Java (Java compiled once at runtime) expression |
-| [jOOR](extensions/joor.md) | camel-quarkus-joor | 2.0.0 | 3.2.0 | Stable | Evaluates a jOOR (Java compiled once at runtime) expression |
 | [JQ](extensions/jq.md) | camel-quarkus-jq | 2.11.0 | 2.11.0 | Stable | Evaluates a JQ expression against a JSON message body |
 | [JavaScript](extensions/javascript.md) | camel-quarkus-javascript | 3.14.0 | n/a | Preview | Evaluates a JavaScript expression |
 | [JSONPath](extensions/jsonpath.md) | camel-quarkus-jsonpath | 1.0.0 | 1.0.0 | Stable | Evaluates a JSONPath expression against a JSON message body |

@@ -72,6 +72,8 @@ Most tools only read, and run without asking. A call that changes the project, r
 
 Answer `y` to let the call run. A call you do not confirm does not run, and the model is told so. Without a terminal to ask on, as in a script, such a call does not run; `--yes` lets all of them run without asking.
 
+A `camel` command the model runs gives it the exit code, the output and the errors apart, as a script gets them (see [Exit Codes and Output](camel-jbang-exit-codes.md)), and stops after 60 seconds. A command that runs until it is stopped is not run, and the model is told the form that returns: `camel run` without `--background`, `--watch` without `--duration`, `camel log` that follows, or `camel shell`.
+
 ### Local and hosted models
 
 A local model gets a core set of tools: the project’s files, the catalog, the integration’s log, errors, state and control, the tools for what the integration uses (SQL, tracing, circuit breakers, HTTP), and `cli_exec` for the other commands. Every tool definition goes with every request, and a local model pays for it in time. A hosted model gets the full set. `--tools=core`, `--tools=full` or `--tools=auto` (the default) chooses.

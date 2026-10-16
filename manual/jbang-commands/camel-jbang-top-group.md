@@ -13,6 +13,7 @@ camel top group [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--duration` | How long to keep watching or following, in millis or as a duration such as 30s (default: until Enter is pressed) |  | long |
 | `--filter` | Filter groups by name |  | String |
 | `--filter-mean` | Filter groups that must be slower than the given time (ms) |  | long |
 | `--json` | Output in JSON Format |  | boolean |

@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 312 components (21 deprecated, 57 JVM only)
+There are 306 components (3 deprecated, 53 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -83,7 +83,6 @@ level | Description |
 | [Debezium PostgreSQL Connector](extensions/debezium-postgres.md) | camel-quarkus-debezium-postgres | 1.0.0 | 1.0.0 | Stable | Capture changes from a PostgreSQL database. |
 | [Debezium SQL Server Connector](extensions/debezium-sqlserver.md) | camel-quarkus-debezium-sqlserver | 1.0.0 | 1.0.0 | Stable | Capture changes from an SQL Server database. |
 | [DFDL](extensions/dfdl.md) | camel-quarkus-dfdl | 3.22.0 | n/a | Preview | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
-| [DigitalOcean](extensions/digitalocean.md) | camel-quarkus-digitalocean | 1.1.0 | 2.0.0 | Stable | Manage Droplets and resources within the DigitalOcean cloud. |
 | [Direct](extensions/direct.md) | camel-quarkus-direct | 0.0.1 | 0.0.1 | Stable | Call another endpoint from the same Camel Context synchronously. |
 | [Disruptor](extensions/disruptor.md) | camel-quarkus-disruptor | 1.1.0 | 1.2.0 | Stable | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [Deep Java Library](extensions/djl.md) | camel-quarkus-djl | 1.1.0 | n/a | Preview | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
@@ -123,7 +122,6 @@ level | Description |
 | [GraphQL](extensions/graphql.md) | camel-quarkus-graphql | 1.0.0 | 1.0.0 | Stable | Send GraphQL queries and mutations to external systems. |
 | [gRPC](extensions/grpc.md) | camel-quarkus-grpc | 1.0.0 | 1.0.0 | Stable | Expose gRPC endpoints and access external gRPC endpoints. |
 | [HashiCorp Vault](extensions/hashicorp-vault.md) | camel-quarkus-hashicorp-vault | 2.11.0 | 3.15.0 | Stable | Manage secrets in HashiCorp Vault Service |
-| [Hazelcast Atomic Number](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Increment, decrement, set, etc. Hazelcast atomic number (a grid wide number). |
 | [Hazelcast Instance](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Consume join/leave events of a cache instance in a Hazelcast cluster. |
 | [Hazelcast List](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed list. |
 | [Hazelcast Map](extensions/hazelcast.md) | camel-quarkus-hazelcast | 1.1.0 | 1.6.0 | Stable | Perform operations on Hazelcast distributed map. |
@@ -141,8 +139,6 @@ level | Description |
 | [IBM Secrets Manager](extensions/ibm-secrets-manager.md) | camel-quarkus-ibm-secrets-manager | 3.22.0 | n/a | Preview | Manage secrets in IBM Secrets Manager Service |
 | [IBM Watson Discovery](extensions/ibm-watson-discovery.md) | camel-quarkus-ibm-watson-discovery | 3.30.0 | 3.35.0 | Stable | Perform document understanding and search using IBM Watson Discovery |
 | [IBM Watson Language](extensions/ibm-watson-language.md) | camel-quarkus-ibm-watson-language | 3.30.0 | 3.35.0 | Stable | Perform natural language processing using IBM Watson Natural Language Understanding |
-| [IEC 60870 Client](extensions/iec60870.md) | camel-quarkus-iec60870 | 1.1.0 | n/a | Preview | IEC 60870 supervisory control and data acquisition (SCADA) client using NeoSCADA implementation. |
-| [IEC 60870 Server](extensions/iec60870.md) | camel-quarkus-iec60870 | 1.1.0 | n/a | Preview | IEC 60870 supervisory control and data acquisition (SCADA) server using NeoSCADA implementation. |
 | [Ignite Cache](extensions/ignite.md) | camel-quarkus-ignite | 1.1.0 | n/a | Preview | Perform cache operations on an Ignite cache or consume changes from a continuous query. |
 | [Ignite Compute](extensions/ignite.md) | camel-quarkus-ignite | 1.1.0 | n/a | Preview | Run compute operations on an Ignite cluster. |
 | [Ignite Events](extensions/ignite.md) | camel-quarkus-ignite | 1.1.0 | n/a | Preview | Receive events from an Ignite cluster by creating a local event listener. |
@@ -152,7 +148,6 @@ level | Description |
 | [Ignite Sets](extensions/ignite.md) | camel-quarkus-ignite | 1.1.0 | n/a | Preview | Interact with Ignite Set data structures. |
 | [Infinispan](extensions/infinispan.md) | camel-quarkus-infinispan | 0.0.1 | 0.0.1 | Stable | Read and write from/to Infinispan distributed key/value store and data grid. |
 | [InfluxDB](extensions/influxdb.md) | camel-quarkus-influxdb | 1.0.0 | 1.0.0 | Stable | Interact with InfluxDB v1, a time series database. |
-| [IRC](extensions/irc.md) | camel-quarkus-irc | 1.1.0 | n/a | Preview | Send and receive messages to/from an IRC chat. |
 | [JCache](extensions/jcache.md) | camel-quarkus-jcache | 1.2.0 | 2.13.0 | Stable | Perform caching operations against JSR107/JCache. |
 | [JCR](extensions/jcr.md) | camel-quarkus-jcr | 1.1.0 | n/a | Preview | Read and write nodes to/from a JCR compliant content repository. |
 | [JDBC](extensions/jdbc.md) | camel-quarkus-jdbc | 0.0.1 | 0.0.1 | Stable | Access databases through SQL and JDBC. |
@@ -164,7 +159,6 @@ level | Description |
 | [JOOQ](extensions/jooq.md) | camel-quarkus-jooq | 1.1.0 | n/a | Preview | Store and retrieve Java objects from an SQL database using JOOQ. |
 | [JPA](extensions/jpa.md) | camel-quarkus-jpa | 1.0.0 | 1.0.0 | Stable | Store and retrieve Java objects from databases using Java Persistence API (JPA). |
 | [JSLT](extensions/jslt.md) | camel-quarkus-jslt | 1.1.0 | 1.4.0 | Stable | Query or transform JSON payloads using JSLT. |
-| [JsonPatch](extensions/json-patch.md) | camel-quarkus-json-patch | 2.7.0 | n/a | Preview | Transforms JSON using JSON patch (RFC 6902). |
 | [JSON Schema Validator](extensions/json-validator.md) | camel-quarkus-json-validator | 1.0.0 | 1.0.0 | Stable | Validate JSON payloads using NetworkNT JSON Schema. |
 | [JSONata](extensions/jsonata.md) | camel-quarkus-jsonata | 1.6.0 | 1.6.0 | Stable | Transforms JSON payload using JSONata transformation. |
 | [JT400](extensions/jt400.md) | camel-quarkus-jt400 | 1.1.0 | 3.8.0 | Stable | Exchanges messages with an IBM i system using data queues, message queues, or program call. IBM i is the replacement for AS/400 and iSeries servers. |
@@ -194,7 +188,7 @@ level | Description |
 | [LangChain4j Chat](extensions/langchain4j-chat.md) | camel-quarkus-langchain4j-chat | 3.11.0 | 3.12.0 | Stable | LangChain4j Chat component |
 | [LangChain4j Embeddings](extensions/langchain4j-embeddings.md) | camel-quarkus-langchain4j-embeddings | 3.10.0 | 3.29.0 | Stable | LangChain4j Embeddings |
 | [LangChain4j Embedding Store](extensions/langchain4j-embeddingstore.md) | camel-quarkus-langchain4j-embeddingstore | 3.29.0 | 3.29.0 | Stable | Perform operations on the LangChain4jEmbeddingStores. |
-| [LangChain4j Tools](extensions/langchain4j-tools.md) | camel-quarkus-langchain4j-tools | 3.15.0 | 3.24.0 | Stable | LangChain4j Tools and Function Calling Features |
+| [LangChain4j Ingest](extensions/langchain4j-ingest.md) | camel-quarkus-langchain4j-ingest | 3.39.0 | 3.39.0 | Stable | Ingest documents into a LangChain4j EmbeddingStore: split, embed and store the message body. |
 | [LangChain4j Web Search](extensions/langchain4j-web-search.md) | camel-quarkus-langchain4j-web-search | 3.15.0 | 3.24.0 | Stable | LangChain4j Web Search Engine |
 | [Language](extensions/language.md) | camel-quarkus-language | 1.1.0 | 2.2.0 | Stable | Execute scripts in any of the languages supported by Camel. |
 | [LDAP](extensions/ldap.md) | camel-quarkus-ldap | 1.1.0 | 3.2.0 | Stable | Perform searches on LDAP servers. |
@@ -225,9 +219,10 @@ level | Description |
 | [Netty HTTP](extensions/netty-http.md) | camel-quarkus-netty-http | 0.2.0 | 0.2.0 | Stable | Netty HTTP server and client using the Netty 4.x. |
 | [Netty](extensions/netty.md) | camel-quarkus-netty | 0.4.0 | 0.4.0 | Stable | Socket level networking using TCP or UDP with Netty 4.x. |
 | [OAI-PMH](extensions/oaipmh.md) | camel-quarkus-oaipmh | 1.7.0 | 1.7.0 | Stable | Harvest metadata using OAI-PMH protocol |
+| [OData](extensions/odata.md) | camel-quarkus-odata | 4.0.0 | 4.0.0 | Stable | Camel OData Component |
 | [Olingo4](extensions/olingo4.md) | camel-quarkus-olingo4 | 1.0.0 | 1.0.0 | Stable | Communicate with OData 4.0 services using Apache Olingo OData API. |
 | [Once](extensions/once.md) | camel-quarkus-once | 3.31.0 | 3.31.0 | Stable | Trigger a single message only once at startup (useful for development and testing purposes). |
-| [OpenAI](extensions/openai.md) | camel-quarkus-openai | 3.32.0 | 3.32.0 | Stable | OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech. |
+| [OpenAI](extensions/openai.md) | camel-quarkus-openai | 3.32.0 | 3.32.0 | Stable | LLM endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech using OpenAI-compatible APIs. The openai scheme is a supported alias. |
 | [OpenSearch](extensions/opensearch.md) | camel-quarkus-opensearch | 3.8.0 | n/a | Preview | Send requests to OpenSearch via Java Client API. |
 | [OpenShift Build Config](extensions/kubernetes.md) | camel-quarkus-kubernetes | 1.0.0 | 1.0.0 | Stable | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](extensions/kubernetes.md) | camel-quarkus-kubernetes | 1.0.0 | 1.0.0 | Stable | Perform operations on OpenShift Builds. |
@@ -279,7 +274,6 @@ level | Description |
 | [SNMP](extensions/snmp.md) | camel-quarkus-snmp | 1.1.0 | n/a | Preview | Receive traps and poll SNMP (Simple Network Management Protocol) capable devices. |
 | [Solr](extensions/solr.md) | camel-quarkus-solr | 3.19.0 | 3.19.0 | Stable | Perform operations against Apache Lucene Solr. |
 | [Splunk HEC](extensions/splunk-hec.md) | camel-quarkus-splunk-hec | 1.1.0 | 3.8.0 | Stable | The splunk component allows publishing events in Splunk using the HTTP Event Collector. |
-| [Splunk](extensions/splunk.md) | camel-quarkus-splunk | 1.8.0 | 1.8.0 | Stable | Publish or search for events in Splunk. |
 | [Spring RabbitMQ](extensions/spring-rabbitmq.md) | camel-quarkus-spring-rabbitmq | 1.7.0 | 1.7.0 | Stable | Send and receive messages from RabbitMQ using the Spring RabbitMQ client. |
 | [Spring Redis](extensions/spring-redis.md) | camel-quarkus-spring-redis | 3.6.0 | n/a | Preview | Send and receive messages from Redis. |
 | [SQL Stored Procedure](extensions/sql.md) | camel-quarkus-sql | 1.0.0 | 1.0.0 | Stable | Perform SQL queries as a JDBC Stored Procedures using Spring JDBC. |

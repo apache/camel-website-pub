@@ -13,6 +13,7 @@ camel get activity [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--duration` | How long to keep watching or following, in millis or as a duration such as 30s (default: until Enter is pressed) |  | long |
 | `--filter` | Filter activity by route ID |  | String |
 | `--json` | Output in JSON Format |  | boolean |
 | `--limit` | Filter activity by limiting to the given number of rows |  | int |

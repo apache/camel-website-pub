@@ -1,26 +1,26 @@
-# Splunk
+# OData
 
-JVM since1.8.0 Native since1.8.0 ⚠️Deprecated
+JVM since4.0.0 Native since4.0.0
 
-Publish or search for events in Splunk.
+Camel OData Component
 
 ## What’s inside
 
--   [Splunk component](../../../../components/4.22.x/splunk-component.md), URI syntax: `splunk:name`
+-   [OData component](../../../../components/next/odata-component.md), URI syntax: `odata:httpUri`
     
 
 Please refer to the above link for usage and configuration details.
 
 ## Maven coordinates
 
-[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-splunk)
+[Create a new project with this extension on code.quarkus.io](https://code.quarkus.io/?extension-search=camel-quarkus-odata)
 
 Or add the coordinates to your existing project:
 
 ```xml
 <dependency>
     <groupId>org.apache.camel.quarkus</groupId>
-    <artifactId>camel-quarkus-splunk</artifactId>
+    <artifactId>camel-quarkus-odata</artifactId>
 </dependency>
 ```
 

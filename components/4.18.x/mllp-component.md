@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The MLLP component supports 34 options, which are listed below.
+The MLLP component supports 35 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -142,6 +142,7 @@ Enum values:
 | **receiveBufferSize** (advanced) | Sets the SO\_RCVBUF option to the specified value (in bytes). | 8192 | Integer |
 | **receiveTimeout** (advanced) | The SO\_TIMEOUT value (in milliseconds) used when waiting for the start of an MLLP frame. | 15000 | int |
 | **sendBufferSize** (advanced) | Sets the SO\_SNDBUF option to the specified value (in bytes). | 8192 | Integer |
+| **hostnameVerification** (security) | Whether the producer checks that the certificate of the server matches the host it connects to, when SSL/TLS is used. When disabled, any certificate accepted by the trust store is accepted, whatever host it was issued for. | true | boolean |
 | **sslContextParameters** (security) | Sets the SSLContextParameters for securing TCP connections. If set, the MLLP component will use SSL/TLS for securing both producer and consumer TCP connections. This allows the configuration of trust stores, key stores, protocols, and other SSL/TLS settings. If not set, the MLLP component will use plain TCP communication. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 | **idleTimeout** (tcp) | The approximate idle time allowed before the Client TCP Connection will be reset. A null value or a value less than or equal to zero will disable the idle timeout. |  | Integer |
@@ -162,7 +163,7 @@ With the following _path_ and _query_ parameters:
 | **hostname** (common) | **Required** Hostname or IP for connection for the TCP connection. The default value is null, which means any local IP address. |  | String |
 | **port** (common) | **Required** Port number for the TCP connection. |  | int |
 
-### Query Parameters (29 parameters)
+### Query Parameters (30 parameters)
 
    
 | Name | Description | Default | Type |
@@ -223,6 +224,7 @@ Enum values:
 | **receiveBufferSize** (advanced) | Sets the SO\_RCVBUF option to the specified value (in bytes). | 8192 | Integer |
 | **receiveTimeout** (advanced) | The SO\_TIMEOUT value (in milliseconds) used when waiting for the start of an MLLP frame. | 15000 | int |
 | **sendBufferSize** (advanced) | Sets the SO\_SNDBUF option to the specified value (in bytes). | 8192 | Integer |
+| **hostnameVerification** (security) | Whether the producer checks that the certificate of the server matches the host it connects to, when SSL/TLS is used. When disabled, any certificate accepted by the trust store is accepted, whatever host it was issued for. | true | boolean |
 | **sslContextParameters** (security) | Sets the SSLContextParameters for securing TCP connections. If set, the MLLP component will use SSL/TLS for securing both producer and consumer TCP connections. This allows the configuration of trust stores, key stores, protocols, and other SSL/TLS settings. If not set, the MLLP component will use plain TCP communication. |  | SSLContextParameters |
 | **idleTimeout** (tcp) | The approximate idle time allowed before the Client TCP Connection will be reset. A null value or a value less than or equal to zero will disable the idle timeout. |  | Integer |
 
@@ -278,6 +280,12 @@ The MLLP Producer supports sending MLLP-framed messages and receiving HL7 Acknow
 The state of the TCP Socket can be controlled by these properties on the Camel exchange:
 
 <table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>Key</strong></td><td class="tableblock halign-left valign-top"><strong>Type</strong></td><td class="tableblock halign-left valign-top"><strong>Description</strong></td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpCloseConnectionBeforeSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be closed before sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpResetConnectionBeforeSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be reset before sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpCloseConnectionAfterSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be closed immediately after sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpResetConnectionAfterSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be reset immediately after sending any data</td></tr></tbody></table>
+
+### Using TLS
+
+Set `sslContextParameters` on the endpoint, or `useGlobalSslContextParameters` on the component, to secure the connections of the consumer and the producer with TLS. The trust store, key store, protocols and cipher suites are configured with the [Camel JSSE Configuration Utility](../../manual/camel-configuration-utilities.md).
+
+The producer checks that the certificate of the server matches the `hostname` of the endpoint, with the same rules as an HTTPS client. A producer that connects by IP address needs a certificate that lists that address as a subject alternative name, and a producer URI without a host name (such as `mllp://8888`) cannot pass the check. Set `hostnameVerification=false` to turn this check off; the certificate chain is still validated against the trust store.
 
 ## Spring Boot Auto-Configuration
 

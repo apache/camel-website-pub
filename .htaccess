@@ -1247,7 +1247,6 @@ Redirect 301 /camel-quarkus/next/extensions/protobuf.html /camel-quarkus/next/re
 Redirect 301 /camel-quarkus/next/extensions/pubnub.html /camel-quarkus/next/reference/extensions/pubnub.html
 Redirect 301 /camel-quarkus/next/extensions/quartz.html /camel-quarkus/next/reference/extensions/quartz.html
 Redirect 301 /camel-quarkus/next/extensions/qute.html /camel-quarkus/next/reference/extensions/qute.html
-Redirect 301 /camel-quarkus/next/extensions/reactive-executor.html /camel-quarkus/next/reference/extensions/reactive-executor.html
 Redirect 301 /camel-quarkus/next/extensions/reactive-streams.html /camel-quarkus/next/reference/extensions/reactive-streams.html
 Redirect 301 /camel-quarkus/next/extensions/ref.html /camel-quarkus/next/reference/extensions/ref.html
 Redirect 301 /camel-quarkus/next/extensions/rest-openapi.html /camel-quarkus/next/reference/extensions/rest-openapi.html
@@ -1268,7 +1267,6 @@ Redirect 301 /camel-quarkus/next/extensions/sql.html /camel-quarkus/next/referen
 Redirect 301 /camel-quarkus/next/extensions/stream.html /camel-quarkus/next/reference/extensions/stream.html
 Redirect 301 /camel-quarkus/next/extensions/tarfile.html /camel-quarkus/next/reference/extensions/tarfile.html
 Redirect 301 /camel-quarkus/next/extensions/telegram.html /camel-quarkus/next/reference/extensions/telegram.html
-Redirect 301 /camel-quarkus/next/extensions/threadpoolfactory-vertx.html /camel-quarkus/next/reference/extensions/threadpoolfactory-vertx.html
 Redirect 301 /camel-quarkus/next/extensions/tika.html /camel-quarkus/next/reference/extensions/tika.html
 Redirect 301 /camel-quarkus/next/extensions/timer.html /camel-quarkus/next/reference/extensions/timer.html
 Redirect 301 /camel-quarkus/next/extensions/twitter.html /camel-quarkus/next/reference/extensions/twitter.html

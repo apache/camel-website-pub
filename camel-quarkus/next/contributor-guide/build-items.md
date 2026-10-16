@@ -223,17 +223,6 @@ Holds the `TypeConverterLoader` `RuntimeValue`.
 Holds the `org.apache.camel.spi.TypeConverterRegistry` `RuntimeValue`.
 
  | `RuntimeValue<TypeConverterRegistry> value` |
-| [`org.apache.camel.quarkus.core.deployment.spi.CompiledCSimpleExpressionBuildItem`](https://github.com/apache/camel-quarkus/blob/main/extensions-core/core/deployment/src/main/java/org/apache/camel/quarkus/core/deployment/spi/CompiledCSimpleExpressionBuildItem.java)
-
-A `MultiBuildItem` bearing info about a compiled CSimple language expression.
-
- | `String sourceCode`
-
-`String className`
-
-`boolean predicate`
-
- |
 | [`org.apache.camel.quarkus.core.deployment.spi.ContainerBeansBuildItem`](https://github.com/apache/camel-quarkus/blob/main/extensions-core/core/deployment/src/main/java/org/apache/camel/quarkus/core/deployment/spi/ContainerBeansBuildItem.java)
 
 Hold a set of beans known to the ArC container.
@@ -263,22 +252,6 @@ A `MultiBuildItem` holding the `CamelContextCustomizer` `RuntimeValue` and could
 _No Javadoc found_
 
  | `Properties properties` |
-
-## CSimple
-
- 
-| Class name | Attributes |
-| --- | --- |
-| [`org.apache.camel.quarkus.component.csimple.deployment.CSimpleExpressionSourceBuildItem`](https://github.com/apache/camel-quarkus/blob/main/extensions/csimple/deployment/src/main/java/org/apache/camel/quarkus/component/csimple/deployment/CSimpleExpressionSourceBuildItem.java)
-A `MultiBuildItem` bearing info about a CSimple language expression that needs to get compiled.
-
- | `String sourceCode`
-
-`String classNameBase`
-
-`boolean predicate`
-
- |
 
 ## DataSonnet
 

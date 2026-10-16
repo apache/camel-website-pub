@@ -93,6 +93,17 @@ The model gets the shared file tools (`camel_get_files`, `camel_edit_file`, `cam
 
 `camel get endpoint` replaces the `REMOTE` column with `SCOPE`, which tells three kinds of endpoint apart: `remote` (an external system, as before), `internal` (Camel plumbing that stays inside the integration, such as `direct`, `seda` or `log`, as the catalog marks its component internal) and `local` (neither, such as `exec` or `bean`). Scripts that read the `REMOTE` column of the table must read `SCOPE` instead. The `--json` output keeps `remote` and adds `internal`.
 
+### camel-jbang - finding integrations by name or PID
+
+All commands find running integrations the same way:
+
+-   A PID given to a command must be a running Camel integration (a live process with a status file in `~/.camel`). Before, any PID was used as is, so `camel stop 1234 --kill` killed whatever process had that PID.
+    
+-   The commands no longer find an integration whose Camel has stopped (phase 9 or later), such as the launcher process of an integration that runs in a child process. `camel ps` does not list it anymore.
+    
+-   The `--timeout` of `camel cmd send`, `camel cmd receive`, `camel eval expression`, `camel transform message` and the `camel semantic` commands also takes a duration such as `30s` (a number is still millis).
+    
+
 ### camel-jbang - exit codes, and errors on stderr
 
 The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](camel-jbang-exit-codes.md)): `0` success, `1` failed, `2` usage error, `3` not found, `70` internal error and `124` timed out. A script that checks the exit code of a command must take these changes into account:
@@ -109,6 +120,8 @@ The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](ca
     
 -   `camel cmd sql` exits with `124` instead of `1` when the query does not answer in time.
     
+-   A source file of `camel cmd route-diagram`, `camel cmd route-structure` and `camel cmd route-topology` that does not exist exits with `3` instead of `1`. The parts of a Java route the parser could not read are printed as a warning on stderr (also with `--json`, which lists them in `unread` as before).
+    
 -   A file or a name that does not exist exits with `3` instead of `1`: a source file or `--source-dir` of `camel run`, the route file of `camel explain` and `camel harden` (checked before the LLM is contacted), the `pom.xml` of `camel dependency runtime`, the Kamelet of `camel init --from-kamelet`, the service of `camel infra run`, the key of `camel config get`, the name given to `camel doc`, and the plugin of `camel plugin delete`.
     
 -   `camel cmd memory-leak` and `camel restart` exit with `3` when no running integration, or more than one, matches the name. `camel cmd memory-leak` exits with `124` when the integration does not reply in time.
@@ -121,6 +134,178 @@ The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](ca
     
 
 Errors, warnings and tips are printed on stderr instead of stdout, so stdout only has the output of the command, such as JSON. If a script reads the error text of a command from stdout, read stderr instead. The list of plugins that are not installed, after `camel --help`, is printed on stderr, and only in an interactive terminal.
+
+### camel-cli-connector - every action with a request id gets an answer
+
+An action written to `~/.camel/<pid>-action-<requestId>.json` now always gets an answer in `~/.camel/<pid>-output-<requestId>.json`, so a tool no longer waits for its timeout:
+
+-   an action without a result (such as a route stop) answers `{"status":"success"}`,
+    
+-   an action that is unknown, throws an exception or reports an error answers `{"status":"failed","error":"…​"}`, with `"reason":"not-found"` when what it was asked to work on does not exist (such as `No route matching: route9`, and the new `No processor matching: …​`).
+    
+
+The WebSocket transport adds the same `reason` to its `result` frame. The shared `~/.camel/<pid>-action.json` used by older Camel CLI versions is unchanged. A tool built on the file transport that relied on actions without a result writing nothing, or that waited for a timeout, sees these answers now. The Camel MCP route tools, for example, now report a route stop as done instead of a timeout.
+
+### camel-jbang - JSON output
+
+With `--json`, stdout is exactly one JSON document, also when the command fails, so a script or an AI agent can parse it (see [JSON output](camel-jbang-exit-codes.html#_json_output)):
+
+-   An error prints `{"status":"error","code":3,"message":"…​"}` on stdout, with the exit code of the command in `code`, and the `ERROR:` line on stderr as before. Before, stdout was empty or had text.
+    
+-   A list with nothing in it prints `[]` instead of nothing, such as `camel ps`, `camel get …​` and `camel top …​` when no integration is running, and `camel catalog …​` when the filter matches nothing. The message about a filter that matches nothing is printed on stderr.
+    
+-   `camel top route --json` and `camel top group --json` print JSON instead of a table, with the load averages in `load01`, `load05` and `load15`.
+    
+-   `camel get route --error --json` prints the routes with an error, and their `lastError`, as JSON instead of tables. `camel get health --trace --json` puts the `stackTrace` and `metadata` of a check in the JSON, instead of printing them as text after it.
+    
+-   `camel get count --total --json` and `camel get count --fail --json` print JSON instead of the comma separated counts.
+    
+-   `camel infra get --json` and `camel infra stop --json` print JSON instead of text, `camel infra run --background --json` prints the pid as JSON, and `camel infra run --json` only prints the properties of the service. `camel infra get` and `camel infra stop` only see services that are running, and exit with `3` when a name matches none.
+    
+-   `camel overview --format=json` only prints the JSON on stdout: the `Saved` message of `--save` and `--ai`, and the progress and the prompts of `--ai`, go to stderr, and `--ai` no longer prints the summary before the JSON. `camel overview --apply-descriptions --format=json` prints the changed files as JSON.
+    
+-   `camel doctor` exits with `1` when a check fails (Maven cannot resolve artifacts, or more than one installation of the Camel CLI is found). A missing container runtime or Ollama, and ports in use, are warnings, which do not fail it.
+    
+
+New `--json` options: `camel doctor` (the status `OK`, `WARN` or `FAIL` of each check), `camel validate yaml`, `camel validate properties` and `camel validate source` (`valid`, `file` and `errors` of each file, as the MCP tool `camel_validate_source` answers), `camel doc` (the documentation the MCP tool `camel_catalog_doc` gives), `camel config get`, `camel config list`, `camel plugin get` and `camel plugin list`.
+
+### camel-jbang - camel cmd actions report failures and timeouts
+
+The commands that act on a running integration now report how the action went in their exit code (see [Exit Codes and Output](camel-jbang-exit-codes.md)):
+
+-   An action without a result waits until the integration confirms it, and exits with `1` when it fails, `3` when the route or processor does not exist, and `124` when the integration does not answer within `--timeout` (10 seconds by default; a number is millis, or use a duration such as `30s`): `camel cmd start-route`, `stop-route`, `suspend-route`, `resume-route`, `start-group`, `stop-group`, `enable-processor`, `disable-processor`, `gc`, `reload`, `reset-stats`, `logger --logging-level` and `camel trace --action=start/stop`. Before, they wrote the action and exited with `0`. An integration on an older Camel version takes the action without confirming it.
+    
+-   A command that waits for a result exits with `124` when the integration does not answer in time, and with `1` when it answers with an error, instead of a message and `1`, or nothing and `0`: such as `camel cmd thread-dump`, `heap-histogram`, `heap-dump`, `browse`, `span`, `stub`, `sql`, `load`, `memory-leak`, `route-dump`, `route-structure`, `route-diagram`, `route-topology`, `camel get bean`, `source`, `route-controller`, `startup-recorder`, `camel top source`, `camel get error --diagram` and `camel get history --diagram`. When the integration has no data to show (a thread dump, the route controller, top source), or OpenTelemetry is not enabled (`camel cmd span`), the command exits with `1` instead of `0`.
+    
+-   A name or pid that matches no running integration exits with `3`, instead of doing nothing and exiting with `0`. Without a name (all integrations) and nothing running, the command exits with `0` and prints `No running Camel integrations` on stderr.
+    
+-   `camel eval expression` with a name or pid that matches no running integration exits with `3`, instead of starting a new Camel to evaluate in: only without a name, or with `--isolated`, a new Camel evaluates the expression. An evaluation that fails exits with `1`, and the `Using existing running Camel integration` line is printed on stderr.
+    
+-   `camel cmd send` exits with `1` when the exchange failed and `124` when the endpoint did not answer in time, also without a name (sending from a local Camel), which exited with `0` before. `camel transform message` exits with `1` when the transformation fails and `124` when it does not answer in time.
+    
+-   `camel cmd load` without `--source`, a header that is not in the `key=value` form (`camel cmd send`, `camel eval expression`, `camel transform message`), and an unknown `--action` (`camel cmd receive`, `camel trace`) exit with `2`.
+    
+-   The `--filter` of `camel cmd route-dump`, `camel cmd route-structure` and `camel get source` takes several names separated by comma, as its description says, and a filter that matches no route exits with `3`.
+    
+
+The commands that wait for the integration have a `--timeout` option, and the ones that return data have a `--json` option: `camel cmd thread-dump`, `heap-histogram`, `heap-dump`, `browse`, `span`, `stub`, `sql`, `logger`, `route-dump`, `camel get bean`, `source`, `route-controller`, `startup-recorder`, `camel top source` and `camel trace` (the status of tracing). `camel get history --json` prints one JSON array instead of one document per line.
+
+### camel-jbang - camel get, top and ps: not found, unreadable status, and the JSON of the listings
+
+-   `camel get …​`, `camel top …​` and `camel ps` with a name or pid that matches no running integration exit with `3`, instead of printing nothing and exiting with `0`. Without a name and with nothing running, they exit with `0` and print `No running Camel integrations` on stderr (and `[]` with `--json`).
+    
+-   An integration whose status file a listing cannot read, such as one of an older Camel version without a value the listing needs, is skipped with a `WARN:` on stderr, instead of failing the listing of every integration.
+    
+-   `camel get health` takes a name or pid, like the other listings.
+    
+-   `camel get endpoint`, `consumer` and `producer --limit` keep the first rows after sorting (they kept the first rows found), and `camel get processor --limit` counts routes, as its description says.
+    
+-   `camel get activity` shows how long ago an exchange happened (it showed decades), and `camel dirty` no longer keeps the files of another pid that starts with the same digits (pid `12` kept `123-status.json`), nor removes the files of a process that is alive.
+    
+
+The JSON of the listings (`--json`) changes, so that a script can use the values without parsing text:
+
+-   `pid` and the counters are numbers instead of text: `total`, `failed`, `inflight`, `mean`, `min`, `max`, `last`, `delta` and `throughput`. A value that is not there is `null`, instead of an empty or `-` text.
+    
+-   Values that combined several numbers are split: `sinceLast` (`1s/2s/-`) into `sinceLastStarted`, `sinceLastCompleted` and `sinceLastFailed`; the `route` of `camel get context` (`3/4`) into `routesStarted` and `routesTotal`; its `reload` into `reloaded` and `reloadFailed`; and in `camel top context` the `load` into `load01`, `load05` and `load15`, `heap` into `heapUsed`, `heapCommitted` and `heapMax` (bytes), `nonHeap` into `nonHeapUsed` and `nonHeapCommitted`, `gc` into `gcCount` and `gcTime` (millis), and `threads` into `threads` and `peakThreads`. In `camel get health`, `rl` becomes `readiness` and `liveness`, `rate` becomes `total`, `success` and `failure`, and `since` becomes `sinceLast`, `sinceStartSuccess` and `sinceStartFailure`.
+    
+-   `ready` is a boolean (`camel ps`, `camel get context`), and `camel ps` has `failed` instead of `fail`.
+    
+-   Next to `age` (such as `5m3s`), the listings have `uptime` in millis. Durations are millis: `duration` and `elapsed` of `camel get blocked`, `inflight` and `internal-task`, and `time` of `camel get groovy`, which lists its `classes` as an array.
+    
+-   The id of a route is `routeId` (it was `route` in `camel get blocked`, `circuit-breaker`, `inflight` and `kafka`), and the state is `status` (it was `state` in `camel get circuit-breaker`). `camel get consumer` has `total` instead of `poll`. Every row of `camel get processor` has the `name` of its integration.
+    
+
+### camel-jbang - camel stop and camel restart wait for the integration
+
+-   `camel stop` waits until the integration has stopped, up to `--timeout` (60 seconds by default), and exits with `124` when it has not stopped in time (use `--kill` to stop it at once). Before, it asked the integration to stop and exited with `0` at once; `--no-wait` does that. An integration without a pid file in `~/.camel` is stopped with `SIGTERM`, which did nothing before.
+    
+-   `camel stop` and `camel restart` with a name or pid that matches no running integration exit with `3`.
+    
+-   `camel restart` waits until the integration has stopped (terminating it when it does not stop within `--timeout`), and does not start it again while the old process is alive (exit `124`). It waits until the new integration has started, and keeps its output in a log file in `~/.camel`, which it prints (the log was removed when the command ended). A new integration that stops right away prints the end of its log and exits with `1`; one that is still starting after `--timeout` exits with `124` and is left running.
+    
+
+### camel-jbang - no command waits for a terminal that is not there
+
+Without an interactive terminal, such as in a script, a CI job (the `CI` environment variable is set) or an AI agent:
+
+-   `--watch` without `--duration` shows the output once, with a `WARN:` on stderr, instead of repeating until Enter is pressed. The new `--duration` option (such as `--duration=30s`) keeps watching for that long, and then exits with `0`.
+    
+-   `camel log`, `camel trace` and `camel cmd receive` do not follow, unless `--follow` or `--duration` is given. `camel infra log` prints the end of the logs and exits, and has `--follow` and `--duration` too.
+    
+-   `camel hawtio` does not open a web browser, and prints the URL of the web console instead. `--openUrl` is now named `--open-url` (the old name still works).
+    
+-   `camel debug`, `camel nano`, `camel shell`, `camel edit`, `camel tui` (except with `--record`), `camel ask` without a question, `camel run --prompt` and `camel get history --it` exit with `2` and `requires an interactive terminal` on stderr. `camel debug` used to wait at 100% CPU.
+    
+
+`--follow` and `--open-url` without a value turn the option on. As boolean options that are on by default, they turned it off (use `--follow=false` to turn it off). In a terminal, the end of the input (Ctrl+D) stops a command that watches or follows, like Enter does.
+
+### camel-jbang - camel run: startup in the background, and input errors
+
+-   `camel run --background` waits up to 60 seconds for the integration to start (it was 20 seconds), and `--background-wait` takes how long, such as `--background-wait=2m` (`true` and `false` still work). An integration that is still starting after the wait exits with `124` and is left running; before, the command exited with `0`.
+    
+-   The output of an integration in the background goes to `~/.camel/<pid>-run.log`, whose path is printed. The log is kept while the integration runs (it was removed once the integration had started), and `camel stop` removes it. With `--background-wait=false` the output goes to the log as well, instead of a pipe that nobody read.
+    
+-   An integration that loads no routes exits with `1` and `No routes found in: <files>`, instead of running without doing anything, except with `--source-dir`, `--empty` or in dev mode, where files can be added later.
+    
+-   `camel run` and `camel dev` with `--max-seconds`, `--max-messages` or `--max-idle-seconds` exit at the limit also in dev mode, which stopped the routes and kept running. A limit from the configuration (`camel.main.durationMax…​`) still only stops the routes in dev mode.
+    
+-   A file that does not exist exits with `3` and `File does not exist: <file>` for every kind of file, before anything is printed. Files together with `--source-dir`, and `--background` with a runtime that does not support it, exit with `2`.
+    
+
+### camel-jbang - the AI tools report failures as errors
+
+-   `camel ask` runs a `camel` command for the model with a timeout of 60 seconds, and gives it the exit code, stdout and stderr as JSON (it gave the output only, and the exit code only when there was no output). A command that runs until it is stopped is not run, and the model is told the form that returns, such as `camel run --background`.
+    
+-   The MCP tools of `camel mcp` and `camel tui --mcp` answer a failure with `isError`, instead of a normal answer that says what went wrong: `camel_run` of an integration that stops while it starts (`status` is `failed`), a restart that fails (`camel_control`), an action the integration answers with an error or does not answer (such as stopping a route that does not exist), and `camel_runtime_ai_trace` when the integration does not answer. The text of the error has what the answer had, such as the output of the integration.
+    
+-   `camel_control restart` in `camel tui --mcp` waits until the integration has started again, or failed to start (it answered at once), and `camel_control stop-routes` and `start-routes` answer with what was done instead of the answer of the integration.
+    
+
+### camel-jbang - exit codes and errors of more commands
+
+-   `camel export` does not clean the export directory when it is the current directory, or one that contains it, unless `--clean-dir` is given: `--dir=./`, `--dir=$PWD` and `--dir=..` deleted the files of the project, as only `--dir=.` was recognized.
+    
+-   `camel harden --url` with an LLM that cannot be reached exits with `1`, instead of sending the route to a local Ollama.
+    
+-   `camel sbom` with an unknown `--sbom-format` or `--sbom-output-format` exits with `2` (it exited with `0` without doing anything), and exits with `124` when Maven does not finish in time.
+    
+-   `camel update run --upgradeTimeout` applies (the output was read to the end before the wait), and exits with `124` when it is reached.
+    
+-   `camel version list` exits with `1` when the versions cannot be downloaded. `camel version set --reset` removes the Kamelets version too, and `camel version get` shows a configuration with only the Kamelets version.
+    
+-   `camel validate yaml` and `camel validate properties` with no file to validate exit with `3`.
+    
+-   `camel doc` looks a name up in the catalog of Camel before it downloads the Kamelet catalog, so a component is documented also offline. `camel catalog kamelet` has `--repos`.
+    
+-   `camel kubernetes logs` exits with `3` when no pod with the label shows up, and with `1` when reading the log fails. `camel kubernetes run` prints the end of the Maven output when the build or deployment fails (it was hidden without `--verbose`), and exits with `124` when the pod is not running after 10 minutes.
+    
+-   `--jvm-args` keeps a quoted value with spaces as one argument.
+    
+
+### camel-jbang - processes started by the CLI stop with it
+
+-   When `camel run` of a Spring Boot or Quarkus project (and `camel debug`) ends, such as on Ctrl+C, the processes started by Maven stop too: the app could outlive Maven, as it runs in a JVM of its own. A process that does not stop within 30 seconds is killed (it was left running).
+    
+-   A plugin that cannot be loaded ends the command with exit code `1` and the error, as before, but no longer exits the JVM while the plugins load, which ended a program that embeds the CLI.
+    
+
+### camel-jbang - exit codes of config set, dependency list, jolokia and cmd memory-leak
+
+-   `camel jolokia` with a name or pid that matches no running integration, or more than one, exits with `3`, as `camel hawtio` does (it exited with `1`, and printed the second case on stdout).
+    
+-   `camel config set` without a key (`=value` stored a value with an empty key) or without a value exits with `2`, and prints the error on stderr.
+    
+-   `camel dependency list` with an unknown `--output` exits with `2`.
+    
+-   `camel cmd memory-leak --min-size` takes a size in bytes such as `10B`, and a value that is not a size exits with `2` (both turned the filter off).
+    
+-   `camel cmd send --reply` to a route that fails with an exception without a message, such as a `NullPointerException`, prints the failed exchange and exits with `1`, instead of failing with a `ClassCastException`.
+    
+-   `camel get source` of an integration with routes without a source location, such as routes added by a `RouteBuilder`, no longer fails.
+    
+-   Versions with four parts, such as the Quarkus platform version `3.27.3.1`, compare as versions in the version checks of the CLI (`3.27.3.1` came after `3.27.4`), and a `-SNAPSHOT` always comes before its release, as in Maven (`4.24.10-SNAPSHOT` came after `4.24.10`).
+    
 
 ### camel-jpa, camel-hazelcast - an exchange marked rollback only is not consumed
 

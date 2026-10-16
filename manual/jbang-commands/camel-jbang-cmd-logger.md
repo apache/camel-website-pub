@@ -13,7 +13,9 @@ camel cmd logger [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--json` | Output the logging levels in JSON Format |  | boolean |
 | `--logger` | The logger name | root | String |
 | `--logging-level` | To change logging level (ERROR, WARN, INFO, DEBUG, TRACE) |  | String |
 | `--sort` | Sort by pid, name or age | pid | String |
+| `--timeout` | How long to wait for the integration to answer, in millis or as a duration such as 30s | 10000 | long |
 | `-h,--help` | Display the help and sub-commands |  | boolean |

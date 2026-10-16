@@ -2,14 +2,16 @@
 
 JVM since3.32.0 Native since3.32.0
 
-OpenAI endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech.
+LLM endpoint for chat completion, Responses API, embeddings, audio transcription, audio translation, and text-to-speech using OpenAI-compatible APIs. The openai scheme is a supported alias.
 
 ## What’s inside
 
--   [OpenAI component](../../../../components/4.22.x/openai-component.md), URI syntax: `openai:operation`
+-   [LLM component](../../../../components/next/openai-component.md), URI syntax: `llm:operation`
+    
+-   [OpenAI component](../../../../components/next/openai-component.md), URI syntax: `openai:operation`
     
 
-Please refer to the above link for usage and configuration details.
+Please refer to the above links for usage and configuration details.
 
 ## Maven coordinates
 

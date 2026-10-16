@@ -6,7 +6,7 @@ Camel Route Diagram rendering
 
 ## What’s inside
 
--   [Diagram](../../../../components/4.22.x/others/diagram.md)
+-   [Diagram](../../../../components/next/others/diagram.md)
     
 
 Please refer to the above link for usage and configuration details.

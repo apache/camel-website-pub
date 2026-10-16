@@ -13,6 +13,7 @@ camel get count [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--duration` | How long to keep watching or following, in millis or as a duration such as 30s (default: until Enter is pressed) |  | long |
 | `--fail` | Get the failed exchanges from a running integration |  | boolean |
 | `--json` | Output in JSON Format |  | boolean |
 | `--sort` | Sort by pid, name or age | pid | String |

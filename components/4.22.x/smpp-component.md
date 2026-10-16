@@ -81,7 +81,9 @@ smpps://\[username@\]hostname\[:port\]\[?options\]
 
 If no **username** is provided, then Camel will provide the default value `smppclient`.  
 If no **port** number is provided, then Camel will provide the default value `2775`.  
-If the protocol name is "smpps", camel-smpp with try to use SSLSocket to init a connection to the server.
+If the protocol name is "smpps", camel-smpp will try to use SSLSocket to init a connection to the server. The certificate of the server must be trusted by the JVM, and it must match the host Camel connects to, with the same rules as an HTTPS client: a connection to an IP address needs a certificate that lists that address as a subject alternative name. Set `hostnameVerification=false` to turn the host check off.
+
+The handshake runs while the connection is being created, so a certificate that does not match makes the producer or consumer fail to start with an `IOException` caused by an `SSLHandshakeException: No subject alternative names matching IP address …​ found` (or `No subject alternative DNS name matching …​ found` for a host name). An IP address has to be listed as a subject alternative name of the certificate; a certificate issued for the host name alone does not match a connection made to its address.
 
 ## Configuring Options
 
@@ -469,6 +471,7 @@ Enum values:
 | **httpProxyPort** (proxy) | If you need to tunnel SMPP through a HTTP proxy, set this attribute to the port of your HTTP proxy. | 3128 | Integer |
 | **httpProxyUsername** (proxy) | If your HTTP proxy requires basic authentication, set this attribute to the username required for your HTTP proxy. |  | String |
 | **proxyHeaders** (proxy) | These headers will be passed to the proxy server while establishing the connection. |  | Map |
+| **hostnameVerification** (security) | Whether to check that the certificate of the SMSC matches the host Camel connects to, when SSL is used. When disabled, any certificate trusted by the JVM is accepted, whatever host it was issued for. | true | boolean |
 | **password** (security) | The password for connecting to SMSC server. |  | String |
 | **systemId** (security) | The system id (username) for connecting to SMSC server. | smppclient | String |
 | **usingSSL** (security) | Whether using SSL with the smpps protocol. | false | boolean |
@@ -843,6 +846,7 @@ Enum values:
 | **httpProxyPort** (proxy) | If you need to tunnel SMPP through a HTTP proxy, set this attribute to the port of your HTTP proxy. | 3128 | Integer |
 | **httpProxyUsername** (proxy) | If your HTTP proxy requires basic authentication, set this attribute to the username required for your HTTP proxy. |  | String |
 | **proxyHeaders** (proxy) | These headers will be passed to the proxy server while establishing the connection. |  | Map |
+| **hostnameVerification** (security) | Whether to check that the certificate of the SMSC matches the host Camel connects to, when SSL is used. When disabled, any certificate trusted by the JVM is accepted, whatever host it was issued for. | true | boolean |
 | **password** (security) | The password for connecting to SMSC server. |  | String |
 | **systemId** (security) | The system id (username) for connecting to SMSC server. | smppclient | String |
 | **usingSSL** (security) | Whether using SSL with the smpps protocol. | false | boolean |
