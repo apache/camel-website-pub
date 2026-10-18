@@ -162,6 +162,42 @@ Enum values:
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
+## Usage
+
+A `milo-server` endpoint is an item of the OPC UA server that the component runs. A producer writes the value of the item, and a consumer receives the values that OPC UA clients write to it. The node ID of an item is its name in the namespace of the component (`urn:org:apache:camel` by default), such as `nsu=urn:org:apache:camel;s=temperature`.
+
+The server is configured with component options, for example in `application.properties`. Clients log in with one of the users of `userAuthenticationCredentials`. The security policy `None` is for trying the server out; use a secure policy in production:
+
+```properties
+camel.component.milo-server.port = 12685
+camel.component.milo-server.user-authentication-credentials = camel:secret
+camel.component.milo-server.username-security-policy-uri = None
+camel.component.milo-server.security-policies-by-id = None
+```
+
+The following routes write a temperature every five seconds, and log the setpoint that a client writes. The body of the consumer is a `DataValue`, and `${body.value.value}` is the value itself:
+
+```yaml
+- route:
+    from:
+      uri: timer:sample
+      parameters:
+        period: 5000
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "${random(15,25)}"
+        - to:
+            uri: milo-server:temperature
+- route:
+    from:
+      uri: milo-server:setpoint
+      steps:
+        - log:
+            message: "A client wrote the setpoint: ${body.value.value}"
+```
+
 ### Security Configuration
 
 When configuring security for the OPC UA server, the following considerations apply:

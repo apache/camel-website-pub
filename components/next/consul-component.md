@@ -82,7 +82,7 @@ The Consul component supports the following options which are listed below.
 | **writeTimeout** (common) | Write timeout. |  | Duration |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **action** (producer) | 
-The default action. Can be overridden by CamelConsulAction.
+The default action. Can be overridden by CamelConsulAction. The actions depend on the API of the endpoint: agent has CHECKS, SERVICES, MEMBERS, AGENT, REGISTER and DEREGISTER; kv has PUT, GET\_VALUE, GET\_VALUES, GET\_KEYS, GET\_SESSIONS, DELETE\_KEY, DELETE\_KEYS, LOCK and UNLOCK; catalog has REGISTER, DEREGISTER, LIST\_DATACENTERS, LIST\_NODES, LIST\_SERVICES, GET\_SERVICE and GET\_NODE; health has CHECKS, NODE\_CHECKS, SERVICE\_CHECKS and SERVICE\_INSTANCES; session has CREATE, DESTROY, INFO, LIST and RENEW; preparedQuery has CREATE, GET and EXECUTE; event has FIRE and LIST; coordinates has DATACENTERS and NODES; status has LEADER and PEERS.
 
 Enum values:
 
@@ -90,11 +90,71 @@ Enum values:
     
 -   SERVICES
     
+-   MEMBERS
+    
 -   AGENT
     
 -   REGISTER
     
 -   DEREGISTER
+    
+-   PUT
+    
+-   GET\_VALUE
+    
+-   GET\_VALUES
+    
+-   GET\_KEYS
+    
+-   GET\_SESSIONS
+    
+-   DELETE\_KEY
+    
+-   DELETE\_KEYS
+    
+-   LOCK
+    
+-   UNLOCK
+    
+-   LIST\_DATACENTERS
+    
+-   LIST\_NODES
+    
+-   LIST\_SERVICES
+    
+-   GET\_SERVICE
+    
+-   GET\_NODE
+    
+-   NODE\_CHECKS
+    
+-   SERVICE\_CHECKS
+    
+-   SERVICE\_INSTANCES
+    
+-   CREATE
+    
+-   DESTROY
+    
+-   INFO
+    
+-   LIST
+    
+-   RENEW
+    
+-   GET
+    
+-   EXECUTE
+    
+-   FIRE
+    
+-   DATACENTERS
+    
+-   NODES
+    
+-   LEADER
+    
+-   PEERS
     
 
 
@@ -183,7 +243,7 @@ Enum values:
  |  | ExchangePattern |
 | **action** (producer) | 
 
-The default action. Can be overridden by CamelConsulAction.
+The default action. Can be overridden by CamelConsulAction. The actions depend on the API of the endpoint: agent has CHECKS, SERVICES, MEMBERS, AGENT, REGISTER and DEREGISTER; kv has PUT, GET\_VALUE, GET\_VALUES, GET\_KEYS, GET\_SESSIONS, DELETE\_KEY, DELETE\_KEYS, LOCK and UNLOCK; catalog has REGISTER, DEREGISTER, LIST\_DATACENTERS, LIST\_NODES, LIST\_SERVICES, GET\_SERVICE and GET\_NODE; health has CHECKS, NODE\_CHECKS, SERVICE\_CHECKS and SERVICE\_INSTANCES; session has CREATE, DESTROY, INFO, LIST and RENEW; preparedQuery has CREATE, GET and EXECUTE; event has FIRE and LIST; coordinates has DATACENTERS and NODES; status has LEADER and PEERS.
 
 Enum values:
 
@@ -191,11 +251,71 @@ Enum values:
     
 -   SERVICES
     
+-   MEMBERS
+    
 -   AGENT
     
 -   REGISTER
     
 -   DEREGISTER
+    
+-   PUT
+    
+-   GET\_VALUE
+    
+-   GET\_VALUES
+    
+-   GET\_KEYS
+    
+-   GET\_SESSIONS
+    
+-   DELETE\_KEY
+    
+-   DELETE\_KEYS
+    
+-   LOCK
+    
+-   UNLOCK
+    
+-   LIST\_DATACENTERS
+    
+-   LIST\_NODES
+    
+-   LIST\_SERVICES
+    
+-   GET\_SERVICE
+    
+-   GET\_NODE
+    
+-   NODE\_CHECKS
+    
+-   SERVICE\_CHECKS
+    
+-   SERVICE\_INSTANCES
+    
+-   CREATE
+    
+-   DESTROY
+    
+-   INFO
+    
+-   LIST
+    
+-   RENEW
+    
+-   GET
+    
+-   EXECUTE
+    
+-   FIRE
+    
+-   DATACENTERS
+    
+-   NODES
+    
+-   LEADER
+    
+-   PEERS
     
 
 
@@ -344,6 +464,58 @@ from("direct:registerFooService")
 It is also possible to set a default action on the consul endpoint and do without the header:
 
 consul:agent?action=REGISTER
+
+### Key-value store
+
+The `kv` endpoint reads and writes the key-value store of Consul. The action comes from the `action` option or the `CamelConsulAction` header (the header wins), and the key from the `key` option or the `CamelConsulKey` header. A PUT stores the message body as the value. A GET\_VALUE sets the value as the message body, and `valueAsString` makes it a string:
+
+```yaml
+- route:
+    from:
+      uri: direct:save-greeting
+      steps:
+        - setHeader:
+            name: CamelConsulAction
+            expression:
+              constant:
+                expression: PUT
+        - to:
+            uri: consul:kv
+            parameters:
+              key: app/greeting
+- route:
+    from:
+      uri: direct:read-greeting
+      steps:
+        - setHeader:
+            name: CamelConsulAction
+            expression:
+              constant:
+                expression: GET_VALUE
+        - to:
+            uri: consul:kv
+            parameters:
+              key: app/greeting
+              valueAsString: true
+        - log:
+            message: "The greeting is ${body}"
+```
+
+A consumer of the `kv` endpoint watches a key with a blocking query of `blockSeconds` (10 by default). The route gets the value each time the query returns: when the value changes, or when the wait ends.
+
+```yaml
+- route:
+    from:
+      uri: consul:kv
+      parameters:
+        key: app/greeting
+        valueAsString: true
+      steps:
+        - log:
+            message: "${header.CamelConsulKey} is now ${body}"
+```
+
+The client connects to the Consul agent at `[http://localhost:8500](http://localhost:8500)`, unless you set the `url` option, for example with `camel.component.consul.url` in `application.properties`.
 
 ## Registering Camel Routes with Consul
 

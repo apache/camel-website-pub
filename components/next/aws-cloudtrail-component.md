@@ -481,3 +481,21 @@ This method will only take into account management events like create/update/del
 This means you won’t consume the events registered in the CloudTrail logs stored on S3, in case of creation of a new Trail.
 
 This is important to notice, and it must be taken into account when using this component.
+
+### Example
+
+The following route consumes the management events of S3 and logs who did what:
+
+```yaml
+- route:
+    from:
+      uri: aws-cloudtrail:trail
+      parameters:
+        eventSource: s3.amazonaws.com
+        region: eu-west-1
+        accessKey: "{{aws.access-key}}"
+        secretKey: "{{aws.secret-key}}"
+      steps:
+        - log:
+            message: "${header.CamelAwsCloudTrailEventName} by ${header.CamelAwsCloudTrailEventUsername}"
+```

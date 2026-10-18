@@ -182,12 +182,69 @@ The endpoint reuses one JDBC connection for its configured `databasePath` / `jdb
 
 ## Example
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:metrics")
     .to("duckdb:local.db?operation=insert&table=metrics&batchSize=500");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:metrics
+      steps:
+        - to:
+            uri: duckdb:local.db
+            parameters:
+              operation: insert
+              table: metrics
+              batchSize: 500
+```
+
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("file:incoming?include=.*\\.csv")
     .to("duckdb:warehouse.db?operation=copy&table=staging&format=csv");
+```
+
+```yaml
+- route:
+    from:
+      uri: file:incoming
+      parameters:
+        include: ".*\\.csv"
+      steps:
+        - to:
+            uri: duckdb:warehouse.db
+            parameters:
+              operation: copy
+              table: staging
+              format: csv
+```
+
+A query returns the rows as a `List` of `Map`, or as a JSON array with `resultFormat=JSON`:
+
+```yaml
+- route:
+    from:
+      uri: timer:report
+      parameters:
+        period: 60000
+      steps:
+        - to:
+            uri: duckdb:warehouse.db
+            parameters:
+              operation: query
+              query: "SELECT region, sum(amount) AS total FROM staging GROUP BY region"
+              resultFormat: JSON
+        - log:
+            message: "${body}"
 ```

@@ -5182,3 +5182,30 @@ Endpoint can be one of:
 Available endpoints differ depending on the endpoint prefixes.
 
 For more information on the endpoints and options, see [Twilio API documentation](https://www.twilio.com/docs/libraries/reference/twilio-java/index.md).
+
+### Example
+
+The account and its auth token are component options, for example in `application.properties`:
+
+```properties
+camel.component.twilio.username = {{env:TWILIO_ACCOUNT_SID}}
+camel.component.twilio.password = {{env:TWILIO_AUTH_TOKEN}}
+camel.component.twilio.account-sid = {{env:TWILIO_ACCOUNT_SID}}
+```
+
+The following route makes a phone call that plays the TwiML document at `url`. A phone number starts with `+`, so it is written as `RAW(…​)` in the endpoint options. The body of the reply is the `Call` resource of the Twilio API:
+
+```yaml
+- route:
+    from:
+      uri: direct:call
+      steps:
+        - to:
+            uri: twilio:call/create
+            parameters:
+              from: "RAW(+15005550006)"
+              to: "RAW(+14108675310)"
+              url: http://demo.twilio.com/docs/voice.xml
+        - log:
+            message: "Call ${body.sid} is ${body.status}"
+```

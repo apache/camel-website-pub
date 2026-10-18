@@ -8,11 +8,11 @@ There is not a prescribed way how to release the Kamelets on the cluster. It can
 
 When you install Camel K, you may want a series of Kamelets which are coming from the [Apache Kamelet Catalog](../../../camel-kamelets/4.22.x/index.md). This is a facility that will let you immediately use a wide set of connector-style resources to interact with any event source and sink.
 
-You can install any catalog version available by downloading locally the catalog and installing to the cluster. For example, this script download a given version of the catalog and install into the `camel-k` namespace:
+You can install any catalog version available by downloading locally the catalog and installing to the cluster. For example, this script download a given version of the catalog and install into the `camel` namespace:
 
 ```none
 mvn -q dependency:copy -Dartifact=org.apache.camel.kamelets:camel-kamelets:4.18.0:jar -Dmdep.useBaseVersion=true -DoutputDirectory=/tmp
-unzip /tmp/camel-kamelets-4.18.1.jar -d /tmp && kubectl apply -f /tmp/kamelets -n camel-k
+unzip /tmp/camel-kamelets-4.18.1.jar -d /tmp && kubectl apply -f /tmp/kamelets -n camel
 ```
 
 > **Note**

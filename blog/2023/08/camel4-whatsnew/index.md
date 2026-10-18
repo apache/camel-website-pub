@@ -1,6 +1,6 @@
 # Apache Camel 4 What's New (top 10)
 
-Published 2023-08-15 by Claus Ibsen, Gregor Zurowski, Otavio Rodolfo Piske in Releases
+Published 2023-08-15 by Claus Ibsen, Gregor Zurowski, Otavio Rodolfo Piske in Releases, Camel
 
 Top 10 of what's new in Apache Camel version 4
 

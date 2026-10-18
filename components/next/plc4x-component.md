@@ -10,8 +10,6 @@ The Camel Component for PLC4X allows you to create routes using the PLC4X API to
 
 plc4x://driver\[?options\]
 
-The bucket will be created if it doesn’t already exist.
-
 You can append query options to the URI in the following format: `?options=value&option2=value&…​`.
 
 ## Configuring Options
@@ -161,6 +159,20 @@ The consumer supports one-time reading or Triggered Reading. To read from the PL
 You can configure the _tags_ using `tag.key=value` in the URI, and you can repeat this for multiple tags.
 
 The Body created by the Consumer will be a `Map<String,Object>` containing the Aliases and their associated value read from the PLC.
+
+The following route reads two tags once. It uses the simulated driver of PLC4X (`plc4j-driver-simulated`), so it needs no PLC. With a real PLC, the driver in the URI and the addresses of the tags follow the protocol of the PLC:
+
+```yaml
+- route:
+    from:
+      uri: plc4x:simulated://plant
+      parameters:
+        tag.temperature: "RANDOM/temperature:DINT"
+        tag.pressure: "RANDOM/pressure:DINT"
+      steps:
+        - log:
+            message: "Tags read: ${body}"
+```
 
 ### Polling Consumer
 

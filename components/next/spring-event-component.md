@@ -107,3 +107,32 @@ Enum values:
 
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+
+## Usage
+
+A route that consumes from `spring-event:default` gets each application event of the Spring `ApplicationContext` as the message body. Use a filter to keep the events you need:
+
+```yaml
+- route:
+    from:
+      uri: spring-event:default
+      steps:
+        - filter:
+            expression:
+              simple:
+                expression: "${body} is 'com.example.OrderPlacedEvent'"
+            steps:
+              - log:
+                  message: "Order placed: ${body}"
+```
+
+A route that sends to `spring-event:default` publishes an event: the message body when it is an `ApplicationEvent`, otherwise a `CamelEvent` that holds the exchange:
+
+```yaml
+- route:
+    from:
+      uri: direct:publish
+      steps:
+        - to:
+            uri: spring-event:default
+```

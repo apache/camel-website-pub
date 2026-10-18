@@ -58,4 +58,28 @@ from("webhook:clickup:<workspaceId>?&authorizationToken=<authorizationToken>&eve
                 .end();
 ```
 
+In YAML, the `is` operator of the simple language checks the type of the event:
+
+```yaml
+- route:
+    from:
+      uri: "webhook:clickup:{{clickup.workspace-id}}"
+      parameters:
+        authorizationToken: "{{clickup.authorization-token}}"
+        events: taskTimeTrackedUpdated
+      steps:
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${body} is 'org.apache.camel.component.clickup.model.TaskTimeTrackedUpdatedEvent'"
+                steps:
+                  - log:
+                      message: "TaskTimeTrackedUpdatedEvent ${body}"
+            otherwise:
+              steps:
+                - log:
+                    message: "Unknown Event: ${body}"
+```
+
 You can follow the [set-up webhooks guide](https://clickup.com/api/developer-portal/webhooks) to enable and configure the webhook.

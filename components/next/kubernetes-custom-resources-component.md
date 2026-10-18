@@ -4,7 +4,7 @@
 
 **Both producer and consumer are supported**
 
-The Kubernetes Custom Resources component is one of [Kubernetes Components](kubernetes-summary.md) which provides a producer to execute Kubernetes Custom Resources operations and a consumer to consume events related to Node objects.
+The Kubernetes Custom Resources component is one of [Kubernetes Components](kubernetes-summary.md) which provides a producer to execute Kubernetes Custom Resources operations and a consumer to consume events related to custom resources.
 
 ## Configuring Options
 
@@ -185,3 +185,52 @@ Enum values:
 -   `createCustomResource`
     
 -   `updateCustomResource`
+    
+
+## Example
+
+The following route lists the custom resources of one kind in the `default` namespace. The headers name the custom resource definition, here the GitHub source of Knative:
+
+```yaml
+- route:
+    from:
+      uri: direct:listSources
+      steps:
+        - setHeader:
+            name: CamelKubernetesNamespaceName
+            expression:
+              constant:
+                expression: default
+        - setHeader:
+            name: CamelKubernetesCRDName
+            expression:
+              constant:
+                expression: githubsources.sources.knative.dev
+        - setHeader:
+            name: CamelKubernetesCRDGroup
+            expression:
+              constant:
+                expression: sources.knative.dev
+        - setHeader:
+            name: CamelKubernetesCRDScope
+            expression:
+              constant:
+                expression: Namespaced
+        - setHeader:
+            name: CamelKubernetesCRDVersion
+            expression:
+              constant:
+                expression: v1alpha1
+        - setHeader:
+            name: CamelKubernetesCRDPlural
+            expression:
+              constant:
+                expression: githubsources
+        - to:
+            uri: kubernetes-custom-resources:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listCustomResources
+        - log:
+            message: "Found ${body.size()} GitHub sources"
+```

@@ -47,10 +47,24 @@ The MIME Multipart dataformat supports the following options which are listed be
 
 ## Examples
 
-_Java-only: marshalling a message with attachments into MIME-Multipart format_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from(...).marshal().mimeMultipart()
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            mimeMultipart: {}
+        - to:
+            uri: mock:result
 ```
 
 With a message where no Content-Type header is set, will create a Message with the following message Camel headers:
@@ -78,10 +92,29 @@ AAECAwQFBgc=
 
 A message with the header Content-Type set to "text/plain" sent to the route
 
-_Java-only: marshalling with custom MIME-Multipart options_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("...").marshal().mimeMultipart("related", true, true, "(included|x-.*)", true);
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            mimeMultipart:
+              multipartSubType: related
+              multipartWithoutAttachment: true
+              headersInline: true
+              includeHeaders: "(included|x-.*)"
+              binaryContent: true
+        - to:
+            uri: mock:result
 ```
 
 will create a message without any specific MIME headers set as Camel headers (the Content-Type header is removed from the Camel message) and the following message body that includes also all headers of the original message starting with "x-" and the header with name "included":

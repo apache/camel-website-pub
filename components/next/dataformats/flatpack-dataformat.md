@@ -30,28 +30,62 @@ The Flatpack dataformat supports the following options which are listed below.
 
 ## Usage
 
-To use the data format, instantiate an instance and invoke the marshal or unmarshal operation in the route builder:
+To use the data format, set it on the marshal or unmarshal step of the route:
 
-_Java-only: programmatic FlatpackDataFormat configuration and unmarshal_
+-   Java
+    
+-   YAML
+    
 
 ```java
-  FlatpackDataFormat fp = new FlatpackDataFormat();
-  fp.setDefinition(new ClassPathResource("INVENTORY-Delimited.pzmap.xml"));
-  ...
-  from("file:order/in").unmarshal(df).to("seda:queue:neworder");
+FlatpackDataFormat fp = new FlatpackDataFormat();
+fp.setDefinition("INVENTORY-Delimited.pzmap.xml");
+
+from("file:order/in").unmarshal(fp).to("seda:neworder");
+```
+
+```yaml
+- route:
+    from:
+      uri: file:order/in
+      steps:
+        - unmarshal:
+            flatpack:
+              definition: INVENTORY-Delimited.pzmap.xml
+        - to:
+            uri: seda:neworder
 ```
 
 The sample above will read files from the `order/in` folder and unmarshal the input using the Flatpack configuration file `INVENTORY-Delimited.pzmap.xml` that configures the structure of the files. The result is a `DataSetList` object we store on the SEDA queue.
 
-_Java-only: programmatic FlatpackDataFormat configuration and marshal_
+-   Java
+    
+-   YAML
+    
 
 ```java
 FlatpackDataFormat df = new FlatpackDataFormat();
-df.setDefinition(new ClassPathResource("PEOPLE-FixedLength.pzmap.xml"));
+df.setDefinition("PEOPLE-FixedLength.pzmap.xml");
 df.setFixed(true);
 df.setIgnoreFirstRecord(false);
 
 from("seda:people").marshal(df).convertBodyTo(String.class).to("jms:queue:people");
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:people
+      steps:
+        - marshal:
+            flatpack:
+              definition: PEOPLE-FixedLength.pzmap.xml
+              fixed: true
+              ignoreFirstRecord: false
+        - convertBodyTo:
+            type: java.lang.String
+        - to:
+            uri: jms:queue:people
 ```
 
 In the code above we marshal the data from an Object representation as a `List` of rows as `Maps`. The rows as `Map` contains the column name as the key, and the corresponding value. This structure can be created in Java code from e.g., a processor. We marshal the data according to the Flatpack format and convert the result as a `String` object and store it on a JMS queue.

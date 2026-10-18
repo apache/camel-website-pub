@@ -158,10 +158,33 @@ The component supports the following operations:
 
 ### Producer example
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(constant("secret-value"))
     .to("alibaba-kms:encrypt?keyId=alias/my-key&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: secret-value
+        - to:
+            uri: alibaba-kms:encrypt
+            parameters:
+              keyId: alias/my-key
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
 ```
 
 ## Examples

@@ -198,3 +198,34 @@ If you need more precise container settings, you can create a new object of the 
 | `delete` | Delete the object. |
 | `getMetadata` | Get metadata. |
 | `createUpdateMetadata` | Create/update metadata. |
+
+### Example
+
+The following route stores each file of the `outbox` folder as an object of the `reports` container. The endpoint is the address of the identity service (Keystone), and the credentials are property placeholders:
+
+```yaml
+- route:
+    from:
+      uri: file:outbox
+      steps:
+        - setHeader:
+            name: CamelOpenstackSwiftContainerName
+            expression:
+              constant:
+                expression: "reports"
+        - setHeader:
+            name: CamelOpenstackSwiftObjectName
+            expression:
+              simple:
+                expression: "${header.CamelFileName}"
+        - to:
+            uri: openstack-swift:http://controller:5000/v3
+            parameters:
+              username: "{{openstack.username}}"
+              password: "{{openstack.password}}"
+              project: "{{openstack.project}}"
+              subsystem: objects
+              operation: create
+        - log:
+            message: "Stored ${header.CamelFileName} with ETag ${body}"
+```

@@ -178,6 +178,24 @@ The Google BigQuery Standard SQL component supports the following message header
 
 Google BigQuery SQL endpoint expects the payload to be either empty or a map of query parameters.
 
+The value of an `@name` parameter comes from the header of that name, or from the map in the body. The following route deletes the row whose id is in the message body:
+
+```yaml
+- route:
+    from:
+      uri: direct:deleteRow
+      steps:
+        - setHeader:
+            name: myId
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: "google-bigquery-sql:project-17248459:delete from test.table where id=@myId"
+        - log:
+            message: "Deleted ${body} rows"
+```
+
 ## Query Placeholders
 
 A query may contain two kinds of placeholder. They cover different positions in a SQL statement and are not interchangeable.

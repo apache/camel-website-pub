@@ -101,3 +101,28 @@ Enum values:
 
 
  |  | ExchangePattern |
+
+## Usage
+
+You do not use the `rest-api` endpoint in a route yourself. The [Rest DSL](../../manual/rest-dsl.md) creates a route from it when the REST configuration has an `apiContextPath`. That route serves the OpenAPI document of the REST services at that path. It needs the `camel-openapi-java` component on the classpath.
+
+```yaml
+- restConfiguration:
+    apiContextPath: /api-doc
+- rest:
+    path: /orders
+    get:
+      - path: "/{id}"
+        to:
+          uri: direct:getOrder
+- route:
+    from:
+      uri: direct:getOrder
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "Order ${header.id}"
+```
+
+With this, `GET /api-doc` returns the OpenAPI document, which describes `GET /orders/{id}`.

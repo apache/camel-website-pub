@@ -151,10 +151,34 @@ The component supports the following operations:
 
 ### Producer example
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(constant("{\"name\":\"camel\"}"))
     .to("alibaba-fc:invokeFunction?serviceName=my-service&functionName=my-function&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: '{"name":"camel"}'
+        - to:
+            uri: alibaba-fc:invokeFunction
+            parameters:
+              serviceName: my-service
+              functionName: my-function
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
 ```
 
 ## Examples

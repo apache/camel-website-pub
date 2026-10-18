@@ -437,3 +437,36 @@ You have also the possibility of using Profile Credentials Provider, by specifyi
 Only one of static, default and profile credentials could be used at the same time.
 
 For more information about this you can look at [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### Example
+
+The following route adds the AWS managed rule that checks that S3 buckets have versioning enabled. The rule comes from the headers: its name, its owner (`AWS`) and the identifier of the managed rule:
+
+```yaml
+- route:
+    from:
+      uri: direct:addRule
+      steps:
+        - setHeader:
+            name: CamelAwsConfigRuleName
+            expression:
+              constant:
+                expression: s3-bucket-versioning-enabled
+        - setHeader:
+            name: CamelAwsConfigRuleSource
+            expression:
+              constant:
+                expression: AWS
+        - setHeader:
+            name: CamelAwsConfigRuleSourceIdentifier
+            expression:
+              constant:
+                expression: S3_BUCKET_VERSIONING_ENABLED
+        - to:
+            uri: aws-config:config
+            parameters:
+              operation: putConfigRule
+              region: eu-west-1
+              accessKey: "{{aws.access-key}}"
+              secretKey: "{{aws.secret-key}}"
+```

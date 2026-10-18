@@ -121,7 +121,7 @@ Thirty-two advisories in one batch is not something a maintainer team produces o
 
 Some advisories have more than one reporter, which is why the column adds up to more than 32. Yu Bao’s work is the reason the header family turned up in twenty-two components rather than two. That was a methodical sweep across the component set, not a one-off report, and it saved us a lot of time.
 
-Everyone here is named in the advisory they reported. If you find something, mail [security@camel.apache.org](mailto:security@camel.apache.org) privately, and see the [ASF security policy](https://www.apache.org/security/) for how the process works.
+Everyone here is named in the advisory they reported. If you find something, mail [security@apache.org](mailto:security@apache.org) privately, and see the [ASF security policy](https://www.apache.org/security/) for how the process works.
 
 ## The full batch
 
@@ -184,4 +184,4 @@ Camel’s [advisory history](../../../../security/) goes back to 2013 and is com
 
 * * *
 
-_Release dates and advisory data in this post come from the published [Apache Camel release announcements](../../../../blog/) and [security advisories](../../../../security/). Report vulnerabilities privately to [security@camel.apache.org](mailto:security@camel.apache.org)._
+_Release dates and advisory data in this post come from the published [Apache Camel release announcements](../../../../blog/) and [security advisories](../../../../security/). Report vulnerabilities privately to [security@apache.org](mailto:security@apache.org)._

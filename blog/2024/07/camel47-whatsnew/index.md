@@ -1,6 +1,6 @@
 # Apache Camel 4.7 What's New
 
-Published 2024-07-15 by Claus Ibsen, Gregor Zurowski, Otavio Rodolfo Piske, Tadayoshi Sato in Releases
+Published 2024-07-15 by Claus Ibsen, Gregor Zurowski, Otavio Rodolfo Piske, Tadayoshi Sato in Releases, Camel
 
 Details of what we have done in the Camel 4.7 release.
 

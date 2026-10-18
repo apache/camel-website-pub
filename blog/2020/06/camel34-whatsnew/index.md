@@ -1,6 +1,6 @@
 # Apache Camel 3.4 What's New
 
-Published 2020-06-18 by Claus Ibsen in Releases
+Published 2020-06-18 by Claus Ibsen in Releases, Camel
 
 The long term release version 3.4 of Camel is here, find out what's new.
 

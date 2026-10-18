@@ -1,6 +1,6 @@
 # Apache Camel 4.15 What's New
 
-Published 2025-10-09 by Claus Ibsen, Tom Cunningham, Pasquale Congiusti in Releases
+Published 2025-10-09 by Claus Ibsen, Tom Cunningham, Pasquale Congiusti in Releases, Camel
 
 Details of what we have done in the Camel 4.15 release.
 

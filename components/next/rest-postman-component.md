@@ -395,9 +395,23 @@ A Postman item has a human readable name rather than an operation id, so this co
 
 ### Invoking a single request
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("rest-postman:petstore.json#getPetById");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "rest-postman:petstore.json#getPetById"
 ```
 
 The message body and headers of the exchange are what is sent. The collection supplies the method, the URL, and any headers the message does not already carry; the body written in the collection is treated as sample data and is not sent.
@@ -408,10 +422,28 @@ Path parameters written as `:petId` become `{petId}` placeholders resolved per e
 
 Naming a folder, or naming nothing at all, runs every request in turn, in the manner of Postman’s collection runner:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:smokeTest")
     .to("rest-postman:petstore.json#pets")    // every request in the Pets folder
     .to("rest-postman:petstore.json");        // every request in the collection
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:smokeTest
+      steps:
+        # every request in the Pets folder
+        - to:
+            uri: "rest-postman:petstore.json#pets"
+        # every request in the collection
+        - to:
+            uri: rest-postman:petstore.json
 ```
 
 Because one exchange body cannot stand in for many different requests, each request sends the body and headers written in the collection. `raw`, `graphql` and `urlencoded` bodies are reconstructed; `formdata` and `file` bodies cannot be, and are skipped with a warning. The `file` body mode is never read from disk, as it records a path on the machine of whoever authored the collection.
@@ -419,6 +451,11 @@ Because one exchange body cannot stand in for many different requests, each requ
 The message body becomes a `List` of `PostmanRunResult`, one per request, each carrying the request id, method, URI, status code, response body, headers and any failure. The headers `CamelRestPostmanRequestCount` and `CamelRestPostmanFailedCount` summarise the run.
 
 By default the run stops and fails on the first request that fails. Set `runFailFast=false` to attempt every request and record the failures in their results instead:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("timer:smoke?period=60000")
@@ -428,9 +465,39 @@ from("timer:smoke?period=60000")
         .to("log:failures");
 ```
 
+```yaml
+- route:
+    from:
+      uri: timer:smoke
+      parameters:
+        period: 60000
+      steps:
+        - to:
+            uri: rest-postman:petstore.json
+            parameters:
+              runFailFast: false
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - filter:
+                  expression:
+                    simple:
+                      expression: "${body.success} == false"
+                  steps:
+                    - to:
+                        uri: log:failures
+```
+
 ### Contract-first consumer
 
 Pointing a route’s `from` at a collection serves its requests over HTTP, dispatching each one to a route consuming from `direct:<requestId>`:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("rest-postman:petstore.json")
@@ -438,6 +505,23 @@ from("rest-postman:petstore.json")
 
 from("direct:getPetById")
     .setBody(constant("{ \"id\": 42 }"));
+```
+
+```yaml
+- route:
+    from:
+      uri: rest-postman:petstore.json
+      steps:
+        - to:
+            uri: direct:dummy
+- route:
+    from:
+      uri: direct:getPetById
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "{ \"id\": 42 }"
 ```
 
 Use a folder id to serve only part of a collection, and `requestFilter` to include or exclude requests by Ant-style patterns over their folder qualified ids.
@@ -452,19 +536,52 @@ If two requests share an HTTP method and path, which is common when a collection
 
 `{{variable}}` placeholders are resolved from the collection’s own `variable` arrays, with folder scopes overriding the collection scope, then from the endpoint’s `variables` option, then, for a collection read from the classpath or the file system, from Camel property placeholders:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("rest-postman:petstore.json#getPetById?variable.baseUrl=https://staging.example.com/v3");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "rest-postman:petstore.json#getPetById"
+            parameters:
+              variable.baseUrl: https://staging.example.com/v3
 ```
 
 Postman environment files are not supported. Unresolved placeholders are left as they are unless `failOnUnresolvedVariable=true`. The exception is one left in the host of the URL, a query parameter name, or the `Accept` or `Content-Type` header of a request: these become options of the delegate endpoint, where Camel would resolve the placeholder from its properties, so the producer fails to start instead.
 
 A collection fetched from the Postman cloud is editable by anyone with access to the Postman workspace, and one fetched over HTTP by whoever serves it. Camel properties by default also cover JVM system properties and OS environment variables, so resolving such a collection’s placeholders from them would let its content copy any of those values into an outgoing request. Its placeholders are therefore **not** resolved from Camel properties: only `classpath:` and `file:` sources, and names without a scheme, are. Pass a property to such a collection explicitly in the endpoint URI, or set `resolveVariablesFromProperties=enabled` if you trust its content as much as your own configuration (`disabled` turns the lookup off for a local collection too; the default, `auto`, decides by source):
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("rest-postman:12ece9e1-2abf-4edc-8e34-de66e74114d2#getPetById?postmanApiKey={{postman.apiKey}}"
         + "&variable.apiToken={{petstore.token}}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "rest-postman:12ece9e1-2abf-4edc-8e34-de66e74114d2#getPetById"
+            parameters:
+              postmanApiKey: "{{postman.apiKey}}"
+              variable.apiToken: "{{petstore.token}}"
 ```
 
 A placeholder name written in the `prefix:value` form of a Camel property placeholder function — `{{env:HOME}}`, `{{sys:user.home}}`, `{{bean:foo}}` and the vault functions among them — is never resolved from Camel properties, whatever the source. Supply such values through the `variables` option instead.
@@ -488,9 +605,25 @@ authenticates against **the API the collection describes**. It is governed by th
 
 ### Fetching a collection from the Postman cloud
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("rest-postman:12ece9e1-2abf-4edc-8e34-de66e74114d2#getPetById?postmanApiKey=PMAK-xxxx");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "rest-postman:12ece9e1-2abf-4edc-8e34-de66e74114d2#getPetById"
+            parameters:
+              postmanApiKey: PMAK-xxxx
 ```
 
 Prefer resolving the key from a vault or a property placeholder over writing it in the URI. Redirects from `postmanApiUrl` are rejected rather than followed, because following one would send the key to the redirect target, and `postmanApiUrl` must use HTTPS unless it names a loopback host.

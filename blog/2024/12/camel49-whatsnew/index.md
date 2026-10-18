@@ -1,6 +1,6 @@
 # Apache Camel 4.9 What's New
 
-Published 2024-12-05 by Claus Ibsen, Pasquale Congiusti, Tadayoshi Sato in Releases
+Published 2024-12-05 by Claus Ibsen, Pasquale Congiusti, Tadayoshi Sato in Releases, Camel
 
 Details of what we have done in the Camel 4.9 release.
 

@@ -1102,3 +1102,25 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
 
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
+
+## Usage
+
+The endpoint is the API name and the method name, such as `events/quickAdd`. The parameters of the method are endpoint options or headers with the `CamelGoogleCalendar.` prefix, and `inBody` names the parameter that comes from the message body. The following route adds an event to the primary calendar from a text in the message body, such as `Lunch with the team tomorrow at noon`:
+
+```yaml
+- route:
+    from:
+      uri: direct:addEvent
+      steps:
+        - to:
+            uri: google-calendar:events/quickAdd
+            parameters:
+              calendarId: primary
+              inBody: text
+              clientId: "{{google.clientId}}"
+              clientSecret: "{{google.clientSecret}}"
+              refreshToken: "{{google.refreshToken}}"
+              applicationName: camel-example
+        - log:
+            message: "Created event ${body.htmlLink}"
+```

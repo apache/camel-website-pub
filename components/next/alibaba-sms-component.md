@@ -150,9 +150,31 @@ The component supports the following operations:
 
 ### Producer example
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("alibaba-sms:sendSms?phoneNumbers=13800138000&signName=MySign&templateCode=SMS_123456&templateParam={\"code\":\"1234\"}&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: alibaba-sms:sendSms
+            parameters:
+              phoneNumbers: "13800138000"
+              signName: MySign
+              templateCode: SMS_123456
+              templateParam: '{"code":"1234"}'
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
 ```
 
 ## Examples

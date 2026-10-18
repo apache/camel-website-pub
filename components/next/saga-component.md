@@ -113,3 +113,49 @@ The Saga component supports the following message header(s), which is/are listed
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **Long-Running-Action** (producer) Constant: [`SAGA_LONG_RUNNING_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-saga/latest/org/apache/camel/component/saga/SagaConstants.html#SAGA_LONG_RUNNING_ACTION) | The long running action. |  | String |
+
+## Usage
+
+The two endpoints are `saga:complete` and `saga:compensate`. A route that is part of a saga with the completion mode `MANUAL` sends to one of them to end the saga. Camel then calls the completion or the compensation endpoint of the saga.
+
+The example below uses the in-memory saga service, which is not meant for production. The first route starts a saga for an order and asks for the payment. The second route gets the payment result, in the same saga: it completes the saga when the order is paid, and compensates it otherwise. The `orderId` option is a header in the completion and compensation routes.
+
+```yaml
+- beans:
+    - name: sagaService
+      type: org.apache.camel.saga.InMemorySagaService
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - saga:
+            completionMode: MANUAL
+            timeout: 1m
+            completion: direct:orderCompleted
+            compensation: direct:orderCancelled
+            option:
+              - key: orderId
+                expression:
+                  simple:
+                    expression: "${header.orderId}"
+        - to:
+            uri: seda:payment
+- route:
+    from:
+      uri: seda:paymentResult
+      steps:
+        - saga:
+            propagation: MANDATORY
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${body} == 'paid'"
+                steps:
+                  - to:
+                      uri: saga:complete
+            otherwise:
+              steps:
+                - to:
+                    uri: saga:compensate
+```

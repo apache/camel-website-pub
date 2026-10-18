@@ -1,6 +1,6 @@
 # Apache Camel 4.19 What's New
 
-Published 2026-04-17 by Claus Ibsen, Federico Mariani, Pasquale Congiusti, Tom Cunningham, Zineb BENDHIBA, Andrea Cosentino in Releases
+Published 2026-04-17 by Claus Ibsen, Federico Mariani, Pasquale Congiusti, Tom Cunningham, Zineb BENDHIBA, Andrea Cosentino in Releases, Camel
 
 Details of what we have done in the Camel 4.19 release.
 

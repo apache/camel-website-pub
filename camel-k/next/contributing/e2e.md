@@ -11,7 +11,7 @@ Since both unit test and integration test names end with `_test.go`, both would 
 
 Look into the [/e2e](https://github.com/apache/camel-k/tree/main/e2e) directory for examples of integration tests.
 
-Before running an integration test, you need to be connected to a Kubernetes/OpenShift namespace and have the Camel K operator installed globally into a namespaced named `camel-k`. After you log into your cluster, you can run the following command to execute the suite of smoke tests:
+Before running an integration test, you need to be connected to a Kubernetes/OpenShift namespace and have the Camel K operator installed globally into a namespaced named `camel`. After you log into your cluster, you can run the following command to execute the suite of smoke tests:
 
 ```none
 make test-smoke

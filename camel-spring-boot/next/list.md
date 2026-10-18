@@ -1396,7 +1396,6 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [Tokenize](../../components/next/languages/tokenize-language.md) | camel-core-languages-starter | Stable | 2.0 | Tokenize text payloads using delimiter patterns |
 | [TypeSafe AI](../../components/next/languages/typesafe-ai-language.md) | camel-typesafe-ai-starter | Preview | 4.23 | Evaluate a Noul question with the TypeSafe AI decision API |
 | [Variable](../../components/next/languages/variable-language.md) | camel-core-languages-starter | Stable | 4.4 | Gets a variable |
-| [Wasm](../../components/next/languages/wasm-language.md) | camel-wasm-starter | Experimental | 4.5 | Call a wasm (web assembly) function |
 | [XML Tokenize](../../components/next/languages/xtokenize-language.md) | camel-stax-starter | Stable | 2.14 | Tokenize XML payloads |
 | [XPath](../../components/next/languages/xpath-language.md) | camel-xpath-starter | Stable | 1.1 | Evaluates an XPath expression against an XML payload |
 | [XQuery](../../components/next/languages/xquery-language.md) | camel-saxon-starter | Stable | 1.0 | Evaluates an XQuery expressions against an XML payload |

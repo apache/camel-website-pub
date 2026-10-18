@@ -1,6 +1,6 @@
 # Apache Camel 4.6 What's New
 
-Published 2024-05-10 by Claus Ibsen in Releases
+Published 2024-05-10 by Claus Ibsen in Releases, Camel
 
 Summary of what's new and improved in the Camel 4.6 release.
 

@@ -19,6 +19,48 @@ In order to use the Workday component, Maven users will need to add the followin
 </dependency>
 ```
 
+## Usage
+
+The entity is `report` (a Workday report as a service) or `commonAPI` (the Workday REST API), and the path is the path of the report or of the API resource. The credentials come from the API client that Workday generates for the integration.
+
+The following route reads a report every hour. The body is the JSON of the report:
+
+```yaml
+- route:
+    from:
+      uri: timer:employees
+      parameters:
+        period: 3600000
+      steps:
+        - to:
+            uri: workday:report:/ISU_Camel/Custom_Report_Employees
+            parameters:
+              host: impl.workday.com
+              tenant: "{{workday.tenant}}"
+              clientId: "{{workday.client-id}}"
+              clientSecret: "{{workday.client-secret}}"
+              tokenRefresh: "{{workday.token-refresh}}"
+        - log:
+            message: "${body}"
+```
+
+The following route reads the workers through the Common API:
+
+```yaml
+- route:
+    from:
+      uri: direct:workers
+      steps:
+        - to:
+            uri: workday:commonAPI:/workers
+            parameters:
+              host: impl.workday.com
+              tenant: "{{workday.tenant}}"
+              clientId: "{{workday.client-id}}"
+              clientSecret: "{{workday.client-secret}}"
+              tokenRefresh: "{{workday.token-refresh}}"
+```
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:

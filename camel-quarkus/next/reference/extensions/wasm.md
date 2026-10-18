@@ -8,10 +8,8 @@ Invoke Wasm functions.
 
 -   [Wasm component](../../../../components/next/wasm-component.md), URI syntax: `wasm:functionName`
     
--   [Wasm language](../../../../components/next/languages/wasm-language.md)
+-   Wasm
     
-
-Please refer to the above links for usage and configuration details.
 
 ## Maven coordinates
 

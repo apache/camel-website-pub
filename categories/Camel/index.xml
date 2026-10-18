@@ -6,8 +6,15 @@
     <description>Recent content in Camel on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Sep 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 15 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Camel/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel 4.23 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/10/camel423-whatsnew/</link>
+      <pubDate>Thu, 15 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/camel423-whatsnew/</guid>
+      <description>Apache Camel 4.23 has just been released.&#xA;This is the biggest Camel release in a long time. Since 4.22 we have resolved 1030 JIRA tickets (nearly twice as many as in 4.22): 503 bug fixes, 362 improvements and 53 new features, made in over 2000 commits by 63 contributors.&#xA;As in Camel 4.22, AI-assisted development is now the norm rather than the exception: almost 90% of the commits that were not made by bots were made with an AI coding assistant.</description>
+    </item>
     <item>
       <title>Authorizing what an AI agent may do in Apache Camel</title>
       <link>https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/</link>
@@ -23,6 +30,13 @@
       <description>Camel 4.23 is planned for October and it adds a new component, camel-spiffe. The problem it solves is not obvious if you have never looked at SPIFFE, so I want to explain what it is for, what it does, and point at the example I wrote for it.&#xA;The problem Two services that talk to each other need to know who is on the other side. The usual answer is a credential that one side stores and the other side checks: an API key in a properties file, a password in a Kubernetes secret, a client certificate that somebody generated years ago.</description>
     </item>
     <item>
+      <title>Apache Camel 4.22 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/08/camel422-whatsnew/</link>
+      <pubDate>Tue, 11 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/08/camel422-whatsnew/</guid>
+      <description>Apache Camel 4.22 LTS has just been released.&#xA;This is a Long Term Support (LTS) release, which means it will receive patch releases with bug fixes and security updates for approximately one year. The supported LTS lines are now 4.18.x and 4.22.x (4.14.x reaches end of life with this release).&#xA;This release introduces a large set of new features and noticeable improvements that we will cover in this blog post.</description>
+    </item>
+    <item>
       <title>Camel Routes as AI Tools: Unified Tooling and MCP Server in Camel 4.22</title>
       <link>https://camel.apache.org/blog/2026/08/camel-ai-tools-mcp-422/</link>
       <pubDate>Fri, 07 Aug 2026 00:00:00 +0000</pubDate>
@@ -30,11 +44,165 @@
       <description>Camel 4.22 brings two features that change how Camel integrates with AI: a unified tool abstraction (camel-ai-tool) and a built-in MCP server (camel-mcp-server). Together, they let you turn any Camel route into an AI tool that works across frameworks and protocols.&#xA;This post covers both features.&#xA;The Problem: Fragmented Tool Definitions Before 4.22, defining AI tools in Camel meant picking a framework and committing to it. Want to expose a route as a tool for LangChain4j?</description>
     </item>
     <item>
+      <title>Apache Camel 4.21 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/07/camel421-whatsnew/</link>
+      <pubDate>Thu, 02 Jul 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/07/camel421-whatsnew/</guid>
+      <description>Apache Camel 4.21 has just been released.&#xA;This release introduces a large set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Error Registry The Error Registry has been enhanced to capture rich exchange data snapshots at error time, following the same pattern as BacklogTracer. This includes the message body, headers, exchange properties, and variables — giving you a complete picture of what was happening when the error occurred.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.20 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/04/camel420-whatsnew/</link>
+      <pubDate>Mon, 27 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/camel420-whatsnew/</guid>
+      <description>Apache Camel 4.20 has just been released.&#xA;This release is an expedited security fix release on top of the previous 4.19 release.&#xA;JDK25 compatibility This is the first release supporting JDK25.&#xA;However, there are a few 3rd party libraries that does not yet fully support JDK25, see more in CAMEL-22114.&#xA;Camel JBang You can now easier configure HTTPS for development purposes with self-signed certificates, so you can host services via HTTPS locally in Camel.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.19 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/04/camel419-whatsnew/</link>
+      <pubDate>Fri, 17 Apr 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/04/camel419-whatsnew/</guid>
+      <description>Apache Camel 4.19 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Spring Boot This is our first release that supports Spring Boot v4. Spring Boot v3 is no longer supported.&#xA;Camel Jackson 3 Components Four new components have been added which provide Jackson 3 support - they are named similarly to the previously existing camel-jackson components.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.18 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/02/camel418-whatsnew/</link>
+      <pubDate>Thu, 19 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/02/camel418-whatsnew/</guid>
+      <description>Apache Camel 4.18 LTS has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Added the possibility to add note(s) to EIPs. This is intended for developer notes or other kind of notes, that is convention to have at the source code. The note has no impaction on the running Camel. Another use case is to build tutorials with half complete code, and have note(s) that describe what to do.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.17 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2026/01/camel417-whatsnew/</link>
+      <pubDate>Tue, 13 Jan 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/01/camel417-whatsnew/</guid>
+      <description>Apache Camel 4.17 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core We have marked up important headers in various EIPs and components for tooling and troubleshooting assistance.&#xA;If you have the need to trigger only once and are using a timer such as timer:tick?repeatCount=1, then we have added the once component to trigger only once on startup, and made it much easier to pre configure the message body and headers as needed.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.16 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/11/camel416-whatsnew/</link>
+      <pubDate>Thu, 06 Nov 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/11/camel416-whatsnew/</guid>
+      <description>Apache Camel 4.16 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core You can now add note(s) to EIPs in the DSL. The notes have no impact on running Camel, but makes it consistent to include code comments or other notes that are valuable for developers for maintaining. You can of course still use code comments, but note make them available for Camel tooling.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.15 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/10/camel415-whatsnew/</link>
+      <pubDate>Thu, 09 Oct 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/10/camel415-whatsnew/</guid>
+      <description>Apache Camel 4.15 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core You can now easier extend Camel via 3d-party dependencies via Java ServiceLoader using the ContextServicePlugin SPI.&#xA;You can add custom sensitive keys to camel.main.additionalSensitiveKeywords which Camel will mask in logging.&#xA;Camel JBang camel debug now also supports debugging Camel Quarkus applications, by executing camel debug pom.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.14 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/08/camel414-whatsnew/</link>
+      <pubDate>Wed, 20 Aug 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/08/camel414-whatsnew/</guid>
+      <description>Apache Camel 4.14 LTS has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Camel consumers will now eagerly setup MDC logging which makes it possible to include details such as routeId in logs while the consumer is being created and started up.&#xA;The Intercept EIP now includes more details where the message was intercepted (node id and other information).</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.13 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/07/camel413-whatsnew/</link>
+      <pubDate>Tue, 08 Jul 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/07/camel413-whatsnew/</guid>
+      <description>Apache Camel 4.13 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core We have made management possible for BackOff, ForegroundTask, and BackgroundTask which are used as internal tasks to perform repetitive tasks, usually related to re-connection or recovery. Some of the Came components uses these features, and other components has native recovery built-in from the underlying library.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.12 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/05/camel412-whatsnew/</link>
+      <pubDate>Fri, 30 May 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/05/camel412-whatsnew/</guid>
+      <description>Apache Camel 4.12 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core The camel-xml-io XML DSL now has a generated XSD Schema that is independent of the classic Camel Spring XSD. This allows tooling and end users to use this schema instead and ensure the schema matches exactly the capabilities of the camel-ml-io XML DSL.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.11 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/04/camel411-whatsnew/</link>
+      <pubDate>Sat, 05 Apr 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/04/camel411-whatsnew/</guid>
+      <description>Apache Camel 4.11 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core The component verifier extension has been deprecated. This functionality has not been in use for many years, and we will start to deprecate more of these unused features in camel-core going forward.&#xA;Recipient List, Split and Multicast EIP In parallel processing mode, you can also enable synchronous=true to force these EIPs to process the sub-tasks using the upper bounds of the thread-pool.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.10 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2025/02/camel410-whatsnew/</link>
+      <pubDate>Wed, 12 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2025/02/camel410-whatsnew/</guid>
+      <description>Apache Camel 4.10 LTS has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Added customize to RouteBuilder to make it easier to configure a specific Camel component / dataformat, service in a Java lambda style, such as follows:&#xA;@Override public void configure() throws Exception { customize(KServeComponent.class, k -&amp;gt; { k.getConfiguration().setTarget(&amp;#34;localhost:8888&amp;#34;); }); from(&amp;#34;timer:kserve?repeatCount=1&amp;#34;) .to(&amp;#34;kserve:model/metadata?modelName=myModel&amp;#34;) .log(&amp;#34;${body}&amp;#34;); }This makes it possible for low-code users that want to have a single Java file with the Camel route and all the Java based configuration done entirely from the same configure method.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.9 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2024/12/camel49-whatsnew/</link>
+      <pubDate>Thu, 05 Dec 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/12/camel49-whatsnew/</guid>
+      <description>Apache Camel 4.9 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Added startup condition feature to let Camel perform some checks on startup, before continuing. For example to check if a specific ENV exists, or wait for a specific file to be created etc.&#xA;The supervised route controller now emits RouteRestartingEvent when routes are attempted to be started again after a previous failure.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.8 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2024/09/camel48-whatsnew/</link>
+      <pubDate>Mon, 16 Sep 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/09/camel48-whatsnew/</guid>
+      <description>Apache Camel 4.8 LTS has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core The simple language has new functions such as a iif (ternary if). The @BindToRegistry now supports init/destroy methods, and can be declared as lazy as well.&#xA;The log EIP can more easily configure its logger name using dynamic patterns.&#xA;Add poll EIP as an easier and simpler version of pollEnrich EIP which is also more tooling friendly.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.7 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2024/07/camel47-whatsnew/</link>
+      <pubDate>Mon, 15 Jul 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/07/camel47-whatsnew/</guid>
+      <description>Apache Camel 4.7 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core The route template has some fixes and improvements, such as that a full local copy of the template is created when creating routes from the template; this prevents unforeseen side effects when the same template is used later to create new routes.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.6 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2024/05/camel46-whatsnew/</link>
+      <pubDate>Fri, 10 May 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/05/camel46-whatsnew/</guid>
+      <description>Apache Camel 4.6 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel JBang We fixed some issues using Camel JBang with Windows, but we would still like more feedback from Windows users.&#xA;Camel JBang is primary intended to be Camel standalone only. However, we added support for running with Spring Boot or Quarkus directly.&#xA;You use the --runtime option to specify which platform to use, as shown below:</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.5 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2024/03/camel45-whatsnew/</link>
+      <pubDate>Thu, 28 Mar 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/03/camel45-whatsnew/</guid>
+      <description>Apache Camel 4.5 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core When using Kamelets and/or Rest DSL then Camel will now hide their intermediate routes and only show user routes. The number of routes that Camel logs on startup is thus only the number of user routes. This also avoids cluttering up the list of routes in monitoring and management tools.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.4 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2024/02/camel44-whatsnew/</link>
+      <pubDate>Mon, 19 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2024/02/camel44-whatsnew/</guid>
+      <description>Apache Camel 4.4 (LTS) has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core The simple language has been improved with hash function, and further improved the embedded functions for jsonpath, jq and xpath making it easier to grab data from JSon or XML within your simple expression or predicates.&#xA;We have optimized data formats to avoid converting payload to byte[] when unmarshalling, but allowing each data format to unmarshal the payload as-is.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.3 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2023/12/camel43-whatsnew/</link>
+      <pubDate>Mon, 18 Dec 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/12/camel43-whatsnew/</guid>
+      <description>Apache Camel 4.3 (non LTS) has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core Added basic support for Java 21 virtual threads. Note this is experimental and there is more work to complete to have full support for virtual threads. More details at threading model.&#xA;The simple language can now work better with JSon and XML with inlined jq/jsonpath/xpath functions.</description>
+    </item>
+    <item>
       <title>The Rise and Fall of the Performance Monsters</title>
       <link>https://camel.apache.org/blog/2023/11/camel-4-performance-improvements-2/</link>
       <pubDate>Sun, 26 Nov 2023 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2023/11/camel-4-performance-improvements-2/</guid>
       <description>Introduction Apache Camel has always been committed to delivering top-notch performance. As the development of Camel 4 progressed, so did the dedication to enhancing its performance. In this blog post, we&amp;rsquo;ll explore the advances made in the pursuit of efficiency, focusing on key improvements introduced between Camel 4.1 and 4.2, with a few important improvements for the upcoming 4.3.&#xA;Camel 4.1: A Leap Forward in Type Conversion One of the notable enhancements in Camel 4.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.2 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2023/11/camel42-whatsnew/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/11/camel42-whatsnew/</guid>
+      <description>Apache Camel 4.2 (non LTS) has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Java 21 This is the first release that officially supports running on Java 21.&#xA;Camel Core We continue to fine-tune the new type converter that was introduced on Camel 4.1.0. This version brings a few cleanups to the code, some fixes to the type converter resolution logic, caching improvements and micro optimizations to the type matching algorithm.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4.1 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2023/10/camel41-whatsnew/</link>
+      <pubDate>Thu, 12 Oct 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/10/camel41-whatsnew/</guid>
+      <description>Apache Camel 4.1 (non LTS) has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core We continue with our performance optimizations in the core.&#xA;This release brings an optimized type converter, that works around JDK issue 8180450, and can bring improved performance for many scenarios, such as the content-based router and filter.&#xA;DSL The XML and YAML DSL now have better support for defining bean which can be configured with properties, and references to other beans.</description>
+    </item>
+    <item>
+      <title>Apache Camel 4 What&#39;s New (top 10)</title>
+      <link>https://camel.apache.org/blog/2023/08/camel4-whatsnew/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2023/08/camel4-whatsnew/</guid>
+      <description>After 10 months of development, with 3 milestones, and 2 RC releases, we are releasing Apache Camel v4 today as LTS release. The Camel 4.0.x is a LTS release, and we will support it for 1 year.&#xA;This blog post highlights some noteworthy new features and improvements in Camel v4.&#xA;The features are based on work since January 2023, which was the time when we switched main branch to be Camel v4 based.</description>
     </item>
     <item>
       <title>Change Data Capture with Apache Camel and Debezium</title>
@@ -51,11 +219,25 @@
       <description>Introduction We are thrilled to share the remarkable advancements in the performance of Apache Camel 4, achieved through our diligent efforts in addressing a critical JVM issue (JDK-8180450). In this article, we will delve into the details of our investigation, the tools employed, and the subsequent optimizations that have propelled Apache Camel 4 to new heights of speed and efficiency.&#xA;Identifying the Performance Challenge The JVM issue JDK-8180450, known for its potential performance penalties during type checking, became our focal point.</description>
     </item>
     <item>
+      <title>Apache Camel 3.20 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2022/12/camel320-whatsnew/</link>
+      <pubDate>Wed, 21 Dec 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/12/camel320-whatsnew/</guid>
+      <description>Apache Camel 3.20 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel Core The Split EIP has been optimized to perform faster and reduced overhead when splitting by a String literal or a regular expression.&#xA;When working with EIPs you may want to temporarily disable one or more EIPs. Today you have to comment out code, or remove the EIPs.</description>
+    </item>
+    <item>
       <title>Load properties from Vault/Secrets cloud services: introducing Camel Context automatic refresh on secrets updates</title>
       <link>https://camel.apache.org/blog/2022/12/camel-context-reloading-secret-refresh/</link>
       <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2022/12/camel-context-reloading-secret-refresh/</guid>
       <description>Starting from Camel 3.19.0 we have four cloud services supported for loading properties as secrets:&#xA;AWS Secret Manager Google Cloud Secret Manager Azure Key Vault Hashicorp Vault One of the problems we faced in the development was related to finding a way to automatically refresh the secret value on the secrets update.&#xA;The main players in the cloud game are providing solutions based on their services: AWS provides multiple ways to be notified about secret updates and secret rotations through AWS Cloudtrail or AWS Cloud events, GCP leverages Google Pubsub to deliver messages with events related to secret, while Azure provides multiple ways of getting notified about events related to a vault in the Azure Key Vault service, mostly by using Azure Eventgrid as an intermediate service.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.19 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2022/10/camel319-whatsnew/</link>
+      <pubDate>Mon, 10 Oct 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/10/camel319-whatsnew/</guid>
+      <description>Apache Camel 3.19 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Camel JBang (Camel CLI) In this release we continue the expansion of Camel CLI.&#xA;You can now easily manage local running Camel integrations.&#xA;For example to list all running Camel processes:&#xA;camel ps PID NAME READY STATUS AGE 61818 sample.camel.MyCamelApplica… 1/1 Running 26m38s 62506 dude 1/1 Running 4m34s To see a bit more information, you can use camel get.</description>
     </item>
     <item>
       <title>Load properties from Vault/Secrets cloud services: an update</title>
@@ -70,6 +252,20 @@
       <pubDate>Thu, 16 Jun 2022 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2022/06/camel3x-top10-features/</guid>
       <description>At the end of 2019 Camel 3 arrived. Some main features were modularization of the core and support for Java 11. A bunch of other changes were mentioned in Claus Ibsen&amp;rsquo;s blog:&#xA;Apache Camel 3 What&amp;rsquo;s New (top 10)&#xA;In this blog, we focus on the top 10 of features that arrived since the 3.0 release. As an overview, but also to give some attention to features not everyone is aware of.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.17 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2022/05/camel317-whatsnew/</link>
+      <pubDate>Thu, 19 May 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/05/camel317-whatsnew/</guid>
+      <description>Apache Camel 3.17 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Java 17 (runtime) support Camel 3.17 is the first release where we have official support for Java 17, really easy to remember :) That said, the Java 17 support is runtime only, meaning that we do not add special support for new Java 17 language features such as Java records.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.16 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2022/03/camel316-whatsnew/</link>
+      <pubDate>Mon, 28 Mar 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/03/camel316-whatsnew/</guid>
+      <description>Apache Camel 3.16 has just been released.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Resume from Offset This release brings a new API to simplify consuming data at scale: the resume API V2. Please check the blog post we wrote to introduce it to our community.&#xA;Load properties from valut/secrets cloud services This release brings a new feature: the ability to retrieve properties values from a Vault/Secrets cloud services.</description>
     </item>
     <item>
       <title>Camel 3.16.0 new feature: Load properties from Vault/Secrets cloud services</title>
@@ -100,11 +296,25 @@
       <description>For Camel 3.16.0 we are removing the deprecated container-based test modules and replacing them with a new set of modules called Camel test-infra.&#xA;They continue to support container-based tests via TestContainers, however they abstract the underlying test infrastructure.&#xA;One of the great benefits for our project is that they allow us to more easily switch from container-based tests, to external instances. Previously, we would need to create a new test or implement a more complex design if we wanted to test both a container instance and an external service instance (i.</description>
     </item>
     <item>
+      <title>Apache Camel 3.15 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2022/02/camel315-whatsnew/</link>
+      <pubDate>Fri, 04 Feb 2022 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2022/02/camel315-whatsnew/</guid>
+      <description>Apache Camel 3.15 has just been released.&#xA;This release has dropped support for Java 8, and therefore Java 11 is required.&#xA;Because this is first release where we upgrade from Java 8 to 11, then some effort has been made to migrate various Maven plugins and settings to make this upgrade possible.&#xA;This release introduces a set of new features and noticeable improvements that we will cover in this blog post.</description>
+    </item>
+    <item>
       <title>Camel Dynamic Router EIP Component</title>
       <link>https://camel.apache.org/blog/2022/01/dynamic-router-eip-component/</link>
       <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2022/01/dynamic-router-eip-component/</guid>
       <description>Apache Camel 3.15.0 introduces a new Dynamic Router EIP component. Although Camel core includes a Dynamic Router processor, I wanted a Dynamic Router implementation that was much closer, and more adherent, to the EIP specification.&#xA;The Dynamic Router as a &amp;ldquo;glue&amp;rdquo; component, not a messaging server It is important to note that, while this implementation of the Dynamic Router is a component, it is not meant to be a component for some type of messaging system (like JMS, etc.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.14 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2021/12/camel314-whatsnew/</link>
+      <pubDate>Fri, 17 Dec 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/12/camel314-whatsnew/</guid>
+      <description>Apache Camel 3.14 has just been released.&#xA;This is the last LTS release supporting Java 8, and therefore we have extended the support period from 1 to 2 years.&#xA;This blog post first details the noteworthy changes since the last 3.11 LTS release from 6 months ago.&#xA;So what&amp;rsquo;s in this release (6 months of work) This release introduces a set of new features and noticeable improvements that we will cover in this blog post.</description>
     </item>
     <item>
       <title>Upcoming changes to the consumer on Kafka component</title>
@@ -121,11 +331,53 @@
       <description>Bringing the world of Java scripting to Camel</description>
     </item>
     <item>
+      <title>Apache Camel 3.11 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2021/06/Camel311-Whatsnew/</link>
+      <pubDate>Tue, 29 Jun 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/06/Camel311-Whatsnew/</guid>
+      <description>Apache Camel 3.11 has just been released.&#xA;This is a LTS release which will be supported for 1 year with regular patch and security releases.&#xA;This blog post first details the noteworthy changes since the last 3.10 release from last month. For readers that are upgrading from the last 3.7 LTS release then we have added a summary section that highlights all the important new features and changes (3.7 to 3.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.10 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2021/05/Camel310-Whatsnew/</link>
+      <pubDate>Fri, 21 May 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/05/Camel310-Whatsnew/</guid>
+      <description>Apache Camel 3.10 has just been released.&#xA;This is a non-LTS release which means we will not provide patch releases. The next planned LTS release is 3.11 scheduled for June/July 2021.&#xA;So what&amp;rsquo;s in this release This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Reduced object allocations We have optimized the remainder of the most complex EIPs to avoid excessive object allocations, and also to support exchange pooling.</description>
+    </item>
+    <item>
       <title>Camel-AWS-S3 - New Streaming upload feature</title>
       <link>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</link>
       <pubDate>Tue, 20 Apr 2021 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2021/04/s3-streaming-upload-3.10.0/</guid>
       <description>The S3 Streaming upload feature will arrive on Camel 3.10.0</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.9 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2021/03/Camel39-Whatsnew/</link>
+      <pubDate>Mon, 29 Mar 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/03/Camel39-Whatsnew/</guid>
+      <description>Apache Camel 3.9 has just been released.&#xA;This is a non-LTS release which means we will not provide patch releases. The next planned LTS release is 3.11 scheduled for June 2021.&#xA;So what&amp;rsquo;s in this release This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Reduced object allocations We have optimized the core by dramatically reducing object allocations - in fact the routing engine will produce ZERO or little objects during routing.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.8 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2021/02/Camel38-Whatsnew/</link>
+      <pubDate>Mon, 15 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2021/02/Camel38-Whatsnew/</guid>
+      <description>Apache Camel 3.8 has just been released.&#xA;This is a non-LTS release which means we will not provide patch releases. The next planned LTS release is 3.10 scheduled for June 2021.&#xA;So what&amp;rsquo;s in this release This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Startup and Shutdown Logging A noticeable difference is we changed the logging noise during startup and shutdown of Camel.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.7 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2020/12/Camel37-Whatsnew/</link>
+      <pubDate>Wed, 16 Dec 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/12/Camel37-Whatsnew/</guid>
+      <description>Apache Camel 3.7 LTS has just been released.&#xA;This is a LTS release which means we will provide patch releases for one year. The next planned LTS release is 3.10 scheduled towards summer 2021.&#xA;So what&amp;rsquo;s in this release This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Pre compiled languages We continued our avenue of making Camel faster and smaller.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.6 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2020/10/Camel36-Whatsnew/</link>
+      <pubDate>Wed, 21 Oct 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/10/Camel36-Whatsnew/</guid>
+      <description>Apache Camel 3.6 has just been released.&#xA;This is a non-LTS release which means we will not provide patch releases but use the release as-is. The next planned LTS release is 3.7 scheduled towards the end of the year.&#xA;So what&amp;rsquo;s in this release? This release introduces a set of new features and noticeable improvements that we will cover in this blog post.&#xA;Spring Boot We have upgraded to the latest release at this time which is Spring Boot 2.</description>
     </item>
     <item>
       <title>Introducing Camel-AWS2-Eventbridge component</title>
@@ -135,11 +387,46 @@
       <description>In Camel 3.6.0 we will introduce the camel-aws2-eventbridge among others new cool components. The aim of this blog post is showing what you can do with the Eventbridge AWS Service and the related camel component.&#xA;What is AWS Eventbridge? The definition from the AWS official website is the following:&#xA;Amazon EventBridge is a serverless event bus that makes it easy to connect applications together using data from your own applications, integrated Software-as-a-Service (SaaS) applications, and AWS services.</description>
     </item>
     <item>
+      <title>Apache Camel 3.5 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2020/09/Camel35-Whatsnew/</link>
+      <pubDate>Mon, 07 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/09/Camel35-Whatsnew/</guid>
+      <description>Apache Camel 3.5 has just been released.&#xA;This is a non-LTS release which means we will not provide patch releases, but use the release as-is. The next planned LTS release is 3.7 scheduled towards end of the year.&#xA;So what&amp;rsquo;s in this release? This release introduces new set of features and noticeable improvements that will we cover in this blog post.&#xA;Java 14 This is the first release that supports Java 14.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.4 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2020/06/camel34-whatsnew/</link>
+      <pubDate>Thu, 18 Jun 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/06/camel34-whatsnew/</guid>
+      <description>Apache Camel 3.4 is the first LTS (Long Term Support) release of Camel 3.&#xA;This release will be actively supported with regular patch releases containing important bug and security fixes for 1-year.&#xA;For more details about LTS vs non-LTS releases see this blog post.&#xA;So what&amp;rsquo;s in this release? This release is mostly about robustness and bug fixes.&#xA;We have also continued the work to make Camel more modular and lighter.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.3 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2020/05/Camel33-Whatsnew/</link>
+      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/05/Camel33-Whatsnew/</guid>
+      <description>A few days ago Apache Camel 3.3 was released. This is a continuation of the work we are doing on Camel leading up to the first long term support release (LTS) that will be the next release v3.4.&#xA;In case you have missed this, the release model in Camel 3.x is following the principe of LTS and non-LTS releases (like Java JDKs). For more details see this blog post.&#xA;What this means is that we will not do patch releases for Camel 3.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3.2 What&#39;s New</title>
+      <link>https://camel.apache.org/blog/2020/04/Camel32-Whatsnew/</link>
+      <pubDate>Thu, 09 Apr 2020 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2020/04/Camel32-Whatsnew/</guid>
+      <description>A few days ago Apache Camel 3.2 was released. This is a continuation of the work we are doing on Camel leading up to the first long term support release (LTS) that would be either Camel 3.3 or 3.4.&#xA;In case you have missed this, the release model in Camel 3.x is following the principe of LTS and non-LTS releases (like Java JDKs). For more details see this blog post.</description>
+    </item>
+    <item>
       <title>Camel AWS2 Components are here: what are the changes for end users?</title>
       <link>https://camel.apache.org/blog/2020/03/Camel3-AWS2-Whatsnew/</link>
       <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/blog/2020/03/Camel3-AWS2-Whatsnew/</guid>
       <description>In Camel 3.2.0 we&amp;rsquo;ll release the complete set of Camel AWS2 components. In Camel 3.1.0 we already have a bunch of AWS2 components living together with the original AWS components. The aim of this post is giving a full perspective of what will change for the end users and the roadmap for new features.&#xA;New components Except camel-aws-xray, which is a particular component needing much more work to be migrated, all the original AWS components have been migrated to AWS SDK v2.</description>
+    </item>
+    <item>
+      <title>Apache Camel 3 What&#39;s New (top 10)</title>
+      <link>https://camel.apache.org/blog/2019/12/Camel3-Whatsnew/</link>
+      <pubDate>Mon, 02 Dec 2019 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2019/12/Camel3-Whatsnew/</guid>
+      <description>Apache Camel 3 was released last thursday November 28th 2019, which also happens to be the day of the US Thanksgiving. This was not intentionally but we can say its a big thanks from us to the community with a brand new major version of Camel - this does not come often by. In fact, its 10 years since Camel 2 hit the streets. So this 3rd generation is long overdue.</description>
     </item>
     <item>
       <title>Apache Camel on top-5 in the ASF annual 2019 report</title>

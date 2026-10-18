@@ -1,6 +1,6 @@
 # Apache Camel 3.17 What's New
 
-Published 2022-05-19 by Claus Ibsen, Gregor Zurowski, Nicolas Filotto, Otavio Rodolfo Piske, Alexandre Gallice, Aurélien Pupier, Zheng Feng in Releases
+Published 2022-05-19 by Claus Ibsen, Gregor Zurowski, Nicolas Filotto, Otavio Rodolfo Piske, Alexandre Gallice, Aurélien Pupier, Zheng Feng in Releases, Camel
 
 Details of what we have done in the Camel 3.17 release.
 

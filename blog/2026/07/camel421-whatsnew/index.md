@@ -1,6 +1,6 @@
 # Apache Camel 4.21 What's New
 
-Published 2026-07-02 by Claus Ibsen, Pasquale Congiusti in Releases
+Published 2026-07-02 by Claus Ibsen, Pasquale Congiusti in Releases, Camel
 
 Details of what we have done in the Camel 4.21 release.
 

@@ -151,3 +151,65 @@ Enum values:
 | **CamelWeaviateKeyValue** (producer) Constant: [`KEY_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#KEY_VALUE) | Key Value for Create/Update/Query operation. |  | String |
 | **CamelWeaviateHybridAlpha** (producer) Constant: [`HYBRID_ALPHA`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#HYBRID_ALPHA) | Alpha value for hybrid search (0.0 = pure BM25, 1.0 = pure vector). |  | Float |
 | **CamelWeaviateQueryVector** (producer) Constant: [`QUERY_VECTOR`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#QUERY_VECTOR) | Optional query vector for hybrid search (overrides server-side vectorizer). |  | List |
+
+## Usage
+
+The `CamelWeaviateAction` header selects the operation. The routes below create a collection, add an object with its vector (the message body) and its properties (the `CamelWeaviateProperties` header), and run a keyword (BM25) search for the text in the message body:
+
+```yaml
+- route:
+    from:
+      uri: direct:createCollection
+      steps:
+        - setHeader:
+            name: CamelWeaviateAction
+            expression:
+              constant:
+                expression: CREATE_COLLECTION
+        - to:
+            uri: weaviate:Articles
+            parameters:
+              host: localhost:8080
+- route:
+    from:
+      uri: direct:addArticle
+      steps:
+        - setHeader:
+            name: CamelWeaviateAction
+            expression:
+              constant:
+                expression: CREATE
+        - setHeader:
+            name: CamelWeaviateProperties
+            expression:
+              groovy:
+                expression: "[title: 'Camel in Action', category: 'books']"
+        - setBody:
+            expression:
+              groovy:
+                expression: "[0.1f, 0.2f, 0.3f]"
+        - to:
+            uri: weaviate:Articles
+            parameters:
+              host: localhost:8080
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - setHeader:
+            name: CamelWeaviateAction
+            expression:
+              constant:
+                expression: BM25_QUERY
+        - setHeader:
+            name: CamelWeaviateQueryTopK
+            expression:
+              constant:
+                expression: "5"
+        - to:
+            uri: weaviate:Articles
+            parameters:
+              host: localhost:8080
+        - log:
+            message: "${body}"
+```

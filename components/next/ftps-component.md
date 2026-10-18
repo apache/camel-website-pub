@@ -485,6 +485,43 @@ The FTPS component supports the following message header(s), which is/are listed
 | **CamelFtpReplyCode** (common) Constant: [`FTP_REPLY_CODE`](https://javadoc.io/doc/org.apache.camel/camel-ftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FTP_REPLY_CODE) | The FTP client reply code. |  | int |
 | **CamelFtpReplyString** (common) Constant: [`FTP_REPLY_STRING`](https://javadoc.io/doc/org.apache.camel/camel-ftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FTP_REPLY_STRING) | The FTP client reply string. |  | String |
 
+## Usage
+
+The FTPS component works as the [FTP](ftp-component.md) component, over TLS. It has the options of the FTP component, and security options for TLS, such as `securityProtocol` (TLSv1.3 by default), `implicit` and `sslContextParameters`.
+
+The following route downloads the files of a directory on an FTPS server to a local folder. The consumer leaves the files on the server by default, so `move` moves each file to the `done` directory when it has been processed:
+
+```yaml
+- route:
+    from:
+      uri: ftps://myserver:21/orders
+      parameters:
+        username: "{{ftps.username}}"
+        password: "{{ftps.password}}"
+        passiveMode: true
+        binary: true
+        move: done
+      steps:
+        - to:
+            uri: file:target/orders
+```
+
+And this route uploads the files of a local folder:
+
+```yaml
+- route:
+    from:
+      uri: file:outbox
+      steps:
+        - to:
+            uri: ftps://myserver:21/upload
+            parameters:
+              username: "{{ftps.username}}"
+              password: "{{ftps.password}}"
+              passiveMode: true
+              binary: true
+```
+
 ## More Information
 
 For more information, you can look at [FTP component](ftp-component.md).

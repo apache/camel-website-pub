@@ -1,6 +1,6 @@
 # Apache Camel 4.18 What's New
 
-Published 2026-02-19 by Claus Ibsen, Andrea Cosentino, Ivo Bek, Federico Mariani, Claudio Miranda, Luigi De Masi in Releases
+Published 2026-02-19 by Claus Ibsen, Andrea Cosentino, Ivo Bek, Federico Mariani, Claudio Miranda, Luigi De Masi in Releases, Camel
 
 Details of what we have done in the Camel 4.18 LTS release.
 

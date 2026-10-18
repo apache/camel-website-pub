@@ -573,3 +573,44 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
 
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
+
+## Usage
+
+An `as2://server/listen` consumer receives AS2 messages on `serverPortNumber`, for the request URIs that match `requestUriPattern`. An `as2://client/send` producer sends the message body (`inBody: ediMessage`) to `targetHostname` and `targetPortNumber`. The following routes send a plain EDIFACT message from one to the other:
+
+```yaml
+- route:
+    from:
+      uri: as2://server/listen
+      parameters:
+        serverPortNumber: 8888
+        requestUriPattern: /receiver
+      steps:
+        - log:
+            message: "Received EDI message: ${body}"
+- route:
+    from:
+      uri: timer:send
+      parameters:
+        repeatCount: 1
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "UNB+UNOA:1+SENDER+RECEIVER+260101:1200+1'UNZ+1+1'"
+        - to:
+            uri: as2://client/send
+            parameters:
+              inBody: ediMessage
+              targetHostname: localhost
+              targetPortNumber: 8888
+              requestUri: /receiver
+              as2From: sender
+              as2To: receiver
+              from: sender@example.com
+              subject: Order
+              as2MessageStructure: PLAIN
+              ediMessageContentType: application/edifact
+```
+
+A `SIGNED`, `ENCRYPTED` or `SIGNED_ENCRYPTED` message structure also needs the keys and certificates of the signing and encrypting options.

@@ -127,6 +127,19 @@ from("file:target/in")
   });
 ```
 
+In YAML, the steps after the StAX endpoint get the handler as the message body. For example, with a counting handler that has a `getNumber()` method:
+
+```yaml
+- route:
+    from:
+      uri: file:target/in
+      steps:
+        - to:
+            uri: stax:org.superbiz.handler.CountingHandler
+        - log:
+            message: "The file has ${body.number} elements"
+```
+
 ### Iterate over a collection using JAXB and StAX
 
 First, we suppose you have JAXB objects.
@@ -138,10 +151,10 @@ _Java-only: Java JAXB annotated class_
 ```java
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "records")
@@ -163,10 +176,10 @@ and
 _Java-only: Java JAXB annotated class_
 
 ```java
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "record", propOrder = { "key", "value" })
@@ -206,7 +219,7 @@ Then you get an XML file to process:
   <record value="v3" key="3"/>
   <record value="v4" key="4"/>
   <record value="v5" key="5"/>
-</record>
+</records>
 ```
 
 The StAX component provides an `StAXBuilder` which can be used when iterating XML elements with the Camel Splitter
@@ -229,9 +242,12 @@ from("file:target/in")
         .to("mock:records");
 ```
 
-Alternatively, the example above could be implemented as follows in Spring XML
+Alternatively, the example above can use a bean for the `StAXBuilder`, as follows in Spring XML or YAML:
 
-_XML-only: Spring bean configuration with StAXBuilder factory method_
+-   Spring XML
+    
+-   YAML
+    
 
 ```xml
   <!-- use STaXBuilder to create the expression we want to use in the route below for splitting the XML file -->
@@ -255,3 +271,26 @@ _XML-only: Spring bean configuration with StAXBuilder factory method_
     </route>
   </camelContext>
 ```
+
+```yaml
+- beans:
+    - name: staxRecord
+      type: org.apache.camel.component.stax.StAXBuilder
+      factoryMethod: stax
+      constructors:
+        0: org.apache.camel.component.stax.model.Record
+- route:
+    from:
+      uri: file:target/in
+      steps:
+        - split:
+            expression:
+              ref:
+                expression: staxRecord
+            streaming: true
+            steps:
+              - to:
+                  uri: mock:records
+```
+
+To turn off namespace awareness in YAML, add `1: false` to the `constructors` of the bean.

@@ -177,6 +177,8 @@ Enum values:
 
 To use Platform HTTP, a provider (engine) is required to be available on the classpath. The purpose is to have drivers for different runtimes such as Quarkus, or Spring Boot.
 
+With `camel run`, the provider is the embedded HTTP server of `camel-platform-http-main`, which starts when a route uses platform-http, on port 8080 (`camel.server.port` in `application.properties` or `camel run --port` changes it). With Camel Main, the embedded HTTP server is disabled by default: enable it in `application.properties` with `camel.server.enabled=true` and set `camel.server.port`. See [Platform HTTP Main](others/platform-http-main.md) for the other `camel.server.*` options.
+
 To use it with different runtimes:
 
 -   Quarkus

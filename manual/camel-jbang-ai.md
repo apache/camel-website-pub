@@ -53,6 +53,8 @@ Use `--show-tools` to see tool calls and results as they happen:
 camel ask "show me the route structure" --show-tools
 ```
 
+With a question, the answer is the only output on stdout, so a script can use it: the model in use, the tool calls of `--show-tools` and the token usage of `--show-stats` are printed on stderr. `camel ask` exits with `1` when the LLM cannot answer, such as when it is not reachable or the call fails.
+
 ### What asks first
 
 Most tools only read, and run without asking. A call that changes the project, reaches beyond the integration, may destroy data or runs code asks you first, on the terminal:

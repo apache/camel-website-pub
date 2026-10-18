@@ -1,6 +1,6 @@
 # Apache Camel 4.17 What's New
 
-Published 2026-01-13 by Claus Ibsen, Federico Mariani, Gregor Zurowski in Releases
+Published 2026-01-13 by Claus Ibsen, Federico Mariani, Gregor Zurowski in Releases, Camel
 
 Details of what we have done in the Camel 4.17 release.
 

@@ -436,14 +436,45 @@ Camel-AWS Translate component provides the following operation on the producer s
 
 ### Translate Text example
 
-_Java-only: uses Java constants for header names and enum values_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
-  .setHeader(TranslateConstants.SOURCE_LANGUAGE, TranslateLanguageEnum.ITALIAN)
-  .setHeader(TranslateConstants.TARGET_LANGUAGE, TranslateLanguageEnum.GERMAN)
+  .setHeader(Translate2Constants.SOURCE_LANGUAGE, constant(Translate2LanguageEnum.ITALIAN))
+  .setHeader(Translate2Constants.TARGET_LANGUAGE, constant(Translate2LanguageEnum.GERMAN))
   .setBody(constant("Ciao"))
   .to("aws2-translate://test?translateClient=#amazonTranslateClient&operation=translateText");
+```
+
+In YAML, the headers are the language codes, `it` and `de`:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAwsTranslateSourceLanguage
+            expression:
+              constant:
+                expression: it
+        - setHeader:
+            name: CamelAwsTranslateTargetLanguage
+            expression:
+              constant:
+                expression: de
+        - setBody:
+            expression:
+              constant:
+                expression: Ciao
+        - to:
+            uri: aws2-translate:test
+            parameters:
+              translateClient: "#amazonTranslateClient"
+              operation: translateText
 ```
 
 As a result, you’ll get an exchange containing the translated text.
@@ -456,8 +487,8 @@ _Java-only: uses AWS SDK POJO request builder as message body_
 
 ```java
 from("direct:start")
-  .setBody(TranslateTextRequest.builder().sourceLanguageCode(Translate2LanguageEnum.ITALIAN.toString())
-                    .targetLanguageCode(Translate2LanguageEnum.GERMAN.toString()).text("Ciao").build())
+  .setBody(constant(TranslateTextRequest.builder().sourceLanguageCode(Translate2LanguageEnum.ITALIAN.toString())
+                    .targetLanguageCode(Translate2LanguageEnum.GERMAN.toString()).text("Ciao").build()))
   .to("aws2-translate://test?translateClient=#amazonTranslateClient&operation=translateText&pojoRequest=true");
 ```
 

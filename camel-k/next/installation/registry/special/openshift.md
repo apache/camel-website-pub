@@ -10,7 +10,7 @@ Openshift has an embedded container registry you can use to store the images pro
 The first thing you need to do is to create an access token for the service account you want to use to pull/push images from the registry. We suggest to use the `camel-k-builder` Service Account which was created during the installation procedure and is normally used to perform "building" operations.
 
 ```bash
-oc serviceaccounts new-token camel-k-builder -n camel-k
+oc serviceaccounts new-token camel-k-builder -n camel
 eyJhb[...]Uhz0
 ```
 
@@ -20,7 +20,7 @@ eyJhb[...]Uhz0
 You will need to use this token to create a secret:
 
 ```bash
-oc create secret docker-registry ocp-registry --docker-server image-registry.openshift-image-registry.svc:5000 --docker-username camel-k-builder --docker-password eyJhb[...]Uhz0 -n camel-k
+oc create secret docker-registry ocp-registry --docker-server image-registry.openshift-image-registry.svc:5000 --docker-username camel-k-builder --docker-password eyJhb[...]Uhz0 -n camel
 ```
 
 > **Note**
@@ -31,8 +31,8 @@ oc create secret docker-registry ocp-registry --docker-server image-registry.ope
 Before being able to pull and push containers images to the registry, you need to provide the proper privileges to access:
 
 ```bash
-oc policy add-role-to-user registry-viewer -z camel-k-builder -n camel-k
-oc policy add-role-to-user registry-editor -z camel-k-builder -n camel-k
+oc policy add-role-to-user registry-viewer -z camel-k-builder -n camel
+oc policy add-role-to-user registry-editor -z camel-k-builder -n camel
 ```
 
 > **Note**

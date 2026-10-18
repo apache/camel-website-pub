@@ -107,3 +107,20 @@ Enum values:
 
 
  |  | ExchangePattern |
+
+## Usage
+
+The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one.
+
+The consumer receives the events of the types in `events`, the names of the `EventType` constants, separated by commas without spaces. Ignite records only the event types that its configuration includes (`includeEventTypes` of the `IgniteConfiguration`):
+
+```yaml
+- route:
+    from:
+      uri: ignite-events:cacheEvents
+      parameters:
+        events: EVT_CACHE_OBJECT_PUT,EVT_CACHE_OBJECT_REMOVED
+      steps:
+        - log:
+            message: "Event: ${body}"
+```

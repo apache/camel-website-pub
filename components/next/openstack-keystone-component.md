@@ -232,3 +232,24 @@ If you need more precise region settings, you can create a new object of the typ
 | `delete` | Delete the user. |
 
 If you need more precise user settings, you can create a new object of the type `org.openstack4j.model.identity.v3.User` and send in the message body.
+
+### Example
+
+The following route lists the projects. The endpoint is the address of the identity service (Keystone), and the credentials are property placeholders:
+
+```yaml
+- route:
+    from:
+      uri: direct:listProjects
+      steps:
+        - to:
+            uri: openstack-keystone:http://controller:5000/v3
+            parameters:
+              username: "{{openstack.username}}"
+              password: "{{openstack.password}}"
+              project: "{{openstack.project}}"
+              subsystem: projects
+              operation: getAll
+        - log:
+            message: "Found ${body.size()} projects"
+```

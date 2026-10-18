@@ -573,7 +573,7 @@ context.addRoutes(new RouteBuilder() {
                + "?userName={{env:SERVICENOW_USERNAME}}"
                + "&password={{env:SERVICENOW_PASSWORD}}"
                + "&oauthClientId={{env:SERVICENOW_OAUTH2_CLIENT_ID}}"
-               + "&oauthClientSecret={{env:SERVICENOW_OAUTH2_CLIENT_SECRET}}"
+               + "&oauthClientSecret={{env:SERVICENOW_OAUTH2_CLIENT_SECRET}}")
            .to("mock:servicenow");
     }
 });
@@ -586,4 +586,34 @@ FluentProducerTemplate.on(context)
     .withHeader(ServiceNowConstants.MODEL, Incident.class)
     .to("direct:servicenow")
     .send();
+```
+
+In YAML, the route sets the action and the limit as headers, and the resource and the table as endpoint options:
+
+```yaml
+- route:
+    from:
+      uri: direct:servicenow
+      steps:
+        - setHeader:
+            name: CamelServiceNowAction
+            expression:
+              constant:
+                expression: retrieve
+        - setHeader:
+            name: CamelServiceNowLimit
+            expression:
+              constant:
+                expression: "10"
+        - to:
+            uri: "servicenow:{{env:SERVICENOW_INSTANCE}}"
+            parameters:
+              resource: table
+              table: incident
+              userName: "{{env:SERVICENOW_USERNAME}}"
+              password: "{{env:SERVICENOW_PASSWORD}}"
+              oauthClientId: "{{env:SERVICENOW_OAUTH2_CLIENT_ID}}"
+              oauthClientSecret: "{{env:SERVICENOW_OAUTH2_CLIENT_SECRET}}"
+        - log:
+            message: "${body}"
 ```

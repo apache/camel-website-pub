@@ -139,8 +139,6 @@ Enum values:
     
 -   variable
     
--   wasm
-    
 -   xpath
     
 -   xquery

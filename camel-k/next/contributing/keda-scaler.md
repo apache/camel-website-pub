@@ -1,0 +1,161 @@
+# Developing KEDA scaler mappings
+
+Camel K can derive KEDA triggers from the consumer endpoints of an Integration. This page explains how to extend that discovery with a mapping for another Camel component. For information about configuring autoscaling, see the [Integration scaling](../scaling/integration.md) guide and the [KEDA trait](../traits/keda.md) reference.
+
+> **Note**
+> A scaler mapping translates a Camel component URI into metadata for an existing KEDA scaler. It does not implement a new scaler in the KEDA project.
+
+## How automatic discovery works
+
+When the KEDA trait is enabled, `kedaTrait.Configure` runs automatic discovery unless `keda.auto` is set to `false`. Discovery follows this flow:
+
+1.  `metadata.ExtractAll` inspects all Integration sources and extracts their Camel `from` URIs.
+    
+2.  Each URI is passed to `MapToKedaTrigger`.
+    
+3.  `ParseComponentURI` separates the URI into its component name, path value, and query parameters.
+    
+4.  The component name is used to look up a `ScaleMapper` in the registry.
+    
+5.  If a mapper is registered, it converts the path and parameters into a KEDA scaler type and metadata, which become a `KedaTrigger`.
+    
+6.  The KEDA trait adds the trigger to the `ScaledObject` that it creates in `Apply`.
+    
+
+An unsupported Camel component has no registered mapper, so it does not produce an automatically discovered trigger. A manually configured trigger takes precedence over an automatically discovered trigger of the same type. The trait also merges entries from `keda.autoMetadata` into discovered metadata.
+
+## The `ScaleMapper` registry
+
+The registry and interface are defined in `pkg/trait/keda/mapper.go`:
+
+```go
+type ScaleMapper interface {
+	Component() string
+	Map(pathValue string, params map[string]string) (kedaType string, metadata map[string]string)
+}
+```
+
+`Component` returns the Camel component name used as the registry key. `Map` receives the path part of the Camel URI and its decoded query parameters, and returns the corresponding KEDA scaler type and metadata.
+
+Each implementation registers itself by calling `keda.Register` from an `init` function. The blank import of `pkg/trait/keda/scalers` in `pkg/trait/keda.go` ensures that these registration functions run when the trait package is loaded.
+
+## Kafka reference implementation
+
+The Kafka mapper in `pkg/trait/keda/scalers/kafka.go` is the reference implementation. It maps the Camel URI path to the KEDA `topic`, the Camel `brokers` parameter to `bootstrapServers`, and `groupId` to `consumerGroup`.
+
+For example, this Camel source URI:
+
+```text
+kafka:orders?brokers=broker:9092&groupId=my-group
+```
+
+produces this trigger:
+
+```yaml
+type: kafka
+metadata:
+  topic: orders
+  bootstrapServers: broker:9092
+  consumerGroup: my-group
+```
+
+Other KEDA Kafka metadata, such as `lagThreshold`, can be supplied through `keda.autoMetadata` when it is not derived from the Camel URI.
+
+## Complete mapping example
+
+The following example uses fictional component and scaler names to show the complete mapping process.
+
+Assume an Integration consumes from this Camel URI:
+
+```text
+my-component:orders?server=broker.example:1234
+```
+
+The Camel component is `my-component`. The URI path, `orders`, should map directly to the scaler’s `topic` metadata field. The Camel `server` parameter should be adapted to the scaler’s `address` metadata field.
+
+For example, a mapper in `pkg/trait/keda/scalers/my_component.go` could look like this:
+
+```go
+package scalers
+
+import keda "github.com/apache/camel-k/v2/pkg/trait/keda"
+
+type MyComponentScaler struct{}
+
+func init() {
+	keda.Register(&MyComponentScaler{})
+}
+
+func (m *MyComponentScaler) Component() string {
+	return "my-component"
+}
+
+func (m *MyComponentScaler) Map(pathValue string, params map[string]string) (string, map[string]string) {
+	metadata := make(map[string]string)
+
+	if pathValue != "" {
+		metadata["topic"] = pathValue
+	}
+	if v, ok := params["server"]; ok {
+		metadata["address"] = v
+	}
+
+	return "my-scaler", metadata
+}
+```
+
+With that mapper registered, the source URI produces this KEDA trigger:
+
+```yaml
+type: my-scaler
+metadata:
+  topic: orders
+  address: broker.example:1234
+```
+
+This example shows the two common mapping cases:
+
+-   `orders` is copied directly from the Camel URI path into the KEDA `topic` field.
+    
+-   `server` is renamed to the KEDA `address` field because the Camel component and KEDA scaler use different names for the same value.
+    
+
+The mapper only translates values needed by the scaler. It should not add unrelated Camel endpoint parameters to the KEDA metadata.
+
+## Adding a mapping
+
+1.  Add `pkg/trait/keda/scalers/<component>.go`.
+    
+2.  Define a type that implements `ScaleMapper`.
+    
+3.  Return the Camel component name from `Component`.
+    
+4.  In `Map`, translate only relevant Camel URI path and parameter values to the metadata expected by the existing KEDA scaler, and return its scaler type.
+    
+5.  Register the mapper with `keda.Register` in an `init` function.
+    
+6.  Add `pkg/trait/keda/scalers/<component>_test.go`.
+    
+
+Keep component-specific conversion in the scaler package. Shared URI parsing and registry behavior belong in `pkg/trait/keda`.
+
+## Testing a mapping
+
+Use `pkg/trait/keda/scalers/kafka_test.go` as the model for a new mapper’s tests. Cover at least:
+
+-   registration under the expected Camel component name;
+    
+-   conversion of a complete URI;
+    
+-   conversion when optional URI values are absent;
+    
+-   exact KEDA scaler type and metadata keys; and
+    
+-   `MapToKedaTrigger` behavior for the new component.
+    
+
+If the change affects discovery or trigger precedence, add coverage to `pkg/trait/keda_test.go` as well. Run the focused tests with:
+
+```console
+$ go test ./pkg/trait/keda/... ./pkg/trait
+```

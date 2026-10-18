@@ -168,7 +168,7 @@ A [Semantic](../languages/semantic-language.md) choice question returns a catego
 
 ## Destinations and management
 
-Case and fallback URIs support property placeholders resolved at startup. Simple expressions in URIs are rejected. In YAML, both cases and `otherwise` accept `uri` plus `parameters`:
+Case values and the case and fallback URIs support property placeholders resolved at startup, so a route template or Kamelet parameter can be used as a case value. A value is lower-cased after it is resolved. Simple expressions in URIs are rejected. In YAML, both cases and `otherwise` accept `uri` plus `parameters`:
 
 ```yaml
 case:

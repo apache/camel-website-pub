@@ -149,6 +149,8 @@ Enum values:
 
 ## Examples
 
+In YAML, a Groovy expression builds the request objects of the Qdrant client, such as `VectorParams` or `PointStruct`.
+
 ### Collection Examples
 
 In the route below, we use the Qdrant component to create a collection named _myCollection_ with the given parameters:
@@ -156,6 +158,8 @@ In the route below, we use the Qdrant component to create a collection named _my
 #### Create Collection
 
 -   Java
+    
+-   YAML
     
 
 ```java
@@ -170,11 +174,35 @@ from("direct:in")
     .to("qdrant:myCollection");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelQdrantAction
+            expression:
+              constant:
+                expression: CREATE_COLLECTION
+        - setBody:
+            expression:
+              groovy:
+                expression: >-
+                  io.qdrant.client.grpc.Collections.VectorParams.newBuilder()
+                  .setSize(2)
+                  .setDistance(io.qdrant.client.grpc.Collections.Distance.Cosine)
+                  .build()
+        - to:
+            uri: qdrant:myCollection
+```
+
 #### Delete Collection
 
 In the route below, we use the Qdrant component to delete a collection named _myCollection_:
 
 -   Java
+    
+-   YAML
     
 
 ```java
@@ -184,11 +212,27 @@ from("direct:in")
     .to("qdrant:myCollection");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelQdrantAction
+            expression:
+              constant:
+                expression: DELETE_COLLECTION
+        - to:
+            uri: qdrant:myCollection
+```
+
 #### Collection Info
 
 In the route below, we use the qdrant component to get information about the collection named `myCollection`:
 
 -   Java
+    
+-   YAML
     
 
 ```java
@@ -197,6 +241,22 @@ from("direct:in")
         .constant(QdrantAction.COLLECTION_INFO)
     .to("qdrant:myCollection")
     .process(this::process);
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelQdrantAction
+            expression:
+              constant:
+                expression: COLLECTION_INFO
+        - to:
+            uri: qdrant:myCollection
+        - log:
+            message: "${body}"
 ```
 
 If there is a collection, you will receive a reply of type `Collections.CollectionInfo`. If there is not, the exchange will contain an exception of type `QdrantActionException` with a cause of type `StatusRuntimeException statusRuntimeException` and status `Status.NOT_FOUND`.
@@ -208,6 +268,8 @@ If there is a collection, you will receive a reply of type `Collections.Collecti
 In the route below we use the qdrant component to perform insert + updates (upsert) on points in the collection named _myCollection_:
 
 -   Java
+    
+-   YAML
     
 
 ```java
@@ -226,11 +288,37 @@ from("direct:in")
     .to("qdrant:myCollection");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelQdrantAction
+            expression:
+              constant:
+                expression: UPSERT
+        - setBody:
+            expression:
+              groovy:
+                expression: >-
+                  io.qdrant.client.grpc.Points.PointStruct.newBuilder()
+                  .setId(io.qdrant.client.PointIdFactory.id(8))
+                  .setVectors(io.qdrant.client.VectorsFactory.vectors([3.5f, 4.5f]))
+                  .putAllPayload([foo: io.qdrant.client.ValueFactory.value('hello'),
+                  bar: io.qdrant.client.ValueFactory.value(1)])
+                  .build()
+        - to:
+            uri: qdrant:myCollection
+```
+
 #### Retrieve
 
 In the route below, we use the Qdrant component to retrieve information of a single point by id from the collection named _myCollection_:
 
 -   Java
+    
+-   YAML
     
 
 ```java
@@ -242,11 +330,31 @@ from("direct:in")
     .to("qdrant:myCollection");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelQdrantAction
+            expression:
+              constant:
+                expression: RETRIEVE
+        - setBody:
+            expression:
+              groovy:
+                expression: "io.qdrant.client.PointIdFactory.id(8)"
+        - to:
+            uri: qdrant:myCollection
+```
+
 #### Delete
 
 In the route below, we use the qdrant component to delete points from the collection named `myCollection` according to a criteria:
 
 -   Java
+    
+-   YAML
     
 
 ```java
@@ -256,4 +364,22 @@ from("direct:in")
     .setBody()
         .constant(ConditionFactory.matchKeyword("foo", "hello"))
     .to("qdrant:myCollection");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - setHeader:
+            name: CamelQdrantAction
+            expression:
+              constant:
+                expression: DELETE
+        - setBody:
+            expression:
+              groovy:
+                expression: "io.qdrant.client.ConditionFactory.matchKeyword('foo', 'hello')"
+        - to:
+            uri: qdrant:myCollection
 ```

@@ -143,6 +143,19 @@ The Citrus endpoint acts as a producer-only endpoint. Routes send exchanges **to
 > **Note**
 > Spec setup (`validate()`, `validateAll()`, `when().receive()`) must complete before exchanges start arriving. For async consumers (SEDA, timer-based routes), ensure all validation chains are fully configured before starting the `CamelContext`.
 
+The route under test sends to the endpoint like to any other, and the test sets the expectations on the endpoint, as the sections below show. In YAML:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: citrus:validate
+            parameters:
+              messageType: json
+```
+
 ### Validation modules
 
 The component does not bundle Citrus validation modules. You must add the required validation module dependency for your message type to your test classpath:
@@ -354,6 +367,21 @@ Exchange result = template.send("direct:start", exchange -> {
 
 citrus.assertIsSatisfied();
 assertThat(result.getIn().getBody(String.class)).isEqualTo("{\"greeting\": \"Hello!\"}");
+```
+
+The route under test calls the simulated service like any other endpoint, and gets the simulated response as its body:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: citrus:receive/service
+            parameters:
+              messageType: json
+        - log:
+            message: "Response: ${body}"
 ```
 
 #### Gherkin-style API

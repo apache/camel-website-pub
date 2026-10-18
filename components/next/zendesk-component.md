@@ -6728,3 +6728,28 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
 
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
+
+## Usage
+
+The server and the credentials are component options, for example in `application.properties`:
+
+```properties
+camel.component.zendesk.server-url = https://yourcompany.zendesk.com
+camel.component.zendesk.username = {{env:ZENDESK_USERNAME}}
+camel.component.zendesk.token = {{env:ZENDESK_TOKEN}}
+```
+
+The endpoint is the method of the Zendesk client, and `inBody` names the method parameter that the message body is. The following route gets the ticket whose id is the message body. The body after the call is the `Ticket`:
+
+```yaml
+- route:
+    from:
+      uri: direct:ticket
+      steps:
+        - to:
+            uri: zendesk:getTicket
+            parameters:
+              inBody: id
+        - log:
+            message: "Ticket ${body.id}: ${body.subject}"
+```

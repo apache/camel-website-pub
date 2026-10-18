@@ -321,6 +321,98 @@ The Ehcache component supports the following message header(s), which is/are lis
 
 ## Examples
 
+### Using the cache in a route
+
+The producer runs the action of the `CamelEhcacheAction` header (or of the `action` option) with the key of the `CamelEhcacheKey` header. A PUT stores the message body. A GET sets the value as the message body, and the header `CamelEhcacheActionHasResult` tells whether the key was found:
+
+```yaml
+- route:
+    from:
+      uri: direct:save-order
+      steps:
+        - setHeader:
+            name: CamelEhcacheAction
+            expression:
+              constant:
+                expression: PUT
+        - setHeader:
+            name: CamelEhcacheKey
+            expression:
+              simple:
+                expression: "${header.orderId}"
+        - to:
+            uri: ehcache:orders
+- route:
+    from:
+      uri: direct:find-order
+      steps:
+        - setHeader:
+            name: CamelEhcacheAction
+            expression:
+              constant:
+                expression: GET
+        - setHeader:
+            name: CamelEhcacheKey
+            expression:
+              simple:
+                expression: "${header.orderId}"
+        - to:
+            uri: ehcache:orders
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelEhcacheActionHasResult}"
+                steps:
+                  - log:
+                      message: "Order ${header.orderId} from the cache: ${body}"
+            otherwise:
+              steps:
+                - log:
+                    message: "Order ${header.orderId} is not in the cache"
+```
+
+> **Note**
+> Without a cache manager or a cache configuration, each endpoint creates its own cache. `ehcache:orders?action=PUT` and `ehcache:orders?action=GET` are then two different caches. Set the action in a header and use one endpoint, as above, or share a cache manager with `configurationUri`, `cacheManager` or `cacheManagerConfiguration`.
+
+The consumer receives cache events only when the cache comes from a configuration or a cache manager. The default cache of an endpoint has no events. In this example, both endpoints use the same `ehcache.xml`, so they share its cache manager:
+
+```yaml
+- route:
+    from:
+      uri: direct:save-order
+      steps:
+        - setHeader:
+            name: CamelEhcacheKey
+            expression:
+              simple:
+                expression: "${header.orderId}"
+        - to:
+            uri: ehcache:orders
+            parameters:
+              configurationUri: classpath:ehcache.xml
+              action: PUT
+- route:
+    from:
+      uri: ehcache:orders
+      parameters:
+        configurationUri: classpath:ehcache.xml
+        eventTypes: CREATED
+      steps:
+        - log:
+            message: "New order ${header.CamelEhcacheKey}: ${body}"
+```
+
+The `ehcache.xml` file configures the cache:
+
+```xml
+<config xmlns="http://www.ehcache.org/v3">
+  <cache alias="orders">
+    <heap unit="entries">1000</heap>
+  </cache>
+</config>
+```
+
 ### Ehcache based idempotent repository example:
 
 _Java-only: programmatic CacheManager and idempotent repository configuration_
@@ -330,7 +422,7 @@ CacheManager manager = CacheManagerBuilder.newCacheManager(new XmlConfiguration(
 EhcacheIdempotentRepository repo = new EhcacheIdempotentRepository(manager, "idempotent-cache");
 
 from("direct:in")
-    .idempotentConsumer(header("messageId"), idempotentRepo)
+    .idempotentConsumer(header("messageId"), repo)
     .to("mock:out");
 ```
 

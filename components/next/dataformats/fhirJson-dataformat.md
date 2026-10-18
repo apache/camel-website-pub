@@ -51,3 +51,23 @@ Enum values:
 | **suppressNarratives** (advanced) | `false` | `Boolean` | If set to true (default is false), narratives will not be included in the encoded values. |
 | **dontStripVersionsFromReferencesAtPaths** (advanced) |  | `String` | If supplied value(s), any resource references at the specified paths will have their resource versions encoded instead of being automatically stripped during the encoding process. Multiple elements can be separated by comma. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
+
+## Usage
+
+The following route parses a FHIR resource from JSON and writes it as XML. The `fhirVersion` must match the version of the resources (R4 is the default):
+
+```yaml
+- route:
+    from:
+      uri: direct:patient
+      steps:
+        - unmarshal:
+            fhirJson:
+              fhirVersion: R4
+        - marshal:
+            fhirXml:
+              fhirVersion: R4
+              prettyPrint: true
+        - to:
+            uri: mock:result
+```

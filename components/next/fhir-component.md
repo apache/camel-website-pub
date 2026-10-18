@@ -1356,3 +1356,54 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
 
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
+
+## Usage
+
+The URI names the API and its method, such as `fhir://read/resourceById`. The parameters of the method are endpoint options, or headers that start with `CamelFhir.`, such as `CamelFhir.stringId`. The routes below create a patient from JSON, read a patient by its id, and search patients by family name:
+
+```yaml
+- route:
+    from:
+      uri: direct:createPatient
+      steps:
+        - to:
+            uri: fhir://create/resource
+            parameters:
+              serverUrl: http://localhost:8080/fhir
+              fhirVersion: R4
+              inBody: resourceAsString
+        - log:
+            message: "Created ${body.id.value}"
+- route:
+    from:
+      uri: direct:readPatient
+      steps:
+        - setHeader:
+            name: CamelFhir.stringId
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: fhir://read/resourceById
+            parameters:
+              serverUrl: http://localhost:8080/fhir
+              fhirVersion: R4
+              resourceClass: Patient
+        - marshal:
+            fhirJson:
+              fhirVersion: R4
+        - log:
+            message: "${body}"
+- route:
+    from:
+      uri: direct:searchPatients
+      steps:
+        - to:
+            uri: fhir://search/searchByUrl
+            parameters:
+              serverUrl: http://localhost:8080/fhir
+              fhirVersion: R4
+              url: "Patient?family=Simpson"
+        - log:
+            message: "Found ${body.total} patients"
+```

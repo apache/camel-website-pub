@@ -24,7 +24,12 @@ The language evaluates the given flag key as a boolean and returns the result. I
 
 The language does not modify the exchange — it reads targeting context from message headers but does not set any properties or headers itself. This means it is safe to use before a producer `to("openfeature:…​")` call without leaking settings.
 
-### Java DSL
+### Filter
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -33,7 +38,27 @@ from("direct:start")
     .end();
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - filter:
+            expression:
+              language:
+                language: openfeature
+                expression: enrichment-enabled
+            steps:
+              - to:
+                  uri: direct:enrich-order
+```
+
 ### Choice
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -45,15 +70,60 @@ from("direct:start")
     .end();
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - choice:
+            when:
+              - expression:
+                  language:
+                    language: openfeature
+                    expression: enrichment-enabled
+                steps:
+                  - to:
+                      uri: direct:enrich-order
+            otherwise:
+              steps:
+                - to:
+                    uri: direct:skip-enrichment
+```
+
 ### Expression with setProperty
 
 The language can also be used as an expression to store the evaluation result in an exchange property. This is a lightweight alternative to the component’s `resultProperty` option — it avoids a full `to()` call and keeps the message body untouched:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .setHeader("CamelOpenFeatureTargetingKey", simple("${body[order_id]}"))
     .setProperty("routingAlgorithm").language("openfeature", "new-routing-algorithm")
     .toD("direct:route-${exchangeProperty.routingAlgorithm}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelOpenFeatureTargetingKey
+            expression:
+              simple:
+                expression: "${body[order_id]}"
+        - setProperty:
+            name: routingAlgorithm
+            expression:
+              language:
+                language: openfeature
+                expression: new-routing-algorithm
+        - toD:
+            uri: "direct:route-${exchangeProperty.routingAlgorithm}"
 ```
 
 The `language()` expression defaults to variant (string) evaluation, so the property receives the string variant value directly.
@@ -71,6 +141,11 @@ Set the targeting key and context attributes as message headers before the langu
 -   `CamelOpenFeatureEvaluationContext` (header): a `Map<String, Object>` of additional context key-value pairs.
     
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setHeader("CamelOpenFeatureTargetingKey", constant("user-123"))
@@ -79,6 +154,33 @@ from("direct:start")
         .to("direct:enrich-order")
     .end();
 ```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelOpenFeatureTargetingKey
+            expression:
+              constant:
+                expression: user-123
+        - setHeader:
+            name: CamelOpenFeatureEvaluationContext
+            expression:
+              groovy:
+                expression: "[customer_tier: 'ENTERPRISE']"
+        - filter:
+            expression:
+              language:
+                language: openfeature
+                expression: enrichment-enabled
+            steps:
+              - to:
+                  uri: direct:enrich-order
+```
+
+In YAML, the Groovy expression `[customer_tier: 'ENTERPRISE']` makes the map of the evaluation context.
 
 ### Via createPredicate / createExpression
 

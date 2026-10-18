@@ -78,7 +78,7 @@ The 28 findings from the Glasswing initiative are credited in their advisories t
 
 Thank you to all of them.
 
-If you find a security issue in Apache Camel, please report it privately to [security@camel.apache.org](mailto:security@camel.apache.org). The [ASF security policy](https://www.apache.org/security/) describes how the process works.
+If you find a security issue in Apache Camel, please report it privately to [security@apache.org](mailto:security@apache.org). The [ASF security policy](https://www.apache.org/security/) describes how the process works.
 
 ## Learn more
 

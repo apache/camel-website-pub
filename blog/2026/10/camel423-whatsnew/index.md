@@ -1,6 +1,6 @@
 # Apache Camel 4.23 What's New
 
-Published 2026-10-15 by Claus Ibsen, Federico Mariani, Christoph Deppisch in Releases
+Published 2026-10-15 by Claus Ibsen, Federico Mariani, Christoph Deppisch in Releases, Camel
 
 Details of what we have done in the Camel 4.23 release.
 

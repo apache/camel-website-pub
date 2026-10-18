@@ -134,6 +134,33 @@ Enum values:
 
  |  | ExchangePattern |
 
+## Usage
+
+Put `webhook:` in front of the URI of a component that supports webhooks. The options that start with `webhook` are for this component, and the other options are for the delegate endpoint.
+
+At startup, Camel exposes a REST endpoint for the webhook and registers its URL at the provider (`webhookAutoRegister`). The provider must reach that URL, so set `webhookExternalUrl` to the public URL of your service. Without it, the URL is made from the REST configuration of Camel, which the provider often cannot reach.
+
+```yaml
+- route:
+    from:
+      uri: webhook:telegram:bots
+      parameters:
+        authorizationToken: "{{telegram.token}}"
+        webhookExternalUrl: "https://camel.example.com"
+        webhookComponentName: platform-http
+      steps:
+        - to:
+            uri: log:info
+```
+
+The REST endpoint uses a REST component of the application. When there is more than one, as with `camel run`, set `webhookComponentName`, for example to `platform-http`. The path of the endpoint is `webhookPath`, or a hash of the delegate URI, after `webhookBasePath` when it is set.
+
+The webhook options can also be set once on the component, for example in `application.properties`:
+
+```properties
+camel.component.webhook.webhook-external-url = https://camel.example.com
+```
+
 ## Examples
 
 Examples of the webhook component are provided in the documentation of the delegate components that support it.

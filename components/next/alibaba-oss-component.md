@@ -280,6 +280,11 @@ The consumer polls objects from a bucket using `listObjectsV2`, downloads each o
 
 ### Put an object
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
   .setBody(constant("Hello OSS"))
@@ -287,11 +292,51 @@ from("direct:start")
   .to("alibaba-oss:my-bucket?operation=putObject&region=cn-hangzhou&accessKey=xxx&secretKey=yyy");
 ```
 
+In YAML, the object name is the `objectName` option, which the producer uses when the header is not set:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: Hello OSS
+        - to:
+            uri: alibaba-oss:my-bucket
+            parameters:
+              operation: putObject
+              objectName: hello.txt
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
+```
+
 Producer operations return structured response metadata in the message body (`Map` or `List<Map>` depending on the operation).
 
 ### Consume objects from a bucket
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("alibaba-oss:my-bucket?region=cn-hangzhou&accessKey=xxx&secretKey=yyy&deleteAfterRead=true")
   .to("log:output");
+```
+
+```yaml
+- route:
+    from:
+      uri: alibaba-oss:my-bucket
+      parameters:
+        region: cn-hangzhou
+        accessKey: "{{alibaba.access-key}}"
+        secretKey: "{{alibaba.secret-key}}"
+        deleteAfterRead: true
+      steps:
+        - to:
+            uri: log:output
 ```

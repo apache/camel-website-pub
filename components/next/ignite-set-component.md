@@ -150,3 +150,30 @@ Enum values:
 
 
  |  | IgniteSetOperation |
+
+## Usage
+
+The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one. A node of its own with the default configuration takes one line in `application.properties`. On Java 17 and later, Ignite also needs the `--add-opens` JVM options that its documentation lists.
+
+```properties
+camel.component.ignite-set.ignite-configuration = #class:org.apache.ignite.configuration.IgniteConfiguration
+```
+
+`ADD` adds the body to the set, and sets the body to `true` when the item was not in the set yet. `SIZE` then sets the number of items as the body:
+
+```yaml
+- route:
+    from:
+      uri: direct:visit
+      steps:
+        - to:
+            uri: ignite-set:visitedPages
+            parameters:
+              operation: ADD
+        - to:
+            uri: ignite-set:visitedPages
+            parameters:
+              operation: SIZE
+        - log:
+            message: "Pages visited: ${body}"
+```

@@ -317,3 +317,45 @@ Enum values:
 | **CamelPineconeQueryFilter** (producer) Constant: [`QUERY_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_FILTER) | Query Filter. |  | String |
 | **CamelPineconeQueryIncludeValues** (producer) Constant: [`QUERY_INCLUDE_VALUES`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_INCLUDE_VALUES) | Query Include Values. |  | boolean |
 | **CamelPineconeQueryIncludeMetadata** (producer) Constant: [`QUERY_INCLUDE_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_INCLUDE_METADATA) | Query Include Metadata. |  | Struct |
+
+## Usage
+
+The `action` option, or the `CamelPineconeAction` header, selects the operation. The first route below creates a serverless index. The second route queries the index with a vector, and the `CamelPineconeQueryTopK` header sets how many matches it returns:
+
+```yaml
+- route:
+    from:
+      uri: direct:createIndex
+      steps:
+        - to:
+            uri: pinecone:my-collection
+            parameters:
+              action: CREATE_SERVERLESS_INDEX
+              token: "{{pinecone.token}}"
+              indexName: my-index
+              collectionSimilarityMetric: cosine
+              collectionDimension: 3
+              cloud: aws
+              cloudRegion: us-east-1
+- route:
+    from:
+      uri: direct:query
+      steps:
+        - setHeader:
+            name: CamelPineconeQueryTopK
+            expression:
+              constant:
+                expression: "3"
+        - setBody:
+            expression:
+              groovy:
+                expression: "[0.1f, 0.2f, 0.3f]"
+        - to:
+            uri: pinecone:my-collection
+            parameters:
+              action: QUERY
+              token: "{{pinecone.token}}"
+              indexName: my-index
+        - log:
+            message: "${body}"
+```

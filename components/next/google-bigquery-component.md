@@ -168,12 +168,29 @@ Templated tables can be specified using the `GoogleBigQueryConstants.TABLE_SUFFI
 
 I.e. the following route will create tables and insert records sharded on a per-day basis:
 
-_Java-only: uses GoogleBigQueryConstants to set the table suffix header_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
   .setHeader(GoogleBigQueryConstants.TABLE_SUFFIX, simple("_${date:now:yyyyMMdd}"))
-  .to("google-bigquery:sampleDataset:sampleTable")
+  .to("google-bigquery:my-project:sampleDataset:sampleTable")
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelGoogleBigQueryTableSuffix
+            expression:
+              simple:
+                expression: "_${date:now:yyyyMMdd}"
+        - to:
+            uri: google-bigquery:my-project:sampleDataset:sampleTable
 ```
 
 Note it is recommended to use partitioning for this use case.

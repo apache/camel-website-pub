@@ -175,13 +175,43 @@ The component supports the following operations:
 
 Put logs:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(simple("${body}"))
     .to("alibaba-sls:putLogs?project=my-project&logStoreName=my-logstore&region=cn-hangzhou&endpoint=cn-hangzhou.log.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: alibaba-sls:putLogs
+            parameters:
+              project: my-project
+              logStoreName: my-logstore
+              endpoint: cn-hangzhou.log.aliyuncs.com
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
+```
+
 Query logs:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -191,11 +221,60 @@ from("direct:start")
     .to("alibaba-sls:getLogs?project=my-project&logStoreName=my-logstore&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAlibabaSlsQuery
+            expression:
+              constant:
+                expression: "*"
+        - setHeader:
+            name: CamelAlibabaSlsFrom
+            expression:
+              constant:
+                expression: "1700000000"
+        - setHeader:
+            name: CamelAlibabaSlsTo
+            expression:
+              constant:
+                expression: "1700003600"
+        - to:
+            uri: alibaba-sls:getLogs
+            parameters:
+              project: my-project
+              logStoreName: my-logstore
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
+```
+
 List log stores:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .to("alibaba-sls:listLogStores?project=my-project&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: alibaba-sls:listLogStores
+            parameters:
+              project: my-project
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
 ```
 
 ## Examples

@@ -150,8 +150,6 @@ from("direct:batch-process")
 - beans:
   - name: documentListProcessor
     type: "#class:org.apache.camel.processor.aggregate.GroupedBodyAggregationStrategy"
-    properties:
-      strategyMethodName: "aggregate"
 
 # Route 1: Collect documents
 - route:
@@ -181,14 +179,15 @@ from("direct:batch-process")
         concurrentConsumers: 1
       steps:
         - aggregate:
-            aggregationStrategy:
-              bean: "documentListProcessor"
+            aggregationStrategy: documentListProcessor
             correlationExpression:
-              constant: true
+              constant:
+                expression: "true"
             completionSize: 10
             completionTimeout: 5000
-        - to:
-            uri: direct:batch-process
+            steps:
+              - to:
+                  uri: direct:batch-process
 
 # Route 3: Process batch
 - route:

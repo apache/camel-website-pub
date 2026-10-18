@@ -297,11 +297,26 @@ The Google Sheets Stream component supports the following message header(s), whi
 | **CamelGoogleSheetsRangeIndex** (consumer) Constant: [`RANGE_INDEX`](https://javadoc.io/doc/org.apache.camel/camel-google-sheets/latest/org/apache/camel/component/google/sheets/stream/GoogleSheetsStreamConstants.html#RANGE_INDEX) | The index of the range. |  | int |
 | **CamelGoogleSheetsValueIndex** (consumer) Constant: [`VALUE_INDEX`](https://javadoc.io/doc/org.apache.camel/camel-google-sheets/latest/org/apache/camel/component/google/sheets/stream/GoogleSheetsStreamConstants.html#VALUE_INDEX) | The index of the value. |  | int |
 
-## ValueInputOption
+## Usage
 
-Many of the APIs with Google sheets require including the following header, with one of the enum values:
+The consumer polls a range of the spreadsheet. With `splitResults`, each row is a message, and the `CamelGoogleSheetsValueIndex` header is its position in the range:
 
-<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>Header</strong></td><td class="tableblock halign-left valign-top"><strong>Enum</strong></td><td class="tableblock halign-left valign-top"><strong>Description</strong></td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelGoogleSheets.ValueInputOption</code></td><td class="tableblock halign-left valign-top"><code>RAW</code></td><td class="tableblock halign-left valign-top">The values the user has entered will not be parsed and will be stored as-is.</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelGoogleSheets.ValueInputOption</code></td><td class="tableblock halign-left valign-top"><code>USER_ENTERED</code></td><td class="tableblock halign-left valign-top">The values will be parsed as if the user typed them into the UI. Numbers will stay as numbers, but strings may be converted to numbers, dates, etc. following the same rules that are applied when entering text into a cell via the Google Sheets UI.</td></tr></tbody></table>
+```yaml
+- route:
+    from:
+      uri: "google-sheets-stream:{{google.spreadsheetId}}"
+      parameters:
+        range: "Orders!A2:C"
+        majorDimension: ROWS
+        splitResults: true
+        clientId: "{{google.clientId}}"
+        clientSecret: "{{google.clientSecret}}"
+        refreshToken: "{{google.refreshToken}}"
+        applicationName: camel-example
+      steps:
+        - log:
+            message: "Row ${header.CamelGoogleSheetsValueIndex}: ${body}"
+```
 
 ## More information
 

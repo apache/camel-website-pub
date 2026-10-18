@@ -1,6 +1,6 @@
 # Apache Camel 3.8 What's New
 
-Published 2021-02-15 by Claus Ibsen in Releases
+Published 2021-02-15 by Claus Ibsen in Releases, Camel
 
 Details of what we have done in the Camel 3.8 release.
 

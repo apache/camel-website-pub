@@ -542,3 +542,36 @@ The Pulsar component supports the following message header(s), which is/are list
 | **CamelPulsarRedeliveryCount** (consumer) Constant: [`PULSAR_REDELIVERY_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#PULSAR_REDELIVERY_COUNT) | The message redelivery count, redelivery count maintain in pulsar broker. |  | int |
 | **CamelPulsarProducerMessageDeliverAfter** (producer) Constant: [`DELIVER_AFTER`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#DELIVER_AFTER) | Deliver the message after a given delayed time (millis). |  | Long |
 | **CamelPulsarProducerMessageId** (producer) Constant: [`PRODUCER_MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#PRODUCER_MESSAGE_ID) | The message id the broker assigned to the published message. |  | MessageId |
+
+## Usage
+
+Set the service URL of the Pulsar cluster on the component, for example in `application.properties`:
+
+```properties
+camel.component.pulsar.service-url = pulsar://localhost:6650
+```
+
+The following routes send a message to the `orders` topic every five seconds, and consume the topic with the `order-processor` subscription:
+
+```yaml
+- route:
+    from:
+      uri: timer:orders
+      parameters:
+        period: 5000
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "Order ${exchangeId}"
+        - to:
+            uri: pulsar:persistent://public/default/orders
+- route:
+    from:
+      uri: pulsar:persistent://public/default/orders
+      parameters:
+        subscriptionName: order-processor
+      steps:
+        - log:
+            message: "Received ${body}"
+```

@@ -116,11 +116,11 @@ The body can be a URL to an LDIF file or an inline LDIF file. To signify the dif
 
 version: 1
 
-If not, the component will try to parse the body as a URL.
+If not, the component reads the body as a URL, but only when the `allowUrlBody` option is enabled. By default, such a body is rejected.
 
 ### Result
 
-The result is returned in the Out body as a `ArrayList<java.lang.String>` object. This contains either `_success_` or an Exception message for each LDIF entry.
+The result is returned in the Out body as a `ArrayList<java.lang.String>` object. This contains either `success` or the error message for each LDIF entry.
 
 ### LdapConnection
 
@@ -145,26 +145,57 @@ The `LdapConnection` bean may be defined as follows in Spring XML:
 <bean id="ldapConnection" factory-bean="ldapConnectionFactory" factory-method="newLdapConnection" scope="prototype"/>
 ```
 
+In YAML, a Groovy script can make the connection:
+
+```yaml
+- beans:
+    - name: ldapConnection
+      type: org.apache.directory.ldap.client.api.LdapConnection
+      scriptLanguage: groovy
+      script: |
+        def config = new org.apache.directory.ldap.client.api.LdapConnectionConfig()
+        config.ldapHost = '{{ldap.host}}'
+        config.ldapPort = {{ldap.port}}
+        config.name = '{{ldap.username}}'
+        config.credentials = '{{ldap.password}}'
+        new org.apache.directory.ldap.client.api.DefaultLdapConnectionFactory(config).newLdapConnection()
+```
+
+A YAML bean is created once, and the component closes the connection after each message. The YAML route in the examples below therefore binds the connection again before each message. This works when the route processes one message at a time.
+
 ## Examples
 
-Following on from the Spring configuration above, the code sample below sends an LDAP request to filter search a group for a member. The Common Name is then extracted from the response.
+Following on from the Spring configuration above, the code sample below sends LDIF content to the LDAP server, and checks the result of each entry.
 
 _Java-only: sending LDIF content using the ProducerTemplate_
 
 ```java
-ProducerTemplate<Exchange> template = exchange.getContext().createProducerTemplate();
+ProducerTemplate template = exchange.getContext().createProducerTemplate();
 
-List<?> results = (Collection<?>) template.sendBody("ldif:ldapConnection, "LDiff goes here");
+List<String> results = template.requestBody("ldif:ldapConnection", "LDIF goes here", List.class);
 
-if (results.size() > 0) {
-  // Check for no errors
-
-  for (String result : results) {
-    if ("success".equalTo(result)) {
-      // LDIF entry success
+for (String result : results) {
+    if ("success".equals(result)) {
+        // LDIF entry success
     } else {
-      // LDIF entry failure
+        // LDIF entry failure
     }
-  }
 }
+```
+
+The following YAML route applies each LDIF file of a folder to the server, with the connection of the YAML bean above, and logs the result:
+
+```yaml
+- route:
+    from:
+      uri: file:ldif
+      steps:
+        # the component closes the connection after each message, so bind it again
+        - bean:
+            ref: ldapConnection
+            method: "bind()"
+        - to:
+            uri: ldif:ldapConnection
+        - log:
+            message: "LDIF result: ${body}"
 ```

@@ -1384,6 +1384,28 @@ Any of the parameters can be provided in either the endpoint URI, or dynamically
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 
+## Usage
+
+The endpoint is the API name and the method name, such as `drive-files/list`. The parameters of the method are endpoint options or headers with the `CamelGoogleDrive.` prefix. The following route lists the files that the credentials give access to:
+
+```yaml
+- route:
+    from:
+      uri: timer:drive
+      parameters:
+        repeatCount: 1
+      steps:
+        - to:
+            uri: google-drive:drive-files/list
+            parameters:
+              clientId: "{{google.clientId}}"
+              clientSecret: "{{google.clientSecret}}"
+              refreshToken: "{{google.refreshToken}}"
+              applicationName: camel-example
+        - log:
+            message: "Found ${body.files.size()} files"
+```
+
 ## More Information
 
-For more information on the endpoints and options see API documentation at: [https://developers.google.com/drive/v2/reference/](https://developers.google.com/drive/v2/reference/)
+For more information on the endpoints and options see API documentation at: [https://developers.google.com/drive/api/reference/rest/v3](https://developers.google.com/drive/api/reference/rest/v3)

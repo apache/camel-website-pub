@@ -143,3 +143,22 @@ The Spring JDBC component supports the following message header(s), which is/are
 | **CamelGeneratedColumns** (producer) Constant: [`JDBC_GENERATED_COLUMNS`](https://javadoc.io/doc/org.apache.camel/camel-spring-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_GENERATED_COLUMNS) | Set it to specify the expected generated columns. |  | String\[\] or int\[\] |
 | **CamelGeneratedKeysRowCount** (producer) Constant: [`JDBC_GENERATED_KEYS_ROW_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-spring-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_GENERATED_KEYS_ROW_COUNT) | The number of rows in the header that contains generated keys. |  | int |
 | **CamelGeneratedKeysRows** (producer) Constant: [`JDBC_GENERATED_KEYS_DATA`](https://javadoc.io/doc/org.apache.camel/camel-spring-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_GENERATED_KEYS_DATA) | Rows that contains the generated keys. |  | List |
+
+## Usage
+
+The message body is the SQL to run, as with the [JDBC](jdbc-component.md) component. The component gets its connections through Spring’s `DataSourceUtils`, so it uses the connection of a Spring-managed transaction. Set `resetAutoCommit` to `false` in that case: by default, the component commits and closes the connection itself.
+
+```yaml
+- route:
+    from:
+      uri: direct:orders
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "select id, item, amount from orders where amount > 100"
+        - to:
+            uri: spring-jdbc:myDataSource
+        - log:
+            message: "Found ${body.size} orders: ${body}"
+```

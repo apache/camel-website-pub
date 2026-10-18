@@ -57,7 +57,7 @@ This dataformat supports marshaling input data either as protobuf `Message` type
 
 ## Output data type
 
-As mentioned above, you can define the content type format to choose from JSON or native to serialize/deserialize data from/to. In addition, you can also obtain the data as `Map` and let this component do the heavy lifting to parse the data from proto `Message` to `Map`, you will need to set the `contentTypeFormat` to `native` and explicitly define the data type `Map` when you get body of the exchange. For instance: `exchange.getMessage().getBody(Map.class)`.
+As mentioned above, you can define the content type format to choose from JSON or native to serialize/deserialize data from/to. In addition, you can also obtain the data as `Map` and let this component do the heavy lifting to parse the data from proto `Message` to `Map`, you will need to set the `contentTypeFormat` to `native` and explicitly define the data type `Map` when you get body of the exchange. For instance: `exchange.getMessage().getBody(Map.class)`. In the `Map`, the value of a `bytes` field is a `byte[]`; when a `Map` is converted to a message, a `bytes` field takes a `byte[]` (or a `ByteString`).
 
 ## Protobuf overview
 

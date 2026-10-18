@@ -6,7 +6,7 @@ Index of Camel expression and predicate languages.
 
 Below is the list of expression languages that are provided by Apache Camel.
 
-Number of Languages: 34 in 24 JAR artifacts (1 deprecated)
+Number of Languages: 33 in 23 JAR artifacts (1 deprecated)
 
     
 | Language | Artifact | Support Level | Since | Description |
@@ -41,7 +41,6 @@ Number of Languages: 34 in 24 JAR artifacts (1 deprecated)
 | [Tokenize](tokenize-language.md) | camel-core-languages | Stable | 2.0 | Tokenize text payloads using delimiter patterns |
 | [TypeSafe AI](typesafe-ai-language.md) | camel-typesafe-ai | Preview | 4.23 | Evaluate a Noul question with the TypeSafe AI decision API |
 | [Variable](variable-language.md) | camel-core-languages | Stable | 4.4 | Gets a variable |
-| [Wasm](wasm-language.md) | camel-wasm | Experimental | 4.5 | Call a wasm (web assembly) function |
 | [XML Tokenize](xtokenize-language.md) | camel-stax | Stable | 2.14 | Tokenize XML payloads |
 | [XPath](xpath-language.md) | camel-xpath | Stable | 1.1 | Evaluates an XPath expression against an XML payload |
 | [XQuery](xquery-language.md) | camel-saxon | Stable | 1.0 | Evaluates an XQuery expressions against an XML payload |

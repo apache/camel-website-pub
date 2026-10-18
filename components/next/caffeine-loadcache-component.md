@@ -223,3 +223,35 @@ The Caffeine LoadCache component supports the following message header(s), which
 | **CamelCaffeineKeys** (producer) Constant: [`KEYS`](https://javadoc.io/doc/org.apache.camel/camel-caffeine/latest/org/apache/camel/component/caffeine/CaffeineConstants.html#KEYS) | The keys to get (GET\_ALL), to invalidate (INVALIDATE\_ALL) or existing (AS\_MAP) according to the action. |  | Set |
 | **CamelCaffeineValue** (producer) Constant: [`VALUE`](https://javadoc.io/doc/org.apache.camel/camel-caffeine/latest/org/apache/camel/component/caffeine/CaffeineConstants.html#VALUE) | The value of key for all put actions (PUT or PUT\_ALL). |  |  |
 | **CamelCaffeineOldValue** (producer) Constant: [`OLD_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-caffeine/latest/org/apache/camel/component/caffeine/CaffeineConstants.html#OLD_VALUE) | The old value returned according to the action. |  |  |
+
+## Usage
+
+A loading cache has a `cacheLoader`, which makes the value of a key that is not in the cache yet. The first GET of a key calls the loader, and the next GETs of that key get the value from the cache. The cache is shared by name, so all `caffeine-loadcache:prices` endpoints use the same cache.
+
+In this example, the loader is a Groovy closure, and the key comes from the `CamelCaffeineKey` header:
+
+```yaml
+- beans:
+    - name: priceLoader
+      type: com.github.benmanes.caffeine.cache.CacheLoader
+      scriptLanguage: groovy
+      script: "{ key -> 'price of ' + key } as com.github.benmanes.caffeine.cache.CacheLoader"
+- route:
+    from:
+      uri: direct:price
+      steps:
+        - setHeader:
+            name: CamelCaffeineKey
+            expression:
+              simple:
+                expression: "${header.product}"
+        - to:
+            uri: caffeine-loadcache:prices
+            parameters:
+              action: GET
+              cacheLoader: "#priceLoader"
+        - log:
+            message: "${body}"
+```
+
+The operations and their result headers are the same as for the [Caffeine Cache](caffeine-cache-component.md) component.

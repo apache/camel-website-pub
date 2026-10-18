@@ -247,3 +247,24 @@ If you need more precise server settings, you can create a new object of the typ
 | `get` | Get the keypair. |
 | `getAll` | Get all keypairs. |
 | `delete` | Delete the keypair. |
+
+### Example
+
+The following route lists the servers. The endpoint is the address of the identity service (Keystone), and the credentials are property placeholders:
+
+```yaml
+- route:
+    from:
+      uri: direct:listServers
+      steps:
+        - to:
+            uri: openstack-nova:http://controller:5000/v3
+            parameters:
+              username: "{{openstack.username}}"
+              password: "{{openstack.password}}"
+              project: "{{openstack.project}}"
+              subsystem: servers
+              operation: getAll
+        - log:
+            message: "Found ${body.size()} servers"
+```

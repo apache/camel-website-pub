@@ -1,6 +1,6 @@
 # Apache Camel 4.14 What's New
 
-Published 2025-08-20 by Claus Ibsen, Gregor Zurowski, Christoph Deppisch in Releases
+Published 2025-08-20 by Claus Ibsen, Gregor Zurowski, Christoph Deppisch in Releases, Camel
 
 Details of what we have done in the Camel 4.14 LTS release.
 

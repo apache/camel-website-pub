@@ -1,6 +1,6 @@
 # Apache Camel 4.20 What's New
 
-Published 2026-04-27 by Claus Ibsen in Releases
+Published 2026-04-27 by Claus Ibsen in Releases, Camel
 
 Details of what we have done in the Camel 4.20 release.
 

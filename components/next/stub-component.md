@@ -159,3 +159,26 @@ Here are a few samples of stubbing endpoint uris
 
 stub:smtp://somehost.foo.com?user=whatnot&something=else
 stub:http://somehost.bar.com/something
+
+In a route, put `stub:` in front of the endpoint you do not want to call. The message goes to an in-memory queue instead. Another route can read the queue from the same stub endpoint, for example to log what would have been sent. The query parameters do not matter: `stub:smtp://somehost.foo.com` is the same queue.
+
+```yaml
+- route:
+    from:
+      uri: timer:orders
+      parameters:
+        repeatCount: 1
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: A new order has arrived
+        - to:
+            uri: "stub:smtp://somehost.foo.com?user=whatnot&something=else"
+- route:
+    from:
+      uri: "stub:smtp://somehost.foo.com"
+      steps:
+        - log:
+            message: "Stubbed mail: ${body}"
+```

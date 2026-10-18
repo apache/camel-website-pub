@@ -1,6 +1,6 @@
 # Apache Camel 4.5 What's New
 
-Published 2024-03-28 by Claus Ibsen, Alexandre Gallice, Gregor Zurowski in Releases
+Published 2024-03-28 by Claus Ibsen, Alexandre Gallice, Gregor Zurowski in Releases, Camel
 
 Details of what we have done in the Camel 4.5 release.
 

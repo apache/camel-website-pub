@@ -1,6 +1,6 @@
 # camel doc
 
-Shows documentation for kamelet, component, and other Camel resources
+Shows documentation for kamelet, component, EIP, and other Camel resources
 
 ## Usage
 

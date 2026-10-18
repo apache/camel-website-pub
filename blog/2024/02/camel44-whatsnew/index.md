@@ -1,6 +1,6 @@
 # Apache Camel 4.4 What's New
 
-Published 2024-02-19 by Claus Ibsen, Otavio Rodolfo Piske, Ivan Mashtak in Releases
+Published 2024-02-19 by Claus Ibsen, Otavio Rodolfo Piske, Ivan Mashtak in Releases, Camel
 
 Details of what we have done in the Camel 4.4 release.
 

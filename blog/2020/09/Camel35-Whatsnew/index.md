@@ -1,6 +1,6 @@
 # Apache Camel 3.5 What's New
 
-Published 2020-09-07 by Andrea Cosentino, Claus Ibsen in Releases
+Published 2020-09-07 by Andrea Cosentino, Claus Ibsen in Releases, Camel
 
 Details of what we have done in the Camel 3.5 release.
 

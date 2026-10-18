@@ -1,6 +1,6 @@
 # Apache Camel 3.19 What's New
 
-Published 2022-10-10 by Claus Ibsen, Gregor Zurowski, Nicolas Filotto, Andrea Cosentino, Otavio Rodolfo Piske in Releases
+Published 2022-10-10 by Claus Ibsen, Gregor Zurowski, Nicolas Filotto, Andrea Cosentino, Otavio Rodolfo Piske in Releases, Camel
 
 Details of what we have done in the Camel 3.19 release.
 

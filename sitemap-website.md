@@ -46,6 +46,7 @@ urls[929]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-91858.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/security/,2026-10-15T10:00:00+02:00
   https://camel.apache.org/blog/2026/10/camel423-whatsnew/,2026-10-15T00:00:00+00:00
+  https://camel.apache.org/categories/Camel/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-10-15T00:00:00+00:00
@@ -74,7 +75,6 @@ urls[929]{loc,lastmod}:
   https://camel.apache.org/releases/kamelets-4.22.1/,2026-09-21T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-simple-customfunction/,2026-09-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/securing-ai-agent-tools/,2026-09-17T00:00:00+00:00
-  https://camel.apache.org/categories/Camel/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/blog/2026/09/camel-quarkus-3.33.3/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/releases/q-3.33.3/,2026-09-17T00:00:00+00:00
   https://camel.apache.org/releases/release-4.22.1/,2026-09-17T00:00:00+00:00

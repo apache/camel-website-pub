@@ -869,7 +869,10 @@ As AMQP component is inherited from JMS component, the usage of the former is al
 
 **Using AMQP component**
 
-_Java-only: Java DSL snippet (incomplete route)_
+-   Java
+    
+-   YAML
+    
 
 ```java
 // Consuming from AMQP queue
@@ -879,6 +882,27 @@ from("amqp:queue:incoming").
 // Sending messages to the AMQP topic
 from(...).
   to("amqp:topic:notify");
+```
+
+```yaml
+- route:
+    from:
+      uri: amqp:queue:incoming
+      steps:
+        - log:
+            message: "Received ${body}"
+- route:
+    from:
+      uri: timer:notify
+      parameters:
+        period: 5000
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: Hello from Camel
+        - to:
+            uri: amqp:topic:notify
 ```
 
 ## Configuring AMQP component
@@ -893,6 +917,12 @@ _Java-only: Java programmatic component factory_
 AMQPComponent amqp = AMQPComponent.amqpComponent("amqp://localhost:5672");
 
 AMQPComponent authorizedAmqp = AMQPComponent.amqpComponent("amqp://localhost:5672", "user", "password");
+```
+
+Without Java code, for example with YAML routes, set the connection factory of the component in `application.properties`:
+
+```properties
+camel.component.amqp.connection-factory = #class:org.apache.qpid.jms.JmsConnectionFactory("amqp://localhost:5672")
 ```
 
 Alternatively, the AMQP Component can be initialized by providing one or more of the available options for configuring SSL, authentication, and AMQP Broker host and port.

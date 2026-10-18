@@ -211,3 +211,23 @@ Enum values:
 | `get` | Get the image. |
 | `getAll` | Get all images. |
 | `delete` | Delete the image. |
+
+### Example
+
+The following route lists the images. The endpoint is the address of the identity service (Keystone), and the credentials are property placeholders:
+
+```yaml
+- route:
+    from:
+      uri: direct:listImages
+      steps:
+        - to:
+            uri: openstack-glance:http://controller:5000/v3
+            parameters:
+              username: "{{openstack.username}}"
+              password: "{{openstack.password}}"
+              project: "{{openstack.project}}"
+              operation: getAll
+        - log:
+            message: "Found ${body.size()} images"
+```

@@ -11,6 +11,41 @@ The Twitter Direct Message Component consumes/produces a user’s direct message
 >
 > When using the Direct Message consumer, it will consider only the last 30-day direct messages
 
+## Usage
+
+The credentials of the Twitter application are component options, for example in `application.properties`:
+
+```properties
+camel.component.twitter-directmessage.consumer-key = {{env:TWITTER_CONSUMER_KEY}}
+camel.component.twitter-directmessage.consumer-secret = {{env:TWITTER_CONSUMER_SECRET}}
+camel.component.twitter-directmessage.access-token = {{env:TWITTER_ACCESS_TOKEN}}
+camel.component.twitter-directmessage.access-token-secret = {{env:TWITTER_ACCESS_TOKEN_SECRET}}
+```
+
+The following route polls the direct messages of the account every minute, and logs their text. The consumer ignores the user of the URI:
+
+```yaml
+- route:
+    from:
+      uri: twitter-directmessage:myaccount
+      parameters:
+        delay: 60000
+      steps:
+        - log:
+            message: "${body.text}"
+```
+
+A producer sends the message body as a direct message to the user of the URI. The `CamelTwitterUser` header overrides it:
+
+```yaml
+- route:
+    from:
+      uri: direct:notify
+      steps:
+        - to:
+            uri: twitter-directmessage:camelfriend
+```
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:

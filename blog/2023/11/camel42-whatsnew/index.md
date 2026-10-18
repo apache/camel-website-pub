@@ -1,6 +1,6 @@
 # Apache Camel 4.2 What's New
 
-Published 2023-11-15 by Claus Ibsen, Gregor Zurowski, Otavio Rodolfo Piske, Aurélien Pupier in Releases
+Published 2023-11-15 by Claus Ibsen, Gregor Zurowski, Otavio Rodolfo Piske, Aurélien Pupier in Releases, Camel
 
 Details of what we have done in the Camel 4.2 release.
 

@@ -43,6 +43,44 @@ The variables have the same names as in the [Groovy](groovy-language.md) languag
 
 The `variable` and `variables` bindings are the exchange-scoped variables (for example set with the [Set Variable](../eips/setVariable-eip.md) EIP). Global and route variables, such as `global:foo`, are not in this map; use `exchange.getVariable('global:foo')` for those.
 
+## Examples
+
+A Python predicate in a [Content-Based Router](../eips/choice-eip.md):
+
+```yaml
+- route:
+    from:
+      uri: direct:orders
+      steps:
+        - choice:
+            when:
+              - expression:
+                  python:
+                    expression: "headers.get('priority') == 'high'"
+                steps:
+                  - to:
+                      uri: direct:fast
+            otherwise:
+              steps:
+                - to:
+                    uri: direct:normal
+```
+
+A Python expression that sets the message body from the body and a header:
+
+```yaml
+- route:
+    from:
+      uri: direct:greet
+      steps:
+        - setBody:
+            expression:
+              python:
+                expression: "'Hello ' + str(body) + ', your priority is ' + str(headers.get('priority'))"
+        - to:
+            uri: log:greeting
+```
+
 ## Dependencies
 
 To use Python in your Camel routes, you need to add the dependency on **camel-python** which implements the Python language.

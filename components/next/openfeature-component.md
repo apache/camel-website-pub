@@ -270,6 +270,11 @@ A boolean flag enables or disables a feature. The flag definition declares two v
 
 The route evaluates the flag and stores the result in an exchange property so the original message body is preserved:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("openfeature:flags?flagKey=enrichment-enabled&resultProperty=enrichEnabled")
@@ -279,6 +284,30 @@ from("direct:start")
         .otherwise()
             .to("direct:skip-enrichment")
     .end();
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: openfeature:flags
+            parameters:
+              flagKey: enrichment-enabled
+              resultProperty: enrichEnabled
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${exchangeProperty.enrichEnabled} == true"
+                steps:
+                  - to:
+                      uri: direct:enrich-order
+            otherwise:
+              steps:
+                - to:
+                    uri: direct:skip-enrichment
 ```
 
 Boolean evaluation is the default (`evaluationType` is unset and `defaultValue` defaults to `"false"`).
@@ -302,10 +331,29 @@ A variant flag returns a string value rather than a boolean. Set `evaluationType
 }
 ```
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("openfeature:flags/variant?flagKey=checkout-banner&resultProperty=banner")
     .log("Banner: ${exchangeProperty.banner}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: openfeature:flags/variant
+            parameters:
+              flagKey: checkout-banner
+              resultProperty: banner
+        - log:
+            message: "Banner: ${exchangeProperty.banner}"
 ```
 
 The `resultProperty` option stores the result in an exchange property instead of replacing the message body.
@@ -337,11 +385,35 @@ A fractional targeting rule splits traffic across variants by percentage. The pr
 
 The route passes a targeting key so each order ID is consistently assigned to the same variant:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setHeader("CamelOpenFeatureTargetingKey", simple("${header.orderId}"))
     .to("openfeature:flags/variant?flagKey=routing-algorithm&resultProperty=algorithm")
     .toD("direct:route-${exchangeProperty.algorithm}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelOpenFeatureTargetingKey
+            expression:
+              simple:
+                expression: "${header.orderId}"
+        - to:
+            uri: openfeature:flags/variant
+            parameters:
+              flagKey: routing-algorithm
+              resultProperty: algorithm
+        - toD:
+            uri: "direct:route-${exchangeProperty.algorithm}"
 ```
 
 Without a targeting key, fractional evaluation may fall back to a random assignment or the default variant, depending on the provider.
@@ -371,13 +443,37 @@ A targeted rule uses evaluation context attributes to decide which variant to re
 
 The route stores the result in an exchange property and routes dynamically:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("openfeature:flags/variant?flagKey=order-compliance-v2&resultProperty=orderVariant")
     .toD("direct:orders-${exchangeProperty.orderVariant}");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: openfeature:flags/variant
+            parameters:
+              flagKey: order-compliance-v2
+              resultProperty: orderVariant
+        - toD:
+            uri: "direct:orders-${exchangeProperty.orderVariant}"
+```
+
 The evaluation context is provided via a header — useful when the message body carries business data:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -388,13 +484,59 @@ from("direct:start")
     .toD("direct:orders-${exchangeProperty.orderVariant}");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelOpenFeatureTargetingKey
+            expression:
+              constant:
+                expression: order-123
+        - setHeader:
+            name: CamelOpenFeatureEvaluationContext
+            expression:
+              groovy:
+                expression: "[customer_tier: 'ENTERPRISE']"
+        - to:
+            uri: openfeature:flags/variant
+            parameters:
+              flagKey: order-compliance-v2
+              resultProperty: orderVariant
+        - toD:
+            uri: "direct:orders-${exchangeProperty.orderVariant}"
+```
+
+In YAML, the Groovy expression `[customer_tier: 'ENTERPRISE']` makes the map of the evaluation context.
+
 Alternatively, enable `contextFromBody=true` to use a `Map` body as the evaluation context:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .to("openfeature:flags/variant?flagKey=order-compliance-v2"
         + "&resultProperty=orderVariant&contextFromBody=true")
     .toD("direct:orders-${exchangeProperty.orderVariant}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: openfeature:flags/variant
+            parameters:
+              flagKey: order-compliance-v2
+              resultProperty: orderVariant
+              contextFromBody: true
+        - toD:
+            uri: "direct:orders-${exchangeProperty.orderVariant}"
 ```
 
 ### Remote flagd service
@@ -425,24 +567,69 @@ To use a custom provider, add the provider’s Maven dependency to your project 
 
 Register the provider as a bean named `flags` (the default lookup name) or with a custom name:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 import dev.openfeature.contrib.providers.envvar.EnvVarProvider;
 
 registry.bind("flags", new EnvVarProvider());
 ```
 
+```yaml
+- beans:
+    - name: flags
+      type: dev.openfeature.contrib.providers.envvar.EnvVarProvider
+```
+
 Routes then use the provider without any additional configuration:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .to("openfeature:flags?flagKey=MY_FEATURE_FLAG&resultProperty=flagValue");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: openfeature:flags
+            parameters:
+              flagKey: MY_FEATURE_FLAG
+              resultProperty: flagValue
+```
+
 Or reference a named provider bean explicitly:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
     .to("openfeature:myDomain?flagKey=enrichment-enabled&provider=#myFlagProvider");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: openfeature:myDomain
+            parameters:
+              flagKey: enrichment-enabled
+              provider: "#myFlagProvider"
 ```
 
 ### InMemoryProvider (testing and simple use cases)
@@ -465,18 +652,54 @@ registry.bind("flags", provider);
 
 Routes then use the provider without any additional configuration:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .to("openfeature:flags?flagKey=feature-x");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: openfeature:flags
+            parameters:
+              flagKey: feature-x
 ```
 
 ### Boolean predicate in filter (language)
 
 For boolean predicates in EIP constructs, use the [OpenFeature language](languages/openfeature-language.md):
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .filter().language("openfeature", "enrichment-enabled")
         .to("direct:enrich-order")
     .end();
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - filter:
+            expression:
+              language:
+                language: openfeature
+                expression: enrichment-enabled
+            steps:
+              - to:
+                  uri: direct:enrich-order
 ```

@@ -269,13 +269,35 @@ Although the FIX protocol is event-driven and asynchronous, there are specific p
 
 Add `exchangePattern=InOut` to the QuickFIX/J endpoint URI. The `MessageOrderStatusService` in the example below is a bean with a synchronous service method. The method returns the response to the request (an ExecutionReport in this case) which is then sent back to the requestor session.
 
-_Java-only: route definition using Java DSL for InOut consumer exchange_
+-   Java
+    
+-   YAML
+    
 
 ```java
     from("quickfix:examples/inprocess.qf.cfg?sessionID=FIX.4.2:MARKET->TRADER&exchangePattern=InOut")
         .filter(header(QuickfixjEndpoint.MESSAGE_TYPE_KEY).isEqualTo(MsgType.ORDER_STATUS_REQUEST))
         .bean(new MarketOrderStatusService());
 ```
+
+```yaml
+- route:
+    from:
+      uri: quickfix:examples/inprocess.qf.cfg
+      parameters:
+        sessionID: "FIX.4.2:MARKET->TRADER"
+        exchangePattern: InOut
+      steps:
+        - filter:
+            expression:
+              simple:
+                expression: "${header.MessageType} == 'H'"
+            steps:
+              - bean:
+                  beanType: com.example.MarketOrderStatusService
+```
+
+In YAML, the headers are written by name: `MessageType` is `QuickfixjEndpoint.MESSAGE_TYPE_KEY`, and the type of an OrderStatusRequest is `H`.
 
 The reply is always sent on the session the request was received on. Changing the `SessionID` header while routing does not change where the reply goes. To send a message to another session, use a QuickFIX/J producer endpoint with the `sessionID` option.
 
@@ -451,7 +473,10 @@ Several examples are included in the QuickFIX/J component source code (test subd
 
 The following route receives messages for the trade executor session and passes application messages to the trade executor component.
 
-_Java-only: route definition using Java DSL to filter and forward FIX messages_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("quickfix:examples/inprocess.qf.cfg?sessionID=FIX.4.2:MARKET->TRADER").
@@ -459,23 +484,72 @@ from("quickfix:examples/inprocess.qf.cfg?sessionID=FIX.4.2:MARKET->TRADER").
     to("trade-executor:market");
 ```
 
+```yaml
+- route:
+    from:
+      uri: quickfix:examples/inprocess.qf.cfg
+      parameters:
+        sessionID: "FIX.4.2:MARKET->TRADER"
+      steps:
+        - filter:
+            expression:
+              simple:
+                expression: "${header.EventCategory} == 'AppMessageReceived'"
+            steps:
+              - to:
+                  uri: trade-executor:market
+```
+
 The trade executor component generates messages that are routed back to the trade session. The session ID must be set in the FIX message itself since no session ID is specified in the endpoint URI.
 
-_Java-only: route definition using Java DSL to send messages back to FIX session_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("trade-executor:market").to("quickfix:examples/inprocess.qf.cfg");
 ```
 
+```yaml
+- route:
+    from:
+      uri: trade-executor:market
+      steps:
+        - to:
+            uri: quickfix:examples/inprocess.qf.cfg
+```
+
 The trader session consumes execution report messages from the market and processes them.
 
-_Java-only: route definition using Java DSL to consume and process execution reports_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("quickfix:examples/inprocess.qf.cfg?sessionID=FIX.4.2:TRADER->MARKET").
     filter(header(QuickfixjEndpoint.MESSAGE_TYPE_KEY).isEqualTo(MsgType.EXECUTION_REPORT)).
     bean(new MyTradeExecutionProcessor());
 ```
+
+```yaml
+- route:
+    from:
+      uri: quickfix:examples/inprocess.qf.cfg
+      parameters:
+        sessionID: "FIX.4.2:TRADER->MARKET"
+      steps:
+        - filter:
+            expression:
+              simple:
+                expression: "${header.MessageType} == '8'"
+            steps:
+              - bean:
+                  beanType: com.example.MyTradeExecutionProcessor
+```
+
+The type of an ExecutionReport is `8`.
 
 ### Additional Examples
 

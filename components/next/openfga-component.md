@@ -250,12 +250,31 @@ The OpenFGA component supports the following message header(s), which is/are lis
 
 `user`, `object` and `relation` are evaluated as [Simple](languages/simple-language.md) expressions against each Exchange, so a literal is used as written and an expression resolves per message:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 to("openfga:check"
         + "?storeId=01HQMVAJ..."
         + "&relation=reader"
         + "&user=user:${exchangeProperty.CamelKeycloakTokenSubject}"
         + "&object=document:${header.documentId}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:checkDocument
+      steps:
+        - to:
+            uri: openfga:check
+            parameters:
+              storeId: "01HQMVAJ..."
+              relation: reader
+              user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+              object: "document:${header.documentId}"
 ```
 
 The component evaluates these itself, per Exchange, so a plain `to()` is enough — there is no need for `toD()` and the endpoint cache it churns.
@@ -277,6 +296,11 @@ The component evaluates these itself, per Exchange, so a plain `to()` is enough 
 
 The `check` operation records the verdict in the `CamelOpenFgaAllowed` header and leaves the message body untouched, so the route decides what to do with it:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/documents")
         .to("openfga:check?storeId={{fga.store}}&authorizationModelId={{fga.model}}"
@@ -289,9 +313,44 @@ from("platform-http:/documents")
                 .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(403));
 ```
 
+```yaml
+- route:
+    from:
+      uri: platform-http:/documents
+      steps:
+        - to:
+            uri: openfga:check
+            parameters:
+              storeId: "{{fga.store}}"
+              authorizationModelId: "{{fga.model}}"
+              relation: reader
+              user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+              object: "document:${header.documentId}"
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpenFgaAllowed} == true"
+                steps:
+                  - to:
+                      uri: direct:serveDocument
+            otherwise:
+              steps:
+                - setHeader:
+                    name: CamelHttpResponseCode
+                    expression:
+                      constant:
+                        expression: "403"
+```
+
 ### As a security policy, stopping the route
 
 `OpenFgaSecurityPolicy` is an `AuthorizationPolicy`, so the check guards a section of the route and a denial throws `CamelAuthorizationException` for the usual `onException` machinery to handle:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 OpenFgaSecurityPolicy policy = new OpenFgaSecurityPolicy();
@@ -305,6 +364,28 @@ policy.setObject("document:${header.documentId}");
 from("platform-http:/documents")
         .policy(policy)
         .to("direct:updateDocument");
+```
+
+```yaml
+- beans:
+    - name: documentWriters
+      type: org.apache.camel.component.openfga.security.OpenFgaSecurityPolicy
+      properties:
+        apiUrl: http://openfga:8080
+        storeId: "01HQMVAJ..."
+        authorizationModelId: "01HQMVAK..."
+        relation: writer
+        user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+        object: "document:${header.documentId}"
+- route:
+    from:
+      uri: platform-http:/documents
+      steps:
+        - policy:
+            ref: documentWriters
+            steps:
+              - to:
+                  uri: direct:updateDocument
 ```
 
 ### Filtering a collection
@@ -329,10 +410,30 @@ The body comes back holding only the identifiers the check allowed, in the order
 
 `listObjects` answers the same question from the other end — ask OpenFGA which objects the subject can reach, rather than filtering a list you already have:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 to("openfga:listObjects?storeId={{fga.store}}&relation=reader"
    + "&user=user:${exchangeProperty.CamelKeycloakTokenSubject}&type=document");
 // body becomes [document:budget, document:roadmap]
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:myDocuments
+      steps:
+        # the body becomes [document:budget, document:roadmap]
+        - to:
+            uri: openfga:listObjects
+            parameters:
+              storeId: "{{fga.store}}"
+              relation: reader
+              user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+              type: document
 ```
 
 `listRelations` and `listUsers` round this out: what a subject may do with one object, and who may do something with it. Both replace the body with a `List<String>`.
@@ -341,12 +442,33 @@ to("openfga:listObjects?storeId={{fga.store}}&relation=reader"
 
 A route that creates a resource usually has to grant access to it too. `writeTuples` takes its tuples from the body, and falls back to the endpoint’s `user`/`relation`/`object` when the body carries none — which is the shape that reads best right after a resource was created:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:createDocument")
         .to("sql:INSERT INTO documents ...")
         .to("openfga:writeTuples?storeId={{fga.store}}"
             + "&user=user:${exchangeProperty.CamelKeycloakTokenSubject}&relation=owner"
             + "&object=document:${header.documentId}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createDocument
+      steps:
+        - to:
+            uri: "sql:INSERT INTO documents ..."
+        - to:
+            uri: openfga:writeTuples
+            parameters:
+              storeId: "{{fga.store}}"
+              user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+              relation: owner
+              object: "document:${header.documentId}"
 ```
 
 For several tuples at once, leave `user`/`relation`/`object` unset and put them in the body instead — a collection of ``Map`s with `user``, `relation` and `object` entries, or of `ClientTupleKey` objects. `deleteTuples` accepts the same shapes and revokes instead.
@@ -429,6 +551,11 @@ No check is registered for an injected `openFgaClient`, which can point anywhere
 
 `contextualTuples` hands OpenFGA relationships that are true for one request and never stored — a group membership that lives in the token rather than in the graph, or a fact about the request such as which network it arrived on. It takes semicolon-separated `user,relation,object` triples, each part a Simple expression:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 // both the subject and the team come from exchange properties the route's own token-validating step set.
 // the object may come from the request - asking about a document is the caller's prerogative - but the
@@ -438,6 +565,21 @@ to("openfga:check?storeId={{fga.store}}&relation=reader"
    + "&object=document:${header.documentId}"
    + "&contextualTuples=user:${exchangeProperty.CamelKeycloakTokenSubject},member,"
    + "team:${exchangeProperty.tokenTeam}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:checkWithTeam
+      steps:
+        - to:
+            uri: openfga:check
+            parameters:
+              storeId: "{{fga.store}}"
+              relation: reader
+              user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+              object: "document:${header.documentId}"
+              contextualTuples: "user:${exchangeProperty.CamelKeycloakTokenSubject},member,team:${exchangeProperty.tokenTeam}"
 ```
 
 It applies to `check`, `batchCheck`, `listObjects`, `listRelations` and `listUsers`. On `batchCheck` the batch fans out into one check per object and the context goes on **every** item, so each object is judged against the same facts.
@@ -468,10 +610,32 @@ Contextual tuples supplied by the **message** are deliberately not supported. If
 
 `readTuples` answers "what access exists", as opposed to ``check’s "may this subject do this". Here `user``, `relation` and `object` are a **filter** rather than a subject, and the body comes back as a list of maps keyed `user`, `relation`, `object` and `timestamp` — deliberately the keys `writeTuples` and `deleteTuples` accept, so a route can revoke what it just read without reshaping anything:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:revokeEverythingBobHas")
         .to("openfga:readTuples?storeId={{fga.store}}&object=document:&user=user:bob")
         .to("openfga:deleteTuples?storeId={{fga.store}}");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:revokeEverythingBobHas
+      steps:
+        - to:
+            uri: openfga:readTuples
+            parameters:
+              storeId: "{{fga.store}}"
+              object: "document:"
+              user: "user:bob"
+        - to:
+            uri: openfga:deleteTuples
+            parameters:
+              storeId: "{{fga.store}}"
 ```
 
 > **Note**
@@ -498,12 +662,44 @@ Both are paged. `pageSize` bounds one request, and the token the page returns ar
 
 A `readChanges` poller has to carry that token from one exchange to the **next**, which an exchange property cannot do: every timer fire is a new exchange, so a property left on the previous one is gone and each poll would start from the beginning again. Use a global variable, which outlives the exchange:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("timer:sync?period=30000")
         .to("openfga:readChanges?storeId={{fga.store}}&type=document"
             + "&continuationToken=${variable.global:fgaToken}")
         .setVariable("global:fgaToken", header("CamelOpenFgaContinuationToken"))
         .split(body()).to("direct:applyChange");
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:sync
+      parameters:
+        period: 30000
+      steps:
+        - to:
+            uri: openfga:readChanges
+            parameters:
+              storeId: "{{fga.store}}"
+              type: document
+              continuationToken: "${variable.global:fgaToken}"
+        - setVariable:
+            name: "global:fgaToken"
+            expression:
+              header:
+                expression: CamelOpenFgaContinuationToken
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - to:
+                  uri: direct:applyChange
 ```
 
 A global variable lives in the `CamelContext`, so it does not survive a restart. A poller that must resume across one should keep the token wherever the deployment already persists state rather than rely on it.
@@ -530,6 +726,11 @@ A global variable lives in the `CamelContext`, so it does not survive a restart.
 
 Guarding an HTTP endpoint, with the identity coming from an authentication step earlier in the route:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/orders/{orderId}")
         // whatever verifies the caller, ending in a processor that records the verified subject as a property
@@ -539,4 +740,29 @@ from("platform-http:/orders/{orderId}")
             + "&object=order:${header.orderId}")
         .filter(header("CamelOpenFgaAllowed").isEqualTo(true))
             .to("direct:serveOrder");
+```
+
+```yaml
+- route:
+    from:
+      uri: "platform-http:/orders/{orderId}"
+      steps:
+        # whatever verifies the caller, ending in a step that records the verified subject as a property
+        - to:
+            uri: direct:authenticate
+        - to:
+            uri: openfga:check
+            parameters:
+              storeId: "{{fga.store}}"
+              authorizationModelId: "{{fga.model}}"
+              relation: can_view
+              user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+              object: "order:${header.orderId}"
+        - filter:
+            expression:
+              simple:
+                expression: "${header.CamelOpenFgaAllowed} == true"
+            steps:
+              - to:
+                  uri: direct:serveOrder
 ```

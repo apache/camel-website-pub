@@ -302,12 +302,26 @@ While deserializing, it’s important to notice that the `unmarshallExchange` me
 
 To insert something on a table, you can use the following code:
 
-_Java-only: route with CQL query string concatenation_
+-   Java
+    
+-   YAML
+    
 
 ```java
 String CQL = "insert into camel_user(login, first_name, last_name) values (?, ?, ?)";
 from("direct:input")
     .to("cql://localhost/camel_ks?cql=" + CQL);
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:input
+      steps:
+        - to:
+            uri: cql://localhost/camel_ks
+            parameters:
+              cql: "insert into camel_user(login, first_name, last_name) values (?, ?, ?)"
 ```
 
 At this point, you should be able to insert data by using a list as body
@@ -318,4 +332,22 @@ _Java-only: creating a parameter list for CQL binding_
 Arrays.asList("davsclaus", "Claus", "Ibsen");
 ```
 
-The same approach can be used for updating or querying the table.
+The same approach can be used for updating or querying the table. For example, a query with `resultSetConversionStrategy` set to `ONE` returns a single `Row`:
+
+```yaml
+- route:
+    from:
+      uri: direct:findUser
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "${header.login}"
+        - to:
+            uri: cql://localhost/camel_ks
+            parameters:
+              cql: "select first_name, last_name from camel_user where login = ?"
+              resultSetConversionStrategy: ONE
+        - log:
+            message: "Found ${body.getString('first_name')} ${body.getString('last_name')}"
+```

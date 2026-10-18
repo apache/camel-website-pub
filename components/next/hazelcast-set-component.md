@@ -210,7 +210,7 @@ The set producer provides seven operations:
 
 -   add
     
--   removeAll
+-   removeValue
     
 -   clear
     
@@ -221,3 +221,43 @@ The set producer provides seven operations:
 -   retainAll
     
 -   getAll
+    
+
+The operation comes from the `CamelHazelcastOperationType` header, or from the `defaultOperation` option when the header is not set. `add` and `removeValue` take the item from the message body, and `addAll`, `removeAll` and `retainAll` take a collection. `getAll` sets the set itself as the message body:
+
+```yaml
+- route:
+    from:
+      uri: direct:addTag
+      steps:
+        - to:
+            uri: hazelcast-set:tags
+            parameters:
+              defaultOperation: add
+- route:
+    from:
+      uri: direct:allTags
+      steps:
+        - setHeader:
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: getAll
+        - to:
+            uri: hazelcast-set:tags
+        - log:
+            message: "Number of tags: ${body.size()}"
+```
+
+## set cache consumer
+
+The consumer receives an event when an item is added to or removed from the set. The message body is the Hazelcast `ItemEvent`, so the item is `${body.item}`, and the `CamelHazelcastListenerAction` header is `added` or `removed`:
+
+```yaml
+- route:
+    from:
+      uri: hazelcast-set:tags
+      steps:
+        - log:
+            message: "${header.CamelHazelcastListenerAction}: ${body.item}"
+```

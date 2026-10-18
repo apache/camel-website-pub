@@ -1,6 +1,6 @@
 # Apache Camel 3.20 What's New
 
-Published 2022-12-21 by Claus Ibsen, Nicolas Filotto in Releases
+Published 2022-12-21 by Claus Ibsen, Nicolas Filotto in Releases, Camel
 
 Details of what we have done in the Camel 3.20 release.
 

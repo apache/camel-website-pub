@@ -91,9 +91,9 @@ Enum values:
 | **width** (common) | `100` | `Integer` | Width of the barcode. |
 | **height** (common) | `100` | `Integer` | Height of the barcode. |
 
-## Using the Java DSL
+## Usage
 
-First, you have to initialize the barcode data format class. You can use the default constructor, or one of parameterized (see JavaDoc). The default values are:
+In Java, you first create an instance of the barcode data format class. You can use the default constructor, or one of parameterized (see JavaDoc). The default values are:
 
  
 | Parameter | Default Value |
@@ -123,12 +123,30 @@ The hints can be added before the data format is started (for example when the r
 
 ### Marshalling
 
-_Java-only: route using Java data format variable_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct://code")
   .marshal(code)
   .to("file://barcode_out");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct://code
+      steps:
+        - marshal:
+            barcode:
+              barcodeFormat: QR_CODE
+              imageType: PNG
+              width: 100
+              height: 100
+        - to:
+            uri: file://barcode_out
 ```
 
 You can call the route from a test class with:
@@ -147,12 +165,28 @@ You should find inside the 'barcode\_out' folder this image:
 
 The unmarshaller is generic. For unmarshalling, you can use any BarcodeDataFormat instance. If you’ve two instances, one for (generating) QR-Code and one for PDF417, it doesn’t matter which one will be used.
 
-_Java-only: route using Java data format variable_
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("file://barcode_in?noop=true")
   .unmarshal(code) // for unmarshalling, the instance doesn't matter
   .to("mock:out");
+```
+
+```yaml
+- route:
+    from:
+      uri: file://barcode_in
+      parameters:
+        noop: true
+      steps:
+        - unmarshal:
+            barcode: {}
+        - to:
+            uri: mock:out
 ```
 
 If you’ll paste the QR-Code image above into the 'barcode\_in' folder, you should find _\`This is a testmessage!\`_ inside the mock. You can find the barcode data format as header variable:

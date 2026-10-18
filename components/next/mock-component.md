@@ -126,6 +126,26 @@ This allows you to test various things like:
 >
 > Remember that Mock is designed for testing. When you add Mock endpoints to a route, each Exchange sent to the endpoint will be stored (to allow for later validation) in memory until explicitly reset or the JVM is restarted. If you are sending high volume and/or large messages, this may cause excessive memory use. If your goal is to test deployable routes inline, consider using NotifyBuilder or AdviceWith in your tests instead of adding Mock endpoints to routes directly. There are two new options `retainFirst`, and `retainLast` that can be used to limit the number of messages the Mock endpoints keep in memory.
 
+In a route, a mock endpoint is the target of a `to` step. With the `log` option, the mock logs each message it receives:
+
+```yaml
+- route:
+    from:
+      uri: direct:orders
+      steps:
+        - setHeader:
+            name: status
+            expression:
+              constant:
+                expression: received
+        - to:
+            uri: mock:orders
+            parameters:
+              log: true
+```
+
+A test then sets the expectations on `mock:orders` and asserts them, as the examples below show in Java.
+
 ## Examples
 
 ### Simple Example
@@ -616,6 +636,21 @@ _Java-only: programmatic mock expectations with retain limits_
   mock.expectedMessageCount(2000);
 
   mock.assertIsSatisfied();
+```
+
+The limits and the expected count can also be options of the endpoint in the route. The test then only asserts the mock:
+
+```yaml
+- route:
+    from:
+      uri: direct:data
+      steps:
+        - to:
+            uri: mock:data
+            parameters:
+              retainFirst: 5
+              retainLast: 5
+              expectedCount: 2000
 ```
 
 Using this has some limitations. The `getExchanges()` and `getReceivedExchanges()` methods on the `MockEndpoint` will return only the retained copies of the Exchanges. So in the example above, the list will contain 10 Exchanges; the first five, and the last five.  

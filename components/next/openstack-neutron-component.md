@@ -286,3 +286,29 @@ If you need more precise subnet settings, you can create a new object of the typ
 | `delete` | Delete the router. |
 | `attachInterface` | Attach an interface. |
 | `detachInterface` | Detach an interface. |
+
+### Example
+
+The following route creates a network and logs its id. The endpoint is the address of the identity service (Keystone), and the credentials are property placeholders:
+
+```yaml
+- route:
+    from:
+      uri: direct:createNetwork
+      steps:
+        - setHeader:
+            name: CamelOpenstackName
+            expression:
+              constant:
+                expression: "orders-net"
+        - to:
+            uri: openstack-neutron:http://controller:5000/v3
+            parameters:
+              username: "{{openstack.username}}"
+              password: "{{openstack.password}}"
+              project: "{{openstack.project}}"
+              subsystem: networks
+              operation: create
+        - log:
+            message: "Created network ${body.id}"
+```

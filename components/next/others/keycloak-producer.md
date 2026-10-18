@@ -666,10 +666,7 @@ All bulk operations return a consistent response format:
 
 ## Complete Producer Example
 
--   Java
-    
--   YAML
-    
+Java
 
 ```java
 // Configure Keycloak component
@@ -713,6 +710,8 @@ from("direct:setup-user-environment")
 
     .transform().constant("User environment setup completed successfully");
 ```
+
+YAML
 
 ```yaml
 # Complete Keycloak producer configuration
@@ -760,7 +759,7 @@ from("direct:setup-user-environment")
         - to:
             uri: keycloak:admin
             parameters:
-              operation: setUserPassword
+              operation: resetUserPassword
         - setHeader:
             name: CamelKeycloakRoleName
             constant: "admin"
@@ -770,13 +769,13 @@ from("direct:setup-user-environment")
               operation: assignRoleToUser
         - transform:
             constant: "User environment setup completed successfully"
+```
 
-# Component configuration
-camel:
-  component:
-    keycloak:
-      server-url: "http://localhost:8080"
-      realm: "master"
-      username: "admin"
-      password: "admin"
+The component configuration, in `application.properties`:
+
+```properties
+camel.component.keycloak.server-url = http://localhost:8080
+camel.component.keycloak.realm = master
+camel.component.keycloak.username = admin
+camel.component.keycloak.password = admin
 ```

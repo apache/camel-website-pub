@@ -429,6 +429,102 @@ The Spring Redis component supports the following message header(s), which is/ar
 
 See also the unit tests available at [https://github.com/apache/camel/tree/main/components/camel-spring-redis/src/test/java/org/apache/camel/component/redis](https://github.com/apache/camel/tree/main/components/camel-spring-redis/src/test/java/org/apache/camel/component/redis).
 
+### Examples
+
+The producer runs the command of the `command` option, or of the `CamelRedis.Command` header. The parameters of the command come from headers, such as `CamelRedis.Key` and `CamelRedis.Value`, not from the message body. The tables below list the parameters of each command. The result of the command is the message body:
+
+```yaml
+- route:
+    from:
+      uri: direct:save-greeting
+      steps:
+        - setHeader:
+            name: CamelRedis.Key
+            expression:
+              constant:
+                expression: greeting
+        - setHeader:
+            name: CamelRedis.Value
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: spring-redis:localhost:6379
+            parameters:
+              command: SET
+- route:
+    from:
+      uri: direct:read-greeting
+      steps:
+        - setHeader:
+            name: CamelRedis.Key
+            expression:
+              constant:
+                expression: greeting
+        - to:
+            uri: spring-redis:localhost:6379
+            parameters:
+              command: GET
+        - log:
+            message: "The greeting is ${body}"
+```
+
+The consumer needs `command` set to `SUBSCRIBE` (channel names) or `PSUBSCRIBE` (channel patterns), and receives the messages posted to these channels. A producer posts a message with `PUBLISH`:
+
+```yaml
+- route:
+    from:
+      uri: spring-redis:localhost:6379
+      parameters:
+        command: SUBSCRIBE
+        channels: orders
+      steps:
+        - log:
+            message: "Order event: ${body}"
+- route:
+    from:
+      uri: direct:publish-order
+      steps:
+        - setHeader:
+            name: CamelRedis.Channel
+            expression:
+              constant:
+                expression: orders
+        - setHeader:
+            name: CamelRedis.Message
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: spring-redis:localhost:6379
+            parameters:
+              command: PUBLISH
+```
+
+By default, keys and values are stored with Java serialization, so other Redis clients do not find the key `greeting`. To store plain strings, set a `StringRedisSerializer` as the `serializer`, on every endpoint that reads or writes these keys:
+
+```yaml
+- route:
+    from:
+      uri: direct:save-greeting
+      steps:
+        - setHeader:
+            name: CamelRedis.Key
+            expression:
+              constant:
+                expression: greeting
+        - setHeader:
+            name: CamelRedis.Value
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: spring-redis:localhost:6379
+            parameters:
+              command: SET
+              serializer: "#class:org.springframework.data.redis.serializer.StringRedisSerializer"
+```
+
 ### Message headers evaluated by the Redis producer
 
 The producer issues commands to the server, and each command has a different set of parameters with specific types. The result from the command execution is returned in the message body.

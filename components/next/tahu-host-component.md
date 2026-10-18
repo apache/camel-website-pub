@@ -159,3 +159,24 @@ Enum values:
 | **CamelTahuMessageTimestamp** (consumer) Constant: [`MESSAGE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-tahu/latest/org/apache/camel/component/tahu/TahuConstants.html#MESSAGE_TIMESTAMP) | The timestamp of a Sparkplug message. |  | Long |
 | **CamelTahuMessageUUID** (consumer) Constant: [`MESSAGE_UUID`](https://javadoc.io/doc/org.apache.camel/camel-tahu/latest/org/apache/camel/component/tahu/TahuConstants.html#MESSAGE_UUID) | The UUID of a Sparkplug message. |  | UUID |
 | **CamelTahuMessageSequenceNumber** (consumer) Constant: [`MESSAGE_SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-tahu/latest/org/apache/camel/component/tahu/TahuConstants.html#MESSAGE_SEQUENCE_NUMBER) | The sequence number of a Sparkplug message. |  | Long |
+
+## Usage
+
+A Host Application consumer receives the Sparkplug messages of the Edge Nodes and Devices. Each metric of a message is a header named `CamelTahuMetric.` followed by the name of the metric, and its value is a Tahu `Metric`. The following route logs the temperature of the device in the [Tahu Edge](tahu-edge-component.md) example:
+
+```yaml
+- route:
+    from:
+      uri: tahu-host:BasicHostApp
+      parameters:
+        clientId: HostClient1
+        servers: "Mqtt:tcp://localhost:1883"
+      steps:
+        - filter:
+            expression:
+              simple:
+                expression: "${header[CamelTahuMetric.temperature]} != null"
+            steps:
+              - log:
+                  message: "Temperature: ${header[CamelTahuMetric.temperature].value}"
+```

@@ -273,6 +273,8 @@ As an example, you could think about these routes:
 
 -   Java
     
+-   YAML
+    
 
 ```java
     protected RoutesBuilder createRouteBuilder() {
@@ -283,7 +285,7 @@ As an example, you could think about these routes:
                         .setHeader(Milvus.Headers.ACTION).constant(MilvusAction.INSERT)
                         .setHeader(Milvus.Headers.KEY_NAME).constant("userID")
                         .setHeader(Milvus.Headers.KEY_VALUE).constant(Long.valueOf("3"))
-                        .transform(new org.apache.camel.spi.DataType("milvus:embeddings"))
+                        .transformDataType(new org.apache.camel.spi.DataType("milvus:embeddings"))
                         .to(MILVUS_URI);
 
                 from("direct:up")
@@ -291,11 +293,66 @@ As an example, you could think about these routes:
                         .setHeader(Milvus.Headers.ACTION).constant(MilvusAction.UPSERT)
                         .setHeader(Milvus.Headers.KEY_NAME).constant("userID")
                         .setHeader(Milvus.Headers.KEY_VALUE).constant(Long.valueOf("3"))
-                        .transform(new org.apache.camel.spi.DataType("milvus:embeddings"))
+                        .transformDataType(new org.apache.camel.spi.DataType("milvus:embeddings"))
                         .to(MILVUS_URI);
             }
         };
     }
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:in
+      steps:
+        - to:
+            uri: langchain4j-embeddings:test
+        - setHeader:
+            name: CamelMilvusAction
+            expression:
+              constant:
+                expression: INSERT
+        - setHeader:
+            name: CamelMilvusKeyName
+            expression:
+              constant:
+                expression: userID
+        - setHeader:
+            name: CamelMilvusKeyValue
+            expression:
+              constant:
+                expression: "3"
+                resultType: java.lang.Long
+        - transformDataType:
+            toType: milvus:embeddings
+        - to:
+            uri: milvus:embeddings
+- route:
+    from:
+      uri: direct:up
+      steps:
+        - to:
+            uri: langchain4j-embeddings:test
+        - setHeader:
+            name: CamelMilvusAction
+            expression:
+              constant:
+                expression: UPSERT
+        - setHeader:
+            name: CamelMilvusKeyName
+            expression:
+              constant:
+                expression: userID
+        - setHeader:
+            name: CamelMilvusKeyValue
+            expression:
+              constant:
+                expression: "3"
+                resultType: java.lang.Long
+        - transformDataType:
+            toType: milvus:embeddings
+        - to:
+            uri: milvus:embeddings
 ```
 
 It’s important to note that Milvus SDK doesn’t support upsert for autoID fields. This means if you set a field as key, and you set the autoID to true, the upsert won’t be possible.

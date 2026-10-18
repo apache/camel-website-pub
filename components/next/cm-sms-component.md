@@ -95,4 +95,23 @@ With the following _path_ and _query_ parameters:
 
 cm-sms://sgw01.cm.nl/gateway.ashx?defaultFrom=DefaultSender&defaultMaxNumberOfParts=8&productToken=xxxxx
 
+The message body is an `org.apache.camel.component.cm.client.SMSMessage`, with the text and the phone number. The following route sends the message body as an SMS to the number in the `phoneNumber` header:
+
+```yaml
+- route:
+    from:
+      uri: direct:sms
+      steps:
+        - setBody:
+            expression:
+              groovy:
+                expression: "new org.apache.camel.component.cm.client.SMSMessage(body, headers.phoneNumber)"
+        - to:
+            uri: cm-sms:sgw01.cm.nl/gateway.ashx
+            parameters:
+              defaultFrom: DefaultSender
+              defaultMaxNumberOfParts: 8
+              productToken: "{{cm.product-token}}"
+```
+
 You can try [this project](https://github.com/oalles/camel-cm-sample) to see how camel-cm-sms can be integrated in a camel route.

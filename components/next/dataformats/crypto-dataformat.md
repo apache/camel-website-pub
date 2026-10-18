@@ -59,6 +59,32 @@ _XML-only: Spring XML data format configuration_
 </camelContext>
 ```
 
+In the YAML DSL, the key is a bean that the data format refers to by name. Here the bean is a new DES key, made by a Groovy script when the application starts:
+
+```yaml
+- beans:
+    - name: desKey
+      type: javax.crypto.SecretKey
+      scriptLanguage: groovy
+      script: "javax.crypto.KeyGenerator.getInstance('DES').generateKey()"
+- route:
+    from:
+      uri: direct:basic-encryption
+      steps:
+        - marshal:
+            crypto:
+              algorithm: DES
+              key: desKey
+        - to:
+            uri: mock:encrypted
+        - unmarshal:
+            crypto:
+              algorithm: DES
+              key: desKey
+        - to:
+            uri: mock:unencrypted
+```
+
 ## Specifying the Encryption Algorithm
 
 Changing the algorithm is a matter of supplying the JCE algorithm name. If you change the algorithm, you will need to use a compatible key.
@@ -113,6 +139,8 @@ The same vector is required in both the encryption and decryption phases. As it 
     
 -   Spring XML
     
+-   YAML
+    
 
 ```java
 KeyGenerator generator = KeyGenerator.getInstance("DES");
@@ -138,6 +166,39 @@ from("direct:inline")
 <crypto id="inline-decrypt" algorithm="DES/CBC/PKCS5Padding" key="desKey" inline="true" />
 ```
 
+```yaml
+- beans:
+    - name: initializationVector
+      scriptLanguage: groovy
+      script: "[0, 1, 2, 3, 4, 5, 6, 7] as byte[]"
+- dataFormats:
+    - crypto:
+        id: inline
+        algorithm: DES/CBC/PKCS5Padding
+        key: desKey
+        initVector: initializationVector
+        inline: true
+    - crypto:
+        id: inline-decrypt
+        algorithm: DES/CBC/PKCS5Padding
+        key: desKey
+        inline: true
+- route:
+    from:
+      uri: direct:inline
+      steps:
+        - marshal:
+            custom:
+              ref: inline
+        - to:
+            uri: mock:encrypted
+        - unmarshal:
+            custom:
+              ref: inline-decrypt
+        - to:
+            uri: mock:unencrypted
+```
+
 For more information about the use of Initialization Vectors, consult
 
 -   [http://en.wikipedia.org/wiki/Initialization\_vector](http://en.wikipedia.org/wiki/Initialization_vector)
@@ -154,6 +215,8 @@ To avoid attacks against the encrypted data while it is in transit, the CryptoDa
 -   Java
     
 -   Spring XML
+    
+-   YAML
     
 
 ```java
@@ -173,11 +236,36 @@ from("direct:hmac")
 <crypto id="hmac" algorithm="DES" key="desKey" shouldAppendHMAC="true" />
 ```
 
+```yaml
+- dataFormats:
+    - crypto:
+        id: hmac
+        algorithm: DES
+        key: desKey
+        shouldAppendHMAC: true
+- route:
+    from:
+      uri: direct:hmac
+      steps:
+        - marshal:
+            custom:
+              ref: hmac
+        - to:
+            uri: mock:encrypted
+        - unmarshal:
+            custom:
+              ref: hmac
+        - to:
+            uri: mock:unencrypted
+```
+
 By default, the HMAC is calculated using the HmacSHA1 mac algorithm, though this can be easily changed by supplying a different algorithm name. See here for how to check what algorithms are available through the configured security providers
 
 -   Java
     
 -   Spring XML
+    
+-   YAML
     
 
 ```java
@@ -198,6 +286,30 @@ from("direct:hmac-algorithm")
 <crypto id="hmac-algorithm" algorithm="DES" key="desKey" macAlgorithm="HmacMD5" shouldAppendHMAC="true" />
 ```
 
+```yaml
+- dataFormats:
+    - crypto:
+        id: hmac-algorithm
+        algorithm: DES
+        key: desKey
+        macAlgorithm: HmacMD5
+        shouldAppendHMAC: true
+- route:
+    from:
+      uri: direct:hmac-algorithm
+      steps:
+        - marshal:
+            custom:
+              ref: hmac-algorithm
+        - to:
+            uri: mock:encrypted
+        - unmarshal:
+            custom:
+              ref: hmac-algorithm
+        - to:
+            uri: mock:unencrypted
+```
+
 ## Supplying Keys Dynamically
 
 When using a Recipient list or similar EIP, the recipient of an exchange can vary dynamically. Using the same key across all recipients may neither be feasible nor desirable. It would be useful to be able to specify keys dynamically on a per-exchange basis. The exchange could then be dynamically enriched with the key of its target recipient before being processed by the data format. To facilitate this, the DataFormat allows for keys to be supplied dynamically via the message headers below
@@ -208,6 +320,8 @@ When using a Recipient list or similar EIP, the recipient of an exchange can var
 -   Java
     
 -   Spring XML
+    
+-   YAML
     
 
 ```java
@@ -232,6 +346,32 @@ from("direct:key-in-header-decrypt").unmarshal(cryptoFormat).process(exchange ->
 
 ```xml
 <crypto id="nokey" algorithm="DES" />
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:key-in-header-encrypt
+      steps:
+        - marshal:
+            crypto:
+              algorithm: DES
+        # remove the key so it does not leak with the message
+        - removeHeader:
+            name: CamelCryptoKey
+        - to:
+            uri: mock:encrypted
+- route:
+    from:
+      uri: direct:key-in-header-decrypt
+      steps:
+        - unmarshal:
+            crypto:
+              algorithm: DES
+        - removeHeader:
+            name: CamelCryptoKey
+        - to:
+            uri: mock:unencrypted
 ```
 
 ## Dependencies

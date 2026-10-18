@@ -20,7 +20,7 @@ This page provides a reference for all Camel CLI commands.
 | [camel dependency](camel-jbang-dependency.md) | Displays all Camel dependencies required to run |
 | [camel dev](camel-jbang-dev.md) | Run in dev mode with live reload |
 | [camel dirty](camel-jbang-dirty.md) | Check if there are dirty files from previous Camel runs that did not terminate gracefully |
-| [camel doc](camel-jbang-doc.md) | Shows documentation for kamelet, component, and other Camel resources |
+| [camel doc](camel-jbang-doc.md) | Shows documentation for kamelet, component, EIP, and other Camel resources |
 | [camel doctor](camel-jbang-doctor.md) | Checks the environment and reports potential issues |
 | [camel eval](camel-jbang-eval.md) | Evaluate Camel expressions and scripts |
 | [camel explain](camel-jbang-explain.md) | Explain what a Camel route does using AI/LLM |

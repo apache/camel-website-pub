@@ -230,3 +230,23 @@ The Google Calendar Stream component supports the following message header(s), w
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelGoogleCalendarEventId** (consumer) Constant: [`EVENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-calendar/latest/org/apache/camel/component/google/calendar/stream/GoogleCalendarStreamConstants.html#EVENT_ID) | The calendar event id. |  | String |
+
+## Usage
+
+The consumer polls a calendar and sends each event as a message, with its id in the `CamelGoogleCalendarEventId` header. With `considerLastUpdate`, each poll starts from the last update of the events it has already seen:
+
+```yaml
+- route:
+    from:
+      uri: google-calendar-stream:events
+      parameters:
+        calendarId: primary
+        considerLastUpdate: true
+        clientId: "{{google.clientId}}"
+        clientSecret: "{{google.clientSecret}}"
+        refreshToken: "{{google.refreshToken}}"
+        applicationName: camel-example
+      steps:
+        - log:
+            message: "Event ${header.CamelGoogleCalendarEventId}: ${body.summary}"
+```

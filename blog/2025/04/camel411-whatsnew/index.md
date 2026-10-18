@@ -1,6 +1,6 @@
 # Apache Camel 4.11 What's New
 
-Published 2025-04-05 by Claus Ibsen, Pasquale Congiusti, Federico Mariani, Gregor Zurowski in Releases
+Published 2025-04-05 by Claus Ibsen, Pasquale Congiusti, Federico Mariani, Gregor Zurowski in Releases, Camel
 
 Details of what we have done in the Camel 4.11 release.
 

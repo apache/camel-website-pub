@@ -250,12 +250,57 @@ _Java-only: Java test API (ProducerTemplate)_
 template.sendBody("controlbus:route?routeId=foo&action=start", null);
 ```
 
+In a route, the same command is a `to` step. This route starts the route `foo` five seconds after Camel has started:
+
+```yaml
+- route:
+    from:
+      uri: timer:startFoo
+      parameters:
+        repeatCount: 1
+        delay: 5000
+      steps:
+        - to:
+            uri: controlbus:route
+            parameters:
+              routeId: foo
+              action: start
+```
+
 To get the status of the route, you can do:
 
 _Java-only: Java test API (ProducerTemplate)_
 
 ```java
 String status = template.requestBody("controlbus:route?routeId=foo&action=status", null, String.class);
+```
+
+In a route, the status is the message body after the call, such as `Started` or `Stopped`. This route checks every minute that the route `foo` runs, and starts it when it is stopped:
+
+```yaml
+- route:
+    from:
+      uri: timer:watchdog
+      parameters:
+        period: 60000
+      steps:
+        - to:
+            uri: controlbus:route
+            parameters:
+              routeId: foo
+              action: status
+        - filter:
+            expression:
+              simple:
+                expression: "${body} == 'Stopped'"
+            steps:
+              - log:
+                  message: Route foo is stopped, starting it again
+              - to:
+                  uri: controlbus:route
+                  parameters:
+                    routeId: foo
+                    action: start
 ```
 
 ### Getting performance statistics
@@ -268,7 +313,25 @@ _Java-only: Java test API (ProducerTemplate)_
 String xml = template.requestBody("controlbus:route?routeId=foo&action=stats", null, String.class);
 ```
 
-The returned statics is in XML format. It is the same data you can get from JMX with the `dumpRouteStatsAsXml` operation on the `ManagedRouteMBean`.
+The returned statics is in XML format. It is the same data you can get from JMX with the `dumpRouteStatsAsXml` operation on the `ManagedRouteMBean`. In a route, the XML is the message body. This route writes the statistics of the route `foo` to a file every minute:
+
+```yaml
+- route:
+    from:
+      uri: timer:stats
+      parameters:
+        period: 60000
+      steps:
+        - to:
+            uri: controlbus:route
+            parameters:
+              routeId: foo
+              action: stats
+        - to:
+            uri: file:stats
+            parameters:
+              fileName: "foo-${date:now:yyyyMMddHHmm}.xml"
+```
 
 To get statics for the entire `CamelContext` you just omit the routeId parameter as shown below:
 

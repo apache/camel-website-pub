@@ -168,9 +168,30 @@ The LangChain4j Ingest component supports the following message header(s), which
 
 Point a file consumer at a folder and the files in it become a knowledge base:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("file:/var/data/product-docs?noop=true&recursive=true&readLock=changed&charset=UTF-8")
     .to("langchain4j-ingest:products?documentIdHeader=CamelFileName");
+```
+
+```yaml
+- route:
+    from:
+      uri: file:/var/data/product-docs
+      parameters:
+        noop: true
+        recursive: true
+        readLock: changed
+        charset: UTF-8
+      steps:
+        - to:
+            uri: langchain4j-ingest:products
+            parameters:
+              documentIdHeader: CamelFileName
 ```
 
 Each file is read as UTF-8 text, split into overlapping segments (`maxSegmentSize`, `maxOverlapSize`), embedded in batches (`embeddingBatchSize`, 32 by default) and written to the store; a document is held in memory whole while it is split. Providers with generous per-request limits ingest large documents faster with a bigger batch — a batch carries at most `embeddingBatchSize × maxSegmentSize` characters, so tune the two together against the provider’s token limits. A custom LangChain4j `DocumentSplitter` bean can replace the default recursive splitting (`documentSplitter=#bean:name`); the two size options are then ignored, and segments are re-stamped with the identity metadata regardless of what the splitter returns. `noop=true` leaves the documents where they are — a knowledge base reads its source, it does not consume it — and already implies the file consumer’s idempotent register, so unchanged files are not re-ingested within a run. The `changed` read lock keeps a file still being copied in from being half-ingested.
@@ -184,10 +205,31 @@ The `embeddingStore` and `embeddingModel` options may be omitted when the regist
 
 Any Camel consumer can feed the endpoint; where the document id lives in the exchange is the consumer’s business, and `documentIdHeader` names it:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("aws2-s3://product-docs?region=eu-west-1&deleteAfterRead=false")
     .to("langchain4j-ingest:s3docs?documentIdHeader=CamelAwsS3Key"
         + "&embeddingStore=#bean:productsStore&embeddingModel=#bean:miniLm");
+```
+
+```yaml
+- route:
+    from:
+      uri: aws2-s3://product-docs
+      parameters:
+        region: eu-west-1
+        deleteAfterRead: false
+      steps:
+        - to:
+            uri: langchain4j-ingest:s3docs
+            parameters:
+              documentIdHeader: CamelAwsS3Key
+              embeddingStore: "#bean:productsStore"
+              embeddingModel: "#bean:miniLm"
 ```
 
 Mind each component’s own defaults: the `aws2-s3` consumer **deletes objects after reading them** unless `deleteAfterRead=false` is set. Without a `documentIdHeader` the producer expects the `CamelLangChain4jIngestDocumentId` header and fails the exchange when no id is found — identity is what update and delete semantics are built on, so a generated fallback would silently break replacement.
@@ -198,20 +240,60 @@ After ingestion the message body is replaced with the `IngestResult`, so a reque
 
 Not everything a consumer delivers belongs in a knowledge base. `includeId` and `excludeId` take comma-separated Ant-style patterns matched against the document id — exclusion wins — and act before the body is read and before the dedup claim, so a rejected delivery costs nothing and never occupies its id. A pattern and an id must agree on a leading `/`: `docs/**` never matches `/docs/guide.md`, so ids derived from absolute paths need patterns starting with `/`. `minDocumentSize` filters documents too short to carry retrievable content, and `documentFilter` names a `Predicate` bean evaluated with the body available; both answer `filtered` and release the dedup claim like a blank document does, so a later, acceptable delivery under the same id still ingests. A duplicate id is answered `skipped` before the content filters run, and the predicate runs before the blank-document check — it must tolerate an absent body, and rejecting a blank delivery answers `filtered` rather than `empty`.
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("file:knowledge-base?noop=true")
     .to("langchain4j-ingest:docs?documentIdHeader=CamelFileName"
         + "&includeId=**/*.md,**/*.txt&excludeId=**/draft-*&minDocumentSize=100");
 ```
 
+```yaml
+- route:
+    from:
+      uri: file:knowledge-base
+      parameters:
+        noop: true
+      steps:
+        - to:
+            uri: langchain4j-ingest:docs
+            parameters:
+              documentIdHeader: CamelFileName
+              includeId: "**/*.md,**/*.txt"
+              excludeId: "**/draft-*"
+              minDocumentSize: 100
+```
+
 ### Deduplicating deliveries
 
 With an `idempotentRepository` configured, the producer claims each document id before writing: a redelivered record or re-listed object ingests once, and a duplicate is answered `skipped` instead of being written twice — first write wins per id. An update arriving under the same id is skipped, not replaced; streams that carry updates need a version-aware id. Only a delivery that wrote segments keeps its claim: a blank document answers `empty` and releases it, so an object created empty and populated later under the same id still ingests, and a failed write releases it so the delivery can be retried. The claim is eager — a duplicate racing an in-flight first delivery is answered `skipped` even if that delivery then fails.
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("kafka:ingest-events?groupId=ingest")
     .to("langchain4j-ingest:events?documentIdHeader=CamelKafkaKey"
         + "&idempotentRepository=#bean:eventsRegister");
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:ingest-events
+      parameters:
+        groupId: ingest
+      steps:
+        - to:
+            uri: langchain4j-ingest:events
+            parameters:
+              documentIdHeader: CamelKafkaKey
+              idempotentRepository: "#bean:eventsRegister"
 ```
 
 The repository is any `IdempotentRepository` bean — in-memory, file-backed or, to deduplicate across application instances, a JDBC one. It is referenced by name on purpose: an application may hold unrelated idempotent repositories, so none is picked up by type. The endpoint starts the repository but never stops it (the bean may be shared); a persistent repository’s lifecycle belongs to whoever created it.
@@ -222,12 +304,44 @@ Two limits of this deduplication are worth knowing. The claim is **eager**: a du
 
 A parser such as Tika copies document metadata over the message headers, so a route that parses untrusted documents must capture the id **before** the parse — a crafted document could otherwise forge its own identity. The `CamelLangChain4jIngestDocumentId` exchange property exists for exactly this and always wins over the header:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("file:/var/data/reports?noop=true&readLock=changed")
     .setProperty(LangChain4jIngest.DOCUMENT_ID_PROPERTY, header(Exchange.FILE_NAME))
     .to("tika:parse?tikaParseOutputFormat=text&tikaParseOutputEncoding=UTF-8")
     .process(new TikaTextDecode())
     .to("langchain4j-ingest:reports");
+```
+
+```yaml
+- beans:
+    - name: tikaTextDecode
+      type: org.apache.camel.component.langchain4j.ingest.TikaTextDecode
+- route:
+    from:
+      uri: file:/var/data/reports
+      parameters:
+        noop: true
+        readLock: changed
+      steps:
+        - setProperty:
+            name: CamelLangChain4jIngestDocumentId
+            expression:
+              header:
+                expression: CamelFileName
+        - to:
+            uri: tika:parse
+            parameters:
+              tikaParseOutputFormat: text
+              tikaParseOutputEncoding: UTF-8
+        - process:
+            ref: tikaTextDecode
+        - to:
+            uri: langchain4j-ingest:reports
 ```
 
 Each format needs its Tika parser module on the classpath: camel-tika ships the HTML and text modules only, so a PDF needs `org.apache.tika:tika-parser-pdf-module`. A format without its module parses to nothing and the document is answered `EMPTY`.
@@ -246,9 +360,31 @@ A body that is not yet a String, such as a file or a stream, is read only one ch
 
 With `modality=media` the body is read as bytes and embedded whole, as one vector, by a multimodal embedding model. The model must list the medium (`IMAGE`, `AUDIO`, `VIDEO` or `PDF`) in its `supportedContentTypes()`; a text-only model fails the start. The vector is stored under a placeholder segment whose text is the document id, with the same identity metadata as text segments plus the MIME type under `camel_ingest_content_type`, so retrieval and citation work unchanged and a retriever on a shared store can tell a media hit from text.
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("file:/var/data/photos?noop=true&recursive=true&readLock=changed&antInclude=**/*.jpg,**/*.png")
     .to("langchain4j-ingest:photos?modality=media&documentIdHeader=CamelFileName");
+```
+
+```yaml
+- route:
+    from:
+      uri: file:/var/data/photos
+      parameters:
+        noop: true
+        recursive: true
+        readLock: changed
+        antInclude: "**/*.jpg,**/*.png"
+      steps:
+        - to:
+            uri: langchain4j-ingest:photos
+            parameters:
+              modality: media
+              documentIdHeader: CamelFileName
 ```
 
 Leave `charset` unset on the consumer: a file consumer with one converts the file through a Reader, which corrupts media. Keep other files out of the folder with the consumer’s `antInclude`, as above, or the endpoint’s `includeId` and `excludeId`: an unsupported file fails the exchange and is retried on every poll.

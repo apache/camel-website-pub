@@ -150,12 +150,13 @@ Show quick reference documentation (description + all configuration options):
 camel doc kafka
 camel doc jackson
 camel doc aws-kinesis-sink
+camel doc split
 ```
 
 > **Note**
 > This shows catalog-level documentation with option tables, not the full website documentation.
 
-If a component and data format share the same name, prefix with `dataformat:` (e.g., `camel doc dataformat:thrift`).
+If a component and data format share the same name, prefix with `dataformat:` (e.g., `camel doc dataformat:thrift`). The same goes for an EIP with the name of a component, such as `camel doc eip:log` for the Log EIP.
 
 Open the online documentation in a browser with `--open-url`, or get just the URL with `--url`:
 

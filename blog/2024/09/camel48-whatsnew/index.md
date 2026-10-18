@@ -1,6 +1,6 @@
 # Apache Camel 4.8 What's New
 
-Published 2024-09-16 by Claus Ibsen, Pasquale Congiusti, Otavio Rodolfo Piske, Andrea Cosentino in Releases
+Published 2024-09-16 by Claus Ibsen, Pasquale Congiusti, Otavio Rodolfo Piske, Andrea Cosentino in Releases, Camel
 
 Details of what we have done in the Camel 4.8 release.
 

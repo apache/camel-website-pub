@@ -167,6 +167,11 @@ The component is producer-only and supports the following operations, selected w
 
 Batch-insert aggregated events into ClickHouse using the native `RowBinary` format:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("kafka:events?groupId=analytics")
     .aggregate(constant(true), new GroupedBodyAggregationStrategy())
@@ -175,18 +180,65 @@ from("kafka:events?groupId=analytics")
     .log("Inserted ${header.CamelClickHouseWrittenRows} rows");
 ```
 
+```yaml
+- route:
+    from:
+      uri: kafka:events
+      parameters:
+        groupId: analytics
+      steps:
+        - aggregate:
+            correlationExpression:
+              constant:
+                expression: "true"
+            aggregationStrategy: "#class:org.apache.camel.processor.aggregate.GroupedBodyAggregationStrategy"
+            completionSize: 5000
+            completionTimeout: 2000
+            steps:
+              - to:
+                  uri: clickhouse://analytics.events
+                  parameters:
+                    operation: insert
+                    format: RowBinary
+              - log:
+                  message: "Inserted ${header.CamelClickHouseWrittenRows} rows"
+```
+
 ### Server-side asynchronous inserts
 
 Let ClickHouse buffer and flush inserts server-side, ideal for many concurrent producers sending small payloads:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("platform-http:/ingest")
     .to("clickhouse://metrics.samples?operation=insert&asyncInsert=true&waitForAsyncInsert=false");
 ```
 
+```yaml
+- route:
+    from:
+      uri: platform-http:/ingest
+      steps:
+        - to:
+            uri: clickhouse://metrics.samples
+            parameters:
+              operation: insert
+              asyncInsert: true
+              waitForAsyncInsert: false
+```
+
 ### Scheduled OLAP query
 
 Run an aggregation query on a timer and route the result set downstream:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("timer:rollup?period=60000")
@@ -195,9 +247,34 @@ from("timer:rollup?period=60000")
     .to("kafka:rollup-metrics");
 ```
 
+```yaml
+- route:
+    from:
+      uri: timer:rollup
+      parameters:
+        period: 60000
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "SELECT count() FROM analytics.events"
+        - to:
+            uri: clickhouse://analytics
+            parameters:
+              operation: query
+              format: JSONEachRow
+        - to:
+            uri: kafka:rollup-metrics
+```
+
 ### Health check
 
 Verify connectivity to the ClickHouse server:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("timer:health?period=30000")
@@ -208,4 +285,29 @@ from("timer:health?period=30000")
         .otherwise()
             .to("direct:alertOps")
     .end();
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:health
+      parameters:
+        period: 30000
+      steps:
+        - to:
+            uri: clickhouse://default
+            parameters:
+              operation: ping
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelClickHousePingOk} == true"
+                steps:
+                  - to:
+                      uri: direct:markHealthy
+            otherwise:
+              steps:
+                - to:
+                    uri: direct:alertOps
 ```

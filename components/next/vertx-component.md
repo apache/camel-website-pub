@@ -125,6 +125,55 @@ Enum values:
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
+## Usage
+
+The producer sends the message body to the event bus address, and a consumer of that address receives it. A message goes to one consumer, or to all consumers with `pubSub`:
+
+```yaml
+- route:
+    from:
+      uri: timer:orders
+      parameters:
+        period: 5000
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: '{"orderId": 123}'
+        - to:
+            uri: vertx:orders
+            parameters:
+              pubSub: true
+- route:
+    from:
+      uri: vertx:orders
+      steps:
+        - log:
+            message: "Received order ${body}"
+```
+
+When the exchange is InOut, the producer sends a request and the reply of the consumer becomes the message body:
+
+```yaml
+- route:
+    from:
+      uri: direct:greet
+      steps:
+        - to:
+            uri: vertx:greeter
+            pattern: InOut
+        - log:
+            message: "The reply is ${body}"
+- route:
+    from:
+      uri: vertx:greeter
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "Hello ${body}"
+```
+
 ## Connecting to the existing Vert.x instance
 
 If you would like to connect to the Vert.x instance already existing in your JVM, you can set the instance on the component level:

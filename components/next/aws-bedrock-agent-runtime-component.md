@@ -721,9 +721,27 @@ The in-message body is the input text sent to the agent. When `pojoRequest=true`
 
 The agent APIs are session based. Set `sessionId` on the endpoint, or the `CamelAwsBedrockAgentRuntimeSessionId` header, to continue an existing conversation; when neither is supplied a random session id is generated for the invocation. The session id used is always echoed back on the `CamelAwsBedrockAgentRuntimeSessionId` header of the out-message so a route can reuse it on the next call.
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:agent")
     .to("aws-bedrock-agent-runtime://label?operation=invokeAgent&agentId=RAWAGENTID&agentAliasId=RAWALIASID");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:agent
+      steps:
+        - to:
+            uri: aws-bedrock-agent-runtime:label
+            parameters:
+              operation: invokeAgent
+              agentId: RAWAGENTID
+              agentAliasId: RAWALIASID
 ```
 
 ### Invoking an inline Bedrock Agent

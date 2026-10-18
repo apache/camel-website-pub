@@ -1,6 +1,6 @@
 # Apache Camel 3 What's New (top 10)
 
-Published 2019-12-02 by Claus Ibsen in Releases
+Published 2019-12-02 by Claus Ibsen in Releases, Camel
 
 Top 10 of what's new in Apache Camel version 3
 

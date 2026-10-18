@@ -134,3 +134,26 @@ The Drill component supports the following message header(s), which is/are liste
 ### Drill Producer
 
 The producer executes a query using the **CamelDrillQuery** header and puts the results into the body.
+
+For example, the following route queries the sample data that comes with Drill, through a Drillbit on the local machine:
+
+```yaml
+- route:
+    from:
+      uri: timer:report
+      parameters:
+        repeatCount: 1
+      steps:
+        - setHeader:
+            name: CamelDrillQuery
+            expression:
+              constant:
+                expression: "SELECT full_name, position_title FROM cp.`employee.json` LIMIT 5"
+        - to:
+            uri: drill:localhost
+            parameters:
+              mode: DRILLBIT
+              port: 31010
+        - log:
+            message: "${body}"
+```

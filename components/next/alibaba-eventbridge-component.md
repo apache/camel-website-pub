@@ -240,10 +240,30 @@ The component supports a 3-level hierarchical validation model: `EventBus (N) â†
 >
 > To prevent untrusted callers from manipulating security policies, always sanitize or remove Camel headers before forwarding to the Alibaba EventBridge producer:
 >
+> -   Java
+>     
+> -   YAML
+>     
+>
 > ```java
 > from("platform-http:/ingress")
 >     .removeHeaders("CamelAlibabaEventBridge*")
 >     .to("alibaba-eventbridge:putEvents?eventBusName=orders-bus&allowedEventSources=RAW(app.orders -> order:created:v1)&region=cn-hangzhou");
+> ```
+>
+> ```yaml
+> - route:
+>     from:
+>       uri: platform-http:/ingress
+>       steps:
+>         - removeHeaders:
+>             pattern: CamelAlibabaEventBridge*
+>         - to:
+>             uri: alibaba-eventbridge:putEvents
+>             parameters:
+>               eventBusName: orders-bus
+>               allowedEventSources: "RAW(app.orders -> order:created:v1)"
+>               region: cn-hangzhou
 > ```
 
 ### Allowed Event Sources Configuration
@@ -420,10 +440,35 @@ The component supports the following operations:
 
 ### Publish event with String / JSON body
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(constant("{\"orderId\":\"123\"}"))
     .to("alibaba-eventbridge:putEvents?eventBusName=my-bus&eventSource=camel.test&eventType=OrderCreated&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: '{"orderId":"123"}'
+        - to:
+            uri: alibaba-eventbridge:putEvents
+            parameters:
+              eventBusName: my-bus
+              eventSource: camel.test
+              eventType: OrderCreated
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
 ```
 
 ### Publish event with Map body (Alibaba Key Dictionary)
@@ -500,6 +545,11 @@ from("direct:start")
 
 ### Dynamic Header and Property Overrides
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setHeader(AlibabaEventBridgeHeaders.EVENT_BUS_NAME, constant("orders-bus"))
@@ -508,6 +558,45 @@ from("direct:start")
     .setHeader(AlibabaEventBridgeHeaders.ALLOWED_EVENT_SOURCES, constant("acs:oss:cn-hangzhou:12345:bucket -> oss:ObjectCreated:PutObject; app.orders -> order:created:v1"))
     .setBody(constant("{\"orderId\":\"123\"}"))
     .to("alibaba-eventbridge:putEvents?eventSource=app.orders&eventType=order:created:v1&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelAlibabaEventBridgeEventBusName
+            expression:
+              constant:
+                expression: orders-bus
+        - setHeader:
+            name: CamelAlibabaEventBridgeValidateEventSource
+            expression:
+              constant:
+                expression: "true"
+        - setHeader:
+            name: CamelAlibabaEventBridgeValidateEventType
+            expression:
+              constant:
+                expression: "true"
+        - setHeader:
+            name: CamelAlibabaEventBridgeAllowedEventSources
+            expression:
+              constant:
+                expression: "acs:oss:cn-hangzhou:12345:bucket -> oss:ObjectCreated:PutObject; app.orders -> order:created:v1"
+        - setBody:
+            expression:
+              constant:
+                expression: '{"orderId":"123"}'
+        - to:
+            uri: alibaba-eventbridge:putEvents
+            parameters:
+              eventSource: app.orders
+              eventType: order:created:v1
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
 ```
 
 For more examples, see the unit tests in the `camel-alibaba-eventbridge` module.

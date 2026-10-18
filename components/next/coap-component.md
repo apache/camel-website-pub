@@ -217,7 +217,7 @@ The following rules determine which request method the CoAP producer will use to
 
 1.  The value of the `CamelCoapMethod` header
     
-2.  `GE` if a query string is provided on the target CoAP server URI.
+2.  `GET` if a query string is provided on the target CoAP server URI.
     
 3.  `POST` if the message exchange body is not null.
     
@@ -230,15 +230,48 @@ When the exchange fails, the CoAP consumer answers the request with `5.00 Intern
 
 By default the error response has no payload, so the exception’s message is not sent to the client. Set `muteException=false` on the endpoint to send the exception’s message as the payload instead.
 
+### Example
+
+The first route is a CoAP server that answers the GET requests for `/temperature`. The second route asks it every ten seconds: without a body and without a query, the producer sends a GET.
+
+```yaml
+- route:
+    from:
+      uri: coap://localhost:5683/temperature
+      parameters:
+        coapMethodRestrict: GET
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "21.5"
+- route:
+    from:
+      uri: timer:poll
+      parameters:
+        period: 10000
+      steps:
+        - to:
+            uri: coap://localhost:5683/temperature
+        - log:
+            message: "Temperature: ${body}"
+```
+
 ## Configuring COAP Server
 
-The COAP server has many configuration options, and this can be configured from a properties file such as `Californium3.properties`. You can specfiy the location of this configuration file on the Camel CoAPComponent, such as:
+The COAP server has many configuration options, and this can be configured from a properties file such as `Californium3.properties`. You can specify the location of this configuration file on the Camel CoAPComponent, such as:
 
 _Java-only: configuring the CoAP component programmatically_
 
 ```java
 CoAPComponent coap = context.getComponent("coap", CoAPComponent.class);
-coap.setCconfigurationFile("/etc/myapp/Californium3.properties");
+coap.setConfigurationFile("/etc/myapp/Californium3.properties");
+```
+
+Or set it in `application.properties`:
+
+```properties
+camel.component.coap.configuration-file = /etc/myapp/Californium3.properties
 ```
 
 The configuration file has many options, here is a sample from CoAP 3.13 release from the [cf-simplefile-server](https://github.com/eclipse-californium/californium/blob/main/demo-apps/cf-simplefile-server/README.md) example:

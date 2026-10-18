@@ -281,6 +281,33 @@ The state of the TCP Socket can be controlled by these properties on the Camel e
 
 <table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>Key</strong></td><td class="tableblock halign-left valign-top"><strong>Type</strong></td><td class="tableblock halign-left valign-top"><strong>Description</strong></td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpCloseConnectionBeforeSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be closed before sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpResetConnectionBeforeSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be reset before sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpCloseConnectionAfterSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be closed immediately after sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpResetConnectionAfterSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be reset immediately after sending any data</td></tr></tbody></table>
 
+### Example
+
+The first route is an MLLP server that acknowledges each HL7 message automatically. The second route sends it an ADT message, and logs the acknowledgement it gets back in the `CamelMllpAcknowledgementString` header. The segments of an HL7 message are separated by a carriage return (`\r`):
+
+```yaml
+- route:
+    from:
+      uri: mllp://0.0.0.0:8888
+      steps:
+        - log:
+            message: "Received ${body}"
+- route:
+    from:
+      uri: timer:send
+      parameters:
+        repeatCount: 1
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: "MSH|^~\\&|SENDER|HOSPITAL|RECEIVER|HOSPITAL|20260101120000||ADT^A01|MSG00001|P|2.5\rPID|1||12345||Doe^John"
+        - to:
+            uri: mllp://localhost:8888
+        - log:
+            message: "Acknowledgement: ${header.CamelMllpAcknowledgementString}"
+```
+
 ### Using TLS
 
 Set `sslContextParameters` on the endpoint, or `useGlobalSslContextParameters` on the component, to secure the connections of the consumer and the producer with TLS. The trust store, key store, protocols and cipher suites are configured with the [Camel JSSE Configuration Utility](../../manual/camel-configuration-utilities.md).

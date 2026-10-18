@@ -184,16 +184,50 @@ Enum values:
 | **useUserKnownHostsFile** (security) | If knownHostFile has not been explicit configured, then use the host file from System.getProperty(user.home) /.ssh/known\_hosts. | true | boolean |
 | **ciphers** (security (advanced)) | Set a comma separated list of ciphers that will be used in order of preference. Possible cipher names are defined by JCraft JSCH. Some examples include: aes128-ctr,aes128-cbc,3des-ctr,3des-cbc,blowfish-cbc,aes192-cbc,aes256-cbc. If not specified the default list from JSCH will be used. |  | String |
 
+## Usage
+
+The SCP component copies the message body to a file on the remote host. In the following route, the file consumer sets the `CamelFileName` header, and each file of a local folder is copied to the `/upload` directory of the host. The host key is checked against a known hosts file:
+
+```yaml
+- route:
+    from:
+      uri: file:outbox
+      steps:
+        - to:
+            uri: scp://myhost:22/upload
+            parameters:
+              username: "{{scp.username}}"
+              password: "{{scp.password}}"
+              knownHostsFile: /home/camel/.ssh/known_hosts
+              strictHostKeyChecking: "yes"
+```
+
 ## OpenSSH Certificate Authentication
 
 Camel supports OpenSSH certificate-based authentication for SCP connections, where a user’s public key is signed by a Certificate Authority (CA). This is configured using the `certFile`, `certUri`, or `certBytes` parameters alongside the private key:
 
-_Java-only: configuring certificate-based authentication_
+-   Java
+    
+-   YAML
+    
 
 ```java
 to("scp://host/path?username=myuser"
    + "&privateKeyFile=/path/to/user_key"
    + "&certFile=/path/to/user_key-cert.pub");
+```
+
+```yaml
+- route:
+    from:
+      uri: file:outbox
+      steps:
+        - to:
+            uri: scp://host/path
+            parameters:
+              username: myuser
+              privateKeyFile: /path/to/user_key
+              certFile: /path/to/user_key-cert.pub
 ```
 
 See the [SFTP component](sftp-component.md) documentation for more details on certificate authentication options.

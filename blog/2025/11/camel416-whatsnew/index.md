@@ -1,6 +1,6 @@
 # Apache Camel 4.16 What's New
 
-Published 2025-11-06 by Claus Ibsen, Pasquale Congiusti in Releases
+Published 2025-11-06 by Claus Ibsen, Pasquale Congiusti in Releases, Camel
 
 Details of what we have done in the Camel 4.16 release.
 

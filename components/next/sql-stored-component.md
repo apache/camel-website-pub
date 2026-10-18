@@ -161,6 +161,19 @@ In SQL terms, the stored procedure could be declared as:
 CREATE PROCEDURE STOREDSAMPLE(VALUE1 INTEGER, VALUE2 INTEGER, INOUT RESULT1 INTEGER, OUT RESULT2 INTEGER)
 ```
 
+In a YAML route, the result is a `Map` in the message body, with the values of the INOUT and OUT parameters by their names. The YAML example reads the headers with the `:#` syntax, which has the same effect as `${headers.num1}` (see IN Parameters below):
+
+```yaml
+- route:
+    from:
+      uri: direct:calculate
+      steps:
+        - to:
+            uri: "sql-stored:STOREDSAMPLE(INTEGER :#num1,INTEGER :#num2,INOUT INTEGER :#num3 result1,OUT INTEGER result2)"
+        - log:
+            message: "result1: ${body[result1]}, result2: ${body[result2]}"
+```
+
 #### IN Parameters
 
 IN parameters take four parts separated by a space: parameter name, SQL type (with scale), type name, and value source.
@@ -212,7 +225,7 @@ SQL type works the same as IN parameters.
 
 Type name is optional and also works the same as IN parameters.
 
-Output parameter name is used for the OUT parameter name, as well as the header name where the result will be stored.
+The output parameter name is the name of the OUT parameter, and the key of its value in the result. The result is a `Map` in the message body, or in the header that the `outputHeader` option names.
 
 _XML-only: stored procedure call with OUT parameter_
 
@@ -220,7 +233,7 @@ _XML-only: stored procedure call with OUT parameter_
 <to uri="sql-stored:MYFUNC(OUT org.example.Types.DECIMAL(10) outheader1)"/>
 ```
 
-URI means that the OUT parameter’s name is `outheader1` and result will be but into header `outheader1`.
+URI means that the OUT parameter’s name is `outheader1`, and its value is in the result under the key `outheader1`.
 
 _XML-only: stored procedure call with OUT parameter and custom type name_
 
@@ -234,7 +247,7 @@ Actual call will be done using `org.springframework.jdbc.core.SqlOutParameter`.
 
 #### INOUT Parameters
 
-INOUT parameters are a combination of all of the above. They receive a value from the exchange, as well as store a result as a message header. The only caveat is that the IN parameter’s "name" is skipped. Instead, the OUT parameter’s _name_ defines both the SQL parameter name, and the result header name.
+INOUT parameters are a combination of all of the above. They receive a value from the exchange, and return a value in the result. The only caveat is that the IN parameter’s "name" is skipped. Instead, the OUT parameter’s _name_ defines both the SQL parameter name, and the key of the value in the result.
 
 _XML-only: stored procedure call with INOUT parameter_
 

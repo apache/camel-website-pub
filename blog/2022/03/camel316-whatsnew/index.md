@@ -1,6 +1,6 @@
 # Apache Camel 3.16 What's New
 
-Published 2022-03-28 by Claus Ibsen, Otavio Rodolfo Piske, Nicolas Filotto, Andrea Cosentino in Releases
+Published 2022-03-28 by Claus Ibsen, Otavio Rodolfo Piske, Nicolas Filotto, Andrea Cosentino in Releases, Camel
 
 Details of what we have done in the Camel 3.16 release.
 

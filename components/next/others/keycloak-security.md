@@ -944,7 +944,9 @@ from("rest:post:/secure-data")
 - onException:
     exception:
       - "org.apache.camel.CamelAuthorizationException"
-    handled: true
+    handled:
+      constant:
+        expression: "true"
     steps:
       - setHeader:
           name: "CamelHttpResponseCode"

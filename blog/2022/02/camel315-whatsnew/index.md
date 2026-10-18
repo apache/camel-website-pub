@@ -1,6 +1,6 @@
 # Apache Camel 3.15 What's New
 
-Published 2022-02-04 by Claus Ibsen, Otavio Rodolfo Piske in Releases
+Published 2022-02-04 by Claus Ibsen, Otavio Rodolfo Piske in Releases, Camel
 
 Details of what we have done in the Camel 3.15 release.
 

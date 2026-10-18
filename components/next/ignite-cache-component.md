@@ -252,3 +252,42 @@ Enum values:
  |  | EventType |
 | **CamelIgniteCacheName** (consumer) Constant: [`IGNITE_CACHE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_CACHE_NAME) | This header carries the cache name for which a continuous query event was received (consumer). It does not allow you to dynamically change the cache against which a producer operation is performed. Use EIPs for that (e.g. recipient list, dynamic router). |  | String |
 | **CamelIgniteCacheOldValue** (common) Constant: [`IGNITE_CACHE_OLD_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_CACHE_OLD_VALUE) | (producer) The old cache value to be replaced when invoking the REPLACE operation. (consumer) This header carries the old cache value when passed in the incoming cache event. |  | Object |
+
+## Usage
+
+The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one. A node of its own with the default configuration takes one line in `application.properties`. On Java 17 and later, Ignite also needs the `--add-opens` JVM options that its documentation lists.
+
+```properties
+camel.component.ignite-cache.ignite-configuration = #class:org.apache.ignite.configuration.IgniteConfiguration
+```
+
+The following routes put an order in the `orders` cache, and get it back by its key:
+
+```yaml
+- route:
+    from:
+      uri: direct:putOrder
+      steps:
+        - setHeader:
+            name: CamelIgniteCacheKey
+            expression:
+              simple:
+                expression: "${header.orderId}"
+        - to:
+            uri: ignite-cache:orders
+            parameters:
+              operation: PUT
+- route:
+    from:
+      uri: direct:getOrder
+      steps:
+        - setHeader:
+            name: CamelIgniteCacheKey
+            expression:
+              simple:
+                expression: "${header.orderId}"
+        - to:
+            uri: ignite-cache:orders
+            parameters:
+              operation: GET
+```

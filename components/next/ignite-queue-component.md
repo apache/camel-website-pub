@@ -183,3 +183,41 @@ Enum values:
 | **CamelIgniteQueueMaxElements** (producer) Constant: [`IGNITE_QUEUE_MAX_ELEMENTS`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_QUEUE_MAX_ELEMENTS) | When invoking the DRAIN operation, the amount of items to drain. |  | Integer |
 | **CamelIgniteQueueTransferredCount** (producer) Constant: [`IGNITE_QUEUE_TRANSFERRED_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_QUEUE_TRANSFERRED_COUNT) | The amount of items transferred as the result of the DRAIN operation. |  | Integer |
 | **CamelIgniteQueueTimeoutMillis** (producer) Constant: [`IGNITE_QUEUE_TIMEOUT_MILLIS`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_QUEUE_TIMEOUT_MILLIS) | Dynamically sets the timeout in milliseconds to use when invoking the OFFER or POLL operations. |  | Long |
+
+## Usage
+
+The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one. A node of its own with the default configuration takes one line in `application.properties`. On Java 17 and later, Ignite also needs the `--add-opens` JVM options that its documentation lists.
+
+```properties
+camel.component.ignite-queue.ignite-configuration = #class:org.apache.ignite.configuration.IgniteConfiguration
+```
+
+The first route adds the body to the `tasks` queue. The second polls the queue every second, and `POLL` returns null when the queue is empty:
+
+```yaml
+- route:
+    from:
+      uri: direct:addTask
+      steps:
+        - to:
+            uri: ignite-queue:tasks
+            parameters:
+              operation: ADD
+- route:
+    from:
+      uri: timer:pollTasks
+      parameters:
+        period: 1000
+      steps:
+        - to:
+            uri: ignite-queue:tasks
+            parameters:
+              operation: POLL
+        - filter:
+            expression:
+              simple:
+                expression: "${body} != null"
+            steps:
+              - log:
+                  message: "Task: ${body}"
+```

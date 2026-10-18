@@ -230,3 +230,23 @@ The Google Mail Stream component supports the following message header(s), which
 | **CamelGoogleMailStreamThreadId** (consumer) Constant: [`MAIL_THREAD_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-mail/latest/org/apache/camel/component/google/mail/stream/GoogleMailStreamConstants.html#MAIL_THREAD_ID) | The thread ID of the message. |  | String |
 | **CamelGoogleMailStreamMessageId** (consumer) Constant: [`MAIL_MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-mail/latest/org/apache/camel/component/google/mail/stream/GoogleMailStreamConstants.html#MAIL_MESSAGE_ID) | The Message-ID of the message. |  | String |
 | **CamelGoogleMailStreamLabelIds** (consumer) Constant: [`MAIL_LABEL_IDS`](https://javadoc.io/doc/org.apache.camel/camel-google-mail/latest/org/apache/camel/component/google/mail/stream/GoogleMailStreamConstants.html#MAIL_LABEL_IDS) | The label IDs of the message. |  | List |
+
+## Usage
+
+The consumer polls the mailbox for the messages that match `query`, and marks them as read. `is:unread` and `markAsRead` are the defaults. The headers carry the sender, the subject and the other fields:
+
+```yaml
+- route:
+    from:
+      uri: google-mail-stream:inbox
+      parameters:
+        query: "is:unread"
+        markAsRead: true
+        clientId: "{{google.clientId}}"
+        clientSecret: "{{google.clientSecret}}"
+        refreshToken: "{{google.refreshToken}}"
+        applicationName: camel-example
+      steps:
+        - log:
+            message: "Mail from ${header.CamelGoogleMailStreamFrom}: ${header.CamelGoogleMailStreamSubject}"
+```

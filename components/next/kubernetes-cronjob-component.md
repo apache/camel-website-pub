@@ -130,3 +130,24 @@ The Kubernetes Cronjob component supports the following message header(s), which
 -   `updateCronJob`
     
 -   `deleteCronJob`
+    
+
+## Example
+
+The following route lists the cron jobs of the cluster every minute. The `kubernetesClient` bean is the client of the cluster, as in the other Kubernetes components:
+
+```yaml
+- route:
+    from:
+      uri: timer:cronjobs
+      parameters:
+        period: 60000
+      steps:
+        - to:
+            uri: kubernetes-cronjob:///
+            parameters:
+              kubernetesClient: "#kubernetesClient"
+              operation: listCronJob
+        - log:
+            message: "The cluster has ${body.size()} cron jobs"
+```

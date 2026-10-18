@@ -239,6 +239,34 @@ Enum values:
  | IfReplyExpected | WaitForTaskToComplete |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
+## Example
+
+The first route below sends a message to a `disruptor-vm` endpoint every second. The second route reads the messages with four concurrent consumers. Unlike a `disruptor` endpoint, a `disruptor-vm` endpoint can also be read by a route in another CamelContext of the same JVM.
+
+```yaml
+- route:
+    from:
+      uri: timer:orders
+      parameters:
+        period: 1000
+        includeMetadata: true
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "Order ${exchangeProperty.CamelTimerCounter}"
+        - to:
+            uri: disruptor-vm:orders
+- route:
+    from:
+      uri: disruptor-vm:orders
+      parameters:
+        concurrentConsumers: 4
+      steps:
+        - log:
+            message: "Processing ${body}"
+```
+
 ## More Documentation
 
 See the [Disruptor](disruptor-component.md) component for more information.

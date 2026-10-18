@@ -101,3 +101,20 @@ This component expects a JSON with the following fields:
   "body": "body here"
 }
 ```
+
+The bot name comes from the endpoint, and the reply is the `reply` field of the message the producer returns. The following route sends the message body to the bot `Harry` as the user in the `user` header:
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: '{"username": "${header.user}", "body": "${body}"}'
+        - to:
+            uri: chatscript:localhost:1024/Harry
+        - log:
+            message: "${body.reply}"
+```

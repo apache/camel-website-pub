@@ -151,6 +151,28 @@ from("direct:start")
 	.to("whatsapp:123456789:insertYourPhoneNumberIdHere?authorizationToken=123456789:insertYourAuthorizationTokenHere");
 ```
 
+In YAML, a Groovy expression builds the request:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              groovy:
+                expression: |
+                  def request = new org.apache.camel.component.whatsapp.model.TextMessageRequest()
+                  request.to = '{{whatsapp.recipient}}'
+                  request.text = new org.apache.camel.component.whatsapp.model.TextMessage()
+                  request.text.body = 'This is an auto-generated message from Camel'
+                  request
+        - to:
+            uri: "whatsapp:{{whatsapp.phone-number-id}}"
+            parameters:
+              authorizationToken: "{{whatsapp.authorization-token}}"
+```
+
 For more information you can refer to [Cloud API Reference](https://developers.facebook.com/docs/whatsapp/cloud-api/reference), Supported API are: [Messages](https://developers.facebook.com/docs/whatsapp/cloud-api/reference/messages) and [Media](https://developers.facebook.com/docs/whatsapp/cloud-api/reference/media)
 
 ### Webhook Mode
@@ -168,12 +190,25 @@ To enable webhook mode, users need first to add a REST implementation to their a
 
 Once done, you need to prepend the webhook URI to the whatsapp URI you want to use.
 
-In Java DSL:
-
-_Java-only: uses fromF with string formatting_
+-   Java
+    
+-   YAML
+    
 
 ```java
 fromF("webhook:whatsapp:%s?authorizationToken=%s&webhookVerifyToken=%s", "<phoneNumberId>", "<AuthorizationToken>", "<webhookVerifyToken>").log("${body}")
+```
+
+```yaml
+- route:
+    from:
+      uri: "webhook:whatsapp:{{whatsapp.phone-number-id}}"
+      parameters:
+        authorizationToken: "{{whatsapp.authorization-token}}"
+        webhookVerifyToken: "{{whatsapp.webhook-verify-token}}"
+      steps:
+        - log:
+            message: "${body}"
 ```
 
 You can follow the [set up webhooks guide](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/set-up-webhooks) to enable and configure the webhook. The webhook component will expose an endpoint that can be used into the whatsapp administration console.

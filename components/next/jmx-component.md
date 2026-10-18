@@ -170,3 +170,27 @@ The JMX component supports the following message header(s), which is/are listed 
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **jmx.handback** (consumer) Constant: [`JMX_HANDBACK`](https://javadoc.io/doc/org.apache.camel/camel-jmx/latest/org/apache/camel/component/jmx/JMXConstants.html#JMX_HANDBACK) | The handback. |  | Object |
+
+## Usage
+
+The JMX consumer receives the notifications of an MBean. With `monitorType`, it creates a JMX monitor that watches an attribute, and sends a notification when the value crosses a threshold. `jmx:platform` is the MBean server of the JVM that runs Camel. The route below gets a notification when the JVM has more than 200 threads. The gauge sends it again only after the value has gone below `thresholdLow`:
+
+```yaml
+- route:
+    from:
+      uri: jmx:platform
+      parameters:
+        objectDomain: java.lang
+        key.type: Threading
+        monitorType: gauge
+        observedAttribute: ThreadCount
+        granularityPeriod: 5000
+        notifyHigh: true
+        thresholdHigh: 200
+        thresholdLow: 100
+      steps:
+        - log:
+            message: "The JVM has more than 200 threads: ${body}"
+```
+
+The message body is the notification as XML. Set `format` to `raw` to get the notification object.

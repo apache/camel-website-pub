@@ -1,6 +1,6 @@
 # Apache Camel 4.13 What's New
 
-Published 2025-07-08 by Claus Ibsen, Pasquale Congiusti, Claudio Miranda in Releases
+Published 2025-07-08 by Claus Ibsen, Pasquale Congiusti, Claudio Miranda in Releases, Camel
 
 Details of what we have done in the Camel 4.13 release.
 

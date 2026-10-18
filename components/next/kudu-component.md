@@ -151,6 +151,35 @@ The input body format has to be a `java.util.Map<String, Object>`. This map will
 
 The output body format will be a `java.util.List<java.util.Map<String, Object>>`. Each element of the list will be a different row of the table. Each row is a `Map<String, Object>` whose elements will be each pair of column name and column value for that row.
 
+### Example
+
+The first route inserts a row from a JSON message, which the JSON data format turns into a `Map`. The second route scans the table:
+
+```yaml
+- route:
+    from:
+      uri: direct:insertOrder
+      steps:
+        - unmarshal:
+            json: {}
+        - to:
+            uri: kudu:localhost:7051/orders
+            parameters:
+              operation: insert
+- route:
+    from:
+      uri: timer:scan
+      parameters:
+        repeatCount: 1
+      steps:
+        - to:
+            uri: kudu:localhost:7051/orders
+            parameters:
+              operation: scan
+        - log:
+            message: "Rows: ${body}"
+```
+
 ### Row errors
 
 The producer fails the exchange with a `KuduRowErrorException` when the answer to an insert, delete, update or upsert carries a row error. Its `getRowError()` returns the row error of the Kudu client, whose status tells the kind of error. There are two cases:

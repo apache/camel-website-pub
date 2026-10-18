@@ -176,6 +176,13 @@ public void configure() {
 }
 ```
 
+Without Java code, set the same component options in `application.properties`:
+
+```properties
+camel.component.wordpress.url = http://yoursite.com/wp-json/
+camel.component.wordpress.api-version = 2
+```
+
 ## Examples
 
 ### Consumer Example
@@ -186,6 +193,19 @@ Consumer polls from the API from time to time domain objects from WordPress. Fol
     
 -   `wordpress:post?id=1` search for a specific post
     
+
+The following route polls the post with the id 1:
+
+```yaml
+- route:
+    from:
+      uri: wordpress:post
+      parameters:
+        id: 1
+      steps:
+        - log:
+            message: "${body}"
+```
 
 ### Producer Example
 

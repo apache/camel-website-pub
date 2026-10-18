@@ -139,3 +139,27 @@ Enum values:
 
 
  |  | IgniteIdGenOperation |
+
+## Usage
+
+The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one. A node of its own with the default configuration takes one line in `application.properties`. On Java 17 and later, Ignite also needs the `--add-opens` JVM options that its documentation lists.
+
+```properties
+camel.component.ignite-idgen.ignite-configuration = #class:org.apache.ignite.configuration.IgniteConfiguration
+```
+
+Each `INCREMENT_AND_GET` returns the next number of the `orderIds` sequence, which starts after its `initialValue`:
+
+```yaml
+- route:
+    from:
+      uri: direct:nextOrderId
+      steps:
+        - to:
+            uri: ignite-idgen:orderIds
+            parameters:
+              operation: INCREMENT_AND_GET
+              initialValue: 1000
+        - log:
+            message: "Order id: ${body}"
+```

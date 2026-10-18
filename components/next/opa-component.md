@@ -189,6 +189,11 @@ The component is used in one of two ways, depending on whether a denied message 
 
 The producer evaluates the policy and records the verdict in the `CamelOpaDecisionAllow` header, leaving the message body untouched. The route then decides what to do with it:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/orders")
     .to("opa:authz/orders/allow")
@@ -196,11 +201,32 @@ from("platform-http:/orders")
         .to("direct:handleOrder");
 ```
 
+```yaml
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - to:
+            uri: opa:authz/orders/allow
+        - filter:
+            expression:
+              simple:
+                expression: "${header.CamelOpaDecisionAllow} == true"
+            steps:
+              - to:
+                  uri: direct:handleOrder
+```
+
 This is the right shape when a denied message is simply not routed further, or when the route wants to inspect the full decision document — a policy that returns obligations, row filters or deny reasons rather than a plain boolean puts them in the `CamelOpaDecision` header.
 
 ### As a security policy, enforcing on a route segment
 
 `OpaSecurityPolicy` is an `AuthorizationPolicy`, so it can wrap part of a route. A deny throws a `CamelAuthorizationException` and the wrapped part never runs, which makes it composable with `onException`:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 OpaSecurityPolicy opaPolicy = new OpaSecurityPolicy("http://localhost:8181", "authz/orders/allow");
@@ -210,9 +236,32 @@ from("platform-http:/orders")
         .to("direct:handleOrder");
 ```
 
+```yaml
+- beans:
+    - name: opaPolicy
+      type: org.apache.camel.component.opa.security.OpaSecurityPolicy
+      properties:
+        serverUrl: http://localhost:8181
+        policyPath: authz/orders/allow
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - policy:
+            ref: opaPolicy
+            steps:
+              - to:
+                  uri: direct:handleOrder
+```
+
 The decision headers are set here too, so an `onException(CamelAuthorizationException.class)` handler can read `CamelOpaDecision` to build a meaningful error response.
 
 The policy can also evaluate a WebAssembly bundle in-process, which is the mode to prefer for a hot path such as authorizing an AI tool call, where a network hop per decision is not wanted:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 OpaSecurityPolicy opaPolicy = new OpaSecurityPolicy();
@@ -223,6 +272,25 @@ opaPolicy.setPolicyBundle("classpath:orders-bundle.tar.gz");
 from("platform-http:/orders")
     .policy(opaPolicy)
         .to("direct:handleOrder");
+```
+
+```yaml
+- beans:
+    - name: opaPolicy
+      type: org.apache.camel.component.opa.security.OpaSecurityPolicy
+      properties:
+        policyPath: authz/orders/allow
+        evaluationMode: wasm
+        policyBundle: classpath:orders-bundle.tar.gz
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - policy:
+            ref: opaPolicy
+            steps:
+              - to:
+                  uri: direct:handleOrder
 ```
 
 The decision contract is identical to `rest` mode - the same `CamelOpaDecision` headers, and a `CamelAuthorizationException` on a deny - so a route need not know which engine evaluated it. `serverUrl`, `bearerToken` and the readiness check do not apply in `wasm` mode; the **Evaluation modes** section below covers building a bundle and what each mode gives up.
@@ -284,12 +352,32 @@ Both headers are written on every evaluation, so a verdict set by an inbound mes
 
 A route that splits a payload and authorizes each element pays one OPA round-trip per element. Set `batch=true` and hand the producer a `List` instead: it builds one input document per element - each element as the `body`, sharing the exchange’s headers and properties - and evaluates them in a single call through OPA’s batch API (the SDK falls back to sequential requests when the server does not implement it).
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:orders")
     // the body is a List of orders to authorize
     .to("opa:authz/orders/allow?batch=true")
     // CamelOpaBatchDecision is now a List<Boolean> parallel to the body
     .process(dropTheDeniedOrders);
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:orders
+      steps:
+        # the body is a List of orders to authorize
+        - to:
+            uri: opa:authz/orders/allow
+            parameters:
+              batch: true
+        # CamelOpaBatchDecision is now a List<Boolean> parallel to the body
+        - process:
+            ref: dropTheDeniedOrders
 ```
 
 The per-element verdicts arrive in `CamelOpaBatchDecision`, a `List<Boolean>` parallel to the input list: element _i_ is allowed when entry _i_ is `true`. Neither `CamelOpaDecisionAllow` nor `CamelOpaDecision` is set in batch mode - there is no single verdict, and no single decision document - and both are cleared on entry like the other decision headers, so a value an inbound message supplied never survives. `CamelOpaPolicyPath` **is** set, to the same value a single evaluation records, so tooling can read it either way.
@@ -306,12 +394,39 @@ The catch is that Camel’s authentication components deliberately keep the iden
 
 Name those properties in `includeProperties` and they arrive in the input document under `properties`:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/orders")
     .policy(keycloakPolicy)                                  // authenticates, stores the subject as a property
     .to("opa:authz/orders/allow?includeProperties=CamelKeycloakTokenSubject")
     .filter(header(OpaConstants.DECISION_ALLOW).isEqualTo(true))
         .to("direct:handleOrder");
+```
+
+```yaml
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        # authenticates, and stores the subject as a property
+        - policy:
+            ref: keycloakPolicy
+            steps:
+              - to:
+                  uri: opa:authz/orders/allow
+                  parameters:
+                    includeProperties: CamelKeycloakTokenSubject
+              - filter:
+                  expression:
+                    simple:
+                      expression: "${header.CamelOpaDecisionAllow} == true"
+                  steps:
+                    - to:
+                        uri: direct:handleOrder
 ```
 
 and the policy reads them the same way it reads headers:
@@ -332,9 +447,26 @@ Prefer this over copying the identity into a header before the `opa:` endpoint. 
 
 By default the component calls a running OPA server over its Data API (`evaluationMode=rest`). It can instead evaluate a WebAssembly bundle in-process:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/orders")
     .to("opa:authz/orders/allow?evaluationMode=wasm&policyBundle=classpath:bundle.tar.gz")
+```
+
+```yaml
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - to:
+            uri: opa:authz/orders/allow
+            parameters:
+              evaluationMode: wasm
+              policyBundle: classpath:bundle.tar.gz
 ```
 
 Build the bundle with OPA’s compiler — note that `-e` names an **entrypoint**, which is fixed at build time and is not the same thing as a data path:
@@ -388,9 +520,26 @@ Neither is optional in practice. A refused connection fails immediately, but a s
 
 TLS is configured with `sslContextParameters`, the usual [JSSE utility](../../manual/camel-configuration-utilities.md):
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/orders")
     .to("opa:authz/orders/allow?serverUrl=https://opa:8181&sslContextParameters=#opaTls")
+```
+
+```yaml
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - to:
+            uri: opa:authz/orders/allow
+            parameters:
+              serverUrl: https://opa:8181
+              sslContextParameters: "#opaTls"
 ```
 
 Set `useGlobalSslContextParameters=true` on the component to pick up the context-wide configuration instead.
@@ -431,6 +580,11 @@ The input document is built from the message, so a sender can influence all of t
 
 An exchange that proceeds that way carries `CamelOpaDecisionFailedOpen=true`. `CamelOpaDecisionAllow` is `true` in both cases, and on its own it cannot tell "a policy allowed this" from "no policy ran and we were told to proceed" — which is exactly the distinction an audit trail needs. The marker is set only on the fail-open path, so a route can branch on it and an operator can alert on its presence:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("platform-http:/orders")
     .to("opa:authz/orders/allow?failOpen=true")
@@ -439,6 +593,29 @@ from("platform-http:/orders")
             .to("log:unauthorized?level=WARN")
     .end()
     .to("direct:orders")
+```
+
+```yaml
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - to:
+            uri: opa:authz/orders/allow
+            parameters:
+              failOpen: true
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelOpaDecisionFailedOpen} == true"
+                steps:
+                  - to:
+                      uri: log:unauthorized
+                      parameters:
+                        level: WARN
+        - to:
+            uri: direct:orders
 ```
 
 Like the other decision headers it is cleared before every evaluation, so a message cannot arrive claiming `CamelOpaDecisionFailedOpen=false` and disguise an unauthorized exchange as one a policy allowed.

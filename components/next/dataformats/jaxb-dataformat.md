@@ -106,6 +106,58 @@ _XML-only: Spring XML bean and route configuration_
 </beans>
 ```
 
+### Using the YAML DSL
+
+In the YAML DSL, you configure the data format on the `marshal` and `unmarshal` steps:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            jaxb:
+              contextPath: org.apache.camel.example
+        - to:
+            uri: direct:marshalled
+- route:
+    from:
+      uri: direct:marshalled
+      steps:
+        - unmarshal:
+            jaxb:
+              contextPath: org.apache.camel.example
+        - to:
+            uri: mock:result
+```
+
+To use one configuration in many routes, define the data format once in `dataFormats` and refer to it by its id, as the Spring XML example does:
+
+```yaml
+- dataFormats:
+    - jaxb:
+        id: myJaxb
+        contextPath: org.apache.camel.example
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            custom:
+              ref: myJaxb
+        - to:
+            uri: direct:marshalled
+- route:
+    from:
+      uri: direct:marshalled
+      steps:
+        - unmarshal:
+            custom:
+              ref: myJaxb
+        - to:
+            uri: mock:result
+```
+
 ### Multiple context paths
 
 It is possible to use this data format with more than one context path. You can specify multiple context paths using `:` as a separator, for example `com.mycompany:com.mycompany2`.
@@ -217,6 +269,22 @@ You can do the same using the XML DSL:
     <jaxb id="jaxb" contextPath="com.acme.model" schema="classpath:person.xsd,classpath:address.xsd"
           accessExternalSchemaProtocols="file"/>
 </marshal>
+```
+
+And using the YAML DSL:
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            jaxb:
+              contextPath: com.acme.model
+              schema: "classpath:person.xsd,classpath:address.xsd"
+              accessExternalSchemaProtocols: file
+        - to:
+            uri: mock:result
 ```
 
 ### Schema Location

@@ -172,3 +172,30 @@ Each operation expects the indicated types:
 | RUN | A Collection of IgniteRunnables, or a single IgniteRunnable. |
 | AFFINITY\_CALL | IgniteCallable. |
 | AFFINITY\_RUN | IgniteRunnable. |
+
+## Usage
+
+The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one. A node of its own with the default configuration takes one line in `application.properties`. On Java 17 and later, Ignite also needs the `--add-opens` JVM options that its documentation lists.
+
+```properties
+camel.component.ignite-compute.ignite-configuration = #class:org.apache.ignite.configuration.IgniteConfiguration
+```
+
+The body is the job to run. Here it is an `IgniteCallable` bean named `wordCountJob`, and the result of the job becomes the body:
+
+```yaml
+- route:
+    from:
+      uri: direct:compute
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "${ref:wordCountJob}"
+        - to:
+            uri: ignite-compute:compute
+            parameters:
+              executionType: CALL
+        - log:
+            message: "Result: ${body}"
+```

@@ -6,6 +6,49 @@
 
 The Twitter Search component consumes search results.
 
+## Usage
+
+The credentials of the Twitter application are component options, for example in `application.properties`:
+
+```properties
+camel.component.twitter-search.consumer-key = {{env:TWITTER_CONSUMER_KEY}}
+camel.component.twitter-search.consumer-secret = {{env:TWITTER_CONSUMER_SECRET}}
+camel.component.twitter-search.access-token = {{env:TWITTER_ACCESS_TOKEN}}
+camel.component.twitter-search.access-token-secret = {{env:TWITTER_ACCESS_TOKEN_SECRET}}
+```
+
+The following route polls the search every minute, and logs the text of each tweet:
+
+```yaml
+- route:
+    from:
+      uri: twitter-search:apachecamel
+      parameters:
+        delay: 60000
+        lang: en
+      steps:
+        - log:
+            message: "${body.text}"
+```
+
+A producer searches once for each message, and the body is the list of tweets. The `CamelTwitterKeywords` header overrides the keywords of the endpoint:
+
+```yaml
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - setHeader:
+            name: CamelTwitterKeywords
+            expression:
+              simple:
+                expression: "${body}"
+        - to:
+            uri: twitter-search:camel
+        - log:
+            message: "Found ${body.size()} tweets"
+```
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:

@@ -152,6 +152,47 @@ The body of the message remains unchanged for the `bind` and `unbind` operations
 
 The message body must have an entry with the key **`filter`**. The value must be a `String` representing a valid LDAP filter, see [http://en.wikipedia.org/wiki/Lightweight\_Directory\_Access\_Protocol#Search\_and\_Compare](http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol#Search_and_Compare).
 
+The following route searches for people. The `ldapTemplate` bean and its context source are created as beans in YAML:
+
+-   `initMethod` runs `afterPropertiesSet`, as Spring would. Without it, the context source has no LDAP environment.
+    
+-   In `constructors`, refer to the context source with `#bean:`.
+    
+-   The context source sets the base DN, so the map needs no `dn`.
+    
+
+The result is a list of `javax.naming.directory.Attributes`:
+
+```yaml
+- beans:
+    - name: ldapContextSource
+      type: org.springframework.ldap.core.support.LdapContextSource
+      initMethod: afterPropertiesSet
+      properties:
+        url: ldap://localhost:389
+        base: dc=example,dc=org
+        userDn: cn=admin,dc=example,dc=org
+        password: "{{ldap.password}}"
+    - name: ldapTemplate
+      type: org.springframework.ldap.core.LdapTemplate
+      constructors:
+        0: "#bean:ldapContextSource"
+- route:
+    from:
+      uri: direct:find-people
+      steps:
+        - setBody:
+            expression:
+              groovy:
+                expression: "[filter: '(objectClass=inetOrgPerson)']"
+        - to:
+            uri: spring-ldap:ldapTemplate
+            parameters:
+              operation: SEARCH
+        - log:
+            message: "Found ${body.size()} people: ${body}"
+```
+
 ### Bind
 
 The message body must have an entry with the key **`attributes`**. The value must be an instance of [javax.naming.directory.Attributes](http://docs.oracle.com/javase/6/docs/api/javax/naming/directory/Attributes.md) This entry specifies the LDAP node to be created.

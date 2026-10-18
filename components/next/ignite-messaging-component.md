@@ -133,3 +133,24 @@ The Ignite Messaging component supports the following message header(s), which i
 | --- | --- | --- | --- |
 | **CamelIgniteMessagingTopic** (common) Constant: [`IGNITE_MESSAGING_TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_MESSAGING_TOPIC) | (producer) Allows you to dynamically change the topic to send messages to. (consumer) It also carries the topic on which a message was received. |  | String |
 | **CamelIgniteMessagingUUID** (consumer) Constant: [`IGNITE_MESSAGING_UUID`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_MESSAGING_UUID) | This header is filled in with the UUID of the subscription when a message arrives. |  | UUID |
+
+## Usage
+
+The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one.
+
+The producer sends the body to the `orders` topic, and the consumer receives the messages of that topic:
+
+```yaml
+- route:
+    from:
+      uri: direct:publish
+      steps:
+        - to:
+            uri: ignite-messaging:orders
+- route:
+    from:
+      uri: ignite-messaging:orders
+      steps:
+        - log:
+            message: "Received: ${body}"
+```

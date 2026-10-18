@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792155281543,
+  "generated": 1792322459671,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -233,6 +233,12 @@
               "path": "contributing/e2e.adoc",
               "url": "/camel-k/next/contributing/e2e.html",
               "title": "End To End local integration test"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing/keda-scaler.adoc",
+              "url": "/camel-k/next/contributing/keda-scaler.html",
+              "title": "Developing KEDA scaler mappings"
             },
             {
               "module": "ROOT",
@@ -23404,12 +23410,6 @@
             },
             {
               "module": "languages",
-              "path": "wasm-language.adoc",
-              "url": "/components/next/languages/wasm-language.html",
-              "title": "Wasm"
-            },
-            {
-              "module": "languages",
               "path": "xpath-language.adoc",
               "url": "/components/next/languages/xpath-language.html",
               "title": "XPath"
@@ -36608,9 +36608,51 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test-agent-run.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test-agent-run.html",
+              "title": "camel test agent run"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test-agent-start.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test-agent-start.html",
+              "title": "camel test agent start"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test-agent-stop.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test-agent-stop.html",
+              "title": "camel test agent stop"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test-agent.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test-agent.html",
+              "title": "camel test agent"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-test-init.adoc",
               "url": "/manual/jbang-commands/camel-jbang-test-init.html",
               "title": "camel test init"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test-inspect.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test-inspect.html",
+              "title": "camel test inspect"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test-ps.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test-ps.html",
+              "title": "camel test ps"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-test-run.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-test-run.html",
+              "title": "camel test run"
             },
             {
               "module": "ROOT",

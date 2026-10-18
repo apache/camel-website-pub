@@ -260,13 +260,42 @@ The component supports the following operations:
 
 ### Queue producer example
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .setBody(constant("Hello MNS"))
     .to("alibaba-mns:myQueue?operation=sendMessage&region=cn-hangzhou&accountEndpoint=https://123456.mns.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: Hello MNS
+        - to:
+            uri: alibaba-mns:myQueue
+            parameters:
+              operation: sendMessage
+              accountEndpoint: https://123456.mns.cn-hangzhou.aliyuncs.com
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
+```
+
 ### Topic producer example
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -274,11 +303,50 @@ from("direct:start")
     .to("alibaba-mns:topic:myTopic?operation=publishMessage&region=cn-hangzhou&accountEndpoint=https://123456.mns.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: Hello Topic
+        - to:
+            uri: alibaba-mns:topic:myTopic
+            parameters:
+              operation: publishMessage
+              accountEndpoint: https://123456.mns.cn-hangzhou.aliyuncs.com
+              region: cn-hangzhou
+              accessKey: "{{alibaba.access-key}}"
+              secretKey: "{{alibaba.secret-key}}"
+```
+
 ### Queue consumer example
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 from("alibaba-mns:myQueue?region=cn-hangzhou&accountEndpoint=https://123456.mns.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)&deleteAfterRead=true")
     .to("bean:processMessage");
+```
+
+```yaml
+- route:
+    from:
+      uri: alibaba-mns:myQueue
+      parameters:
+        region: cn-hangzhou
+        accountEndpoint: https://123456.mns.cn-hangzhou.aliyuncs.com
+        accessKey: "{{alibaba.access-key}}"
+        secretKey: "{{alibaba.secret-key}}"
+        deleteAfterRead: true
+      steps:
+        - to:
+            uri: bean:processMessage
 ```
 
 ### Exchange properties evaluated by the producer
