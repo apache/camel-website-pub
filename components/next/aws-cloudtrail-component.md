@@ -75,6 +75,8 @@ The AWS CloudTrail component supports the following options which are listed bel
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **configuration** (consumer) | Component configuration. |  | CloudtrailConfiguration |
 | **eventSource** (consumer) | Specify an event source to select events. |  | String |
+| **lookBackInterval** (consumer) | How often the consumer looks up the lookBackWindow again for events that CloudTrail made visible late. A late event is routed at most this long after it became visible. Must be above 0 unless lookBackWindow is 0. | 60000 | long |
+| **lookBackWindow** (consumer) | How far back the consumer looks again, every lookBackInterval, for events that CloudTrail made visible after a newer event (CloudTrail typically delivers an event within 5 minutes). Events not routed yet are routed. Set to 0 to disable. | 600000 | long |
 | **maxResults** (consumer) | Maximum number of records that will be fetched in each lookup page. Each poll drains all pages, so this controls the page size rather than the total per poll. AWS allows up to 50. | 50 | int |
 | **overrideEndpoint** (consumer) | Set the need for overriding the endpoint. This option needs to be used in combination with uriEndpointOverride option. | false | boolean |
 | **region** (consumer) | 
@@ -225,6 +227,8 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **eventSource** (consumer) | Specify an event source to select events. |  | String |
+| **lookBackInterval** (consumer) | How often the consumer looks up the lookBackWindow again for events that CloudTrail made visible late. A late event is routed at most this long after it became visible. Must be above 0 unless lookBackWindow is 0. | 60000 | long |
+| **lookBackWindow** (consumer) | How far back the consumer looks again, every lookBackInterval, for events that CloudTrail made visible after a newer event (CloudTrail typically delivers an event within 5 minutes). Events not routed yet are routed. Set to 0 to disable. | 600000 | long |
 | **maxResults** (consumer) | Maximum number of records that will be fetched in each lookup page. Each poll drains all pages, so this controls the page size rather than the total per poll. AWS allows up to 50. | 50 | int |
 | **overrideEndpoint** (consumer) | Set the need for overriding the endpoint. This option needs to be used in combination with uriEndpointOverride option. | false | boolean |
 | **region** (consumer) | 
@@ -481,6 +485,10 @@ This method will only take into account management events like create/update/del
 This means you won’t consume the events registered in the CloudTrail logs stored on S3, in case of creation of a new Trail.
 
 This is important to notice, and it must be taken into account when using this component.
+
+CloudTrail can make an event visible to `LookupEvents` some minutes after its event time, so a newer event can be returned first. Each poll looks up the events from the newest event time already seen, so it does not return such a late event. Every `lookBackInterval` (1 minute by default) the consumer therefore also looks up the events from `lookBackWindow` (10 minutes by default) before now up to the newest event time seen, and routes those it has not routed yet (by event id). Events with an event time before the start of the consumer are not routed, and an event that becomes visible more than `lookBackWindow` after its event time is still missed.
+
+The normal polls send the same `LookupEvents` requests regardless of these options. The late-event lookup adds `ceil(N / maxResults)` requests per `lookBackInterval`, at most one per poll, where N is the number of events (of the `eventSource`, if set) in its range, and none when the newest event time seen is older than `lookBackWindow`. With the defaults this is one request per minute while at most 50 events fall in 10 minutes, and 20 requests per minute with 1000 events in 10 minutes. AWS allows two `LookupEvents` requests per second per account and Region; the polls themselves send at least one request every `delay` (500 ms by default, so up to about two per second), and one more per further page of new events. Set `lookBackWindow=0` to disable the late-event lookup. A negative `lookBackWindow`, or a `lookBackInterval` of 0 or less while the late-event lookup is enabled, fails the start of the consumer.
 
 ### Example
 

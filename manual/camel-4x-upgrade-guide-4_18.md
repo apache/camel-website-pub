@@ -29,6 +29,18 @@ The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list 
 
 The `accessToken` (with its `jwtAuthorizationType`) is now added to a request only when the request goes to the scheme, host and port of `httpUri`, and the `username` and `password` are registered for that authority only. Previously neither was bound to the authority of `httpUri`. A request to another authority, including the same host with another scheme or port, is now sent without them. A route that needs to authenticate to another authority must address it in `httpUri`. When `proxyHost` is set, the `username` and `password` are no longer offered to the proxy when it asks for authentication.
 
+### camel-elasticsearch - the credentials are only sent to the nodes of the cluster
+
+The `user` and `password` are now offered only to the nodes the client talks to: the hosts of `hostAddresses` and, when `enableSniffer` is set, the nodes the sniffer finds, matching the scheme, host and port. Previously they were registered for any host. A request to another host, including the host of a node with another scheme or port, is now sent without them. A client set with the `client` option is not changed.
+
+### camel-elasticsearch-rest-client - the credentials are only sent to the nodes of the cluster
+
+The `user` and `password` are now offered only to the nodes the client talks to: the hosts of `hostAddressesList` and, when `enableSniffer` is set, the nodes the sniffer finds, matching the scheme, host and port. Previously they were registered for any host. A request to another host, including the host of a node with another scheme or port, is now sent without them. A client set with the `restClient` option is not changed.
+
+### camel-opensearch - the credentials are only sent to the nodes of the cluster
+
+The `user` and `password` are now offered only to the nodes the client talks to: the hosts of `hostAddresses` and, when `enableSniffer` is set, the nodes the sniffer finds, matching the scheme, host and port. Every node of a multi-host cluster still receives them. Previously they were registered for any host. A request to another host, including the host of a node with another scheme or port, is now sent without them. A client set with the `client` option is not changed.
+
 ### camel-telegram - webhook requests are verified with a secret token
 
 In webhook mode, Camel now registers the webhook with a secret token, which Telegram sends in the `X-Telegram-Bot-Api-Secret-Token` header of every webhook request, and rejects a webhook request that does not carry the token with HTTP 403. The token is the value of the new `webhookSecretToken` option or, when that option is not set, a value derived from the authorization token. A client that calls the webhook endpoint directly, for example in a test, must send the header too.
@@ -48,6 +60,16 @@ To restore the previous behaviour, set `webhookSecretTokenEnabled=false`: the we
 When the message comes from platform-http (on Vert.x or on Spring Boot), from a servlet based HTTP consumer (camel-servlet, camel-jetty) or from camel-netty-http, the bearer token and the session cookie are now read from the `Authorization` and `Cookie` headers of the HTTP request only. A query or form parameter of the same name, which these consumers also map into the message headers, is no longer used for them, and neither is an `Authorization` or `Cookie` message header that the route sets itself. For example `.setHeader("Authorization", simple("Bearer ${header.X-Forwarded-Access-Token}"))` before `OAuthBearerTokenProcessor` now results in a 401 response. A route that takes the token from elsewhere can authenticate it itself, with `authenticate(new TokenCredentials(token))` on the `OAuth` instance that `OAuthFactory.lookupFactory(context).findOAuth()` returns.
 
 For any other message, such as one from camel-undertow, the processors keep reading the message headers, but leave out a value that also appears in the query string of the request.
+
+### camel-chunk - message data printed with a direct tag is rendered literally
+
+Previously the `chunk` component bound the message body, headers and variables into the Chunk engine so that Chunk re-parsed those values as template source: a value that itself contained Chunk tags (such as a body of `{$headers.name}`) had those tags expanded instead of being printed verbatim.
+
+Message data bound to the engine is now neutralised so that a direct `{$tag}` printing the body, a header, a variable, or an element of a nested map, list or array renders the value literally instead of evaluating the tags inside it. Tag-free data is unchanged and Chunk’s string filters (for example `slice`, `get`, `join`) keep their existing behaviour. Routes that relied on message data being evaluated as Chunk template code must move that markup into the template itself.
+
+As part of this, a non-`List` `Collection` value (such as a `Set`) is now bound as a `List`, so a direct `{$body}` prints Chunk’s list placeholder instead of the collection’s `toString()`, and a filter such as `|join` operates on its elements.
+
+This does not cover every path: Chunk re-parses any string it produces while rendering, so the output of a filter (`{$body|trim}`), a string property of a bean body (`{$body.name}`, `{$exception.message}`) and string items bound by a `{% loop %}` are still parsed as template code. Keep untrusted data to direct `{$tag}` output; do not pass untrusted values through Chunk filters, bean properties or loops. If untrusted data must go through one of those paths, remove the `{` and `}` characters from it in the route before the `chunk` endpoint (Chunk has no escape for tags inside data), for example with a processor that rewrites the body or header.
 
 ### camel-spring-ws - internal Camel headers are no longer written into SOAP headers
 
@@ -81,6 +103,16 @@ A mismatch shows as the producer or consumer failing to start, with an `IOExcept
 java.io.IOException: No subject alternative names matching IP address 127.0.0.1 found
     Caused by: javax.net.ssl.SSLHandshakeException: No subject alternative names matching IP address 127.0.0.1 found
 ```
+
+### camel-milo - the OPC UA client validates the server certificate
+
+When the endpoint it selects uses a security policy other than `None`, the `milo-client` and `milo-browse` components now validate the certificate of the OPC UA server. Before, any server certificate was accepted, and no option allowed to validate it.
+
+Configure the trusted certificates with the new `trustListDirectory` option: put the certificate of the server, or of the CA that issued it, in the `trusted/certs` directory of the trust list. A server certificate that does not chain up to a trusted certificate is written to `rejected/certs`, from where it can be moved to `trusted/certs` once it has been checked. The trust list also refuses a server certificate outside its validity period, revoked by a revocation list of the trust list, or whose application URI differs from the one of the server. A server certificate issued by a CA is refused with `Bad_CertificateRevocationUnknown` when the trust list holds no revocation list of that CA: add the CRL of the CA (an empty one is enough) to `trusted/crl` or `issuer/crl`. A custom validator can be configured with the new `certificateValidator` option instead.
+
+With neither option, the client does not connect to such an endpoint. It logs a `WARN` message `Failed to connect: The certificate of the OPC UA server cannot be validated`, followed by the endpoint and its security policy, and tries again every 10 seconds. A producer fails with `IllegalStateException: No connected`, caused by the same message. A server certificate refused by the trust list or by a `certificateValidator` is logged at `WARN` as `Failed to connect, because a certificate or security check failed`. To restore the previous behaviour, set the new `trustAllCertificates` option to `true`. This is insecure: the client then does not authenticate the server.
+
+The certificate that the user name and password are encrypted with is checked by the same validator. Endpoints that use the security policy `None` are not affected.
 
 ### camel-pqc - a configured KeyGenerator is used by one exchange at a time
 

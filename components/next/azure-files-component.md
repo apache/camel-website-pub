@@ -544,6 +544,8 @@ The Files producer is optimized for two body types:
 
 In either case, the remote file size is allocated and then rewritten with body content. Any inconsistency between declared file length and stream length results in a corrupted remote file.
 
+The size is the length of the body when it is known without reading the body (a file, a `byte[]`, a cached stream). The `CamelFileLength` header is only used for a stream whose length is not known otherwise: a file consumer sets this header, and it is not updated when the route changes the body. Any other body is converted to `byte[]`.
+
 #### Limitations
 
 The underlying Azure Files service does not allow growing files. The file length must be known at its creation time, consequently:

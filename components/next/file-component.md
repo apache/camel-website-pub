@@ -959,7 +959,7 @@ from("file:bar?doneFileName=done");
           message: "${header.CamelFileName}"
 ```
 
-It will only consume files from the _bar_ folder if a _done file_ exists in the same directory as the target files. Camel will automatically delete the _done file_ when it’s done consuming the files.
+It will only consume files from the _bar_ folder if a _done file_ exists in the same directory as the target files. Camel will automatically delete the _done file_ when it’s done consuming the files. When a poll leaves files of the directory for the next poll (beyond `maxMessagesPerPoll`, or not started, for example when the read lock is not acquired), the _done file_ is kept until they are consumed; meanwhile the polls consume every file of the directory, as they do whenever the _done file_ is there.
 
 > **Note**
 > Camel does not delete automatically the _done file_ if `noop=true` is configured.

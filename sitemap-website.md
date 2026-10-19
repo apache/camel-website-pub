@@ -1,8 +1,10 @@
-urls[929]{loc,lastmod}:
+urls[930]{loc,lastmod}:
+  https://camel.apache.org/security/CVE-2026-88900.md,2026-10-19T10:00:00+02:00
+  https://camel.apache.org/,2026-10-19T10:00:00+02:00
+  https://camel.apache.org/security/,2026-10-19T10:00:00+02:00
   https://camel.apache.org/blog/2026/10/camel-security-advisories-4.23.0/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/blog/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-testing-pitfalls/,2026-10-16T00:00:00+00:00
-  https://camel.apache.org/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/categories/Howtos/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/categories/Security/,2026-10-16T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-10-16T00:00:00+00:00
@@ -44,7 +46,6 @@ urls[929]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-85317.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-88901.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-91858.md,2026-10-15T10:00:00+02:00
-  https://camel.apache.org/security/,2026-10-15T10:00:00+02:00
   https://camel.apache.org/blog/2026/10/camel423-whatsnew/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/categories/Camel/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.23.0/,2026-10-15T00:00:00+00:00

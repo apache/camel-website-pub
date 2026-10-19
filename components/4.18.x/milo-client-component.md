@@ -85,7 +85,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OPC UA Client component supports 26 options, which are listed below.
+The OPC UA Client component supports 29 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -116,6 +116,9 @@ The OPC UA Client component supports 26 options, which are listed below.
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
+| **certificateValidator** (security) | A custom validator for the certificate of the OPC UA server. When set, it is used instead of the trust list configured with trustListDirectory. Endpoints share a connection only when they use the same validator instance. |  | CertificateValidator |
+| **trustAllCertificates** (security) | Whether to accept any certificate presented by the OPC UA server. This is insecure: the connection is encrypted, but the client does not authenticate the server it talks to. It only applies when neither certificateValidator nor trustListDirectory is configured. | false | boolean |
+| **trustListDirectory** (security) | The directory holding the trust list used to validate the certificate of the OPC UA server, in the layout used by Eclipse Milo: trusted certificates in trusted/certs, CRLs of trusted certificates in trusted/crl, certificates of issuing CAs in issuer/certs and their CRLs in issuer/crl. The directories are created if they do not exist. Besides the chain of trust, the validity period, the revocation by a CRL of the trust list and the application URI of the server certificate are checked. A certificate issued by a CA is refused when the trust list holds no CRL of that CA; an empty CRL is enough. A server certificate that does not chain up to a trusted certificate is written to rejected/certs, from where it can be moved to trusted/certs once it has been checked. |  | String |
 
 ## Endpoint Options
 
@@ -132,7 +135,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **endpointUri** (common) | **Required** The OPC UA server endpoint. |  | String |
 
-### Query Parameters (34 parameters)
+### Query Parameters (37 parameters)
 
    
 | Name | Description | Default | Type |
@@ -215,6 +218,9 @@ Enum values:
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
+| **certificateValidator** (security) | A custom validator for the certificate of the OPC UA server. When set, it is used instead of the trust list configured with trustListDirectory. Endpoints share a connection only when they use the same validator instance. |  | CertificateValidator |
+| **trustAllCertificates** (security) | Whether to accept any certificate presented by the OPC UA server. This is insecure: the connection is encrypted, but the client does not authenticate the server it talks to. It only applies when neither certificateValidator nor trustListDirectory is configured. | false | boolean |
+| **trustListDirectory** (security) | The directory holding the trust list used to validate the certificate of the OPC UA server, in the layout used by Eclipse Milo: trusted certificates in trusted/certs, CRLs of trusted certificates in trusted/crl, certificates of issuing CAs in issuer/certs and their CRLs in issuer/crl. The directories are created if they do not exist. Besides the chain of trust, the validity period, the revocation by a CRL of the trust list and the application URI of the server certificate are checked. A certificate issued by a CA is refused when the trust list holds no CRL of that CA; an empty CRL is enough. A server certificate that does not chain up to a trusted certificate is written to rejected/certs, from where it can be moved to trusted/certs once it has been checked. |  | String |
 
 ## Message Headers
 
@@ -301,6 +307,40 @@ The known security policy URIs and enum literals are can be seen here: [Security
 > **Note**
 > In any case security policies are considered case sensitive.
 
+When `allowedSecurityPolicies` is not set, the client accepts every security policy the server offers and uses the endpoint with the highest security level reported by the server, which can be `None`. To make sure the connection is secured, set `allowedSecurityPolicies` to the secured policies you expect the server to offer.
+
+### Validating the server certificate
+
+When the selected endpoint uses a security policy other than `None`, the client validates the certificate of the server when it opens the secure channel and the session. Configure the trusted certificates with one of these options:
+
+-   `trustListDirectory`: a directory holding the trust list, in the layout used by Eclipse Milo. Put the certificate of the server, or the certificate of the CA that issued it, in `trusted/certs`. Certificates of intermediate CAs that are only used to build the chain go in `issuer/certs`, and certificate revocation lists in `trusted/crl` and `issuer/crl`. The directories are created if they do not exist.
+    
+-   `certificateValidator`: a custom `org.eclipse.milo.opcua.stack.core.security.CertificateValidator`. It is used instead of `trustListDirectory` when both are set. Endpoints share a connection only when they use the same validator instance.
+    
+
+With `trustListDirectory`, the client refuses a server certificate that:
+
+-   does not chain up to a certificate in `trusted/certs`, possibly through the certificates in `issuer/certs`,
+    
+-   is outside its validity period,
+    
+-   is revoked by a certificate revocation list in `trusted/crl` or `issuer/crl`. A certificate issued by a CA is also refused, with `Bad_CertificateRevocationUnknown`, when the trust list holds no revocation list of that CA. An empty CRL signed by the CA is enough. A self-signed certificate in `trusted/certs` is not checked for revocation,
+    
+-   or holds an application URI that differs from the one the server announces in its endpoint description.
+    
+
+A failed host name, key usage or extended key usage check is only logged. A certificate that does not chain up to a trusted certificate is written to `rejected/certs`, from where it can be moved to `trusted/certs` once it has been checked. A certificate refused for another reason is not written there. To use other checks, configure a `certificateValidator`, for example a `DefaultClientCertificateValidator` created with the `ValidationCheck` set you need.
+
+If neither option is configured, the client does not connect to an endpoint that uses a security policy other than `None`. Setting `trustAllCertificates` to `true` makes the client accept any server certificate instead. This is insecure: the connection is encrypted, but the client does not authenticate the server it talks to.
+
+When the server certificate cannot be validated, the client logs a `WARN` message that starts with `Failed to connect`, and tries again every 10 seconds, so a certificate moved to `trusted/certs` is used at the next attempt. A producer fails with `IllegalStateException: No connected`, whose cause gives the reason.
+
+The same validator checks the server certificate that the user name and password are encrypted with. With the security policy `None`, the server is not authenticated, whatever the configuration.
+
+A secured policy also requires a client certificate and key, configured with `keyStoreUrl` and the related options. For example:
+
+milo-client:opc.tcp://localhost:4840?node=RAW(ns=2;s=Temperature)&allowedSecurityPolicies=Basic256Sha256&keyStoreUrl=file:/etc/opcua/client.p12&keyStorePassword=RAW(changeit)&keyAlias=client&keyPassword=RAW(changeit)&trustListDirectory=/etc/opcua/pki
+
 #### Milo 1.0.5 Migration Notes
 
 With Milo 1.0.5, several security-related API changes were introduced:
@@ -309,7 +349,7 @@ With Milo 1.0.5, several security-related API changes were introduced:
     
 -   Certificate validation now uses `org.eclipse.milo.opcua.stack.core.security.CertificateValidator`
     
--   When configuring custom certificate validators, ensure you’re using the updated API
+-   A validator configured with the `certificateValidator` option must implement this interface
     
 
 ## Spring Boot Auto-Configuration

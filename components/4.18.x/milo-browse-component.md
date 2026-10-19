@@ -77,7 +77,7 @@ The following two sections list all the options, firstly for the component follo
 
 ## Component Options
 
-The OPC UA Browser component supports 25 options, which are listed below.
+The OPC UA Browser component supports 28 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -107,6 +107,9 @@ The OPC UA Browser component supports 25 options, which are listed below.
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
+| **certificateValidator** (security) | A custom validator for the certificate of the OPC UA server. When set, it is used instead of the trust list configured with trustListDirectory. Endpoints share a connection only when they use the same validator instance. |  | CertificateValidator |
+| **trustAllCertificates** (security) | Whether to accept any certificate presented by the OPC UA server. This is insecure: the connection is encrypted, but the client does not authenticate the server it talks to. It only applies when neither certificateValidator nor trustListDirectory is configured. | false | boolean |
+| **trustListDirectory** (security) | The directory holding the trust list used to validate the certificate of the OPC UA server, in the layout used by Eclipse Milo: trusted certificates in trusted/certs, CRLs of trusted certificates in trusted/crl, certificates of issuing CAs in issuer/certs and their CRLs in issuer/crl. The directories are created if they do not exist. Besides the chain of trust, the validity period, the revocation by a CRL of the trust list and the application URI of the server certificate are checked. A certificate issued by a CA is refused when the trust list holds no CRL of that CA; an empty CRL is enough. A server certificate that does not chain up to a trusted certificate is written to rejected/certs, from where it can be moved to trusted/certs once it has been checked. |  | String |
 
 ## Endpoint Options
 
@@ -123,7 +126,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **endpointUri** (producer) | **Required** The OPC UA server endpoint. |  | String |
 
-### Query Parameters (30 parameters)
+### Query Parameters (33 parameters)
 
    
 | Name | Description | Default | Type |
@@ -174,6 +177,9 @@ Enum values:
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
+| **certificateValidator** (security) | A custom validator for the certificate of the OPC UA server. When set, it is used instead of the trust list configured with trustListDirectory. Endpoints share a connection only when they use the same validator instance. |  | CertificateValidator |
+| **trustAllCertificates** (security) | Whether to accept any certificate presented by the OPC UA server. This is insecure: the connection is encrypted, but the client does not authenticate the server it talks to. It only applies when neither certificateValidator nor trustListDirectory is configured. | false | boolean |
+| **trustListDirectory** (security) | The directory holding the trust list used to validate the certificate of the OPC UA server, in the layout used by Eclipse Milo: trusted certificates in trusted/certs, CRLs of trusted certificates in trusted/crl, certificates of issuing CAs in issuer/certs and their CRLs in issuer/crl. The directories are created if they do not exist. Besides the chain of trust, the validity period, the revocation by a CRL of the trust list and the application URI of the server certificate are checked. A certificate issued by a CA is refused when the trust list holds no CRL of that CA; an empty CRL is enough. A server certificate that does not chain up to a trusted certificate is written to rejected/certs, from where it can be moved to trusted/certs once it has been checked. |  | String |
 
 ## Message Headers
 
@@ -186,7 +192,7 @@ The OPC UA Browser component supports 1 message header(s), which is/are listed b
 
 ### Client
 
-The browse component shares the same base options like the Camel Milo Client component, e.g. concerning topics like discovery, security policies, the construction of node ids, etc.
+The browse component shares the same base options like the Camel Milo Client component, e.g. concerning topics like discovery, security policies, the validation of the server certificate, the construction of node ids, etc.
 
 Please refer to the documentation of the Camel Milo Client component for further details.
 

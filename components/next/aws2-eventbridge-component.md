@@ -1094,7 +1094,7 @@ AWS EventBridge is an event router, not a message queue — it does not provide 
     
 5.  Successfully processed messages are deleted from the queue; failed messages remain for retry.
     
-6.  On shutdown the target is removed and the auto-created queue is deleted (configurable).
+6.  On shutdown the target of an auto-created queue is removed and the queue is deleted (configurable). A queue given with `queueUrl` keeps its target, so it collects the events while no consumer runs, and all the consumers that share it use the same target (its id is derived from the queue ARN).
     
 
 ### Consumer Configuration Options

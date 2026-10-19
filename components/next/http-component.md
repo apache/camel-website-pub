@@ -424,6 +424,110 @@ Enum values:
 
 ## Usage
 
+### Which HTTP method will be used
+
+> **Important**
+> Without the `httpMethod` option, the message body decides the method: a message with a body is sent as a `POST`, and a message without a body as a `GET`. After `unmarshal`, `split` or `setBody` the message has a body, so a call meant as a GET is sent as a POST. Set `httpMethod: GET` on the endpoint when you mean a GET; a GET sends no body (unless `getWithBody` is true).
+
+The method is chosen in this order:
+
+1.  The `httpMethod` option of the endpoint.
+    
+2.  The `CamelHttpMethod` header.
+    
+3.  `GET` when the `CamelHttpQuery` header, or the `CamelHttpUri` header, has a query string.
+    
+4.  `GET` when the endpoint URI has a query string.
+    
+5.  `POST` when the message has a body.
+    
+6.  `GET` otherwise.
+    
+
+For example, a stock lookup for each line of an order is a GET, whatever the line in the body is:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:checkStock")
+    .split(simple("${body[lines]}"))
+        .toD("http://localhost:8080/stock/${body[sku]}?httpMethod=GET")
+        .log("Stock answer: ${body}")
+    .end();
+```
+
+```xml
+<route>
+    <from uri="direct:checkStock"/>
+    <split>
+        <simple>${body[lines]}</simple>
+        <toD uri="http://localhost:8080/stock/${body[sku]}?httpMethod=GET"/>
+        <log message="Stock answer: ${body}"/>
+    </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:checkStock
+      steps:
+        - split:
+            expression:
+              simple:
+                expression: "${body[lines]}"
+            steps:
+              - toD:
+                  uri: "http://localhost:8080/stock/${body[sku]}"
+                  parameters:
+                    httpMethod: GET
+              - log:
+                  message: "Stock answer: ${body}"
+```
+
+To send the order as JSON, marshal the body first, and say that it is a POST:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:createOrder")
+    .marshal().json()
+    .to("http://localhost:8080/orders?httpMethod=POST");
+```
+
+```xml
+<route>
+    <from uri="direct:createOrder"/>
+    <marshal>
+        <json/>
+    </marshal>
+    <to uri="http://localhost:8080/orders?httpMethod=POST"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createOrder
+      steps:
+        - marshal:
+            json: {}
+        - to:
+            uri: http://localhost:8080/orders
+            parameters:
+              httpMethod: POST
+```
+
 ### Message Body
 
 Camel will store the HTTP response from the external server on the _OUT_ body. All headers from the _IN_ message will be copied to the _OUT_ message, so headers are preserved during routing. Additionally, Camel will add the HTTP response headers as well to the _OUT_ message headers.
@@ -513,16 +617,6 @@ With automatic retries disabled, a 429 response is treated as an error and a `Ht
     
 -   Response body as a `java.lang.String`, if server provided a body as response
     
-
-### Which HTTP method will be used
-
-The following algorithm is used to determine what HTTP method should be used:  
-1\. Use method provided as endpoint configuration (`httpMethod`).  
-2\. Use method provided in header (`Exchange.HTTP_METHOD`).  
-3\. `GET` if query string is provided in header.  
-4\. `GET` if endpoint is configured with a query string.  
-5\. `POST` if there is data to send (body is not `null`).  
-6\. `GET` otherwise.
 
 ### Configuring URI to call
 
@@ -670,7 +764,7 @@ from("direct:start")
 
 ### How to set the http method (GET/PATCH/POST/PUT/DELETE/HEAD/OPTIONS/TRACE) to the HTTP producer
 
-The HTTP component provides a way to set the HTTP request method by setting the message header. Here is an example:
+Set the `httpMethod` option of the endpoint, as in [Which HTTP method will be used](#_which_http_method_will_be_used). The `CamelHttpMethod` header sets the method for each message, when the endpoint has no `httpMethod` option. Here is an example with the header:
 
 -   Java
     
