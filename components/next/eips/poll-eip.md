@@ -195,6 +195,52 @@ When using `poll` or `pollEnrich` with the file based components, then the `eage
 
 This improves performance for use-cases without need for sorting first.
 
+#### The file name of a dynamic uri
+
+With the file based components (file, ftp, ftps, sftp, smb and azure-files), Camel reuses one endpoint for every message, and the consumer evaluates the `fileName` option when it looks for the file:
+
+-   A `fileName` that uses the file functions, such as `${file:onlyname.noext}` or `${date:file:yyyyMMdd}`, is evaluated for each file found, as these functions read that file.
+    
+-   Any other `fileName` is evaluated on the current message: its body, headers, variables and exchange properties.
+    
+
+For example, the body is the name of the report to download:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:report")
+  .poll("ftp:myserver.com/myfolder?fileName=${body}");
+```
+
+```xml
+<route>
+    <from uri="direct:report"/>
+    <poll uri="ftp:myserver.com/myfolder?fileName=${body}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:report
+      steps:
+        - poll:
+            uri: ftp:myserver.com/myfolder
+            parameters:
+              fileName: "${body}"
+```
+
+> **Note**
+> Before Camel 4.24, `${body}` in the `fileName` was the file found, not the current message, and only the headers, variables and exchange properties of the message could be used. With an older version, put the value in a header or a variable first.
+
+To evaluate the whole uri on the message instead, with an endpoint for each file name, set `allowOptimisedComponents` to `false`.
+
 ## See More
 
 -   [Poll EIP](#)

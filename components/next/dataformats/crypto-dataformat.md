@@ -105,7 +105,7 @@ from("direct:hmac-algorithm")
     .to("mock:unencrypted");
 ```
 
-A list of the available algorithms in Java 17 is available via the [Java Security Standard Algorithm Names](https://docs.oracle.com/en/java/javase/17/docs/specs/security/standard-names.md) documentation.
+A list of the available algorithms in Java 21 is available via the [Java Security Standard Algorithm Names](https://docs.oracle.com/en/java/javase/21/docs/specs/security/standard-names.md) documentation.
 
 ## Specifying an Initialization Vector
 

@@ -98,87 +98,6 @@ from("direct:a")
                   uri: direct:b
 ```
 
-The Split EIP has special support for splitting using a delimiter, instead of using [Tokenize](../../4.22.x/languages/tokenize-language.md) language.
-
-The previous example can also be done as follows:
-
--   Java
-    
--   XML
-    
--   YAML
-    
-
-```java
-from("direct:a")
-    .split(body()).delimiter("\n")
-        .to("direct:b");
-```
-
-```xml
-<route>
-  <from uri="direct:a"/>
-  <split delimiter="\n">
-    <simple>${body}</simple>
-    <to uri="direct:b"/>
-  </split>
-</route>
-```
-
-```yaml
-- route:
-    from:
-      uri: direct:a
-      steps:
-        - split:
-            delimiter: "\n"
-            expression:
-              simple:
-                expression: "${body}"
-            steps:
-              - to:
-                  uri: direct:b
-```
-
-The splitter can use any [Expression](../../../manual/expression.md), so you could use any of the supported languages such as [Simple](../../4.22.x/languages/simple-language.md), [XPath](../../4.22.x/languages/xpath-language.md), [JSonPath](../../4.22.x/languages/jsonpath-language.md), [Groovy](../../4.22.x/languages/groovy-language.md) to perform the split.
-
--   Java
-    
--   XML
-    
--   YAML
-    
-
-```java
-from("activemq:my.queue")
-    .split(xpath("//foo/bar"))
-        .to("file:some/directory");
-```
-
-```xml
-<route>
-    <from uri="activemq:my.queue"/>
-    <split>
-        <xpath>//foo/bar</xpath>
-        <to uri="file:some/directory"/>
-    </split>
-</route>
-```
-
-```yaml
-- route:
-    from:
-      uri: activemq:my.queue
-      steps:
-        - split:
-            expression:
-              xpath:
-                expression: //foo/bar
-            steps:
-              - to:
-                  uri: file:some/directory
-```
-
 ### Splitting the message body
 
 A common use case is to split a list/set/collection/map, array, or something that is iterable from the message body.
@@ -245,6 +164,91 @@ In YAML, you use [Simple](../../4.22.x/languages/simple-language.md) to refer to
                   uri: mock:result
 ```
 
+### Splitting with a delimiter
+
+The Split EIP has special support for splitting using a delimiter, instead of using [Tokenize](../../4.22.x/languages/tokenize-language.md) language.
+
+The first example can also be done as follows:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:a")
+    .split(body()).delimiter("\n")
+        .to("direct:b");
+```
+
+```xml
+<route>
+  <from uri="direct:a"/>
+  <split delimiter="\n">
+    <simple>${body}</simple>
+    <to uri="direct:b"/>
+  </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - split:
+            delimiter: "\n"
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - to:
+                  uri: direct:b
+```
+
+### Splitting with an expression
+
+The splitter can use any [Expression](../../../manual/expression.md), so you could use any of the supported languages such as [Simple](../../4.22.x/languages/simple-language.md), [XPath](../../4.22.x/languages/xpath-language.md), [JSonPath](../../4.22.x/languages/jsonpath-language.md), [Groovy](../../4.22.x/languages/groovy-language.md) to perform the split.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("activemq:my.queue")
+    .split(xpath("//foo/bar"))
+        .to("file:some/directory");
+```
+
+```xml
+<route>
+    <from uri="activemq:my.queue"/>
+    <split>
+        <xpath>//foo/bar</xpath>
+        <to uri="file:some/directory"/>
+    </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:my.queue
+      steps:
+        - split:
+            expression:
+              xpath:
+                expression: //foo/bar
+            steps:
+              - to:
+                  uri: file:some/directory
+```
+
 ### Splitting with parallel processing
 
 You can enable parallel processing with Split EIP so each split message is processed by its own thread in parallel.
@@ -261,9 +265,9 @@ The example below enabled parallel mode:
 ```java
 from("direct:a")
   .split(body()).parallelProcessing()
-    .to("direct:x")
-    .to("direct:y")
-    .to("direct:z");
+    .to("direct:b")
+    .to("direct:c")
+    .to("direct:d");
 ```
 
 ```xml
@@ -304,7 +308,7 @@ from("direct:a")
 
 You may want to continue routing the exchange after the Split EIP. In Java DSL you need to use `end()` to mark where split ends, and where other EIPs can be added to continue the route.
 
-In the example above then sending to mock:result happens after the Split EIP has finished. In other words, the message should finish splitting the entire message before the message continues.
+In the example below then sending to mock:result happens after the Split EIP has finished. In other words, the message should finish splitting the entire message before the message continues.
 
 -   Java
     
@@ -316,9 +320,9 @@ In the example above then sending to mock:result happens after the Split EIP has
 ```java
 from("direct:a")
   .split(body()).parallelProcessing()
-    .to("direct:x")
-    .to("direct:y")
-    .to("direct:z")
+    .to("direct:b")
+    .to("direct:c")
+    .to("direct:d")
   .end()
   .to("mock:result");
 ```
@@ -379,11 +383,11 @@ The example now aggregates with the `MyAggregationStrategy` class:
     
 
 ```java
-from("direct:start")
+from("direct:a")
   .split(body(), new MyAggregationStrategy())
-    .to("direct:x")
-    .to("direct:y")
-    .to("direct:z")
+    .to("direct:b")
+    .to("direct:c")
+    .to("direct:d")
   .end()
   .to("mock:result");
 ```
@@ -490,7 +494,7 @@ You can also supply a custom [Bean](../../4.22.x/languages/bean-language.md) to 
 ```java
 from("direct:streaming")
   .split(method(new MyCustomSplitter(), "splitMe")).streaming()
-    .to("activemq:my.parts")
+    .to("activemq:my.parts");
 ```
 
 ```xml
@@ -672,7 +676,7 @@ from("file:inbox")
                   uri: activemq:queue:order
 ```
 
-You can set `inheritNamsepaceTagName` property to `*` to include the preceding context in each token (i.e., generating each token enclosed in its ancestor elements). It is noted that each token must share the same ancestor elements in this case. The above tokenizer works well on simple structures but has some inherent limitations in handling more complex XML structures.
+You can set `inheritNamespaceTagName` property to `*` to include the preceding context in each token (i.e., generating each token enclosed in its ancestor elements). It is noted that each token must share the same ancestor elements in this case. The above tokenizer works well on simple structures but has some inherent limitations in handling more complex XML structures.
 
 ### Streaming big XML payloads using XML Tokenize language
 
@@ -874,7 +878,7 @@ from("direct:start")
     // after we have split and handled each message, we want to send a single combined
     // response back to the original caller, so we let this bean build it for us,
     // this bean will receive the result of the aggregate strategy: MyOrderStrategy
-    .to("bean:MyOrderService?method=buildCombinedResponse")
+    .to("bean:MyOrderService?method=buildCombinedResponse");
 ```
 
 ```xml
@@ -1348,6 +1352,8 @@ To support this use case, you would have to share the unit of work on the Splitt
 
 -   Java
     
+-   XML
+    
 -   Spring XML
     
 -   YAML
@@ -1372,6 +1378,39 @@ from("direct:line")
     .to("log:line")
     .process(new MyProcessor())
     .to("mock:line");
+```
+
+```xml
+<!-- define error handler as DLC, with use original message enabled -->
+<routeConfiguration>
+  <errorHandler>
+    <deadLetterChannel deadLetterUri="mock:dead" useOriginalMessage="true">
+      <redeliveryPolicy maximumRedeliveries="3" redeliveryDelay="0"/>
+    </deadLetterChannel>
+  </errorHandler>
+</routeConfiguration>
+
+<route>
+  <from uri="direct:start"/>
+  <to uri="mock:a"/>
+  <!-- share unit of work in the splitter, which tells Camel to propagate failures from
+       processing the split messages back to the result of the splitter, which allows
+       it to act as a combined unit of work -->
+  <split shareUnitOfWork="true">
+    <tokenize token=","/>
+    <to uri="mock:b"/>
+    <to uri="direct:line"/>
+  </split>
+  <to uri="mock:result"/>
+</route>
+
+<!-- route for processing each split line -->
+<route>
+  <from uri="direct:line"/>
+  <to uri="log:line"/>
+  <process ref="myProcessor"/>
+  <to uri="mock:line"/>
+</route>
 ```
 
 ```xml
@@ -1410,6 +1449,13 @@ from("direct:line")
 ```
 
 ```yaml
+- errorHandler:
+    deadLetterChannel:
+      deadLetterUri: mock:dead
+      useOriginalMessage: true
+      redeliveryPolicy:
+        maximumRedeliveries: 3
+        redeliveryDelay: "0"
 - route:
     from:
       uri: direct:start

@@ -15,7 +15,42 @@ So in other words, the [Marshal](#) and [Unmarshal](unmarshal-eip.md) EIPs are u
 
 ## Example
 
-The following example reads XML files from the inbox/xml directory. Each file is then transformed into Java Objects using [JAXB](../dataformats/jaxb-dataformat.md). Then a [Bean](../bean-component.md) is invoked that takes in the Java object.
+The following example sends an order as JSON to a JMS queue. The message body is an object, such as a Map or a POJO, and `marshal` turns it into JSON text with [Jackson](../dataformats/jackson2-dataformat.md):
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:order")
+  .marshal().json(JsonLibrary.Jackson)
+  .to("jms:queue:order");
+```
+
+```xml
+<route>
+  <from uri="direct:order"/>
+  <marshal><json library="Jackson"/></marshal>
+  <to uri="jms:queue:order"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:order
+      steps:
+        - marshal:
+            json:
+              library: Jackson
+        - to:
+            uri: jms:queue:order
+```
+
+The next example reads XML files from the inbox/xml directory. Each file is then transformed into Java Objects using [JAXB](../dataformats/jaxb-dataformat.md). Then a [Bean](../bean-component.md) is invoked that takes in the Java object.
 
 Then the reverse operation happens to transform the Java objects back into XML also via JAXB, but using the `marshal` operation. And finally, the message is routed to a [JMS](../jms-component.md) queue.
 

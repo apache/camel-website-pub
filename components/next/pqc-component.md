@@ -940,7 +940,7 @@ All other signature algorithms follow the exact same route pattern shown above f
 | LMS | `LMS` | LMS | BC | LMS-SHA256-N32-H5 / SHA256-N32-W1 (OTS) | `PQCDefaultLMSMaterial` |
 | XMSS | `XMSS` | XMSS | BCPQC | Tree height 10, SHA-256 | `PQCDefaultXMSSMaterial` |
 | XMSSMT | `XMSSMT` | XMSSMT | BCPQC | XMSSMT-SHA2-20d2-256 | `PQCDefaultXMSSMTMaterial` |
-| HSS | `HSS` | HSS | BC | LMS-SHA256-N32-H5 | `PQCDefaultHSSMaterial` |
+| HSS | `HSS` | LMS | BC | LMS-SHA256-N32-H5 / SHA256-N32-W2 (OTS), 2 levels | `PQCDefaultHSSMaterial` |
 | Dilithium | `DILITHIUM` | ML-DSA | BC | ML-DSA-87 | `PQCDefaultDILITHIUMMaterial` |
 | Falcon | `FALCON` | Falcon | BCPQC | falcon\_512 | `PQCDefaultFalconMaterial` |
 | SPHINCS+ | `SPHINCSPLUS` | SLH-DSA | BC | SLH-DSA-SHA2-128S | `PQCDefaultSPHINCSPLUSMaterial` |

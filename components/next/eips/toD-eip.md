@@ -402,13 +402,18 @@ Detected SendDynamicAware component: http optimising toD: http:myloginserver:808
 
 Because `toD` computes its endpoint uri at runtime, a route that interpolates message content into the uri (for example `toD("${header.target}")`) can end up resolving to any component on the classpath. In low-code or Kamelet-style deployments you may want to constrain this to a fixed set of components. The optional `allowedSchemes` option takes a comma-separated allow-list of component schemes; a resolved recipient whose scheme is not in the list is rejected (independently of `ignoreInvalidEndpoint`). By default the option is unset and any scheme is allowed.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     // only http and https recipients are permitted
     .toD().allowedSchemes("http,https").uri("${header.target}");
 ```
-
-And in XML:
 
 ```xml
 <route>
@@ -417,15 +422,14 @@ And in XML:
 </route>
 ```
 
-And in YAML:
-
 ```yaml
-- from:
-    uri: direct:start
-    steps:
-      - toD:
-          uri: "${header.target}"
-          allowedSchemes: "http,https"
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - toD:
+            uri: "${header.target}"
+            allowedSchemes: "http,https"
 ```
 
 > **Note**

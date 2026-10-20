@@ -23,7 +23,7 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 ldap:ldapServerBean\[?options\]
 
-The _ldapServerBean_ portion of the URI refers to a [DirContext](https://docs.oracle.com/en/java/javase/17/docs/api/java.naming/javax/naming/directory/DirContext.md) bean in the registry. The LDAP component only supports producer endpoints, which means that an `ldap` URI cannot appear in the `from` at the start of a route.
+The _ldapServerBean_ portion of the URI refers to a [DirContext](https://docs.oracle.com/en/java/javase/21/docs/api/java.naming/javax/naming/directory/DirContext.md) bean in the registry. The LDAP component only supports producer endpoints, which means that an `ldap` URI cannot appear in the `from` at the start of a route.
 
 ## Configuring Options
 

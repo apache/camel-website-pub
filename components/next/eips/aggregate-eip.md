@@ -140,7 +140,12 @@ class ArrayListAggregationStrategy implements AggregationStrategy {
 
 In the route below we group all the exchanges together using `GroupedExchangeAggregationStrategy`:
 
-_Java-only: using GroupedExchangeAggregationStrategy_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -150,6 +155,37 @@ from("direct:start")
     .aggregate(new GroupedExchangeAggregationStrategy()).constant(true)
     // wait for 0.5 seconds to aggregate
     .completionTimeout(500L).to("mock:result");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <aggregate aggregationStrategy="groupedExchangeStrategy" completionTimeout="500">
+        <correlationExpression>
+            <constant>true</constant>
+        </correlationExpression>
+        <to uri="mock:result"/>
+    </aggregate>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: groupedExchangeStrategy
+            completionTimeout: 500
+            correlationExpression:
+              constant:
+                expression: "true"
+            steps:
+              - to:
+                  uri: mock:result
+- beans:
+    - name: groupedExchangeStrategy
+      type: org.apache.camel.processor.aggregate.GroupedExchangeAggregationStrategy
 ```
 
 As a result we have one outgoing `Exchange` being routed to the `"mock:result"` endpoint. The exchange is a holder containing all the incoming Exchanges.
@@ -227,6 +263,55 @@ When aggregation [Exchange](../../../manual/exchange.md)s at some point, you nee
 All the different completions are per correlation key. You can combine them in any way you like. It’s basically the first that triggers that wins. So you can use a completion size together with a completion timeout. Only completionTimeout and completionInterval cannot be used at the same time.
 
 Completion is mandatory and must be configured on the aggregation.
+
+For example, to collect the order lines of each order into a List, and send the order on when it has 10 lines, or when no new line has arrived for 5 seconds:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:lines")
+    .aggregate(header("orderId"), new GroupedBodyAggregationStrategy())
+        .completionSize(10)
+        .completionTimeout(5000)
+        .to("direct:order");
+```
+
+```xml
+<route>
+    <from uri="direct:lines"/>
+    <aggregate aggregationStrategy="groupedBodies" completionSize="10" completionTimeout="5000">
+        <correlationExpression>
+            <header>orderId</header>
+        </correlationExpression>
+        <to uri="direct:order"/>
+    </aggregate>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:lines
+      steps:
+        - aggregate:
+            correlationExpression:
+              header:
+                expression: orderId
+            aggregationStrategy: groupedBodies
+            completionSize: 10
+            completionTimeout: 5000
+            steps:
+              - to:
+                  uri: direct:order
+- beans:
+    - name: groupedBodies
+      type: org.apache.camel.processor.aggregate.GroupedBodyAggregationStrategy
+```
 
 ### Pre-completion mode
 
@@ -354,7 +439,7 @@ from("direct:start")
    .aggregate(header("id"), new MyAggregationStrategy())
       .completionSize(10).id("myAggregator")
       .aggregateController(controller)
-      .to("mock:aggregated");
+      .to("mock:result");
 ```
 
 ```xml
@@ -363,7 +448,7 @@ from("direct:start")
 <camelContext xmlns="http://camel.apache.org/schema/spring">
     <route>
         <from uri="direct:start"/>
-        <aggregate aggregationStrategy="myAppender" completionSize="10"
+        <aggregate id="myAggregator" aggregationStrategy="myAppender" completionSize="10"
                    aggregateController="myController">
             <correlationExpression>
                 <header>id</header>
@@ -380,6 +465,7 @@ from("direct:start")
       uri: direct:start
       steps:
         - aggregate:
+            id: myAggregator
             aggregateController: myController
             aggregationStrategy: myAppender
             completionSize: 10
@@ -535,9 +621,14 @@ public void configure() throws Exception {
                   uri: mock:result
 ```
 
-In Java DSL, you can also provide the bean class type directly:
+You can also provide the bean class type directly. In Java DSL you pass the class to `AggregationStrategies.bean`, and in XML or YAML DSL you specify the bean class in `aggregationStrategy` using the `#class:` syntax as shown:
 
-_Java-only: using AggregationStrategies.bean with class type_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 public void configure() throws Exception {
@@ -547,40 +638,6 @@ public void configure() throws Exception {
             .to("mock:result");
 }
 ```
-
-And if the bean has only one method, we do not need to specify the name of the method:
-
-_Java-only: using AggregationStrategies.bean without method name_
-
-```java
-public void configure() throws Exception {
-    from("direct:start")
-        .aggregate(constant(true), AggregationStrategies.bean(MyBodyAppender.class))
-            .completionSize(3)
-            .to("mock:result");
-}
-```
-
-And the `append` method could be static:
-
-_Java-only: bean class with static method_
-
-```java
-public class MyBodyAppender {
-
-    public static String append(String existing, String next) {
-        return next + existing;
-    }
-
-}
-```
-
-When using XML or YAML DSL, you can also specify the bean class directly in `aggregationStrategy` using the `#class:` syntax as shown:
-
--   XML
-    
--   YAML
-    
 
 ```xml
 <route>
@@ -611,13 +668,78 @@ When using XML or YAML DSL, you can also specify the bean class directly in `agg
                   uri: mock:result
 ```
 
+And if the bean has only one method, we do not need to specify the name of the method:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+public void configure() throws Exception {
+    from("direct:start")
+        .aggregate(constant(true), AggregationStrategies.bean(MyBodyAppender.class))
+            .completionSize(3)
+            .to("mock:result");
+}
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <aggregate aggregationStrategy="#class:com.foo.MyBodyAppender" completionSize="3">
+        <correlationExpression>
+            <constant>true</constant>
+        </correlationExpression>
+        <to uri="mock:result"/>
+    </aggregate>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - aggregate:
+            aggregationStrategy: "#class:com.foo.MyBodyAppender"
+            completionSize: 3
+            correlationExpression:
+              constant:
+                expression: "true"
+            steps:
+              - to:
+                  uri: mock:result
+```
+
+And the `append` method could be static:
+
+_Java-only: bean class with static method_
+
+```java
+public class MyBodyAppender {
+
+    public static String append(String existing, String next) {
+        return next + existing;
+    }
+
+}
+```
+
 ### Aggregating when no data
 
-When using bean as `AggregationStrategy`, then the method is **only** invoked when there is data to be aggregated, meaning that the message body is not `null`. In cases where you want to have the method invoked, even when there are no data (message body is `null`), then set the `strategyMethodAllowNull` to `true`.
+When using bean as `AggregationStrategy`, then the method is **only** invoked when there is data to be aggregated, meaning that the message body is not `null`. In cases where you want to have the method invoked, even when there are no data (message body is `null`), then set the `aggregationStrategyMethodAllowNull` to `true`.
 
-When using beans, this can be configured a bit easier using the `beanAllowNull` method from `AggregationStrategies` as shown:
+When using beans in Java DSL, this can be configured a bit easier using the `beanAllowNull` method from `AggregationStrategies`. In XML and YAML DSL you set the `aggregationStrategyMethodAllowNull` option to `true`, as shown:
 
-_Java-only: using AggregationStrategies.beanAllowNull_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 public void configure() throws Exception {
@@ -625,6 +747,36 @@ public void configure() throws Exception {
         .pollEnrich("seda:foo", 1000, AggregationStrategies.beanAllowNull(appender, "append"))
             .to("mock:result");
 }
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <pollEnrich timeout="1000"
+                aggregationStrategy="myAppender"
+                aggregationStrategyMethodName="append"
+                aggregationStrategyMethodAllowNull="true">
+        <constant>seda:foo</constant>
+    </pollEnrich>
+    <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - pollEnrich:
+            expression:
+              constant:
+                expression: seda:foo
+            timeout: 1000
+            aggregationStrategy: myAppender
+            aggregationStrategyMethodName: append
+            aggregationStrategyMethodAllowNull: true
+        - to:
+            uri: mock:result
 ```
 
 Then the `append` method in the bean would need to deal with the situation that `newExchange` can be `null`:
@@ -649,12 +801,23 @@ In the example above we use the [Content Enricher](content-enricher.md) EIP usin
 
 So if we need to do special merge logic, we would need to set `setAllowNullNewExchange=true`. If we didn’t do this, then on timeout the append method would normally not be invoked, meaning the [Content Enricher](content-enricher.md) did not merge/change the message.
 
-In XML and YAML DSL you would configure the `strategyMethodAllowNull` option and set it to `true` as shown below:
+The same works with the aggregate EIP, as shown below:
 
+-   Java
+    
 -   XML
     
 -   YAML
     
+
+```java
+public void configure() throws Exception {
+    from("direct:start")
+        .aggregate(constant(true), AggregationStrategies.beanAllowNull(appender, "append"))
+            .completionSize(3)
+            .to("mock:result");
+}
+```
 
 ```xml
 <camelContext xmlns="http://camel.apache.org/schema/spring">
@@ -693,7 +856,7 @@ In XML and YAML DSL you would configure the `strategyMethodAllowNull` option and
 
 ### Aggregating with different body types
 
-When, for example, using `strategyMethodAllowNull` as `true`, then the parameter type of the message bodies does not have to be the same. For example suppose we want to aggregate from a `com.foo.User` type to a `List<String>` that contains the name of the user. We could code a bean as follows:
+When, for example, using `aggregationStrategyMethodAllowNull` as `true`, then the parameter type of the message bodies does not have to be the same. For example suppose we want to aggregate from a `com.foo.User` type to a `List<String>` that contains the name of the user. We could code a bean as follows:
 
 _Java-only: bean class aggregating different body types_
 

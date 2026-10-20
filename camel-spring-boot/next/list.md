@@ -1507,6 +1507,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Springdoc](../../components/next/others/springdoc.md) | openapi-java-starter |  | 3.14 | Springdoc Swagger UI for openapi-java in spring boot |
 | [Telemetry](../../components/next/others/telemetry.md) | camel-telemetry-starter | Preview | 4.11 | Distributed telemetry common interfaces |
 | [Telemetry Dev](../../components/next/others/telemetry-dev.md) | camel-telemetry-dev-starter | Preview | 4.11 | Basic implementation of Camel Telemetry useful for development purposes |
+| [Test DST](../../components/next/others/test-dst.md) | camel-test-dst-starter | Preview | 4.24 | Deterministic simulation testing for Camel consumers: seeded virtual-time scheduler, fault injection, invariants and seed replay |
 | [Test JUnit5](../../components/next/others/test-junit5.md) | camel-test-junit5-starter | Stable | 3.0 | Camel unit testing with JUnit 5 |
 | [Test JUnit6](../../components/next/others/test-junit6.md) | camel-test-junit6-starter | Stable | 4.17 | Camel unit testing with JUnit 6 |
 | [Test Main JUnit5](../../components/next/others/test-main-junit5.md) | camel-test-main-junit5-starter | Stable | 3.16 | Camel unit testing with Main and JUnit 5 |

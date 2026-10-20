@@ -14,7 +14,7 @@ irm https://camel.apache.org/install.ps1 | iex
 
 With no arguments, both installers resolve and install the latest published release. An exact version can be requested instead with `--version X.Y.Z` (`install.sh`) or `-Version X.Y.Z` (`install.ps1`).
 
-Both installers download the release archive from Maven Central, verify it against a SHA-256 recorded in a signed-path manifest before extracting it, and reject archives containing absolute paths, `../` traversal, escaping symlinks/reparse points, or more than one top-level directory. The staged launcher is run once to confirm a Java 17+ runtime can be discovered; if that check fails, the previously active installation, if any, is left untouched and the installer exits nonzero.
+Both installers download the release archive from Maven Central, verify it against a SHA-256 recorded in a signed-path manifest before extracting it, and reject archives containing absolute paths, `../` traversal, escaping symlinks/reparse points, or more than one top-level directory. The staged launcher is run once to confirm a Java 21+ runtime can be discovered; if that check fails, the previously active installation, if any, is left untouched and the installer exits nonzero.
 
 ## Installing a specific version
 
@@ -33,7 +33,7 @@ irm https://camel.apache.org/install.ps1 -OutFile install.ps1
 
 ## Requirements
 
--   A Java 17+ runtime available at install and run time. The launcher locates Java from `JAVACMD`, `JAVA_HOME`, or `PATH`.
+-   A Java 21+ runtime available at install and run time. The launcher locates Java from `JAVACMD`, `JAVA_HOME`, or `PATH`.
     
 -   Linux and macOS: `curl` or `wget`; `tar`; and one of `sha256sum`, `shasum`, or `openssl`.
     

@@ -44,6 +44,10 @@ Enum values:
 
 -   Java
     
+-   XML
+    
+-   YAML
+    
 
 ```java
 KafkaResumeStrategyConfigurationBuilder kafkaConfigurationBuilder =
@@ -57,14 +61,66 @@ from("some:component")
     .process(this::process);
 ```
 
+```xml
+<route>
+    <from uri="some:component"/>
+    <resumable resumeStrategy="kafkaResumeStrategy"/>
+    <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: some:component
+      steps:
+        - resumable:
+            resumeStrategy: kafkaResumeStrategy
+        - process:
+            ref: myProcessor
+```
+
+> **Note**
+> The configuration builder is only available in the Java DSL. In XML and YAML, the `resumeStrategy` option refers to a resume strategy bean by its name. In this example, `kafkaResumeStrategy` is a `SingleNodeKafkaResumeStrategy` bean set up with the same configuration.
+
 ### Intermittent Mode
 
 Enable intermittent mode to avoid updating the offset for every exchange:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("some:component")
     .resumable().resumeStrategy(new MyTestResumeStrategy()).intermittent(true)
     .process(this::process);
+```
+
+```xml
+<route>
+    <from uri="some:component"/>
+    <resumable resumeStrategy="testResumeStrategy" intermittent="true"/>
+    <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: some:component
+      steps:
+        - resumable:
+            resumeStrategy: testResumeStrategy
+            intermittent: true
+        - process:
+            ref: myProcessor
+- beans:
+    - name: testResumeStrategy
+      type: com.foo.MyTestResumeStrategy
 ```
 
 ## See Also

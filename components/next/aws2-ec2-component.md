@@ -3285,6 +3285,24 @@ Enum values:
     
 -   m9g.medium
     
+-   t8i.nano
+    
+-   t8i.micro
+    
+-   t8i.small
+    
+-   t8i.medium
+    
+-   i8g.metal-48xl
+    
+-   r8gb.48xlarge
+    
+-   r8gb.metal-48xl
+    
+-   m9gd.medium
+    
+-   trn2u.48xlarge
+    
 -   null
     
 

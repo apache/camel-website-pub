@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792403610117,
+  "generated": 1792501760369,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -11131,6 +11131,24 @@
               "attributes": {
                 "page-aliases": "testing.adoc"
               }
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/testing/camel-quarkus-test-support.adoc",
+              "url": "/camel-quarkus/next/user-guide/testing/camel-quarkus-test-support.html",
+              "title": "<code>CamelTestSupport</code> style of testing"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/testing/camel-quarkus-test.adoc",
+              "url": "/camel-quarkus/next/user-guide/testing/camel-quarkus-test.html",
+              "title": "Annotation based testing with <code>@CamelQuarkusTest</code>"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/testing/external-services.adoc",
+              "url": "/camel-quarkus/next/user-guide/testing/external-services.html",
+              "title": "Testing with external services"
             }
           ]
         },
@@ -24001,6 +24019,12 @@
               "path": "telemetry.adoc",
               "url": "/components/next/others/telemetry.html",
               "title": "Telemetry"
+            },
+            {
+              "module": "others",
+              "path": "test-dst.adoc",
+              "url": "/components/next/others/test-dst.html",
+              "title": "Test DST"
             },
             {
               "module": "others",

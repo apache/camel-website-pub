@@ -28,3 +28,14 @@ The following configuration options are available:
 | `keda.autoMetadata` | `map[string]map[string]string` | Additional metadata to merge into auto-discovered triggers. Keys are trigger types (e.g., "kafka"), values are maps of metadata key-value pairs to merge (e.g., {"lagThreshold": "10"}). |
 > **Note**
 > the variable names are "snake case" if you’re using in `kamel` CLI, for example `trait.myParam` has to be translated as `-t trait.my-param`
+
+## Automatic scaler discovery
+
+When `keda.auto` is enabled, Camel K inspects the consumer endpoints in an Integration and creates KEDA triggers for components with a registered scaler mapping. A scaler is the KEDA adapter that reads metrics from an external system and uses them to determine when a workload should scale. See the [KEDA scaler concepts](https://keda.sh/docs/latest/concepts/scaling-deployments/) documentation for more information.
+
+Automatic discovery currently supports the following Camel component:
+
+-   `kafka`: creates an Apache Kafka trigger from the topic, broker, and consumer-group values in the endpoint URI. See the [KEDA Apache Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) documentation for the available trigger metadata.
+    
+
+Unsupported Camel components do not produce an automatically discovered trigger. You can still configure their KEDA triggers explicitly with `keda.triggers`.

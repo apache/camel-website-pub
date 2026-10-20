@@ -12,6 +12,8 @@
     
 -   Camel 4.0.0+ requires JDK 17 and supports JDK 21
     
+-   Camel 4.24.0+ requires JDK 21
+    
 
 You can use Camel CLI which lists up-to-date JDK requirements for every Camel release.
 

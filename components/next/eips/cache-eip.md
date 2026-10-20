@@ -10,6 +10,8 @@ Camel includes several cache **components** (`camel-caffeine`, `camel-ehcache`, 
 
 The Cache **EIP** covers the most common use case — _"cache the result of this expensive block by key with a TTL"_ — without manual plumbing. It is analogous to `@Cacheable` in Spring:
 
+Java
+
 ```java
 // Without Cache EIP: 7+ lines of plumbing, tied to one cache technology
 from("direct:start")
@@ -17,7 +19,7 @@ from("direct:start")
     .setHeader("CamelCaffeineKey", header("productId"))
     .to("caffeine-cache:products")
     .choice()
-        .when(body().isNull())
+        .when(header("CamelCaffeineActionHasResult").isEqualTo(false))
             .to("http://expensive-service")
             .setHeader("CamelCaffeineAction", constant("PUT"))
             .to("caffeine-cache:products")
@@ -28,6 +30,91 @@ from("direct:start")
     .cache(simple("${header.productId}"))
         .to("http://expensive-service")
     .end();
+```
+
+XML
+
+```xml
+<!-- Without Cache EIP: manual plumbing, tied to one cache technology -->
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelCaffeineAction">
+    <constant>GET</constant>
+  </setHeader>
+  <setHeader name="CamelCaffeineKey">
+    <header>productId</header>
+  </setHeader>
+  <to uri="caffeine-cache:products"/>
+  <choice>
+    <when>
+      <simple>${header.CamelCaffeineActionHasResult} == false</simple>
+      <to uri="http://expensive-service"/>
+      <setHeader name="CamelCaffeineAction">
+        <constant>PUT</constant>
+      </setHeader>
+      <to uri="caffeine-cache:products"/>
+    </when>
+  </choice>
+</route>
+
+<!-- With Cache EIP: backend-agnostic -->
+<route>
+  <from uri="direct:start"/>
+  <cache>
+    <simple>${header.productId}</simple>
+    <to uri="http://expensive-service"/>
+  </cache>
+</route>
+```
+
+YAML
+
+```yaml
+# Without Cache EIP: manual plumbing, tied to one cache technology
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelCaffeineAction
+            expression:
+              constant:
+                expression: GET
+        - setHeader:
+            name: CamelCaffeineKey
+            expression:
+              header:
+                expression: productId
+        - to:
+            uri: caffeine-cache:products
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.CamelCaffeineActionHasResult} == false"
+                steps:
+                  - to:
+                      uri: http://expensive-service
+                  - setHeader:
+                      name: CamelCaffeineAction
+                      expression:
+                        constant:
+                          expression: PUT
+                  - to:
+                      uri: caffeine-cache:products
+
+# With Cache EIP: backend-agnostic
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - cache:
+            expression:
+              simple:
+                expression: "${header.productId}"
+            steps:
+              - to:
+                  uri: http://expensive-service
 ```
 
 ## Options
@@ -61,6 +148,13 @@ Cache errors are handled gracefully:
 
 Cache with an auto-created in-memory store (zero config):
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .cache(simple("${header.productId}"))
@@ -68,6 +162,38 @@ from("direct:start")
         .unmarshal().json()
     .end()
     .to("direct:continue");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <cache>
+    <simple>${header.productId}</simple>
+    <to uri="http://product-service/api/product"/>
+    <unmarshal>
+      <json/>
+    </unmarshal>
+  </cache>
+  <to uri="direct:continue"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - cache:
+            expression:
+              simple:
+                expression: "${header.productId}"
+            steps:
+              - to:
+                  uri: http://product-service/api/product
+              - unmarshal:
+                  json: {}
+        - to:
+            uri: direct:continue
 ```
 
 Cache with TTL and an explicit `KeyValueRepository`:
@@ -101,16 +227,21 @@ from("direct:start")
 ```
 
 ```yaml
-- from:
-    uri: "direct:start"
-    steps:
-      - cache:
-          simple: "${header.productId}"
-          keyValueRepository: "myCache"
-          ttl: "10m"
-          steps:
-            - to: "http://product-service/api/product"
-      - to: "direct:continue"
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - cache:
+            expression:
+              simple:
+                expression: "${header.productId}"
+            keyValueRepository: myCache
+            ttl: 10m
+            steps:
+              - to:
+                  uri: http://product-service/api/product
+        - to:
+            uri: direct:continue
 ```
 
 Expression clause form:
@@ -141,12 +272,44 @@ public KeyValueRepository myCache() {
 
 Then reference it in the route:
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 from("direct:start")
     .cache(simple("${header.key}"))
         .keyValueRepository("myCache")
         .to("http://service")
     .end();
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <cache keyValueRepository="myCache">
+    <simple>${header.key}</simple>
+    <to uri="http://service"/>
+  </cache>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - cache:
+            expression:
+              simple:
+                expression: "${header.key}"
+            keyValueRepository: myCache
+            steps:
+              - to:
+                  uri: http://service
 ```
 
 If a single `KeyValueRepository` bean exists in the registry, it is auto-discovered — no explicit reference needed.
@@ -170,6 +333,13 @@ public KeyValueRepository productCache() {
 }
 ```
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
 ```java
 // Route that caches product lookups
 from("direct:getProduct")
@@ -190,8 +360,6 @@ from("jms:topic:product.changes")
     .log("Invalidated cache for product ${header.productId}");
 ```
 
-### XML DSL
-
 ```xml
 <route>
   <from uri="direct:getProduct"/>
@@ -209,9 +377,43 @@ from("jms:topic:product.changes")
 </route>
 ```
 
+```yaml
+- route:
+    from:
+      uri: direct:getProduct
+      steps:
+        - cache:
+            expression:
+              simple:
+                expression: "${header.productId}"
+            keyValueRepository: productCache
+            ttl: 30m
+            steps:
+              - to:
+                  uri: http://product-service/api/product
+
+# Invalidation route
+- route:
+    from:
+      uri: jms:topic:product.changes
+      steps:
+        - bean:
+            ref: productCache
+            method: "delete(${header.productId})"
+        - log:
+            message: "Invalidated cache for product ${header.productId}"
+```
+
 ### Clearing the Entire Cache
 
 To clear all entries from a `KeyValueRepository`, call `clear()`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:clearAll")
@@ -220,4 +422,21 @@ from("direct:clearAll")
             .lookupByNameAndType("productCache", KeyValueRepository.class);
         cache.clear();
     });
+```
+
+```xml
+<route>
+  <from uri="direct:clearAll"/>
+  <bean ref="productCache" method="clear"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:clearAll
+      steps:
+        - bean:
+            ref: productCache
+            method: clear
 ```

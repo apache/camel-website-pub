@@ -139,13 +139,13 @@ from("direct:a")
 <route>
     <from uri="direct:a"/>
     <setHeaders>
-	    <setHeader name="foo">
-			<simple>${body}</simple>
-		</setHeader>
-		<setHeader name="bar">
-			<simple resultType="java.lang.Boolean">${header.foo} > 10</simple>
-		</setHeader>
-	</setHeaders>
+        <setHeader name="foo">
+            <simple>${body}</simple>
+        </setHeader>
+        <setHeader name="bar">
+            <simple resultType="java.lang.Boolean">${header.foo} > 10</simple>
+        </setHeader>
+    </setHeaders>
     <to uri="direct:b"/>
 </route>
 ```
@@ -177,7 +177,7 @@ It’s also possible to build a Map and pass it as the single argument to `setHe
 _Java-only: using a LinkedHashMap to set headers in order_
 
 ```java
-private Map<String, Expression> headerMap = new java.util.LinkedHashMap<>();
+Map<String, Expression> headerMap = new java.util.LinkedHashMap<>();
 headerMap.put("foo", ConstantLanguage.constant("ABC"));
 headerMap.put("bar", ConstantLanguage.constant("XYZ"));
 

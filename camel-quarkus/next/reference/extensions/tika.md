@@ -25,3 +25,20 @@ Or add the coordinates to your existing project:
 ```
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
+
+## Usage
+
+### Parser modules
+
+Tika parses only the formats whose parser module is on the classpath. `camel-tika` brings the HTML and plain text modules. For any other format, add its module to your application, e.g. for PDF:
+
+```xml
+<dependency>
+    <groupId>org.apache.tika</groupId>
+    <artifactId>tika-parser-pdf-module</artifactId>
+</dependency>
+```
+
+The Camel Quarkus BOM manages the version of `tika-parser-pdf-module` only. For other modules, use the version of `org.apache.tika:tika-core` that `camel-tika` brings.
+
+In native mode, the HTML, plain text and PDF modules are supported.

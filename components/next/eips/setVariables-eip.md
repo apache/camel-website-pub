@@ -139,13 +139,13 @@ from("direct:a")
 <route>
     <from uri="direct:a"/>
     <setVariables>
-	    <setVariable name="foo">
-			<simple>${body}</simple>
-		</setVariable>
-		<setVariable name="bar">
-			<simple resultType="java.lang.Boolean">${variable.foo} > 10</simple>
-		</setVariable>
-	</setVariables>
+        <setVariable name="foo">
+            <simple>${body}</simple>
+        </setVariable>
+        <setVariable name="bar">
+            <simple resultType="java.lang.Boolean">${variable.foo} > 10</simple>
+        </setVariable>
+    </setVariables>
     <to uri="direct:b"/>
 </route>
 ```
@@ -177,7 +177,7 @@ It’s also possible to build a Map and pass it as the single argument to `setVa
 _Java-only: using a LinkedHashMap to set variables in order_
 
 ```java
-private Map<String, Expression> variableMap = new java.util.LinkedHashMap<>();
+Map<String, Expression> variableMap = new java.util.LinkedHashMap<>();
 variableMap.put("foo", ConstantLanguage.constant("ABC"));
 variableMap.put("bar", ConstantLanguage.constant("XYZ"));
 

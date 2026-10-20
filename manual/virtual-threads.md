@@ -708,7 +708,7 @@ Apache Camel provides the `ContextValue` abstraction that automatically chooses 
   
 | JDK Version | Virtual Threads Enabled | Implementation |
 | --- | --- | --- |
-| JDK 17-24 | N/A | ThreadLocal |
+| JDK 21-24 | N/A | ThreadLocal |
 | JDK 21-24 | Yes | ThreadLocal (ScopedValue not yet stable) |
 | JDK 25+ | Yes | **ScopedValue** |
 | JDK 25+ | No | ThreadLocal |

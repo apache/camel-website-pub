@@ -151,9 +151,21 @@ The dynamic list of recipients that are defined in the header must be iterable s
 
 ### Configuring delimiter for dynamic destinations
 
-In XML DSL you can set the delimiter attribute for setting a delimiter to be used if the header value is a single `String` with multiple separated endpoints. By default, Camel uses comma as delimiter, but this option lets you specify a custom delimiter to use instead.
+You can set the `delimiter` option for setting a delimiter to be used if the header value is a single `String` with multiple separated endpoints. By default, Camel uses comma as delimiter, but this option lets you specify a custom delimiter to use instead.
 
-_XML-only:_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+In Java DSL, you specify the delimiter as second parameter:
+
+```java
+from("direct:a")
+    .recipientList(header("myHeader"), ";");
+```
 
 ```xml
 <route>
@@ -164,8 +176,6 @@ _XML-only:_
   </recipientList>
 </route>
 ```
-
-And in YAML DSL you set the `delimiter` parameter:
 
 ```yaml
 - route:
@@ -179,16 +189,7 @@ And in YAML DSL you set the `delimiter` parameter:
                 expression: myHeader
 ```
 
-So if **myHeader** contains a `String` with the value `"activemq:queue:foo;activemq:topic:hello ; log:bar"` then Camel will split the `String` using the delimiter given in the XML that was comma, resulting into three endpoints to send to. You can use spaces between the endpoints as Camel will trim the value when it looks up the endpoint to send to.
-
-In Java DSL, you specify the delimiter as second parameter as shown below:
-
-_Java-only: the delimiter is passed as a second parameter to recipientList_
-
-```java
-from("direct:a")
-    .recipientList(header("myHeader"), ";");
-```
+So if **myHeader** contains a `String` with the value `"activemq:queue:foo;activemq:topic:hello ; log:bar"` then Camel will split the `String` using the delimiter, which is a semicolon, resulting into three endpoints to send to. You can use spaces between the endpoints as Camel will trim the value when it looks up the endpoint to send to.
 
 ### Using parallel processing
 
@@ -377,9 +378,14 @@ Camel will then process the messages in parallel until the timeout is hit. This 
 >
 > If the timeout is reached with running tasks still remaining, certain tasks for which it is challenging for Camel to shut down in a graceful manner may continue to run. So use this option with a bit of care.
 
-For example, in the unit test below, you can see that we multicast the message to three destinations. We have a timeout of 2 seconds, which means only the last two messages can be completed within the timeframe. This means we will only aggregate the last two which yields a result aggregation which outputs "BC".
+For example, in the unit test below, you can see that we multicast the message to three destinations. We have a timeout of 250 milliseconds, which means only the last two messages can be completed within the timeframe. This means we will only aggregate the last two which yields a result aggregation which outputs "BC".
 
-_Java-only: multicast with inline AggregationStrategy and timeout_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -404,6 +410,104 @@ from("direct:a").delay(1000).to("mock:A").setBody(constant("A"));
 from("direct:b").to("mock:B").setBody(constant("B"));
 
 from("direct:c").to("mock:C").setBody(constant("C"));
+```
+
+```xml
+<routes>
+    <route>
+        <from uri="direct:start"/>
+        <multicast aggregationStrategy="myStrategy" parallelProcessing="true" timeout="250">
+            <to uri="direct:a"/>
+            <to uri="direct:b"/>
+            <to uri="direct:c"/>
+        </multicast>
+        <to uri="mock:result"/>
+    </route>
+
+    <route>
+        <from uri="direct:a"/>
+        <delay>
+            <constant>1000</constant>
+        </delay>
+        <to uri="mock:A"/>
+        <setBody>
+            <constant>A</constant>
+        </setBody>
+    </route>
+
+    <route>
+        <from uri="direct:b"/>
+        <to uri="mock:B"/>
+        <setBody>
+            <constant>B</constant>
+        </setBody>
+    </route>
+
+    <route>
+        <from uri="direct:c"/>
+        <to uri="mock:C"/>
+        <setBody>
+            <constant>C</constant>
+        </setBody>
+    </route>
+</routes>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - multicast:
+            aggregationStrategy: myStrategy
+            parallelProcessing: true
+            timeout: 250
+            steps:
+              - to:
+                  uri: direct:a
+              - to:
+                  uri: direct:b
+              - to:
+                  uri: direct:c
+        - to:
+            uri: mock:result
+- route:
+    from:
+      uri: direct:a
+      steps:
+        - delay:
+            expression:
+              constant:
+                expression: "1000"
+        - to:
+            uri: mock:A
+        - setBody:
+            expression:
+              constant:
+                expression: A
+- route:
+    from:
+      uri: direct:b
+      steps:
+        - to:
+            uri: mock:B
+        - setBody:
+            expression:
+              constant:
+                expression: B
+- route:
+    from:
+      uri: direct:c
+      steps:
+        - to:
+            uri: mock:C
+        - setBody:
+            expression:
+              constant:
+                expression: C
+- beans:
+    - name: myStrategy
+      type: com.foo.MyAggregationStrategy
 ```
 
 By default, if a timeout occurs the `AggregationStrategy` is not invoked. However, you can implement the `timeout` method: This allows you to deal with the timeout in the `AggregationStrategy` if you really need to.

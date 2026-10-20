@@ -271,25 +271,26 @@ It is possible to reference an existing logger instance. For example:
 Logger myLogger = org.slf4j.LoggerFactory.getLogger("com.mycompany.mylogger");
 
 from("direct:moo")
-    .log(myLogger, "Me Got ${body}")
+    .log(LoggingLevel.INFO, myLogger, "Me Got ${body}")
     .to("bean:foo");
 ```
 
 ```xml
-<bean id="myLogger" class="org.slf4j.LoggerFactory" factory-method="getLogger">
-    <constructor-arg value="com.mycompany.mylogger" />
+<bean name="myLogger" type="org.slf4j.LoggerFactory" factoryMethod="getLogger">
+    <constructors>
+        <constructor index="0" value="com.mycompany.mylogger"/>
+    </constructors>
 </bean>
 
-<route id="moo">
+<route>
     <from uri="direct:moo"/>
     <log message="Me Got ${body}" logger="myLogger"/>
-    <to uri="mock:baz"/>
+    <to uri="bean:foo"/>
 </route>
 ```
 
 ```yaml
 - route:
-    id: moo
     from:
       uri: direct:moo
       steps:
@@ -297,7 +298,13 @@ from("direct:moo")
             logger: myLogger
             message: "Me Got ${body}"
         - to:
-            uri: mock:baz
+            uri: bean:foo
+- beans:
+    - name: myLogger
+      type: org.slf4j.LoggerFactory
+      factoryMethod: getLogger
+      constructors:
+        0: com.mycompany.mylogger
 ```
 
 ### Configuring logging name

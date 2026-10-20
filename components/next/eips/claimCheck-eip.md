@@ -157,97 +157,6 @@ You can also remove headers when merging data back. For example, to remove all h
 
 Note you cannot have both include (`+`) and exclude (`-`) `header:pattern` at the same time.
 
-## Dynamic keys
-
-The claim check keys are static, but you can use the `simple` language syntax to define dynamic keys. For example, to use a header from the message named `myKey`:
-
--   Java
-    
--   XML
-    
--   YAML
-    
-
-```java
-from("direct:start")
-    .to("mock:a")
-    .claimCheck(ClaimCheckOperation.Set, "${header.myKey}")
-    .transform().constant("Bye World")
-    .to("mock:b")
-    .claimCheck(ClaimCheckOperation.Get, "${header.myKey}")
-    .to("mock:c")
-    .transform().constant("Hi World")
-    .to("mock:d")
-    .claimCheck(ClaimCheckOperation.Get, "${header.myKey}")
-    .to("mock:e");
-```
-
-```xml
-<route>
-    <from uri="direct:start"/>
-    <to uri="mock:a"/>
-    <claimCheck operation="Set" key="${header.myKey}"/>
-    <transform>
-        <constant>Bye World</constant>
-    </transform>
-    <to uri="mock:b"/>
-    <claimCheck operation="Get" key="${header.myKey}"/>
-    <to uri="mock:c"/>
-    <transform>
-        <constant>Hi World</constant>
-    </transform>
-    <to uri="mock:d"/>
-    <claimCheck operation="Get" key="${header.myKey}"/>
-    <to uri="mock:e"/>
-</route>
-```
-
-```yaml
-- route:
-    from:
-      uri: direct
-      parameters:
-        name: start
-      steps:
-        - to:
-            uri: mock
-            parameters:
-              name: a
-        - claimCheck:
-            operation: Set
-            key: "${header.myKey}"
-        - transform:
-            expression:
-              constant:
-                expression: Bye World
-        - to:
-            uri: mock
-            parameters:
-              name: b
-        - claimCheck:
-            operation: Get
-            key: "${header.myKey}"
-        - to:
-            uri: mock
-            parameters:
-              name: c
-        - transform:
-            expression:
-              constant:
-                expression: Hi World
-        - to:
-            uri: mock
-            parameters:
-              name: d
-        - claimCheck:
-            operation: Get
-            key: "${header.myKey}"
-        - to:
-            uri: mock
-            parameters:
-              name: e
-```
-
 ## Example
 
 The following example shows the `Push` and `Pop` operations in action:
@@ -446,4 +355,95 @@ from("direct:start")
             filter: "header:(foo|bar)"
         - to:
             uri: mock:c
+```
+
+## Dynamic keys
+
+The claim check keys are static, but you can use the `simple` language syntax to define dynamic keys. For example, to use a header from the message named `myKey`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("mock:a")
+    .claimCheck(ClaimCheckOperation.Set, "${header.myKey}")
+    .transform().constant("Bye World")
+    .to("mock:b")
+    .claimCheck(ClaimCheckOperation.Get, "${header.myKey}")
+    .to("mock:c")
+    .transform().constant("Hi World")
+    .to("mock:d")
+    .claimCheck(ClaimCheckOperation.Get, "${header.myKey}")
+    .to("mock:e");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <to uri="mock:a"/>
+    <claimCheck operation="Set" key="${header.myKey}"/>
+    <transform>
+        <constant>Bye World</constant>
+    </transform>
+    <to uri="mock:b"/>
+    <claimCheck operation="Get" key="${header.myKey}"/>
+    <to uri="mock:c"/>
+    <transform>
+        <constant>Hi World</constant>
+    </transform>
+    <to uri="mock:d"/>
+    <claimCheck operation="Get" key="${header.myKey}"/>
+    <to uri="mock:e"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct
+      parameters:
+        name: start
+      steps:
+        - to:
+            uri: mock
+            parameters:
+              name: a
+        - claimCheck:
+            operation: Set
+            key: "${header.myKey}"
+        - transform:
+            expression:
+              constant:
+                expression: Bye World
+        - to:
+            uri: mock
+            parameters:
+              name: b
+        - claimCheck:
+            operation: Get
+            key: "${header.myKey}"
+        - to:
+            uri: mock
+            parameters:
+              name: c
+        - transform:
+            expression:
+              constant:
+                expression: Hi World
+        - to:
+            uri: mock
+            parameters:
+              name: d
+        - claimCheck:
+            operation: Get
+            key: "${header.myKey}"
+        - to:
+            uri: mock
+            parameters:
+              name: e
 ```

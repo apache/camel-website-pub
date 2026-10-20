@@ -186,39 +186,55 @@ In Camel, you need to configure the propagations using `SpringTransactionPolicy`
 
 <bean id="txMandatory" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
     <property name="transactionManager" ref="jmsTransactionManager"/>
-    <property name="propagationBehaviorName" value="PROPAGATION_REQUIRES_MANDATORY"/>
+    <property name="propagationBehaviorName" value="PROPAGATION_MANDATORY"/>
 </bean>
 ```
 
 Then we have routes where each of the routes uses their different policy:
 
--   Spring XML
+-   Java
+    
+-   XML
     
 -   YAML
     
 
+```java
+from("activemq:queue:inbox")
+    .transacted("txRequired")
+    .to("direct:audit")
+    .to("direct:order")
+    .to("activemq:queue:order");
+
+from("direct:audit")
+    .transacted("txRequiresNew")
+    .bean("auditLogService", "insertAuditLog");
+
+from("direct:order")
+    .transacted("txMandatory")
+    .bean("orderService", "insertOrder");
+```
+
 ```xml
-<camelContext xmlns="http://camel.apache.org/schema/spring">
-    <route>
-        <from uri="activemq:queue:inbox"/>
-        <transacted ref="txRequired"/>
-        <to uri="direct:audit"/>
-        <to uri="direct:order"/>
-        <to uri="activemq:queue:order"/>
-    </route>
+<route>
+    <from uri="activemq:queue:inbox"/>
+    <transacted ref="txRequired"/>
+    <to uri="direct:audit"/>
+    <to uri="direct:order"/>
+    <to uri="activemq:queue:order"/>
+</route>
 
-    <route>
-        <from uri="direct:audit"/>
-        <transacted ref="txRequiresNew"/>
-        <bean ref="auditLogService" method="insertAuditLog"/>
-    </route>
+<route>
+    <from uri="direct:audit"/>
+    <transacted ref="txRequiresNew"/>
+    <bean ref="auditLogService" method="insertAuditLog"/>
+</route>
 
-    <route>
-        <from uri="direct:order"/>
-        <transacted ref="txMandatory"/>
-        <bean ref="orderService" method="insertOrder"/>
-    </route>
-</camelContext>
+<route>
+    <from uri="direct:order"/>
+    <transacted ref="txMandatory"/>
+    <bean ref="orderService" method="insertOrder"/>
+</route>
 ```
 
 ```yaml
@@ -265,7 +281,7 @@ In this sample, we want to ensure that two endpoints are under transaction contr
 
 The sample is in its full as a [unit test](https://github.com/apache/camel/blob/main/components/camel-spring-parent/camel-spring-xml/src/test/java/org/apache/camel/spring/interceptor/TransactionalClientDataSourceWithOnExceptionMinimalConfigurationTest.java).
 
-First, we set up the usual spring stuff in its configuration file. Here we have defined a DataSource to the HSQLDB and most importantly the Spring `DataSourceTransactionManager` that is doing the heavy lifting of ensuring our transactional policies.
+First, we set up the usual spring stuff in its configuration file. Here we have defined a DataSource to the H2 database and most importantly the Spring `DataSourceTransactionManager` that is doing the heavy lifting of ensuring our transactional policies.
 
 As we use the new convention over configuration, we do **not** need to configure a transaction policy bean, so we do not have any `PROPAGATION_REQUIRED` beans. All the beans needed to be configured are **standard** Spring beans only, there is no Camel specific configuration at all.
 
@@ -294,47 +310,63 @@ Then we are ready to define our Camel routes. We have two routes: 1 for success 
 
 This is, after all, based on a unit test. Notice that we mark each route as transacted using the `<transacted/>` XML tag.
 
--   Spring XML
+-   Java
+    
+-   XML
     
 -   YAML
     
 
+```java
+from("direct:okay")
+    // mark this route as transacted
+    .transacted()
+    .setBody(constant("Tiger in Action"))
+    .bean("bookService")
+    .setBody(constant("Elephant in Action"))
+    .bean("bookService");
+
+from("direct:fail")
+    // mark this route as transacted
+    .transacted()
+    .setBody(constant("Tiger in Action"))
+    .bean("bookService")
+    .setBody(constant("Donkey in Action"))
+    .bean("bookService");
+```
+
 ```xml
-<camelContext xmlns="http://camel.apache.org/schema/spring">
+<route>
+    <from uri="direct:okay"/>
+    <!-- we mark this route as transacted. Camel will look up the spring transaction manager
+         and use it by default. We can optionally pass in arguments to specify a policy to use
+         that is configured with a spring transaction manager of choice. However, Camel supports
+         convention over configuration as we can just use the defaults out of the box, which
+         suits most situations -->
+    <transacted/>
+    <setBody>
+        <constant>Tiger in Action</constant>
+    </setBody>
+    <bean ref="bookService"/>
+    <setBody>
+        <constant>Elephant in Action</constant>
+    </setBody>
+    <bean ref="bookService"/>
+</route>
 
-    <route>
-        <from uri="direct:okay"/>
-        <!-- we mark this route as transacted. Camel will look up the spring transaction manager
-             and use it by default. We can optimally pass in arguments to specify a policy to use
-             that is configured with a spring transaction manager of choice. However, Camel supports
-             convention over configuration as we can just use the defaults out of the box and Camel
-             that suites in most situations -->
-        <transacted/>
-        <setBody>
-            <constant>Tiger in Action</constant>
-        </setBody>
-        <bean ref="bookService"/>
-        <setBody>
-            <constant>Elephant in Action</constant>
-        </setBody>
-        <bean ref="bookService"/>
-    </route>
-
-    <route>
-        <from uri="direct:fail"/>
-        <!-- we mark this route as transacted. See comments above. -->
-        <transacted/>
-        <setBody>
-            <constant>Tiger in Action</constant>
-        </setBody>
-        <bean ref="bookService"/>
-        <setBody>
-            <constant>Donkey in Action</constant>
-        </setBody>
-        <bean ref="bookService"/>
-    </route>
-
-</camelContext>
+<route>
+    <from uri="direct:fail"/>
+    <!-- we mark this route as transacted. See comments above. -->
+    <transacted/>
+    <setBody>
+        <constant>Tiger in Action</constant>
+    </setBody>
+    <bean ref="bookService"/>
+    <setBody>
+        <constant>Donkey in Action</constant>
+    </setBody>
+    <bean ref="bookService"/>
+</route>
 ```
 
 ```yaml
@@ -378,7 +410,7 @@ That is all that is needed to configure a Camel route as being transacted. Remem
 
 ## Transaction example with JMS
 
-In this sample, we want to listen for messages in a queue and process the messages with our business logic java code and send them along. Since it is based on a [unit test](https://github.com/apache/camel/tree/main/components/camel-jms/src/test/java/org/apache/camel/component/jms/tx/TransactionMinimalConfigurationTest.java), the destination is a mock endpoint.
+In this sample, we want to listen for messages in a queue and process the messages with our business logic java code and send them along. Since it is based on a [unit test](https://github.com/apache/camel/blob/main/components/camel-jms/src/test/java/org/apache/camel/component/jms/integration/spring/tx/TransactionMinimalConfigurationIT.java), the destination is a mock endpoint.
 
 First, we configure the standard Spring XML to declare a JMS connection factory, a JMS transaction manager and our ActiveMQ component that we use in our routing.
 
@@ -402,7 +434,7 @@ First, we configure the standard Spring XML to declare a JMS connection factory,
 </bean>
 
 <!-- define our activemq component -->
-<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+<bean id="activemq" class="org.apache.camel.component.activemq.ActiveMQComponent">
     <property name="connectionFactory" ref="poolConnectionFactory"/>
     <!-- define the jms consumer/producer as transacted -->
     <property name="transacted" value="true"/>
@@ -415,24 +447,35 @@ First, we configure the standard Spring XML to declare a JMS connection factory,
 
 And then we configure our routes. Notice that all we have to do is mark the route as transacted using the `<transacted/>` XML tag.
 
--   Spring XML
+-   Java
+    
+-   XML
     
 -   YAML
     
 
+```java
+// 1: from the jms queue
+from("activemq:queue:okay")
+    // 2: mark this route as transacted
+    .transacted()
+    // 3: call our business logic that is myProcessor
+    .process("myProcessor")
+    // 4: if success then send it to the mock
+    .to("mock:result");
+```
+
 ```xml
-<camelContext xmlns="http://camel.apache.org/schema/spring">
-    <route>
-        <!-- 1: from the jms queue -->
-        <from uri="activemq:queue:okay"/>
-        <!-- 2: mark this route as transacted -->
-        <transacted/>
-        <!-- 3: call our business logic that is myProcessor -->
-        <process ref="myProcessor"/>
-        <!-- 4: if success then send it to the mock -->
-        <to uri="mock:result"/>
-    </route>
-</camelContext>
+<route>
+    <!-- 1: from the jms queue -->
+    <from uri="activemq:queue:okay"/>
+    <!-- 2: mark this route as transacted -->
+    <transacted/>
+    <!-- 3: call our business logic that is myProcessor -->
+    <process ref="myProcessor"/>
+    <!-- 4: if success then send it to the mock -->
+    <to uri="mock:result"/>
+</route>
 ```
 
 ```yaml

@@ -91,18 +91,14 @@ from("direct:start")
 ```yaml
 - route:
     from:
-      uri: direct
-      parameters:
-        name: start
+      uri: direct:start
       steps:
         - setBody:
             expression:
               simple:
                 expression: "${body} World!"
         - to:
-            uri: mock
-            parameters:
-              name: result
+            uri: mock:result
 ```
 
 ## Content enrichment using a Processor
@@ -164,16 +160,12 @@ from("direct:start")
 ```yaml
 - route:
     from:
-      uri: direct
-      parameters:
-        name: start
+      uri: direct:start
       steps:
         - process:
             ref: myProcessor
         - to:
-            uri: mock
-            parameters:
-              name: result
+            uri: mock:result
 ```
 
 ## Content enrichment using a Bean EIP
@@ -195,22 +187,22 @@ from("activemq:My.Queue")
 
 ```xml
 <route>
-    <from uri="activemq:Input"/>
+    <from uri="activemq:My.Queue"/>
     <bean ref="myBeanName" method="doTransform"/>
-    <to uri="activemq:Output"/>
+    <to uri="activemq:Another.Queue"/>
 </route>
 ```
 
 ```yaml
 - route:
     from:
-      uri: activemq:Input
+      uri: activemq:My.Queue
       steps:
         - bean:
             ref: myBeanName
             method: doTransform
         - to:
-            uri: activemq:Output
+            uri: activemq:Another.Queue
 ```
 
 ## Content enrichment using Enrich EIP

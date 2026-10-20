@@ -36,6 +36,7 @@ You can programmatically create an instance of `PollingConsumer` from any endpoi
 ```java
 Endpoint endpoint = context.getEndpoint("activemq:my.queue");
 PollingConsumer consumer = endpoint.createPollingConsumer();
+consumer.start();
 Exchange exchange = consumer.receive();
 ```
 
@@ -74,5 +75,6 @@ You can configure these options in endpoints [URIs](../../../manual/uris.md), su
 Endpoint endpoint =
 context.getEndpoint("file:inbox?pollingConsumerQueueSize=50");
 PollingConsumer consumer = endpoint.createPollingConsumer();
+consumer.start();
 Exchange exchange = consumer.receive(5000);
 ```

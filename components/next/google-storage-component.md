@@ -35,6 +35,25 @@ Provide authentication credentials to your application code by setting the envir
 
 export GOOGLE\_APPLICATION\_CREDENTIALS="/home/user/Downloads/my-key.json"
 
+### Workload Identity Federation
+
+Instead of a service account key, the component can authenticate with [Workload Identity Federation](https://cloud.google.com/iam/docs/workload-identity-federation), enabled with `useWorkloadIdentityFederation=true`:
+
+-   With `workloadIdentityConfig`, the component loads a credential configuration file of type `external_account`, such as the one that `gcloud iam workload-identity-pools create-cred-config` generates, and exchanges the token of the external identity provider (AWS, Azure, an OIDC provider) for Google credentials.
+    
+-   Without it, the component uses the Application Default Credentials, which detect Workload Identity on GKE.
+    
+
+Set `impersonatedServiceAccount` to act as a service account with the federated credentials. The federated identity needs the `Service Account Token Creator` role on that service account.
+
+_Java-only: constructing the endpoint URI programmatically_
+
+```java
+String endpoint = "google-storage://myCamelBucket?useWorkloadIdentityFederation=true"
+        + "&workloadIdentityConfig=file:/etc/gcp/wif-config.json"
+        + "&impersonatedServiceAccount=storage-writer@my-project.iam.gserviceaccount.com";
+```
+
 ## URI Format
 
 google-storage://bucketNameOrArn?\[options\]
@@ -171,6 +190,9 @@ Enum values:
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
+| **impersonatedServiceAccount** (security) | The email of a service account to impersonate with the credentials of Workload Identity Federation, so the workload gets the permissions of that service account. Used when useWorkloadIdentityFederation is enabled; the federated identity needs the Service Account Token Creator role on the service account. |  | String |
+| **useWorkloadIdentityFederation** (security) | Whether to authenticate with Workload Identity Federation instead of a service account key: with the credential configuration file given in workloadIdentityConfig or, when it is not set, with the Application Default Credentials, which detect Workload Identity on GKE. | false | boolean |
+| **workloadIdentityConfig** (security) | The Workload Identity Federation credential configuration file (JSON, of type external\_account), which says how to exchange a token of an external identity provider, such as AWS, Azure or an OIDC provider, for Google credentials. Used when useWorkloadIdentityFederation is enabled. It is loaded from the classpath by default; prefix it with classpath:, file:, http: or https: to load it from another location. |  | String |
 
 ## Endpoint Options
 
@@ -314,6 +336,9 @@ Enum values:
 
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
+| **impersonatedServiceAccount** (security) | The email of a service account to impersonate with the credentials of Workload Identity Federation, so the workload gets the permissions of that service account. Used when useWorkloadIdentityFederation is enabled; the federated identity needs the Service Account Token Creator role on the service account. |  | String |
+| **useWorkloadIdentityFederation** (security) | Whether to authenticate with Workload Identity Federation instead of a service account key: with the credential configuration file given in workloadIdentityConfig or, when it is not set, with the Application Default Credentials, which detect Workload Identity on GKE. | false | boolean |
+| **workloadIdentityConfig** (security) | The Workload Identity Federation credential configuration file (JSON, of type external\_account), which says how to exchange a token of an external identity provider, such as AWS, Azure or an OIDC provider, for Google credentials. Used when useWorkloadIdentityFederation is enabled. It is loaded from the classpath by default; prefix it with classpath:, file:, http: or https: to load it from another location. |  | String |
 
 ## Message Headers
 

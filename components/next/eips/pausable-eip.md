@@ -21,6 +21,10 @@ To use the Pausable EIP, you need an instance of a consumer listener along with 
 
 -   Java
     
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("kafka:topic")
@@ -29,7 +33,42 @@ from("kafka:topic")
     .to("direct:destination");
 ```
 
+```xml
+<route>
+    <from uri="kafka:topic"/>
+    <pausable consumerListener="kafkaConsumerListener" untilCheck="canContinue"/>
+    <log message="Received: ${body}"/>
+    <to uri="direct:destination"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:topic
+      steps:
+        - pausable:
+            consumerListener: kafkaConsumerListener
+            untilCheck: canContinue
+        - log:
+            message: "Received: ${body}"
+        - to:
+            uri: direct:destination
+- beans:
+    - name: kafkaConsumerListener
+      type: org.apache.camel.component.kafka.consumer.errorhandler.KafkaConsumerListener
+    - name: canContinue
+      type: com.foo.CanContinuePredicate
+```
+
 You can also integrate the Pausable EIP with the [Circuit Breaker EIP](circuitBreaker-eip.md) to pause consumption based on downstream system availability:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("kafka:topic")
@@ -38,6 +77,33 @@ from("kafka:topic")
         .resilience4jConfiguration().circuitBreaker("pausableCircuit").end()
         .to("direct:downstream")
     .end();
+```
+
+```xml
+<route>
+    <from uri="kafka:topic"/>
+    <pausable consumerListener="kafkaConsumerListener" untilCheck="canContinue"/>
+    <circuitBreaker>
+        <resilience4jConfiguration circuitBreaker="pausableCircuit"/>
+        <to uri="direct:downstream"/>
+    </circuitBreaker>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:topic
+      steps:
+        - pausable:
+            consumerListener: kafkaConsumerListener
+            untilCheck: canContinue
+        - circuitBreaker:
+            resilience4jConfiguration:
+              circuitBreaker: pausableCircuit
+            steps:
+              - to:
+                  uri: direct:downstream
 ```
 
 ## See Also

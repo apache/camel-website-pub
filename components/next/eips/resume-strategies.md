@@ -36,7 +36,7 @@ The resume strategies comes in three parts:
 
 ## The DSL method
 
-The route needs to use the `resumable()` method followed by passing a strategy configuration using `configuration`. It is also possible to use the `resumableStrategy` to point to an instance of the resume strategy in use, although this is much more complex. The vast majority of the cases should use a `configuration`, in which case Camel will do the heavy-lifting for you.
+The route needs to use the `resumable()` method followed by passing a strategy configuration using `configuration`. It is also possible to use the `resumeStrategy` to point to an instance of the resume strategy in use, although this is much more complex. The vast majority of the cases should use a `configuration`, in which case Camel will do the heavy-lifting for you.
 
 Using the resume API with the configuration should look like this:
 
@@ -59,7 +59,12 @@ from("some:component")
 
 This instance can be bound in the Context registry as follows:
 
-_Java-only: binding resume strategy to the registry_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 getCamelContext().getRegistry().bind("testResumeStrategy", new MyTestResumeStrategy());
@@ -70,16 +75,84 @@ from("some:component")
     .process(this::process);
 ```
 
+```xml
+<bean name="testResumeStrategy" type="com.foo.MyTestResumeStrategy"/>
+<bean name="resumeCache" type="com.foo.MyChoiceOfResumeCache">
+    <constructors>
+        <constructor index="0" value="100"/>
+    </constructors>
+</bean>
+
+<route>
+    <from uri="some:component"/>
+    <resumable resumeStrategy="testResumeStrategy"/>
+    <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- beans:
+    - name: testResumeStrategy
+      type: com.foo.MyTestResumeStrategy
+    - name: resumeCache
+      type: com.foo.MyChoiceOfResumeCache
+      constructors:
+        0: 100
+- route:
+    from:
+      uri: some:component
+      steps:
+        - resumable:
+            resumeStrategy: testResumeStrategy
+        - process:
+            ref: myProcessor
+```
+
 Or the instance can be constructed as follows:
 
-_Java-only: constructing resume strategy inline_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 getCamelContext().getRegistry().bind("resumeCache", new MyChoiceOfResumeCache<>(100));
 
 from("some:component")
     .resumable(new MyTestResumeStrategy())
-    .process(this::process)
+    .process(this::process);
+```
+
+```xml
+<bean name="resumeCache" type="com.foo.MyChoiceOfResumeCache">
+    <constructors>
+        <constructor index="0" value="100"/>
+    </constructors>
+</bean>
+
+<route>
+    <from uri="some:component"/>
+    <resumable resumeStrategy="#class:com.foo.MyTestResumeStrategy"/>
+    <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- beans:
+    - name: resumeCache
+      type: com.foo.MyChoiceOfResumeCache
+      constructors:
+        0: 100
+- route:
+    from:
+      uri: some:component
+      steps:
+        - resumable:
+            resumeStrategy: "#class:com.foo.MyTestResumeStrategy"
+        - process:
+            ref: myProcessor
 ```
 
 In some circumstances, such as when dealing with File I/O, it may be necessary to set the offset manually. There are **supporting classes** that can help work with resumables:
@@ -93,12 +166,40 @@ In some circumstances, such as when dealing with File I/O, it may be necessary t
 
 In some cases, it may be necessary to avoid updating the offset for every exchange. You can enable the intermittent mode to modify the route behavior so that missing offsets will not cause an exception:
 
-_Java-only: enabling intermittent mode on resumable_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("some:component")
-.resumable().resumeStrategy(new MyTestResumeStrategy()).intermittent(true)
-.process(this::process)
+    .resumable().resumeStrategy(new MyTestResumeStrategy()).intermittent(true)
+    .process(this::process);
+```
+
+```xml
+<route>
+    <from uri="some:component"/>
+    <resumable resumeStrategy="testResumeStrategy" intermittent="true"/>
+    <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: some:component
+      steps:
+        - resumable:
+            resumeStrategy: testResumeStrategy
+            intermittent: true
+        - process:
+            ref: myProcessor
+- beans:
+    - name: testResumeStrategy
+      type: com.foo.MyTestResumeStrategy
 ```
 
 ## Builtin Resume Strategies
@@ -140,7 +241,12 @@ When using the converters with the file component, beware of the differences in 
 
 For instance, the behavior of:
 
-_Java-only: resumable with Reader body type_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("file:{{input.dir}}?noop=true&fileName={{input.file}}")
@@ -149,15 +255,70 @@ from("file:{{input.dir}}?noop=true&fileName={{input.file}}")
     .process(this::process);
 ```
 
+```xml
+<route>
+    <from uri="file:{{input.dir}}?noop=true&amp;fileName={{input.file}}"/>
+    <resumable resumeStrategy="testResumeStrategy"/>
+    <convertBodyTo type="java.io.Reader"/>
+    <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "file:{{input.dir}}"
+      parameters:
+        noop: true
+        fileName: "{{input.file}}"
+      steps:
+        - resumable:
+            resumeStrategy: testResumeStrategy
+        - convertBodyTo:
+            type: java.io.Reader
+        - process:
+            ref: myProcessor
+```
+
 It is different from the behavior of:
 
-_Java-only: resumable with InputStream body type_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("file:{{input.dir}}?noop=true&fileName={{input.file}}")
     .resumable("testResumeStrategy")
     .convertBodyTo(InputStream.class)
     .process(this::process);
+```
+
+```xml
+<route>
+    <from uri="file:{{input.dir}}?noop=true&amp;fileName={{input.file}}"/>
+    <resumable resumeStrategy="testResumeStrategy"/>
+    <convertBodyTo type="java.io.InputStream"/>
+    <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: "file:{{input.dir}}"
+      parameters:
+        noop: true
+        fileName: "{{input.file}}"
+      steps:
+        - resumable:
+            resumeStrategy: testResumeStrategy
+        - convertBodyTo:
+            type: java.io.InputStream
+        - process:
+            ref: myProcessor
 ```
 
 **Reason**: the `skip` method in the Reader will skip characters, whereas the same method on the InputStream will skip bytes.
@@ -180,13 +341,46 @@ To use the API, it needs an instance of a Consumer listener along with a predica
 
 Usage example:
 
-_Java-only: using pausable consumer API_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
-from(from)
+from("kafka:topic")
     .pausable(new KafkaConsumerListener(), o -> canContinue())
     .process(exchange -> LOG.info("Received an exchange: {}", exchange.getMessage().getBody()))
-    .to(destination);
+    .to("direct:destination");
+```
+
+```xml
+<route>
+    <from uri="kafka:topic"/>
+    <pausable consumerListener="kafkaConsumerListener" untilCheck="canContinue"/>
+    <log message="Received an exchange: ${body}"/>
+    <to uri="direct:destination"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:topic
+      steps:
+        - pausable:
+            consumerListener: kafkaConsumerListener
+            untilCheck: canContinue
+        - log:
+            message: "Received an exchange: ${body}"
+        - to:
+            uri: direct:destination
+- beans:
+    - name: kafkaConsumerListener
+      type: org.apache.camel.component.kafka.consumer.errorhandler.KafkaConsumerListener
+    - name: canContinue
+      type: com.foo.CanContinuePredicate
 ```
 
 You can also integrate the pausable API and the consumer listener with the circuit breaker EIP. For instance, it’s possible to configure the circuit breaker so that it can manipulate the state of the listener based on success or on error conditions on the circuit.
@@ -195,7 +389,7 @@ One example would be to create an event watcher that checks for a downstream sys
 
 An example implementation of this approach would be similar to this:
 
-_Java-only: integrating pausable consumer with circuit breaker_
+_Java-only: creating the circuit breaker and binding it to the registry_
 
 ```java
 CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults("pausable");
@@ -214,21 +408,63 @@ circuitBreaker.getEventPublisher()
 
         if (executorService == null) {
             executorService = Executors.newSingleThreadScheduledExecutor();
-            // In a real world scenario, instead of incrementing, it could be pinging a remote system or
-            // running a similar check to determine whether it's available. That
+            // In a real world scenario, it could be pinging a remote system or
+            // running a similar check to determine whether it's available.
             executorService.scheduleAtFixedRate(() -> someCheckMethod(), 1, 1, TimeUnit.SECONDS);
         }
     });
 
 // Binds the configuration to the registry
- getCamelContext().getRegistry().bind("pausableCircuit", circuitBreaker);
+getCamelContext().getRegistry().bind("pausableCircuit", circuitBreaker);
+```
 
-from(from)
+The route then uses the circuit breaker by its name in the registry, `pausableCircuit`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("kafka:topic")
     .pausable(new KafkaConsumerListener(), o -> canContinue())
     .routeId("pausable-it")
     .process(exchange -> LOG.info("Got record from Kafka: {}", exchange.getMessage().getBody()))
     .circuitBreaker()
         .resilience4jConfiguration().circuitBreaker("pausableCircuit").end()
-        .to(to)
+        .to("direct:downstream")
     .end();
+```
+
+```xml
+<route id="pausable-it">
+    <from uri="kafka:topic"/>
+    <pausable consumerListener="kafkaConsumerListener" untilCheck="canContinue"/>
+    <log message="Got record from Kafka: ${body}"/>
+    <circuitBreaker>
+        <resilience4jConfiguration circuitBreaker="pausableCircuit"/>
+        <to uri="direct:downstream"/>
+    </circuitBreaker>
+</route>
+```
+
+```yaml
+- route:
+    id: pausable-it
+    from:
+      uri: kafka:topic
+      steps:
+        - pausable:
+            consumerListener: kafkaConsumerListener
+            untilCheck: canContinue
+        - log:
+            message: "Got record from Kafka: ${body}"
+        - circuitBreaker:
+            resilience4jConfiguration:
+              circuitBreaker: pausableCircuit
+            steps:
+              - to:
+                  uri: direct:downstream
 ```

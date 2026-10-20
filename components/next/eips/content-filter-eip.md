@@ -13,6 +13,48 @@ Camel supports the [Content Filter](http://www.enterpriseintegrationpatterns.com
 -   Using an [Expression](../../../manual/expression.md)
     
 
+## Message Content filtering using expression
+
+Some languages like [XPath](../languages/xpath-language.md), and [XQuery](../languages/xquery-language.md) can be used to transform and filter content from messages.
+
+In the example we use xpath to filter a XML message to select all the `<foo><bar>` elements:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("activemq:Input")
+  .setBody().xpath("//foo/bar")
+  .to("activemq:Output");
+```
+
+```xml
+<route>
+  <from uri="activemq:Input"/>
+  <setBody>
+    <xpath>//foo/bar</xpath>
+  </setBody>
+  <to uri="activemq:Output"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:Input
+      steps:
+        - setBody:
+            expression:
+              xpath:
+                expression: //foo/bar
+        - to:
+            uri: activemq:Output
+```
+
 ## Message Content filtering using a Processor
 
 In this example, we add our own [Processor](../../../manual/processor.md) using explicit Java to filter the message:
@@ -76,16 +118,12 @@ from("direct:start")
 ```yaml
 - route:
     from:
-      uri: direct
-      parameters:
-        name: start
+      uri: direct:start
       steps:
         - process:
             ref: myProcessor
         - to:
-            uri: mock
-            parameters:
-              name: result
+            uri: mock:result
 ```
 
 ## Message Content filtering using a Bean EIP
@@ -100,9 +138,9 @@ We can use [Bean EIP](bean-eip.md) to use any Java method on any bean to act as 
     
 
 ```java
-from("activemq:My.Queue")
+from("activemq:Input")
     .bean("myBeanName", "doFilter")
-    .to("activemq:Another.Queue");
+    .to("activemq:Output");
 ```
 
 ```xml
@@ -121,47 +159,6 @@ from("activemq:My.Queue")
         - bean:
             ref: myBeanName
             method: doFilter
-        - to:
-            uri: activemq:Output
-```
-
-## Message Content filtering using expression
-
-Some languages like [XPath](../languages/xpath-language.md), and [XQuery](../languages/xquery-language.md) can be used to transform and filter content from messages.
-
-In the example we use xpath to filter a XML message to select all the `<foo><bar>` elements:
-
--   Java
-    
--   XML
-    
--   YAML
-    
-
-```java
-from("activemq:Input")
-  .setBody().xpath("//foo:bar")
-  .to("activemq:Output");
-```
-
-```xml
-<route>
-  <from uri="activemq:Input"/>
-  <setBody>
-    <xpath>//foo:bar</xpath>
-  </setBody>
-  <to uri="activemq:Output"/>
-</route>
-```
-
-```yaml
-- route:
-    from:
-      uri: activemq:Input
-      steps:
-        - setBody:
-            expression:
-              xpath: //foo:bar
         - to:
             uri: activemq:Output
 ```

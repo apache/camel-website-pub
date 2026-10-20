@@ -123,4 +123,8 @@ camel dirty
 camel dirty --clean
 ```
 
+Only the files named after the pid of a process that is gone count, such as `<pid>-status.json`. Other files in `~/.camel`, such as the log of a Spring Boot or Quarkus app that `camel run` runs (`<name>.log`), are left alone.
+
+The log of the previous run of an integration (`~/.camel/<name>-previous.log`, see `camel log --previous`) is kept on purpose, so `camel dirty` leaves it.
+
 An error is printed as one line that starts with `ERROR:`. To see the stack trace of every error, set the environment variable `CAMEL_CLI_DEBUG` to `true`. See [Exit Codes and Output](camel-jbang-exit-codes.md) for what each exit code means.

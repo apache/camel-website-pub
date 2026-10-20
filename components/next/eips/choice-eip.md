@@ -173,7 +173,7 @@ The Choice EIP in precondition mode combined with [Route Templates](../../../man
 
 The Camel [Simple](../languages/simple-language.md) language is great to use with the Choice EIP in precondition mode to select a specific branch based on [property placeholders](../../../manual/using-propertyplaceholder.md).
 
-Here we select from the Switch the first predicate that matches. So if there is a property placeholder with the key `foo` then it is selected, and so on. Notice how we can use `{{?foo}}` to mark the property placeholder as optional.
+Here we select from the Choice the first predicate that matches. So if there is a property placeholder with the key `foo` then it is selected, and so on. Notice how we can use `{{?foo}}` to mark the property placeholder as optional.
 
 -   Java
     

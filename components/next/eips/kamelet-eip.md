@@ -32,12 +32,7 @@ routeTemplate("my-aggregate")
 
 And the following route using the kamelet:
 
--   Java
-    
--   XML
-    
--   YAML
-    
+Java
 
 ```java
 from("direct:start")
@@ -47,6 +42,8 @@ from("direct:start")
     .to("mock:result");
 ```
 
+XML
+
 ```xml
 <route>
     <from uri="direct:start"/>
@@ -55,6 +52,8 @@ from("direct:start")
     <to uri="mock:result"/>
 </route>
 ```
+
+YAML
 
 ```yaml
 - route:

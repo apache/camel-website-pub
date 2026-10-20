@@ -85,6 +85,7 @@ The State Store component supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **backendFactory** (advanced) | **Autowired** Factory that creates a dedicated backend for each store name. When set, it takes precedence over registry auto-discovery for endpoints without an explicit backend. |  | StateStoreBackendFactory |
 
 ## Endpoint Options
 
@@ -267,6 +268,20 @@ from("direct:init")
 If no `backend` option is specified on the endpoint, the component automatically looks up a `KeyValueRepository` bean from the Camel registry. If exactly one is found, it is used for all endpoints. If none is found, the default in-memory backend (`MemoryKeyValueRepository`) is used.
 
 This means you can configure a backend once (via Java or properties) and all `state-store` endpoints will use it without needing `backend=#beanName` on each endpoint URI.
+
+### Backend per store name
+
+To give each store name its own backend, set the `backendFactory` component option to a `StateStoreBackendFactory`. A single bean of that type in the registry is autowired. The factory is called once per store name and takes precedence over the registry lookup above. The component starts and stops the backends it creates. If the factory returns `null`, the usual resolution applies.
+
+```java
+StateStoreComponent stateStore = context.getComponent("state-store", StateStoreComponent.class);
+stateStore.setBackendFactory(storeName -> new MyKeyValueRepository(storeName));
+```
+
+An explicit `backend` option on the endpoint still takes precedence over the factory.
+
+> **Note**
+> Autowiring only applies when the registry holds exactly one `StateStoreBackendFactory`. With two or more, none is autowired: the component logs a WARN and falls back to the default resolution. Set `backendFactory` explicitly to choose one.
 
 ### In-Memory (default)
 

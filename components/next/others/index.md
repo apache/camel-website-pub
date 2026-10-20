@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 105 in 69 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 106 in 70 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -103,6 +103,7 @@ Number of Miscellaneous Components: 105 in 69 JAR artifacts (3 deprecated)
 | [Springdoc](springdoc.md) | openapi-java |  | 3.14 | Springdoc Swagger UI for openapi-java in spring boot |
 | [Telemetry](telemetry.md) | camel-telemetry | Preview | 4.11 | Distributed telemetry common interfaces |
 | [Telemetry Dev](telemetry-dev.md) | camel-telemetry-dev | Preview | 4.11 | Basic implementation of Camel Telemetry useful for development purposes |
+| [Test DST](test-dst.md) | camel-test-dst | Preview | 4.24 | Deterministic simulation testing for Camel consumers: seeded virtual-time scheduler, fault injection, invariants and seed replay |
 | [Test JUnit5](test-junit5.md) | camel-test-junit5 | Stable | 3.0 | Camel unit testing with JUnit 5 |
 | [Test JUnit6](test-junit6.md) | camel-test-junit6 | Stable | 4.17 | Camel unit testing with JUnit 6 |
 | [Test Main JUnit5](test-main-junit5.md) | camel-test-main-junit5 | Stable | 3.16 | Camel unit testing with Main and JUnit 5 |

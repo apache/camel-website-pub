@@ -15,7 +15,46 @@ So in other words, the [Marshal](marshal-eip.md) and [Unmarshal](#) EIPs are use
 
 ## Example
 
-The following example reads XML files from the inbox/xml directory. Each file is then transformed into Java Objects using [JAXB](../dataformats/jaxb-dataformat.md). Then a [Bean](../bean-component.md) is invoked that takes in the Java object.
+The following example reads JSON files from the inbox/json directory. `unmarshal` turns each file into a Map with [Jackson](../dataformats/jackson2-dataformat.md) (a JSON object becomes a Map, a JSON array a List), so the route can read its fields, such as `${body[orderId]}`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("file:inbox/json")
+  .unmarshal().json(JsonLibrary.Jackson)
+  .log("Order ${body[orderId]} for customer ${body[customer]}")
+  .to("bean:validateOrder");
+```
+
+```xml
+<route>
+  <from uri="file:inbox/json"/>
+  <unmarshal><json library="Jackson"/></unmarshal>
+  <log message="Order ${body[orderId]} for customer ${body[customer]}"/>
+  <to uri="bean:validateOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: file:inbox/json
+      steps:
+        - unmarshal:
+            json:
+              library: Jackson
+        - log:
+            message: "Order ${body[orderId]} for customer ${body[customer]}"
+        - to:
+            uri: bean:validateOrder
+```
+
+The next example reads XML files from the inbox/xml directory. Each file is then transformed into Java Objects using [JAXB](../dataformats/jaxb-dataformat.md). Then a [Bean](../bean-component.md) is invoked that takes in the Java object.
 
 Then the reverse operation happens to transform the Java objects back into XML also via JAXB, but using the `marshal` operation. And finally, the message is routed to a [JMS](../jms-component.md) queue.
 

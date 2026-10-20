@@ -137,6 +137,55 @@ from(direct("tickets"))
 
 A [Semantic](../languages/semantic-language.md) choice question returns a category string that Switch can match against its literal cases. Configure `camel-semantic` and register an expert bean named `decisions` as described in the language documentation. This example uses one reference, `ref:department`, to evaluate the message body once and route the result. Load it alongside the `direct:billing`, `direct:technical`, and `direct:review` handling routes shown above.
 
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+import static org.apache.camel.semantic.SemanticEvaluationsBuilder.semanticEvaluations;
+
+semanticEvaluations(this)
+    .evaluation("department").expert("decisions")
+        .type("choice")
+        .instructions("Which department should handle this message?")
+        .criterion("billing", "Invoices, payments and refunds")
+        .criterion("technical", "Bugs, outages and technical problems")
+        .criterion("other", "Any other request")
+    .register();
+
+from("direct:classify")
+    .doSwitch().language("semantic", "ref:department")
+        .doCase("billing", "direct:billing")
+        .doCase("technical", "direct:technical")
+        .otherwise("direct:review")
+    .end();
+```
+
+```xml
+<routes xmlns="http://camel.apache.org/schema/xml-io">
+    <semantic>
+        <evaluation expert="decisions" name="department" type="choice">
+            <instructions>Which department should handle this message?</instructions>
+            <criterion key="billing" value="Invoices, payments and refunds"/>
+            <criterion key="technical" value="Bugs, outages and technical problems"/>
+            <criterion key="other" value="Any other request"/>
+        </evaluation>
+    </semantic>
+    <route>
+        <from uri="direct:classify"/>
+        <switch>
+            <selector><language language="semantic">ref:department</language></selector>
+            <case value="billing" uri="direct:billing"/>
+            <case value="technical" uri="direct:technical"/>
+            <otherwise uri="direct:review"/>
+        </switch>
+    </route>
+</routes>
+```
+
 ```yaml
 - semantic:
     evaluation:

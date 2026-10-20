@@ -383,7 +383,9 @@ And you can generate unique IDs with the [Camel UUID Generator](../../../manual/
 To load data from classpath, you can use the load function such as `$\{load(myrules.json)}`. If the file is not present on classpath, then an exception is thrown. However, you can mark the file as optional as follows: `$\{load(myrules.json?optional=true)}`, which will return `null` if the file does not exists.
 
 > **Important**
-> The load function can only load from classpath; and not the file-system in general. This is on purpose to avoid potential security risks by constructing dynamic simple expressions using the load function to attempt to load server files.
+> The load function can only load from classpath; and not the file-system in general. This is on purpose to avoid potential security risks by constructing dynamic simple expressions using the load function to attempt to load server files. A prefix such as `file:` is not used: `$\{load(file:/var/inbox/data.json)}` looks for `/var/inbox/data.json` on the classpath, and when it is not there, the error says so.
+
+With Camel JBang, `camel run` puts the files of the project on the classpath, such as a `stock.json` next to the routes, so `$\{load(stock.json)}` reads it there. To read a file of the file-system in any runtime, use the [Constant](constant-language.md) language with `resource:file:`, such as `resource:file:stock.json`, for example in a `setVariable` that keeps the content for the steps after it.
 
 ### String Functions
 

@@ -48,6 +48,10 @@ The tokenization creates a composite message (an array of Strings). This composi
 
 -   Java
     
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
@@ -61,11 +65,47 @@ from("direct:start")
     .to("mock:result");
 ```
 
+```xml
+<route>
+    <from uri="direct:start"/>
+    <tokenizer>
+        <langChain4jParagraphTokenizer maxTokens="1024" maxOverlap="10" tokenizerType="OPEN_AI"/>
+    </tokenizer>
+    <split>
+        <simple>${body}</simple>
+        <to uri="mock:result"/>
+    </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - tokenizer:
+            langChain4jParagraphTokenizer:
+              maxTokens: 1024
+              maxOverlap: 10
+              tokenizerType: OPEN_AI
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - to:
+                  uri: mock:result
+```
+
 ### Tokenize by tokens
 
 Starting with Camel 4.12, the code defaults to using segment sizes for determining the maximum amount of data to tokenize. To tokenize by tokens, you must specify the underlying model:
 
 -   Java
+    
+-   XML
+    
+-   YAML
     
 
 ```java
@@ -78,6 +118,39 @@ from("direct:start")
                 .end())
     .split().body()
     .to("mock:result");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <tokenizer>
+        <langChain4jParagraphTokenizer maxTokens="1024" modelName="gpt-4o-mini" maxOverlap="10" tokenizerType="OPEN_AI"/>
+    </tokenizer>
+    <split>
+        <simple>${body}</simple>
+        <to uri="mock:result"/>
+    </split>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - tokenizer:
+            langChain4jParagraphTokenizer:
+              maxTokens: 1024
+              modelName: gpt-4o-mini
+              maxOverlap: 10
+              tokenizerType: OPEN_AI
+        - split:
+            expression:
+              simple:
+                expression: "${body}"
+            steps:
+              - to:
+                  uri: mock:result
 ```
 
 ## Dependencies

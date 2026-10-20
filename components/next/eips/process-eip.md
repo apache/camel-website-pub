@@ -46,11 +46,37 @@ public class MyProcessor implements Processor {
 
 Then in Camel you can call this processor:
 
-_Java-only: calling a Processor by instantiating it directly_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("activemq:myQueue")
   .process(new MyProcessor());
+```
+
+```xml
+<bean name="myProcessor" type="com.foo.MyProcessor"/>
+
+<route>
+  <from uri="activemq:myQueue"/>
+  <process ref="myProcessor"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: activemq:myQueue
+      steps:
+        - process:
+            ref: myProcessor
+- beans:
+    - name: myProcessor
+      type: com.foo.MyProcessor
 ```
 
 You can also call a processor by its bean id, if the processor has been enlisted in the [Registry](../../../manual/registry.md), such as with the id `myProcessor`:

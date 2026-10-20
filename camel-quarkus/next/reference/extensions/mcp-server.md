@@ -59,6 +59,12 @@ or in YAML DSL:
 
 Tool parameters are declared with the `parameter.NAME` options: the value is the JSON type (`string`, `integer`, `number`, `boolean`), and the `parameter.NAME.description`, `parameter.NAME.required` and `parameter.NAME.enum` options refine the generated input schema. Arguments arrive as message headers in the route (`${header.customerId}`).
 
+### Structured tool output
+
+Tools declaring their output with the `outputSchema` or `outputParameter.NAME` options publish it as the MCP `outputSchema`. The route body must then be JSON: MCP clients receive it as `structuredContent`, next to the same JSON as text content. See [Structured Tool Output](../../../../components/next/ai-tool-component.html#_structured_tool_output_outputschema) in the AI Tool component documentation.
+
+In native mode, an `outputSchema` loaded from `classpath:` must be [embedded in the native executable](../../user-guide/native-mode.html#embedding-resource-in-native-executable).
+
 ### Combining the Camel and quarkus-mcp-server configuration
 
 The configuration is split by ownership: `quarkus.camel.mcp-server.` **decides \*which tools exist and how they execute** (identical semantics on every Camel runtime), while `quarkus.mcp.server.` **decides \*how the server is exposed**. Both are set side by side in `application.properties`:

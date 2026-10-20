@@ -47,9 +47,22 @@ errorHandler(deadLetterChannel("log:dead?level=ERROR"));
 
 Pay attention to Spring XML DSL. The type attribute is used to declare which error handler to use, here its `DeadLetterChannel`. And in XML the `<errorHandler>` must be configured with an id. The id must then be enabled on either the `<camelContext>` (global scope), or per route that should use this error handler.
 
-The following listing is an equivalent of the prior Java DSL listing:
+The following listing shows the error handler together with a route:
 
-_XML-only:_
+-   Java
+    
+-   Spring XML
+    
+-   YAML
+    
+
+```java
+errorHandler(deadLetterChannel("log:dead?level=ERROR"));
+
+from("direct:newOrder")
+    .bean("orderService", "validate")
+    .bean("orderService", "store");
+```
 
 ```xml
 <camelContext errorHandlerRef="myErrorHandler">
@@ -63,7 +76,23 @@ _XML-only:_
 </camelContext>
 ```
 
-Notice how we have enabled the error handler on the `<camelContext>` via `errorHandlerRef` which means this error handler is used globally. You can override this per route, and have individual routes used another error handler.
+```yaml
+- errorHandler:
+    deadLetterChannel:
+      deadLetterUri: "log:dead?level=ERROR"
+- route:
+    from:
+      uri: direct:newOrder
+      steps:
+        - bean:
+            ref: orderService
+            method: validate
+        - bean:
+            ref: orderService
+            method: store
+```
+
+Notice how in Spring XML we have enabled the error handler on the `<camelContext>` via `errorHandlerRef` which means this error handler is used globally. You can override this per route, and have individual routes used another error handler. In Java and YAML, the error handler applies to the routes in the same `RouteBuilder` class or YAML file.
 
 > **Note**
 > The DSLs is planned to be improved in the near future to have a unified way of configuring error handling across all DSLs with [Route Configuration](../../../manual/route-configuration.md). When fully implemented, then configuring error handler in Java and Spring XML DSL would be much more similar than currently.
@@ -231,7 +260,7 @@ By enabling `useOriginalMessage` on the dead letter channel, then the message mo
 ```java
 // will use the original message (body and headers)
 errorHandler(deadLetterChannel("jms:queue:dead")
-   .useOriginalMessage().maximumRedeliveries(5).redeliveryDelay(5000);
+   .useOriginalMessage().maximumRedeliveries(5).redeliveryDelay(5000));
 ```
 
 And in XML, you set `useOriginalMessage=true` on the `<errorHandler>` as shown:
@@ -275,7 +304,7 @@ For example, you can do:
 ```java
 errorHandler(deadLetterChannel("jms:queue:dead")
   .maximumRedeliveries(3)
-  .onRedelivery(new MyOnRedeliveryProcessor()));
+  .onRedelivery(new MyRedeliveryProcessor()));
 ```
 
 And in XML DSL, you specify a bean id via `onRedeliveryRef` on the `<errorHandler>` as shown:
@@ -335,8 +364,7 @@ errorHandler(deadLetterChannel("jms:dead").onPrepareFailure(new MyPrepareProcess
 Configuring this from Spring XML is done with the `onPrepareFailureRef` to refer to the processor as a `<bean>` as shown:
 
 ```xml
-<bean id="myPrepare"
-      class="org.apache.camel.processor.DeadLetterChannelOnPrepareTest.MyPrepareProcessor"/>
+<bean id="myPrepare" class="com.foo.MyPrepareProcessor"/>
 
 <errorHandler id="dlc" type="DeadLetterChannel" deadLetterUri="jms:dead" onPrepareFailureRef="myPrepare"/>
 ```

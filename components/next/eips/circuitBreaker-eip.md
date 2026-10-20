@@ -54,38 +54,7 @@ Inside the `onFallback` these properties tell why the fallback runs. `CamelCircu
 | The call was made and timed out | `false` | `true` |
 | The call was not attempted: the breaker is open, or the bulkhead is full | `true` | not set |
 
-`CamelCircuitBreakerState` is the state of the breaker after the call was recorded, so the call that opens the breaker reports `OPEN` although it was attempted; use the rejected property to know whether a call was made. The caught exception is available in the fallback, for example as `${exception.message}` in the Simple language.
-
-For example, a fallback that answers differently when the service is down rather than failing once:
-
-```yaml
-- route:
-    from:
-      uri: timer:stock?period=1000
-      steps:
-        - circuitBreaker:
-            steps:
-              - to:
-                  uri: direct:supplier
-            onFallback:
-              steps:
-                - choice:
-                    when:
-                      - expression:
-                          simple:
-                            expression: "${exchangeProperty.CamelCircuitBreakerResponseRejected} == true"
-                        steps:
-                          - setBody:
-                              expression:
-                                constant:
-                                  expression: "supplier is down, using the last known stock"
-                    otherwise:
-                      steps:
-                        - setBody:
-                            expression:
-                              constant:
-                                expression: "stock check failed, will try again"
-```
+`CamelCircuitBreakerState` is the state of the breaker after the call was recorded, so the call that opens the breaker reports `OPEN` although it was attempted; use the rejected property to know whether a call was made. The caught exception is available in the fallback, for example as `${exception.message}` in the Simple language. The example under _Using the exchange properties in the fallback_ below uses these properties.
 
 ## Example
 
@@ -142,6 +111,84 @@ from("direct:start")
                         expression: Fallback message
         - to:
             uri: mock:result
+```
+
+### Using the exchange properties in the fallback
+
+A fallback that answers differently when the service is down rather than failing once:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("timer:stock?period=1000")
+    .circuitBreaker()
+        .to("direct:supplier")
+    .onFallback()
+        .choice()
+            .when(simple("${exchangeProperty.CamelCircuitBreakerResponseRejected} == true"))
+                .setBody(constant("supplier is down, using the last known stock"))
+            .otherwise()
+                .setBody(constant("stock check failed, will try again"))
+        .end()
+    .end();
+```
+
+```xml
+<route>
+  <from uri="timer:stock?period=1000"/>
+  <circuitBreaker>
+    <to uri="direct:supplier"/>
+    <onFallback>
+      <choice>
+        <when>
+          <simple>${exchangeProperty.CamelCircuitBreakerResponseRejected} == true</simple>
+          <setBody>
+            <constant>supplier is down, using the last known stock</constant>
+          </setBody>
+        </when>
+        <otherwise>
+          <setBody>
+            <constant>stock check failed, will try again</constant>
+          </setBody>
+        </otherwise>
+      </choice>
+    </onFallback>
+  </circuitBreaker>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:stock?period=1000
+      steps:
+        - circuitBreaker:
+            steps:
+              - to:
+                  uri: direct:supplier
+            onFallback:
+              steps:
+                - choice:
+                    when:
+                      - expression:
+                          simple:
+                            expression: "${exchangeProperty.CamelCircuitBreakerResponseRejected} == true"
+                        steps:
+                          - setBody:
+                              expression:
+                                constant:
+                                  expression: "supplier is down, using the last known stock"
+                    otherwise:
+                      steps:
+                        - setBody:
+                            expression:
+                              constant:
+                                expression: "stock check failed, will try again"
 ```
 
 ## Route lifecycle and breaker state

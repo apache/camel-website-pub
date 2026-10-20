@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.23 to 4.24
 
+### Java
+
+**Breaking change:** Camel 4.24 requires **Java 21** as the minimum runtime version. Java 17 is no longer supported. Upgrade your JDK to 21 or later before upgrading to Camel 4.24.
+
 ### camel-core - Route.clearRouteModel() is deprecated
 
 The `Route.clearRouteModel()` method is deprecated and is now a no-op. It will be removed in a later release.
@@ -14,6 +18,18 @@ The `Route.clearRouteModel()` method is deprecated and is now a no-op. It will b
 This method dropped the references a runtime route held to its model (the route definition, the error handler factory and the error handlers) once the route was created at startup. The `CamelContext` already keeps the route definitions in its model, so clearing them on the route saved little memory at the cost of making `Route.getRoute()` and `Route.getErrorHandlerFactory()` return `null` for routes created at startup (but not for routes added after startup).
 
 Applications that called `Route.clearRouteModel()` directly can remove the call. Implementations of the `Route` interface that override `clearRouteModel()` can remove the override.
+
+### camel-core - the documented default of skipBindingOnErrorCode is true
+
+The `skipBindingOnErrorCode` option of the Rest DSL (on `restConfiguration`, `rest`, its verbs and `restBinding`) is now documented with the default value `true`, the default it has always had at runtime. Before, the model, the catalog, the XML and YAML DSL schemas said `false`. Routes behave as before.
+
+Tools that read the default from the catalog or the schemas now see `true`.
+
+### camel-core - pollEnrich: the body is null after a timeout also for a message that creates its body on demand
+
+When `pollEnrich` (or `poll`) times out and no `aggregationStrategy` is configured, the body is set to `null`, and with `variableReceive` the variable is `null`. For a message that creates its body on demand, the `null` did not stick: the next read created the body again. The message of a file consumer creates its body from its file, so after a timeout the body, or the variable of `variableReceive`, was the file of the incoming exchange instead of `null`. The messages of the JMS, sjms, mail, HTTP, XMPP, SMPP, SNMP and Spring WS consumers create their body on demand as well, so there it was the payload of the consumer again.
+
+The body, or the variable, is now `null` after a timeout for these consumers too. A route that read the incoming file or payload from the body after a timed out `pollEnrich` must keep it before the `pollEnrich` instead, for example with `variableReceive`, which leaves the body as it was. To keep the body empty, the message is replaced by a plain message with the same message id, headers and attachments, so after a timeout it is no longer of the message type of the consumer (such as `GenericFileMessage` or `JmsMessage`).
 
 ### camel-report-maven-plugin:validate / configuration-validate
 
@@ -105,6 +121,16 @@ So `camel validate` can report an endpoint it did not report before.
 ### camel-file - a done file with a fixed name is kept for the files a poll left
 
 A done file with a fixed name (such as `doneFileName=ready`) is no longer deleted while a poll left files of its directory for the next poll (beyond `maxMessagesPerPoll`, or not started); before, they were left until a new done file was written. Meanwhile the polls consume every file of the directory, as they do whenever the done file is there. This also applies to `pollEnrich` and `ConsumerTemplate.receive`, which take one file per call: the done file is now kept until the last file of the directory is received, where before the first received file deleted it. This applies to camel-ftp, camel-sftp, camel-smb and camel-azure-files as well.
+
+### camel-file - poll and pollEnrich evaluate the fileName on the current message
+
+`poll` and `pollEnrich` with a file based component (file, ftp, ftps, sftp, smb and azure-files) evaluate a dynamic `fileName` that does not use the file functions on the current message, so `fileName=${body}` and `fileName=${body[customer]}.json` read its body. Before, the consumer evaluated it for each file found, with that file as the body, so `${body}` was the file found. A `fileName` that uses the file functions (`${file:…​}`, `${date:file:…​}`) is still evaluated for each file found, and headers, variables and exchange properties work as before. A `fileName` that read the file found through its headers, such as `${header.CamelFileName}`, must use the file functions instead (`${file:name}`).
+
+### camel-pqc - an unknown hybridKdfAlgorithm is rejected
+
+The hybrid KEM operations now fail with an `IllegalArgumentException` when `hybridKdfAlgorithm` is not one of `HKDF-SHA256`, `HKDF-SHA384` or `HKDF-SHA512`. Before, any other value silently fell back to `HKDF-SHA256`, so a typo such as `HKDF-SHA-512` went unnoticed - and if only one end of an exchange carried the typo, both ends still reported success while deriving the key with different digests.
+
+The HKDF info bytes of the hybrid KEM are also now encoded explicitly as UTF-8, where they previously used the platform default charset. The info string is the symmetric algorithm name, so this has no effect for the usual values such as `AES`, which are pure ASCII. A deployment running on a JVM whose default charset cannot encode that name identically to UTF-8 would, however, derive a different key than the previous version, and could not decrypt material produced by it.
 
 ### camel-jbang - camel validate normalize writes one file per input file to an output directory
 
@@ -381,7 +407,7 @@ Without an interactive terminal, such as in a script, a CI job (the `CI` environ
 
 ### camel-xml-io, camel-yaml-io, camel-java-io - route dumps keep options set to their default value
 
-The XML, YAML and Java route dumps (`camel transform route`, `camel validate normalize`, `camel.main.dumpRoutes`, the developer console) now write these options whenever they are set, also with their documented default value: the binding options of the rest configuration, a rest and its verbs (such as `bindingMode="off"`), the options of a redelivery policy, of a `resilience4jConfiguration` and of a `faultToleranceConfiguration`, and `shutdownRoute` / `shutdownRunningTask` of a route. Left out, such an option took the value of the parent level when the dump was loaded (the rest configuration, the error handler, the global circuit breaker configuration, the CamelContext), so the route behaved differently.
+The XML, YAML and Java route dumps (`camel transform route`, `camel validate normalize`, `camel.main.dumpRoutes`, the developer console) now write these options whenever they are set, also with their documented default value: the binding options of the rest configuration, a rest and its verbs (such as `bindingMode="off"`), the options of a redelivery policy, of a `resilience4jConfiguration` and of a `faultToleranceConfiguration`, `shutdownRoute` / `shutdownRunningTask` of a route, and `apiDocs` of a rest verb. Left out, such an option took the value of the parent level when the dump was loaded (the rest configuration or the rest, the error handler, the global circuit breaker configuration, the CamelContext), so the route behaved differently, or, for `apiDocs`, a verb with `apiDocs="true"` under a rest with `apiDocs="false"` was left out of the OpenAPI document.
 
 ### camel-jbang - camel get bean, get route-controller and top source
 
@@ -532,15 +558,33 @@ A `hashicorp:` property without an engine and with a version, such as `{{hashico
 
 A `hashicorp:` property with a field of a secret that does not exist, such as `{{hashicorp:secret:missing#field}}`, now resolves to no value, as it already did without a field, so its default value or an optional placeholder (`{{?hashicorp:secret:missing#field}}`) applies. Before, without a default value, it failed with a `NullPointerException`.
 
+### camel-aws2-ddb - aws2-ddbstream reads every shard to its end
+
+The `aws2-ddbstream` consumer now reads a closed shard to its end before it reads its child shards, and uses `streamIteratorType` only for its start position. Before, records left in a closed shard could be skipped, and after a shard rotation the consumer started again from `streamIteratorType`: with `FROM_START` it routed records of the stream again, and with `FROM_LATEST` it skipped records already written to the new shards.
+
 ### camel-bindy - a number field without precision keeps all its decimals when marshalled
 
 A `BigDecimal`, `Double` or `Float` field whose `@DataField` (or `@KeyValuePairField`) has no `precision` and no `pattern` was marshalled with at most three decimals, rounded: `1.23456` was written as `1.235` and `0.000123` as `0` (since Camel 4.22, CAMEL-24168; up to Camel 4.21 the default `precision = 0` wrote these fields without any decimals). It is now written with all its decimals, so a record that is unmarshalled and marshalled again is the same text. A `Double` that is the result of a calculation is written with all its digits too (`0.1 + 0.2` as `0.30000000000000004`, before `0.3`). Set `precision` to get a fixed number of decimals, as before.
+
+### camel-smooks - allowExternalEntities applies to Smooks Source bodies and to a reader declared without a class
+
+The Smooks component and `SmooksProcessor` now parse a message body that is already a Smooks `Source` (`org.smooks.io.source.StringSource`, `ReaderSource`, `StreamSource`, `ByteSource` or `URLSource`) with the same XML reader settings as the other message bodies, so external entities in it are only resolved when `allowExternalEntities` is `true`. Before, such a body was handed to Smooks as it was. The bytes of a `StreamSource`, `ByteSource` or `URLSource` are decoded with the exchange charset, or UTF-8, as before. These bodies are now parsed into a DOM before Smooks processes them, which uses more memory for very large inputs. `DOMSource` and `JavaSource` bodies are unchanged.
+
+A Smooks configuration whose `<reader>` declares no `class` only sets handlers, features or parameters of the default XML reader. The Smooks component, `SmooksProcessor` and the Smooks data format now apply `allowExternalEntities` to such a configuration as they do to a configuration without a `<reader>`, so the handlers and features of that reader no longer take part in parsing the XML unless `allowExternalEntities` is `true`. Configurations that declare a reader class, such as EDI, CSV, JSON, DFDL or a custom reader, are unchanged.
+
+A document with a document type declaration (`<!DOCTYPE …​>`) is now processed with these settings for every body type, `String`, `byte[]` and `InputStream` bodies included, which failed before: the entities of its internal subset are expanded, and the declaration itself is not passed on to Smooks.
+
+Set `allowExternalEntities=true` on the endpoint or on the data format for documents that rely on external entities or an external DTD.
 
 ### camel-ical - each unmarshal parses with its own calendar builder
 
 The `ical` data format used one ical4j `CalendarBuilder` for all exchanges. Two exchanges that were unmarshalled at the same time could get the events of each other, or the calendar of the other exchange. Each unmarshal now uses its own builder.
 
 A builder also has its own time zone registry, so a `VTIMEZONE` of one calendar is no longer used for the calendars unmarshalled after it. A date with a `TZID` that is not a standard time zone and that its calendar does not define is now read as a local date-time without a zone (`getDate()` returns a `LocalDateTime`); before, it was read with the definition of an earlier message, if there was one. A calendar that defines a `TZID` an earlier message has defined differently is now read with its own definition.
+
+### camel-flatpack - marshal writes the first row of the list
+
+With the default `ignoreFirstRecord=true`, marshalling a `List<Map<String, Object>>` skipped the first map, so the first data row was missing from the output, for delimited and fixed-length files alike (the header line of a delimited file is written from the column names, not from the first map). Every map of the list is now written, and `ignoreFirstRecord` only applies to unmarshal. A route that set `ignoreFirstRecord=false` to work around this is not affected; a route that added a dummy first map now gets it in the output too.
 
 ### camel-milo - the OPC UA client validates the server certificate
 
@@ -552,9 +596,32 @@ With neither option, the client does not connect to such an endpoint. It logs a 
 
 The certificate that the user name and password are encrypted with is checked by the same validator. Endpoints that use the security policy `None` are not affected.
 
+### camel-ssh - known\_hosts entries are matched as in OpenSSH
+
+When `knownHostsResource` is set, the entries of the `known_hosts` file are now matched as OpenSSH matches them, against the host name or address the client connects to, written `host` for port 22 and `[host]:port` for another port:
+
+-   A host pattern must match that name as a whole. An entry for another host whose name or address contains the configured one is no longer used.
+    
+-   A pattern such as `db.example.com` only applies to port 22. A server on another port needs an entry such as `[db.example.com]:2222`, or a pattern that matches that form, such as `*`.
+    
+-   The host is used as it is written: the host configured on the endpoint, or the `HostName` that `~/.ssh/config` gives for it. An endpoint configured with a host name no longer uses entries listed only under its address, an endpoint configured with an address no longer uses entries listed under the name that a reverse lookup of the address returns, and an IPv6 address such as `::1` is matched as written instead of in its expanded form.
+    
+-   Every entry of the host is considered, so a host can be listed with several keys. Wildcard, negated and hashed patterns, comments and `@revoked` entries are supported. `@cert-authority` entries are ignored.
+    
+-   A `known_hosts` resource that cannot be read, or that has a line that cannot be read (for example an unknown `@` marker, a missing key, or a key that is not valid base64), now makes every connection fail, whatever the value of `failOnUnknownHost`. Previously such a resource was treated as having no entry, and such a line was skipped.
+    
+
+As before, a server whose host has entries without a marker is rejected when it presents a key that none of them lists, whatever the value of `failOnUnknownHost`, which only applies to a host without such an entry: `@revoked` and `@cert-authority` entries do not list a host. Check that the `known_hosts` file has an entry for the host name or address, and the port, that each endpoint is configured with.
+
 ### camel-zipfile - ZipAggregationStrategy keeps entries with the same name
 
 `ZipAggregationStrategy` replaced an entry of the zip file when a later message had the same entry name, for example two files `orders.csv` from different folders of a recursive file consumer (the folders are not kept by default), so the content of the earlier file was lost. The later entry is now added with a number before its extension: `orders (1).csv`, `orders (2).csv`, and so on. Entry names can therefore differ from the file names (or the `CamelFileName` header). Use `preserveFolderStructure=true` to keep the folders in the entry names instead.
+
+### camel-milo - each client connection has thread pools of its own
+
+A `milo-client` or `milo-browse` connection now handles the outcome of its write, method call, read and browse requests on a thread pool of its own named `MiloClient`, and runs its reconnects on a single thread named `MiloClientReconnect`. Before, it used the shared scheduled executor of Milo (`milo-shared-scheduled-executor`) for both. A route that continues after an awaited request now runs on a thread of the `MiloClient` pool. The pool has up to as many threads as there are processors, which end after they have been idle for the keep-alive time of the default thread pool profile (60 seconds). With virtual threads enabled and more than one processor, it starts a virtual thread for each task instead. The `MiloClientReconnect` thread starts with the first reconnect of the connection, and its reconnects run one after the other. The threads of a connection end when it is closed.
+
+A `MiloClientConnection` created outside an endpoint needs a `CamelContext`, set with `setCamelContext`, before it is used.
 
 ### camel-lra - only an LRA hosted by the configured coordinator is joined
 
@@ -732,6 +799,10 @@ When the consumer lists the bucket, a failure to get one of the listed objects (
 
 The poll still fails, as before, when none of the listed objects could be got and at least one get failed with an error other than that the object no longer exists (for example expired credentials, no permission to get objects, throttling): the failure of the first object is then the failure of the poll, and `backoffErrorThreshold` applies. In both cases the objects are no longer kept in the `inProgressRepository`; before, the object (or a new object with the same key) was skipped by all later polls until the endpoint was restarted. With the `fileName` option, a failed get still fails the poll.
 
+### camel-aws2-s3 - the producer stores the whole body when the content-length header is stale
+
+When the length of the body is known without reading it (a `byte[]`, `String`, file, `Path` or cached stream), the producer now uploads it with that length, and the `CamelAwsS3ContentLength` header is only used for a stream whose length is not known. Previously the header took precedence: after a route changed the body of an object read by the aws2-s3 consumer (which sets the header), a longer body was stored cut to the old length and a shorter one failed.
+
 ### camel-mina - the host name of the server is verified over SSL
 
 When `sslContextParameters` is set (on the endpoint, or with `useGlobalSslContextParameters` on the component), the producer, and the consumer with `clientMode=true`, now check that the certificate of the server matches the `host` of the endpoint, with the same rules as an HTTPS client. Before, any certificate trusted by the trust store was accepted, whatever host the certificate was issued for.
@@ -771,6 +842,10 @@ The servlet and Jetty consumers uncompressed a request body with `Content-Encodi
 ### camel-undertow - form fields are decoded as UTF-8
 
 The consumer now decodes the fields of an `application/x-www-form-urlencoded` or `multipart/form-data` request that declares no charset as UTF-8, the encoding browsers use. Before, Undertow’s default ISO-8859-1 was used, so `café` became `cafÃ©` in the headers and the body map. A charset that the request or a part declares is still used: a client that sends ISO-8859-1 form data without declaring a charset now gets U+FFFD replacement characters instead of its text, and must declare its charset (for example `application/x-www-form-urlencoded; charset=ISO-8859-1`).
+
+### camel-huaweicloud-obs - a listed object that cannot be got is skipped
+
+When the consumer lists the bucket, a failure to get one of the listed objects (for example access denied, or an archived object that is not restored) no longer fails the poll, as long as another object of that listing could be got: the object is skipped, the other listed objects are consumed, and the skipped object is tried again by a later poll. The failure is given to the exception handler of the consumer, with the key in the message (by default a `WARN` with the stack trace, at every poll that lists the object). Before, the poll failed, so the other objects listed with it were not consumed either, and when the bucket fitted in one listing (`maxMessagesPerPoll`, default 10) the consumer consumed no object at all. The poll still fails when none of the listed objects could be got. With the `fileName` option, a failed get still fails the poll.
 
 ### camel-github2 - consumers and items of a poll that were not routed
 
@@ -813,6 +888,10 @@ Enabling the option also makes the JDK send the host as an SNI server name, as `
 
 On a consumer that acts as a server the option is now ignored instead of being passed to the engine. It never verified anything there - the JDK does not support host name verification on the server side of a handshake, and rejected the client certificate with `Endpoint Identification Algorithm HTTPS is not supported on the server side` - so a consumer that asks for client certificates and had the option set now completes the handshake instead of failing it.
 
+### camel-alibaba-oss - a listed object that cannot be got is skipped
+
+When the consumer lists the bucket, a failure to get one of the listed objects (for example access denied, or an archived object that is not restored) no longer fails the poll, as long as another object of that listing could be got: the object is skipped, the other listed objects are consumed, and the skipped object is tried again by a later poll. The failure is given to the exception handler of the consumer, with the key in the message (by default a `WARN` with the stack trace, at every poll that lists the object). Before, the poll failed and the next poll listed the same page again, so one such object stopped the consumer from consuming any object. The poll still fails when none of the listed objects could be got, and the next poll then reads the next page of the listing.
+
 ### camel-dropbox - search and get read every page of the result
 
 The `search` operation (producer and consumer) now returns every match that the service gives. Previously it returned only the first page of the matches (the Dropbox SDK asks for 100 matches per page), and the rest was dropped without any sign. A search with many matches now sends one request per page, for the consumer at each poll. When one of these requests fails, the operation fails and no match is returned, as before.
@@ -824,6 +903,10 @@ The `get` operation on a folder (producer and consumer) now downloads every file
 When Camel creates the instance itself, the KEM operations of the `pqc` component (including the hybrid KEM operations) and the PQC data format now use a new `KeyGenerator`, and for the hybrid operations a new `KeyAgreement`, for every operation. A configured instance is still shared: a registry bean, which is autowired into every `pqc` endpoint, a `KeyGenerator` set on the data format, or the default material used when no key material is configured. Each operation now holds its lock from `init` until the result is returned, so concurrent exchanges that use it run one at a time.
 
 A started PQC data format no longer keeps a `KeyGenerator` of its own: `getKeyGenerator()` returns only a configured instance and, unless one is configured, the `CamelPQCKemAlgorithm` header now selects the KEM algorithm of each operation.
+
+### camel-minio - a listed object that cannot be got is skipped
+
+When the consumer lists the bucket, a failure to stat or get one of the listed objects (for example access denied, or an object encrypted with a customer key the consumer does not have) no longer fails the poll, as long as another listed object could be got: the object is skipped, the other listed objects are consumed, and the skipped object is tried again by a later poll. The failure is given to the exception handler of the consumer, with the object name in the message (by default a `WARN` with the stack trace, at every poll that lists the object). Before, the objects listed after it in the same poll were not consumed, so one such object could keep the consumer from consuming the rest of the bucket. The poll still fails when none of the listed objects could be got, and when `objectName` is set. When a poll lists `maxMessagesPerPoll` objects, the next poll now continues after the last listed object (before, after the last object that was consumed), so an object that cannot be got at the end of a page does not hold the listing back.
 
 ### camel-box - getEnterpriseEvents returns the events of every chunk
 
@@ -842,6 +925,10 @@ Message data bound to the engine is now neutralised so that a direct `{$tag}` pr
 As part of this, a non-`List` `Collection` value (such as a `Set`) is now bound as a `List`, so a direct `{$body}` prints Chunk’s list placeholder instead of the collection’s `toString()`, and a filter such as `|join` operates on its elements.
 
 This does not cover every path: Chunk re-parses any string it produces while rendering, so the output of a filter (`{$body|trim}`), a string property of a bean body (`{$body.name}`, `{$exception.message}`) and string items bound by a `{% loop %}` are still parsed as template code. Keep untrusted data to direct `{$tag}` output; do not pass untrusted values through Chunk filters, bean properties or loops. If untrusted data must go through one of those paths, remove the `{` and `}` characters from it in the route before the `chunk` endpoint (Chunk has no escape for tags inside data), for example with a processor that rewrites the body or header.
+
+### camel-azure-storage-blob - a listed blob that cannot be got is skipped
+
+When the consumer lists the container, a failure to get one of the listed blobs (for example a blob in the archive tier, or access denied) no longer fails the poll, as long as another listed blob could be got: the blob is skipped, the other listed blobs are consumed, and the skipped blob is tried again by a later poll. The failure is given to the exception handler of the consumer, with the blob name in the message (by default a `WARN` with the stack trace, at every poll that lists the blob). Before, the poll failed, and as every poll lists the container again, one such blob stopped the consumer from consuming any blob. The poll still fails when none of the listed blobs could be got.
 
 ### camel-azure-servicebus - the dead-letter reason and description are bounded
 
@@ -881,6 +968,10 @@ A route diagram drew the `onException` clauses of a route among its steps, thoug
 
 The `<camel-topology-diagram>` web component no longer draws the error paths of the route topology as calls between routes. With its new `errors` attribute it draws the routes reached only on error in a frame below the other routes.
 
+### camel-jbang - the default name of a run of a whole directory
+
+`camel run --source-dir`, and `camel run` of a directory, without `--name` name the integration after the directory. A folder of a project layout (`src`, `main`, `resources`, `java`, `camel` or `routes`) gives way to the first parent with another name, and `.` is the working directory. Before, the name was the one of the first file, in the order that the file system lists them, which could be any file, such as a Java class that a route uses. `--name`, and `camel.main.name` in application.properties, still win.
+
 ### camel-jbang - route-diagram, route-structure and route-topology read Java sources without compiling them
 
 Given Java source files, `camel cmd route-diagram`, `camel cmd route-structure` and `camel cmd route-topology` (and the `camel_render_route_diagram` MCP tool) now read the routes with the Java DSL parser, as `camel transform route` and `camel overview` do, instead of compiling the sources and loading their routes in a short-lived Camel. A step the parser cannot work out, such as a lambda or a processor, is shown as a placeholder, and the parts it could not read are listed (with `--json`, as an `unread` array in the JSON). Use the new `--compile` option to compile the sources and load their routes as before.
@@ -890,6 +981,10 @@ Given Java source files, `camel cmd route-diagram`, `camel cmd route-structure` 
 `camel export --runtime=quarkus` wrote every `quarkus.` **key except `quarkus.hawtio.`** in dash case: an upper-case letter became a dash and the lower-case letter, and an underscore became a dash. That also changed the names that a key holds, such as a log category, a datasource name or a map key. Now only option names in camel case are written in dash case, such as `quarkus.http.rootPath` as `quarkus.http.root-path`. A segment of the key that is quoted, that starts with an upper-case letter, or that has no upper-case letter is kept as it is. So `quarkus.log.category."com.example.MyRoute".level`, `quarkus.datasource.Orders.db-kind` and `quarkus.datasource.order_history.db-kind` are no longer exported as `quarkus.log.category."com.example.-my-route".level`, `quarkus.datasource.-orders.db-kind` and `quarkus.datasource.order-history.db-kind`. The same applies to `camel run --runtime=quarkus`, which exports the project in the same way.
 
 A name in camel case that starts with a lower-case letter, such as the datasource `myOrders` or `my_DataSource`, still looks like an option name and is written in dash case as a whole, underscores included (`my-orders`, `my-data-source`). Quote it to keep it: `quarkus.datasource."myOrders".db-kind`.
+
+### camel-jbang - camel dirty removes only the files of processes that are gone
+
+`camel dirty` counts, and `camel dirty --clean` removes, only the files named after the pid of a process that is gone, such as `<pid>-status.json`. Before, it counted every other file in `~/.camel` too, and `--clean` removed them: the log of a Spring Boot or Quarkus app that `camel run` runs (`<name>.log`), also while the app ran, the console output that the AI tools keep, and the history of the AI prompt. Directories are not counted, and `--clean` counts only the files it removed.
 
 ### camel-mongodb-gridfs - the consumer routes a file once
 
@@ -904,6 +999,10 @@ Semantic evaluations now recognize a selected `${body}` with an image `Content-T
 The additive `SemanticAdapter.getMaxImageBytes()` method exposes an expert’s configured per-image byte limit, with zero meaning no advertised limit. Image-capable adapters should advertise a positive limit and enforce it before inference. CLI and TUI local image loading now requires that metadata; the configured value appears as `maxImageBytes` in each image operation’s contract.
 
 Semantic audit backends can opt into the additive `inputType` extension. Readers that do not support it keep their existing projection. The `camel semantic audit --json` display omits image base64 and reports metadata instead. Use `--output=<new-file>` to export the full returned JSON, with `--include-input` for case/bulk requests that need captured input. Existing files are not overwritten.
+
+### camel-azure-storage-datalake - a listed file that cannot be got is skipped
+
+When the consumer lists the file system, a failure to get one of the listed files (for example access denied by the ACL of the file) no longer fails the poll, as long as another listed file could be got: the file is skipped, the other listed files are consumed, and the skipped file is tried again by a later poll. The failure is given to the exception handler of the consumer, with the file name in the message (by default a `WARN` with the stack trace, at every poll that lists the file). A file deleted after the listing is skipped as well; before, it made the whole poll return no file. Before, any other failure failed the poll, and as every poll lists the file system again, one such file stopped the consumer from consuming any file. The poll still fails when none of the listed files could be got.
 
 ### camel-milo - a Bad or Uncertain status is delivered by default
 
@@ -921,9 +1020,20 @@ Stopping a consumer now deletes its monitored items. Previously they stayed on t
 
 When the server removes the subscription that the consumers of a connection share, or the subscription times out on the server, it is now created again in the existing session; previously the consumers stopped receiving values until the connection was rebuilt for another reason. The monitored items deliver their current values again after the subscription is recreated.
 
+### camel-milo - a producer request for a node with an unknown namespace URI
+
+A `milo-client` write, method call or read, or a `milo-browse` browse, for a node ID with a namespace URI (`nsu=`) that is not in the namespace table of the server no longer makes the client reconnect, which also recreated the subscriptions of the consumers that share the connection. A write, read or browse answers the node like a node that the server does not have, with the status code `Bad_NodeIdUnknown`, and the other nodes of a read or browse are not affected. Previously an awaited write or read completed without an error and with a `null` body, and a browse failed with a `NullPointerException`.
+
 ### camel-protobuf - a bytes field in a Map
 
 When a protobuf message is converted to a `Map` (for example `getBody(Map.class)` after unmarshalling), the value of a `bytes` field is now a `byte[]` with the content of the field. Previously it was the `String` that `ByteString.toString()` returns, a description such as `<ByteString@1b6d3586 size=4 contents="…​">`, which does not contain the whole value. When a `Map` is marshalled, a `byte[]` value is accepted for a `bytes` field.
+
+### camel-jbang - where the CLI writes its log files
+
+-   The `log4j2.properties` of camel-jbang-core logs to the console only. It is the configuration that log4j finds on the classpath when nothing configures logging. It also wrote a log file into `~/.camel`, named after the `pid` system property, which only the CLI sets: a JVM that uses camel-jbang-core without the CLI (such as a test) wrote `~/.camel/${sys:pid}.log`, and `camel test run` left a `<pid>.log` there. The configuration that `camel run` uses with color is now `log4j2-color.properties`, next to `log4j2-no-color.properties`.
+    
+-   The log files of the CLI (`<pid>.log`, `camel-export.log` and `camel-script.log`) are written into the Camel directory of the CLI, where `camel log` reads them, instead of `~/.camel` under `user.home`. The two differ when `user.home` is `?` (a user without a home, such as in a container), as the CLI then uses `$HOME`, and when a test gives the CLI a home of its own. The CLI sets the directory as the system property `camel.jbang.logDir`. A Quarkus app that `camel run` exports and runs also logs there.
+    
 
 ### camel-jbang-mcp - runtime tools that changed behaviour
 
@@ -941,3 +1051,32 @@ Some runtime tools of the Camel MCP server now do what their description says, w
 The `camel_write_file` and `camel_edit_file` tools used to refuse content with a YAML shape that a model often gets wrong but that has only one reading, such as `steps:` written at the column of its EIP, or an option at the column of the EIP it belongs to. Such content is now repaired and written, and `repaired` in the answer lists the repairs. Content with more than one reading is refused as before.
 
 `camel_edit_file` now matches lines to find that are not in the file as given, as when a model writes them from memory, to the closest lines of the file when exactly one place matches well. It changes there the lines the model changed and keeps the file’s version of the other lines. The edit stands only when its result is valid; otherwise the answer is the one of a miss, with the lines the file has there. `matchedLines` in the answer names the lines it matched.
+
+### camel-jbang - the console output of an integration that the AI tools start
+
+`camel_run` and `camel_control restart` send the console output of the integration they start to `~/.camel/<pid>-run.log`, as `camel run --background` does, and remove it when the integration ends. It went to `~/.camel/camel-launch-<number>.log` or `camel-restart-<number>.log`, which stayed until the MCP server exited. An integration that still runs when the server exits keeps the file while it runs: `camel stop` removes it, and `camel dirty --clean` once the integration has ended.
+
+### camel-main - a properties file that changed while reloading applies its beans and components
+
+With live reloading (such as `camel run --dev`), a change to application.properties now applies its configuration:
+
+-   The file is matched to the properties file the application loaded, also when its location is written another way: `camel run --source-dir=.` loads `file:./application.properties`, and the file watcher reports `file:application.properties`. Before, the two did not match, so the file was added once more for its property placeholders, but its `camel.component.`**, `camel.dataformat.`** and `camel.language.*` options were not applied.
+    
+-   A new bean (`camel.beans.*`) is created and bound, before the components are configured again, so a component can refer to it (`#bean:name`), and a component that is created later can autowire it. With camel-jbang, the class of the bean is downloaded when camel-jbang knows it, such as the Artemis client. A dependency that is added to `camel.jbang.dependencies` while the application runs is not downloaded until a restart (CAMEL-25833).
+    
+-   A bean that exists is left as it is, as components may hold it. When its properties change, a `WARN` says that a restart is needed.
+    
+-   A properties file that is created while the application runs is applied as well.
+    
+
+`PropertiesReload` has a new default method, `onChanged`, which a properties file that changed calls with the properties that changed. A context reload (such as for secret rotation) still calls `onReload`.
+
+### camel-jbang - camel run keeps the log of the previous run
+
+When `camel run` ends, its log is no longer deleted. It is kept as `~/.camel/<name>-previous.log`, by the name of the integration, with `~/.camel/<name>-previous.json`, which says when and how the run ended. The next run of that name that ends replaces both, and at most the last 10 MB of a log are kept. `camel log <name> --previous` prints the log, like `kubectl logs --previous` in Kubernetes. The log of an integration that was killed is kept the same way, the next time a previous run is looked up. `camel dirty` does not count these files.
+
+### camel-jbang - the AI tools wait for Camel to start, and read the log of the previous run
+
+-   `camel_run` and `camel_control restart` answer that the integration started once its CamelContext has started. They answered as soon as the status file of the integration appeared, which happens while Camel starts and before the routes start. An integration whose route then failed to start was answered as started, and stopped right after. Now the answer is the failure, with its cause.
+    
+-   `camel_get_log` of an integration that is not running answers with the log of its previous run (see `camel log --previous`), and its message says how that run ended. `previous=true` asks for that log also when the integration runs again. `camel_get_errors` of an integration that is not running says how its previous run ended.

@@ -65,9 +65,9 @@ Note that delay creates its own block, so some DSLs (including Java) require the
 _Java-only: closing the delay block with end() in Java DSL_
 
 ```java
-.from("direct:delayBlockExample")
+from("direct:delayBlockExample")
     .to("direct:getJobState")
-    .loopDoWhile(simple("${body.state} = 'NOT_DONE'"))
+    .loopDoWhile(simple("${body.state} == 'NOT_DONE'"))
         .log(LoggingLevel.DEBUG, "Pausing")
         .delay(10000)
             .syncDelayed()
