@@ -33,8 +33,7 @@ Enum values:
 
 
  |
-| **lengthMarker** (common) | `false` | `Boolean` | Whether to prefix array lengths with a hash marker so arrays render as hash-prefixed lengths instead of plain lengths. |
-| **strict** (common) | `true` | `Boolean` | Whether to enable strict validation when unmarshalling TOON. When false, JToon uses best-effort parsing. |
+| **strict** (common) | `true` | `Boolean` | Whether to enable strict validation when unmarshalling TOON. When false, the decoder applies the non-strict recoveries of the TOON specification, such as accepting an array whose length differs from the declared length; other malformed TOON still fails. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header to text/toon when marshalling. |
 
 ## Marshal behavior

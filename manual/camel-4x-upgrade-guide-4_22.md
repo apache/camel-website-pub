@@ -17,9 +17,35 @@ With neither option, the client does not connect to such an endpoint. It logs a 
 
 The certificate that the user name and password are encrypted with is checked by the same validator. Endpoints that use the security policy `None` are not affected.
 
+### camel-platform-http-main - management server settings on a shared port
+
+When the HTTP server (`camel.server.enabled=true`) and the HTTP management server (`camel.management.enabled=true`) have the same port (both default to 8080), the HTTP server serves the management endpoints. It cannot apply these options of the management server, which were ignored without notice:
+
+-   `camel.management.host`, when set to another host than the one of the HTTP server
+    
+-   `camel.management.path`, when set to another path than the one of the HTTP server
+    
+-   `camel.management.useGlobalSslContextParameters=true`, when the HTTP server does not use the global SSL configuration
+    
+-   `camel.management.authenticationEnabled=true`, with the basic or JWT authentication options
+    
+
+Camel now fails to start when the management server shares the port and one of them is configured, with a message that lists them. Set `camel.management.port` to another port, so that the management server runs a server of its own and applies them. To keep a single port, remove them and configure the HTTP server instead: for example, authentication configured on the HTTP server for `/*` also applies to the management endpoints.
+
 ### camel-elasticsearch - the credentials are only sent to the nodes of the cluster
 
 The `user` and `password` are now offered only to the nodes the client talks to: the hosts of `hostAddresses` and, when `enableSniffer` is set, the nodes the sniffer finds, matching the scheme, host and port. Previously they were registered for any host. A request to another host, including the host of a node with another scheme or port, is now sent without them. A client set with the `client` option is not changed.
+
+### camel-thrift - SSL/TLS settings of the consumer, and errors sent to the client
+
+-   A consumer configured with `negotiationType=SSL` and the default `synchronous=false` now fails to start. It used to start a server without SSL/TLS. SSL/TLS requires `synchronous=true`, as on the producer.
+    
+-   The `SASL` negotiation type, which is not implemented, now makes the producer and the consumer fail to start. They used to behave as with `PLAINTEXT`.
+    
+-   The SSL/TLS consumer now creates its server socket from the SSL context of `sslParameters`, so all of its settings apply, including the trust managers and the server parameters. For example, `serverParameters.clientAuthentication=REQUIRE` now requires a client certificate. Before, the consumer only used the key store, the protocol and the cipher suites, and never asked for a client certificate. The key managers are required, and as in the other components the key is read with their `keyPassword`: set it when the key is protected by a password. Before, the consumer read the key with the password of the key store.
+    
+-   A new `muteException` consumer option, enabled by default, sends a generic `TApplicationException` of type `INTERNAL_ERROR` ("Internal error processing <method>") to the client instead of an exception that the Thrift method does not declare. Before, the asynchronous consumer sent the message of the exception. An exception declared in the IDL is still sent as it is. Set `muteException=false` to send the exception as before.
+    
 
 ### camel-elasticsearch-rest-client - the credentials are only sent to the nodes of the cluster
 
@@ -51,6 +77,15 @@ When `knownHostsResource` is set, the entries of the `known_hosts` file are now 
     
 
 As before, a server whose host has entries without a marker is rejected when it presents a key that none of them lists, whatever the value of `failOnUnknownHost`, which only applies to a host without such an entry: `@revoked` and `@cert-authority` entries do not list a host. Check that the `known_hosts` file has an entry for the host name or address, and the port, that each endpoint is configured with.
+
+### camel-a2a - caller profile and task owner
+
+-   When a security requirement of the agent card combines several schemes, such as an API key and an OAuth token, the caller profile (`CamelA2AUserProfile`) is now the one of the token, whatever the order of the schemes. Before, it was the profile of the first scheme, so a requirement that listed the API key first only gave `{"scheme": "apiKey"}` to the route, and the tasks belonged to the API key.
+    
+-   A token without a `sub` claim is now identified by the `username` that a token introspection response gives, else by its `client_id` or `azp` claim (such as a client credentials token), so the tasks of different users and clients are kept apart. A valid token that has none of these claims is now rejected with HTTP 401.
+    
+-   The `CamelOAuthTokenValidationResult` exchange property is now set on the exchange that the route processes, as documented. Before, it was only set on the incoming HTTP exchange.
+    
 
 ### camel-opensearch - the credentials are only sent to the nodes of the cluster
 

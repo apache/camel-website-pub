@@ -153,6 +153,28 @@ camel cmd route-structure myApp --description
 
 Give a source file instead of a running integration to see the structure without running it. A Java source file is read by the Java DSL parser, without compiling it; use `--compile` to compile it instead. `--brief` shortens each node, and `--description` shows the description of each node instead of its code.
 
+#### Body types
+
+When the integration runs with the message history on, such as with `camel run --dev`, each step also shows the body types it has been reached with, across the messages:
+
+```text
+Source: orders.camel.yaml
+--------------------------------------------------------------------------------
+   1: route[orders]
+   2:   from[file:inbox]
+   5:     unmarshal[json]                body: GenericFile
+   8:     to[http://stock/api/reserve]   body: LinkedHashMap | String (data and payload)
+  11:     log[${body}]                   body: String | byte[]
+```
+
+A step reached with more than one type is a part of the route that is dynamic, such as the log here. When the types are of more than one kind (`null`, `payload`, `data` or `collection`), the step needs attention: here some messages reach the HTTP call with parsed data that was never marshalled, which the call cannot send. `--varied` shows only the steps that have been reached with more than one body type:
+
+```bash
+camel cmd route-structure myApp --varied
+```
+
+The JSON output (`--json`) has the types and kinds of each step as `bodyTypes` and `bodyKinds`. The route console of a running integration counts them per route: `variedBodyTypes` and `mixedBodyKinds` (the steps that need attention). See [Message History](../components/4.22.x/eips/message-history.md) for what the kinds mean.
+
 ### Route dump
 
 `camel cmd route-dump` dumps the routes of the running integration in YAML (default), XML or Java DSL:

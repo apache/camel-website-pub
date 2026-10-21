@@ -250,7 +250,7 @@ Enum values:
 | **keyRotationSchedulerEnabled** (advanced) | Whether to start an automated background key rotation scheduler for this component. Requires keyLifecycleManager to be set. The scheduler periodically rotates keys that exceed the configured age and/or usage policy. | false | boolean |
 | **keyStore** (advanced) | **Autowired** A KeyStore where we could get Cryptographic material. |  | KeyStore |
 | **keyStorePassword** (advanced) | The KeyStore password to use in combination with KeyStore Parameter. |  | String |
-| **parameterSpec** (advanced) | The NIST parameter set (security level) to use for the configured signature or key encapsulation algorithm, using the BouncyCastle parameter-set names: for example ML-DSA-44, ML-DSA-65 or ML-DSA-87 for MLDSA, and ML-KEM-512, ML-KEM-768 or ML-KEM-1024 for MLKEM. Names are case-insensitive and the underscore form (ml\_dsa\_87) is accepted as an alias. When set, the key material is generated with this parameter set instead of the algorithm default. Not supported for the stateful signature algorithms (XMSS, XMSSMT, LMS, HSS), for MAYO and SNOVA, nor for the hybrid operations: for those, register a KeyPair bean in the registry instead. |  | String |
+| **parameterSpec** (advanced) | The NIST parameter set (security level) to use for the configured signature or key encapsulation algorithm, using the BouncyCastle parameter-set names: for example ML-DSA-44, ML-DSA-65 or ML-DSA-87 for MLDSA, and ML-KEM-512, ML-KEM-768 or ML-KEM-1024 for MLKEM. Names are case-insensitive and the underscore form (ml\_dsa\_87) is accepted as an alias. When set, the key material is generated with this parameter set instead of the algorithm default. Not supported for the stateful signature algorithms (XMSS, XMSSMT, LMS, HSS) nor for the hybrid operations: for those, register a KeyPair bean in the registry instead. |  | String |
 | **signatureAlgorithm** (advanced) | 
 
 In case there is no signer, we specify an algorithm to build the KeyPair or the Signer.
@@ -524,7 +524,7 @@ Enum values:
 | **keyPairAlias** (advanced) | A KeyPair alias to use in combination with KeyStore parameter. |  | String |
 | **keyStore** (advanced) | **Autowired** A KeyStore where we could get Cryptographic material. |  | KeyStore |
 | **keyStorePassword** (advanced) | The KeyStore password to use in combination with KeyStore Parameter. |  | String |
-| **parameterSpec** (advanced) | The NIST parameter set (security level) to use for the configured signature or key encapsulation algorithm, using the BouncyCastle parameter-set names: for example ML-DSA-44, ML-DSA-65 or ML-DSA-87 for MLDSA, and ML-KEM-512, ML-KEM-768 or ML-KEM-1024 for MLKEM. Names are case-insensitive and the underscore form (ml\_dsa\_87) is accepted as an alias. When set, the key material is generated with this parameter set instead of the algorithm default. Not supported for the stateful signature algorithms (XMSS, XMSSMT, LMS, HSS), for MAYO and SNOVA, nor for the hybrid operations: for those, register a KeyPair bean in the registry instead. |  | String |
+| **parameterSpec** (advanced) | The NIST parameter set (security level) to use for the configured signature or key encapsulation algorithm, using the BouncyCastle parameter-set names: for example ML-DSA-44, ML-DSA-65 or ML-DSA-87 for MLDSA, and ML-KEM-512, ML-KEM-768 or ML-KEM-1024 for MLKEM. Names are case-insensitive and the underscore form (ml\_dsa\_87) is accepted as an alias. When set, the key material is generated with this parameter set instead of the algorithm default. Not supported for the stateful signature algorithms (XMSS, XMSSMT, LMS, HSS) nor for the hybrid operations: for those, register a KeyPair bean in the registry instead. |  | String |
 | **signatureAlgorithm** (advanced) | 
 
 In case there is no signer, we specify an algorithm to build the KeyPair or the Signer.
@@ -704,6 +704,8 @@ Values are the BouncyCastle parameter-set names, resolved case-insensitively. Th
 | `FALCON` | `FALCON-512`, `FALCON-1024` |
 | `DILITHIUM` | `ML-DSA-44` (lifecycle manager default), `ML-DSA-65`, `ML-DSA-87` (component default) |
 | `SPHINCSPLUS` | The `SLHDSA` parameter sets, for example `SLH-DSA-SHA2-128S` (default) |
+| `MAYO` | `mayo1`, `mayo2`, `mayo3`, `mayo5` (default); the canonical dashed form (`MAYO-1`) is accepted too |
+| `SNOVA` | `SNOVA_24_5_5_SHAKE_SSK` (default), `SNOVA_24_5_4_ESK`, …​ (see `SnovaParameterSpec`). The SNOVA names keep their underscores and are not accepted in dashed form |
 | `KYBER` | `ML-KEM-512`, `ML-KEM-768` (lifecycle manager default), `ML-KEM-1024` (component default); `kyber512`, `kyber768` and `kyber1024` are accepted as aliases |
 | `NTRU` | `ntruhps2048509`, …​ (see `NTRUParameterSpec`) |
 | `NTRULPRime` | `ntrulpr653`, …​ (see `NTRULPRimeParameterSpec`) |
@@ -717,7 +719,7 @@ Values are the BouncyCastle parameter-set names, resolved case-insensitively. Th
 The `parameterSpec` option is also honoured by the `generateKeyPair` lifecycle operation, which then generates the key at the configured security level.
 
 > **Note**
-> `parameterSpec` is not supported for the stateful hash-based signature algorithms (XMSS, XMSSMT, LMS, HSS), for MAYO and SNOVA, nor for the hybrid operations: those either have no name-addressable BouncyCastle parameter set, or pair a fixed classical key set with a matching PQC key set. For those, register a `KeyPair` bean in the registry instead.
+> `parameterSpec` is not supported for the stateful hash-based signature algorithms (XMSS, XMSSMT, LMS, HSS) nor for the hybrid operations: those either have no name-addressable BouncyCastle parameter set, or pair a fixed classical key set with a matching PQC key set. For those, register a `KeyPair` bean in the registry instead.
 
 ## Supported Operations
 

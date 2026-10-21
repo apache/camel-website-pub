@@ -502,8 +502,7 @@ The first line, on stderr, says which run it was and how it ended. The log follo
 
 Each name keeps the log of its last run that ended, as `~/.camel/<name>-previous.log`. The next run of that name that ends replaces it. Like Kubernetes, at most the last 10 MB of a log are kept. An integration that was killed, or whose JVM crashed, leaves its log behind. That log becomes the log of its previous run the next time you look one up.
 
-> **Note**
-> The log is kept for the `jbang` runtime, which runs Camel in the JVM of the Camel CLI. This is the default, also with `--background`. The runtimes that run with Maven (`--runtime=spring-boot`, `quarkus` or `main`) do not keep it.
+The log is kept for every runtime: `jbang`, the default (also with `--background`), and the runtimes that run with Maven (`--runtime=spring-boot`, `quarkus` or `main`, and `camel run pom.xml` of an existing project). With `quarkus` and `spring-boot`, Maven runs the app in a process of its own, so the first line has no pid and no exit code of the app: it says how Maven ended when it failed, such as `Maven ended with exit code 1`. A run on a Maven runtime that was killed leaves its log behind as `~/.camel/<name>.log`. That log becomes the log of the previous run when the next run of that name starts.
 
 ## Configuring logging levels
 

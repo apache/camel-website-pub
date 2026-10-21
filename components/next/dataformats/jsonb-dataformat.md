@@ -47,6 +47,7 @@ The JSON JSON-B dataformat supports the following options which are listed below
 | **objectMapper** (common) |  | `String` | Lookup and use the existing Jsonb instance with the given id. |
 | **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
+| **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson, Gson or JSON-B is allowed to attempt to use the CamelJacksonUnmarshalType, CamelGsonUnmarshalType or CamelJsonbUnmarshallType header during the unmarshalling. This should only be enabled when desired to be used. |
 
 ## A body that is already JSON
 

@@ -31,6 +31,10 @@ When `pollEnrich` (or `poll`) times out and no `aggregationStrategy` is configur
 
 The body, or the variable, is now `null` after a timeout for these consumers too. A route that read the incoming file or payload from the body after a timed out `pollEnrich` must keep it before the `pollEnrich` instead, for example with `variableReceive`, which leaves the body as it was. To keep the body empty, the message is replaced by a plain message with the same message id, headers and attachments, so after a timeout it is no longer of the message type of the consumer (such as `GenericFileMessage` or `JmsMessage`).
 
+### camel-main - a failure to start is logged
+
+A Camel Main application that fails to start now logs why, at ERROR: `Error starting Camel: …​` with the stack trace, as `camel run` already did. Before, the failure left `main()` and only the JVM printed it, on stderr (`Exception in thread "main" …​`), so the log file of the application did not say why it stopped. The JVM no longer prints that same failure a second time. When the application logs nothing at ERROR (such as without a logging implementation), the JVM prints it as before.
+
 ### camel-report-maven-plugin:validate / configuration-validate
 
 The catalog now accepts all `camel.` **groups defined in `camel-main-configuration-metadata.json` (previously only 7 of the 36 groups were recognized, besides `camel.component.`**, `camel.dataformat.` **and `camel.language.`**). As a result, `camel-report-maven-plugin:validate` and the camel-jbang MCP `camel_configuration_validate` tool now validate 29 additional `camel.` **groups (including `camel.server.`**, `camel.management.`**, `camel.vault.`**, `camel.ssl.*`, and others).
@@ -105,6 +109,10 @@ When the WebSocket that the `camel-vertx-websocket` producer sends to (a server 
 
 See the [Kubernetes client 8 migration guide](https://github.com/fabric8io/kubernetes-client/blob/main/doc/MIGRATION-v8.md) for the other changes.
 
+### camel-gson, camel-jsonb - the unmarshal type header needs allowUnmarshallType
+
+The Gson and JSON-B data formats now use the `CamelGsonUnmarshalType` and `CamelJsonbUnmarshallType` headers to choose the class to unmarshal to only when the new `allowUnmarshallType` option is enabled, as the Jackson data formats do with `CamelJacksonUnmarshalType`. By default the headers are ignored, and the configured `unmarshalType` is used (a `Map` for a JSON object when none is configured). A route that sets the header must enable the option, for example with `.unmarshal(new JsonDataFormat(JsonLibrary.Gson).allowUnmarshallType(true))` or `<json library="Gson" allowUnmarshallType="true"/>`.
+
 ### camel-jbang - camel validate and camel overview report the same endpoints no route consumes
 
 `camel validate source` and `camel overview` now use the same rules for a `direct:`, `seda:` or `disruptor:` endpoint that a route sends to and no route consumes, so they report the same endpoints on the same project:
@@ -131,6 +139,14 @@ A done file with a fixed name (such as `doneFileName=ready`) is no longer delete
 The hybrid KEM operations now fail with an `IllegalArgumentException` when `hybridKdfAlgorithm` is not one of `HKDF-SHA256`, `HKDF-SHA384` or `HKDF-SHA512`. Before, any other value silently fell back to `HKDF-SHA256`, so a typo such as `HKDF-SHA-512` went unnoticed - and if only one end of an exchange carried the typo, both ends still reported success while deriving the key with different digests.
 
 The HKDF info bytes of the hybrid KEM are also now encoded explicitly as UTF-8, where they previously used the platform default charset. The info string is the symmetric algorithm name, so this has no effect for the usual values such as `AES`, which are pure ASCII. A deployment running on a JVM whose default charset cannot encode that name identically to UTF-8 would, however, derive a different key than the previous version, and could not decrypt material produced by it.
+
+### camel-pqc - the BouncyCastle providers stay registered when an endpoint stops
+
+Stopping a `pqc` endpoint no longer removes the `BC` and `BCPQC` providers from `java.security.Security`.
+
+`java.security.Security` is JVM-global, and the endpoint only added a provider when it was absent, so stopping one endpoint could remove a provider it had not installed - breaking the other `pqc` endpoint of the same route, other `CamelContext` instances, components such as camel-crypto, camel-ssh and camel-xmlsecurity, and any non-Camel code in the same JVM.
+
+An application that relied on the providers being de-registered on shutdown must now remove them itself with `Security.removeProvider("BC")` and `Security.removeProvider("BCPQC")`.
 
 ### camel-jbang - camel validate normalize writes one file per input file to an output directory
 
@@ -191,6 +207,14 @@ The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](ca
     
 
 Errors, warnings and tips are printed on stderr instead of stdout, so stdout only has the output of the command, such as JSON. If a script reads the error text of a command from stdout, read stderr instead. The list of plugins that are not installed, after `camel --help`, is printed on stderr, and only in an interactive terminal.
+
+### camel-pqc - parameterSpec accepts MAYO and SNOVA, and the FIPS advisory no longer flags two aliases
+
+`parameterSpec` can now select a named parameter set for `MAYO` and `SNOVA`. Both were rejected on the grounds that they have no name-addressable BouncyCastle parameter spec, which is not the case: `MayoParameterSpec.fromName` and `SnovaParameterSpec.fromName` both exist, and neither algorithm is stateful. The stateful hash-based signatures (`XMSS`, `XMSSMT`, `LMS`, `HSS`) are still rejected, as they genuinely have no such spec.
+
+`DILITHIUM` and `SPHINCSPLUS` no longer produce the "not part of NIST FIPS 204/205" warning on hybrid endpoints. Both are aliases that resolve to `ML-DSA` and `SLH-DSA`, so the warning was recommending the algorithm already in use. `FALCON`, `MAYO`, `SNOVA`, `XMSS` and `XMSSMT` still warn.
+
+The five default key material classes that generated their key pair with the provider’s default RNG (`Falcon`, `MAYO`, `SNOVA`, `LMS`, `HSS`) now use the shared `SecureRandomHelper` like the other sixteen. No key format or parameter set changes; only the randomness source is now uniform.
 
 ### camel-cli-connector - every action with a request id gets an answer
 
@@ -524,6 +548,15 @@ When a route marks the exchange rollback only (for example with `markRollbackOnl
 
 A message that the route marks rollback only every time was removed before, and is now consumed again at every poll (JPA), or taken from the queue again at once, without a delay (transacted Hazelcast SEDA, as for a failed exchange). Handle such a message in the route instead, for example by moving it aside, rather than marking it rollback only every time.
 
+### camel-a2a - caller profile and task owner
+
+-   When a security requirement of the agent card combines several schemes, such as an API key and an OAuth token, the caller profile (`CamelA2AUserProfile`) is now the one of the token, whatever the order of the schemes. Before, it was the profile of the first scheme, so a requirement that listed the API key first only gave `{"scheme": "apiKey"}` to the route, and the tasks belonged to the API key.
+    
+-   A token without a `sub` claim is now identified by the `username` that a token introspection response gives, else by its `client_id` or `azp` claim (such as a client credentials token), so the tasks of different users and clients are kept apart. A valid token that has none of these claims is now rejected with HTTP 401.
+    
+-   The `CamelOAuthTokenValidationResult` exchange property is now set on the exchange that the route processes, as documented. Before, it was only set on the incoming HTTP exchange.
+    
+
 ### camel-sql, camel-mybatis, camel-jooq - an exchange marked rollback only last is not consumed either
 
 The SQL, MyBatis and jOOQ consumers already left a message unconsumed when the route marked the exchange rollback only with `markRollbackOnly()`. They now leave it unconsumed when the route marks it rollback only last with `markRollbackOnlyLast()` too, as the JPA and Hazelcast SEDA consumers do: the SQL consumer runs its `onConsumeFailed` statement instead of `onConsume` (and no statement when `onConsumeFailed` is not set), the MyBatis consumer does not run its `onConsume` statement, and the jOOQ consumer does not delete the entity, so the next poll reads the row again. With `transacted=true` the SQL and MyBatis consumers break out of the batch and roll back. `markRollbackOnlyLast()` reaches the consumer only when no `transacted()` EIP has consumed the flag, so the consumer’s own transaction is the last one.
@@ -533,6 +566,17 @@ The SQL, MyBatis and jOOQ consumers already left a message unconsumed when the r
 In a `transacted()` route that uses a JTA transaction manager, `markRollbackOnlyLast()` now rolls back the transaction of that `transacted()` block, as it already did with the camel-spring transaction error handler. Before, the transaction was committed, and the marker was then cleared, so nothing showed that the rollback was skipped. The marker is still cleared afterwards, so an outer `transacted()` block does not see it.
 
 If the `transacted()` block in which the exchange is marked rollback only last joins the transaction of an outer block (for example a `PROPAGATION_MANDATORY` block inside a `PROPAGATION_REQUIRED` block), that shared JTA transaction is now marked rollback only, so the commit of the outer block fails (in Camel Quarkus with `CamelException: Unable to commit transaction`) where it used to commit, as with camel-spring (`UnexpectedRollbackException`). To roll back only the inner block, use `PROPAGATION_REQUIRES_NEW` for it.
+
+### camel-thrift - SSL/TLS settings of the consumer, and errors sent to the client
+
+-   A consumer configured with `negotiationType=SSL` and the default `synchronous=false` now fails to start. It used to start a server without SSL/TLS. SSL/TLS requires `synchronous=true`, as on the producer.
+    
+-   The `SASL` negotiation type, which is not implemented, now makes the producer and the consumer fail to start. They used to behave as with `PLAINTEXT`.
+    
+-   The SSL/TLS consumer now creates its server socket from the SSL context of `sslParameters`, so all of its settings apply, including the trust managers and the server parameters. For example, `serverParameters.clientAuthentication=REQUIRE` now requires a client certificate. Before, the consumer only used the key store, the protocol and the cipher suites, and never asked for a client certificate. The key managers are required, and as in the other components the key is read with their `keyPassword`: set it when the key is protected by a password. Before, the consumer read the key with the password of the key store.
+    
+-   A new `muteException` consumer option, enabled by default, sends a generic `TApplicationException` of type `INTERNAL_ERROR` ("Internal error processing <method>") to the client instead of an exception that the Thrift method does not declare. Before, the asynchronous consumer sent the message of the exception, and the synchronous consumer sent a `TApplicationException` as it was, such as one returned by another Thrift service that the route called. An exception declared in the IDL is still sent as it is. Set `muteException=false` to send the exception as before.
+    
 
 ### camel-telegram - webhook requests are verified with a secret token
 
@@ -575,6 +619,21 @@ A Smooks configuration whose `<reader>` declares no `class` only sets handlers, 
 A document with a document type declaration (`<!DOCTYPE …​>`) is now processed with these settings for every body type, `String`, `byte[]` and `InputStream` bodies included, which failed before: the entities of its internal subset are expanded, and the declaration itself is not passed on to Smooks.
 
 Set `allowExternalEntities=true` on the endpoint or on the data format for documents that rely on external entities or an external DTD.
+
+### camel-platform-http-main - management server settings on a shared port
+
+When the HTTP server (`camel.server.enabled=true`) and the HTTP management server (`camel.management.enabled=true`) have the same port (both default to 8080), the HTTP server serves the management endpoints. It cannot apply these options of the management server, which were ignored without notice:
+
+-   `camel.management.host`, when set to another host than the one of the HTTP server
+    
+-   `camel.management.path`, when set to another path than the one of the HTTP server
+    
+-   `camel.management.useGlobalSslContextParameters=true`, when the HTTP server does not use the global SSL configuration
+    
+-   `camel.management.authenticationEnabled=true`, with the basic or JWT authentication options
+    
+
+Camel now fails to start when the management server shares the port and one of them is configured, with a message that lists them. Set `camel.management.port` to another port, so that the management server runs a server of its own and applies them. To keep a single port, remove them and configure the HTTP server instead: for example, authentication configured on the HTTP server for `/*` also applies to the management endpoints.
 
 ### camel-ical - each unmarshal parses with its own calendar builder
 
@@ -777,6 +836,10 @@ When `sslContextParameters` is set (on the endpoint, or with `useGlobalSslContex
 
 A producer that connects with a host name or an IP address that the certificate does not list now fails the TLS handshake; an IP address must be listed as a subject alternative name of the certificate, and a producer URI without a host name (such as `mllp://8888`) cannot pass the check. Use a certificate that matches the host of the endpoint, or set the new `hostnameVerification` option to `false` to keep the previous behaviour.
 
+### camel-aws2-s3 - streaming upload with the random or timestamp naming strategy names the first file too
+
+With `streamingUploadMode=true` and `namingStrategy=random` (or `timestamp`), the first file uploaded by a producer was named after `keyName` alone (for example `camel.txt`), and only the later files got a UUID (or a timestamp) after `keyName`. A producer that was started again (a restart of the route or of the application), or another producer with the same `keyName`, wrote its first file to the same key and replaced the first file written before. Every file now gets the UUID (or the timestamp), the first one too: `camel-<uuid>.txt`. The progressive naming strategy is unchanged.
+
 ### camel-atom - sortEntries sorts by the updated date and routes the oldest entry first
 
 With `sortEntries=true` the `atom` consumer sorted the entries of a feed by their published date and routed them from the newest to the oldest one. With the default idempotent strategy (which skips an entry that is not newer than the one routed before it) only some entries of a feed were routed, and the others were skipped.
@@ -814,6 +877,10 @@ MINA does not pass a failed handshake on as an error: the producer fails with a 
 ### camel-aws-secrets-manager - the CloudTrail refresh task reads every event since the last check
 
 With `camel.vault.aws.refreshEnabled=true` and without SQS notification, each check now reads every page of the `PutSecretValue` and `UpdateSecret` events since the previous check, including the events in the same second as the newest event seen before, so an update is no longer missed when more events than one page happened in between. The first check looks for the updates made after the task started: an update made before the start no longer reloads the context. A check sends two `LookupEvents` requests, one per event name, and one more per further 50 updates (before: always one request, for all Secrets Manager events); reads of secrets no longer add requests. LookupEvents allows two requests per second per account and Region.
+
+### camel-aws2-s3 - a timestamp window uploaded more than once is stored in more than one object
+
+With `streamingUploadMode=true` and `timestampGroupingEnabled=true`, the upload of a time window is completed when it reaches `batchMessageNumber` messages (10 by default) or `batchSize` bytes, or when `streamingUploadTimeout` runs. A later message of the same window started a new upload with the same key, and S3 replaced the object of the first upload with it, so the messages of the earlier uploads were lost (unless the bucket is versioned). A later upload of a window now gets the number of the uploads of that window before it after the time range: for example `grouped-messages_20240101_0800_0800-0805.txt`, then `grouped-messages_20240101_0800_0800-0805-1.txt`, `grouped-messages_20240101_0800_0800-0805-2.txt`, and so on. The first upload of a window keeps the name it had. The first time a producer uploads a window, it lists the objects of the window in the bucket (one `ListObjectsV2` request per window), so after a restart it continues after the highest number stored; this needs the `s3:ListBucket` permission, and without it the producer logs a WARN and numbers the uploads of the window from the first one. These keys do not sort in upload order (`-1` sorts before the first upload’s name, `-10` before `-2`). Producers running at the same time with the same `keyName` still need distinct key names.
 
 ### camel-aws2-kinesis - the consumer continues after the last record when a shard iterator expired
 
@@ -986,6 +1053,10 @@ A name in camel case that starts with a lower-case letter, such as the datasourc
 
 `camel dirty` counts, and `camel dirty --clean` removes, only the files named after the pid of a process that is gone, such as `<pid>-status.json`. Before, it counted every other file in `~/.camel` too, and `--clean` removed them: the log of a Spring Boot or Quarkus app that `camel run` runs (`<name>.log`), also while the app ran, the console output that the AI tools keep, and the history of the AI prompt. Directories are not counted, and `--clean` counts only the files it removed.
 
+### camel-google-storage - a listed object that cannot be got is skipped
+
+When the consumer lists the bucket, a failure to download one of the listed objects (for example access denied, or an object whose encryption key the consumer cannot use) no longer fails the poll, as long as another listed object could be got: the object is skipped, the other listed objects are consumed, and the skipped object is tried again by a later poll. The failure is given to the exception handler of the consumer, with the object name in the message (by default a `WARN` with the stack trace, at every poll that lists the object). Before, the poll failed, and as every poll lists the whole bucket, one such object stopped the consumer from consuming any object. The poll still fails when none of the listed objects could be got.
+
 ### camel-mongodb-gridfs - the consumer routes a file once
 
 With the `TimeStamp` (default) and `PersistentTimestamp` query strategies, the `mongodb-gridfs` consumer routed every file uploaded since the consumer started again at each poll (every `delay`, 500 ms by default). The upload date of the newest routed file is now kept between the polls, so a file is routed once. A route that relied on receiving the same file repeatedly now receives it once. These two strategies now skip a file whose upload date is older than that of a file already routed (as they did before Camel 3.13), for example a file from a second uploader, or from a client with another clock, that becomes visible later: GridFS sets the upload date on the client. Use `TimeStampAndFileAttribute` or `PersistentTimestampAndFileAttribute` if such files must be routed: these strategies keep the start date in their query, as before, and mark each file so that it is routed once.
@@ -1023,6 +1094,16 @@ When the server removes the subscription that the consumers of a connection shar
 ### camel-milo - a producer request for a node with an unknown namespace URI
 
 A `milo-client` write, method call or read, or a `milo-browse` browse, for a node ID with a namespace URI (`nsu=`) that is not in the namespace table of the server no longer makes the client reconnect, which also recreated the subscriptions of the consumers that share the connection. A write, read or browse answers the node like a node that the server does not have, with the status code `Bad_NodeIdUnknown`, and the other nodes of a read or browse are not affected. Previously an awaited write or read completed without an error and with a `null` body, and a browse failed with a `NullPointerException`.
+
+### camel-milo - the consumer reports a lost connection and refreshes its values after it
+
+The OPC UA client consumer delivers `Bad_NoCommunication` with a null value for every monitored node when communication with the server is lost, and the current value of every node once communication is restored. Before, the consumer delivered nothing during an outage, and values that did not change were not delivered again after it.
+
+A consumer that starts while the server cannot be reached, or whose client cannot connect at all, for example because of wrong credentials or an untrusted server certificate, delivers the status for its nodes too; the cause is in the log. A connection that Camel rebuilds after a failed request delivers it for every node of the connection. Each loss and each recovery delivers one exchange per node.
+
+A route that uses only the value of the `DataValue` body receives a null for these exchanges, which the type converters turn into `0` or `false`; a route that stores values checks the status code of the body first, for example with `${body.statusCode.bad}`. A value can now arrive again after an outage, so a route that counts values, computes differences or detects changes must tolerate repeats. The consumer’s route also runs during an outage: an OPC UA write that it makes while the client reconnects waits for the next reconnect attempt and can take effect after communication is restored, and a request that fails rebuilds the connection.
+
+To keep the previous behaviour, filter the exchanges with a bad status out right after the consumer, for example with `filter(simple("${body.statusCode.bad} == false"))`. This also drops the other bad statuses, such as the refusal of a node, and the current values delivered after an outage still arrive.
 
 ### camel-protobuf - a bytes field in a Map
 
@@ -1080,3 +1161,12 @@ When `camel run` ends, its log is no longer deleted. It is kept as `~/.camel/<na
 -   `camel_run` and `camel_control restart` answer that the integration started once its CamelContext has started. They answered as soon as the status file of the integration appeared, which happens while Camel starts and before the routes start. An integration whose route then failed to start was answered as started, and stopped right after. Now the answer is the failure, with its cause.
     
 -   `camel_get_log` of an integration that is not running answers with the log of its previous run (see `camel log --previous`), and its message says how that run ended. `previous=true` asks for that log also when the integration runs again. `camel_get_errors` of an integration that is not running says how its previous run ended.
+    
+
+### camel-toon - the lengthMarker option is removed (Breaking change)
+
+`camel-toon` now uses JToon 2.0.7, which follows a newer version of the TOON specification.
+
+The `lengthMarker` option of the TOON data format is removed, because the TOON specification no longer has the `[N]` array length marker. Remove the option from the data format in Java, XML and YAML routes. TOON text with a `[#N]` array header, such as the output of a data format with `lengthMarker=true`, now fails to unmarshal in both strict and non-strict mode; in Camel 4.23 it already failed in strict mode (the default). To read such data, remove the from its array headers (`tags[#2]:` becomes `tags[2]:`).
+
+With `strict=false`, unmarshalling no longer returns `null` or a partial result for malformed TOON. Only the non-strict recoveries of the TOON specification apply, such as accepting an array whose length differs from the declared length; other malformed TOON fails with `IllegalArgumentException`, as in strict mode.

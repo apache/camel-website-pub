@@ -46,6 +46,7 @@ The JSON Gson dataformat supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
+| **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson, Gson or JSON-B is allowed to attempt to use the CamelJacksonUnmarshalType, CamelGsonUnmarshalType or CamelJsonbUnmarshallType header during the unmarshalling. This should only be enabled when desired to be used. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **dateFormatPattern** (common) |  | `String` | To configure the date format while marshall or unmarshall Date fields in JSON using Gson. |
 

@@ -598,6 +598,7 @@ A small set of per-component options relaxes a security default when set to a no
 | `allowUrlSource=true`, `allowFilePathSource=true` (`camel-docling`) | `false` | A `String` body may name a URL to fetch or a local file to read (CVE-2026-78163); `inputBaseDirectory`, unset by default, confines the local paths when it is set. Marked `insecure:dev`. |
 | `allowExternalEntities=true` (`camel-smooks`) | `false` | External entities and DTDs declared in the XML body are resolved (CVE-2026-88901). Marked `insecure:dev` on the `smooks:` endpoint. |
 | `logPhi=true` (`camel-mllp`) | `false` | HL7 payload content is written to the log (CVE-2026-85260). |
+| `allowUnmarshallType=true` (`camel-jackson`, `camel-gson`, `camel-jsonb`) | `false` | The `CamelJacksonUnmarshalType`, `CamelGsonUnmarshalType` or `CamelJsonbUnmarshallType` header selects the class that the body is unmarshalled into (CVE-2016-8749 for Jackson). |
 
 A machine-readable index of these variants, the entry-point trust levels, the in/out-of-scope component families, the claimed and disclaimed properties, the known non-findings and the triage dispositions is published alongside this page as `security-model.yaml` (an attachment); it is a derived index for automated triage and this prose page remains canonical.
 

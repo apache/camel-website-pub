@@ -70,6 +70,17 @@ The default webhook path is a hash of the endpoint URI, so adding an option to t
 
 To restore the previous behaviour, set `webhookSecretTokenEnabled=false`: the webhook is then registered without a secret token, and webhook requests are not verified.
 
+### camel-thrift - SSL/TLS settings of the consumer, and errors sent to the client
+
+-   A consumer configured with `negotiationType=SSL` and the default `synchronous=false` now fails to start. It used to start a server without SSL/TLS. SSL/TLS requires `synchronous=true`, as on the producer.
+    
+-   The `SASL` negotiation type, which is not implemented, now makes the producer and the consumer fail to start. They used to behave as with `PLAINTEXT`.
+    
+-   The SSL/TLS consumer now creates its server socket from the SSL context of `sslParameters`, so all of its settings apply, including the trust managers and the server parameters. For example, `serverParameters.clientAuthentication=REQUIRE` now requires a client certificate. Before, the consumer only used the key store, the protocol and the cipher suites, and never asked for a client certificate. The key managers are required, and as in the other components the key is read with their `keyPassword`: set it when the key is protected by a password. Before, the consumer read the key with the password of the key store.
+    
+-   A new `muteException` consumer option, enabled by default, sends a generic `TApplicationException` of type `INTERNAL_ERROR` ("Internal error processing <method>") to the client instead of an exception that the Thrift method does not declare. Before, the asynchronous consumer sent the message of the exception. An exception declared in the IDL is still sent as it is. Set `muteException=false` to send the exception as before.
+    
+
 ### camel-oauth - the bearer token processor is stateless and reads the HTTP request headers
 
 `OAuthBearerTokenProcessor` no longer creates or updates the OAuth session, and no longer sets the `camel.oauth.session` cookie nor the `CamelOAuthSessionId` header: a bearer token authenticates the request that carries it, and nothing else. The authenticated `UserProfile` is available in the `CamelOAuthUserProfile` exchange property (`OAuth.CAMEL_OAUTH_USER_PROFILE`). A route that read the profile from the OAuth session after `OAuthBearerTokenProcessor` must read it from that exchange property instead.
@@ -103,6 +114,21 @@ This does not cover every path: Chunk re-parses any string it produces while ren
 The default `messageFilter` of the `spring-ws` component, `BasicMessageFilter`, now applies the endpoint’s `headerFilterStrategy` before it writes a message header into the SOAP header, both on the request sent by the producer and on the response returned by the consumer. With the default `SpringWebserviceHeaderFilterStrategy`, message headers whose names start with `Camel` or `camel` (case-insensitively) are no longer written into the SOAP header. Other message headers are written as before.
 
 A `BasicMessageFilter` created in application code applies a `SpringWebserviceHeaderFilterStrategy` unless it is created with another strategy. A route that relies on the previous behaviour can supply a custom `headerFilterStrategy` on the `spring-ws` endpoint.
+
+### camel-platform-http-main - management server settings on a shared port
+
+When the HTTP server (`camel.server.enabled=true`) and the HTTP management server (`camel.management.enabled=true`) have the same port (both default to 8080), the HTTP server serves the management endpoints. It cannot apply these options of the management server, which were ignored without notice:
+
+-   `camel.management.host`, when set to another host than the one of the HTTP server
+    
+-   `camel.management.path`, when set to another path than the one of the HTTP server
+    
+-   `camel.management.useGlobalSslContextParameters=true`, when the HTTP server does not use the global SSL configuration
+    
+-   `camel.management.authenticationEnabled=true`, with the basic or JWT authentication options
+    
+
+Camel now fails to start when the management server shares the port and one of them is configured, with a message that lists them. Set `camel.management.port` to another port, so that the management server runs a server of its own and applies them. To keep a single port, remove them and configure the HTTP server instead: for example, authentication configured on the HTTP server for `/*` also applies to the management endpoints.
 
 ### camel-mina - the host name of the server is verified over SSL
 

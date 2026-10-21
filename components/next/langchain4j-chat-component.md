@@ -287,6 +287,55 @@ The provider is one of `ollama`, `openai`, `anthropic`, `azure-openai`, `mistral
 
 Endpoints with the same provider options share one model instance. The provider is ignored when a model bean is configured (`chatModel`).
 
+### The body is the message, and the answer replaces it
+
+The component sends the body of the message to the model as the user message, and the answer of the model, a `String`, replaces the body. To keep the data the route works on, such as a review that it logs or sends on, build the prompt in a variable and receive the answer in another variable, with `variableSend` and `variableReceive` of the `to`. The body stays as it was:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:review")
+    .setVariable("prompt", simple("Answer with one word, positive or negative: is this review positive? ${body[comment]}"))
+    .toV("langchain4j-chat:sentiment", "prompt", "sentiment")
+    .log("Review ${body[id]} is ${variable.sentiment}");
+```
+
+```xml
+<route>
+  <from uri="direct:review"/>
+  <setVariable name="prompt">
+    <simple>Answer with one word, positive or negative: is this review positive? ${body[comment]}</simple>
+  </setVariable>
+  <to uri="langchain4j-chat:sentiment" variableSend="prompt" variableReceive="sentiment"/>
+  <log message="Review ${body[id]} is ${variable.sentiment}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:review
+      steps:
+        - setVariable:
+            name: prompt
+            expression:
+              simple:
+                expression: "Answer with one word, positive or negative: is this review positive? ${body[comment]}"
+        - to:
+            uri: langchain4j-chat:sentiment
+            variableSend: prompt
+            variableReceive: sentiment
+        - log:
+            message: "Review ${body[id]} is ${variable.sentiment}"
+```
+
+The review is a `Map` here (such as after `unmarshal` of JSON), and the model is configured as in [Configuring the model by provider](#_configuring_the_model_by_provider). Without `variableSend`, the body itself is the prompt; without `variableReceive`, the answer replaces the body, and `${body[id]}` reads the answer of the model.
+
 ### Using a specific Chat Model
 
 The Camel LangChain4j chat component provides an abstraction for interacting with various types of Large Language Models (LLMs) supported by [LangChain4j](https://github.com/langchain4j/langchain4j).
@@ -446,7 +495,10 @@ from("direct:chat")
 
 ### Send a prompt with variables
 
-To send a prompt with variables, use the Operation type `LangChain4jChatOperations.CHAT_SINGLE_MESSAGE_WITH_PROMPT`. This operation allows you to send a single prompt message with dynamic variables, which will be replaced with values provided in the request.
+To send a prompt with variables, use the Operation type `LangChain4jChatOperations.CHAT_SINGLE_MESSAGE_WITH_PROMPT`. This operation allows you to send a single prompt message with dynamic variables, which will be replaced with values provided in the request. The template is the header `CamelLangChain4jChatPromptTemplate` (`LangChain4jChatHeaders.PROMPT_TEMPLATE`), and the body is a `Map` with the values of its variables.
+
+> **Note**
+> In YAML and XML routes, and in properties files, `{langchain4j-chat}` is a property placeholder, which Camel resolves before the route runs. There, build the prompt with the simple language instead, as in [The body is the message](#_the_body_is_the_message_and_the_answer_replaces_it).
 
 Route example:
 

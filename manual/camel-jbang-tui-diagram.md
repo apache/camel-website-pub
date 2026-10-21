@@ -20,6 +20,8 @@ See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
     
 -   [**Metrics and source**](#_metrics_and_source_code) — throughput and timing on the boxes, and the source a box comes from
     
+-   [**Body types**](#_body_types) — the types of the bodies each step has been reached with, on the arrows into the steps
+    
 
 ## Route Topology Diagram
 
@@ -69,7 +71,7 @@ The Diagram tab shows one diagram at three zoom levels, and the line above it sa
 
 The level shown is highlighted; the others stay visible, and one that does not apply yet (Route, until a route is selected) is greyed out. **Enter** zooms in and **Esc** zooms out, from a route to its topology and from the topology to the architecture (at the architecture, **Esc** goes back to the Overview tab as on any tab). **v**, shown at the start of the line, moves to the next level and round again, and a click on a level goes there.
 
-The right side of the line holds the view settings of the level shown, with their state (● on, ○ off, or the mode). **a** ai, shown unless the AI Overview setting is off, switches every level between the view with the AI-assisted parts and the facts alone: off, the architecture groups only by what the sources say (route groups, shared services, utility, and Other for the rest), and the topology, the Info panel and the Routes tab show no AI label, note or group. It changes what is shown only: the AI overview setting, the summary and its automatic updates stay as they are. When the project has no `camel-summary.md` yet, **a** has the AI write one, as `/overview` does: the AI panel opens to show it start, and the diagram picks up the summary once it is saved. **b** switches every level between the **business** view and the **technical** view: route labels and what capabilities achieve (the AI-assisted parts marked ✦), or route ids with their endpoints and the entry points and systems of each capability. The business view is the default when the routes have descriptions, from their source or the AI project overview; **n**, the key of the former description toggle, does the same. **m** metrics and **e** external systems apply to the topology, **m** and **d** detail to a route. **g** group, in the topology, shows the architecture one level down: each route box names its group (a route group, an AI capability marked ✦, shared services or utility), each group has the border colour of its box in the architecture, and a legend at the bottom of the topology lists the groups in their colours; it is on when the project has groups. **u** shows or hides the utility routes, one setting for the architecture and the topology, so both show the same groups. **x** errors, in the topology, draws the error handling in a frame of its own below the routes: the routes reached only while handling a failure (such as the target of a dead letter channel), and under each one where its failures come from and how they are handled (handled: the message ends there; continued; not handled: the failure goes on to the caller). There are no arrows into the frame (with a global error handler every route would have one); selecting a route in the frame highlights the routes that send to it. With **e**, an external system only the routes in the frame use (where the failed messages end up) is in the frame too, below its route. Off, the topology shows the happy path only. A route with error handling has a dim ⚡ on its box, in the topology and in the route view, whether the error handling is shown or not. In the route view **x** does the same for one route: off, the route shows its own steps only, without the onException clauses (a global one is in every route); on, a frame below the route lists where its failures go and where it is reached on error from, and shows its onException clauses as blocks of their own. The history view always shows the onException clauses, so a replay can step into them. It needs Camel 4.23 or newer in the integration; the toggle says **4.23+** for an older one. The route boxes widen, within reason, so a label and its group fit on a line, and the Info panel of a route names its group (✦ when the AI placed it). The footer lists only actions, such as **Enter** drill-down, **c** source and **s** summary.
+The right side of the line holds the view settings of the level shown, with their state (● on, ○ off, or the mode). **a** ai, shown unless the AI Overview setting is off, switches every level between the view with the AI-assisted parts and the facts alone: off, the architecture groups only by what the sources say (route groups, shared services, utility, and Other for the rest), and the topology, the Info panel and the Routes tab show no AI label, note or group. It changes what is shown only: the AI overview setting, the summary and its automatic updates stay as they are. When the project has no `camel-summary.md` yet, **a** has the AI write one, as `/overview` does: the AI panel opens to show it start, and the diagram picks up the summary once it is saved. **b** switches every level between the **business** view and the **technical** view: route labels and what capabilities achieve (the AI-assisted parts marked ✦), or route ids with their endpoints and the entry points and systems of each capability. The business view is the default when the routes have descriptions, from their source or the AI project overview; **n**, the key of the former description toggle, does the same. **m** metrics and **e** external systems apply to the topology, **m**, **y** body types and **d** detail to a route. **g** group, in the topology, shows the architecture one level down: each route box names its group (a route group, an AI capability marked ✦, shared services or utility), each group has the border colour of its box in the architecture, and a legend at the bottom of the topology lists the groups in their colours; it is on when the project has groups. **u** shows or hides the utility routes, one setting for the architecture and the topology, so both show the same groups. **x** errors, in the topology, draws the error handling in a frame of its own below the routes: the routes reached only while handling a failure (such as the target of a dead letter channel), and under each one where its failures come from and how they are handled (handled: the message ends there; continued; not handled: the failure goes on to the caller). There are no arrows into the frame (with a global error handler every route would have one); selecting a route in the frame highlights the routes that send to it. With **e**, an external system only the routes in the frame use (where the failed messages end up) is in the frame too, below its route. Off, the topology shows the happy path only. A route with error handling has a dim ⚡ on its box, in the topology and in the route view, whether the error handling is shown or not. In the route view **x** does the same for one route: off, the route shows its own steps only, without the onException clauses (a global one is in every route); on, a frame below the route lists where its failures go and where it is reached on error from, and shows its onException clauses as blocks of their own. The history view always shows the onException clauses, so a replay can step into them. It needs Camel 4.23 or newer in the integration; the toggle says **4.23+** for an older one. The route boxes widen, within reason, so a label and its group fit on a line, and the Info panel of a route names its group (✦ when the AI placed it). The footer lists only actions, such as **Enter** drill-down, **c** source and **s** summary.
 
 ### Architecture View
 
@@ -122,6 +124,30 @@ Press **e** to cycle through three modes for external endpoints:
 -   Press **b** (or **n**) to switch between the business view (labels) and the technical view (route ids and endpoints)
     
 
+### Body Types
+
+When the integration runs with the message history on, such as with `camel run --dev`, Camel keeps the body types each step has been reached with, across the messages (see [Body types](camel-jbang-diagnostics.html#_body_types) for the same in the Camel CLI). In a route, press **y** to show them beside the arrow into each step, so the arrows show how the body changes along the route:
+
+```text
+           ┌──────────────────────┐
+           │   unmarshal[json]    │
+           └──────────────────────┘
+                      │
+                      │ ⚠ byte[] | LinkedHashMap (payload and data)
+                    3 ▼ 12
+           ┌────────────────────⚠─┐
+           │   to[file:outbox]    │
+           └──────────────────────┘
+```
+
+A step reached with more than one type is a part of the route that is dynamic. When the types are of more than one kind (`null`, `payload`, `data` or `collection`), the step needs attention, as its body depends on the path a message takes: its box has a ⚠ in its top border, whether the types are shown or not. Here some messages reach the file endpoint with parsed data that was never marshalled.
+
+![The orders route with its body types on the arrows: only one branch of the choice marshals](_images/jbang/camel-tui-diagram-body-types.png)
+
+The arrows of a branch are side by side, so the types beside them are cut to the room there is: the first ones and how many more (`ByteArrayInputStreamCache +2`). The Info panel of the selected step lists them all with their kind. In the topology, the Info panel of a route says how many of its steps were reached with more than one type (`⚠ 1 mixed · 2 varied`), and the Routes tab has the same in its BODY TYPES column, with the types of each step in the table of the processors of the selected route.
+
+![The Routes tab: the orders route has four steps reached with bodies of more than one kind](_images/jbang/camel-tui-routes-body-types.png)
+
 ## Keyboard Shortcuts
 
 ### Diagram Tab
@@ -134,6 +160,7 @@ Press **e** to cycle through three modes for external endpoints:
 | **Esc** | Go back (previous route or topology) |
 | **t** | Jump to topology view |
 | **m** | Toggle metrics overlay |
+| **y** | In a route: show the body types each step has been reached with, beside the arrows into the steps |
 | **e** | External systems: in the topology off, edges, all; in the architecture off or edges |
 | **a** | AI-assisted parts shown, or the facts alone; without a `camel-summary.md` yet, has the AI write one |
 | **b** (or **n**) | Business view (labels, what capabilities achieve) or technical view (route ids, endpoints) |

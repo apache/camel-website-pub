@@ -54,6 +54,20 @@ The routes of a Java or XML DSL file are also read into the Camel model, without
 
 These are what the Java compiler cannot see inside the strings. A part of a Java route the parser cannot work out (a value computed at runtime) is left unchecked.
 
+### What a running integration saw
+
+The YAML validator follows the message body through the steps of each route, and reports a step that cannot work on it: a field read such as `${body.qty}` on text that was never unmarshalled, or a Map that a `to: file` cannot write. Where the file does not tell what the body is, such as after a `platform-http` or `kafka` consumer, or after a call with `to: http`, it says nothing.
+
+When an integration runs the routes of the file with the message history on, such as with `camel run --dev`, the validator fills these gaps with what the integration saw at the endpoints of its routes: the body each consumer gave, and each producer returned, when all those bodies were of one kind (see [Message History](../components/4.22.x/eips/message-history.md)). For example:
+
+```text
+route orders: simple reads a field of the body (${body.qty}), but the body here is still text, not parsed data - in
+the running app, from: platform-http:/orders gave a ByteArrayInputStreamCache: unmarshal it first with the data format
+of the payload (json, jacksonXml, csv, ...) to read its fields
+```
+
+So the next version of a file is checked against what the integration does with the current one, before it is written or reloaded. The tools that write files for AI agents validate the same way.
+
 ### Endpoints no route consumes
 
 As the routes of an application are spread over the files of its directory, `camel validate source` also reports a `direct:`, `seda:` or `disruptor:` endpoint that a route sends to, but that no YAML, Java or XML route in the directory (and its subdirectories) consumes. With `direct:` sending a message to it fails; with `seda:` and `disruptor:` the messages would be queued and never read.
