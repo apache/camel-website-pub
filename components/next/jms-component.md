@@ -1054,6 +1054,83 @@ from("jms:queue:foo")
             uri: bean:myBusinessLogic
 ```
 
+### Sending a request and waiting for the reply
+
+To send a request and wait for its reply, the caller sends with the `InOut` exchange pattern, and the service is a route that consumes the queue: the body at the end of its route is the reply. You do not need to set `replyTo` or a `JMSReplyTo` header: Camel uses a temporary reply queue by default and sets `JMSReplyTo` itself. Set `replyTo` for a fixed (shared or exclusive) reply queue, see [Request-reply over JMS](#_request_reply_over_jms). With `variableReceive`, the reply goes into a variable, and the body is kept:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("timer:order?repeatCount=1")
+  .setBody(constant("{\"orderId\": \"ORD-1001\", \"sku\": \"CAMEL-MUG\"}"))
+  .setExchangePattern(ExchangePattern.InOut)
+  .toV("jms:queue:stock", null, "stockReply")
+  .log("Order ${body} got the reply ${variable.stockReply}");
+
+from("jms:queue:stock")
+  .log("Stock service got ${body}")
+  .setBody(constant("{\"reserved\": true}"));
+```
+
+```xml
+<route>
+  <from uri="timer:order?repeatCount=1"/>
+  <setBody>
+    <constant>{"orderId": "ORD-1001", "sku": "CAMEL-MUG"}</constant>
+  </setBody>
+  <to uri="jms:queue:stock" pattern="InOut" variableReceive="stockReply"/>
+  <log message="Order ${body} got the reply ${variable.stockReply}"/>
+</route>
+<route>
+  <from uri="jms:queue:stock"/>
+  <log message="Stock service got ${body}"/>
+  <setBody>
+    <constant>{"reserved": true}</constant>
+  </setBody>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: timer:order
+      parameters:
+        repeatCount: 1
+      steps:
+        - setBody:
+            expression:
+              constant:
+                expression: '{"orderId": "ORD-1001", "sku": "CAMEL-MUG"}'
+        - to:
+            uri: jms:queue:stock
+            pattern: InOut
+            variableReceive: stockReply
+        - log:
+            message: "Order ${body} got the reply ${variable.stockReply}"
+- route:
+    from:
+      uri: jms:queue:stock
+      steps:
+        - log:
+            message: "Stock service got ${body}"
+        - setBody:
+            expression:
+              constant:
+                expression: '{"reserved": true}'
+```
+
+> **Note**
+> In Java, `setExchangePattern(ExchangePattern.InOut)` keeps the exchange `InOut` for the rest of the route, while `pattern` on the XML and YAML `to` applies to that send only. Here it makes no difference, as only a `log` follows; with another `to("jms:…​")` later in the route, set the pattern back with `setExchangePattern(ExchangePattern.InOnly)`, or use `to(ExchangePattern.InOut, "jms:…​")`, which applies to that send only.
+
+The reply queue can also be shared or exclusive: see [Request-reply over JMS](#_request_reply_over_jms) below.
+
+### Routing JMS messages
+
 You can use any of the EIP patterns so the route can be context based. For example, here’s how to filter an order topic for the big spenders:
 
 -   Java
@@ -1640,7 +1717,7 @@ from("jms:SomeQueue?concurrentConsumers=20&asyncConsumer=true")
 
 ### Request-reply over JMS
 
-Camel supports Request Reply over JMS. In essence the MEP of the Exchange should be `InOut` when you send a message to a JMS queue.
+Camel supports Request Reply over JMS. In essence the MEP of the Exchange should be `InOut` when you send a message to a JMS queue. The example in [Sending a request and waiting for the reply](#_sending_a_request_and_waiting_for_the_reply) shows the caller and the service. Camel sets the `JMSReplyTo` header and waits for the reply. You do not need to set `replyTo` or a `JMSReplyTo` header: Camel uses a temporary reply queue by default. Set `replyTo` for a fixed (shared or exclusive) reply queue, see below.
 
 Camel offers a number of options to configure request/reply over JMS that influence performance and clustered environments. The table below summaries the options.
 

@@ -206,6 +206,7 @@ The PubNub component supports the following message header(s), which is/are list
 | **CamelPubNubOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#OPERATION) | The operation to perform. |  | String |
 | **CamelPubNubTimeToken** (common) Constant: [`TIMETOKEN`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#TIMETOKEN) | The Timestamp for the event. |  | Long |
 | **CamelPubNubChannel** (consumer) Constant: [`CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#CHANNEL) | The channel for which the message belongs. |  | String |
+| **CamelPubNubOverrideChannel** (producer) Constant: [`OVERRIDE_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#OVERRIDE_CHANNEL) | The channel to use instead of the channel configured on the endpoint. |  | String |
 | **CamelPubNubUUID** (producer) Constant: [`UUID`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#UUID) | UUID to be used as a device identifier. |  | String |
 
 ## Usage

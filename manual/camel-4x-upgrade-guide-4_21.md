@@ -1273,7 +1273,10 @@ Swift (`SwiftConstants`):
 | `SwiftConstants.DELIMITER` | `delimiter` | `CamelOpenstackSwiftDelimiter` |
 | `SwiftConstants.PATH` | `path` | `CamelOpenstackSwiftPath` |
 
-`SwiftConstants.CONTAINER_METADATA_PREFIX`, `SwiftConstants.VERSIONS_LOCATION`, `SwiftConstants.CONTAINER_READ`, and `SwiftConstants.CONTAINER_WRITE` intentionally keep their previous values (`X-Container-Meta-`, `X-Versions-Location`, `X-Container-Read`, `X-Container-Write`) because they are part of the Swift HTTP protocol contract used by openstack4j to forward container metadata and ACLs to the Swift backend. Renaming them would break interoperability with the Swift API.
+`SwiftConstants.CONTAINER_METADATA_PREFIX`, `SwiftConstants.VERSIONS_LOCATION`, `SwiftConstants.CONTAINER_READ`, and `SwiftConstants.CONTAINER_WRITE` keep their previous values (`X-Container-Meta-`, `X-Versions-Location`, `X-Container-Read`, `X-Container-Write`) in this release.
+
+> **Note**
+> These four constants have since been renamed to follow the Camel naming convention; see CAMEL-25895 for the releases that carry the change. They are Exchange header keys only: openstack4j builds the `X-Container-*` wire headers itself from `CreateUpdateContainerOptions`, so the Camel header name never reaches Swift.
 
 Routes that reference the constants symbolically (for example `setHeader(OpenstackConstants.OPERATION, …​)`) continue to work without changes. Routes that set the header by its literal string value (for example `setHeader("operation", …​)`) must be updated to use the new value (`setHeader("CamelOpenstackOperation", …​)`).
 

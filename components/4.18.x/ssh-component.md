@@ -73,8 +73,8 @@ The SSH component supports 26 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **failOnUnknownHost** (common) | Specifies whether a connection to an unknown host should fail or not. This value is only checked when the property knownHosts is set. | false | boolean |
-| **knownHostsResource** (common) | Sets the resource path for a known\_hosts file. |  | String |
+| **failOnUnknownHost** (common) | Specifies whether a connection to a server whose host has no entry without a marker in the known\_hosts resource should fail or not. This value is only checked when the property knownHostsResource is set. A server whose host has entries without a marker is always rejected when it presents a key that none of them lists, and a key listed in a matching revoked entry is always rejected. | false | boolean |
+| **knownHostsResource** (common) | Sets the resource path for a known\_hosts file used to verify the SSH server host key. The file uses the OpenSSH known\_hosts format, and its entries are matched against the host and port configured on the endpoint. A resource that cannot be read, or that has a line that cannot be read, makes every connection fail. When not set, the client does not verify the server host key against a known\_hosts file. |  | String |
 | **timeout** (common) | Sets the timeout in milliseconds to wait in establishing the remote SSH server connection. Defaults to 30000 milliseconds. | 30000 | long |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **pollCommand** (consumer) | Sets the command string to send to the remote SSH server during every poll cycle. Only works with camel-ssh component being used as a consumer, i.e. from(ssh://…​) You may need to end your command with a newline, and that must be URL encoded %0A. |  | String |
@@ -121,8 +121,8 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **failOnUnknownHost** (common) | Specifies whether a connection to an unknown host should fail or not. This value is only checked when the property knownHosts is set. | false | boolean |
-| **knownHostsResource** (common) | Sets the resource path for a known\_hosts file. |  | String |
+| **failOnUnknownHost** (common) | Specifies whether a connection to a server whose host has no entry without a marker in the known\_hosts resource should fail or not. This value is only checked when the property knownHostsResource is set. A server whose host has entries without a marker is always rejected when it presents a key that none of them lists, and a key listed in a matching revoked entry is always rejected. | false | boolean |
+| **knownHostsResource** (common) | Sets the resource path for a known\_hosts file used to verify the SSH server host key. The file uses the OpenSSH known\_hosts format, and its entries are matched against the host and port configured on the endpoint. A resource that cannot be read, or that has a line that cannot be read, makes every connection fail. When not set, the client does not verify the server host key against a known\_hosts file. |  | String |
 | **timeout** (common) | Sets the timeout in milliseconds to wait in establishing the remote SSH server connection. Defaults to 30000 milliseconds. | 30000 | long |
 | **pollCommand** (consumer) | Sets the command string to send to the remote SSH server during every poll cycle. Only works with camel-ssh component being used as a consumer, i.e. from(ssh://…​) You may need to end your command with a newline, and that must be URL encoded %0A. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
@@ -285,6 +285,57 @@ from("ssh://scott@localhost:8101?certResource=classpath:test_rsa&useFixedDelay=t
 ```
 
 An example of using Public Key authentication is provided in `examples/camel-example-ssh-security`.
+
+### Server host key verification
+
+The SSH Component verifies the host key of the SSH server only when the `knownHostsResource` option is set. It refers to a file in the OpenSSH `known_hosts` format, such as the output of `ssh-keyscan`. Set `failOnUnknownHost` to `true` as well, so that a server without any entry in that file is rejected. When it is `false` (the default), such a server is accepted and a warning is logged.
+
+The entries are matched as OpenSSH matches them:
+
+-   Each host pattern of an entry is compared, ignoring case, with the host name or address the client connects to: the host configured on the endpoint, or the `HostName` that `~/.ssh/config` gives for it. It is written `host` for port 22 and `[host]:port` for another port. **and `?` are wildcards, a pattern starting with `!` excludes the hosts it matches, and hashed entries are supported. So `db.example.com` only applies to port 22, `[db.example.com]:2222` to port 2222, and** to every host and port. The host is never resolved: an endpoint configured with an address only uses the entries for that address, and an IPv6 address such as `::1` is not expanded.
+    
+-   The server is accepted when an entry of its host lists the key it presents. A host can be listed with several keys, one per line.
+    
+-   The server is rejected when the key it presents is listed in a matching `@revoked` entry, or when its host has entries without a marker but none of them lists that key, whatever the value of `failOnUnknownHost`. That option only decides for a host without such an entry: `@revoked` and `@cert-authority` entries do not list a host.
+    
+-   `@cert-authority` entries (OpenSSH host certificates) are not supported and are ignored.
+    
+-   A `known_hosts` resource that cannot be read, or that has a line that cannot be read (for example an unknown `@` marker, a missing key, or a key that is not valid base64), makes every connection fail.
+    
+
+The following route verifies the host key of a server listening on port 2222 against a `known_hosts` file that contains the line `[db.example.com]:2222 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5…​`.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:status")
+    .to("ssh://scott@db.example.com:2222?certResource=classpath:test_rsa&knownHostsResource=file:/etc/camel/known_hosts&failOnUnknownHost=true");
+```
+
+```xml
+<route>
+  <from uri="direct:status"/>
+  <to uri="ssh://scott@db.example.com:2222?certResource=classpath:test_rsa&amp;knownHostsResource=file:/etc/camel/known_hosts&amp;failOnUnknownHost=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:status
+      steps:
+        - to:
+            uri: ssh://scott@db.example.com:2222
+            parameters:
+              certResource: "classpath:test_rsa"
+              knownHostsResource: "file:/etc/camel/known_hosts"
+              failOnUnknownHost: true
+```
 
 ### Certificate Dependencies
 

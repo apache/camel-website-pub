@@ -896,7 +896,7 @@ KeyLifecycleManager keyManager = new FileBasedKeyLifecycleManager("/secure/keys"
 
 // Generate a new Dilithium key
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 
 // Use the key
 KeyMetadata metadata = keyManager.getKeyMetadata("app-signing-key");
@@ -1046,7 +1046,7 @@ public HashicorpVaultKeyLifecycleManager createKeyManager() {
 
 // Generate a Dilithium key stored in Vault
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 
 // Key is stored in Vault at: secret/data/pqc/keys/app-signing-key
 ```
@@ -1067,7 +1067,7 @@ HashicorpVaultKeyLifecycleManager keyManager =
 
 // Generate and store key in Vault
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "vault-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 ```
 
 **Example with HashiCorp Cloud Platform (HCP) Vault:**
@@ -1088,7 +1088,7 @@ HashicorpVaultKeyLifecycleManager keyManager =
 
 // Generate and store key in HCP Vault
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "hcp-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 
 // Key is stored in HCP Vault at: admin/secret/data/pqc/keys/hcp-key
 ```
@@ -1478,7 +1478,7 @@ public AwsSecretsManagerKeyLifecycleManager createKeyManager() {
 
 // Generate a Dilithium key stored in AWS Secrets Manager
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 
 // Keys are stored as: pqc/keys/app-signing-key/private, /public, /metadata
 ```
@@ -1497,7 +1497,7 @@ AwsSecretsManagerKeyLifecycleManager keyManager =
 
 // Generate and store key in AWS Secrets Manager
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "aws-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 ```
 
 **Example with LocalStack (Testing):**
@@ -1515,7 +1515,7 @@ AwsSecretsManagerKeyLifecycleManager keyManager =
 
 // Generate and store key in LocalStack
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "test-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 ```
 
 **YAML Configuration:**
@@ -1835,7 +1835,7 @@ KeyPair mldsaKey = keyManager.generateKeyPair("MLDSA", "mldsa-key");
 
 // Dilithium with specific parameter
 KeyPair dilithiumKey = keyManager.generateKeyPair("DILITHIUM", "dilithium-key",
-    DilithiumParameterSpec.dilithium3);
+    MLDSAParameterSpec.ml_dsa_65);
 
 // Falcon (uses default Falcon-512)
 KeyPair falconKey = keyManager.generateKeyPair("FALCON", "falcon-key");
@@ -2041,7 +2041,7 @@ public KeyLifecycleManager createKeyManager() throws IOException {
 public KeyPair createSigningKey() throws Exception {
     KeyLifecycleManager manager = createKeyManager();
     return manager.generateKeyPair("DILITHIUM", "route-signing-key",
-        DilithiumParameterSpec.dilithium2);
+        MLDSAParameterSpec.ml_dsa_44);
 }
 ```
 
@@ -2059,7 +2059,7 @@ camel:
       scriptLanguage: groovy
       script: |
         def manager = new org.apache.camel.component.pqc.lifecycle.FileBasedKeyLifecycleManager('/secure/keys')
-        def spec = org.bouncycastle.pqc.jcajce.spec.DilithiumParameterSpec.dilithium2
+        def spec = org.bouncycastle.jcajce.spec.MLDSAParameterSpec.ml_dsa_44
         manager.generateKeyPair('DILITHIUM', 'route-signing-key', spec)
 ```
 
@@ -2116,9 +2116,9 @@ The lifecycle manager provides sensible defaults for all algorithms:
  
 | Algorithm | Default Parameter Spec |
 | --- | --- |
-| DILITHIUM | dilithium2 |
+| DILITHIUM | ml\_dsa\_44 |
 | FALCON | falcon\_512 |
-| SPHINCSPLUS | sha2\_128s |
+| SPHINCSPLUS | slh\_dsa\_sha2\_128s |
 | XMSS | 10-tree height with SHA-256 |
 | XMSSMT | XMSSMT-SHA2-20d2-256 |
 | LMS/HSS | LMS-SHA256-N32-H10 with SHA256-N32-W4 |
@@ -2231,7 +2231,7 @@ for (int i = 0; i < 100; i++) {
     executor.submit(() -> {
         try {
             keyManager.generateKeyPair("DILITHIUM", "key-" + index,
-                DilithiumParameterSpec.dilithium2);
+                MLDSAParameterSpec.ml_dsa_44);
         } catch (Exception e) {
             logger.error("Key generation failed", e);
         }
@@ -2377,7 +2377,7 @@ The DataFormat requires a KeyPair to be available either:
 ```java
 @BindToRegistry("pqcKeyPair")
 public KeyPair createMLKEMKeyPair() throws Exception {
-    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BC");
     kpg.initialize(MLKEMParameterSpec.ml_kem_768, new SecureRandom());
     return kpg.generateKeyPair();
 }
@@ -2391,7 +2391,7 @@ pqcFormat.setSymmetricKeyAlgorithm("AES");
 #### Option 2: Direct Configuration
 
 ```java
-KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BC");
 kpg.initialize(MLKEMParameterSpec.ml_kem_768, new SecureRandom());
 KeyPair keyPair = kpg.generateKeyPair();
 
@@ -2437,7 +2437,7 @@ from("direct:encrypt")
     
 -   SNTRUPrime - Streamlined NTRU Prime
     
--   KYBER - Kyber (pre-standardization version)
+-   KYBER - Compatibility alias for ML-KEM
     
 
 #### Symmetric Encryption Algorithms
@@ -2659,7 +2659,7 @@ Configure a KeyGenerator once to avoid repeated initialization:
 ```java
 @BindToRegistry("kemKeyGenerator")
 public KeyGenerator createKeyGenerator() throws Exception {
-    return KeyGenerator.getInstance("ML-KEM", "BCPQC");
+    return KeyGenerator.getInstance("ML-KEM", "BC");
 }
 
 PQCDataFormat pqcFormat = new PQCDataFormat();
@@ -2688,7 +2688,7 @@ void testPQCDataFormatRoundTrip() throws Exception {
     Security.addProvider(new BouncyCastleProvider());
     Security.addProvider(new BouncyCastlePQCProvider());
 
-    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BC");
     kpg.initialize(MLKEMParameterSpec.ml_kem_512, new SecureRandom());
     KeyPair keyPair = kpg.generateKeyPair();
 

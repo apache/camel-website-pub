@@ -95,7 +95,7 @@ The Keycloak component supports the following options which are listed below.
 | **introspectionCacheTtl** (common) | Time-to-live for cached introspection results in seconds. | 60 | long |
 | **ipAddress** (common) | Filter events by IP address. |  | String |
 | **keycloakClient** (common) | **Autowired** To use an existing configured Keycloak admin client. |  | Keycloak |
-| **maxResults** (common) | Maximum number of events to retrieve per poll. | 100 | int |
+| **maxResults** (common) | The number of events the first poll retrieves, and the page size of the later polls, which read every event since the previous poll. | 100 | int |
 | **operation** (common) | 
 The operation to perform.
 
@@ -366,7 +366,7 @@ With the following _path_ and _query_ parameters:
 | **introspectionCacheTtl** (common) | Time-to-live for cached introspection results in seconds. | 60 | long |
 | **ipAddress** (common) | Filter events by IP address. |  | String |
 | **keycloakClient** (common) | **Autowired** To use an existing configured Keycloak admin client. |  | Keycloak |
-| **maxResults** (common) | Maximum number of events to retrieve per poll. | 100 | int |
+| **maxResults** (common) | The number of events the first poll retrieves, and the page size of the later polls, which read every event since the previous poll. | 100 | int |
 | **operation** (common) | 
 The operation to perform.
 

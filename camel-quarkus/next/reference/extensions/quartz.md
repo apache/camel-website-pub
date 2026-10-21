@@ -77,7 +77,7 @@ Support for Quartz clustering is provided by the Quarkus Quartz extension. The f
     </dependency>
     ```
     
-    Also add a Quartz database creation script for your chosen database kind. The Quartz project provides ready-made scripts that can be copied from [here](https://github.com/quartz-scheduler/quartz/tree/master/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstore). Add the SQL script to `src/main/resources/db/migration/V1.0.0__QuarkusQuartz.sql`. Quarkus Flyway will detect it on startup and will proceed to create the Quartz database tables.
+    Also add a Quartz database creation script for your chosen database kind. The Quartz project provides ready-made scripts that can be copied from [here](https://github.com/quartz-scheduler/quartz/tree/main/quartz/src/main/resources/org/quartz/impl/jdbcjobstore). Add the SQL script to `src/main/resources/db/migration/V1.0.0__QuarkusQuartz.sql`. Quarkus Flyway will detect it on startup and will proceed to create the Quartz database tables.
     
 4.  Configure the Camel Quartz component to use the Quarkus Quartz scheduler.
     

@@ -95,11 +95,11 @@ The SSH component supports the following options which are listed below.
 | **certResource** (security) | Sets the resource path of the certificate to use for Authentication. Will use ResourceHelperKeyPairProvider to resolve file based certificate, and depends on keyType setting. |  | String |
 | **certResourcePassword** (security) | Sets the password to use in loading certResource, if certResource is an encrypted key. |  | String |
 | **ciphers** (security) | Comma-separated list of allowed/supported ciphers in their order of preference. |  | String |
-| **failOnUnknownHost** (security) | Specifies whether a connection to an unknown SSH server host key should fail. When false, host keys that are not present in the known\_hosts resource are accepted. | false | boolean |
+| **failOnUnknownHost** (security) | Specifies whether a connection to a server whose host has no entry without a marker in the known\_hosts resource should fail. When false, such a server is accepted. A server whose host has entries without a marker is always rejected when it presents a key that none of them lists, and a key listed in a matching revoked entry is always rejected. | false | boolean |
 | **kex** (security) | Comma-separated list of allowed/supported key exchange algorithms in their order of preference. |  | String |
 | **keyPairProvider** (security) | Sets the KeyPairProvider reference to use when connecting using Certificates to the remote SSH Server. |  | KeyPairProvider |
 | **keyType** (security) | Sets the key type to pass to the KeyPairProvider as part of authentication. KeyPairProvider.loadKey(…​) will be passed this value. From Camel 3.0.0 / 2.25.0, by default Camel will select the first available KeyPair that is loaded. Prior to this, a KeyType of 'ssh-rsa' was enforced by default. |  | String |
-| **knownHostsResource** (security) | Sets the resource path for a known\_hosts file used to verify the SSH server host key. When not set, the client does not verify the server host key against a known\_hosts file. |  | String |
+| **knownHostsResource** (security) | Sets the resource path for a known\_hosts file used to verify the SSH server host key. The file uses the OpenSSH known\_hosts format, and its entries are matched against the host and port configured on the endpoint. A resource that cannot be read, or that has a line that cannot be read, makes every connection fail. When not set, the client does not verify the server host key against a known\_hosts file. |  | String |
 | **macs** (security) | Comma-separated list of allowed/supported message authentication code algorithms in their order of preference. The MAC algorithm is used for data integrity protection. |  | String |
 | **password** (security) | Sets the password to use in connecting to remote SSH server. Requires keyPairProvider to be set to null. |  | String |
 | **signatures** (security) | Comma-separated list of allowed/supported signature algorithms in their order of preference. |  | String |
@@ -224,11 +224,11 @@ Enum values:
 | **certResource** (security) | Sets the resource path of the certificate to use for Authentication. Will use ResourceHelperKeyPairProvider to resolve file based certificate, and depends on keyType setting. |  | String |
 | **certResourcePassword** (security) | Sets the password to use in loading certResource, if certResource is an encrypted key. |  | String |
 | **ciphers** (security) | Comma-separated list of allowed/supported ciphers in their order of preference. |  | String |
-| **failOnUnknownHost** (security) | Specifies whether a connection to an unknown SSH server host key should fail. When false, host keys that are not present in the known\_hosts resource are accepted. | false | boolean |
+| **failOnUnknownHost** (security) | Specifies whether a connection to a server whose host has no entry without a marker in the known\_hosts resource should fail. When false, such a server is accepted. A server whose host has entries without a marker is always rejected when it presents a key that none of them lists, and a key listed in a matching revoked entry is always rejected. | false | boolean |
 | **kex** (security) | Comma-separated list of allowed/supported key exchange algorithms in their order of preference. |  | String |
 | **keyPairProvider** (security) | Sets the KeyPairProvider reference to use when connecting using Certificates to the remote SSH Server. |  | KeyPairProvider |
 | **keyType** (security) | Sets the key type to pass to the KeyPairProvider as part of authentication. KeyPairProvider.loadKey(…​) will be passed this value. From Camel 3.0.0 / 2.25.0, by default Camel will select the first available KeyPair that is loaded. Prior to this, a KeyType of 'ssh-rsa' was enforced by default. |  | String |
-| **knownHostsResource** (security) | Sets the resource path for a known\_hosts file used to verify the SSH server host key. When not set, the client does not verify the server host key against a known\_hosts file. |  | String |
+| **knownHostsResource** (security) | Sets the resource path for a known\_hosts file used to verify the SSH server host key. The file uses the OpenSSH known\_hosts format, and its entries are matched against the host and port configured on the endpoint. A resource that cannot be read, or that has a line that cannot be read, makes every connection fail. When not set, the client does not verify the server host key against a known\_hosts file. |  | String |
 | **macs** (security) | Comma-separated list of allowed/supported message authentication code algorithms in their order of preference. The MAC algorithm is used for data integrity protection. |  | String |
 | **password** (security) | Sets the password to use in connecting to remote SSH server. Requires keyPairProvider to be set to null. |  | String |
 | **signatures** (security) | Comma-separated list of allowed/supported signature algorithms in their order of preference. |  | String |
@@ -342,6 +342,57 @@ from("ssh://scott@localhost:8101?certResource=classpath:test_rsa&useFixedDelay=t
 ```
 
 An example of using Public Key authentication is provided in `examples/camel-example-ssh-security`.
+
+### Server host key verification
+
+The SSH Component verifies the host key of the SSH server only when the `knownHostsResource` option is set. It refers to a file in the OpenSSH `known_hosts` format, such as the output of `ssh-keyscan`. Set `failOnUnknownHost` to `true` as well, so that a server without any entry in that file is rejected. When it is `false` (the default), such a server is accepted and a warning is logged.
+
+The entries are matched as OpenSSH matches them:
+
+-   Each host pattern of an entry is compared, ignoring case, with the host name or address the client connects to: the host configured on the endpoint, or the `HostName` that `~/.ssh/config` gives for it. It is written `host` for port 22 and `[host]:port` for another port. **and `?` are wildcards, a pattern starting with `!` excludes the hosts it matches, and hashed entries are supported. So `db.example.com` only applies to port 22, `[db.example.com]:2222` to port 2222, and** to every host and port. The host is never resolved: an endpoint configured with an address only uses the entries for that address, and an IPv6 address such as `::1` is not expanded.
+    
+-   The server is accepted when an entry of its host lists the key it presents. A host can be listed with several keys, one per line.
+    
+-   The server is rejected when the key it presents is listed in a matching `@revoked` entry, or when its host has entries without a marker but none of them lists that key, whatever the value of `failOnUnknownHost`. That option only decides for a host without such an entry: `@revoked` and `@cert-authority` entries do not list a host.
+    
+-   `@cert-authority` entries (OpenSSH host certificates) are not supported and are ignored.
+    
+-   A `known_hosts` resource that cannot be read, or that has a line that cannot be read (for example an unknown `@` marker, a missing key, or a key that is not valid base64), makes every connection fail.
+    
+
+The following route verifies the host key of a server listening on port 2222 against a `known_hosts` file that contains the line `[db.example.com]:2222 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5…​`.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:status")
+    .to("ssh://scott@db.example.com:2222?certResource=classpath:test_rsa&knownHostsResource=file:/etc/camel/known_hosts&failOnUnknownHost=true");
+```
+
+```xml
+<route>
+  <from uri="direct:status"/>
+  <to uri="ssh://scott@db.example.com:2222?certResource=classpath:test_rsa&amp;knownHostsResource=file:/etc/camel/known_hosts&amp;failOnUnknownHost=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:status
+      steps:
+        - to:
+            uri: ssh://scott@db.example.com:2222
+            parameters:
+              certResource: "classpath:test_rsa"
+              knownHostsResource: "file:/etc/camel/known_hosts"
+              failOnUnknownHost: true
+```
 
 ### Certificate Dependencies
 

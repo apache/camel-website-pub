@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792558053564,
+  "generated": 1792612519201,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -353,6 +353,12 @@
               "path": "installation/knative.adoc",
               "url": "/camel-k/next/installation/knative.html",
               "title": "Knative configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "installation/multi-namespace.adoc",
+              "url": "/camel-k/next/installation/multi-namespace.html",
+              "title": "Multi namespace installation"
             },
             {
               "module": "ROOT",
@@ -11116,6 +11122,12 @@
               "path": "user-guide/observability.adoc",
               "url": "/camel-quarkus/next/user-guide/observability.html",
               "title": "Observability"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/quarkus-agent-mcp.adoc",
+              "url": "/camel-quarkus/next/user-guide/quarkus-agent-mcp.html",
+              "title": "AI-assisted Development"
             },
             {
               "module": "ROOT",

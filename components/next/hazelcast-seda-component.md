@@ -192,7 +192,7 @@ Enum values:
 | **concurrentConsumers** (seda) | To use concurrent consumers polling from the SEDA queue. | 1 | int |
 | **onErrorDelay** (seda) | Milliseconds before consumer continues polling after an error has occurred. | 1000 | int |
 | **pollTimeout** (seda) | The timeout used when consuming from the SEDA queue. When a timeout occurs, the consumer can check whether it is allowed to continue running. Setting a lower value allows the consumer to react more quickly upon shutdown. | 1000 | int |
-| **transacted** (seda) | If set to true then the consumer runs in transaction mode, where the messages in the seda queue will only be removed if the transaction commits, which happens when the processing is complete. | false | boolean |
+| **transacted** (seda) | If set to true then the consumer runs in transaction mode, where the messages in the seda queue will only be removed if the transaction commits, which happens when the processing is complete. A Hazelcast transaction belongs to the thread that began it, so each consumer thread waits for its exchange to complete, also when the route continues on another thread, before it takes the next message. The exchange must complete within the Hazelcast transaction timeout (2 minutes by default): when it takes longer, the commit fails, the transaction is rolled back and the message is consumed again. | false | boolean |
 | **transferExchange** (seda) | If set to true the whole Exchange will be transfered. If header or body contains not serializable objects, they will be skipped. | false | boolean |
 
 ## SEDA producer – to(“hazelcast-seda:foo”)

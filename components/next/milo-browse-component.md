@@ -103,6 +103,7 @@ The OPC UA Browser component supports the following options which are listed bel
 | **overrideHost** (client) | Override the server reported endpoint host with the host from the endpoint URI. | false | boolean |
 | **overridePort** (client) | Override the server reported endpoint port with the port from the endpoint URI. | false | boolean |
 | **productUri** (client) | The product URI. | [http://camel.apache.org/EclipseMilo](http://camel.apache.org/EclipseMilo) | String |
+| **reconnectTimeout** (client) | The delay in milliseconds before the client tries again to connect to the server after an attempt failed. It is not used while the OPC UA client recovers a lost session on its own. | 10000 | long |
 | **requestedPublishingInterval** (client) | The requested publishing interval in milliseconds. | 1\_000.0 | Double |
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
@@ -175,6 +176,7 @@ Enum values:
 | **overrideHost** (client) | Override the server reported endpoint host with the host from the endpoint URI. | false | boolean |
 | **overridePort** (client) | Override the server reported endpoint port with the port from the endpoint URI. | false | boolean |
 | **productUri** (client) | The product URI. | [http://camel.apache.org/EclipseMilo](http://camel.apache.org/EclipseMilo) | String |
+| **reconnectTimeout** (client) | The delay in milliseconds before the client tries again to connect to the server after an attempt failed. It is not used while the OPC UA client recovers a lost session on its own. | 10000 | long |
 | **requestedPublishingInterval** (client) | The requested publishing interval in milliseconds. | 1\_000.0 | Double |
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |

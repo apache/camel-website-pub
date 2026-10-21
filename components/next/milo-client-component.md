@@ -120,6 +120,7 @@ The OPC UA Client component supports the following options which are listed belo
 | **overrideHost** (client) | Override the server reported endpoint host with the host from the endpoint URI. | false | boolean |
 | **overridePort** (client) | Override the server reported endpoint port with the port from the endpoint URI. | false | boolean |
 | **productUri** (client) | The product URI. | [http://camel.apache.org/EclipseMilo](http://camel.apache.org/EclipseMilo) | String |
+| **reconnectTimeout** (client) | The delay in milliseconds before the client tries again to connect to the server after an attempt failed. It is not used while the OPC UA client recovers a lost session on its own. | 10000 | long |
 | **requestedPublishingInterval** (client) | The requested publishing interval in milliseconds. | 1\_000.0 | Double |
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
@@ -226,6 +227,7 @@ Enum values:
 | **overrideHost** (client) | Override the server reported endpoint host with the host from the endpoint URI. | false | boolean |
 | **overridePort** (client) | Override the server reported endpoint port with the port from the endpoint URI. | false | boolean |
 | **productUri** (client) | The product URI. | [http://camel.apache.org/EclipseMilo](http://camel.apache.org/EclipseMilo) | String |
+| **reconnectTimeout** (client) | The delay in milliseconds before the client tries again to connect to the server after an attempt failed. It is not used while the OPC UA client recovers a lost session on its own. | 10000 | long |
 | **requestedPublishingInterval** (client) | The requested publishing interval in milliseconds. | 1\_000.0 | Double |
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
@@ -329,7 +331,7 @@ A string node ID that contains a comma cannot be used in `nodes`; monitor it wit
 
 All nodes of the list share the `samplingInterval`, `queueSize` and `omitNullValues` options of the consumer and its monitor filter (`monitorFilterType`, `dataChangeFilter*`). Tags that need a different sampling interval or deadband need a consumer of their own.
 
-A node that does not exist on the server does not affect the other nodes. A node that cannot be monitored is reported once with its status code and is not retried; restarting the route or a rebuilt connection to the server creates the monitored items again. A node whose namespace URI (`nsu=`) is not in the namespace table of the server is reported in the same way. The consumer delivers one exchange with the bad status code for such a node, and the `CamelMiloNodeId` header names it.
+A node that does not exist on the server does not affect the other nodes. A node that cannot be monitored is reported once with its status code, and Camel tries to create its monitored item again every 10 seconds while the connection lasts, for all such nodes of the connection in one request. A failed attempt delivers nothing; once the item is created, the node delivers its current value as its first value. This covers a node that is added to the server later, for example with a new PLC program, and a server that refused the item because it had too many. A rebuilt connection creates the monitored items of all nodes again, and a stopped consumer is not retried. A node whose namespace URI (`nsu=`) is not in the namespace table of the server is reported and retried in the same way, so a namespace that the server adds later is found. The consumer delivers one exchange with the bad status code for such a node, and the `CamelMiloNodeId` header names it.
 
 ### Status codes and null values
 
@@ -485,7 +487,7 @@ A failed host name, key usage or extended key usage check is only logged. A cert
 
 If neither option is configured, the client does not connect to an endpoint that uses a security policy other than `None`. Setting `trustAllCertificates` to `true` makes the client accept any server certificate instead. This is insecure: the connection is encrypted, but the client does not authenticate the server it talks to.
 
-When the server certificate cannot be validated, the client logs a `WARN` message that starts with `Failed to connect`, and tries again every 10 seconds, so a certificate moved to `trusted/certs` is used at the next attempt. A producer fails with `IllegalStateException: No connected`, whose cause gives the reason.
+When the server certificate cannot be validated, the client logs a `WARN` message that starts with `Failed to connect`, and tries again after `reconnectTimeout` (10 seconds by default), so a certificate moved to `trusted/certs` is used at the next attempt. A producer fails with `IllegalStateException: No connected`, whose cause gives the reason.
 
 The same validator checks the server certificate that the user name and password are encrypted with. With the security policy `None`, the server is not authenticated, whatever the configuration.
 

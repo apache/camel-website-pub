@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[260]{title,link,pubDate,description}:
+posts[261]{title,link,pubDate,description}:
+  Round 4: making Camel work for any AI model, now with intermediate examples|https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/index.md|Wed, 21 Oct 2026 00:00:00 +0000|This is the fourth post in a series about making Camel easy to use for any AI model: the frontier models in the cloud, and especially the models that are small enough to run on your own laptop or a mi
   Apache Camel security advisories: 38 CVEs fixed in 4.18.5, 4.22.1 and 4.23.0|https://camel.apache.org/blog/2026/10/camel-security-advisories-4.23.0/index.md|Fri, 16 Oct 2026 00:00:00 +0000|On 15 October we published 38 security advisories for Apache Camel. All of them are fixed in 4.22.1, 4.18.5 and 4.23.0, and we recommend upgrading. Thirteen of the advisories are rated HIGH and twenty
   Camel Integration Testing Pitfalls|https://camel.apache.org/blog/2026/10/camel-testing-pitfalls/index.md|Fri, 16 Oct 2026 00:00:00 +0000|Your integration tests keep failing for non-obvious reasons. Or even worse, the test suite reports success, but some of those green tests might be lying to you. The tests pass because the validations 
   Apache Camel 4.23 What's New|https://camel.apache.org/blog/2026/10/camel423-whatsnew/index.md|Thu, 15 Oct 2026 00:00:00 +0000|Apache Camel 4.23 has just been released. This is the biggest Camel release in a long time. Since 4.22 we have resolved 1030 JIRA tickets (nearly twice as many as in 4.22): 503 bug fixes, 362 improvem

@@ -172,6 +172,7 @@ Enum values:
  | DEBUG | LoggingLevel |
 | **transferLoggingVerbose** (common) | Configures whether perform verbose (fine-grained) logging of the progress of upload and download operations. | false | boolean |
 | **fastExistsCheck** (common (advanced)) | If set this option to be true, camel-ftp will use the list file directly to check if the file exists. Since some FTP server may not support to list the file directly, if the option is false, camel-ftp will use the old way to list the directory and check if the file exists. This option also influences readLock=changed to control whether it performs a fast check to update file information or not. This can be used to speed up the process if the FTP server has a lot of files. | false | boolean |
+| **sendNoop** (common (advanced)) | Whether to send a noop command to check that the connection is still valid, as a pre-write check before uploading files (producer) and before each poll (consumer). This is enabled by default, which allows to silently re-connect if the connection was lost. However if this causes problems, you can turn this option off, and then a lost connection may only be found when the next operation fails. | true | boolean |
 | **delete** (consumer) | If true, the file will be deleted after it is processed successfully. | false | boolean |
 | **moveFailed** (consumer) | Sets the move failure expression based on Simple language. For example, to move files into a .error subdirectory use: .error. Note: When moving the files to the fail location Camel will handle the error and will not pick up the file again. |  | String |
 | **noop** (consumer) | If true, the file is not moved or deleted in any way. This option is good for readonly data, or for ETL type requirements. If noop=true, Camel will set idempotent=true as well, to avoid consuming the same files over and over again. | false | boolean |
@@ -310,7 +311,6 @@ Enum values:
 | **keepLastModified** (producer (advanced)) | Will keep the last modified timestamp from the source file (if any). Will use the FileConstants.FILE\_LAST\_MODIFIED header to located the timestamp. This header can contain either a java.util.Date or long with the timestamp. If the timestamp exists and the option is enabled it will set this timestamp on the written file. Note: This option only applies to the file producer. You cannot use this option with any of the ftp producers. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **moveExistingFileStrategy** (producer (advanced)) | Strategy (Custom Strategy) used to move file with special naming token to use when fileExist=Move is configured. By default, there is an implementation used if no custom strategy is provided. |  | FileMoveExistingStrategy |
-| **sendNoop** (producer (advanced)) | Whether to send a noop command as a pre-write check before uploading files to the FTP server. This is enabled by default as a validation of the connection is still valid, which allows to silently re-connect to be able to upload the file. However if this causes problems, you can turn this option off. | true | boolean |
 | **activePortRange** (advanced) | Set the client side port range in active mode. The syntax is: minPort-maxPort Both port numbers are inclusive, e.g., 10000-19999 to include all 1xxxx ports. |  | String |
 | **autoCreate** (advanced) | Automatically create missing directories in the file’s pathname. For the file consumer, that means creating the starting directory. For the file producer, it means the directory the files should be written to. | true | boolean |
 | **browseLimit** (advanced) | Maximum number of messages to keep in memory available for browsing. Use 0 for unlimited. | 100 | int |
@@ -501,6 +501,12 @@ The FTP component supports the following message header(s), which is/are listed 
 | **CamelFtpReplyString** (common) Constant: [`FTP_REPLY_STRING`](https://javadoc.io/doc/org.apache.camel/camel-ftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FTP_REPLY_STRING) | The FTP client reply string. |  | String |
 
 ## Usage
+
+### FTPS host name verification
+
+The FTPS client that Camel creates checks, on the control connection, that the certificate of the server matches the host of the endpoint, with the same rules as an HTTPS client. The check happens during the TLS handshake, before login. Data connections (`PROT P`) use the same trust manager, but Apache Commons Net does not check their host name. A connection to an IP address needs a certificate that lists that address as a subject alternative name. Set `hostnameVerification=false` to turn this check off; the certificate is still checked by the trust manager. The option does not apply to a custom `ftpClient`.
+
+Use the `hostnameVerification` option to control the check. Setting `ftpClient.endpointCheckingEnabled` on the endpoint also turns it on or off, and takes precedence over `hostnameVerification`, but the security policy (for example `camel.main.profile=prod`) only checks the `hostnameVerification` option.
 
 ### FTPS component default trust store
 

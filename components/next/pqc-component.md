@@ -620,10 +620,62 @@ The PQC Algorithms component supports the following message header(s), which is/
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelPQCOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#OPERATION) | The operation we want to perform. |  | String |
+| **CamelPQCOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#OPERATION) | 
+The operation we want to perform. It must be one the endpoint holds the key material for: an override crossing between the signature and the key encapsulation operations is rejected.
+
+Enum values:
+
+-   sign
+    
+-   verify
+    
+-   hybridSign
+    
+-   hybridVerify
+    
+-   generateSecretKeyEncapsulation
+    
+-   extractSecretKeyEncapsulation
+    
+-   extractSecretKeyFromEncapsulation
+    
+-   hybridGenerateSecretKeyEncapsulation
+    
+-   hybridExtractSecretKeyEncapsulation
+    
+-   hybridExtractSecretKeyFromEncapsulation
+    
+-   getRemainingSignatures
+    
+-   getKeyState
+    
+-   deleteKeyState
+    
+-   generateKeyPair
+    
+-   exportKey
+    
+-   importKey
+    
+-   rotateKey
+    
+-   getKeyMetadata
+    
+-   listKeys
+    
+-   expireKey
+    
+-   revokeKey
+    
+
+
+
+
+
+ |  | PQCOperations |
 | **CamelPQCSignature** (producer) Constant: [`SIGNATURE`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#SIGNATURE) | The signature of a body. |  | String |
 | **CamelPQCVerification** (producer) Constant: [`VERIFY`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#VERIFY) | The result of verification of a Body signature. |  | Boolean |
-| **CamelPQCSecretKey** (producer) Constant: [`SECRET_KEY`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#SECRET_KEY) | The extracted key in case of extractSecretKeyFromEncapsulation operation and storeExtractedSecretKeyAsHeader option enabled. |  | Boolean |
+| **CamelPQCSecretKey** (producer) Constant: [`SECRET_KEY`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#SECRET_KEY) | The extracted key in case of extractSecretKeyFromEncapsulation operation and storeExtractedSecretKeyAsHeader option enabled. |  | SecretKey |
 | **CamelPQCRemainingSignatures** (producer) Constant: [`REMAINING_SIGNATURES`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#REMAINING_SIGNATURES) | The remaining signatures for a stateful key. |  | Long |
 | **CamelPQCKeyState** (producer) Constant: [`KEY_STATE`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#KEY_STATE) | The key state for a stateful key. |  | StatefulKeyState |
 | **CamelPQCKeyId** (producer) Constant: [`KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#KEY_ID) | The key ID for stateful key operations. |  | String |

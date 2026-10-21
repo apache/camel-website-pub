@@ -6,8 +6,15 @@
     <description>Recent content in Tooling on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 16 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 21 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Tooling/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Round 4: making Camel work for any AI model, now with intermediate examples</title>
+      <link>https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/</link>
+      <pubDate>Wed, 21 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/</guid>
+      <description>This is the fourth post in a series about making Camel easy to use for any AI model: the frontier models in the cloud, and especially the models that are small enough to run on your own laptop or a mini PC. The first, second and third posts show how it works. A local model builds and changes Camel routes, with the camel-jbang-mcp server as its tools. A frontier model reads every step that failed.</description>
+    </item>
     <item>
       <title>Camel Integration Testing Pitfalls</title>
       <link>https://camel.apache.org/blog/2026/10/camel-testing-pitfalls/</link>

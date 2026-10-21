@@ -194,7 +194,7 @@ Enum values:
 | **delay** (common) | Time in milliseconds to elapse for the next poll. | 6000 | Integer |
 | **jiraUrl** (common) | **Required** The Jira server url, for example [http://my\_jira.com:8081](http://my_jira.com:8081). |  | String |
 | **jql** (consumer) | JQL is the query language from JIRA which allows you to retrieve the data you want. For example jql=project=MyProject Where MyProject is the product key in Jira. It is important to use the RAW() and set the JQL inside it to prevent camel parsing it, example: RAW(project in (MYP, COM) AND resolution = Unresolved). |  | String |
-| **maxResults** (consumer) | Max number of issues to search for. | 50 | Integer |
+| **maxResults** (consumer) | Max number of issues to search for. The newIssues consumer reads every issue created since its previous poll, page by page, with this as the page size (at most 50). | 50 | Integer |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **sendOnlyUpdatedField** (consumer) | Indicator for sending only changed fields in exchange body or issue object. By default consumer sends only changed fields. | true | boolean |
 | **watchedFields** (consumer) | Comma separated list of fields to watch for changes. Status,Priority are the defaults. | Status,Priority | String |
@@ -372,6 +372,8 @@ One important thing to note is that the newIssues consumer will automatically se
     
 
 This is in order to optimize startup processing, rather than having to index every single issue in the project.
+
+Each poll reads every page of that search, so the issues created since the previous poll are consumed also when there are more than `maxResults` of them (for example after Jira was unreachable for a while); `maxResults` is then the page size of the search (at most 50). There is no upper bound: after a long outage or a large import, one poll reads all the new issues, one search request per page, keeps them in memory and routes them as one batch. On Jira Cloud the pages are read with the next page token of the search, as Jira Cloud cannot page by start index. The search of Jira Cloud is eventually consistent, so a new issue can become searchable only after a newer one: when a poll has already consumed the newer one, the late issue is not consumed.
 
 Another note is that, similarly, the newComments consumer will have to index every single issue **and** comment on the project. Therefore, for large projects, it’s **vital** to optimize the JQL expression as much as possible. For example, the JIRA Toolkit Plugin includes a `"Number of comments"` custom field use `'"Number of comments" > 0'` in your query. Also try to minimize based on state (`status=Open`), increase the polling delay, etc. Example:
 

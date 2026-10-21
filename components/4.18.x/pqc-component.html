@@ -100,7 +100,7 @@
 
 // Generate a new Dilithium key
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 
 // Use the key
 KeyMetadata metadata = keyManager.getKeyMetadata("app-signing-key");
@@ -136,7 +136,7 @@ public HashicorpVaultKeyLifecycleManager createKeyManager() {
 
 // Generate a Dilithium key stored in Vault
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 
 // Key is stored in Vault at: secret/data/pqc/keys/app-signing-key</code></pre> </div> </div> <div class="paragraph"> <p><strong>Example with Direct Configuration:</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Option 2: Direct configuration with connection parameters
 HashicorpVaultKeyLifecycleManager keyManager =
@@ -151,7 +151,7 @@ HashicorpVaultKeyLifecycleManager keyManager =
 
 // Generate and store key in Vault
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "vault-key",
-    DilithiumParameterSpec.dilithium2);</code></pre> </div> </div> <div class="paragraph"> <p><strong>Example with HashiCorp Cloud Platform (HCP) Vault:</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Option 3: Configuration for HCP Vault with namespace
+    MLDSAParameterSpec.ml_dsa_44);</code></pre> </div> </div> <div class="paragraph"> <p><strong>Example with HashiCorp Cloud Platform (HCP) Vault:</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Option 3: Configuration for HCP Vault with namespace
 HashicorpVaultKeyLifecycleManager keyManager =
     new HashicorpVaultKeyLifecycleManager(
         "your-cluster.vault.hashicorp.cloud",  // HCP Vault host
@@ -166,7 +166,7 @@ HashicorpVaultKeyLifecycleManager keyManager =
 
 // Generate and store key in HCP Vault
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "hcp-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 
 // Key is stored in HCP Vault at: admin/secret/data/pqc/keys/hcp-key</code></pre> </div> </div> <div class="paragraph"> <p><strong>YAML Configuration:</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">camel:
   beans:
@@ -424,7 +424,7 @@ public AwsSecretsManagerKeyLifecycleManager createKeyManager() {
 
 // Generate a Dilithium key stored in AWS Secrets Manager
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "app-signing-key",
-    DilithiumParameterSpec.dilithium2);
+    MLDSAParameterSpec.ml_dsa_44);
 
 // Keys are stored as: pqc/keys/app-signing-key/private, /public, /metadata</code></pre> </div> </div> <div class="paragraph"> <p><strong>Example with Direct Configuration:</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Option 2: Direct configuration with AWS credentials
 AwsSecretsManagerKeyLifecycleManager keyManager =
@@ -437,7 +437,7 @@ AwsSecretsManagerKeyLifecycleManager keyManager =
 
 // Generate and store key in AWS Secrets Manager
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "aws-key",
-    DilithiumParameterSpec.dilithium2);</code></pre> </div> </div> <div class="paragraph"> <p><strong>Example with LocalStack (Testing):</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Option 3: Configuration for LocalStack testing
+    MLDSAParameterSpec.ml_dsa_44);</code></pre> </div> </div> <div class="paragraph"> <p><strong>Example with LocalStack (Testing):</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Option 3: Configuration for LocalStack testing
 AwsSecretsManagerKeyLifecycleManager keyManager =
     new AwsSecretsManagerKeyLifecycleManager(
         "us-east-1",                    // region
@@ -449,7 +449,7 @@ AwsSecretsManagerKeyLifecycleManager keyManager =
 
 // Generate and store key in LocalStack
 KeyPair keyPair = keyManager.generateKeyPair("DILITHIUM", "test-key",
-    DilithiumParameterSpec.dilithium2);</code></pre> </div> </div> <div class="paragraph"> <p><strong>YAML Configuration:</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">camel:
+    MLDSAParameterSpec.ml_dsa_44);</code></pre> </div> </div> <div class="paragraph"> <p><strong>YAML Configuration:</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">camel:
   beans:
     # Create SecretsManagerClient using default credentials
     secretsManagerClient:
@@ -667,7 +667,7 @@ KeyPair mldsaKey = keyManager.generateKeyPair("MLDSA", "mldsa-key");
 
 // Dilithium with specific parameter
 KeyPair dilithiumKey = keyManager.generateKeyPair("DILITHIUM", "dilithium-key",
-    DilithiumParameterSpec.dilithium3);
+    MLDSAParameterSpec.ml_dsa_65);
 
 // Falcon (uses default Falcon-512)
 KeyPair falconKey = keyManager.generateKeyPair("FALCON", "falcon-key");
@@ -778,7 +778,7 @@ public KeyLifecycleManager createKeyManager() throws IOException {
 public KeyPair createSigningKey() throws Exception {
     KeyLifecycleManager manager = createKeyManager();
     return manager.generateKeyPair("DILITHIUM", "route-signing-key",
-        DilithiumParameterSpec.dilithium2);
+        MLDSAParameterSpec.ml_dsa_44);
 }</code></pre> </div> </div> </div> <div id="_tabs_1_yaml--panel" class="tabpanel" aria-labelledby="_tabs_1_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># Configure key lifecycle manager in application.yaml
 camel:
   beans:
@@ -792,7 +792,7 @@ camel:
       scriptLanguage: groovy
       script: |
         def manager = new org.apache.camel.component.pqc.lifecycle.FileBasedKeyLifecycleManager('/secure/keys')
-        def spec = org.bouncycastle.pqc.jcajce.spec.DilithiumParameterSpec.dilithium2
+        def spec = org.bouncycastle.jcajce.spec.MLDSAParameterSpec.ml_dsa_44
         manager.generateKeyPair('DILITHIUM', 'route-signing-key', spec)</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p><strong>Using in Routes:</strong></p> </div> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("timer:check-rotation?period=86400000") // Check daily
     .bean("keyLifecycleManager", "needsRotation('route-signing-key', 90, 10000)")
     .choice()
@@ -824,7 +824,7 @@ camel:
                 - to: log:rotation-complete
           otherwise:
             steps:
-              - log: "Key rotation not needed"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_default_parameter_specifications"><a class="anchor" href="#_default_parameter_specifications"></a>Default Parameter Specifications</h3> <div class="paragraph"> <p>The lifecycle manager provides sensible defaults for all algorithms:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Algorithm</th> <th class="tableblock halign-left valign-top">Default Parameter Spec</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">DILITHIUM</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">dilithium2</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">FALCON</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">falcon_512</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">SPHINCSPLUS</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">sha2_128s</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">XMSS</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">10-tree height with SHA-256</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">XMSSMT</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">XMSSMT-SHA2-20d2-256</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">LMS/HSS</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">LMS-SHA256-N32-H10 with SHA256-N32-W4</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">NTRU</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">ntruhps2048509</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">NTRULPRime</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">ntrulpr653</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">SNTRUPrime</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">sntrup761</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">SABER</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">lightsaberkem128r3</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">FRODO</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">frodokem640aes</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">BIKE</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">bike128</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">HQC</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">hqc128</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">CMCE</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">mceliece348864</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_best_practices"><a class="anchor" href="#_best_practices"></a>Best Practices</h3> <div class="paragraph"> <p><strong>1. Regular Key Rotation</strong></p> </div> <div class="paragraph"> <p>Implement automated key rotation policies:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Rotate keys every 90 days or after 10,000 uses
+              - log: "Key rotation not needed"</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_default_parameter_specifications"><a class="anchor" href="#_default_parameter_specifications"></a>Default Parameter Specifications</h3> <div class="paragraph"> <p>The lifecycle manager provides sensible defaults for all algorithms:</p> </div> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Algorithm</th> <th class="tableblock halign-left valign-top">Default Parameter Spec</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">DILITHIUM</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">ml_dsa_44</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">FALCON</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">falcon_512</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">SPHINCSPLUS</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">slh_dsa_sha2_128s</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">XMSS</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">10-tree height with SHA-256</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">XMSSMT</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">XMSSMT-SHA2-20d2-256</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">LMS/HSS</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">LMS-SHA256-N32-H10 with SHA256-N32-W4</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">NTRU</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">ntruhps2048509</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">NTRULPRime</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">ntrulpr653</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">SNTRUPrime</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">sntrup761</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">SABER</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">lightsaberkem128r3</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">FRODO</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">frodokem640aes</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">BIKE</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">bike128</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">HQC</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">hqc128</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">CMCE</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">mceliece348864</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_best_practices"><a class="anchor" href="#_best_practices"></a>Best Practices</h3> <div class="paragraph"> <p><strong>1. Regular Key Rotation</strong></p> </div> <div class="paragraph"> <p>Implement automated key rotation policies:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Rotate keys every 90 days or after 10,000 uses
 Duration maxAge = Duration.ofDays(90);
 long maxUsage = 10000;
 
@@ -847,7 +847,7 @@ for (int i = 0; i &lt; 100; i++) {
     executor.submit(() -&gt; {
         try {
             keyManager.generateKeyPair("DILITHIUM", "key-" + index,
-                DilithiumParameterSpec.dilithium2);
+                MLDSAParameterSpec.ml_dsa_44);
         } catch (Exception e) {
             logger.error("Key generation failed", e);
         }
@@ -901,7 +901,7 @@ from("file:encrypted")
             symmetricKeyLength: 256
       - to: direct:decrypted</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_configuration_options"><a class="anchor" href="#_configuration_options"></a>Configuration Options</h3> <div class="table-wrapper"><table class="tableblock frame-all grid-all stretch"> <colgroup> <col> <col> <col> <col> </colgroup> <thead> <tr> <th class="tableblock halign-left valign-top">Option</th> <th class="tableblock halign-left valign-top">Type</th> <th class="tableblock halign-left valign-top">Default</th> <th class="tableblock halign-left valign-top">Description</th> </tr> </thead> <tbody> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">keyEncapsulationAlgorithm</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">MLKEM</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">PQC KEM algorithm (MLKEM, BIKE, HQC, CMCE, SABER, FRODO, NTRU, NTRULPRime, SNTRUPrime, KYBER)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">symmetricKeyAlgorithm</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">AES</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Symmetric encryption algorithm (AES, ARIA, RC2, RC5, CAMELLIA, CAST5, CAST6, CHACHA7539, DSTU7624, GOST28147, GRAIN128, SEED, SM4, DESEDE)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">symmetricKeyLength</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">128</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Length of the symmetric key in bits (128, 192, or 256 for AES)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">keyPair</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">KeyPair</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">KeyPair to use for encryption/decryption. Can also be provided via header.</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">bufferSize</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">int</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">4096</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Buffer size for streaming encryption/decryption</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">provider</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">JCE security provider (defaults to Bouncy Castle PQC provider)</p></td> </tr> <tr> <td class="tableblock halign-left valign-top"><p class="tableblock">keyGenerator</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">KeyGenerator</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">null</p></td> <td class="tableblock halign-left valign-top"><p class="tableblock">Custom KeyGenerator for KEM operations</p></td> </tr> </tbody> </table></div> </div> <div class="sect2"> <h3 id="_registering_keypair"><a class="anchor" href="#_registering_keypair"></a>Registering KeyPair</h3> <div class="paragraph"> <p>The DataFormat requires a KeyPair to be available either:</p> </div> <div class="olist arabic"> <ol class="arabic"> <li> <p>Configured on the DataFormat instance</p> </li> <li> <p>Registered in the Camel Registry</p> </li> <li> <p>Provided via message header</p> </li> </ol> </div> <div class="sect3"> <h4 id="_option_1_registry_based_configuration"><a class="anchor" href="#_option_1_registry_based_configuration"></a>Option 1: Registry-based Configuration</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BindToRegistry("pqcKeyPair")
 public KeyPair createMLKEMKeyPair() throws Exception {
-    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BC");
     kpg.initialize(MLKEMParameterSpec.ml_kem_768, new SecureRandom());
     return kpg.generateKeyPair();
 }
@@ -909,7 +909,7 @@ public KeyPair createMLKEMKeyPair() throws Exception {
 // DataFormat will automatically use the registered KeyPair
 PQCDataFormat pqcFormat = new PQCDataFormat();
 pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
-pqcFormat.setSymmetricKeyAlgorithm("AES");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_option_2_direct_configuration"><a class="anchor" href="#_option_2_direct_configuration"></a>Option 2: Direct Configuration</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+pqcFormat.setSymmetricKeyAlgorithm("AES");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_option_2_direct_configuration"><a class="anchor" href="#_option_2_direct_configuration"></a>Option 2: Direct Configuration</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BC");
 kpg.initialize(MLKEMParameterSpec.ml_kem_768, new SecureRandom());
 KeyPair keyPair = kpg.generateKeyPair();
 
@@ -919,7 +919,7 @@ pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
 pqcFormat.setSymmetricKeyAlgorithm("AES");</code></pre> </div> </div> </div> <div class="sect3"> <h4 id="_option_3_header_based_configuration"><a class="anchor" href="#_option_3_header_based_configuration"></a>Option 3: Header-based Configuration</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:encrypt")
     .setHeader(PQCDataFormat.KEY_PAIR, () -&gt; generateKeyPair())
     .marshal(pqcFormat)
-    .to("direct:encrypted");</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_supported_algorithms_2"><a class="anchor" href="#_supported_algorithms_2"></a>Supported Algorithms</h3> <div class="sect3"> <h4 id="_key_encapsulation_algorithms_2"><a class="anchor" href="#_key_encapsulation_algorithms_2"></a>Key Encapsulation Algorithms</h4> <div class="paragraph"> <p><strong>Standardized (NIST)</strong></p> </div> <div class="ulist"> <ul> <li> <p><strong>MLKEM</strong> - ML-KEM (FIPS 203) - Recommended for production use</p> </li> </ul> </div> <div class="paragraph"> <p><strong>Experimental</strong></p> </div> <div class="ulist"> <ul> <li> <p>BIKE - Bit Flipping Key Encapsulation</p> </li> <li> <p>CMCE - Classic McEliece</p> </li> <li> <p>HQC - Hamming Quasi-Cyclic</p> </li> <li> <p>FRODO - FrodoKEM</p> </li> <li> <p>SABER - Saber KEM</p> </li> <li> <p>NTRU - NTRU Encrypt</p> </li> <li> <p>NTRULPRime - NTRU LPRime</p> </li> <li> <p>SNTRUPrime - Streamlined NTRU Prime</p> </li> <li> <p>KYBER - Kyber (pre-standardization version)</p> </li> </ul> </div> </div> <div class="sect3"> <h4 id="_symmetric_encryption_algorithms"><a class="anchor" href="#_symmetric_encryption_algorithms"></a>Symmetric Encryption Algorithms</h4> <div class="ulist"> <ul> <li> <p>AES - Advanced Encryption Standard (recommended)</p> </li> <li> <p>ARIA - Korean standard</p> </li> <li> <p>RC2, RC5 - Rivest ciphers</p> </li> <li> <p>CAMELLIA - Japanese standard</p> </li> <li> <p>CAST5, CAST6 - CAST ciphers</p> </li> <li> <p>CHACHA7539 - ChaCha stream cipher</p> </li> <li> <p>DSTU7624 - Ukrainian standard</p> </li> <li> <p>GOST28147 - Russian standard</p> </li> <li> <p>GRAIN128 - Stream cipher</p> </li> <li> <p>SEED - Korean standard</p> </li> <li> <p>SM4 - Chinese standard</p> </li> <li> <p>DESEDE - Triple DES</p> </li> </ul> </div> </div> </div> <div class="sect2"> <h3 id="_advanced_examples"><a class="anchor" href="#_advanced_examples"></a>Advanced Examples</h3> <div class="sect3"> <h4 id="_secure_file_transfer"><a class="anchor" href="#_secure_file_transfer"></a>Secure File Transfer</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PQCDataFormat pqcFormat = new PQCDataFormat();
+    .to("direct:encrypted");</code></pre> </div> </div> </div> </div> <div class="sect2"> <h3 id="_supported_algorithms_2"><a class="anchor" href="#_supported_algorithms_2"></a>Supported Algorithms</h3> <div class="sect3"> <h4 id="_key_encapsulation_algorithms_2"><a class="anchor" href="#_key_encapsulation_algorithms_2"></a>Key Encapsulation Algorithms</h4> <div class="paragraph"> <p><strong>Standardized (NIST)</strong></p> </div> <div class="ulist"> <ul> <li> <p><strong>MLKEM</strong> - ML-KEM (FIPS 203) - Recommended for production use</p> </li> </ul> </div> <div class="paragraph"> <p><strong>Experimental</strong></p> </div> <div class="ulist"> <ul> <li> <p>BIKE - Bit Flipping Key Encapsulation</p> </li> <li> <p>CMCE - Classic McEliece</p> </li> <li> <p>HQC - Hamming Quasi-Cyclic</p> </li> <li> <p>FRODO - FrodoKEM</p> </li> <li> <p>SABER - Saber KEM</p> </li> <li> <p>NTRU - NTRU Encrypt</p> </li> <li> <p>NTRULPRime - NTRU LPRime</p> </li> <li> <p>SNTRUPrime - Streamlined NTRU Prime</p> </li> <li> <p>KYBER - Compatibility alias for ML-KEM</p> </li> </ul> </div> </div> <div class="sect3"> <h4 id="_symmetric_encryption_algorithms"><a class="anchor" href="#_symmetric_encryption_algorithms"></a>Symmetric Encryption Algorithms</h4> <div class="ulist"> <ul> <li> <p>AES - Advanced Encryption Standard (recommended)</p> </li> <li> <p>ARIA - Korean standard</p> </li> <li> <p>RC2, RC5 - Rivest ciphers</p> </li> <li> <p>CAMELLIA - Japanese standard</p> </li> <li> <p>CAST5, CAST6 - CAST ciphers</p> </li> <li> <p>CHACHA7539 - ChaCha stream cipher</p> </li> <li> <p>DSTU7624 - Ukrainian standard</p> </li> <li> <p>GOST28147 - Russian standard</p> </li> <li> <p>GRAIN128 - Stream cipher</p> </li> <li> <p>SEED - Korean standard</p> </li> <li> <p>SM4 - Chinese standard</p> </li> <li> <p>DESEDE - Triple DES</p> </li> </ul> </div> </div> </div> <div class="sect2"> <h3 id="_advanced_examples"><a class="anchor" href="#_advanced_examples"></a>Advanced Examples</h3> <div class="sect3"> <h4 id="_secure_file_transfer"><a class="anchor" href="#_secure_file_transfer"></a>Secure File Transfer</h4> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PQCDataFormat pqcFormat = new PQCDataFormat();
 pqcFormat.setKeyEncapsulationAlgorithm("MLKEM");
 pqcFormat.setSymmetricKeyAlgorithm("AES");
 pqcFormat.setSymmetricKeyLength(256);
@@ -1005,7 +1005,7 @@ public KeyPair createKeyPair() throws Exception {
     .to("direct:encrypted");</code></pre> </div> </div> <div class="paragraph"> <p>The DataFormat approach is significantly simpler and handles all KEM operations internally.</p> </div> </div> <div class="sect2"> <h3 id="_security_considerations"><a class="anchor" href="#_security_considerations"></a>Security Considerations</h3> <div class="paragraph"> <p><strong>1. Key Management</strong></p> </div> <div class="ulist"> <ul> <li> <p><strong>Private Key Protection</strong>: The private key must be kept secure. Consider using:</p> <div class="ulist"> <ul> <li> <p>Hardware Security Modules (HSMs)</p> </li> <li> <p>Secure key storage (FileBasedKeyLifecycleManager with encrypted filesystem)</p> </li> <li> <p>Cloud key management services (HashicorpVaultKeyLifecycleManager, AwsSecretsManagerKeyLifecycleManager)</p> </li> </ul> </div> </li> <li> <p><strong>Key Rotation</strong>: Regularly rotate keys using the Key Lifecycle Manager</p> </li> </ul> </div> <div class="paragraph"> <p><strong>2. Algorithm Selection</strong></p> </div> <div class="ulist"> <ul> <li> <p><strong>Production Use</strong>: Use MLKEM (NIST-standardized)</p> </li> <li> <p><strong>High Security</strong>: Use ML-KEM-1024 parameter spec</p> </li> <li> <p><strong>Testing</strong>: Experimental algorithms are suitable for research and testing</p> </li> </ul> </div> <div class="paragraph"> <p><strong>3. Symmetric Algorithm</strong></p> </div> <div class="ulist"> <ul> <li> <p><strong>Recommended</strong>: AES-256 or AES-128</p> </li> <li> <p><strong>Avoid</strong>: RC2, GOST28147 (legacy algorithms)</p> </li> </ul> </div> <div class="paragraph"> <p><strong>4. Wire Format Security</strong></p> </div> <div class="ulist"> <ul> <li> <p>The encapsulation is not secret and can be transmitted in the clear</p> </li> <li> <p>The encrypted data is protected by the symmetric key</p> </li> <li> <p>Use authenticated encryption modes (GCM) when available</p> </li> </ul> </div> </div> <div class="sect2"> <h3 id="_performance_considerations"><a class="anchor" href="#_performance_considerations"></a>Performance Considerations</h3> <div class="paragraph"> <p><strong>1. Buffer Size</strong></p> </div> <div class="paragraph"> <p>Adjust bufferSize based on message size:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">PQCDataFormat pqcFormat = new PQCDataFormat();
 pqcFormat.setBufferSize(8192);  // Larger buffer for big files</code></pre> </div> </div> <div class="paragraph"> <p><strong>2. Caching KeyGenerator</strong></p> </div> <div class="paragraph"> <p>Configure a KeyGenerator once to avoid repeated initialization:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">@BindToRegistry("kemKeyGenerator")
 public KeyGenerator createKeyGenerator() throws Exception {
-    return KeyGenerator.getInstance("ML-KEM", "BCPQC");
+    return KeyGenerator.getInstance("ML-KEM", "BC");
 }
 
 PQCDataFormat pqcFormat = new PQCDataFormat();
@@ -1018,7 +1018,7 @@ void testPQCDataFormatRoundTrip() throws Exception {
     Security.addProvider(new BouncyCastleProvider());
     Security.addProvider(new BouncyCastlePQCProvider());
 
-    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BCPQC");
+    KeyPairGenerator kpg = KeyPairGenerator.getInstance("ML-KEM", "BC");
     kpg.initialize(MLKEMParameterSpec.ml_kem_512, new SecureRandom());
     KeyPair keyPair = kpg.generateKeyPair();
 

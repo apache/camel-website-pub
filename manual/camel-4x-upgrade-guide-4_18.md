@@ -7,6 +7,16 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.18.5 to 4.18.6
 
+### camel-azure-eventhubs - per-partition checkpoint counters and timer; checkpoint window boundary fix
+
+Several fixes from 4.22.x have been brought forward to 4.18.6 to give this change a sound base.
+
+`checkpointBatchSize` and `checkpointBatchTimeout` now count events per partition, not across all partitions. Each partition has its own `AtomicInteger` counter and its own `ScheduledFuture` timer. A checkpoint on one partition no longer resets the count of another. Before this change, the shared counter mixed events across partitions, so the batch size was reached across all partitions combined and a checkpoint on a busy partition could reset the count for a quiet one.
+
+The `CamelAzureEventHubsCheckpointUpdatedBy` header can now be `timeout`. With `checkpointBatchTimeout`, the consumer now starts a new checkpoint window when the timer of the current window has run, and no longer when the wall clock passes the time the timer was scheduled for. Before, an event that completed in the millisecond in which the timer ran (or while the timer was taking the count) was counted in the window whose count had already been taken: it was checkpointed only with the next event, and when the partition stayed quiet it was delivered again after a restart. Routes that read this header may now see `timeout` more often.
+
+Checkpoint failures from the timer are now logged at `WARN` level with the full stack trace instead of at `DEBUG` level with the message only. Checkpoint failures triggered by batch size are still logged at `WARN`.
+
 ### camel-lra - only an LRA hosted by the configured coordinator is joined
 
 The LRA saga service now joins, completes or compensates an LRA only when its URL is under the configured LRA coordinator (`coordinatorUrl` followed by `coordinatorContextPath`). A message whose `Long-Running-Action` header holds the URL of another coordinator now fails, instead of the saga service calling that URL.
@@ -80,6 +90,10 @@ To restore the previous behaviour, set `webhookSecretTokenEnabled=false`: the we
     
 -   A new `muteException` consumer option, enabled by default, sends a generic `TApplicationException` of type `INTERNAL_ERROR` ("Internal error processing <method>") to the client instead of an exception that the Thrift method does not declare. Before, the asynchronous consumer sent the message of the exception. An exception declared in the IDL is still sent as it is. Set `muteException=false` to send the exception as before.
     
+
+### camel-netty - errors sent to the client
+
+A new `muteException` consumer option, enabled by default, makes a consumer with `sync=true` write a generic exception (`java.lang.Exception` with the message `Exchange processing failed` and no stack trace) back to the client when the exchange failed, instead of the exception of the route. With `textline=true` the client now receives the line `java.lang.Exception: Exchange processing failed`, where it used to receive the class name and the message of the exception of the route. With an encoder that accepts any object, the serialised exception no longer carries the class, message, cause or stack trace of the exception of the route. Set `muteException=false` to write the exception as before. `transferExchange=true` is not affected.
 
 ### camel-oauth - the bearer token processor is stateless and reads the HTTP request headers
 
@@ -166,6 +180,14 @@ Configure the trusted certificates with the new `trustListDirectory` option: put
 With neither option, the client does not connect to such an endpoint. It logs a `WARN` message `Failed to connect: The certificate of the OPC UA server cannot be validated`, followed by the endpoint and its security policy, and tries again every 10 seconds. A producer fails with `IllegalStateException: No connected`, caused by the same message. A server certificate refused by the trust list or by a `certificateValidator` is logged at `WARN` as `Failed to connect, because a certificate or security check failed`. To restore the previous behaviour, set the new `trustAllCertificates` option to `true`. This is insecure: the client then does not authenticate the server.
 
 The certificate that the user name and password are encrypted with is checked by the same validator. Endpoints that use the security policy `None` are not affected.
+
+### camel-pqc - Bouncy Castle 1.85
+
+Camel 4.18.6 upgrades Bouncy Castle from 1.83 to 1.85. `DILITHIUM`, `SPHINCSPLUS` and `KYBER` now use ML-DSA, SLH-DSA and ML-KEM through the `BC` provider. The Camel option names are unchanged.
+
+Replace `DilithiumParameterSpec`, `SPHINCSPlusParameterSpec` and `KyberParameterSpec` in user code with `MLDSAParameterSpec`, `SLHDSAParameterSpec` and `MLKEMParameterSpec` from `org.bouncycastle.jcajce.spec`, and use the `BC` provider when creating key material. Previously stored Dilithium and SPHINCS+ keys must be regenerated; update peers that use their public keys.
+
+The default `SPHINCSPLUS` parameter set changes from `haraka_256s` (NIST category 5) to `slh_dsa_sha2_128s` (category 1). Use an SLH-DSA 256-bit parameter set if category 5 is required.
 
 ### camel-pqc - a configured KeyGenerator is used by one exchange at a time
 
@@ -1030,7 +1052,10 @@ Swift (`SwiftConstants`):
 | `SwiftConstants.DELIMITER` | `delimiter` | `CamelOpenstackSwiftDelimiter` |
 | `SwiftConstants.PATH` | `path` | `CamelOpenstackSwiftPath` |
 
-`SwiftConstants.CONTAINER_METADATA_PREFIX`, `SwiftConstants.VERSIONS_LOCATION`, `SwiftConstants.CONTAINER_READ`, and `SwiftConstants.CONTAINER_WRITE` intentionally keep their previous values (`X-Container-Meta-`, `X-Versions-Location`, `X-Container-Read`, `X-Container-Write`) because they are part of the Swift HTTP protocol contract used by openstack4j to forward container metadata and ACLs to the Swift backend. Renaming them would break interoperability with the Swift API.
+`SwiftConstants.CONTAINER_METADATA_PREFIX`, `SwiftConstants.VERSIONS_LOCATION`, `SwiftConstants.CONTAINER_READ`, and `SwiftConstants.CONTAINER_WRITE` keep their previous values (`X-Container-Meta-`, `X-Versions-Location`, `X-Container-Read`, `X-Container-Write`) in this release.
+
+> **Note**
+> These four constants have since been renamed to follow the Camel naming convention; see CAMEL-25895 for the releases that carry the change. They are Exchange header keys only: openstack4j builds the `X-Container-*` wire headers itself from `CreateUpdateContainerOptions`, so the Camel header name never reaches Swift.
 
 Routes that reference the constants symbolically (for example `setHeader(OpenstackConstants.OPERATION, …​)`) continue to work without changes. Routes that set the header by its literal string value (for example `setHeader("operation", …​)`) must be updated to use the new value (`setHeader("CamelOpenstackOperation", …​)`).
 
