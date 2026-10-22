@@ -2,13 +2,49 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://camel.apache.org/categories/AI/</loc>
-    <lastmod>2026-10-21T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/security/CVE-2026-101259.html</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-10-21T00:00:00+00:00</lastmod>
+    <loc>https://camel.apache.org/security/CVE-2026-90885.html</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-94386.html</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-95628.html</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-95629.html</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-95663.html</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/CVE-2026-95664.html</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/security/</loc>
+    <lastmod>2026-10-22T10:00:00+02:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2026-10-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/release-4.22.2/</loc>
+    <lastmod>2026-10-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/10/RELEASE-4.22.2/</loc>
+    <lastmod>2026-10-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Releases/</loc>
+    <lastmod>2026-10-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-10-22T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/AI/</loc>
     <lastmod>2026-10-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/</loc>
@@ -18,9 +54,6 @@
     <lastmod>2026-10-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-88900.html</loc>
-    <lastmod>2026-10-19T10:00:00+02:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-10-19T10:00:00+02:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/camel-security-advisories-4.23.0/</loc>
@@ -159,12 +192,6 @@
     <lastmod>2026-10-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/</loc>
-    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Releases/</loc>
-    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-10-15T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/</loc>

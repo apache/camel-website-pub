@@ -6,8 +6,71 @@
     <description>Recent content in Home on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 21 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 22 Oct 2026 10:00:00 +0200</lastBuildDate>
     <atom:link href="https://camel.apache.org/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-101259</title>
+      <link>https://camel.apache.org/security/CVE-2026-101259.html</link>
+      <pubDate>Thu, 22 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-101259.html</guid>
+      <description>Camel-CoAP: information disclosure - when the consumer could not build its response once the route had completed, the exception&amp;rsquo;s message was sent to the CoAP client as the payload of the 5.00 response, so an internal error message reached an external client</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-90885</title>
+      <link>https://camel.apache.org/security/CVE-2026-90885.html</link>
+      <pubDate>Thu, 22 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-90885.html</guid>
+      <description>Camel-Saxon: XML external entity processing - XQueryBuilder parsed a message body that was already a javax.xml.transform.Source with Saxon&amp;rsquo;s default parser settings, so an external entity declared in that body was resolved</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-94386</title>
+      <link>https://camel.apache.org/security/CVE-2026-94386.html</link>
+      <pubDate>Thu, 22 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-94386.html</guid>
+      <description>Camel-OAuth: Cross-scope token reuse via an under-keyed JVM-global client credentials token cache</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-95628</title>
+      <link>https://camel.apache.org/security/CVE-2026-95628.html</link>
+      <pubDate>Thu, 22 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-95628.html</guid>
+      <description>Camel-Docling: Custom CLI argument path validation does not reject absolute paths (incomplete fix of CVE-2026-40047)</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-95629</title>
+      <link>https://camel.apache.org/security/CVE-2026-95629.html</link>
+      <pubDate>Thu, 22 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-95629.html</guid>
+      <description>Camel-Docling: Unvalidated output path header enables writing conversion output to an arbitrary directory in DoclingProducer</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-95663</title>
+      <link>https://camel.apache.org/security/CVE-2026-95663.html</link>
+      <pubDate>Thu, 22 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-95663.html</guid>
+      <description>Camel-Keycloak: Security policy accepts expired access tokens because cached token introspection results are not bounded by the token expiry</description>
+    </item>
+    <item>
+      <title>Apache Camel Security Advisory - CVE-2026-95664</title>
+      <link>https://camel.apache.org/security/CVE-2026-95664.html</link>
+      <pubDate>Thu, 22 Oct 2026 10:00:00 +0200</pubDate>
+      <guid>https://camel.apache.org/security/CVE-2026-95664.html</guid>
+      <description>Camel-AWS2-S3: The producer evaluated an object key taken from the CamelAwsS3Key header as a Simple expression, so a route forwarding objects between buckets evaluated object names chosen by anyone able to upload to the source bucket</description>
+    </item>
+    <item>
+      <title>Release 4.22.2</title>
+      <link>https://camel.apache.org/releases/release-4.22.2/</link>
+      <pubDate>Thu, 22 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/releases/release-4.22.2/</guid>
+      <description>This release is the new Camel 4.22.2 LTS release.</description>
+    </item>
+    <item>
+      <title>RELEASE 4.22.2</title>
+      <link>https://camel.apache.org/blog/2026/10/RELEASE-4.22.2/</link>
+      <pubDate>Thu, 22 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/RELEASE-4.22.2/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.22.2 LTS release with 86 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
     <item>
       <title>Round 4: making Camel work for any AI model, now with intermediate examples</title>
       <link>https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/</link>
