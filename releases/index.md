@@ -8,7 +8,6 @@ Every release of every Camel project, newest first. Supported releases are on th
 
 | Version | Release date | Description |
 | --- | --- | --- |
-| [4.22.2](../releases/release-4.22.2/) LTS | 2026-10-22 | New LTS release 4.22.2 |
 | [4.23.0](../releases/release-4.23.0/) | 2026-10-15 | New LTS release 4.23.0 |
 | [4.18.5](../releases/release-4.18.5/) LTS | 2026-10-11 | New LTS release 4.18.5 |
 | [4.22.1](../releases/release-4.22.1/) LTS | 2026-09-17 | New LTS release 4.22.1 |
