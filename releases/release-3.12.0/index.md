@@ -355,7 +355,7 @@ JIRA Source Component -- Oauth 401 after time
 
 Support to disable the stream caching in camel-servlet from the camel context - once more
 
-### Dependency upgrade (14)
+### Dependency upgrade (13)
 
 [CAMEL-17002](https://issues.apache.org/jira/browse/CAMEL-17002)
 
@@ -380,10 +380,6 @@ upgrade to kotlin 1.5.30
 [CAMEL-16880](https://issues.apache.org/jira/browse/CAMEL-16880)
 
 Upgrade thrift to 0.14.1
-
-[CAMEL-16872](https://issues.apache.org/jira/browse/CAMEL-16872)
-
-Upgrade xchange to 5.0.11
 
 [CAMEL-16856](https://issues.apache.org/jira/browse/CAMEL-16856)
 

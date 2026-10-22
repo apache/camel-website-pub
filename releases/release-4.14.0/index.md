@@ -231,7 +231,7 @@ Upgrade apache directory to 2.0.0.AM27
 
 Camel-Jbang: Bump Camel Kamelets to version 4.13.0
 
-### Improvement (56)
+### Improvement (55)
 
 [CAMEL-22350](https://issues.apache.org/jira/browse/CAMEL-22350)
 
@@ -452,10 +452,6 @@ camel-observability-services - Port 9876 should be optional
 [CAMEL-21917](https://issues.apache.org/jira/browse/CAMEL-21917)
 
 \[camel-telemetry\] Load decorators dynamically
-
-[CAMEL-16871](https://issues.apache.org/jira/browse/CAMEL-16871)
-
-Support camel-aws2-s3 multipart with remote files
 
 ### New Feature (9)
 

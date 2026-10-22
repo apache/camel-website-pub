@@ -94,7 +94,7 @@ The Infinispan Embedded component supports the following options which are liste
 | **eventTypes** (consumer) | Specifies the set of event types to register by the consumer.Multiple event can be separated by comma. The possible event types are: CACHE\_ENTRY\_ACTIVATED, CACHE\_ENTRY\_PASSIVATED, CACHE\_ENTRY\_VISITED, CACHE\_ENTRY\_LOADED, CACHE\_ENTRY\_EVICTED, CACHE\_ENTRY\_CREATED, CACHE\_ENTRY\_REMOVED, CACHE\_ENTRY\_MODIFIED, TRANSACTION\_COMPLETED, TRANSACTION\_REGISTERED, CACHE\_ENTRY\_INVALIDATED, CACHE\_ENTRY\_EXPIRED, DATA\_REHASHED, TOPOLOGY\_CHANGED, PARTITION\_STATUS\_CHANGED, PERSISTENCE\_AVAILABILITY\_CHANGED. |  | String |
 | **sync** (consumer) | If true, the consumer will receive notifications synchronously. | true | boolean |
 | **defaultValue** (producer) | Set a specific default value for some producer operations. |  | Object |
-| **key** (producer) | Set a specific key for producer operations. |  | Object |
+| **key** (producer) | Set a specific key for producer operations. When set, it takes precedence over the CamelInfinispanKey header. |  | Object |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **oldValue** (producer) | Set a specific old value for some producer operations. |  | Object |
 | **operation** (producer) | 
@@ -202,7 +202,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **defaultValue** (producer) | Set a specific default value for some producer operations. |  | Object |
-| **key** (producer) | Set a specific key for producer operations. |  | Object |
+| **key** (producer) | Set a specific key for producer operations. When set, it takes precedence over the CamelInfinispanKey header. |  | Object |
 | **oldValue** (producer) | Set a specific old value for some producer operations. |  | Object |
 | **operation** (producer) | 
 
@@ -597,6 +597,20 @@ Table 11. Query Operation
 
 > **Note**
 > Write methods like put(key, value) and remove(key) do not return the previous value by default.
+
+### Key and cache name headers
+
+The `key` option of the endpoint takes precedence over the `CamelInfinispanKey` header. When the endpoint does not set `key`, the producer uses the `CamelInfinispanKey` header.
+
+The `CamelInfinispanCacheName` header takes precedence over the cache name of the endpoint.
+
+An `infinispan-embedded` consumer sets `CamelInfinispanKey` and `CamelInfinispanCacheName` to the key and the cache of the event. When a route sends those events to an `infinispan-embedded` producer, the producer works on the cache of the event, and on the key of the event unless the endpoint sets `key`. To use the cache and the key configured on the producer endpoint, remove the headers first:
+
+```java
+from("infinispan-embedded:source")
+    .removeHeaders("CamelInfinispan*")
+    .to("infinispan-embedded:target?operation=PUT&key=myKey&value=myValue");
+```
 
 ## Examples
 

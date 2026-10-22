@@ -122,17 +122,28 @@ Using a feature that is only available in isolated mode fails the test build.
 | `mockEndpoints`, `mockEndpointsAndSkip`, `stubEndpoints` | No | Yes |
 | `autoStartupExclude` | No | Yes |
 | `@ProvidesBreakpoint` | No | Yes |
-| `dumpRouteCoverage`, `dumpRoute`, `shutdownTimeout` | Yes | Yes |
+| `dumpRouteCoverage`, `dumpRoute`, `dumpRouteDiagramFolder`, `shutdownTimeout` | Yes | Yes |
 
 In isolated mode, `advices` and `replaceRouteFromWith` are applied before routes are created.
 
-## Debugging, route coverage and route dumps
+## Debugging, route coverage, route dumps and route diagrams
 
 A `public static` no-arg method annotated with `@ProvidesBreakpoint` and returning `org.apache.camel.spi.Breakpoint` enables the Camel debugger with that breakpoint.
 
 `dumpRouteCoverage = true` writes route coverage to `target/camel-route-coverage` after each test method. It requires `camel-quarkus-management`.
 
 `dumpRoute` writes the routes to `target/camel-route-dump` after each test method, in `xml` or `yaml` format. It requires `camel-quarkus-xml-io-dsl` for `xml`, and `camel-quarkus-yaml-io` for `yaml`.
+
+`dumpRouteDiagramFolder` writes PNG route diagrams to the given folder before the first test method. The diagrams include the routes and advice declared by the test class. The route topology diagram is also written, unless `dumpRouteDiagramTopology = false`. `dumpRouteDiagramTopologyExternal = false` leaves external systems out of it. It requires `camel-quarkus-diagram`.
+
+```java
+@CamelQuarkusTest(dumpRouteDiagramFolder = "src/docs/diagrams")
+class RouteDiagramTest {
+    @Test
+    void dumpRouteDiagrams() {
+    }
+}
+```
 
 ## Continuous testing
 

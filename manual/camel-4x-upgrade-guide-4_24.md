@@ -203,6 +203,14 @@ Recording the usage also costs a write. A signing endpoint with a `keyLifecycleM
 
 The key encapsulation operations do not record usage, so `maxKeyUsage` still never triggers for a KEM key.
 
+### camel-pqc - a failed stateful signature no longer carries the signature headers
+
+Signing with one of the stateful hash-based algorithms (LMS, HSS, XMSS, XMSSMT) consumes a one-time index inside the private key. That advanced key is now persisted through the `keyLifecycleManager` **before** the signature is placed on the message, instead of after.
+
+Such an exchange already failed when the key state could not be stored, so what changes is the content of the failed message: it no longer carries `CamelPQCSignature`, nor the hybrid `CamelPQCHybridSignature`, `CamelPQCClassicalSignature` and `CamelPQCPqcSignature` headers. A route that caught the failure with `onException(…​).handled(true)`, or routed it to a dead letter channel, could previously read the signature off the failed message and pass it on; it can no longer do so. That is the point of the change - a signature whose index advance was never recorded must not escape, because after a restart the key resumes at the previous index and can sign a second time with an index already used.
+
+Signing a stateful key without a `keyLifecycleManager`, and signing any key without a `CamelPQCKeyId` header or with no stored metadata for the key, now logs a warning once per producer rather than being silently ignored. A non-stateful key without a `keyLifecycleManager` stays silent, as there is no `maxKeyUsage` threshold to miss. For a stateful key the warning names the index-reuse risk; for any other key it names the `usageCount` that will not advance.
+
 ### camel-jbang - camel get endpoint shows the scope of an endpoint
 
 `camel get endpoint` replaces the `REMOTE` column with `SCOPE`, which tells three kinds of endpoint apart: `remote` (an external system, as before), `internal` (Camel plumbing that stays inside the integration, such as `direct`, `seda` or `log`, as the catalog marks its component internal) and `local` (neither, such as `exec` or `bean`). Scripts that read the `REMOTE` column of the table must read `SCOPE` instead. The `--json` output keeps `remote` and adds `internal`.
@@ -661,6 +669,10 @@ When the webhook is registered in another way, through the `WebhookRoutePolicy` 
 The default webhook path is a hash of the endpoint URI, so adding an option to the URI, such as `webhookSecretToken`, changes the path. When the webhook is not registered by Camel at startup, set `webhookPath` to keep the path that is registered.
 
 To restore the previous behaviour, set `webhookSecretTokenEnabled=false`: the webhook is then registered without a secret token, and webhook requests are not verified.
+
+### camel-paho-mqtt5 - a failed message with manualAcksEnabled is delivered again or acknowledged
+
+With `manualAcksEnabled=true`, a message whose exchange failed was left unacknowledged. For a QoS 1 message the broker never sent it again during the connection, and after `receiveMaximum` such messages it sent the consumer nothing more (the client completes the QoS 2 flow on its own, so QoS 2 messages did not stop the consumer). Now, for a QoS 1 message on a session that the broker keeps after the disconnect (`cleanStart=false` and `sessionExpiryInterval` greater than 0), the consumer connects again after a failed exchange (after one second, doubled for each failed exchange in a row up to `maxReconnectDelay`, and back to one second after any exchange that succeeds; logged at WARN), and the broker sends the message again. In all other cases (a clean session, which is the default, a QoS 2 message, or `cleanStart=false` without `sessionExpiryInterval`, where the session ends with the connection) the broker never sends the message again, so the failed message is acknowledged and the failure is left to the Camel error handler. A consumer that uses a client set with the `client` option leaves a failed QoS 1 message on a session that the broker keeps unacknowledged, as before; as the consumer does not connect that client, set the `cleanStart` and `sessionExpiryInterval` of the endpoint to match its connection options.
 
 ### camel-iggy - messageExpiry is sent to Iggy in microseconds
 
@@ -1216,6 +1228,14 @@ To keep the previous behaviour, filter the exchanges with a bad status out right
 ### camel-milo - the reconnectTimeout of the components sets the delay between connection attempts
 
 `setReconnectTimeout` on the `milo-client` and `milo-browse` components set the request timeout of every service call, and the delay between two connection attempts stayed 10 seconds. It now sets that delay, which the new `reconnectTimeout` option of both endpoints and components sets too; its default of 10000 milliseconds is the previous delay, and a value of 0 or less is rejected. To set the request timeout, use the `requestTimeout` option instead (for example `camel.component.milo-client.requestTimeout`, or `getConfiguration().setRequestTimeout(…​)` in Java).
+
+### camel-infinispan - the key option of the producer takes precedence over the key header
+
+The `infinispan` and `infinispan-embedded` producers now use the `key` option of the endpoint when it is set, and use the `CamelInfinispanKey` header only when the endpoint does not set `key`. Previously the header took precedence over the option, so a route that sent the events of an Infinispan consumer, which set `CamelInfinispanKey` to the key of the event, to a producer with a fixed `key` worked on the key of the event.
+
+Routes that set `key` on the endpoint and override it per message with the `CamelInfinispanKey` header must remove `key` from the endpoint.
+
+The `CamelInfinispanCacheName` header still takes precedence over the cache of the endpoint, so a route that sends the events of an Infinispan consumer to a producer must still remove the `CamelInfinispan*` headers first, see _Key and cache name headers_ in the component docs.
 
 ### camel-protobuf - a bytes field in a Map
 

@@ -95,7 +95,7 @@ With the following _path_ and _query_ parameters:
 | **port** (common) | **Required** The Thrift server port. |  | int |
 | **service** (common) | **Required** Fully qualified service name from the thrift descriptor file (package dot service definition name). |  | String |
 
-### Query Parameters (13 parameters)
+### Query Parameters (14 parameters)
 
    
 | Name | Description | Default | Type |
@@ -137,6 +137,7 @@ Enum values:
  | BINARY | ThriftExchangeProtocol |
 | **clientTimeout** (consumer) | Client timeout for consumers. |  | int |
 | **maxPoolSize** (consumer) | The Thrift server consumer max thread pool size. | 10 | int |
+| **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side, the Thrift client receives a generic error that does not contain the exception’s message. An exception that the Thrift method declares in the IDL is still sent as it is. | true | boolean |
 | **poolSize** (consumer) | The Thrift server consumer initial thread pool size. | 1 | int |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
@@ -239,6 +240,43 @@ from("thrift://localhost:1101/org.apache.camel.component.thrift.generated.Calcul
 ```
 
 It’s possible to automate Java code generation for .thrift files using **thrift-maven-plugin**, but before start the thrift compiler binary distribution for your operating system must be present on the running host.
+
+## SSL/TLS
+
+Set `negotiationType=SSL` and configure `sslParameters` to use SSL/TLS. SSL/TLS requires the synchronous communication mode (`synchronous=true`), on the producer and on the consumer: an endpoint that combines `negotiationType=SSL` with `synchronous=false` (the default) fails to start. The `SASL` negotiation type is not supported, and an endpoint configured with it fails to start.
+
+The consumer creates its server socket from the SSL context of `sslParameters`, so all of its settings apply: the key managers (required, with the `keyPassword` of a key protected by a password), the trust managers, the secure socket protocols and cipher suites, and the server parameters. For example, require a client certificate with `serverParameters.clientAuthentication=REQUIRE` and trust managers that trust the certificates of the clients:
+
+```java
+KeyStoreParameters keyStore = new KeyStoreParameters();
+keyStore.setResource("file:server-keystore.jks");
+keyStore.setPassword("changeit");
+KeyManagersParameters keyManagers = new KeyManagersParameters();
+keyManagers.setKeyStore(keyStore);
+keyManagers.setKeyPassword("changeit");
+
+KeyStoreParameters trustStore = new KeyStoreParameters();
+trustStore.setResource("file:client-truststore.jks");
+trustStore.setPassword("changeit");
+TrustManagersParameters trustManagers = new TrustManagersParameters();
+trustManagers.setKeyStore(trustStore);
+
+SSLContextServerParameters serverParameters = new SSLContextServerParameters();
+serverParameters.setClientAuthentication("REQUIRE");
+
+SSLContextParameters sslParameters = new SSLContextParameters();
+sslParameters.setKeyManagers(keyManagers);
+sslParameters.setTrustManagers(trustManagers);
+sslParameters.setServerParameters(serverParameters);
+context.getRegistry().bind("sslParams", sslParameters);
+
+from("thrift://0.0.0.0:1101/org.apache.camel.component.thrift.generated.Calculator?negotiationType=SSL&sslParameters=#sslParams&synchronous=true")
+    .to("direct:thrift-service");
+```
+
+## Errors sent to the client
+
+When the exchange of an asynchronous consumer (the default) fails, the Thrift client receives an error. An exception that the Thrift method declares in the IDL (such as `throws (1:InvalidOperation ouch)`) belongs to the service contract and is sent as it is. Any other exception is sent as a generic `TApplicationException` of type `INTERNAL_ERROR`, without the message of the exception, as long as the `muteException` option is enabled (the default). Set `muteException=false` to send the message of the exception to the client.
 
 ## For more information, see these resources
 

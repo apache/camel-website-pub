@@ -167,7 +167,7 @@ camel-kafka - file descriptor leak
 
 apiHost option in REST DSL is ignored
 
-### Dependency upgrade (4)
+### Dependency upgrade (3)
 
 [CAMEL-16919](https://issues.apache.org/jira/browse/CAMEL-16919)
 
@@ -176,10 +176,6 @@ Upgrade to spring boot 2.5.4
 [CAMEL-16910](https://issues.apache.org/jira/browse/CAMEL-16910)
 
 Update Commons Compress to 1.21
-
-[CAMEL-16872](https://issues.apache.org/jira/browse/CAMEL-16872)
-
-Upgrade xchange to 5.0.11
 
 [CAMEL-16856](https://issues.apache.org/jira/browse/CAMEL-16856)
 
