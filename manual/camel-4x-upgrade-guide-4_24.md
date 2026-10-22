@@ -888,6 +888,12 @@ The `value` of a Switch case and the `uriDelimiter` of the Dynamic Router EIP we
 
 The undertow producer writes the path, query and header values of the outgoing request to the socket one character at a time, without validating them. A carriage return or line feed therefore broke the request into further lines, and a character above `0xFF` was written as a single, different byte (for example `U+010A` became a line feed). The producer now refuses to send a request path, query or header value that contains a control character or a character above `0xFF`, and fails the exchange with an `IllegalArgumentException` instead. A space and a tab, which do not change the framing, are still allowed. Routes that put a percent-encoded control character (such as `%0D%0A`) into the `CamelHttpPath` or `CamelHttpQuery` header, which the producer decodes before building the request, are the ones most likely to be affected.
 
+### camel-undertow - a WebSocket connection opened before a consumer with custom handlers started is no longer served
+
+On a WebSocket path whose producer applies a security provider or allowed roles, a connection could be accepted while only the producer served the path, before its consumer was started for the first time. Such a connection ran the producer checks but not the custom `handlers` the consumer configures, as those handlers run only for consumers. Once the consumer was started, the connection was still treated as having passed the consumer checks, so its messages reached the route and it kept receiving what the producer sent.
+
+Once a consumer that configures `handlers` is started on a path, a connection opened on that path before the consumer first ran is no longer served: its messages no longer reach the route and it no longer receives what the producer sends, and the connection is closed. Clients that open a connection in this window must reconnect after the consumer has started.
+
 ### camel-dapr - the saveBulk and executeTransaction state operations are sent
 
 The `saveBulk` and `executeTransaction` operations of `dapr:state` built their request but never sent it to Dapr, so nothing was stored and the exchange completed without an error. The requests are now sent, and the producer waits for the answer like the other state operations: the states are stored, and a request that Dapr rejects (or a sidecar that cannot be reached) fails the exchange.
