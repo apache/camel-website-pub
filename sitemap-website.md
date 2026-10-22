@@ -1,4 +1,4 @@
-urls[938]{loc,lastmod}:
+urls[940]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-101259.md,2026-10-22T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-90885.md,2026-10-22T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-94386.md,2026-10-22T10:00:00+02:00
@@ -8,8 +8,12 @@ urls[938]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-95664.md,2026-10-22T10:00:00+02:00
   https://camel.apache.org/,2026-10-22T10:00:00+02:00
   https://camel.apache.org/security/,2026-10-22T10:00:00+02:00
+  https://camel.apache.org/blog/,2026-10-22T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.22.2/,2026-10-22T00:00:00+00:00
+  https://camel.apache.org/blog/2026/10/RELEASE-4.22.2/,2026-10-22T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-10-22T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-10-22T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-10-21T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-10-21T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/,2026-10-21T00:00:00+00:00
   https://camel.apache.org/categories/Tooling/,2026-10-21T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-88900.md,2026-10-19T10:00:00+02:00
@@ -59,8 +63,6 @@ urls[938]{loc,lastmod}:
   https://camel.apache.org/categories/Camel/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/,2026-10-15T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-10-15T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/,2026-10-14T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-10-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-mcp-talk-to-your-crm/,2026-10-12T00:00:00+00:00
