@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 22 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building an Agentic RAG Application with Apache Camel and LangChain4j</title>
+      <link>https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/</link>
+      <pubDate>Fri, 23 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/</guid>
+      <description>Introduction Large language models (LLMs) can reason about a question, but they do not know your organization&amp;rsquo;s past production incidents, and they cannot look up what changed in the world last week. Retrieval-Augmented Generation (RAG) addresses the first problem: relevant data is retrieved and handed to the model as context. Agentic RAG goes one step further. Instead of following a fixed retrieval pipeline, the model itself decides which tools to call to gather the information it needs.</description>
+    </item>
     <item>
       <title>RELEASE 4.22.2</title>
       <link>https://camel.apache.org/blog/2026/10/RELEASE-4.22.2/</link>

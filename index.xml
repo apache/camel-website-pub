@@ -16,6 +16,13 @@
       <description>Camel-A2A: Push notification webhook guard accepts IPv6 unique local addresses reached through a host name, enabling blind server-side request forgery</description>
     </item>
     <item>
+      <title>Building an Agentic RAG Application with Apache Camel and LangChain4j</title>
+      <link>https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/</link>
+      <pubDate>Fri, 23 Oct 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/</guid>
+      <description>Introduction Large language models (LLMs) can reason about a question, but they do not know your organization&amp;rsquo;s past production incidents, and they cannot look up what changed in the world last week. Retrieval-Augmented Generation (RAG) addresses the first problem: relevant data is retrieved and handed to the model as context. Agentic RAG goes one step further. Instead of following a fixed retrieval pipeline, the model itself decides which tools to call to gather the information it needs.</description>
+    </item>
+    <item>
       <title>Kamelets 4.23.0</title>
       <link>https://camel.apache.org/releases/kamelets-4.23.0/</link>
       <pubDate>Fri, 23 Oct 2026 00:00:00 +0000</pubDate>

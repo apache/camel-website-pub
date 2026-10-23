@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[262]{title,link,pubDate,description}:
+posts[263]{title,link,pubDate,description}:
+  Building an Agentic RAG Application with Apache Camel and LangChain4j|https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/index.md|Fri, 23 Oct 2026 00:00:00 +0000|Introduction Large language models (LLMs) can reason about a question, but they do not know your organization&rsquo;s past production incidents, and they cannot look up what changed in the world last 
   RELEASE 4.22.2|https://camel.apache.org/blog/2026/10/RELEASE-4.22.2/index.md|Thu, 22 Oct 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.22.2 LTS release with 86 bug fixes and improvements. The artifacts are published and ready for you to download from the Central 
   Round 4: making Camel work for any AI model, now with intermediate examples|https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/index.md|Wed, 21 Oct 2026 00:00:00 +0000|This is the fourth post in a series about making Camel easy to use for any AI model: the frontier models in the cloud, and especially the models that are small enough to run on your own laptop or a mi
   Apache Camel security advisories: 38 CVEs fixed in 4.18.5, 4.22.1 and 4.23.0|https://camel.apache.org/blog/2026/10/camel-security-advisories-4.23.0/index.md|Fri, 16 Oct 2026 00:00:00 +0000|On 15 October we published 38 security advisories for Apache Camel. All of them are fixed in 4.22.1, 4.18.5 and 4.23.0, and we recommend upgrading. Thirteen of the advisories are rated HIGH and twenty

@@ -896,6 +896,12 @@ A message header whose value is a `java.util.Collection` or an object array (as 
 
 Every other value is converted to one String and sent as one header as before: a String (also when it contains commas), a `byte[]` and the other primitive arrays, a `Map`, and a Vert.x `JsonObject` or `JsonArray` (sent as JSON). A route that needs the old single header can set the header to a String, for example with `String.valueOf(list)`.
 
+### camel-vertx - standalone TrustManager on SSLContextParameters is applied
+
+When configuring TLS through `SSLContextParameters` with a standalone `TrustManager` instance (via `TrustManagersParameters.setTrustManager(…​)`), Vert.x components now wrap and apply the configured `TrustManager`. Previously, only `TrustAllTrustManager.INSTANCE` and KeyStore-backed configurations were applied, and other standalone `TrustManager` instances were not set on the underlying Vert.x options.
+
+When both a `TrustManager` and a keystore are configured on `TrustManagersParameters`, the `TrustManager` is now used, as with the other components that use `SSLContextParameters`; before, the keystore-based trust options were used.
+
 ### camel-knative-http - a header with several values is sent as several headers
 
 A message header whose value is a `java.util.Collection` or an object array (as the consumer maps a request header that occurs more than once) is now sent as one HTTP header per value. The Knative HTTP producer sent it as one HTTP header with the `toString()` of the value, for example `[a, b]`, and the reply of the consumer sent only its last value. A collection or an object array that is empty, or that holds only null values, sends no header (the producer sent an empty List as the header value `[]`).
@@ -1101,6 +1107,10 @@ java.io.IOException: No subject alternative names matching IP address 127.0.0.1 
 
 The body of a request received by the consumer is a `NettyChannelBufferStreamCache`. Its `read()` method now returns a byte as a value from 0 to 255, and -1 at the end of the body, as `java.io.InputStream` requires. Before, a byte from 0x80 was returned as a negative value (0xFF as -1, which a reader takes for the end of the body), and the method threw an `IndexOutOfBoundsException` at the end. `markSupported()` now returns `false` (`mark(int)` never did anything): a reader that needs mark support has to wrap the stream, for example in a `BufferedInputStream`. `reset()` goes back to the start of the body, as before.
 
+### camel-netty-http - securityConfiguration is copied per endpoint
+
+When `securityConfiguration` is set on the `NettyHttpComponent`, each endpoint now receives an independent copy of the configuration. Modifying `securityConfiguration.*` options on an endpoint URI no longer alters the component-level configuration or other endpoints.
+
 ### camel-netty - hostnameVerification verifies the host instead of failing
 
 `hostnameVerification=true` on a `netty` producer, or on a consumer with `clientMode=true`, now checks that the certificate of the server matches the host the endpoint connects to. Before, it made the TLS handshake fail for every certificate, matching or not, with `CertificateException: Hostname or IP address is undefined` - the engine was created without a peer host, so the JDK had no name to compare against.
@@ -1173,6 +1183,10 @@ When the consumer dead-letters a message after a failed route with `enableDeadLe
 
 A settlement request the broker rejects is now reported through the consumer’s exception handler.
 
+### camel-nats - the JetStream pull consumer subscribes again when its ephemeral consumer was deleted
+
+With `jetstreamEnabled=true` and a pull subscription (the default), the `nats` consumer kept fetching from a JetStream consumer that the server had deleted, and consumed nothing more until the route was restarted. It now subscribes again when the server no longer has its ephemeral consumer (no `durableName`, and no durable name in the `consumerConfiguration`), which the server deletes after about 5 seconds without a pull request, for example while the client is disconnected, or loses on a restart. The new consumer starts at the first message the route did not acknowledge, so the route can see again the messages after that one (with `ackPolicy=None`, after the last message fetched). On a stream with `WorkQueue` retention, and on a stream that was created again since the route subscribed, the new consumer uses the consumer configuration as it is. The consumer asks the server for its consumer only after a fetch that ended empty well before `pullFetchTimeout`, at most every 5 seconds. A durable consumer is not created again: when it is gone (deleted by an administrator, or after its `inactiveThreshold`), the consumer logs a WARN and keeps fetching, and the fetches work again when the durable is created again with the same name.
+
 ### camel-telegram - a failed send fails the exchange once
 
 When Telegram answers a message with an error status (for example `400` for an unknown chat), or with a body that cannot be read, the producer now fails the exchange once and the route stops there. Previously the route first continued after the producer as if the message had been sent, and then the exchange failed as well.
@@ -1231,6 +1245,10 @@ When the consumer lists the bucket, a failure to download one of the listed obje
 
 With the `TimeStamp` (default) and `PersistentTimestamp` query strategies, the `mongodb-gridfs` consumer routed every file uploaded since the consumer started again at each poll (every `delay`, 500 ms by default). The upload date of the newest routed file is now kept between the polls, so a file is routed once. A route that relied on receiving the same file repeatedly now receives it once. These two strategies now skip a file whose upload date is older than that of a file already routed (as they did before Camel 3.13), for example a file from a second uploader, or from a client with another clock, that becomes visible later: GridFS sets the upload date on the client. Use `TimeStampAndFileAttribute` or `PersistentTimestampAndFileAttribute` if such files must be routed: these strategies keep the start date in their query, as before, and mark each file so that it is routed once.
 
+### camel-paho-mqtt5, camel-paho - consumers that share a client get the messages of their own topic
+
+A client has a single callback, and each consumer set it on its client. The consumers of several endpoints that use the same client (the `client` option) therefore all routed their messages through the consumer that started last, and only that consumer subscribed again after the client reconnected. The consumers of a client now share one callback: a message goes to the consumers whose topic filter matches it, also when a single consumer of the client is left (only a client that the consumer created for itself still gives it every message), and each consumer subscribes again after a reconnect. When a consumer that uses a client set with the `client` option stops, it now unsubscribes its topic from the client (unless `cleanStart=false`, or `cleanSession=false` for `camel-paho`, or another running consumer of the client uses the same topic filter), as the client stays connected, and it uses the same client again when it starts again (it created a client of its own before). This depends on the endpoint option, not on how the client was connected: set `cleanStart=false` on the endpoints to keep the subscriptions of a client connected with `cleanStart=false`. With `cleanStart=false` the stopped consumer’s subscription stays on the connected client, so the broker keeps sending its messages, which are dropped (with one WARN per topic, then at DEBUG) until the consumer starts again. With `manualAcksEnabled=true` such a dropped message is also acknowledged, so it is gone from a session that the broker keeps: left unacknowledged, it would count against `receiveMaximum` (for `camel-paho`, the broker’s limit of unacknowledged messages per client), and the broker would then send nothing more to any consumer of the client. Consumers of one client whose topic filters overlap (such as `orders/#` and `orders/eu`, or the same filter) each get a message that matches several filters, and a broker that sends one copy per matching subscription (MQTT allows it, Apache ActiveMQ Artemis does it) makes each of them get every copy. With `manualAcksEnabled=true` each of them acknowledges the message, so a message that failed in one of these routes is still acknowledged when another of them processes it. Each subscribe of a filter makes the broker send the retained message of a matching topic again, so consumers of the same filter get it again when another of them starts and each time they subscribe again after a reconnect. Only the running consumers count when a consumer stops: with consumers of the same filter on one client, one with `cleanStart=true` and one with `cleanStart=false` (`cleanSession` for `camel-paho`), stopping the durable one and then the other unsubscribes the filter, which also removes the subscription that the durable consumer kept. Give such consumers a client of their own.
+
 ### Semantic image input and audit output
 
 Semantic evaluations now recognize a selected `${body}` with an image `Content-Type`, and self-describing `data:image/…​` strings, as image input. Text-only experts reject these inputs instead of treating encoded images as text. For binary image streams, Camel preserves the bytes using a replayable stream cache; downstream code must not rely on the original stream class. For the exact `${body}` selector, `audio/` **and `video/`** content types now fail before inference, even for a `String` body. Select an explicitly textual field to evaluate text accompanying audio or video. Content-Type normalization does not apply to other selectors such as `$\{bodyAs(byte[])}`; use `${body}` for image bytes or select a media envelope or image data URL explicitly. Ordinary strings without a media content type remain text. The `$semanticInput` key is reserved for explicit media envelopes. TypeSafe AI rejects that key in structured state, including nested objects; rename an application-state key that conflicts with it.
@@ -1274,6 +1292,12 @@ A consumer that starts while the server cannot be reached, or whose client canno
 A route that uses only the value of the `DataValue` body receives a null for these exchanges, which the type converters turn into `0` or `false`; a route that stores values checks the status code of the body first, for example with `${body.statusCode.bad}`. A value can now arrive again after an outage, so a route that counts values, computes differences or detects changes must tolerate repeats. The consumer’s route also runs during an outage: an OPC UA write that it makes while the client reconnects waits for the next reconnect attempt and can take effect after communication is restored, and a request that fails rebuilds the connection.
 
 To keep the previous behaviour, filter the exchanges with a bad status out right after the consumer, for example with `filter(simple("${body.statusCode.bad} == false"))`. This also drops the other bad statuses, such as the refusal of a node, and the current values delivered after an outage still arrive.
+
+### camel-milo - an awaited write, call or read that fails now fails the exchange
+
+An awaited `milo-client` write, method call or read that fails at the service or transport level, for example a request that times out (`Bad_Timeout`) or a lost connection, now fails the exchange and lets the route’s error handler run. Before, the exchange completed without an error and with a `null` body, silently discarding the failure. A bad status for the node itself, such as `Bad_TypeMismatch` on a write, is not a failure of the operation and is still returned as the body.
+
+An awaited `call` that succeeds now returns the `CallMethodResult` as the exchange body. Before, the body was always `null` even on success. A route that reads the result of an awaited call must be updated to read the `CallMethodResult` from the body instead of expecting `null`.
 
 ### camel-milo - the reconnectTimeout of the components sets the delay between connection attempts
 
@@ -1361,6 +1385,14 @@ The `lengthMarker` option of the TOON data format is removed, because the TOON s
 
 With `strict=false`, unmarshalling no longer returns `null` or a partial result for malformed TOON. Only the non-strict recoveries of the TOON specification apply, such as accepting an array whose length differs from the declared length; other malformed TOON fails with `IllegalArgumentException`, as in strict mode.
 
+### camel-as2 - consumers sharing a port use their own asynchronous MDN settings
+
+`as2://server/listen` consumers that share a `serverPortNumber` now deliver asynchronous MDNs with their own `mdnUserName`, `mdnPassword`, `mdnAccessToken` and `asyncMdnAllowedHosts`, selected by the matched `requestUriPattern` in the same way as the signing material. Previously the values of the first consumer configured on the port were used for every consumer on it, and the values set on the other consumers were ignored. A consumer that relied on inheriting them now has to set them itself.
+
+This applies to `asyncMdnAllowedHosts` as well. A consumer without its own list used to inherit the first consumer’s list, so asynchronous MDNs to other hosts were refused; it now delivers to the address the sender gives, without credentials. A deployment that counted on the inherited list as a restriction has to set it on each consumer.
+
+A consumer whose `requestUriPattern` is `/` now also uses its own keys, certificates and asynchronous MDN settings when another consumer created the shared server connection; before, it used the first consumer’s.
+
 ### camel-ftp, camel-sftp, camel-ftps, camel-mina-sftp - sendNoop also applies to the consumer
 
 The `sendNoop` option now also applies to the check a consumer makes before each poll, not only to the pre-write check of a producer, and its label is now `common,advanced` instead of `producer,advanced`. The default is still `true`, so a consumer sends a noop before each poll as before.
@@ -1374,3 +1406,7 @@ For sftp and mina-sftp the client notices a closed connection, but not one that 
 ### camel-cometd - the CORS filter allows credentials only for listed origins
 
 With `crossOriginFilterOn=true`, the CORS responses now include `Access-Control-Allow-Credentials: true` only when `allowedOrigins` lists the origins explicitly, without any **or `null`. When `allowedOrigins` is not set, is** , or has an entry with a wildcard such as `[https://*](https://*)` or an entry `null`, the origin is still allowed, but without credentials. Previously credentials were allowed for every origin. A cross-origin client that sends cookies or other credentials must have its origin listed in `allowedOrigins`.
+
+### camel-tahu - a Device producer uses the client of its started Edge Node producer
+
+A Device producer (`tahu-edge:group/edgeNode/device`) no longer creates the client of its Edge Node: only the Edge Node producer creates it, from the options of the Edge Node endpoint (`deviceIds`, `primaryHostId`, `servers`). A Device route that starts before the Edge Node route, or while it is stopped, therefore no longer fails with a `NullPointerException` when the Device URI has no `deviceIds`. Sending to a Device endpoint while no producer of its Edge Node endpoint is started now fails the exchange with an `IllegalStateException`; before, the data was dropped.

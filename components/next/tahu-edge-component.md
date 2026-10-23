@@ -189,6 +189,8 @@ Sparkplug Devices are identified by a unique combination of the Edge Node Descri
 
 Device Endpoints inherit all MQTT Server connection information from their associated Edge Node Endpoint. Setting Component- or Endpoint-level configuration values on Device Components or Endpoints is unnecessary and should be avoided.
 
+A Device Producer publishes through the client of its Edge Node Producer and never creates one, so sending to a Device Endpoint while no producer of its Edge Node Endpoint is started fails the exchange with an `IllegalStateException`.
+
 ### Edge Node and Device Endpoint Interaction
 
 Sparkplug Edge Nodes are not required to have a Device hierarchy and physical devices may be represented directly as Edge Nodes—​this decision is left to Sparkplug application developers.

@@ -11,10 +11,22 @@
     <loc>https://camel.apache.org/security/</loc>
     <lastmod>2026-10-23T10:00:00+02:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/categories/AI/</loc>
+    <lastmod>2026-10-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/</loc>
+    <lastmod>2026-10-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/</loc>
+    <lastmod>2026-10-23T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.23.0/</loc>
     <lastmod>2026-10-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/</loc>
+    <lastmod>2026-10-23T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/categories/Usecases/</loc>
     <lastmod>2026-10-23T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/security/CVE-2026-101259.html</loc>
@@ -38,9 +50,6 @@
     <loc>https://camel.apache.org/security/CVE-2026-95664.html</loc>
     <lastmod>2026-10-22T10:00:00+02:00</lastmod>
   </url><url>
-    <loc>https://camel.apache.org/blog/</loc>
-    <lastmod>2026-10-22T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>https://camel.apache.org/releases/release-4.22.2/</loc>
     <lastmod>2026-10-22T00:00:00+00:00</lastmod>
   </url><url>
@@ -49,9 +58,6 @@
   </url><url>
     <loc>https://camel.apache.org/categories/Releases/</loc>
     <lastmod>2026-10-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/AI/</loc>
-    <lastmod>2026-10-21T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/</loc>
     <lastmod>2026-10-21T00:00:00+00:00</lastmod>
@@ -207,9 +213,6 @@
     <lastmod>2026-10-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/10/camel-mcp-talk-to-your-crm/</loc>
-    <lastmod>2026-10-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/categories/Usecases/</loc>
     <lastmod>2026-10-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/release-4.18.5/</loc>

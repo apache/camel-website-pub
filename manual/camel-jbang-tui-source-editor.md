@@ -72,6 +72,8 @@ The problems are marked as soon as a file opens, before you change anything: a r
 
 In the editor, a line with a problem has a red line number, the title shows how many errors there are, and the Error panel at the bottom says what is wrong with the line the cursor is on. A note, something that works but is not right (such as a dependency a Kamelet does not use), is marked as a warning instead: a yellow `⚠`, an amber line number, and counted apart in the title as `notes`. A note does not keep the file from being saved. They are checked again as you type, and **F9** jumps to the next problem.
 
+A route that sends to a `direct` or `seda` endpoint no route consumes gets a note on that line, such as `to: direct:cheese` while no route has `from: direct:cheese`. This works for YAML, Java and XML routes, and the routes of the other YAML, Java and XML files of the project count too. They are read in the background each time a file opens, and again while you type once the last read is a few seconds old. It is a note rather than an error, as the route that consumes it is often the next one you write. The check says nothing when the other files cannot tell, such as a route whose input is a property placeholder or a route template, or a project with more files than the check reads.
+
 ![A misspelled seda option marked while typing](_images/jbang/camel-tui-source-problems.png)
 
 ### Saving

@@ -84,7 +84,7 @@ The AWS StepFunctions component supports the following options which are listed 
 | **configuration** (producer) | Component configuration. |  | StepFunctions2Configuration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
-**Required** The operation to perform. It can be listFunctions, getFunction, createFunction, deleteFunction or invokeFunction.
+**Required** The operation to perform.
 
 Enum values:
 
@@ -277,7 +277,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform. It can be listFunctions, getFunction, createFunction, deleteFunction or invokeFunction.
+**Required** The operation to perform.
 
 Enum values:
 
@@ -463,7 +463,7 @@ The AWS StepFunctions component supports the following message header(s), which 
 | **CamelAwsStepFunctionsStateMachinesMaxResults** (producer) Constant: [`STATE_MACHINES_MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#STATE_MACHINES_MAX_RESULTS) | The limit number of results while listing state machines. |  | Integer |
 | **CamelAwsStepFunctionsActivityName** (producer) Constant: [`ACTIVITY_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#ACTIVITY_NAME) | The name of the state machine activity. |  | String |
 | **CamelAwsStepFunctionsActivityArn** (producer) Constant: [`ACTIVITY_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#ACTIVITY_ARN) | The ARN of the state machine activity. |  | String |
-| **CamelAwsStepFunctionsActivitiesMaxResults** (producer) Constant: [`ACTIVITIES_MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#ACTIVITIES_MAX_RESULTS) | The limit number of results while listing state machines. |  | Integer |
+| **CamelAwsStepFunctionsActivitiesMaxResults** (producer) Constant: [`ACTIVITIES_MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#ACTIVITIES_MAX_RESULTS) | The limit number of results while listing activities. |  | Integer |
 | **CamelAwsStepFunctionsExecutionArn** (producer) Constant: [`EXECUTION_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#EXECUTION_ARN) | The Amazon Resource Name (ARN) of the execution. |  | String |
 | **CamelAwsStepFunctionsExecutionName** (producer) Constant: [`EXECUTION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#EXECUTION_NAME) | Optional name of the execution. |  | String |
 | **CamelAwsStepFunctionsExecutionInput** (producer) Constant: [`EXECUTION_INPUT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#EXECUTION_INPUT) | The string that contains the JSON input data for the execution. |  | String |
