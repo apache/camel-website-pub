@@ -45,7 +45,12 @@ The file cluster service could further be tuned by tweaking `quarkus.camel.clust
   
 | Configuration property | Type | Default |
 | --- | --- | --- |
+| `[quarkus.camel.cluster.file.enabled](#quarkus-camel-cluster-file-enabled)`
+Whether a File Lock Cluster Service should be automatically configured according to 'quarkus.camel.cluster.file.\*' configurations.
+
+ | `boolean` | `true` |
 | `[quarkus.camel.cluster.file.id](#quarkus-camel-cluster-file-id)`
+
 The cluster service ID (defaults to null).
 
  | `string` |  |
@@ -95,10 +100,5 @@ Sets the timeout for a cluster data task (reading or writing cluster data). The 
 Timeouts are useful when the cluster data root is on network storage, where I/O operations may occasionally block for long or unpredictable periods.
 
  | `string` |  |
-| `[quarkus.camel.cluster.file.enabled](#quarkus-camel-cluster-file-enabled)`
-
-Whether a File Lock Cluster Service should be automatically configured according to 'quarkus.camel.cluster.file.\*' configurations.
-
- | `boolean` | `true` |
 
 Configuration property fixed at build time. All other configuration properties are overridable at runtime.

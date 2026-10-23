@@ -266,11 +266,6 @@ This allows CDI observers to be configured for Camel events. E.g. those belongin
 Note that this configuration item only has any effect when observers configured for Camel events are present in the application.
 
  | `boolean` | `true` |
-| `[quarkus.camel.source-location-enabled](#quarkus-camel-source-location-enabled)`
-
-Build time configuration options for enable/disable camel source location.
-
- | `boolean` | `false` |
 | `[quarkus.camel.dev-ui.update-interval](#quarkus-camel-dev-ui-update-interval)`
 
 The interval at which data is updated in Camel Quarkus Dev UI pages.
@@ -291,96 +286,6 @@ The action to take when `CamelMain` encounters an unknown argument. fail - Print
 When set to true, the {@link CamelRuntime} will be started automatically.
 
  | `boolean` | `true` |
-| `[quarkus.camel.routes-discovery.enabled](#quarkus-camel-routes-discovery-enabled)`
-
-Enable automatic discovery of routes during static initialization.
-
- | `boolean` | `true` |
-| `[quarkus.camel.trace.enabled](#quarkus-camel-trace-enabled)`
-
-Enables tracer in your Camel application.
-
- | `boolean` | `false` |
-| `[quarkus.camel.trace.standby](#quarkus-camel-trace-standby)`
-
-To set the tracer in standby mode, where the tracer will be installed, but not automatically enabled. The tracer can then be enabled explicitly later from Java, JMX or tooling.
-
- | `boolean` | `false` |
-| `[quarkus.camel.trace.backlog-size](#quarkus-camel-trace-backlog-size)`
-
-Defines how many of the last messages to keep in the tracer.
-
- | `int` | `1000` |
-| `[quarkus.camel.trace.remove-on-dump](#quarkus-camel-trace-remove-on-dump)`
-
-Whether all traced messages should be removed when the tracer is dumping. By default, the messages are removed, which means that dumping will not contain previous dumped messages.
-
- | `boolean` | `true` |
-| `[quarkus.camel.trace.body-max-chars](#quarkus-camel-trace-body-max-chars)`
-
-To limit the message body to a maximum size in the traced message. Use 0 or negative value to use unlimited size.
-
- | `int` | `131072` |
-| `[quarkus.camel.trace.body-include-streams](#quarkus-camel-trace-body-include-streams)`
-
-Whether to include the message body of stream based messages. If enabled then beware the stream may not be re-readable later. See more about Stream Caching.
-
- | `boolean` | `false` |
-| `[quarkus.camel.trace.body-include-files](#quarkus-camel-trace-body-include-files)`
-
-Whether to include the message body of file based messages. The overhead is that the file content has to be read from the file.
-
- | `boolean` | `true` |
-| `[quarkus.camel.trace.include-exchange-properties](#quarkus-camel-trace-include-exchange-properties)`
-
-Whether to include the exchange properties in the traced message.
-
- | `boolean` | `true` |
-| `[quarkus.camel.trace.include-exchange-variables](#quarkus-camel-trace-include-exchange-variables)`
-
-Whether to include the exchange variables in the traced message.
-
- | `boolean` | `true` |
-| `[quarkus.camel.trace.include-exception](#quarkus-camel-trace-include-exception)`
-
-Whether to include the exception in the traced message in case of failed exchange.
-
- | `boolean` | `true` |
-| `[quarkus.camel.trace.trace-rests](#quarkus-camel-trace-trace-rests)`
-
-Whether to trace routes that is created from Rest DSL.
-
- | `boolean` | `false` |
-| `[quarkus.camel.trace.trace-templates](#quarkus-camel-trace-trace-templates)`
-
-Whether to trace routes that is created from route templates or kamelets.
-
- | `boolean` | `false` |
-| `[quarkus.camel.trace.trace-pattern](#quarkus-camel-trace-trace-pattern)`
-
-Filter for tracing by route or node id.
-
- | `string` |  |
-| `[quarkus.camel.trace.trace-filter](#quarkus-camel-trace-trace-filter)`
-
-Filter for tracing messages.
-
- | `string` |  |
-| `[quarkus.camel.trace.activity-enabled](#quarkus-camel-trace-activity-enabled)`
-
-Whether activity tracking is enabled. Activity tracking captures a rolling window of completed exchange summaries with enriched span decorator attributes (e.g. Kafka topic, HTTP method, SQL query).
-
- | `boolean` | `false` |
-| `[quarkus.camel.trace.activity-size](#quarkus-camel-trace-activity-size)`
-
-The maximum number of completed exchange summaries to keep in the activity queue. The valid range is 1 to 1000.
-
- | `int` | `100` |
-| `[quarkus.camel.type-converter.statistics-enabled](#quarkus-camel-type-converter-statistics-enabled)`
-
-Whether type converter statistics are enabled. By default, type converter utilization statistics are disabled. Note that enabling statistics incurs a minor performance impact under very heavy load.
-
- | `boolean` | `false` |
 
 Configuration property fixed at build time. All other configuration properties are overridable at runtime.
 

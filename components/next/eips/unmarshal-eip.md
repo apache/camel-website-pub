@@ -102,7 +102,7 @@ from("file:inbox/xml")
 
 ## Allow Null Body
 
-Sometimes, there are situations where `null` can be a normal value for the body of a message but `null` by default is not an accepted value to unmarshal. To work around that, it is possible to allow `null` as value to a body to unmarshall using the option `allowNullBody` as shown in the next code snippets:
+Sometimes, there are situations where `null` can be a normal value for the body of a message but `null` by default is not an accepted value to unmarshal. To work around that, it is possible to allow `null` as value to a body to unmarshall using the option `allowNullBody` as shown in the next code snippets. A `null` body then skips the unmarshalling and leaves the message as it is, as `marshal` does; with `variableReceive`, that variable is set to `null`.
 
 -   Java
     

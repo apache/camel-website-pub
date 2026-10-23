@@ -127,6 +127,8 @@ camel get route
 
 Use `--remote` to break down TOTAL, FAILED and INFLIGHT into remote/total pairs: the exchanges that came from a remote endpoint, such as Kafka or HTTP, of all the exchanges of the route. A route with a remote consumer has only remote exchanges, and a route such as `direct:audit` has the remote exchanges of the routes that call it. The same works with `camel get processor --remote` and `camel top route --remote`, and the JSON of these commands has the remote counters as `remoteTotal`, `remoteFailed` and `remoteInflight`.
 
+Use `--checksum` to show the [checksum and revision](routes.html#_route_checksum_and_revision) of each route. The checksum is the same in every run while the route is not changed, so comparing it with an earlier run tells which routes changed; the revision counts the times a reload changed the route since the integration started. The JSON output (`--json`) always has them, as `checksum` and `revision`.
+
 > **Tip**
 > Run `camel get --help` to see all available sub-commands.
 

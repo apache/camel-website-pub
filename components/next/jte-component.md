@@ -157,6 +157,8 @@ You can set up your custom JTE data model in the message header with the key "**
 
 Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
+Each distinct template text from the `CamelJteTemplate` header is compiled once, and the compiled template is kept until the component stops. So the templates in this header should come from a small, known set.
+
 ## Examples
 
 For example, you could use something like:

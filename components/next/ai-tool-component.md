@@ -76,6 +76,7 @@ The AI Tool component supports the following options which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **argSchema** (consumer) | Raw JSON Schema for tool input parameters. Supports inline JSON and resource references (classpath:, file:, resource:). Mutually exclusive with the parameter multi-value options. Use for nested objects, arrays, oneOf, and other complex schemas. |  | String |
+| **argumentsAsBody** (consumer) | Whether to populate the message body with the tool arguments as a JSON string, excluding undeclared arguments and reserved names. Declared argument headers remain available. When disabled, the message body is left unchanged. | false | boolean |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **configuration** (consumer) | The component configuration. |  | AiToolConfiguration |
 | **description** (consumer) | Human-readable description of what this tool does. Passed verbatim to the LLM; be precise and action-oriented. When omitted, defaults to the tool name. |  | String |
@@ -113,6 +114,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **argSchema** (consumer) | Raw JSON Schema for tool input parameters. Supports inline JSON and resource references (classpath:, file:, resource:). Mutually exclusive with the parameter multi-value options. Use for nested objects, arrays, oneOf, and other complex schemas. |  | String |
+| **argumentsAsBody** (consumer) | Whether to populate the message body with the tool arguments as a JSON string, excluding undeclared arguments and reserved names. Declared argument headers remain available. When disabled, the message body is left unchanged. | false | boolean |
 | **description** (consumer) | Human-readable description of what this tool does. Passed verbatim to the LLM; be precise and action-oriented. When omitted, defaults to the tool name. |  | String |
 | **destructiveHint** (consumer) | MCP hint that the tool may perform destructive or irreversible updates. Advisory for MCP clients; not enforced by Camel. | false | Boolean |
 | **idempotentHint** (consumer) | MCP hint that repeating the tool call with the same arguments has no additional effect. Advisory for MCP clients; not enforced by Camel. | false | Boolean |
@@ -142,6 +144,16 @@ Enum values:
 
  |  | ExchangePattern |
 | **authorizationPolicy** (security) | Reference to an org.apache.camel.spi.AuthorizationPolicy used to authorize tool calls before the route runs. Set it on the component to guard every tool route by construction, or per endpoint to override. The policy authorizes on trustworthy input only: the tool name comes from the route (never from model output), and the caller identity is carried as an exchange property set before the agent ran (for example by camel-spiffe or camel-keycloak), which the model cannot set. Authorize on exchange properties or validated tokens only, never on message headers (on a tool route the headers carry the model-controlled tool arguments). A denied call surfaces to the model as a short refusal rather than a stack trace. |  | AuthorizationPolicy |
+
+## Message Headers
+
+The AI Tool component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelAiToolCallId** (consumer) Constant: [`TOOL_CALL_ID`](https://javadoc.io/doc/org.apache.camel/camel-ai-tool/latest/org/apache/camel/component/ai/tool/AiToolConstants.html#TOOL_CALL_ID) | The tool invocation identifier supplied by the calling framework. Absent when the framework does not supply one. |  | String |
+| **CamelAiToolConversationId** (consumer) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-ai-tool/latest/org/apache/camel/component/ai/tool/AiToolConstants.html#CONVERSATION_ID) | The conversation identifier supplied by the calling framework. Absent when the framework does not supply one. |  | String |
 
 ## Usage
 
@@ -371,6 +383,52 @@ from("ai-tool:delete_order?tags=orders&description=Delete an order"
 Supported options: `title`, `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`, and `returnDirect`. When a hint is omitted, it is not published; MCP clients then apply their own defaults (for example assuming destructive/open-world unless told otherwise). The `returnDirect` hint is also honoured by AI producers such as [OpenAI](../4.22.x/openai-component.md) when route tools are exposed via the `tags` option.
 
 The `title` option maps to the MCP tool’s top-level `title` field (not `ToolAnnotations.title`). Boolean hint options use nullable configuration: when unset, Camel omits them from the published MCP tool even though the component catalog may list `defaultValue: false` for documentation tooling.
+
+### Tool Arguments in the Body
+
+By default, tool arguments are exposed as individual headers and the message body is left unchanged. Set `argumentsAsBody=true` to also populate the body with a JSON string containing the tool-call arguments. This is useful when mapping a complete JSON document, for example with Kaoto Data Mapper.
+
+```yaml
+- route:
+    from:
+      uri: ai-tool:place_order
+      parameters:
+        description: Place a merchandise order
+        argSchema: classpath:place-order.args.schema.json
+        argumentsAsBody: true
+      steps:
+        - to:
+            uri: direct:mapOrder
+```
+
+For a tool call with a customer name and two items, `direct:mapOrder` receives this JSON-string body:
+
+```json
+{
+  "customerName": "Alice",
+  "items": [
+    { "sku": "TSHIRT", "quantity": 2 },
+    { "sku": "MUG", "quantity": 1 }
+  ]
+}
+```
+
+Nested objects, arrays and JSON value types are preserved. A call with no arguments produces `{}`. The body and individual argument headers include only declared arguments, after the same allowlist filtering. Camel logs a warning for each undeclared argument. Reserved names starting with `camel` or `org.apache.camel.` (case-insensitive) are excluded from both the body and argument headers. Missing required arguments still reject an invocation before the tool route runs. Required arguments are checked after reserved names are removed, so a required argument with a reserved name rejects the call even if the model supplied it. Rename such arguments to use names outside the reserved namespace. This option does not add full JSON Schema validation.
+
+### Invocation Identifiers
+
+Tool routes receive `CamelAiToolCallId` and `CamelAiToolConversationId` when the calling adapter can supply them. These headers are populated independently of `argumentsAsBody`. An unavailable identifier is omitted rather than generated.
+
+-   LangChain4j Agent supplies the tool execution request ID and the memory ID (converted to a string) as the conversation ID when the agent uses memory. Agents without memory omit the conversation header, including the framework’s default memory ID.
+    
+-   OpenAI supplies the tool-call ID. The Responses API also supplies its resolved conversation ID (`CamelOpenAIConversationId` or the `conversationId` option); chat-completion callbacks omit it.
+    
+-   Spring AI Chat supplies the `CamelSpringAiChatConversationId` from the calling exchange. Its tool callback does not supply a call ID.
+    
+-   MCP server tool callbacks currently do not propagate these identifiers.
+    
+
+For example, use `${header.CamelAiToolCallId}` to correlate route processing with a particular tool invocation. Several calls in the same conversation can share `CamelAiToolConversationId` while having different call IDs.
 
 ### Tag-Based Discovery
 

@@ -361,6 +361,7 @@ Every release of every Camel project, newest first. Supported releases are on th
 
 | Version | Release date | Description |
 | --- | --- | --- |
+| [4.23.0](../releases/kamelets-4.23.0/) | 2026-10-23 |  |
 | [4.22.1](../releases/kamelets-4.22.1/) | 2026-09-21 |  |
 | [4.22.0](../releases/kamelets-4.22.0/) | 2026-08-29 |  |
 | [4.18.3](../releases/kamelets-4.18.3/) | 2026-07-17 |  |

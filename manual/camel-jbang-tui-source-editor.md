@@ -6,6 +6,8 @@ The Source tab (**2**) of the [Camel TUI](camel-jbang-tui.md) is where you read 
 
 -   [**Live run data**](#_live_run_data) — the exchanges and failures of each line of the running integration, next to the code.
     
+-   [**Running as saved**](#_running_as_saved) — whether the integration runs the file as it is saved, or needs a restart.
+    
 -   [**Problems as you type**](#_problems_as_you_type) — endpoint options, Simple expressions and more are checked as soon as a file opens and while you type, in YAML, Java and XML routes; a YAML or XML file with problems is not saved.
     
 -   [**Quick fixes**](#_quick_fixes) — **Shift+F9** applies the fix a problem names, such as an option typo.
@@ -42,6 +44,23 @@ While the integration runs, a column after the line numbers shows what the proce
 In the example the timer fired 227 times; the `filter` let 137 of those through to `log:big`, and 27 orders failed at `throwException`. You see this without leaving the code, and without adding a single log statement.
 
 The column keeps its width, so the code does not move as the numbers grow. It works for YAML, Java and XML routes, as `camel run` records the source line of every processor.
+
+## Running as Saved
+
+The bottom border of the source says whether the integration runs the routes of the file as it is saved:
+
+-   `● running as saved` — the integration loaded the file after it was last saved.
+    
+-   `○ reloading…​` — the file was saved a moment ago, and the integration runs in dev mode, which reloads it.
+    
+-   `○ not running yet` — the file was saved after the integration loaded it. An integration that runs without `--dev` does not reload a file when it is saved: restart it. The log of one in dev mode says why it did not reload the file.
+    
+-   `⚠ the reload failed` — the integration runs the routes it ran before the reload, until a reload succeeds.
+    
+
+![The bottom border of an edited route file: the integration runs without --dev](_images/jbang/camel-tui-source-running-as-saved.png)
+
+The Source tab compares when the file was saved with when the integration loaded the routes it has from the file, and shows nothing for a file it has no route from. It does not load the file itself, as loading a route file runs parts of it, such as creating its beans. Edits not saved yet are not part of it: the title of the editor marks them with `*`. To compare a file with the running routes one by one, `camel cmd route-structure <file>` gives the checksum of each route of the file, and `camel get route --checksum` the checksum of each running route.
 
 ## Problems as You Type
 

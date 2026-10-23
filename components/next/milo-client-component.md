@@ -120,7 +120,7 @@ The OPC UA Client component supports the following options which are listed belo
 | **overrideHost** (client) | Override the server reported endpoint host with the host from the endpoint URI. | false | boolean |
 | **overridePort** (client) | Override the server reported endpoint port with the port from the endpoint URI. | false | boolean |
 | **productUri** (client) | The product URI. | [http://camel.apache.org/EclipseMilo](http://camel.apache.org/EclipseMilo) | String |
-| **reconnectTimeout** (client) | The delay in milliseconds before the client tries again to connect to the server after an attempt failed. It is not used while the OPC UA client recovers a lost session on its own. | 10000 | long |
+| **reconnectTimeout** (client) | The delay in milliseconds before the client tries again to connect to the server after an attempt failed, and between two attempts to create the monitored items that the server refused. Neither attempt is made while the OPC UA client recovers a lost session on its own. | 10000 | long |
 | **requestedPublishingInterval** (client) | The requested publishing interval in milliseconds. | 1\_000.0 | Double |
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
@@ -227,7 +227,7 @@ Enum values:
 | **overrideHost** (client) | Override the server reported endpoint host with the host from the endpoint URI. | false | boolean |
 | **overridePort** (client) | Override the server reported endpoint port with the port from the endpoint URI. | false | boolean |
 | **productUri** (client) | The product URI. | [http://camel.apache.org/EclipseMilo](http://camel.apache.org/EclipseMilo) | String |
-| **reconnectTimeout** (client) | The delay in milliseconds before the client tries again to connect to the server after an attempt failed. It is not used while the OPC UA client recovers a lost session on its own. | 10000 | long |
+| **reconnectTimeout** (client) | The delay in milliseconds before the client tries again to connect to the server after an attempt failed, and between two attempts to create the monitored items that the server refused. Neither attempt is made while the OPC UA client recovers a lost session on its own. | 10000 | long |
 | **requestedPublishingInterval** (client) | The requested publishing interval in milliseconds. | 1\_000.0 | Double |
 | **requestTimeout** (client) | Request timeout in milliseconds. |  | Long |
 | **sessionName** (client) | Session name. |  | String |
@@ -331,7 +331,9 @@ A string node ID that contains a comma cannot be used in `nodes`; monitor it wit
 
 All nodes of the list share the `samplingInterval`, `queueSize` and `omitNullValues` options of the consumer and its monitor filter (`monitorFilterType`, `dataChangeFilter*`). Tags that need a different sampling interval or deadband need a consumer of their own.
 
-A node that does not exist on the server does not affect the other nodes. A node that cannot be monitored is reported once with its status code, and Camel tries to create its monitored item again every 10 seconds while the connection lasts, for all such nodes of the connection in one request. A failed attempt delivers nothing; once the item is created, the node delivers its current value as its first value. This covers a node that is added to the server later, for example with a new PLC program, and a server that refused the item because it had too many. A rebuilt connection creates the monitored items of all nodes again, and a stopped consumer is not retried. A node whose namespace URI (`nsu=`) is not in the namespace table of the server is reported and retried in the same way, so a namespace that the server adds later is found. The consumer delivers one exchange with the bad status code for such a node, and the `CamelMiloNodeId` header names it.
+A node that does not exist on the server does not affect the other nodes. A node that cannot be monitored is reported once with its status code, and Camel tries to create its monitored item again every `reconnectTimeout` (10 seconds by default) while the connection lasts, for all such nodes of the connection in one request. A failed attempt delivers nothing; once the item is created, the node delivers its current value as its first value. This covers a node that is added to the server later, for example with a new PLC program, and a server that refused the item because it had too many. A rebuilt connection creates the monitored items of all nodes again, and a stopped consumer is not retried. A node whose namespace URI (`nsu=`) is not in the namespace table of the server is reported and retried in the same way, so a namespace that the server adds later is found. The consumer delivers one exchange with the bad status code for such a node, and the `CamelMiloNodeId` header names it.
+
+The `milo-client` developer console (`/q/dev/milo-client`, for example with `camel run --console`) shows which nodes are not monitored: for each connection of the consumers, it lists the routes that use it, whether its session is active, the number of monitored nodes, and the refused nodes, each with the status of the latest attempt to create its monitored item. Reading it does not wait for a request to the server in progress.
 
 ### Status codes and null values
 

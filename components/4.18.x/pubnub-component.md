@@ -198,7 +198,7 @@ Enum values:
 
 ## Message Headers
 
-The PubNub component supports 4 message header(s), which is/are listed below:
+The PubNub component supports 5 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -206,6 +206,7 @@ The PubNub component supports 4 message header(s), which is/are listed below:
 | **CamelPubNubOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#OPERATION) | The operation to perform. |  | String |
 | **CamelPubNubTimeToken** (common) Constant: [`TIMETOKEN`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#TIMETOKEN) | The Timestamp for the event. |  | Long |
 | **CamelPubNubChannel** (consumer) Constant: [`CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#CHANNEL) | The channel for which the message belongs. |  | String |
+| **CamelPubNubOverrideChannel** (producer) Constant: [`OVERRIDE_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#OVERRIDE_CHANNEL) | The channel to use instead of the channel configured on the endpoint. |  | String |
 | **CamelPubNubUUID** (producer) Constant: [`UUID`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#UUID) | UUID to be used as a device identifier. |  | String |
 
 ## Usage

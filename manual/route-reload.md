@@ -59,6 +59,19 @@ When using route reload, then it is recommended to assign id’s to your routes,
 
 And adding new routes is therefore possible as they would have a new unique route id specified.
 
+### Which routes changed
+
+The summary that is logged after a reload says how many of the reloaded routes changed, and marks each one: a route that came back with another [checksum](routes.html#_route_checksum_and_revision) is `(changed)`, and a route that was not there before is `(new)`. A route that is saved again as it was is not marked.
+
+```text
+Routes reloaded summary (total:3 started:3 changed:2)
+    Started orders (direct://orders) (source: orders.yaml:3) (changed)
+    Started stock (direct://stock) (source: orders.yaml:9)
+    Started audit (direct://audit) (source: orders.yaml:14) (new)
+```
+
+The revision of a route counts the times a reload changed it in this run.
+
 ### Live reload of resource files
 
 In addition to reloading routes, when `routesReloadEnabled=true` Camel also disables the `contentCache` option on resource-based components (such as `xslt`) whose default is `true`. This way, edits to resource files are picked up on the next message without having to restart the route.

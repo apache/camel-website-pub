@@ -111,4 +111,4 @@ To go native, you will need to follow the [Quarkus guide to write native extensi
 
 ## Camel textual debug configuration
 
-In case, you are using a profile for the Camel textual debug, you need to modify the quarkus-maven-plugin in this profile to add the following jvm arguments: `-Dcamel.main.shutdownTimeout=30 -Dquarkus.camel.source-location-enabled=true`.
+In case, you are using a profile for the Camel textual debug, you need to modify the quarkus-maven-plugin in this profile to add the following jvm arguments: `-Dcamel.main.shutdownTimeout=30 -Dcamel.main.sourceLocationEnabled=true`.

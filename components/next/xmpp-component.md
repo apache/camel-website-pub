@@ -147,6 +147,10 @@ The XMPP component supports the following message header(s), which is/are listed
 
 ## Usage
 
+### Connections
+
+The consumers and producers of one account (the same host, port, service name, user, password, resource and login settings) share one XMPP connection, also across endpoints with different participants or rooms. With the `connectionConfig` option, endpoints share a connection only when they refer to the same `ConnectionConfiguration` instance, for example the same bean in the registry, because that class has no `equals()`.
+
 ### Headers and setting Subject or Language
 
 Camel sets the message IN headers as properties on the XMPP message. You can configure a `HeaderFilterStategy` if you need custom filtering of headers. The **Subject** and **Language** of the XMPP message are also set if they are provided as IN headers.

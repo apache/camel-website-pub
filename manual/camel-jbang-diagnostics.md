@@ -153,6 +153,15 @@ camel cmd route-structure myApp --description
 
 Give a source file instead of a running integration to see the structure without running it. A Java source file is read by the Java DSL parser, without compiling it; use `--compile` to compile it instead. `--brief` shortens each node, and `--description` shows the description of each node instead of its code.
 
+Each route has its [checksum](routes.html#_route_checksum_and_revision) under its source, from a running integration and from a source file alike: a route read from its file has the same checksum as when it runs, until it is changed. Compare it with `camel get route --checksum` to tell whether the routes that run are the ones in the file. A Java source file read without compiling it has the checksum only when the parser read all of it (else use `--compile`).
+
+```text
+Source: orders.camel.yaml
+Checksum: aa4535cb1725
+--------------------------------------------------------------------------------
+   4: route[orders]
+```
+
 #### Body types
 
 When the integration runs with the message history on, such as with `camel run --dev`, each step also shows the body types it has been reached with, across the messages:

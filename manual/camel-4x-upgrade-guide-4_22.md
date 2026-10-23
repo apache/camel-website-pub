@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.22.2 to 4.22.3
 
+### camel-ai-tool - required arguments with reserved names reject the call
+
+Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
+
 ### camel-azure-eventhubs - an event that completes when the checkpoint timer of its window has run is checkpointed
 
 With `checkpointBatchTimeout`, the consumer now starts a new checkpoint window when the timer of the current window has run, and no longer when the wall clock passes the time the timer was scheduled for. Before, an event that completed in the millisecond in which the timer ran (or while the timer was taking the count) was counted in the window whose count had already been taken: it was checkpointed only with the next event, and when the partition stayed quiet it was delivered again after a restart.
@@ -110,6 +114,18 @@ The undertow producer writes the path, query and header values of the outgoing r
 When `pollEnrich` (or `poll`) times out and no `aggregationStrategy` is configured, the body is set to `null`, and with `variableReceive` the variable is `null`. For a message that creates its body on demand, the `null` did not stick: the next read created the body again. The message of a file consumer creates its body from its file, so after a timeout the body, or the variable of `variableReceive`, was the file of the incoming exchange instead of `null`. The messages of the JMS, sjms, mail, HTTP, XMPP, SMPP, SNMP and Spring WS consumers create their body on demand as well, so there it was the payload of the consumer again.
 
 The body, or the variable, is now `null` after a timeout for these consumers too. A route that read the incoming file or payload from the body after a timed out `pollEnrich` must keep it before the `pollEnrich` instead, for example with `variableReceive`, which leaves the body as it was. To keep the body empty, the message is replaced by a plain message with the same message id, headers and attachments, so after a timeout it is no longer of the message type of the consumer (such as `GenericFileMessage` or `JmsMessage`).
+
+### camel-pubnub - the producer uses its configured channel
+
+The pubnub producer no longer reads the `CamelPubNubChannel` header. This header is set by the pubnub consumer to the channel a message was received on, and the producer used it instead of the channel configured on its endpoint, so a route from one pubnub endpoint to another sent each message back to the channel it came from. The producer now uses the channel of its endpoint, for every operation. To choose a different channel for a message, set the new `CamelPubNubOverrideChannel` header (`PubNubConstants.OVERRIDE_CHANNEL`). Routes that set `CamelPubNubChannel` to pick the channel of a pubnub producer must set `CamelPubNubOverrideChannel` instead.
+
+### camel-pqc - message bodies are signed and verified over their bytes
+
+The `sign`, `verify`, `hybridSign` and `hybridVerify` operations now read a `java.io.File` or `java.nio.file.Path` body, and a file from a file consumer (a `GenericFile` body), as bytes from the file, the same way as a `byte[]` or `InputStream` body. A `String` (or any `CharSequence`) body is encoded as UTF-8, and any other body that has a binary type converter (for example a `java.nio.ByteBuffer`, a `java.io.ByteArrayOutputStream`, a Netty `ByteBuf` or a Vert.x `Buffer`) is signed over those bytes.
+
+A body with no binary representation (for example a `Map` or a POJO) is no longer signed over its `toString()`: it is now rejected with an `InvalidPayloadException`. Convert such a body to a `String`, `byte[]` or other binary type earlier in the route.
+
+Signatures created by earlier versions over a `File`, `Path`, `GenericFile` or other non-`byte[]`/`InputStream` body may not verify and need to be created again.
 
 ## Upgrading from 4.22.1 to 4.22.2
 

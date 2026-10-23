@@ -148,6 +148,16 @@ The arrows of a branch are side by side, so the types beside them are cut to the
 
 ![The Routes tab: the orders route has four steps reached with bodies of more than one kind](_images/jbang/camel-tui-routes-body-types.png)
 
+### Checksum and Revision
+
+The Info panel of a route in the topology has its checksum: a short hash of the route as written, the same in every run (see [Route Checksum and Revision](routes.html#_route_checksum_and_revision)). `camel cmd route-structure` gives the checksum of the routes of a source file without running them, so you can tell whether a file has the route that runs. A route added again changed in this run, such as by a reload of its file, has its revision under it (`Revision: 3 · 2 changes`), and the Routes tab has it after the id of the route, dimmed: `orders (rev 3)`.
+
+![The Info panel of the orders route in the topology: its checksum](_images/jbang/camel-tui-diagram-route-revision.png)
+
+![The Routes tab: the orders route is at revision 3](_images/jbang/camel-tui-routes-revision.png)
+
+An integration of a Camel version before 4.24, or without camel-xml-io, has neither: `camel run` always has camel-xml-io, while a Spring Boot or Quarkus application may not.
+
 ## Keyboard Shortcuts
 
 ### Diagram Tab

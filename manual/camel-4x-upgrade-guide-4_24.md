@@ -7,9 +7,17 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.23 to 4.24
 
+### camel-ai-tool - required arguments with reserved names reject the call
+
+Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
+
 ### Java
 
 **Breaking change:** Camel 4.24 requires **Java 21** as the minimum runtime version. Java 17 is no longer supported. Upgrade your JDK to 21 or later before upgrading to Camel 4.24.
+
+### camel-core - Package scanning of JARs no longer includes sibling packages
+
+When scanning classes in a package (for example `camel.main.base-package-scan=com.acme.routes`, or `PackageScanClassResolver.findImplementations`), classes found in a JAR were also included when they belonged to a sibling package whose name merely started with the scanned package name, such as `com.acme.routesupport` or `com.acme.routes2`. Scanning a directory on the classpath never did this. Both now only include the scanned package and its sub packages, so a `RoutesBuilder` or `@Configuration` class in such a sibling package is no longer discovered when running from a JAR; list that package explicitly if it should be scanned.
 
 ### camel-core - Route.clearRouteModel() is deprecated
 
@@ -112,6 +120,10 @@ See the [Kubernetes client 8 migration guide](https://github.com/fabric8io/kuber
 ### camel-gson, camel-jsonb - the unmarshal type header needs allowUnmarshallType
 
 The Gson and JSON-B data formats now use the `CamelGsonUnmarshalType` and `CamelJsonbUnmarshallType` headers to choose the class to unmarshal to only when the new `allowUnmarshallType` option is enabled, as the Jackson data formats do with `CamelJacksonUnmarshalType`. By default the headers are ignored, and the configured `unmarshalType` is used (a `Map` for a JSON object when none is configured). A route that sets the header must enable the option, for example with `.unmarshal(new JsonDataFormat(JsonLibrary.Gson).allowUnmarshallType(true))` or `<json library="Gson" allowUnmarshallType="true"/>`.
+
+### camel-google-mail, camel-google-drive, camel-google-calendar, camel-google-sheets - one API client per endpoint
+
+The `google-mail`, `google-mail-stream`, `google-drive`, `google-calendar`, `google-calendar-stream`, `google-sheets` and `google-sheets-stream` components now create one API client per endpoint, from the options of that endpoint (`clientId`, `clientSecret`, `refreshToken`, `accessToken`, `serviceAccountKey`, `delegate`, `scopes` and `applicationName`, plus `emailAddress`, `p12FileName` and `user` on the two calendar components), instead of a single client per component that every endpoint of the component shared. Each endpoint keeps its client for its lifetime. The `clientFactory` option of a `google-drive` endpoint is now used to create the client of that endpoint. In addition, a `google-mail-stream` endpoint configured with neither `clientSecret` nor `serviceAccountKey` now fails with an `IllegalArgumentException` when its client is created, instead of getting a `null` client and failing at the first API call. The `google-mail:update-message-labels` data type transformer now uses a client created from the component-level configuration (the `camel.component.google-mail.*` options), kept until the component stops. Before, it used whichever client the component had already created, for example the one of a `google-mail:messages/modify` endpoint, so credentials set only on an endpoint URI no longer reach the transformer: set them on the component as well.
 
 ### camel-jbang - camel validate and camel overview report the same endpoints no route consumes
 
@@ -633,6 +645,10 @@ A message that the route marks rollback only every time was removed before, and 
 
 A Hazelcast transaction can only be committed or rolled back by the thread that began it. When the route of a transacted (`transacted=true`) Hazelcast SEDA consumer continued on another thread (an asynchronous producer, or `threads()`), the consumer tried to commit or roll back the transaction on that thread, which failed with `Transaction cannot span multiple threads!` (logged as a WARN and ignored). The message was neither removed nor put back: a failed message was not taken again, and the messages, also the processed ones, were put back into the queue when the application left the Hazelcast cluster, so they were consumed again. Now the consumer thread waits for the exchange to complete and ends the transaction itself, so it takes the next message only then; use `concurrentConsumers` to process several messages at the same time. The exchange must complete within the Hazelcast transaction timeout (2 minutes by default, `TransactionOptions`): when it takes longer, the commit fails with `TransactionTimedOutException`, which is logged at ERROR, the transaction is rolled back and the message is consumed again, also when the route succeeded.
 
+### camel-hazelcast - the reliable topic consumer goes on after it lost messages
+
+A `hazelcast-topic` consumer with `reliable=true` that fell behind the ringbuffer of the reliable topic (messages overwritten, or expired by its time to live, before the consumer read them) stopped receiving messages for good, while the route stayed started: Hazelcast removed its listener. The consumer now skips the lost messages, logs a WARN with their number, and goes on with the oldest message still in the ringbuffer. When Hazelcast cancels the listener for another reason, such as a destroyed topic, the consumer reports it to its exception handler (logged at WARN by default); restart the route to receive messages again. A listener cancelled because the Hazelcast instance or the CamelContext is shutting down is only logged at DEBUG.
+
 ### camel-sql, camel-mybatis, camel-jooq - an exchange marked rollback only last is not consumed either
 
 The SQL, MyBatis and jOOQ consumers already left a message unconsumed when the route marked the exchange rollback only with `markRollbackOnly()`. They now leave it unconsumed when the route marks it rollback only last with `markRollbackOnlyLast()` too, as the JPA and Hazelcast SEDA consumers do: the SQL consumer runs its `onConsumeFailed` statement instead of `onConsume` (and no statement when `onConsumeFailed` is not set), the MyBatis consumer does not run its `onConsume` statement, and the jOOQ consumer does not delete the entity, so the next poll reads the row again. With `transacted=true` the SQL and MyBatis consumers break out of the batch and roll back. `markRollbackOnlyLast()` reaches the consumer only when no `transacted()` EIP has consumed the flag, so the consumer’s own transaction is the last one.
@@ -683,6 +699,14 @@ The `messageExpiry` option is in seconds, but its value was passed unchanged to 
 A poll of the `newIssues` consumer read only the newest `maxResults` (default 50) of the issues created since the previous poll, and the older ones were never consumed. A poll now reads every page of the search and can route more than `maxResults` issues; `maxResults` is the page size of that search (at most 50). There is no upper bound, so the first poll after a long outage or a large import can send many search requests and route many issues in one batch.
 
 On Jira Cloud the Jira consumers now read the pages of a search with the next page token, as Jira Cloud cannot page by start index: with `maxResults` above 50, a search with more than 50 results failed on the second page with `UnsupportedOperationException`.
+
+### camel-netty-http - an ambiguous request path is rejected when a security constraint is configured
+
+A `netty-http` consumer configured with a `securityConstraint` now rejects, with HTTP 400, a request whose path contains `.` or `..` segments (including their percent-encoded `%2e` form). Such a path is ambiguous: the security constraint, the consumer dispatch and the route may each interpret it differently, so with `matchOnUriPrefix=true` and a specific inclusion such as `/admin/*`, a request like `/foo/../admin/x` (or its encoded `/foo/%2e%2e/admin/x` form) could be matched against the inclusions and exclusions in a different form than the one the route handles. Rejecting it up front keeps the constraint decision and the routed path consistent. A well-behaved HTTP client normalizes dot-segments before sending, so normal traffic is unaffected.
+
+For the same reason, such a consumer also rejects with HTTP 400 a request whose path contains an empty segment (`//`), a `;` path parameter (also as `%3b`) or a `\` (also as `%5c`). A backend the route forwards the request to may collapse the empty segment, strip the path parameter or treat the backslash as a `/`, and so act on a different path than the one the constraint was checked against. A route that needs matrix parameters (`;`) must not configure a `securityConstraint` on the same consumer.
+
+This applies only when a `securityConstraint` is configured; a consumer without one is unchanged, and continues to receive the request path as sent.
 
 ### camel-hashicorp-vault - properties without engine use the `secret` engine
 
@@ -747,7 +771,7 @@ When the endpoint it selects uses a security policy other than `None`, the `milo
 
 Configure the trusted certificates with the new `trustListDirectory` option: put the certificate of the server, or of the CA that issued it, in the `trusted/certs` directory of the trust list. A server certificate that does not chain up to a trusted certificate is written to `rejected/certs`, from where it can be moved to `trusted/certs` once it has been checked. The trust list also refuses a server certificate outside its validity period, revoked by a revocation list of the trust list, or whose application URI differs from the one of the server. A server certificate issued by a CA is refused with `Bad_CertificateRevocationUnknown` when the trust list holds no revocation list of that CA: add the CRL of the CA (an empty one is enough) to `trusted/crl` or `issuer/crl`. A custom validator can be configured with the new `certificateValidator` option instead.
 
-With neither option, the client does not connect to such an endpoint. It logs a `WARN` message `Failed to connect: The certificate of the OPC UA server cannot be validated`, followed by the endpoint and its security policy, and tries again every 10 seconds. A producer fails with `IllegalStateException: No connected`, caused by the same message. A server certificate refused by the trust list or by a `certificateValidator` is logged at `WARN` as `Failed to connect, because a certificate or security check failed`. To restore the previous behaviour, set the new `trustAllCertificates` option to `true`. This is insecure: the client then does not authenticate the server.
+With neither option, the client does not connect to such an endpoint. It logs a `WARN` message `Failed to connect: The certificate of the OPC UA server cannot be validated`, followed by the endpoint and its security policy, and tries again after `reconnectTimeout` (10 seconds by default). A producer fails with `IllegalStateException: No connected`, caused by the same message. A server certificate refused by the trust list or by a `certificateValidator` is logged at `WARN` as `Failed to connect, because a certificate or security check failed`. To restore the previous behaviour, set the new `trustAllCertificates` option to `true`. This is insecure: the client then does not authenticate the server.
 
 The certificate that the user name and password are encrypted with is checked by the same validator. Endpoints that use the security policy `None` are not affected.
 
@@ -831,7 +855,7 @@ The `route-parser` plugin (`camel route-parser`) and its `camel-jbang-plugin-rou
 
 The `camel_component_properties` MCP tool is removed. It listed the endpoint options of a component as `camel.component.<scheme>.<option>` keys, which `camel run` and `camel_configuration_validate` reject: only the component options can be set that way. Use `camel_catalog_doc` instead: each component option in its answer carries its `application.properties` key as `configKey`.
 
-`camel_catalog_doc` without `optionsFilter` now lists the required options and the first 20 other options of a component in full, and the rest by name in `moreOptions` (`limit` lists more in full), and an answer is cut at 16 000 characters with a marker. An option of both the endpoint and the component is listed once, with `scope` set to `endpoint,component` and its `configKey`, instead of twice, and `matchedOptions` counts option names. A name that only matches a word of an EIP title (such as `retry`) no longer returns that EIP: the answer is a not-found with suggestions.
+`camel_catalog_doc` without `optionsFilter` now lists the required options and the first 20 other options of a component in full, and the rest by name in `moreOptions` (`limit` lists more in full), and an answer is cut at 18 000 characters with a marker. An option of both the endpoint and the component is listed once, with `scope` set to `endpoint,component` and its `configKey`, instead of twice, and `matchedOptions` counts option names. A name that only matches a word of an EIP title (such as `retry`) no longer returns that EIP: the answer is a not-found with suggestions.
 
 ### camel-wasm - the endpoint runs WASI command modules (Breaking change)
 
@@ -858,6 +882,14 @@ The following API of `camel-wasm` is removed or changed with the old ABI:
 
 When the subscription of a consumer ends with an error (for example a request to the node that fails inside `BLOCK_OBSERVABLE` or `TRANSACTION_OBSERVABLE`, or a node that cannot be reached when the route starts), the consumer now subscribes again every 15 seconds until it succeeds. The error is routed as before, and logged at `WARN`; the failed attempts that follow are logged at `DEBUG`. Previously the consumer received nothing more while the route stayed started. A new subscription starts at the latest block, so the blocks between the error and the new subscription are not routed. `REPLAY_BLOCKS_OBSERVABLE`, `REPLAY_TRANSACTIONS_OBSERVABLE` and an `ETH_LOG_OBSERVABLE` with `fromBlock` set to a block number are not subscribed again, as that would route the same blocks or logs again.
 
+### camel-xmpp - one endpoint per participant and user, and one connection per account
+
+XMPP URIs that differ only in the participant or the user are now separate endpoints. Before, the component could return an endpoint that was created for another participant or user, and messages went to the wrong participant.
+
+All the consumers and producers of one account (the same host, port, service name, user, password, resource and login settings) now share one XMPP connection, also across endpoints. So an account has one session on the server instead of one per endpoint, and the server no longer closes one of them with a `conflict` error. The connection is closed when the last route that uses the account stops. With the `connectionConfig` option, endpoints share a connection only when they refer to the same `ConnectionConfiguration` instance (for example the same bean in the registry).
+
+`XmppEndpoint.createConnection()` now creates a new connection on every call, instead of returning the connection of the endpoint, and an endpoint no longer disconnects a connection when it stops.
+
 ### camel-vertx-http - a header with several values is sent as several headers
 
 A message header whose value is a `java.util.Collection` or an object array (as the HTTP consumers map a request header that occurs more than once) was sent as one HTTP header with the `toString()` of the value, for example `[a, b]`. The producer now sends one HTTP header per value. A collection or an object array that is empty, or that holds only null values, now sends no header (an empty List was sent as the header value `[]`).
@@ -883,6 +915,10 @@ This also applies to camel-graphql, which sends its requests with camel-http.
 ### camel-core - Switch case values and the Dynamic Router uriDelimiter resolve property placeholders
 
 The `value` of a Switch case and the `uriDelimiter` of the Dynamic Router EIP were used as written, so a property placeholder or a route template parameter in them never matched (Switch) or did not split the slip (Dynamic Router). They are now resolved at startup like the other EIP options; a placeholder of a property that does not exist now fails the route at startup.
+
+### camel-kamelet - the route of a Kamelet endpoint is removed with the endpoint
+
+A Kamelet endpoint creates a route from the Kamelet’s template. When the endpoint is created while the CamelContext runs and is shut down later, its route is now stopped and removed as well; before, it stayed behind and kept running. This applies to an endpoint that is used once and discarded (`toD`, `recipientList` or `routingSlip` with `cacheSize=-1`), which kept one more route for every message. It also applies to a route added at runtime (such as a dev-mode reload or `CamelContext.addRoutes`) that consumes from a Kamelet (`from("kamelet:my-source")`): removing that route now also removes the route of the Kamelet. A route id given in the uri (`kamelet:my-source/myRoute` or `routeId=`) is shared by the endpoints that use it, so such a route is not removed. Routes created when the CamelContext starts are not changed.
 
 ### camel-undertow - the producer refuses a request target or header value with control characters
 
@@ -1091,6 +1127,14 @@ When Camel creates the instance itself, the KEM operations of the `pqc` componen
 
 A started PQC data format no longer keeps a `KeyGenerator` of its own: `getKeyGenerator()` returns only a configured instance and, unless one is configured, the `CamelPQCKemAlgorithm` header now selects the KEM algorithm of each operation.
 
+### camel-pqc - message bodies are signed and verified over their bytes
+
+The `sign`, `verify`, `hybridSign` and `hybridVerify` operations now read a `java.io.File` or `java.nio.file.Path` body, and a file from a file consumer (a `GenericFile` body), as bytes from the file, the same way as a `byte[]` or `InputStream` body. A `String` (or any `CharSequence`) body is encoded as UTF-8, and any other body that has a binary type converter (for example a `java.nio.ByteBuffer`, a `java.io.ByteArrayOutputStream`, a Netty `ByteBuf` or a Vert.x `Buffer`) is signed over those bytes.
+
+A body with no binary representation (for example a `Map` or a POJO) is no longer signed over its `toString()`: it is now rejected with an `InvalidPayloadException`. Convert such a body to a `String`, `byte[]` or other binary type earlier in the route.
+
+Signatures created by earlier versions over a `File`, `Path`, `GenericFile` or other non-`byte[]`/`InputStream` body may not verify and need to be created again.
+
 ### camel-minio - a listed object that cannot be got is skipped
 
 When the consumer lists the bucket, a failure to stat or get one of the listed objects (for example access denied, or an object encrypted with a customer key the consumer does not have) no longer fails the poll, as long as another listed object could be got: the object is skipped, the other listed objects are consumed, and the skipped object is tried again by a later poll. The failure is given to the exception handler of the consumer, with the object name in the message (by default a `WARN` with the stack trace, at every poll that lists the object). Before, the objects listed after it in the same poll were not consumed, so one such object could keep the consumer from consuming the rest of the bucket. The poll still fails when none of the listed objects could be got, and when `objectName` is set. When a poll lists `maxMessagesPerPoll` objects, the next poll now continues after the last listed object (before, after the last object that was consumed), so an object that cannot be got at the end of a page does not hold the listing back.
@@ -1207,7 +1251,7 @@ A `milo-client` consumer now delivers a data change with a Bad or Uncertain stat
 
 ### camel-milo - creating and deleting the monitored items of a consumer
 
-Since 4.16, a `milo-client` consumer whose monitored item could not be created, for example because the node does not exist, received nothing. Now it receives one `DataValue` with the bad status code. The monitored item is then created again every 10 seconds on the same connection, without delivering anything for a failed attempt, until the server accepts it; its first value is the current value of the node. A route restart or a connection that Camel rebuilds creates it again too.
+Since 4.16, a `milo-client` consumer whose monitored item could not be created, for example because the node does not exist, received nothing. Now it receives one `DataValue` with the bad status code. The monitored item is then created again every `reconnectTimeout` (10 seconds by default) on the same connection, without delivering anything for a failed attempt, until the server accepts it; its first value is the current value of the node. A route restart or a connection that Camel rebuilds creates it again too.
 
 A node ID with a namespace URI (`nsu=`) that is not in the namespace table of the server no longer takes the whole client connection down, including the consumers of other nodes. Its consumer receives one `DataValue` with `Bad_NodeIdUnknown`, like a node that does not exist.
 
@@ -1233,7 +1277,11 @@ To keep the previous behaviour, filter the exchanges with a bad status out right
 
 ### camel-milo - the reconnectTimeout of the components sets the delay between connection attempts
 
-`setReconnectTimeout` on the `milo-client` and `milo-browse` components set the request timeout of every service call, and the delay between two connection attempts stayed 10 seconds. It now sets that delay, which the new `reconnectTimeout` option of both endpoints and components sets too; its default of 10000 milliseconds is the previous delay, and a value of 0 or less is rejected. To set the request timeout, use the `requestTimeout` option instead (for example `camel.component.milo-client.requestTimeout`, or `getConfiguration().setRequestTimeout(…​)` in Java).
+`setReconnectTimeout` on the `milo-client` and `milo-browse` components set the request timeout of every service call, and the delay between two connection attempts stayed 10 seconds. It now sets that delay, which the new `reconnectTimeout` option of both endpoints and components sets too; its default of 10000 milliseconds is the previous delay, and a value of 0 or less is rejected. The option also sets how often the monitored items that the server refused are created again: a lower value repeats the `CreateMonitoredItems` request for them, for example for a node ID with a typo, more often while the connection lasts. To set the request timeout, use the `requestTimeout` option instead (for example `camel.component.milo-client.requestTimeout`, or `getConfiguration().setRequestTimeout(…​)` in Java).
+
+### camel-milo - the sessionTimeout of the components reaches their endpoints
+
+A `sessionTimeout` configured on the `milo-client` or `milo-browse` component (for example `camel.component.milo-client.sessionTimeout`) did not reach its endpoints, so their sessions used the default of Milo, 120000 milliseconds. The endpoints now use it, unless they set `sessionTimeout` themselves.
 
 ### camel-infinispan - the key option of the producer takes precedence over the key header
 
@@ -1269,7 +1317,11 @@ Some runtime tools of the Camel MCP server now do what their description says, w
 
 The `camel_write_file` and `camel_edit_file` tools used to refuse content with a YAML shape that a model often gets wrong but that has only one reading, such as `steps:` written at the column of its EIP, or an option at the column of the EIP it belongs to. Such content is now repaired and written, and `repaired` in the answer lists the repairs. Content with more than one reading is refused as before.
 
-`camel_edit_file` now matches lines to find that are not in the file as given, as when a model writes them from memory, to the closest lines of the file when exactly one place matches well. It changes there the lines the model changed and keeps the file’s version of the other lines. The edit stands only when its result is valid; otherwise the answer is the one of a miss, with the lines the file has there. `matchedLines` in the answer names the lines it matched.
+`camel_edit_file` now matches lines to find that are not in the file as given, as when a model writes them from memory, to the closest lines of the file when exactly one place matches well. It changes there the lines the model changed and keeps the file’s version of the other lines, and the lines of the file the model did not have. The edit stands only when its result is valid; otherwise the answer is the one of a miss, with the lines the file has there. `matchedLines` in the answer names the lines it matched.
+
+A write of the content the file already has, and an edit whose replacement gives the text the file has, answer with the status `unchanged` instead of `overwritten` or `edited`. Nothing is written, so a running integration does not reload. When one of several edits misses, the answer shows the file as it is in `fileWindow` and says that none of the edits was written, also not the ones before it that matched.
+
+`camel_get_log` marks the records from before the last reload of the routes with `beforeLastReload`, with a `reloadNote` first in the answer. The note of `camel_get_errors` on errors from before the last reload is now the first key of its answer, and says how many exchanges failed since.
 
 ### camel-jbang - the console output of an integration that the AI tools start
 
@@ -1318,3 +1370,7 @@ A consumer endpoint that already sets `sendNoop=false`, which was ignored before
 For ftp and ftps the client does not notice a connection that the server has closed, so such a consumer finds it only when the next operation fails, during the poll or while processing a file. After a failure caused by an I/O error, the consumer sends a noop before the next poll, and connects again if the noop fails. If the FTP server closes idle connections and the `delay` between polls is longer than its idle timeout, every other poll fails and is logged before the consumer connects again. Keep `sendNoop=true` for such a consumer. Whatever `sendNoop` is, the ftp and ftps consumer still sends a noop before it renames or deletes a file on the server, as it does for each processed file unless `noop=true`.
 
 For sftp and mina-sftp the client notices a closed connection, but not one that dropped silently. For sftp the noop is a keep-alive message that does not wait for a reply, so it does not find such a connection either. For mina-sftp the noop is a request that waits for the reply, so with `sendNoop=false` such a connection is found by the next poll, which fails and is logged before the consumer connects again. For sftp and mina-sftp, set `serverAliveInterval` to let the client close such a connection itself, so that the consumer connects again before the poll.
+
+### camel-cometd - the CORS filter allows credentials only for listed origins
+
+With `crossOriginFilterOn=true`, the CORS responses now include `Access-Control-Allow-Credentials: true` only when `allowedOrigins` lists the origins explicitly, without any **or `null`. When `allowedOrigins` is not set, is** , or has an entry with a wildcard such as `[https://*](https://*)` or an entry `null`, the origin is still allowed, but without credentials. Previously credentials were allowed for every origin. A cross-origin client that sends cookies or other credentials must have its origin listed in `allowedOrigins`.
