@@ -46,6 +46,20 @@ The Syslog dataformat supports the following options which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 
+## Message Body
+
+The message body at each side of the Syslog data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text` or `pojo` | A SyslogMessage, or the text of a syslog message, which is parsed first. A missing facility, severity, hostname or timestamp gets a default. |
+| **Marshal output** | `stream`, as text | The syslog message in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | An RFC 3164 or RFC 5424 message, decoded with the charset of the exchange. |
+| **Unmarshal output** | `pojo` (`org.apache.camel.component.syslog.SyslogMessage`) | A SyslogMessage, an Rfc5424SyslogMessage for an RFC 5424 message. The facility, severity, hostname and timestamp are headers as well. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## RFC5424 Syslog protocol
 
 **Since Camel 2.14**

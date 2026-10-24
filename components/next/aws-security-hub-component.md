@@ -432,6 +432,28 @@ The AWS Security Hub component supports the following message header(s), which i
 | **CamelAwsSecurityHubProductArn** (getFindingHistory) Constant: [`PRODUCT_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#PRODUCT_ARN) | The product ARN for the finding. |  | String |
 | **CamelAwsSecurityHubFindingAggregatorArn** (getFindingAggregator) Constant: [`FINDING_AGGREGATOR_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FINDING_AGGREGATOR_ARN) | The ARN of the finding aggregator to retrieve. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Security Hub component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+batchImportFindings, the default, imports the findings of the CamelAwsSecurityHubFindings header, or else of the body: a List of the AwsSecurityFinding of the AWS SDK, or one AwsSecurityFinding. JSON text, a Map, an array or a List of anything else fails. The other operations take their input from headers, such as CamelAwsSecurityHubFilters. With pojoRequest=true the request of the AWS SDK for the operation, such as a GetFindingsRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the BatchImportFindingsResponse of batchImportFindings, with the counts in the CamelAwsSecurityHubSuccessCount and CamelAwsSecurityHubFailedCount headers: a finding that is not imported does not fail the exchange. getFindings gives a GetFindingsResponse, with the token of the next page in the CamelAwsSecurityHubNextToken header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Static credentials, Default Credential Provider and Profile Credentials Provider

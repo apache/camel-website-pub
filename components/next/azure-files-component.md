@@ -468,6 +468,40 @@ The Azure Files component supports the following message header(s), which is/are
 | **CamelFileLocalWorkPath** (common) Constant: [`FILE_LOCAL_WORK_PATH`](https://javadoc.io/doc/org.apache.camel/camel-azure-files/latest/org/apache/camel/component/file/azure/FilesConstants.html#FILE_LOCAL_WORK_PATH) | Path to the local work file, if local work directory is used. |  | String |
 | **CamelFileHost** (common) Constant: [`FILE_HOST`](https://javadoc.io/doc/org.apache.camel/camel-azure-files/latest/org/apache/camel/component/file/azure/FilesConstants.html#FILE_HOST) | The remote hostname. |  | String |
 
+## Message Body
+
+The message body at each side of the Azure Files component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `file` | The file as read: a RemoteFile with its content loaded as bytes, which converts to text, bytes or a stream; a stream with streamDownload; with preMove its content, a byte array.
+-   With `streamDownload=true`: `stream`
+    
+-   With `download=false`: `null`
+    
+
+Not known when `preMove` is set.
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+
+What converts to an InputStream or a byte array: text, bytes, a stream or a file. A Map or a List fails: marshal it first.
+
+-   With `allowNullBody=true`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Endpoint URI Examples
 
 azure-files://camelazurefiles.file.core.windows.net/samples?sv=2022-11-02&ss=f&srt=sco&sp=rwdlc&se=2023-06-18T22:29:13Z&st=2023-06-05T14:29:13Z&spr=https&sig=MPsMh8zci0v3To7IT9SKdaFGZV8ezno63m9C8s9bdVQ%3D

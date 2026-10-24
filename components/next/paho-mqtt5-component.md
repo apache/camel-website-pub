@@ -220,6 +220,20 @@ The Paho MQTT 5 component supports the following message header(s), which is/are
 | **CamelPahoMqtt5OverrideTopic** (producer) Constant: [`CAMEL_PAHO_OVERRIDE_TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-paho-mqtt5/latest/org/apache/camel/component/paho/mqtt5/PahoMqtt5Constants.html#CAMEL_PAHO_OVERRIDE_TOPIC) | The name of topic to override and send to instead of topic specified on endpoint. |  | String |
 | **CamelPahoMqtt5MsgProperties** (producer) Constant: [`CAMEL_PAHO_MSG_PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-paho-mqtt5/latest/org/apache/camel/component/paho/mqtt5/PahoMqtt5Constants.html#CAMEL_PAHO_MSG_PROPERTIES) | Consumer: The properties set on the incoming message. Producer: The properties to be set on the outgoing message. |  | MqttProperties |
 
+## Message Body
+
+The message body at each side of the Paho MQTT 5 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The payload of the MQTT message. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Default payload type

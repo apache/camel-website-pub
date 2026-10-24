@@ -449,6 +449,17 @@ The AWS CloudTrail component supports the following message header(s), which is/
 | **CamelAwsCloudTrailEventSource** (consumer) Constant: [`EVENT_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-aws-cloudtrail/latest/org/apache/camel/component/aws/cloudtrail/CloudtrailConstants.html#EVENT_SOURCE) | The event Source of the cloud trail event consumed. |  | String |
 | **CamelAwsCloudTrailEventUsername** (consumer) Constant: [`USERNAME`](https://javadoc.io/doc/org.apache.camel/camel-aws-cloudtrail/latest/org/apache/camel/component/aws/cloudtrail/CloudtrailConstants.html#USERNAME) | The associated username of the event of the cloud trail event consumed. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS CloudTrail component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`), as json | The CloudTrail record of the event as JSON in a byte array, one message per event, the newest first within a poll, with the id, the name, the source and the user name of the event in headers: unmarshal it to read its fields. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Static credentials, Default Credential Provider and Profile Credentials Provider

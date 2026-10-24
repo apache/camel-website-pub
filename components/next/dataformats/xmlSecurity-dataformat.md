@@ -115,6 +115,20 @@ Enum values:
 | **addKeyValueForEncryptedKey** (common) | `true` | `Boolean` | Whether to add the public key used to encrypt the session key as a KeyValue in the EncryptedKey structure or not. |
 | **namespace** (common) |  | `Object` | Refers to a Map of XML Namespaces of prefix to uri mappings. |
 
+## Message Body
+
+The message body at each side of the XML Security data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML: text, bytes, a stream, a file, a DOM Document, a DOMSource or a StreamSource. |
+| **Marshal output** | `stream`, as xml | The XML with EncryptedData elements, in the stream cache, or a byte array when stream caching is off. Without secureTag the whole document is encrypted; with it the elements it selects, or their content when secureTagContents is true. |
+| **Unmarshal input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML with EncryptedData elements: text, bytes, a stream, a file, a DOM Document, a DOMSource or a StreamSource. |
+| **Unmarshal output** | `bytes` (`byte[]`), as xml | The decrypted XML document, as a byte array. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ### Key Cipher Algorithm
 
 The default Key Cipher Algorithm is now `XMLCipher.RSA_OAEP` instead of `XMLCipher.RSA_v1dot5`. Usage of `XMLCipher.RSA_v1dot5` is discouraged due to various attacks. Requests that use RSA v1.5 as the key cipher algorithm will be rejected unless it has been explicitly configured as the key cipher algorithm.

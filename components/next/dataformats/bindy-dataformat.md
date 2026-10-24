@@ -66,6 +66,32 @@ Enum values:
 | **unwrapSingleInstance** (advanced) | `true` | `Boolean` | When unmarshalling should a single instance be unwrapped and returned instead of wrapped in a java.util.List. |
 | **locale** (advanced) |  | `String` | To configure a default locale to use, such as us for united states. To use the JVM platform default locale then use the name default. |
 
+## Message Body
+
+The message body at each side of the Bindy data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `pojo` or `list` | An object of the classType class, or a List (or an Iterator) of them; a Map of the model class names to the objects is one record. Other bodies, such as a Map of field values, are not records. |
+| **Marshal output** | `stream`, as csv | The CSV in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as csv | 
+ |
+| **Unmarshal output** | `pojo` or `list` | 
+
+An object of the classType class when there is one record, otherwise a List of them; an empty List for no records with allowEmptyStream.
+
+-   With `unwrapSingleInstance=false`: `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Annotations
@@ -1555,43 +1581,18 @@ from("file://inbox")
   .to("direct:handleOrders");
 ```
 
-The Camel route will pick up files in the inbox directory, unmarshall CSV records into a collection of model objects and send the collection  
-to the route referenced by `handleOrders`.
+The Camel route will pick up files in the inbox directory, unmarshal the CSV records into model objects and send them to the route referenced by `handleOrders`.
 
-The collection returned is a **List of Map** objects. Each Map within the list contains the model objects marshalled out of each line of the CSV. The reason behind this is that _each line can correspond to more than one object_. This can be confusing when you expect one object to be returned per line.
+The body after unmarshal is a **List** of the objects of the `classType` class, one for each record. When there is only one record, the body is that object, unless `unwrapSingleInstance` is `false`. The objects of the classes that `@Link` links are set in the fields of the object of each record. With `allowEmptyStream=true`, a file without records gives an empty List.
 
-Each object can be retrieved using its class name.
+To process one Order at a time in a route, use a Splitter, which also takes the single Order of a file with one record:
 
 _Java-only: Java annotation model class_
-
-```java
-List<Map<String, Object>> unmarshaledModels = (List<Map<String, Object>>) exchange.getIn().getBody();
-
-int modelCount = 0;
-for (Map<String, Object> model : unmarshaledModels) {
-  for (String className : model.keySet()) {
-     Object obj = model.get(className);
-     LOG.info("Count: {}, {}", modelCount, obj.toString());
-  }
- modelCount++;
-}
-
-LOG.info("Total CSV records received by the csv bean: {}", modelCount);
-```
-
-Assuming that you want to extract a single Order object from this map for processing in a route, you could use a combination of a Splitter and a Processor as per the following:
-
-_Java-only: inline Processor implementation_
 
 ```java
 from("file://inbox")
     .unmarshal(bindy)
     .split(body())
-        .process(exchange -> {
-            Message in = exchange.getIn();
-            Map<String, Object> modelMap = (Map<String, Object>) in.getBody();
-            in.setBody(modelMap.get(Order.class.getCanonicalName()));
-        })
         .to("direct:handleSingleOrder")
     .end();
 ```
@@ -1671,7 +1672,7 @@ The second route will extract the pojos from the queue and marshal the content t
 
 In the YAML DSL, the data format is `bindy`, and its `type` is `Csv`, `Fixed` or `KeyValue`. The `classType` is the model class.
 
-The following route reads CSV files, unmarshals them into a list of `Order` objects, and splits the list to handle one order at a time:
+The following route reads CSV files, unmarshals them into a list of `Order` objects (or one `Order` for a file with one record), and splits the list to handle one order at a time:
 
 ```yaml
 - route:

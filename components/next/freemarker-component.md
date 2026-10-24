@@ -121,6 +121,18 @@ The Freemarker component supports the following message header(s), which is/are 
 | **CamelFreemarkerTemplate** (producer) Constant: [`FREEMARKER_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-freemarker/latest/org/apache/camel/component/freemarker/FreemarkerConstants.html#FREEMARKER_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
 | **CamelFreemarkerDataModel** (producer) Constant: [`FREEMARKER_DATA_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-freemarker/latest/org/apache/camel/component/freemarker/FreemarkerConstants.html#FREEMARKER_DATA_MODEL) | The data model. |  | Object |
 
+## Message Body
+
+The message body at each side of the Freemarker component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The template gets the body as body, as it is: text, or a Map, a List or a POJO to read from; convert bytes or a stream to a String first, and no body fails ${body} unless it is written ${body!}. The template is the resource, or the CamelFreemarkerTemplate or CamelFreemarkerResourceUri header with allowTemplateFromHeader=true, and never the body. |
+| **Producer output** | `text` (`java.lang.String`) | The text the template writes, also when it is JSON or XML: unmarshal it to read its fields. The headers are kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Headers
 
 Headers set during the FreeMarker evaluation are returned to the message and added as headers. This provides a mechanism for the FreeMarker component to return values to the Message.
@@ -135,7 +147,7 @@ The header, `fruit`, is now accessible from the `message.out.headers`.
 
 ### FreeMarker Context
 
-Camel will provide exchange information in the FreeMarker context (just a `Map`). The `Exchange` is transferred as:
+Camel will provide exchange information in the FreeMarker context (just a `Map`). The `Exchange` is transferred as: The `body`, `header`, `headers`, `variable`, `variables` and `exception` entries are always there; the others only when the endpoint has `allowContextMapAll=true`.
 
  
 | key | value |
@@ -167,7 +179,7 @@ The FreeMarker template resource is by default **not** hot reloadable for both f
 
 ### Dynamic templates
 
-Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
+Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, and the endpoint has `allowTemplateFromHeader=true`, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
 ## Examples
 
@@ -320,14 +332,14 @@ It’s possible to specify what template the component should use dynamically vi
 
 ```java
 from("direct:in")
-    .setHeader("FreemarkerResourceUri").constant("path/to/my/template.ftl")
+    .setHeader("CamelFreemarkerResourceUri").constant("path/to/my/template.ftl")
     .to("freemarker:dummy?allowTemplateFromHeader=true");
 ```
 
 ```xml
 <route>
   <from uri="direct:in"/>
-  <setHeader name="FreemarkerResourceUri">
+  <setHeader name="CamelFreemarkerResourceUri">
     <constant>path/to/my/template.ftl</constant>
   </setHeader>
   <to uri="freemarker:dummy?allowTemplateFromHeader=true"/>
@@ -340,7 +352,7 @@ from("direct:in")
       uri: direct:in
       steps:
         - setHeader:
-            name: FreemarkerResourceUri
+            name: CamelFreemarkerResourceUri
             expression:
               constant:
                 expression: path/to/my/template.ftl

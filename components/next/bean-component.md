@@ -126,6 +126,18 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **parameters** (advanced) | Used for configuring additional properties on the bean. This is a multi-value option with prefix: bean. |  | Map |
 
+## Message Body
+
+The message body at each side of the Bean component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The first parameter of the method gets the body, converted to its type: a String parameter gets a Map or a POJO as its toString(), so marshal it first. |
+| **Producer output** | `unknown` | What the method returns, also when it returns null. A void method leaves the body unchanged. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 A **bean:** endpoint cannot be defined as the input to the route; i.e., you cannot consume from it, you can only route from some inbound message Endpoint to the bean endpoint as output, such as the **direct** endpoint as input.

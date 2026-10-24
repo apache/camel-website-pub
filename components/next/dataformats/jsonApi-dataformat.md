@@ -10,6 +10,21 @@ The JSonApi dataformat supports the following options which are listed below.
 | **dataFormatTypes** (common) |  | `String` | The classes to take into account for the marshalling. Multiple classes can be separated by comma. |
 | **mainFormatType** (common) |  | `String` | The class to take into account while unmarshalling. |
 
+## Message Body
+
+The message body at each side of the JSonApi data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `pojo` | One resource object of a class dataFormatTypes names, annotated with @Type and @Id of JSONAPI-Converter. A Map or a List fails. |
+| **Marshal output** | `stream`, as json | The JSON:API document in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
+ |
+| **Unmarshal output** | `pojo` or `null` | The primary data as an object of the class mainFormatType names, or no body when the data is null. A document whose data is an array fails. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 The `dataFormatTypes` are the resource classes, separated by commas. They are annotated with `@Type` and `@Id` of the JSONAPI-Converter library. On unmarshal, `mainFormatType` is the class of the primary data of the document:

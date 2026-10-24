@@ -139,11 +139,46 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **frameBinding** (advanced) | To configure the Jsonata frame binding. Allows custom functions to be added. |  | JsonataFrameBinding |
 
+## Message Body
+
+The message body at each side of the JSONata component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `map`, `list` or `pojo`, as json | 
+JSON data: a Map, a List, a JsonNode or another object Jackson converts. JSON as text, bytes, a stream or a file needs inputType=JsonString: without it text is read as one JSON string, and bytes or a stream fail.
+
+-   With `inputType=JsonString`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` (`com.fasterxml.jackson.databind.JsonNode`), as json | 
+
+The result as a Jackson JsonNode, or as JSON text with outputType=JsonString.
+
+-   With `outputType=JsonString`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 ### Basic
 
 For example, you could use something like:
+
+The messages of the queue are JSON text, so the examples set `inputType` and `outputType` to `JsonString`: with the default, `Jackson`, the body must be JSON data (a Map, a List or a JsonNode), such as after `unmarshal: json`, and the result is a JsonNode.
 
 -   Java
     
@@ -154,13 +189,13 @@ For example, you could use something like:
 
 ```java
 from("activemq:My.Queue")
-    .to("jsonata:com/acme/MyResponse.json");
+    .to("jsonata:com/acme/MyResponse.json?inputType=JsonString&outputType=JsonString");
 ```
 
 ```xml
 <route>
   <from uri="activemq:My.Queue"/>
-  <to uri="jsonata:com/acme/MyResponse.json"/>
+  <to uri="jsonata:com/acme/MyResponse.json?inputType=JsonString&amp;outputType=JsonString"/>
 </route>
 ```
 
@@ -171,6 +206,9 @@ from("activemq:My.Queue")
       steps:
         - to:
             uri: jsonata:com/acme/MyResponse.json
+            parameters:
+              inputType: JsonString
+              outputType: JsonString
 ```
 
 And a file-based resource:
@@ -184,14 +222,14 @@ And a file-based resource:
 
 ```java
 from("activemq:My.Queue")
-    .to("jsonata:file://myfolder/MyResponse.json?contentCache=true")
+    .to("jsonata:file://myfolder/MyResponse.json?contentCache=true&inputType=JsonString&outputType=JsonString")
     .to("activemq:Another.Queue");
 ```
 
 ```xml
 <route>
   <from uri="activemq:My.Queue"/>
-  <to uri="jsonata:file://myfolder/MyResponse.json?contentCache=true"/>
+  <to uri="jsonata:file://myfolder/MyResponse.json?contentCache=true&amp;inputType=JsonString&amp;outputType=JsonString"/>
   <to uri="activemq:Another.Queue"/>
 </route>
 ```
@@ -205,6 +243,8 @@ from("activemq:My.Queue")
             uri: jsonata:file://myfolder/MyResponse.json
             parameters:
               contentCache: true
+              inputType: JsonString
+              outputType: JsonString
         - to:
             uri: activemq:Another.Queue
 ```
@@ -222,14 +262,14 @@ It is possible to configure custom functions that can be called from Jsonata. Fo
 
 ```java
 from("activemq:My.Queue")
-    .to("jsonata:file://myfolder/MyResponse.json?contentCache=true&frameBinding=#customBindings")
+    .to("jsonata:file://myfolder/MyResponse.json?contentCache=true&inputType=JsonString&outputType=JsonString&frameBinding=#customBindings")
     .to("activemq:Another.Queue");
 ```
 
 ```xml
 <route>
   <from uri="activemq:My.Queue"/>
-  <to uri="jsonata:file://myfolder/MyResponse.json?contentCache=true&amp;frameBinding=#customBindings"/>
+  <to uri="jsonata:file://myfolder/MyResponse.json?contentCache=true&amp;inputType=JsonString&amp;outputType=JsonString&amp;frameBinding=#customBindings"/>
   <to uri="activemq:Another.Queue"/>
 </route>
 ```
@@ -243,6 +283,8 @@ from("activemq:My.Queue")
             uri: jsonata:file://myfolder/MyResponse.json
             parameters:
               contentCache: true
+              inputType: JsonString
+              outputType: JsonString
               frameBinding: "#customBindings"
         - to:
             uri: activemq:Another.Queue

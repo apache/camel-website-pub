@@ -122,6 +122,18 @@ The Wasm component supports the following message header(s), which is/are listed
 | **CamelWasmExitCode** (producer) Constant: [`EXIT_CODE`](https://javadoc.io/doc/org.apache.camel/camel-wasm/latest/org/apache/camel/wasm/Wasm$Headers.html#EXIT_CODE) | The exit code of the module: 0 when it returned from its \_start function, otherwise the value it passed to proc\_exit. Not set when the module trapped, timed out or exceeded maxOutputSize. |  | Integer |
 | **CamelWasmStderr** (producer) Constant: [`STDERR`](https://javadoc.io/doc/org.apache.camel/camel-wasm/latest/org/apache/camel/wasm/Wasm$Headers.html#STDERR) | What the module wrote to its standard error, decoded as UTF-8. Not set when the module wrote nothing or timed out. |  | String |
 
+## Message Body
+
+The message body at each side of the Wasm component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The standard input of the module: text, bytes, a stream or a file; no body is an empty input. A Map, a List or a POJO fails: marshal it first. |
+| **Producer output** | `bytes` (`byte[]`) | The standard output of the module, with the exit code in the CamelWasmExitCode header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Writing a module

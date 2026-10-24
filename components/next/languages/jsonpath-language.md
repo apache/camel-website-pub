@@ -42,6 +42,28 @@ Enum values:
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+## Message Body
+
+The message body at each side of the JSONPath language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Expression input** | `any` | JSON as text, bytes, a stream or a file, or parsed: a Map or a List. A POJO is read through Jackson. |
+| **Expression result** | `unknown` | 
+The value the path selects: a Map for an object, a List for an array or for a path with a wildcard or a filter, otherwise text, a number or a boolean.
+
+-   With `writeAsString=true`: `text` or `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 ### JSONPath Syntax

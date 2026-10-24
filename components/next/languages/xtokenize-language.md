@@ -52,6 +52,21 @@ Enum values:
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+## Message Body
+
+The message body at each side of the XML Tokenize language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Expression input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | XML as text, bytes, a stream or a file, or a DOM.
+Not known when `source` is set.
+
+ |
+| **Expression result** | `iterator` | An Iterator of the elements the path matches as XML text, read once; mode t gives their text. With group, each N elements are joined into one text. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Namespaces
 
 The XML Tokenize language is namespace aware, so a tokenized element can be selected by its prefix. The prefix to URI mappings can be declared inline, or shared across several expressions by registering a `org.apache.camel.support.builder.Namespaces` bean and referring to it with the `namespacesRef` option:

@@ -430,6 +430,28 @@ The AWS Textract component supports the following message header(s), which is/ar
 | **CamelAwsTextractNextToken** (producer) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#NEXT_TOKEN) | The next token for pagination in operations that return multiple pages. |  | String |
 | **CamelAwsTextractFeatureTypes** (producer) Constant: [`FEATURE_TYPES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#FEATURE_TYPES) | The feature types for document analysis (TABLES, FORMS, SIGNATURES, etc.). |  | List |
 
+## Message Body
+
+The message body at each side of the AWS Textract component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The document of detectDocumentText, the default, analyzeDocument and analyzeExpense when no S3 object is named: an image or a PDF as bytes, a stream or a file; a Map, a List, a POJO or no body fails. The s3Bucket and s3Object options, or else the CamelAwsTextractS3Bucket and CamelAwsTextractS3Object headers, name an S3 object instead, and the start operations read only that. The get operations take the job id from the CamelAwsTextractJobId header, or else the body as text. With pojoRequest=true the request of the AWS SDK for the operation, such as a DetectDocumentTextRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the DetectDocumentTextResponse of detectDocumentText, the default, whose blocks hold the lines and the words found. The start operations give the job id only in the response: set the CamelAwsTextractJobId header from it for the get operations. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Textract component options
 
 You have to provide the amazonTextractClient in the Registry or your accessKey and secretKey to access the [Amazon Textract](https://aws.amazon.com/textract/) service.

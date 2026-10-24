@@ -110,6 +110,20 @@ Enum values:
 | **browseLimit** (advanced) | Maximum number of messages to keep in memory available for browsing. Use 0 for unlimited. |  | int |
 | **filter** (advanced) | To use a predicate to filter whether to include the message for browsing. Return true to include, false to exclude. |  | Predicate |
 
+## Message Body
+
+The message body at each side of the Browse component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unchanged` | The body the producer sent: the route runs on the same exchange, in the thread of the producer. |
+| **Producer input** | `any` | 
+ |
+| **Producer output** | `unchanged` | Unchanged, unless a route consumes from the same browse endpoint: it runs on the same exchange, so the body is the one that route ends with. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 In the route below, we insert a `browse:` component to be able to browse the Exchanges that are passing through:
@@ -157,7 +171,7 @@ public void inspectReceivedOrders() {
 
     // then we can inspect the list of received exchanges from Java
     for (Exchange exchange : exchanges) {
-        String payload = exchange.getIn().getBody();
+        String payload = exchange.getIn().getBody(String.class);
         // do something with payload
     }
 }

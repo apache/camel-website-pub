@@ -372,6 +372,68 @@ Enum values:
  |  | ReturnDocument |
 | **CamelMongoDbOperationOption** (producer update one and options) Constant: [`OPTIONS`](https://javadoc.io/doc/org.apache.camel/camel-mongodb/latest/org/apache/camel/component/mongodb/MongoDbConstants.html#OPTIONS) | Options to use. When set, options set in the headers will be ignored. |  | Object |
 
+## Message Body
+
+The message body at each side of the MongoDB component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`org.bson.Document`) | 
+The document added to the capped collection; with changeStreams the full document of the change, null when the change has none (an update without fullDocument=updateLookup).
+
+-   With `consumerType=changeStreams`: `pojo` or `null`
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | A document or a query: a Document, a Map or JSON text; a List of them for insert, aggregate and update. |
+| **Producer output** | `unknown` | By the operation: a Document or null for a find of one, a List for findAll, findDistinct and aggregate, a Long for count, the document added for insert, the result of the driver for the other writes, and a Document for command and the stats.
+
+-   With `operation=findById`: `pojo` or `null` (`org.bson.Document`)
+    
+-   With `operation=findOneByQuery`: `pojo` or `null` (`org.bson.Document`)
+    
+-   With `operation=findOneAndDelete`: `pojo` or `null` (`org.bson.Document`)
+    
+-   With `operation=findOneAndReplace`: `pojo` or `null` (`org.bson.Document`)
+    
+-   With `operation=findOneAndUpdate`: `pojo` or `null` (`org.bson.Document`)
+    
+-   With `operation=findAll`: `list`
+    
+-   With `operation=findDistinct`: `list`
+    
+-   With `operation=aggregate`: `list`
+    
+-   With `operation=count`: `value` (`java.lang.Long`)
+    
+-   With `operation=insert`: `pojo` or `list`
+    
+-   With `operation=save`: `pojo`
+    
+-   With `operation=update`: `pojo` (`com.mongodb.client.result.UpdateResult`)
+    
+-   With `operation=remove`: `pojo` (`com.mongodb.client.result.DeleteResult`)
+    
+-   With `operation=bulkWrite`: `pojo` (`com.mongodb.bulk.BulkWriteResult`)
+    
+-   With `operation=command`: `pojo` (`org.bson.Document`)
+    
+-   With `operation=getDbStats`: `pojo` (`org.bson.Document`)
+    
+-   With `operation=getColStats`: `pojo` (`org.bson.Document`)
+    
+
+Not known when `outputType` or `writeResultAsHeader` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuration of a database in Spring XML

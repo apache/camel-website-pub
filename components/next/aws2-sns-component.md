@@ -451,6 +451,39 @@ The AWS Simple Notification System (SNS) component supports the following messag
 | **CamelAwsSnsFailedMessageCount** (producer) Constant: [`FAILED_MESSAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sns/latest/org/apache/camel/component/aws2/sns/Sns2Constants.html#FAILED_MESSAGE_COUNT) | The number of failed messages in a batch publish operation. |  | Integer |
 | **CamelAwsSnsSuccessfulMessageCount** (producer) Constant: [`SUCCESSFUL_MESSAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sns/latest/org/apache/camel/component/aws2/sns/Sns2Constants.html#SUCCESSFUL_MESSAGE_COUNT) | The number of successful messages in a batch publish operation. |  | Integer |
 
+## Message Body
+
+The message body at each side of the AWS Simple Notification System (SNS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The message to publish, as text: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(): marshal it first. With messageStructure=json, a JSON object with a message per protocol; with batchEnabled=true, a List of the PublishBatchRequestEntry of the AWS SDK.
+
+-   With `batchEnabled=true`: `list`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+Unchanged after a publish, with the id of the message in a header. With batchEnabled=true, the PublishBatchResponse of the AWS SDK.
+
+-   With `batchEnabled=true`: `pojo` (`software.amazon.awssdk.services.sns.model.PublishBatchResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required SNS component options
 
 You have to provide the amazonSNSClient in the Registry or your accessKey and secretKey to access the [Amazon’s SNS](https://aws.amazon.com/sns).

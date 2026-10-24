@@ -119,6 +119,21 @@ Enum values:
 | **advancedOptions** (advanced) | Whether to forward extra URI parameters to the endpoint wrapped by the Kamelet. When enabled, parameters that are not Kamelet template properties or reserved Kamelet options are appended to the wrapped source or sink endpoint. Disabled by default. | false | boolean |
 | **location** (advanced) | Location of the Kamelet to use which can be specified as a resource from file system, classpath etc. The location cannot use wildcards, and must refer to a file including extension, for example file:/etc/foo-kamelet.xml. |  | String |
 | **noErrorHandler** (advanced) | Whether kamelets should use error handling or not. By default, the Kamelet uses the same error handler as from the calling route. This means that if the calling route has error handling that performs retries, or routing to a dead letter channel, then the kamelet route will use this also. This can be turned off by setting this option to true. If off then the kamelet route is not using error handling, and any exception thrown will for source kamelets be logged by the consumer, and the sink/action kamelets will fail processing. | false | boolean |
+
+## Message Body
+
+The message body at each side of the Kamelet component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The body the Kamelet sends, as its data types or its template say. In the template of a Kamelet, kamelet:source gives the body the caller sent. |
+| **Producer input** | `any` | 
+ |
+| **Producer output** | `unknown` | The body the template of the Kamelet ends with. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > The **kamelet** endpoint is **lenient**, which means that the endpoint accepts additional parameters that are passed to the [Route Template](../../manual/route-template.md) engine and consumed upon route materialization.
 

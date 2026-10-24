@@ -103,6 +103,21 @@ With the following _path_ and _query_ parameters:
 | **sleepForEmptyTest** (producer (advanced)) | Allows a sleep to be specified to wait to check that this mock really is empty when expectedMessageCount(int) is called with zero value. |  | long |
 | **browseLimit** (advanced) | Maximum number of messages to keep in memory available for browsing. Use 0 for unlimited. | 100 | int |
 
+## Message Body
+
+The message body at each side of the Mock component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+ |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The Mock component provides a powerful declarative testing mechanism, which is similar to [jMock](http://www.jmock.org) in that it allows declarative expectations to be created on any Mock endpoint before a test begins. Then the test is run, which typically fires messages to one or more endpoints, and finally the expectations can be asserted in a test case to ensure the system worked as expected.

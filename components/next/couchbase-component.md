@@ -227,6 +227,44 @@ The Couchbase component supports the following message header(s), which is/are l
 | **CamelCouchbaseViewName** (consumer) Constant: [`HEADER_VIEWNAME`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#HEADER_VIEWNAME) | The view name. |  | String |
 | **CamelCqlResumeQuery** (consumer) Constant: [`COUCHBASE_RESUME_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-couchbase/latest/org/apache/camel/component/couchbase/CouchbaseConstants.html#COUCHBASE_RESUME_ACTION) | The resume action to execute when resuming. |  | String |
 
+## Message Body
+
+The message body at each side of the Couchbase component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.couchbase.client.java.kv.GetResult`) | 
+One message per document the query finds, read by its id (the CamelCouchbaseId header) as the GetResult of the Couchbase SDK: contentAsObject() gives the JSON document. With fullDocument=false the row of the SQL++ query as JSON text, or with useView=true the value the view emits.
+
+-   With `fullDocument=false`: `text` (`java.lang.String`)
+    
+-   With `useView=true`: `pojo` (`com.couchbase.client.java.kv.GetResult`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `map`, `list` or `pojo` | The document that CCB\_PUT, the default, stores as JSON: a Map, a List or a POJO becomes JSON, and text is stored as a JSON string, so unmarshal JSON text first. Bytes, a stream or no body fail. CCB\_GET and CCB\_DEL do not use the body: the id is the CamelCouchbaseId header.
+
+Not known when `operation` is set.
+
+ |
+| **Producer output** | `value` (`java.lang.Boolean`) | true for CCB\_PUT, the default; the GetResult of the Couchbase SDK for CCB\_GET, and the MutationResult as text for CCB\_DEL. The producer removes the CamelCouchbaseId header.
+
+-   With `operation=CCB_GET`: `pojo` (`com.couchbase.client.java.kv.GetResult`)
+    
+-   With `operation=CCB_DEL`: `text` (`java.lang.String`)
+    
+
+Not known when `operation` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Consuming documents
 
 The consumer supports two query modes for polling documents from Couchbase:
@@ -291,7 +329,7 @@ from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
 
 The query must include `META().id AS \__id` in the SELECT clause so the consumer can identify each document.
 
-When `fullDocument` is `true` (the default), the consumer fetches the complete document from the KV store using the document ID. When `false`, the query result row is used directly as the message body.
+When `fullDocument` is `true` (the default), the consumer fetches the document from the KV store by its id, and the message body is the `GetResult` of the Couchbase SDK, with the id in the `CamelCouchbaseId` header: `contentAsObject()` gives the JSON document. When `false`, the message body is the query result row as JSON text, or with views the value the view emits.
 
 > **Note**
 > SQL++ queries require a primary index or appropriate secondary index on the bucket/collection. Create one with: `` CREATE PRIMARY INDEX ON \`myBucket\` `` or via the Couchbase SDK.
@@ -348,6 +386,12 @@ _Java-only: string concatenation in endpoint URI_
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
     + "&statement=SELECT META().id AS __id, * FROM `myBucket` ORDER BY META().id DESC LIMIT 10")
 ```
+
+## Producing documents
+
+The producer runs the operation of the `operation` option: `CCB_PUT` (the default) stores the message body as the document with the id of the `CamelCouchbaseId` header, `CCB_GET` reads the document of that id, and `CCB_DEL` deletes it. The producer removes the `CamelCouchbaseId` header after each call, so set it again before the next one.
+
+`CCB_PUT` stores the body as JSON: a Map, a List or a POJO becomes a JSON document, and text is stored as a JSON string, so unmarshal JSON text to a Map first. A byte array, a stream or no body fail. After the call the message body is `true` for `CCB_PUT`, the `GetResult` of the Couchbase SDK for `CCB_GET`, and the `MutationResult` as text for `CCB_DEL`.
 
 ## Couchbase SDK compatibility
 

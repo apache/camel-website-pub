@@ -543,6 +543,29 @@ The AWS Eventbridge component supports the following message header(s), which is
 | **CamelAwsEventbridgeMessageId** (consumer) Constant: [`MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#MESSAGE_ID) | The SQS message ID. |  | String |
 | **CamelAwsEventbridgeReceiptHandle** (consumer) Constant: [`RECEIPT_HANDLE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#RECEIPT_HANDLE) | The SQS receipt handle for message deletion. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Eventbridge component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The event as JSON text, one message per event the rule sends to the SQS queue of the consumer: the envelope of EventBridge, with the data of the event in its detail field, and the id of the SQS message in a header. |
+| **Producer input** | `any` | 
+Not used by putRule, the default, and the other operations, which take their input from headers and the eventPatternFile option. putEvent sends the body as the detail of the event, which must be a JSON object as text: bytes, a stream or a file are read as text, a Map or a POJO is sent as its toString(), so marshal it first, and no body fails. With pojoRequest=true the request of the AWS SDK, such as a PutEventsRequest.
+
+-   With `operation=putEvent`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation: a PutRuleResponse for putRule, the default, and a PutEventsResponse for putEvent. An event that AWS rejects, such as one whose detail is not a JSON object, does not fail the exchange: check the CamelAwsEventbridgeFailedEntryCount header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Static credentials, Default Credential Provider and Profile Credentials Provider
@@ -1006,7 +1029,7 @@ from("direct:start")
 
 This operation will return a list of rules associated with a target.
 
--   PutEvent: this operation will send an event to the Servicebus
+-   PutEvent: this operation will send an event to the event bus, with the message body as the detail of the event, which must be a JSON object as text
     
 
 -   Java
@@ -1021,7 +1044,7 @@ from("direct:start")
     .setHeader("CamelAwsEventbridgeResourcesArn", constant("arn:aws:sqs:eu-west-1:780410022472:camel-connector-test"))
     .setHeader("CamelAwsEventbridgeSource", constant("com.pippo"))
     .setHeader("CamelAwsEventbridgeDetailType", constant("peppe"))
-    .setBody(constant("Test Event"))
+    .setBody(constant("{\"message\": \"Test Event\"}"))
     .to("aws2-eventbridge://test?operation=putEvent")
     .to("mock:result");
 ```
@@ -1039,7 +1062,7 @@ from("direct:start")
     <constant>peppe</constant>
   </setHeader>
   <setBody>
-    <constant>Test Event</constant>
+    <constant>{"message": "Test Event"}</constant>
   </setBody>
   <to uri="aws2-eventbridge://test?operation=putEvent"/>
   <to uri="mock:result"/>
@@ -1061,7 +1084,7 @@ from("direct:start")
             name: CamelAwsEventbridgeDetailType
             constant: peppe
         - setBody:
-            constant: Test Event
+            constant: '{"message": "Test Event"}'
         - to:
             uri: aws2-eventbridge://test
             parameters:
@@ -1070,7 +1093,7 @@ from("direct:start")
             uri: mock:result
 ```
 
-This operation will return a list of entries with related ID sent to servicebus.
+The message body is then the `PutEventsResponse`, with the id of each event in its entries. An event that AWS rejects, such as one whose detail is not a JSON object, does not fail the exchange: the `CamelAwsEventbridgeFailedEntryCount` header counts the events that were rejected.
 
 ### Updating the rule
 

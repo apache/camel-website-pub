@@ -222,6 +222,41 @@ The PDF component supports the following message header(s), which is/are listed 
 | **CamelPdfDecryptionMaterial** (producer) Constant: [`DECRYPTION_MATERIAL_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-pdf/latest/org/apache/camel/component/pdf/PdfHeaderConstants.html#DECRYPTION_MATERIAL_HEADER_NAME) | Expected type is [https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/encryption/DecryptionMaterial.htmlDecryptionMaterial](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/encryption/DecryptionMaterial.htmlDecryptionMaterial). Mandatory header if PDF document is encrypted. |  | DecryptionMaterial |
 | **CamelPdfFilesToMerge** (producer) Constant: [`FILES_TO_MERGE_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-pdf/latest/org/apache/camel/component/pdf/PdfHeaderConstants.html#FILES_TO_MERGE_HEADER_NAME) | Mandatory header for merge operation and ignored in all other operations. The array of pdf files that will be merged. |  | List |
 
+## Message Body
+
+The message body at each side of the PDF component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The text to write for create and append, which takes the document from the CamelPdfDocument header; a Map or a POJO is written as its toString: marshal it first. extractText reads a PDF from bytes, a stream, a file or a PDDocument, not from text. merge takes the files from the CamelPdfFilesToMerge header.
+
+-   With `operation=extractText`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `operation=merge`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `bytes` (`java.io.ByteArrayOutputStream`) | 
+
+The PDF of create, append and merge as bytes, in a ByteArrayOutputStream: convertBodyTo byte\[\] before extractText. The text of the document for extractText.
+
+-   With `operation=extractText`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Type converter
@@ -261,6 +296,8 @@ from("direct:start")
 ```
 
 It is now possible to get the body as a PD Document by using `PDDocument doc = exchange.getIn().getBody(PDDocument.class);`, which saves the trouble of converting the byte-array to a document.
+
+The body after `create`, `append` and `merge` is a `ByteArrayOutputStream` with the PDF, which does not convert to a `PDDocument`: convert it to `byte[]` before `extractText`.
 
 > **Note**
 > this only works for unprotected PDF files. For password-protected, the files still need to be converted manually.

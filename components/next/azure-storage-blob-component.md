@@ -833,6 +833,98 @@ Enum values:
  |  | BlobImmutabilityPolicyMode |
 | **CamelAzureStorageBlobRehydratePriority** (producer) Constant: [`REHYDRATE_PRIORITY`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-blob/latest/org/apache/camel/component/azure/storage/blob/BlobConstants.html#REHYDRATE_PRIORITY) | (setBlobTier) The rehydrate priority used when rehydrating a blob from the archive tier: Standard or High. Ignored when changing tier between non-archive tiers. |  | RehydratePriority |
 
+## Message Body
+
+The message body at each side of the Azure Storage Blob Service component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` or `file` | The content of the blob, one message per blob: a stream that reads it, or with fileDir the java.io.File it is downloaded to. |
+| **Producer input** | `any` | 
+The content to upload for uploadBlockBlob, commitAppendBlob and uploadPageBlob: text, bytes, a stream or a file; a Map or a List fails: marshal it first. A List of BlobBlock for stageBlockBlobList, and of Block for commitBlobBlockList. getBlob writes into an OutputStream body. The other operations do not use the body, or take their value from a header first: the file of uploadBlockBlobChunked, the tags, the tag filter, the legal hold, the tier and the policy.
+
+-   With `operation=uploadBlockBlob`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=commitAppendBlob`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=uploadPageBlob`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=stageBlockBlobList`: `list` or `pojo`
+    
+-   With `operation=commitBlobBlockList`: `list` or `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `list` | 
+
+A List of the items of the SDK for listBlobContainers, the default, findBlobsByTags, listBlobs, listBlobVersions and getChangeFeed. A stream of the content for getBlob, or the OutputStream body it wrote into; the java.io.File for downloadBlobToFile; true for the operations that create, upload, set or delete, with their results in headers, such as the link of downloadLink.
+
+-   With `operation=getBlob`: `stream`
+    
+-   With `operation=downloadBlobToFile`: `file` (`java.io.File`)
+    
+-   With `operation=getBlobTags`: `map` (`java.util.Map<String, String>`)
+    
+-   With `operation=getPageBlobRanges`: `iterator` (`com.azure.core.http.rest.PagedIterable<com.azure.storage.blob.models.PageRangeItem>`)
+    
+-   With `operation=getBlobBlockList`: `pojo` (`com.azure.storage.blob.models.BlockList`)
+    
+-   With `operation=setBlobImmutabilityPolicy`: `pojo` (`com.azure.storage.blob.models.BlobImmutabilityPolicy`)
+    
+-   With `operation=setBlobTier`: `pojo` (`com.azure.storage.blob.models.AccessTier`)
+    
+-   With `operation=copyBlob`: `text` (`java.lang.String`)
+    
+-   With `operation=createBlobSnapshot`: `text` (`java.lang.String`)
+    
+-   With `operation=setBlobLegalHold`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=createBlobContainer`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deleteBlobContainer`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deleteBlob`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=downloadLink`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=uploadBlockBlob`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=uploadBlockBlobChunked`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=stageBlockBlobList`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=commitBlobBlockList`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=createAppendBlob`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=commitAppendBlob`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=createPageBlob`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=uploadPageBlob`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=resizePageBlob`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=clearPageBlob`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=setBlobTags`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=undeleteBlob`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 **Required information options:**
 
 To use this component, you have multiple options to provide the required Azure authentication information:

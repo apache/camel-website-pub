@@ -184,6 +184,28 @@ Enum values:
 | **useUserKnownHostsFile** (security) | If knownHostFile has not been explicit configured, then use the host file from System.getProperty(user.home) /.ssh/known\_hosts. | true | boolean |
 | **ciphers** (security (advanced)) | Set a comma separated list of ciphers that will be used in order of preference. Possible cipher names are defined by JCraft JSCH. Some examples include: aes128-ctr,aes128-cbc,3des-ctr,3des-cbc,blowfish-cbc,aes192-cbc,aes256-cbc. If not specified the default list from JSCH will be used. |  | String |
 
+## Message Body
+
+The message body at each side of the SCP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The content of the file: text, bytes, a stream or a file, which is read into memory first to send its size. A Map or a List fails: marshal it first.
+
+-   With `allowNullBody=true`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | Unchanged, with the name of the remote file in the CamelFileNameProduced header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The SCP component copies the message body to a file on the remote host. In the following route, the file consumer sets the `CamelFileName` header, and each file of a local folder is copied to the `/upload` directory of the host. The host key is checked against a known hosts file:

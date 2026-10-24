@@ -118,6 +118,20 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **synchronous** (advanced) | Whether synchronous processing is forced. If enabled, then the producer thread will be forced to wait until the message has been completed before the same thread will continue processing. If disabled, the default, then the producer thread may be freed and can do other work while the message is continued processed by other threads (reactive). | false | boolean |
 
+## Message Body
+
+The message body at each side of the Direct component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unchanged` | The body the caller sent. |
+| **Producer input** | `any` | 
+ |
+| **Producer output** | `unknown` | The body the route it calls ends with. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 In the route below, we use the direct component to link the two routes together:

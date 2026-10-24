@@ -259,6 +259,19 @@ Enum values:
  |  | TelegramParseMode |
 | **CamelMessageTimestamp** (common) Constant: [`MESSAGE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-telegram/latest/org/apache/camel/component/telegram/TelegramConstants.html#MESSAGE_TIMESTAMP) | The message timestamp. |  | long |
 
+## Message Body
+
+The message body at each side of the Telegram component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` or `null` | One message per update: an IncomingMessage for a message or a channel post, with the chat id in the CamelTelegramChatId header, and the IncomingCallbackQuery, IncomingInlineQuery, PreCheckoutQuery, ShippingQuery or PaidMediaPurchased of the other updates; no body for an update of another kind, such as an edited message. |
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `pojo` or `null` | A message of org.apache.camel.component.telegram.model, such as an OutgoingTextMessage, or text to send as a text message: a stream or a file is read as text, and a Map or another POJO is sent as its toString(), so marshal it first. A byte array is sent as the photo, audio, video or document the CamelTelegramMediaType header names, and fails without it. No body sends nothing. |
+| **Producer output** | `pojo` or `unchanged` | The MessageResult of the call, with the message sent, or a subclass of it such as MessageResultString for createInvoiceLink; an answer with ok=false is a MessageResult too. No body is left as it is. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The Telegram component supports both consumer and producer endpoints. It can also be used in **reactive chatbot mode** (to consume, then produce messages).
@@ -316,7 +329,7 @@ When using the producer endpoint without specifying the **chat id** option, the 
 | `EditMessageMediaMessage` | To edit animation, audio, document, photo, or video messages. (editMessageMedia) |
 | `EditMessageReplyMarkupMessage` | To edit only the reply markup of a message. (editMessageReplyMarkup) |
 | `EditMessageDelete` | To delete a message, including service messages. (deleteMessage) |
-| `SendLocationMessage` | To send a location (setSendLocation) |
+| `SendLocationMessage` | To send a location (sendLocation) |
 | `EditMessageLiveLocationMessage` | To send changes to a live location (editMessageLiveLocation) |
 | `StopMessageLiveLocationMessage` | To stop updating a live location message sent by the bot or via the bot (for inline bots) before live\_period expires (stopMessageLiveLocation) |
 | `SendVenueMessage` | To send information about a venue (sendVenue) |
@@ -329,8 +342,10 @@ When using the producer endpoint without specifying the **chat id** option, the 
 | `GetStarTransactionsMessage` | To get the list of bot’s Telegram Star transactions (getStarTransactions) |
 | `RefundStarPaymentMessage` | To refund a successful payment in Telegram Stars (refundStarPayment) |
 | `EditUserStarSubscriptionMessage` | To cancel or re-enable extension of a subscription paid in Telegram Stars (editUserStarSubscription) |
-| `byte[]` | To send any media type supported. It requires the `CamelTelegramMediaType` header to be set to the appropriate media type |
+| `byte[]` | To send a photo, an audio, a video or a document, as the `CamelTelegramMediaType` header names (`PHOTO_PNG`, `PHOTO_JPG`, `AUDIO`, `VIDEO` or `DOCUMENT`). It fails without the header. A stream or a file is sent as text, so convert it to `byte[]` to send it as media |
 | `String` | To send a text message to a chat. It gets converted automatically into a `OutgoingTextMessage` |
+
+Any other body is sent as text, so marshal a Map or another object first, as it is otherwise sent as its `toString()`. After the call the message body is the `MessageResult` of the call, with the message sent, or a subclass of it, such as `MessageResultString` for `CreateInvoiceLinkMessage`. A message body that is null sends nothing, and stays null.
 
 ### Consumer
 
@@ -387,8 +402,13 @@ Supported types for incoming messages are
  
 | Java Type | Description |
 | --- | --- |
-| `IncomingMessage` | The full object representation of an incoming message |
+| `IncomingMessage` | The full object representation of an incoming message or channel post, with the chat id in the `CamelTelegramChatId` header |
 | `String` | The content of the message, for text messages only |
+| `IncomingCallbackQuery` | A callback query, from a button of an inline keyboard |
+| `IncomingInlineQuery` | An inline query |
+| `PreCheckoutQuery`, `ShippingQuery`, `PaidMediaPurchased` | The payment updates, of the package `org.apache.camel.component.telegram.model.payments` |
+
+An update of another kind, such as an edited message, gives a message with no body.
 
 ### Reactive Chat-Bot Example
 

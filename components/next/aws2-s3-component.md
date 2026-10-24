@@ -819,6 +819,96 @@ Enum values:
 | **CamelAwsS3UploadLinkHttpRequestHeaders** (producer) Constant: [`UPLOAD_LINK_HTTP_REQUEST_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3/latest/org/apache/camel/component/aws2/s3/AWS2S3Constants.html#UPLOAD_LINK_HTTP_REQUEST_HEADERS) | The headers that are needed by the service for upload (not needed when BrowserCompatible is true). |  | Map |
 | **CamelAwsS3UploadLinkSignedPayload** (producer) Constant: [`UPLOAD_LINK_SIGNED_PAYLOAD`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3/latest/org/apache/camel/component/aws2/s3/AWS2S3Constants.html#UPLOAD_LINK_SIGNED_PAYLOAD) | The request payload that is needed by the service for upload (not needed when BrowserCompatible is true). |  | String |
 
+## Message Body
+
+The message body at each side of the AWS S3 Storage Service component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | 
+The content of the object as a byte array, one message per object, with its key and metadata in headers. With includeBody=false the stream of the object, and with ignoreBody=true no body.
+
+-   With `includeBody=false`: `stream`
+    
+-   With `ignoreBody=true`: `null`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The content to upload, when no operation is set: text, bytes, a stream or a file. A Map or a List fails: marshal it first. The operations take their input from headers, or with pojoRequest=true from the request of the AWS SDK in the body, such as a GetObjectRequest.
+
+Not known when `operation` or `pojoRequest` is set.
+
+ |
+| **Producer output** | `unchanged` | 
+
+Unchanged after an upload and a copyObject, with the ETag in a header. By the operation: the stream of the object for getObject and getObjectRange, a List for the lists and the tagging gets, the URL as text for the links, the policy JSON for getBucketPolicy, true for deleteObject, and the response of the AWS SDK for the others. getObject with ignoreBody=true, headBucket for a bucket that does not exist and streamingUploadMode keep the body.
+
+-   With `operation=getObject`: `stream`
+    
+-   With `operation=getObjectRange`: `stream`
+    
+-   With `operation=listObjects`: `list` (`java.util.List<software.amazon.awssdk.services.s3.model.S3Object>`)
+    
+-   With `operation=listBuckets`: `list` (`java.util.List<software.amazon.awssdk.services.s3.model.Bucket>`)
+    
+-   With `operation=getObjectTagging`: `list` (`java.util.List<software.amazon.awssdk.services.s3.model.Tag>`)
+    
+-   With `operation=getBucketTagging`: `list` (`java.util.List<software.amazon.awssdk.services.s3.model.Tag>`)
+    
+-   With `operation=createDownloadLink`: `text` (`java.lang.String`)
+    
+-   With `operation=createUploadLink`: `text` (`java.lang.String`)
+    
+-   With `operation=getBucketPolicy`: `text` (`java.lang.String`)
+    
+-   With `operation=deleteObject`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=headBucket`: `pojo` or `unchanged`
+    
+-   With `operation=headObject`: `pojo` (`software.amazon.awssdk.services.s3.model.HeadObjectResponse`)
+    
+-   With `operation=deleteObjects`: `pojo` (`software.amazon.awssdk.services.s3.model.DeleteObjectsResponse`)
+    
+-   With `operation=deleteBucket`: `pojo` (`software.amazon.awssdk.services.s3.model.DeleteBucketResponse`)
+    
+-   With `operation=createBucket`: `pojo` (`software.amazon.awssdk.services.s3.model.CreateBucketResponse`)
+    
+-   With `operation=restoreObject`: `pojo` (`software.amazon.awssdk.services.s3.model.RestoreObjectResponse`)
+    
+-   With `operation=putObjectTagging`: `pojo` (`software.amazon.awssdk.services.s3.model.PutObjectTaggingResponse`)
+    
+-   With `operation=deleteObjectTagging`: `pojo` (`software.amazon.awssdk.services.s3.model.DeleteObjectTaggingResponse`)
+    
+-   With `operation=getObjectAcl`: `pojo` (`software.amazon.awssdk.services.s3.model.GetObjectAclResponse`)
+    
+-   With `operation=putObjectAcl`: `pojo` (`software.amazon.awssdk.services.s3.model.PutObjectAclResponse`)
+    
+-   With `operation=putBucketTagging`: `pojo` (`software.amazon.awssdk.services.s3.model.PutBucketTaggingResponse`)
+    
+-   With `operation=deleteBucketTagging`: `pojo` (`software.amazon.awssdk.services.s3.model.DeleteBucketTaggingResponse`)
+    
+-   With `operation=getBucketVersioning`: `pojo` (`software.amazon.awssdk.services.s3.model.GetBucketVersioningResponse`)
+    
+-   With `operation=putBucketVersioning`: `pojo` (`software.amazon.awssdk.services.s3.model.PutBucketVersioningResponse`)
+    
+-   With `operation=putBucketPolicy`: `pojo` (`software.amazon.awssdk.services.s3.model.PutBucketPolicyResponse`)
+    
+-   With `operation=deleteBucketPolicy`: `pojo` (`software.amazon.awssdk.services.s3.model.DeleteBucketPolicyResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required S3 component options
 
 You have to provide the amazonS3Client in the Registry or your accessKey and secretKey to access the [Amazon’s S3](https://aws.amazon.com/s3).
@@ -847,9 +937,9 @@ Camel-AWS2-S3 component provides the following operation on the producer side:
     
 -   listObjects
     
--   getObject (this will return an S3Object instance)
+-   getObject (this will return the content of the object as a stream)
     
--   getObjectRange (this will return an S3Object instance)
+-   getObjectRange (this will return the range of the content as a stream)
     
 -   createDownloadLink
     

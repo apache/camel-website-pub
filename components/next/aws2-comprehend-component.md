@@ -444,6 +444,30 @@ The AWS Comprehend component supports the following message header(s), which is/
 | **CamelAwsComprehendDetectedSentiment** (producer) Constant: [`DETECTED_SENTIMENT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-comprehend/latest/org/apache/camel/component/aws2/comprehend/Comprehend2Constants.html#DETECTED_SENTIMENT) | The detected sentiment. |  | String |
 | **CamelAwsComprehendDetectedSentimentScore** (producer) Constant: [`DETECTED_SENTIMENT_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-comprehend/latest/org/apache/camel/component/aws2/comprehend/Comprehend2Constants.html#DETECTED_SENTIMENT_SCORE) | The detected sentiment scores. |  | SentimentScore |
 
+## Message Body
+
+The message body at each side of the AWS Comprehend component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The text to analyze, for every operation: bytes, a stream or a file are read as text, a Map or a POJO is analyzed as its toString(), so take the text out of it first, and no body fails. With pojoRequest=true the request of the AWS SDK for the operation, such as a DetectSentimentRequest: another body fails. |
+| **Producer output** | `list` | 
+A List of what is found: the languages for detectDominantLanguage, the default, with the first one and its score in headers, and the entities, key phrases, syntax tokens, PII entities or toxic labels of the other operations. The DetectSentimentResponse of the AWS SDK for detectSentiment, with the sentiment and its scores in headers, and the ClassifyDocumentResponse for classifyDocument. The text is not kept: store it in a variable to analyze it again.
+
+-   With `operation=detectSentiment`: `pojo` (`software.amazon.awssdk.services.comprehend.model.DetectSentimentResponse`)
+    
+-   With `operation=classifyDocument`: `pojo` (`software.amazon.awssdk.services.comprehend.model.ClassifyDocumentResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Comprehend component options
 
 You have to provide the amazonComprehendClient in the Registry or your accessKey and secretKey to access the [Amazon Comprehend](https://aws.amazon.com/comprehend/) service.
@@ -994,10 +1018,13 @@ _Java-only: uses body() method reference and choice/when/otherwise with inline c
 ```java
 from("kafka:customer-feedback")
     .log("Processing feedback: ${body}")
+    // Keep the text, as each operation replaces the body with its result
+    .setVariable("feedback", body())
     // Analyze sentiment
     .to("aws2-comprehend://test?operation=detectSentiment&languageCode=en&useDefaultCredentialsProvider=true&region=us-east-1")
     .setHeader("sentiment", simple("${header.CamelAwsComprehendDetectedSentiment}"))
-    // Extract key phrases
+    // Restore the text and extract key phrases
+    .setBody(variable("feedback"))
     .to("aws2-comprehend://test?operation=detectKeyPhrases&languageCode=en&useDefaultCredentialsProvider=true&region=us-east-1")
     .setHeader("keyPhrases", body())
     .log("Sentiment: ${header.sentiment}, Key topics: ${header.keyPhrases}")

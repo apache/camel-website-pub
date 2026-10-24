@@ -618,6 +618,43 @@ The AWS Bedrock Agent Runtime component supports the following message header(s)
 | **CamelAwsBedrockAgentRuntimeNextToken** (producer) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#NEXT_TOKEN) | Pagination token used by the retrieve operation. Set on the in-message to request the next page; set on the out-message when the response carries one. |  | String |
 | **CamelAwsBedrockAgentRuntimeRetrieveGuardrailAction** (producer) Constant: [`RETRIEVE_GUARDRAIL_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#RETRIEVE_GUARDRAIL_ACTION) | When performing a retrieve operation, this header will contain the guardrail action (if any) applied by the knowledge base. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Bedrock Agent Runtime component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The question, the query or the input of the agent as text for retrieveAndGenerate, retrieve, invokeAgent and invokeInlineAgent: bytes, a stream or a file are read as text, a Map or a POJO is sent as its toString(), so take the text out of it first, and no body fails. invokeFlow takes a String, which becomes the document of the input node FlowInputNode, or a FlowInput or a List of FlowInput of the AWS SDK: another body fails. With pojoRequest=true the request of the AWS SDK for the operation, such as a RetrieveAndGenerateRequest: another body fails.
+
+-   With `operation=invokeFlow`: `text`, `list` or `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` or `list` | 
+
+The answer as text for retrieveAndGenerate, with the citations and the session id in headers, and a List of KnowledgeBaseRetrievalResult for retrieve. invokeAgent and invokeInlineAgent give the answer as text, or a List of the chunks with streamOutputMode=chunks or the CamelAwsBedrockAgentRuntimeAgentStreamOutputMode header; the text is empty when the agent returns control. invokeFlow gives the document of the last output of the flow as text, or as a Document of the AWS SDK for another type, and keeps the body when the flow has no output.
+
+-   With `operation=retrieveAndGenerate`: `text` (`java.lang.String`)
+    
+-   With `operation=retrieve`: `list` (`java.util.List<software.amazon.awssdk.services.bedrockagentruntime.model.KnowledgeBaseRetrievalResult>`)
+    
+-   With `operation=invokeFlow`: `text`, `pojo` or `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Bedrock component options
 
 You have to provide the bedrockRuntimeClient in the Registry or your accessKey and secretKey to access the [Amazon Bedrock](https://aws.amazon.com/bedrock/) service.

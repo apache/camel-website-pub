@@ -130,11 +130,33 @@ Enum values:
 | **tikaConfigFile** (advanced) | Path to a Tika JSON configuration file. |  | String |
 | **tikaLoader** (advanced) | Tika loader used to configure parsers and detectors. |  | TikaLoader |
 
+## Message Body
+
+The message body at each side of the Tika component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The document: text, bytes, a stream or a file. A Map, a List, a POJO or no body fails, and parse fails on an empty document. |
+| **Producer output** | `bytes` (`java.io.ByteArrayOutputStream`) | 
+parse gives the content as bytes, in a ByteArrayOutputStream: XHTML, or HTML or plain text with tikaParseOutputFormat, in tikaParseOutputEncoding, and the metadata of the document in headers; camel-tika parses HTML and text, other types need their Tika parser module. detect gives the media type as text, such as text/html.
+
+-   With `operation=detect`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### To Detect a file’s MIME Type
 
-The file should be placed in the Body.
+The body is the document: text, bytes, a stream or a file. After `detect`, the body is the MIME type as text, such as `text/html`.
 
 -   Java
     
@@ -166,7 +188,7 @@ from("direct:start")
 
 ### To Parse a File
 
-The file should be placed in the Body.
+The body is the document: text, bytes, a stream or a file. After `parse`, the body is a `ByteArrayOutputStream` with the content as XHTML, or as HTML or plain text with `tikaParseOutputFormat`, which converts to a `String`, and the metadata of the document are headers, such as `dc:title`. The component has the Tika parsers of HTML and text: other types need their Tika parser module, such as `org.apache.tika:tika-parser-pdf-module` for PDF, or the content is empty.
 
 -   Java
     

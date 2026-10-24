@@ -890,6 +890,10 @@ All the consumers and producers of one account (the same host, port, service nam
 
 `XmppEndpoint.createConnection()` now creates a new connection on every call, instead of returning the connection of the endpoint, and an endpoint no longer disconnects a connection when it stops.
 
+### camel-pulsar - a consumer that cannot subscribe fails the start of the route
+
+With `subscriptionType` `Shared`, `Failover` or `Key_Shared`, a consumer that could not subscribe when the route started (for example a broker that could not be reached within the operation timeout of the Pulsar client) was only logged at `ERROR`, and the route started with fewer consumers than `numberOfConsumers`, or with none, and never subscribed them again. Now the consumers that did subscribe are closed and the route fails to start with the error of the Pulsar client, as it already did with `Exclusive`. When the route starts with the CamelContext, the CamelContext then fails to start, unless the supervising route controller (`camel.routecontroller.enabled=true`) is used, which starts such a route again. With `messageListener=true` (the default) the consumers that did subscribe may already have received messages before they are closed, and messages they received but did not acknowledge can be delivered again once the route has started.
+
 ### camel-vertx-http - a header with several values is sent as several headers
 
 A message header whose value is a `java.util.Collection` or an object array (as the HTTP consumers map a request header that occurs more than once) was sent as one HTTP header with the `toString()` of the value, for example `[a, b]`. The producer now sends one HTTP header per value. A collection or an object array that is empty, or that holds only null values, now sends no header (an empty List was sent as the header value `[]`).
@@ -1193,6 +1197,10 @@ When Telegram answers a message with an error status (for example `400` for an u
 
 The exception of the exchange is the one that `process()` of the producer threw before: a `RuntimeException` that wraps an `ExecutionException`, with the `RuntimeCamelException` (status and body of the answer) as its cause, or the `IOException` when the request got no answer. The producer still waits for the answer before it returns, so the order of the messages is the same. The steps after the producer now run on the calling thread, and no longer on a thread of the HTTP client.
 
+### camel-nats - the JetStream push consumer subscribes again when its ephemeral consumer was deleted
+
+With `jetstreamEnabled=true` and `pullSubscription=false`, the consumer now creates its ephemeral JetStream consumer again after a reconnect when the server deleted it, starting at the first message the route did not acknowledge, so the route can see again the messages after that one. A durable consumer is not created again (a WARN is logged), and a consumer deleted while the connection stays up is not detected. See the [NATS component](../components/4.22.x/nats-component.md) page for the details.
+
 ### camel-vertx-websocket - the client consumer makes one reconnect attempt at a time
 
 When the WebSocket of a consumer with `consumeAsClient=true` is closed, the consumer now makes one reconnect attempt at a time: while an attempt waits for the server (up to the connect timeout), the next runs of `reconnectInterval` are skipped, and `maxReconnectAttempts` counts these attempts one after the other. Previously every interval started another attempt, and when the server answered late each of them opened a WebSocket, so that every message was routed once per WebSocket. A consumer that is stopped no longer reconnects.
@@ -1287,9 +1295,9 @@ A `milo-client` write, method call or read, or a `milo-browse` browse, for a nod
 
 The OPC UA client consumer delivers `Bad_NoCommunication` with a null value for every monitored node when communication with the server is lost, and the current value of every node once communication is restored. Before, the consumer delivered nothing during an outage, and values that did not change were not delivered again after it.
 
-A consumer that starts while the server cannot be reached, or whose client cannot connect at all, for example because of wrong credentials or an untrusted server certificate, delivers the status for its nodes too; the cause is in the log. A connection that Camel rebuilds after a failed request delivers it for every node of the connection. Each loss and each recovery delivers one exchange per node.
+A consumer that starts while the server cannot be reached, or whose client cannot connect at all, for example because of wrong credentials or an untrusted server certificate, delivers the status for its nodes too; the cause is in the log. A connection that Camel rebuilds delivers it for every node of the connection. Each loss and each recovery delivers one exchange per node.
 
-A route that uses only the value of the `DataValue` body receives a null for these exchanges, which the type converters turn into `0` or `false`; a route that stores values checks the status code of the body first, for example with `${body.statusCode.bad}`. A value can now arrive again after an outage, so a route that counts values, computes differences or detects changes must tolerate repeats. The consumer’s route also runs during an outage: an OPC UA write that it makes while the client reconnects waits for the next reconnect attempt and can take effect after communication is restored, and a request that fails rebuilds the connection.
+A route that uses only the value of the `DataValue` body receives a null for these exchanges, which the type converters turn into `0` or `false`; a route that stores values checks the status code of the body first, for example with `${body.statusCode.bad}`. A value can now arrive again after an outage, so a route that counts values, computes differences or detects changes must tolerate repeats. The consumer’s route also runs during an outage: an OPC UA write that it makes while the client reconnects waits for the next reconnect attempt and can take effect after communication is restored.
 
 To keep the previous behaviour, filter the exchanges with a bad status out right after the consumer, for example with `filter(simple("${body.statusCode.bad} == false"))`. This also drops the other bad statuses, such as the refusal of a node, and the current values delivered after an outage still arrive.
 
@@ -1298,6 +1306,12 @@ To keep the previous behaviour, filter the exchanges with a bad status out right
 An awaited `milo-client` write, method call or read that fails at the service or transport level, for example a request that times out (`Bad_Timeout`) or a lost connection, now fails the exchange and lets the route’s error handler run. Before, the exchange completed without an error and with a `null` body, silently discarding the failure. A bad status for the node itself, such as `Bad_TypeMismatch` on a write, is not a failure of the operation and is still returned as the body.
 
 An awaited `call` that succeeds now returns the `CallMethodResult` as the exchange body. Before, the body was always `null` even on success. A route that reads the result of an awaited call must be updated to read the `CallMethodResult` from the body instead of expecting `null`.
+
+### camel-milo - a failed producer request keeps the connection
+
+A `milo-client` write, method call or read, or a `milo-browse` browse, that fails (for example with `Bad_Timeout`, or because the session was lost) no longer disconnects the client connection and rebuilds the subscriptions of the consumers that share it. The failure is still set on the exchange of an awaited request. A lost session is recovered by the client itself, and a session that the server no longer has rebuilds the connection, as before. The client recovers a lost session with the endpoint and the server certificate it found when it connected, so a server that changes either while it cannot be reached is reached again only when Camel rebuilds the connection, for example when the Camel context restarts.
+
+Producer requests and `MiloClientConnection.getOpcUaClient()` no longer wait for the subscription work on the same connection to finish, such as a consumer that starts or stops, or the periodic attempt to create the monitored items that the server refused. Before, they waited until the server answered that work, and while the network was down silently, until the client noticed the lost session. While Camel rebuilds the connection, a producer request now fails at once with an `IllegalStateException` ("No connected", caused by the failure that ended the connection) instead of waiting for the rebuild to finish. The attempts to create the refused monitored items again now run on the `MiloClientReconnect` thread instead of the `MiloClient` pool, so that a slow attempt no longer holds up the outcome of the requests, which that pool completes; on a machine with one processor the pool has a single thread.
 
 ### camel-milo - the reconnectTimeout of the components sets the delay between connection attempts
 
@@ -1314,6 +1328,14 @@ The `infinispan` and `infinispan-embedded` producers now use the `key` option of
 Routes that set `key` on the endpoint and override it per message with the `CamelInfinispanKey` header must remove `key` from the endpoint.
 
 The `CamelInfinispanCacheName` header still takes precedence over the cache of the endpoint, so a route that sends the events of an Infinispan consumer to a producer must still remove the `CamelInfinispan*` headers first, see _Key and cache name headers_ in the component docs.
+
+### camel-aws2-athena - the SQL is taken from the message body only with useMessageBodyForSql
+
+The `startQueryExecution` operation of the `aws2-athena` producer, which is its default operation, now takes the SQL to run from the `CamelAwsAthenaQueryString` header, and when the header is not set, from the `queryString` option. It uses the message body as the SQL only when the new `useMessageBodyForSql` option is set to `true`, like the option of the same name in `camel-sql`. A non-empty body then takes precedence over the header and the option, as before. Previously the message body always came first, so an endpoint configured with `queryString` used the message body as the SQL whenever the message had one.
+
+Routes that put the SQL in the message body, as the examples in the component documentation did, must set `useMessageBodyForSql=true`, or set the SQL in the `CamelAwsAthenaQueryString` header or the `queryString` option instead. Without SQL, the exchange fails with an `IllegalArgumentException` that names these options.
+
+With `includeTrace=true`, the URI of the from endpoint in the SQL comment is now sanitized, as Camel does when it logs an endpoint URI, and it is left out when the exchange has no from endpoint, which failed with a `NullPointerException` before.
 
 ### camel-protobuf - a bytes field in a Map
 

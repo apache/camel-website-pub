@@ -491,6 +491,68 @@ The Docling component supports the following message header(s), which is/are lis
 | **CamelDoclingChunkingMaxTokens** (common) Constant: [`CHUNKING_MAX_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#CHUNKING_MAX_TOKENS) | Maximum tokens per chunk for hybrid chunking. |  | Integer |
 | **CamelDoclingChunkingMergePeers** (common) Constant: [`CHUNKING_MERGE_PEERS`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#CHUNKING_MERGE_PEERS) | Whether to merge peer chunks in hybrid chunking. |  | Boolean |
 
+## Message Body
+
+The message body at each side of the Docling component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` | The document of an async conversion that completed (SUBMIT\_ASYNC\_CONVERSION on the same component), as text in the outputFormat it was submitted with: markdown by default, JSON text for json. The task id is in the CamelDoclingTaskId header, and a failed conversion goes to the error handler. |
+| **Producer input** | `any` | 
+The document: its content as text or bytes, or a File (the GenericFile of the file consumers too). A stream or a Path fails: convert it to bytes first. Text that looks like a URL or a path (it starts with http://, https:// or /, or has a backslash) is read as one only with allowUrlSource or allowFilePathSource, and fails otherwise. With the CamelDoclingInputFilePath header the body is not read. The batch operations take a List or an array of paths or files (a directory path with allowFilePathSource), and CHECK\_CONVERSION\_STATUS the task id, unless the CamelDoclingTaskId header gives it.
+
+-   With `operation=BATCH_CONVERT_TO_MARKDOWN`: `list`
+    
+-   With `operation=BATCH_CONVERT_TO_HTML`: `list`
+    
+-   With `operation=BATCH_CONVERT_TO_JSON`: `list`
+    
+-   With `operation=BATCH_EXTRACT_TEXT`: `list`
+    
+-   With `operation=BATCH_EXTRACT_STRUCTURED_DATA`: `list`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` | 
+
+By the operation: text for the conversions to markdown, HTML and text, which with the docling CLI is the path of the output file unless contentInBody (useDoclingServe gives the content); the task id for SUBMIT\_ASYNC\_CONVERSION; a DoclingDocument for CONVERT\_TO\_JSON and EXTRACT\_STRUCTURED\_DATA; a BatchProcessingResults for the batch operations, a List of BatchConversionResult with splitBatchResults; and a ChunkDocumentResponse for the chunking, a List of Chunk with contentInBody.
+
+-   With `operation=CONVERT_TO_JSON`: `pojo` (`ai.docling.core.DoclingDocument`)
+    
+-   With `operation=EXTRACT_STRUCTURED_DATA`: `pojo` (`ai.docling.core.DoclingDocument`)
+    
+-   With `operation=CHECK_CONVERSION_STATUS`: `pojo` (`org.apache.camel.component.docling.ConversionStatus`)
+    
+-   With `operation=EXTRACT_METADATA`: `pojo` (`org.apache.camel.component.docling.DocumentMetadata`)
+    
+-   With `operation=BATCH_CONVERT_TO_MARKDOWN`: `pojo` or `list`
+    
+-   With `operation=BATCH_CONVERT_TO_HTML`: `pojo` or `list`
+    
+-   With `operation=BATCH_CONVERT_TO_JSON`: `pojo` or `list`
+    
+-   With `operation=BATCH_EXTRACT_TEXT`: `pojo` or `list`
+    
+-   With `operation=BATCH_EXTRACT_STRUCTURED_DATA`: `pojo` or `list`
+    
+-   With `operation=CHUNK_HYBRID`: `pojo` or `list`
+    
+-   With `operation=CHUNK_HIERARCHICAL`: `pojo` or `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Input Types

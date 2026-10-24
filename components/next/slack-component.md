@@ -218,9 +218,24 @@ Enum values:
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 
+## Message Body
+
+The message body at each side of the Slack component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.slack.api.model.Message`) | One message per new message of the conversation, the most recent first, or the oldest first with naturalOrder; the first poll gives the last message of the history. The text is ${body.text}. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo` | The text of the message, or a com.slack.api.model.Message with its blocks: bytes, a stream or a file are read as text. A Map or another POJO is sent as its toString(): marshal it first. No body sends no text, which Slack rejects. |
+| **Producer output** | `unchanged` | Unchanged: the answer of Slack is not kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
-To send a message contained in the message body, a pre-established [Slack incoming webhook](https://api.slack.com/incoming-webhooks) must be configured in Slack.
+To send a message contained in the message body, a pre-established [Slack incoming webhook](https://api.slack.com/incoming-webhooks) must be configured in Slack, or the producer uses a token of a Slack app.
+
+The producer sends the message body as the text of the message: bytes, a stream or a file are read as text. A `com.slack.api.model.Message` body is sent with its blocks and attachments. Marshal a Map or another object to text first, as it is otherwise sent as its `toString()`. The message body is unchanged after the call.
 
 ### Configuring in Spring XML
 
@@ -345,7 +360,7 @@ from("slack://general?token=RAW(<YOUR_TOKEN>)&maxResults=1")
             uri: mock:result
 ```
 
-This way you’ll get the last message from `general` channel. The consumer will track the timestamp of the last message consumed, and in the next poll it will consume only newer messages in the channel. When more than `maxResults` new messages were posted since the previous poll, the consumer reads the following pages of the conversation history in the same poll (`maxResults` messages per request), so no message is skipped. For a busy channel, set a higher `maxResults` to need fewer requests. If the request for a following page fails, for example because Slack rate limits it (some apps may send only one `conversations.history` request per minute), the consumer routes the most recent messages it has already read, as when it reads one page only, and logs a WARN that the older messages of that poll were skipped.
+This way you’ll get the last message from `general` channel, as a `com.slack.api.model.Message`, whose text is `${body.text}`. The consumer will track the timestamp of the last message consumed, and in the next poll it will consume only newer messages in the channel. When more than `maxResults` new messages were posted since the previous poll, the consumer reads the following pages of the conversation history in the same poll (`maxResults` messages per request), so no message is skipped. For a busy channel, set a higher `maxResults` to need fewer requests. If the request for a following page fails, for example because Slack rate limits it (some apps may send only one `conversations.history` request per minute), the consumer routes the most recent messages it has already read, as when it reads one page only, and logs a WARN that the older messages of that poll were skipped.
 
 You’ll need to create a Slack app and use it in your workspace.
 

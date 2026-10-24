@@ -171,6 +171,28 @@ Enum values:
 | **platformHttpEngine** (advanced) | An HTTP Server engine implementation to serve the requests of this endpoint. |  | PlatformHttpEngine |
 | **oauthProfile** (security) | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. |  | String |
 
+## Message Body
+
+The message body at each side of the Platform HTTP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream`, `bytes`, `null`, `map` or `file` | 
+The request body: the stream cache with the Vert.x engine, a byte array with Spring Boot; null for a request without a body, such as a GET; a Map of the fields of a form (populateBodyWithForm); a File for an upload.
+
+-   With `useBodyHandler=false`: `pojo`
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `null`, `text`, `bytes` or `stream` | The response body: text, bytes, a stream or no body. A Map or a List fails: marshal it first. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Platform HTTP Provider

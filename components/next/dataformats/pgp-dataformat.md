@@ -27,6 +27,20 @@ The PGP (Pretty Good Privacy Cryptographic) dataformat supports the following op
 | **signatureVerificationOption** (common) |  | `String` | Controls the behavior for verifying the signature during unmarshaling. Possible values: optional, required, ignore, no\_signature\_allowed. |
 | **requireIntegrityProtection** (common) | `true` | `Boolean` | Whether a message must be integrity protected in order to be decrypted. The legacy symmetrically encrypted data packet carries no modification detection code, and the packet type is chosen by whoever produced the message, so accepting it lets the sender decide whether the integrity check applies. Set to false only to interoperate with a sender that still emits the legacy packet. |
 
+## Message Body
+
+The message body at each side of the PGP (Pretty Good Privacy Cryptographic) data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The data to encrypt: text in the charset of the exchange, bytes, a stream or a file. |
+| **Marshal output** | `stream` | The PGP message in the stream cache, or a byte array when stream caching is off: binary, or ASCII armored text when armored is true. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file` | A PGP message, binary or ASCII armored: the armor is detected, whatever armored is set to. |
+| **Unmarshal output** | `stream` | The decrypted data in the stream cache, or a byte array when stream caching is off. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## PGPDataFormat Message Headers
 
 You can override the PGPDataFormat options by applying the below headers into messages dynamically.

@@ -158,6 +158,17 @@ The Timer component supports the following message header(s), which is/are liste
 | **CamelTimerFiredTime** (consumer) Constant: [`HEADER_FIRED_TIME`](https://javadoc.io/doc/org.apache.camel/camel-timer/latest/org/apache/camel/component/timer/TimerConstants.html#HEADER_FIRED_TIME) | The fired time. |  | Date |
 | **CamelMessageTimestamp** (consumer) Constant: [`HEADER_MESSAGE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-timer/latest/org/apache/camel/component/timer/TimerConstants.html#HEADER_MESSAGE_TIMESTAMP) | The timestamp of the message. |  | long |
 
+## Message Body
+
+The message body at each side of the Timer component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body: the message only starts the route. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Exchange Properties

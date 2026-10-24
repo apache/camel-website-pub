@@ -1,9 +1,9 @@
 urls[8]{loc,lastmod}:
-  https://camel.apache.org/camel-core/advanced-camel-core-guides/index.md,2026-10-23T20:57:53.818Z
-  https://camel.apache.org/camel-core/contributing/building.md,2026-10-23T20:57:53.818Z
-  https://camel.apache.org/camel-core/contributing/expectations.md,2026-10-23T20:57:53.818Z
-  https://camel.apache.org/camel-core/contributing/index.md,2026-10-23T20:57:53.818Z
-  https://camel.apache.org/camel-core/contributing/testing-camel.md,2026-10-23T20:57:53.818Z
-  https://camel.apache.org/camel-core/getting-started/index.md,2026-10-23T20:57:53.818Z
-  https://camel.apache.org/camel-core/reference/index.md,2026-10-23T20:57:53.818Z
-  https://camel.apache.org/camel-core/working-with-camel-core/index.md,2026-10-23T20:57:53.818Z
+  https://camel.apache.org/camel-core/advanced-camel-core-guides/index.md,2026-10-24T15:11:35.575Z
+  https://camel.apache.org/camel-core/contributing/building.md,2026-10-24T15:11:35.575Z
+  https://camel.apache.org/camel-core/contributing/expectations.md,2026-10-24T15:11:35.575Z
+  https://camel.apache.org/camel-core/contributing/index.md,2026-10-24T15:11:35.575Z
+  https://camel.apache.org/camel-core/contributing/testing-camel.md,2026-10-24T15:11:35.575Z
+  https://camel.apache.org/camel-core/getting-started/index.md,2026-10-24T15:11:35.575Z
+  https://camel.apache.org/camel-core/reference/index.md,2026-10-24T15:11:35.575Z
+  https://camel.apache.org/camel-core/working-with-camel-core/index.md,2026-10-24T15:11:35.575Z

@@ -331,6 +331,50 @@ The Spring RabbitMQ component supports the following message header(s), which is
 | **CamelSpringRabbitmqPriority** (common) Constant: [`PRIORITY`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#PRIORITY) | The message priority. |  | Integer |
 | **CamelSpringRabbitmqClusterId** (common) Constant: [`CLUSTER_ID`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#CLUSTER_ID) | The cluster id. |  | String |
 
+## Message Body
+
+The message body at each side of the Spring RabbitMQ component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `bytes` | A String when the content type starts with text, as for text this component sends; a byte array otherwise, JSON and Java serialized objects too, which are not deserialized.
+Not known when `messageConverter` is set.
+
+ |
+| **Consumer reply** | `text`, `bytes`, `stream` or `file` | The reply to a message with a reply-to, converted as the producer converts a body: a Map or a POJO fails.
+
+-   With `allowNullBody=true`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+Not known when `messageConverter` is set.
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | Text, bytes, a stream or a file, sent as a byte array, text as text/plain unless the CamelSpringRabbitmqContentType header says another type. A Map or a POJO fails, as it is not serialized: marshal it first.
+
+-   With `allowNullBody=true`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+Not known when `messageConverter` is set.
+
+ |
+| **Producer output** | `unknown` | 
+
+Unchanged for a message that expects no reply (InOnly). A message that expects one (InOut) gets the body of the reply as the consumer gives it: a String for a text content type, a byte array otherwise.
+
+-   With `exchangePattern=InOnly`: `unchanged`
+    
+-   With `disableReplyTo=true`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Using a connection factory

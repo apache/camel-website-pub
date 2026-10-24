@@ -147,6 +147,18 @@ Enum values:
 | **CamelQdrantPointId** (producer) Constant: [`POINT_ID`](https://javadoc.io/doc/org.apache.camel/camel-qdrant/latest/org/apache/camel/component/qdrant/QdrantHeaders.html#POINT_ID) | The point id to use for operation. |  | int |
 | **CamelQdrantMaxResults** (producer) Constant: [`MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-qdrant/latest/org/apache/camel/component/qdrant/QdrantHeaders.html#MAX_RESULTS) | The maximum number of results to return from a similarity search. |  | int |
 
+## Message Body
+
+The message body at each side of the Qdrant component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo`, `list` or `null` | By the action in the CamelQdrantAction header: a VectorParams for CREATE\_COLLECTION, a PointStruct or a List of them for UPSERT, a PointId or a List of them for RETRIEVE, a PointsSelector, PointId, Filter or Condition for DELETE, and the query vector as a List of Float, a float array or a PointStruct for SIMILARITY\_SEARCH. DELETE\_COLLECTION and COLLECTION\_INFO do not read the body. Another body fails, such as a number as the id (use PointIdFactory.id) or a List of Double. The qdrant:embeddings data type transformer builds the PointStruct from the output of langchain4j-embeddings. |
+| **Producer output** | `list`, `pojo` or `unchanged` | By the action: a List of RetrievedPoint for RETRIEVE, a List of ScoredPoint for SIMILARITY\_SEARCH and a CollectionInfo for COLLECTION\_INFO. The other actions keep the body, UPSERT and DELETE with the operation id and status in headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 In YAML, a Groovy expression builds the request objects of the Qdrant client, such as `VectorParams` or `PointStruct`.

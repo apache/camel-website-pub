@@ -23,7 +23,7 @@ from("kafka:topic")
 ```xml
 <route>
   <from uri="kafka:topic"/>
-  <unmarshal><protobuf library="Jackson"/></unmarshal>
+  <unmarshal><protobuf library="Jackson" unmarshalType="com.fasterxml.jackson.databind.JsonNode"/></unmarshal>
   <to uri="log:info"/>
 </route>
 ```
@@ -36,6 +36,7 @@ from("kafka:topic")
         - unmarshal:
             protobuf:
               library: Jackson
+              unmarshalType: com.fasterxml.jackson.databind.JsonNode
         - to:
             uri: log:info
 ```
@@ -65,6 +66,23 @@ The Protobuf Jackson 2 dataformat supports the following options which are liste
 | **schemaResolver** (advanced) |  | `String` | Optional schema resolver used to lookup schemas for the data in transit. |
 | **autoDiscoverSchemaResolver** (advanced) | `true` | `Boolean` | When not disabled, the SchemaResolver will be looked up into the registry. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
+
+## Message Body
+
+The message body at each side of the Protobuf Jackson 2 data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `map` or `pojo` | A POJO, a Map or a JsonNode to write as the message of the protobuf schema of the schemaResolver. Text, bytes or a stream are written as they are, not encoded. |
+| **Marshal output** | `stream`, as binary | The protobuf binary data in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | Protobuf binary data of the schema of the schemaResolver. A String fails. |
+| **Unmarshal output** | `map` | A Map (LinkedHashMap) of the fields of the message; an object of the class unmarshalType names, such as JsonNode.
+Not known when `unmarshalType` or `collectionType` or `useList` or `allowUnmarshallType` or `allowJmsType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 
 ## Usage
 

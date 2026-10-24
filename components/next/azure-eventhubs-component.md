@@ -246,6 +246,19 @@ The Azure Event Hubs component supports the following message header(s), which i
 | **CamelMessageTimestamp** (consumer) Constant: [`MESSAGE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-azure-eventhubs/latest/org/apache/camel/component/azure/eventhubs/EventHubsConstants.html#MESSAGE_TIMESTAMP) | The timestamp of the message. |  | long |
 | **CamelAzureEventHubsCheckpointUpdatedBy** (consumer) Constant: [`CHECKPOINT_UPDATED_BY`](https://javadoc.io/doc/org.apache.camel/camel-azure-eventhubs/latest/org/apache/camel/component/azure/eventhubs/EventHubsConstants.html#CHECKPOINT_UPDATED_BY) | It sets the reason for the checkpoint to have been updated. This is only present on a received EventData. |  | String |
 
+## Message Body
+
+The message body at each side of the Azure Event Hubs component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The body of the event, one message per event. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | What converts to a byte array: text, bytes, a stream or a file, sent as one event; a Map, a number or a POJO fails: marshal it first. A List is sent as one event per element, in one batch, and an element that is an Exchange or a Message is sent with its headers. |
+| **Producer output** | `unchanged` | Unchanged: a send gives no result, and no header is set. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Authentication Information

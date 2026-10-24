@@ -21,6 +21,20 @@ The Crypto (Java Cryptographic Extension) dataformat supports the following opti
 | **shouldAppendHMAC** (common) | `true` | `Boolean` | Flag indicating that a Message Authentication Code should be calculated and appended to the encrypted data. |
 | **inline** (advanced) | `false` | `Boolean` | Flag indicating that the configured IV should be inlined into the encrypted data stream. Is by default false. |
 
+## Message Body
+
+The message body at each side of the Crypto (Java Cryptographic Extension) data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The bytes to encrypt: text in the charset of the exchange, bytes, a stream or a file. |
+| **Marshal output** | `stream`, as binary | The encrypted data in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | Encrypted data as marshal writes it, with the same inline and shouldAppendHMAC settings. |
+| **Unmarshal output** | `stream` | The decrypted bytes in the stream cache, or a byte array when stream caching is off. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Basic Usage
 
 At its most basic, all that is required to encrypt/decrypt an exchange is a shared secret key. If one or more instances of the Crypto data format are configured with this key, the format can be used to encrypt the payload in one route (or part of one) and decrypted in another. For example, using the Java DSL as follows:

@@ -13,6 +13,20 @@ The LZF Deflate Compression dataformat supports the following options which are 
 | --- | --- | --- | --- |
 | **usingParallelCompression** (common) | `false` | `Boolean` | Whether to enable encoding (compress) using multiple processing cores. |
 
+## Message Body
+
+The message body at each side of the LZF Deflate Compression data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The data to compress: text in the charset of the exchange, bytes, a stream or a file. |
+| **Marshal output** | `stream`, as binary | The LZF data in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | LZF data, such as marshal gives, with or without usingParallelCompression. |
+| **Unmarshal output** | `stream` | The decompressed data in the stream cache, or a byte array when stream caching is off. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Marshal
 
 In this example, we marshal a regular text/XML payload to a compressed payload employing LZF compression format and send it an ActiveMQ queue called MY\_QUEUE.

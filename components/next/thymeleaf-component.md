@@ -170,6 +170,18 @@ The Thymeleaf component supports the following message header(s), which is/are l
 | **CamelThymeleafVariableMap** (producer) Constant: [`THYMELEAF_VARIABLE_MAP`](https://javadoc.io/doc/org.apache.camel/camel-thymeleaf/latest/org/apache/camel/component/thymeleaf/ThymeleafConstants.html#THYMELEAF_VARIABLE_MAP) | The value of this header should be a Map with key/values that will be override any existing key with the same name. This can be used to preconfigure common key/values you want to reuse in your Thymeleaf endpoints. |  | Map |
 | **CamelThymeleafServletContext** (producer) Constant: [`THYMELEAF_SERVLET_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-thymeleaf/latest/org/apache/camel/component/thymeleaf/ThymeleafConstants.html#THYMELEAF_SERVLET_CONTEXT) | The ServletContext for a web application. |  | ServletContext |
 
+## Message Body
+
+The message body at each side of the Thymeleaf component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The template gets the body as ${body}, as it is: text, or a Map, a List or a POJO to read from; no body prints as empty text, and bytes or a stream are not read as text. The template is the resource, or the CamelThymeleafTemplate header with allowTemplateFromHeader=true, never the body. |
+| **Producer output** | `text` (`java.lang.String`) | The text the template writes, in its templateMode such as HTML. The headers are kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Headers set during the Thymeleaf evaluation are returned to the message and added as headers, thus making it possible to return values from Thymeleaf to the Message.
 
 For example, to set the header value of `fruit` in the Thymeleaf template `fruit-template.html`:
@@ -182,7 +194,7 @@ The `fruit` header is now accessible from the `message.out.headers`.
 
 ### Thymeleaf Context
 
-Camel will provide exchange information in the Thymeleaf context (just a `Map`). The `Exchange` is transferred as:
+Camel will provide exchange information in the Thymeleaf context (just a `Map`). The `Exchange` is transferred as: The `body`, `header`, `headers`, `variable`, `variables` and `exception` entries are always there; the others only when the endpoint has `allowContextMapAll=true`.
 
  
 | key | value |
@@ -197,13 +209,14 @@ Camel will provide exchange information in the Thymeleaf context (just a `Map`).
 | `out` | The Out message (only for InOut message exchange pattern). |
 | `response` | The Out message (only for InOut message exchange pattern). |
 
-You can set up a custom Thymeleaf Context yourself by setting property `allowTemplateFromHeader=true` and setting the message header `CamelThymeleafContext` like this
+You can add your own variables to the Thymeleaf context with a `Map` in the message header `CamelThymeleafVariableMap`. Camel sets the `body`, `header`, `headers`, `variable`, `variables` and `exception` entries on top of it, and removes the header after use:
 
 _Java-only: programmatic Thymeleaf context setup via Exchange API_
 
 ```java
-EngineContext engineContext = new EngineContext(variableMap);
-exchange.getIn().setHeader("CamelThymeleafContext", engineContext);
+Map<String, Object> variableMap = new HashMap<>();
+variableMap.put("greeting", "Hello");
+exchange.getIn().setHeader("CamelThymeleafVariableMap", variableMap);
 ```
 
 ### Hot reloading
@@ -212,7 +225,7 @@ The Thymeleaf template resource is, by default, hot reloadable for both file and
 
 ### Dynamic templates
 
-Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
+Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, and the endpoint has `allowTemplateFromHeader=true`, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
   
 | Header | Type | Description |

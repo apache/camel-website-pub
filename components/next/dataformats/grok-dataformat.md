@@ -2,7 +2,7 @@
 
 **Since Camel 3.0**
 
-This component provides dataformat for processing inputs with grok patterns. Grok patterns are used to process unstructured data into structured objects - `List<Map<String, Object>>`.
+This component provides dataformat for processing inputs with grok patterns. Grok patterns are used to process unstructured data into structured objects: a `Map<String, Object>` of the captures for one match, a `List` of such Maps for several matches, or no body when nothing matches. With a split, as in the examples below, an input with one match gives a `Map` whose entries are split one by one.
 
 This component is based on the [Java Grok library](https://github.com/thekrakken/java-grok)
 
@@ -65,7 +65,7 @@ Parse Apache logs and process only 4xx responses
 
 ```java
 from("file://apacheLogs")
-    .unmarshal().grok("%{COMBINEDAPACHELOG")
+    .unmarshal().grok("%{COMBINEDAPACHELOG}")
     .split(body()).filter(simple("${body[response]} starts with '4'"))
     .to("log:4xx");
 ```
@@ -73,7 +73,7 @@ from("file://apacheLogs")
 ```xml
 <route>
   <from uri="file://apacheLogs"/>
-  <unmarshal><grok pattern="%{COMBINEDAPACHELOG"/></unmarshal>
+  <unmarshal><grok pattern="%{COMBINEDAPACHELOG}"/></unmarshal>
   <split>
     <simple>${body}</simple>
     <filter>
@@ -91,7 +91,7 @@ from("file://apacheLogs")
       steps:
         - unmarshal:
             grok:
-              pattern: "%{COMBINEDAPACHELOG"
+              pattern: "%{COMBINEDAPACHELOG}"
         - split:
             simple: "${body}"
             steps:
@@ -144,3 +144,15 @@ The Grok dataformat supports the following options which are listed below.
 | **flattened** (common) | `false` | `Boolean` | Whether to use flattened mode. In flattened mode an exception is thrown when there are multiple pattern matches with the same key. |
 | **allowMultipleMatchesPerLine** (common) | `true` | `Boolean` | Whether to allow multiple matches per line. If false, every line of input is matched for the pattern only once. Otherwise the line can be scanned multiple times when a non-terminal pattern is used. |
 | **namedOnly** (common) | `false` | `Boolean` | Whether to capture named expressions only or not (i.e. %\\{IP:ip} but not ${IP}). |
+
+## Message Body
+
+The message body at each side of the Grok data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | Lines of text, such as a log file: each line is matched with the pattern. |
+| **Unmarshal output** | `map`, `list` or `null` | A Map of the captures for one match, a List of such Maps for several, or null when no line matches. The Maps cannot be modified. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).

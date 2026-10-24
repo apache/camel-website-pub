@@ -116,6 +116,20 @@ Enum values:
 | **exchangeProperties** (advanced) | The data to use as exchange properties as key=value pairs. You can externalize the data by using file: or classpath: as prefix and specify the location of the file. This is a multi-value option with prefix: exchangeProperty. |  | Map |
 | **variables** (advanced) | The data to use as exchange variables as key=value pairs. You can externalize the data by using file: or classpath: as prefix and specify the location of the file. This is a multi-value option with prefix: variable. |  | Map |
 
+## Message Body
+
+The message body at each side of the Once component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body without the body option. The body option gives its text, the text of a file:, classpath: or http: resource, a Boolean for true or false, a number for a whole number, or with language:NAME: the result of the expression.
+Not known when `body` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ## Example
@@ -295,12 +309,12 @@ By default, the component is fired after 1 seconds when Camel has been fully sta
     
 
 ```java
-from("once:foo?body=file.data.json&delay=-1").to("bean:myBean?method=someMethodName");
+from("once:foo?body=file:data.json&delay=-1").to("bean:myBean?method=someMethodName");
 ```
 
 ```xml
 <route>
-  <from uri="once:foo?body=file.data.json&amp;delay=-1"/>
+  <from uri="once:foo?body=file:data.json&amp;delay=-1"/>
   <to uri="bean:myBean?method=someMethodName"/>
 </route>
 ```
@@ -310,7 +324,7 @@ from("once:foo?body=file.data.json&delay=-1").to("bean:myBean?method=someMethodN
     from:
       uri: once:foo
       parameters:
-        body: file.data.json
+        body: file:data.json
         delay: -1
       steps:
         - to:

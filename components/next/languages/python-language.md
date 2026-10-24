@@ -17,12 +17,26 @@ The Python language supports the following options which are listed below.
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+## Message Body
+
+The message body at each side of the Python language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Expression input** | `any` | The body as it is, in the variable body: a String is a Python unicode string, and other Java objects keep their methods. |
+| **Expression result** | `text` (`java.lang.String`) | The Python text, str(), of what the script returns: a dict as its Python text, and None as the text None.
+Not known when `resultType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Variables
 
   
 | Variable | Type | Description |
 | --- | --- | --- |
-| **this** | Exchange | the Exchange is the root object |
 | exchange | Exchange | the Exchange |
 | camelContext | CamelContext | the CamelContext |
 | exchangeId | String | the exchange id |
@@ -42,6 +56,8 @@ The Python language supports the following options which are listed below.
 The variables have the same names as in the [Groovy](groovy-language.md) language, except `in`, which is a reserved word in Python (use `message` or `request`), and the deprecated `out` and `response`. The deprecated `context` and `properties` still work.
 
 The `variable` and `variables` bindings are the exchange-scoped variables (for example set with the [Set Variable](../eips/setVariable-eip.md) EIP). Global and route variables, such as `global:foo`, are not in this map; use `exchange.getVariable('global:foo')` for those.
+
+The result of a script is its Python text, as `str()` gives it: a dict gives its Python text, and `None` gives the text `None`. Set `resultType` to convert the text to another type.
 
 ## Examples
 

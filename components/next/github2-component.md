@@ -273,6 +273,73 @@ The GitHub2 component supports the following message header(s), which is/are lis
 | **CamelGitHubCommitUrl** (consumer) Constant: [`GITHUB_COMMIT_URL`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_COMMIT_URL) | The commit URL. |  | String |
 | **CamelGitHubEventPayload** (consumer) Constant: [`GITHUB_EVENT_PAYLOAD`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_EVENT_PAYLOAD) | The event payload. |  | GHEventPayload |
 
+## Message Body
+
+The message body at each side of the GitHub2 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `null` | 
+One message per new item, oldest first. commit gives the commit message (null when the data of the commit cannot be loaded), or the GHCommit with commitMessageAsBody=false, and event the type of the event, such as PUSH, with the GHEventInfo in the CamelGitHubEventPayload header.
+
+-   With `commitMessageAsBody=false`: `pojo` (`org.kohsuke.github.GHCommit`)
+    
+-   With `type=PULLREQUEST`: `pojo` (`org.kohsuke.github.GHPullRequest`)
+    
+-   With `type=PULLREQUESTCOMMENT`: `pojo` (`org.kohsuke.github.GHIssueComment`)
+    
+-   With `type=TAG`: `pojo` (`org.kohsuke.github.GHTag`)
+    
+-   With `type=EVENT`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | 
+
+Read as text: the comment for pullRequestComment, which needs a body, and the description of the issue for createIssue and of the commit status for pullRequestState; a Map or a POJO is sent as its toString(), so marshal it first. getCommitFile reads the sha from the body when the CamelGitHubCommitSha header is not set, and the other types read only headers.
+
+-   With `type=PULLREQUESTCOMMENT`: `text`, `bytes`, `stream` or `file`
+    
+-   With `type=CREATEISSUE`: `null`, `text`, `bytes`, `stream` or `file`
+    
+-   With `type=PULLREQUESTSTATE`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unknown` | 
+
+The GHPullRequest as read before the close for closePullRequest, the GHIssueComment for pullRequestComment when the exchange expects a reply (InOut), otherwise the body is unchanged, the GHCommitStatus for pullRequestState, a List of GHPullRequestFileDetail for pullRequestFiles, the content of the file as text for getCommitFile, and the GHIssue for createIssue.
+
+-   With `type=CLOSEPULLREQUEST`: `pojo` (`org.kohsuke.github.GHPullRequest`)
+    
+-   With `type=PULLREQUESTCOMMENT`: `pojo` or `unchanged`
+    
+-   With `type=PULLREQUESTSTATE`: `pojo` (`org.kohsuke.github.GHCommitStatus`)
+    
+-   With `type=PULLREQUESTFILES`: `list` (`java.util.List<org.kohsuke.github.GHPullRequestFileDetail>`)
+    
+-   With `type=GETCOMMITFILE`: `text` (`java.lang.String`)
+    
+-   With `type=CREATEISSUE`: `pojo` (`org.kohsuke.github.GHIssue`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring authentication
@@ -330,10 +397,10 @@ from("github2:commit/main?repoOwner=myorg&repoName=myrepo&apiUrl=https://github.
 | Endpoint | Context | Body Type |
 | --- | --- | --- |
 | pullRequest | polling | `org.kohsuke.github.GHPullRequest` |
-| pullRequestComment | polling | `org.kohsuke.github.GHPullRequestReviewComment` |
+| pullRequestComment | polling | `org.kohsuke.github.GHIssueComment` |
 | tag | polling | `org.kohsuke.github.GHTag` |
 | commit | polling | `org.kohsuke.github.GHCommit` or `String` with commit message and headers with some metadata. This can be configured by the `commitMessageAsBody` option. |
-| event | polling | `org.kohsuke.github.GHEventInfo` |
+| event | polling | `String` with the type of the event, such as `PUSH`, and the `org.kohsuke.github.GHEventInfo` in the `CamelGitHubEventPayload` header |
 
 ### Producer Endpoints
 
@@ -343,7 +410,7 @@ from("github2:commit/main?repoOwner=myorg&repoName=myrepo&apiUrl=https://github.
 | pullRequestComment | String (comment text) | \- `CamelGitHubPullRequest` (integer) (REQUIRED): Pull request number. - `CamelGitHubInResponseTo` (integer): Required if responding to another inline comment on the pull request diff. If left off, a general comment on the pull request discussion is assumed. |
 | closePullRequest | none | \- `CamelGitHubPullRequest` (integer) (REQUIRED): Pull request number. |
 | createIssue | String (issue body text) | \- `CamelGitHubIssueTitle` (String) (REQUIRED): Issue Title. |
-| pullRequestState | none | \- `CamelGitHubPullRequest` (integer) (REQUIRED): Pull request number. Sets the commit status on a pull request. |
+| pullRequestState | String (description of the status) | \- `CamelGitHubPullRequestHeadCommitSha` (String) (REQUIRED): The sha of the commit to set the status on. Sets the commit status on a pull request. |
 | pullRequestFiles | none | \- `CamelGitHubPullRequest` (integer) (REQUIRED): Pull request number. Returns the list of files changed in a pull request. |
 | getCommitFile | none | \- `CamelGitHubCommitSha` (String) (REQUIRED): Commit SHA. - `CamelGitHubFilePath` (String) (REQUIRED): File path. Returns the content of a file at a specific commit. |
 

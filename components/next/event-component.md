@@ -160,6 +160,20 @@ The Event component supports the following message header(s), which is/are liste
 | **CamelEventRedeliveryAttempt** (consumer) Constant: [`HEADER_EVENT_REDELIVERY_ATTEMPT`](https://javadoc.io/doc/org.apache.camel/camel-event/latest/org/apache/camel/component/camelevent/CamelEventConstants.html#HEADER_EVENT_REDELIVERY_ATTEMPT) | The redelivery attempt number (for ExchangeRedelivery events). |  | Integer |
 | **CamelEventBatchSize** (consumer) Constant: [`HEADER_EVENT_BATCH_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-event/latest/org/apache/camel/component/camelevent/CamelEventConstants.html#HEADER_EVENT_BATCH_SIZE) | The number of events in a batch (only set when batchSize is configured). |  | Integer |
 
+## Message Body
+
+The message body at each side of the Event component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`org.apache.camel.spi.CamelEvent`) | The event, such as a RouteStartedEvent or an ExchangeCompletedEvent. With a batchSize above 1, a List of the events.
+Not known when `batchSize` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Event Types
 
 The following event types are available (corresponding to `org.apache.camel.spi.CamelEvent.Type`):

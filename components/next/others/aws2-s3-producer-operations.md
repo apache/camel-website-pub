@@ -58,7 +58,7 @@ Bucket-level operations (`listBuckets`, `deleteBucket`, `listObjects`, `createBu
 | `deleteBucket` | Delete a bucket. |  |
 | `headBucket` | Check if a bucket exists and you have permission to access it. |  |
 | `listObjects` | List objects in a bucket. |  |
-| `getObject` | Get a single object. Returns an `S3Object` instance. |  |
+| `getObject` | Get a single object. Returns its content as a stream. |  |
 | `getObjectRange` | Get a byte range from an object. | See [getObjectRange](#getObjectRange) |
 | `deleteObject` | Delete an object. |  |
 | `deleteObjects` | Delete multiple objects in a single request. | See [deleteObjects](#deleteObjects) |

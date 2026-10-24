@@ -423,6 +423,32 @@ The File component supports the following message header(s), which is/are listed
 | **CamelOverruleFileName** (producer) Constant: [`OVERRULE_FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-file/latest/org/apache/camel/component/file/FileConstants.html#OVERRULE_FILE_NAME) | Is used for overruling CamelFileName header and use the value instead (but only once, as the producer will remove this header after writing the file). The value can be only be a String. Notice that if the option fileName has been configured, then this is still being evaluated. |  | Object |
 | **CamelFileInitialOffset** (consumer) Constant: [`INITIAL_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-file/latest/org/apache/camel/component/file/FileConstants.html#INITIAL_OFFSET) | A long value containing the initial offset. |  | long |
 | **CamelFileChecksum** (producer) Constant: [`FILE_CHECKSUM`](https://javadoc.io/doc/org.apache.camel/camel-file/latest/org/apache/camel/component/file/FileConstants.html#FILE_CHECKSUM) | The checksum of the file written, when checksumAlgorithm is in use. |  | String |
+
+## Message Body
+
+The message body at each side of the File component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `file` | The file as read: a GenericFile (a java.io.File with preMove), which converts to text, bytes or a stream. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+What converts to an InputStream: text, bytes, a stream or a file. A Map or a List fails: marshal it first.
+
+-   With `allowNullBody=true`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Tip**
 > **Default behavior for file producer**
 >

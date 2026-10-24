@@ -104,6 +104,24 @@ With the following _path_ and _query_ parameters:
 | **schemaLanguage** (advanced) | Configures the W3C XML Schema Namespace URI. | [http://www.w3.org/2001/XMLSchema](http://www.w3.org/2001/XMLSchema) | String |
 | **useSharedSchema** (advanced) | Whether the Schema instance should be shared or not. This option is introduced to work around a JDK 1.6.x bug. Xerces should not have this issue. | true | boolean |
 
+## Message Body
+
+The message body at each side of the Validator component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML to validate: text, bytes, a stream, a file, a DOM or another javax.xml.transform.Source. A Map, a List or no body fails; with headerName the header is validated instead.
+-   With `failOnNullBody=false`: `null`, `text`, `bytes`, `stream`, `file` or `pojo`
+    
+
+Not known when `headerName` is set.
+
+ |
+| **Producer output** | `unchanged` | Unchanged: XML that is not valid fails with a SchemaValidationException. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Example
 
 The following [example](https://github.com/apache/camel/blob/main/components/camel-spring-xml/src/test/resources/org/apache/camel/component/validator/camelContext.xml) shows how to configure a route from endpoint **direct:start** which then goes to one of two endpoints, either **mock:valid** or **mock:invalid** based on whether the XML matches the given schema (which is supplied on the classpath). When the XML does not match the schema, the validator throws an `org.apache.camel.ValidationException`, which the `doCatch` handles:

@@ -28,6 +28,21 @@ The Flatpack dataformat supports the following options which are listed below.
 | **textQualifier** (advanced) |  | `String` | If the text is qualified with a character. Uses quote character by default. |
 | **parserFactory** (advanced) |  | `Object` | References to a custom parser factory to lookup in the registry. |
 
+## Message Body
+
+The message body at each side of the Flatpack data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `list` | The rows as a List of Maps, such as the DataSetList unmarshal gives; a single Map fails. Without a definition, the keys of the first Map name the columns. |
+| **Marshal output** | `stream`, as text | The records in the stream cache, or a byte array when stream caching is off. An empty List writes nothing. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | 
+ |
+| **Unmarshal output** | `list` (`org.apache.camel.component.flatpack.DataSetList`) | A DataSetList: a List of the rows, each a HashMap of the column names and the values, which does not keep the column order. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 To use the data format, set it on the marshal or unmarshal step of the route:

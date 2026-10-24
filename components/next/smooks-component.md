@@ -6,6 +6,8 @@
 
 The Camel Smooks component uses [Smooks](https://www.smooks.org/) to break up the structured data (EDI, CSV, POJO, etc…​) of a Camel message body into fragments. These fragments can be processed independently of one another from within Smooks.
 
+The body is read by the reader of the Smooks configuration (XML by default) as text, bytes, a stream or a file. A POJO is read when the body is a `org.smooks.io.source.JavaSource` that holds it: a POJO, a `Map` or a `List` as the body itself fails.
+
 Common applications of Smooks include:
 
 -   transformation: EDI to CSV, POJO to EDI, POJO to XML, and so on.
@@ -125,6 +127,18 @@ The Smooks component supports the following message header(s), which is/are list
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelSmooksExecutionContext** (advanced) Constant: [`SMOOKS_EXECUTION_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-smooks/latest/org/apache/camel/component/smooks/SmooksConstants.html#SMOOKS_EXECUTION_CONTEXT) | The Smooks execution context. |  | ExecutionContext |
+
+## Message Body
+
+The message body at each side of the Smooks component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The data the reader of the smooks config reads: XML by default, or EDI, CSV or JSON with a reader. A Map, a List or a POJO fails. |
+| **Producer output** | `unknown` | What the exports of the smooks config give: the bean a JavaSink export extracts (a Map of the beans when it extracts none), or the text of a StringSink. Without exports, the input as a stream. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Usage
 

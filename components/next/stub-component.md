@@ -149,6 +149,20 @@ Enum values:
 | **browseLimit** (advanced) | Maximum number of messages to keep in memory available for browsing. Use 0 for unlimited. | 100 | int |
 | **queue** (advanced) | Define the queue instance which will be used by the endpoint. |  | BlockingQueue |
 
+## Message Body
+
+The message body at each side of the Stub component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unchanged` | The body the producer sent. |
+| **Producer input** | `any` | 
+ |
+| **Producer output** | `unknown` | Unchanged when no route consumes from the stub endpoint, or for a message that expects no reply (InOnly). A message that expects one (InOut) waits for the body the stub route ends with. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 Internally, the Stub component creates [Seda](seda-component.md) endpoints. The main difference between [Stub](#) and [Seda](seda-component.md) is that [Seda](seda-component.md) will validate the URI and parameters you give it, so putting seda: in front of a typical URI with query arguments will usually fail. Stub won’t, though, as it basically ignores all query parameters to let you quickly stub out one or more endpoints in your route temporarily.

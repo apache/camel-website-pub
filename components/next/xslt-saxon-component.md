@@ -166,6 +166,35 @@ The XSLT Saxon component supports the following message header(s), which is/are 
 | **CamelXsltStylesheet** (producer) Constant: [`XSLT_STYLESHEET`](https://javadoc.io/doc/org.apache.camel/camel-xslt-saxon/latest/org/apache/camel/component/xslt/XsltConstants.html#XSLT_STYLESHEET) | The template to use instead of the endpoint configured. |  | String |
 | **CamelXsltFileName** (producer) Constant: [`XSLT_FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-xslt-saxon/latest/org/apache/camel/component/xslt/XsltConstants.html#XSLT_FILE_NAME) | The XSLT file name. |  | String |
 
+## Message Body
+
+The message body at each side of the XSLT Saxon component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML to transform: text, bytes, a stream, a file, a DOM or another javax.xml.transform.Source; JSON text with useJsonBody. A Map, a List or no body fails.
+-   With `failOnNullBody=false`: `null`, `text`, `bytes`, `stream`, `file` or `pojo`
+    
+
+Not known when `source` or `useJsonBody` is set.
+
+ |
+| **Producer output** | `text` (`java.lang.String`) | The result of the transformation.
+
+-   With `output=bytes`: `bytes` (`byte[]`)
+    
+-   With `output=DOM`: `pojo` (`org.w3c.dom.Document`)
+    
+-   With `output=file`: `file` (`java.io.File`)
+    
+
+Not known when `resultHandlerFactory` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Using XSLT endpoints

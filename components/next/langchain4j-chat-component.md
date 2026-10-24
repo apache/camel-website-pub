@@ -254,6 +254,30 @@ Enum values:
 | **CamelLangChain4jChatRequestModel** (producer) Constant: [`REQUEST_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#REQUEST_MODEL) | The request model name. |  | String |
 | **CamelLangChain4jChatResponseModel** (producer) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#RESPONSE_MODEL) | The response model name. |  | String |
 
+## Message Body
+
+The message body at each side of the LangChain4j Chat component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The prompt as text, or a ChatMessage; another body is sent as its toString(), and no body fails. CHAT\_SINGLE\_MESSAGE\_WITH\_PROMPT takes the variables of the template in the CamelLangChain4jChatPromptTemplate header as a Map, and CHAT\_MULTIPLE\_MESSAGES a List of ChatMessage.
+
+-   With `chatOperation=CHAT_SINGLE_MESSAGE_WITH_PROMPT`: `map`
+    
+-   With `chatOperation=CHAT_MULTIPLE_MESSAGES`: `list`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` | The answer of the model as text, also when it is asked for JSON: unmarshal it to read its fields. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring the model by provider

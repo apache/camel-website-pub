@@ -238,6 +238,45 @@ Enum values:
 | **routeId** (producer) | To specify a route by its id. The special keyword current indicates the current route. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
+## Message Body
+
+The message body at each side of the Control Bus component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The route actions do not read the body. The language command evaluates the body as its expression, as text.
+
+-   With `command=language`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+The status of the route for action=status, such as Started, and its statistics as XML for action=stats; the result of the expression for the language command. The other actions leave the body unchanged, as does async=true or a task that fails, which is only logged.
+
+-   With `action=status`: `text` or `unchanged`
+    
+-   With `action=stats`: `text` or `unchanged`
+    
+-   With `command=language`: `unknown`
+    
+-   With `async=true`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 ### Using route command

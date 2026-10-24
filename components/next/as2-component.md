@@ -248,6 +248,10 @@ Enum values:
  |  | ExchangePattern |
 | **expectContinue** (producer) | Controls whether the Expect: 100-Continue header is included in outbound AS2 messages. When enabled, the client sends the headers first and waits for a 100 Continue response from the server before sending the message body. This can improve efficiency with compatible partners but may cause 3-second delays with servers that don’t support the protocol. Default is false for backward compatibility. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **proxyAuthPassword** (proxy) | The password for basic authentication with the HTTP proxy. |  | String |
+| **proxyAuthUsername** (proxy) | The user name for basic authentication with the HTTP proxy. The credentials are sent to the proxy only. |  | String |
+| **proxyHost** (proxy) | The host name of an HTTP proxy the client sends its AS2 messages through. The connection to the proxy is plain http; when an SSL context is configured, the AS2 message goes through a CONNECT tunnel to the target. |  | String |
+| **proxyPort** (proxy) | The port number of the HTTP proxy. |  | Integer |
 | **accessToken** (security) | The access token that is used by the client for bearer authentication. |  | String |
 | **asyncMdnAllowedHosts** (security) | Comma separated list of host names an asynchronous MDN may be delivered to. The delivery address is chosen by the sender of the AS2 message, so this is the list of hosts the operator vouches for. When set, an asynchronous MDN whose delivery address names a host outside the list is refused, and the configured mdnUserName/mdnPassword/mdnAccessToken are attached only to a host on the list. When not set, the MDN is still delivered to the sender-supplied address but no credentials are attached. The option applies to the consumer endpoint it is set on: consumers sharing a serverPortNumber each apply their own list. |  | String |
 | **decryptingPrivateKey** (security) | The key used to encrypt the EDI message. |  | PrivateKey |
@@ -571,6 +575,33 @@ In addition to the parameters above, the as2 API can also use any of the [Query 
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
 
+## Message Body
+
+The message body at each side of the AS2 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `stream` | 
+The EDI message that server/listen receives, decrypted, decompressed and without its signature: text in the charset of its Content-Type, or a stream when the sender used the base64 or binary transfer encoding. The component answers with its own receipt (MDN), never the body of the route. receipt/receive gives the receipt: a DispositionNotificationMultipartReportEntity, or a MultipartSignedEntity when it is signed. The CamelAs2.interchange exchange property holds the HttpCoreContext.
+
+-   With `apiName=RECEIPT`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | The body is used only when inBody names the argument of the method it is: with inBody=ediMessage it is the EDI message of client/send, passed as it is, which must be text, encoded in ediMessageCharset (us-ascii when not set), or a stream; convert bytes or a file to text first. Without inBody the message comes from the ediMessage option or the CamelAs2.ediMessage header.
+
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo` or `null` | The receipt (MDN) in the response when dispositionNotificationTo asks for one: a DispositionNotificationMultipartReportEntity, or a MultipartSignedEntity when it is signed. null without a receipt, when receiptDeliveryOption sends it to a receipt/receive consumer, or when the response has none, such as an HTTP error, which does not fail the exchange: the CamelAs2.interchange exchange property holds the HttpCoreContext with the response. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 
@@ -618,3 +649,33 @@ A `SIGNED`, `ENCRYPTED` or `SIGNED_ENCRYPTED` message structure also needs the k
 Several `as2://server/listen` consumers can share a `serverPortNumber`, each with its own `requestUriPattern`. Each consumer applies its own keys and certificates and its own asynchronous MDN settings (`mdnUserName`, `mdnPassword`, `mdnAccessToken` and `asyncMdnAllowedHosts`) to the messages received on its own pattern.
 
 The settings of the shared server connection still come from the first endpoint created on the port: `sslContextParameters` and `sslContext` (used for the TLS listener and for the https delivery of asynchronous MDNs), `mdnMessageTemplate`, `server`, `serverFqdn` and `as2Version`. They are per port, not per consumer.
+
+### Sending through an HTTP proxy
+
+When outbound traffic must go through an HTTP forward proxy, set `proxyHost` and `proxyPort` on the `as2://client/send` endpoint. The client connects to the proxy over plain http:
+
+-   without an `sslContext`, the AS2 message is sent to the proxy with an absolute request URI;
+    
+-   with an `sslContext`, the client asks the proxy to open a `CONNECT` tunnel to `targetHostname` and `targetPortNumber`, and the TLS handshake and hostname verification are made with the target through the tunnel.
+    
+
+If the proxy requires authentication, set `proxyAuthUsername` and `proxyAuthPassword`. They are sent to the proxy as a preemptive Basic `Proxy-Authorization` header, on the `CONNECT` request when tunnelling, and are not sent to the AS2 partner. Setting only one of them is a configuration error: the endpoint fails to start. If the proxy refuses the request, for example with `407 Proxy Authentication Required`, the send fails with an exception, as the message has not reached the partner. The proxy options apply to the AS2 client only: asynchronous MDNs are delivered directly.
+
+```yaml
+- route:
+    from:
+      uri: direct:sendToPartner
+      steps:
+        - to:
+            uri: as2://client/send
+            parameters:
+              inBody: ediMessage
+              targetHostname: partner.example.com
+              targetPortNumber: 443
+              sslContext: "#partnerSslContext"
+              proxyHost: proxy.internal
+              proxyPort: 3128
+              proxyAuthUsername: "{{proxy.user}}"
+              proxyAuthPassword: "{{proxy.password}}"
+              # ... the AS2 message options
+```

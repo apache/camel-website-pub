@@ -411,6 +411,55 @@ The AWS Kinesis Firehose component supports the following message header(s), whi
 | **CamelAwsKinesisFirehoseEncrypted** (sendBatchRecord) Constant: [`ENCRYPTED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/firehose/KinesisFirehose2Constants.html#ENCRYPTED) | Whether the batch operation was encrypted. |  | Boolean |
 | **CamelAwsKinesisFirehoseDeliveryStreamStatus** (describeDeliveryStream) Constant: [`DELIVERY_STREAM_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/firehose/KinesisFirehose2Constants.html#DELIVERY_STREAM_STATUS) | The status of the delivery stream. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Kinesis Firehose component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The data of the record, when no operation is set: text, bytes, a stream or a file. A Map, a List or a POJO fails, and a number is sent as its binary value: marshal it or convert it to text first. sendBatchRecord takes a List of the Record of the Firehose SDK or a PutRecordBatchRequest, and the other operations their request of the AWS SDK, or for deleteDeliveryStream and describeDeliveryStream the CamelAwsKinesisFirehoseDeliveryStreamName header.
+
+-   With `operation=sendBatchRecord`: `list` or `pojo`
+    
+-   With `operation=createDeliveryStream`: `pojo` (`software.amazon.awssdk.services.firehose.model.CreateDeliveryStreamRequest`)
+    
+-   With `operation=updateDestination`: `pojo` (`software.amazon.awssdk.services.firehose.model.UpdateDestinationRequest`)
+    
+-   With `operation=deleteDeliveryStream`: `any`
+    
+-   With `operation=describeDeliveryStream`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+Unchanged after a send, with the id of the record in a header; the response of the AWS SDK for the operations.
+
+-   With `operation=sendBatchRecord`: `pojo` (`software.amazon.awssdk.services.firehose.model.PutRecordBatchResponse`)
+    
+-   With `operation=createDeliveryStream`: `pojo` (`software.amazon.awssdk.services.firehose.model.CreateDeliveryStreamResponse`)
+    
+-   With `operation=deleteDeliveryStream`: `pojo` (`software.amazon.awssdk.services.firehose.model.DeleteDeliveryStreamResponse`)
+    
+-   With `operation=describeDeliveryStream`: `pojo` (`software.amazon.awssdk.services.firehose.model.DescribeDeliveryStreamResponse`)
+    
+-   With `operation=updateDestination`: `pojo` (`software.amazon.awssdk.services.firehose.model.UpdateDestinationResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Kinesis Firehose component options
 
 You have to provide the FirehoseClient in the Registry with proxies and relevant credentials configured.

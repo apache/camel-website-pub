@@ -525,6 +525,28 @@ The AWS Rekognition component supports the following message header(s), which is
 | **CamelAwsRekognitionFaceMatchThreshold** (producer) Constant: [`FACE_MATCH_THRESHOLD`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#FACE_MATCH_THRESHOLD) | Optional value specifying the minimum confidence in the face match to return. |  | Float |
 | **CamelAwsRekognitionMaxUsers** (producer) Constant: [`MAX_USERS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#MAX_USERS) | Maximum number of users to return in the response. |  | Integer |
 
+## Message Body
+
+The message body at each side of the AWS Rekognition component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used, not even for the picture: the image comes from the CamelAwsRekognitionImage header, and for compareFaces from the CamelAwsRekognitionSourceImage and CamelAwsRekognitionTargetImage headers, as an Image of the AWS SDK with the bytes or the S3 object of a JPEG or PNG; bytes in these headers are not used. The other inputs come from headers too, such as CamelAwsRekognitionCollectionId. With pojoRequest=true the request of the AWS SDK for the operation, such as a DetectLabelsRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the DetectLabelsResponse of detectLabels, whose labels hold the names and the confidence of what the image shows. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Rekognition component options
 
 You have to provide the `awsRekognitionClient` in the Camel Registry or your accessKey and secretKey to access the [AWS Rekognition](https://aws.amazon.com/rekognition/) service.

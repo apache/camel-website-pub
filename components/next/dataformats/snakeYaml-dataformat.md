@@ -42,6 +42,26 @@ Enum values:
 | **typeFilter** (advanced) |  | `String` | Set the types SnakeYAML is allowed to un-marshall. Multiple types can be separated by comma. |
 | **maxAliasesForCollections** (advanced) | `50` | `Integer` | Set the maximum amount of aliases allowed for collections. |
 | **allowRecursiveKeys** (advanced) | `false` | `Boolean` | Set whether recursive keys are allowed. |
+
+## Message Body
+
+The message body at each side of the YAML SnakeYAML data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `any` | A Map, a List or a POJO to write as YAML. |
+| **Marshal output** | `stream`, as yaml | The YAML in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as yaml | 
+ |
+| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for a mapping, a List (ArrayList) for a sequence; a document that is a single value gives that value.
+
+Not known when `unmarshalType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 > **Warning**
 > SnakeYAML can load any class from YAML definition which may lead to security breach so by default, SnakeYAML DataForma restrict the object it can load to standard Java objects like List or Long. If you want to load custom POJOs you need to add theirs type to SnakeYAML DataFormat type filter list. If your source is trusted, you can set the property allowAnyType to true so SnakeYAML DataForma won’t perform any filter on the types.
 

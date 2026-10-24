@@ -400,6 +400,56 @@ Enum values:
 | **CamelGoogleCloudStorageLastUpdate** (consumer) Constant: [`METADATA_LAST_UPDATE`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#METADATA_LAST_UPDATE) | The last update of the object. |  | Date |
 | **CamelGoogleCloudStorageOverrideBucketName** (common) Constant: [`OVERRIDE_BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#OVERRIDE_BUCKET_NAME) | The bucket Name to override which this object will be stored or which will be used for the current operation or in which this object is contained. |  | String |
 
+## Message Body
+
+The message body at each side of the Google Storage component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream`, `bytes` or `file` | 
+The content of the object, one message per object, with its metadata in headers: a stream cache, or a byte array when stream caching is off. With downloadFileName the java.io.File it is downloaded to, and with includeBody=false the Blob, which has the metadata and not the content.
+
+-   With `includeBody=false`: `pojo` (`com.google.cloud.storage.Blob`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The content to upload, when no operation is set: text, bytes, a stream or a file. A Map, a List or no body fails: marshal it first. The operations take their input from options and headers.
+
+Not known when `operation` is set.
+
+ |
+| **Producer output** | `pojo` (`com.google.cloud.storage.Blob`) | 
+
+The Blob of the uploaded object. By the operation: the content as a byte array for getObject, with its metadata in headers, a List of Blob or Bucket for the lists, the CopyWriter for copyObject, whose getResult() gives the Blob of the copy, true or false for the deletes and the signed URL as text for createDownloadLink.
+
+-   With `operation=getObject`: `bytes` (`byte[]`)
+    
+-   With `operation=listObjects`: `list` (`java.util.List<com.google.cloud.storage.Blob>`)
+    
+-   With `operation=listBuckets`: `list` (`java.util.List<com.google.cloud.storage.Bucket>`)
+    
+-   With `operation=copyObject`: `pojo` (`com.google.cloud.storage.CopyWriter`)
+    
+-   With `operation=deleteObject`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deleteBucket`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=createDownloadLink`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Google Storage Producer operations
@@ -784,7 +834,7 @@ from("direct:start")
             uri: mock:result
 ```
 
-This operation will return a Blob object instance related to the `OBJECT_NAME` object in `myCamelBucket` bucket.
+This operation will return the content of the `OBJECT_NAME` object in `myCamelBucket` bucket as a byte array, with its metadata in headers.
 
 -   `CreateDownloadLink`: this operation will return a download link
     

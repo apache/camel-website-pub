@@ -16,6 +16,25 @@ The HL7 Terser language supports the following options which are listed below.
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+## Message Body
+
+The message body at each side of the HL7 Terser language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Expression input** | `text`, `bytes` or `pojo`, as hl7 | An HL7 message as text or bytes, in ER7 or XML, a HAPI Message, or a DOM of HL7 XML. A stream or a file fails: convert it to text first.
+Not known when `source` is set.
+
+ |
+| **Expression result** | `text` or `null` (`java.lang.String`) | The value of the field as text, null when the field is empty.
+
+Not known when `resultType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Examples
 
 In the example below, we want to set a header with the patent id from field QRD-8 in the QRY\_A19 message:

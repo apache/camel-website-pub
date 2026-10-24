@@ -560,6 +560,29 @@ The AWS Kinesis component supports the following message header(s), which is/are
 | **CamelAwsKinesisFailedRecordCount** (producer) Constant: [`FAILED_RECORD_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#FAILED_RECORD_COUNT) | The number of records that failed in a batch put operation. |  | Integer |
 | **CamelAwsKinesisRecordCount** (producer) Constant: [`RECORD_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#RECORD_COUNT) | The total number of records in a batch put operation. |  | Integer |
 
+## Message Body
+
+The message body at each side of the AWS Kinesis component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | 
+The data of the record as a byte array, one message per record, with its partition key, sequence number and shard id in headers. With useKclConsumers=true a java.nio.ByteBuffer: convert it to a String or bytes for the steps that read text.
+
+-   With `useKclConsumers=true`: `pojo` (`java.nio.ByteBuffer`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | The data of the record: text, bytes, a stream or a file. A List or another Iterable is sent as a batch, one record per element, and each element must be text, bytes, a ByteBuffer or a stream. A Map or a POJO fails: marshal it first. |
+| **Producer output** | `unchanged` | Unchanged, with the sequence number and the shard id of the record in headers, or the number of records of a batch. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Kinesis component options
 
 You have to provide the KinesisClient in the Registry with proxies and relevant credentials configured.

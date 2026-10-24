@@ -224,6 +224,40 @@ The Caffeine LoadCache component supports the following message header(s), which
 | **CamelCaffeineValue** (producer) Constant: [`VALUE`](https://javadoc.io/doc/org.apache.camel/camel-caffeine/latest/org/apache/camel/component/caffeine/CaffeineConstants.html#VALUE) | The value of key for all put actions (PUT or PUT\_ALL). |  |  |
 | **CamelCaffeineOldValue** (producer) Constant: [`OLD_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-caffeine/latest/org/apache/camel/component/caffeine/CaffeineConstants.html#OLD_VALUE) | The old value returned according to the action. |  |  |
 
+## Message Body
+
+The message body at each side of the Caffeine LoadCache component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The value to store for PUT, converted to the valueType when set, and a Map of the entries for PUT\_ALL, unless the CamelCaffeineValue header gives it; without either they fail. The other actions do not use the body. |
+| **Producer output** | `unknown` | 
+By the action, which the CamelCaffeineAction header can set: the value of the key for GET, from the cache or else the cacheLoader, or the body as it was when the loader gives null, a Map of the entries found or loaded for GET\_ALL, and the cache as a Map for AS\_MAP. The other actions keep the body.
+
+-   With `action=GET_ALL`: `map` (`java.util.Map`)
+    
+-   With `action=AS_MAP`: `map` (`java.util.concurrent.ConcurrentMap`)
+    
+-   With `action=PUT`: `unchanged`
+    
+-   With `action=PUT_ALL`: `unchanged`
+    
+-   With `action=INVALIDATE`: `unchanged`
+    
+-   With `action=INVALIDATE_ALL`: `unchanged`
+    
+-   With `action=CLEANUP`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 A loading cache has a `cacheLoader`, which makes the value of a key that is not in the cache yet. The first GET of a key calls the loader, and the next GETs of that key get the value from the cache. The cache is shared by name, so all `caffeine-loadcache:prices` endpoints use the same cache.

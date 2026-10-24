@@ -16,6 +16,30 @@ The Zip File dataformat supports the following options which are listed below.
 | **preservePathElements** (common) | `false` | `Boolean` | If the file name contains path elements, setting this option to true, allows the path to be maintained in the zip file. |
 | **maxDecompressedSize** (advanced) | `1073741824` | `Integer` | Set the maximum decompressed size of a zip file (in bytes). The default value if not specified corresponds to 1 gigabyte. Set to -1 to disable setting a maximum decompressed size. |
 
+## Message Body
+
+The message body at each side of the Zip File data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The content of the one entry: text in the charset of the exchange, bytes, a stream or a file. The entry name is the file name of the CamelFileName header (its whole path with preservePathElements), or the message id. |
+| **Marshal output** | `stream`, as binary | The zip file in the stream cache, or a byte array when stream caching is off. The CamelFileName header is the entry name with .zip. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | A zip file with one entry, or with several when usingIterator. |
+| **Unmarshal output** | `stream` | 
+The content of the one entry in the stream cache, or a byte array when stream caching is off; a zip with more entries, a folder too, fails. With usingIterator, an Iterator for the split EIP: of messages with the content of one file each, in a stream cache.
+
+-   With `usingIterator=true`: `iterator` (`org.apache.camel.dataformat.zipfile.ZipIterator`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Marshal
 
 In this example, we marshal a regular text/XML payload to a compressed payload using Zip file compression, and send it to an ActiveMQ queue called MY\_QUEUE.
@@ -54,7 +78,7 @@ from("direct:start")
             uri: activemq:queue:MY_QUEUE
 ```
 
-The name of the Zip entry inside the created Zip file is based on the incoming `CamelFileName` message header, which is the standard message header used by the file component. Additionally, the outgoing `CamelFileName` message header is automatically set to the value of the incoming `CamelFileName` message header, with the ".zip" suffix. So, for example, if the following route finds a file named "test.txt" in the input directory, the output will be a Zip file named "test.txt.zip" containing a single Zip entry named "test.txt":
+The name of the Zip entry inside the created Zip file is based on the incoming `CamelFileName` message header, which is the standard message header used by the file component. Additionally, the outgoing `CamelFileName` message header is automatically set to the file name of the incoming `CamelFileName` message header, without its path, with the ".zip" suffix. So, for example, if the following route finds a file named "test.txt" in the input directory, the output will be a Zip file named "test.txt.zip" containing a single Zip entry named "test.txt":
 
 -   Java
     

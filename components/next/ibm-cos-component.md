@@ -324,6 +324,57 @@ The IBM Cloud Object Storage component supports the following message header(s),
 | **CamelIBMCOSRangeEnd** (producer) Constant: [`RANGE_END`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#RANGE_END) | The range end position for partial object retrieval. |  | Long |
 | **CamelIBMCOSBucketExists** (producer) Constant: [`BUCKET_EXISTS`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#BUCKET_EXISTS) | Whether the bucket exists or not. |  | Boolean |
 
+## Message Body
+
+The message body at each side of the IBM Cloud Object Storage component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` | 
+The content of the object as a stream, one message per object, with its key and metadata in headers. No body with includeBody=false.
+
+-   With `includeBody=false`: `null`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The content to upload with putObject, the default: text, bytes, a stream or a file. A Map, a List or no body fails: marshal it first. The other operations take their input from headers.
+
+-   With `operation=putObject`: `text`, `bytes`, `stream` or `file`
+    
+
+Not known when `operation` is set.
+
+ |
+| **Producer output** | `unchanged` | 
+
+Unchanged after putObject (with the ETag in a header), copyObject, deleteObject, createBucket and deleteBucket. getObject and getObjectRange give the content as a stream, listObjects a List of the first page of objects, listBuckets a List of Bucket, deleteObjects a List of the deleted objects and headBucket whether the bucket exists.
+
+-   With `operation=getObject`: `stream`
+    
+-   With `operation=getObjectRange`: `stream`
+    
+-   With `operation=listObjects`: `list` (`java.util.List<com.ibm.cloud.objectstorage.services.s3.model.S3ObjectSummary>`)
+    
+-   With `operation=listBuckets`: `list` (`java.util.List<com.ibm.cloud.objectstorage.services.s3.model.Bucket>`)
+    
+-   With `operation=deleteObjects`: `list`
+    
+-   With `operation=headBucket`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required IBM COS component options
 
 You have to provide the `apiKey` and `serviceInstanceId` to access IBM Cloud Object Storage, along with the `endpointUrl` for your region.

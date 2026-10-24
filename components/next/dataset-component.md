@@ -159,6 +159,20 @@ The Dataset component supports the following message header(s), which is/are lis
 | --- | --- | --- | --- |
 | **CamelDataSetIndex** (common) Constant: [`DATASET_INDEX`](https://javadoc.io/doc/org.apache.camel/camel-dataset/latest/org/apache/camel/component/dataset/DataSetConstants.html#DATASET_INDEX) | The dataset index. |  | Long |
 
+## Message Body
+
+The message body at each side of the Dataset component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The body the DataSet bean creates for each message: the defaultBody of a SimpleDataSet (the text <hello>world!</hello> unless set), the bodies of a ListDataSet in turn, or the text of a FileDataSet. |
+| **Producer input** | `any` | Each message is compared with the body the DataSet creates for its index. A mismatch fails the assertions of the endpoint, not the message. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring DataSet
@@ -180,7 +194,7 @@ The `DataSetSupport` abstract class is a nice starting point for new data set, a
    
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
-| `defaultHeaders` | `Map<String,Object>` | `null` | Specify the default message body. For `SimpleDataSet` it is a constant payload; though if you want to create custom payloads per message, create your own derivation of `DataSetSupport`. |
+| `defaultHeaders` | `Map<String,Object>` | `null` | Specify the default message headers. They are the same for each message; though if you want to create custom headers per message, create your own derivation of `DataSetSupport`. |
 | `outputTransformer` | `org.apache.camel.Processor` | null |  |
 | `size` | `long` | `10` | Specify how many messages to send/consume. |
 | `reportCount` | `long` | `-1` | Specify the number of messages to be received before reporting progress. Useful for showing the progress of a large load test. If smaller than zero (\` < 0\`), then `size` / 5, if is 0 then `size`, else set to `reportCount` value. |

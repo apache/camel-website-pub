@@ -6,7 +6,7 @@
 
 This is an additional component for Camel to run DNS queries, using DNSJava. The component is a thin layer on top of [DNSJava](http://www.xbill.org/dnsjava/). The component offers the following operations:
 
--   `ip`: to resolve a domain by its ip
+-   `ip`: to resolve a domain to its ip
     
 -   `lookup`: to lookup information about the domain
     
@@ -144,6 +144,34 @@ The DNS component supports the following message header(s), which is/are listed 
 | **CamelDnsType** (lookup dig) Constant: [`DNS_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_TYPE) | The type of the lookup. Should match the values of org.xbill.dns.Type. Optional. |  | String |
 | **CamelDnsTerm** (wikipedia) Constant: [`TERM`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#TERM) | **Required** The term. |  |  |
 
+## Message Body
+
+The message body at each side of the DNS component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The body is not used: the name to query is in a header, CamelDnsDomain for ip, CamelDnsName for lookup and dig, and CamelDnsTerm for wikipedia. |
+| **Producer output** | `unknown` | 
+By the type: for ip the InetAddress of the domain, which converts to the address as text; for lookup the records of the answer as an array of Record, and the lookup fails when there are none; for dig the response Message; for wikipedia the text of the first TXT record, or no body.
+
+-   With `dnsType=ip`: `pojo` (`java.net.InetAddress`)
+    
+-   With `dnsType=lookup`: `list` (`org.xbill.DNS.Record[]`)
+    
+-   With `dnsType=dig`: `pojo` (`org.xbill.DNS.Message`)
+    
+-   With `dnsType=wikipedia`: `text` or `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 ### IP lookup
@@ -179,7 +207,7 @@ from("direct:start")
 
 This looks up a domain’s IP. For example, _www.example.com_ resolves to 192.0.32.10.
 
-The IP address to lookup must be provided in the header with key `"CamelDnsDomain"`.
+The domain to resolve must be provided in the header with key `"CamelDnsDomain"`.
 
 ### DNS lookup
 
@@ -212,7 +240,7 @@ from("direct:start")
             uri: dns:lookup
 ```
 
-This returns a set of DNS records associated with a domain.  
+This returns the DNS records associated with a domain, as an array of `org.xbill.DNS.Record`.  
 The name to lookup must be provided in the header with key `"CamelDnsName"`.
 
 ### DNS Dig

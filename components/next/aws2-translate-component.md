@@ -394,6 +394,18 @@ The AWS Translate component supports the following message header(s), which is/a
 | **CamelAwsTranslateTerminologyNames** (producer) Constant: [`TERMINOLOGY_NAMES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-translate/latest/org/apache/camel/component/aws2/translate/Translate2Constants.html#TERMINOLOGY_NAMES) | The terminologies to use. |  | Collection |
 | **CamelAwsTranslateOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-translate/latest/org/apache/camel/component/aws2/translate/Translate2Constants.html#OPERATION) | The operation we want to perform. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Translate component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The text to translate: bytes, a stream or a file are read as text, a Map or a POJO is translated as its toString(), so take the text out of it first, and no body fails. With pojoRequest=true the body is a TranslateTextRequest of the AWS SDK: another body fails. |
+| **Producer output** | `text` (`java.lang.String`) | The translated text. The source language that AWS detects with autodetectSourceLanguage=true is not kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Translate component options
 
 You have to provide the amazonTranslateClient in the Registry or your accessKey and secretKey to access the [Amazon Translate](https://aws.amazon.com/translate/) service.

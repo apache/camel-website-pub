@@ -205,6 +205,38 @@ Enum values:
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 
+## Message Body
+
+The message body at each side of the XQuery component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML to query: text, bytes, a stream, a file, a DOM or another javax.xml.transform.Source. A Map or no body fails.
+Not known when `source` is set.
+
+ |
+| **Producer output** | `pojo` (`org.w3c.dom.Document`) | The result of the query as a DOM Document. A query that gives text, a number or more than one element fails with the default DOM: set resultsFormat to String or List.
+
+-   With `resultsFormat=Bytes`: `bytes` (`byte[]`)
+    
+-   With `resultsFormat=BytesSource`: `pojo` (`org.apache.camel.util.xml.BytesSource`)
+    
+-   With `resultsFormat=DOMSource`: `text` (`java.lang.String`)
+    
+-   With `resultsFormat=List`: `list`
+    
+-   With `resultsFormat=String`: `text` (`java.lang.String`)
+    
+-   With `resultsFormat=StringSource`: `pojo` (`org.apache.camel.util.xml.StringSource`)
+    
+
+Not known when `resultType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 -   Java
@@ -320,7 +352,7 @@ from("activemq:MyQueue")
 
 Notice how we can reuse the namespace prefixes, **foo** in this case, in the XPath expression for easier namespace-based XQuery expressions!
 
-When you use functions in your XQuery expression, you need an explicit type conversion which is done in the xml configuration via the **@type** attribute:
+When you use functions in your XQuery expression, you need an explicit type conversion which is done in the xml configuration via the **resultType** attribute:
 
 ```xml
 <xquery resultType="java.lang.String">concat('mock:foo.', /person/@city)</xquery>

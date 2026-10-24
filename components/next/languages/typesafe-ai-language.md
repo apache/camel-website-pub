@@ -23,7 +23,7 @@ With Camel Main, all settings are configurable from properties; no predicate bea
 | `threshold` | Endpoint `threshold` (`0.5`) | Probability at or above this value matches outside the uncertainty band. |
 | `uncertainty` | Endpoint `uncertainty` (`0`) | Half-width of the inclusive band around the threshold; zero disables it. |
 | `uncertainty-policy` | Endpoint `uncertaintyPolicy` (`NonMatch`) | `NonMatch` returns false within the band; `Fail` raises `TypeSafeAiUncertainResultException`. |
-| `state` | Endpoint `state` (`${body}`) | Simple expression selecting the state to send. For streams, use `${bodyAs(String)}`. |
+| `state` | Endpoint `state` (`${body}`) | Simple expression selecting the state to send: text, a Map or a List. For a stream, bytes or another object, use `${bodyAs(String)}`. |
 
 Prefix these properties with `camel.language.typesafe-ai.`. Unset language properties fall back to the selected endpoint’s configuration, which inherits `camel.component.typesafe-ai.*` defaults. Threshold and both uncertainty-band boundaries must lie in \[0,1\]. For example, threshold `0.5` and uncertainty `0.125` make \[0.375, 0.625\] uncertain, including both boundaries.
 
@@ -104,3 +104,15 @@ The TypeSafe AI language supports the following options which are listed below.
 | **language** (common) |  | `String` | **Required** The name of the language to use. |
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
+
+## Message Body
+
+The message body at each side of the TypeSafe AI language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Expression input** | `text`, `map` or `list` | The state, the body unless the state option selects another: text, or a Map or a List of JSON values. Another body fails: select ${bodyAs(String)}. |
+| **Expression result** | `value` (`java.lang.Boolean`) | Whether the Noul probability reaches the threshold. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).

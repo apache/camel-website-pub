@@ -113,7 +113,22 @@ With the following _path_ and _query_ parameters:
 
 ## Message Body
 
-If the `variables` and `variablesHeader` parameters are not set and the IN body is a JsonObject instance, Camel will use it for the operation’s variables. If the `query` and `queryFile` parameters are not set and the IN body is a String, Camel will use it as the query. Camel will store the GraphQL response from the external server on the OUT message body. All headers from the IN message will be copied to the OUT message, so headers are preserved during routing. Additionally, Camel will add the HTTP response headers as well to the OUT message headers.
+The message body at each side of the GraphQL component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The query, when none of query, queryFile and queryHeader is set: text, or bytes, a stream or a file of it. A Map is not a query. With one of them the body is not sent, except that an org.apache.camel.util.json.JsonObject body is the variables when neither variables nor variablesHeader is set.
+Not known when `query` or `queryFile` or `queryHeader` is set.
+
+ |
+| **Producer output** | `text` or `null` | The response as text, the JSON with the data and errors of GraphQL: unmarshal it to read them. Errors in the response do not fail the exchange; a status outside 2xx does, unless throwExceptionOnFailure=false, which keeps the response as text. null for a response without a body. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
+## Message Body
+
+If the `variables` and `variablesHeader` parameters are not set and the IN body is an `org.apache.camel.util.json.JsonObject` instance, Camel will use it for the operation’s variables (another `Map` is not used). If the `query`, `queryFile` and `queryHeader` parameters are not set, Camel will use the IN body as the query: text, or bytes, a stream or a file of it. Camel will store the GraphQL response from the external server on the OUT message body, as a `String` of the JSON response, with the `data` and `errors` of GraphQL: errors in the response do not fail the exchange. All headers from the IN message will be copied to the OUT message, so headers are preserved during routing. Additionally, Camel will add the HTTP response headers as well to the OUT message headers.
 
 ## Examples
 

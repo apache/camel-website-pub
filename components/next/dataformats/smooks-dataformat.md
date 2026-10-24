@@ -69,3 +69,17 @@ The Smooks dataformat supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **smooksConfig** (common) |  | `String` | **Required** Path to the Smooks configuration file. |
 | **allowExternalEntities** (security) | `false` | `Boolean` | Whether to allow the XML reader used by Smooks to resolve external XML entities (external general and parameter entities) when parsing XML input. This is disabled by default so that external entities in the message body are not resolved; enable it only for trusted legacy configurations that rely on external entity resolution. |
+
+## Message Body
+
+The message body at each side of the Smooks data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `map`, `list` or `pojo` | A Java object graph, such as the beans unmarshal gives, which Smooks reads as a JavaSource. Text, bytes or a stream are not parsed: Smooks reads them as a Java object too. |
+| **Marshal output** | `stream` | The text Smooks writes in UTF-8, such as the XML of the object graph or the output of a template of the config, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file` | The data the reader of the smooks config reads: XML by default, or EDI, CSV or JSON with a reader. |
+| **Unmarshal output** | `unknown` | What the exports of the smooks config give: the bean a JavaSink export extracts (a Map of the beans when it extracts several or none), the text of a StringSink, or a List of the results of several exports (empty without exports). |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).

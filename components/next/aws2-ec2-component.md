@@ -3328,6 +3328,59 @@ Enum values:
 | **CamelAwsEC2MaxResults** (describeInstances describeInstancesStatus) Constant: [`MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#MAX_RESULTS) | The maximum number of results to return. |  | Integer |
 | **CamelAwsEC2IsTruncated** (describeInstances describeInstancesStatus) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
 
+## Message Body
+
+The message body at each side of the AWS Elastic Compute Cloud (EC2) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the operations take their input from headers, such as the ids of the instances in CamelAwsEC2InstancesIds as a Collection. With pojoRequest=true the request of the AWS SDK for the operation, such as a DescribeInstancesRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unknown` | 
+
+The response of the AWS SDK for the operation, such as a RunInstancesResponse for createAndRunInstances; rebootInstances keeps the body.
+
+-   With `operation=createAndRunInstances`: `pojo` (`software.amazon.awssdk.services.ec2.model.RunInstancesResponse`)
+    
+-   With `operation=startInstances`: `pojo` (`software.amazon.awssdk.services.ec2.model.StartInstancesResponse`)
+    
+-   With `operation=stopInstances`: `pojo` (`software.amazon.awssdk.services.ec2.model.StopInstancesResponse`)
+    
+-   With `operation=terminateInstances`: `pojo` (`software.amazon.awssdk.services.ec2.model.TerminateInstancesResponse`)
+    
+-   With `operation=describeInstances`: `pojo` (`software.amazon.awssdk.services.ec2.model.DescribeInstancesResponse`)
+    
+-   With `operation=describeInstancesStatus`: `pojo` (`software.amazon.awssdk.services.ec2.model.DescribeInstanceStatusResponse`)
+    
+-   With `operation=rebootInstances`: `unchanged`
+    
+-   With `operation=monitorInstances`: `pojo` (`software.amazon.awssdk.services.ec2.model.MonitorInstancesResponse`)
+    
+-   With `operation=unmonitorInstances`: `pojo` (`software.amazon.awssdk.services.ec2.model.UnmonitorInstancesResponse`)
+    
+-   With `operation=createTags`: `pojo` (`software.amazon.awssdk.services.ec2.model.CreateTagsResponse`)
+    
+-   With `operation=deleteTags`: `pojo` (`software.amazon.awssdk.services.ec2.model.DeleteTagsResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required EC2 component options
 
 You have to provide the amazonEc2Client in the Registry or your accessKey and secretKey to access the [Amazon EC2](https://aws.amazon.com/ec2/) service.

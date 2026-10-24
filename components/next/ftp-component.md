@@ -500,6 +500,40 @@ The FTP component supports the following message header(s), which is/are listed 
 | **CamelFtpReplyCode** (common) Constant: [`FTP_REPLY_CODE`](https://javadoc.io/doc/org.apache.camel/camel-ftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FTP_REPLY_CODE) | The FTP client reply code. |  | int |
 | **CamelFtpReplyString** (common) Constant: [`FTP_REPLY_STRING`](https://javadoc.io/doc/org.apache.camel/camel-ftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FTP_REPLY_STRING) | The FTP client reply string. |  | String |
 
+## Message Body
+
+The message body at each side of the FTP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `file` | The file as read: a RemoteFile, which converts to text, bytes or a stream; a stream with streamDownload; with preMove its content, a byte array.
+-   With `streamDownload=true`: `stream`
+    
+-   With `download=false`: `null`
+    
+
+Not known when `preMove` is set.
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+
+What converts to an InputStream: text, bytes, a stream or a file. A Map or a List fails: marshal it first.
+
+-   With `allowNullBody=true`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### FTPS host name verification

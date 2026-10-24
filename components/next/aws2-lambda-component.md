@@ -562,6 +562,43 @@ The AWS Lambda component supports the following message header(s), which is/are 
 | **CamelAwsLambdaSourceAccount** (addPermission) Constant: [`SOURCE_ACCOUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#SOURCE_ACCOUNT) | The Amazon Web Services account ID of the principal. |  | String |
 | **CamelAwsLambdaSourceArn** (addPermission) Constant: [`SOURCE_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#SOURCE_ARN) | The ARN of the Amazon Web Services resource that invokes the function. For example, an Amazon S3 bucket or Amazon SNS topic. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Lambda component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The payload of invokeFunction, the default, as JSON text: bytes, a stream or a file are read as text, a Map or a POJO is sent as its toString(), so marshal it first, and no body fails. createFunction and updateFunction take the zip of the code as bytes, a stream or a file, or no body with the CamelAwsLambdaZipFile header or the S3 headers. The other operations take their input from headers, or with pojoRequest=true from the request of the AWS SDK in the body.
+
+-   With `operation=invokeFunction`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=createFunction`: `bytes`, `stream`, `file` or `null`
+    
+-   With `operation=updateFunction`: `bytes`, `stream`, `file` or `null`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The response of the AWS SDK for the operation, such as a ListFunctionsResponse. For invokeFunction, the default, the payload of the response as text: the JSON the function returns, or the JSON of its error with the CamelAwsLambdaFunctionError header set, as an error of the function does not fail the exchange.
+
+-   With `operation=invokeFunction`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Lambda component options
 
 You have to provide the awsLambdaClient in the Registry or your accessKey and secretKey to access the [Amazon Lambda](https://aws.amazon.com/lambda/) service.

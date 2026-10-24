@@ -131,6 +131,36 @@ The Dynamic Router Control component supports the following message header(s), w
 | **CamelDynamicRouterPredicateBean** (producer) Constant: [`CONTROL_PREDICATE_BEAN`](https://javadoc.io/doc/org.apache.camel/camel-dynamic-router/latest/org/apache/camel/component/dynamicrouter/control/DynamicRouterControlConstants.html#CONTROL_PREDICATE_BEAN) | The name of the bean in the registry that identifies the subscription predicate. |  | String |
 | **CamelDynamicRouterExpressionLanguage** (producer) Constant: [`CONTROL_EXPRESSION_LANGUAGE`](https://javadoc.io/doc/org.apache.camel/camel-dynamic-router/latest/org/apache/camel/component/dynamicrouter/control/DynamicRouterControlConstants.html#CONTROL_EXPRESSION_LANGUAGE) | The language for the predicate when supplied as a string. |  | String |
 
+## Message Body
+
+The message body at each side of the Dynamic Router Control component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | A DynamicRouterControlMessage, or the subscription in the options or the headers. For subscribe and update without a predicate or a predicateBean, the body must be the Predicate. |
+| **Producer output** | `unknown` | 
+By the action: the id of the subscription for subscribe and update, true when unsubscribe removed it, and the subscriptions or their statistics as text for list and statistics. The CamelDynamicRouterControlAction header overrides the action.
+
+-   With `controlAction=subscribe`: `text` (`java.lang.String`)
+    
+-   With `controlAction=update`: `text` (`java.lang.String`)
+    
+-   With `controlAction=unsubscribe`: `value` (`java.lang.Boolean`)
+    
+-   With `controlAction=list`: `text` (`java.lang.String`)
+    
+-   With `controlAction=statistics`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Supplying the subscription predicate
 
 A subscription needs a predicate that decides which exchanges the participant receives. There are three ways to supply one, and they differ in who chooses it:

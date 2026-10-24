@@ -189,6 +189,44 @@ The REST component supports the following message header(s), which is/are listed
 | **Accept** (producer) Constant: [`ACCEPT`](https://javadoc.io/doc/org.apache.camel/camel-rest/latest/org/apache/camel/component/rest/RestConstants.html#ACCEPT) | The media type such as: 'text/xml', or 'application/json' this REST service accepts. |  | String |
 | **CamelHttpResponseCode** (producer) Constant: [`HTTP_RESPONSE_CODE`](https://javadoc.io/doc/org.apache.camel/camel-rest/latest/org/apache/camel/component/rest/RestConstants.html#HTTP_RESPONSE_CODE) | The http response code. |  | Integer |
 
+## Message Body
+
+The message body at each side of the REST component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream`, `bytes`, `null`, `map` or `file` | The request body as the HTTP consumer gives it (platform-http by default). With bindingMode json, the object of inType, or a Map or a List without inType.
+-   With `bindingMode=json`: `map`, `list` or `pojo`
+    
+
+Not known when `consumerComponentName` is set.
+
+ |
+| **Consumer reply** | `null`, `text`, `bytes` or `stream` | The response body as the HTTP consumer writes it. With bindingMode json, any object, which the binding writes as JSON.
+
+-   With `bindingMode=json`: `any`
+    
+
+Not known when `consumerComponentName` is set.
+
+ |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The request body the HTTP producer sends (the http component by default). With bindingMode json, any object, which the binding writes as JSON.
+
+-   With `bindingMode=json`: `any`
+    
+
+Not known when `producerComponentName` is set.
+
+ |
+| **Producer output** | `bytes`, `stream` or `null` | The response body as the HTTP producer gives it; with bindingMode json and outType, an object of outType.
+
+Not known when `producerComponentName` or `outType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Supported REST components
 
 The following components support the REST consumer (Rest DSL):

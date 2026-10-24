@@ -23,7 +23,7 @@ from("kafka:topic")
 ```xml
 <route>
   <from uri="kafka:topic"/>
-  <unmarshal><avro library="Jackson"/></unmarshal>
+  <unmarshal><avro library="Jackson" unmarshalType="tools.jackson.databind.JsonNode"/></unmarshal>
   <to uri="log:info"/>
 </route>
 ```
@@ -36,6 +36,7 @@ from("kafka:topic")
         - unmarshal:
             avro:
               library: Jackson
+              unmarshalType: tools.jackson.databind.JsonNode
         - to:
             uri: log:info
 ```

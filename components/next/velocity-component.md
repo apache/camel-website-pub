@@ -122,6 +122,18 @@ The Velocity component supports the following message header(s), which is/are li
 | **CamelVelocityContext** (producer) Constant: [`VELOCITY_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-velocity/latest/org/apache/camel/component/velocity/VelocityConstants.html#VELOCITY_CONTEXT) | The velocity context to use. |  | Context |
 | **CamelVelocitySupplementalContext** (producer) Constant: [`VELOCITY_SUPPLEMENTAL_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-velocity/latest/org/apache/camel/component/velocity/VelocityConstants.html#VELOCITY_SUPPLEMENTAL_CONTEXT) | To add additional information to the used VelocityContext. The value of this header should be a Map with key/values that will added (override any existing key with the same name). This can be used to pre setup some common key/values you want to reuse in your velocity endpoints. |  | Map |
 
+## Message Body
+
+The message body at each side of the Velocity component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The template gets the body as body, as it is: text, or a Map, a List or a POJO to read from; convert bytes or a stream to a String first. The template is the resource, or the CamelVelocityTemplate or CamelVelocityResourceUri header with allowTemplateFromHeader=true, and never the body. |
+| **Producer output** | `text` (`java.lang.String`) | The text the template writes, also when it is JSON or XML: unmarshal it to read its fields. The headers are kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Headers set during the Velocity evaluation are returned to the message and added as headers. Then it is possible to return values from Velocity to the Message.
 
 For example, to set the header value of `fruit` in the Velocity template `.tm`:
@@ -134,7 +146,7 @@ The `fruit` header is now accessible from the `message.out.headers`.
 
 ### Velocity Context
 
-Camel will provide exchange information in the Velocity context (just a `Map`). The `Exchange` is transferred as:
+Camel will provide exchange information in the Velocity context (just a `Map`). The `Exchange` is transferred as: The `body`, `header`, `headers`, `variable`, `variables` and `exception` entries are always there; the others only when the endpoint has `allowContextMapAll=true`.
 
  
 | key | value |
@@ -234,7 +246,7 @@ The Velocity template resource is, by default, hot reloadable for both file and 
 
 ### Dynamic templates
 
-Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
+Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, and the endpoint has `allowTemplateFromHeader=true`, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
   
 | Header | Type | Description |

@@ -661,6 +661,48 @@ The AWS Simple Queue Service (SQS) component supports the following message head
 | **CamelAwsSqsFailedMessageCount** (sendBatchMessage) Constant: [`FAILED_MESSAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sqs/latest/org/apache/camel/component/aws2/sqs/Sqs2Constants.html#FAILED_MESSAGE_COUNT) | The number of failed messages in a batch send operation. |  | Integer |
 | **CamelAwsSqsSuccessfulMessageCount** (sendBatchMessage) Constant: [`SUCCESSFUL_MESSAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sqs/latest/org/apache/camel/component/aws2/sqs/Sqs2Constants.html#SUCCESSFUL_MESSAGE_COUNT) | The number of successful messages in a batch send operation. |  | Integer |
 
+## Message Body
+
+The message body at each side of the AWS Simple Queue Service (SQS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The body of the SQS message. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The body of the message to send, as text: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(): marshal it first. sendBatchMessage takes a List of text, text that batchSeparator splits, or a SendMessageBatchRequest.
+
+-   With `operation=sendBatchMessage`: `list`, `text` or `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+Unchanged for a send, with the id of the message in a header; the response of the AWS SDK for the other operations.
+
+-   With `operation=sendBatchMessage`: `pojo` (`software.amazon.awssdk.services.sqs.model.SendMessageBatchResponse`)
+    
+-   With `operation=deleteMessage`: `pojo` (`software.amazon.awssdk.services.sqs.model.DeleteMessageResponse`)
+    
+-   With `operation=listQueues`: `pojo` (`software.amazon.awssdk.services.sqs.model.ListQueuesResponse`)
+    
+-   With `operation=purgeQueue`: `pojo` (`software.amazon.awssdk.services.sqs.model.PurgeQueueResponse`)
+    
+-   With `operation=deleteQueue`: `pojo` (`software.amazon.awssdk.services.sqs.model.DeleteQueueResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required SQS component options
 
 You have to provide the amazonSQSClient in the Registry or your accessKey and secretKey to access the [Amazon’s SQS](https://aws.amazon.com/sqs).

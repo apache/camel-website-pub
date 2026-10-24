@@ -15,6 +15,21 @@ The Groovy XML dataformat supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **attributeMapping** (common) | `true` | `Boolean` | Whether to enable attribute mapping. When enabled, keys that start with \_ or character will be mapped to an XML attribute, and vice versa. |
 
+## Message Body
+
+The message body at each side of the Groovy XML data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream`, `file`, `map` or `pojo` | A Groovy Node or GPathResult, a Map or a Jackson JsonNode to write as XML. Text, bytes, a stream or a file is written as it is. |
+| **Marshal output** | `stream`, as xml | The XML in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as xml | 
+ |
+| **Unmarshal output** | `pojo` (`groovy.util.Node`) | The XML parsed into a Groovy Node. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Supported Java types
 
 This data format supports marshalling from the following Java type to XML:

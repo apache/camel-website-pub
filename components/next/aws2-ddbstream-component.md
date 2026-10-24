@@ -460,6 +460,17 @@ Enum values:
 | **useProfileCredentialsProvider** (security) | Set whether the Cloudtrail client should expect to load credentials through a profile credentials provider. | false | boolean |
 | **useSessionCredentials** (security) | Set whether the DDB Streams client should expect to use Session Credentials. This is useful in situation in which the user needs to assume a IAM role for doing operations in DDB. | false | boolean |
 
+## Message Body
+
+The message body at each side of the AWS DynamoDB Streams component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`software.amazon.awssdk.services.dynamodb.model.Record`) | The change record of the stream, one message per record, with the event name (INSERT, MODIFY or REMOVE) in a header. The keys and the images of the item are maps of AttributeValue in body.dynamodb(). A Record is not a JavaBean, so Jackson cannot marshal it. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required DynamoDBStream component options
 
 You have to provide the DynamoDbStreamsClient in the Registry with proxies and relevant credentials configured.

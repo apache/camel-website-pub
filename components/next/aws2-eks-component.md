@@ -405,6 +405,28 @@ The AWS Elastic Kubernetes Service (EKS) component supports the following messag
 | **CamelAwsEKSIsTruncated** (listClusters) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eks/latest/org/apache/camel/component/aws2/eks/EKS2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
 | **CamelAwsEKSClusterArn** (createCluster describeCluster deleteCluster) Constant: [`CLUSTER_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eks/latest/org/apache/camel/component/aws2/eks/EKS2Constants.html#CLUSTER_ARN) | The ARN of the cluster. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Elastic Kubernetes Service (EKS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the operations take their input from headers, such as the name of the cluster in CamelAwsEKSClusterName. With pojoRequest=true the request of the AWS SDK for the operation, such as a ListClustersRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the ListClustersResponse of listClusters, with the token of the next page in a header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required EKS component options
 
 You have to provide the amazonEKSClient in the Registry or your accessKey and secretKey to access the [Amazon EKS](https://aws.amazon.com/eks/) service.

@@ -93,6 +93,28 @@ Enum values:
 | **recordConverterRef** (advanced) |  | `String` | Refers to a custom CsvRecordConverter to lookup from the registry to use. |
 | **captureHeaderRecord** (advanced) | `false` | `Boolean` | Whether the unmarshalling should capture the header record and store it in the message header. |
 
+## Message Body
+
+The message body at each side of the CSV data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `map` or `list` | One row as a Map, or the rows as a List (or an Iterator) of Maps or Lists. |
+| **Marshal output** | `stream`, as csv | The CSV in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as csv | 
+ |
+| **Unmarshal output** | `list` | A List of the rows, each a List of its values; with useMaps or useOrderedMaps, a Map of the header names and the values.
+
+-   With `lazyLoad=true`: `iterator`
+    
+
+Not known when `recordConverterRef` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Message Headers
 
 The following headers are supported by this component:

@@ -135,6 +135,18 @@ The JTE component supports the following message header(s), which is/are listed 
 | **CamelJteTemplate** (producer) Constant: [`JTE_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-jte/latest/org/apache/camel/component/jte/JteConstants.html#JTE_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
 | **CamelJteDataModel** (producer) Constant: [`JTE_DATA_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-jte/latest/org/apache/camel/component/jte/JteConstants.html#JTE_DATA_MODEL) | The data model. |  | Object |
 
+## Message Body
+
+The message body at each side of the JTE component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The template takes an org.apache.camel.component.jte.Model: the body as it is in model.body, and converted to text by model.strBody(). With allowTemplateFromHeader=true the CamelJteDataModel header replaces the model. |
+| **Producer output** | `text` (`java.lang.String`) | The text the template writes, with leading and trailing whitespace trimmed. The headers are kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### JTE Context
@@ -155,7 +167,7 @@ You can set up your custom JTE data model in the message header with the key "**
 
 ### Dynamic templates
 
-Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
+Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, and the endpoint has `allowTemplateFromHeader=true`, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
 Each distinct template text from the `CamelJteTemplate` header is compiled once, and the compiled template is kept until the component stops. So the templates in this header should come from a small, known set.
 

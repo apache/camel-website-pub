@@ -407,6 +407,28 @@ The AWS Managed Streaming for Apache Kafka (MSK) component supports the followin
 | **CamelAwsMSKIsTruncated** (listClusters) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
 | **CamelAwsMSKClusterState** (createCluster describeCluster) Constant: [`CLUSTER_STATE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#CLUSTER_STATE) | The state of the cluster. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Managed Streaming for Apache Kafka (MSK) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the operations take their input from headers, such as the ARN of the cluster in CamelAwsMSKClusterArn. With pojoRequest=true the request of the AWS SDK for the operation, such as a ListClustersRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the ListClustersResponse of listClusters, with the token of the next page in a header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required MSK component options
 
 You have to provide the amazonMskClient in the Registry or your accessKey and secretKey to access the [Amazon MSK](https://aws.amazon.com/msk/) service.

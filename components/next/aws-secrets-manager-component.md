@@ -437,6 +437,45 @@ The AWS Secrets Manager component supports the following message header(s), whic
 | **CamelAwsSecretsManagerSecretReplicationRegions** (producer) Constant: [`SECRET_REPLICATION_REGIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#SECRET_REPLICATION_REGIONS) | A comma separated list of Regions in which to replicate the secret. |  | String |
 | **CamelAwsSecretsManagerSecretForceDeletion** (producer) Constant: [`SECRET_FORCE_DELETION`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#SECRET_FORCE_DELETION) | If this header is set to true, the deleted secret won’t have any retention period. |  | Boolean |
 
+## Message Body
+
+The message body at each side of the AWS Secrets Manager component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The value of the secret for createSecret, updateSecret and putSecretValue, as text: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), so marshal it first, and no body fails. The other operations take their input from headers. With pojoRequest=true the body is the request of the AWS SDK for the operation, such as a CreateSecretRequest.
+
+-   With `operation=createSecret`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=updateSecret`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=putSecretValue`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The value of the secret as text for getSecret, with its version id in a header: unmarshal a JSON secret to read its fields. No body for a binary secret unless binaryPayload=true. A List of the values for batchGetSecret, and the response of the AWS SDK for the other operations, such as a CreateSecretResponse.
+
+-   With `operation=getSecret`: `text` or `null`
+    
+-   With `operation=batchGetSecret`: `list` (`java.util.List<java.lang.String>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Static credentials, Default Credential Provider and Profile Credentials Provider
 
 You have the possibility of avoiding the usage of explicit static credentials by specifying the useDefaultCredentialsProvider option and set it to true.

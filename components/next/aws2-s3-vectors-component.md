@@ -611,6 +611,35 @@ The AWS S3 Vectors component supports the following message header(s), which is/
 | **CamelAwsS3VectorsIndexStatus** (consumer) Constant: [`INDEX_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#INDEX_STATUS) | The status of the vector index. |  | String |
 | **CamelAwsS3VectorsVectorBucketArn** (consumer) Constant: [`VECTOR_BUCKET_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_BUCKET_ARN) | The ARN of the vector bucket. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS S3 Vectors component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`software.amazon.awssdk.services.s3vectors.model.QueryOutputVector`) | One message per vector that the similarity search of consumerQueryVector finds and that was not sent before, as a QueryOutputVector of the AWS SDK with its key only, also in the CamelAwsS3VectorsVectorId header. |
+| **Producer input** | `any` | The vector of putVectors and queryVectors, unless the CamelAwsS3VectorsVectorData or CamelAwsS3VectorsQueryVector header has it: one vector as a List of numbers, a float\[\] or a double\[\]. Text such as a JSON array fails, so unmarshal it first. The keys of getVectors and deleteVectors, unless the CamelAwsS3VectorsVectorId header has them: a String, a String\[\] or a List of Strings. The other operations do not use the body. |
+| **Producer output** | `pojo` | 
+The response of the AWS SDK for the operation, such as the PutVectorsResponse of putVectors, with the key of the vector in the CamelAwsS3VectorsVectorId header. A List for queryVectors, getVectors, listVectorBuckets and listVectorIndexes, the last two the first page only. The vectors of queryVectors and getVectors hold their keys only: the distance, the data and the metadata are not asked for.
+
+-   With `operation=queryVectors`: `list` (`java.util.List<software.amazon.awssdk.services.s3vectors.model.QueryOutputVector>`)
+    
+-   With `operation=getVectors`: `list` (`java.util.List<software.amazon.awssdk.services.s3vectors.model.GetOutputVector>`)
+    
+-   With `operation=listVectorBuckets`: `list` (`java.util.List<software.amazon.awssdk.services.s3vectors.model.VectorBucketSummary>`)
+    
+-   With `operation=listVectorIndexes`: `list` (`java.util.List<software.amazon.awssdk.services.s3vectors.model.IndexSummary>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Producer Operations

@@ -448,6 +448,28 @@ The AWS RedshiftData component supports the following message header(s), which i
 | **CamelAwsRedshiftDataSqlParameterList** (producer) Constant: [`SQL_PARAMETER_LIST`](https://javadoc.io/doc/org.apache.camel/camel-aws2-redshift/latest/org/apache/camel/component/aws2/redshift/data/RedshiftData2Constants.html#SQL_PARAMETER_LIST) | The parameters for the SQL statement. |  | List |
 | **CamelAwsRedshiftDataSqlStatementList** (producer) Constant: [`SQL_STATEMENT_LIST`](https://javadoc.io/doc/org.apache.camel/camel-aws2-redshift/latest/org/apache/camel/component/aws2/redshift/data/RedshiftData2Constants.html#SQL_STATEMENT_LIST) | The List of SQL statements text to run. |  | List |
 
+## Message Body
+
+The message body at each side of the AWS RedshiftData component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the operations take their input from headers, such as the SQL of executeStatement in CamelAwsRedshiftDataSqlStatement; SQL in the body is not run. With pojoRequest=true the request of the AWS SDK for the operation, such as an ExecuteStatementRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the ExecuteStatementResponse of executeStatement, which does not wait for the statement, or the GetStatementResultResponse of getStatementResult with one page of records. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Redshift Data component options
 
 You have to provide the awsRedshiftDataClient in the Registry or your accessKey and secretKey to access the [AWS Redshift](https://aws.amazon.com/redshift/) service.

@@ -229,6 +229,28 @@ The OCSF dataformat supports the following options which are listed below.
 | **allowUnmarshallType** (common) | `false` | `Boolean` | Whether to allow the unmarshal type to be specified via the CamelOcsfUnmarshalType header. |
 | **prettyPrint** (common) | `false` | `Boolean` | Whether to enable pretty printing output nicely formatted. |
 
+## Message Body
+
+The message body at each side of the OCSF data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `map`, `list` or `pojo` | An OCSF event such as a DetectionFinding, a Map or a List to write as JSON. A String is written as one JSON string and bytes as Base64, not as they are. |
+| **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
+ |
+| **Unmarshal output** | `pojo` (`org.apache.camel.dataformat.ocsf.model.OcsfEvent`) | The base OcsfEvent; an object of the class unmarshalType names, such as DetectionFinding.
+
+-   With `useList=true`: `list`
+    
+
+Not known when `unmarshalType` or `collectionType` or `allowUnmarshallType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## OCSF Event Categories
 
 OCSF defines the following event categories:

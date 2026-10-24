@@ -50,4 +50,4 @@ To use WebSockets with Knative:
 
 For platform-specific configuration, refer to:
 
--   [OpenShift Ingress Operator documentation](https://docs.openshift.com/container-platform/4.15/networking/ingress-operator.md)
+-   [OpenShift Ingress Operator documentation](https://docs.redhat.com/en/documentation/openshift_container_platform/4.15/html/networking/configuring-ingress)

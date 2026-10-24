@@ -158,6 +158,21 @@ The Exec component supports the following message header(s), which is/are listed
 | **CamelExecUseStderrOnEmptyStdout** (in) Constant: [`EXEC_USE_STDERR_ON_EMPTY_STDOUT`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_USE_STDERR_ON_EMPTY_STDOUT) | Indicates that when stdout is empty, this component will populate the Camel Message Body with stderr. This behavior is disabled (false) by default. Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | boolean |
 | **CamelExecCommandLogLevel** (in) Constant: [`EXEC_COMMAND_LOG_LEVEL`](https://javadoc.io/doc/org.apache.camel/camel-exec/latest/org/apache/camel/component/exec/ExecBinding.html#EXEC_COMMAND_LOG_LEVEL) | Logging level to be used for commands during execution. The default value is DEBUG. Possible values are TRACE, DEBUG, INFO, WARN, ERROR or OFF (Values of LoggingLevel enum). Requires allowControlHeaders=true on the exec endpoint or component (default is false since Camel 4.20). |  | String |
 
+## Message Body
+
+The message body at each side of the Exec component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The standard input of the command, when the body converts to a stream: text, bytes, a stream or a file. Another body, or no body, runs the command without input. |
+| **Producer output** | `pojo` (`org.apache.camel.component.exec.ExecResult`) | The ExecResult, with the exit value and the standard error in headers. It converts to the text, bytes or stream of the standard output, of the outFile when set, or of the standard error with useStderrOnEmptyStdout.
+Not known when `binding` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Control headers
@@ -193,7 +208,7 @@ When `allowControlHeaders` is `false` (the default), those in-headers on the exc
 
 ### Message body
 
-If the component receives an `in` message body that is convertible to `java.io.InputStream`, it is used to feed input to the executable via its standard input (`stdin`). After execution, [the message body](http://camel.apache.org/exchange.md) is the result of the execution. That is, an `org.apache.camel.components.exec.ExecResult` instance containing the `stdout`, `stderr`, _exit value_, and the _out file_.
+If the component receives an `in` message body that is convertible to `java.io.InputStream`, it is used to feed input to the executable via its standard input (`stdin`). After execution, [the message body](http://camel.apache.org/exchange.md) is the result of the execution. That is, an `org.apache.camel.component.exec.ExecResult` instance containing the `stdout`, `stderr`, _exit value_, and the _out file_.
 
 This component supports the following `ExecResult` [type converters](http://camel.apache.org/type-converter.md) for convenience:
 
@@ -361,14 +376,14 @@ In the next example, the `ant.bat` command redirects its output to `CamelExecOut
     
 
 ```java
-// When outFile is specified, the body is the content of that file (as InputStream)
+// When outFile is specified, the ExecResult in the body converts to the content of that file
 from("direct:exec")
     .to("exec:ant.bat?args=-f CamelExecBuildFile.xml -l CamelExecOutFile.txt&outFile=CamelExecOutFile.txt")
     .to("log:result");
 ```
 
 ```xml
-<!-- When outFile is specified, the body is the content of that file (as InputStream) -->
+<!-- When outFile is specified, the ExecResult in the body converts to the content of that file -->
 <route>
   <from uri="direct:exec"/>
   <to uri="exec:ant.bat?args=-f CamelExecBuildFile.xml -l CamelExecOutFile.txt&amp;outFile=CamelExecOutFile.txt"/>
@@ -377,7 +392,7 @@ from("direct:exec")
 ```
 
 ```yaml
-# When outFile is specified, the body is the content of that file (as InputStream)
+# When outFile is specified, the ExecResult in the body converts to the content of that file
 - route:
     from:
       uri: direct:exec

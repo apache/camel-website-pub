@@ -4,9 +4,9 @@
 
 The RSS component ships with an RSS dataformat that can be used to convert between String (as XML) and ROME RSS model objects.
 
--   marshal = from ROME `SyndFeed` to XML `String`
+-   marshal = from ROME `SyndFeed` (or the XML text of a feed) to XML
     
--   unmarshal = from XML `String` to ROME `SyndFeed`
+-   unmarshal = from XML (text, bytes, a stream or a file) to ROME `SyndFeed`
     
 
 A route using this would look something like this:
@@ -26,13 +26,27 @@ The RSS dataformat supports the following options which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 
+## Message Body
+
+The message body at each side of the RSS data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text` or `pojo` | A ROME SyndFeed, such as the rss consumer gives, or the XML text of an RSS or Atom feed, which is parsed first. |
+| **Marshal output** | `stream`, as xml | The RSS or Atom XML in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as xml | An RSS or Atom feed. |
+| **Unmarshal output** | `pojo` (`com.rometools.rome.feed.synd.SyndFeed`) | A ROME SyndFeed of the feed. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Example
 
 The RSS component ships with an RSS dataformat that can be used to convert between String (as XML) and ROME RSS model objects.
 
--   marshal = from ROME `SyndFeed` to XML `String`
+-   marshal = from ROME `SyndFeed` (or the XML text of a feed) to XML
     
--   unmarshal = from XML `String` to ROME `SyndFeed`
+-   unmarshal = from XML (text, bytes, a stream or a file) to ROME `SyndFeed`
     
 
 A route using the RSS dataformat will look like this:

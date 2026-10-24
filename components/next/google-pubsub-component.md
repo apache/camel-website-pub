@@ -174,6 +174,22 @@ The Google Pubsub component supports the following message header(s), which is/a
 | **CamelGooglePubsubAcknowledge** (consumer) Constant: [`GOOGLE_PUBSUB_ACKNOWLEDGE`](https://javadoc.io/doc/org.apache.camel/camel-google-pubsub/latest/org/apache/camel/component/google/pubsub/GooglePubsubConstants.html#GOOGLE_PUBSUB_ACKNOWLEDGE) | Can be used to manually acknowledge or negative-acknowledge a message when ackMode=NONE. |  | GooglePubsubAcknowledge |
 | **CamelGooglePubsubDeliveryAttempt** (consumer) Constant: [`DELIVERY_ATTEMPT`](https://javadoc.io/doc/org.apache.camel/camel-google-pubsub/latest/org/apache/camel/component/google/pubsub/GooglePubsubConstants.html#DELIVERY_ATTEMPT) | The delivery attempt counter received from PubSub. This is the approximate number of times the message has been delivered. This will be 1 for the first delivery. This feature requires a dead-letter policy to be configured on the subscription. |  | Integer |
 
+## Message Body
+
+The message body at each side of the Google Pubsub component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The data of the Pub/Sub message as a byte array, with its attributes in headers: convert or unmarshal it. |
+| **Producer input** | `text` or `bytes` | Text is sent as UTF-8 and bytes as they are; a List of the exchanges of a grouped aggregation is sent as one message per exchange. Any other body goes to the serializer, by default Java serialization, so a Map or a POJO is sent as Java-serialized bytes, and a stream or a file fails: marshal or convert it first.
+Not known when `serializer` is set.
+
+ |
+| **Producer output** | `unchanged` | Unchanged, with the id of the published message in a header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Producer Endpoints

@@ -38,9 +38,33 @@ Enum values:
  |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 
+## Message Body
+
+The message body at each side of the Protobuf data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `pojo` or `map` | A protobuf Message of a generated class, or a Map of the fields of the instanceClass message, which needs instanceClass. JSON text is not converted. |
+| **Marshal output** | `stream` | The protobuf binary data, or JSON with contentTypeFormat json, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file` | 
+Protobuf binary data, or JSON with contentTypeFormat json: unmarshal fails without instanceClass.
+
+-   With `contentTypeFormat=json`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Unmarshal output** | `pojo` (`com.google.protobuf.Message`) | The generated class of instanceClass, such as AddressBookProtos$Person; convertBodyTo Map gives its fields. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Content type format
 
-It’s possible to parse JSON message to convert it to the protobuf format and unparse it back using native util converter. To use this option, set contentTypeFormat value to `json` or call protobuf with second parameter. If the default instance is not specified, always use the native protobuf format. The sample code shows below:
+It’s possible to parse JSON message to convert it to the protobuf format and unparse it back using native util converter. To use this option, set contentTypeFormat value to `json` or call protobuf with second parameter. Unmarshal needs the default instance (`instanceClass`) in both formats; marshal writes the given `Message` in either. The sample code shows below:
 
 _Java-only: programmatic protobuf configuration with content type format_
 
@@ -57,7 +81,7 @@ This dataformat supports marshaling input data either as protobuf `Message` type
 
 ## Output data type
 
-As mentioned above, you can define the content type format to choose from JSON or native to serialize/deserialize data from/to. In addition, you can also obtain the data as `Map` and let this component do the heavy lifting to parse the data from proto `Message` to `Map`, you will need to set the `contentTypeFormat` to `native` and explicitly define the data type `Map` when you get body of the exchange. For instance: `exchange.getMessage().getBody(Map.class)`. In the `Map`, the value of a `bytes` field is a `byte[]`; when a `Map` is converted to a message, a `bytes` field takes a `byte[]` (or a `ByteString`).
+As mentioned above, you can define the content type format to choose from JSON or native to serialize/deserialize data from/to. In addition, you can also obtain the data as `Map` and let this component do the heavy lifting to parse the data from proto `Message` to `Map`, in either `contentTypeFormat`, by explicitly defining the data type `Map` when you get body of the exchange. For instance: `exchange.getMessage().getBody(Map.class)`. In the `Map`, the value of a `bytes` field is a `byte[]`; when a `Map` is converted to a message, a `bytes` field takes a `byte[]` (or a `ByteString`).
 
 ## Protobuf overview
 

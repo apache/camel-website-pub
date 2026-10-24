@@ -426,6 +426,39 @@ The AWS Parameter Store component supports the following message header(s), whic
 | **CamelAwsParameterStoreKmsKeyId** (producer) Constant: [`KMS_KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-parameter-store/latest/org/apache/camel/component/aws/parameterstore/ParameterStoreConstants.html#KMS_KEY_ID) | The KMS Key ID to use for SecureString encryption. |  | String |
 | **CamelAwsParameterStoreTier** (producer) Constant: [`PARAMETER_TIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-parameter-store/latest/org/apache/camel/component/aws/parameterstore/ParameterStoreConstants.html#PARAMETER_TIER) | The tier for the parameter (Standard, Advanced, Intelligent-Tiering). |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Parameter Store component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used, except by putParameter when the CamelAwsParameterStoreValue header is not set: the value of the parameter as text. Bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), so marshal it first, and no body fails. The other operations take their input from headers, such as CamelAwsParameterStoreName. With pojoRequest=true the request of the AWS SDK for the operation, such as a GetParameterRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The value of the parameter as text for getParameter, with its version in the CamelAwsParameterStoreVersion header: a SecureString is decrypted only when the CamelAwsParameterStoreWithDecryption header is true. The response of the AWS SDK for the other operations, such as the GetParametersResponse of getParameters, whose invalidParameters() lists the names not found.
+
+-   With `operation=getParameter`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Static credentials, Default Credential Provider and Profile Credentials Provider
 
 You have the possibility of avoiding the usage of explicit static credentials by specifying the useDefaultCredentialsProvider option and set it to true.

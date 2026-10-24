@@ -473,6 +473,28 @@ The AWS StepFunctions component supports the following message header(s), which 
 | **CamelAwsStepFunctionsExecutionHistoryReverseOrder** (producer) Constant: [`EXECUTION_HISTORY_REVERSE_ORDER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#EXECUTION_HISTORY_REVERSE_ORDER) | Lists events in descending order of their timeStamp. |  | Boolean |
 | **CamelAwsStepFunctionsExecutionMaxResults** (producer) Constant: [`EXECUTIONS_MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-step-functions/latest/org/apache/camel/component/aws2/stepfunctions/StepFunctions2Constants.html#EXECUTIONS_MAX_RESULTS) | The limit number of results while listing executions. |  | Integer |
 
+## Message Body
+
+The message body at each side of the AWS StepFunctions component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the operations take their input from headers, such as the input of startExecution and startSyncExecution in the CamelAwsStepFunctionsExecutionInput header as JSON text: marshal a Map or a POJO first. With pojoRequest=true the request of the AWS SDK for the operation, such as a StartExecutionRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the StartExecutionResponse of startExecution with the ARN of the execution. startSyncExecution gives a StartSyncExecutionResponse whose output is the JSON that the execution returns, as text: a failed execution does not fail the exchange, so check its status. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Step Functions component options
 
 You have to provide the awsSfnClient in the Registry or your accessKey and secretKey to access the [AWS Step Functions](https://aws.amazon.com/step-functions/) service.

@@ -1,6 +1,6 @@
 # Camel components supported on Quarkus
 
-There are 306 components (3 deprecated, 53 JVM only)
+There are 307 components (3 deprecated, 53 JVM only)
 
      
 | Component | Artifact | JVM  
@@ -11,6 +11,7 @@ level | Description |
 | [A2A](extensions/a2a.md) | camel-quarkus-a2a | 3.38.0 | 3.38.0 | Stable | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](extensions/activemq.md) | camel-quarkus-activemq | 1.0.0 | 1.0.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](extensions/activemq6.md) | camel-quarkus-activemq6 | 3.30.0 | 3.30.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
+| [AI Resource](extensions/ai-resource.md) | camel-quarkus-ai-resource | 4.0.0 | 4.0.0 | Stable | Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry. |
 | [AI Tool](extensions/ai-tool.md) | camel-quarkus-ai-tool | 3.39.0 | 3.39.0 | Stable | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
 | [AMQP](extensions/amqp.md) | camel-quarkus-amqp | 1.0.0 | 1.0.0 | Stable | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](extensions/arangodb.md) | camel-quarkus-arangodb | 1.1.0 | 1.1.0 | Stable | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |

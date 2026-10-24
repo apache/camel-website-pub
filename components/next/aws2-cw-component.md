@@ -416,6 +416,32 @@ The AWS CloudWatch component supports the following message header(s), which is/
 | **CamelAwsCwMaxResults** (producer) Constant: [`MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#MAX_RESULTS) | The maximum number of results to return. |  | Integer |
 | **CamelAwsCwIsTruncated** (producer) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
 
+## Message Body
+
+The message body at each side of the AWS CloudWatch component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | putMetricData sends a body that is a MetricDatum of the AWS SDK or a List of them, and a List of anything else fails; with another body the metric comes from the CamelAwsCwMetric\* headers or the name, value and unit options. The other operations do not use the body. |
+| **Producer output** | `unchanged` | 
+Unchanged after putMetricData, the default. The response of the AWS SDK for listMetrics, describeAlarms and describeAlarmsForMetric.
+
+-   With `operation=listMetrics`: `pojo` (`software.amazon.awssdk.services.cloudwatch.model.ListMetricsResponse`)
+    
+-   With `operation=describeAlarms`: `pojo` (`software.amazon.awssdk.services.cloudwatch.model.DescribeAlarmsResponse`)
+    
+-   With `operation=describeAlarmsForMetric`: `pojo` (`software.amazon.awssdk.services.cloudwatch.model.DescribeAlarmsForMetricResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required CW component options
 
 You have to provide the amazonCwClient in the Registry or your accessKey and secretKey to access the [Amazon’s CloudWatch](https://aws.amazon.com/cloudwatch/).

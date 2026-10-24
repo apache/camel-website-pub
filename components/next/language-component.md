@@ -177,6 +177,30 @@ The Language component supports the following message header(s), which is/are li
 | --- | --- | --- | --- |
 | **CamelLanguageScript** (producer) Constant: [`LANGUAGE_SCRIPT`](https://javadoc.io/doc/org.apache.camel/camel-language/latest/org/apache/camel/component/language/LanguageConstants.html#LANGUAGE_SCRIPT) | The script to execute provided in the header. Takes precedence over script configured on the endpoint. |  | String or Expression |
 
+## Message Body
+
+The message body at each side of the Language component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The body as the language of the script reads it. The script is in the uri, the script option or a resource, or in the CamelLanguageScript header with allowTemplateFromHeader=true, and never in the body. |
+| **Producer output** | `unknown` | 
+The result of the script, as the language gives it. Unchanged with transform=false. With binary=true the content of the resource as a stream, which is not evaluated.
+
+-   With `transform=false`: `unchanged`
+    
+-   With `binary=true`: `stream`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 For example, you can use the [Simple](languages/simple-language.md) language as [Message Translator](eips/message-translator.md) EIP:
@@ -250,13 +274,13 @@ You can also use the [Groovy](languages/groovy-language.md) language, such as th
 
 ```java
 from("direct:double")
-    .to("language:groovy:${body} * 2}");
+    .to("language:groovy:body * 2");
 ```
 
 ```xml
 <route>
   <from uri="direct:double"/>
-  <to uri="language:groovy:${body} * 2}"/>
+  <to uri="language:groovy:body * 2"/>
 </route>
 ```
 
@@ -266,21 +290,21 @@ from("direct:double")
       uri: direct:double
       steps:
         - to:
-            uri: "language:groovy:${body} * 2}"
+            uri: "language:groovy:body * 2"
 ```
 
-You can also provide the script as a header as shown below. Here we use [XPath](languages/xpath-language.md) language to extract the text from the `<foo>` tag.
+You can also provide the script as a header as shown below, when the endpoint has `allowTemplateFromHeader=true`. Here we use [XPath](languages/xpath-language.md) language to extract the text from the `<foo>` tag.
 
 _Java-only: providing the script as a message header_
 
 ```java
-Object out = producer.requestBodyAndHeader("language:xpath", "<foo>Hello World</foo>", Exchange.LANGUAGE_SCRIPT, "/foo/text()");
+Object out = producer.requestBodyAndHeader("language:xpath?allowTemplateFromHeader=true", "<foo>Hello World</foo>", Exchange.LANGUAGE_SCRIPT, "/foo/text()");
 assertEquals("Hello World", out);
 ```
 
 ## Loading scripts from resources
 
-You can specify a resource uri for a script to load in either the endpoint uri, or in the `Exchange.LANGUAGE_SCRIPT` header. The uri must start with one of the following schemes: `file:`, `classpath:`, or `http:`
+You can specify a resource uri for a script to load in either the endpoint uri, or in the `Exchange.LANGUAGE_SCRIPT` header (with `allowTemplateFromHeader=true`). The uri must start with one of the following schemes: `file:`, `classpath:`, or `http:`
 
 -   Java
     

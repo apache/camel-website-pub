@@ -114,6 +114,19 @@ The Saga component supports the following message header(s), which is/are listed
 | --- | --- | --- | --- |
 | **Long-Running-Action** (producer) Constant: [`SAGA_LONG_RUNNING_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-saga/latest/org/apache/camel/component/saga/SagaConstants.html#SAGA_LONG_RUNNING_ACTION) | The long running action. |  | String |
 
+## Message Body
+
+The message body at each side of the Saga component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+ |
+| **Producer output** | `unchanged` | Unchanged: the saga service calls the completion or compensation endpoints with messages of its own. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The two endpoints are `saga:complete` and `saga:compensate`. A route that is part of a saga with the completion mode `MANUAL` sends to one of them to end the saga. Camel then calls the completion or the compensation endpoint of the saga.

@@ -422,6 +422,18 @@ Enum values:
 | **CamelHttpCharacterEncoding** (producer) Constant: [`HTTP_CHARACTER_ENCODING`](https://javadoc.io/doc/org.apache.camel/camel-http/latest/org/apache/camel/component/http/HttpConstants.html#HTTP_CHARACTER_ENCODING) | The character encoding. |  | String |
 | **Content-Type** (producer) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-http/latest/org/apache/camel/component/http/HttpConstants.html#CONTENT_TYPE) | The HTTP content type. Is set on both the IN and OUT message to provide a content type, such as text/html. |  | String |
 
+## Message Body
+
+The message body at each side of the HTTP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The request body: text, bytes, a stream or a file. A Map or a List fails: marshal it first. Without httpMethod, no body sends a GET and a body a POST. |
+| **Producer output** | `bytes`, `stream` or `null` | The response body: a byte array when its Content-Length is at most responsePayloadStreamingThreshold (8192), otherwise the stream cache (the stream itself with disableStreamCache); null for a response without a body. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Which HTTP method will be used

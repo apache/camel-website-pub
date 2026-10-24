@@ -391,6 +391,28 @@ The AWS Security Token Service (STS) component supports the following message he
 | **CamelAwsStsExpiration** (assumeRole getSessionToken getFederationToken) Constant: [`EXPIRATION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#EXPIRATION) | The expiration date and time of the credentials. |  | Instant |
 | **CamelAwsStsAssumedRoleArn** (assumeRole) Constant: [`ASSUMED_ROLE_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#ASSUMED_ROLE_ARN) | The Amazon Resource Name (ARN) of the assumed role. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Security Token Service (STS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: assumeRole takes the role from the CamelAwsStsRoleArn and CamelAwsStsRoleSessionName headers, and getFederationToken the name from CamelAwsStsFederatedName. With pojoRequest=true the request of the AWS SDK for the operation, such as an AssumeRoleRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the AssumeRoleResponse of assumeRole, the default, with the temporary credentials in credentials(). |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required STS component options
 
 You have to provide the amazonSTSClient in the Registry or your accessKey and secretKey to access the [Amazon STS](https://aws.amazon.com/sts/) service.

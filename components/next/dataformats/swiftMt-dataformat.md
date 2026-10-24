@@ -13,6 +13,30 @@ The SWIFT MT dataformat supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **writeInJson** (common) | `false` | `Boolean` | Whether to marshal messages in JSON format. |
 
+## Message Body
+
+The message body at each side of the SWIFT MT data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `pojo` (`com.prowidesoftware.swift.model.mt.AbstractMT`) | 
+A Prowide MT message, such as an MT103, as unmarshal gives. The body is not converted: MT text fails.
+
+-   With `writeInJson=true`: `pojo` (`com.prowidesoftware.JsonSerializable`)
+    
+
+
+
+
+
+ |
+| **Marshal output** | `stream` | The MT message in FIN format, or JSON with writeInJson, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file` | An MT message in FIN format. |
+| **Unmarshal output** | `pojo` or `null` (`com.prowidesoftware.swift.model.mt.AbstractMT`) | The Prowide class of the message type, such as MT103; null when the type is not known. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 In Spring DSL, you configure the data format using this tag:
 
 _XML-only: Spring XML data format configuration_
@@ -101,7 +125,7 @@ from("direct:startEncode")
 
 ## Marshal
 
-In this example, we marshal the messages read from a JMS queue in SWIFT format before storing the result into a file.
+In this example, we marshal the messages read from a JMS queue in SWIFT format before storing the result into a file. The body must be a Prowide MT object, such as an `MT103`, as unmarshal gives: it is not converted, so an MT message as text fails.
 
 -   Java
     

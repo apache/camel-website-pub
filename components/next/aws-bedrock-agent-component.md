@@ -403,6 +403,42 @@ The AWS Bedrock Agent component supports the following message header(s), which 
 | **CamelAwsBedrockAgentRuntimeNextToken** (common) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#NEXT_TOKEN) | Pagination token used by the retrieve operation. Set on the in-message to request the next page; set on the out-message when the response carries one. |  | String |
 | **CamelAwsBedrockAgentRuntimeRetrieveGuardrailAction** (common) Constant: [`RETRIEVE_GUARDRAIL_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#RETRIEVE_GUARDRAIL_ACTION) | When performing a retrieve operation, this header will contain the guardrail action (if any) applied by the knowledge base. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Bedrock Agent component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`software.amazon.awssdk.services.bedrockagent.model.IngestionJob`) | The ingestion job of the knowledgeBaseId, dataSourceId and ingestionJobId options, one message per poll, also when the job did not change, with its status in the CamelAwsBedrockAgentIngestionJobStatus header. |
+| **Producer input** | `any` | 
+Not used: the knowledge base, the data source and the ingestion job come from the options, or from headers such as CamelAwsBedrockAgentKnowledgeBaseId when the option is not set. With pojoRequest=true the request of the AWS SDK for the operation, such as a StartIngestionJobRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` (`software.amazon.awssdk.services.bedrockagent.model.IngestionJob`) | 
+
+The id of the ingestion job as text for startIngestionJob, a List of IngestionJobSummary for listIngestionJobs, and the IngestionJob for getIngestionJob, with its status in the CamelAwsBedrockAgentIngestionJobStatus header.
+
+-   With `operation=startIngestionJob`: `text` (`java.lang.String`)
+    
+-   With `operation=listIngestionJobs`: `list` (`java.util.List<software.amazon.awssdk.services.bedrockagent.model.IngestionJobSummary>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Bedrock component options
 
 You have to provide the bedrockRuntimeClient in the Registry or your accessKey and secretKey to access the [Amazon Bedrock](https://aws.amazon.com/bedrock/) service.

@@ -423,6 +423,61 @@ Enum values:
 | **CamelMinioLength** (producer) Constant: [`LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-minio/latest/org/apache/camel/component/minio/MinioConstants.html#LENGTH) | The length. |  | String |
 | **CamelMinioPresignedURLExpirationTime** (producer) Constant: [`PRESIGNED_URL_EXPIRATION_TIME`](https://javadoc.io/doc/org.apache.camel/camel-minio/latest/org/apache/camel/component/minio/MinioConstants.html#PRESIGNED_URL_EXPIRATION_TIME) | Expiration of minio presigned url in Seconds. |  | int |
 | **CamelMinioOverrideBucketName** (common) Constant: [`OVERRIDE_BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-minio/latest/org/apache/camel/component/minio/MinioConstants.html#OVERRIDE_BUCKET_NAME) | The bucket Name to override which this object will be stored or which will be used for the current operation or in which this object is contained. |  | String |
+
+## Message Body
+
+The message body at each side of the Minio component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | 
+The content of the object as a byte array, one message per object, with its metadata in headers. No body with includeBody=false.
+
+-   With `includeBody=false`: `null`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The content to upload, when no operation is set: text, bytes, a stream or a file. A Map, a List or no body fails: marshal it first. The operations take their input from headers, or with pojoRequest=true from the builder of the request of the Minio SDK in the body, such as a GetObjectArgs.Builder; deleteObjects works only so.
+
+Not known when `operation` or `pojoRequest` is set.
+
+ |
+| **Producer output** | `unchanged` | 
+
+Unchanged after an upload and a copyObject, with the ETag in a header. By the operation: the stream of the object for getObject and getObjectRange, a lazy Iterable of Result for listObjects, whose get() gives the Item, an Iterator of Bucket for listBuckets, true for the deletes, ok for deleteBucket and the URL as text for the links.
+
+-   With `operation=getObject`: `stream`
+    
+-   With `operation=getObjectRange`: `stream`
+    
+-   With `operation=listObjects`: `iterator` (`java.lang.Iterable<io.minio.Result<io.minio.messages.Item>>`)
+    
+-   With `operation=listBuckets`: `iterator` (`java.util.Iterator<io.minio.messages.ListAllMyBucketsResult.Bucket>`)
+    
+-   With `operation=deleteObject`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deleteObjects`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deleteBucket`: `text` (`java.lang.String`)
+    
+-   With `operation=createDownloadLink`: `text` (`java.lang.String`)
+    
+-   With `operation=createUploadLink`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > You have to provide the minioClient in the Registry or your `accessKey` and `secretKey` to access the [Minio](https://min.io/).
 
@@ -453,9 +508,9 @@ Camel-Minio component provides the following operation on the producer side:
     
 -   `listObjects`
     
--   `getObject` (this will return a \`MinioObject instance)
+-   `getObject` (this will return the content of the object as a stream)
     
--   `getObjectRange` (this will return a \`MinioObject instance)
+-   `getObjectRange` (this will return the range of the content as a stream)
     
 -   `createDownloadLink` (this will return a Presigned download Url)
     
@@ -773,7 +828,7 @@ from("direct:start")
             uri: mock:result
 ```
 
-This operation will return a MinioObject instance related to the camelKey object in `mycamelbucket` bucket.
+This operation will return the content of the camelKey object in `mycamelbucket` bucket as a stream.
 
 -   `GetObjectRange`: this operation gets a single object range in a specific bucket
     
@@ -834,7 +889,7 @@ from("direct:start")
             uri: mock:result
 ```
 
-This operation will return a MinioObject instance related to the camelKey object in `mycamelbucket` bucket, containing bytes from 0 to 9.
+This operation will return the bytes from 0 to 9 of the camelKey object in `mycamelbucket` bucket as a stream.
 
 -   `createDownloadLink`: this operation will return a presigned url through which a file can be downloaded using GET method
     

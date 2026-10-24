@@ -9,7 +9,7 @@
 >     
 > -   You may try your luck using the given camel component on Quarkus directly (without an extension). Most probably it will work in the JVM mode and fail in the native mode. Do not hesitate to [report](https://github.com/apache/camel-quarkus/issues) any issues you encounter.
 
-There are 334 extensions (5 deprecated, 59 JVM only)
+There are 335 extensions (5 deprecated, 59 JVM only)
 
      
 | Extension | Artifact | JVM  
@@ -20,6 +20,7 @@ level | Description |
 | [A2A](extensions/a2a.md) | camel-quarkus-a2a | 3.38.0 | 3.38.0 | Preview | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ](extensions/activemq.md) | camel-quarkus-activemq | 1.0.0 | 1.0.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](extensions/activemq6.md) | camel-quarkus-activemq6 | 3.30.0 | 3.30.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
+| [AI Resource](extensions/ai-resource.md) | camel-quarkus-ai-resource | 4.0.0 | 4.0.0 | Preview | Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry. |
 | [AI Tool](extensions/ai-tool.md) | camel-quarkus-ai-tool | 3.39.0 | 3.39.0 | Preview | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
 | [AMQP](extensions/amqp.md) | camel-quarkus-amqp | 1.0.0 | 1.0.0 | Stable | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](extensions/arangodb.md) | camel-quarkus-arangodb | 1.1.0 | 1.1.0 | Stable | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |

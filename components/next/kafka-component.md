@@ -644,6 +644,33 @@ The Kafka component supports the following message header(s), which is/are liste
 | **CamelKafkaRecordMeta** (producer) Constant: [`KAFKA_RECORD_META`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#KAFKA_RECORD_META) | The metadata (only configured if recordMetadata endpoint parameter is true). |  | List |
 | **CamelKafkaManualCommit** (consumer) Constant: [`MANUAL_COMMIT`](https://javadoc.io/doc/org.apache.camel/camel-kafka/latest/org/apache/camel/component/kafka/KafkaConstants.html#MANUAL_COMMIT) | Can be used for forcing manual offset commit when using Kafka consumer. |  | KafkaManualCommit |
 
+## Message Body
+
+The message body at each side of the Kafka component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `null` | The value of the record: a String with the default valueDeserializer (StringDeserializer), null for a tombstone. With batching, a List of the exchanges of the records.
+-   With `valueDeserializer=org.apache.kafka.common.serialization.ByteArrayDeserializer`: `bytes` or `null` (`byte[]`)
+    
+-   With `batching=true`: `list`
+    
+
+Not known when `valueDeserializer` is set.
+
+ |
+| **Producer input** | `any` | The value of the record, converted for the valueSerializer: text with the default StringSerializer, so a Map or a POJO is sent as its toString(): marshal it first. With useIterator, an Iterable or an Iterator is sent as one record per element.
+
+Not known when `valueSerializer` is set.
+
+ |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 For more information about Producer/Consumer configuration:
 
 [http://kafka.apache.org/documentation.html#newconsumerconfigs](http://kafka.apache.org/documentation.html#newconsumerconfigs) [http://kafka.apache.org/documentation.html#producerconfigs](http://kafka.apache.org/documentation.html#producerconfigs)

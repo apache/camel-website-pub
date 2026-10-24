@@ -112,13 +112,25 @@ The Chunk component supports the following message header(s), which is/are liste
 | **CamelChunkResourceUri** (producer) Constant: [`CHUNK_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-chunk/latest/org/apache/camel/component/chunk/ChunkConstants.html#CHUNK_RESOURCE_URI) | A URI for the template resource to use instead of the endpoint configured. |  | String |
 | **CamelChunkTemplate** (producer) Constant: [`CHUNK_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-chunk/latest/org/apache/camel/component/chunk/ChunkConstants.html#CHUNK_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
 
+## Message Body
+
+The message body at each side of the Chunk component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The template gets the body as {$body}, as it is: text, or a Map, a List or a POJO to read from; no body prints as empty text, and bytes or a stream are not read as text. The template is the resource, or the CamelChunkTemplate header with allowTemplateFromHeader=true, never the body. |
+| **Producer output** | `text` (`java.lang.String`) | The text the template writes. The headers are kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Chunk component will look for a specific template in the _themes_ folder with extensions _.chtml_ or \_.cxml. \_If you need to specify a different folder or extensions, you will need to use the specific options listed above.
 
 ## Usage
 
 ### Chunk Context
 
-Camel will provide exchange information in the Chunk context (just a `Map`). The `Exchange` is transferred as:
+Camel will provide exchange information in the Chunk context (just a `Map`). The `Exchange` is transferred as: The `body`, `header`, `headers`, `variable`, `variables` and `exception` entries are always there; the others only when the endpoint has `allowContextMapAll=true`.
 
  
 | key | value |
@@ -134,7 +146,7 @@ Camel will provide exchange information in the Chunk context (just a `Map`). The
 
 ### Dynamic templates
 
-Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
+Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, and the endpoint has `allowTemplateFromHeader=true`, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
 ## Examples
 

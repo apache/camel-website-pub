@@ -188,6 +188,30 @@ Enum values:
 
  |
 
+## Message Body
+
+The message body at each side of the HL7 data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes` or `pojo` | A HAPI Message, or HL7 as text or bytes (ER7 or XML) or an HL7 XML DOM Document, which a type converter parses into a Message. A stream or a file fails: convert it to text first. |
+| **Marshal output** | `stream` | HL7 in ER7 (pipe-delimited), or HL7 XML with targetFormat XML, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file` | HL7 in ER7 (pipe-delimited) or XML, which the parser detects. |
+| **Unmarshal output** | `pojo` (`ca.uhn.hl7v2.model.Message`) | 
+The HAPI Message of the structure for its type and version, such as ADT\_A01 (a GenericMessage without the structures), with the MSH fields in CamelHL7 headers. With targetFormat XML, the HL7 XML as a DOM Document.
+
+-   With `targetFormat=XML`: `pojo` (`org.w3c.dom.Document`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 -   `marshal` = from Message to byte stream (can be used when responding using the HL7 MLLP codec)
     
 -   `unmarshal` = from byte stream to Message (can be used when receiving streamed data from the HL7 MLLP

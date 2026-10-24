@@ -248,6 +248,43 @@ The Nats component supports the following message header(s), which is/are listed
 | **CamelNatsDeliveryCounter** (consumer) Constant: [`NATS_DELIVERY_COUNTER`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_DELIVERY_COUNTER) | Number of times this message has been delivered (1 = first, 1 then message has been redelivered). |  | long |
 | **CamelNatsManualAck** (consumer) Constant: [`NATS_MANUAL_ACK`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_MANUAL_ACK) | The manual acknowledgment handle for JetStream messages (only set when manualAck=true). |  | NatsManualAck |
 
+## Message Body
+
+The message body at each side of the Nats component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The payload of the NATS message as a byte array, empty for a message without one: convert or unmarshal it. |
+| **Consumer reply** | `any` | 
+Only with exchangePattern=InOut is a message with a reply subject answered, with the body the route ends with: text, bytes, a stream or a file. A Map, a POJO or no body sends no reply, and the requester times out.
+
+-   With `exchangePattern=InOut`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | What converts to a byte array: text, bytes, a stream or a file. A Map or a POJO is sent as its toString(), and a List or no body fails: marshal it first. |
+| **Producer output** | `unknown` | 
+
+Unchanged for a message that expects no reply (InOnly). A message that expects one (InOut) waits for the reply, up to requestTimeout, and gets its payload as a byte array.
+
+-   With `exchangePattern=InOnly`: `unchanged`
+    
+-   With `exchangePattern=InOut`: `bytes` (`byte[]`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring servers
@@ -317,9 +354,9 @@ camel.component.nats.servers=scott:tiger@someserver:4222,superman:123@someothers
 
 ### Request/Reply support
 
-The producer supports request/reply where it can wait for an expected reply message.
+The producer supports request/reply: when the exchange pattern is InOut, it waits for the reply message, up to `requestTimeout`, and the payload of the reply becomes the message body, as a byte array.
 
-The consumer will, when routing the message is complete, send back the message as reply-message if required.
+The consumer sends back the message body as the reply message, when routing the message is complete, if the message has a reply subject and the consumer has `exchangePattern=InOut`. The body must convert to a byte array: text, bytes, a stream or a file. A body that does not, such as a Map, sends no reply.
 
 ## Examples
 
@@ -469,3 +506,20 @@ from("nats:mytopic?jetstreamEnabled=true&jetstreamName=mystream&durableName=myco
 ```
 
 If the route completes without calling any NatsManualAck method, the message remains unacknowledged and NATS will redeliver it after `ackWait` expires (default 30 seconds).
+
+### JetStream push consumer whose consumer was deleted
+
+With `jetstreamEnabled=true` and `pullSubscription=false`, the server deletes an ephemeral JetStream consumer (no `durableName`, and no durable name in the `consumerConfiguration`) after about 5 seconds without a subscriber, for example while the client is disconnected, and loses it on a restart. After every reconnect the Camel consumer asks the server for its consumer, and subscribes again when its ephemeral consumer is gone:
+
+-   The new consumer starts at the first message the route did not acknowledge, so the route can see again the messages after that one (with `ackPolicy=None`, after the last message delivered). A message that was not acknowledged and was already delivered `maxDeliver` times does not count, as the server does not deliver it again.
+    
+-   When nothing was delivered yet, a consumer with the deliver policy `New` (or `Last`) starts after (or at) the last message of the stream at the subscribe.
+    
+-   On a stream with `WorkQueue` retention, and on a stream that was created again since the route subscribed, the new consumer uses the consumer configuration as it is (from the first message of the new stream for `New` and `Last`).
+    
+-   When the consumer cannot be checked or created again (for example JetStream is not ready yet after a server restart, or the stream is gone until it is created again), the Camel consumer keeps trying while the route runs, a few times a second apart and then up to every 30 seconds, and logs a WARN after the first attempts.
+    
+
+A durable consumer is not created again: when it is gone (deleted by an administrator, or after its `inactiveThreshold`), the Camel consumer logs a WARN and keeps its subscription, and messages arrive again when the durable is created again with the same deliver subject.
+
+The consumer is checked only after a reconnect. A consumer that is deleted while the connection stays up (for example with `nats consumer rm`) is not detected, and the route receives nothing more until it is restarted.

@@ -51,6 +51,32 @@ The uniVocity TSV dataformat supports the following options which are listed bel
 | **lazyLoad** (common) | `false` | `Boolean` | Whether the unmarshalling should produce an iterator that reads the lines on the fly or if all the lines must be read at once. |
 | **asMap** (common) | `false` | `Boolean` | Whether the unmarshalling should produce maps for the lines values instead of lists. It requires to have header (either defined or collected). |
 
+## Message Body
+
+The message body at each side of the uniVocity TSV data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `map` or `list` | One row as a Map, or the rows as a List (or an Iterator) of Maps. Rows that are Lists, as unmarshal gives without asMap, are not accepted. |
+| **Marshal output** | `stream`, as text | The TSV in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | 
+ |
+| **Unmarshal output** | `list` | 
+
+A List of the rows, each a List of its values (the first line too, unless headerExtractionEnabled); with asMap, a Map of the header names and the values.
+
+-   With `lazyLoad=true`: `iterator`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Marshalling usages
 
 The marshalling accepts either:

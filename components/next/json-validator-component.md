@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The JSON Schema Validator component performs bean validation of the message body against JSON Schemas v4, v6, v7, v2019-09 draft and v2020-12(partial) using the NetworkNT JSON Schema library ([https://github.com/networknt/json-schema-validator](https://github.com/networknt/json-schema-validator)).
+The JSON Schema Validator component validates the JSON in the message body against JSON Schemas v4, v6, v7, v2019-09 draft and v2020-12(partial) using the NetworkNT JSON Schema library ([https://github.com/networknt/json-schema-validator](https://github.com/networknt/json-schema-validator)).
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -112,6 +112,24 @@ With the following _path_ and _query_ parameters:
 | **errorHandler** (advanced) | To use a custom ValidatorErrorHandler. The default error handler captures the errors and throws an exception. |  | JsonValidatorErrorHandler |
 | **objectMapper** (advanced) | The used Jackson object mapper. |  | ObjectMapper |
 | **uriSchemaLoader** (advanced) | To use a custom schema loader allowing for adding custom format validation. The default implementation will create a schema loader that tries to determine the schema version from the $schema property of the specified schema. |  | JsonUriSchemaLoader |
+
+## Message Body
+
+The message body at each side of the JSON Schema Validator component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file`, as json | The JSON to validate: text, bytes, a stream or a file. A Map, a POJO or no body fails: marshal it first; with headerName the header is validated instead.
+-   With `failOnNullBody=false`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+Not known when `headerName` is set.
+
+ |
+| **Producer output** | `unchanged` | Unchanged: JSON that does not match the schema, or text that is not JSON, fails with a JsonValidationException. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Example
 

@@ -166,6 +166,18 @@ The IBM Watson Language component supports the following message header(s), whic
 | **CamelIBMWatsonLanguageSentimentScore** (producer) Constant: [`SENTIMENT_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-language/latest/org/apache/camel/component/ibm/watson/language/WatsonLanguageConstants.html#SENTIMENT_SCORE) | The sentiment score. |  | Double |
 | **CamelIBMWatsonLanguageSentimentLabel** (producer) Constant: [`SENTIMENT_LABEL`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-language/latest/org/apache/camel/component/ibm/watson/language/WatsonLanguageConstants.html#SENTIMENT_LABEL) | The sentiment label (positive, negative, neutral). |  | String |
 
+## Message Body
+
+The message body at each side of the IBM Watson Language component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The text to analyze for analyzeText, or the URL of the page for analyzeUrl, read as text, unless the CamelIBMWatsonLanguageText or CamelIBMWatsonLanguageUrl header gives it. Without the header, no body or a blank one fails, and a Map or a POJO is analyzed as its toString(): marshal it first. |
+| **Producer output** | `pojo` (`com.ibm.watson.natural_language_understanding.v1.model.AnalysisResults`) | The results of the features enabled (sentiment, entities, keywords and so on), with the sentiment score and label and the language in headers too. Converted to text, it is the JSON of the results. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required IBM Watson Language component options
 
 You must provide the `apiKey` for authentication and optionally the `serviceUrl` for your Watson service instance.

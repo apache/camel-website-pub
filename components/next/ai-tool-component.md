@@ -155,6 +155,21 @@ The AI Tool component supports the following message header(s), which is/are lis
 | **CamelAiToolCallId** (consumer) Constant: [`TOOL_CALL_ID`](https://javadoc.io/doc/org.apache.camel/camel-ai-tool/latest/org/apache/camel/component/ai/tool/AiToolConstants.html#TOOL_CALL_ID) | The tool invocation identifier supplied by the calling framework. Absent when the framework does not supply one. |  | String |
 | **CamelAiToolConversationId** (consumer) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-ai-tool/latest/org/apache/camel/component/ai/tool/AiToolConstants.html#CONVERSATION_ID) | The conversation identifier supplied by the calling framework. Absent when the framework does not supply one. |  | String |
 
+## Message Body
+
+The message body at each side of the AI Tool component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body: each argument of the tool call is a header named as its parameter, a Map or a List for a nested JSON value. Undeclared arguments and names starting with camel are dropped. |
+| **Consumer reply** | `any` | The tool result, as text: the body converted to a String, so a Map, a List or a POJO is sent as its toString(): marshal it to JSON first. No body gives No result. With outputSchema or outputParameter.NAME options the body must be JSON: a JSON String, a Map, a List, a number or a boolean, and bytes, a stream or another object fail the call.
+Not known when `outputSchema` or `outputParameters` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Basic Tool Definition

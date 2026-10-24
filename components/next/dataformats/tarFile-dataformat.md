@@ -2,7 +2,7 @@
 
 **Since Camel 2.16**
 
-The Tar File Data Format is a message compression and decompression format. Messages can be marshalled (compressed) to Tar Files containing a single entry, and Tar Files containing a single entry can be unmarshalled (decompressed) to the original file contents.
+The Tar File Data Format is a message archiving format. Messages can be marshalled to Tar Files containing a single entry, and Tar Files containing a single entry can be unmarshalled to the original file contents. The Tar File is not compressed: for a `.tar.gz`, marshal it with the [gzipDeflater](gzipDeflater-dataformat.md) data format as well.
 
 There is also an aggregation strategy that can aggregate multiple messages into a single Tar File.
 
@@ -18,9 +18,33 @@ The Tar File dataformat supports the following options which are listed below.
 | **preservePathElements** (common) | `false` | `Boolean` | Whether to preserve path elements when the file name contains path elements in the tar file. |
 | **maxDecompressedSize** (advanced) | `1073741824` | `Integer` | The maximum decompressed size of a tar file (in bytes). An IOException is thrown if the decompressed size exceeds this amount. Set to -1 to disable. |
 
+## Message Body
+
+The message body at each side of the Tar File data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The content of the one entry: text, bytes, a stream or a file. The entry size is the CamelFileLength header, or else what the stream has available, and must match the content. |
+| **Marshal output** | `stream`, as binary | The tar file, not compressed, in the stream cache, or a byte array when stream caching is off. The CamelFileName header is the entry name with .tar. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | A tar file with one entry, or with several when usingIterator. A .tar.gz is unmarshalled with gzipDeflater first. |
+| **Unmarshal output** | `stream` | 
+The content of the one entry in the stream cache, or a byte array when stream caching is off; a tar with more entries, a folder too, fails. With usingIterator, an Iterator for a streaming split EIP: of messages whose body streams one file of the archive, to read before the next.
+
+-   With `usingIterator=true`: `iterator` (`org.apache.camel.dataformat.tarfile.TarIterator`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Marshal
 
-In this example, we marshal a regular text/XML payload to a compressed payload using Tar File compression, and send it to an ActiveMQ queue called MY\_QUEUE.
+In this example, we marshal a regular text/XML payload to a Tar File payload, and send it to an ActiveMQ queue called MY\_QUEUE.
 
 -   Java
     
@@ -56,7 +80,7 @@ from("direct:start")
             uri: activemq:queue:MY_QUEUE
 ```
 
-The name of the Tar entry inside the created Tar File is based on the incoming `CamelFileName` message header, which is the standard message header used by the file component. Additionally, the outgoing `CamelFileName` message header is automatically set to the value of the incoming `CamelFileName` message header, with the ".tar" suffix. So, for example, if the following route finds a file named "test.txt" in the input directory, the output will be a Tar File named "test.txt.tar" containing a single Tar entry named "test.txt":
+The name of the Tar entry inside the created Tar File is based on the incoming `CamelFileName` message header, which is the standard message header used by the file component. Additionally, the outgoing `CamelFileName` message header is automatically set to the file name of the incoming `CamelFileName` message header, without its path, with the ".tar" suffix. So, for example, if the following route finds a file named "test.txt" in the input directory, the output will be a Tar File named "test.txt.tar" containing a single Tar entry named "test.txt":
 
 -   Java
     
@@ -177,7 +201,7 @@ _Java-only: Java TarSplitter class_
 ```
 
 > **Important**
-> You cannot use TarSplitter in _parallel_ mode with the splitter.
+> You cannot use TarSplitter in _parallel_ mode with the splitter. The splitter must be _streaming_ too: the body of each message streams its entry from the Tar File, which is read on as the splitter goes, so a splitter that is not streaming gives messages with empty bodies.
 
 ## Aggregate
 

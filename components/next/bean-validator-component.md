@@ -113,6 +113,18 @@ With the following _path_ and _query_ parameters:
 | **validationProviderResolver** (advanced) | To use a a custom ValidationProviderResolver. |  | ValidationProviderResolver |
 | **validatorFactory** (advanced) | To use a custom ValidatorFactory. |  | ValidatorFactory |
 
+## Message Body
+
+The message body at each side of the Bean Validator component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo` or `list` | A POJO with Jakarta Bean Validation constraints, or a List or another Iterable of them, each one validated. Text, a Map or an array has no constraints of its own and passes unchecked; no body fails. |
+| **Producer output** | `unchanged` | Unchanged: a body that breaks a constraint fails with a BeanValidationException. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Using HibernateValidationProviderResolver
 
 -   Java

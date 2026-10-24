@@ -4,7 +4,7 @@ The Source tab (**2**) of the [Camel TUI](camel-jbang-tui.md) is where you read 
 
 ## Top Features
 
--   [**Live run data**](#_live_run_data) — the exchanges and failures of each line of the running integration, next to the code.
+-   [**Live run data**](#_live_run_data) — the exchanges and failures of each line of the running integration, next to the code, and the body types each step has been reached with at the end of its line.
     
 -   [**Running as saved**](#_running_as_saved) — whether the integration runs the file as it is saved, or needs a restart.
     
@@ -45,6 +45,16 @@ In the example the timer fired 227 times; the `filter` let 137 of those through 
 
 The column keeps its width, so the code does not move as the numbers grow. It works for YAML, Java and XML routes, as `camel run` records the source line of every processor.
 
+### Body Types
+
+With the message history on, such as with `camel run --dev`, the body types each step has been reached with go at the end of its line, dimmed and lined up. A step reached with bodies of more than one kind (`null`, `payload`, `data` or `collection`) needs attention, as its body depends on the path a message takes: it has a `⚠` in the gutter, and its types and kinds are in the warning color. The quick documentation of the line lists all the types, which the end of the line cuts to the room there is.
+
+![The orders route in the source view: the steps after the choice are reached with a map and a stream](_images/jbang/camel-tui-source-body-types.png)
+
+The same body types are in the Routes and Diagram tabs (see [Body Types](camel-jbang-tui-diagram.html#_body_types)).
+
+The live run data and the body types are of the version of the file the integration runs. While it does not run the file as saved (see [Running as Saved](#_running_as_saved)), the numbers are dimmed and the body types are left out, as the lines of the version that runs may be others.
+
 ## Running as Saved
 
 The bottom border of the source says whether the integration runs the routes of the file as it is saved:
@@ -56,6 +66,8 @@ The bottom border of the source says whether the integration runs the routes of 
 -   `○ not running yet` — the file was saved after the integration loaded it. An integration that runs without `--dev` does not reload a file when it is saved: restart it. The log of one in dev mode says why it did not reload the file.
     
 -   `⚠ the reload failed` — the integration runs the routes it ran before the reload, until a reload succeeds.
+    
+-   `○ the routes of this file are stopped` — stopped (or suspended) by hand. The live run data and the body types still show when the integration loaded the file as saved, which is not known for a route stopped after a reload.
     
 
 ![The bottom border of an edited route file: the integration runs without --dev](_images/jbang/camel-tui-source-running-as-saved.png)

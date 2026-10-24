@@ -367,6 +367,41 @@ The AWS Transcribe component supports the following message header(s), which is/
 | **CamelAwsTranscribeSpecialty** (producer) Constant: [`SPECIALTY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-transcribe/latest/org/apache/camel/component/aws2/transcribe/Transcribe2Constants.html#SPECIALTY) | The medical specialty of a medical transcription job. |  | String |
 | **CamelAwsTranscribeType** (producer) Constant: [`TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-transcribe/latest/org/apache/camel/component/aws2/transcribe/Transcribe2Constants.html#TYPE) | The audio type of a medical transcription job. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Transcribe component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: AWS reads the audio from S3, at the URI in the CamelAwsTranscribeMediaUri header, and the other inputs come from headers too, such as the job name in CamelAwsTranscribeTranscriptionJobName. With pojoRequest=true the request of the AWS SDK for the operation, such as a StartTranscriptionJobRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The response of the AWS SDK for the operation, such as the StartTranscriptionJobResponse of startTranscriptionJob. The transcript is not in the body: the job writes it to S3, at the URI that getTranscriptionJob gives. deleteTranscriptionJob and deleteVocabulary keep the body.
+
+-   With `operation=deleteTranscriptionJob`: `unchanged`
+    
+-   With `operation=deleteVocabulary`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Transcribe component options
 
 You have to provide the amazonTranscribeClient in the Registry or your accessKey and secretKey to access the [Amazon Transcribe](https://aws.amazon.com/transcribe/) service.

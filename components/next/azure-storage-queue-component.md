@@ -363,6 +363,58 @@ Enum values:
 | **CamelAzureStorageQueueTimeToLive** (producer) Constant: [`TIME_TO_LIVE`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-queue/latest/org/apache/camel/component/azure/storage/queue/QueueConstants.html#TIME_TO_LIVE) | (sendMessage) How long the message will stay alive in the queue. If unset the value will default to 7 days, if -1 is passed the message will not expire. The time to live must be -1 or any positive number. |  | Duration |
 | **CamelAzureStorageQueueCreateQueue** (producer) Constant: [`CREATE_QUEUE`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-queue/latest/org/apache/camel/component/azure/storage/queue/QueueConstants.html#CREATE_QUEUE) | (sendMessage) When is set to true, the queue will be automatically created when sending messages to the queue. |  | boolean |
 
+## Message Body
+
+The message body at each side of the Azure Storage Queue Service component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` or `null` | The text of the queue message as a stream, with its id and pop receipt in headers; no body for a message without text. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The text of the message for sendMessage, the default, and updateMessage: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(): marshal it first. sendMessage fails without a body, and updateMessage then changes only the visibility. The other operations do not use the body.
+
+-   With `operation=updateMessage`: `text`, `bytes`, `stream`, `file` or `null`
+    
+-   With `operation=listQueues`: `any`
+    
+-   With `operation=createQueue`: `any`
+    
+-   With `operation=deleteQueue`: `any`
+    
+-   With `operation=clearQueue`: `any`
+    
+-   With `operation=deleteMessage`: `any`
+    
+-   With `operation=receiveMessages`: `any`
+    
+-   With `operation=peekMessages`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `value` (`java.lang.Boolean`) | 
+
+true after sendMessage, the default, and the operations that create, clear, update or delete, with their results in headers, such as the id and the pop receipt of the message sent. A List of the items of the SDK for listQueues, receiveMessages and peekMessages.
+
+-   With `operation=listQueues`: `list` (`java.util.List<com.azure.storage.queue.models.QueueItem>`)
+    
+-   With `operation=receiveMessages`: `list` (`java.util.List<com.azure.storage.queue.models.QueueMessageItem>`)
+    
+-   With `operation=peekMessages`: `list` (`java.util.List<com.azure.storage.queue.models.PeekedMessageItem>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 **Required information options:**
 
 **Required information options:**

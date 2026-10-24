@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792789047675,
+  "generated": 1792854669097,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8638,6 +8638,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/extensions/ai-resource.adoc",
+              "url": "/camel-quarkus/next/reference/extensions/ai-resource.html",
+              "title": "AI Resource"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/extensions/ai-tool.adoc",
               "url": "/camel-quarkus/next/reference/extensions/ai-tool.html",
               "title": "AI Tool"
@@ -11398,6 +11404,12 @@
               "path": "migration-guide/3.40.0.adoc",
               "url": "/camel-quarkus/3.40.x/migration-guide/3.40.0.html",
               "title": "Camel Quarkus 3.40.0 Migration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-guide/3.40.1.adoc",
+              "url": "/camel-quarkus/3.40.x/migration-guide/3.40.1.html",
+              "title": "Camel Quarkus 3.40.1 Migration Guide"
             },
             {
               "module": "ROOT",

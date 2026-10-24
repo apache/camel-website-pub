@@ -102,6 +102,25 @@ Enum values:
 
  |  | ExchangePattern |
 
+## Message Body
+
+The message body at each side of the REST API component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | The GET request for the API document, which has no body.
+Not known when `consumerComponentName` is set.
+
+ |
+| **Consumer reply** | `null`, `text`, `bytes` or `stream` | The API document the route of the REST DSL sets: the OpenAPI document as bytes, JSON unless the path ends with .yaml or the Accept header asks for YAML.
+
+Not known when `consumerComponentName` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 You do not use the `rest-api` endpoint in a route yourself. The [Rest DSL](../../manual/rest-dsl.md) creates a route from it when the REST configuration has an `apiContextPath`. That route serves the OpenAPI document of the REST services at that path. It needs the `camel-openapi-java` component on the classpath.

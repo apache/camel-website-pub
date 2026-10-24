@@ -543,6 +543,19 @@ The Pulsar component supports the following message header(s), which is/are list
 | **CamelPulsarProducerMessageDeliverAfter** (producer) Constant: [`DELIVER_AFTER`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#DELIVER_AFTER) | Deliver the message after a given delayed time (millis). |  | Long |
 | **CamelPulsarProducerMessageId** (producer) Constant: [`PRODUCER_MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#PRODUCER_MESSAGE_ID) | The message id the broker assigned to the published message. |  | MessageId |
 
+## Message Body
+
+The message body at each side of the Pulsar component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` or `null` (`byte[]`) | The payload of the Pulsar message as a byte array, null for a message with a null value (a tombstone), with the key and the properties in headers: convert or unmarshal it. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload. Any other body is sent with Java serialization, a Map, a List, a number and no body too, and an object that is not Serializable fails: marshal it first. |
+| **Producer output** | `unchanged` | Unchanged, also when the exchange expects a reply, with the id of the published message in a header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 Set the service URL of the Pulsar cluster on the component, for example in `application.properties`:

@@ -189,6 +189,17 @@ The Scheduler component supports the following message header(s), which is/are l
 | --- | --- | --- | --- |
 | **CamelMessageTimestamp** (consumer) Constant: [`MESSAGE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-scheduler/latest/org/apache/camel/component/scheduler/SchedulerConstants.html#MESSAGE_TIMESTAMP) | The timestamp of the message. |  | long |
 
+## Message Body
+
+The message body at each side of the Scheduler component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body: the message only starts the route. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## More information
 
 This component is a scheduler [Polling Consumer](http://camel.apache.org/polling-consumer.md) where you can find more information about the options above, and examples at the [Polling Consumer](http://camel.apache.org/polling-consumer.md) page.

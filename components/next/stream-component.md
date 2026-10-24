@@ -174,12 +174,33 @@ The Stream component supports the following message header(s), which is/are list
 | **CamelStreamIndex** (consumer) Constant: [`STREAM_INDEX`](https://javadoc.io/doc/org.apache.camel/camel-stream/latest/org/apache/camel/component/stream/StreamConstants.html#STREAM_INDEX) | The index. |  | long |
 | **CamelStreamComplete** (consumer) Constant: [`STREAM_COMPLETE`](https://javadoc.io/doc/org.apache.camel/camel-stream/latest/org/apache/camel/component/stream/StreamConstants.html#STREAM_COMPLETE) | Is complete. |  | boolean |
 
+## Message Body
+
+The message body at each side of the Stream component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | Each line of the stream as text. With groupLines, a List of the lines; with readLine=false, all the bytes of the stream.
+-   With `readLine=false`: `bytes` (`byte[]`)
+    
+
+Not known when `groupLines` is set.
+
+ |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | Text in the encoding, or bytes, a stream or a file as bytes, followed by a new line; no body writes nothing. A Map or a POJO is written as its toString() and a List fails: marshal it first. |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message content
 
-The Stream component supports either `String` or `byte[]` for writing to streams. Just add either `String` or `byte[]` content to the `message.in.body`. Messages sent to the **stream:** producer in binary mode are not followed by the newline character (as opposed to the `String` messages). Message with `null` body will not be appended to the output stream.  
-The special `stream:header` URI is used for custom output streams. Just add a `java.io.OutputStream` object to `message.in.header` in the key `header`.  
+The Stream component writes text, bytes, a stream or a file: text in the `encoding`, and the others as bytes, each followed by a new line unless `appendNewLine` is `false`. A message with a `null` body writes nothing. Another body, such as a `Map`, is written as its `toString()`, so marshal it first.  
+The special `stream:header` URI is used for custom output streams. Just add a `java.io.OutputStream` object to `message.in.header` in the key `stream`.  
 See samples for an example.
 
 ## Examples

@@ -22,6 +22,43 @@ The BeanIO dataformat supports the following options which are listed below.
 | **beanReaderErrorHandlerType** (advanced) |  | `String` | To use a custom org.apache.camel.dataformat.beanio.BeanIOErrorHandler as error handler while parsing. Configure the fully qualified class name of the error handler. |
 | **unmarshalSingleObject** (advanced) | `false` | `Boolean` | This option controls whether to unmarshal as a list of objects or as a single object only. |
 
+## Message Body
+
+The message body at each side of the BeanIO data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `pojo` or `list` | 
+A bean of a record of the mapping file, or a List (or an Iterator) of them; a Map is one record only with unmarshalSingleObject.
+
+-   With `unmarshalSingleObject=true`: `pojo`, `map` or `list`
+    
+
+
+
+
+
+ |
+| **Marshal output** | `stream` | The records in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file` | 
+
+ |
+| **Unmarshal output** | `list` | 
+
+A List with the bean of each record, of the class the mapping file names (a Map for a map record); with unmarshalSingleObject, the one bean.
+
+-   With `unmarshalSingleObject=true`: `pojo` or `map`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 An example of a [mapping file is here](https://github.com/apache/camel/blob/main/components/camel-beanio/src/test/resources/org/apache/camel/dataformat/beanio/mappings.xml).

@@ -27,7 +27,7 @@ The component supports polling OID values from an SNMP enabled device and receiv
 
 It can also be used to request information using GET method.
 
-The response body type is `org.apache.camel.component.snmp.SnmpMessage`.
+After a `POLL`, the body is an `org.apache.camel.component.snmp.SnmpMessage`: a Camel message whose own body is the response as XML text. It does not convert to a `String` itself. A `GET_NEXT` gives a `List` of them, one per variable of the walk. A `TRAP` producer sends the body, which must be an `org.snmp4j.PDU`, and leaves it as it is.
 
 ## Configuring Options
 
@@ -288,6 +288,42 @@ Enum values:
  | 3 | int |
 | **securityName** (security) | Sets the security name to be used with this target. |  | String |
 
+## Message Body
+
+The message body at each side of the SNMP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`), as xml | The variable bindings of the response of a poll or of a trap as XML text: an snmp element with an entry of an oid and a value for each, and the community of a trap in the securityName header. |
+| **Producer input** | `any` | 
+Not used by a POLL or GET\_NEXT, which requests the oids. A TRAP sends the body, which must be a PDU of SNMP4J for the snmpVersion: a PDUv1 for 0, the default, a PDU for 1 and a ScopedPDU for 3. Another body fails.
+
+-   With `type=TRAP`: `pojo` (`org.snmp4j.PDU`)
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` (`org.apache.camel.component.snmp.SnmpMessage`) | 
+
+The response of a POLL as an SnmpMessage, a Camel message as the body, whose own body is the XML text of the consumer; it does not convert to text. A List of them, one per step of the walk, for GET\_NEXT. A TRAP leaves the body unchanged.
+
+-   With `type=GET_NEXT`: `list` (`java.util.List<org.apache.camel.component.snmp.SnmpMessage>`)
+    
+-   With `type=TRAP`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### The result of a poll
@@ -301,12 +337,9 @@ Given the situation, that I poll for the following OIDs:
 1.3.6.1.2.1.25.3.5.1.1.1
 1.3.6.1.2.1.43.5.1.1.11.1
 
-The result will be the following:
-
-**Result of toString conversion**
+The body is the result as XML text, written on one line without an XML declaration (indented here):
 
 ```xml
-<?xml version="1.0" encoding="UTF-8"?>
 <snmp>
   <entry>
     <oid>1.3.6.1.2.1.1.3.0</oid>
@@ -351,7 +384,7 @@ snmp:127.0.0.1:162?protocol=udp&type=TRAP
 
 You can get the community of SNMP TRAP with message header `securityName`, peer address of the SNMP TRAP with message header `peerAddress`.
 
-Routing example in Java: (converts the SNMP PDU to XML String)
+Routing example in Java: (the body of the consumer is the SNMP PDU as XML text)
 
 -   Java
     

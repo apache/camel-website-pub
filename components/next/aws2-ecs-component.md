@@ -402,6 +402,28 @@ The AWS Elastic Container Service (ECS) component supports the following message
 | **CamelAwsECSIsTruncated** (listClusters) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ecs/latest/org/apache/camel/component/aws2/ecs/ECS2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
 | **CamelAwsECSClusterArn** (createCluster describeCluster deleteCluster) Constant: [`CLUSTER_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ecs/latest/org/apache/camel/component/aws2/ecs/ECS2Constants.html#CLUSTER_ARN) | The ARN of the cluster. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Elastic Container Service (ECS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the operations take their input from headers, such as the name of the cluster in CamelAwsECSClusterName. With pojoRequest=true the request of the AWS SDK for the operation, such as a ListClustersRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the ListClustersResponse of listClusters, with the token of the next page in a header. describeCluster of a cluster that does not exist does not fail: the response lists it in its failures. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required ECS component options
 
 You have to provide the amazonECSClient in the Registry or your accessKey and secretKey to access the [Amazon ECS](https://aws.amazon.com/ecs/) service.

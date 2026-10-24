@@ -412,6 +412,28 @@ The AWS Key Management Service (KMS) component supports the following message he
 | **CamelAwsKMSKeyState** (createKey describeKey) Constant: [`KEY_STATE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kms/latest/org/apache/camel/component/aws2/kms/KMS2Constants.html#KEY_STATE) | The state of the key. |  | String |
 | **CamelAwsKMSDeletionDate** (scheduleKeyDeletion) Constant: [`DELETION_DATE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kms/latest/org/apache/camel/component/aws2/kms/KMS2Constants.html#DELETION_DATE) | The date and time after which AWS KMS deletes the key. |  | Instant |
 
+## Message Body
+
+The message body at each side of the AWS Key Management Service (KMS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the key id and the other inputs come from headers, such as CamelAwsKMSKeyId. With pojoRequest=true the request of the AWS SDK for the operation, such as a ListKeysRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the CreateKeyResponse of createKey, which puts the id, the ARN and the state of the key in headers too. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required KMS component options
 
 You have to provide the amazonKmsClient in the Registry or your accessKey and secretKey to access the [Amazon KMS](https://aws.amazon.com/kms/) service.

@@ -39,7 +39,12 @@ The kubernetes cluster service could further be tuned by tweaking `quarkus.camel
   
 | Configuration property | Type | Default |
 | --- | --- | --- |
+| `[quarkus.camel.cluster.kubernetes.enabled](#quarkus-camel-cluster-kubernetes-enabled)`
+Whether a Kubernetes Cluster Service should be automatically configured according to 'quarkus.camel.cluster.kubernetes.\*' configurations.
+
+ | `boolean` | `true` |
 | `[quarkus.camel.cluster.kubernetes.rebalancing](#quarkus-camel-cluster-kubernetes-rebalancing)`
+
 Whether the camel master namespace leaders should be distributed evenly across all the camel contexts in the cluster.
 
  | `boolean` | `true` |
@@ -108,10 +113,5 @@ The lease resource type used in Kubernetes, either 'config-map' or 'lease' (defa
 The labels key/value used to identify the pods composing the cluster, defaults to empty map.
 
  | `Map<String,String>` |  |
-| `[quarkus.camel.cluster.kubernetes.enabled](#quarkus-camel-cluster-kubernetes-enabled)`
-
-Whether a Kubernetes Cluster Service should be automatically configured according to 'quarkus.camel.cluster.kubernetes.\*' configurations.
-
- | `boolean` | `true` |
 
 Configuration property fixed at build time. All other configuration properties are overridable at runtime.

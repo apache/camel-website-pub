@@ -26,6 +26,30 @@ The MIME Multipart dataformat supports the following options which are listed be
 | **includeHeaders** (common) |  | `String` | A regex that defines which Camel headers are also included as MIME headers into the MIME multipart. This only works if headersInline is set to true. |
 | **binaryContent** (common) | `false` | `Boolean` | Whether the content of binary parts in the MIME multipart is binary (true) or Base-64 encoded (false). |
 
+## Message Body
+
+The message body at each side of the MIME Multipart data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The body of the first part, of the content type in the Content-Type header (application/octet-stream when not set); the attachments of the message are the other parts. |
+| **Marshal output** | `stream` | The MIME multipart in the stream cache, or a byte array when stream caching is off, with its MIME headers as Camel headers unless headersInline is true. Without attachments the body is written as it is, unless multipartWithoutAttachment or headersInline is true. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file` | A MIME multipart, with its Content-Type (multipart/\*) and MIME-Version as Camel headers, as marshal leaves them; with headersInline, the MIME headers are at the start of the body. |
+| **Unmarshal output** | `stream` | 
+The first part, decoded, as a stream, with the other parts as attachments and its Content-Type as a header. Without a multipart Content-Type header the body is given back as a stream; with headersInline, a body that is not a multipart stays as it was.
+
+-   With `headersInline=true`: `stream` or `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Message Headers (marshal)
 
   
@@ -33,7 +57,7 @@ The MIME Multipart dataformat supports the following options which are listed be
 | --- | --- | --- |
 | Message-Id | String | The marshal operation will set this parameter to the generated MIME message id if the "headersInline" parameter is set to false. |
 | MIME-Version | String | The marshal operation will set this parameter to the applied MIME version (1.0) if the "headersInline" parameter is set to false. |
-| Content-Type | String | The content of this header will be used as a content type for the message body part. If no content type is set, "application/octet-stream" is assumed. After the marshal operation, the content type is set to "multipart/related" or empty if the "headersInline" parameter is set to true. |
+| Content-Type | String | The content of this header will be used as a content type for the message body part. If no content type is set, "application/octet-stream" is assumed. After the marshal operation, the content type is set to "multipart/" with the "multipartSubType" ("multipart/mixed" by default), or empty if the "headersInline" parameter is set to true. |
 | Content-Encoding | String | If the incoming content type is "text/\*" the content encoding will be set to the encoding parameter of the Content-Type MIME header of the body part. Furthermore, the given charset is applied for text to binary conversions. |
 
 ## Message Headers (unmarshal)

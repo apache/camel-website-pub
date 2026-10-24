@@ -50,7 +50,7 @@ from("direct:unmarshal")
 
 ### Marshal (XML to fixed format)
 
-Below is an example of using the DFDL Data Format to unmarshal an EDI message into an XML DOM Document:
+Below is an example of using the DFDL Data Format to marshal XML (a DOM Document, or XML text) into an EDI message:
 
 -   Java
     
@@ -85,3 +85,17 @@ The DFDL dataformat supports the following options which are listed below.
 | **schemaUri** (common) |  | `String` | **Required** The path to the DFDL schema file. |
 | **rootElement** (advanced) |  | `String` | The root element name of the schema to use. If not specified, the first root element in the schema will be used. |
 | **rootNamespace** (advanced) |  | `String` | The root namespace of the schema to use. |
+
+## Message Body
+
+The message body at each side of the DFDL data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML infoset of the DFDL schema, as text or as a DOM Document (or another DOM Node or Source), which is converted to a DOM Document. |
+| **Marshal output** | `stream` | The data in the format the DFDL schema describes, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file` | Data in the format the DFDL schema describes, such as an EDI message. |
+| **Unmarshal output** | `pojo` (`org.w3c.dom.Document`) | The XML infoset as a DOM Document. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).

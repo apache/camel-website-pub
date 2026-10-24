@@ -379,6 +379,18 @@ The AWS Simple Email Service (SES) component supports the following message head
 | **CamelAwsSesHtmlEmail** (producer) Constant: [`HTML_EMAIL`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ses/latest/org/apache/camel/component/aws2/ses/Ses2Constants.html#HTML_EMAIL) | The flag to show if email content is HTML. |  | Boolean |
 | **CamelAwsSesConfigurationSet** (producer) Constant: [`CONFIGURATION_SET`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ses/latest/org/apache/camel/component/aws2/ses/Ses2Constants.html#CONFIGURATION_SET) | TThe configuration set to send. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Simple Email Service (SES) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the mail, or its HTML with the CamelAwsSesHtmlEmail header set to true: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(), so marshal it first. A jakarta.mail Message is sent as a raw mail as it is. |
+| **Producer output** | `unchanged` | Unchanged, with the id of the mail in the CamelAwsSesMessageId header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required SES component options
 
 You have to provide the amazonSESClient in the Registry or your accessKey and secretKey to access the [Amazon’s SES](https://aws.amazon.com/ses).

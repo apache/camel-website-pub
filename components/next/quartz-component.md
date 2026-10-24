@@ -144,6 +144,17 @@ Enum values:
 | **autoStartScheduler** (scheduler) | Whether or not the scheduler should be auto started. | true | boolean |
 | **triggerStartDelay** (scheduler) | In case of scheduler has already started, we want the trigger start slightly after current time to ensure endpoint is fully started before the job kicks in. Negative value shifts trigger start time in the past. | 500 | long |
 
+## Message Body
+
+The message body at each side of the Quartz component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body: the message only starts the route. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 Each endpoint represents a different timer (in Quartz terms, a `Trigger` and `` `JobDetail ``).

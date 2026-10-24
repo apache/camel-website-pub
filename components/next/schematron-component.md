@@ -90,6 +90,18 @@ With the following _path_ and _query_ parameters:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **uriResolver** (advanced) | Set the URIResolver to be used for resolving schematron includes in the rules file. |  | URIResolver |
 
+## Message Body
+
+The message body at each side of the Schematron component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML to validate: text, bytes, a stream, a file, a DOM or another javax.xml.transform.Source. A Map or another POJO is read as its toString(): marshal it first; no body fails. |
+| **Producer output** | `unchanged` | Unchanged: the CamelSchematronValidationStatus header is SUCCESS or FAILED, and CamelSchematronValidationReport holds the SVRL report. With abort, a failed assert throws a SchematronValidationException. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Headers
 
    

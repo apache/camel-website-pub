@@ -150,11 +150,31 @@ The JDBC component supports the following message header(s), which is/are listed
 | **CamelGeneratedKeysRowCount** (producer) Constant: [`JDBC_GENERATED_KEYS_ROW_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_GENERATED_KEYS_ROW_COUNT) | The number of rows in the header that contains generated keys. |  | int |
 | **CamelGeneratedKeysRows** (producer) Constant: [`JDBC_GENERATED_KEYS_DATA`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_GENERATED_KEYS_DATA) | Rows that contains the generated keys. |  | List |
 
+## Message Body
+
+The message body at each side of the JDBC component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The SQL statement as text, or bytes, a stream or a file of it; a Map or a List is not a statement: set the SQL as the body. With useHeadersAsParameters, the values of its placeholders come from the CamelJdbcParameters header, or else from the headers. |
+| **Producer output** | `list` or `unchanged` | The rows of a select: a List of Maps of the column names and their values (beans of outputClass when set). SelectOne gives the Map of the one row, the value of its column as the driver reads it when it has one, or null for no row; StreamList an Iterator of the rows, read once. A statement that is not a select leaves the body unchanged, with the count in the CamelJdbcUpdateCount header.
+-   With `outputType=SelectOne`: `map`, `text`, `value`, `bytes`, `pojo`, `null` or `unchanged`
+    
+-   With `outputType=StreamList`: `iterator` or `unchanged`
+    
+
+Not known when `outputClass` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Result
 
-By default, the result is returned in the OUT body as an `ArrayList<HashMap<String, Object>>`. The `List` object contains the list of rows and the `Map` objects contain each row with the `String` key as the column name. You can use the option `outputType` to control the result.
+By default, the result of a select is returned in the OUT body as an `ArrayList<LinkedHashMap<String, Object>>`. The `List` object contains the list of rows and the `Map` objects contain each row with the `String` key as the column name. You can use the option `outputType` to control the result: `SelectOne` gives the `Map` of the one row, the value of its column when it has one column, or `null` when there is no row, and `StreamList` gives an `Iterator` of the rows, which can be read once. A statement that is not a select leaves the body as it is, with the count in the `CamelJdbcUpdateCount` header.
 
 **Note:** This component fetches `ResultSetMetaData` to be able to return the column name as the key in the `Map`.
 

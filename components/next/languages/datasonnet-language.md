@@ -28,6 +28,25 @@ The DataSonnet language supports the following options which are listed below.
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+## Message Body
+
+The message body at each side of the DataSonnet language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Expression input** | `any` | The body as it is, in the variable body. JSON, XML or CSV text is read in that format only with bodyMediaType or a Content-Type header, and a stream needs one of them.
+Not known when `bodyMediaType` or `source` is set.
+
+ |
+| **Expression result** | `pojo` (`com.datasonnet.document.Document`) | A Document with the result: a Java object, or text in outputMediaType when it is set. With resultType, the result converted to that type.
+
+Not known when `resultType` or `outputMediaType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Setting a result type
@@ -73,7 +92,7 @@ from("direct:start")
 
 In XML and YAML DSL, `resultType` is the fully qualified class name.
 
-If the expression results in an array, or an object, you can instruct the expression to return you `List.class` or `Map.class`, respectively. However, you must also set the output media type to `application/x-java-object`.
+If the expression results in an array, or an object, you can instruct the expression to return you `List.class` or `Map.class`, respectively, as long as the output media type is `application/x-java-object`, which is the default.
 
 > **Note**
 > The default `Document` object is useful in situations where there are intermediate transformation steps, and so retaining the content metadata through a route execution is valuable.
@@ -109,6 +128,9 @@ And for output media type:
     
 5.  `application/x-java-object`
     
+
+> **Note**
+> With the body media type `application/x-java-object`, the body is the Java object it is: JSON text is a string, not an object, so `body.foo` fails on it. Set `bodyMediaType`, or a `Content-Type` header, to read text, bytes, a stream or a file in that format, such as `application/json`, `application/xml` or `application/csv`.
 
 ### Functions
 

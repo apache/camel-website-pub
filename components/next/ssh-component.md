@@ -246,11 +246,26 @@ The SSH component supports the following message header(s), which is/are listed 
 | **CamelSshStderr** (common) Constant: [`STDERR`](https://javadoc.io/doc/org.apache.camel/camel-ssh/latest/org/apache/camel/component/ssh/SshConstants.html#STDERR) | The value of this header is a InputStream with the standard error stream of the executable. |  | InputStream |
 | **CamelSshExitValue** (common) Constant: [`EXIT_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-ssh/latest/org/apache/camel/component/ssh/SshConstants.html#EXIT_VALUE) | The value of this header is the exit value that is returned, after the execution. By convention a non-zero status exit value indicates abnormal termination. Note that the exit value is OS dependent. |  | Integer |
 
+## Message Body
+
+The message body at each side of the SSH component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` | The standard output of the pollCommand as a stream, with the exit value and the standard error in the CamelSshExitValue and CamelSshStderr headers. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The command to run, as text: bytes, a stream or a file are read as text. A Map or a POJO is sent as its toString(): build the command as text first. No body fails. |
+| **Producer output** | `stream` | The standard output of the command as a stream, with the exit value and the standard error in the CamelSshExitValue and CamelSshStderr headers; an exit value that is not 0 does not fail the exchange. Convert it to text to read it more than once. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Usage as a Producer endpoint
 
 When the SSH Component is used as a Producer (`.to("ssh://…​")`), it will send the message body as the command to execute on the remote SSH server.
+
+After the call, the message body is the standard output of the command as a stream, with the exit value in the `CamelSshExitValue` header and the standard error, as a stream as well, in the `CamelSshStderr` header. An exit value that is not 0 does not fail the exchange. The polling consumer gives the output of its `pollCommand` the same way.
 
 Here is an example of this. Note that the command has a newline (`&#10;`).
 

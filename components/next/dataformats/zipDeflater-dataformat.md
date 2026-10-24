@@ -48,6 +48,20 @@ Enum values:
 
  |
 
+## Message Body
+
+The message body at each side of the Zip Deflater data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The data to compress: text in the charset of the exchange, bytes, a stream or a file. |
+| **Marshal output** | `stream`, as binary | The deflate data in the zlib format, not a zip file, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | Deflate data in the zlib format, such as marshal gives with any compressionLevel. |
+| **Unmarshal output** | `stream` | The decompressed data in the stream cache, or a byte array when stream caching is off. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Marshal
 
 In this example we marshal a regular text/XML payload to a compressed payload employing zip compression `Deflater.BEST_COMPRESSION` and send it an ActiveMQ queue called MY\_QUEUE.
@@ -92,7 +106,7 @@ from("direct:start").marshal().zipDeflater().to("activemq:queue:MY_QUEUE");
 
 ## Unmarshal
 
-In this example, we unmarshal a zipped payload from an ActiveMQ queue called MY\_QUEUE to its original format, and forward it for processing to the UnZippedMessageProcessor. Note that the compression Level employed during marshaling should be identical to the one employed during unmarshalling to avoid errors.
+In this example, we unmarshal a zipped payload from an ActiveMQ queue called MY\_QUEUE to its original format, and forward it for processing to the UnZippedMessageProcessor. Unmarshal reads the data of any compression level, so the level of the marshal does not need to be set.
 
 _Java-only: inline Processor instance_
 

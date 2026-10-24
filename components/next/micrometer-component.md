@@ -169,6 +169,18 @@ Enum values:
 | **CamelMetricsDescription** (producer) Constant: [`HEADER_METRIC_DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_METRIC_DESCRIPTION) | Override description value in URI. |  | String |
 | **CamelMetricsTags** (producer) Constant: [`HEADER_METRIC_TAGS`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_METRIC_TAGS) | To augment meter tags defined as URI parameters. |  | Iterable |
 
+## Message Body
+
+The message body at each side of the Micrometer component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used, unless an option such as increment, decrement or value is a simple expression that reads it, which must then give a number. The CamelMetrics headers override the options. |
+| **Producer output** | `unchanged` | Unchanged; the CamelMetrics headers are removed. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Meter Registry

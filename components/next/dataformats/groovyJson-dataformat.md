@@ -17,6 +17,21 @@ The Groovy JSon dataformat supports the following options which are listed below
 | --- | --- | --- | --- |
 | **prettyPrint** (common) | `true` | `Boolean` | Whether to pretty print output nicely formatted. |
 
+## Message Body
+
+The message body at each side of the Groovy JSon data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream`, `file`, `map` or `pojo` | A Map, a Groovy Node or a Jackson JsonNode to write as JSON. Text, bytes, a stream or a file is written as it is; a List is not supported. |
+| **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
+ |
+| **Unmarshal output** | `map` or `list` | A Map (Groovy LazyMap) for a JSON object, a List (ArrayList) for an array. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Supported Java types
 
 This data format supports marshalling from the following Java type to JSon:

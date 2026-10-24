@@ -316,6 +316,38 @@ The SQL component supports the following message header(s), which is/are listed 
 | **CamelSqlParameters** (producer) Constant: [`SQL_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_PARAMETERS) | The SQL parameters when using the option useMessageBodyForSql. |  | Iterator |
 | **CamelSqlDataSource** (producer) Constant: [`SQL_DATA_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_DATA_SOURCE) | To use a specific DataSource to operate on another database than the pre configured DataSource on the component. |  | DataSource |
 
+## Message Body
+
+The message body at each side of the SQL component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `map` (`java.util.Map<String, Object>`) | A row of the query: a Map of the column names and their values.
+-   With `useIterator=false`: `list`
+    
+-   With `outputType=SelectOne`: `map` or `value`
+    
+-   With `outputType=StreamList`: `iterator`
+    
+
+Not known when `outputClass` or `outputHeader` is set.
+
+ |
+| **Producer input** | `any` | The parameters of the query: a Map for the named ones, a List or an array for the # ones; the query itself with useMessageBodyForSql. |
+| **Producer output** | `list` or `unchanged` | The rows of a select: a List of Maps of the column names and their values. A query that is not a select leaves the body unchanged, with the count in the CamelSqlUpdateCount header.
+
+-   With `outputType=SelectOne`: `map`, `value` or `null`
+    
+-   With `outputType=StreamList`: `iterator`
+    
+
+Not known when `outputClass` or `outputHeader` or `noop` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Treatment of the message body

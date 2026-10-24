@@ -448,6 +448,55 @@ Enum values:
 | **CamelInfinispanEntryVersion** (consumer) Constant: [`ENTRY_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#ENTRY_VERSION) | Provides access to the version of the created cache entry. |  | long |
 | **CamelInfinispanCommandRetried** (consumer) Constant: [`COMMAND_RETRIED`](https://javadoc.io/doc/org.apache.camel/camel-infinispan/latest/org/apache/camel/component/infinispan/InfinispanConstants.html#COMMAND_RETRIED) | This will be true if the write command that caused this had to be retried again due to a topology change. |  | boolean |
 
+## Message Body
+
+The message body at each side of the Infinispan component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body: the event type, the cache name and the key of the entry are in headers, and for the events of a continuous query (queryBuilder) the value in the CamelInfinispanEventData header.
+Not known when `customListener` is set.
+
+ |
+| **Producer input** | `any` | The body is not used: the key, the value and the Map for PUTALL come from the CamelInfinispanKey, CamelInfinispanValue and CamelInfinispanMap headers, or the key and value options. |
+| **Producer output** | `unknown` | The result of the operation, which the CamelInfinispanOperation header can set: the value for GET, the previous value for PUT, the default, which is null unless the FORCE\_RETURN\_VALUE flag is set, a Boolean for CONTAINSKEY, an Integer for SIZE, a List for QUERY and a CompletableFuture for the ASYNC operations; PUTALL and CLEAR keep the body. With resultHeader the result goes to that header and the body is kept.
+
+-   With `operation=PUTASYNC`: `pojo` (`java.util.concurrent.CompletableFuture`)
+    
+-   With `operation=PUTALL`: `unchanged`
+    
+-   With `operation=PUTALLASYNC`: `pojo` (`java.util.concurrent.CompletableFuture`)
+    
+-   With `operation=PUTIFABSENTASYNC`: `pojo` (`java.util.concurrent.CompletableFuture`)
+    
+-   With `operation=CONTAINSKEY`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=CONTAINSVALUE`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=REMOVEASYNC`: `pojo` (`java.util.concurrent.CompletableFuture`)
+    
+-   With `operation=REPLACEASYNC`: `pojo` (`java.util.concurrent.CompletableFuture`)
+    
+-   With `operation=SIZE`: `value` (`java.lang.Integer`)
+    
+-   With `operation=CLEAR`: `unchanged`
+    
+-   With `operation=CLEARASYNC`: `pojo` (`java.util.concurrent.CompletableFuture`)
+    
+-   With `operation=QUERY`: `list` or `unchanged`
+    
+-   With `operation=STATS`: `pojo` (`org.infinispan.client.hotrod.ServerStatistics`)
+    
+-   With `operation=COMPUTEASYNC`: `pojo` (`java.util.concurrent.CompletableFuture`)
+    
+
+Not known when `resultHeader` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Camel Operations
@@ -480,9 +529,9 @@ Table 1. Put Operations
     -   `CamelInfinispanMaxIdleTimeUnit`
         
     
--   **Result Header**:
+-   **Result**:
     
-    -   `CamelInfinispanOperationResult`
+    -   the message body, or the header named by the `resultHeader` option
         
     
 
@@ -531,9 +580,9 @@ Table 4. Contains Key Operation
     -   `CamelInfinispanKey`
         
     
--   **Result Header**
+-   **Result**:
     
-    -   `CamelInfinispanOperationResult`
+    -   the message body, or the header named by the `resultHeader` option
         
     
 
@@ -547,9 +596,9 @@ Table 5. Contains Value Operation
     -   `CamelInfinispanValue`
         
     
--   **Result Header**
+-   **Result**:
     
-    -   `CamelInfinispanOperationResult`
+    -   the message body, or the header named by the `resultHeader` option
         
     
 
@@ -569,9 +618,9 @@ Table 6. Remove Operations
     -   `CamelInfinispanValue`
         
     
--   **Result Header**:
+-   **Result**:
     
-    -   `CamelInfinispanOperationResult`
+    -   the message body, or the header named by the `resultHeader` option
         
     
 
@@ -601,9 +650,9 @@ Table 7. Replace Operations
     -   `CamelInfinispanMaxIdleTimeUnit`
         
     
--   **Result Header**:
+-   **Result**:
     
-    -   `CamelInfinispanOperationResult`
+    -   the message body, or the header named by the `resultHeader` option
         
     
 
@@ -616,9 +665,9 @@ Table 8. Clear Operations
 | --- | --- |
 | `InfinispanOperation.SIZE` | Returns the number of entries in the cache |
 
--   **Result Header**
+-   **Result**:
     
-    -   `CamelInfinispanOperationResult`
+    -   the message body, or the header named by the `resultHeader` option
         
     
 
@@ -627,9 +676,9 @@ Table 10. Stats Operation
 | --- | --- |
 | `InfinispanOperation.STATS` | Returns statistics about the cache |
 
--   **Result Header**:
+-   **Result**:
     
-    -   `CamelInfinispanOperationResult`
+    -   the message body, or the header named by the `resultHeader` option
         
     
 
@@ -676,10 +725,11 @@ from("infinispan:source")
     from("direct:start")
         .setHeader("CamelInfinispanOperation").constant("PUT") (1)
         .setHeader("CamelInfinispanKey").constant("123") (2)
-        .to("infinispan:myCacheName?cacheContainer=#cacheContainer"); (3)
+        .setHeader("CamelInfinispanValue").constant("Hello") (3)
+        .to("infinispan:myCacheName?cacheContainer=#cacheContainer"); (4)
     ```
     
-    <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the operation to perform</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the key used to identify the element in the cache</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Use the configured cache manager <code>cacheContainer</code> from the registry to put an element to the cache named <code>myCacheName</code></td></tr></tbody></table>
+    <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the operation to perform</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the key used to identify the element in the cache</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Set the value to store: the message body is not used</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Use the configured cache manager <code>cacheContainer</code> from the registry to put an element to the cache named <code>myCacheName</code></td></tr></tbody></table>
     
     ```xml
     <route>
@@ -689,6 +739,9 @@ from("infinispan:source")
       </setHeader>
       <setHeader name="CamelInfinispanKey">
         <constant>123</constant>
+      </setHeader>
+      <setHeader name="CamelInfinispanValue">
+        <constant>Hello</constant>
       </setHeader>
       <to uri="infinispan:myCacheName?cacheContainer=#cacheContainer"/>
     </route>
@@ -705,6 +758,9 @@ from("infinispan:source")
             - setHeader:
                 name: CamelInfinispanKey
                 constant: "123"
+            - setHeader:
+                name: CamelInfinispanValue
+                constant: Hello
             - to:
                 uri: infinispan:myCacheName
                 parameters:

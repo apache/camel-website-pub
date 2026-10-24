@@ -56,7 +56,27 @@ The CBOR dataformat supports the following options which are listed below.
 | **enableFeatures** (advanced) |  | `String` | Set of features to enable on the Jackson ObjectMapper. Multiple features can be separated by comma. |
 | **disableFeatures** (advanced) |  | `String` | Set of features to disable on the Jackson ObjectMapper. Multiple features can be separated by comma. |
 
-#### Using CBOR in Spring DSL
+## Message Body
+
+The message body at each side of the CBOR data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `map`, `list` or `pojo` | A Map, a List or a POJO to write as CBOR. A String or bytes are written as one CBOR text or byte string, not as they are. |
+| **Marshal output** | `stream`, as binary | The CBOR data in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | CBOR data. A String fails. |
+| **Unmarshal output** | `pojo` | An object of the class unmarshalType names, such as java.util.Map: unmarshal fails without unmarshalType.
+-   With `useList=true`: `list`
+    
+
+Not known when `collectionType` or `allowUnmarshallType` or `allowJmsType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
+## Using CBOR in Spring DSL
 
 When using Data Format in Spring DSL, you need to declare the data formats first. This is done in the **DataFormats** XML tag.
 

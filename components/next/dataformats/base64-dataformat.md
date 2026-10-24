@@ -15,6 +15,21 @@ The Base64 dataformat supports the following options which are listed below.
 | **lineSeparator** (advanced) |  | `String` | The line separators to use. By default \\r\\n is used. |
 | **urlSafe** (advanced) | `false` | `Boolean` | Instead of emitting and / we emit - and \_ respectively. urlSafe is only applied to encode operations. Decoding seamlessly handles both modes. |
 
+## Message Body
+
+The message body at each side of the Base64 data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The bytes to encode: text in the charset of the exchange, bytes, a stream or a file. |
+| **Marshal output** | `stream`, as text | The Base64 text in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | 
+ |
+| **Unmarshal output** | `stream` | The decoded bytes, as a stream. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 In Spring DSL, you configure the data format using this tag:
 
 _XML-only: Spring XML data format configuration_
@@ -109,7 +124,7 @@ from("file://data.bin")
 
 ## Unmarshal
 
-In this example, we unmarshal the payload from the JMS queue to a byte\[\] object, before its processed by the `newOrder` processor.
+In this example, we unmarshal the payload from the JMS queue to a stream of the decoded bytes, before its processed by the `newOrder` processor.
 
 -   Java
     

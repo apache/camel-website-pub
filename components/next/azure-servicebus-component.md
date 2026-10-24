@@ -401,6 +401,19 @@ Enum values:
  |  | ServiceBusProducerOperationDefinition |
 | **CamelAzureServiceBusCorrelationId** (common) Constant: [`CORRELATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#CORRELATION_ID) | Gets or Sets a correlation identifier. |  | String |
 
+## Message Body
+
+The message body at each side of the Azure ServiceBus component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.azure.core.util.BinaryData`) | The payload of the Service Bus message as an Azure BinaryData, which converts to a String but not to bytes or a stream: convert it to a String before an unmarshal, a file or another producer. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | Sent as text by default: bytes, a stream or a file are read as text, so binary content needs binary=true. A BinaryData, as the consumer gives it, is sent as it is, and a Map or a POJO is sent as its toString(): marshal it first. A List is sent as one message per element. |
+| **Producer output** | `unchanged` | Unchanged, also after scheduleMessages. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Consumer and Producer

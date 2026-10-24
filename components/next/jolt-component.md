@@ -168,9 +168,44 @@ The JOLT component supports the following message header(s), which is/are listed
 | **CamelJoltResourceUri** (producer) Constant: [`JOLT_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-jolt/latest/org/apache/camel/component/jolt/JoltConstants.html#JOLT_RESOURCE_URI) | The resource URI. |  | String |
 | **CamelJoltContext** (producer) Constant: [`JOLT_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-jolt/latest/org/apache/camel/component/jolt/JoltConstants.html#JOLT_CONTEXT) | The context. |  | Map |
 
+## Message Body
+
+The message body at each side of the JOLT component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `map` or `list`, as json | 
+Parsed JSON: a Map or a List. JSON as text, bytes, a stream or a file needs inputType=JsonString: without it the body reaches the spec unparsed, and the result is most likely null.
+
+-   With `inputType=JsonString`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` or `list`, as json | 
+
+The JSON the spec makes: a Map for an object, a List for an array; JSON text with outputType=JsonString.
+
+-   With `outputType=JsonString`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 For example, you could use something like
+
+The messages of the queue are JSON text, so the examples set `inputType` and `outputType` to `JsonString`: with the default, `Hydrated`, the body must be parsed JSON (a Map or a List), such as after `unmarshal: json`, and the result is parsed JSON too.
 
 -   Java
     
@@ -181,13 +216,13 @@ For example, you could use something like
 
 ```java
 from("activemq:My.Queue")
-    .to("jolt:com/acme/MyResponse.json");
+    .to("jolt:com/acme/MyResponse.json?inputType=JsonString&outputType=JsonString");
 ```
 
 ```xml
 <route>
   <from uri="activemq:My.Queue"/>
-  <to uri="jolt:com/acme/MyResponse.json"/>
+  <to uri="jolt:com/acme/MyResponse.json?inputType=JsonString&amp;outputType=JsonString"/>
 </route>
 ```
 
@@ -198,6 +233,9 @@ from("activemq:My.Queue")
       steps:
         - to:
             uri: jolt:com/acme/MyResponse.json
+            parameters:
+              inputType: JsonString
+              outputType: JsonString
 ```
 
 And a file-based resource:
@@ -211,14 +249,14 @@ And a file-based resource:
 
 ```java
 from("activemq:My.Queue")
-    .to("jolt:file://myfolder/MyResponse.json?contentCache=true")
+    .to("jolt:file://myfolder/MyResponse.json?contentCache=true&inputType=JsonString&outputType=JsonString")
     .to("activemq:Another.Queue");
 ```
 
 ```xml
 <route>
   <from uri="activemq:My.Queue"/>
-  <to uri="jolt:file://myfolder/MyResponse.json?contentCache=true"/>
+  <to uri="jolt:file://myfolder/MyResponse.json?contentCache=true&amp;inputType=JsonString&amp;outputType=JsonString"/>
   <to uri="activemq:Another.Queue"/>
 </route>
 ```
@@ -232,6 +270,8 @@ from("activemq:My.Queue")
             uri: jolt:file://myfolder/MyResponse.json
             parameters:
               contentCache: true
+              inputType: JsonString
+              outputType: JsonString
         - to:
             uri: activemq:Another.Queue
 ```

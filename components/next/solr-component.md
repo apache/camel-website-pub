@@ -164,6 +164,28 @@ The Solr component supports the following message header(s), which is/are listed
 | **CamelSolrField.** (producer) Constant: [`HEADER_FIELD_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-solr/latest/org/apache/camel/component/solr/SolrConstants.html#HEADER_FIELD_PREFIX) | The prefix of the headers that carry the fields of the document to insert: the header CamelSolrField.id holds the id field. |  | Object |
 | **CamelSolrParam.** (producer) Constant: [`HEADER_PARAM_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-solr/latest/org/apache/camel/component/solr/SolrConstants.html#HEADER_PARAM_PREFIX) | The prefix of the headers that carry extra request parameters: the header CamelSolrParam.commit holds the commit parameter. |  | String |
 
+## Message Body
+
+The message body at each side of the Solr component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+What the operation needs: INSERT a Map or a SolrInputDocument, a List of them or of @Field beans, a JSON array or XML text, or a file; DELETE the id or, with deleteByQuery=true, the query, as text or a List of text; SEARCH the query as text or a SolrQuery; PING does not use it. Convert bytes or a stream to text first. The CamelSolrField. and CamelSolrQueryString headers can replace the body.
+
+-   With `operation=DELETE`: `text` or `list`
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` | The response of Solr as a Map (a SimpleOrderedMap) with the responseHeader and, for a search, the documents under response as a SolrDocumentList. Convert it to a QueryResponse or a SolrPingResponse to read it with SolrJ. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message Operations
@@ -186,11 +208,15 @@ The following Solr operations are currently supported. Set an exchange header wi
 | `INSERT` | File | inserts/updates a document or documents using the given File (using ContentStreamUpdateRequest) |
 | `INSERT` | SolrInputDocument or Collection<SolrInputDocument> | inserts/updates a document or documents based on the given (collection of) SolrInputDocument |
 | `INSERT` | bean or Collection<bean> | inserts/updates a document or documents based on values in an [annotated bean](http://wiki.apache.org/solr/Solrj#Directly_adding_POJOs_to_Solr) |
-| `INSERT` | String | inserts/updates a document or documents index based on the given XML or json as string (must follow SolrInputDocument format) |
-| `DELETE` | String or Collection<String> | delete a record by ID (or collection of ids) or by a query (or a collection of queries) when header "deleteByQuery=true" |
-| `PING` | SolrPing | Pings the solr instance |
+| `INSERT` | Map or Collection<Map> | inserts/updates a document or documents with the fields of the Map |
+| `INSERT` | String | inserts/updates the documents of the given JSON or XML text: a JSON array of documents, or XML documents (an `<add>` element is added when the text does not start with one) |
+| `DELETE` | String or Collection<String> | delete a record by ID (or collection of ids) or by a query (or a collection of queries) when the `deleteByQuery` option or the `CamelSolrDeleteByQuery` header is true |
+| `PING` | n/a | Pings the solr instance |
 | `SEARCH` | SolrQuery | Performs a search request to the solr instance |
 | `SEARCH` | QueryRequest | Performs a search request to the solr instance |
+| `SEARCH` | String | Performs a search with the query as text, unless the `CamelSolrQueryString` header holds the query |
+
+After each operation the message body is the response of Solr as a Map (a `SimpleOrderedMap`) with the `responseHeader`, and for a search the documents under `response` as a `SolrDocumentList`. Convert it to a `QueryResponse` to read it with SolrJ.
 
 ## Example
 

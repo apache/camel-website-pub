@@ -91,6 +91,20 @@ Enum values:
 | **width** (common) | `100` | `Integer` | Width of the barcode. |
 | **height** (common) | `100` | `Integer` | Height of the barcode. |
 
+## Message Body
+
+The message body at each side of the Barcode data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream` or `file`, as text | The text to encode: bytes, a stream or a file are read in the charset of the exchange. It must suit the barcodeFormat, such as digits only for EAN-13. |
+| **Marshal output** | `stream`, as binary | The image of the barcode, a PNG unless imageType is JPG or GIF, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | An image ImageIO reads, such as PNG, JPEG or GIF, of any barcode format ZXing reads, whatever barcodeFormat is. |
+| **Unmarshal output** | `text` (`java.lang.String`), as text | The text of the barcode, with the format found in the BarcodeFormat header and the ZXing result metadata, such as ORIENTATION, as headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 In Java, you first create an instance of the barcode data format class. You can use the default constructor, or one of parameterized (see JavaDoc). The default values are:

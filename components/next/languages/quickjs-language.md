@@ -23,6 +23,21 @@ The QuickJS language supports the following options which are listed below.
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+## Message Body
+
+The message body at each side of the QuickJS language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Expression input** | `text`, `bytes`, `value`, `map`, `list` or `pojo` | A JSON copy of the body, in the variable body: bytes as Base64 text, and a POJO through Jackson. A stream fails: convert it to text first. |
+| **Expression result** | `text`, `value`, `map`, `list` or `null` | The JSON value the script returns: an object as a Map, an array as a List, and undefined, NaN or a function as null.
+Not known when `resultType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Variables
 
 The following variables are bound for each evaluation. Values are JSON snapshots taken before the script runs, not live Java objects. Live `Exchange`, `Message` and `CamelContext` instances are never exposed; the `camel` API below is the way to read the current state or to change it.
@@ -114,7 +129,7 @@ Values cross the Java/JavaScript boundary as JSON:
     
 -   `byte[]` becomes a Base64 JSON string. `char[]` becomes a JSON string.
     
--   Other Java types are serialized with Jackson into a JSON object or array snapshot. Java methods such as `getAge()` are not callable from JavaScript; use JSON fields such as `body.age`.
+-   Other Java types are serialized with Jackson into a JSON snapshot: an object or an array, or a value such as the milliseconds of a `Date`. Java methods such as `getAge()` are not callable from JavaScript; use JSON fields such as `body.age`.
     
 -   `Exchange`, `Message`, `CamelContext`, `Class`, and `ClassLoader` values are rejected when they appear as the message body, with an evaluation error. They are never passed into the script.
     
@@ -127,7 +142,7 @@ Serialization failures of the message body raise a Camel evaluation exception th
 
 ## Expression and predicate
 
-As an expression, the JavaScript value of the script becomes the Camel result (then converted with Camel type converters when a result type is requested).
+As an expression, the JSON value of the script becomes the Camel result (then converted with Camel type converters when a result type is requested): an object becomes a `Map` and an array a `List`, a `Date` becomes its ISO text, and `undefined`, `NaN` or a function becomes `null`. A `Set` or a typed array does not keep its values. In `setBody` and `transform` this result replaces a body the script set with `camel.setBody(…​)`.
 
 As a predicate (`.when().quickjs(…​)` or `.filter().quickjs(…​)`), the result is converted to boolean with Camel’s standard `ObjectHelper.evaluateValuePredicate` rules: a `Boolean` is used directly; the strings `true`/`false` are parsed; any other non-empty, non-null value is true.
 

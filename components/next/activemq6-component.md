@@ -866,6 +866,55 @@ Enum values:
  |  | JmsMessageType |
 | **CamelJmsRequestTimeout** (producer) Constant: [`JMS_REQUEST_TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-activemq6/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_REQUEST_TIMEOUT) | The timeout for waiting for a reply when using the InOut Exchange Pattern (in milliseconds). | 20000 | long |
 
+## Message Body
+
+The message body at each side of the ActiveMQ 6.x component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text`, `bytes`, `map`, `stream` or `null` | By the JMS message received: a String for a TextMessage, a byte array for a BytesMessage, a Map for a MapMessage, a stream for a StreamMessage; an ObjectMessage only with objectMessageEnabled.
+-   With `mapJmsMessage=false`: `pojo` (`jakarta.jms.Message`)
+    
+-   With `objectMessageEnabled=true`: `text`, `bytes`, `map`, `stream`, `pojo` or `null`
+    
+
+Not known when `messageConverter` or `transferExchange` is set.
+
+ |
+| **Consumer reply** | `text`, `bytes`, `stream`, `file` or `map` | The reply, sent as the producer sends a message.
+
+-   With `objectMessageEnabled=true`: `text`, `bytes`, `stream`, `file`, `map` or `pojo`
+    
+
+Not known when `jmsMessageType` or `messageConverter` or `transferExchange` is set.
+
+ |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `map` | Text is sent as a TextMessage; bytes, a stream or a file as a BytesMessage; a Map as a MapMessage. Another Serializable object fails unless objectMessageEnabled.
+
+-   With `objectMessageEnabled=true`: `text`, `bytes`, `stream`, `file`, `map` or `pojo`
+    
+
+Not known when `jmsMessageType` or `messageConverter` or `transferExchange` is set.
+
+ |
+| **Producer output** | `unknown` | 
+
+Unchanged for a message that expects no reply (InOnly). A message that expects one (InOut) gets the body of the reply, as the consumer gives it.
+
+-   With `exchangePattern=InOnly`: `unchanged`
+    
+-   With `disableReplyTo=true`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 You’ll need to provide a connectionFactory to the ActiveMQ Component, to have the following examples working.

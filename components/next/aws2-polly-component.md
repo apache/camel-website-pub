@@ -1327,6 +1327,47 @@ Enum values:
 | **CamelAwsPollyContentType** (producer) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-polly/latest/org/apache/camel/component/aws2/polly/Polly2Constants.html#CONTENT_TYPE) | The content type of the audio stream. |  | String |
 | **CamelAwsPollyRequestCharacters** (producer) Constant: [`REQUEST_CHARACTERS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-polly/latest/org/apache/camel/component/aws2/polly/Polly2Constants.html#REQUEST_CHARACTERS) | Number of characters synthesized. |  | Integer |
 
+## Message Body
+
+The message body at each side of the AWS Polly component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The text to speak for synthesizeSpeech, the default, and startSpeechSynthesisTask: plain text, or SSML with textType=ssml. Bytes, a stream or a file are read as text, a Map or a POJO is spoken as its toString(), so take the text out of it first, and no body fails. putLexicon takes the lexicon from the body when neither the lexiconContent option nor the CamelAwsPollyLexiconContent header is set. The other operations do not use the body. With pojoRequest=true the request of the AWS SDK for the operation, such as a SynthesizeSpeechRequest: another body fails.
+
+-   With `operation=synthesizeSpeech`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=startSpeechSynthesisTask`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The audio of synthesizeSpeech, the default, as a stream, with its content type and the number of characters in headers: read it once, or write it to a file. A List for describeVoices, listLexicons and listSpeechSynthesisTasks, the SynthesisTask for startSpeechSynthesisTask, with its id in a header, and getSpeechSynthesisTask, the Lexicon for getLexicon, and the response of the AWS SDK for putLexicon and deleteLexicon.
+
+-   With `operation=synthesizeSpeech`: `stream`
+    
+-   With `operation=describeVoices`: `list` (`java.util.List<software.amazon.awssdk.services.polly.model.Voice>`)
+    
+-   With `operation=listLexicons`: `list` (`java.util.List<software.amazon.awssdk.services.polly.model.LexiconDescription>`)
+    
+-   With `operation=listSpeechSynthesisTasks`: `list` (`java.util.List<software.amazon.awssdk.services.polly.model.SynthesisTask>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Polly component options
 
 You have to provide the amazonPollyClient in the Registry or your accessKey and secretKey to access the [Amazon Polly](https://aws.amazon.com/polly/) service.

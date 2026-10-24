@@ -312,6 +312,67 @@ The Jira component supports the following message header(s), which is/are listed
 | **CamelJiraLinkType** (producer) Constant: [`LINK_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#LINK_TYPE) | The type of link. |  | String |
 | **CamelJiraMinutesSpent** (producer) Constant: [`MINUTES_SPENT`](https://javadoc.io/doc/org.apache.camel/camel-jira/latest/org/apache/camel/component/jira/JiraConstants.html#MINUTES_SPENT) | The minutes spent. | \-1 | int |
 
+## Message Body
+
+The message body at each side of the Jira component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` or `null` | One message per new Issue (newIssues) or new Comment (newComments). watchUpdates sends one per watched field that changed, with its new value, such as the Status or the BasicPriority (null when cleared), or the Issue with sendOnlyUpdatedField=false.
+-   With `sendOnlyUpdatedField=false`: `pojo` (`com.atlassian.jira.rest.client.api.domain.Issue`)
+    
+-   With `type=NEWISSUES`: `pojo` (`com.atlassian.jira.rest.client.api.domain.Issue`)
+    
+-   With `type=NEWCOMMENTS`: `pojo` (`com.atlassian.jira.rest.client.api.domain.Comment`)
+    
+
+Not known when `watchedFields` is set.
+
+ |
+| **Producer input** | `any` | 
+
+Read as text: the description for addIssue and updateIssue, the comment for addComment and addWorkLog, which fail without a body, and an optional comment for transitionIssue and addIssueLink; a Map or a POJO is sent as its toString(), so marshal it first. attach uploads a file, or text, bytes or a stream named by the CamelFileName header. The other types read only headers.
+
+-   With `type=ADDISSUE`: `null`, `text`, `bytes`, `stream` or `file`
+    
+-   With `type=UPDATEISSUE`: `null`, `text`, `bytes`, `stream` or `file`
+    
+-   With `type=TRANSITIONISSUE`: `null`, `text`, `bytes`, `stream` or `file`
+    
+-   With `type=ADDISSUELINK`: `null`, `text`, `bytes`, `stream` or `file`
+    
+-   With `type=ADDCOMMENT`: `text`, `bytes`, `stream` or `file`
+    
+-   With `type=ADDWORKLOG`: `text`, `bytes`, `stream` or `file`
+    
+-   With `type=ATTACH`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+The Issue created for addIssue, the Issue for fetchIssue and the List of its Comments for fetchComments. The other types leave the body unchanged.
+
+-   With `type=ADDISSUE`: `pojo` (`com.atlassian.jira.rest.client.api.domain.Issue`)
+    
+-   With `type=FETCHISSUE`: `pojo` (`com.atlassian.jira.rest.client.api.domain.Issue`)
+    
+-   With `type=FETCHCOMMENTS`: `list` (`java.util.List<com.atlassian.jira.rest.client.api.domain.Comment>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Client Factory
@@ -471,7 +532,7 @@ Required:
 
 -   `CamelJiraIssueKey`: The issue key identifier.
     
--   the body of the exchange is the description.
+-   the body of the exchange is the text of the comment.
     
 
 ### Attach
@@ -482,7 +543,7 @@ Required:
 
 -   `CamelJiraIssueKey`: The issue key identifier.
     
--   body of the exchange should be of type `File`
+-   the body of the exchange is the file to attach: a `File`, the file of the file consumer, or text, bytes or a stream, named by the `CamelFileName` header
     
 
 ### DeleteIssue
@@ -500,7 +561,10 @@ Required:
     
 -   `CamelJiraIssueTransitionId`: The issue transition `id`.
     
--   the body of the exchange is the description.
+
+Optional:
+
+-   the body of the exchange is a comment to add to the issue after the transition.
     
 
 ### UpdateIssue

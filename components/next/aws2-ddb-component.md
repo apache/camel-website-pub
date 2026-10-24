@@ -542,6 +542,18 @@ Enum values:
 | **CamelAwsDdbFilterExpressionAttributeValues** (Query Scan) Constant: [`FILTER_EXPRESSION_ATTRIBUTE_VALUES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#FILTER_EXPRESSION_ATTRIBUTE_VALUES) | The Filter Expression Attribute Values. |  | Map |
 | **CamelAwsDdbProjectExpression** (Query Scan) Constant: [`PROJECT_EXPRESSION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#PROJECT_EXPRESSION) | The Project Expression. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS DynamoDB component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operations take their input from headers, such as the item in CamelAwsDdbItem and the key in CamelAwsDdbKey as maps of the AttributeValue of the AWS SDK, or the PartiQL statement in CamelAwsDdbStatement. |
+| **Producer output** | `unchanged` | Unchanged for every operation: the result is in headers, such as CamelAwsDdbAttributes for the item operations, CamelAwsDdbItems for Query and Scan, and CamelAwsDdbExecuteStatementItems for ExecuteStatement. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required DDB component options
 
 You have to provide the amazonDDBClient in the Registry or your accessKey and secretKey to access the [Amazon’s DynamoDB](https://aws.amazon.com/dynamodb).

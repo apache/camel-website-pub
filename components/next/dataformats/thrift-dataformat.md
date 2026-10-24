@@ -34,9 +34,40 @@ Enum values:
  |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 
+## Message Body
+
+The message body at each side of the Thrift data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `pojo` (`org.apache.thrift.TBase`) | An object of a class the Thrift compiler generated, as unmarshal gives. The body is not converted: other bodies fail. |
+| **Marshal output** | `stream` | The Thrift binary data, or JSON with contentTypeFormat json or sjson, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file` | Thrift binary data, or with contentTypeFormat json the Thrift JSON protocol (field ids and types) as marshal writes it. sjson is for marshal only.
+-   With `contentTypeFormat=binary`: `bytes`, `stream` or `file`
+    
+-   With `contentTypeFormat=json`: `text`, `bytes`, `stream` or `file`
+    
+
+Not known when `contentTypeFormat` is set.
+
+ |
+| **Unmarshal output** | `pojo` (`org.apache.thrift.TBase`) | An object of the class instanceClass names: unmarshal fails without it.
+
+-   With `contentTypeFormat=binary`: `pojo` (`org.apache.thrift.TBase`)
+    
+-   With `contentTypeFormat=json`: `pojo` (`org.apache.thrift.TBase`)
+    
+
+Not known when `contentTypeFormat` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Content type format
 
-It’s possible to parse JSON message to convert it to the Thrift format and serialize it back using native util converter. To use this option, set contentTypeFormat value to 'json' or call thrift with second parameter. If the default instance is not specified, always use the native binary Thrift format. The simple JSON format is write-only (marshal) and produces a simple output format suitable for parsing by scripting languages. The sample code shows below:
+It’s possible to parse JSON message to convert it to the Thrift format and serialize it back using native util converter. To use this option, set contentTypeFormat value to 'json' or call thrift with second parameter. Unmarshal needs the default instance (`instanceClass`) in the binary and json formats; marshal writes the given Thrift object in any of them. The simple JSON format is write-only (marshal) and produces a simple output format suitable for parsing by scripting languages. The sample code shows below:
 
 -   Java
     

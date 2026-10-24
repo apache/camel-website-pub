@@ -326,6 +326,29 @@ The Mail component supports the following message header(s), which is/are listed
 | **CamelMailDelete** (consumer) Constant: [`MAIL_DELETE`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_DELETE) | Deletes the messages after they have been processed. |  | boolean |
 | **CamelMailMessageId** (common) Constant: [`MAIL_MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_MESSAGE_ID) | The message ID. |  | String |
 
+## Message Body
+
+The message body at each side of the Mail component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text`, `stream` or `pojo` | The content of the mail an imap or pop3 consumer reads: a String for text/plain, text/html and text/xml, a stream for another content type, and a jakarta.mail Multipart for a multipart mail, which converts to the text of its first text part, with the files in the attachments. The jakarta.mail.Message itself with mapMailMessage=false.
+-   With `mapMailMessage=false`: `pojo` (`jakarta.mail.Message`)
+    
+
+Not known when `binding` is set.
+
+ |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The text of the mail smtp sends, in the contentType: bytes, a stream or a file are read as text, so send binary content as an attachment, and no body sends an empty text. A jakarta.mail MimeMessage is sent as it is, and a Map or a POJO as its toString(): marshal it first.
+
+Not known when `binding` is set.
+
+ |
+| **Producer output** | `unchanged` | Unchanged, with the Message-ID of the mail in the CamelMailMessageId header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 Typically, you specify a URI with login credentials as follows:
@@ -417,7 +440,7 @@ Camel uses Jakarta JavaMail, which only trusts certificates issued by well-known
 
 ### Mail Message Content
 
-Camel uses the message exchange’s IN body as the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) text content. The body is converted to `String.class`.
+Camel uses the message exchange’s IN body as the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) text content. The body is converted to `String.class`: bytes, a stream or a file are read as text, so send binary content as an attachment, and a Map or a POJO is sent as its `toString()`. A body that is a `jakarta.mail.internet.MimeMessage` is sent as it is, with its own recipients and subject.
 
 Camel copies all of the exchange’s IN headers to the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) headers.
 
@@ -799,15 +822,7 @@ _XML-only: `method` expression with `beanType` attribute is XML DSL specific_
 </split>
 ```
 
-You can also split the attachments as byte\[\] to be stored as the message body. This is done by creating the expression with boolean true
-
-_Java-only: programmatic `SplitAttachmentsExpression` configuration_
-
-```java
-SplitAttachmentsExpression split = SplitAttachmentsExpression(true);
-```
-
-And then use the expression with the splitter EIP.
+Each split message has the content of one attachment as its body: a byte array, or a String for a text attachment, with the name of the attachment in the `CamelSplitAttachmentId` header.
 
 ### Using custom SearchTerm
 

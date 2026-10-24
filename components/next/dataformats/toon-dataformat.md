@@ -36,6 +36,21 @@ Enum values:
 | **strict** (common) | `true` | `Boolean` | Whether to enable strict validation when unmarshalling TOON. When false, the decoder applies the non-strict recoveries of the TOON specification, such as accepting an array whose length differs from the declared length; other malformed TOON still fails. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header to text/toon when marshalling. |
 
+## Message Body
+
+The message body at each side of the TOON data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `value`, `map`, `list` or `pojo` | A Map, a List, a POJO or a value to write as TOON. A String must be JSON text; bytes, a stream or a file are not read as text. |
+| **Marshal output** | `stream`, as text | The TOON in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | 
+ |
+| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for an object, a List for an array; a document that is a single value gives that value. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Marshal behavior
 
 Marshalling converts a JSON-compatible message body to TOON text:

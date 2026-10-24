@@ -207,6 +207,50 @@ The Dropbox component supports the following message header(s), which is/are lis
 | **DELETED\_PATH** (del) Constant: [`DELETED_PATH`](https://javadoc.io/doc/org.apache.camel/camel-dropbox/latest/org/apache/camel/component/dropbox/util/DropboxConstants.html#DELETED_PATH) | Name of the path deleted on dropbox. |  | String |
 | **MOVED\_PATH** (move) Constant: [`MOVED_PATH`](https://javadoc.io/doc/org.apache.camel/camel-dropbox/latest/org/apache/camel/component/dropbox/util/DropboxConstants.html#MOVED_PATH) | Name of the path moved on dropbox. |  | String |
 
+## Message Body
+
+The message body at each side of the Dropbox component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | 
+One message per poll. get: the content of the file in remotePath as a stream cache (a byte array when stream caching is off), or for a folder a Map of the path to the content of each file. search: a List of SearchMatchV2.
+
+-   With `operation=get`: `stream`, `bytes` or `map`
+    
+-   With `operation=search`: `list` (`java.util.List<com.dropbox.core.v2.files.SearchMatchV2>`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | Only put reads the body, unless localPath or the CamelDropboxLocalPath header names a local file or folder to upload: the content to upload, as text, bytes, a stream or a file. A Map or a List is not uploaded, and the result is KO without an error: marshal it first. |
+| **Producer output** | `unknown` | 
+
+put: OK or KO, a DropboxResultCode, or for a local folder of several files a Map of each remote path to its result. get: the content of the file as a stream cache (a byte array when stream caching is off), or a Map of the path to the content of each file of a folder. del: the path deleted. move: the new path. search: a List of SearchMatchV2.
+
+-   With `operation=put`: `value` or `map`
+    
+-   With `operation=get`: `stream`, `bytes` or `map`
+    
+-   With `operation=del`: `text` (`java.lang.String`)
+    
+-   With `operation=move`: `text` (`java.lang.String`)
+    
+-   With `operation=search`: `list` (`java.util.List<com.dropbox.core.v2.files.SearchMatchV2>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Del operation

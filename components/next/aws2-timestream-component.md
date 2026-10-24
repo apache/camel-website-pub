@@ -558,6 +558,28 @@ The AWS Timestream component supports the following message header(s), which is/
 | **CamelAwsTimestreamClientToken** (producer) Constant: [`CLIENT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#CLIENT_TOKEN) | Using a ClientToken makes the call to CreateScheduledQuery idempotent. |  | String |
 | **CamelAwsTimestreamKmsKeyId** (producer) Constant: [`KMS_KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#KMS_KEY_ID) | The Amazon KMS key used to encrypt the scheduled query resource, at-rest. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Timestream component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the operations of both client types take their input from headers, such as the records of writeRecords in CamelAwsTimestreamRecordList, a List of the Record of the AWS SDK, and the SQL of query in CamelAwsTimestreamQueryString. With pojoRequest=true the request of the AWS SDK for the operation, such as a WriteRecordsRequest or a QueryRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the WriteRecordsResponse of writeRecords, or the QueryResponse of query with one page of rows: the next page needs a QueryRequest with its nextToken and pojoRequest=true. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Timestream component options
 
 Based on the type of operation to be performed, the type of client (write/query) needs to be provided as clientType URI path parameter
@@ -755,7 +777,7 @@ from("direct:query")
 
 ### Using a POJO as body
 
-Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS Timestream there are multiple operations you can submit, as an example for Create state machine request, you can do something like:
+Sometimes building an AWS Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In AWS Timestream there are multiple operations you can submit, as an example for a create database request, you can do something like:
 
 -   Write Operation
     
@@ -767,7 +789,7 @@ _Java-only: uses AWS SDK POJO request builder as message body_
 
 ```java
 from("direct:start")
-  .setBody(CreateDatabaseRequest.builder().database(Database.builder().databaseName("testDb").kmsKeyId("testKmsKey").build()).build())
+  .setBody(CreateDatabaseRequest.builder().databaseName("testDb").kmsKeyId("testKmsKey").build())
   .to("aws2-timestream://write:test?awsTimestreamWriteClient=#awsTimestreamWriteClient&operation=createDatabase&pojoRequest=true")
 ```
 

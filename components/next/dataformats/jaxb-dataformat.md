@@ -48,6 +48,26 @@ Enum values:
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **accessExternalSchemaProtocols** (security) |  | `String` | Only in use if schema validation has been enabled. Restrict access to the protocols specified for external reference set by the schemaLocation attribute, Import and Include element. |
 
+## Message Body
+
+The message body at each side of the JAXB data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `text`, `bytes`, `stream`, `file` or `pojo` | A JAXB object: a class with @XmlRootElement, a JAXBElement, or a class the ObjectFactory makes an element of. Text, bytes, a stream or a file is written as it is, as XML already, unless mustBeJAXBElement is true.
+-   With `mustBeJAXBElement=true`: `pojo`
+    
+
+Not known when `partNamespace` is set.
+
+ |
+| **Marshal output** | `stream`, as xml | The XML in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML: text, bytes, a stream, a file, a DOM Document, a DOMSource or a StreamSource. |
+| **Unmarshal output** | `pojo` | The object of the root element, of a JAXB class of contextPath, or of partClass when set; a JAXBElement, where JAXB gives one, when ignoreJAXBElement is false. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Using the Java DSL
@@ -311,9 +331,9 @@ You can do the same using the XML DSL:
 
 ### Marshal data that is already XML
 
-The JAXB marshaller requires that the message body is JAXB compatible, e.g., it is a `JAXBElement`, a java instance that has JAXB annotations, or extends `JAXBElement`. There can be situations where the message body is already in XML, e.g., from a `String` type.
+The JAXB marshaller marshals a message body that is JAXB compatible, e.g., it is a `JAXBElement`, a java instance that has JAXB annotations, or extends `JAXBElement`. There can be situations where the message body is already in XML, e.g., from a `String` type.
 
-`JaxbDataFormat` has an option named `mustBeJAXBElement` which you can set to `false` to relax this check and have the JAXB marshaller only attempt marshalling on `JAXBElement` (`javax.xml.bind.JAXBIntrospector#isElement` returns `true`). In those situations, the marshaller will fall back to marshal the message body as-is.
+The option `mustBeJAXBElement` is `false` by default: a message body that is not JAXB compatible (`jakarta.xml.bind.JAXBIntrospector#isElement` returns `false`) is then written as-is, as XML already. Text, bytes, a stream or a file can be written this way; a `Map` or a `List` fails. Set `mustBeJAXBElement` to `true` to fail with an `InvalidPayloadException` instead.
 
 ## Dependencies
 

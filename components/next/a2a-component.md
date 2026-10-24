@@ -278,6 +278,86 @@ The A2A component supports the following message header(s), which is/are listed 
 | **CamelA2AListStatus** (common) Constant: [`LIST_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#LIST_STATUS) | Comma-separated status filter for task listing. |  | String |
 | **CamelA2AExtensions** (consumer) Constant: [`EXTENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#EXTENSIONS) | Negotiated A2A extension URIs requested by the client. |  | List |
 
+## Message Body
+
+The message body at each side of the A2A component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` | 
+The message of the caller, for SendMessage and SendStreamingMessage (the component answers the task and push config requests itself): the text of its parts, one per line, a data part as JSON and a file part as its URL. With dataFormat POJO the Message, with RAW the Message as JSON.
+
+-   With `dataFormat=POJO`: `pojo` (`org.apache.camel.component.a2a.model.Message`)
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `text`, `bytes`, `stream`, `file` or `pojo` | The reply of the agent: text, sent as one text part (bytes, a stream or a file as their text), or a Message sent as it is. Another body is sent as text: a Task as the text of its last message, a Map or a POJO as its toString(): marshal it first. The reply goes in a Task, completed unless the CamelA2ATaskState header says another state, or as a Message when the CamelA2AResponseType header is message. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo` | 
+
+The message to send: text, sent as one text part (bytes, a stream or a file as their text), or a Message sent as it is; MESSAGE\_STREAM also takes a SendMessageRequest. Another body is sent as its toString(), so a Map or a POJO needs marshalling first, and JSON text is sent as text. PUSH\_CONFIG\_CREATE needs a TaskPushNotificationConfig, and the other operations read headers, not the body.
+
+-   With `operation=TASK_GET`: `any`
+    
+-   With `operation=TASK_LIST`: `any`
+    
+-   With `operation=TASK_CANCEL`: `any`
+    
+-   With `operation=TASK_SUBSCRIBE`: `any`
+    
+-   With `operation=PUSH_CONFIG_CREATE`: `pojo` (`org.apache.camel.component.a2a.model.TaskPushNotificationConfig`)
+    
+-   With `operation=PUSH_CONFIG_GET`: `any`
+    
+-   With `operation=PUSH_CONFIG_LIST`: `any`
+    
+-   With `operation=PUSH_CONFIG_DELETE`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` | 
+
+The reply of the agent as text: the parts of the Message, or of the last message in the history of the Task, one per line. TASK\_GET and TASK\_CANCEL give the text of the Task, TASK\_LIST a List of Task, MESSAGE\_STREAM and TASK\_SUBSCRIBE an Iterator of the events as they arrive (split it), and the push config operations a TaskPushNotificationConfig, a List of them, or an empty Map for delete. With dataFormat POJO the Task or the Message, with RAW the JSON of the response as text (a stream of the events for MESSAGE\_STREAM and TASK\_SUBSCRIBE).
+
+-   With `operation=MESSAGE_STREAM`: `iterator` (`org.apache.camel.component.a2a.streaming.SseEventIterator`)
+    
+-   With `operation=TASK_GET`: `text`
+    
+-   With `operation=TASK_LIST`: `list` or `null`
+    
+-   With `operation=TASK_CANCEL`: `text`
+    
+-   With `operation=TASK_SUBSCRIBE`: `iterator` (`org.apache.camel.component.a2a.streaming.SseEventIterator`)
+    
+-   With `operation=PUSH_CONFIG_CREATE`: `pojo` (`org.apache.camel.component.a2a.model.TaskPushNotificationConfig`)
+    
+-   With `operation=PUSH_CONFIG_GET`: `pojo` (`org.apache.camel.component.a2a.model.TaskPushNotificationConfig`)
+    
+-   With `operation=PUSH_CONFIG_LIST`: `list` or `null`
+    
+-   With `operation=PUSH_CONFIG_DELETE`: `map`
+    
+-   With `dataFormat=POJO`: `pojo`
+    
+-   With `dataFormat=RAW`: `text`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Sub-Pages
 
 For more details on consumer and producer usage, see:

@@ -133,6 +133,17 @@ The File Watch component supports the following message header(s), which is/are 
 | **CamelFileParent** (consumer) Constant: [`FILE_PARENT`](https://javadoc.io/doc/org.apache.camel/camel-file-watch/latest/org/apache/camel/component/file/watch/FileWatchConstants.html#FILE_PARENT) | The parent path. |  | String |
 | **CamelFileLastModified** (consumer) Constant: [`FILE_LAST_MODIFIED`](https://javadoc.io/doc/org.apache.camel/camel-file-watch/latest/org/apache/camel/component/file/watch/FileWatchConstants.html#FILE_LAST_MODIFIED) | A Long value containing the last modified timestamp of the file. |  | long |
 
+## Message Body
+
+The message body at each side of the File Watch component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `file` (`java.io.File`) | The java.io.File of the file or directory of the event, also for DELETE, with the event in the CamelFileEventType header. The consumer does not read it: it converts to text, bytes or a stream by reading the file, which fails after a DELETE. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 ### Recursive watch all events (file creation, file deletion, file modification):

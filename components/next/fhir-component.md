@@ -1354,6 +1354,44 @@ In addition to the parameters above, the fhir API can also use any of the [Query
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelFhir.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelFhir.myParameterNameHere` header.
 
+## Message Body
+
+The message body at each side of the FHIR component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | 
+One message per poll with the return value of the method: a MethodOutcome for create, update, patch, delete and validate, and a HAPI FHIR model object of the fhirVersion for the others, such as the Bundle of a search. A List is split into one message per resource, and transaction withBundle with stringBundle gives the response as text.
+
+-   With `apiName=TRANSACTION`: `pojo` or `text`
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | The body is used only when inBody names the argument of the method it is, and then passed as it is, without type conversion: resourceAsString, stringBundle and url take text (convertBodyTo String first), and resource, bundle and resources a HAPI FHIR object or a List of them (unmarshal with fhirJson or fhirXml first). Without inBody the arguments come from the options and the CamelFhir. headers.
+
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo` | 
+
+The return value of the method: a MethodOutcome for create, update, patch, delete and validate, and a HAPI FHIR model object of the fhirVersion for the others, such as the Bundle of a search or the resource of a read; marshal a resource or a Bundle with fhirJson or fhirXml to get text. transaction gives a Bundle for withBundle with bundle, the response as text with stringBundle, and a List of the resources for withResources.
+
+-   With `apiName=TRANSACTION`: `pojo`, `text` or `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 
@@ -1407,3 +1445,7 @@ The URI names the API and its method, such as `fhir://read/resourceById`. The pa
         - log:
             message: "Found ${body.total} patients"
 ```
+
+The `inBody` option names the parameter of the method that the message body is, such as `resourceAsString` in the first route. The body is passed as it is, without type conversion, so a parameter of type String needs a String body: convert a byte array or a stream with `convertBodyTo` first. Without `inBody` the body is not used.
+
+After the call the message body is the result of the method: a `MethodOutcome` for create, update, patch, delete and validate, and a HAPI FHIR model object for the others, such as the `Bundle` of a search or the resource of a read. Marshal a resource or a `Bundle` with `fhirJson` or `fhirXml` to get text.

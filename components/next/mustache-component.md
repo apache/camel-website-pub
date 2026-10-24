@@ -119,11 +119,23 @@ The Mustache component supports the following message header(s), which is/are li
 | **CamelMustacheResourceUri** (producer) Constant: [`MUSTACHE_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_RESOURCE_URI) | A URI for the template resource to use instead of the endpoint. |  | String |
 | **CamelMustacheTemplate** (producer) Constant: [`MUSTACHE_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-mustache/latest/org/apache/camel/component/mustache/MustacheConstants.html#MUSTACHE_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
 
+## Message Body
+
+The message body at each side of the Mustache component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The template gets the body as body, as it is: text, or a Map, a List or a POJO to read from; convert bytes or a stream to a String first. The template is the resource, or the CamelMustacheTemplate or CamelMustacheResourceUri header with allowTemplateFromHeader=true, and never the body. |
+| **Producer output** | `text` (`java.lang.String`) | The text the template writes, also when it is JSON: unmarshal it to read its fields. Values in double braces are HTML-escaped, in triple braces as they are. The headers are kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Mustache Context
 
-Camel will provide exchange information in the Mustache context (just a `Map`). The `Exchange` is transferred as:
+Camel will provide exchange information in the Mustache context (just a `Map`). The `Exchange` is transferred as: The `body`, `header`, `headers`, `variable`, `variables` and `exception` entries are always there; the others only when the endpoint has `allowContextMapAll=true`.
 
  
 | key | value |
@@ -139,7 +151,7 @@ Camel will provide exchange information in the Mustache context (just a `Map`). 
 
 ### Dynamic templates
 
-Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
+Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, and the endpoint has `allowTemplateFromHeader=true`, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
 ## Examples
 

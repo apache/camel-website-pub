@@ -225,6 +225,30 @@ The Knative component supports the following message header(s), which is/are lis
 | **CamelCloudEventSubject** (common) Constant: [`CLOUD_EVENT_SUBJECT`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_SUBJECT) | The subject of the event in the context of the event source. |  | String |
 | **CamelCloudEventTime** (common) Constant: [`CLOUD_EVENT_TIME`](https://javadoc.io/doc/org.apache.camel/camel-knative/latest/org/apache/camel/component/knative/KnativeConstants.html#CLOUD_EVENT_TIME) | The time the event occurred. The producer uses the exchange creation time when not set. |  | String |
 
+## Message Body
+
+The message body at each side of the Knative component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes`, `null`, `map`, `list`, `text` or `value` | The data of the event as a byte array, empty or null for an event without data. A structured event (Content-Type application/cloudevents+json) gives its data field parsed from JSON: a Map, a List, text or a value. |
+| **Consumer reply** | `null`, `text`, `bytes`, `stream` or `file` | 
+The data of the reply, sent as bytes: text, bytes, a stream or a file; no body answers 204 No Content. A Map or a POJO fails: marshal it first. With reply=false the body is not sent.
+
+-   With `reply=false`: `any`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The data of the event: text, bytes, a stream or a file, sent as bytes. No body fails, and so does a Map or a POJO: marshal it first. |
+| **Producer output** | `bytes` or `null` | The body of the response, also for a message that expects no reply (InOnly): a byte array, null for a response without a body. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported Knative resources

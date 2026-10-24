@@ -276,7 +276,7 @@ Enum values:
  |  | String |
 | **streamOutputMode** (producer) | 
 
-The streaming output mode (complete or chunks). In complete mode, the full response is accumulated and returned as a single message. In chunks mode, each chunk is emitted as a separate exchange.
+The streaming output mode (complete or chunks). In complete mode, the full response is accumulated and returned as a single message. In chunks mode, the message body is a List of the chunks.
 
 Enum values:
 
@@ -546,7 +546,7 @@ Enum values:
  |  | String |
 | **streamOutputMode** (producer) | 
 
-The streaming output mode (complete or chunks). In complete mode, the full response is accumulated and returned as a single message. In chunks mode, each chunk is emitted as a separate exchange.
+The streaming output mode (complete or chunks). In complete mode, the full response is accumulated and returned as a single message. In chunks mode, the message body is a List of the chunks.
 
 Enum values:
 
@@ -621,6 +621,51 @@ The AWS Bedrock component supports the following message header(s), which is/are
 | **CamelAwsBedrockGuardrailAssessments** (producer) Constant: [`GUARDRAIL_ASSESSMENTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_ASSESSMENTS) | The guardrail assessments from ApplyGuardrail response. |  | List |
 | **CamelAwsBedrockGuardrailUsage** (producer) Constant: [`GUARDRAIL_USAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_USAGE) | The guardrail usage metrics from ApplyGuardrail response. |  | GuardrailUsage |
 
+## Message Body
+
+The message body at each side of the AWS Bedrock component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text` | 
+The request of the model as JSON text for the invoke operations, which also need the CamelAwsBedrockContentType and CamelAwsBedrockAcceptContentType headers. Bytes, a stream or a file are sent as their toString(): convert them to a String first, and marshal a Map or a POJO to JSON. converse, converseStream and applyGuardrail take their input from headers, such as CamelAwsBedrockConverseMessages. With pojoRequest=true an InvokeModelRequest of the AWS SDK: another body fails.
+
+-   With `operation=converse`: `any`
+    
+-   With `operation=converseStream`: `any`
+    
+-   With `operation=applyGuardrail`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` or `list` | 
+
+The streaming operations and converseStream give the text, or a List of the chunks with streamOutputMode=chunks. invokeTextModel gives the JSON response as text for the Amazon Titan models, and a Jackson JsonNode for the others: the response, or the generated text for Llama, Cohere and Claude 2. invokeImageModel gives a JsonNode array of the images as Base64 text, and invokeEmbeddingsModel the InvokeModelResponse of the AWS SDK. converse gives the answer as text, empty when the model asks for a tool, and applyGuardrail its action as text: NONE or GUARDRAIL\_INTERVENED.
+
+-   With `operation=invokeTextModel`: `text` or `pojo`
+    
+-   With `operation=invokeImageModel`: `pojo`
+    
+-   With `operation=invokeEmbeddingsModel`: `pojo` (`software.amazon.awssdk.services.bedrockruntime.model.InvokeModelResponse`)
+    
+-   With `operation=converse`: `text` (`java.lang.String`)
+    
+-   With `operation=applyGuardrail`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Bedrock component options
 
 You have to provide the bedrockRuntimeClient in the Registry or your accessKey and secretKey to access the [Amazon Bedrock](https://aws.amazon.com/bedrock/) service.
@@ -687,7 +732,7 @@ Two streaming modes are supported:
 
 **Complete Mode (default)**: Accumulates all chunks and returns the complete response as a single message. This is the simplest mode and behaves similarly to non-streaming operations, but with lower time-to-first-token.
 
-**Chunks Mode**: Emits each chunk as it arrives in a List. Useful for reactive streaming pipelines or when you need to process chunks individually.
+**Chunks Mode**: Returns the chunks as a List in a single message, once the model has finished. Useful when you need to process chunks individually, for example with a split.
 
 #### Streaming Configuration Options
 

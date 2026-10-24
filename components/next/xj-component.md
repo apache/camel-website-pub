@@ -184,6 +184,37 @@ The XJ component supports the following message header(s), which is/are listed b
 | **CamelXsltResourceUri** (producer) Constant: [`XSLT_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-xj/latest/org/apache/camel/component/xslt/XsltConstants.html#XSLT_RESOURCE_URI) | A URI for the template resource to load and use instead of the endpoint configured. |  | String |
 | **CamelXsltStylesheet** (producer) Constant: [`XSLT_STYLESHEET`](https://javadoc.io/doc/org.apache.camel/camel-xj/latest/org/apache/camel/component/xslt/XsltConstants.html#XSLT_STYLESHEET) | The template to use instead of the endpoint configured. |  | String |
 
+## Message Body
+
+The message body at each side of the XJ component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo` | The XML for XML2JSON as text, bytes, a stream, a file, a DOM or another javax.xml.transform.Source; the JSON for JSON2XML as text, bytes, a stream or a file. A Map, a List or no body fails, unless failOnNullBody=false for no body.
+-   With `transformDirection=XML2JSON`: `text`, `bytes`, `stream`, `file` or `pojo`
+    
+-   With `transformDirection=JSON2XML`: `text`, `bytes`, `stream` or `file`
+    
+
+Not known when `source` or `useJsonBody` is set.
+
+ |
+| **Producer output** | `text` (`java.lang.String`) | The result of the transformation: JSON text with XML2JSON, XML text with JSON2XML. output=DOM works with JSON2XML only.
+
+-   With `output=bytes`: `bytes` (`byte[]`)
+    
+-   With `output=DOM`: `pojo` (`org.w3c.dom.Document`)
+    
+-   With `output=file`: `file` (`java.io.File`)
+    
+
+Not known when `resultHandlerFactory` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Converting JSON to XML

@@ -537,6 +537,28 @@ The AWS Identity and Access Management (IAM) component supports the following me
 | **CamelAwsIAMInstanceProfileArn** (producer) Constant: [`INSTANCE_PROFILE_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-iam/latest/org/apache/camel/component/aws2/iam/IAM2Constants.html#INSTANCE_PROFILE_ARN) | The ARN of an AWS IAM Instance Profile. |  | String |
 | **CamelAwsIAMInstanceProfileId** (producer) Constant: [`INSTANCE_PROFILE_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-iam/latest/org/apache/camel/component/aws2/iam/IAM2Constants.html#INSTANCE_PROFILE_ID) | The ID of an AWS IAM Instance Profile. |  | String |
 
+## Message Body
+
+The message body at each side of the AWS Identity and Access Management (IAM) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used: the names, the ARNs and the policy documents come from headers, such as CamelAwsIAMUsername. With pojoRequest=true the request of the AWS SDK for the operation, such as a CreateUserRequest: another body fails.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the CreateUserResponse of createUser; the create and get operations put the ARN and the id in headers too. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required IAM component options
 
 You have to provide the amazonKmsClient in the Registry or your accessKey and secretKey to access the [Amazon IAM](https://aws.amazon.com/iam/) service.

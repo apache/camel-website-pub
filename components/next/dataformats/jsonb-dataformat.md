@@ -49,9 +49,28 @@ The JSON JSON-B dataformat supports the following options which are listed below
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
 | **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson, Gson or JSON-B is allowed to attempt to use the CamelJacksonUnmarshalType, CamelGsonUnmarshalType or CamelJsonbUnmarshallType header during the unmarshalling. This should only be enabled when desired to be used. |
 
+## Message Body
+
+The message body at each side of the JSON JSON-B data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `any` | A Map, a List or a POJO to write as JSON. Bytes, a stream, a file from a file consumer, or a String with a JSON object or array is written as it is; any other String becomes a JSON string. |
+| **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
+ |
+| **Unmarshal output** | `map` or `list` | A Map (HashMap with Yasson) for a JSON object, a List (ArrayList) for an array, with the numbers as BigDecimal; an object of the class unmarshalType names.
+
+Not known when `unmarshalType` or `allowUnmarshallType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## A body that is already JSON
 
-A body that already is the JSON text is written as it is, not serialized as a Java object: a file, an `InputStream`, a `byte[]`, and a `String` whose text is a JSON object or array (it starts with `{` and ends with `}`, or `[` and `]`). So `marshal: json` after reading a JSON file, or after building the JSON with a template or a Simple expression, sends that JSON unchanged. Any other `String` is written as a JSON string, and POJOs, maps and lists are marshalled as usual. All the JSON data formats of Camel do the same.
+A body that already is the JSON text is written as it is, not serialized as a Java object: a file from a consumer such as file or ftp, an `InputStream`, a `byte[]`, and a `String` whose text is a JSON object or array (it starts with `{` and ends with `}`, or `[` and `]`). So `marshal: json` after reading a JSON file, or after building the JSON with a template or a Simple expression, sends that JSON unchanged. Any other `String` is written as a JSON string, and POJOs, maps and lists are marshalled as usual. The Jackson, Gson, Jsonb and Fastjson JSON data formats do the same.
 
 ## Dependencies
 

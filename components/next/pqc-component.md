@@ -696,6 +696,63 @@ Enum values:
 | **CamelPQCHybridEncapsulation** (producer) Constant: [`HYBRID_ENCAPSULATION`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#HYBRID_ENCAPSULATION) | The hybrid encapsulation combining both classical and PQC encapsulations. |  | byte\[\] |
 | **CamelPQCHybridVerification** (producer) Constant: [`HYBRID_VERIFY`](https://javadoc.io/doc/org.apache.camel/camel-pqc/latest/org/apache/camel/component/pqc/PQCConstants.html#HYBRID_VERIFY) | The verification result of hybrid signature (both must pass). |  | Boolean |
 
+## Message Body
+
+The message body at each side of the PQC Algorithms component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The payload of sign, verify, hybridSign and hybridVerify: bytes or a stream as they are, text as UTF-8; another body is signed as its text, so marshal it first. extractSecretKeyEncapsulation and extractSecretKeyFromEncapsulation take the SecretKeyWithEncapsulation that generateSecretKeyEncapsulation gives, and importKey the key as bytes, or as text for PEM. The other operations do not use the body.
+
+-   With `operation=sign`: `text`, `bytes` or `stream`
+    
+-   With `operation=verify`: `text`, `bytes` or `stream`
+    
+-   With `operation=hybridSign`: `text`, `bytes` or `stream`
+    
+-   With `operation=hybridVerify`: `text`, `bytes` or `stream`
+    
+-   With `operation=extractSecretKeyEncapsulation`: `pojo` (`org.bouncycastle.jcajce.SecretKeyWithEncapsulation`)
+    
+-   With `operation=extractSecretKeyFromEncapsulation`: `pojo` (`org.bouncycastle.jcajce.SecretKeyWithEncapsulation`)
+    
+-   With `operation=importKey`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+Unchanged for the signature and key operations, which set their results in headers, such as CamelPQCSignature and CamelPQCVerification. generateSecretKeyEncapsulation and extractSecretKeyEncapsulation give a SecretKeyWithEncapsulation, and the other key encapsulation operations the SecretKey; with storeExtractedSecretKeyAsHeader=true the key is in the CamelPQCSecretKey header instead.
+
+-   With `operation=generateSecretKeyEncapsulation`: `pojo` (`org.bouncycastle.jcajce.SecretKeyWithEncapsulation`)
+    
+-   With `operation=extractSecretKeyEncapsulation`: `pojo` (`org.bouncycastle.jcajce.SecretKeyWithEncapsulation`)
+    
+-   With `operation=extractSecretKeyFromEncapsulation`: `pojo` (`javax.crypto.SecretKey`)
+    
+-   With `operation=hybridGenerateSecretKeyEncapsulation`: `pojo` (`javax.crypto.SecretKey`)
+    
+-   With `operation=hybridExtractSecretKeyEncapsulation`: `pojo` (`javax.crypto.SecretKey`)
+    
+-   With `operation=hybridExtractSecretKeyFromEncapsulation`: `pojo` (`javax.crypto.SecretKey`)
+    
+-   With `storeExtractedSecretKeyAsHeader=true`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Supported Algorithms
 
 The component supports the following algorithms for signature and verification.

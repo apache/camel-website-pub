@@ -16,6 +16,30 @@ The SWIFT MX dataformat supports the following options which are listed below.
 | **readConfig** (advanced) |  | `Object` | Refers to a specific configuration to use when unmarshalling an input stream to lookup from the registry. |
 | **writeConfig** (advanced) |  | `Object` | Refers to a specific configuration to use when marshalling a message to lookup from the registry. |
 
+## Message Body
+
+The message body at each side of the SWIFT MX data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `pojo` (`com.prowidesoftware.swift.model.mx.AbstractMX`) | 
+A Prowide MX message, such as an MxPacs00800108, as unmarshal gives. The body is not converted: MX XML text fails.
+
+-   With `writeInJson=true`: `pojo` (`com.prowidesoftware.JsonSerializable`)
+    
+
+
+
+
+
+ |
+| **Marshal output** | `stream` | The MX XML, or JSON with writeInJson, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as xml | An MX message, read as UTF-8. |
+| **Unmarshal output** | `pojo` or `null` (`com.prowidesoftware.swift.model.mx.AbstractMX`) | The Prowide class of the message by its namespace (or readMessageId), such as MxPacs00800108; null when the type is not detected. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 In Spring DSL, you configure the data format using this tag:
 
 _XML-only: Spring XML data format configuration_
@@ -104,7 +128,7 @@ from("direct:startEncode")
 
 ## Marshal
 
-In this example, we marshal the messages read from a JMS queue in SWIFT format before storing the result into a file.
+In this example, we marshal the messages read from a JMS queue in SWIFT format before storing the result into a file. The body must be a Prowide MX object, such as an `MxPacs00800108`, as unmarshal gives: it is not converted, so an MX message as text fails.
 
 -   Java
     

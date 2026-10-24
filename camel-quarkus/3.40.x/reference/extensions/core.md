@@ -266,11 +266,6 @@ This allows CDI observers to be configured for Camel events. E.g. those belongin
 Note that this configuration item only has any effect when observers configured for Camel events are present in the application.
 
  | `boolean` | `true` |
-| `[quarkus.camel.source-location-enabled](#quarkus-camel-source-location-enabled)`
-
-Build time configuration options for enable/disable camel source location.
-
- | `boolean` | `false` |
 | `[quarkus.camel.dev-ui.update-interval](#quarkus-camel-dev-ui-update-interval)`
 
 The interval at which data is updated in Camel Quarkus Dev UI pages.
@@ -301,6 +296,11 @@ Enable automatic discovery of routes during static initialization.
 What to do if it is not possible to extract CSimple expressions from a route definition at build time.
 
  | `fail`, `warn`, `ignore` | `warn` |
+| `[quarkus.camel.source-location-enabled](#quarkus-camel-source-location-enabled)`
+
+Build time configuration options for enable/disable camel source location.
+
+ | `boolean` | `false` |
 | `[quarkus.camel.trace.enabled](#quarkus-camel-trace-enabled)`
 
 Enables tracer in your Camel application.

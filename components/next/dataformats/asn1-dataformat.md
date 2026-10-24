@@ -2,7 +2,7 @@
 
 **Since Camel 2.20**
 
-The [ASN.1 Data Format](https://www.itu.int/en/ITU-T/asn1/Pages/introduction.aspx) is a Camel Framework’s data format implementation based on Bouncy Castle’s bcprov-jdk18on library and jASN.1’s java compiler for the formal notation used for describing data transmitted by telecommunications protocols, regardless of language implementation and physical representation of these data, whatever the application, whether complex or very simple. Messages can be unmarshalled (conversion to simple Java POJO(s)) to plain Java objects. With the help of Camel’s routing engine and data transformations, you can then play with POJO(s) and apply customized formatting and call other Camel Components to convert and send messages to upstream systems.
+The [ASN.1 Data Format](https://www.itu.int/en/ITU-T/asn1/Pages/introduction.aspx) is a Camel Framework’s data format implementation based on Bouncy Castle’s bcprov-jdk18on library and jASN.1’s java compiler for the formal notation used for describing data transmitted by telecommunications protocols, regardless of language implementation and physical representation of these data, whatever the application, whether complex or very simple. Messages can be unmarshalled to byte arrays, or, with `usingIterator` and `unmarshalType`, to plain Java objects (POJOs) of the classes the jASN.1 compiler generated. With the help of Camel’s routing engine and data transformations, you can then play with POJO(s) and apply customized formatting and call other Camel Components to convert and send messages to upstream systems.
 
 ## ASN.1 Data Format Options
 
@@ -14,11 +14,42 @@ The ASN.1 File dataformat supports the following options which are listed below.
 | **unmarshalType** (common) |  | `String` | Class to use when unmarshalling. |
 | **usingIterator** (common) | `false` | `Boolean` | If the asn1 file has more than one entry, the setting this option to true allows working with the splitter EIP to split each entry individually. |
 
+## Message Body
+
+The message body at each side of the ASN.1 File data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `bytes`, `stream` or `file` | BER-encoded data, written as it is. With usingIterator, a byte array or a Bouncy Castle ASN1Primitive, and with unmarshalType as well an object of a class the asn1bean compiler generated.
+-   With `usingIterator=true`: `bytes` or `pojo`
+    
+
+Not known when `unmarshalType` is set.
+
+ |
+| **Marshal output** | `stream`, as binary | The BER-encoded data in the stream cache, or a byte array when stream caching is off. With usingIterator, and no unmarshalType, nothing is written for a body that is neither a byte array nor an ASN1Primitive. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | BER-encoded data: one record, or several one after the other. |
+| **Unmarshal output** | `bytes` | 
+
+The records, encoded again, in one byte array. With usingIterator, an Iterator for the split EIP: of messages with the bytes of one record each, or of objects of the class unmarshalType names.
+
+-   With `usingIterator=true`: `iterator`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Unmarshal
 
 There are 3 different ways to unmarshal ASN.1 structured messages. (Usually binary files)
 
-In this first example, we unmarshal BER file payload to OutputStream and send it to mock endpoint.
+In this first example, we unmarshal BER file payload to a byte array, with the records encoded again, and send it to mock endpoint.
 
 -   Java
     
@@ -40,7 +71,7 @@ from("direct:unmarshal").unmarshal(asn1).to("mock:unmarshal");
             uri: mock:unmarshal
 ```
 
-In the second example, we unmarshal BER file payload to a byte array using Split EIP. The reason for applying Split EIP is that usually each BER file or (ASN.1 structured file) contains multiple records to process and Split EIP helps us to get each record in a file as byte arrays which is actually ASN1Primitive’s instance (by the use of Bouncy Castle’s ASN.1 support in bcprov-jdk18on library) Byte arrays then may be converted to ASN1Primitive by the help of public static method in (ASN1Primitive.fromByteArray) In such example, note that you need to set `usingIterator=true`
+In the second example, we unmarshal BER file payload to a byte array using Split EIP. The reason for applying Split EIP is that usually each BER file or (ASN.1 structured file) contains multiple records to process and Split EIP helps us to get each record in a file as a message whose body is the bytes of one record, encoded as an ASN1Primitive (by the use of Bouncy Castle’s ASN.1 support in bcprov-jdk18on library) Byte arrays then may be converted to ASN1Primitive by the help of public static method in (ASN1Primitive.fromByteArray) In such example, note that you need to set `usingIterator=true`
 
 -   Java
     

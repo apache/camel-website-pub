@@ -119,15 +119,27 @@ The String Template component supports the following message header(s), which is
 | **CamelStringTemplateVariableMap** (producer) Constant: [`STRINGTEMPLATE_VARIABLE_MAP`](https://javadoc.io/doc/org.apache.camel/camel-stringtemplate/latest/org/apache/camel/component/stringtemplate/StringTemplateConstants.html#STRINGTEMPLATE_VARIABLE_MAP) | Map of the variables which are made available to a script or template. |  | Map |
 | **CamelStringTemplateTemplate** (producer) Constant: [`STRINGTEMPLATE_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-stringtemplate/latest/org/apache/camel/component/stringtemplate/StringTemplateConstants.html#STRINGTEMPLATE_TEMPLATE) | The template to use instead of the endpoint configured. |  | String |
 
+## Message Body
+
+The message body at each side of the String Template component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The template gets the body as body, as it is: text, or a Map, a List or a POJO to read from; convert bytes or a stream to a String first. The template is the resource, or the CamelStringTemplateTemplate or CamelStringTemplateResourceUri header with allowTemplateFromHeader=true, and never the body. |
+| **Producer output** | `text` (`java.lang.String`) | The text the template writes, also when it is JSON or XML: unmarshal it to read its fields. The headers are kept, and the CamelStringTemplateResourceUri header is set to the uri of the resource. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Headers
 
-Camel will store a reference to the resource in the message header with key, `org.apache.camel.stringtemplate.resource`. The Resource is an `org.springframework.core.io.Resource` object.
+Camel sets the uri of the template resource in the message header `CamelStringTemplateResourceUri`.
 
 ### String Template Context
 
-Camel will provide exchange information in the String Template context (just a `Map`). The `Exchange` is transferred as:
+Camel will provide exchange information in the String Template context (just a `Map`). The `Exchange` is transferred as: The `body`, `header`, `headers`, `variable`, `variables` and `exception` entries are always there; the others only when the endpoint has `allowContextMapAll=true`.
 
  
 | key | value |
@@ -147,7 +159,7 @@ The string template resource is by default hot-reloadable for both file and clas
 
 ### Dynamic templates
 
-Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
+Camel provides two headers by which you can define a different resource location for a template or the template content itself. If any of these headers is set, and the endpoint has `allowTemplateFromHeader=true`, then Camel uses this over the endpoint configured resource. This allows you to provide a dynamic template at runtime.
 
 ### StringTemplate Attributes
 

@@ -37,6 +37,23 @@ Enum values:
 | **schema** (common) |  | `String` | To validate against an existing schema. You can use the prefix classpath:, file: or http: to specify how the resource should be resolved. You can separate multiple schema files by using the ',' character. |
 | **ignoreUnmarshalledHeaders** (advanced) | `false` | `Boolean` | Whether to ignore headers that were not unmarshalled. |
 
+## Message Body
+
+The message body at each side of the SOAP data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `pojo` | A JAXB object whose class has @XmlType with a name, written as the one element of the SOAP body; text fails. When the exchange has a caught exception (onException, doCatch), a SOAP fault of it is written instead.
+Not known when `elementNameStrategy` is set.
+
+ |
+| **Marshal output** | `stream`, as xml | The SOAP envelope in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | A SOAP envelope of the version: text, bytes, a stream, a file, a DOM Document, a DOMSource or a StreamSource. |
+| **Unmarshal output** | `pojo` or `null` | The JAXB object of the first element of the SOAP body, with the SOAP headers in the org.apache.camel.dataformat.soap.UNMARSHALLED\_HEADER\_LIST header. No body when the SOAP body is empty or a fault, which becomes the exception of the exchange. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## ElementNameStrategy
 
 An element name strategy is used for two purposes. The first is to find an XML element name for a given object and soap action when marshaling the object into a SOAP message. The second is to find an Exception class for a given soap fault name.
