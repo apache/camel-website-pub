@@ -332,7 +332,7 @@ from("keycloak:userEvents"
         maxResults=50
       steps:
         - log:
-            message: "Specific user events: ${body}"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_event_processing_patterns"><a class="anchor" href="#_event_processing_patterns"></a>Event Processing Patterns</h2> <div class="sectionbody"> <div class="sect2"> <h3 id="_audit_trail"><a class="anchor" href="#_audit_trail"></a>Audit Trail</h3> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Create comprehensive audit trail from admin events
+            message: "Specific user events: ${body}"</code></pre> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_event_processing_patterns"><a class="anchor" href="#_event_processing_patterns"></a>Event Processing Patterns</h2> <div class="sectionbody"> <div class="sect2"> <h3 id="_audit_trail"><a class="anchor" href="#_audit_trail"></a>Audit Trail</h3> <div class="paragraph"> <p>The route below sends each admin event as a JSON audit record to Kafka, and inserts the same record into an <code>audit_trail</code> table with the <a href="../jdbc-component.html" class="xref page">JDBC</a> component. The JDBC component runs the SQL in the message body, and with <code>useHeadersAsParameters=true</code> it takes the values of the named parameters (<code>:?name</code>) from the <code>CamelJdbcParameters</code> header. The <code>timestamp</code> is the time of the event as Keycloak gives it, in milliseconds since the epoch, the same in the JSON record and in the table, so the <code>event_time</code> column is a <code>BIGINT</code>.</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Create comprehensive audit trail from admin events
 from("keycloak:adminEvents"
      + "?realm=my-realm"
      + "&amp;eventType=admin-events"
@@ -340,23 +340,26 @@ from("keycloak:adminEvents"
      + "&amp;delay=10000")
     .process(exchange -&gt; {
         AdminEventRepresentation event = exchange.getIn().getBody(AdminEventRepresentation.class);
+        AuthDetailsRepresentation authDetails = event.getAuthDetails();
 
-        // Build audit record
+        // Build audit record (every named parameter of the SQL insert needs a value, null included)
         Map&lt;String, Object&gt; auditRecord = new HashMap&lt;&gt;();
-        auditRecord.put("timestamp", new Date(event.getTime()));
+        auditRecord.put("timestamp", event.getTime());
         auditRecord.put("operation", event.getOperationType());
         auditRecord.put("resourceType", event.getResourceType());
         auditRecord.put("resourcePath", event.getResourcePath());
-
-        if (event.getAuthDetails() != null) {
-            auditRecord.put("userId", event.getAuthDetails().getUserId());
-            auditRecord.put("ipAddress", event.getAuthDetails().getIpAddress());
-        }
+        auditRecord.put("userId", authDetails != null ? authDetails.getUserId() : null);
+        auditRecord.put("ipAddress", authDetails != null ? authDetails.getIpAddress() : null);
 
         exchange.getIn().setBody(auditRecord);
+        // the values of the named parameters of the SQL insert
+        exchange.getIn().setHeader("CamelJdbcParameters", auditRecord);
     })
     .marshal().json()
     .to("kafka:audit-trail?brokers=localhost:9092")
+    // the JDBC component runs the SQL in the message body
+    .setBody(constant("insert into audit_trail (event_time, operation, resource_type, resource_path, user_id, ip_address)"
+                      + " values (:?timestamp, :?operation, :?resourceType, :?resourcePath, :?userId, :?ipAddress)"))
     .to("jdbc:dataSource?useHeadersAsParameters=true");</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># Audit trail pattern
 - route:
     from:
@@ -367,22 +370,36 @@ from("keycloak:adminEvents"
         maxResults=100&amp;
         delay=10000
       steps:
+        # build the audit record (every named parameter of the SQL insert needs a value, null included)
         - setBody:
-            simple: &gt;
-              {
-                "timestamp": ${body.time},
-                "operation": "${body.operationType}",
-                "resourceType": "${body.resourceType}",
-                "resourcePath": "${body.resourcePath}",
-                "userId": "${body.authDetails.userId}",
-                "ipAddress": "${body.authDetails.ipAddress}"
-              }
+            expression:
+              simple:
+                expression: &gt;-
+                  ${map(timestamp,${body.time},
+                  operation,${body.operationType},
+                  resourceType,${body.resourceType},
+                  resourcePath,${body.resourcePath},
+                  userId,${body?.authDetails?.userId},
+                  ipAddress,${body?.authDetails?.ipAddress})}
+        # the values of the named parameters of the SQL insert
+        - setHeader:
+            name: CamelJdbcParameters
+            expression:
+              simple:
+                expression: "${body}"
         - marshal:
             json: {}
         - to:
             uri: kafka:audit-trail
             parameters:
               brokers: "localhost:9092"
+        # the JDBC component runs the SQL in the message body
+        - setBody:
+            expression:
+              constant:
+                expression: &gt;-
+                  insert into audit_trail (event_time, operation, resource_type, resource_path, user_id, ip_address)
+                  values (:?timestamp, :?operation, :?resourceType, :?resourcePath, :?userId, :?ipAddress)
         - to:
             uri: jdbc:dataSource
             parameters:

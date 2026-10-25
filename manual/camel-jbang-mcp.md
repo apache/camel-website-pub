@@ -315,7 +315,7 @@ A session is an MCP connection of `camel mcp`, and for `camel tui --mcp` the tim
 | Tool | Description |
 | --- | --- |
 | `camel_catalog_kamelets` | List available Kamelets from the Kamelet Catalog with filtering by name, description, and type (`source`, `sink`, `action`). Supports querying specific Kamelets catalog versions. |
-| `camel_catalog_kamelet_doc` | Get detailed documentation for a specific Kamelet including all properties/options, their types, defaults, examples, and the Kamelet’s Maven dependencies. |
+| `camel_catalog_kamelet_doc` | Get detailed documentation for a specific Kamelet including all properties/options, their types, defaults, examples, and the Kamelet’s Maven dependencies. For a Kamelet with data types, each data type with its data type transformer and the body it takes or gives (see [Message Body Types](body-types.md)). |
 
 ### Example Catalog
 

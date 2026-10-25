@@ -83,6 +83,8 @@ The body types of a model are a set of _sides_. A side that is not listed is not
 | `unmarshalOut` | The body after `unmarshal`. |
 | Language | `expressionIn` | The bodies the expressions of the language can read. |
 | `expressionOut` | The result of an expression. |
+| Data type transformer | `transformerIn` | The bodies the transformer can transform. |
+| `transformerOut` | The body after the transformer: what `transformDataType` leaves. |
 | EIP | `eipIn` | The bodies the EIP needs, such as text for `tokenizer`. |
 | `eipOut` | The body after the EIP. |
 | `eipSteps` | The body the steps of the EIP start with, such as each part for `split`. |
@@ -173,9 +175,12 @@ Some options name the class the result is converted to: the `resultType` of a la
 The body after an EIP is often the body of something else: `marshal` leaves what its data format writes, `to` what the producer of its endpoint leaves, and `setBody` the result of its expression. The catalog says so with `from`, instead of copying the body types of every data format, component and language:
 
 ```json
-"eipOut": { "from": "marshalOut", "dependsOn": [ "variableReceive" ],
+"eipOut": { "from": "marshalOut",
+  "byOption": [ { "option": "variableReceive", "value": "*", "carriers": [ "unchanged" ] } ],
   "description": "What the data format writes. With variableReceive the result goes into the variable, and the body stays as it was" }
 ```
+
+The value `*` is any value of the option: with `variableReceive` set to any name, the body stays as it was, whatever the data format writes. In the same way, with `variableSend` a step sends the variable instead of the body, and does not need the body (`any`). A route starts with the body of the consumer of its `from` endpoint, and with no body (`null`) when `from` has `variableReceive`.
 
 An EIP with steps of its own also says what they start with. The steps of a `split` start with each part, and after it the body is as it was before the split:
 
@@ -185,6 +190,33 @@ An EIP with steps of its own also says what they start with. The steps of a `spl
 "eipSteps": { "carriers": [ "unknown" ],
   "description": "Each part of what the expression gives, such as an element of a List or a line of text" }
 ```
+
+### Data type transformers
+
+A data type transformer, which `transformDataType` runs for its `toType`, has body types as well. `application-json` writes any object as JSON bytes, and the CloudEvent transformers of the components only set headers:
+
+```json
+"transformerIn": { "carriers": [ "any" ] },
+"transformerOut": { "carriers": [ "bytes" ], "javaType": "byte[]", "format": "json" }
+```
+
+`transformDataType` takes its body from them, by the name of its `toType`: `aws2-s3:application-cloudevents` is the transformer `aws2-s3-application-cloudevents` of the catalog.
+
+### Kamelets
+
+A Kamelet says the body it takes and gives with its data types (`spec.dataTypes`), whose `format` names a data type transformer. Camel runs the transformer of the default `in` data type at the start of the Kamelet route, and of the default `out` one at its end, so the body of a Kamelet is what that transformer takes and leaves:
+
+```yaml
+spec:
+  dataTypes:
+    out:
+      default: binary
+      types:
+        binary:
+          format: application-octet-stream
+```
+
+The Camel CLI reads the data types of the Kamelets of the Kamelet catalog and of the project’s own `.kamelet.yaml` files. The YAML validator walks a route that starts with `from: kamelet:aws-s3-source` with bytes. It reports a body that a Kamelet sink cannot take before a `to: kamelet:…​`. `camel_catalog_kamelet_doc` lists the data types of a Kamelet with the body of each. A Kamelet without data types says nothing about its body.
 
 ## Tooling
 
@@ -204,6 +236,8 @@ text (java.lang.String). The result of the transformation. With output=bytes: by
 ### YAML validator
 
 `camel validate source` follows the body through the steps of each route with the body types, and reports a step that cannot take the body it gets (see [Validation](camel-jbang-validation.md)). Where the catalog does not know the body, such as after an HTTP consumer, it says nothing, unless a running integration has shown what the body is.
+
+The EIPs come from the catalog as well: their `eipOut` says which ones leave the body as it was (`log`, `setHeader`, `threads`, a `split` without an aggregation strategy), and their `eipSteps` whose steps start with the body at the EIP (`choice`, `filter`, `loop`), not with another body (`aggregate`, `split`) or one the validator cannot know (`doCatch`).
 
 ### Asking an AI assistant
 
@@ -260,7 +294,7 @@ The `to` has been reached with a `LinkedHashMap` (data) by one message and a `St
 
 ## Declaring body types
 
-A component declares its body types with the `@BodyTypes` annotation on its endpoint class, a data format and a language on their class, and an EIP on its model class in `camel-core-model`. That is also where the EIPs that other modules implement are declared, such as `circuitBreaker`. A subclass does not have the body types of its superclass, as it may change the body:
+A component declares its body types with the `@BodyTypes` annotation on its endpoint class, a data format and a language on their class, a data type transformer on its class, and an EIP on its model class in `camel-core-model`. That is also where the EIPs that other modules implement are declared, such as `circuitBreaker`. A subclass does not have the body types of its superclass, as it may change the body:
 
 ```java
 @BodyTypes(consumerOut = @BodyType(value = Carrier.FILE, description = "The file as read ..."),
@@ -298,9 +332,9 @@ The JSON of a component, data format, language or EIP in the catalog has a `body
 | `javaType` | string | The Java type of the body, when it is always of this type. |
 | `format` | string | The format of the payload, when it is always the same: `json`, `xml`, `csv`, `yaml`, `text` or `binary`. |
 | `dependsOn` | array of strings | The options the body depends on. The side holds while they keep their default values. When the step sets one, only a `byOption` entry for that value says the body; without one it is not known. |
-| `byOption` | array of objects | The body for a value of an option: `option`, `value`, `carriers`, and optionally `javaType` and `javaTypeOption`. |
+| `byOption` | array of objects | The body for a value of an option: `option`, `value`, `carriers`, and optionally `javaType` and `javaTypeOption`. The value `*` is any value: the body when the step sets the option at all. |
 | `javaTypeOption` | string | The option that names the class of the body, such as `resultType`. When the step sets it, the body is an object of that class, or null. |
-| `from` | string | For an EIP, the side of another model the body is: `expressionIn`, `expressionOut` (the language of its expression), `marshalIn`, `marshalOut`, `unmarshalIn`, `unmarshalOut` (its data format), `producerIn`, `producerOut` (its endpoint as a producer), `consumerOut` (its endpoint as a consumer), or `steps` (what its own steps end with). |
+| `from` | string | For an EIP, the side of another model the body is: `expressionIn`, `expressionOut` (the language of its expression), `marshalIn`, `marshalOut`, `unmarshalIn`, `unmarshalOut` (its data format), `producerIn`, `producerOut` (its endpoint as a producer), `consumerOut` (its endpoint as a consumer), `transformerIn`, `transformerOut` (the data type transformer of `transformDataType`), or `steps` (what its own steps end with). |
 | `description` | string | What to know about the body, in a sentence. |
 
 ### Reading a side for a step
@@ -309,17 +343,19 @@ To know the body a step leaves, or the bodies it needs, read its side with the o
 
 1.  **No side:** not known.
     
-2.  **A side with `from`:** when the step sets an option of `dependsOn`, not known. Otherwise, read the side `from` names on the model the step uses (the language of its expression, its data format or its endpoint), with the options of that model. `steps` is the body the steps of the EIP end with.
+2.  **A `byOption` entry for any value (**) whose option the step sets:\* its carriers, whatever the rest of the side says, `from` and `dependsOn` too. When two of them say different bodies: not known. When the step does not set the option, but it can be set elsewhere: not known.
     
-3.  **An option the side names whose value is not known before the route runs** (a `{{placeholder}}` or a `${expression}`), or an option the step does not set but that can be set elsewhere, such as on the component: not known.
+3.  **A side with `from`:** when the step sets an option of `dependsOn`, not known. Otherwise, read the side `from` names on the model the step uses (the language of its expression, its data format, its endpoint, or the data type transformer of its `toType`), with the options of that model. `steps` is the body the steps of the EIP end with.
     
-4.  **An option of `dependsOn` the step sets:** the `byOption` entry for that value says the body. When it has a `javaTypeOption` the step sets, the body is an object of that class. Without such an entry: not known.
+4.  **An option the side names whose value is not known before the route runs** (a `{{placeholder}}` or a `${expression}`), or an option the step does not set but that can be set elsewhere, such as on the component: not known.
     
-5.  **The `javaTypeOption` of the side, when the step sets it:** an object of the class it names, or null. It wins over the `byOption` entries of other options.
+5.  **An option of `dependsOn` the step sets:** the `byOption` entry for that value says the body. When it has a `javaTypeOption` the step sets, the body is an object of that class. Without such an entry: not known.
     
-6.  **The `byOption` entries for the values the step sets:** their carriers (or the class of their `javaTypeOption`). When two of them say different bodies: not known.
+6.  **The `javaTypeOption` of the side, when the step sets it:** an object of the class it names, or null. It wins over the `byOption` entries of other options.
     
-7.  **Otherwise:** the carriers of the side. `unknown` is not known, and `unchanged` is the body before the step.
+7.  **The `byOption` entries for the values the step sets:** their carriers (or the class of their `javaTypeOption`). When two of them say different bodies: not known.
+    
+8.  **Otherwise:** the carriers of the side. `unknown` is not known, and `unchanged` is the body before the step.
     
 
 The values of an option compare in any case, and in any style of an enum constant, as Camel takes them: `convert-to-json`, `convertToJson` and `CONVERT_TO_JSON` are one value.

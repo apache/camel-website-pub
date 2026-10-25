@@ -56,7 +56,10 @@ The message body at each side of the Poll Enrich EIP: _EIP input_ is the body it
 | Side | Body | Description |
 | --- | --- | --- |
 | **EIP output** | what the consumer of its endpoint receives | The message the consumer of the endpoint receives, with the default aggregation strategy, or null when none came before the timeout. With variableReceive it goes into the variable, and the body stays as it was.
-Not known when `aggregationStrategy` or `variableReceive` is set.
+-   With `variableReceive` set: `unchanged`
+    
+
+Not known when `aggregationStrategy` is set.
 
  |
 

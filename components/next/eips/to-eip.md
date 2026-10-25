@@ -48,9 +48,27 @@ The message body at each side of the To EIP: _EIP input_ is the body it needs, _
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **EIP input** | what the producer of its endpoint sends | Not known when `variableSend` is set. |
-| **EIP output** | what the producer of its endpoint leaves | What the producer of the endpoint leaves. With variableReceive the reply goes into the variable, and the body stays as it was.
-Not known when `variableReceive` is set.
+| **EIP input** | what the producer of its endpoint sends | 
+With variableSend the variable is sent, and the body is not read.
+
+-   With `variableSend` set: `any`
+    
+
+
+
+
+
+ |
+| **EIP output** | what the producer of its endpoint leaves | 
+
+What the producer of the endpoint leaves. With variableReceive the reply goes into the variable, and the body stays as it was.
+
+-   With `variableReceive` set: `unchanged`
+    
+
+
+
+
 
  |
 

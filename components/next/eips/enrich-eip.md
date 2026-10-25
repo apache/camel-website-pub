@@ -54,8 +54,23 @@ The message body at each side of the Enrich EIP: _EIP input_ is the body it need
   
 | Side | Body | Description |
 | --- | --- | --- |
+| **EIP input** | what the producer of its endpoint sends | 
+With variableSend the variable is sent, and the body is not read.
+
+-   With `variableSend` set: `any`
+    
+
+
+
+
+
+ |
 | **EIP output** | what the producer of its endpoint leaves | The reply of the endpoint, with the default aggregation strategy. With variableReceive the reply goes into the variable, and the body stays as it was.
-Not known when `aggregationStrategy` or `variableReceive` is set.
+
+-   With `variableReceive` set: `unchanged`
+    
+
+Not known when `aggregationStrategy` is set.
 
  |
 

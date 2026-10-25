@@ -293,6 +293,7 @@ It lists Kamelets too: the project’s own Kamelet files first, marked `project`
 | **w** | Toggle word wrap |
 | **g** | Toggle waterfall view |
 | **d** | Toggle diagram replay mode |
+| **+** / **\-**, **z** | Zoom the replay diagram in or out, or fit it to the screen (the zoom of the Diagram tab, see [Zoom and Folding](camel-jbang-tui-diagram.html#_zoom_and_folding)) |
 | **n** | Toggle description labels |
 | **F5** | Refresh / clear traces |
 

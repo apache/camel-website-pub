@@ -48,6 +48,10 @@ When `knownHostsResource` is set, the entries of the `known_hosts` file are now 
 
 As before, a server whose host has entries without a marker is rejected when it presents a key that none of them lists, whatever the value of `failOnUnknownHost`, which only applies to a host without such an entry: `@revoked` and `@cert-authority` entries do not list a host. Check that the `known_hosts` file has an entry for the host name or address, and the port, that each endpoint is configured with.
 
+### camel-google-mail, camel-google-drive, camel-google-calendar, camel-google-sheets - one API client per endpoint
+
+The `google-mail`, `google-mail-stream`, `google-drive`, `google-calendar`, `google-calendar-stream`, `google-sheets` and `google-sheets-stream` components now create one API client per endpoint, from the options of that endpoint (`clientId`, `clientSecret`, `refreshToken`, `accessToken`, `serviceAccountKey`, `delegate`, `scopes` and `applicationName`, plus `emailAddress`, `p12FileName` and `user` on the two calendar components), instead of a single client per component that every endpoint of the component shared. Each endpoint keeps its client for its lifetime. The `clientFactory` option of a `google-drive` endpoint is now used to create the client of that endpoint. In addition, a `google-mail-stream` endpoint configured with neither `clientSecret` nor `serviceAccountKey` now fails with an `IllegalArgumentException` when its client is created, instead of getting a `null` client and failing at the first API call.
+
 ### camel-netty-http - the roles of a security constraint are matched by role name
 
 The roles of a `SecurityConstraintMapping` inclusion are a comma-separated list of role names, and an authenticated user is now accepted only when one of their roles is equal to one of those names. The comparison is case-sensitive, whitespace around each name and blank entries are ignored, and a value of `*` still accepts any role. A roles value that uses another separator, such as `admin;guest` or `admin guest`, must be changed to `admin,guest`.

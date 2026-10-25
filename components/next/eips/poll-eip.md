@@ -45,8 +45,15 @@ The message body at each side of the Poll EIP: _EIP input_ is the body it needs,
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **EIP output** | what the consumer of its endpoint receives | The message the consumer of the endpoint receives, or null when none came before the timeout. With variableReceive it goes into the variable, and the body stays as it was.
-Not known when `variableReceive` is set.
+| **EIP output** | what the consumer of its endpoint receives | 
+The message the consumer of the endpoint receives, or null when none came before the timeout. With variableReceive it goes into the variable, and the body stays as it was.
+
+-   With `variableReceive` set: `unchanged`
+    
+
+
+
+
 
  |
 
