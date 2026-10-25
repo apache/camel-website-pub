@@ -29,7 +29,7 @@ Not known when `source` is set.
  |
 | **Expression result** | `pojo`, `list` or `null` | A JsonNode; a List of JsonNode when the filter gives several, null when it gives none.
 
-Not known when `resultType` is set.
+With `resultType` set: an object of the class it names, or null.
 
  |
 

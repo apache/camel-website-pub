@@ -21,7 +21,11 @@ The message body at each side of the JSonApi data format: _Marshal input_ and _U
 | **Marshal output** | `stream`, as json | The JSON:API document in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
  |
-| **Unmarshal output** | `pojo` or `null` | The primary data as an object of the class mainFormatType names, or no body when the data is null. A document whose data is an array fails. |
+| **Unmarshal output** | `pojo` or `null` | The primary data as an object of the class mainFormatType names, or no body when the data is null. A document whose data is an array fails.
+
+With `mainFormatType` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

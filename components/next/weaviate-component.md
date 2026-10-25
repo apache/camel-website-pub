@@ -64,6 +64,39 @@ The weaviate component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **action** (producer) | 
+The action to perform. The CamelWeaviateAction header, when set, wins over this option.
+
+Enum values:
+
+-   AGGREGATE
+    
+-   BATCH\_CREATE
+    
+-   BM25\_QUERY
+    
+-   CREATE\_COLLECTION
+    
+-   CREATE
+    
+-   DELETE\_BY\_ID
+    
+-   DELETE\_COLLECTION
+    
+-   HYBRID\_QUERY
+    
+-   QUERY
+    
+-   QUERY\_BY\_ID
+    
+-   UPDATE\_BY\_ID
+    
+
+
+
+
+
+ |  | WeaviateVectorDbAction |
 | **apiKey** (producer) | API Key to authenticate to weaviate with. |  | String |
 | **configuration** (producer) | The configuration;. |  | WeaviateVectorDbConfiguration |
 | **grpcHost** (producer) | gRPC host for Weaviate server connection. |  | String |
@@ -93,6 +126,39 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **action** (producer) | 
+The action to perform. The CamelWeaviateAction header, when set, wins over this option.
+
+Enum values:
+
+-   AGGREGATE
+    
+-   BATCH\_CREATE
+    
+-   BM25\_QUERY
+    
+-   CREATE\_COLLECTION
+    
+-   CREATE
+    
+-   DELETE\_BY\_ID
+    
+-   DELETE\_COLLECTION
+    
+-   HYBRID\_QUERY
+    
+-   QUERY
+    
+-   QUERY\_BY\_ID
+    
+-   UPDATE\_BY\_ID
+    
+
+
+
+
+
+ |  | WeaviateVectorDbAction |
 | **apiKey** (producer) | API Key to authenticate to weaviate with. |  | String |
 | **grpcHost** (producer) | gRPC host for Weaviate server connection. |  | String |
 | **grpcPort** (producer) | gRPC port for Weaviate server connection. | 50051 | Integer |
@@ -159,14 +225,75 @@ The message body at each side of the weaviate component: _Consumer_ is the body 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `list`, `text` or `null` | By the action in the CamelWeaviateAction header: the vector as a List of Float or a float array for CREATE, UPDATE\_BY\_ID and QUERY, with the properties in the CamelWeaviateProperties header, a List of WeaviateObject for BATCH\_CREATE, and the query text for HYBRID\_QUERY and BM25\_QUERY. CREATE\_COLLECTION, DELETE\_COLLECTION, QUERY\_BY\_ID, DELETE\_BY\_ID and AGGREGATE do not read the body, the id is in the CamelWeaviateIndexId header. Another body fails, a List of Double too: the weaviate:embeddings data type transformer builds the vector from the output of langchain4j-embeddings. |
-| **Producer output** | `pojo` or `value` | By the action: a WeaviateObject for CREATE, an InsertManyResponse for BATCH\_CREATE, a QueryResponse for QUERY, HYBRID\_QUERY and BM25\_QUERY, an Optional of WeaviateObject for QUERY\_BY\_ID, an AggregateResponse for AGGREGATE, and a Boolean for CREATE\_COLLECTION, UPDATE\_BY\_ID, DELETE\_BY\_ID and DELETE\_COLLECTION. |
+| **Producer input** | `list`, `text` or `null` | 
+By the action in the action option or the CamelWeaviateAction header: the vector as a List of Float or a float array for CREATE, UPDATE\_BY\_ID and QUERY, with the properties in the CamelWeaviateProperties header, a List of WeaviateObject for BATCH\_CREATE, and the query text for HYBRID\_QUERY and BM25\_QUERY. CREATE\_COLLECTION, DELETE\_COLLECTION, QUERY\_BY\_ID, DELETE\_BY\_ID and AGGREGATE do not read the body, the id is in the CamelWeaviateIndexId header. Another body fails, a List of Double too: the weaviate:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
+
+-   With `action=CREATE`: `list`
+    
+-   With `action=BATCH_CREATE`: `list` (`java.util.List<io.weaviate.client6.v1.api.collections.WeaviateObject<java.util.Map<java.lang.String, java.lang.Object>>>`)
+    
+-   With `action=UPDATE_BY_ID`: `list`
+    
+-   With `action=QUERY`: `list`
+    
+-   With `action=HYBRID_QUERY`: `text` (`java.lang.String`)
+    
+-   With `action=BM25_QUERY`: `text` (`java.lang.String`)
+    
+-   With `action=CREATE_COLLECTION`: `any`
+    
+-   With `action=DELETE_COLLECTION`: `any`
+    
+-   With `action=QUERY_BY_ID`: `any`
+    
+-   With `action=DELETE_BY_ID`: `any`
+    
+-   With `action=AGGREGATE`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` or `value` | 
+
+By the action: a WeaviateObject for CREATE, an InsertManyResponse for BATCH\_CREATE, a QueryResponse for QUERY, HYBRID\_QUERY and BM25\_QUERY, an Optional of WeaviateObject for QUERY\_BY\_ID, an AggregateResponse for AGGREGATE, and a Boolean for CREATE\_COLLECTION, UPDATE\_BY\_ID, DELETE\_BY\_ID and DELETE\_COLLECTION.
+
+-   With `action=CREATE`: `pojo` (`io.weaviate.client6.v1.api.collections.WeaviateObject<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `action=BATCH_CREATE`: `pojo` (`io.weaviate.client6.v1.api.collections.data.InsertManyResponse`)
+    
+-   With `action=QUERY`: `pojo` (`io.weaviate.client6.v1.api.collections.query.QueryResponse<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `action=HYBRID_QUERY`: `pojo` (`io.weaviate.client6.v1.api.collections.query.QueryResponse<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `action=BM25_QUERY`: `pojo` (`io.weaviate.client6.v1.api.collections.query.QueryResponse<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `action=QUERY_BY_ID`: `pojo` (`java.util.Optional<io.weaviate.client6.v1.api.collections.WeaviateObject<java.util.Map<java.lang.String, java.lang.Object>>>`)
+    
+-   With `action=AGGREGATE`: `pojo` (`io.weaviate.client6.v1.api.collections.aggregate.AggregateResponse`)
+    
+-   With `action=CREATE_COLLECTION`: `value` (`java.lang.Boolean`)
+    
+-   With `action=UPDATE_BY_ID`: `value` (`java.lang.Boolean`)
+    
+-   With `action=DELETE_BY_ID`: `value` (`java.lang.Boolean`)
+    
+-   With `action=DELETE_COLLECTION`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Usage
 
-The `CamelWeaviateAction` header selects the operation. The routes below create a collection, add an object with its vector (the message body) and its properties (the `CamelWeaviateProperties` header), and run a keyword (BM25) search for the text in the message body:
+The `action` option of the endpoint, such as `weaviate:myCollection?action=BM25_QUERY`, or the `CamelWeaviateAction` header selects the operation; the header, when set, wins over the option. Without either, the producer fails. The weaviate:embeddings data type transformer runs before the endpoint, so it reads the header only. The routes below create a collection, add an object with its vector (the message body) and its properties (the `CamelWeaviateProperties` header), and run a keyword (BM25) search for the text in the message body:
 
 ```yaml
 - route:

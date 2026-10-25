@@ -67,6 +67,30 @@ The JSON Jackson 3 dataformat supports the following options which are listed be
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **maxStringLength** (advanced) |  | `Integer` | Sets the maximum string length (in chars or bytes, depending on input context). The default is 20,000,000. |
 
+## Message Body
+
+The message body at each side of the JSON Jackson 3 data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `any` | A Map, a List or a POJO to write as JSON. Text, bytes or a stream that is JSON already is written as it is. |
+| **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
+ |
+| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for a JSON object, a List (ArrayList) for an array.
+
+With `unmarshalType` set: an object of the class it names, or null.
+
+-   With `useList=true`: `list`
+    
+
+Not known when `collectionType` or `useList` or `allowUnmarshallType` or `allowJmsType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Using Jackson with the json() DSL

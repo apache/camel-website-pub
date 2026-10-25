@@ -47,6 +47,42 @@ Enum values:
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+### Configuring the language
+
+The XPath language itself has the following options, which apply to all its expressions. You set them in a configuration file such as `application.properties`, with the option name after the `camel.language.xpath.` prefix.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **resultQName** (common) | `NODESET` | `Enum` | 
+Sets the output type supported by XPath.
+
+Enum values:
+
+-   NUMBER
+    
+-   STRING
+    
+-   BOOLEAN
+    
+-   NODESET
+    
+-   NODE
+    
+
+
+
+
+
+ |
+| **documentType** (advanced) |  | `String` | Name of class for document type. The default value is org.w3c.dom.Document. |
+| **xpathFactory** (advanced) |  | `Object` | A custom XPathFactory to use. |
+| **saxon** (advanced) | `false` | `Boolean` | Whether to use Saxon. |
+| **objectModelUri** (advanced) |  | `String` | The XPath object model to use. |
+| **threadSafety** (advanced) | `false` | `Boolean` | Whether to enable thread-safety for the returned result of the xpath expression. This applies to when using NODESET as the result type, and the returned set has multiple elements. |
+| **logNamespaces** (advanced) | `false` | `Boolean` | Whether to log namespaces which can assist during troubleshooting. |
+| **preCompile** (advanced) | `true` | `Boolean` | Whether to enable pre-compiling the xpath expression during initialization phase. pre-compile is enabled by default. |
+
 ## Message Body
 
 The message body at each side of the XPath language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
@@ -58,7 +94,11 @@ The message body at each side of the XPath language: _Expression input_ is the b
 Not known when `source` is set.
 
  |
-| **Expression result** | `pojo` (`org.w3c.dom.NodeList`) | The nodes the expression selects.
+| **Expression result** | `pojo` (`org.w3c.dom.NodeList`) | 
+
+The nodes the expression selects.
+
+With `resultType` set: an object of the class it names, or null.
 
 -   With `resultQName=STRING`: `text` (`java.lang.String`)
     
@@ -69,7 +109,9 @@ Not known when `source` is set.
 -   With `resultQName=NODE`: `pojo` (`org.w3c.dom.Node`)
     
 
-Not known when `resultType` is set.
+
+
+
 
  |
 

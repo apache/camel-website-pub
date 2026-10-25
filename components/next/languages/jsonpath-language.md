@@ -42,6 +42,40 @@ Enum values:
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+### Configuring the language
+
+The JSONPath language itself has the following options, which apply to all its expressions. You set them in a configuration file such as `application.properties`, with the option name after the `camel.language.jsonpath.` prefix.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **suppressExceptions** (common) | `false` | `Boolean` | Whether to suppress exceptions such as PathNotFoundException. |
+| **allowSimple** (advanced) | `true` | `Boolean` | Whether to allow in inlined Simple exceptions in the JSONPath expression. |
+| **allowEasyPredicate** (advanced) | `true` | `Boolean` | Whether to allow using the easy predicate parser to pre-parse predicates. |
+| **writeAsString** (common) | `false` | `Boolean` | Whether to write the output of each row/element as a JSON String value instead of a Map/POJO value. |
+| **unpackArray** (common) | `false` | `Boolean` | Whether to unpack a single element json-array into an object. |
+| **options** (advanced) |  | `Enum` | 
+To configure additional options on JSONPath. Multiple values can be separated by comma.
+
+Enum values:
+
+-   DEFAULT\_PATH\_LEAF\_TO\_NULL
+    
+-   ALWAYS\_RETURN\_LIST
+    
+-   AS\_PATH\_LIST
+    
+-   SUPPRESS\_EXCEPTIONS
+    
+-   REQUIRE\_PROPERTIES
+    
+
+
+
+
+
+ |
+
 ## Message Body
 
 The message body at each side of the JSONPath language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
@@ -52,6 +86,8 @@ The message body at each side of the JSONPath language: _Expression input_ is th
 | **Expression input** | `any` | JSON as text, bytes, a stream or a file, or parsed: a Map or a List. A POJO is read through Jackson. |
 | **Expression result** | `unknown` | 
 The value the path selects: a Map for an object, a List for an array or for a path with a wildcard or a filter, otherwise text, a number or a boolean.
+
+With `resultType` set: an object of the class it names, or null.
 
 -   With `writeAsString=true`: `text` or `list`
     

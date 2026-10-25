@@ -100,7 +100,10 @@ The message body at each side of the MapStruct component: _Consumer_ is the body
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `pojo` or `null` | A POJO that a mapper of the mapperPackageName packages maps to the className type; a body of that type already is left as it is. Any other body fails with an InvalidPayloadException, unless mandatory is false. |
-| **Producer output** | `pojo` or `null` | The object of the className type the mapper returns, or null when there is no body. With mandatory=false, a body that no mapper converts becomes null. |
+| **Producer output** | `pojo` or `null` | The object of the className type the mapper returns, or null when there is no body. With mandatory=false, a body that no mapper converts becomes null.
+With `className` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 

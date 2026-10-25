@@ -25,7 +25,10 @@ The message body at each side of the JavaScript language: _Expression input_ is 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression input** | `any` | The body as it is, in the variable body: a String is a JavaScript string, and other Java objects keep their methods. |
-| **Expression result** | `unknown` | What the script returns: an object as a Map, an array or a typed array as a List, a Set as a Set, an ArrayBuffer as bytes and a Date as an Instant. A function fails. |
+| **Expression result** | `unknown` | What the script returns: an object as a Map, an array or a typed array as a List, a Set as a Set, an ArrayBuffer as bytes and a Date as an Instant. A function fails.
+With `resultType` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

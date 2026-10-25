@@ -212,14 +212,16 @@ The prompt as text, or a UserMessage or another Spring AI Message. A byte\[\] is
  |
 | **Producer output** | `text` | The answer of the model as text, also in the CamelSpringAiChatResponse header. entityClass makes it an object of that class, and outputFormat an object of outputClass, a Map or a List of texts; the CamelSpringAiChatEntityClass and CamelSpringAiChatOutputFormat headers do the same per message.
 
--   With `outputFormat=BEAN`: `pojo`
+With `entityClass` set: an object of the class it names, or null.
+
+-   With `outputFormat=BEAN`: `pojo`, or an object of the class `outputClass` names when it is set
     
 -   With `outputFormat=MAP`: `map`
     
 -   With `outputFormat=LIST`: `list`
     
 
-Not known when `entityClass` or `structuredOutputConverter` is set.
+Not known when `structuredOutputConverter` is set.
 
  |
 

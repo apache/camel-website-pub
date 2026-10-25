@@ -19,6 +19,17 @@ The Java language supports the following options which are listed below.
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+### Configuring the language
+
+The Java language itself has the following options, which apply to all its expressions. You set them in a configuration file such as `application.properties`, with the option name after the `camel.language.java.` prefix.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **configResource** (advanced) | `classpath:camel-joor.properties?optional=true` | `String` | The resource with the configuration of the Java language, such as its imports and aliases. Can also be ref:name of a String bean with the configuration. |
+| **preCompile** (advanced) | `true` | `Boolean` | Whether the expression should be pre compiled once during initialization phase. If this is turned off, then the expression is reloaded and compiled on each evaluation. |
+| **singleQuotes** (advanced) | `true` | `Boolean` | Whether single quotes can be used as replacement for double quotes. This is convenient when you need to work with strings inside strings. |
+
 ## Message Body
 
 The message body at each side of the Java language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
@@ -27,7 +38,10 @@ The message body at each side of the Java language: _Expression input_ is the bo
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression input** | `any` | The body as it is, in the variable body of type Object: bodyAs(type) converts it. |
-| **Expression result** | `unknown` | What the script returns. |
+| **Expression result** | `unknown` | What the script returns.
+With `resultType` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

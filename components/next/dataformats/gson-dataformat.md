@@ -61,9 +61,11 @@ The message body at each side of the JSON Gson data format: _Marshal input_ and 
 | **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
  |
-| **Unmarshal output** | `map` or `list` | A Map (Gson LinkedTreeMap) for a JSON object, a List (ArrayList) for an array, with the numbers as Double; an object of the class unmarshalType names.
+| **Unmarshal output** | `map` or `list` | A Map (Gson LinkedTreeMap) for a JSON object, a List (ArrayList) for an array, with the numbers as Double.
 
-Not known when `unmarshalType` or `allowUnmarshallType` is set.
+With `unmarshalType` set: an object of the class it names, or null.
+
+Not known when `allowUnmarshallType` is set.
 
  |
 

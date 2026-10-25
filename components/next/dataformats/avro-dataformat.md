@@ -40,7 +40,10 @@ The message body at each side of the Avro data format: _Marshal input_ and _Unma
 | **Marshal input** | `pojo` | An Avro record: an object of a class the Avro compiler generated, or a GenericRecord of the schema of instanceClassName. Without instanceClassName the schema comes from the class of the body, so a GenericRecord fails. A Map is not converted. |
 | **Marshal output** | `stream`, as binary | The record in Avro binary encoding, without the schema (not an Avro container file), in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `bytes`, `stream` or `file`, as binary | One record in Avro binary encoding, as marshal writes it: unmarshal fails without instanceClassName (or a schema set in Java). |
-| **Unmarshal output** | `pojo` | An object of the class instanceClassName names; a GenericRecord when a schema set in Java has no class on the classpath. |
+| **Unmarshal output** | `pojo` | An object of the class instanceClassName names; a GenericRecord when a schema set in Java has no class on the classpath.
+With `instanceClassName` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

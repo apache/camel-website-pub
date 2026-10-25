@@ -84,8 +84,6 @@ from("direct:a")
 
 ## Simple Language options
 
-The Simple Language can be configured globally. However, its seldom needed.
-
 The Simple language supports the following options which are listed below.
 
    
@@ -107,7 +105,11 @@ The message body at each side of the Simple language: _Expression input_ is the 
 | --- | --- | --- |
 | **Expression input** | `any` | 
  |
-| **Expression result** | `unknown` | A text with functions gives text. A single function, such as ${body} or ${header.foo}, gives its value as it is. |
+| **Expression result** | `unknown` | A text with functions gives text. A single function, such as ${body} or ${header.foo}, gives its value as it is.
+
+With `resultType` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

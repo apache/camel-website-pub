@@ -67,6 +67,25 @@ The Protobuf Jackson 3 dataformat supports the following options which are liste
 | **autoDiscoverSchemaResolver** (advanced) | `true` | `Boolean` | When not disabled, the SchemaResolver will be looked up into the registry. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 
+## Message Body
+
+The message body at each side of the Protobuf Jackson 3 data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `map` or `pojo` | A POJO, a Map or a JsonNode to write as the message of the protobuf schema of the schemaResolver. Text, bytes or a stream are not written as they are: marshal fails for them. |
+| **Marshal output** | `stream`, as binary | The protobuf binary data in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | Protobuf binary data of the schema of the schemaResolver. A String fails. |
+| **Unmarshal output** | `map` | A Map (LinkedHashMap) of the fields of the message; with unmarshalType an object of that class, such as JsonNode.
+With `unmarshalType` set: an object of the class it names, or null.
+
+Not known when `collectionType` or `useList` or `allowUnmarshallType` or `allowJmsType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring the `SchemaResolver`

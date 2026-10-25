@@ -67,6 +67,28 @@ The Avro Jackson 3 dataformat supports the following options which are listed be
 | **schemaResolver** (advanced) |  | `String` | Optional schema resolver used to lookup schemas for the data in transit. |
 | **autoDiscoverSchemaResolver** (advanced) | `true` | `Boolean` | When not disabled, the SchemaResolver will be looked up into the registry. |
 
+## Message Body
+
+The message body at each side of the Avro Jackson 3 data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `map`, `list` or `pojo` | A POJO, a Map or a JsonNode to write with the Avro schema of the schemaResolver, or a List for an array schema. A String or bytes are not written as they are. |
+| **Marshal output** | `stream`, as binary | The Avro binary data, without the schema, in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `bytes`, `stream` or `file`, as binary | Avro binary data of the schema of the schemaResolver. A String fails. |
+| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for an Avro record, a List (ArrayList) for an array; with unmarshalType an object of that class, such as JsonNode.
+With `unmarshalType` set: an object of the class it names, or null.
+
+-   With `useList=true`: `list`
+    
+
+Not known when `collectionType` or `useList` or `allowUnmarshallType` or `allowJmsType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring the `SchemaResolver`

@@ -77,11 +77,13 @@ The message body at each side of the Avro Jackson 2 data format: _Marshal input_
 | **Marshal input** | `map`, `list` or `pojo` | A POJO, a Map or a JsonNode to write with the Avro schema of the schemaResolver, or a List for an array schema. A String or bytes are not written as they are. |
 | **Marshal output** | `stream`, as binary | The Avro binary data, without the schema, in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `bytes`, `stream` or `file`, as binary | Avro binary data of the schema of the schemaResolver. A String fails. |
-| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for an Avro record, a List (ArrayList) for an array; an object of the class unmarshalType names, such as JsonNode.
+| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for an Avro record, a List (ArrayList) for an array; with unmarshalType an object of that class, such as JsonNode.
+With `unmarshalType` set: an object of the class it names, or null.
+
 -   With `useList=true`: `list`
     
 
-Not known when `unmarshalType` or `collectionType` or `allowUnmarshallType` or `allowJmsType` is set.
+Not known when `collectionType` or `useList` or `allowUnmarshallType` or `allowJmsType` is set.
 
  |
 

@@ -52,7 +52,7 @@ Number of Non-Core Components: 390 in 317 JAR artifacts (4 deprecated)
     
 | Component | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
-| [A2A](a2a-component.md) | camel-a2a | Stable | 4.21 | A2A endpoint for agent-to-agent communication. |
+| [A2A](a2a-component.md) | camel-a2a | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](activemq-component.md) | camel-activemq | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](activemq6-component.md) | camel-activemq6 | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI](ai-summary.md) |  |  |  |  |
@@ -430,7 +430,7 @@ Number of Non-Core Components: 390 in 317 JAR artifacts (4 deprecated)
 | [weaviate](weaviate-component.md) | camel-weaviate | Stable | 4.12 | Perform operations on the Weaviate Vector Database. |
 | [Web3j Ethereum Blockchain](web3j-component.md) | camel-web3j | Stable | 2.22 | Interact with Ethereum nodes using web3j client API. |
 | [Webhook](webhook-component.md) | camel-webhook | Stable | 3.0 | Expose webhook endpoints to receive push notifications for other Camel components. |
-| [WhatsApp](whatsapp-component.md) | camel-whatsapp | Stable | 3.19 | Send messages to WhatsApp. |
+| [WhatsApp](whatsapp-component.md) | camel-whatsapp | Stable | 3.19 | Send messages to WhatsApp, and receive its events in webhook mode. |
 | [WordPress](wordpress-component.md) | camel-wordpress | Stable | 2.21 | Manage posts and users using the WordPress API. |
 | [Workday](workday-component.md) | camel-workday | Stable | 3.1 | Detect and parse documents using Workday. |
 | [XChange](xchange-component.md) | camel-xchange | Stable | 2.21 | Access market data and trade on Bitcoin and Altcoin exchanges. |

@@ -64,7 +64,16 @@ Not known when `partNamespace` is set.
  |
 | **Marshal output** | `stream`, as xml | The XML in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML: text, bytes, a stream, a file, a DOM Document, a DOMSource or a StreamSource. |
-| **Unmarshal output** | `pojo` | The object of the root element, of a JAXB class of contextPath, or of partClass when set; a JAXBElement, where JAXB gives one, when ignoreJAXBElement is false. |
+| **Unmarshal output** | `pojo` | The object of the root element, of a JAXB class of contextPath, or of partClass when set; a JAXBElement, where JAXB gives one, when ignoreJAXBElement is false.
+
+With `partClass` set: an object of the class it names, or null.
+
+-   With `ignoreJAXBElement=true`: `pojo`, or an object of the class `partClass` names when it is set
+    
+
+Not known when `ignoreJAXBElement` is set.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

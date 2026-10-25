@@ -266,6 +266,8 @@ The message body at each side of the JPA component: _Consumer_ is the body of th
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `pojo` | One entity of the entityType class per message. A query that selects columns gives one row per message: an Object array, or the value of a single column; a nativeQuery gives an Object array unless resultClass is set.
+With `entityType` set: an object of the class it names, or null.
+
 Not known when `query` or `namedQuery` or `nativeQuery` is set.
 
  |
@@ -281,7 +283,7 @@ Not known when `query` or `namedQuery` or `nativeQuery` is set.
 
 -   With `usePersist=true`: `unchanged`
     
--   With `findEntity=true`: `pojo` or `null`
+-   With `findEntity=true`: `pojo` or `null`, or an object of the class `entityType` names when it is set
     
 
 Not known when `query` or `namedQuery` or `nativeQuery` or `outputTarget` is set.

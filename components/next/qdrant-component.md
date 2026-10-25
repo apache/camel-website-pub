@@ -12,6 +12,8 @@ qdrant:collection\[?options\]
 
 Where **collection** represents a named set of points (vectors with a payload) defined in your database.
 
+The `action` option of the endpoint, or the `CamelQdrantAction` header, selects the action, such as `qdrant:myCollection?action=SIMILARITY_SEARCH`. The header, when set, wins over the option, so one endpoint can also run several actions. Without either, the producer fails.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -64,6 +66,31 @@ The Qdrant component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **action** (producer) | 
+The action to perform. The CamelQdrantAction header, when set, wins over this option.
+
+Enum values:
+
+-   CREATE\_COLLECTION
+    
+-   DELETE\_COLLECTION
+    
+-   UPSERT
+    
+-   RETRIEVE
+    
+-   DELETE
+    
+-   COLLECTION\_INFO
+    
+-   SIMILARITY\_SEARCH
+    
+
+
+
+
+
+ |  | QdrantAction |
 | **configuration** (producer) | The configuration;. |  | QdrantConfiguration |
 | **host** (producer) | The host to connect to. | localhost | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -95,6 +122,31 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **action** (producer) | 
+The action to perform. The CamelQdrantAction header, when set, wins over this option.
+
+Enum values:
+
+-   CREATE\_COLLECTION
+    
+-   DELETE\_COLLECTION
+    
+-   UPSERT
+    
+-   RETRIEVE
+    
+-   DELETE
+    
+-   COLLECTION\_INFO
+    
+-   SIMILARITY\_SEARCH
+    
+
+
+
+
+
+ |  | QdrantAction |
 | **host** (producer) | The host to connect to. | localhost | String |
 | **maxResults** (producer) | Max results for similarity search. | 3 | int |
 | **port** (producer) | The port to connect to. | 6334 | int |
@@ -154,8 +206,53 @@ The message body at each side of the Qdrant component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `pojo`, `list` or `null` | By the action in the CamelQdrantAction header: a VectorParams for CREATE\_COLLECTION, a PointStruct or a List of them for UPSERT, a PointId or a List of them for RETRIEVE, a PointsSelector, PointId, Filter or Condition for DELETE, and the query vector as a List of Float, a float array or a PointStruct for SIMILARITY\_SEARCH. DELETE\_COLLECTION and COLLECTION\_INFO do not read the body. Another body fails, such as a number as the id (use PointIdFactory.id) or a List of Double. The qdrant:embeddings data type transformer builds the PointStruct from the output of langchain4j-embeddings. |
-| **Producer output** | `list`, `pojo` or `unchanged` | By the action: a List of RetrievedPoint for RETRIEVE, a List of ScoredPoint for SIMILARITY\_SEARCH and a CollectionInfo for COLLECTION\_INFO. The other actions keep the body, UPSERT and DELETE with the operation id and status in headers. |
+| **Producer input** | `pojo`, `list` or `null` | 
+By the action in the action option or the CamelQdrantAction header: a VectorParams for CREATE\_COLLECTION, a PointStruct or a List of them for UPSERT, a PointId or a List of them for RETRIEVE, a PointsSelector, PointId, Filter or Condition for DELETE, and the query vector as a List of Float, a float array or a PointStruct for SIMILARITY\_SEARCH. DELETE\_COLLECTION and COLLECTION\_INFO do not read the body. Another body fails, such as a number as the id (use PointIdFactory.id) or a List of Double. The qdrant:embeddings data type transformer builds the PointStruct from the output of langchain4j-embeddings.
+
+-   With `action=CREATE_COLLECTION`: `pojo` (`io.qdrant.client.grpc.Collections.VectorParams`)
+    
+-   With `action=DELETE_COLLECTION`: `any`
+    
+-   With `action=UPSERT`: `pojo` or `list`
+    
+-   With `action=RETRIEVE`: `pojo` or `list`
+    
+-   With `action=DELETE`: `pojo`
+    
+-   With `action=SIMILARITY_SEARCH`: `list` or `pojo`
+    
+-   With `action=COLLECTION_INFO`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `list`, `pojo` or `unchanged` | 
+
+By the action: a List of RetrievedPoint for RETRIEVE, a List of ScoredPoint for SIMILARITY\_SEARCH and a CollectionInfo for COLLECTION\_INFO. The other actions keep the body, UPSERT and DELETE with the operation id and status in headers.
+
+-   With `action=CREATE_COLLECTION`: `unchanged`
+    
+-   With `action=DELETE_COLLECTION`: `unchanged`
+    
+-   With `action=UPSERT`: `unchanged`
+    
+-   With `action=RETRIEVE`: `list` (`java.util.List<io.qdrant.client.grpc.Points.RetrievedPoint>`)
+    
+-   With `action=DELETE`: `unchanged`
+    
+-   With `action=SIMILARITY_SEARCH`: `list` (`java.util.List<io.qdrant.client.grpc.Points.ScoredPoint>`)
+    
+-   With `action=COLLECTION_INFO`: `pojo` (`io.qdrant.client.grpc.Collections.CollectionInfo`)
+    
+
+
+
+
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 

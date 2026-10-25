@@ -18,7 +18,7 @@ A `javax.sql.DataSource` must be provided. It is recommended to use a connection
 
 ## Actions
 
-The following actions are supported via the `CamelPgVectorAction` header:
+The `action` option of the endpoint, such as `pgvector:myTable?action=SIMILARITY_SEARCH`, or the `CamelPgVectorAction` header selects the action; the header, when set, wins over the option. Without either, the producer fails. The following actions are supported:
 
 -   `CREATE_TABLE` - Creates the pgvector extension and a table with columns: id, text\_content, metadata, embedding
     
@@ -252,10 +252,34 @@ The PGVector component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **action** (producer) | 
+The action to perform. The CamelPgVectorAction header, when set, wins over this option.
+
+Enum values:
+
+-   CREATE\_TABLE
+    
+-   CREATE\_INDEX
+    
+-   DROP\_TABLE
+    
+-   UPSERT
+    
+-   DELETE
+    
+-   SIMILARITY\_SEARCH
+    
+
+
+
+
+
+ |  | PgVectorAction |
 | **configuration** (producer) | The configuration;. |  | PgVectorConfiguration |
 | **dataSource** (producer) | **Autowired** The DataSource to use for connecting to the PostgreSQL database with pgvector extension. |  | DataSource |
 | **dimension** (producer) | The dimension of the vectors to store. | 384 | int |
 | **distanceType** (producer) | 
+
 The distance type to use for similarity search.
 
 Enum values:
@@ -295,9 +319,33 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **action** (producer) | 
+The action to perform. The CamelPgVectorAction header, when set, wins over this option.
+
+Enum values:
+
+-   CREATE\_TABLE
+    
+-   CREATE\_INDEX
+    
+-   DROP\_TABLE
+    
+-   UPSERT
+    
+-   DELETE
+    
+-   SIMILARITY\_SEARCH
+    
+
+
+
+
+
+ |  | PgVectorAction |
 | **dataSource** (producer) | **Autowired** The DataSource to use for connecting to the PostgreSQL database with pgvector extension. |  | DataSource |
 | **dimension** (producer) | The dimension of the vectors to store. | 384 | int |
 | **distanceType** (producer) | 
+
 The distance type to use for similarity search.
 
 Enum values:
@@ -360,7 +408,48 @@ The message body at each side of the PGVector component: _Consumer_ is the body 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `list` or `null` | By the action in the CamelPgVectorAction header: the vector as a List of Float or a float array for UPSERT and SIMILARITY\_SEARCH, with the id, text and metadata of UPSERT in headers. CREATE\_TABLE, CREATE\_INDEX, DROP\_TABLE and DELETE do not read the body, DELETE takes the id from the CamelPgVectorRecordId header. Another body fails, a List of Double too: the pgvector:embeddings data type transformer builds the vector from the output of langchain4j-embeddings. |
-| **Producer output** | `value`, `text` or `list` | By the action: a Boolean for CREATE\_TABLE, CREATE\_INDEX, DROP\_TABLE and DELETE (false when no record had the id), the record id as a String for UPSERT, and a List of Map with the keys id, text\_content, metadata and distance for SIMILARITY\_SEARCH. |
+| **Producer input** | `list` or `null` | 
+By the action in the action option or the CamelPgVectorAction header: the vector as a List of Float or a float array for UPSERT and SIMILARITY\_SEARCH, with the id, text and metadata of UPSERT in headers. CREATE\_TABLE, CREATE\_INDEX, DROP\_TABLE and DELETE do not read the body, DELETE takes the id from the CamelPgVectorRecordId header. Another body fails, a List of Double too: the pgvector:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
+
+-   With `action=UPSERT`: `list`
+    
+-   With `action=SIMILARITY_SEARCH`: `list`
+    
+-   With `action=CREATE_TABLE`: `any`
+    
+-   With `action=CREATE_INDEX`: `any`
+    
+-   With `action=DROP_TABLE`: `any`
+    
+-   With `action=DELETE`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `value`, `text` or `list` | 
+
+By the action: a Boolean for CREATE\_TABLE, CREATE\_INDEX, DROP\_TABLE and DELETE (false when no record had the id), the record id as a String for UPSERT, and a List of Map with the keys id, text\_content, metadata and distance for SIMILARITY\_SEARCH.
+
+-   With `action=CREATE_TABLE`: `value` (`java.lang.Boolean`)
+    
+-   With `action=CREATE_INDEX`: `value` (`java.lang.Boolean`)
+    
+-   With `action=DROP_TABLE`: `value` (`java.lang.Boolean`)
+    
+-   With `action=DELETE`: `value` (`java.lang.Boolean`)
+    
+-   With `action=UPSERT`: `text` (`java.lang.String`)
+    
+-   With `action=SIMILARITY_SEARCH`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+
+
+
+
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).

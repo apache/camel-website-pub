@@ -41,7 +41,10 @@ The message body at each side of the MVEL language: _Expression input_ is the bo
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression input** | `any` | The body as it is, in request.body or message.body: there is no variable body. |
-| **Expression result** | `unknown` | What the expression returns. |
+| **Expression result** | `unknown` | What the expression returns.
+With `resultType` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

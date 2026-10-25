@@ -70,6 +70,30 @@ The Jackson XML 3 dataformat supports the following options which are listed bel
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **maxStringLength** (advanced) |  | `Integer` | Maximum allowed string length when deserializing (in chars or bytes, depending on input context). The default is 20,000,000. |
 
+## Message Body
+
+The message body at each side of the Jackson XML 3 data format: _Marshal input_ and _Unmarshal input_ are the bodies marshal and unmarshal can take, and _Marshal output_ and _Unmarshal output_ the body after them.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Marshal input** | `any` | A Map, a List or a POJO to write as XML. Text is written as an XML value, not as it is. |
+| **Marshal output** | `stream`, as xml | The XML in the stream cache, or a byte array when stream caching is off. |
+| **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as xml | 
+ |
+| **Unmarshal output** | `map` | A Map (LinkedHashMap) of the XML.
+
+With `unmarshalType` set: an object of the class it names, or null.
+
+-   With `useList=true`: `list`
+    
+
+Not known when `collectionType` or `useList` or `allowUnmarshallType` or `allowJmsType` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Using Jackson XML in Spring DSL

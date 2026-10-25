@@ -139,17 +139,19 @@ Camel events can now be serialized to JSON (`asJSon()` / `toJSon()`), with struc
 
 ## Semantic EIPs
 
-The new [Semantic](../../../../components/next/languages/semantic-language.md) language lets a route make decisions on the meaning of a message. You declare named evaluations once, and then use them anywhere Camel accepts an expression or predicate:
+The new [Semantic](../../../../components/next/languages/semantic-language.md) language lets a route make decisions on the meaning of a message. You declare named evaluations once, and then use them anywhere Camel accepts an expression or predicate. Each evaluation names its _expert_, here a bean registered with `camel.beans.decisions=#class:org.apache.camel.component.typesafeai.TypeSafeAiSemanticAdapter`:
 
 ```yaml
 - semantic:
     evaluation:
       department:
+        expert: decisions
         type: choice
-        instructions: Which department should handle this message?
-        criteria:
-          billing: Invoices, payments and refunds
-          technical: Bugs, outages and technical problems
+        parameters:
+          instructions: Which department should handle this message?
+          criteria:
+            billing: Invoices, payments and refunds
+            technical: Bugs, outages and technical problems
 - route:
     from:
       uri: direct:tickets

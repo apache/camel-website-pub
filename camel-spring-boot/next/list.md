@@ -874,7 +874,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
     
 | Component | Artifact | Support Level | Since | Description |
 | --- | --- | --- | --- | --- |
-| [A2A](../../components/next/a2a-component.md) | camel-a2a-starter | Stable | 4.21 | A2A endpoint for agent-to-agent communication. |
+| [A2A](../../components/next/a2a-component.md) | camel-a2a-starter | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](../../components/next/activemq-component.md) | camel-activemq-starter | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](../../components/next/activemq6-component.md) | camel-activemq6-starter | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI Resource](../../components/next/ai-resource-component.md) | camel-ai-resource-starter | Preview | 4.23 | Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry. |
@@ -1266,7 +1266,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [weaviate](../../components/next/weaviate-component.md) | camel-weaviate-starter | Stable | 4.12 | Perform operations on the Weaviate Vector Database. |
 | [Web3j Ethereum Blockchain](../../components/next/web3j-component.md) | camel-web3j-starter | Stable | 2.22 | Interact with Ethereum nodes using web3j client API. |
 | [Webhook](../../components/next/webhook-component.md) | camel-webhook-starter | Stable | 3.0 | Expose webhook endpoints to receive push notifications for other Camel components. |
-| [WhatsApp](../../components/next/whatsapp-component.md) | camel-whatsapp-starter | Stable | 3.19 | Send messages to WhatsApp. |
+| [WhatsApp](../../components/next/whatsapp-component.md) | camel-whatsapp-starter | Stable | 3.19 | Send messages to WhatsApp, and receive its events in webhook mode. |
 | [WordPress](../../components/next/wordpress-component.md) | camel-wordpress-starter | Stable | 2.21 | Manage posts and users using the WordPress API. |
 | [Workday](../../components/next/workday-component.md) | camel-workday-starter | Stable | 3.1 | Detect and parse documents using Workday. |
 | [XChange](../../components/next/xchange-component.md) | camel-xchange-starter | Stable | 2.21 | Access market data and trade on Bitcoin and Altcoin exchanges. |

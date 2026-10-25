@@ -78,12 +78,14 @@ The message body at each side of the JSON Jackson 2 data format: _Marshal input_
 | **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
  |
-| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for a JSON object, a List (ArrayList) for an array; an object of the class unmarshalType names.
+| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for a JSON object, a List (ArrayList) for an array.
+
+With `unmarshalType` set: an object of the class it names, or null.
 
 -   With `useList=true`: `list`
     
 
-Not known when `unmarshalType` or `collectionType` or `allowUnmarshallType` or `allowJmsType` is set.
+Not known when `collectionType` or `useList` or `allowUnmarshallType` or `allowJmsType` is set.
 
  |
 

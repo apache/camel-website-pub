@@ -26,7 +26,7 @@ The message body at each side of the Constant language: _Expression input_ is th
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression result** | `text` (`java.lang.String`) | The text as it is written; resource:classpath:name loads the text of the resource.
-Not known when `resultType` is set.
+With `resultType` set: an object of the class it names, or null.
 
  |
 

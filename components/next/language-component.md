@@ -185,17 +185,15 @@ The message body at each side of the Language component: _Consumer_ is the body 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | The body as the language of the script reads it. The script is in the uri, the script option or a resource, or in the CamelLanguageScript header with allowTemplateFromHeader=true, and never in the body. |
-| **Producer output** | `unknown` | 
-The result of the script, as the language gives it. Unchanged with transform=false. With binary=true the content of the resource as a stream, which is not evaluated.
+| **Producer output** | `unknown` | The result of the script, as the language gives it. Unchanged with transform=false. With binary=true the content of the resource as a stream, which is not evaluated.
+With `resultType` set: an object of the class it names, or null.
 
 -   With `transform=false`: `unchanged`
     
 -   With `binary=true`: `stream`
     
 
-
-
-
+Not known when `transform` or `binary` is set.
 
  |
 

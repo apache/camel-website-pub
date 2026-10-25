@@ -21,6 +21,8 @@ neo4j:name\[?options\]
 
 Where **name** is the database name.
 
+The `operation` option of the endpoint, or the `CamelNeo4jOperation` header, selects the operation, such as `neo4j:test?operation=RETRIEVE_NODES`. The header, when set, wins over the option, so one endpoint can also run several operations. Without either, the producer fails.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -82,8 +84,38 @@ The Neo4j component supports the following options which are listed below.
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **maxResults** (producer) | Maximum results for Vector Similarity search. | 3 | int |
 | **minScore** (producer) | Minimum score for Vector Similarity search. | 0 | double |
+| **operation** (producer) | 
+The operation to perform. The CamelNeo4jOperation header, when set, wins over this option.
+
+Enum values:
+
+-   CREATE\_NODE
+    
+-   DELETE\_NODE
+    
+-   RETRIEVE\_NODES
+    
+-   RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY
+    
+-   ADD\_OR\_DELETE\_NODE\_WITH\_CYPHER\_QUERY
+    
+-   CREATE\_VECTOR\_INDEX
+    
+-   DROP\_VECTOR\_INDEX
+    
+-   CREATE\_VECTOR
+    
+-   VECTOR\_SIMILARITY\_SEARCH
+    
+
+
+
+
+
+ |  | Neo4Operation |
 | **query** (producer) | Cypher Query. |  | String |
 | **similarityFunction** (producer) | 
+
 Similarity Function of Vector Index.
 
 Enum values:
@@ -134,8 +166,38 @@ With the following _path_ and _query_ parameters:
 | **label** (producer) | Node Label. |  | String |
 | **maxResults** (producer) | Maximum results for Vector Similarity search. | 3 | int |
 | **minScore** (producer) | Minimum score for Vector Similarity search. | 0 | double |
+| **operation** (producer) | 
+The operation to perform. The CamelNeo4jOperation header, when set, wins over this option.
+
+Enum values:
+
+-   CREATE\_NODE
+    
+-   DELETE\_NODE
+    
+-   RETRIEVE\_NODES
+    
+-   RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY
+    
+-   ADD\_OR\_DELETE\_NODE\_WITH\_CYPHER\_QUERY
+    
+-   CREATE\_VECTOR\_INDEX
+    
+-   DROP\_VECTOR\_INDEX
+    
+-   CREATE\_VECTOR
+    
+-   VECTOR\_SIMILARITY\_SEARCH
+    
+
+
+
+
+
+ |  | Neo4Operation |
 | **query** (producer) | Cypher Query. |  | String |
 | **similarityFunction** (producer) | 
+
 Similarity Function of Vector Index.
 
 Enum values:
@@ -214,8 +276,61 @@ The message body at each side of the Neo4j component: _Consumer_ is the body of 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | What the operation of the CamelNeo4jOperation header needs: CREATE\_NODE the properties of the node as a Map or as JSON text (bytes, a stream, a POJO or no body fail); the two Cypher operations the query as text (bytes or a stream are read as text); CREATE\_VECTOR a Neo4jEmbedding, or the text with the float\[\] vector in the CamelLangChain4jEmbeddingsVector header; VECTOR\_SIMILARITY\_SEARCH a Neo4jEmbedding, a float\[\] or a List of Float. The other operations do not use the body. |
-| **Producer output** | `list` or `unchanged` | RETRIEVE\_NODES, RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY and VECTOR\_SIMILARITY\_SEARCH give a List of Maps, the properties of each node found (empty when none; the first column a Cypher query returns must be a node), with the Records of the driver in the CamelNeo4jQueryResultListNeo4jNodes header. The other operations leave the body unchanged, with the counts in the CamelNeo4jQueryResult headers. |
+| **Producer input** | `any` | 
+What the operation of the operation option or the CamelNeo4jOperation header needs: CREATE\_NODE the properties of the node as a Map or as JSON text (bytes, a stream, a POJO or no body fail); the two Cypher operations the query as text (bytes or a stream are read as text); CREATE\_VECTOR a Neo4jEmbedding, or the text with the float\[\] vector in the CamelLangChain4jEmbeddingsVector header; VECTOR\_SIMILARITY\_SEARCH a Neo4jEmbedding, a float\[\] or a List of Float. The other operations do not use the body.
+
+-   With `operation=CREATE_NODE`: `map` or `text`
+    
+-   With `operation=RETRIEVE_NODES_AND_UPDATE_WITH_CYPHER_QUERY`: `text`
+    
+-   With `operation=ADD_OR_DELETE_NODE_WITH_CYPHER_QUERY`: `text`
+    
+-   With `operation=CREATE_VECTOR`: `pojo` or `text`
+    
+-   With `operation=VECTOR_SIMILARITY_SEARCH`: `pojo` or `list`
+    
+-   With `operation=DELETE_NODE`: `any`
+    
+-   With `operation=RETRIEVE_NODES`: `any`
+    
+-   With `operation=CREATE_VECTOR_INDEX`: `any`
+    
+-   With `operation=DROP_VECTOR_INDEX`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `list` or `unchanged` | 
+
+RETRIEVE\_NODES, RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY and VECTOR\_SIMILARITY\_SEARCH give a List of Maps, the properties of each node found (empty when none; the first column a Cypher query returns must be a node), with the Records of the driver in the CamelNeo4jQueryResultListNeo4jNodes header. The other operations leave the body unchanged, with the counts in the CamelNeo4jQueryResult headers.
+
+-   With `operation=RETRIEVE_NODES`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `operation=RETRIEVE_NODES_AND_UPDATE_WITH_CYPHER_QUERY`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `operation=VECTOR_SIMILARITY_SEARCH`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `operation=CREATE_NODE`: `unchanged`
+    
+-   With `operation=DELETE_NODE`: `unchanged`
+    
+-   With `operation=ADD_OR_DELETE_NODE_WITH_CYPHER_QUERY`: `unchanged`
+    
+-   With `operation=CREATE_VECTOR_INDEX`: `unchanged`
+    
+-   With `operation=DROP_VECTOR_INDEX`: `unchanged`
+    
+-   With `operation=CREATE_VECTOR`: `unchanged`
+    
+
+
+
+
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
@@ -305,7 +420,7 @@ Exchange result = fluentTemplate.to("neo4j:test?alias=u&label=User&detachRelatio
 
 ### The operations in a route
 
-In a route, the `CamelNeo4jOperation` header selects the operation. The first route below creates a node from a JSON body, and the second finds the nodes whose `name` is the message body:
+In a route, the `operation` option or the `CamelNeo4jOperation` header selects the operation. The first route below creates a node from a JSON body, and the second finds the nodes whose `name` is the message body:
 
 ```yaml
 - route:

@@ -347,10 +347,10 @@ from("direct:rome")
 The postgres-sink Kamelet can also be configured in `application.properties` which reduces the configuration in the route above:
 
 ```properties
-camel.component.kamelet.postgresql-sink.databaseName={{secret:mydb/myhost}}
-camel.component.kamelet.postgresql-sink.serverPort={{secret:mydb/myport}}
-camel.component.kamelet.postgresql-sink.username={{secret:mydb/myuser}}
-camel.component.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
+camel.kamelet.postgresql-sink.databaseName={{secret:mydb/myhost}}
+camel.kamelet.postgresql-sink.serverPort={{secret:mydb/myport}}
+camel.kamelet.postgresql-sink.username={{secret:mydb/myuser}}
+camel.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
 ```
 
 Which reduces the route to:

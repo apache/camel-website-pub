@@ -520,10 +520,10 @@ from("direct:rome")
 The postgres-sink Kamelet can also be configured in `application.properties` which reduces the configuration in the route above:
 
 ```properties
-camel.component.kamelet.postgresql-sink.databaseName={{secret:mydb/myhost}}
-camel.component.kamelet.postgresql-sink.serverPort={{secret:mydb/myport}}
-camel.component.kamelet.postgresql-sink.username={{secret:mydb/myuser}}
-camel.component.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
+camel.kamelet.postgresql-sink.databaseName={{secret:mydb/myhost}}
+camel.kamelet.postgresql-sink.serverPort={{secret:mydb/myport}}
+camel.kamelet.postgresql-sink.username={{secret:mydb/myuser}}
+camel.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
 ```
 
 Which reduces the route to:
@@ -576,10 +576,10 @@ During development, you may want to run in _local mode_ where you do not need ac
 For example the example above with the Postgres kamelet, that was configured using a secret:
 
 ```properties
-camel.component.kamelet.postgresql-sink.databaseName={{secret:mydb/myhost}}
-camel.component.kamelet.postgresql-sink.serverPort={{secret:mydb/myport}}
-camel.component.kamelet.postgresql-sink.username={{secret:mydb/myuser}}
-camel.component.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
+camel.kamelet.postgresql-sink.databaseName={{secret:mydb/myhost}}
+camel.kamelet.postgresql-sink.serverPort={{secret:mydb/myport}}
+camel.kamelet.postgresql-sink.username={{secret:mydb/myuser}}
+camel.kamelet.postgresql-sink.password={{secret:mydb/mypass}}
 ```
 
 Now suppose we have a local Postgres database we want to use, then we can turn on _local mode_ and specify the credentials in the same properties file:

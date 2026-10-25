@@ -105,6 +105,33 @@ The TypeSafe AI language supports the following options which are listed below.
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+### Configuring the language
+
+The TypeSafe AI language itself has the following options, which apply to all its expressions. You set them in a configuration file such as `application.properties`, with the option name after the `camel.language.typesafe-ai.` prefix.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **endpoint** (common) | `typesafe-ai:default` | `String` | The typesafe-ai endpoint that evaluates the questions. It inherits the camel.component.typesafe-ai settings. |
+| **threshold** (common) |  | `Number` | Inclusive matching threshold. Falls back to the endpoint threshold. |
+| **uncertainty** (common) |  | `Number` | Half-width of the inclusive uncertainty band. Falls back to the endpoint uncertainty. |
+| **uncertaintyPolicy** (common) |  | `Enum` | 
+Whether an uncertain decision is a non-match or fails. Falls back to the endpoint uncertaintyPolicy.
+
+Enum values:
+
+-   NonMatch
+    
+-   Fail
+    
+
+
+
+
+
+ |
+| **state** (common) |  | `String` | Simple expression selecting state to submit. Falls back to the endpoint state expression. |
+
 ## Message Body
 
 The message body at each side of the TypeSafe AI language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.

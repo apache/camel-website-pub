@@ -54,9 +54,11 @@ Not known when `contentTypeFormat` is set.
  |
 | **Unmarshal output** | `pojo` (`org.apache.thrift.TBase`) | An object of the class instanceClass names: unmarshal fails without it.
 
--   With `contentTypeFormat=binary`: `pojo` (`org.apache.thrift.TBase`)
+With `instanceClass` set: an object of the class it names, or null.
+
+-   With `contentTypeFormat=binary`: `pojo` (`org.apache.thrift.TBase`), or an object of the class `instanceClass` names when it is set
     
--   With `contentTypeFormat=json`: `pojo` (`org.apache.thrift.TBase`)
+-   With `contentTypeFormat=json`: `pojo` (`org.apache.thrift.TBase`), or an object of the class `instanceClass` names when it is set
     
 
 Not known when `contentTypeFormat` is set.

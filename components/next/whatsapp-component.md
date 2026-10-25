@@ -2,7 +2,7 @@
 
 **Since Camel 3.19**
 
-**Only producer is supported**
+**Both producer and consumer are supported**
 
 The WhatsApp component provides access to the [WhatsApp Cloud API](https://developers.facebook.com/docs/whatsapp/cloud-api). It allows a Camel-based application to send messages using a cloud-hosted version of the WhatsApp Business Platform.
 
@@ -75,8 +75,9 @@ The WhatsApp component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **phoneNumberId** (common) | **Required** Phone Number ID taken from WhatsApp Meta for Developers Dashboard. |  | String |
+| **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **phoneNumberId** (producer) | **Required** Phone Number ID taken from WhatsApp Meta for Developers Dashboard. |  | String |
 | **apiVersion** (advanced) | WhatsApp Cloud API version. | v13.0 | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **baseUri** (advanced) | Can be used to set an alternative base URI, e.g. when you want to test the component against a mock WhatsApp API. | [https://graph.facebook.com](https://graph.facebook.com) | String |
@@ -97,13 +98,30 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **phoneNumberId** (producer) | **Required** The phone number ID taken from whatsapp-business dashboard. |  | String |
+| **phoneNumberId** (common) | **Required** The phone number ID taken from whatsapp-business dashboard. |  | String |
 
 ### Query Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
+| **exchangePattern** (consumer (advanced)) | 
+Sets the exchange pattern when the consumer creates an exchange.
+
+Enum values:
+
+-   InOnly
+    
+-   InOut
+    
+
+
+
+
+
+ |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **apiVersion** (advanced) | Facebook graph api version. |  | String |
 | **baseUri** (advanced) | Can be used to set an alternative base URI, e.g. when you want to test the component against a mock WhatsApp API. |  | String |
@@ -131,6 +149,8 @@ The message body at each side of the WhatsApp component: _Consumer_ is the body 
   
 | Side | Body | Description |
 | --- | --- | --- |
+| **Consumer** | `text` or `null` | In webhook mode (webhook:whatsapp:…​), the event that WhatsApp posts, as JSON text. The verification request of WhatsApp (a GET) also reaches the route, with the hub.challenge as the body when hub.mode is subscribe and hub.verify\_token matches webhookVerifyToken, else with no body (403, or 400 when the parameters are missing). With webhookSecret, an event without a valid X-Hub-Signature-256 is answered with 403 and does not reach the route. |
+| **Consumer reply** | `any` | The body at the end of the route is not sent: the reply is the body the route got, the event or the hub.challenge. |
 | **Producer input** | `pojo` or `null` | A request of org.apache.camel.component.whatsapp.model: a TextMessageRequest, MediaMessageRequest, LocationMessageRequest, ContactMessageRequest, InteractiveMessageRequest or TemplateMessageRequest to send a message, or an UploadMediaRequest to upload a media file. Text, bytes, a Map or another POJO fails: build the request. No body sends nothing. |
 | **Producer output** | `pojo` or `unchanged` | The org.apache.camel.component.whatsapp.model.MessageResponse of WhatsApp, with the ids of the messages sent, or the id of the media uploaded. No body is left as it is. |
 

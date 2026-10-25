@@ -29,7 +29,7 @@ Not known when `source` is set.
  |
 | **Expression result** | `text` or `null` (`java.lang.String`) | The value of the field as text, null when the field is empty.
 
-Not known when `resultType` is set.
+With `resultType` set: an object of the class it names, or null.
 
  |
 

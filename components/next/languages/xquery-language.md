@@ -20,6 +20,15 @@ The XQuery language supports the following options which are listed below.
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+### Configuring the language
+
+The XQuery language itself has the following options, which apply to all its expressions. You set them in a configuration file such as `application.properties`, with the option name after the `camel.language.xquery.` prefix.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **configuration** (advanced) |  | `Object` | To use an existing Saxon configuration, instead of default settings. |
+
 ## Message Body
 
 The message body at each side of the XQuery language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
@@ -33,7 +42,7 @@ Not known when `source` is set.
  |
 | **Expression result** | `pojo` (`org.w3c.dom.Document`) | The result of the query as a DOM Document. A query that gives text, a number or more than one element fails unless resultType is java.lang.String.
 
-Not known when `resultType` is set.
+With `resultType` set: an object of the class it names, or null.
 
  |
 

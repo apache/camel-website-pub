@@ -59,9 +59,9 @@ The message body at each side of the JSON Fastjson data format: _Marshal input_ 
 | **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
  |
-| **Unmarshal output** | `map` or `list` | A Map (fastjson JSONObject) for a JSON object, a List (JSONArray) for an array; an object of the class unmarshalType names.
+| **Unmarshal output** | `map` or `list` | A Map (fastjson JSONObject) for a JSON object, a List (JSONArray) for an array.
 
-Not known when `unmarshalType` is set.
+With `unmarshalType` set: an object of the class it names, or null.
 
  |
 

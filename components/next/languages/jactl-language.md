@@ -29,7 +29,10 @@ The message body at each side of the Jactl language: _Expression input_ is the b
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression input** | `any` | The body as it is, in the variable body. Without host access a script uses text, a number, bytes, a Map or a List, not the methods of other objects: JSON text is not parsed. |
-| **Expression result** | `unknown` | What the script returns. |
+| **Expression result** | `unknown` | What the script returns.
+With `resultType` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

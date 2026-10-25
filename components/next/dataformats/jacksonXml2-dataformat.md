@@ -81,12 +81,14 @@ The message body at each side of the Jackson XML 2 data format: _Marshal input_ 
 | **Marshal output** | `stream`, as xml | The XML in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as xml | 
  |
-| **Unmarshal output** | `map` | A Map (LinkedHashMap) of the XML; an object of the class unmarshalType names.
+| **Unmarshal output** | `map` | A Map (LinkedHashMap) of the XML.
+
+With `unmarshalType` set: an object of the class it names, or null.
 
 -   With `useList=true`: `list`
     
 
-Not known when `unmarshalType` or `collectionType` or `allowUnmarshallType` or `allowJmsType` is set.
+Not known when `collectionType` or `useList` or `allowUnmarshallType` or `allowJmsType` is set.
 
  |
 

@@ -21,25 +21,8 @@ The message body at each side of the Convert Body To EIP: _EIP input_ is the bod
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **EIP output** | `unknown` | 
-An object of the type the type option names; null when there is no conversion and mandatory is false.
-
--   With `type=String`: `text` (`java.lang.String`)
-    
--   With `type=java.lang.String`: `text` (`java.lang.String`)
-    
--   With `type=byte[]`: `bytes` (`byte[]`)
-    
--   With `type=java.io.InputStream`: `stream` (`java.io.InputStream`)
-    
--   With `type=java.util.Map`: `map` (`java.util.Map`)
-    
--   With `type=java.util.List`: `list` (`java.util.List`)
-    
-
-
-
-
+| **EIP output** | `unknown` | An object of the type the type option names; null when there is no conversion and mandatory is false.
+With `type` set: an object of the class it names, or null.
 
  |
 

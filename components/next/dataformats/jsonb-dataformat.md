@@ -60,9 +60,11 @@ The message body at each side of the JSON JSON-B data format: _Marshal input_ an
 | **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
  |
-| **Unmarshal output** | `map` or `list` | A Map (HashMap with Yasson) for a JSON object, a List (ArrayList) for an array, with the numbers as BigDecimal; an object of the class unmarshalType names.
+| **Unmarshal output** | `map` or `list` | A Map (HashMap with Yasson) for a JSON object, a List (ArrayList) for an array, with the numbers as BigDecimal.
 
-Not known when `unmarshalType` or `allowUnmarshallType` is set.
+With `unmarshalType` set: an object of the class it names, or null.
+
+Not known when `allowUnmarshallType` is set.
 
  |
 

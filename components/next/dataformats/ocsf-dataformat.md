@@ -242,10 +242,12 @@ The message body at each side of the OCSF data format: _Marshal input_ and _Unma
  |
 | **Unmarshal output** | `pojo` (`org.apache.camel.dataformat.ocsf.model.OcsfEvent`) | The base OcsfEvent; an object of the class unmarshalType names, such as DetectionFinding.
 
+With `unmarshalType` set: an object of the class it names, or null.
+
 -   With `useList=true`: `list`
     
 
-Not known when `unmarshalType` or `collectionType` or `allowUnmarshallType` is set.
+Not known when `collectionType` or `useList` or `allowUnmarshallType` is set.
 
  |
 

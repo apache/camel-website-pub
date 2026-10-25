@@ -39,9 +39,11 @@ The message body at each side of the DataSonnet language: _Expression input_ is 
 Not known when `bodyMediaType` or `source` is set.
 
  |
-| **Expression result** | `pojo` or `null` (`com.datasonnet.document.Document`) | A Document with the result: a Java object, or text in outputMediaType when it is set, and null when the result is null. With resultType, the result converted to that type.
+| **Expression result** | `pojo` or `null` (`com.datasonnet.document.Document`) | A Document with the result: a Java object, or text in outputMediaType when it is set, and null when the result is null.
 
-Not known when `resultType` or `outputMediaType` is set.
+With `resultType` set: an object of the class it names, or null.
+
+Not known when `outputMediaType` is set.
 
  |
 

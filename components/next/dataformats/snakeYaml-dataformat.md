@@ -56,7 +56,7 @@ The message body at each side of the YAML SnakeYAML data format: _Marshal input_
  |
 | **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for a mapping, a List (ArrayList) for a sequence; a document that is a single value gives that value.
 
-Not known when `unmarshalType` is set.
+With `unmarshalType` set: an object of the class it names, or null.
 
  |
 

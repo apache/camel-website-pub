@@ -323,26 +323,32 @@ The message body at each side of the SQL component: _Consumer_ is the body of th
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `map` (`java.util.Map<String, Object>`) | A row of the query: a Map of the column names and their values.
+| **Consumer** | `map` (`java.util.Map<String, Object>`) | A row of the query: a Map of the column names and their values, or an object of outputClass; with useIterator=false the List of them.
+With `outputClass` set: an object of the class it names, or null.
+
+-   With `useIterator=true`: `map` (`java.util.Map<String, Object>`), or an object of the class `outputClass` names when it is set
+    
 -   With `useIterator=false`: `list`
     
--   With `outputType=SelectOne`: `map` or `value`
+-   With `outputType=SelectList`: `map` (`java.util.Map<String, Object>`), or an object of the class `outputClass` names when it is set
+    
+-   With `outputType=SelectOne`: `map` or `value`, or an object of the class `outputClass` names when it is set
     
 -   With `outputType=StreamList`: `iterator`
     
 
-Not known when `outputClass` or `outputHeader` is set.
+Not known when `outputHeader` or `useIterator` or `outputType` is set.
 
  |
 | **Producer input** | `any` | The parameters of the query: a Map for the named ones, a List or an array for the # ones; the query itself with useMessageBodyForSql. |
-| **Producer output** | `list` or `unchanged` | The rows of a select: a List of Maps of the column names and their values. A query that is not a select leaves the body unchanged, with the count in the CamelSqlUpdateCount header.
+| **Producer output** | `list` or `unchanged` | The rows of a select: a List of Maps of the column names and their values (objects of outputClass when set). A query that is not a select leaves the body unchanged, with the count in the CamelSqlUpdateCount header.
 
--   With `outputType=SelectOne`: `map`, `value` or `null`
+-   With `outputType=SelectOne`: `map`, `value` or `null`, or an object of the class `outputClass` names when it is set
     
 -   With `outputType=StreamList`: `iterator`
     
 
-Not known when `outputClass` or `outputHeader` or `noop` is set.
+Not known when `outputHeader` or `noop` is set.
 
  |
 

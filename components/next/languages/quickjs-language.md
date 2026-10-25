@@ -23,6 +23,16 @@ The QuickJS language supports the following options which are listed below.
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+### Configuring the language
+
+The QuickJS language itself has the following options, which apply to all its expressions. You set them in a configuration file such as `application.properties`, with the option name after the `camel.language.quickjs.` prefix.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **engineMaxMemory** (advanced) | `67108864` | `Integer` | Recycle a worker thread’s engine once its WebAssembly memory exceeds this many bytes (default 64 MB). |
+| **engineMaxEvaluations** (advanced) | `50000` | `Integer` | Recycle a worker thread’s engine after this many evaluations. |
+
 ## Message Body
 
 The message body at each side of the QuickJS language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.
@@ -32,7 +42,7 @@ The message body at each side of the QuickJS language: _Expression input_ is the
 | --- | --- | --- |
 | **Expression input** | `text`, `bytes`, `value`, `map`, `list` or `pojo` | A JSON copy of the body, in the variable body: bytes as Base64 text, and a POJO through Jackson. A stream fails: convert it to text first. |
 | **Expression result** | `text`, `value`, `map`, `list` or `null` | The JSON value the script returns: an object or a Map as a Map, an array, a Set or a typed array as a List, a Date as its ISO text, and undefined, NaN or a function as null.
-Not known when `resultType` is set.
+With `resultType` set: an object of the class it names, or null.
 
  |
 

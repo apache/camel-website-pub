@@ -12,6 +12,8 @@ milvus:collection\[?options\]
 
 Where **collection** represents a named set of points (vectors with a payload) defined in your database.
 
+The `action` option of the endpoint, or the `CamelMilvusAction` header, selects the action, such as `milvus:myCollection?action=SEARCH`. The header, when set, wins over the option, so one endpoint can also run several actions. Without either, the producer fails.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -64,6 +66,31 @@ The Milvus component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **action** (producer) | 
+The action to perform. The CamelMilvusAction header, when set, wins over this option.
+
+Enum values:
+
+-   CREATE\_COLLECTION
+    
+-   CREATE\_INDEX
+    
+-   UPSERT
+    
+-   INSERT
+    
+-   SEARCH
+    
+-   QUERY
+    
+-   DELETE
+    
+
+
+
+
+
+ |  | MilvusAction |
 | **configuration** (producer) | The configuration;. |  | MilvusConfiguration |
 | **host** (producer) | The host to connect to. | localhost | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -92,6 +119,31 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **action** (producer) | 
+The action to perform. The CamelMilvusAction header, when set, wins over this option.
+
+Enum values:
+
+-   CREATE\_COLLECTION
+    
+-   CREATE\_INDEX
+    
+-   UPSERT
+    
+-   INSERT
+    
+-   SEARCH
+    
+-   QUERY
+    
+-   DELETE
+    
+
+
+
+
+
+ |  | MilvusAction |
 | **host** (producer) | The host to connect to. | localhost | String |
 | **port** (producer) | The port to connect to. | 19530 | int |
 | **timeout** (producer) | Sets a default timeout for all requests. |  | long |
@@ -145,8 +197,53 @@ The message body at each side of the Milvus component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `pojo` | The request of the Milvus SDK for the action in the CamelMilvusAction header: a CreateCollectionParam, CreateIndexParam, InsertParam, UpsertParam, SearchSimpleParam, QueryParam or DeleteParam. Another body fails, a vector as a List too: the milvus:embeddings data type transformer builds the InsertParam or UpsertParam from the output of langchain4j-embeddings. |
-| **Producer output** | `pojo` | The result of the Milvus SDK for the action: an RpcStatus for CREATE\_COLLECTION and CREATE\_INDEX, a MutationResult for INSERT, UPSERT and DELETE, a SearchResponse for SEARCH and a QueryResults for QUERY. |
+| **Producer input** | `pojo` | 
+The request of the Milvus SDK for the action in the action option or the CamelMilvusAction header: a CreateCollectionParam, CreateIndexParam, InsertParam, UpsertParam, SearchSimpleParam, QueryParam or DeleteParam. Another body fails, a vector as a List too: the milvus:embeddings data type transformer builds the InsertParam or UpsertParam from the output of langchain4j-embeddings.
+
+-   With `action=CREATE_COLLECTION`: `pojo` (`io.milvus.param.collection.CreateCollectionParam`)
+    
+-   With `action=CREATE_INDEX`: `pojo` (`io.milvus.param.index.CreateIndexParam`)
+    
+-   With `action=UPSERT`: `pojo` (`io.milvus.param.dml.UpsertParam`)
+    
+-   With `action=INSERT`: `pojo` (`io.milvus.param.dml.InsertParam`)
+    
+-   With `action=SEARCH`: `pojo` (`io.milvus.param.highlevel.dml.SearchSimpleParam`)
+    
+-   With `action=QUERY`: `pojo` (`io.milvus.param.dml.QueryParam`)
+    
+-   With `action=DELETE`: `pojo` (`io.milvus.param.dml.DeleteParam`)
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The result of the Milvus SDK for the action: an RpcStatus for CREATE\_COLLECTION and CREATE\_INDEX, a MutationResult for INSERT, UPSERT and DELETE, a SearchResponse for SEARCH and a QueryResults for QUERY.
+
+-   With `action=CREATE_COLLECTION`: `pojo` (`io.milvus.param.RpcStatus`)
+    
+-   With `action=CREATE_INDEX`: `pojo` (`io.milvus.param.RpcStatus`)
+    
+-   With `action=UPSERT`: `pojo` (`io.milvus.grpc.MutationResult`)
+    
+-   With `action=INSERT`: `pojo` (`io.milvus.grpc.MutationResult`)
+    
+-   With `action=SEARCH`: `pojo` (`io.milvus.param.highlevel.dml.response.SearchResponse`)
+    
+-   With `action=QUERY`: `pojo` (`io.milvus.grpc.QueryResults`)
+    
+-   With `action=DELETE`: `pojo` (`io.milvus.grpc.MutationResult`)
+    
+
+
+
+
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
@@ -371,4 +468,4 @@ It’s important to note that Milvus SDK doesn’t support upsert for autoID fie
 
 That’s the reason why, in the example, we are setting the userID as keyName with a keyValue of 3. This is particularly important when you design your Milvus database.
 
-The transformer only supports insert/upsert objects, so the only operation you can set via header are INSERT and UPSERT, otherwise the transformer will fail with an error log.
+The transformer only supports insert/upsert objects, so the only operation you can set via header are INSERT and UPSERT, otherwise the transformer will fail with an error log. The transformer runs before the endpoint, so it reads the `CamelMilvusAction` header only, not the `action` option of the endpoint.

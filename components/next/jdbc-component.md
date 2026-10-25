@@ -158,13 +158,17 @@ The message body at each side of the JDBC component: _Consumer_ is the body of t
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The SQL statement as text, or bytes, a stream or a file of it; a Map or a List is not a statement: set the SQL as the body. With useHeadersAsParameters, the values of its placeholders come from the CamelJdbcParameters header, or else from the headers. |
-| **Producer output** | `list` or `unchanged` | The rows of a select: a List of Maps of the column names and their values (beans of outputClass when set). SelectOne gives the Map of the one row, the value of its column as the driver reads it when it has one, or null for no row; StreamList an Iterator of the rows, read once. A statement that is not a select leaves the body unchanged, with the count in the CamelJdbcUpdateCount header.
--   With `outputType=SelectOne`: `map`, `text`, `value`, `bytes`, `pojo`, `null` or `unchanged`
+| **Producer output** | `list` or `unchanged` | 
+The rows of a select: a List of Maps of the column names and their values (beans of outputClass when set). SelectOne gives the Map of the one row, the value of its column as the driver reads it when it has one, or null for no row; StreamList an Iterator of the rows, read once. A statement that is not a select leaves the body unchanged, with the count in the CamelJdbcUpdateCount header.
+
+-   With `outputType=SelectOne`: `map`, `text`, `value`, `bytes`, `pojo`, `null` or `unchanged`, or an object of the class `outputClass` names when it is set
     
 -   With `outputType=StreamList`: `iterator` or `unchanged`
     
 
-Not known when `outputClass` is set.
+
+
+
 
  |
 

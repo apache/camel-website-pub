@@ -25,7 +25,10 @@ The message body at each side of the Python language: _Expression input_ is the 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression input** | `any` | The body as it is, in the variable body: a String is a Python unicode string, and other Java objects keep their methods. |
-| **Expression result** | `unknown` | The Java value of what the script returns: a dict as a Map, a list or a tuple as a List, a set as a Set, and None as null. |
+| **Expression result** | `unknown` | The Java value of what the script returns: a dict as a Map, a list or a tuple as a List, a set as a Set, and None as null.
+With `resultType` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

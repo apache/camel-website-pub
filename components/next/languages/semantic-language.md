@@ -586,6 +586,15 @@ The Semantic Evaluation language supports the following options which are listed
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
 | **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
+### Configuring the language
+
+The Semantic Evaluation language itself has the following options, which apply to all its expressions. You set them in a configuration file such as `application.properties`, with the option name after the `camel.language.semantic.` prefix.
+
+   
+| Name | Default | Java Type | Description |
+| --- | --- | --- | --- |
+| **defaultState** (common) |  | `String` | The Simple expression selecting the state of the evaluations that have no selector of their own. Defaults to the message body. |
+
 ## Message Body
 
 The message body at each side of the Semantic Evaluation language: _Expression input_ is the body its expressions can read, and _Expression result_ what they return.

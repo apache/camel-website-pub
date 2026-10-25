@@ -58,7 +58,11 @@ Protobuf binary data, or JSON with contentTypeFormat json: unmarshal fails witho
 
 
  |
-| **Unmarshal output** | `pojo` (`com.google.protobuf.Message`) | The generated class of instanceClass, such as AddressBookProtos$Person; convertBodyTo Map gives its fields. |
+| **Unmarshal output** | `pojo` (`com.google.protobuf.Message`) | The generated class of instanceClass, such as AddressBookProtos$Person; convertBodyTo Map gives its fields.
+
+With `instanceClass` set: an object of the class it names, or null.
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 
