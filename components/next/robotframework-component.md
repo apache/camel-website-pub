@@ -298,7 +298,7 @@ The message body at each side of the Robot Framework component: _Consumer_ is th
 | **Producer input** | `any` | The test gets the body converted to a String as the body variable, and the headers and exchange properties as headers.name and properties.name; a null body or header value fails the exchange. |
 | **Producer output** | `unchanged` | The body is left as it is. The CamelRobotReturnCode header has the return code of the run (0 when all tests pass, non-zero otherwise), and CamelRobotVariables the variables passed to it; a failed test does not fail the exchange. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Examples
 

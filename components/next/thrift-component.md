@@ -211,7 +211,7 @@ A List of the arguments of the called method, in the order of the IDL, with the 
 | **Producer input** | `list`, `pojo`, `text` or `null` | A List of the arguments of the method, in the order of the IDL; a body that is not a List is the one argument, no body calls a method without arguments. A binary argument is a ByteBuffer, not a byte array; a method whose one argument is a list needs it wrapped in a List. |
 | **Producer output** | `unknown` | The result of the method, of its return type in the IDL: a number, a boolean, a String, a ByteBuffer, a Thrift struct, or a List, Set or Map; no body for a void or oneway method. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Thrift method parameters mapping
 

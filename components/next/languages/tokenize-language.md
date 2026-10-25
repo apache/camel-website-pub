@@ -40,7 +40,7 @@ Not known when `source` is set.
  |
 | **Expression result** | `iterator` | An Iterator of the tokens as text, read once: in setBody the body is the Iterator, for the Split EIP to walk. With group, each N tokens are joined into one text. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Example
 

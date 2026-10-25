@@ -948,7 +948,7 @@ The message body at each side of the SMPP component: _Consumer_ is the body of t
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the short message: bytes, a stream or a file are read as text, unless an 8-bit CamelSmppDataCoding or CamelSmppAlphabet header, or an 8-bit dataCoding or alphabet option for a byte array, sends bytes as they are. A stream is read once and replaced by its content. No body fails; a Map or a POJO is sent as its toString(). DataSm, QuerySm and CancelSm do not read the body. |
 | **Producer output** | `unchanged` | Unchanged, with the message ids in the CamelSmppId header, also when the exchange expects a reply (InOut). |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Exception handling
 

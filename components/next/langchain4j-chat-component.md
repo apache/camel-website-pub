@@ -276,7 +276,7 @@ The prompt as text, or a ChatMessage; another body is sent as its toString(), an
  |
 | **Producer output** | `text` | The answer of the model as text, also when it is asked for JSON: unmarshal it to read its fields. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

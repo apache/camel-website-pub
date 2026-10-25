@@ -201,7 +201,7 @@ Not read unless includeBody=true: then a String, number, boolean, Map or List go
  |
 | **Producer output** | `unchanged` | The body is kept: the verdict is in the CamelOpaDecisionAllow header and the decision document in CamelOpaDecision, or with batch=true a List of Boolean per element in CamelOpaBatchDecision. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

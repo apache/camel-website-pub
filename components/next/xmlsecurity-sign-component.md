@@ -194,7 +194,7 @@ The XML document to sign: text, bytes, a stream, a file or a DOM Document. A Map
  |
 | **Producer output** | `bytes` (`byte[]`), as xml | The signed XML document as bytes, in the outputXmlEncoding when set: the document with the signature for enveloped and detached, or the Signature element with the payload inside for enveloping. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## XML Signature Wrapping Modes
 

@@ -257,7 +257,7 @@ The message body at each side of the Azure Event Hubs component: _Consumer_ is t
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | What converts to a byte array: text, bytes, a stream or a file, sent as one event; a Map, a number or a POJO fails: marshal it first. A List is sent as one event per element, in one batch, and an element that is an Exchange or a Message is sent with its headers. |
 | **Producer output** | `unchanged` | Unchanged: a send gives no result, and no header is set. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

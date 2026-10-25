@@ -412,7 +412,7 @@ The message body at each side of the Azure ServiceBus component: _Consumer_ is t
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | Sent as text by default: bytes, a stream or a file are read as text, so binary content needs binary=true. A BinaryData, as the consumer gives it, is sent as it is, and a Map or a POJO is sent as its toString(): marshal it first. A List is sent as one message per element. |
 | **Producer output** | `unchanged` | Unchanged, also after scheduleMessages. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

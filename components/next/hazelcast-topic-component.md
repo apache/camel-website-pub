@@ -218,7 +218,7 @@ The message body at each side of the Hazelcast Topic component: _Consumer_ is th
 | **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The object to publish: an object Hazelcast can serialize, so convert a stream to bytes or text first; no body fails. |
 | **Producer output** | `unchanged` | The producer publishes the body and keeps it. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Topic producer – to(“hazelcast-topic:foo”)
 

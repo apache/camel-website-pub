@@ -158,7 +158,7 @@ invokeFunction sends the body as the payload of the function: text and bytes as 
  |
 | **Producer output** | `map` (`java.util.Map`) | A Map: for invokeFunction the statusCode, the headers and the body of the response, which holds the payload the function returns as bytes, with the status code in the CamelAlibabaFcStatusCode header too; for getFunction the fields of the function, such as functionName, runtime and handler. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

@@ -141,7 +141,7 @@ The message body at each side of the Spring AI Image component: _Consumer_ is th
 | **Producer input** | `any` | The prompt as text, or an ImagePrompt, which keeps its own options: n, width and the other options and headers then do not apply. Another body is converted to text, and no body fails. |
 | **Producer output** | `pojo` or `list` | The generated org.springframework.ai.image.Image, with a URL or base64 data, or a List of Image when the model returns more than one (n above 1). An Image converts to byte\[\] by decoding the base64 data; an Image with only a URL gives the bytes of the URL text. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

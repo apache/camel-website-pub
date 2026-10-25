@@ -38,7 +38,7 @@ The message body at each side of the RSS data format: _Marshal input_ and _Unmar
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as xml | An RSS or Atom feed. |
 | **Unmarshal output** | `pojo` (`com.rometools.rome.feed.synd.SyndFeed`) | A ROME SyndFeed of the feed. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Example
 

@@ -132,7 +132,7 @@ The message body at each side of the LDAP component: _Consumer_ is the body of t
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The LDAP search filter, such as (objectClass=person), as text, or bytes, a stream or a file of it. A Map or a POJO is read as its toString(), which is not a filter, and no body fails as an empty filter. |
 | **Producer output** | `list` (`java.util.List<javax.naming.directory.SearchResult>`) | The entries found under the base DN: a List of SearchResult, empty when none match, all the pages of them with pageSize. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

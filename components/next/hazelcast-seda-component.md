@@ -206,7 +206,7 @@ The message body at each side of the Hazelcast SEDA component: _Consumer_ is the
 | **Producer input** | `text`, `bytes`, `stream`, `file`, `value`, `map`, `list` or `pojo` | A Serializable body goes on the queue as is, and another one converted to bytes, so a stream works, but a POJO that does not convert to bytes fails, as does no body. |
 | **Producer output** | `unchanged` | The producer puts the message on the queue and does not wait for the consumer, also for a message that expects a reply (InOut). |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## SEDA producer – to(“hazelcast-seda:foo”)
 

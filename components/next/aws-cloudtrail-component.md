@@ -456,7 +456,7 @@ The message body at each side of the AWS CloudTrail component: _Consumer_ is the
 | --- | --- | --- |
 | **Consumer** | `bytes` (`byte[]`), as json | The CloudTrail record of the event as JSON in a byte array, one message per event, the newest first within a poll, with the id, the name, the source and the user name of the event in headers: unmarshal it to read its fields. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

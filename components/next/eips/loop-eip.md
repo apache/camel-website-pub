@@ -29,7 +29,7 @@ The message body at each side of the Loop EIP: _EIP input_ is the body it needs,
 | **EIP output** | what its steps end with | What the last iteration ends with. |
 | **Steps** | `unchanged` | The first iteration starts with the body; each next one with what the last ended with, or with the body again with copy. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Exchange properties
 

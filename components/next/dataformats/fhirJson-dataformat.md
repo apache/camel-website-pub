@@ -65,7 +65,7 @@ The message body at each side of the FHIR JSon data format: _Marshal input_ and 
  |
 | **Unmarshal output** | `pojo` (`org.hl7.fhir.instance.model.api.IBaseResource`) | The HAPI FHIR resource of the model of the fhirVersion, such as an org.hl7.fhir.r4.model.Patient with R4. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Usage
 

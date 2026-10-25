@@ -389,7 +389,7 @@ The message body at each side of the AWS Simple Email Service (SES) component: _
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the mail, or its HTML with the CamelAwsSesHtmlEmail header set to true: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(), so marshal it first. A jakarta.mail Message or a RawMessage is sent as a raw mail as it is, a SendRawEmailRequest is sent as the request, and no body fails. |
 | **Producer output** | `unchanged` | Unchanged, with the id of the mail in the CamelAwsSesMessageId header. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Required SES component options
 

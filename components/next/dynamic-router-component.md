@@ -166,7 +166,7 @@ The message body at each side of the Dynamic Router component: _Consumer_ is the
 | **Producer input** | `any` | The message to route: the predicates of the subscriptions on the channel decide where it goes. |
 | **Producer output** | `unknown` | The body the recipient ends with; with allMatch, the one of the last recipient unless an aggregationStrategy is set. When no subscription matches, a text that says so, with the body in the originalBody header. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

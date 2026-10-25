@@ -155,4 +155,4 @@ The message body at each side of the Grok data format: _Marshal input_ and _Unma
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | Lines of text, such as a log file: each line is matched with the pattern. |
 | **Unmarshal output** | `map`, `list` or `null` | A Map of the captures for one match, a List of such Maps for several, or null when no line matches. The Maps cannot be modified. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).

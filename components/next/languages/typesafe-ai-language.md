@@ -142,4 +142,4 @@ The message body at each side of the TypeSafe AI language: _Expression input_ is
 | **Expression input** | `text`, `map` or `list` | The state, the body unless the state option selects another: text, or a Map or a List of JSON values. Another body fails: select ${bodyAs(String)}. |
 | **Expression result** | `value` (`java.lang.Boolean`) | Whether the Noul probability reaches the threshold. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).

@@ -296,4 +296,4 @@ The message body at each side of the Twitter Search component: _Consumer_ is the
 | **Producer input** | `any` | The body is not read: the search uses the keywords of the endpoint, or of the CamelTwitterKeywords header. |
 | **Producer output** | `list` (`java.util.List<twitter4j.v1.Status>`) | The tweets found, an empty List when there are none. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).

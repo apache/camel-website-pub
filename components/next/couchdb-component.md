@@ -197,7 +197,7 @@ The message body at each side of the CouchDB component: _Consumer_ is the body o
 | **Producer input** | `text` or `pojo`, as json | The document to save as a JSON object: JSON text, a Gson JsonElement or a Cloudant Document, with \_id and \_rev to update it. A Map, bytes, a stream or no body fail: marshal it to JSON text first. The CamelCouchDbMethod header DELETE deletes the document of the body; GET reads the document of the CamelCouchDbId header, yet still needs one of these bodies. |
 | **Producer output** | `unchanged` or `pojo` | Unchanged after a save or delete, with the id and the new revision in the CamelCouchDbId and CamelCouchDbRev headers; the document read as a Cloudant Document for the GET method. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Headers are set by the consumer once the message is received. The producer will also set the headers for downstream processors once the insert/update has taken place. The producer only reads the CamelCouchDbMethod header, and the CamelCouchDbId header for the `GET` method. That means, for example, if you set CamelCouchDbId as a header, it will not be used as the id for insertion, the id of the document will still be used.
 

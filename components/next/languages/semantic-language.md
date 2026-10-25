@@ -605,7 +605,7 @@ The message body at each side of the Semantic Evaluation language: _Expression i
 | **Expression input** | `text`, `map`, `list`, `bytes` or `stream` | The state, the body unless the declaration selects another: text, a Map or a List, and bytes, a stream or Base64 text only with an image Content-Type. Another body fails: select ${bodyAs(String)}. |
 | **Expression result** | `value`, `text`, `list` or `map` | What the operation of the expert gives: a Boolean, a category as text, a score or a Set of labels, and with refs: a Map of the results by name. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Developer consoles
 

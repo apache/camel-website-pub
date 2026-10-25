@@ -132,7 +132,7 @@ The message body at each side of the Huawei Cloud Face Recognition Service (FRS)
 | **Producer input** | `any` | Not used, not even for the image: the image comes from the options or the exchange properties as base64 (CamelHwCloudFrsImageBase64), a URL (CamelHwCloudFrsImageUrl) or a local file path (CamelHwCloudFrsImageFilePath), the second image of faceVerification from the CamelHwCloudFrsAnotherImage properties, and the video of faceLiveDetection from the CamelHwCloudFrsVideo properties. |
 | **Producer output** | `pojo` | The response of the Huawei Cloud SDK for the operation and the source of the image, such as the DetectFaceByBase64Response of faceDetection with base64, which holds the faces found. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 > **Note**
 > When using imageBase64 or videoBase64 option, we suggest you use RAW(base64\_value) to avoid encoding issue.

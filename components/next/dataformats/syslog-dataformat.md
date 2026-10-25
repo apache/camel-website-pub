@@ -58,7 +58,7 @@ The message body at each side of the Syslog data format: _Marshal input_ and _Un
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | An RFC 3164 or RFC 5424 message, decoded with the charset of the exchange. |
 | **Unmarshal output** | `pojo` (`org.apache.camel.component.syslog.SyslogMessage`) | A SyslogMessage, an Rfc5424SyslogMessage for an RFC 5424 message. The facility, severity, hostname and timestamp are headers as well. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## RFC5424 Syslog protocol
 

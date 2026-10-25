@@ -132,7 +132,7 @@ The message body at each side of the Velocity component: _Consumer_ is the body 
 | **Producer input** | `any` | The template gets the body as body, as it is: text, or a Map, a List or a POJO to read from; convert bytes or a stream to a String first. The template is the resource, or the CamelVelocityTemplate or CamelVelocityResourceUri header with allowTemplateFromHeader=true, and never the body. |
 | **Producer output** | `text` (`java.lang.String`) | The text the template writes, also when it is JSON or XML: unmarshal it to read its fields. The headers are kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Headers set during the Velocity evaluation are returned to the message and added as headers. Then it is possible to return values from Velocity to the Message.
 

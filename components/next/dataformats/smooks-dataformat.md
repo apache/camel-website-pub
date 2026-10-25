@@ -82,4 +82,4 @@ The message body at each side of the Smooks data format: _Marshal input_ and _Un
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file` | The data the reader of the smooks config reads: XML by default, or EDI, CSV or JSON with a reader. |
 | **Unmarshal output** | `unknown` | What the exports of the smooks config give: the bean a JavaSink export extracts (a Map of the beans when it extracts several or none), the text of a StringSink, or a List of the results of several exports (empty without exports). |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).

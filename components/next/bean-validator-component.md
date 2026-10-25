@@ -123,7 +123,7 @@ The message body at each side of the Bean Validator component: _Consumer_ is the
 | **Producer input** | `pojo` or `list` | A POJO with Jakarta Bean Validation constraints, or a List or another Iterable of them, each one validated. Text, a Map or an array has no constraints of its own and passes unchecked; no body fails. |
 | **Producer output** | `unchanged` | Unchanged: a body that breaks a constraint fails with a BeanValidationException. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ### Using HibernateValidationProviderResolver
 

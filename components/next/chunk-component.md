@@ -122,7 +122,7 @@ The message body at each side of the Chunk component: _Consumer_ is the body of 
 | **Producer input** | `any` | The template gets the body as {$body}, as it is: text, or a Map, a List or a POJO to read from; no body prints as empty text, and bytes or a stream are not read as text. The template is the resource, or the CamelChunkTemplate header with allowTemplateFromHeader=true, never the body. |
 | **Producer output** | `text` (`java.lang.String`) | The text the template writes. The headers are kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Chunk component will look for a specific template in the _themes_ folder with extensions _.chtml_ or \_.cxml. \_If you need to specify a different folder or extensions, you will need to use the specific options listed above.
 

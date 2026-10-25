@@ -176,7 +176,7 @@ The message body at each side of the IBM Watson Language component: _Consumer_ i
 | **Producer input** | `any` | The text to analyze for analyzeText, or the URL of the page for analyzeUrl, read as text, unless the CamelIBMWatsonLanguageText or CamelIBMWatsonLanguageUrl header gives it. Without the header, no body or a blank one fails, and a Map or a POJO is analyzed as its toString(): marshal it first. |
 | **Producer output** | `pojo` (`com.ibm.watson.natural_language_understanding.v1.model.AnalysisResults`) | The results of the features enabled (sentiment, entities, keywords and so on), with the sentiment score and label and the language in headers too. Converted to text, it is the JSON of the results. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Required IBM Watson Language component options
 

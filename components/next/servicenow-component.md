@@ -489,7 +489,7 @@ The message body at each side of the ServiceNow component: _Consumer_ is the bod
 | **Producer input** | `map`, `pojo`, `text`, `bytes`, `stream`, `file` or `null` | The record to create, modify or update must be an instance of the request model: a Map by default, an object of the class set with models or requestModels or the CamelServiceNowRequestModel header, or JSON text with a String model; another body fails. An attachment upload sends the body as a stream, with its content type in the CamelServiceNowContentType header. A retrieve or delete does not read the body: the action, table and sys\_id are headers. |
 | **Producer output** | `map`, `list`, `pojo`, `text`, `stream` or `unchanged` | The result of the call: a Map of the record, or a List of Maps for many, or objects of the response model class set with models or responseModels or the CamelServiceNowResponseModel header (the JSON text with a String model). The content of an attachment is an InputStream. A response with no content, such as a delete, leaves the body; the paging offsets and the other response fields are headers. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Table 1. API Mapping    
 | CamelServiceNowResource | CamelServiceNowAction | Method | API URI |

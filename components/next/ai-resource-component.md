@@ -139,7 +139,7 @@ The message body at each side of the AI Resource component: _Consumer_ is the bo
 | **Consumer** | `null` | No body and no headers: a resource read carries no arguments. The route fetches the content itself, for example with pollEnrich or a producer with a read operation. |
 | **Consumer reply** | `text`, `bytes`, `stream` or `file` | The content the route ends with: converted to a String when the mimeType is textual (the default text/plain, json, xml, yaml), else to a byte\[\] sent as a blob. A Map, a List or another object is sent as its toString as text and fails as a blob: marshal it first. No body is an error. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

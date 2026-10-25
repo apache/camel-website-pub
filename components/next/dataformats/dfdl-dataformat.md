@@ -98,4 +98,4 @@ The message body at each side of the DFDL data format: _Marshal input_ and _Unma
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file` | Data in the format the DFDL schema describes, such as an EDI message. |
 | **Unmarshal output** | `pojo` (`org.w3c.dom.Document`) | The XML infoset as a DOM Document. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).

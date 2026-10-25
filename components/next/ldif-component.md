@@ -118,7 +118,7 @@ The message body at each side of the LDIF component: _Consumer_ is the body of t
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The LDIF text, starting with version: 1, or bytes, a stream or a file of it. With allowUrlBody, a text that is not LDIF is read as the URL of the LDIF file; otherwise it fails, as does a Map or a POJO. |
 | **Producer output** | `list` or `null` | A List of one status String per LDIF entry: success, or the error message from the server, which can be empty. No body or an empty body gives null. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

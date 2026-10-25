@@ -213,7 +213,7 @@ The message body at each side of the OAI-PMH component: _Consumer_ is the body o
 | **Producer input** | `any` | The body is not read: the request comes from the options, which the CamelOaimph headers override. |
 | **Producer output** | `list` (`java.util.List`) | A List of Strings, the XML response of each page of the request until the last; with onlyFirst only the first page, and the token for the next page in the CamelOaimphResumptionToken header. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

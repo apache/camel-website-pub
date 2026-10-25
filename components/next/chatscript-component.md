@@ -100,7 +100,7 @@ The message body at each side of the ChatScript component: _Consumer_ is the bod
 | **Producer input** | `pojo` or `text` | A ChatScriptMessage, or its JSON as text with the username and the message fields. Bytes, a stream, a Map or plain text fail; the bot name always comes from the endpoint. |
 | **Producer output** | `pojo` (`org.apache.camel.component.chatscript.ChatScriptMessage`) | The ChatScriptMessage that was sent, with the answer of the bot in its reply (the response field in JSON). |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

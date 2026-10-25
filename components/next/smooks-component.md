@@ -138,7 +138,7 @@ The message body at each side of the Smooks component: _Consumer_ is the body of
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The data the reader of the smooks config reads: XML by default, or EDI, CSV or JSON with a reader. A Map, a List or a POJO fails. |
 | **Producer output** | `unknown` | What the exports of the smooks config give: the bean a JavaSink export extracts (a Map of the beans when it extracts none), or the text of a StringSink. Without exports, the input as a stream. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

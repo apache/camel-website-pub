@@ -154,7 +154,7 @@ The message body at each side of the WhatsApp component: _Consumer_ is the body 
 | **Producer input** | `pojo` or `null` | A request of org.apache.camel.component.whatsapp.model: a TextMessageRequest, MediaMessageRequest, LocationMessageRequest, ContactMessageRequest, InteractiveMessageRequest or TemplateMessageRequest to send a message, or an UploadMediaRequest to upload a media file. Text, bytes, a Map or another POJO fails: build the request. No body sends nothing. |
 | **Producer output** | `pojo` or `unchanged` | The org.apache.camel.component.whatsapp.model.MessageResponse of WhatsApp, with the ids of the messages sent, or the id of the media uploaded. No body is left as it is. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

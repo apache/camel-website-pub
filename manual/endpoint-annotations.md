@@ -15,7 +15,7 @@ The Camel project uses this to automatic keep the website documentation up-to-da
 | `@UriParam` | Used to annotate a parameter value; usually specified via ?foo=bar syntax in the URI strings in Camel. Used currently only on field declarations but in the future could be used on setter methods too. If no name is specified then the name of the field/setter property is used. |
 | `@UriParams` | Specifies that a field is a nested object of one or more configuration parameters; then the class of this field should be annotated with one or more `@UriParam` or `@UriParams` annotations |
 | `@Metadata` | Used for special situations to provide additional information. |
-| `@BodyTypes` | The message body the endpoint works with: the body the consumer creates, the bodies the producer can send, and the body after the producer. See [Body types in the Catalog](camel-catalog.html#_body_types_in_the_catalog). |
+| `@BodyTypes` | The message body the endpoint works with: the body the consumer creates, the bodies the producer can send, and the body after the producer. See [Message Body Types](body-types.md). |
 
 For example see the `TimerEndpoint` from the `camel-timer` component and notice how it is using these annotations.
 

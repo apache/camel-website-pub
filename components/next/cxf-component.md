@@ -283,7 +283,7 @@ POJO: a MessageContentsList with the return value of the operation first, then t
 
  |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 The `serviceName` and `portName` are [QNames](http://en.wikipedia.org/wiki/QName), so if you provide them be sure to prefix them with their _{namespace}_ as shown in the examples above.
 

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792929282973,
+  "generated": 1792930517003,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -35009,6 +35009,12 @@
               "path": "bean-integration.adoc",
               "url": "/manual/bean-integration.html",
               "title": "Bean Integration"
+            },
+            {
+              "module": "ROOT",
+              "path": "body-types.adoc",
+              "url": "/manual/body-types.html",
+              "title": "Message Body Types"
             },
             {
               "module": "ROOT",

@@ -198,7 +198,7 @@ The message body at each side of the Crypto (JCE) component: _Consumer_ is the b
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | The payload to sign or verify, read as a stream: text, bytes, a stream or a file; no body is an empty payload. A Map, a POJO or a number fails: marshal it first. Without stream caching a stream body is used up. The signature is not in the body: sign sets it, Base64 encoded, in the CamelDigitalSignature header (signatureHeaderName), which verify reads. |
 | **Producer output** | `unchanged` | The body is unchanged: a signature that does not verify fails the exchange with a SignatureException. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

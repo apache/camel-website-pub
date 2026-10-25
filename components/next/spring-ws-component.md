@@ -209,7 +209,7 @@ The message body at each side of the Spring WebService component: _Consumer_ is 
 | **Producer input** | `text`, `bytes`, `stream` or `pojo`, as xml | The request payload as XML: a String, bytes, a stream cache, a Source or a DOM Document. No body, a File, a Map or a number fails: read or marshal it to XML first. |
 | **Producer output** | `pojo` or `null`, as xml | The payload of the SOAP response as a javax.xml.transform.Source (a DOMSource with the default SAAJ message factory), null for an empty SOAP body; also with the InOnly pattern. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

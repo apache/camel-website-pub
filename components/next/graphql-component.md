@@ -124,7 +124,7 @@ Not known when `query` or `queryFile` or `queryHeader` is set.
  |
 | **Producer output** | `text` or `null` | The response as text, the JSON with the data and errors of GraphQL: unmarshal it to read them. Errors in the response do not fail the exchange; a status outside 2xx does, unless throwExceptionOnFailure=false, which keeps the response as text. null for a response without a body. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Message Body
 

@@ -23,7 +23,7 @@ The message body at each side of the Header language: _Expression input_ is the 
 | --- | --- | --- |
 | **Expression result** | `unknown` | The value of the header as it is, null when there is none. A missing header falls back to the exchange property of that name. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Example usage
 

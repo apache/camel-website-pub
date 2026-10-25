@@ -178,7 +178,7 @@ A String for a text message, a byte array for a binary one; null for the open, c
 | **Producer input** | `null`, `text`, `bytes` or `stream` | Text or a Reader as a text message, bytes or an InputStream as a binary one; other bodies as their toString. No body sends nothing. Sent to all peers with sendToAll, otherwise to the connection key headers. |
 | **Producer output** | `unchanged` | The body is kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Reading and Writing Data over Websocket
 

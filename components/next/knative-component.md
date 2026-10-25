@@ -247,7 +247,7 @@ The data of the reply, sent as bytes: text, bytes, a stream or a file; no body a
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The data of the event: text, bytes, a stream or a file, sent as bytes. No body fails, and so does a Map or a POJO: marshal it first. |
 | **Producer output** | `bytes` or `null` | The body of the response, also for a message that expects no reply (InOnly): a byte array, null for a response without a body. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

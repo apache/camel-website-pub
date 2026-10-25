@@ -161,6 +161,18 @@ The Azure Event Grid component supports the following message header(s), which i
 | **CamelAzureEventGridEventTime** (producer) Constant: [`EVENT_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-eventgrid/latest/org/apache/camel/component/azure/eventgrid/EventGridConstants.html#EVENT_TIME) | The time the event was generated. |  | OffsetDateTime |
 | **CamelAzureEventGridId** (producer) Constant: [`ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-eventgrid/latest/org/apache/camel/component/azure/eventgrid/EventGridConstants.html#ID) | The unique identifier for the event. |  | String |
 
+## Message Body
+
+The message body at each side of the Azure Event Grid component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `map`, `pojo` or `list` | The data of the event, serialized to JSON by the Azure SDK: a Map or a POJO becomes a JSON object and a number a JSON number. Text becomes a JSON string and is not parsed, so unmarshal JSON text first; bytes become a base64 string, a stream an empty object and a file its path. A List is sent as one event per element, and no body fails. |
+| **Producer output** | `unchanged` | Unchanged: publishing gives no result, and no header is set. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
+
 ## Authentication
 
 The component supports the following credential types via the `credentialType` option:

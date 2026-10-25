@@ -178,7 +178,7 @@ The logs to write for putLogs: a LogGroup or a PutLogsRequest of the SLS SDK, an
  |
 | **Producer output** | `map` | A Map of the response with its statusCode and headers. For getLogs the GetLogsResponseBody of the SLS SDK is under body, for listLogStores the names under logstores with count and total. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

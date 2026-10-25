@@ -257,7 +257,7 @@ The message body at each side of the SSH component: _Consumer_ is the body of th
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The command to run, as text: bytes, a stream or a file are read as text. A Map or a POJO is sent as its toString(): build the command as text first. No body fails. |
 | **Producer output** | `stream` | The standard output of the command as a stream, with the exit value and the standard error in the CamelSshExitValue and CamelSshStderr headers; an exit value that is not 0 does not fail the exchange. Convert it to text to read it more than once. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

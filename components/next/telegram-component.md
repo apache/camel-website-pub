@@ -270,7 +270,7 @@ The message body at each side of the Telegram component: _Consumer_ is the body 
 | **Producer input** | `text`, `bytes`, `stream`, `file`, `pojo` or `null` | A message of org.apache.camel.component.telegram.model, such as an OutgoingTextMessage, or text to send as a text message: a Map or another POJO is sent as its toString(), so marshal it first. A byte array, a stream or a file is sent as the photo, audio, video or document the CamelTelegramMediaType header names, or as text when it names TEXT. Without the header, a byte array fails, and a stream or a file is read as text. No body, or an IncomingMessage without text, sends nothing. |
 | **Producer output** | `pojo` or `unchanged` | The MessageResult of the call, with the message sent, or a subclass of it such as MessageResultString for createInvoiceLink; an answer with ok=false fails the exchange. No body, or an IncomingMessage without text, is left as it is. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

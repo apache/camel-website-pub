@@ -483,7 +483,7 @@ The message body at each side of the AWS DynamoDB Streams component: _Consumer_ 
 | --- | --- | --- |
 | **Consumer** | `pojo` (`software.amazon.awssdk.services.dynamodb.model.Record`) | The change record of the stream, one message per record, with the event name (INSERT, MODIFY or REMOVE) in a header. The keys and the images of the item are maps of AttributeValue in body.dynamodb(). A Record is not a JavaBean, so Jackson cannot marshal it. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Required DynamoDBStream component options
 

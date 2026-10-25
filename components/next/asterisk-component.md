@@ -178,7 +178,7 @@ The message body at each side of the Asterisk component: _Consumer_ is the body 
 | **Producer input** | `any` | The body is not read: the action comes from the action option or the CamelAsteriskAction header, and the extension and context of EXTENSION\_STATE from the CamelAsteriskExtension and CamelAsteriskContext headers. |
 | **Producer output** | `pojo` (`org.asteriskjava.manager.response.ManagerResponse`) | The ManagerResponse of the action, such as an ExtensionStateResponse; a ManagerError when Asterisk answers with an error. QUEUE\_STATUS and SIP\_PEERS give only the first response, not the events of the list. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Action
 

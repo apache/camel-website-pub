@@ -264,7 +264,7 @@ The body of the message to send or publish, as text: bytes, a stream or a file a
  |
 | **Producer output** | `unchanged` | Unchanged: the message id, the request id and the MD5 of the body are set as exchange properties, not headers. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

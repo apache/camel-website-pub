@@ -180,7 +180,7 @@ The message body at each side of the Thymeleaf component: _Consumer_ is the body
 | **Producer input** | `any` | The template gets the body as ${body}, as it is: text, or a Map, a List or a POJO to read from; no body prints as empty text, and bytes or a stream are not read as text. The template is the resource, or the CamelThymeleafTemplate header with allowTemplateFromHeader=true, never the body. |
 | **Producer output** | `text` (`java.lang.String`) | The text the template writes, in its templateMode such as HTML. The headers are kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Headers set during the Thymeleaf evaluation are returned to the message and added as headers, thus making it possible to return values from Thymeleaf to the Message.
 

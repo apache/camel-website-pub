@@ -217,7 +217,7 @@ The message body at each side of the Stripe component: _Consumer_ is the body of
 | **Producer input** | `map`, `text` or `null` | The request parameters of the call: a Map, or a JSON object as text; null for none. Bytes, a stream or a POJO fails: convert it to a String first. retrieve, delete and cancel ignore the body; they and update and capture take the id of the object from the CamelStripeObjectId header. |
 | **Producer output** | `pojo` | The Stripe object the call returns, such as a com.stripe.model.Customer; list gives a collection of them, such as a CustomerCollection, with the objects in its data. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Authentication
 

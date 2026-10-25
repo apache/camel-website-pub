@@ -404,7 +404,7 @@ The message body at each side of the AWS Translate component: _Consumer_ is the 
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The text to translate: bytes, a stream or a file are read as text, a Map or a POJO is translated as its toString(), so take the text out of it first, and no body fails. With pojoRequest=true the body is a TranslateTextRequest of the AWS SDK: another body fails. |
 | **Producer output** | `text` (`java.lang.String`) | The translated text. The source language that AWS detects with autodetectSourceLanguage=true is not kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Required Translate component options
 

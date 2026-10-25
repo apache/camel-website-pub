@@ -100,7 +100,7 @@ The message body at each side of the Schematron component: _Consumer_ is the bod
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML to validate: text, bytes, a stream, a file, a DOM or another javax.xml.transform.Source. A Map or another POJO is read as its toString(): marshal it first; no body fails. |
 | **Producer output** | `unchanged` | Unchanged: the CamelSchematronValidationStatus header is SUCCESS or FAILED, and CamelSchematronValidationReport holds the SVRL report. With abort, a failed assert throws a SchematronValidationException. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Headers
 

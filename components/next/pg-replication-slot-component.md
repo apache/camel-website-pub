@@ -200,7 +200,7 @@ The message body at each side of the PostgreSQL Replication Slot component: _Con
 | --- | --- | --- |
 | **Consumer** | `bytes` (`byte[]`) | One message of the output plugin of the slot, as bytes: text for test\_decoding, JSON for wal2json, the binary protocol for pgoutput; convert it to a String for the text plugins. The exchange id is the LSN of the message. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

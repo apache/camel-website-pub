@@ -130,7 +130,7 @@ The message body at each side of the JSLT component: _Consumer_ is the body of t
 | **Producer input** | `text`, `bytes`, `stream` or `file`, as json | JSON as text, bytes, a stream, a Reader or a java.io.File, such as the file of the file consumer. A Map, a List, a JsonNode or no body fails: marshal parsed JSON first. |
 | **Producer output** | `text` (`java.lang.String`), as json | The result as JSON text, pretty printed with prettyPrint=true. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

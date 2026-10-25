@@ -217,7 +217,7 @@ The message body at each side of the LangChain4j Embeddings component: _Consumer
 | **Producer input** | `text`, `pojo` or `list` | The text to embed as a String or a TextSegment, or a non-empty List of them to embed in one batch. Bytes, a stream, a file, a Map and no body fail: convert the body to a String first. |
 | **Producer output** | `unchanged` | The body is kept. The vector goes in the CamelLangChain4jEmbeddingsVector header as a float array, with the Embedding and the TextSegment in the CamelLangChain4jEmbeddingsEmbedding and CamelLangChain4jEmbeddingsTextSegment headers; a List body gives Lists of them in the CamelLangChain4jEmbeddingsEmbeddings and CamelLangChain4jEmbeddingsTextSegments headers instead. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

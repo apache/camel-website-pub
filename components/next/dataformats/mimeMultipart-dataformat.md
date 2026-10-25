@@ -38,7 +38,7 @@ The message body at each side of the MIME Multipart data format: _Marshal input_
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file` | A MIME multipart, with its Content-Type (multipart/\*) and MIME-Version as Camel headers, as marshal leaves them; with headersInline, the MIME headers are at the start of the body. |
 | **Unmarshal output** | `stream` or `unchanged` | The first part, decoded, as a stream, with the other parts as attachments and its Content-Type as a header. A body that is not a multipart stays as it was: without headersInline, one without a multipart Content-Type header. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Message Headers (marshal)
 

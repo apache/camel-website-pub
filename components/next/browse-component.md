@@ -122,7 +122,7 @@ The message body at each side of the Browse component: _Consumer_ is the body of
  |
 | **Producer output** | `unchanged` | Unchanged, unless a route consumes from the same browse endpoint: it runs on the same exchange, so the body is the one that route ends with. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Examples
 

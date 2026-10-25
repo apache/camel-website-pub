@@ -154,7 +154,7 @@ The message body at each side of the JCR component: _Consumer_ is the body of th
 | **Producer input** | `any` | Insert (the default) ignores the body and stores the headers as node properties; getById (CamelJcrOperation header) reads the node identifier from the body as a String. |
 | **Producer output** | `text` or `unchanged` | Insert sets the identifier of the node, a String; getById leaves the body and sets the node properties as headers. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Example
 

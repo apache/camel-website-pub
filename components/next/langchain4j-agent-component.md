@@ -275,7 +275,7 @@ The message body at each side of the LangChain4j Agent component: _Consumer_ is 
 | **Producer input** | `text`, `pojo`, `bytes`, `stream` or `file` | The user message as text, or an AiAgentBody with the user message, the system message, the memory id and a content. Bytes, a stream or a file of the file consumers is sent as an image, audio, video, PDF or text content after the text of the CamelLangChain4jAgentUserMessage header; bytes and a stream need the CamelLangChain4jAgentMediaType or Content-Type header. A Map, a java.io.File or another object fails, and no body fails. |
 | **Producer output** | `text` | The answer of the agent as text, also with outputClass or jsonSchema: unmarshal the JSON to read its fields. The token counts, the finish reason, the sources and the tool executions are in headers. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## OAuth Authentication
 

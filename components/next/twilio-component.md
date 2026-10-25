@@ -5171,7 +5171,7 @@ Not known when `inBody` is set.
  |
 | **Producer output** | `pojo`, `iterator` or `value` | The resource of the method, such as the Message of message/create and message/fetch or the Call of call/create. read gives a ResourceSet, which reads the next pages from Twilio while it is iterated, and delete a Boolean. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.

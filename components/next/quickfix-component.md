@@ -197,7 +197,7 @@ The message body at each side of the QuickFix component: _Consumer_ is the body 
 | **Producer input** | `pojo`, `text` or `bytes` | The FIX message to send: a quickfix.Message, or the FIX message as text or bytes, parsed with the DataDictionary exchange property or the data dictionary of the session. A stream, a Map or no body fails. |
 | **Producer output** | `unchanged` or `pojo` | The body is left as it was. An InOut exchange waits for the reply that matches the CorrelationCriteria exchange property, and the reply quickfix.Message is the body. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

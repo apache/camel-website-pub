@@ -205,7 +205,7 @@ The message body at each side of the RSS component: _Consumer_ is the body of th
 | --- | --- | --- |
 | **Consumer** | `pojo` (`com.rometools.rome.feed.synd.SyndFeed`) | A ROME SyndFeed: with splitEntries (the default) a copy of the feed with the one entry in its entries, with splitEntries=false the whole feed with all its entries. The CamelRssFeed header carries the whole feed unless feedHeader=false. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

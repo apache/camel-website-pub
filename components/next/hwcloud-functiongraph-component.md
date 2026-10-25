@@ -121,7 +121,7 @@ The message body at each side of the Huawei FunctionGraph component: _Consumer_ 
 | **Producer input** | `map` or `text` | The event of the function, as a Map or a JSON object as text. Bytes, a stream, a file, a JSON array, a POJO or no body fail: convert the body to a String or a Map first. |
 | **Producer output** | `text` or `null` | The body field of the result of the function as text: a string as it is, an object or an array as JSON. No body when the result has no body field. With the CamelHwCloudFgXCffLogType exchange property set, the log of the call is in the CamelHwCloudFgXCffLogs exchange property. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

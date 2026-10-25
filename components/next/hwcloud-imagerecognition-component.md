@@ -138,7 +138,7 @@ The result of the Huawei Cloud SDK: for celebrityRecognition a List with a Celeb
 
  |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 > **Note**
 > When using imageContent option, we suggest you use RAW(image\_base64\_value) to avoid encoding issue.

@@ -214,7 +214,7 @@ Not known when `transferException` or `httpBinding` is set.
  |
 | **Consumer reply** | `null`, `text`, `bytes`, `stream` or `file` | The response body: text, bytes, a stream or a file. A Map, a List or a POJO is sent as an empty body (as its toString with chunked=false): marshal it first. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## OAuth Bearer token validation
 

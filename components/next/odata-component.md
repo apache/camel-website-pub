@@ -215,7 +215,7 @@ The body is not read by READ\_SET, READ\_ENTRY and DELETE. CREATE and UPDATE sen
  |
 | **Producer output** | `map` or `null` | The JSON object of the response parsed into a Map (a JsonObject); for READ\_SET the entities are in its value entry. No body for a 204 or an empty response, such as of a DELETE. The response code, the ETag, the count and the next link are in headers. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 > **Note**
 > This is a producer-only component. Per-message options can be supplied through `CamelOData` headers in addition to endpoint options.

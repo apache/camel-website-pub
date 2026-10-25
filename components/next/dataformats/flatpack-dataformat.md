@@ -41,7 +41,7 @@ The message body at each side of the Flatpack data format: _Marshal input_ and _
  |
 | **Unmarshal output** | `list` (`org.apache.camel.component.flatpack.DataSetList`) | A DataSetList: a List of the rows, each a HashMap of the column names and the values, which does not keep the column order. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Usage
 

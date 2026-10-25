@@ -127,7 +127,7 @@ The message body at each side of the MVEL component: _Consumer_ is the body of t
 | **Producer input** | `any` | The template gets the body as body, as it is: no body prints as null, and bytes or a stream are not read as text. The template is the resource, or the CamelMvelTemplate header with allowTemplateFromHeader=true, never the body. |
 | **Producer output** | `text` (`java.lang.String`) | The text the template writes. The headers are kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

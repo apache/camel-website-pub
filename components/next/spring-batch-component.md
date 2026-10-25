@@ -127,7 +127,7 @@ The message body at each side of the Spring Batch component: _Consumer_ is the b
 | **Producer input** | `any` | The body is not read: the job parameters are the message headers (Date, Long and Double values as such, other values as text; a null header value fails). |
 | **Producer output** | `pojo` (`org.springframework.batch.core.job.JobExecution`) | The JobExecution of the launched job, with its status and exit status; the headers stay as they were. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

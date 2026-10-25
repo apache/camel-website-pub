@@ -229,7 +229,7 @@ The message body at each side of the Slack component: _Consumer_ is the body of 
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo` | The text of the message, or a com.slack.api.model.Message with its blocks: bytes, a stream or a file are read as text. A Map or another POJO is sent as its toString(): marshal it first. No body sends no text, which Slack rejects. |
 | **Producer output** | `unchanged` | Unchanged: the answer of Slack is not kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

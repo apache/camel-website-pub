@@ -184,7 +184,7 @@ The Post or User (org.apache.camel.component.wordpress.api.model) to create, or 
  |
 | **Producer output** | `pojo` | The Post or User that WordPress answers: the one created, updated or deleted. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Most of the parameters needed when performing a read operation mirrors from the official [API](https://developer.wordpress.org/rest-api/reference/). When performing searches operations, the `criteria.` suffix is needed. Take the following `Consumer` as example:
 

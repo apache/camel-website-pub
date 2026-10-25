@@ -119,7 +119,7 @@ The message body at each side of the Spring Event component: _Consumer_ is the b
 | **Producer input** | `any` | An ApplicationEvent body is published as it is. Any other body, also none, is published as a CamelEvent that holds the exchange, so listeners read the body from its getExchange(). |
 | **Producer output** | `unchanged` | The body is left as it is. The listeners run before the producer returns, and a CamelEvent gives them the exchange itself. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

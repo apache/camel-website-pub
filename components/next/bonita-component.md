@@ -116,7 +116,7 @@ The message body at each side of the Bonita component: _Consumer_ is the body of
 | **Producer input** | `map` | The contract inputs of the process: a Map of the input names and their Serializable values, a FileInput for a file to upload. Any other body, also JSON text, fails as no contract input: unmarshal it to a Map first. |
 | **Producer output** | `unchanged` | The Map of the inputs, in which each FileInput is replaced by a Map of its filename and the tempPath of the upload. The id of the case started is not kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

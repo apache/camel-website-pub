@@ -191,4 +191,4 @@ The message body at each side of the Workday component: _Consumer_ is the body o
 | **Producer input** | `any` | The body is not read: the report or the API resource is the path, and the report parameters are the other options of the endpoint. |
 | **Producer output** | `text` (`java.lang.String`), as json | The JSON that Workday answers, as text: the report (in the reportFormat) or the API resource; unmarshal it to work with its fields. The URL called is in the CamelWorkdayURL header. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).

@@ -175,7 +175,7 @@ An Object array of the parameters of the called message, in the order of the pro
 | **Producer input** | `list`, `pojo`, `text` or `value` | An Object array of the parameters of the message, in the order of the protocol, or the one parameter itself, such as a record. A java.util.List is not unpacked and a Map is not a record: build the parameter types of the protocol. The message name comes from the CamelAvroMessageName header, or else from the endpoint. |
 | **Producer output** | `unknown` | The response of the message, of its type in the protocol, such as the record class; no body for a message with a null response. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Apache Avro Overview
 

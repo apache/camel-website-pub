@@ -22,7 +22,7 @@ See the [Camel CLI documentation](../manual/camel-jbang.md) for installation ins
 
 ## Camel TUI
 
-The `camel tui` command launches a full terminal-based UI with route status, message flow, and tracing in a single view — plus a built-in mini source editor for YAML DSL routes with context-aware Tab completion, validation on save, and inline quick docs.
+The `camel tui` command launches a terminal-based UI for development, with route status, message flow, and tracing in a single view — plus a built-in source editor for YAML, Java and XML routes that checks them as you type, with context-aware Tab completion and inline quick docs.
 
 See the [Camel TUI documentation](../manual/camel-jbang-tui.md) for more details.
 
@@ -138,6 +138,6 @@ An open source HTML5 web application for visualizing, managing and tracing Camel
 
 [Forage](https://kaotoio.github.io/forage/)
 
-Opinionated bean factories for Apache Camel — configure data sources, connection factories, AI models, and more via properties. Works with Camel JBang, Spring Boot, and Quarkus.
+Opinionated bean factories for Apache Camel — configure data sources, connection factories, AI models, and more via properties. Works with the Camel CLI, Spring Boot, and Quarkus.
 
 If you are using or have developed tooling for Apache Camel please add an entry via a [pull request](https://github.com/apache/camel-website); or post to the [mailing list](../community/mailing-list/index.md).

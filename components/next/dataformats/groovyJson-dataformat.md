@@ -30,7 +30,7 @@ The message body at each side of the Groovy JSon data format: _Marshal input_ an
  |
 | **Unmarshal output** | `map` or `list` | A Map (Groovy LazyMap) for a JSON object, a List (ArrayList) for an array. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Supported Java types
 

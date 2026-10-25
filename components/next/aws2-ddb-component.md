@@ -584,7 +584,7 @@ The message body at each side of the AWS DynamoDB component: _Consumer_ is the b
 | **Producer input** | `any` | Not used: the operations take their input from headers, such as the item in CamelAwsDdbItem and the key in CamelAwsDdbKey as maps of the AttributeValue of the AWS SDK, or the PartiQL statement in CamelAwsDdbStatement. |
 | **Producer output** | `unchanged` | Unchanged for every operation: the result is in headers, such as CamelAwsDdbAttributes for the item operations, CamelAwsDdbItems for Query and Scan, and CamelAwsDdbExecuteStatementItems for ExecuteStatement. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Required DDB component options
 

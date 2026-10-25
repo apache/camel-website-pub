@@ -145,7 +145,7 @@ The message body at each side of the JTE component: _Consumer_ is the body of th
 | **Producer input** | `any` | The template takes an org.apache.camel.component.jte.Model: the body as it is in model.body, and converted to text by model.strBody(). With allowTemplateFromHeader=true the CamelJteDataModel header replaces the model. |
 | **Producer output** | `text` (`java.lang.String`) | The text the template writes, with leading and trailing whitespace trimmed. The headers are kept. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

@@ -45,7 +45,7 @@ The message body at each side of the Recipient List EIP: _EIP input_ is the body
 | --- | --- | --- |
 | **EIP output** | `unknown` | The reply of the last recipient, unless an aggregationStrategy is set. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 > **Tip**
 > See the `cacheSize` option for more details on _how much cache_ to use depending on how many or few unique endpoints are used.

@@ -128,7 +128,7 @@ The message body at each side of the Lumberjack component: _Consumer_ is the bod
 | --- | --- | --- |
 | **Consumer** | `map`, `list`, `text`, `value` or `null` | The log event: a Map of its fields, such as message, source and host, with the nested objects as Maps and the arrays as Lists. A JSON frame that is not an object gives a List, a String, a number, a boolean or null. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

@@ -29,7 +29,7 @@ The message body at each side of the UBL data format: _Marshal input_ and _Unmar
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as xml | A UBL 2.1 document, whose root element gives the document type. |
 | **Unmarshal output** | `pojo` | The ph-ubl object of the document type, such as an InvoiceType for an Invoice. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## Supported Document Types
 

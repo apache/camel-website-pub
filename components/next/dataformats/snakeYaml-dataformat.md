@@ -60,7 +60,7 @@ With `unmarshalType` set: an object of the class it names, or null.
 
  |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 > **Warning**
 > SnakeYAML can load any class from YAML definition which may lead to security breach so by default, SnakeYAML DataForma restrict the object it can load to standard Java objects like List or Long. If you want to load custom POJOs you need to add theirs type to SnakeYAML DataFormat type filter list. If your source is trusted, you can set the property allowAnyType to true so SnakeYAML DataForma won’t perform any filter on the types.

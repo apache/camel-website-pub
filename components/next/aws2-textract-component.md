@@ -450,7 +450,7 @@ The document of detectDocumentText, the default, analyzeDocument and analyzeExpe
  |
 | **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the DetectDocumentTextResponse of detectDocumentText, the default, whose blocks hold the lines and the words found. The start operations give the response with the job id, and set the CamelAwsTextractJobId header to it for the get operations. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Required Textract component options
 

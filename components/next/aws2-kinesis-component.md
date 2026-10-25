@@ -581,7 +581,7 @@ The data of the record as a byte array, one message per record, with its partiti
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | The data of the record: text, bytes, a stream or a file. A List or another Iterable is sent as a batch, one record per element, and each element must be text, bytes, a ByteBuffer or a stream. A Map or a POJO fails: marshal it first. |
 | **Producer output** | `unchanged` | Unchanged, with the sequence number and the shard id of the record in headers, or the number of records of a batch. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Required Kinesis component options
 

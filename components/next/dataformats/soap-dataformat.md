@@ -52,7 +52,7 @@ Not known when `elementNameStrategy` is set.
 | **Unmarshal input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | A SOAP envelope of the version: text, bytes, a stream, a file, a DOM Document, a DOMSource or a StreamSource. |
 | **Unmarshal output** | `pojo` or `null` | The JAXB object of the first element of the SOAP body, with the SOAP headers in the org.apache.camel.dataformat.soap.UNMARSHALLED\_HEADER\_LIST header. No body when the SOAP body is empty or a fault, which becomes the exception of the exchange. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## ElementNameStrategy
 

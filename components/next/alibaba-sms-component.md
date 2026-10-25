@@ -149,7 +149,7 @@ The message body at each side of the Alibaba Short Message Service (SMS) compone
 | **Producer input** | `any` | Not used: sendSms takes the phone numbers, sign name, template code and template parameters from options or headers, such as CamelAlibabaSmsTemplateParam. |
 | **Producer output** | `map` | A Map of the response: the statusCode, and the code, message, bizId and requestId the service returns. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

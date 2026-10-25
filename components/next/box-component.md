@@ -1710,7 +1710,7 @@ Not known when `inBody` is set.
  |
 | **Producer output** | `pojo`, `list` or `null` | The return value of the method: a Box SDK object, such as the BoxFile of files/uploadFile, the BoxFolder of folders/createFolder or the Info of files/getFileInfo; a Collection or a List for the methods that list, such as folders/getFolderItems; null for the deletes and the other methods without a result. files/downloadFile writes the content to the OutputStream of the output option or the CamelBox.output header and gives that OutputStream, not the content. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.

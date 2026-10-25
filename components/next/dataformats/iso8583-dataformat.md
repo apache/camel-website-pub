@@ -29,7 +29,7 @@ The message body at each side of the ISO-8583 data format: _Marshal input_ and _
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file` | An ISO-8583 message of the ISO-Type in the CamelIso8583IsoType header, or else the isoType option: unmarshal fails without either. |
 | **Unmarshal output** | `pojo` (`com.solab.iso8583.IsoMessage`) | A j8583 IsoMessage: getAt(n) gives field n. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
 ## ISO-Types
 

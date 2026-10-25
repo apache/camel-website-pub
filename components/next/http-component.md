@@ -432,7 +432,7 @@ The message body at each side of the HTTP component: _Consumer_ is the body of t
 | **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The request body: text, bytes, a stream or a file. A Map or a List fails: marshal it first. Without httpMethod, no body sends a GET and a body a POST. |
 | **Producer output** | `bytes`, `stream` or `null` | The response body: a byte array when its Content-Length is at most responsePayloadStreamingThreshold (8192), otherwise the stream cache (the stream itself with disableStreamCache); null for a response without a body. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

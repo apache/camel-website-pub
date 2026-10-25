@@ -176,7 +176,7 @@ The message body at each side of the FOP component: _Consumer_ is the body of th
 | **Producer input** | `text`, `bytes`, `stream` or `file`, as xml | The XSL-FO document to render, as text, bytes, a stream or a file. A DOM Document, a Map or no body fails. |
 | **Producer output** | `bytes` (`java.io.ByteArrayOutputStream`) | The rendered document as bytes, in a ByteArrayOutputStream: PDF, or the outputType, or the format of the CamelFop.Output.Format header. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ### Configuration file
 

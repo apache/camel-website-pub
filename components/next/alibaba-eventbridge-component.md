@@ -157,7 +157,7 @@ The message body at each side of the Alibaba EventBridge component: _Consumer_ i
 | **Producer input** | `text`, `map`, `list` or `pojo` | The event to publish: the JSON text of the data of the event, with the source, the type and the bus from the options or headers; a Map of the event fields, such as eventSource, eventType and eventData, where a Map or a POJO as data is serialized to JSON; a CloudEvent of the Alibaba SDK; or a List of these for a batch. Bytes, a stream, a file, another POJO or no body fail: convert to text first. |
 | **Producer output** | `map` (`java.util.Map`) | A Map with the requestId, the failedEntryCount, the resourceOwnerAccountId and the entryList of the response, with the request id in the CamelAlibabaEventBridgeRequestId header too. An event that EventBridge rejects does not fail the exchange: check failedEntryCount. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

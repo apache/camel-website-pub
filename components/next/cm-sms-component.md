@@ -101,7 +101,7 @@ The message body at each side of the CM SMS Gateway component: _Consumer_ is the
 | **Producer input** | `pojo` (`org.apache.camel.component.cm.client.SMSMessage`) | The SMS as an org.apache.camel.component.cm.client.SMSMessage with the text and the E.164 phone number; text, a Map or no body fails. A message that fails its validation, such as a phone number not in E.164 form, fails. |
 | **Producer output** | `unchanged` | The body is left as it was; the call returns nothing and a rejected message fails the exchange. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Example
 

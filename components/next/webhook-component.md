@@ -144,7 +144,7 @@ The message body at each side of the Webhook component: _Consumer_ is the body o
 | **Consumer** | `unknown` | The body the webhook handler of the delegate component (endpointUri) makes of the HTTP request: the same body as its polling consumer, such as an IncomingMessage (or another update) for Telegram, an Event for ClickUp, or the JSON as a String for WhatsApp. |
 | **Consumer reply** | `any` | The delegate component sets the HTTP response body itself after the route: Telegram and ClickUp reply with an empty body, WhatsApp with the request content, whatever body the route ends with. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

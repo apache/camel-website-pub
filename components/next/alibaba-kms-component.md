@@ -165,7 +165,7 @@ encrypt encrypts the body unless the plaintext option or header is set: text and
  |
 | **Producer output** | `map` (`java.util.Map`) | A Map with the statusCode and the fields of the response: the ciphertextBlob and keyId of encrypt, the plaintext of decrypt, which is Base64 when this component encrypted it, and the plaintext and ciphertextBlob of generateDataKey. The request id is in the CamelAlibabaKmsRequestId header too. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

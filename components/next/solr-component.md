@@ -184,7 +184,7 @@ What the operation needs: INSERT a Map or a SolrInputDocument, a List of them or
  |
 | **Producer output** | `map` | The response of Solr as a Map (a SimpleOrderedMap) with the responseHeader and, for a search, the documents under response as a SolrDocumentList. Convert it to a QueryResponse or a SolrPingResponse to read it with SolrJ. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

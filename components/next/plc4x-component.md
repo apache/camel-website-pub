@@ -122,7 +122,7 @@ The message body at each side of the PLC4X component: _Consumer_ is the body of 
 | **Producer input** | `map` | A Map of the tag names, each to a Map of the address of the tag and the value to write, such as {temperature: {"%DB1:DINT": 21}}; another body fails. |
 | **Producer output** | `pojo` (`org.apache.plc4x.java.api.messages.PlcWriteResponse`) | The write response of PLC4X, with the response code of each tag. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Dependencies
 

@@ -182,7 +182,7 @@ The document read as a String, then split and embedded; another body, such as a 
  |
 | **Producer output** | `pojo` (`org.apache.camel.component.langchain4j.ingest.IngestResult`) | An IngestResult with the pipeline, the document id, the number of segments written and the outcome: INGESTED, EMPTY, SKIPPED or FILTERED. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 

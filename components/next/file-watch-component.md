@@ -142,7 +142,7 @@ The message body at each side of the File Watch component: _Consumer_ is the bod
 | --- | --- | --- |
 | **Consumer** | `file` (`java.io.File`) | The java.io.File of the file or directory of the event, also for DELETE, with the event in the CamelFileEventType header. The consumer does not read it: it converts to text, bytes or a stream by reading the file, which fails after a DELETE. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Examples
 

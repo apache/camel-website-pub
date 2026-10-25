@@ -187,7 +187,7 @@ The message body at each side of the Flink component: _Consumer_ is the body of 
 | **Producer input** | `any` | The body is handed to the DataSet or DataStream callback as its payload, a List as one payload per element; the data to compute on is the DataSet or DataStream of the endpoint or of the CamelFlinkDataSet or CamelFlinkDataStream header. |
 | **Producer output** | `unknown` | What the callback returns, null for a void callback. A DataSet it returns is collected into a List; a DataStream it returns fails unless collect is false, then the DataStream (or DataSet) is the body and the CamelFlinkDataStream (or CamelFlinkDataSet) header. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Examples
 

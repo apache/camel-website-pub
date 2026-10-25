@@ -496,7 +496,7 @@ Not used: the operations take their input from headers, such as the input of sta
  |
 | **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the StartExecutionResponse of startExecution with the ARN of the execution. startSyncExecution gives a StartSyncExecutionResponse whose output is the JSON that the execution returns, as text: a failed execution does not fail the exchange, so check its status. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 Required Step Functions component options
 

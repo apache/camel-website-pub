@@ -149,7 +149,7 @@ The message body at each side of the OptaPlanner component: _Consumer_ is the bo
 | **Producer input** | `pojo` | The planning problem: an instance of the PlanningSolution class of the solver configuration, or a ProblemChange to apply to the problem being solved. Any other body fails to solve, and no body fails. |
 | **Producer output** | `pojo` or `unchanged` | The best solution found, a new instance of the problem class, with the CamelOptaPlannerIsSolving header false (also with async, the exchange waits for it); a ProblemChange leaves the body unchanged. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Message Body
 

@@ -121,7 +121,7 @@ The message body at each side of the Master component: _Consumer_ is the body of
 | --- | --- | --- |
 | **Consumer** | `unknown` | The body the consumer of the delegate endpoint (delegateUri) makes, such as the file of a file consumer: only the node that holds the leadership of the namespace in the cluster service runs it. |
 
-The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
 
