@@ -16,6 +16,17 @@ The Rollback eip supports the following options which are listed below.
 | **markRollbackOnly** | If enabled then only the current transaction is marked for rollback. No exception is thrown and the route continues to execute. | false | Boolean |
 | **markRollbackOnlyLast** | If enabled then only the last sub-transaction (from the last transacted EIP) is marked for rollback. This allows partial rollbacks in nested transaction scenarios. | false | Boolean |
 
+## Message Body
+
+The message body at each side of the Rollback EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Marks the exchange for rollback: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Rollback eip has no exchange properties.

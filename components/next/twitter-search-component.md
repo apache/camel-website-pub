@@ -284,3 +284,16 @@ The Twitter Search component supports the following message header(s), which is/
 | **CamelTwitterSinceId** (common) Constant: [`TWITTER_SINCEID`](https://javadoc.io/doc/org.apache.camel/camel-twitter/latest/org/apache/camel/component/twitter/TwitterConstants.html#TWITTER_SINCEID) | The last tweet id which will be used for pulling the tweets. It is useful when the camel route is restarted after a long-running. |  | Long |
 | **CamelTwitterMaxId** (common) Constant: [`TWITTER_MAXID`](https://javadoc.io/doc/org.apache.camel/camel-twitter/latest/org/apache/camel/component/twitter/TwitterConstants.html#TWITTER_MAXID) | If specified, returns tweets with status ids less than the given id. |  | Long |
 | **CamelTwitterEventType** (common) Constant: [`TWITTER_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-twitter/latest/org/apache/camel/component/twitter/TwitterConstants.html#TWITTER_EVENT_TYPE) | The type of event. The supported values are the values of the enum org.apache.camel.component.twitter.consumer.TwitterEventType. |  | String |
+
+## Message Body
+
+The message body at each side of the Twitter Search component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`twitter4j.v1.Status`) | One tweet found by the search per exchange, with its text in getText(). |
+| **Producer input** | `any` | The body is not read: the search uses the keywords of the endpoint, or of the CamelTwitterKeywords header. |
+| **Producer output** | `list` (`java.util.List<twitter4j.v1.Status>`) | The tweets found, an empty List when there are none. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).

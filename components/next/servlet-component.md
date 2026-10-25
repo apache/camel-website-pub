@@ -20,7 +20,7 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 > **Note**
 > **Stream**
 >
-> Servlet is stream-based, which means the input it receives is submitted to Camel as a stream. That means you will only be able to read the content of the stream **once**. If you find a situation where the message body appears to be empty, or you need to access the data multiple times (eg: doing multicasting, or redelivery error handling), you should use Stream caching or convert the message body to a `String` which is safe to be read multiple times.
+> Servlet is stream-based, which means the input it receives is submitted to Camel as a stream. By default the consumer copies the request body into a stream cache, which can be read more than once. With `disableStreamCache=true` the body is the raw request stream, and you will only be able to read the content of the stream **once**. If you find a situation where the message body appears to be empty, or you need to access the data multiple times (eg: doing multicasting, or redelivery error handling), you should use Stream caching or convert the message body to a `String` which is safe to be read multiple times.
 
 ## URI format
 
@@ -149,6 +149,21 @@ Enum values:
 | **optionsEnabled** (consumer (advanced)) | Specifies whether to enable HTTP OPTIONS for this Servlet consumer. By default OPTIONS is turned off. | false | boolean |
 | **traceEnabled** (consumer (advanced)) | Specifies whether to enable HTTP TRACE for this Servlet consumer. By default TRACE is turned off. | false | boolean |
 | **oauthProfile** (security) | OAuth profile name for validating incoming Authorization: Bearer tokens. When set, the request is authenticated before the route is processed. This requires an OAuthTokenValidationFactory; camel-oauth provides the default implementation. This is Camel endpoint-level validation and does not replace servlet container or framework security. |  | String |
+
+## Message Body
+
+The message body at each side of the Servlet component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` or `null` | The request body as a stream cache, which can be read again (the raw stream, read once, with disableStreamCache); an empty one for a GET, null with Content-Length 0 or eagerCheckContentAvailable. The fields of a form are also headers; a multipart request is the raw multipart payload, or with attachmentMultipartBinding an empty body and its parts as attachments.
+Not known when `transferException` or `httpBinding` is set.
+
+ |
+| **Consumer reply** | `null`, `text`, `bytes`, `stream` or `file` | The response body: text, bytes, a stream or a file. A Map, a List or a POJO is sent as an empty body (as its toString with chunked=false): marshal it first. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## OAuth Bearer token validation
 

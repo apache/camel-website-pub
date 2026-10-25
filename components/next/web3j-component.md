@@ -241,6 +241,178 @@ The Web3j Ethereum Blockchain component supports the following message header(s)
 | **CamelWeb3jStatus** (consumer) Constant: [`HEADER_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#HEADER_STATUS) | The status of the operation. |  | String |
 | **CamelWeb3jHeaderOperation** (consumer) Constant: [`HEADER_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#HEADER_OPERATION) | The operation. |  | String |
 
+## Message Body
+
+The message body at each side of the Web3j Ethereum Blockchain component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text`, `pojo` or `null` | One message per item of the subscription of the operation: the hash of a block or a pending transaction as a String, an EthBlock.Block, a Transaction or a Log of web3j. No body on the message that ends the subscription (header CamelWeb3jStatus=done) or carries its error.
+-   With `operation=ETH_BLOCK_HASH_OBSERVABLE`: `text` or `null` (`java.lang.String`)
+    
+-   With `operation=ETH_PENDING_TRANSACTION_HASH_OBSERVABLE`: `text` or `null` (`java.lang.String`)
+    
+-   With `operation=BLOCK_OBSERVABLE`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.EthBlock.Block`)
+    
+-   With `operation=REPLAY_BLOCKS_OBSERVABLE`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.EthBlock.Block`)
+    
+-   With `operation=TRANSACTION_OBSERVABLE`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.Transaction`)
+    
+-   With `operation=PENDING_TRANSACTION_OBSERVABLE`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.Transaction`)
+    
+-   With `operation=REPLAY_TRANSACTIONS_OBSERVABLE`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.Transaction`)
+    
+-   With `operation=ETH_LOG_OBSERVABLE`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.Log`)
+    
+
+Not known when `operation` is set.
+
+ |
+| **Producer input** | `any` | The operations take their input from headers and options, except WEB3\_SHA3, DB\_PUT\_STRING, DB\_PUT\_HEX and QUORUM\_GET\_PRIVATE\_PAYLOAD, which send the body converted to a String: a Map or a POJO is sent as its toString. |
+| **Producer output** | `unchanged` | 
+
+The result of the JSON-RPC call of the operation, selected by the CamelWeb3jOperation header or the operation option: a String for a hash, an address or hex data, a BigInteger for a quantity, a Boolean, a List, or a web3j object such as an EthBlock.Block, a Transaction (null when not found) or an Optional of a TransactionReceipt. On a JSON-RPC error the body is unchanged and the exchange fails, with the CamelWeb3jErrorCode, CamelWeb3jErrorData and CamelWeb3jErrorMessage headers.
+
+-   With `operation=WEB3_CLIENT_VERSION`: `text` (`java.lang.String`)
+    
+-   With `operation=WEB3_SHA3`: `text` (`java.lang.String`)
+    
+-   With `operation=NET_VERSION`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_PROTOCOL_VERSION`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_COINBASE`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_GET_STORAGE_AT`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_GET_CODE`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_SIGN`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_SEND_TRANSACTION`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_SEND_RAW_TRANSACTION`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_CALL`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_COMPILE_LLL`: `text` (`java.lang.String`)
+    
+-   With `operation=ETH_COMPILE_SERPENT`: `text` (`java.lang.String`)
+    
+-   With `operation=DB_GET_STRING`: `text` (`java.lang.String`)
+    
+-   With `operation=DB_GET_HEX`: `text` (`java.lang.String`)
+    
+-   With `operation=SHH_VERSION`: `text` (`java.lang.String`)
+    
+-   With `operation=SHH_NEW_IDENTITY`: `text` (`java.lang.String`)
+    
+-   With `operation=SHH_NEW_GROUP`: `text` (`java.lang.String`)
+    
+-   With `operation=QUORUM_ETH_SEND_TRANSACTION`: `text` (`java.lang.String`)
+    
+-   With `operation=QUORUM_GET_PRIVATE_PAYLOAD`: `text` (`java.lang.String`)
+    
+-   With `operation=NET_PEER_COUNT`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_HASHRATE`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_GAS_PRICE`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_BLOCK_NUMBER`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_GET_BALANCE`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_GET_TRANSACTION_COUNT`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_GET_BLOCK_TRANSACTION_COUNT_BY_HASH`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_GET_BLOCK_TRANSACTION_COUNT_BY_NUMBER`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_GET_UNCLE_COUNT_BY_BLOCK_HASH`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_GET_UNCLE_COUNT_BY_BLOCK_NUMBER`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_ESTIMATE_GAS`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_NEW_FILTER`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_NEW_BLOCK_FILTER`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=ETH_NEW_PENDING_TRANSACTION_FILTER`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=SHH_NEW_FILTER`: `value` (`java.math.BigInteger`)
+    
+-   With `operation=NET_LISTENING`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=ETH_SYNCING`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=ETH_MINING`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=ETH_UNINSTALL_FILTER`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=ETH_SUBMIT_WORK`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=ETH_SUBMIT_HASHRATE`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=DB_PUT_STRING`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=DB_PUT_HEX`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=SHH_POST`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=SHH_HAS_IDENTITY`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=SHH_ADD_TO_GROUP`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=SHH_UNINSTALL_FILTER`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=ETH_ACCOUNTS`: `list` (`java.util.List<java.lang.String>`)
+    
+-   With `operation=ETH_GET_COMPILERS`: `list` (`java.util.List<java.lang.String>`)
+    
+-   With `operation=ETH_GET_WORK`: `list` (`java.util.List<java.lang.String>`)
+    
+-   With `operation=ETH_GET_FILTER_CHANGES`: `list` (`java.util.List<org.web3j.protocol.core.methods.response.EthLog.LogResult<?>>`)
+    
+-   With `operation=ETH_GET_FILTER_LOGS`: `list` (`java.util.List<org.web3j.protocol.core.methods.response.EthLog.LogResult<?>>`)
+    
+-   With `operation=ETH_GET_LOGS`: `list` (`java.util.List<org.web3j.protocol.core.methods.response.EthLog.LogResult<?>>`)
+    
+-   With `operation=SHH_GET_FILTER_CHANGES`: `list` (`java.util.List<org.web3j.protocol.core.methods.response.ShhMessages.SshMessage>`)
+    
+-   With `operation=SHH_GET_MESSAGES`: `list` (`java.util.List<org.web3j.protocol.core.methods.response.ShhMessages.SshMessage>`)
+    
+-   With `operation=ETH_COMPILE_SOLIDITY`: `map` (`java.util.Map<java.lang.String, org.web3j.protocol.core.methods.response.EthCompileSolidity.Code>`)
+    
+-   With `operation=ETH_GET_BLOCK_BY_HASH`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.EthBlock.Block`)
+    
+-   With `operation=ETH_GET_BLOCK_BY_NUMBER`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.EthBlock.Block`)
+    
+-   With `operation=ETH_GET_UNCLE_BY_BLOCK_HASH_AND_INDEX`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.EthBlock.Block`)
+    
+-   With `operation=ETH_GET_UNCLE_BY_BLOCK_NUMBER_AND_INDEX`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.EthBlock.Block`)
+    
+-   With `operation=ETH_GET_TRANSACTION_BY_HASH`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.Transaction`)
+    
+-   With `operation=ETH_GET_TRANSACTION_BY_BLOCK_HASH_AND_INDEX`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.Transaction`)
+    
+-   With `operation=ETH_GET_TRANSACTION_BY_BLOCK_NUMBER_AND_INDEX`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.Transaction`)
+    
+-   With `operation=ETH_GET_TRANSACTION_RECEIPT`: `pojo` (`java.util.Optional<org.web3j.protocol.core.methods.response.TransactionReceipt>`)
+    
+-   With `operation=QUORUM_NODE_INFO`: `pojo` (`org.web3j.protocol.core.methods.response.admin.AdminNodeInfo.NodeInfo`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 All URI options can also be set as exchange headers.
 
 ## Examples

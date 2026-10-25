@@ -152,6 +152,18 @@ Enum values:
 | **CamelWeaviateHybridAlpha** (producer) Constant: [`HYBRID_ALPHA`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#HYBRID_ALPHA) | Alpha value for hybrid search (0.0 = pure BM25, 1.0 = pure vector). |  | Float |
 | **CamelWeaviateQueryVector** (producer) Constant: [`QUERY_VECTOR`](https://javadoc.io/doc/org.apache.camel/camel-weaviate/latest/org/apache/camel/component/weaviate/WeaviateVectorDbHeaders.html#QUERY_VECTOR) | Optional query vector for hybrid search (overrides server-side vectorizer). |  | List |
 
+## Message Body
+
+The message body at each side of the weaviate component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `list`, `text` or `null` | By the action in the CamelWeaviateAction header: the vector as a List of Float or a float array for CREATE, UPDATE\_BY\_ID and QUERY, with the properties in the CamelWeaviateProperties header, a List of WeaviateObject for BATCH\_CREATE, and the query text for HYBRID\_QUERY and BM25\_QUERY. CREATE\_COLLECTION, DELETE\_COLLECTION, QUERY\_BY\_ID, DELETE\_BY\_ID and AGGREGATE do not read the body, the id is in the CamelWeaviateIndexId header. Another body fails, a List of Double too: the weaviate:embeddings data type transformer builds the vector from the output of langchain4j-embeddings. |
+| **Producer output** | `pojo` or `value` | By the action: a WeaviateObject for CREATE, an InsertManyResponse for BATCH\_CREATE, a QueryResponse for QUERY, HYBRID\_QUERY and BM25\_QUERY, an Optional of WeaviateObject for QUERY\_BY\_ID, an AggregateResponse for AGGREGATE, and a Boolean for CREATE\_COLLECTION, UPDATE\_BY\_ID, DELETE\_BY\_ID and DELETE\_COLLECTION. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The `CamelWeaviateAction` header selects the operation. The routes below create a collection, add an object with its vector (the message body) and its properties (the `CamelWeaviateProperties` header), and run a keyword (BM25) search for the text in the message body:

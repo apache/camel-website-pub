@@ -230,6 +230,20 @@ Enum values:
 | **CamelHiveMQRetained** (common) Constant: [`MQTT_RETAINED`](https://javadoc.io/doc/org.apache.camel/camel-hivemq/latest/org/apache/camel/component/hivemq/HiveMQConstants.html#MQTT_RETAINED) | Whether the message should be retained. |  | Boolean |
 | **CamelHiveMQOverrideTopic** (common) Constant: [`OVERRIDE_TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-hivemq/latest/org/apache/camel/component/hivemq/HiveMQConstants.html#OVERRIDE_TOPIC) | Header to dynamically override the target topic for publishing. |  | String |
 
+## Message Body
+
+The message body at each side of the HiveMQ component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The payload of the MQTT message, an empty byte array for an empty payload. The topic is in the CamelHiveMQTopic header. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload; no body is sent as an empty payload. A Map, a POJO or a number does not convert and is sent as an empty payload too, without an error: marshal it first. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Default payload type

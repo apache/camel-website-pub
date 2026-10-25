@@ -563,6 +563,68 @@ Enum values:
 | **CamelAzureStorageDataLakeFileClient** (producer) Constant: [`FILE_CLIENT`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#FILE_CLIENT) | Sets the file client to use. |  | DataLakeFileClient |
 | **CamelAzureStorageDataLakeFlush** (producer) Constant: [`FLUSH`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#FLUSH) | Sets whether to flush on append. |  | Boolean |
 
+## Message Body
+
+The message body at each side of the Azure Storage Data Lake Service component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` or `file` | The content of the file, one message per file: a stream that reads it, or with fileDir the java.io.File it is downloaded to. The name of the file is in the CamelAzureStorageDataLakeFileName header; without fileName, every file of the file system is consumed, the directories skipped. |
+| **Producer input** | `any` | 
+The content to write for upload and appendToFile: text, bytes, a stream or a file; a Map or no body fails: marshal it first. getFile writes into an OutputStream body. The other operations do not use the body: uploadFromFile reads the file of the path option.
+
+-   With `operation=upload`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=appendToFile`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `list` (`java.util.List<com.azure.storage.file.datalake.models.FileSystemItem>`) | 
+
+A List of the items of the SDK for listFileSystem, the default, and listPaths. A stream of the content for getFile, or the OutputStream body it wrote into, and of the query result for openQueryInputStream; the java.io.File for downloadToFile; the link for downloadLink; the PathInfo for flushToFile and the DataLakeFileClient for createFile; true for createFileSystem and the operations that upload, append or delete, with their results in headers.
+
+-   With `operation=createFileSystem`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deleteFileSystem`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deleteFile`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=appendToFile`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=uploadFromFile`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=upload`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deleteDirectory`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=listPaths`: `list` (`java.util.List<com.azure.storage.file.datalake.models.PathItem>`)
+    
+-   With `operation=getFile`: `stream`
+    
+-   With `operation=openQueryInputStream`: `stream`
+    
+-   With `operation=downloadToFile`: `file` (`java.io.File`)
+    
+-   With `operation=downloadLink`: `text` (`java.lang.String`)
+    
+-   With `operation=flushToFile`: `pojo` (`com.azure.storage.file.datalake.models.PathInfo`)
+    
+-   With `operation=createFile`: `pojo` (`com.azure.storage.file.datalake.DataLakeFileClient`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Methods of authentication
 
 To use this component, you will have to provide at least one of the specific credentialType parameters:

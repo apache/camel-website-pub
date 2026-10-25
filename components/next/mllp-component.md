@@ -17,7 +17,7 @@ The component supports the following:
 -   A Camel producer using a TCP Client
     
 
-The MLLP component use `byte[]` payloads, and relies on Camel type conversion to convert `byte[]` to other types.
+The MLLP consumer gives the HL7 payload as a `String` by default (`stringPayload=true`), or as a `byte[]` with `stringPayload=false`. The MLLP producer sends a `String` or a `byte[]` body.
 
 Maven users will need to add the following dependency to their pom.xml for this component:
 
@@ -258,6 +258,30 @@ The MLLP component supports the following message header(s), which is/are listed
 | **CamelMllpProcessingId** (consumer) Constant: [`MLLP_PROCESSING_ID`](https://javadoc.io/doc/org.apache.camel/camel-mllp/latest/org/apache/camel/component/mllp/MllpConstants.html#MLLP_PROCESSING_ID) | MSH-11 value. |  | String |
 | **CamelMllpVersionId** (consumer) Constant: [`MLLP_VERSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-mllp/latest/org/apache/camel/component/mllp/MllpConstants.html#MLLP_VERSION_ID) | MSH-12 value. |  | String |
 | **CamelMllpCharset** (consumer) Constant: [`MLLP_CHARSET`](https://javadoc.io/doc/org.apache.camel/camel-mllp/latest/org/apache/camel/component/mllp/MllpConstants.html#MLLP_CHARSET) | MSH-18 value. |  | String |
+
+## Message Body
+
+The message body at each side of the MLLP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | 
+The HL7 message without the MLLP envelope, as a String in the charset of MSH-18 or charsetName, or a byte array with stringPayload=false.
+
+-   With `stringPayload=false`: `bytes` (`byte[]`)
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `any` | The body is not sent back: the acknowledgement is the CamelMllpAcknowledgement or CamelMllpAcknowledgementString exchange property, or with autoAck an HL7 ACK (AA, or AE when the exchange failed). |
+| **Producer input** | `text` or `bytes` | The HL7 message as a String or a byte array. No body fails; another body, such as a stream, is sent as an empty message: convert it to a String first. |
+| **Producer output** | `unchanged` | The body is left as it was: with InOut the acknowledgement is in the CamelMllpAcknowledgement (byte array) and CamelMllpAcknowledgementString headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Usage
 

@@ -172,6 +172,36 @@ The IBM Watson Text to Speech component supports the following message header(s)
 | **CamelIBMWatsonTTSModelId** (producer) Constant: [`MODEL_ID`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-text-to-speech/latest/org/apache/camel/component/ibm/watson/tts/WatsonTextToSpeechConstants.html#MODEL_ID) | The custom model ID. |  | String |
 | **CamelIBMWatsonTTSVoiceName** (producer) Constant: [`VOICE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-text-to-speech/latest/org/apache/camel/component/ibm/watson/tts/WatsonTextToSpeechConstants.html#VOICE_NAME) | The name of the voice. |  | String |
 
+## Message Body
+
+The message body at each side of the IBM Watson Text to Speech component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The text to synthesize, or the voice name, custom model ID or word for getVoice, getCustomModel and getPronunciation, read as text unless the CamelIBMWatsonTTSText, CamelIBMWatsonTTSVoiceName, CamelIBMWatsonTTSModelId or CamelIBMWatsonTTSWord header gives it. No body fails, and a Map or a POJO is sent as its toString(). listVoices and listCustomModels do not read the body. |
+| **Producer output** | `stream` (`java.io.InputStream`) | 
+synthesize gives the audio in the format of accept (audio/wav by default) as the InputStream of the HTTP response, which can be read once: write it to a file or convert it to bytes. listVoices gives a List of Voice and listCustomModels a List of CustomModel of the IBM Watson SDK.
+
+-   With `operation=listVoices`: `list`
+    
+-   With `operation=getVoice`: `pojo` (`com.ibm.watson.text_to_speech.v1.model.Voice`)
+    
+-   With `operation=listCustomModels`: `list`
+    
+-   With `operation=getCustomModel`: `pojo` (`com.ibm.watson.text_to_speech.v1.model.CustomModel`)
+    
+-   With `operation=getPronunciation`: `pojo` (`com.ibm.watson.text_to_speech.v1.model.Pronunciation`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required Watson Text to Speech component options
 
 You must provide the `apiKey` to access IBM Watson Text to Speech. Optionally, you can specify a custom `serviceUrl` if you’re using a dedicated or private instance.

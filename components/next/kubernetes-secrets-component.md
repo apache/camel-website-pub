@@ -118,6 +118,38 @@ The Kubernetes Secrets component supports the following message header(s), which
 | **CamelKubernetesSecret** (producer) Constant: [`KUBERNETES_SECRET`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_SECRET) | A secret object. |  | Secret |
 | **CamelKubernetesSecretsAnnotations** (producer) Constant: [`KUBERNETES_SECRETS_ANNOTATIONS`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_SECRETS_ANNOTATIONS) | The secret annotations. |  | Map |
 
+## Message Body
+
+The message body at each side of the Kubernetes Secrets component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesSecretName, the labels in CamelKubernetesSecretsLabels and the Secret to create or update in CamelKubernetesSecret. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of Secret for listSecrets and listSecretsByLabels; the Secret for getSecret (null when not found), createSecret and updateSecret; a Boolean for deleteSecret, false when not found.
+
+-   With `operation=listSecrets`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.Secret>`)
+    
+-   With `operation=listSecretsByLabels`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.Secret>`)
+    
+-   With `operation=getSecret`: `pojo` or `null` (`io.fabric8.kubernetes.api.model.Secret`)
+    
+-   With `operation=createSecret`: `pojo` (`io.fabric8.kubernetes.api.model.Secret`)
+    
+-   With `operation=updateSecret`: `pojo` (`io.fabric8.kubernetes.api.model.Secret`)
+    
+-   With `operation=deleteSecret`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

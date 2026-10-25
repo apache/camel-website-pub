@@ -196,6 +196,18 @@ The OPC UA Browser component supports the following message header(s), which is/
 | --- | --- | --- | --- |
 | **CamelMiloNodeIds** (producer) Constant: [`HEADER_NODE_IDS`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_NODE_IDS) | The node ids. |  | List |
 
+## Message Body
+
+The message body at each side of the OPC UA Browser component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The body is not read: the nodes to browse are the node IDs of the CamelMiloNodeIds header, or else the node option. |
+| **Producer output** | `map` | A Map of the browsed ExpandedNodeId to its Milo BrowseResult; the node IDs found are also in the CamelMiloNodeIds header, as a List of Strings for the milo-client producer. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Client
 
 The browse component shares the same base options like the Camel Milo Client component, e.g. concerning topics like discovery, security policies, the validation of the server certificate, the construction of node ids, etc.

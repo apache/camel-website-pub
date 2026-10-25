@@ -21,6 +21,17 @@ The Script eip supports the following options which are listed below.
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **expression** | **Required** The expression to evaluate as a script. The script result does not change the message body (use transform instead if that is desired). |  | ExpressionDefinition |
 
+## Message Body
+
+The message body at each side of the Script EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unknown` | The EIP does not use the result of the script, but the script can set the body. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Script eip has no exchange properties.

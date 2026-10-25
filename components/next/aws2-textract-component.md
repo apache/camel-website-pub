@@ -425,10 +425,10 @@ The AWS Textract component supports the following message header(s), which is/ar
 | **CamelAwsTextractS3Bucket** (producer) Constant: [`S3_BUCKET`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#S3_BUCKET) | The S3 bucket name containing the document to process. |  | String |
 | **CamelAwsTextractS3Object** (producer) Constant: [`S3_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#S3_OBJECT) | The S3 object name (key) of the document to process. |  | String |
 | **CamelAwsTextractS3ObjectVersion** (producer) Constant: [`S3_OBJECT_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#S3_OBJECT_VERSION) | The S3 object version of the document to process. |  | String |
-| **CamelAwsTextractJobId** (producer) Constant: [`JOB_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#JOB_ID) | The job ID for async operations (StartDocumentTextDetection, StartDocumentAnalysis). |  | String |
+| **CamelAwsTextractJobId** (producer) Constant: [`JOB_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#JOB_ID) | The job ID of an async operation. It is set from the response of the startDocumentTextDetection, startDocumentAnalysis and startExpenseAnalysis operations, and it is the job ID of the getDocumentTextDetection, getDocumentAnalysis and getExpenseAnalysis operations (else the body is used as the job ID). |  | String |
 | **CamelAwsTextractMaxResults** (producer) Constant: [`MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#MAX_RESULTS) | The maximum number of results to return in paginated operations. |  | Integer |
 | **CamelAwsTextractNextToken** (producer) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#NEXT_TOKEN) | The next token for pagination in operations that return multiple pages. |  | String |
-| **CamelAwsTextractFeatureTypes** (producer) Constant: [`FEATURE_TYPES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#FEATURE_TYPES) | The feature types for document analysis (TABLES, FORMS, SIGNATURES, etc.). |  | List |
+| **CamelAwsTextractFeatureTypes** (producer) Constant: [`FEATURE_TYPES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-textract/latest/org/apache/camel/component/aws2/textract/Textract2Constants.html#FEATURE_TYPES) | The feature types of the analyzeDocument and startDocumentAnalysis operations (TABLES, FORMS, QUERIES, SIGNATURES, LAYOUT): a list of FeatureType or String values, or a String with comma separated values. The String values are case-insensitive. Without this header TABLES and FORMS are used. |  | List |
 
 ## Message Body
 
@@ -448,13 +448,13 @@ The document of detectDocumentText, the default, analyzeDocument and analyzeExpe
 
 
  |
-| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the DetectDocumentTextResponse of detectDocumentText, the default, whose blocks hold the lines and the words found. The start operations give the job id only in the response: set the CamelAwsTextractJobId header from it for the get operations. |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the DetectDocumentTextResponse of detectDocumentText, the default, whose blocks hold the lines and the words found. The start operations give the response with the job id, and set the CamelAwsTextractJobId header to it for the get operations. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 Required Textract component options
 
-You have to provide the amazonTextractClient in the Registry or your accessKey and secretKey to access the [Amazon Textract](https://aws.amazon.com/textract/) service.
+You have to provide the textractClient in the Registry or your accessKey and secretKey to access the [Amazon Textract](https://aws.amazon.com/textract/) service.
 
 ## Usage
 
@@ -482,6 +482,53 @@ You have also the possibility of using Profile Credentials Provider, by specifyi
 Only one of static, default and profile credentials could be used at the same time.
 
 For more information about this you can look at [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### The document
+
+The synchronous operations (`detectDocumentText`, `analyzeDocument` and `analyzeExpense`) read the document from S3 or from the message body; the asynchronous `start` operations read it from S3 only:
+
+-   The bucket is the `s3Bucket` option, or else the `CamelAwsTextractS3Bucket` header.
+    
+-   The object is the `s3Object` option, or else the `CamelAwsTextractS3Object` header.
+    
+-   The version is the `s3ObjectVersion` option, or else the `CamelAwsTextractS3ObjectVersion` header.
+    
+
+The options are used first: a header is read only when its option is not set. When both the bucket and the object are known, the document is that S3 object. Otherwise a synchronous operation uses the message body (as bytes) as the document, and an asynchronous operation fails.
+
+### Feature types
+
+The `analyzeDocument` and `startDocumentAnalysis` operations analyze the feature types of the `CamelAwsTextractFeatureTypes` header, or else `TABLES` and `FORMS`. The header can be a list (or array) of `FeatureType` or `String` values, or one `String` with comma separated values, such as `TABLES,SIGNATURES`. The `String` values are case-insensitive, and an unknown value fails with an `IllegalArgumentException`.
+
+### Asynchronous operations
+
+The `startDocumentTextDetection`, `startDocumentAnalysis` and `startExpenseAnalysis` operations return the start response as the body, and set the `CamelAwsTextractJobId` header to the job ID of the response. The `getDocumentTextDetection`, `getDocumentAnalysis` and `getExpenseAnalysis` operations read the job ID from the `CamelAwsTextractJobId` header, or else from the message body, so a `get` step can follow a `start` step (the job must have finished, see the `JobStatus` of the `get` response):
+
+```yaml
+- route:
+    from:
+      uri: direct:analyze
+      steps:
+        - setHeader:
+            name: CamelAwsTextractFeatureTypes
+            constant:
+              expression: "TABLES,SIGNATURES"
+        - to:
+            uri: aws2-textract:textract
+            parameters:
+              operation: startDocumentAnalysis
+              s3Bucket: my-documents
+              s3Object: contracts/contract-1.pdf
+        - delay:
+            constant:
+              expression: "10000"
+        - to:
+            uri: aws2-textract:textract
+            parameters:
+              operation: getDocumentAnalysis
+        - log:
+            message: "${body.jobStatus}"
+```
 
 ### Example
 

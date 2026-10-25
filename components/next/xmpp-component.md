@@ -145,6 +145,44 @@ The XMPP component supports the following message header(s), which is/are listed
 | --- | --- | --- | --- |
 | **CamelXmppDoc** (consumer) Constant: [`DOC_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-xmpp/latest/org/apache/camel/component/xmpp/XmppConstants.html#DOC_HEADER) | The XMPP message. |  | Message |
 
+## Message Body
+
+The message body at each side of the XMPP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `pojo` | 
+The text of the chat message; the Smack Message when it has no body text, such as a pubsub notification. With doc, the Smack Message. The subject, thread and sender are in the CamelXmpp\* headers.
+
+-   With `doc=true`: `pojo` (`org.jivesoftware.smack.packet.Message`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | 
+
+The body is converted to text and sent as the chat message (a Map or a POJO as its toString); the headers become message properties. Without a room, doc sends a Smack Stanza (or an array of them) and pubsub a Smack PubSub packet as they are; another body fails.
+
+-   With `doc=true`: `pojo`
+    
+-   With `pubsub=true`: `pojo` (`org.jivesoftware.smackx.pubsub.packet.PubSub`)
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Connections

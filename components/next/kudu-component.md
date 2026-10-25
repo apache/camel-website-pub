@@ -137,6 +137,41 @@ The Kudu component supports the following message header(s), which is/are listed
 | **CamelKuduScanPredicate** (producer) Constant: [`CAMEL_KUDU_SCAN_PREDICATE`](https://javadoc.io/doc/org.apache.camel/camel-kudu/latest/org/apache/camel/component/kudu/KuduConstants.html#CAMEL_KUDU_SCAN_PREDICATE) | The predicate for scan operation. |  | KuduPredicate |
 | **CamelKuduScanLimit** (producer) Constant: [`CAMEL_KUDU_SCAN_LIMIT`](https://javadoc.io/doc/org.apache.camel/camel-kudu/latest/org/apache/camel/component/kudu/KuduConstants.html#CAMEL_KUDU_SCAN_LIMIT) | The limit on the number of rows for scan operation. |  | long |
 
+## Message Body
+
+The message body at each side of the Kudu component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `map` | 
+For insert, update, upsert and delete: a Map of the column names and their values, one row, each value of the Java type of its column (a String for an INT32 column fails); delete uses only the key columns. Text such as JSON, a List or a POJO fails: unmarshal it into a Map first. Scan and create\_table do not read the body: they take the CamelKuduScan\* and the CamelKuduSchema and CamelKuduTableOptions headers. The operation must be set.
+
+-   With `operation=SCAN`: `any`
+    
+-   With `operation=CREATE_TABLE`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+Scan gives a List of the rows, each a Map of the column names and their values, an empty List for no rows. The other operations leave the body unchanged.
+
+-   With `operation=SCAN`: `list` (`java.util.List<java.util.Map<String, Object>>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Input Body formats

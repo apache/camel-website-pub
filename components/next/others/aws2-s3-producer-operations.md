@@ -48,6 +48,8 @@ from("direct:start")
 
 Bucket-level operations (`listBuckets`, `deleteBucket`, `listObjects`, `createBucket`, etc.) don’t require a key header — just set the `operation` parameter.
 
+The operations take the bucket from the endpoint URI, unless the `CamelAwsS3OverrideBucketName` header is set, and the key from the `keyName` option, unless the `CamelAwsS3Key` header is set.
+
 ## Operations Reference
 
   
@@ -56,14 +58,14 @@ Bucket-level operations (`listBuckets`, `deleteBucket`, `listObjects`, `createBu
 | `listBuckets` | List all buckets for this account in this region. |  |
 | `createBucket` | Create a new bucket. |  |
 | `deleteBucket` | Delete a bucket. |  |
-| `headBucket` | Check if a bucket exists and you have permission to access it. |  |
+| `headBucket` | Check if a bucket exists and you have permission to access it. | Sets the `CamelAwsS3BucketExists` header |
 | `listObjects` | List objects in a bucket. |  |
 | `getObject` | Get a single object. Returns its content as a stream. |  |
 | `getObjectRange` | Get a byte range from an object. | See [getObjectRange](#getObjectRange) |
 | `deleteObject` | Delete an object. |  |
 | `deleteObjects` | Delete multiple objects in a single request. | See [deleteObjects](#deleteObjects) |
 | `copyObject` | Copy an object from one bucket to another. | See [copyObject](#copyObject) |
-| `headObject` | Retrieve metadata from an object without returning the object itself. |  |
+| `headObject` | Retrieve metadata from an object without returning the object itself. | Requires a key (the `keyName` option or the `CamelAwsS3Key` header) |
 | `uploadObject` (default) | Upload a file to S3 based on the body content. | See [Upload (Single Upload)](#uploadObject) |
 | `multipartUpload` | Upload a large file using multipart upload. | See [Multipart Upload](#multipartUpload) |
 | `createDownloadLink` | Generate a presigned download URL. | See [createDownloadLink](#createDownloadLink) |

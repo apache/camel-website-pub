@@ -48,8 +48,11 @@ Currently, the component supports the following applications.
 | `nlp/machine_translation` | `String` | `String` |
 | `nlp/multiple_choice` | `String` | `String` |
 | `nlp/text_embedding` | `String` | `ai.djl.ndarray.NDArray` |
+| `nlp/word_embedding` (custom model only) | `String` | `byte[]` (the encoded `ai.djl.ndarray.NDList`) |
 | `audio` | `ai.djl.modality.audio.Audio   byte[]   InputStream   File` | `String` |
 | `timeseries/forecasting` | `ai.djl.timeseries.TimeSeriesData` | `ai.djl.timeseries.Forecast` |
+| `tabular/linear_regression` (custom model only) | Any body: the input type of the translator | The output type of the translator |
+| `tabular/softmax_regression` (custom model only) | Any body: the input type of the translator | The output type of the translator |
 
 ## Configuring Options
 
@@ -141,6 +144,127 @@ The Deep Java Library component supports the following message header(s), which 
 | --- | --- | --- | --- |
 | **CamelDjlInput** (producer) Constant: [`INPUT`](https://javadoc.io/doc/org.apache.camel/camel-djl/latest/org/apache/camel/component/djl/DJLConstants.html#INPUT) | The input data used for prediction. |  |  |
 | **CamelDjlFileType** (producer) Constant: [`FILE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-djl/latest/org/apache/camel/component/djl/DJLConstants.html#FILE_TYPE) | The file type of the message body data. It is used when the body is converted to bytes. |  |  |
+
+## Message Body
+
+The message body at each side of the Deep Java Library component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `bytes`, `stream`, `file`, `pojo`, `text` or `list` | 
+Depends on the application. The cv applications and audio take an image or audio clip as bytes, a stream, a File or a Path, or a DJL Image or Audio (a BufferedImage or a file name as text is not converted); cv/image\_generation an int\[\] of seeds. The nlp applications take a String only (bytes or a stream fail: convert to text first), nlp/question\_answer a QAInput or a String\[\] of the question and the paragraph, timeseries/forecasting a TimeSeriesData. No body fails.
+
+-   With `application=cv/image_classification`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=cv/object_detection`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=cv/semantic_segmentation`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=cv/instance_segmentation`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=cv/pose_estimation`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=cv/action_recognition`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=cv/word_recognition`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=cv/image_enhancement`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=cv/image_generation`: `list` (`int[]`)
+    
+-   With `application=nlp/fill_mask`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/text_classification`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/sentiment_analysis`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/token_classification`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/word_embedding`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/text_generation`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/machine_translation`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/multiple_choice`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/text_embedding`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/question_answer`: `pojo` or `list`
+    
+-   With `application=audio`: `bytes`, `stream`, `file` or `pojo`
+    
+-   With `application=timeseries/forecasting`: `pojo` (`ai.djl.timeseries.TimeSeriesData`)
+    
+-   With `application=tabular/linear_regression`: `any`
+    
+-   With `application=tabular/softmax_regression`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo`, `text`, `list` or `bytes` | 
+
+The prediction of the model, as a DJL object: Classifications, DetectedObjects, CategoryMask, Joints, an Image, an NDArray or a Forecast, or text for word\_recognition, question\_answer, text\_generation, machine\_translation, multiple\_choice and audio; nlp/word\_embedding gives the encoded NDList as bytes. With a custom model, it is what its translator returns. The input the model took, such as the Image, is in the CamelDjlInput header.
+
+-   With `application=cv/image_classification`: `pojo` (`ai.djl.modality.Classifications`)
+    
+-   With `application=cv/object_detection`: `pojo` (`ai.djl.modality.cv.output.DetectedObjects`)
+    
+-   With `application=cv/semantic_segmentation`: `pojo` (`ai.djl.modality.cv.output.CategoryMask`)
+    
+-   With `application=cv/instance_segmentation`: `pojo` (`ai.djl.modality.cv.output.DetectedObjects`)
+    
+-   With `application=cv/pose_estimation`: `pojo` (`ai.djl.modality.cv.output.Joints`)
+    
+-   With `application=cv/action_recognition`: `pojo` (`ai.djl.modality.Classifications`)
+    
+-   With `application=cv/word_recognition`: `text` (`java.lang.String`)
+    
+-   With `application=cv/image_generation`: `list` (`ai.djl.modality.cv.Image[]`)
+    
+-   With `application=cv/image_enhancement`: `pojo` (`ai.djl.modality.cv.Image`)
+    
+-   With `application=nlp/fill_mask`: `list` (`java.lang.String[]`)
+    
+-   With `application=nlp/question_answer`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/text_classification`: `pojo` (`ai.djl.modality.Classifications`)
+    
+-   With `application=nlp/sentiment_analysis`: `pojo` (`ai.djl.modality.Classifications`)
+    
+-   With `application=nlp/token_classification`: `pojo` (`ai.djl.modality.Classifications`)
+    
+-   With `application=nlp/word_embedding`: `bytes` (`byte[]`)
+    
+-   With `application=nlp/text_generation`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/machine_translation`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/multiple_choice`: `text` (`java.lang.String`)
+    
+-   With `application=nlp/text_embedding`: `pojo` (`ai.djl.ndarray.NDArray`)
+    
+-   With `application=audio`: `text` (`java.lang.String`)
+    
+-   With `application=timeseries/forecasting`: `pojo` (`ai.djl.timeseries.Forecast`)
+    
+-   With `application=tabular/linear_regression`: `unknown`
+    
+-   With `application=tabular/softmax_regression`: `unknown`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Usage
 

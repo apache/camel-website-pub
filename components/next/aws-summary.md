@@ -88,7 +88,7 @@ Manage AWS MSK instances.
 
 [AWS MQ](aws2-mq-component.md)
 
-Send messages to AWS MQ.
+Manage AWS MQ instances.
 
 [AWS Parameter Store](aws-parameter-store-component.md)
 

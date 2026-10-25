@@ -26,7 +26,7 @@ The message body at each side of the Base64 data format: _Marshal input_ and _Un
 | **Marshal output** | `stream`, as text | The Base64 text in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | 
  |
-| **Unmarshal output** | `stream` | The decoded bytes, as a stream. |
+| **Unmarshal output** | `stream` | The decoded bytes in the stream cache, or a byte array when stream caching is off. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 
@@ -124,7 +124,7 @@ from("file://data.bin")
 
 ## Unmarshal
 
-In this example, we unmarshal the payload from the JMS queue to a stream of the decoded bytes, before its processed by the `newOrder` processor.
+In this example, we unmarshal the payload from the JMS queue to the decoded bytes in a stream cache, before its processed by the `newOrder` processor.
 
 -   Java
     

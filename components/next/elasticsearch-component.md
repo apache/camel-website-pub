@@ -215,6 +215,79 @@ Enum values:
 | **CamelElasticsearchFrom** (producer) Constant: [`PARAM_FROM`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_FROM) | The starting index of the response. |  | Integer |
 | **CamelElasticsearchEnableDocumentOnlyMode** (producer) Constant: [`PARAM_DOCUMENT_MODE`](https://javadoc.io/doc/org.apache.camel/camel-elasticsearch/latest/org/apache/camel/component/es/ElasticsearchConstants.html#PARAM_DOCUMENT_MODE) | Indicates whether the body of the message contains only documents. | false | Boolean |
 
+## Message Body
+
+The message body at each side of the Elasticsearch component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `map`, `list` or `pojo` | 
+By the operation, set by the operation option or the CamelElasticsearchOperation header. Index and Update take the document as JSON text, bytes or a stream, a Map or a POJO (written as JSON), or the request builder of the Elasticsearch client; text that is not JSON, a List, a java.io.File or no body fail. Update expects the Update API form, {"doc": {…​}}, unless enableDocumentOnlyMode is set. GetById and Delete take the id as text, Bulk and MultiGet a List of documents or ids, Search a query as JSON text or a Map (only its query member when it has one), and MultiSearch only an MsearchRequest.Builder; each also takes its request builder. DeleteIndex needs a text body but deletes the index of the CamelElasticsearchIndexName header or indexName, not the one in the body. Exists and Ping do not use the body.
+
+-   With `operation=Index`: `text`, `bytes`, `stream`, `map` or `pojo`
+    
+-   With `operation=Update`: `text`, `bytes`, `stream`, `map` or `pojo`
+    
+-   With `operation=Bulk`: `list` or `pojo`
+    
+-   With `operation=GetById`: `text` or `pojo`
+    
+-   With `operation=MultiGet`: `list` or `pojo`
+    
+-   With `operation=MultiSearch`: `pojo`
+    
+-   With `operation=Delete`: `text` or `pojo`
+    
+-   With `operation=DeleteIndex`: `text` or `pojo`
+    
+-   With `operation=Search`: `text`, `map` or `pojo`
+    
+-   With `operation=Exists`: `any`
+    
+-   With `operation=Ping`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text`, `value`, `pojo`, `list` or `iterator` | 
+
+The id of the document as text for Index and Update. GetById gives the GetResponse of the Elasticsearch client (found() is false for no document), Search the HitsMetadata of the hits, or with useScroll an ElasticsearchScrollRequestIterator of the hits to close after use; the source of a hit is a Jackson ObjectNode unless documentClass is set. MultiGet, MultiSearch and Bulk give a List of the response item of each document or search, Delete the Result enum (Deleted or NotFound), and DeleteIndex, Exists and Ping a Boolean.
+
+-   With `operation=Index`: `text` (`java.lang.String`)
+    
+-   With `operation=Update`: `text` (`java.lang.String`)
+    
+-   With `operation=Bulk`: `list`
+    
+-   With `operation=GetById`: `pojo` (`co.elastic.clients.elasticsearch.core.GetResponse`)
+    
+-   With `operation=MultiGet`: `list`
+    
+-   With `operation=MultiSearch`: `list`
+    
+-   With `operation=Delete`: `value` (`co.elastic.clients.elasticsearch._types.Result`)
+    
+-   With `operation=DeleteIndex`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=Search`: `pojo` or `iterator`
+    
+-   With `operation=Exists`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=Ping`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Message Operations
 
 The following Elasticsearch operations are currently supported. Set an endpoint URI option or exchange header with a key of "operation" and a value set to one of the following. Some operations also require other parameters or the message body to be set.
@@ -225,7 +298,7 @@ The following Elasticsearch operations are currently supported. Set an endpoint 
 | Index | **Map**, **String**, **byte\[\]**, **Reader**, **InputStream** or **IndexRequest.Builder** content to index | Adds content to an index and returns the content’s indexId in the body. You can set the name of the target index by setting the message header with the key "indexName". You can set the indexId by setting the message header with the key "indexId". |
 | GetById | **String** or **GetRequest.Builder** index id of content to retrieve | Retrieves the document corresponding to the given index id and returns a `GetResponse` object in the body. You can set the name of the target index by setting the message header with the key "indexName". You can set the type of document by setting the message header with the key "documentClass". |
 | Delete | **String** or **DeleteRequest.Builder** index id of content to delete | Deletes the specified indexName and returns a Result object in the body. You can set the name of the target index by setting the message header with the key "indexName". |
-| DeleteIndex | **String** or **DeleteIndexRequest.Builder** index name of the index to delete | Deletes the specified indexName and returns a status code in the body. You can set the name of the target index by setting the message header with the key "indexName". |
+| DeleteIndex | **String** (its text is not used) or **DeleteIndexRequest.Builder** | Deletes the index named by the indexName header or option, not the one in a `String` body, and returns a `Boolean` in the body that is true when the deletion is acknowledged. You can set the name of the target index by setting the message header with the key "indexName". |
 | Bulk | **Iterable** or **BulkRequest.Builder** of any type that is already accepted (DeleteOperation.Builder for delete operation, UpdateOperation.Builder for update operation, CreateOperation.Builder for create operation, byte\[\], InputStream, String, Reader, Map or any document type for index operation) | Adds/Updates/Deletes content from/to an index and returns a List<BulkResponseItem> object in the body You can set the name of the target index by setting the message header with the key "indexName". |
 | Search | **Map**, **String** or **SearchRequest.Builder** | Search the content with the map of query string. You can set the name of the target index by setting the message header with the key "indexName". You can set the number of hits to return by setting the message header with the key "size". You can set the starting document offset by setting the message header with the key "from". |
 | MultiSearch | **MsearchRequest.Builder** | Multiple search in one |
@@ -342,7 +415,7 @@ from("direct:index")
               indexName: twitter
 ```
 
-**For this operation, you’ll need to specify an `indexId` header.**
+The indexId header (`CamelElasticsearchIndexId`) is optional: without it, the server generates the id of the document.
 
 A client would simply need to pass a body message containing a Map to the route. The result body contains the indexId created.
 

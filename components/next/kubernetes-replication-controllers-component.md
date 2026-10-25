@@ -167,6 +167,41 @@ Enum values:
  |  | Action |
 | **CamelKubernetesEventTimestamp** (consumer) Constant: [`KUBERNETES_EVENT_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_EVENT_TIMESTAMP) | Timestamp of the action watched by the consumer. |  | long |
 
+## Message Body
+
+The message body at each side of the Kubernetes Replication Controller component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`io.fabric8.kubernetes.api.model.ReplicationController`) | The ReplicationController that changed, one message per watch event, with the action (ADDED, MODIFIED, DELETED) in the CamelKubernetesEventAction header. |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesReplicationControllerName, the labels in CamelKubernetesReplicationControllersLabels, the ReplicationControllerSpec in CamelKubernetesReplicationControllerSpec and the replicas in CamelKubernetesReplicationControllerReplicas. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of ReplicationController for listReplicationControllers and listReplicationControllersByLabels; the ReplicationController for getReplicationController (null when not found), createReplicationController and updateReplicationController; a Boolean for deleteReplicationController, false when not found; for scaleReplicationController the replicas of its status, as an Integer.
+
+-   With `operation=listReplicationControllers`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.ReplicationController>`)
+    
+-   With `operation=listReplicationControllersByLabels`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.ReplicationController>`)
+    
+-   With `operation=getReplicationController`: `pojo` or `null` (`io.fabric8.kubernetes.api.model.ReplicationController`)
+    
+-   With `operation=createReplicationController`: `pojo` (`io.fabric8.kubernetes.api.model.ReplicationController`)
+    
+-   With `operation=updateReplicationController`: `pojo` (`io.fabric8.kubernetes.api.model.ReplicationController`)
+    
+-   With `operation=deleteReplicationController`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=scaleReplicationController`: `value` (`java.lang.Integer`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

@@ -318,6 +318,123 @@ The Docker component supports the following message header(s), which is/are list
 | **CamelDockerDetach** (common) Constant: [`DOCKER_DETACH`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_DETACH) | With detach flag. |  | Boolean |
 | **CamelDockerExecId** (common) Constant: [`DOCKER_EXEC_ID`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_EXEC_ID) | The Exec ID. |  | String |
 
+## Message Body
+
+The message body at each side of the Docker component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | 
+The object of docker-java for each item of the stream: an Event of the daemon with events, the Statistics of the container in CamelDockerContainerId with stats.
+
+-   With `operation=events`: `pojo` (`com.github.dockerjava.api.model.Event`)
+    
+-   With `operation=stats`: `pojo` (`com.github.dockerjava.api.model.Statistics`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | 
+
+Not used by most operations, which take their input from the options and headers, such as the container in CamelDockerContainerId. imagecreate reads the image as a stream; imagebuild needs an InputStream or a java.io.File of the build context, and another body is logged as an error.
+
+-   With `operation=imagecreate`: `stream`, `bytes`, `text` or `file`
+    
+-   With `operation=imagebuild`: `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo`, `list`, `text`, `stream`, `null` or `unchanged` | 
+
+The response of docker-java for the operation, such as the Version of version and a List of Containers for containerlist; the operations without a response, such as ping and containerstart, keep the body. The streaming operations (imagepull, imagepush, containerattach, containerlog, containerwait, execstart) give the docker-java callback once the stream is done, not its frames; imagebuild gives the image id of the last line of the output, null when it is not the Successfully built line.
+
+-   With `operation=auth`: `pojo` (`com.github.dockerjava.api.model.AuthResponse`)
+    
+-   With `operation=info`: `pojo` (`com.github.dockerjava.api.model.Info`)
+    
+-   With `operation=ping`: `unchanged`
+    
+-   With `operation=version`: `pojo` (`com.github.dockerjava.api.model.Version`)
+    
+-   With `operation=imagebuild`: `text` or `null`
+    
+-   With `operation=imagecreate`: `pojo` (`com.github.dockerjava.api.command.CreateImageResponse`)
+    
+-   With `operation=imageinspect`: `pojo` (`com.github.dockerjava.api.command.InspectImageResponse`)
+    
+-   With `operation=imagelist`: `list`
+    
+-   With `operation=imagepull`: `pojo` (`com.github.dockerjava.api.command.PullImageResultCallback`)
+    
+-   With `operation=imagepush`: `pojo`
+    
+-   With `operation=imageremove`: `unchanged`
+    
+-   With `operation=imagesearch`: `list`
+    
+-   With `operation=imagetag`: `unchanged`
+    
+-   With `operation=containerattach`: `pojo`
+    
+-   With `operation=containercommit`: `text` (`java.lang.String`)
+    
+-   With `operation=containercopyfile`: `stream`
+    
+-   With `operation=containercreate`: `pojo` (`com.github.dockerjava.api.command.CreateContainerResponse`)
+    
+-   With `operation=containerdiff`: `list`
+    
+-   With `operation=inspectcontainer`: `pojo` (`com.github.dockerjava.api.command.InspectContainerResponse`)
+    
+-   With `operation=containerkill`: `unchanged`
+    
+-   With `operation=containerlist`: `list`
+    
+-   With `operation=containerlog`: `pojo`
+    
+-   With `operation=containerpause`: `unchanged`
+    
+-   With `operation=containerrestart`: `unchanged`
+    
+-   With `operation=containerremove`: `unchanged`
+    
+-   With `operation=containerstart`: `unchanged`
+    
+-   With `operation=containerstop`: `unchanged`
+    
+-   With `operation=containertop`: `pojo` (`com.github.dockerjava.api.command.TopContainerResponse`)
+    
+-   With `operation=containerunpause`: `unchanged`
+    
+-   With `operation=containerwait`: `pojo` (`com.github.dockerjava.api.command.WaitContainerResultCallback`)
+    
+-   With `operation=execcreate`: `pojo` (`com.github.dockerjava.api.command.ExecCreateCmdResponse`)
+    
+-   With `operation=execstart`: `pojo`
+    
+-   With `operation=networkconnect`: `unchanged`
+    
+-   With `operation=networkcreate`: `pojo` (`com.github.dockerjava.api.command.CreateNetworkResponse`)
+    
+-   With `operation=networkremove`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Header Strategy

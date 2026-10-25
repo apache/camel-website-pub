@@ -165,6 +165,19 @@ Enum values:
 | **CamelTahuMessageUUID** (producer) Constant: [`MESSAGE_UUID`](https://javadoc.io/doc/org.apache.camel/camel-tahu/latest/org/apache/camel/component/tahu/TahuConstants.html#MESSAGE_UUID) | The UUID of a Sparkplug message. |  | UUID |
 | **CamelTahuMessageSequenceNumber** (producer) Constant: [`MESSAGE_SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-tahu/latest/org/apache/camel/component/tahu/TahuConstants.html#MESSAGE_SEQUENCE_NUMBER) | The sequence number of a Sparkplug message. |  | Long |
 
+## Message Body
+
+The message body at each side of the Tahu Edge Node / Device component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo` or `null` | A Tahu SparkplugBPayload with the metrics to publish, or no body: the metrics are then made from the CamelTahuMetric.<name> headers. Text, bytes or another body fails, as it does not convert to a SparkplugBPayload. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Edge Node Endpoint Configuration

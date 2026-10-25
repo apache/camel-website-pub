@@ -408,7 +408,7 @@ The message body at each side of the Azure ServiceBus component: _Consumer_ is t
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `pojo` (`com.azure.core.util.BinaryData`) | The payload of the Service Bus message as an Azure BinaryData, which converts to a String but not to bytes or a stream: convert it to a String before an unmarshal, a file or another producer. |
+| **Consumer** | `pojo` (`com.azure.core.util.BinaryData`) | The payload of the Service Bus message as an Azure BinaryData, which converts to a String, bytes or a stream. |
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | Sent as text by default: bytes, a stream or a file are read as text, so binary content needs binary=true. A BinaryData, as the consumer gives it, is sent as it is, and a Map or a POJO is sent as its toString(): marshal it first. A List is sent as one message per element. |
 | **Producer output** | `unchanged` | Unchanged, also after scheduleMessages. |
 
@@ -457,7 +457,7 @@ It is possible to provide a custom client instance on either the consumer or pro
 
 In the producer, this component accepts a message body of `String`, `byte[]` and `BinaryData` types. Or `List<String>`, `List<byte[]>` and `List<BinaryData>` to send batch messages.
 
-In the consumer, the returned message body will be of type `String`.
+In the consumer, the returned message body will be of type `com.azure.core.util.BinaryData`, which converts to `String`, `byte[]` and `InputStream`.
 
 ### Azure ServiceBus Producer operations
 

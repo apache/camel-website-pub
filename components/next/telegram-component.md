@@ -143,7 +143,7 @@ Enum values:
 | **chatId** (producer) | The identifier of the chat that will receive the produced messages. Chat ids can be first obtained from incoming messages (eg. when a telegram user starts a conversation with a bot, its client sends automatically a '/start' message containing the chat id). It is an optional parameter, as the chat id can be set dynamically for each outgoing message (using body or headers). |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **baseUri** (advanced) | Can be used to set an alternative base URI, e.g. when you want to test the component against a mock Telegram API. |  | String |
-| **bufferSize** (advanced) | The initial in-memory buffer size used when transferring data between Camel and AHC Client. | 1048576 | int |
+| **bufferSize** (advanced) | The initial size, in bytes, of the in-memory buffer for the body of a request sent to Telegram. The buffer grows to the size of the content, so it does not limit the size of the media that can be sent. | 8192 | int |
 | **client** (advanced) | To use a custom HttpClient. |  | HttpClient |
 | **proxyHost** (proxy) | HTTP proxy host which could be used when sending out the message. |  | String |
 | **proxyPort** (proxy) | HTTP proxy port which could be used when sending out the message. |  | Integer |
@@ -267,8 +267,8 @@ The message body at each side of the Telegram component: _Consumer_ is the body 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `pojo` or `null` | One message per update: an IncomingMessage for a message or a channel post, with the chat id in the CamelTelegramChatId header, and the IncomingCallbackQuery, IncomingInlineQuery, PreCheckoutQuery, ShippingQuery or PaidMediaPurchased of the other updates; no body for an update of another kind, such as an edited message. |
-| **Producer input** | `text`, `bytes`, `stream`, `file`, `pojo` or `null` | A message of org.apache.camel.component.telegram.model, such as an OutgoingTextMessage, or text to send as a text message: a stream or a file is read as text, and a Map or another POJO is sent as its toString(), so marshal it first. A byte array is sent as the photo, audio, video or document the CamelTelegramMediaType header names, and fails without it. No body sends nothing. |
-| **Producer output** | `pojo` or `unchanged` | The MessageResult of the call, with the message sent, or a subclass of it such as MessageResultString for createInvoiceLink; an answer with ok=false is a MessageResult too. No body is left as it is. |
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `pojo` or `null` | A message of org.apache.camel.component.telegram.model, such as an OutgoingTextMessage, or text to send as a text message: a Map or another POJO is sent as its toString(), so marshal it first. A byte array, a stream or a file is sent as the photo, audio, video or document the CamelTelegramMediaType header names, or as text when it names TEXT. Without the header, a byte array fails, and a stream or a file is read as text. No body, or an IncomingMessage without text, sends nothing. |
+| **Producer output** | `pojo` or `unchanged` | The MessageResult of the call, with the message sent, or a subclass of it such as MessageResultString for createInvoiceLink; an answer with ok=false fails the exchange. No body, or an IncomingMessage without text, is left as it is. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
@@ -342,10 +342,14 @@ When using the producer endpoint without specifying the **chat id** option, the 
 | `GetStarTransactionsMessage` | To get the list of bot’s Telegram Star transactions (getStarTransactions) |
 | `RefundStarPaymentMessage` | To refund a successful payment in Telegram Stars (refundStarPayment) |
 | `EditUserStarSubscriptionMessage` | To cancel or re-enable extension of a subscription paid in Telegram Stars (editUserStarSubscription) |
-| `byte[]` | To send a photo, an audio, a video or a document, as the `CamelTelegramMediaType` header names (`PHOTO_PNG`, `PHOTO_JPG`, `AUDIO`, `VIDEO` or `DOCUMENT`). It fails without the header. A stream or a file is sent as text, so convert it to `byte[]` to send it as media |
+| `byte[]` | To send any media type supported. It requires the `CamelTelegramMediaType` header to be set to the appropriate media type. With the media type `TEXT`, the bytes are sent as a text message, decoded in the charset of the exchange |
+| `InputStream`, `File`, `StreamCache` and other bodies that convert to `byte[]` | With the `CamelTelegramMediaType` header set to a media type other than `TEXT`, the content is read as bytes and sent as that media. Without the header, or with `TEXT`, it is sent as a text message |
 | `String` | To send a text message to a chat. It gets converted automatically into a `OutgoingTextMessage` |
+| `IncomingMessage` | A received message is sent back as its text. A message without text, such as a photo, is not sent, as for an empty body |
 
 Any other body is sent as text, so marshal a Map or another object first, as it is otherwise sent as its `toString()`. After the call the message body is the `MessageResult` of the call, with the message sent, or a subclass of it, such as `MessageResultString` for `CreateInvoiceLinkMessage`. A message body that is null sends nothing, and stays null.
+
+An answer of Telegram with `"ok": false` fails the exchange with the error code and the description of the answer.
 
 ### Consumer
 

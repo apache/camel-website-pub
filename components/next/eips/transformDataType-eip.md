@@ -36,6 +36,17 @@ The Transform Data Type eip supports the following options which are listed belo
 | **fromType** | The source data type URN in the format 'scheme:name' (e.g. 'java:com.example.MyClass'). If not specified, the current message body type is used. |  | String |
 | **toType** | **Required** The target data type URN in the format 'scheme:name' (e.g. 'json:JsonOrder') that the message body should be transformed into. |  | String |
 
+## Message Body
+
+The message body at each side of the Transform Data Type EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unknown` | What the data type transformer makes. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Transform Data Type eip has no exchange properties.

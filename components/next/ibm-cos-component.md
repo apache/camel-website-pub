@@ -302,12 +302,12 @@ The IBM Cloud Object Storage component supports the following message header(s),
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelIBMCOSBucketName** (common) Constant: [`BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#BUCKET_NAME) | The bucket Name which this object will be stored or which will be used for the current operation. |  | String |
+| **CamelIBMCOSBucketName** (consumer) Constant: [`BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#BUCKET_NAME) | The name of the bucket the consumed object is contained in. |  | String |
 | **CamelIBMCOSBucketDestinationName** (producer) Constant: [`BUCKET_DESTINATION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#BUCKET_DESTINATION_NAME) | The bucket Destination Name which will be used for the current operation. |  | String |
 | **CamelIBMCOSCacheControl** (common) Constant: [`CACHE_CONTROL`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#CACHE_CONTROL) | The optional Cache-Control HTTP header which allows the user to specify caching behavior. |  | String |
 | **CamelIBMCOSContentDisposition** (common) Constant: [`CONTENT_DISPOSITION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#CONTENT_DISPOSITION) | The optional Content-Disposition HTTP header, which specifies presentational information such as the recommended filename. |  | String |
 | **CamelIBMCOSContentEncoding** (common) Constant: [`CONTENT_ENCODING`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#CONTENT_ENCODING) | The optional Content-Encoding HTTP header specifying what content encodings have been applied to the object. |  | String |
-| **CamelIBMCOSContentLength** (common) Constant: [`CONTENT_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#CONTENT_LENGTH) | The Content-Length HTTP header indicating the size of the associated object in bytes. |  | Long |
+| **CamelIBMCOSContentLength** (common) Constant: [`CONTENT_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#CONTENT_LENGTH) | The Content-Length HTTP header indicating the size of the associated object in bytes. The putObject operation uses it only for a stream body of unknown length, and takes the length from the body otherwise. |  | Long |
 | **CamelIBMCOSContentMD5** (common) Constant: [`CONTENT_MD5`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#CONTENT_MD5) | The base64 encoded 128-bit MD5 digest of the associated object. |  | String |
 | **CamelIBMCOSContentType** (common) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#CONTENT_TYPE) | The Content-Type HTTP header, which indicates the type of content stored in the associated object. |  | String |
 | **CamelIBMCOSETag** (common) Constant: [`E_TAG`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#E_TAG) | The ETag value for the object. |  | String |
@@ -323,6 +323,7 @@ The IBM Cloud Object Storage component supports the following message header(s),
 | **CamelIBMCOSRangeStart** (producer) Constant: [`RANGE_START`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#RANGE_START) | The range start position for partial object retrieval. |  | Long |
 | **CamelIBMCOSRangeEnd** (producer) Constant: [`RANGE_END`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#RANGE_END) | The range end position for partial object retrieval. |  | Long |
 | **CamelIBMCOSBucketExists** (producer) Constant: [`BUCKET_EXISTS`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#BUCKET_EXISTS) | Whether the bucket exists or not. |  | Boolean |
+| **CamelIBMCOSOverrideBucketName** (producer) Constant: [`OVERRIDE_BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-cos/latest/org/apache/camel/component/ibm/cos/IBMCOSConstants.html#OVERRIDE_BUCKET_NAME) | The bucket name to use instead of the bucket of the endpoint, in which this object will be stored or which will be used for the current operation. |  | String |
 
 ## Message Body
 
@@ -420,6 +421,12 @@ If you don’t specify an operation explicitly, the producer will do:
     
 -   a multipart upload if multiPartUpload option is enabled
     
+
+### Content length of putObject
+
+The putObject operation sends the content length of the object with the upload. When the length of the body is known, such as a `byte[]`, a `String`, a stream cache, a `java.io.File`, a `java.nio.file.Path` or the file of the [File](file-component.md) consumer, that length is used and the `CamelIBMCOSContentLength` header is ignored. The consumer and getObject set this header to the length of the object they read, so it is wrong once the route changed the body, and the upload would fail.
+
+Only for a stream of unknown length is the `CamelIBMCOSContentLength` header used, so the stream does not have to be read to know its length. Without the header, the stream is read into a stream cache first to compute its length.
 
 ## Examples
 
@@ -815,7 +822,7 @@ This operation will delete the bucket _mycamelbucket_.
 
 ```java
 from("direct:start")
-    .setHeader("CamelIBMCOSBucketName", constant("newBucket"))
+    .setHeader("CamelIBMCOSOverrideBucketName", constant("newBucket"))
     .to("ibm-cos://mycamelbucket?cosClient=#cosClient&operation=createBucket")
     .to("mock:result");
 ```
@@ -823,7 +830,7 @@ from("direct:start")
 ```xml
 <route>
   <from uri="direct:start"/>
-  <setHeader name="CamelIBMCOSBucketName">
+  <setHeader name="CamelIBMCOSOverrideBucketName">
     <constant>newBucket</constant>
   </setHeader>
   <to uri="ibm-cos://mycamelbucket?cosClient=#cosClient&amp;operation=createBucket"/>
@@ -837,7 +844,7 @@ from("direct:start")
       uri: direct:start
       steps:
         - setHeader:
-            name: CamelIBMCOSBucketName
+            name: CamelIBMCOSOverrideBucketName
             constant: newBucket
         - to:
             uri: ibm-cos://mycamelbucket

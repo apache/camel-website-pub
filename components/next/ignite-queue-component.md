@@ -184,6 +184,44 @@ Enum values:
 | **CamelIgniteQueueTransferredCount** (producer) Constant: [`IGNITE_QUEUE_TRANSFERRED_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_QUEUE_TRANSFERRED_COUNT) | The amount of items transferred as the result of the DRAIN operation. |  | Integer |
 | **CamelIgniteQueueTimeoutMillis** (producer) Constant: [`IGNITE_QUEUE_TIMEOUT_MILLIS`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_QUEUE_TIMEOUT_MILLIS) | Dynamically sets the timeout in milliseconds to use when invoking the OFFER or POLL operations. |  | Long |
 
+## Message Body
+
+The message body at each side of the Ignite Queues component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | ADD, OFFER, PUT, CONTAINS, REMOVE and RETAIN\_ALL use the body as the element, and a Collection as several elements unless treatCollectionsAsCacheObjects=true; no body fails ADD, CONTAINS, REMOVE and RETAIN\_ALL. DRAIN drains into a Collection body, or a new List. The other operations do not use the body. The operation is the operation option or the CamelIgniteQueueOperation header; with neither the producer fails. |
+| **Producer output** | `unknown` | true or false for ADD, OFFER, CONTAINS, REMOVE and RETAIN\_ALL, the number of elements for SIZE, an Iterator for ITERATOR, an Object array for ARRAY, and the Collection of the drained elements for DRAIN, with their count in the CamelIgniteQueueTransferredCount header. ELEMENT, TAKE, PEEK and POLL give the head element; PEEK and POLL give null for an empty queue. CLEAR and PUT leave the body.
+-   With `operation=ADD`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=OFFER`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=CONTAINS`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=REMOVE`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=RETAIN_ALL`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=SIZE`: `value` (`java.lang.Integer`)
+    
+-   With `operation=ITERATOR`: `iterator`
+    
+-   With `operation=ARRAY`: `list`
+    
+-   With `operation=DRAIN`: `list`
+    
+-   With `operation=CLEAR`: `unchanged`
+    
+-   With `operation=PUT`: `unchanged`
+    
+
+Not known when `propagateIncomingBodyIfNoReturnValue` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one. A node of its own with the default configuration takes one line in `application.properties`. On Java 17 and later, Ignite also needs the `--add-opens` JVM options that its documentation lists.

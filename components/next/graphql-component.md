@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The GraphQL component is a GraphQL client that communicates over HTTP and supports queries and mutations, but not subscriptions. It uses the [Apache HttpClient](https://hc.apache.org/httpcomponents-client-4.5.x/index.md) library.
+The GraphQL component is a GraphQL client that communicates over HTTP and supports queries and mutations, but not subscriptions. It sends the requests with the [HTTP](http-component.md) component, which uses the Apache HttpClient 5 library.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -100,10 +100,10 @@ With the following _path_ and _query_ parameters:
 | **proxyHost** (producer) | The proxy host in the format hostname:port. |  | String |
 | **query** (producer) | The query text. |  | String |
 | **queryFile** (producer) | The query file name located in the classpath (or use file: to load from file system). |  | String |
-| **queryHeader** (producer) | The name of a header containing the GraphQL query. |  | String |
+| **queryHeader** (producer) | The name of a header containing the GraphQL query. The header is not sent as an HTTP header. |  | String |
 | **throwExceptionOnFailure** (producer) | Option to disable throwing the HttpOperationFailedException in case of failed responses from the remote server. This allows you to get all responses regardless of the HTTP status code. | true | boolean |
 | **variables** (producer) | The JsonObject instance containing the operation variables. |  | JsonObject |
-| **variablesHeader** (producer) | The name of a header containing a JsonObject instance containing the operation variables. |  | String |
+| **variablesHeader** (producer) | The name of a header containing the operation variables, as a JsonObject or a Map. The header is not sent as an HTTP header. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **httpClient** (advanced) | To use a custom pre-existing Http Client. Beware that when using this, then other configurations such as proxy, access token, is not applied and all this must be pre-configured on the Http Client. |  | HttpClient |
 | **accessToken** (security) | The access token sent in the Authorization header. |  | String |
@@ -118,7 +118,7 @@ The message body at each side of the GraphQL component: _Consumer_ is the body o
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | The query, when none of query, queryFile and queryHeader is set: text, or bytes, a stream or a file of it. A Map is not a query. With one of them the body is not sent, except that an org.apache.camel.util.json.JsonObject body is the variables when neither variables nor variablesHeader is set.
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The query, when none of query, queryFile and queryHeader is set: text, or bytes, a stream or a file of it; another body, such as a Map, fails. With one of them the body is not sent, except that a Map body, such as an org.apache.camel.util.json.JsonObject, is the variables when neither variables nor variablesHeader is set.
 Not known when `query` or `queryFile` or `queryHeader` is set.
 
  |
@@ -128,7 +128,20 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ## Message Body
 
-If the `variables` and `variablesHeader` parameters are not set and the IN body is an `org.apache.camel.util.json.JsonObject` instance, Camel will use it for the operation’s variables (another `Map` is not used). If the `query`, `queryFile` and `queryHeader` parameters are not set, Camel will use the IN body as the query: text, or bytes, a stream or a file of it. Camel will store the GraphQL response from the external server on the OUT message body, as a `String` of the JSON response, with the `data` and `errors` of GraphQL: errors in the response do not fail the exchange. All headers from the IN message will be copied to the OUT message, so headers are preserved during routing. Additionally, Camel will add the HTTP response headers as well to the OUT message headers.
+If the `query`, `queryFile` and `queryHeader` parameters are not set, the body is the query: it must be text, bytes, a stream or a file, and another body (such as a `Map`) fails with an `InvalidPayloadException`. Otherwise, if the `variables` and `variablesHeader` parameters are not set and the body is a `Map` (such as a `JsonObject`), Camel will use it for the operation’s variables. Camel will store the GraphQL response from the external server on the message body, as a `String` of the JSON response, with the `data` and `errors` of GraphQL: errors in the response do not fail the exchange.
+
+## HTTP Headers
+
+The headers of the message are sent as HTTP request headers (filtered by the `headerFilterStrategy`), except:
+
+-   the headers named by the `queryHeader` and `variablesHeader` parameters, as the query and the variables are sent in the JSON body of the request;
+    
+-   a `Content-Encoding` header, as the request is not compressed.
+    
+
+The producer always sends the request with `Content-Type: application/json`, `Accept: application/json` and `Accept-Encoding: gzip`, whatever the headers of the message are.
+
+After the call, the message keeps its own headers, and Camel adds the HTTP response headers (such as `CamelHttpResponseCode` and the `Content-Type` of the response). The headers the producer set for the request (`CamelHttpMethod`, `Accept` and `Accept-Encoding`) do not stay on the message: a header of the message with the same name keeps its value.
 
 ## Examples
 

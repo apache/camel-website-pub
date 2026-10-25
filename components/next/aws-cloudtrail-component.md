@@ -14,8 +14,6 @@ You must have a valid Amazon Web Services developer account, and be signed up to
 
 aws-cloudtrail://label\[?options\]
 
-The stream needs to be created prior to it being used.
-
 You can append query options to the URI in the following format:
 
 `?options=value&option2=value&…​`

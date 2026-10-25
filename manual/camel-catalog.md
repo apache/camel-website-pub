@@ -115,7 +115,7 @@ Aliases are descriptive names for discovery only; they cannot be used as the sch
 
 The options of a component say how to configure it, but not what the message body is after a step. That is the question people, IDEs and AI agents ask most when they write the next step of a route: the file consumer gives the file it read, the `http` producer leaves the response as a byte array or a stream, and after `unmarshal: json` the body is a `Map` or a `List`.
 
-A component, data format or language can declare its body types, and the catalog then has a `bodyTypes` section with one entry per side:
+A component, data format, language or EIP can declare its body types, and the catalog then has a `bodyTypes` section with one entry per side:
 
  
 | Side | The body |
@@ -127,6 +127,9 @@ A component, data format or language can declare its body types, and the catalog
 | `marshalIn`, `marshalOut` | The bodies a data format can marshal, and the body after marshal. |
 | `unmarshalIn`, `unmarshalOut` | The bodies a data format can unmarshal, and the body after unmarshal. |
 | `expressionIn`, `expressionOut` | The bodies the expressions of a language can read, and their result. |
+| `eipIn` | The bodies an EIP needs, such as text for `tokenizer`. |
+| `eipOut` | The body after an EIP. |
+| `eipSteps` | The body the steps of an EIP start with, such as each part for `split`. |
 
 Each side has the _carriers_ of the body, the kinds of Java object it is in: `null`, `text`, `bytes`, `stream`, `file`, `value`, `map`, `list`, `iterator` (read once, with no size and no index) and `pojo`; `unchanged` for a step that leaves the body as it was, `any` for a step that takes any body, and `unknown` for a body that depends on what the other system sends or on a class the user configures. A side can also have the Java type when the body is always of that type, the format of the payload (json, xml, csv, yaml, text or binary), the options the body depends on, the body for other values of an option, and a description:
 
@@ -140,7 +143,16 @@ Each side has the _carriers_ of the body, the kinds of Java object it is in: `nu
 }
 ```
 
-The sides say what the body is with the default options. A side that is not in the catalog is not known, and tooling should not guess it. The documentation page of a component, data format or language shows them in its _Message Body_ section, and `camel catalog doc` prints them. The Java API gives them on the model:
+An EIP whose body is the body of another model says which side of it with `from`, instead of carriers of its own: `marshal` leaves what its data format leaves (`marshalOut`), `to` what the producer of its endpoint leaves (`producerOut`), `pollEnrich` what the consumer of its endpoint receives (`consumerOut`), `setBody` the result of its expression (`expressionOut`), and a `filter` what its own steps end with (`steps`):
+
+```json
+"bodyTypes": {
+  "eipOut": { "from": "steps", "description": "What its steps end with; the body as it was when the predicate does not match" },
+  "eipSteps": { "carriers": [ "unchanged" ] }
+}
+```
+
+The sides say what the body is with the default options. A side that is not in the catalog is not known, and tooling should not guess it. The documentation page of a component, data format, language or EIP shows them in its _Message Body_ section, and `camel catalog doc` prints them. The Java API gives them on the model:
 
 ```java
 CamelCatalog catalog = new DefaultCamelCatalog();
@@ -150,7 +162,7 @@ out.getCarriers();     // [text]
 out.getJavaType();     // java.lang.String
 ```
 
-Component developers declare them with the `@BodyTypes` annotation on the endpoint, data format or language class. A subclass does not have the body types of its superclass, as it may change the body:
+Component developers declare them with the `@BodyTypes` annotation on the endpoint, data format or language class, and the EIPs on their model class in `camel-core-model`, also when the EIP is implemented in another module, such as `circuitBreaker`. A subclass does not have the body types of its superclass, as it may change the body:
 
 ```java
 @BodyTypes(consumerOut = @BodyType(value = Carrier.FILE, description = "The file as read ..."),
@@ -160,7 +172,7 @@ Component developers declare them with the `@BodyTypes` annotation on the endpoi
 public class FileEndpoint extends GenericFileEndpoint<File> {
 ```
 
-The build checks that each side belongs to the kind (a consumer-only component has no producer sides), that the options a side names exist, that a value of an option is one the option can have (such as `chat-completion` for the `operation` of openai), and that `unchanged` is only on the body after a step and `any` only on what a step needs. The values are read from the code that sets the body, and checked against the body types the message history records when the routes run.
+The build checks that each side belongs to the kind (a consumer-only component has no producer sides), that the options a side names exist, that a value of an option is one the option can have (such as `chat-completion` for the `operation` of openai), that `unchanged` is only on the body after a step and `any` only on what a step needs, and that `from` names a side the body can come from. The values are read from the code that sets the body, and checked against the body types the message history records when the routes run.
 
 The YAML validator of the Camel CLI follows the body through the steps of a route with the body types, and reports a step that cannot work on it, such as a Map that a `to: file` cannot write (see [Camel CLI validation](camel-jbang-validation.html#_what_a_running_integration_saw)).
 

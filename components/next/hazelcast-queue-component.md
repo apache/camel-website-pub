@@ -223,6 +223,48 @@ The Hazelcast Queue component supports the following message header(s), which is
 | **CamelHazelcastCacheName** (consumer) Constant: [`CACHE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#CACHE_NAME) | The name of the cache - e.g. foo. |  | String |
 | **CamelHazelcastOperationType** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#OPERATION) | The operation to perform. |  | String |
 
+## Message Body
+
+The message body at each side of the Hazelcast Queue component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.hazelcast.collection.ItemEvent`) | 
+In Listen mode, the default, the Hazelcast ItemEvent of an item added to or removed from the queue, not the item: ${body.item} is the item, and the CamelHazelcastListenerAction header is added or removed. In Poll mode the consumer takes the items off the queue, and the body is the item itself, without headers.
+
+-   With `queueConsumerMode=poll`: `unknown`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The item that add, the default, put and offer add to the queue, and that removeValue removes (without a body it removes the head): an object Hazelcast can serialize, so a stream or no body fails. A Collection for removeAll and retainAll. The other operations do not use the body. |
+| **Producer output** | `unchanged` | 
+
+Unchanged for add, the default, and the other operations that change the queue. poll and peek give the head of the queue, or null when it is empty, and take waits for one; remainingCapacity gives an Integer, and drainTo the number of items it moved into the Collection of the CamelHazelcastDrainToCollection header. The CamelHazelcastOperationType header overrides the defaultOperation option.
+
+-   With `defaultOperation=poll`: `unknown`
+    
+-   With `defaultOperation=peek`: `unknown`
+    
+-   With `defaultOperation=take`: `unknown`
+    
+-   With `defaultOperation=remainingCapacity`: `value` (`java.lang.Integer`)
+    
+-   With `defaultOperation=drainTo`: `value` (`java.lang.Integer`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Queue producer – to(“hazelcast-queue:foo”)
 
 The queue producer provides 12 operations:

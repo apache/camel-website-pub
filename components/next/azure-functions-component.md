@@ -330,6 +330,95 @@ Enum values:
 | **CamelAzureFunctionsRuntimeVersion** (producer) Constant: [`RUNTIME_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-azure-functions/latest/org/apache/camel/component/azure/functions/FunctionsConstants.html#RUNTIME_VERSION) | Runtime version for the function app. |  | String |
 | **CamelAzureFunctionsStorageConnectionString** (producer) Constant: [`STORAGE_CONNECTION_STRING`](https://javadoc.io/doc/org.apache.camel/camel-azure-functions/latest/org/apache/camel/component/azure/functions/FunctionsConstants.html#STORAGE_CONNECTION_STRING) | Storage account connection string for the function app. |  | String |
 
+## Message Body
+
+The message body at each side of the Azure Functions component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes` or `null` | 
+The request body of invokeFunction, the default, sent as text: bytes are read as UTF-8, and any other body, a stream, a file or a Map included, is sent as its toString(): marshal it first. GET and DELETE send no body. The management operations do not use the body: they take their input from headers, such as the app settings and the tags.
+
+-   With `operation=listFunctionApps`: `any`
+    
+-   With `operation=getFunctionApp`: `any`
+    
+-   With `operation=createFunctionApp`: `any`
+    
+-   With `operation=deleteFunctionApp`: `any`
+    
+-   With `operation=startFunctionApp`: `any`
+    
+-   With `operation=stopFunctionApp`: `any`
+    
+-   With `operation=restartFunctionApp`: `any`
+    
+-   With `operation=listFunctions`: `any`
+    
+-   With `operation=getFunction`: `any`
+    
+-   With `operation=getFunctionKeys`: `any`
+    
+-   With `operation=getFunctionAppConfiguration`: `any`
+    
+-   With `operation=updateFunctionAppConfiguration`: `any`
+    
+-   With `operation=listTags`: `any`
+    
+-   With `operation=tagResource`: `any`
+    
+-   With `operation=untagResource`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` (`java.lang.String`) | 
+
+The response body of the function as text for invokeFunction, the default, also for an error status, with the status in the CamelAzureFunctionsStatusCode header. A List of Maps that describe the function apps or the functions for the list operations, a Map for the get and create operations, the settings or the tags as a Map, and true for delete, start, stop and restart.
+
+-   With `operation=listFunctionApps`: `list` (`java.util.List<java.util.Map<String, Object>>`)
+    
+-   With `operation=getFunctionApp`: `map` (`java.util.Map<String, Object>`)
+    
+-   With `operation=createFunctionApp`: `map` (`java.util.Map<String, Object>`)
+    
+-   With `operation=deleteFunctionApp`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=startFunctionApp`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=stopFunctionApp`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=restartFunctionApp`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=listFunctions`: `list` (`java.util.List<java.util.Map<String, Object>>`)
+    
+-   With `operation=getFunction`: `map` (`java.util.Map<String, Object>`)
+    
+-   With `operation=getFunctionKeys`: `map` (`java.util.Map<String, Object>`)
+    
+-   With `operation=getFunctionAppConfiguration`: `map` (`java.util.Map<String, String>`)
+    
+-   With `operation=updateFunctionAppConfiguration`: `map` (`java.util.Map<String, String>`)
+    
+-   With `operation=listTags`: `map` (`java.util.Map<String, String>`)
+    
+-   With `operation=tagResource`: `map` (`java.util.Map<String, String>`)
+    
+-   With `operation=untagResource`: `map` (`java.util.Map<String, String>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## URI Format
 
 ```none

@@ -115,6 +115,31 @@ With the following _path_ and _query_ parameters:
 | **threshold** (producer) | Indicates the threshold of confidence. When the operation is tagRecognition, this parameter ranges from 0 to 100. Tags whose confidence score is lower than the threshold will not be returned. The default value is 60. When the operation is celebrityRecognition, this parameter ranges from 0 to 1. Labels whose confidence score is lower than the threshold will not be returned. The default value is 0.48. |  | float |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **ignoreSslVerification** (security) | Ignore SSL verification. | false | boolean |
+
+## Message Body
+
+The message body at each side of the Huawei Cloud Image Recognition component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used, not even for the image: the image comes from the imageContent option or the CamelHwCloudImageContent exchange property as base64, or from the imageUrl option or the CamelHwCloudImageUrl exchange property as a URL. |
+| **Producer output** | `list` or `pojo` | 
+The result of the Huawei Cloud SDK: for celebrityRecognition a List with a CelebrityRecognitionResultBody per celebrity found, and for tagRecognition an ImageTaggingResponseResult with the tags.
+
+-   With `operation=celebrityRecognition`: `list` (`java.util.List<com.huaweicloud.sdk.image.v2.model.CelebrityRecognitionResultBody>`)
+    
+-   With `operation=tagRecognition`: `pojo` (`com.huaweicloud.sdk.image.v2.model.ImageTaggingResponseResult`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > When using imageContent option, we suggest you use RAW(image\_base64\_value) to avoid encoding issue.
 

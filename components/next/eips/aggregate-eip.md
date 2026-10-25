@@ -52,6 +52,18 @@ The Aggregate eip supports the following options which are listed below.
 | **completeAllOnStop** | If enabled then waits to complete all current and partial (pending) aggregated exchanges when the context is stopped, ensuring the aggregation repository is empty before shutdown. | false | Boolean |
 | **outputs** | **Required** |  | List |
 
+## Message Body
+
+The message body at each side of the Aggregate EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | The message goes on with its body as it was; the aggregated message goes through the steps. |
+| **Steps** | `unknown` | The aggregated message, as the aggregationStrategy makes it. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Aggregate eip supports the following exchange properties which are listed below.

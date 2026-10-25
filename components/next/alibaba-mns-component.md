@@ -243,6 +243,29 @@ The Alibaba Message Service (MNS) component supports the following message heade
 | **CamelAlibabaMnsNextVisibleTime** (consumer) Constant: [`NEXT_VISIBLE_TIME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#NEXT_VISIBLE_TIME) | Next time the message becomes visible. |  | Date |
 | **CamelAlibabaMnsFirstDequeueTime** (consumer) Constant: [`FIRST_DEQUEUE_TIME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#FIRST_DEQUEUE_TIME) | Time when the message was first dequeued. |  | Date |
 
+## Message Body
+
+The message body at each side of the Alibaba Message Service (MNS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The body of the MNS message as text, with the message id, the receipt handle and the dequeue count in headers. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The body of the message to send or publish, as text: bytes, a stream or a file are read as text, which corrupts binary data, a Map or a POJO is sent as its toString(), so marshal it first, and no body fails. deleteMessage does not use the body: it takes the receipt handle from the CamelAlibabaMnsReceiptHandle header.
+
+-   With `operation=deleteMessage`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | Unchanged: the message id, the request id and the MD5 of the body are set as exchange properties, not headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Operations

@@ -500,7 +500,7 @@ The message body at each side of the Docling component: _Consumer_ is the body o
 | --- | --- | --- |
 | **Consumer** | `text` | The document of an async conversion that completed (SUBMIT\_ASYNC\_CONVERSION on the same component), as text in the outputFormat it was submitted with: markdown by default, JSON text for json. The task id is in the CamelDoclingTaskId header, and a failed conversion goes to the error handler. |
 | **Producer input** | `any` | 
-The document: its content as text or bytes, or a File (the GenericFile of the file consumers too). A stream or a Path fails: convert it to bytes first. Text that looks like a URL or a path (it starts with http://, https:// or /, or has a backslash) is read as one only with allowUrlSource or allowFilePathSource, and fails otherwise. With the CamelDoclingInputFilePath header the body is not read. The batch operations take a List or an array of paths or files (a directory path with allowFilePathSource), and CHECK\_CONVERSION\_STATUS the task id, unless the CamelDoclingTaskId header gives it.
+The document: its content as text, bytes or a stream, or a File (the GenericFile of the file consumers too). A Path fails: convert it to bytes first. Text that looks like a URL or a path (it starts with http://, https:// or /, or has a backslash) is read as one only with allowUrlSource or allowFilePathSource, and fails otherwise. With the CamelDoclingInputFilePath header the body is not read. The batch operations take a List or an array of paths or files (a directory path with allowFilePathSource), and CHECK\_CONVERSION\_STATUS the task id, unless the CamelDoclingTaskId header gives it.
 
 -   With `operation=BATCH_CONVERT_TO_MARKDOWN`: `list`
     
@@ -561,12 +561,14 @@ The component accepts the following input types in the message body:
 
 -   `String` - Document content. It is only read as a location when the endpoint opts in - see [Input Sources](#_input_sources) below
     
--   `byte[]` - Binary document content
+-   `byte[]` - Binary document content, written to a temporary file
     
 -   `File` - File object
     
--   `InputStream` - Input stream containing document data
+-   `InputStream` - Input stream containing document data, such as the stream body of an HTTP or FTP consumer, or the stream cache that stream caching makes of a stream. It is written to a temporary file as a `byte[]` is; a stream cache is reset afterwards, so the route can read it again.
     
+
+A `byte[]` or `InputStream` body larger than `maxFileSize`, and a `File` larger than it, is rejected.
 
 For the batch operations the body may also be a `List<String>` or `String[]` of file paths, a `List<File>` or `File[]`, or a single directory path `String`.
 

@@ -178,18 +178,42 @@ Enum values:
 | **CamelGeoCoderCountryShort** (producer) Constant: [`COUNTRY_SHORT`](https://javadoc.io/doc/org.apache.camel/camel-geocoder/latest/org/apache/camel/component/geocoder/GeoCoderConstants.html#COUNTRY_SHORT) | The country short name. |  | String |
 | **CamelGeoCoderPostalCode** (producer) Constant: [`POSTAL_CODE`](https://javadoc.io/doc/org.apache.camel/camel-geocoder/latest/org/apache/camel/component/geocoder/GeoCoderConstants.html#POSTAL_CODE) | The postal code. |  | String |
 
+## Message Body
+
+The message body at each side of the Geocoder component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The body is not read: the address or the latitude and longitude come from the CamelGeoCoderAddress or CamelGeoCoderLatlng header, or else from the endpoint. |
+| **Producer output** | `list` or `unchanged` | 
+With Google, the array of com.google.maps.model.GeocodingResult, empty for no results; unchanged when Google denies the request, with the status in the CamelGeoCoderStatus header. With Nominatim, its jsonv2 response as text: an array of one place for an address, an object for a latitude and longitude. The first result is also in the headers.
+
+-   With `type=NOMINATIM`: `text` (`java.lang.String`)
+    
+-   With `headersOnly=true`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Exchange data format
 
 Notice not all headers may be provided depending on available data and mode in use (`address` vs. `latlng`).
 
 ### Body using a Nominatim Server
 
-Camel will deliver the body as a JSONv2 type.
+Camel will deliver the body as a String with the JSON response of Nominatim (the `jsonv2` format): an array with one place for an address, and an object for a latitude and longitude.
 
 ### Body using a Google Server
 
-Camel will deliver the body as a `com.google.code.geocoder.model.GeocodeResponse` type.  
-And if the address is `"current"` then the response is a String type with a JSON representation of the current location.
+Camel will deliver the body as an array of `com.google.maps.model.GeocodingResult` (empty when there are no results).  
+If the address is `"current"` then the current location is found by geolocation, and the body is the array of `GeocodingResult` of that location as well. When Google denies the request, the body is left as-is and the `CamelGeoCoderStatus` header has the status.
 
 If the option `headersOnly` is set to `true` then the message body is left as-is, and only headers will be added to the Exchange.
 

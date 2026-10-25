@@ -341,6 +341,70 @@ Enum values:
 
  | SHARED\_ACCOUNT\_KEY | CredentialType |
 
+## Message Body
+
+The message body at each side of the Azure CosmosDB component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `list` (`java.util.List<java.util.Map<String, Object>>`) | The items of one batch of the change feed: a List with a Map per item created or changed, with the system fields of Cosmos DB such as \_etag and \_lsn. |
+| **Producer input** | `any` | 
+The item for createItem, upsertItem and replaceItem: a Map or a POJO, which Jackson serializes, or the JSON of the item as bytes. A JSON String fails, as it is sent as a JSON string and not as an object: unmarshal it first. The other operations do not use the body: the item id, the partition key and the query are options or headers.
+
+-   With `operation=createItem`: `map`, `pojo` or `bytes`
+    
+-   With `operation=upsertItem`: `map`, `pojo` or `bytes`
+    
+-   With `operation=replaceItem`: `map`, `pojo` or `bytes`
+    
+
+
+
+
+
+ |
+| **Producer output** | `list` (`java.util.List<com.azure.cosmos.models.CosmosDatabaseProperties>`) | A List of the properties of the SDK for listDatabases, the default, and the list and query operations of databases and containers; the item as written for createItem, upsertItem and replaceItem, of the type of the body sent, or no body with contentResponseOnWriteEnabled=false; the item as a Map for readItem, and a List of them for readAllItems and queryItems, whose elements are values for a SELECT VALUE query. The operations on databases, containers and throughput leave the body and set the response in headers.
+
+-   With `operation=queryDatabases`: `list` (`java.util.List<com.azure.cosmos.models.CosmosDatabaseProperties>`)
+    
+-   With `operation=listContainers`: `list` (`java.util.List<com.azure.cosmos.models.CosmosContainerProperties>`)
+    
+-   With `operation=queryContainers`: `list` (`java.util.List<com.azure.cosmos.models.CosmosContainerProperties>`)
+    
+-   With `operation=createDatabase`: `unchanged`
+    
+-   With `operation=deleteDatabase`: `unchanged`
+    
+-   With `operation=createContainer`: `unchanged`
+    
+-   With `operation=deleteContainer`: `unchanged`
+    
+-   With `operation=replaceDatabaseThroughput`: `unchanged`
+    
+-   With `operation=replaceContainerThroughput`: `unchanged`
+    
+-   With `operation=createItem`: `map`, `pojo` or `bytes`
+    
+-   With `operation=upsertItem`: `map`, `pojo` or `bytes`
+    
+-   With `operation=replaceItem`: `map`, `pojo` or `bytes`
+    
+-   With `operation=readItem`: `map` (`java.util.Map<String, Object>`)
+    
+-   With `operation=readAllItems`: `list` (`java.util.List<java.util.Map<String, Object>>`)
+    
+-   With `operation=queryItems`: `list`
+    
+-   With `operation=deleteItem`: `null`
+    
+
+Not known when `contentResponseOnWriteEnabled` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Authentication Information
@@ -429,12 +493,12 @@ For these operations, `databaseName` and `containerName` is **required** for all
 | --- | --- |
 | `deleteContainer` | Delete a container from the specified Azure CosmosDB database. |
 | `replaceContainerThroughput` | Replace the throughput for the specified Azure CosmosDB container. |
-| `createItem` | **`itemPartitionKey` is required** Creates an item in the specified container, it accepts POJO or key value as `Map<String, ?>`. |
-| `upsertItem` | **`itemPartitionKey` is required** Creates an item in the specified container if it doesn’t exist otherwise overwrite it if it exists, it accepts POJO or key value as `Map<String, ?>`. |
-| `replaceItem` | **`itemPartitionKey` and `itemId` are required** Overwrites an item in the specified container, it accepts POJO or key value as `Map<String, ?>`. |
+| `createItem` | **`itemPartitionKey` is required** Creates an item in the specified container, it accepts POJO or key value as `Map<String, ?>`; a JSON String fails: unmarshal it first. |
+| `upsertItem` | **`itemPartitionKey` is required** Creates an item in the specified container if it doesn’t exist otherwise overwrite it if it exists, it accepts POJO or key value as `Map<String, ?>`; a JSON String fails: unmarshal it first. |
+| `replaceItem` | **`itemPartitionKey` and `itemId` are required** Overwrites an item in the specified container, it accepts POJO or key value as `Map<String, ?>`; a JSON String fails: unmarshal it first. |
 | `deleteItem` | **`itemPartitionKey` and `itemId` are required** Deletes an item in the specified container. |
 | `readItem` | **`itemPartitionKey` and `itemId` are required** Gets an item in the specified container as `Map<String,?>` set in the exchange body message. |
-| `readItem` | **`itemPartitionKey`** Gets a list of items in the specified container per the `itemPartitionKey` as `List<Map<String,?>>` set in the exchange body message. |
+| `readAllItems` | **`itemPartitionKey`** Gets a list of items in the specified container per the `itemPartitionKey` as `List<Map<String,?>>` set in the exchange body message. |
 | `queryItems` | **`query` is required** Execute an SQL query against the container level in order, for example, return only matching items per the SQL query. It will set `List<Map<String,>?>` in the exchange message body. |
 
 Refer to the example section in this page to learn how to use these operations into your camel application.
@@ -443,7 +507,7 @@ Refer to the example section in this page to learn how to use these operations i
 
 ### Consuming records from a specific container
 
-For example, to consume records from a specific container in a specific database to a file, use the following snippet:
+For example, to consume records from a specific container in a specific database to a file, use the following snippet. The consumer gives a `List` of the changed items as `Map`, so marshal it to JSON before writing it:
 
 -   Java
     
@@ -454,12 +518,14 @@ For example, to consume records from a specific container in a specific database
 
 ```java
 from("azure-cosmosdb://camelDb/myContainer?accountKey=MyaccountKey&databaseEndpoint=https//myazure.com:443&leaseDatabaseName=myLeaseDB&createLeaseDatabaseIfNotExists=true&createLeaseContainerIfNotExists=true")
+    .marshal().json()
     .to("file://directory");
 ```
 
 ```xml
 <route>
     <from uri="azure-cosmosdb://camelDb/myContainer?accountKey=MyaccountKey&amp;databaseEndpoint=https//myazure.com:443&amp;leaseDatabaseName=myLeaseDB&amp;createLeaseDatabaseIfNotExists=true&amp;createLeaseContainerIfNotExists=true"/>
+    <marshal><json/></marshal>
     <to uri="file://directory"/>
 </route>
 ```
@@ -475,6 +541,8 @@ from("azure-cosmosdb://camelDb/myContainer?accountKey=MyaccountKey&databaseEndpo
         createLeaseDatabaseIfNotExists: true
         createLeaseContainerIfNotExists: true
       steps:
+        - marshal:
+            json: {}
         - to:
             uri: file://directory
 ```
@@ -806,6 +874,7 @@ from("direct:start")
     .setHeader("CamelAzureCosmosDbContainerPartitionKeyPath", constant("partition"))
     .setHeader("CamelAzureCosmosDbItemPartitionKey", constant("test-1"))
     .setBody(constant("{\"id\":\"test-id-1\",\"partition\":\"test-1\",\"field1\":\"awesome!\"}"))
+    .unmarshal().json()
     .to("azure-cosmosdb://?operation=createItem")
     .to("mock:result");
 ```
@@ -828,6 +897,9 @@ from("direct:start")
   <setBody>
     <constant>{"id":"test-id-1","partition":"test-1","field1":"awesome!"}</constant>
   </setBody>
+  <unmarshal>
+    <json/>
+  </unmarshal>
   <to uri="azure-cosmosdb://?operation=createItem"/>
   <to uri="mock:result"/>
 </route>
@@ -852,6 +924,8 @@ from("direct:start")
             constant: "test-1"
         - setBody:
             constant: '{"id":"test-id-1","partition":"test-1","field1":"awesome!"}'
+        - unmarshal:
+            json: {}
         - to:
             uri: azure-cosmosdb://
             parameters:
@@ -877,6 +951,7 @@ from("direct:start")
     .setHeader("CamelAzureCosmosDbItemPartitionKey", constant("test-1"))
     .setHeader("CamelAzureCosmosDbItemId", constant("test-id-1"))
     .setBody(constant("{\"id\":\"test-id-1\",\"partition\":\"test-1\",\"field1\":\"awesome!\"}"))
+    .unmarshal().json()
     .to("azure-cosmosdb://?operation=replaceItem")
     .to("mock:result");
 ```
@@ -899,6 +974,9 @@ from("direct:start")
   <setBody>
     <constant>{"id":"test-id-1","partition":"test-1","field1":"awesome!"}</constant>
   </setBody>
+  <unmarshal>
+    <json/>
+  </unmarshal>
   <to uri="azure-cosmosdb://?operation=replaceItem"/>
   <to uri="mock:result"/>
 </route>
@@ -923,6 +1001,8 @@ from("direct:start")
             constant: "test-id-1"
         - setBody:
             constant: '{"id":"test-id-1","partition":"test-1","field1":"awesome!"}'
+        - unmarshal:
+            json: {}
         - to:
             uri: azure-cosmosdb://
             parameters:

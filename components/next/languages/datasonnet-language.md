@@ -35,11 +35,11 @@ The message body at each side of the DataSonnet language: _Expression input_ is 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Expression input** | `any` | The body as it is, in the variable body. JSON, XML or CSV text is read in that format only with bodyMediaType or a Content-Type header, and a stream needs one of them.
+| **Expression input** | `any` | The body as it is, in the variable body. JSON, XML or CSV text is read in that format only with bodyMediaType or a Content-Type header, and without them a stream is read as text.
 Not known when `bodyMediaType` or `source` is set.
 
  |
-| **Expression result** | `pojo` (`com.datasonnet.document.Document`) | A Document with the result: a Java object, or text in outputMediaType when it is set. With resultType, the result converted to that type.
+| **Expression result** | `pojo` or `null` (`com.datasonnet.document.Document`) | A Document with the result: a Java object, or text in outputMediaType when it is set, and null when the result is null. With resultType, the result converted to that type.
 
 Not known when `resultType` or `outputMediaType` is set.
 
@@ -51,7 +51,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ### Setting a result type
 
-The [DataSonnet](#) expression will return a `com.datasonnet.document.Document` by default. The document preserves the content type metadata along with the contents of the transformation result. In predicates, however, the Document will be automatically unwrapped and the boolean content will be returned. Similarly, any time you want the content in a specific result type like a String. To do this, you have to instruct the [DataSonnet](#) which result type to return.
+The [DataSonnet](#) expression will return a `com.datasonnet.document.Document` by default, or `null` when the result is `null`. The document preserves the content type metadata along with the contents of the transformation result. In predicates, however, the Document will be automatically unwrapped and the boolean content will be returned. Similarly, any time you want the content in a specific result type like a String. To do this, you have to instruct the [DataSonnet](#) which result type to return.
 
 -   Java
     
@@ -130,7 +130,7 @@ And for output media type:
     
 
 > **Note**
-> With the body media type `application/x-java-object`, the body is the Java object it is: JSON text is a string, not an object, so `body.foo` fails on it. Set `bodyMediaType`, or a `Content-Type` header, to read text, bytes, a stream or a file in that format, such as `application/json`, `application/xml` or `application/csv`.
+> With the body media type `application/x-java-object`, the body is the Java object it is: JSON text is a string, not an object, so `body.foo` fails on it. Set `bodyMediaType`, or a `Content-Type` header, to read text, bytes, a stream or a file in that format, such as `application/json`, `application/xml` or `application/csv`. Without a media type, a stream is read as text.
 
 ### Functions
 

@@ -76,7 +76,11 @@ The Source tab compares when the file was saved with when the integration loaded
 
 ## Problems as You Type
 
-The editor checks your routes while you type: endpoint URIs and their options against the Camel catalog, Simple expressions, the YAML DSL schema, and a `to` whose URI holds `${...}` and should be a `toD`. Java routes are read without compiling them, so endpoints built with the endpoint DSL or from a constant are checked too.
+The editor checks your routes while you type: endpoint URIs and their options against the Camel catalog, Simple expressions, and a `to` whose URI holds `${...}` and should be a `toD`. Java routes are read without compiling them, so endpoints built with the endpoint DSL or from a constant are checked too.
+
+A YAML route is also followed through its steps with the message body each step gives and needs, as soon as the file passes the YAML DSL schema: a `to: file` after `unmarshal: json` cannot write the `Map` it gets, and the line says to add `marshal: json` before it (see [Validation](camel-jbang-validation.md)). The schema itself is checked when you save, as a file being typed is often not valid YAML yet.
+
+![A route that writes the parsed JSON to a file](_images/jbang/camel-tui-source-body-problem-on-open.png)
 
 The problems are marked as soon as a file opens, before you change anything: a red `✗` on the line, and the count in the title. The panel at the bottom says the problem of the selected line, and **F9** goes to the next one.
 

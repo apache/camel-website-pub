@@ -160,6 +160,25 @@ Enum values:
  | NonMatch | UncertaintyPolicy |
 | **apiKey** (security) | **Required** The API key used for Bearer authentication. |  | String |
 
+## Message Body
+
+The message body at each side of the TypeSafe AI component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `map` | The request: a Map with the state and a nonempty questions Map, and optionally the model. JSON text is not parsed: unmarshal it first. With questions or questionsResource, the state option (the body by default) selects the state instead: text, or a Map or a List of JSON values; bytes, a stream or a file fail, select ${bodyAs(String)}.
+Not known when `questions` or `questionsResource` is set.
+
+ |
+| **Producer output** | `map` (`org.apache.camel.util.json.JsonObject`), as json | The response: a JsonObject with the model, the answers keyed by question name and the token usage. With resultProperty, the body is unchanged and the response is in that exchange property.
+
+Not known when `resultProperty` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Configuration
 
 Configure credentials through property placeholders or a supported vault:

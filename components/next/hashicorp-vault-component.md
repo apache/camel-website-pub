@@ -132,6 +132,45 @@ The HashiCorp Vault component supports the following message header(s), which is
 | **CamelHashicorpVaultSecretPath** (producer) Constant: [`SECRET_PATH`](https://javadoc.io/doc/org.apache.camel/camel-hashicorp-vault/latest/org/apache/camel/component/hashicorp/vault/HashicorpVaultConstants.html#SECRET_PATH) | Set the desired secret path as header. |  | String |
 | **CamelHashicorpVaultSecretVersion** (producer) Constant: [`SECRET_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-hashicorp-vault/latest/org/apache/camel/component/hashicorp/vault/HashicorpVaultConstants.html#SECRET_VERSION) | Set the desired secret version as header. |  | String |
 
+## Message Body
+
+The message body at each side of the HashiCorp Vault component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `map` or `pojo` | 
+The fields of the secret for createSecret, the default operation: a Map of the keys and values, or a POJO written as JSON. Text, bytes, a stream, a file or a List fail, so unmarshal JSON first, and no body writes an empty version. The other operations take the secret from the secretPath option or the CamelHashicorpVaultSecretPath header.
+
+-   With `operation=getSecret`: `any`
+    
+-   With `operation=deleteSecret`: `any`
+    
+-   With `operation=listSecrets`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+getSecret gives a Map with the fields of the secret under data and its version under metadata, or no body when the secret does not exist or is deleted. listSecrets gives a List of the names of the secrets in the engine; createSecret and deleteSecret leave the body unchanged.
+
+-   With `operation=getSecret`: `map` or `null`
+    
+-   With `operation=listSecrets`: `list` (`java.util.List<java.lang.String>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Authentication and HashiCorp Vault on-premise vs HashiCorp Cloud
 
 The component supports operations at the producer level. Specifically, it provides the following functionalities:
@@ -198,7 +237,7 @@ from("direct:createSecret")
 
 #### Getting a secret
 
-The message body becomes the data of the secret; the `CamelHashicorpVaultSecretVersion` header reads a given version instead of the latest:
+The message body becomes a Map with the fields of the secret under `data` and its version details under `metadata`, or no body when the secret does not exist; the `CamelHashicorpVaultSecretVersion` header reads a given version instead of the latest:
 
 -   Java
     

@@ -135,6 +135,57 @@ The IBM Secrets Manager component supports the following message header(s), whic
 | **CamelIbmSecretsManagerSecretPayload** (producer) Constant: [`SECRET_PAYLOAD`](https://javadoc.io/doc/org.apache.camel/camel-ibm-secrets-manager/latest/org/apache/camel/component/ibm/secrets/manager/IBMSecretsManagerConstants.html#SECRET_PAYLOAD) | Set the secret payload for update operation. |  | String |
 | **CamelIbmSecretsManagerSecretData** (producer) Constant: [`SECRET_DATA`](https://javadoc.io/doc/org.apache.camel/camel-ibm-secrets-manager/latest/org/apache/camel/component/ibm/secrets/manager/IBMSecretsManagerConstants.html#SECRET_DATA) | Set the secret data (Map) for KV secret update operation. |  | Map |
 
+## Message Body
+
+The message body at each side of the IBM Secrets Manager component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The payload of the secret for createArbitrarySecret, the default operation, as text: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), and no body fails. createKVSecret needs a Map of the keys and values: a JSON text fails, so unmarshal it first. updateSecret takes text for an arbitrary secret and a Map for a kv secret, unless the CamelIbmSecretsManagerSecretPayload or CamelIbmSecretsManagerSecretData header is set. The other operations take the secret id from a header.
+
+-   With `operation=createKVSecret`: `map`
+    
+-   With `operation=updateSecret`: `text`, `bytes`, `stream`, `file` or `map`
+    
+-   With `operation=getSecret`: `any`
+    
+-   With `operation=deleteSecret`: `any`
+    
+-   With `operation=listSecrets`: `any`
+    
+-   With `operation=listSecretVersions`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` (`java.lang.String`) | 
+
+The id of the new secret for createArbitrarySecret and createKVSecret. getSecret gives the payload text of an arbitrary secret, the Map of a kv secret, or the Secret of the IBM SDK for service credentials, and fails for other secret types. updateSecret gives the SecretVersion of the IBM SDK, the list operations the collection of the IBM SDK, and deleteSecret leaves the body unchanged.
+
+-   With `operation=getSecret`: `text`, `map` or `pojo`
+    
+-   With `operation=deleteSecret`: `unchanged`
+    
+-   With `operation=listSecrets`: `pojo` (`com.ibm.cloud.secrets_manager_sdk.secrets_manager.v2.model.SecretMetadataPaginatedCollection`)
+    
+-   With `operation=updateSecret`: `pojo`
+    
+-   With `operation=listSecretVersions`: `pojo` (`com.ibm.cloud.secrets_manager_sdk.secrets_manager.v2.model.SecretVersionMetadataCollection`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Functionalities
 
 The component supports operations at the producer level. Specifically, it provides the following functionalities:

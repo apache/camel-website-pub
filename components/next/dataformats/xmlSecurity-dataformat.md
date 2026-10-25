@@ -54,10 +54,10 @@ Enum values:
 | **passPhrase** (common) |  | `String` | A String used as passPhrase to encrypt/decrypt content. |
 | **passPhraseByte** (advanced) |  | `String` | A byte used as passPhrase to encrypt/decrypt content. |
 | **secureTag** (common) |  | `String` | The XPath reference to the XML Element selected for encryption/decryption. If no tag is specified, the entire payload is encrypted/decrypted. |
-| **secureTagContents** (common) | `false` | `Boolean` | A boolean value to specify whether the XML Element is to be encrypted or the contents of the XML Element. false = Element Level, true = Element Content Level. |
-| **keyCipherAlgorithm** (common) | `RSA_OAEP` | `Enum` | 
+| **secureTagContents** (common) | `true` | `Boolean` | A boolean value to specify whether the XML Element is to be encrypted or the contents of the XML Element. false = Element Level, true = Element Content Level. |
+| **keyCipherAlgorithm** (common) |  | `Enum` | 
 
-The cipher algorithm to be used for encryption/decryption of the asymmetric key.
+The cipher algorithm to be used for encryption/decryption of the asymmetric key. When not set, marshal uses RSA\_OAEP when the recipientKeyAlias is set, and unmarshal decrypts with the symmetric key of the passPhrase.
 
 Enum values:
 

@@ -116,6 +116,32 @@ The OpenShift Builds component supports the following message header(s), which i
 | **CamelKubernetesBuildsLabels** (producer) Constant: [`KUBERNETES_BUILDS_LABELS`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_BUILDS_LABELS) | The OpenShift build labels. |  | Map |
 | **CamelKubernetesBuildName** (producer) Constant: [`KUBERNETES_BUILD_NAME`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_BUILD_NAME) | The OpenShift build name. |  | String |
 
+## Message Body
+
+The message body at each side of the OpenShift Builds component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesBuildName and the labels in CamelKubernetesBuildsLabels. listBuilds does not read the namespace header: it lists the builds of all namespaces. |
+| **Producer output** | `list`, `pojo` or `null` | 
+A List of Build for listBuilds and listBuildsByLabels; the Build for getBuild (null when not found).
+
+-   With `operation=listBuilds`: `list` (`java.util.List<io.fabric8.openshift.api.model.Build>`)
+    
+-   With `operation=listBuildsByLabels`: `list` (`java.util.List<io.fabric8.openshift.api.model.Build>`)
+    
+-   With `operation=getBuild`: `pojo` or `null` (`io.fabric8.openshift.api.model.Build`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

@@ -66,11 +66,11 @@ The message body at each side of the CBOR data format: _Marshal input_ and _Unma
 | **Marshal input** | `map`, `list` or `pojo` | A Map, a List or a POJO to write as CBOR. A String or bytes are written as one CBOR text or byte string, not as they are. |
 | **Marshal output** | `stream`, as binary | The CBOR data in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `bytes`, `stream` or `file`, as binary | CBOR data. A String fails. |
-| **Unmarshal output** | `pojo` | An object of the class unmarshalType names, such as java.util.Map: unmarshal fails without unmarshalType.
+| **Unmarshal output** | `map` or `list` | A Map (LinkedHashMap) for a CBOR map, a List (ArrayList) for an array; an object of the class unmarshalType names.
 -   With `useList=true`: `list`
     
 
-Not known when `collectionType` or `allowUnmarshallType` or `allowJmsType` is set.
+Not known when `unmarshalType` or `collectionType` or `allowUnmarshallType` or `allowJmsType` is set.
 
  |
 

@@ -200,13 +200,54 @@ Enum values:
 | **CamelGoogleSecretManagerSecretId** (producer) Constant: [`SECRET_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-secret-manager/latest/org/apache/camel/component/google/secret/manager/GoogleSecretManagerConstants.html#SECRET_ID) | The id of the secret. |  | String |
 | **CamelGoogleSecretManagerVersionId** (producer) Constant: [`VERSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-secret-manager/latest/org/apache/camel/component/google/secret/manager/GoogleSecretManagerConstants.html#VERSION_ID) | The version of the secret. | latest | String |
 
+## Message Body
+
+The message body at each side of the Google Secret Manager component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The value of the secret for createSecret, the default operation, as text: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), so marshal it first, and no body fails. The other operations take the secret id from the CamelGoogleSecretManagerSecretId header. With pojoRequest=true the body is the request of the Google SDK for the operation, such as an AddSecretVersionRequest.
+
+-   With `operation=getSecretVersion`: `any`
+    
+-   With `operation=deleteSecret`: `any`
+    
+-   With `operation=listSecrets`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` (`com.google.cloud.secretmanager.v1.SecretVersion`) | 
+
+The SecretVersion of the Google SDK that createSecret added. The value of the secret as text for getSecretVersion: unmarshal a JSON secret to read its fields. A ListSecretsPagedResponse for listSecrets, whose iterateAll() gives the Secrets; deleteSecret leaves the body unchanged.
+
+-   With `operation=getSecretVersion`: `text` (`java.lang.String`)
+    
+-   With `operation=deleteSecret`: `unchanged`
+    
+-   With `operation=listSecrets`: `pojo`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Using GCP Secret Manager Property Function
 
 To use GCP Secret Manager, you need to provide `serviceAccountKey` file and GCP `projectId`. This can be done using environmental variables before starting the application:
 
 ```bash
-export $CAMEL_VAULT_GCP_SERVICE_ACCOUNT_KEY=file:////path/to/service.accountkey
-export $CAMEL_VAULT_GCP_PROJECT_ID=projectId
+export CAMEL_VAULT_GCP_SERVICE_ACCOUNT_KEY=file:////path/to/service.accountkey
+export CAMEL_VAULT_GCP_PROJECT_ID=projectId
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -222,8 +263,8 @@ camel.vault.gcp.projectId = projectId
 If you want instead to use the [GCP default client instance](https://cloud.google.com/docs/authentication/production), you’ll need to provide the following env variables:
 
 ```bash
-export $CAMEL_VAULT_GCP_USE_DEFAULT_INSTANCE=true
-export $CAMEL_VAULT_GCP_PROJECT_ID=projectId
+export CAMEL_VAULT_GCP_USE_DEFAULT_INSTANCE=true
+export CAMEL_VAULT_GCP_PROJECT_ID=projectId
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -492,8 +533,8 @@ Being able to reload Camel context on a Secret Refresh could be done by specifyi
 With Environment variables:
 
 ```bash
-export $CAMEL_VAULT_GCP_USE_DEFAULT_INSTANCE=true
-export $CAMEL_VAULT_GCP_PROJECT_ID=projectId
+export CAMEL_VAULT_GCP_USE_DEFAULT_INSTANCE=true
+export CAMEL_VAULT_GCP_PROJECT_ID=projectId
 ```
 
 or as plain Camel main properties:

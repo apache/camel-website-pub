@@ -477,7 +477,21 @@ The ServiceNow component supports the following message header(s), which is/are 
 | **CamelServiceNowElementsFilter** (producer) Constant: [`SYSPARM_ELEMENTS_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-servicenow/latest/org/apache/camel/component/servicenow/ServiceNowConstants.html#SYSPARM_ELEMENTS_FILTER) | The sys param elements filter. |  | String |
 | **CamelServiceNowBreakdownRelation** (producer) Constant: [`SYSPARM_BREAKDOWN_RELATION`](https://javadoc.io/doc/org.apache.camel/camel-servicenow/latest/org/apache/camel/component/servicenow/ServiceNowConstants.html#SYSPARM_BREAKDOWN_RELATION) | The sys param breakdown relation. |  | String |
 | **CamelServiceNowDataSource** (producer) Constant: [`SYSPARM_DATA_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-servicenow/latest/org/apache/camel/component/servicenow/ServiceNowConstants.html#SYSPARM_DATA_SOURCE) | The sys param data source. |  | String |
-| **CamelServiceNowTopLevelOnly** (producer) Constant: [`SYSPARM_TOP_LEVEL_ONLY`](https://javadoc.io/doc/org.apache.camel/camel-servicenow/latest/org/apache/camel/component/servicenow/ServiceNowConstants.html#SYSPARM_TOP_LEVEL_ONLY) | Gets only those categories whose parent is a catalog. |  | Boolean |Table 1. API Mapping    
+| **CamelServiceNowTopLevelOnly** (producer) Constant: [`SYSPARM_TOP_LEVEL_ONLY`](https://javadoc.io/doc/org.apache.camel/camel-servicenow/latest/org/apache/camel/component/servicenow/ServiceNowConstants.html#SYSPARM_TOP_LEVEL_ONLY) | Gets only those categories whose parent is a catalog. |  | Boolean |
+
+## Message Body
+
+The message body at each side of the ServiceNow component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `map`, `pojo`, `text`, `bytes`, `stream`, `file` or `null` | The record to create, modify or update must be an instance of the request model: a Map by default, an object of the class set with models or requestModels or the CamelServiceNowRequestModel header, or JSON text with a String model; another body fails. An attachment upload sends the body as a stream, with its content type in the CamelServiceNowContentType header. A retrieve or delete does not read the body: the action, table and sys\_id are headers. |
+| **Producer output** | `map`, `list`, `pojo`, `text`, `stream` or `unchanged` | The result of the call: a Map of the record, or a List of Maps for many, or objects of the response model class set with models or responseModels or the CamelServiceNowResponseModel header (the JSON text with a String model). The content of an attachment is an InputStream. A response with no content, such as a delete, leaves the body; the paging offsets and the other response fields are headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
+Table 1. API Mapping    
 | CamelServiceNowResource | CamelServiceNowAction | Method | API URI |
 | --- | --- | --- | --- |
 | TABLE | RETRIEVE | GET | /api/now/v1/table/{table\_name}/{sys\_id} |

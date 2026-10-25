@@ -152,7 +152,7 @@ Enum values:
 | **messageOrderingEnabled** (producer (advanced)) | Should message ordering be enabled. | false | boolean |
 | **pubsubEndpoint** (producer (advanced)) | Pub/Sub endpoint to use. Required when using message ordering, and ensures that messages are received in order even when multiple publishers are used. |  | String |
 | **retry** (producer (advanced)) | A custom RetrySettings to control how the publisher handles retry-able failures. |  | RetrySettings |
-| **serializer** (producer (advanced)) | **Autowired** A custom GooglePubsubSerializer to use for serializing message payloads in the producer. |  | GooglePubsubSerializer |
+| **serializer** (producer (advanced)) | **Autowired** A custom GooglePubsubSerializer to use for serializing message payloads in the producer. It is used only for a body that is not a String or a byte array and that the type converter cannot convert to a byte array. |  | GooglePubsubSerializer |
 | **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter headers to and from Camel message. |  | HeaderFilterStrategy |
 | **includeAllGoogleProperties** (advanced) | Whether to include all Google headers when mapping from Pubsub to Camel Message. Setting this to true will include properties such as x-goog etc. | false | boolean |
 | **loggerId** (advanced) | **Deprecated** To use a custom logger name. |  | String |
@@ -182,7 +182,7 @@ The message body at each side of the Google Pubsub component: _Consumer_ is the 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `bytes` (`byte[]`) | The data of the Pub/Sub message as a byte array, with its attributes in headers: convert or unmarshal it. |
-| **Producer input** | `text` or `bytes` | Text is sent as UTF-8 and bytes as they are; a List of the exchanges of a grouped aggregation is sent as one message per exchange. Any other body goes to the serializer, by default Java serialization, so a Map or a POJO is sent as Java-serialized bytes, and a stream or a file fails: marshal or convert it first.
+| **Producer input** | `text`, `bytes`, `stream` or `file` | Text is sent as UTF-8 and bytes as they are; a List of the exchanges of a grouped aggregation is sent as one message per exchange. A body that converts to bytes, such as a stream or a file, is sent as its content. Any other body goes to the serializer, by default Java serialization, so a Map or a POJO is sent as Java-serialized bytes: marshal it first. No body fails.
 Not known when `serializer` is set.
 
  |
@@ -196,14 +196,18 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 Producer endpoints can accept and deliver to PubSub individual and grouped exchanges alike. Grouped exchanges have `Exchange.GROUPED_EXCHANGE` property set.
 
-Google PubSub expects the payload to be byte\[\] array, Producer endpoints will send:
+Google PubSub expects the payload to be byte\[\] array, Producer endpoints will send, in this order:
 
 -   String body as `byte[]` encoded as UTF-8
     
 -   `byte[]` body as is
     
--   Everything else will be serialised into a `byte[]` array
+-   any other body that the Camel type converter can convert to `byte[]`, as the result of that conversion. This sends the content of a stream, a stream cache, a `java.io.File`, a `java.nio.file.Path` or the file of the [File](file-component.md) consumer, so `from("file:inbox").to("google-pubsub:project:topic")` publishes the content of each file.
     
+-   everything else is passed to the `serializer`, which by default uses Java serialization (`ObjectOutputStream`), so for example a `Map` or a POJO is sent as Java-serialized bytes. Set a custom `serializer` to send such bodies in another format, or marshal the body (for example to JSON) before the producer.
+    
+
+A message without a body is not sent: the producer fails with an `InvalidPayloadException`.
 
 A Map set as message header `GooglePubsubConstants.ATTRIBUTES` will be sent as PubSub attributes.
 

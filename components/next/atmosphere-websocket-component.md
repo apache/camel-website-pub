@@ -157,6 +157,29 @@ The Atmosphere Websocket component supports the following message header(s), whi
 | **CamelAtmosphereWebsocketEventType** (consumer) Constant: [`EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#EVENT_TYPE) | The type of event received. It can be ONOPEN\_EVENT\_TYPE, ONERROR\_EVENT\_TYPE or ONCLOSE\_EVENT\_TYPE. |  | int |
 | **CamelAtmosphereWebsocketErrorType** (consumer) Constant: [`ERROR_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-atmosphere-websocket/latest/org/apache/camel/component/atmosphere/websocket/WebsocketConstants.html#ERROR_TYPE) | The type of error that occurred. It can be MESSAGE\_NOT\_SENT\_ERROR\_TYPE. |  | int |
 
+## Message Body
+
+The message body at each side of the Atmosphere Websocket component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text`, `bytes` or `null` | 
+A String for a text message, a byte array for a binary one; null for the open, close and error events (the servlet init parameter events=true). A message the producer could not deliver comes back with the CamelAtmosphereWebsocketErrorType header. The consumer does not reply.
+
+-   With `useStreaming=true`: `stream` or `null`
+    
+
+
+
+
+
+ |
+| **Producer input** | `null`, `text`, `bytes` or `stream` | Text or a Reader as a text message, bytes or an InputStream as a binary one; other bodies as their toString. No body sends nothing. Sent to all peers with sendToAll, otherwise to the connection key headers. |
+| **Producer output** | `unchanged` | The body is kept. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Reading and Writing Data over Websocket
 
 An atmopshere-websocket endpoint can either write data to the socket or read from the socket, depending on whether the endpoint is configured as the producer or the consumer, respectively.

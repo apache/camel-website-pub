@@ -167,6 +167,19 @@ Enum values:
 
  |  | AsteriskAction |
 
+## Message Body
+
+The message body at each side of the Asterisk component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`org.asteriskjava.manager.event.ManagerEvent`) | The AMI event: a subclass of ManagerEvent such as NewChannelEvent or HangupEvent, with its simple class name in the CamelAsteriskEventName header. The ConnectEvent of the login comes first. |
+| **Producer input** | `any` | The body is not read: the action comes from the action option or the CamelAsteriskAction header, and the extension and context of EXTENSION\_STATE from the CamelAsteriskExtension and CamelAsteriskContext headers. |
+| **Producer output** | `pojo` (`org.asteriskjava.manager.response.ManagerResponse`) | The ManagerResponse of the action, such as an ExtensionStateResponse; a ManagerError when Asterisk answers with an error. QUEUE\_STATUS and SIP\_PEERS give only the first response, not the events of the list. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Action
 
 Supported actions are:

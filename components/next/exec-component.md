@@ -220,7 +220,7 @@ This component supports the following `ExecResult` [type converters](http://came
 | `ExecResult` | `byte []` |
 | `ExecResult` | `org.w3c.dom.Document` |
 
-If an _out file_ is specified (in the endpoint via `outFile` or the message headers via `ExecBinding.EXEC_COMMAND_OUT_FILE`), the converters will return the content of the _out file_. If no _out file_ is used, then this component will convert the `stdout` of the process to the target type. For more details, please refer to the [usage examples](#) below.
+If an _out file_ is specified (in the endpoint via `outFile` or the message headers via `ExecBinding.EXEC_COMMAND_OUT_FILE`), the converters will return the content of the _out file_. If no _out file_ is used, then this component will convert the `stdout` of the process to the target type. When the process writes nothing to its output, the `String` converter gives an empty string, and the `byte []` converter an empty byte array. For more details, please refer to the [usage examples](#) below.
 
 ## Examples
 

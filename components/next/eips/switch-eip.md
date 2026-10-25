@@ -23,6 +23,17 @@ The Switch eip supports the following options which are listed below.
 | **case** | Literal cases. Duplicate values are rejected at startup, ignoring case. |  | List |
 | **otherwise** | Fixed fallback URI for null or unmatched selector results. Without a fallback processing continues. |  | SwitchOtherwiseDefinition |
 
+## Message Body
+
+The message body at each side of the Switch EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unknown` | What the producer of the endpoint the selector chose leaves. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Scalar selectors
 
 The selector is evaluated once on each entry. Scalar results are converted to strings and matched case-insensitively using the English locale. An empty string is a valid literal. An asterisk is literal, not a wildcard. Duplicate normalized values are rejected at startup.

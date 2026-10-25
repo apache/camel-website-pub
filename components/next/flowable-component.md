@@ -107,6 +107,20 @@ Enum values:
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
+## Message Body
+
+The message body at each side of the Flowable component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The event a process or case sends on an outbound channel, as text: JSON or XML, as the serializerType of the channel says. |
+| **Producer input** | `text` or `pojo` | The event for an inbound channel: JSON or XML text, as the deserializerType of the channel expects, or an object whose toString() is that text, such as a Jackson JsonNode. Bytes, a stream or a Map fail: convert them to text first. The headers go along as the headers of the event. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Body content

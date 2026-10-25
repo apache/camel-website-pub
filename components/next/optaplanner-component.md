@@ -140,14 +140,29 @@ The OptaPlanner component supports the following message header(s), which is/are
 
 ## Message Body
 
-Camel takes the planning problem for the `IN` body, solves it and returns it on the _OUT_ body. The `IN` body object supports the following use cases:
+The message body at each side of the OptaPlanner component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
 
--   If the body contains the `PlanningSolution` annotation, then it will be solved using the solver identified by solverId and either synchronously or asynchronously.
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | The body is empty: the new best solution is in the CamelOptaPlannerBestSolution header. Events come only from producers that solve asynchronously, with the same problemId. |
+| **Producer input** | `pojo` | The planning problem: an instance of the PlanningSolution class of the solver configuration, or a ProblemChange to apply to the problem being solved. Any other body fails to solve, and no body fails. |
+| **Producer output** | `pojo` or `unchanged` | The best solution found, a new instance of the problem class, with the CamelOptaPlannerIsSolving header false (also with async, the exchange waits for it); a ProblemChange leaves the body unchanged. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
+## Message Body
+
+Camel takes the planning problem from the message body, solves it and sets the best solution as the message body. The body supports the following use cases:
+
+-   If the body is an instance of the `PlanningSolution` class of the solver configuration, then it is solved, either synchronously or asynchronously. In both cases the exchange continues with the best solution as the body.
     
--   If the body is an instance of `ProblemChange`, then it will trigger `addProblemFactChange`.
+-   If the body is an instance of `ProblemChange`, then it is added to the problem being solved with the same `problemId`, and the body is left unchanged.
     
--   If the body is none of the above types, then the producer will return the best result from the solver identified by `solverId`.
+-   Any other body fails the exchange, as the solver cannot solve it.
     
+
+The consumer receives an exchange each time a producer solving asynchronously, with the same `problemId`, finds a new best solution. Its body is empty: the best solution is in the `CamelOptaPlannerBestSolution` header.
 
 ### Examples
 

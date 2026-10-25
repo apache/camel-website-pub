@@ -24,6 +24,19 @@ The Idempotent Consumer eip supports the following options which are listed belo
 | **removeOnFailure** | Sets whether to remove or keep the key on failure. The default behavior is to remove the key on failure. | true | Boolean |
 | **outputs** | **Required** |  | List |
 
+## Message Body
+
+The message body at each side of the Idempotent Consumer EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what its steps end with | What its steps end with; the body as it was for a duplicate message. |
+| **Steps** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Idempotent Consumer eip supports the following exchange properties which are listed below.

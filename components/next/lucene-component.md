@@ -145,6 +145,41 @@ The Lucene component supports the following message header(s), which is/are list
 | **CamelLuceneQuery** (producer) Constant: [`HEADER_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-lucene/latest/org/apache/camel/component/lucene/LuceneConstants.html#HEADER_QUERY) | The Lucene Query to performed on the index. The query may include wildcards and phrases. |  | String |
 | **CamelLuceneReturnLuceneDocs** (producer) Constant: [`HEADER_RETURN_LUCENE_DOCS`](https://javadoc.io/doc/org.apache.camel/camel-lucene/latest/org/apache/camel/component/lucene/LuceneConstants.html#HEADER_RETURN_LUCENE_DOCS) | Set this header to true to include the actual Lucene documentation when returning hit information. |  | String |
 
+## Message Body
+
+The message body at each side of the Lucene component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+insert indexes the body as text in the contents field: bytes, a stream or a file are read as text, another object as its toString(), and no body fails; each header is indexed too, as a field of its name. query does not use the body: the query is the CamelLuceneQuery header.
+
+-   With `operation=insert`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` or `pojo` | 
+
+insert leaves the body unchanged. query gives the Hits: the number of hits and a List of Hit with the score and the contents of each document found (and the Lucene Document with the CamelLuceneReturnLuceneDocs header).
+
+-   With `operation=insert`: `unchanged`
+    
+-   With `operation=query`: `pojo` (`org.apache.camel.processor.lucene.support.Hits`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Lucene Producers

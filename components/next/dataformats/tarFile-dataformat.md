@@ -25,11 +25,11 @@ The message body at each side of the Tar File data format: _Marshal input_ and _
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Marshal input** | `text`, `bytes`, `stream` or `file` | The content of the one entry: text, bytes, a stream or a file. The entry size is the CamelFileLength header, or else what the stream has available, and must match the content. |
+| **Marshal input** | `text`, `bytes`, `stream` or `file` | The content of the one entry: text, bytes, a stream or a file. The entry size is taken from the content, not from the CamelFileLength header. |
 | **Marshal output** | `stream`, as binary | The tar file, not compressed, in the stream cache, or a byte array when stream caching is off. The CamelFileName header is the entry name with .tar. |
 | **Unmarshal input** | `bytes`, `stream` or `file`, as binary | A tar file with one entry, or with several when usingIterator. A .tar.gz is unmarshalled with gzipDeflater first. |
 | **Unmarshal output** | `stream` | 
-The content of the one entry in the stream cache, or a byte array when stream caching is off; a tar with more entries, a folder too, fails. With usingIterator, an Iterator for a streaming split EIP: of messages whose body streams one file of the archive, to read before the next.
+The content of the one file in the stream cache, or a byte array when stream caching is off; folder entries are skipped, and a tar with more files fails. With usingIterator, an Iterator for the split EIP: of messages with the content of one file each, in a stream cache.
 
 -   With `usingIterator=true`: `iterator` (`org.apache.camel.dataformat.tarfile.TarIterator`)
     
@@ -201,7 +201,7 @@ _Java-only: Java TarSplitter class_
 ```
 
 > **Important**
-> You cannot use TarSplitter in _parallel_ mode with the splitter. The splitter must be _streaming_ too: the body of each message streams its entry from the Tar File, which is read on as the splitter goes, so a splitter that is not streaming gives messages with empty bodies.
+> You cannot use TarSplitter in _parallel_ mode with the splitter.
 
 ## Aggregate
 

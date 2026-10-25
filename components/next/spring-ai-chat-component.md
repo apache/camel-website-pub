@@ -190,6 +190,41 @@ The Spring AI Chat component supports the following message header(s), which is/
 | **CamelSpringAiChatToolNames** (producer) Constant: [`TOOL_NAMES`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#TOOL_NAMES) | Comma-separated tool names for selecting tools by name via ToolCallbackResolver. |  | String |
 | **CamelSpringAiChatToolContext** (producer) Constant: [`TOOL_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#TOOL_CONTEXT) | Context map to pass to tools during execution. |  | Map |
 
+## Message Body
+
+The message body at each side of the Spring AI Chat component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The prompt as text, or a UserMessage or another Spring AI Message. A byte\[\] is sent as media (image/png unless the CamelSpringAiChatMediaType header says otherwise), and a WrappedFile of a local file, or a List of them, as media files: these need userMessage or the CamelSpringAiChatUserMessage header for the text. A stream, a java.io.File or another body is sent as its text, and no body fails. CHAT\_SINGLE\_MESSAGE\_WITH\_PROMPT takes the variables of the template in the CamelSpringAiChatPromptTemplate header as a Map, and CHAT\_MULTIPLE\_MESSAGES a List of Message.
+
+-   With `chatOperation=CHAT_SINGLE_MESSAGE_WITH_PROMPT`: `map`
+    
+-   With `chatOperation=CHAT_MULTIPLE_MESSAGES`: `list`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` | The answer of the model as text, also in the CamelSpringAiChatResponse header. entityClass makes it an object of that class, and outputFormat an object of outputClass, a Map or a List of texts; the CamelSpringAiChatEntityClass and CamelSpringAiChatOutputFormat headers do the same per message.
+
+-   With `outputFormat=BEAN`: `pojo`
+    
+-   With `outputFormat=MAP`: `map`
+    
+-   With `outputFormat=LIST`: `list`
+    
+
+Not known when `entityClass` or `structuredOutputConverter` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring the ChatModel

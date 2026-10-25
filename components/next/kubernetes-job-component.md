@@ -118,6 +118,38 @@ The Kubernetes Job component supports the following message header(s), which is/
 | **CamelKubernetesJobLabels** (producer) Constant: [`KUBERNETES_JOB_LABELS`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_JOB_LABELS) | The Job labels. |  | Map |
 | **CamelKubernetesJobAnnotations** (producer) Constant: [`KUBERNETES_JOB_ANNOTATIONS`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_JOB_ANNOTATIONS) | The Job annotations. |  | Map |
 
+## Message Body
+
+The message body at each side of the Kubernetes Job component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operations take their input from headers, such as the name of the Job in CamelKubernetesJobName and its JobSpec in CamelKubernetesJobSpec. |
+| **Producer output** | `list`, `pojo`, `null` or `unchanged` | 
+A List of the Jobs for the list operations, the Job of get, create and update (null when getJob finds none), and the body as it was after deleteJob.
+
+-   With `operation=listJob`: `list`
+    
+-   With `operation=listJobByLabels`: `list`
+    
+-   With `operation=getJob`: `pojo` or `null`
+    
+-   With `operation=createJob`: `pojo` (`io.fabric8.kubernetes.api.model.batch.v1.Job`)
+    
+-   With `operation=updateJob`: `pojo` (`io.fabric8.kubernetes.api.model.batch.v1.Job`)
+    
+-   With `operation=deleteJob`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

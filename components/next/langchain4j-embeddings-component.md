@@ -207,6 +207,18 @@ Enum values:
 | **CamelLangChain4jEmbeddingsTextSegment** (producer) Constant: [`TEXT_SEGMENT`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddings/latest/org/apache/camel/component/langchain4j/embeddings/LangChain4jEmbeddingsHeaders.html#TEXT_SEGMENT) | A TextSegment representation of the vector embedding input text. |  | TextSegment |
 | **CamelLangChain4jEmbeddingsTextSegments** (producer) Constant: [`TEXT_SEGMENTS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddings/latest/org/apache/camel/component/langchain4j/embeddings/LangChain4jEmbeddingsHeaders.html#TEXT_SEGMENTS) | List of text segments from a batch embedAll operation. |  | List |
 
+## Message Body
+
+The message body at each side of the LangChain4j Embeddings component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `pojo` or `list` | The text to embed as a String or a TextSegment, or a non-empty List of them to embed in one batch. Bytes, a stream, a file, a Map and no body fail: convert the body to a String first. |
+| **Producer output** | `unchanged` | The body is kept. The vector goes in the CamelLangChain4jEmbeddingsVector header as a float array, with the Embedding and the TextSegment in the CamelLangChain4jEmbeddingsEmbedding and CamelLangChain4jEmbeddingsTextSegment headers; a List body gives Lists of them in the CamelLangChain4jEmbeddingsEmbeddings and CamelLangChain4jEmbeddingsTextSegments headers instead. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring the model by provider

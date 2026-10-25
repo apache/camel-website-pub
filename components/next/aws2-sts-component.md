@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-The AWS2 STS component supports assumeRole operation. [AWS STS](https://aws.amazon.com/sts/).
+The AWS2 STS component supports the assumeRole, getSessionToken and getFederationToken operations of [AWS STS](https://aws.amazon.com/sts/).
 
 Prerequisites
 
@@ -415,7 +415,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 Required STS component options
 
-You have to provide the amazonSTSClient in the Registry or your accessKey and secretKey to access the [Amazon STS](https://aws.amazon.com/sts/) service.
+You have to provide the `stsClient` option (an `StsClient` in the Registry) or your accessKey and secretKey to access the [Amazon STS](https://aws.amazon.com/sts/) service.
 
 ## Usage
 

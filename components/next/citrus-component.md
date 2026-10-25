@@ -136,6 +136,28 @@ Enum values:
 | **sleepForEmptyTest** (producer (advanced)) | Allows a sleep to be specified to wait to check that this mock really is empty when expectedMessageCount(int) is called with zero value. |  | long |
 | **browseLimit** (advanced) | Maximum number of messages to keep in memory available for browsing. Use 0 for unlimited. | 100 | int |
 
+## Message Body
+
+The message body at each side of the Citrus component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text` or `stream` | The body Citrus validates, as text; a stream cache is read as text and reset. Any other body is compared by its toString(): bytes as a list of numbers, a file as its path, a Map as {key=value}, so convert it to a String first. |
+| **Producer output** | `unchanged` | 
+validate leaves the body as it is. receive sets the body of the simulated response, as text with its Citrus variables resolved (or what the MessagePayloadBuilder given to it builds), and leaves the body as it is when the response has no body or no spec matches the exchange.
+
+-   With `operation=receive`: `text` or `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The Citrus endpoint acts as a producer-only endpoint. Routes send exchanges **to** `citrus:validate`, and the component validates each exchange using Citrus message validation.

@@ -73,7 +73,7 @@ The SSH component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **timeout** (common) | Sets the timeout in milliseconds to wait in establishing the remote SSH server connection. Defaults to 30000 milliseconds. | 30000 | long |
+| **timeout** (common) | Sets the timeout in milliseconds to wait in establishing the remote SSH server connection: connecting, authenticating and opening the channel. It does not limit how long the command runs. Defaults to 30000 milliseconds. | 30000 | long |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **pollCommand** (consumer) | Sets the command string to send to the remote SSH server during every poll cycle. Only works with camel-ssh component being used as a consumer, i.e. from(ssh://…​) You may need to end your command with a newline, and that must be URL encoded %0A. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -88,7 +88,7 @@ The SSH component supports the following options which are listed below.
 | **heartbeatInterval** (advanced) | Sets the heartbeat interval in milliseconds. If positive, the component will send keep-alive messages to prevent the SSH session from timing out. |  | long |
 | **heartbeatReplyMaxWait** (advanced) | Sets the maximum number of keep-alive messages without reply before the session is terminated. |  | int |
 | **idleTimeout** (advanced) | Sets the timeout in milliseconds to wait before the SSH session is closed due to inactivity. The default value is 0, which means no idle timeout is applied. |  | long |
-| **shellPrompt** (advanced) | Sets the shellPrompt to be dropped when response is read after command execution. |  | String |
+| **shellPrompt** (advanced) | Sets the shellPrompt to be dropped when response is read after command execution. Required when the channelType is shell. |  | String |
 | **sleepForShellPrompt** (advanced) | Sets the sleep period in milliseconds to wait reading response from shell prompt. Defaults to 100 milliseconds. | 100 | long |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
@@ -126,7 +126,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **timeout** (common) | Sets the timeout in milliseconds to wait in establishing the remote SSH server connection. Defaults to 30000 milliseconds. | 30000 | long |
+| **timeout** (common) | Sets the timeout in milliseconds to wait in establishing the remote SSH server connection: connecting, authenticating and opening the channel. It does not limit how long the command runs. Defaults to 30000 milliseconds. | 30000 | long |
 | **pollCommand** (consumer) | Sets the command string to send to the remote SSH server during every poll cycle. Only works with camel-ssh component being used as a consumer, i.e. from(ssh://…​) You may need to end your command with a newline, and that must be URL encoded %0A. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -157,7 +157,7 @@ Enum values:
 | **heartbeatInterval** (advanced) | Sets the heartbeat interval in milliseconds. If positive, the component will send keep-alive messages to prevent the SSH session from timing out. |  | long |
 | **heartbeatReplyMaxWait** (advanced) | Sets the maximum number of keep-alive messages without reply before the session is terminated. |  | int |
 | **idleTimeout** (advanced) | Sets the timeout in milliseconds to wait before the SSH session is closed due to inactivity. The default value is 0, which means no idle timeout is applied. |  | long |
-| **shellPrompt** (advanced) | Sets the shellPrompt to be dropped when response is read after command execution. |  | String |
+| **shellPrompt** (advanced) | Sets the shellPrompt to be dropped when response is read after command execution. Required when the channelType is shell. |  | String |
 | **sleepForShellPrompt** (advanced) | Sets the sleep period in milliseconds to wait reading response from shell prompt. Defaults to 100 milliseconds. | 100 | long |
 | **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffIdleThreshold** (scheduler) | The number of subsequent idle polls that should happen before the backoffMultipler should kick-in. |  | int |
@@ -309,6 +309,10 @@ from("direct:exampleSshProducer")
         - log:
             message: "${body}"
 ```
+
+The `timeout` option covers connecting to the server, authenticating and opening the channel, not the run of the command. The producer waits until the command ends, with no time limit, so a command that does not end blocks the thread that sends the message.
+
+With `channelType=shell`, the `shellPrompt` option is required, and the endpoint fails to start without it. The producer reads the output of the shell until it ends with the `shellPrompt` text, and checks the output every `sleepForShellPrompt` milliseconds (100 by default).
 
 ### Authentication
 

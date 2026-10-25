@@ -246,6 +246,57 @@ The OpenFGA component supports the following message header(s), which is/are lis
 | **CamelOpenFgaWrittenTuples** (producer) Constant: [`WRITTEN_TUPLES`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#WRITTEN_TUPLES) | How many relationship tuples the writeTuples operation wrote. |  | Integer |
 | **CamelOpenFgaDeletedTuples** (producer) Constant: [`DELETED_TUPLES`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#DELETED_TUPLES) | How many relationship tuples the deleteTuples operation deleted. |  | Integer |
 
+## Message Body
+
+The message body at each side of the OpenFGA component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | batchCheck: the objects to check, as a List or comma-separated text. writeTuples and deleteTuples: a Map with user, relation and object, a ClientTupleKey, or a List of them, used only when none of user, relation and object is configured; text fails, unmarshal JSON first. The other operations do not read the body.
+-   With `operation=batchCheck`: `list`, `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=writeTuples`: `map`, `list` or `pojo`
+    
+-   With `operation=deleteTuples`: `map`, `list` or `pojo`
+    
+
+Not known when `object` is set.
+
+ |
+| **Producer output** | `unknown` | 
+
+check, writeTuples and deleteTuples keep the body: the verdict is in the CamelOpenFgaAllowed header, the count in CamelOpenFgaWrittenTuples or CamelOpenFgaDeletedTuples. batchCheck: the allowed objects of the body; the list operations: a List of String identifiers; readTuples and readChanges: a List of Maps with user, relation, object and timestamp (and operation for a change); expand: the UsersetTree, or null when the object or relation does not resolve.
+
+-   With `operation=check`: `unchanged`
+    
+-   With `operation=batchCheck`: `list` (`java.util.List<java.lang.String>`)
+    
+-   With `operation=listObjects`: `list` (`java.util.List<java.lang.String>`)
+    
+-   With `operation=listRelations`: `list` (`java.util.List<java.lang.String>`)
+    
+-   With `operation=listUsers`: `list` (`java.util.List<java.lang.String>`)
+    
+-   With `operation=readTuples`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `operation=readChanges`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `operation=expand`: `pojo` or `null`
+    
+-   With `operation=writeTuples`: `unchanged`
+    
+-   With `operation=deleteTuples`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Resolving the subject and the object
 
 `user`, `object` and `relation` are evaluated as [Simple](languages/simple-language.md) expressions against each Exchange, so a literal is used as written and an expression resolves per message:
@@ -440,7 +491,7 @@ to("openfga:listObjects?storeId={{fga.store}}&relation=reader"
 
 ### Granting and revoking access
 
-A route that creates a resource usually has to grant access to it too. `writeTuples` takes its tuples from the body, and falls back to the endpoint’s `user`/`relation`/`object` when the body carries none — which is the shape that reads best right after a resource was created:
+A route that creates a resource usually has to grant access to it too. `writeTuples` takes its tuple from the endpoint’s `user`/`relation`/`object` when they are configured, and from the body only when none of them is — the configured tuple is the shape that reads best right after a resource was created:
 
 -   Java
     

@@ -17,6 +17,17 @@ The Stop eip supports the following options which are listed below.
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 
+## Message Body
+
+The message body at each side of the Stop EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Stops the routing of the message: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Stop eip has no exchange properties.

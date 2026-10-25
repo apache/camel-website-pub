@@ -426,6 +426,60 @@ The Olingo2 component supports the following message header(s), which is/are lis
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelOlingo2.responseHttpHeaders** (producer) Constant: [`RESPONSE_HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-olingo2/latest/org/apache/camel/component/olingo2/internal/Olingo2Constants.html#RESPONSE_HTTP_HEADERS) | The response Http headers. |  | Map |
+
+## Message Body
+
+The message body at each side of the Olingo2 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo`, `map`, `text` or `value` | 
+The result of read for the resourcePath, as in the producer: a feed is split into one message per ODataEntry and the $links of an entry into one message per link URI; with splitResult=false the ODataFeed or the List comes in one message. uread gives the response unparsed as a stream.
+
+-   With `methodName=uread`: `stream`
+    
+-   With `splitResult=false`: `pojo`, `map`, `list`, `text` or `value`
+    
+
+
+
+
+
+ |
+| **Producer input** | `map`, `list`, `text` or `value` | create, update, patch, merge and batch send the body as their data, passed as it is without type conversion: a Map of the property names and values for an entry or a complex property, the Java value of a simple property, a Map of the key for a link and a List of such Maps for links, and a List of Olingo2BatchRequest for batch. JSON text, bytes or a stream fails: unmarshal it to a Map first. read, uread and delete do not use the body.
+
+-   With `methodName=read`: `any`
+    
+-   With `methodName=uread`: `any`
+    
+-   With `methodName=delete`: `any`
+    
+
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo`, `map`, `list`, `text` or `value` | 
+
+read gives the Olingo object of the resource: an ODataFeed, an ODataEntry, the Edm of $metadata or the ServiceDocument; a Map for a property, the Java value for $value, a Long for $count, the URI text of a link and a List of them for $links. uread gives the response as a stream. create gives the created ODataEntry, or the HttpStatusCodes when the response has no content; update, patch, merge and delete the HttpStatusCodes, and batch a List of Olingo2BatchResponse. With filterAlreadySeen, a result read before is null.
+
+-   With `methodName=uread`: `stream`
+    
+-   With `methodName=delete`: `value`
+    
+-   With `methodName=batch`: `list`
+    
+-   With `filterAlreadySeen=true`: `pojo`, `map`, `list`, `text`, `value` or `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 

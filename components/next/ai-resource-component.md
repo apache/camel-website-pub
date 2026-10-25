@@ -129,6 +129,18 @@ Enum values:
 
  |  | ExchangePattern |
 
+## Message Body
+
+The message body at each side of the AI Resource component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body and no headers: a resource read carries no arguments. The route fetches the content itself, for example with pollEnrich or a producer with a read operation. |
+| **Consumer reply** | `text`, `bytes`, `stream` or `file` | The content the route ends with: converted to a String when the mimeType is textual (the default text/plain, json, xml, yaml), else to a byte\[\] sent as a blob. A Map, a List or another object is sent as its toString as text and fails as a blob: marshal it first. No body is an error. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 A resource read carries no arguments: the route is invoked with an empty exchange and its message body is the content returned to the client. Retrieval therefore uses whatever Camel already offers for reading on demand: a producer with a read operation (`aws2-s3` with `operation=getObject`), or `pollEnrich` for the polling components (`file`, `ftp`, `sftp`), whose producers write rather than read.

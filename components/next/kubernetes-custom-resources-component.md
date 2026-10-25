@@ -172,6 +172,39 @@ Enum values:
 | **CamelKubernetesCRDInstance** (producer) Constant: [`KUBERNETES_CRD_INSTANCE`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_CRD_INSTANCE) | The manifest of the CRD resource to create as JSON string. |  | String |
 | **CamelKubernetesDeleteResult** (producer) Constant: [`KUBERNETES_DELETE_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_DELETE_RESULT) | The result of the delete operation. |  | boolean |
 
+## Message Body
+
+The message body at each side of the Kubernetes Custom Resources component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`), as json | The custom resource that changed as JSON text, with the action (ADDED, MODIFIED or DELETED) in the CamelKubernetesCRDEventAction header. |
+| **Producer input** | `any` | Not used: the operations take their input from headers, such as the name of the instance in CamelKubernetesCRDInstanceName and, for createCustomResource and updateCustomResource, the instance as JSON text in CamelKubernetesCRDInstance. |
+| **Producer output** | `list`, `map`, `pojo` or `unchanged` | 
+A JsonArray of the GenericKubernetesResource of the instances for the list operations, a JsonObject of the instance for getCustomResource, and the GenericKubernetesResource of create and update (an empty one when it already exists). deleteCustomResource leaves the body as it was, with whether it deleted the instance in the CamelKubernetesDeleteResult header.
+
+-   With `operation=listCustomResources`: `list` (`org.apache.camel.util.json.JsonArray`)
+    
+-   With `operation=listCustomResourcesByLabels`: `list` (`org.apache.camel.util.json.JsonArray`)
+    
+-   With `operation=getCustomResource`: `map` (`org.apache.camel.util.json.JsonObject`)
+    
+-   With `operation=createCustomResource`: `pojo` (`io.fabric8.kubernetes.api.model.GenericKubernetesResource`)
+    
+-   With `operation=updateCustomResource`: `pojo` (`io.fabric8.kubernetes.api.model.GenericKubernetesResource`)
+    
+-   With `operation=deleteCustomResource`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Supported producer operation
 
 -   `listCustomResources`

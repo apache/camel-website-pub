@@ -46,6 +46,21 @@ Enum values:
 | **autoStartComponents** | Whether to auto startup components when toD is starting up. | true | Boolean |
 | **allowedSchemes** | Sets an optional comma-separated allow-list of component schemes that the dynamic recipient may resolve to (e.g. http,https). When set, a dynamic endpoint whose scheme is not in the list is rejected. This is a defence-in-depth restriction, useful for low-code / Kamelet deployments; by default (unset) any scheme is allowed. |  | String |
 
+## Message Body
+
+The message body at each side of the To D EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP input** | what the producer of its endpoint sends | Not known when `variableSend` is set. |
+| **EIP output** | what the producer of its endpoint leaves | What the producer of the endpoint leaves. With variableReceive the reply goes into the variable, and the body stays as it was.
+Not known when `variableReceive` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The To D eip supports the following exchange properties which are listed below.

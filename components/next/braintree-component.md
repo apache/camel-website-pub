@@ -1885,6 +1885,21 @@ In addition to the parameters above, the braintree API can also use any of the [
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelBraintree.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelBraintree.myParameterNameHere` header.
 
+## Message Body
+
+The message body at each side of the Braintree component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The body is used only when inBody names a parameter of the method, and must then be of the type of that parameter: a request object such as the TransactionRequest for request of transaction/sale, or text for an id. A Map or JSON or XML text is not turned into a request: build it first. Without inBody the arguments come from the options and the CamelBraintree. headers.
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo`, `iterator`, `list` or `text` | The return value of the method: a Result for the methods that change data, such as transaction/sale, which does not fail the exchange when Braintree rejects the request: isSuccess() is then false and the errors are in the Result; the model object of a find, such as a Customer; a ResourceCollection for search and customer/all, which fetches the records while it is iterated; a List for plan/all; text for clientToken/generate, oauth/connectUrl and webhookNotification/verify. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 

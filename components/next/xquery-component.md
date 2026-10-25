@@ -2,7 +2,7 @@
 
 **Since Camel 1.0**
 
-**Both producer and consumer are supported**
+**Only producer is supported**
 
 Camel supports [XQuery](http://www.w3.org/TR/xquery/) component for message transformation
 
@@ -58,7 +58,6 @@ The XQuery component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **configuration** (advanced) | To use a custom Saxon configuration. |  | Configuration |
@@ -78,16 +77,16 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **resourceUri** (common) | **Required** The name of the template to load from classpath or file system. |  | String |
+| **resourceUri** (producer) | **Required** The name of the template to load from classpath or file system. |  | String |
 
 ### Query Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **allowStAX** (common) | Whether to allow using StAX mode. | false | boolean |
-| **namespacePrefixes** (common) | Allows to control which namespace prefixes to use for a set of namespace mappings. |  | Map |
-| **resultsFormat** (common) | 
+| **allowStAX** (producer) | Whether to allow using StAX mode. | false | boolean |
+| **namespacePrefixes** (producer) | Allows to control which namespace prefixes to use for a set of namespace mappings. |  | Map |
+| **resultsFormat** (producer) | 
 What output result to use.
 
 Enum values:
@@ -112,29 +111,9 @@ Enum values:
 
 
  | DOM | ResultFormat |
-| **resultType** (common) | What output result to use defined as a class. |  | Class |
-| **source** (common) | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |  | String |
-| **stripsAllWhiteSpace** (common) | Whether to strip all whitespaces. | true | boolean |
-| **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
-| **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
-| **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
-| **exchangePattern** (consumer (advanced)) | 
-
-Sets the exchange pattern when the consumer creates an exchange.
-
-Enum values:
-
--   InOnly
-    
--   InOut
-    
-
-
-
-
-
- |  | ExchangePattern |
-| **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
+| **resultType** (producer) | What output result to use defined as a class. |  | Class |
+| **source** (producer) | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |  | String |
+| **stripsAllWhiteSpace** (producer) | Whether to strip all whitespaces. | true | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **configuration** (advanced) | To use a custom Saxon configuration. |  | Configuration |
 | **configurationProperties** (advanced) | To set custom Saxon configuration properties. |  | Map |
@@ -142,68 +121,6 @@ Enum values:
 | **parameters** (advanced) | Additional parameters. |  | Map |
 | **properties** (advanced) | Properties to configure the serialization parameters. |  | Properties |
 | **staticQueryContext** (advanced) | To use a custom Saxon StaticQueryContext. |  | StaticQueryContext |
-| **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |
-| **backoffIdleThreshold** (scheduler) | The number of subsequent idle polls that should happen before the backoffMultipler should kick-in. |  | int |
-| **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
-| **delay** (scheduler) | Milliseconds before the next poll. | 500 | long |
-| **greedy** (scheduler) | If greedy is enabled, then the ScheduledPollConsumer will run immediately again, if the previous run polled 1 or more messages. | false | boolean |
-| **initialDelay** (scheduler) | Milliseconds before the first poll starts. | 1000 | long |
-| **repeatCount** (scheduler) | Specifies a maximum limit of number of fires. So if you set it to 1, the scheduler will only fire once. If you set it to 5, it will only fire five times. A value of zero or negative means fire forever. | 0 | long |
-| **runLoggingLevel** (scheduler) | 
-
-The consumer logs a start/complete log line when it polls. This option allows you to configure the logging level for that.
-
-Enum values:
-
--   TRACE
-    
--   DEBUG
-    
--   INFO
-    
--   WARN
-    
--   ERROR
-    
--   OFF
-    
-
-
-
-
-
- | TRACE | LoggingLevel |
-| **scheduledExecutorService** (scheduler) | Allows for configuring a custom/shared thread pool to use for the consumer. By default each consumer has its own single threaded thread pool. |  | ScheduledExecutorService |
-| **scheduler** (scheduler) | To use a cron scheduler from either camel-spring or camel-quartz component. Use value spring or quartz for built in scheduler. | none | Object |
-| **schedulerProperties** (scheduler) | To configure additional properties when using a custom scheduler or any of the Quartz, Spring based scheduler. This is a multi-value option with prefix: scheduler. |  | Map |
-| **startScheduler** (scheduler) | Whether the scheduler should be auto started. | true | boolean |
-| **timeUnit** (scheduler) | 
-
-Time unit for initialDelay and delay options.
-
-Enum values:
-
--   NANOSECONDS
-    
--   MICROSECONDS
-    
--   MILLISECONDS
-    
--   SECONDS
-    
--   MINUTES
-    
--   HOURS
-    
--   DAYS
-    
-
-
-
-
-
- | MILLISECONDS | TimeUnit |
-| **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 
 ## Message Body
 

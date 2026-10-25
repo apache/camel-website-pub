@@ -140,6 +140,30 @@ Enum values:
 
  |  | IgniteIdGenOperation |
 
+## Message Body
+
+The message body at each side of the Ignite ID Generator component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+ADD\_AND\_GET and GET\_AND\_ADD add the body to the sequence: a number, or text of one; no body fails. The other operations do not use the body, but text that is not a number still fails. The operation is the operation option or the CamelIgniteIdGenOperation header.
+
+-   With `operation=ADD_AND_GET`: `value` or `text`
+    
+-   With `operation=GET_AND_ADD`: `value` or `text`
+    
+
+
+
+
+
+ |
+| **Producer output** | `value` (`java.lang.Long`) | The value of the sequence, as a Long. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one. A node of its own with the default configuration takes one line in `application.properties`. On Java 17 and later, Ignite also needs the `--add-opens` JVM options that its documentation lists.

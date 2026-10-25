@@ -288,6 +288,35 @@ The JT400 component supports the following message header(s), which is/are liste
 | **CamelJt400MessageDefaultReply** (consumer) Constant: [`MESSAGE_DFT_RPY`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#MESSAGE_DFT_RPY) | The default message reply, when the message is an inquiry message. |  | String |
 | **CamelJt400MessageReplyToKey** (common) Constant: [`MESSAGE_REPLYTO_KEY`](https://javadoc.io/doc/org.apache.camel/camel-jt400/latest/org/apache/camel/component/jt400/Jt400Constants.html#MESSAGE_REPLYTO_KEY) | Consumer: The key of the message that will be replied to (if the sendingReply parameter is set to true). Producer: If set, and if the message body is not empty, a new message will not be sent to the provided message queue. Instead, a response will be sent to the message identified by the given key. This is set automatically when reading from the message queue if the sendingReply parameter is set to true. |  | byte\[\] |
 
+## Message Body
+
+The message body at each side of the JT400 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` | The data queue entry as a String, or a byte array with format=binary; a message queue (.MSGQ) always gives the message text.
+-   With `format=binary`: `bytes`
+    
+-   With `sendEmptyMessageWhenIdle=true`: `text`, `bytes` or `null`
+    
+
+Not known when `objectPath` is set.
+
+ |
+| **Producer input** | `any` | A queue writes the body converted to a String, or to a byte array with format=binary (text, bytes or a stream). A program call (.PGM, .SRVPGM) needs an Object\[\] of the parameters: a List fails.
+
+Not known when `objectPath` or `format` is set.
+
+ |
+| **Producer output** | `unchanged` | Unchanged for a queue. A program call sets an Object\[\] of the parameters, the output ones replaced by what the program returned: Strings, or byte arrays with format=binary.
+
+Not known when `objectPath` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 When configured as a data queue consumer endpoint, the endpoint will poll a data queue on an IBM i system. For every entry on the data queue, a new `Exchange` is sent with the entry’s data in the _In_ message’s body, formatted either as a `String` or a `byte[]`, depending on the format.

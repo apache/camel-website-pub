@@ -108,6 +108,19 @@ Enum values:
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
+## Message Body
+
+The message body at each side of the Spring Event component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`org.springframework.context.ApplicationEvent`) | The ApplicationEvent itself, for every event of the ApplicationContext whatever the name: an object published with publishEvent comes as a PayloadApplicationEvent, and a non-event body a spring-event producer sent as a CamelEvent, whose getExchange() holds the sending exchange. |
+| **Producer input** | `any` | An ApplicationEvent body is published as it is. Any other body, also none, is published as a CamelEvent that holds the exchange, so listeners read the body from its getExchange(). |
+| **Producer output** | `unchanged` | The body is left as it is. The listeners run before the producer returns, and a CamelEvent gives them the exchange itself. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 A route that consumes from `spring-event:default` gets each application event of the Spring `ApplicationContext` as the message body. Use a filter to keep the events you need:

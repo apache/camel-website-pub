@@ -185,6 +185,20 @@ Enum values:
 | **SessionID** (common) Constant: [`SESSION_ID_KEY`](https://javadoc.io/doc/org.apache.camel/camel-quickfix/latest/org/apache/camel/component/quickfixj/QuickfixjEndpoint.html#SESSION_ID_KEY) | The FIX message SessionID. |  | SessionID |
 | **MessageType** (common) Constant: [`MESSAGE_TYPE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-quickfix/latest/org/apache/camel/component/quickfixj/QuickfixjEndpoint.html#MESSAGE_TYPE_KEY) | The FIX MsgType tag value. |  | String |
 
+## Message Body
+
+The message body at each side of the QuickFix component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` or `null` | The FIX message: a quickfix.Message, such as a quickfix.fix44.Email, with the kind of event in the EventCategory header and the MsgType in the MessageType header. SessionCreated, SessionLogon and SessionLogoff events have no body. |
+| **Consumer reply** | `pojo`, `text` or `bytes` | With exchangePattern=InOut, the reply sent back on the session of the request: a quickfix.Message, or the FIX message as text or bytes. Every event is answered with the body the route ends with: a route that sets no reply sends back the message it received. |
+| **Producer input** | `pojo`, `text` or `bytes` | The FIX message to send: a quickfix.Message, or the FIX message as text or bytes, parsed with the DataDictionary exchange property or the data dictionary of the session. A stream, a Map or no body fails. |
+| **Producer output** | `unchanged` or `pojo` | The body is left as it was. An InOut exchange waits for the reply that matches the CorrelationCriteria exchange property, and the reply quickfix.Message is the body. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The `DataDictionary` exchange property is useful if string messages are being received and need to be parsed in a route. QuickFIX/J requires a data dictionary to parse certain types of messages (with repeating groups, for example). By setting the `DataDictionary` exchange property (`QuickfixjEndpoint.DATA_DICTIONARY_KEY`) in the route after receiving a message string, the FIX engine can properly parse the data. The property can hold a `quickfix.DataDictionary` instance or the name of a data dictionary resource, such as `FIX44.xml`. When the property is not set, the data dictionary of the session identified by the `SessionID` header is used, if that session exists.
@@ -311,7 +325,7 @@ For producers, sending a message will block until a reply is received or a timeo
 | Correlation Criteria | `CorrelationCriteria` | `QuickfixjProducer.CORRELATION_CRITERIA_KEY` | None |
 | Correlation Timeout in Milliseconds | `CorrelationTimeout` | `QuickfixjProducer.CORRELATION_TIMEOUT_KEY` | 1000 |
 
-The correlation criteria is defined with a `MessagePredicate` object. The following example will treat a FIX `ExecutionReport` from the specified session where the transaction type is STATUS and the Order ID matches our request. The session ID should be for the _requestor_, the sender and target CompID fields will be reversed when looking for the reply.
+The correlation criteria is defined with a `MessagePredicate` object. The following example will treat a FIX `ExecutionReport` from the specified session where the transaction type is STATUS and the Order ID matches our request. The SenderCompID and TargetCompID of the session ID are matched as given against the header of the reply, so use the session ID as the _replier_ sees it: for a request sent on `FIX.4.2:TRADER→MARKET`, use `FIX.4.2:MARKET→TRADER`. The correlation criteria is required for an InOut exchange.
 
 _Java-only: programmatic correlation criteria setup using QuickFIX/J API_
 

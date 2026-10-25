@@ -19,6 +19,17 @@ The Sample eip supports the following options which are listed below.
 | **samplePeriod** | The period between samples, using a time-based approach. Default is 1 second. | 1000 | String |
 | **messageFrequency** | The frequency of samples as a message count, using a message-frequency approach. For example, a value of 5 means every 5th message is sampled. |  | Long |
 
+## Message Body
+
+The message body at each side of the Sample EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Lets one message in a period through and stops the others: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Sample eip has no exchange properties.

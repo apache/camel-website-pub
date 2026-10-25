@@ -94,7 +94,7 @@ Number of Non-Core Components: 390 in 317 JAR artifacts (4 deprecated)
 | [AWS Kinesis Firehose](aws2-kinesis-firehose-component.md) | camel-aws2-kinesis | Stable | 3.2 | Produce data to AWS Kinesis Firehose streams. |
 | [AWS Lambda](aws2-lambda-component.md) | camel-aws2-lambda | Stable | 3.2 | Manage and invoke AWS Lambda functions. |
 | [AWS Managed Streaming for Apache Kafka (MSK)](aws2-msk-component.md) | camel-aws2-msk | Stable | 3.1 | Manage AWS MSK instances. |
-| [AWS MQ](aws2-mq-component.md) | camel-aws2-mq | Stable | 3.1 | Send messages to AWS MQ. |
+| [AWS MQ](aws2-mq-component.md) | camel-aws2-mq | Stable | 3.1 | Manage AWS MQ instances. |
 | [AWS Parameter Store](aws-parameter-store-component.md) | camel-aws-parameter-store | Stable | 4.17 | Manage parameters using AWS Systems Manager (SSM) Parameter Store. |
 | [AWS Polly](aws2-polly-component.md) | camel-aws2-polly | Stable | 4.18 | Synthesize speech using AWS Polly and AWS SDK version 2.x. |
 | [AWS RedshiftData](aws2-redshift-data-component.md) | camel-aws2-redshift | Stable | 4.1 | Perform operations on AWS Redshift using Redshift Data API. |

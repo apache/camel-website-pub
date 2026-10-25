@@ -16,6 +16,18 @@ The On Fallback eip supports the following options which are listed below.
 | **fallbackViaNetwork** | **Deprecated** Whether the fallback goes over the network. If so, the fallback is executed on a separate thread-pool to avoid exhausting the main thread-pool. | false | Boolean |
 | **outputs** | **Required** |  | List |
 
+## Message Body
+
+The message body at each side of the On Fallback EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what its steps end with | What its steps end with. |
+| **Steps** | `unchanged` | The body the circuit breaker got. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The On Fallback eip has no exchange properties.

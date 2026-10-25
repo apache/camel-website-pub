@@ -174,6 +174,28 @@ The Google BigQuery Standard SQL component supports the following message header
 | **CamelGoogleBigQueryPageToken** (producer) Constant: [`PAGE_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-google-bigquery/latest/org/apache/camel/component/google/bigquery/GoogleBigQueryConstants.html#PAGE_TOKEN) | The page token to retrieve a specific page of results from BigQuery. If not set, the first page is returned. |  | String |
 | **CamelGoogleBigQueryNextPageToken** (producer) Constant: [`NEXT_PAGE_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-google-bigquery/latest/org/apache/camel/component/google/bigquery/GoogleBigQueryConstants.html#NEXT_PAGE_TOKEN) | The next page token returned by BigQuery. Use this token in the CamelGoogleBigQueryPageToken header of a subsequent request to retrieve the next page of results. |  | String |
 
+## Message Body
+
+The message body at each side of the Google BigQuery Standard SQL component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The query is set on the endpoint. A Map body gives the values of the @name parameters, before the headers of the same name; any other body is ignored. |
+| **Producer output** | `list` or `value` | 
+For a SELECT the rows of the page, a Map per row whose scalar values are the text BigQuery returns, with the next page token and the job id in headers; with outputType=STREAM\_LIST an Iterator of those Maps over all pages. For a DML statement the number of affected rows as a Long.
+
+-   With `outputType=STREAM_LIST`: `iterator` or `value`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Producer Endpoints
 
 Google BigQuery SQL endpoint expects the payload to be either empty or a map of query parameters.
@@ -291,22 +313,20 @@ Returns an `Iterator<Map<String, Object>>` for memory-efficient streaming of lar
 
 ## Data Type Mapping
 
-BigQuery result types are mapped to Java types:
+BigQuery result types are mapped to Java types. The values of the scalar types are the text BigQuery returns for them, as a `String`: convert them where you need a number or a boolean.
 
   
 | BigQuery Type | Java Type | Notes |
 | --- | --- | --- |
-| INT64 | Long |  |
-| FLOAT64 | Double |  |
-| NUMERIC | BigDecimal |  |
+| INT64 | String | For example `"42"` |
+| FLOAT64 | String | For example `"1.5"` |
+| NUMERIC, BIGNUMERIC | String |  |
 | STRING | String |  |
-| BOOL | Boolean |  |
-| BYTES | byte\[\] |  |
-| DATE | String | ISO 8601 format |
-| DATETIME | String | ISO 8601 format |
-| TIME | String | ISO 8601 format |
-| TIMESTAMP | String | ISO 8601 format with timezone |
+| BOOL | String | `"true"` or `"false"` |
+| BYTES | String | Base64 encoded |
+| DATE, DATETIME, TIME | String | ISO 8601 format |
+| TIMESTAMP | String | The text BigQuery returns, such as the seconds since the epoch |
 | STRUCT (RECORD) | Map<String, Object> | Recursively converted to nested maps |
 | ARRAY (REPEATED) | List<Object> | Elements recursively converted based on their type |
-| RANGE | Map<String, Object> | Map with range start and end values |
+| RANGE | Map<String, String> | Map with range start and end values |
 | NULL | null |  |

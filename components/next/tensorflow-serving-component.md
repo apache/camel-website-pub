@@ -147,6 +147,49 @@ The TensorFlow Serving component supports the following message header(s), which
 | **CamelTensorFlowServingModelVersionLabel** (producer) Constant: [`MODEL_VERSION_LABEL`](https://javadoc.io/doc/org.apache.camel/camel-tensorflow-serving/latest/org/apache/camel/component/tensorflow/serving/TensorFlowServingConstants.html#MODEL_VERSION_LABEL) | Optional choice of which version of the model to use. Use the version associated with the given label. |  | String |
 | **CamelTensorFlowServingSignatureName** (producer) Constant: [`SIGNATURE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-tensorflow-serving/latest/org/apache/camel/component/tensorflow/serving/TensorFlowServingConstants.html#SIGNATURE_NAME) | A named signature to evaluate. If unspecified, the default signature will be used. |  | String |
 
+## Message Body
+
+The message body at each side of the TensorFlow Serving component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo` | 
+The protobuf request of the api, or its Builder: a PredictRequest for predict, a ClassificationRequest or RegressionRequest, or the Input of one, for classify and regress. Another body, such as text, JSON or bytes, is not read: an empty request is sent and the server rejects it. model-status and model-metadata need no body, and read a GetModelStatusRequest or GetModelMetadataRequest when it is one. The model comes from the CamelTensorFlowServingModelName header, or else the modelName option.
+
+-   With `api=model-status`: `any`
+    
+-   With `api=model-metadata`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The protobuf response of the api, such as a PredictResponse with the output tensors by name.
+
+-   With `api=model-status`: `pojo` (`tensorflow.serving.GetModelStatus$GetModelStatusResponse`)
+    
+-   With `api=model-metadata`: `pojo` (`tensorflow.serving.GetModelMetadata$GetModelMetadataResponse`)
+    
+-   With `api=classify`: `pojo` (`tensorflow.serving.Classification$ClassificationResponse`)
+    
+-   With `api=regress`: `pojo` (`tensorflow.serving.RegressionOuterClass$RegressionResponse`)
+    
+-   With `api=predict`: `pojo` (`tensorflow.serving.Predict$PredictResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component supports the following APIs.

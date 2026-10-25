@@ -68,11 +68,11 @@ The component supports the following tasks:
 | text-generation | String (prompt) | String (generated text) | revision, device, maxTokens, temperature | Generative models (e.g., gpt2 for completion, mistralai/Mistral-7B-Instruct-v0.2 for instruct-tuned generation) |
 | question-answering | QAInput | String (extracted answer) | revision, device | QA-tuned models (e.g., distilbert-base-cased-distilled-squad for extractive QA, deepset/roberta-base-squad2 for robust Q&A) |
 | summarization | String (text to summarize) | String (summary text) | revision, device, minLength, maxTokens, temperature | Summarization-tuned models (e.g., facebook/bart-large-cnn for abstractive summarization, t5-small for translation-like summarization) |
-| zero-shot-classification | String\[\] or List<String> \[text, label1, label2, …​\] | String (best label) | revision, device, multiLabel, autoSelect | NLI-based zero-shot models (e.g., facebook/bart-large-mnli for general zero-shot, joeddav/deberta-v3-large-zeroshot-v1 for multi-label) |
+| zero-shot-classification | String\[\] or List<String> \[text, label1, label2, …​\] | String (best label), or _ai.djl.modality.Classifications_ with autoSelect=false | revision, device, multiLabel, autoSelect | NLI-based zero-shot models (e.g., facebook/bart-large-mnli for general zero-shot, joeddav/deberta-v3-large-zeroshot-v1 for multi-label) |
 | sentence-embeddings | String\[\], List<String> or String (sentences to embed) | float\[\]\[\] (2D embedding tensor: batch × dimension) | revision, device | Embedding-tuned models (e.g., sentence-transformers/all-MiniLM-L6-v2) |
 | text-to-image | String (prompt) | byte\[\] (PNG image bytes) | revision, device | Diffusion-based generation models (e.g., CompVis/stable-diffusion-v1-4 for general images, runwayml/stable-diffusion-v1-5 for improved quality) |
-| automatic-speech-recognition | Audio or byte\[\] (audio bytes) | String (transcribed text) | revision, device | ASR-tuned models (e.g., facebook/wav2vec2-base-960h) |
-| text-to-speech | String (text prompt) | _ai.djl.modality.audio_ | revision, device | TTS-tuned models (e.g., facebook/mms-tts-eng for English TTS, microsoft/speecht5\_tts for multi-speaker) |
+| automatic-speech-recognition | _ai.djl.modality.audio.Audio_ (the waveform) | String (transcribed text) | revision, device | ASR-tuned models (e.g., facebook/wav2vec2-base-960h) |
+| text-to-speech | String (text prompt) | _ai.djl.modality.audio.Audio_ | revision, device | TTS-tuned models (e.g., facebook/mms-tts-eng for English TTS, microsoft/speecht5\_tts for multi-speaker) |
 | chat | String (user message) | String (LLM response) | revision, device, maxTokens, temperature, systemPrompt, userRole, memoryIdHeader | Instruct-tuned/chat models (e.g., mistralai/Mistral-7B-Instruct-v0.2 for conversational, microsoft/Phi-3-mini-4k-instruct for efficient chat) |
 | custom | TBD | TBD | predictorBean (required), revision, device | Any HF model compatible with the custom predictor bean (e.g., Helsinki-NLP/opus-mt-en-fr for translation, distilgpt2 for custom generation) |
 
@@ -232,6 +232,63 @@ The Hugging Face component supports the following message header(s), which is/ar
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelHuggingFaceOutput** (producer) Constant: [`OUTPUT`](https://javadoc.io/doc/org.apache.camel/camel-huggingface/latest/org/apache/camel/component/huggingface/HuggingFaceConstants.html#OUTPUT) | The output from the model. |  | String |
+
+## Message Body
+
+The message body at each side of the Hugging Face component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text` | Most tasks take the text as a String, and fail on bytes or a stream: the text to classify, the prompt, or the text to summarize or speak. question-answering takes a DJL QAInput, zero-shot-classification a List or array of Strings with the text first and then the labels, sentence-embeddings a String or a List or array of them, and automatic-speech-recognition a DJL Audio. chat converts the body to the text of the user message, and a null body sends the history alone. With predictorBean, the predictor bean reads the body.
+-   With `task=QUESTION_ANSWERING`: `pojo` (`ai.djl.modality.nlp.qa.QAInput`)
+    
+-   With `task=ZERO_SHOT_CLASSIFICATION`: `list`
+    
+-   With `task=SENTENCE_EMBEDDINGS`: `text` or `list`
+    
+-   With `task=AUTOMATIC_SPEECH_RECOGNITION`: `pojo` (`ai.djl.modality.audio.Audio`)
+    
+-   With `task=CHAT`: `text`, `bytes`, `stream`, `file` or `null`
+    
+-   With `task=CUSTOM`: `any`
+    
+
+Not known when `predictorBean` is set.
+
+ |
+| **Producer output** | `text` | The result as text for text-generation, question-answering (the answer), summarization, automatic-speech-recognition (the transcript) and chat (the reply). text-classification gives DJL Classifications, as zero-shot-classification does with autoSelect=false (else the best label as text); sentence-embeddings a float\[\]\[\] with a vector per sentence, text-to-image the PNG image as bytes, and text-to-speech a DJL Audio. The CamelHuggingFaceOutput header has the result too, as the raw JSON for the classifications and the embeddings.
+
+-   With `task=TEXT_CLASSIFICATION`: `pojo` (`ai.djl.modality.Classifications`)
+    
+-   With `task=TEXT_GENERATION`: `text` (`java.lang.String`)
+    
+-   With `task=QUESTION_ANSWERING`: `text` (`java.lang.String`)
+    
+-   With `task=SUMMARIZATION`: `text` (`java.lang.String`)
+    
+-   With `task=ZERO_SHOT_CLASSIFICATION`: `text` (`java.lang.String`)
+    
+-   With `task=SENTENCE_EMBEDDINGS`: `list` (`float[][]`)
+    
+-   With `task=TEXT_TO_IMAGE`: `bytes` (`byte[]`)
+    
+-   With `task=AUTOMATIC_SPEECH_RECOGNITION`: `text` (`java.lang.String`)
+    
+-   With `task=TEXT_TO_SPEECH`: `pojo` (`ai.djl.modality.audio.Audio`)
+    
+-   With `task=CHAT`: `text` (`java.lang.String`)
+    
+-   With `task=CUSTOM`: `unknown`
+    
+-   With `autoSelect=false`: `pojo` (`ai.djl.modality.Classifications`)
+    
+
+Not known when `predictorBean` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## OAuth Authentication
 

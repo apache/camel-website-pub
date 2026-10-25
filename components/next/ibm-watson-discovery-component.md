@@ -177,6 +177,53 @@ The IBM Watson Discovery component supports the following message header(s), whi
 | **CamelIBMWatsonDiscoveryDocumentFilename** (producer) Constant: [`DOCUMENT_FILENAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-discovery/latest/org/apache/camel/component/ibm/watson/discovery/WatsonDiscoveryConstants.html#DOCUMENT_FILENAME) | The document filename. |  | String |
 | **CamelIBMWatsonDiscoveryDocumentContentType** (producer) Constant: [`DOCUMENT_CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-discovery/latest/org/apache/camel/component/ibm/watson/discovery/WatsonDiscoveryConstants.html#DOCUMENT_CONTENT_TYPE) | The document content type. |  | String |
 
+## Message Body
+
+The message body at each side of the IBM Watson Discovery component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The natural language query for query, read as text unless the CamelIBMWatsonDiscoveryQuery header gives it: no body fails, and a Map is sent as its toString(). addDocument and updateDocument upload the body as the document, with the CamelIBMWatsonDiscoveryDocumentFilename and CamelIBMWatsonDiscoveryDocumentContentType headers (document and application/octet-stream when not set): no body or a Map fails. The other operations do not read the body.
+
+-   With `operation=addDocument`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=updateDocument`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The response of the IBM Watson SDK, such as the QueryResponse of a query; converted to text, it is its JSON. addDocument also sets the document ID in the CamelIBMWatsonDiscoveryDocumentId header. deleteCollection gives the text Collection deleted successfully.
+
+-   With `operation=query`: `pojo` (`com.ibm.watson.discovery.v2.model.QueryResponse`)
+    
+-   With `operation=listCollections`: `pojo` (`com.ibm.watson.discovery.v2.model.ListCollectionsResponse`)
+    
+-   With `operation=createCollection`: `pojo` (`com.ibm.watson.discovery.v2.model.CollectionDetails`)
+    
+-   With `operation=deleteCollection`: `text` (`java.lang.String`)
+    
+-   With `operation=addDocument`: `pojo` (`com.ibm.watson.discovery.v2.model.DocumentAccepted`)
+    
+-   With `operation=updateDocument`: `pojo` (`com.ibm.watson.discovery.v2.model.DocumentAccepted`)
+    
+-   With `operation=deleteDocument`: `pojo` (`com.ibm.watson.discovery.v2.model.DeleteDocumentResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Required IBM Watson Discovery component options
 
 You must provide the `apiKey` for authentication, `projectId` for your Watson Discovery project, and optionally the `serviceUrl` for your Watson service instance.
@@ -346,8 +393,7 @@ from("direct:createCollection")
     .to("ibm-watson-discovery:default?apiKey=RAW(yourApiKey)&projectId=yourProjectId&operation=createCollection")
     .process(exchange -> {
         CollectionDetails collection = exchange.getIn().getBody(CollectionDetails.class);
-        String collectionId = exchange.getIn().getHeader(WatsonDiscoveryConstants.COLLECTION_ID, String.class);
-        System.out.println("Created collection with ID: " + collectionId);
+        System.out.println("Created collection with ID: " + collection.getCollectionId());
     });
 ```
 
@@ -367,7 +413,7 @@ from("direct:createCollection")
             apiKey: RAW(yourApiKey)
             projectId: yourProjectId
             operation: createCollection
-      - log: "Created collection: ${header.CamelIBMWatsonDiscoveryCollectionId}"
+      - log: "Created collection: ${body.collectionId}"
 ```
 
 ### Add Document

@@ -191,6 +191,32 @@ The Cassandra CQL component supports the following message header(s), which is/a
 | **CamelCqlQuery** (producer) Constant: [`CQL_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-cassandraql/latest/org/apache/camel/component/cassandra/CassandraConstants.html#CQL_QUERY) | The CQL query to execute. |  | String |
 | **CamelCqlResumeAction** (consumer) Constant: [`CASSANDRA_RESUME_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-cassandraql/latest/org/apache/camel/component/cassandra/CassandraConstants.html#CASSANDRA_RESUME_ACTION) | The resume action to execute when resuming. |  | String |
 
+## Message Body
+
+The message body at each side of the Cassandra CQL component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `list` | One message per poll with the rows of the cql query: a List of the Row of the Cassandra driver, empty when there is none. ONE gives the first Row or null, LIMIT\_n a List of at most n rows.
+-   With `resultSetConversionStrategy=ONE`: `pojo` or `null` (`com.datastax.oss.driver.api.core.cql.Row`)
+    
+
+Not known when `resultSetConversionStrategy` is set.
+
+ |
+| **Producer input** | `any` | The values of the ? placeholders of the CQL (the cql option or the CamelCqlQuery header): an array or a Collection of them, or one value for one placeholder. No body, an empty array or an empty Collection binds none; any other body is one value, so a body left from an earlier step fails a CQL without placeholders. |
+| **Producer output** | `list` | The rows: a List of the Row of the Cassandra driver, empty for an insert, update or delete. ONE gives the first Row or null, LIMIT\_n a List of at most n rows.
+
+-   With `resultSetConversionStrategy=ONE`: `pojo` or `null` (`com.datastax.oss.driver.api.core.cql.Row`)
+    
+
+Not known when `resultSetConversionStrategy` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Endpoint Connection Syntax
@@ -212,11 +238,11 @@ To fine-tune the Cassandra connection (SSL options, pooling options, load balanc
 
 #### Incoming Message
 
-The Camel Cassandra endpoint expects a bunch of simple objects (`Object` or `Object[]` or `Collection<Object>`) which will be bound to the CQL statement as query parameters. If the message body is null or empty, then CQL query will be executed without binding parameters.
+The Camel Cassandra endpoint expects a bunch of simple objects (`Object` or `Object[]` or `Collection<Object>`) which will be bound to the CQL statement as query parameters. If the message body is null, an empty array or an empty collection, then the CQL query will be executed without binding parameters. Any other body is bound as a single parameter, so a body that is left from an earlier step makes a query without parameters fail: clear the body first.
 
 Headers:
 
--   `CamelCqlQuery` (optional, `String` or `RegularStatement`): CQL query either as a plain String or built using the `QueryBuilder`.
+-   `CamelCqlQuery` (optional, `String` or `SimpleStatement`): CQL query either as a plain String or built using the `QueryBuilder`.
     
 
 #### Outgoing Message
@@ -225,7 +251,7 @@ The Camel Cassandra endpoint produces one or many a Cassandra Row objects depend
 
 -   `List<Row>` if `resultSetConversionStrategy` is `ALL` or `LIMIT_[0-9]+`
     
--   Single\` Row\` if `resultSetConversionStrategy` is `ONE`
+-   Single `Row` if `resultSetConversionStrategy` is `ONE`, or `null` when there is no row
     
 -   Anything else, if `resultSetConversionStrategy` is a custom implementation of the `ResultSetConversionStrategy`
     

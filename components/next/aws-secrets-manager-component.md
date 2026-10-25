@@ -70,7 +70,7 @@ The AWS Secrets Manager component supports the following options which are liste
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **binaryPayload** (producer) | Set if the secret is binary or not. | false | boolean |
+| **binaryPayload** (producer) | Set if the secret is binary or not. When true, the createSecret, updateSecret and putSecretValue operations store the bytes of the message body as the binary of the secret. The getSecret and batchGetSecret operations give the value the secret has, whatever this option says: a byte for a binary secret, a String for a string secret. | false | boolean |
 | **configuration** (producer) | Component configuration. |  | SecretsManagerConfiguration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
@@ -256,7 +256,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **binaryPayload** (producer) | Set if the secret is binary or not. | false | boolean |
+| **binaryPayload** (producer) | Set if the secret is binary or not. When true, the createSecret, updateSecret and putSecretValue operations store the bytes of the message body as the binary of the secret. The getSecret and batchGetSecret operations give the value the secret has, whatever this option says: a byte for a binary secret, a String for a string secret. | false | boolean |
 | **operation** (producer) | 
 **Required** The operation to perform.
 
@@ -433,7 +433,7 @@ The AWS Secrets Manager component supports the following message header(s), whic
 | **CamelAwsSecretsManagerSecretIds** (producer) Constant: [`SECRET_IDS`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#SECRET_IDS) | A comma separated list of the ARN or name of the secrets. |  | String |
 | **CamelAwsSecretsManagerLambdaRotationFunctionArn** (producer) Constant: [`LAMBDA_ROTATION_FUNCTION_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#LAMBDA_ROTATION_FUNCTION_ARN) | The ARN of the Lambda rotation function that can rotate the secret. |  | String |
 | **CamelAwsSecretsManagerSecretVersionId** (producer) Constant: [`SECRET_VERSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#SECRET_VERSION_ID) | The unique identifier of the version of the secret. |  | String |
-| **CamelAwsSecretsManagerSecretVersionIds** (producer) Constant: [`SECRET_VERSION_IDS`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#SECRET_VERSION_IDS) | The unique identifier of the version of the secrets in batch operation. |  | String |
+| **CamelAwsSecretsManagerSecretVersionIds** (producer) Constant: [`SECRET_VERSION_IDS`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#SECRET_VERSION_IDS) | The version ids of the secrets in the batch operation, in the same order as the values in the message body (null for a secret with no version id). |  | List |
 | **CamelAwsSecretsManagerSecretReplicationRegions** (producer) Constant: [`SECRET_REPLICATION_REGIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#SECRET_REPLICATION_REGIONS) | A comma separated list of Regions in which to replicate the secret. |  | String |
 | **CamelAwsSecretsManagerSecretForceDeletion** (producer) Constant: [`SECRET_FORCE_DELETION`](https://javadoc.io/doc/org.apache.camel/camel-aws-secrets-manager/latest/org/apache/camel/component/aws/secretsmanager/SecretsManagerConstants.html#SECRET_FORCE_DELETION) | If this header is set to true, the deleted secret won’t have any retention period. |  | Boolean |
 
@@ -445,7 +445,7 @@ The message body at each side of the AWS Secrets Manager component: _Consumer_ i
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-The value of the secret for createSecret, updateSecret and putSecretValue, as text: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), so marshal it first, and no body fails. The other operations take their input from headers. With pojoRequest=true the body is the request of the AWS SDK for the operation, such as a CreateSecretRequest.
+The value of the secret for createSecret, updateSecret and putSecretValue, as text: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), so marshal it first, and no body fails. The other operations take their input from headers. With binaryPayload=true the bytes of the body are stored as the binary of the secret. With pojoRequest=true the body is the request of the AWS SDK for the operation, such as a CreateSecretRequest.
 
 -   With `operation=createSecret`: `text`, `bytes`, `stream` or `file`
     
@@ -461,11 +461,11 @@ The value of the secret for createSecret, updateSecret and putSecretValue, as te
  |
 | **Producer output** | `pojo` | 
 
-The value of the secret as text for getSecret, with its version id in a header: unmarshal a JSON secret to read its fields. No body for a binary secret unless binaryPayload=true. A List of the values for batchGetSecret, and the response of the AWS SDK for the other operations, such as a CreateSecretResponse.
+The value of the secret as text for getSecret, with its version id in a header: unmarshal a JSON secret to read its fields. A byte\[\] for a binary secret, whatever binaryPayload says. A List of the values for batchGetSecret, each as for getSecret, and the response of the AWS SDK for the other operations, such as a CreateSecretResponse.
 
--   With `operation=getSecret`: `text` or `null`
+-   With `operation=getSecret`: `text` or `bytes`
     
--   With `operation=batchGetSecret`: `list` (`java.util.List<java.lang.String>`)
+-   With `operation=batchGetSecret`: `list` (`java.util.List<java.lang.Object>`)
     
 
 
@@ -804,6 +804,8 @@ This approach will return the username field of the database secret with version
 
 For the moment we are not considering the rotation function if any are applied, but it is in the work to be done.
 
+The function reads the string of a secret. A binary secret is read as the UTF-8 text of its bytes, such as a secret created with `binaryPayload=true` from a text body.
+
 The only requirement is adding the camel-aws-secrets-manager jar to your Camel application.
 
 ### Testing AWS Secrets Manager Property Function with Localstack
@@ -824,14 +826,14 @@ Being able to reload Camel context on a Secret Refresh could be done by specifyi
 With Environment variables:
 
 ```bash
-export CAMEL_VAULT_AWS_USE_DEFAULT_CREDENTIALS_PROVIDER=accessKey
+export CAMEL_VAULT_AWS_USE_DEFAULT_CREDENTIALS_PROVIDER=true
 export CAMEL_VAULT_AWS_REGION=region
 ```
 
 or as plain Camel main properties:
 
 ```properties
-camel.vault.aws.useDefaultCredentialProvider = true
+camel.vault.aws.defaultCredentialsProvider = true
 camel.vault.aws.region = region
 ```
 
@@ -940,7 +942,7 @@ The `operation` option selects what to do (the `CamelAwsSecretsManagerOperation`
 
 #### Creating a secret
 
-The message body is the value of the secret, as a string (with `binaryPayload=true` it is stored as binary):
+The message body is the value of the secret, stored as the string of the secret. With `binaryPayload=true` the bytes of the message body are stored as the binary of the secret instead (a text body is stored as its bytes in the charset of the exchange, UTF-8 by default). The `updateSecret` and `putSecretValue` operations take the value the same way:
 
 -   Java
     
@@ -991,7 +993,9 @@ from("direct:createSecret")
 
 #### Getting a secret
 
-The message body becomes the value of the secret, and the `CamelAwsSecretsManagerSecretVersionId` response header is set to the version id of the retrieved secret:
+The message body becomes the value of the secret, and the `CamelAwsSecretsManagerSecretVersionId` response header is set to the version id of the retrieved secret. The body is what the secret has, whatever the `binaryPayload` option says: a `String` for a string secret, and a `byte[]` for a binary secret.
+
+The `batchGetSecret` operation gets the secrets of the comma separated `CamelAwsSecretsManagerSecretIds` header: the body is a `List` of their values (a `String` or a `byte[]` for each secret, as above), and the `CamelAwsSecretsManagerSecretVersionIds` header is the `List` of their version ids, in the same order. When a secret cannot be read, the exchange fails with a message that names the secret, the error code and the error message.
 
 -   Java
     

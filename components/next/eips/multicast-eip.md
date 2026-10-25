@@ -30,6 +30,21 @@ The Multicast eip supports the following options which are listed below.
 | **shareUnitOfWork** | Shares the unit of work with the parent and each of the multicast exchanges. By default each multicast exchange has its own individual unit of work. | false | Boolean |
 | **outputs** | **Required** |  | List |
 
+## Message Body
+
+The message body at each side of the Multicast EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what its steps end with | What the last output ends with, unless an aggregationStrategy is set.
+Not known when `aggregationStrategy` is set.
+
+ |
+| **Steps** | `unchanged` | Each output gets a copy of the body. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Multicast eip supports the following exchange properties which are listed below.

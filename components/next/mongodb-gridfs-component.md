@@ -191,20 +191,65 @@ The MongoDB GridFS component supports the following message header(s), which is/
 | **CamelGridFsFileId** (producer) Constant: [`GRIDFS_FILE_ID_PRODUCED`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#GRIDFS_FILE_ID_PRODUCED) | The ObjectId of the file produced. |  | ObjectId |
 | **CamelGridFsObjectId** (producer) Constant: [`GRIDFS_OBJECT_ID`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#GRIDFS_OBJECT_ID) | The ObjectId of the file. |  | ObjectId |
 
+## Message Body
+
+The message body at each side of the MongoDB GridFS component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` | One message per new file: a stream of the content of the file (the stream cache when stream caching is on), with its length, upload date, content type and metadata in headers. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The content of the file that create, the default operation, uploads under the name in the CamelFileName header: text, bytes, a stream or a file. A Map, a POJO or no body fail. The other operations do not use the body; the CamelGridFsOperation header sets the operation when the option is not set.
+
+-   With `operation=findOne`: `any`
+    
+-   With `operation=listAll`: `any`
+    
+-   With `operation=count`: `any`
+    
+-   With `operation=remove`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+create, the default, leaves the body unchanged, with the id of the file in the CamelGridFsFileId header. findOne gives a stream of the content of the file named by CamelFileName; listAll a Reader of text, one line per file with its name and id separated by a tab; count the number of files as a Long; remove leaves the body unchanged.
+
+-   With `operation=findOne`: `stream`
+    
+-   With `operation=listAll`: `stream`
+    
+-   With `operation=count`: `value` (`java.lang.Long`)
+    
+-   With `operation=remove`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### GridFS operations - producer endpoint
 
 #### count
 
-Returns the total number of files in the collection, returning an Integer as the OUT message body.
+Returns the total number of files in the collection, returning a Long as the message body.
 
 _Java-only: using ProducerTemplate to invoke the count operation_
 
 ```java
 // from("direct:count").to("mongodb-gridfs?database=tickets&operation=count");
-Integer result = template.requestBodyAndHeader("direct:count", "irrelevantBody");
-assertTrue("Result is not of type Long", result instanceof Integer);
+Long result = template.requestBody("direct:count", "irrelevantBody", Long.class);
 ```
 
 You can provide a filename header to provide a count of files matching that filename.
@@ -214,7 +259,7 @@ _Java-only: using ProducerTemplate with filename header_
 ```java
 Map<String, Object> headers = new HashMap<String, Object>();
 headers.put(Exchange.FILE_NAME, "filename.txt");
-Integer count = template.requestBodyAndHeaders("direct:count", query, headers);
+Long count = template.requestBodyAndHeaders("direct:count", "irrelevantBody", headers, Long.class);
 ```
 
 #### listAll

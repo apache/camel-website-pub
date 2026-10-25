@@ -314,6 +314,20 @@ The Debezium MongoDB Connector component supports the following message header(s
 | **CamelDebeziumBefore** (consumer) Constant: [`HEADER_BEFORE`](https://javadoc.io/doc/org.apache.camel/camel-debezium-mongodb/latest/org/apache/camel/component/debezium/DebeziumConstants.html#HEADER_BEFORE) | If presents, contains the state of the row before the event occurred. |  | Struct |
 | **CamelDebeziumDdlSQL** (consumer) Constant: [`HEADER_DDL_SQL`](https://javadoc.io/doc/org.apache.camel/camel-debezium-mongodb/latest/org/apache/camel/component/debezium/DebeziumConstants.html#HEADER_DDL_SQL) | If presents, the ddl sql text of the event. |  | String |
 
+## Message Body
+
+The message body at each side of the Debezium MongoDB Connector component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `null` (`java.lang.String`), as json | The document after the change as a JSON String (MongoDB extended JSON): unmarshal it to work with its fields. No body for a delete or a tombstone, nor for an update when captureMode does not look up the full document or the document is gone by then; the operation and the key are in headers.
+Not known when `additionalProperties` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 For more information about configuration: [https://debezium.io/documentation/reference/0.10/operations/embedded.html#engine-properties](https://debezium.io/documentation/reference/0.10/operations/embedded.html#engine-properties) [https://debezium.io/documentation/reference/0.10/connectors/mongodb.html#connector-properties](https://debezium.io/documentation/reference/0.10/connectors/mongodb.html#connector-properties)
 
 **Note**: Debezium Mongodb uses MongoDB’s oplog to populate the CDC events, the update events in MongoDB’s oplog don’t have the before or after states of the changed document, so there’s no way for the Debezium connector to provide this information, therefore header key `CamelDebeziumBefore` is not available in this component.

@@ -324,6 +324,7 @@ The Mail component supports the following message header(s), which is/are listed
 | **CamelMailCopyTo** (consumer) Constant: [`MAIL_COPY_TO`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_COPY_TO) | After processing a mail message, it can be copied to a mail folder with the given name. |  | String |
 | **CamelMailMoveTo** (consumer) Constant: [`MAIL_MOVE_TO`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_MOVE_TO) | After processing a mail message, it can be moved to a mail folder with the given name. |  | String |
 | **CamelMailDelete** (consumer) Constant: [`MAIL_DELETE`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_DELETE) | Deletes the messages after they have been processed. |  | boolean |
+| **CamelMailAlternativeBody** (producer) Constant: [`MAIL_ALTERNATIVE_BODY`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_ALTERNATIVE_BODY) | The alternative body of the mail, as plain text. When set, the mail is sent as multipart/alternative with this text and the body (typically HTML) as its two parts, so mail clients that cannot show HTML show the text. The alternativeBodyHeader option can change the name of this header. |  | String |
 | **CamelMailMessageId** (common) Constant: [`MAIL_MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_MESSAGE_ID) | The message ID. |  | String |
 
 ## Message Body
@@ -441,6 +442,14 @@ Camel uses Jakarta JavaMail, which only trusts certificates issued by well-known
 ### Mail Message Content
 
 Camel uses the message exchange’s IN body as the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) text content. The body is converted to `String.class`: bytes, a stream or a file are read as text, so send binary content as an attachment, and a Map or a POJO is sent as its `toString()`. A body that is a `jakarta.mail.internet.MimeMessage` is sent as it is, with its own recipients and subject.
+
+Mails are sent with `smtp` or `smtps`. A producer on `imap`, `imaps`, `pop3` or `pop3s` fails when it is created.
+
+The text is encoded in the charset of the `contentType` option (or of the `Content-Type` header), else in the charset of the exchange (the `CamelCharsetName` exchange property). When neither has a charset, the text is encoded in the default charset of Jakarta Mail (the `mail.mime.charset` system property, else the JVM default charset, which is UTF-8 unless changed), and that charset is added to the `Content-Type` of the mail.
+
+When the body is a `jakarta.mail.internet.MimeMessage`, it is sent as it is. A message read from a mail store, such as the body of a mail consumer with `mapMailMessage=false`, is read-only, so a copy of it is sent.
+
+When a mail consumer gives a multipart mail, the body converts to the text of its first text part (a text part without a content handler in Jakarta Mail, such as `text/csv`, is read in the charset of the part), or to `null` when the mail has no text part.
 
 Camel copies all of the exchange’s IN headers to the [MimeMessage](http://java.sun.com/javaee/5/docs/api/javax/mail/internet/MimeMessage.md) headers.
 

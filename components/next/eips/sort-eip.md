@@ -19,6 +19,17 @@ The Sort eip supports the following options which are listed below.
 | **expression** | The expression to use for sorting. The message body is split into a list, sorted using this expression as the comparator key, and then reassembled. |  | ExpressionDefinition |
 | **comparator** | Sets a reference to lookup for the comparator to use for sorting. |  | Comparator |
 
+## Message Body
+
+The message body at each side of the Sort EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `list` (`java.util.List`) | The sorted List. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Sort eip has no exchange properties.

@@ -397,8 +397,8 @@ The AWS Managed Streaming for Apache Kafka (MSK) component supports the followin
 | --- | --- | --- | --- |
 | **CamelAwsMSKOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#OPERATION) | The operation we want to perform. |  | String |
 | **CamelAwsMSKClusterFilter** (producer) Constant: [`CLUSTERS_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#CLUSTERS_FILTER) | The cluster name filter for list operation. |  | String |
-| **CamelAwsMSKClusterName** (producer) Constant: [`CLUSTER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#CLUSTER_NAME) | The cluster name for list and create operation. |  | String |
-| **CamelAwsMSKClusterArn** (producer) Constant: [`CLUSTER_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#CLUSTER_ARN) | The cluster arn for delete operation. |  | String |
+| **CamelAwsMSKClusterName** (producer) Constant: [`CLUSTER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#CLUSTER_NAME) | The cluster name for the create operation. |  | String |
+| **CamelAwsMSKClusterArn** (producer) Constant: [`CLUSTER_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#CLUSTER_ARN) | The cluster ARN for the delete and describe operations. It is set by the create and describe operations. |  | String |
 | **CamelAwsMSKClusterKafkaVersion** (producer) Constant: [`CLUSTER_KAFKA_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#CLUSTER_KAFKA_VERSION) | The Kafka for the cluster during create operation. |  | String |
 | **CamelAwsMSKBrokerNodesNumber** (producer) Constant: [`BROKER_NODES_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#BROKER_NODES_NUMBER) | The number of nodes for the cluster during create operation. |  | Integer |
 | **CamelAwsMSKBrokerNodesGroupInfo** (producer) Constant: [`BROKER_NODES_GROUP_INFO`](https://javadoc.io/doc/org.apache.camel/camel-aws2-msk/latest/org/apache/camel/component/aws2/msk/MSK2Constants.html#BROKER_NODES_GROUP_INFO) | The Broker nodes group info to provide during the create operation. |  | BrokerNodeGroupInfo |
@@ -471,7 +471,7 @@ Camel-AWS MSK component provides the following operation on the producer side:
 
 ### Producer Examples
 
--   listClusters: this operation will list the available MSK Brokers in AWS
+-   listClusters: this operation will list the MSK Clusters in AWS
     
 
 -   Java
@@ -534,7 +534,7 @@ from("direct:createCluster")
 
 ```java
 from("direct:deleteCluster")
-    .setHeader("CamelAwsMSKClusterArn", constant("test-kafka"))
+    .setHeader("CamelAwsMSKClusterArn", constant("arn:aws:kafka:us-east-1:123456789012:cluster/test-kafka/abcd1234-ab12-cd34-ef56-abcdef123456-1"))
     .to("aws2-msk://test?mskClient=#amazonMskClient&operation=deleteCluster");
 ```
 
@@ -542,7 +542,7 @@ from("direct:deleteCluster")
 <route>
     <from uri="direct:deleteCluster"/>
     <setHeader name="CamelAwsMSKClusterArn">
-        <constant>test-kafka</constant>
+        <constant>arn:aws:kafka:us-east-1:123456789012:cluster/test-kafka/abcd1234-ab12-cd34-ef56-abcdef123456-1</constant>
     </setHeader>
     <to uri="aws2-msk://test?mskClient=#amazonMskClient&amp;operation=deleteCluster"/>
 </route>
@@ -555,26 +555,12 @@ from("direct:deleteCluster")
       steps:
         - setHeader:
             name: CamelAwsMSKClusterArn
-            constant: test-kafka
+            constant: "arn:aws:kafka:us-east-1:123456789012:cluster/test-kafka/abcd1234-ab12-cd34-ef56-abcdef123456-1"
         - to:
             uri: aws2-msk://test
             parameters:
               mskClient: "#amazonMskClient"
               operation: deleteCluster
-```
-
-_Java-only: uses AWS SDK `BrokerNodeGroupInfo` builder_
-
-```java
-from("direct:deleteCluster")
-    .process(exchange -> {
-        exchange.getIn().setHeader("CamelAwsMSKClusterName", "test-kafka");
-        exchange.getIn().setHeader("CamelAwsMSKClusterKafkaVersion", "2.1.1");
-        exchange.getIn().setHeader("CamelAwsMSKBrokerNodesNumber", 2);
-        exchange.getIn().setHeader("CamelAwsMSKBrokerNodesGroupInfo",
-            BrokerNodeGroupInfo.builder().build());
-    })
-    .to("aws2-msk://test?mskClient=#amazonMskClient&operation=deleteCluster");
 ```
 
 ### Using a POJO as body

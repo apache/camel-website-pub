@@ -70,7 +70,7 @@ The AWS Translate component supports the following options which are listed belo
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **autodetectSourceLanguage** (producer) | Being able to autodetect the source language. | false | boolean |
+| **autodetectSourceLanguage** (producer) | Being able to autodetect the source language. When enabled, the source language is auto, and the sourceLanguage option and the CamelAwsTranslateSourceLanguage header are not used. | false | boolean |
 | **configuration** (producer) | Component configuration. |  | Translate2Configuration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
@@ -184,8 +184,8 @@ Enum values:
 
 
  |  | String |
-| **sourceLanguage** (producer) | Source language to use. |  | String |
-| **targetLanguage** (producer) | Target language to use. |  | String |
+| **sourceLanguage** (producer) | Source language to use. When not set, the CamelAwsTranslateSourceLanguage header is used. It is not used when autodetectSourceLanguage is enabled. |  | String |
+| **targetLanguage** (producer) | Target language to use. When not set, the CamelAwsTranslateTargetLanguage header is used. |  | String |
 | **uriEndpointOverride** (producer) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **translateClient** (advanced) | **Autowired** To use an existing configured AWS Translate client. |  | TranslateClient |
@@ -238,7 +238,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **autodetectSourceLanguage** (producer) | Being able to autodetect the source language. | false | boolean |
+| **autodetectSourceLanguage** (producer) | Being able to autodetect the source language. When enabled, the source language is auto, and the sourceLanguage option and the CamelAwsTranslateSourceLanguage header are not used. | false | boolean |
 | **operation** (producer) | 
 **Required** The operation to perform.
 
@@ -350,8 +350,8 @@ Enum values:
 
 
  |  | String |
-| **sourceLanguage** (producer) | Source language to use. |  | String |
-| **targetLanguage** (producer) | Target language to use. |  | String |
+| **sourceLanguage** (producer) | Source language to use. When not set, the CamelAwsTranslateSourceLanguage header is used. It is not used when autodetectSourceLanguage is enabled. |  | String |
+| **targetLanguage** (producer) | Target language to use. When not set, the CamelAwsTranslateTargetLanguage header is used. |  | String |
 | **uriEndpointOverride** (producer) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **translateClient** (advanced) | **Autowired** To use an existing configured AWS Translate client. |  | TranslateClient |
@@ -408,7 +408,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 Required Translate component options
 
-You have to provide the amazonTranslateClient in the Registry or your accessKey and secretKey to access the [Amazon Translate](https://aws.amazon.com/translate/) service.
+You have to provide the translateClient in the Registry or your accessKey and secretKey to access the [Amazon Translate](https://aws.amazon.com/translate/) service.
 
 ## Usage
 
@@ -443,6 +443,19 @@ Camel-AWS Translate component provides the following operation on the producer s
 
 -   translateText
     
+
+### Source and target language
+
+Each language is taken from its option, or else from its header:
+
+-   the source language from the `sourceLanguage` option, or else the `CamelAwsTranslateSourceLanguage` header;
+    
+-   the target language from the `targetLanguage` option, or else the `CamelAwsTranslateTargetLanguage` header.
+    
+
+So one language can be set as an option and the other as a header. With `autodetectSourceLanguage=true`, the source language is `auto`, and Amazon Translate detects it.
+
+When the target language is missing, or the source language is missing and `autodetectSourceLanguage` is not enabled, the producer fails with an `IllegalArgumentException` that names the option and the header to set.
 
 ## Examples
 

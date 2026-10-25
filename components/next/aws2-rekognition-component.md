@@ -4,9 +4,7 @@
 
 **Only producer is supported**
 
-The AWS2 Rekognition component supports the following operations on [AWS Rekognition](https://aws.amazon.com/rekognition/):
-
-\- -
+The AWS2 Rekognition component supports analyzing images (faces, labels, text, celebrities and protective equipment), managing face collections and users, and running media analysis jobs on [AWS Rekognition](https://aws.amazon.com/rekognition/). The operations are listed under Usage.
 
 Prerequisites
 
@@ -75,7 +73,7 @@ The AWS Rekognition component supports the following options which are listed be
 | **configuration** (producer) | Component configuration. |  | Rekognition2Configuration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
-**Required** The operation to perform. It can be listFunctions, getFunction, createFunction, deleteFunction or invokeFunction.
+**Required** The operation to perform.
 
 Enum values:
 
@@ -290,7 +288,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform. It can be listFunctions, getFunction, createFunction, deleteFunction or invokeFunction.
+**Required** The operation to perform.
 
 Enum values:
 
@@ -494,13 +492,13 @@ The AWS Rekognition component supports the following message header(s), which is
 | **CamelAwsRekognitionUserId** (producer) Constant: [`USER_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#USER_ID) | The ID of the User. |  | String |
 | **CamelAwsRekognitionFaceIds** (producer) Constant: [`FACE_IDS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#FACE_IDS) | Collection of the Face IDs. |  | Collection |
 | **CamelAwsRekognitionUserMatchThreshold** (producer) Constant: [`USER_MATCH_THRESHOLD`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#USER_MATCH_THRESHOLD) | Minimum user match confidence required for the face to be associated with a UserID that has at least one FaceID already associated. |  | Float |
-| **CamelAwsRekognitionClientRequestToken** (producer) Constant: [`CLIENT_REQUEST_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#CLIENT_REQUEST_TOKEN) | The ID of the User. |  | String |
-| **CamelAwsRekognitionSourceImage** (producer) Constant: [`SOURCE_IMAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#SOURCE_IMAGE) | Source Input Image. |  | Image |
-| **CamelAwsRekognitionTargetImage** (producer) Constant: [`TARGET_IMAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#TARGET_IMAGE) | Target Input Image. |  | Image |
+| **CamelAwsRekognitionClientRequestToken** (producer) Constant: [`CLIENT_REQUEST_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#CLIENT_REQUEST_TOKEN) | Idempotency token of the request: a retry of associateFaces, createUser, deleteUser, disassociateFaces or startMediaAnalysisJob with the same token is not processed again. |  | String |
+| **CamelAwsRekognitionSourceImage** (producer) Constant: [`SOURCE_IMAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#SOURCE_IMAGE) | Source Input Image of compareFaces. |  | Image |
+| **CamelAwsRekognitionTargetImage** (producer) Constant: [`TARGET_IMAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#TARGET_IMAGE) | Target Input Image of compareFaces. |  | Image |
 | **CamelAwsRekognitionSimilarityThreshold** (producer) Constant: [`SIMILARITY_THRESHOLD`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#SIMILARITY_THRESHOLD) | Similarity Score Threshold. |  | Float |
 | **CamelAwsRekognitionQualityFilter** (producer) Constant: [`QUALITY_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#QUALITY_FILTER) | Allows to filter out detected faces that dont meet a required quality bar. |  | String |
-| **CamelAwsRekognitionImage** (producer) Constant: [`IMAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#IMAGE) | Input Image. |  | Image |
-| **CamelAwsRekognitionFacialAttributes** (producer) Constant: [`FACIAL_ATTRIBUTES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#FACIAL_ATTRIBUTES) | Facial Attributes to be returned. |  | List |
+| **CamelAwsRekognitionImage** (producer) Constant: [`IMAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#IMAGE) | Input Image of the operations that analyze an image (all but compareFaces, which uses the source and target image headers). |  | Image |
+| **CamelAwsRekognitionFacialAttributes** (producer) Constant: [`FACIAL_ATTRIBUTES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#FACIAL_ATTRIBUTES) | Facial Attributes to be returned by detectFaces: the names of the attributes (such as DEFAULT or ALL), or Attribute values of the AWS SDK. |  | Collection |
 | **CamelAwsRekognitionMaxLabels** (producer) Constant: [`MAX_LABELS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#MAX_LABELS) | Maximum Labels to detect. |  | Integer |
 | **CamelAwsRekognitionMinConfidence** (producer) Constant: [`MIN_CONFIDENCE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#MIN_CONFIDENCE) | Minimum confidence level for the labels to return. |  | Float |
 | **CamelAwsRekognitionFeatures** (producer) Constant: [`FEATURES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#FEATURES) | A list of the types of analysis to perform. |  | Collection |
@@ -517,7 +515,7 @@ The AWS Rekognition component supports the following message header(s), which is
 | **CamelAwsRekognitionOperationsConfig** (producer) Constant: [`OPERATIONS_CONFIG`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#OPERATIONS_CONFIG) | Configuration options for the media analysis job to be created. |  | MediaAnalysisOperationsConfig |
 | **CamelAwsRekognitionKmsKeyId** (producer) Constant: [`KMS_KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#KMS_KEY_ID) | The identifier for your AWS Key Management Service key (AWS KMS key). |  | String |
 | **CamelAwsRekognitionExternalImageId** (producer) Constant: [`EXTERNAL_IMAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#EXTERNAL_IMAGE_ID) | The ID used to identify a user in the collection. |  | String |
-| **CamelAwsRekognitionDetectionAttributes** (producer) Constant: [`DETECTION_ATTRIBUTES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#DETECTION_ATTRIBUTES) | An array of facial attributes to return. |  | Collection |
+| **CamelAwsRekognitionDetectionAttributes** (producer) Constant: [`DETECTION_ATTRIBUTES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#DETECTION_ATTRIBUTES) | Facial Attributes to be returned by indexFaces: the names of the attributes (such as DEFAULT or ALL), or Attribute values of the AWS SDK. |  | Collection |
 | **CamelAwsRekognitionMaxFaces** (producer) Constant: [`MAX_FACES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#MAX_FACES) | The maximum number of faces to index. |  | Integer |
 | **CamelAwsRekognitionMaxResults** (producer) Constant: [`MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#MAX_RESULTS) | Maximum number of results to return. |  | Integer |
 | **CamelAwsRekognitionNextToken** (producer) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-rekognition/latest/org/apache/camel/component/aws2/rekognition/Rekognition2Constants.html#NEXT_TOKEN) | Pagination token from the previous response. |  | String |
@@ -637,11 +635,33 @@ Camel-AWS Rekognition component provides the following operation on the producer
 -   startMediaAnalysisJob
     
 
+### The input image
+
+The operations that analyze an image (detectFaces, detectLabels, detectModerationLabels, detectProtectiveEquipment, detectText, indexFaces, recognizeCelebrities, searchFacesByImage and searchUsersByImage) read the image from the `CamelAwsRekognitionImage` header, which holds an `software.amazon.awssdk.services.rekognition.model.Image` of the AWS SDK. The compareFaces operation reads the two images from the `CamelAwsRekognitionSourceImage` and `CamelAwsRekognitionTargetImage` headers, which hold an `Image` as well.
+
+An `Image` holds either the bytes of the image or the location of an object in Amazon S3. The message body is not used as the image, and neither is a byte array in the image header: build the `Image` from it.
+
+_Java-only: building the Image from the bytes in the message body_
+
+```java
+from("direct:detectFaces")
+    .process(exchange -> {
+        byte[] bytes = exchange.getMessage().getBody(byte[].class);
+        Image image = Image.builder().bytes(SdkBytes.fromByteArray(bytes)).build();
+        exchange.getMessage().setHeader(Rekognition2Constants.IMAGE, image);
+    })
+    .to("aws2-rekognition://test?awsRekognitionClient=#awsRekognitionClient&operation=detectFaces");
+```
+
+An image stored in Amazon S3 is given as `Image.builder().s3Object(S3Object.builder().bucket("my-bucket").name("photo.jpg").build()).build()`.
+
+The `CamelAwsRekognitionFacialAttributes` header of detectFaces and the `CamelAwsRekognitionDetectionAttributes` header of indexFaces hold the names of the facial attributes to return, such as `DEFAULT` or `ALL`, as a collection of Strings (or of `Attribute` values of the AWS SDK), or as a comma separated String.
+
 ## Examples
 
 ### Producer Examples
 
--   createCollection: this operation will create a collection
+-   createCollection: this operation will create a collection with the id of the `CamelAwsRekognitionCollectionId` header
     
 
 -   Java
@@ -653,12 +673,16 @@ Camel-AWS Rekognition component provides the following operation on the producer
 
 ```java
 from("direct:createCollection")
+    .setHeader(Rekognition2Constants.COLLECTION_ID, constant("my-collection"))
     .to("aws2-rekognition://test?awsRekognitionClient=#awsRekognitionClient&operation=createCollection");
 ```
 
 ```xml
 <route>
   <from uri="direct:createCollection"/>
+  <setHeader name="CamelAwsRekognitionCollectionId">
+    <constant>my-collection</constant>
+  </setHeader>
   <to uri="aws2-rekognition://test?awsRekognitionClient=#awsRekognitionClient&amp;operation=createCollection"/>
 </route>
 ```
@@ -668,6 +692,11 @@ from("direct:createCollection")
     from:
       uri: direct:createCollection
       steps:
+        - setHeader:
+            name: CamelAwsRekognitionCollectionId
+            expression:
+              constant:
+                expression: my-collection
         - to:
             uri: aws2-rekognition://test
             parameters:

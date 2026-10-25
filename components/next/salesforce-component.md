@@ -799,6 +799,80 @@ The Salesforce component supports the following message header(s), which is/are 
 | **CamelSalesforcePubSubRpcId** (consumer) Constant: [`HEADER_SALESFORCE_PUBSUB_RPC_ID`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_PUBSUB_RPC_ID) | The Pub/Sub API rpc id. |  | String |
 | **CamelSalesforceQueryResultTotalSize** (producer) Constant: [`HEADER_SALESFORCE_QUERY_RESULT_TOTAL_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-salesforce/latest/org/apache/camel/component/salesforce/SalesforceConstants.html#HEADER_SALESFORCE_QUERY_RESULT_TOTAL_SIZE) | Total number of records matching a query. |  | int |
 
+## Message Body
+
+The message body at each side of the Salesforce component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `map` or `pojo` | 
+The subscribe operation gives a push topic record as a Map, or an object of sObjectClass (or the DTO of sObjectName), a platform event (/event/) as a PlatformEvent, and a change event (/data/) as a Map of the changed fields, with the replay id and the change event header in headers; rawPayload=true gives the JSON text instead. pubSubSubscribe gives an Avro GenericRecord or SpecificRecord, an object of pubSubPojoClass with POJO, or JSON text with JSON.
+
+-   With `operationName=pubSubSubscribe`: `pojo`
+    
+-   With `rawPayload=true`: `text` or `pojo`
+    
+-   With `pubSubDeserializeType=JSON`: `text`, `map` or `pojo`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `pojo`, `list`, `map` or `null` | The REST operations send a generated DTO (an AbstractSObjectBase) as JSON, or JSON text, bytes, a stream or a file as is; a Map or another object is sent as its toString, not as JSON: marshal it first. Text in the body is the id, SOQL or SOSL when the option or header is not set. apexCall takes a Map as query parameters; bulk operations take a JobInfo, BatchInfo or Job, and createBatch the CSV or XML records as a stream; composite operations an SObjectComposite, SObjectBatch or SObjectTree, the SObject collections a List of DTOs; pubSubPublish a List of events; raw the request as a stream. |
+| **Producer output** | `pojo`, `list`, `map`, `stream`, `unchanged` or `null` | The response as a DTO: a CreateSObjectResult, the SObject DTO of sObjectName or sObjectClass, a QueryRecords class for a query (an Iterator of the records with streamQueryResult=true), JobInfo or Job for bulk, a List for getVersions, the collections and pubSubPublish; a DTO class that is not in packages fails: set sObjectClass or use rawPayload. getBlobField, raw and the bulk results give a stream; an update or delete with no content leaves the body. rawPayload=true gives the JSON of the REST, apexCall and composite responses as a stream; format=JSON or XML only sets the content type of raw.
+
+-   With `operationName=createSObject`: `pojo` (`org.apache.camel.component.salesforce.api.dto.CreateSObjectResult`)
+    
+-   With `operationName=upsertSObject`: `pojo` or `unchanged`
+    
+-   With `operationName=updateSObject`: `unchanged`
+    
+-   With `operationName=deleteSObject`: `unchanged`
+    
+-   With `operationName=deleteSObjectWithId`: `unchanged`
+    
+-   With `operationName=getSObject`: `pojo`
+    
+-   With `operationName=getSObjectWithId`: `pojo`
+    
+-   With `operationName=query`: `pojo` or `stream`
+    
+-   With `operationName=queryAll`: `pojo` or `stream`
+    
+-   With `operationName=queryMore`: `pojo` or `stream`
+    
+-   With `operationName=getBlobField`: `stream`
+    
+-   With `operationName=getVersions`: `list`
+    
+-   With `operationName=apexCall`: `pojo`, `map`, `stream` or `unchanged`
+    
+-   With `operationName=raw`: `stream` or `null`
+    
+-   With `operationName=compositeCreateSObjectCollections`: `list`
+    
+-   With `operationName=compositeUpdateSObjectCollections`: `list`
+    
+-   With `operationName=compositeUpsertSObjectCollections`: `list`
+    
+-   With `operationName=compositeRetrieveSObjectCollections`: `list`
+    
+-   With `operationName=compositeDeleteSObjectCollections`: `list`
+    
+-   With `operationName=pubSubPublish`: `list`
+    
+-   With `rawPayload=true`: `stream`, `pojo`, `list`, `unchanged` or `null`
+    
+
+Not known when `streamQueryResult` or `notFoundBehaviour` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Authenticating to Salesforce

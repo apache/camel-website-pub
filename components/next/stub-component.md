@@ -159,13 +159,19 @@ The message body at each side of the Stub component: _Consumer_ is the body of t
 | **Consumer** | `unchanged` | The body the producer sent. |
 | **Producer input** | `any` | 
  |
-| **Producer output** | `unknown` | Unchanged when no route consumes from the stub endpoint, or for a message that expects no reply (InOnly). A message that expects one (InOut) waits for the body the stub route ends with. |
+| **Producer output** | `unknown` | Unchanged when no route consumes from the stub endpoint (it keeps the latest size messages and drops the oldest), or for a message that expects no reply (InOnly). A message that expects one (InOut) waits for the body the stub route ends with. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Usage
 
 Internally, the Stub component creates [Seda](seda-component.md) endpoints. The main difference between [Stub](#) and [Seda](seda-component.md) is that [Seda](seda-component.md) will validate the URI and parameters you give it, so putting seda: in front of a typical URI with query arguments will usually fail. Stub won’t, though, as it basically ignores all query parameters to let you quickly stub out one or more endpoints in your route temporarily.
+
+### Stub endpoints without a consumer
+
+A stub endpoint that no route consumes from keeps the latest messages sent to it, so you can browse them, for example with `camel cmd stub --browse` from the [Camel CLI](../../manual/camel-jbang.md). It keeps up to `size` messages (1000 by default), and when the queue is full, it drops the oldest message to make room for the new one. Sending to a stub endpoint without a consumer therefore never fails with `Queue full`, and the memory it uses stays bounded.
+
+When a route consumes from the stub endpoint, the messages are queued as with [Seda](seda-component.md), and the `size`, `blockWhenFull` and `discardWhenFull` options apply as usual.
 
 ## Examples
 

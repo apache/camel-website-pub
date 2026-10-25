@@ -157,6 +157,42 @@ The XChange component supports the following message header(s), which is/are lis
 | **Currency** (producer) Constant: [`HEADER_CURRENCY`](https://javadoc.io/doc/org.apache.camel/camel-xchange/latest/org/apache/camel/component/xchange/XChangeConfiguration.html#HEADER_CURRENCY) | The target currency. |  | Currency |
 | **CurrencyPair** (producer) Constant: [`HEADER_CURRENCY_PAIR`](https://javadoc.io/doc/org.apache.camel/camel-xchange/latest/org/apache/camel/component/xchange/XChangeConfiguration.html#HEADER_CURRENCY_PAIR) | The target currency pair. |  | CurrencyPair |
 
+## Message Body
+
+The message body at each side of the XChange component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Read only by ticker and currencyPairMetaData, as a CurrencyPair, and by currencyMetaData, as a Currency, when the CurrencyPair or Currency header is not set. Text such as BTC/USDT is not converted: use the currencyPair option, or a CurrencyPair object in the body or the header. |
+| **Producer output** | `pojo`, `list`, `null` or `unchanged` | 
+The XChange object of the method: a Ticker, a List of Currency, CurrencyPair, Balance, Wallet or FundingRecord, or the CurrencyMetaData or InstrumentMetaData, null for one the exchange does not know. A method of another service leaves the body unchanged.
+
+-   With `method=ticker`: `pojo` (`org.knowm.xchange.dto.marketdata.Ticker`)
+    
+-   With `method=currencies`: `list` (`java.util.List<org.knowm.xchange.currency.Currency>`)
+    
+-   With `method=currencyPairs`: `list` (`java.util.List<org.knowm.xchange.currency.CurrencyPair>`)
+    
+-   With `method=currencyMetaData`: `pojo` or `null`
+    
+-   With `method=currencyPairMetaData`: `pojo` or `null`
+    
+-   With `method=balances`: `list` (`java.util.List<org.knowm.xchange.dto.account.Balance>`)
+    
+-   With `method=wallets`: `list` (`java.util.List<org.knowm.xchange.dto.account.Wallet>`)
+    
+-   With `method=fundingHistory`: `list` (`java.util.List<org.knowm.xchange.dto.account.FundingRecord>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Authentication

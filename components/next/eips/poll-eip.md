@@ -38,6 +38,20 @@ The Poll eip supports the following options which are listed below.
 | **uri** | **Required** The uri of the endpoint to poll a single message from. The result is stored in the original message body (or in a variable if variableReceive is set). |  | String |
 | **timeout** | Timeout in millis when polling from the external service. The default value is 20000 (20 seconds). | 20000 | String |
 
+## Message Body
+
+The message body at each side of the Poll EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what the consumer of its endpoint receives | The message the consumer of the endpoint receives, or null when none came before the timeout. With variableReceive it goes into the variable, and the body stays as it was.
+Not known when `variableReceive` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Poll eip has no exchange properties.

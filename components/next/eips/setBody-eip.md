@@ -29,6 +29,19 @@ The Set Body eip supports the following options which are listed below.
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **expression** | **Required** The expression whose result is used as the new message body. |  | ExpressionDefinition |
 
+## Message Body
+
+The message body at each side of the Set Body EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP input** | what its expression reads | 
+ |
+| **EIP output** | the result of its expression | The result of the expression, in the language of the expression. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Set Body eip has no exchange properties.

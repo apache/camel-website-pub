@@ -257,9 +257,9 @@ The message body at each side of the Nats component: _Consumer_ is the body of t
 | --- | --- | --- |
 | **Consumer** | `bytes` (`byte[]`) | The payload of the NATS message as a byte array, empty for a message without one: convert or unmarshal it. |
 | **Consumer reply** | `any` | 
-Only with exchangePattern=InOut is a message with a reply subject answered, with the body the route ends with: text, bytes, a stream or a file. A Map, a POJO or no body sends no reply, and the requester times out.
+Only with exchangePattern=InOut is a core NATS message with a reply subject answered, with the body the route ends with: text, bytes, a stream or a file, and no body sends an empty reply. A Map or a POJO sends no reply, and the requester times out.
 
--   With `exchangePattern=InOut`: `text`, `bytes`, `stream` or `file`
+-   With `exchangePattern=InOut`: `null`, `text`, `bytes`, `stream` or `file`
     
 
 
@@ -357,6 +357,15 @@ camel.component.nats.servers=scott:tiger@someserver:4222,superman:123@someothers
 The producer supports request/reply: when the exchange pattern is InOut, it waits for the reply message, up to `requestTimeout`, and the payload of the reply becomes the message body, as a byte array.
 
 The consumer sends back the message body as the reply message, when routing the message is complete, if the message has a reply subject and the consumer has `exchangePattern=InOut`. The body must convert to a byte array: text, bytes, a stream or a file. A body that does not, such as a Map, sends no reply.
+
+A consumer replies when its `exchangePattern` is `InOut`, the message has a reply subject, `replyToDisabled` is `false`, and the exchange did not fail (NATS has no error reply, so a failed exchange is not answered and the requester times out). The body the route ends with is converted to a byte array and published to the reply subject:
+
+-   A route that ends with no body sends an empty reply (0 bytes), so the requester gets an answer.
+    
+-   A body that does not convert to a byte array, such as a `Map` or a POJO, is not sent. No reply is published, and the error goes to the exception handler of the consumer, which logs it at WARN level by default. Convert the body in the route, for example to JSON or a `String`, before the route ends.
+    
+
+Replies are for core NATS only. The reply subject of a JetStream message is its ack subject, so a consumer with `jetstreamEnabled=true` never replies to a JetStream message, even when `exchangePattern` is `InOut`. The consumer logs a WARN when it starts with this combination.
 
 ## Examples
 

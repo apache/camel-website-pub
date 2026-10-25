@@ -377,7 +377,7 @@ The AWS Simple Email Service (SES) component supports the following message head
 | **CamelAwsSesBcc** (producer) Constant: [`BCC`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ses/latest/org/apache/camel/component/aws2/ses/Ses2Constants.html#BCC) | List of comma separated destination blind carbon copy (bcc) email address. |  | String |
 | **CamelAwsSesTags** (producer) Constant: [`TAGS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ses/latest/org/apache/camel/component/aws2/ses/Ses2Constants.html#TAGS) | A collection of name/value pairs to apply when sending the email. Tags are user-defined properties that are included in published email sending events. |  | Map |
 | **CamelAwsSesHtmlEmail** (producer) Constant: [`HTML_EMAIL`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ses/latest/org/apache/camel/component/aws2/ses/Ses2Constants.html#HTML_EMAIL) | The flag to show if email content is HTML. |  | Boolean |
-| **CamelAwsSesConfigurationSet** (producer) Constant: [`CONFIGURATION_SET`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ses/latest/org/apache/camel/component/aws2/ses/Ses2Constants.html#CONFIGURATION_SET) | TThe configuration set to send. |  | String |
+| **CamelAwsSesConfigurationSet** (producer) Constant: [`CONFIGURATION_SET`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ses/latest/org/apache/camel/component/aws2/ses/Ses2Constants.html#CONFIGURATION_SET) | The configuration set to send. |  | String |
 
 ## Message Body
 
@@ -386,7 +386,7 @@ The message body at each side of the AWS Simple Email Service (SES) component: _
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the mail, or its HTML with the CamelAwsSesHtmlEmail header set to true: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(), so marshal it first. A jakarta.mail Message is sent as a raw mail as it is. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the mail, or its HTML with the CamelAwsSesHtmlEmail header set to true: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(), so marshal it first. A jakarta.mail Message or a RawMessage is sent as a raw mail as it is, a SendRawEmailRequest is sent as the request, and no body fails. |
 | **Producer output** | `unchanged` | Unchanged, with the id of the mail in the CamelAwsSesMessageId header. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
@@ -458,6 +458,24 @@ from("direct:start")
 
 The `#client` refers to a `SesClient` in the Registry.
 
+### Message body
+
+The producer sends the message body as follows:
+
+ 
+| Body | Sent as |
+| --- | --- |
+| text (a `String`, or any body converted to a `String`) | a plain mail (`sendEmail`) with the body as its text, or its HTML when the `CamelAwsSesHtmlEmail` header is `true`, and the subject, recipients and other fields of the options or headers. |
+| `jakarta.mail.Message` | a raw mail (`sendRawEmail`) with the MIME content of the message. |
+| `software.amazon.awssdk.services.ses.model.RawMessage` | a raw mail (`sendRawEmail`) with the MIME content of the `RawMessage`. |
+| `software.amazon.awssdk.services.ses.model.SendRawEmailRequest` | the request as it is (`sendRawEmail`); the options and headers are not used. |
+
+For a raw mail (a `jakarta.mail.Message` or `RawMessage` body), the source is the `from` option or the `CamelAwsSesFrom` header, and the destinations are the addresses of the `to`, `cc` and `bcc` options or the `CamelAwsSesTo`, `CamelAwsSesCc` and `CamelAwsSesBcc` headers. When none of them is set, SES sends the mail to the recipients of the To, Cc and Bcc headers of the raw mail. The subject is the one of the raw mail.
+
+A message without a body fails with an `InvalidPayloadException`, and nothing is sent to SES.
+
+The `to`, `cc`, `bcc` and `replyToAddresses` options and their headers are a `String`; give several addresses as a comma-separated list, such as `to1@example.com,[to2@example.com](mailto:to2@example.com)`.
+
 ## Examples
 
 ### Producer Examples
@@ -471,8 +489,8 @@ The `#client` refers to a `SesClient` in the Registry.
 
 ```java
 from("direct:start")
-    .setHeader(SesConstants.SUBJECT, constant("This is my subject"))
-    .setHeader(SesConstants.TO, constant(Collections.singletonList("to@example.com")))
+    .setHeader(Ses2Constants.SUBJECT, constant("This is my subject"))
+    .setHeader(Ses2Constants.TO, constant("to@example.com"))
     .setBody(constant("This is my message text."))
     .to("aws2-ses://from@example.com?accessKey=xxx&secretKey=yyy");
 ```

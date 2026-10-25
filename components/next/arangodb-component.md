@@ -209,6 +209,83 @@ The ArangoDb component supports the following message header(s), which is/are li
 | **CamelArangoDbAqlParameters** (producer) Constant: [`AQL_QUERY_BIND_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-arangodb/latest/org/apache/camel/component/arangodb/ArangoDbConstants.html#AQL_QUERY_BIND_PARAMETERS) | The key/value pairs defining the variables to bind the query to. |  | Map |
 | **CamelArangoDbAqlOptions** (advanced) Constant: [`AQL_QUERY_OPTIONS`](https://javadoc.io/doc/org.apache.camel/camel-arangodb/latest/org/apache/camel/component/arangodb/ArangoDbConstants.html#AQL_QUERY_OPTIONS) | The additional options that will be passed to the query API. |  | AqlQueryOptions |
 
+## Message Body
+
+The message body at each side of the ArangoDb component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `map`, `pojo` or `list` | 
+By the operation: the document to save or update as a Map or a POJO (a List of them with the CamelArangoDbMultiInsert or CamelArangoDbMultiUpdate header), the key as text to find or delete (a List of keys with CamelArangoDbMultiDelete), and the AQL query as text unless the CamelArangoDbAqlQuery header has it. JSON text, bytes or a stream is not a document: unmarshal it to a Map first. The key of an update is the CamelArangoDbKey header.
+
+-   With `operation=FIND_DOCUMENT_BY_KEY`: `text`
+    
+-   With `operation=DELETE_DOCUMENT`: `text` or `list`
+    
+-   With `operation=AQL_QUERY`: `text`
+    
+-   With `operation=SAVE_VERTEX`: `map` or `pojo`
+    
+-   With `operation=UPDATE_VERTEX`: `map` or `pojo`
+    
+-   With `operation=FIND_VERTEX_BY_KEY`: `text`
+    
+-   With `operation=DELETE_VERTEX`: `text`
+    
+-   With `operation=SAVE_EDGE`: `map` or `pojo`
+    
+-   With `operation=UPDATE_EDGE`: `map` or `pojo`
+    
+-   With `operation=FIND_EDGE_BY_KEY`: `text`
+    
+-   With `operation=DELETE_EDGE`: `text`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unknown` | 
+
+By the operation, which must be set: the result entity of the ArangoDB driver (DocumentCreateEntity, DocumentUpdateEntity, DocumentDeleteEntity, or a MultiDocumentEntity for the multi headers) for the document writes; the document found as a BaseDocument (or BaseEdgeDocument), or of the class in the CamelArangoDbResultClassType header, or null when there is none; a List of the AQL results, empty for a query that returns nothing; and true for a delete of a vertex or edge.
+
+-   With `operation=SAVE_DOCUMENT`: `pojo`
+    
+-   With `operation=FIND_DOCUMENT_BY_KEY`: `pojo` or `null`
+    
+-   With `operation=UPDATE_DOCUMENT`: `pojo`
+    
+-   With `operation=DELETE_DOCUMENT`: `pojo`
+    
+-   With `operation=AQL_QUERY`: `list`
+    
+-   With `operation=SAVE_VERTEX`: `pojo` (`com.arangodb.entity.VertexEntity`)
+    
+-   With `operation=FIND_VERTEX_BY_KEY`: `pojo` or `null`
+    
+-   With `operation=UPDATE_VERTEX`: `pojo` (`com.arangodb.entity.VertexUpdateEntity`)
+    
+-   With `operation=DELETE_VERTEX`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=SAVE_EDGE`: `pojo` (`com.arangodb.entity.EdgeEntity`)
+    
+-   With `operation=FIND_EDGE_BY_KEY`: `pojo` or `null`
+    
+-   With `operation=UPDATE_EDGE`: `pojo` (`com.arangodb.entity.EdgeUpdateEntity`)
+    
+-   With `operation=DELETE_EDGE`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 ### Producer Examples

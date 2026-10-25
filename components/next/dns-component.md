@@ -12,6 +12,8 @@ This is an additional component for Camel to run DNS queries, using DNSJava. The
     
 -   `dig`: to run DNS queries
     
+-   `wikipedia` (deprecated): to query the Wikipedia over DNS service, which is no longer available
+    
 
 > **Note**
 > **Requires SUN JVM**
@@ -104,7 +106,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **dnsType** (producer) | 
-**Required** The type of the lookup.
+**Required** The type of the lookup. The wikipedia type is deprecated, as the Wikipedia over DNS service it queries is no longer available.
 
 Enum values:
 
@@ -138,11 +140,11 @@ The DNS component supports the following message header(s), which is/are listed 
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelDnsClass** (lookup dig) Constant: [`DNS_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_CLASS) | The DNS class of the lookup. Should match the values of org.xbill.dns.DClass. Optional. |  | String |
-| **CamelDnsName** (lookup) Constant: [`DNS_NAME`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_NAME) | **Required** The name to lookup. |  | String |
+| **CamelDnsName** (lookup dig) Constant: [`DNS_NAME`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_NAME) | **Required** The name to lookup. |  | String |
 | **CamelDnsDomain** (ip) Constant: [`DNS_DOMAIN`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_DOMAIN) | **Required** The domain name. |  | String |
 | **CamelDnsServer** (dig) Constant: [`DNS_SERVER`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_SERVER) | The server in particular for the query. If none is given, the default one specified by the OS will be used. Optional. |  | String |
-| **CamelDnsType** (lookup dig) Constant: [`DNS_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_TYPE) | The type of the lookup. Should match the values of org.xbill.dns.Type. Optional. |  | String |
-| **CamelDnsTerm** (wikipedia) Constant: [`TERM`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#TERM) | **Required** The term. |  |  |
+| **CamelDnsType** (lookup dig) Constant: [`DNS_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#DNS_TYPE) | The type of the lookup. Should match the values of org.xbill.dns.Type. Optional. The dig operation uses A when none or an unknown type is given. |  | String |
+| **CamelDnsTerm** (wikipedia) Constant: [`TERM`](https://javadoc.io/doc/org.apache.camel/camel-dns/latest/org/apache/camel/component/dns/DnsConstants.html#TERM) | **Required** **Deprecated** The term. Deprecation note: The Wikipedia over DNS service is no longer available. |  |  |
 
 ## Message Body
 
@@ -276,7 +278,7 @@ from("direct:start")
             uri: dns:dig
 ```
 
-The query must be provided in the header with key `"CamelDnsName"`.
+The query must be provided in the header with key `"CamelDnsName"`; without it the exchange fails with an `IllegalArgumentException`. The `"CamelDnsType"` header sets the type of the query, such as `MX`, and defaults to `A` when it is not set or not a known type. The `"CamelDnsClass"` header sets the DNS class, and defaults to `IN`.
 
 ### Dns Activation Policy
 

@@ -73,7 +73,7 @@ The AWS MQ component supports the following options which are listed below.
 | **configuration** (producer) | Component configuration. |  | MQ2Configuration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
-**Required** The operation to perform. It can be listBrokers, createBroker, deleteBroker.
+**Required** The operation to perform.
 
 Enum values:
 
@@ -246,7 +246,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** The operation to perform. It can be listBrokers, createBroker, deleteBroker.
+**Required** The operation to perform.
 
 Enum values:
 
@@ -409,14 +409,14 @@ The AWS MQ component supports the following message header(s), which is/are list
 | **CamelAwsMQBrokerEngine** (producer) Constant: [`BROKER_ENGINE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_ENGINE) | The Broker Engine for MQ. |  | String |
 | **CamelAwsMQBrokerEngineVersion** (producer) Constant: [`BROKER_ENGINE_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_ENGINE_VERSION) | The Broker Engine Version for MQ. Currently you can choose between 5.15.6 and 5.15.0 of ACTIVEMQ. |  | String |
 | **CamelAwsMQBrokerID** (producer) Constant: [`BROKER_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_ID) | The broker id. |  | String |
-| **CamelAwsMQConfigurationID** (producer) Constant: [`CONFIGURATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#CONFIGURATION_ID) | A list of information about the configuration. |  | ConfigurationId |
+| **CamelAwsMQConfigurationID** (producer) Constant: [`CONFIGURATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#CONFIGURATION_ID) | The configuration of the broker for the updateBroker operation: a ConfigurationId of the AWS SDK, or the id of the configuration as a String. |  | ConfigurationId |
 | **CamelAwsMQBrokerDeploymentMode** (producer) Constant: [`BROKER_DEPLOYMENT_MODE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_DEPLOYMENT_MODE) | The deployment mode for the broker in the createBroker operation. |  | String |
 | **CamelAwsMQBrokerInstanceType** (producer) Constant: [`BROKER_INSTANCE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_INSTANCE_TYPE) | The instance type for the MQ machine in the createBroker operation. |  | String |
-| **CamelAwsMQBrokerUsers** (producer) Constant: [`BROKER_USERS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_USERS) | The list of users for MQ. |  | List |
+| **CamelAwsMQBrokerUsers** (producer) Constant: [`BROKER_USERS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_USERS) | The list of users for MQ in the createBroker operation, as User objects of the AWS SDK. |  | List |
 | **CamelAwsMQBrokerPubliclyAccessible** (producer) Constant: [`BROKER_PUBLICLY_ACCESSIBLE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_PUBLICLY_ACCESSIBLE) | If the MQ instance must be publicly available or not. | false | Boolean |
 | **CamelAwsMQNextToken** (listBrokers) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#NEXT_TOKEN) | The token for the next set of results. |  | String |
 | **CamelAwsMQIsTruncated** (listBrokers) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
-| **CamelAwsMQBrokerArn** (createBroker) Constant: [`BROKER_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_ARN) | The Amazon Resource Name (ARN) of the broker. |  | String |
+| **CamelAwsMQBrokerArn** (createBroker describeBroker) Constant: [`BROKER_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_ARN) | The Amazon Resource Name (ARN) of the broker. |  | String |
 | **CamelAwsMQBrokerState** (describeBroker) Constant: [`BROKER_STATE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-mq/latest/org/apache/camel/component/aws2/mq/MQ2Constants.html#BROKER_STATE) | The state of the broker. |  | String |
 
 ## Message Body

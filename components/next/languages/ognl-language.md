@@ -41,7 +41,7 @@ The message body at each side of the OGNL language: _Expression input_ is the bo
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Expression input** | `any` | The body as it is, in request.body: there is no variable body. |
+| **Expression input** | `any` | The body as it is, in message.body or request.body: there is no variable body. |
 | **Expression result** | `unknown` | What the expression returns. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
@@ -57,6 +57,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 | exchangeId | String | the exchange id |
 | exception | Throwable | the Exchange exception (if any) |
 | request | Message | the message |
+| message | Message | the message |
 | headers | Map | the message headers |
 | getHeader(name) | Object | the message header by the given name |
 | getHeader(name, type) | Type | the message header by the given name as the given type |

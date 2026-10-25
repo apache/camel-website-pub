@@ -164,7 +164,7 @@ Enum values:
 | **marginTop** (producer) | Margin top in pixels. | 20 | int |
 | **pageSize** (producer) | 
 
-Page size.
+Page size: LETTER, LEGAL or A0 to A6. The older names PAGE\_SIZE\_A0 to PAGE\_SIZE\_A6 and PAGE\_SIZE\_LETTER are also accepted.
 
 Enum values:
 
@@ -220,7 +220,7 @@ The PDF component supports the following message header(s), which is/are listed 
 | **CamelPdfProtectionPolicy** (producer) Constant: [`PROTECTION_POLICY_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-pdf/latest/org/apache/camel/component/pdf/PdfHeaderConstants.html#PROTECTION_POLICY_HEADER_NAME) | Expected type is [https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/encryption/ProtectionPolicy.htmlProtectionPolicy](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/encryption/ProtectionPolicy.htmlProtectionPolicy). If specified then PDF document will be encrypted with it. |  | ProtectionPolicy |
 | **CamelPdfDocument** (producer) Constant: [`PDF_DOCUMENT_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-pdf/latest/org/apache/camel/component/pdf/PdfHeaderConstants.html#PDF_DOCUMENT_HEADER_NAME) | Mandatory header for append operation and ignored in all other operations. Expected type is [https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.htmlPDDocument](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/PDDocument.htmlPDDocument). Stores PDF document which will be used for append operation. |  | PDDocument |
 | **CamelPdfDecryptionMaterial** (producer) Constant: [`DECRYPTION_MATERIAL_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-pdf/latest/org/apache/camel/component/pdf/PdfHeaderConstants.html#DECRYPTION_MATERIAL_HEADER_NAME) | Expected type is [https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/encryption/DecryptionMaterial.htmlDecryptionMaterial](https://pdfbox.apache.org/docs/2.0.13/javadocs/org/apache/pdfbox/pdmodel/encryption/DecryptionMaterial.htmlDecryptionMaterial). Mandatory header if PDF document is encrypted. |  | DecryptionMaterial |
-| **CamelPdfFilesToMerge** (producer) Constant: [`FILES_TO_MERGE_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-pdf/latest/org/apache/camel/component/pdf/PdfHeaderConstants.html#FILES_TO_MERGE_HEADER_NAME) | Mandatory header for merge operation and ignored in all other operations. The array of pdf files that will be merged. |  | List |
+| **CamelPdfFilesToMerge** (producer) Constant: [`FILES_TO_MERGE_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-pdf/latest/org/apache/camel/component/pdf/PdfHeaderConstants.html#FILES_TO_MERGE_HEADER_NAME) | Mandatory header for merge operation and ignored in all other operations. The list of pdf files that will be merged, each given as a java.io.File or a java.nio.file.Path. |  | List |
 
 ## Message Body
 
@@ -230,7 +230,7 @@ The message body at each side of the PDF component: _Consumer_ is the body of th
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `bytes`, `stream` or `file` | 
-The text to write for create and append, which takes the document from the CamelPdfDocument header; a Map or a POJO is written as its toString: marshal it first. extractText reads a PDF from bytes, a stream, a file or a PDDocument, not from text. merge takes the files from the CamelPdfFilesToMerge header.
+The text to write for create and append, which takes the document from the CamelPdfDocument header; a Map or a POJO is written as its toString: marshal it first. extractText reads a PDF from bytes, such as the ByteArrayOutputStream of create, a stream, a file or a PDDocument, not from text; another body, or none, fails. merge takes the files from the CamelPdfFilesToMerge header.
 
 -   With `operation=extractText`: `bytes`, `stream`, `file` or `pojo`
     
@@ -244,7 +244,7 @@ The text to write for create and append, which takes the document from the Camel
  |
 | **Producer output** | `bytes` (`java.io.ByteArrayOutputStream`) | 
 
-The PDF of create, append and merge as bytes, in a ByteArrayOutputStream: convertBodyTo byte\[\] before extractText. The text of the document for extractText.
+The PDF of create, append and merge as bytes, in a ByteArrayOutputStream, which extractText reads as it is. The text of the document for extractText.
 
 -   With `operation=extractText`: `text` (`java.lang.String`)
     
@@ -297,7 +297,19 @@ from("direct:start")
 
 It is now possible to get the body as a PD Document by using `PDDocument doc = exchange.getIn().getBody(PDDocument.class);`, which saves the trouble of converting the byte-array to a document.
 
-The body after `create`, `append` and `merge` is a `ByteArrayOutputStream` with the PDF, which does not convert to a `PDDocument`: convert it to `byte[]` before `extractText`.
+The type converter reads a PDF from a `byte[]`, a `ByteArrayOutputStream`, an `InputStream`, a `java.io.File` or a `java.nio.file.Path`. The `create`, `append` and `merge` operations leave the PDF in a `ByteArrayOutputStream`, so `pdf:create` can be followed by `pdf:extractText` directly. The `extractText` operation fails with an `InvalidPayloadException` naming the type of the body when the body is missing or is not one of these types.
 
 > **Note**
 > this only works for unprotected PDF files. For password-protected, the files still need to be converted manually.
+
+### Creating a PDF from text
+
+The `create` operation needs a body with the text to write; without a body it fails with an `InvalidPayloadException`.
+
+With the default `textProcessingFactory=lineTermination`, the text is written line by line: a line ends at `\r\n`, `\r` or `\n`. A tab is written as four spaces, and other control characters, which the fonts cannot show, are left out.
+
+The `pageSize` option takes `LETTER`, `LEGAL` or `A0` to `A6` (default `A4`). The older names `PAGE_SIZE_A0` to `PAGE_SIZE_A6` and `PAGE_SIZE_LETTER` are still accepted. An unknown value fails when the endpoint is created.
+
+### Merging PDF files
+
+The `merge` operation reads the files to merge from the `CamelPdfFilesToMerge` header: a list of at least two elements, each a `java.io.File` or a `java.nio.file.Path`.

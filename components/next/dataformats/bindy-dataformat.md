@@ -73,7 +73,7 @@ The message body at each side of the Bindy data format: _Marshal input_ and _Unm
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Marshal input** | `pojo` or `list` | An object of the classType class, or a List (or an Iterator) of them; a Map of the model class names to the objects is one record. Other bodies, such as a Map of field values, are not records. |
+| **Marshal input** | `pojo` or `list` | An object of the classType class, or a List (or an Iterator) of them; a Map of the model class names to the objects is one record. Other bodies, such as a Map of field values or a String, fail. |
 | **Marshal output** | `stream`, as csv | The CSV in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as csv | 
  |
@@ -1619,6 +1619,8 @@ from("direct:handleOrders")
    .marshal(bindy)
    .to("file://outbox")
 ```
+
+The body to marshal is an object of the model class (`classType`), a `List` of them, or a `Map` of the model class names to the objects (one record). Any other body, such as a `Map` of field values or a `String`, fails with an `InvalidPayloadException`.
 
 ### Using Spring XML
 

@@ -129,7 +129,7 @@ Enum values:
  | synthesizeSpeech | Polly2Operations |
 | **outputFormat** (producer) | 
 
-The audio output format.
+The audio output format. When neither this option nor the CamelAwsPollyOutputFormat header is set, MP3 is used.
 
 Enum values:
 
@@ -154,7 +154,7 @@ Enum values:
 
 
 
- | MP3 | OutputFormat |
+ |  | OutputFormat |
 | **overrideEndpoint** (producer) | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | boolean |
 | **pojoRequest** (producer) | If we want to use a POJO request as body or not. | false | boolean |
 | **region** (producer) | 
@@ -260,7 +260,7 @@ Enum values:
 | **taskId** (producer) | The task ID for getSpeechSynthesisTask operation. |  | String |
 | **textType** (producer) | 
 
-The type of text input (text or ssml).
+The type of text input (text or ssml). When neither this option nor the CamelAwsPollyTextType header is set, TEXT is used.
 
 Enum values:
 
@@ -275,7 +275,7 @@ Enum values:
 
 
 
- | TEXT | TextType |
+ |  | TextType |
 | **uriEndpointOverride** (producer) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **voiceId** (producer) | 
 
@@ -611,7 +611,7 @@ Enum values:
  | synthesizeSpeech | Polly2Operations |
 | **outputFormat** (producer) | 
 
-The audio output format.
+The audio output format. When neither this option nor the CamelAwsPollyOutputFormat header is set, MP3 is used.
 
 Enum values:
 
@@ -636,7 +636,7 @@ Enum values:
 
 
 
- | MP3 | OutputFormat |
+ |  | OutputFormat |
 | **overrideEndpoint** (producer) | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | boolean |
 | **pojoRequest** (producer) | If we want to use a POJO request as body or not. | false | boolean |
 | **region** (producer) | 
@@ -742,7 +742,7 @@ Enum values:
 | **taskId** (producer) | The task ID for getSpeechSynthesisTask operation. |  | String |
 | **textType** (producer) | 
 
-The type of text input (text or ssml).
+The type of text input (text or ssml). When neither this option nor the CamelAwsPollyTextType header is set, TEXT is used.
 
 Enum values:
 
@@ -757,7 +757,7 @@ Enum values:
 
 
 
- | TEXT | TextType |
+ |  | TextType |
 | **uriEndpointOverride** (producer) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **voiceId** (producer) | 
 
@@ -1326,6 +1326,7 @@ Enum values:
 | **CamelAwsPollySnsTopicArn** (producer) Constant: [`SNS_TOPIC_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-polly/latest/org/apache/camel/component/aws2/polly/Polly2Constants.html#SNS_TOPIC_ARN) | The SNS topic ARN for notifications. |  | String |
 | **CamelAwsPollyContentType** (producer) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-polly/latest/org/apache/camel/component/aws2/polly/Polly2Constants.html#CONTENT_TYPE) | The content type of the audio stream. |  | String |
 | **CamelAwsPollyRequestCharacters** (producer) Constant: [`REQUEST_CHARACTERS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-polly/latest/org/apache/camel/component/aws2/polly/Polly2Constants.html#REQUEST_CHARACTERS) | Number of characters synthesized. |  | Integer |
+| **CamelAwsPollyNextToken** (producer) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-polly/latest/org/apache/camel/component/aws2/polly/Polly2Constants.html#NEXT_TOKEN) | The token of the next page for the describeVoices, listLexicons and listSpeechSynthesisTasks operations. It is in and out: when set, it is sent as the next token of the request, and after the call it holds the next token of the response, or it is removed when the response has none, which is the last page. Remove it before calling a different list operation. |  | String |
 
 ## Message Body
 
@@ -1370,7 +1371,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 Required Polly component options
 
-You have to provide the amazonPollyClient in the Registry or your accessKey and secretKey to access the [Amazon Polly](https://aws.amazon.com/polly/) service.
+You have to provide the pollyClient in the Registry or your accessKey and secretKey to access the [Amazon Polly](https://aws.amazon.com/polly/) service.
 
 ## Usage
 
@@ -1421,6 +1422,73 @@ Camel-AWS Polly component provides the following operations on the producer side
     
 -   listSpeechSynthesisTasks
     
+
+### Text type and output format
+
+The `textType` option, or else the `CamelAwsPollyTextType` header, says whether the text is plain text (`TEXT`) or SSML (`SSML`). The `outputFormat` option, or else the `CamelAwsPollyOutputFormat` header, sets the audio format. When neither the option nor the header is set, `TEXT` and `MP3` are used. This applies to the synthesizeSpeech and startSpeechSynthesisTask operations.
+
+The `lexiconNames` option, or else the `CamelAwsPollyLexiconNames` header, is a comma-separated list of lexicon names. The spaces around each name are removed, so `a, b` is the same as `a,b`.
+
+### Paging the list operations
+
+The describeVoices, listLexicons and listSpeechSynthesisTasks operations return one page of results in the body. The `CamelAwsPollyNextToken` header is both an input and an output:
+
+-   when it is set, it is sent as the next token of the request, so the call returns the next page;
+    
+-   after the call, it holds the next token of the response, or it is removed when the response has none, which means this was the last page.
+    
+
+A route can therefore call the operation again while the header is set. Because the header stays on the message, remove it before calling a different list operation, or that call starts from a token that is not its own.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .to("aws2-polly://test?operation=listLexicons")
+  .log("Lexicons: ${body}")
+  .loopDoWhile(header(Polly2Constants.NEXT_TOKEN).isNotNull())
+    .to("aws2-polly://test?operation=listLexicons")
+    .log("Lexicons: ${body}")
+  .end()
+  .removeHeader(Polly2Constants.NEXT_TOKEN)
+  .to("aws2-polly://test?operation=describeVoices");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: aws2-polly:test
+            parameters:
+              operation: listLexicons
+        - log:
+            message: "Lexicons: ${body}"
+        - loop:
+            doWhile: true
+            expression:
+              simple:
+                expression: "${header.CamelAwsPollyNextToken} != null"
+            steps:
+              - to:
+                  uri: aws2-polly:test
+                  parameters:
+                    operation: listLexicons
+              - log:
+                  message: "Lexicons: ${body}"
+        - removeHeader:
+            name: CamelAwsPollyNextToken
+        - to:
+            uri: aws2-polly:test
+            parameters:
+              operation: describeVoices
+```
+
+With `pojoRequest=true`, the next token is taken from the request in the body, and the `CamelAwsPollyNextToken` header is set from the response in the same way.
 
 ## Examples
 

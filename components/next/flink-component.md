@@ -177,6 +177,18 @@ The Flink component supports the following message header(s), which is/are liste
 | **CamelFlinkDataStream** (producer) Constant: [`FLINK_DATASTREAM_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-flink/latest/org/apache/camel/component/flink/FlinkConstants.html#FLINK_DATASTREAM_HEADER) | The data stream. |  | Object |
 | **CamelFlinkDataStreamCallback** (producer) Constant: [`FLINK_DATASTREAM_CALLBACK_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-flink/latest/org/apache/camel/component/flink/FlinkConstants.html#FLINK_DATASTREAM_CALLBACK_HEADER) | The data stream callback. |  | DataStreamCallback |
 
+## Message Body
+
+The message body at each side of the Flink component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The body is handed to the DataSet or DataStream callback as its payload, a List as one payload per element; the data to compute on is the DataSet or DataStream of the endpoint or of the CamelFlinkDataSet or CamelFlinkDataStream header. |
+| **Producer output** | `unknown` | What the callback returns, null for a void callback. A DataSet it returns is collected into a List; a DataStream it returns fails unless collect is false, then the DataStream (or DataSet) is the body and the CamelFlinkDataStream (or CamelFlinkDataSet) header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 ### Flink DataSet Callback

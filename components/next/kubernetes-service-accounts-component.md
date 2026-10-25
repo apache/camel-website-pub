@@ -117,6 +117,38 @@ The Kubernetes Service Account component supports the following message header(s
 | **CamelKubernetesServiceAccountName** (producer) Constant: [`KUBERNETES_SERVICE_ACCOUNT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_SERVICE_ACCOUNT_NAME) | The service account name. |  | String |
 | **CamelKubernetesServiceAccount** (producer) Constant: [`KUBERNETES_SERVICE_ACCOUNT`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_SERVICE_ACCOUNT) | A service account object. |  | ServiceAccount |
 
+## Message Body
+
+The message body at each side of the Kubernetes Service Account component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesServiceAccountName, the labels in CamelKubernetesServiceAccountsLabels and the ServiceAccount to create or update in CamelKubernetesServiceAccount. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of ServiceAccount for listServiceAccounts and listServiceAccountsByLabels; the ServiceAccount for getServiceAccount (null when not found), createServiceAccount and updateServiceAccount; a Boolean for deleteServiceAccount, false when not found.
+
+-   With `operation=listServiceAccounts`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.ServiceAccount>`)
+    
+-   With `operation=listServiceAccountsByLabels`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.ServiceAccount>`)
+    
+-   With `operation=getServiceAccount`: `pojo` or `null` (`io.fabric8.kubernetes.api.model.ServiceAccount`)
+    
+-   With `operation=createServiceAccount`: `pojo` (`io.fabric8.kubernetes.api.model.ServiceAccount`)
+    
+-   With `operation=updateServiceAccount`: `pojo` (`io.fabric8.kubernetes.api.model.ServiceAccount`)
+    
+-   With `operation=deleteServiceAccount`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

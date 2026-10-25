@@ -171,6 +171,27 @@ The JMX component supports the following message header(s), which is/are listed 
 | --- | --- | --- | --- |
 | **jmx.handback** (consumer) Constant: [`JMX_HANDBACK`](https://javadoc.io/doc/org.apache.camel/camel-jmx/latest/org/apache/camel/component/jmx/JMXConstants.html#JMX_HANDBACK) | The handback. |  | Object |
 
+## Message Body
+
+The message body at each side of the JMX component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`), as xml | 
+The notification as XML text, such as an AttributeChangeNotification or a MonitorNotification element; with format=raw the Notification object. The handback object is in the jmx.handback header.
+
+-   With `format=raw`: `pojo` (`javax.management.Notification`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The JMX consumer receives the notifications of an MBean. With `monitorType`, it creates a JMX monitor that watches an attribute, and sends a notification when the value crosses a threshold. `jmx:platform` is the MBean server of the JVM that runs Camel. The route below gets a notification when the JVM has more than 200 threads. The gauge sends it again only after the value has gone below `thresholdLow`:

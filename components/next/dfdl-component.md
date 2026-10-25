@@ -110,6 +110,39 @@ Enum values:
 | **rootElement** (advanced) | The root element name of the schema to use. If not specified, the first root element in the schema will be used. |  | String |
 | **rootNamespace** (advanced) | The root namespace of the schema to use. |  | String |
 
+## Message Body
+
+The message body at each side of the DFDL component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+Data in the format the DFDL schema describes, such as an EDI message, to parse. UNPARSE takes the XML infoset as text, bytes, a stream, a file or a DOM Document. A Map or no body fails.
+
+-   With `parseDirection=UNPARSE`: `text`, `bytes`, `stream`, `file` or `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` (`org.w3c.dom.Document`) | 
+
+The XML infoset as a DOM Document. UNPARSE gives the data in the format the DFDL schema describes as bytes, in a ByteArrayOutputStream.
+
+-   With `parseDirection=UNPARSE`: `bytes` (`java.io.ByteArrayOutputStream`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## DFDL Schemas
 
 Many DFDL schemas are freely available at [DFDLSchemas on GitHub](https://github.com/DFDLSchemas) including:

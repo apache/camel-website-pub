@@ -157,6 +157,18 @@ The Stitch component supports the following message header(s), which is/are list
 | **CamelStitchHeaders** (producer) Constant: [`HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-stitch/latest/org/apache/camel/component/stitch/StitchConstants.html#HEADERS) | HTTP headers that are returned from Stitch Import HTTP API. |  | Map |
 | **CamelStitchStatus** (producer) Constant: [`STATUS`](https://javadoc.io/doc/org.apache.camel/camel-stitch/latest/org/apache/camel/component/stitch/StitchConstants.html#STATUS) | The status message that Stitch returns after sending the data through Stitch Import API. |  | String |
 
+## Message Body
+
+The message body at each side of the Stitch component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo`, `map` or `list` | A StitchRequestBody, a StitchMessage, a Map of the Stitch batch JSON (table\_name, schema, messages, key\_names as a list), or a List of StitchMessage, Map of a message, StitchRequestBody, Message or Exchange. Text, bytes, a stream or no body fails. The tableName, keyNames and schema options or headers set the rest of the batch. |
+| **Producer output** | `text` (`java.lang.String`) | The message of the response of Stitch, empty when it has none; the HTTP status code, the status and the response headers are in the CamelStitchCode, CamelStitchStatus and CamelStitchHeaders headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Prerequisites
@@ -268,7 +280,7 @@ from("direct:sendStitch")
         data.put(StitchRequestBody.SCHEMA, Collections.singletonMap("properties", properties));
         data.put(StitchRequestBody.MESSAGES,
                 Collections.singletonList(Collections.singletonMap("data", Collections.singletonMap("id", 2))));
-        data.put(StitchRequestBody.KEY_NAMES, "test_key");
+        data.put(StitchRequestBody.KEY_NAMES, Collections.singletonList("test_key"));
 
         exchange.getMessage().setBody(data);
      })
@@ -289,7 +301,7 @@ In YAML, a Groovy map has the same structure. The keys are those of the Stitch J
                   [table_name: 'my_table',
                    schema    : [properties: [id: [type: 'integer'], name: [type: 'string']]],
                    messages  : [[data: [id: 2, name: 'Camel']]],
-                   key_names : 'id']
+                   key_names : ['id']]
         - to:
             uri: stitch:my_table
             parameters:

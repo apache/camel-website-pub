@@ -72,13 +72,11 @@ The AWS S3 Vectors component supports the following options which are listed bel
 | --- | --- | --- | --- |
 | **configuration** (common) | The component configuration. |  | AWS2S3VectorsConfiguration |
 | **dataType** (common) | 
-The data type of the vector. Options: float32, float16.
+The data type of the vectors of the index to create. S3 Vectors supports float32 only.
 
 Enum values:
 
 -   float32
-    
--   float16
     
 
 
@@ -88,15 +86,13 @@ Enum values:
  | float32 | String |
 | **distanceMetric** (common) | 
 
-The distance metric to use for similarity search. Options: cosine, euclidean, dot-product.
+The distance metric of the index to create, which the similarity search uses. Options: cosine, euclidean.
 
 Enum values:
 
 -   cosine
     
 -   euclidean
-    
--   dot-product
     
 
 
@@ -201,13 +197,13 @@ Enum values:
 
 
  |  | String |
-| **similarityThreshold** (common) | The minimum similarity threshold for results. |  | Float |
+| **similarityThreshold** (common) | **Deprecated** (deprecated) Never used: S3 Vectors has no similarity threshold. The consumer sets the CamelAwsS3VectorsDistance header to the distance of each vector from the query vector. Deprecation note: S3 Vectors has no similarity threshold, the component never used this option. Filter the results on their CamelAwsS3VectorsDistance header instead. |  | Float |
 | **topK** (common) | The number of top similar vectors to return in a query. | 10 | Integer |
 | **uriEndpointOverride** (common) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **vectorDimensions** (common) | The dimensions of the vector embeddings (default: 1536, which is the dimension for OpenAI text-embedding-3-small). | 1536 | Integer |
 | **vectorIndexName** (common) | The name of the vector index. |  | String |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
-| **consumerMetadataFilter** (consumer) | Optional metadata filter for the consumer to filter vectors during polling. |  | String |
+| **consumerMetadataFilter** (consumer) | The metadata filter of the similarity search of the consumer, as a JSON object with the filter operators of S3 Vectors, such as \\{genre: \\{$eq: drama}}. Only the vectors whose metadata match the filter are consumed. |  | String |
 | **consumerQueryVector** (consumer) | The query vector to use for the consumer to poll for similar vectors. Specified as comma-separated float values (e.g., 0.1,0.2,0.3). If not specified, the consumer will not poll. |  | String |
 | **delay** (consumer) | Milliseconds before the next poll for the consumer. | 500 | long |
 | **deleteAfterRead** (consumer) | Delete vectors after they have been consumed. | false | boolean |
@@ -301,13 +297,11 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **dataType** (common) | 
-The data type of the vector. Options: float32, float16.
+The data type of the vectors of the index to create. S3 Vectors supports float32 only.
 
 Enum values:
 
 -   float32
-    
--   float16
     
 
 
@@ -317,15 +311,13 @@ Enum values:
  | float32 | String |
 | **distanceMetric** (common) | 
 
-The distance metric to use for similarity search. Options: cosine, euclidean, dot-product.
+The distance metric of the index to create, which the similarity search uses. Options: cosine, euclidean.
 
 Enum values:
 
 -   cosine
     
 -   euclidean
-    
--   dot-product
     
 
 
@@ -430,12 +422,12 @@ Enum values:
 
 
  |  | String |
-| **similarityThreshold** (common) | The minimum similarity threshold for results. |  | Float |
+| **similarityThreshold** (common) | **Deprecated** (deprecated) Never used: S3 Vectors has no similarity threshold. The consumer sets the CamelAwsS3VectorsDistance header to the distance of each vector from the query vector. Deprecation note: S3 Vectors has no similarity threshold, the component never used this option. Filter the results on their CamelAwsS3VectorsDistance header instead. |  | Float |
 | **topK** (common) | The number of top similar vectors to return in a query. | 10 | Integer |
 | **uriEndpointOverride** (common) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **vectorDimensions** (common) | The dimensions of the vector embeddings (default: 1536, which is the dimension for OpenAI text-embedding-3-small). | 1536 | Integer |
 | **vectorIndexName** (common) | The name of the vector index. |  | String |
-| **consumerMetadataFilter** (consumer) | Optional metadata filter for the consumer to filter vectors during polling. |  | String |
+| **consumerMetadataFilter** (consumer) | The metadata filter of the similarity search of the consumer, as a JSON object with the filter operators of S3 Vectors, such as \\{genre: \\{$eq: drama}}. Only the vectors whose metadata match the filter are consumed. |  | String |
 | **consumerQueryVector** (consumer) | The query vector to use for the consumer to poll for similar vectors. Specified as comma-separated float values (e.g., 0.1,0.2,0.3). If not specified, the consumer will not poll. |  | String |
 | **delay** (consumer) | Milliseconds before the next poll for the consumer. | 500 | long |
 | **deleteAfterRead** (consumer) | Delete vectors after they have been consumed. | false | boolean |
@@ -594,19 +586,20 @@ The AWS S3 Vectors component supports the following message header(s), which is/
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelAwsS3VectorsOperation** (common) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#OPERATION) | The operation to perform. |  | String |
-| **CamelAwsS3VectorsVectorBucketName** (common) Constant: [`VECTOR_BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_BUCKET_NAME) | The name of the vector bucket which will be used for the current operation. |  | String |
-| **CamelAwsS3VectorsVectorIndexName** (common) Constant: [`VECTOR_INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_INDEX_NAME) | The name of the vector index which will be used for the current operation. |  | String |
-| **CamelAwsS3VectorsVectorId** (producer) Constant: [`VECTOR_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_ID) | The unique identifier for a vector. |  | String |
+| **CamelAwsS3VectorsVectorBucketName** (producer) Constant: [`VECTOR_BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_BUCKET_NAME) | The name of the vector bucket to use for the current operation instead of the vector bucket of the endpoint. An input only: neither the producer nor the consumer sets it. |  | String |
+| **CamelAwsS3VectorsVectorIndexName** (producer) Constant: [`VECTOR_INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_INDEX_NAME) | The name of the vector index to use for the current operation instead of the vectorIndexName option of the endpoint. An input only: neither the producer nor the consumer sets it. |  | String |
+| **CamelAwsS3VectorsVectorId** (common) Constant: [`VECTOR_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_ID) | The key of a vector. putVectors puts the vector under this key (the exchange id when it is not set) and sets it to the key it used. getVectors and deleteVectors take their key, or a list of keys, from this header only when the message body holds no keys. The consumer sets it to the key of the consumed vector. |  | String or List |
 | **CamelAwsS3VectorsVectorData** (producer) Constant: [`VECTOR_DATA`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_DATA) | The vector embedding data as a list of floats or float array. |  | List or float\[\] |
 | **CamelAwsS3VectorsVectorDimensions** (producer) Constant: [`VECTOR_DIMENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_DIMENSIONS) | The dimensions of the vector. |  | Integer |
-| **CamelAwsS3VectorsDataType** (producer) Constant: [`DATA_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#DATA_TYPE) | The data type of the vector (float32 or float16). |  | String |
-| **CamelAwsS3VectorsVectorMetadata** (producer) Constant: [`VECTOR_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_METADATA) | Additional metadata for the vector as a map. |  | Map |
+| **CamelAwsS3VectorsDataType** (producer) Constant: [`DATA_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#DATA_TYPE) | The data type of the vectors of the index to create (float32). |  | String |
+| **CamelAwsS3VectorsVectorMetadata** (producer) Constant: [`VECTOR_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_METADATA) | Additional metadata for the vector as a map. The values may be Strings, numbers, booleans or lists of these. |  | Map |
 | **CamelAwsS3VectorsQueryVector** (producer) Constant: [`QUERY_VECTOR`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#QUERY_VECTOR) | The query vector for similarity search as a list of floats or float array. |  | List or float\[\] |
 | **CamelAwsS3VectorsTopK** (producer) Constant: [`TOP_K`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#TOP_K) | The number of top similar vectors to return. |  | Integer |
-| **CamelAwsS3VectorsDistanceMetric** (producer) Constant: [`DISTANCE_METRIC`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#DISTANCE_METRIC) | The distance metric to use for similarity search (cosine, euclidean, dot-product). |  | String |
-| **CamelAwsS3VectorsSimilarityThreshold** (producer) Constant: [`SIMILARITY_THRESHOLD`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#SIMILARITY_THRESHOLD) | The minimum similarity threshold for results. |  | Float |
-| **CamelAwsS3VectorsMetadataFilter** (producer) Constant: [`METADATA_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#METADATA_FILTER) | Optional filter expression for metadata filtering during vector search. |  | String |
-| **CamelAwsS3VectorsSimilarityScore** (consumer) Constant: [`SIMILARITY_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#SIMILARITY_SCORE) | The similarity score of the returned vector. |  | Float |
+| **CamelAwsS3VectorsDistanceMetric** (producer) Constant: [`DISTANCE_METRIC`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#DISTANCE_METRIC) | The distance metric of the index to create (cosine or euclidean). |  | String |
+| **CamelAwsS3VectorsSimilarityThreshold** (producer) Constant: [`SIMILARITY_THRESHOLD`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#SIMILARITY_THRESHOLD) | **Deprecated** (deprecated) Never used: S3 Vectors has no similarity threshold. Deprecation note: S3 Vectors has no similarity threshold, the component never used this header. Filter the results on their CamelAwsS3VectorsDistance header instead. |  | Float |
+| **CamelAwsS3VectorsMetadataFilter** (producer) Constant: [`METADATA_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#METADATA_FILTER) | The metadata filter of queryVectors, as a JSON object with the filter operators of S3 Vectors, such as $eq, $in or $and. Only the vectors whose metadata match the filter are returned. |  | String |
+| **CamelAwsS3VectorsSimilarityScore** (consumer) Constant: [`SIMILARITY_SCORE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#SIMILARITY_SCORE) | **Deprecated** (deprecated) Never set: S3 Vectors returns a distance, see CamelAwsS3VectorsDistance. Deprecation note: S3 Vectors returns a distance, not a similarity score, and the component never set this header. Use the CamelAwsS3VectorsDistance header instead. |  | Float |
+| **CamelAwsS3VectorsDistance** (consumer) Constant: [`DISTANCE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#DISTANCE) | The distance of the consumed vector from the query vector, computed with the distance metric of the index: the lower, the closer. |  | Float |
 | **CamelAwsS3VectorsResultCount** (consumer) Constant: [`RESULT_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#RESULT_COUNT) | The number of vectors returned in the result. |  | Integer |
 | **CamelAwsS3VectorsIndexStatus** (consumer) Constant: [`INDEX_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#INDEX_STATUS) | The status of the vector index. |  | String |
 | **CamelAwsS3VectorsVectorBucketArn** (consumer) Constant: [`VECTOR_BUCKET_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-s3-vectors/latest/org/apache/camel/component/aws2/s3vectors/AWS2S3VectorsConstants.html#VECTOR_BUCKET_ARN) | The ARN of the vector bucket. |  | String |
@@ -618,10 +611,10 @@ The message body at each side of the AWS S3 Vectors component: _Consumer_ is the
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `pojo` (`software.amazon.awssdk.services.s3vectors.model.QueryOutputVector`) | One message per vector that the similarity search of consumerQueryVector finds and that was not sent before, as a QueryOutputVector of the AWS SDK with its key only, also in the CamelAwsS3VectorsVectorId header. |
-| **Producer input** | `any` | The vector of putVectors and queryVectors, unless the CamelAwsS3VectorsVectorData or CamelAwsS3VectorsQueryVector header has it: one vector as a List of numbers, a float\[\] or a double\[\]. Text such as a JSON array fails, so unmarshal it first. The keys of getVectors and deleteVectors, unless the CamelAwsS3VectorsVectorId header has them: a String, a String\[\] or a List of Strings. The other operations do not use the body. |
+| **Consumer** | `pojo` (`software.amazon.awssdk.services.s3vectors.model.QueryOutputVector`) | One message per vector that the similarity search of consumerQueryVector finds and that was not sent before, as a QueryOutputVector of the AWS SDK with its key, its metadata and its distance, the key also in the CamelAwsS3VectorsVectorId header and the distance in the CamelAwsS3VectorsDistance header. |
+| **Producer input** | `any` | The vector of putVectors and queryVectors, unless the CamelAwsS3VectorsVectorData or CamelAwsS3VectorsQueryVector header has it: one vector as a List of numbers, a float\[\] or a double\[\]. Text such as a JSON array fails, so unmarshal it first. The keys of getVectors and deleteVectors: a String, a String\[\] or a List of Strings. When the body holds no keys, they come from the CamelAwsS3VectorsVectorId header. The other operations do not use the body. |
 | **Producer output** | `pojo` | 
-The response of the AWS SDK for the operation, such as the PutVectorsResponse of putVectors, with the key of the vector in the CamelAwsS3VectorsVectorId header. A List for queryVectors, getVectors, listVectorBuckets and listVectorIndexes, the last two the first page only. The vectors of queryVectors and getVectors hold their keys only: the distance, the data and the metadata are not asked for.
+The response of the AWS SDK for the operation, such as the PutVectorsResponse of putVectors, with the key of the vector in the CamelAwsS3VectorsVectorId header. A List for queryVectors, getVectors, listVectorBuckets and listVectorIndexes, the last two the first page only. The vectors of queryVectors hold their keys, their metadata and their distance, and the vectors of getVectors their keys, their data and their metadata.
 
 -   With `operation=queryVectors`: `list` (`java.util.List<software.amazon.awssdk.services.s3vectors.model.QueryOutputVector>`)
     
@@ -656,7 +649,7 @@ The bodies are the ones with the default options. A side that is not listed is n
     
 -   `deleteVectorBucket` - Delete bucket
     
--   `listVectorBuckets` - List buckets
+-   `listVectorBuckets` - List buckets (the first page of the result only)
     
 -   `describeVectorBucket` - Get bucket info
     
@@ -664,14 +657,46 @@ The bodies are the ones with the default options. A side that is not listed is n
     
 -   `deleteVectorIndex` - Delete index
     
--   `listVectorIndexes` - List indexes
+-   `listVectorIndexes` - List indexes (the first page of the result only)
     
 -   `describeVectorIndex` - Get index info
     
 
+`listVectorBuckets` and `listVectorIndexes` send a single request, so they return the first page of the buckets or indexes that S3 Vectors returns, not all of them.
+
+### Bucket and index of an operation
+
+Each operation uses the vector bucket of the endpoint URI and the `vectorIndexName` option. The `CamelAwsS3VectorsVectorBucketName` and `CamelAwsS3VectorsVectorIndexName` headers override them for a single message. These headers are inputs only: neither the producer nor the consumer sets them, so a route that reads from one bucket and writes to another one does not write back into the bucket it reads from.
+
+### Vector keys
+
+`putVectors` puts the vector under the key of the `CamelAwsS3VectorsVectorId` header, or under the exchange id when the header is not set, and sets the header to the key it used.
+
+`getVectors` and `deleteVectors` take their keys from the message body when the body holds keys: a `String`, or a `Collection` or an array whose elements are all Strings. Otherwise they take the keys from the `CamelAwsS3VectorsVectorId` header (a `String` or a list of Strings). Keys that are not Strings, such as a list of numbers, fail with an `IllegalArgumentException`. As the body comes first, a `getVectors` after a `putVectors` in the same route gets the keys of its body, not the key that the `putVectors` left in the header.
+
+`getVectors` returns the vectors with their data and their metadata.
+
+### Vector data and metadata
+
+The vector of `putVectors` and `queryVectors` is a `List` of numbers, a `float[]` or a `double[]`. A `null` element fails with an `IllegalArgumentException` that names its position.
+
+The `CamelAwsS3VectorsVectorMetadata` header of `putVectors` is a `Map` whose values may be Strings, numbers, booleans, or lists of these. Any other value fails with an `IllegalArgumentException` that names its key.
+
+### Metadata filter and distance
+
+The `CamelAwsS3VectorsMetadataFilter` header of `queryVectors` and the `consumerMetadataFilter` option of the consumer are JSON objects with the [filter operators of S3 Vectors](https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-vectors-metadata-filtering.md), such as `{"genre": {"$eq": "drama"}}` or `{"$and": [{"genre": "drama"}, {"year": {"$gte": 2020}}]}`. Only the vectors whose metadata match the filter are returned. A filter that is not a valid JSON object fails with an `IllegalArgumentException`: the producer fails the exchange, and the consumer does not start.
+
+`queryVectors` and the consumer return the vectors with their metadata and their distance from the query vector. The distance is computed with the distance metric of the index (`cosine` or `euclidean`): the lower, the closer. S3 Vectors has no similarity threshold, so the `similarityThreshold` option and the `CamelAwsS3VectorsSimilarityThreshold` and `CamelAwsS3VectorsSimilarityScore` headers are deprecated and do nothing. To keep only the close vectors, filter on the distance, such as `.filter(simple("${header.CamelAwsS3VectorsDistance} < 0.3"))` after the consumer.
+
+### Index data type and distance metric
+
+The `dataType` option of `createVectorIndex` is `float32`, the only data type of S3 Vectors. The `distanceMetric` option is `cosine` (the default) or `euclidean`.
+
 ### Consumer
 
 The consumer polls for vectors using similarity search. It tracks processed vector IDs to avoid duplicates.
+
+Each consumed vector is a `QueryOutputVector` in the message body, with its metadata. The consumer sets the `CamelAwsS3VectorsVectorId` header to the key of the vector and the `CamelAwsS3VectorsDistance` header to its distance from the `consumerQueryVector`.
 
 ## Examples
 
@@ -773,6 +798,40 @@ from("aws2-s3-vectors://my-bucket?"
             message: "Vector ID: ${header.CamelAwsS3VectorsVectorId}"
         - to:
             uri: direct:process
+```
+
+### Query with a Metadata Filter
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:search")
+    .setBody(constant(Arrays.asList(0.15f, 0.25f, 0.35f)))
+    .setHeader(AWS2S3VectorsConstants.METADATA_FILTER, constant("{\"genre\": {\"$eq\": \"drama\"}}"))
+    .to("aws2-s3-vectors://my-bucket?operation=queryVectors&vectorIndexName=my-index")
+    .log("Found ${body.size} similar drama vectors");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:search
+      steps:
+        - setBody:
+            groovy: "[0.15, 0.25, 0.35]"
+        - setHeader:
+            name: CamelAwsS3VectorsMetadataFilter
+            constant: '{"genre": {"$eq": "drama"}}'
+        - to:
+            uri: aws2-s3-vectors://my-bucket
+            parameters:
+              operation: queryVectors
+              vectorIndexName: my-index
+        - log:
+            message: "Found ${body.size} similar drama vectors"
 ```
 
 ### Create Index

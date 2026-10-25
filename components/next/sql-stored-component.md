@@ -141,6 +141,39 @@ The SQL Stored Procedure component supports the following message header(s), whi
 | **CamelSqlStoredParameters** (producer) Constant: [`SQL_STORED_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_PARAMETERS) | The parameters. |  | Iterator |
 | **CamelSqlStoredUpdateCount** (producer) Constant: [`SQL_STORED_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_UPDATE_COUNT) | The update count. |  | Integer |
 
+## Message Body
+
+The message body at each side of the SQL Stored Procedure component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+What the expressions of the IN parameters read: a :#name parameter takes its value from a Map body, or else from the header. With batch, a List or an Iterator of such bodies, one batch item each (a single Map is not a batch); with useMessageBodyForTemplate, the template as text, with the parameters in the CamelSqlStoredParameters header.
+
+-   With `batch=true`: `list` or `iterator`
+    
+-   With `useMessageBodyForTemplate=true`: `text`
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` (`java.util.Map<String, Object>`) | A Map of the names of the OUT and INOUT parameters and their values, with a result set the procedure returns under #result-set-1 (a List of Maps) and the update count under #update-count-1, which is also in the CamelSqlStoredUpdateCount header. With outputHeader the Map is in that header and the body is unchanged; batch leaves the body unchanged, with the total update count in the header.
+
+-   With `noop=true`: `unchanged`
+    
+-   With `batch=true`: `unchanged`
+    
+
+Not known when `outputHeader` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Declaring the stored procedure template

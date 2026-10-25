@@ -6,7 +6,7 @@
 
 The Vert.x component is for working with the [Vertx](http://vertx.io/) [EventBus](https://vertx.io/docs/vertx-core/java/#event_bus).
 
-The vertx [EventBus](https://vertx.io/docs/vertx-core/java/#event_bus) sends and receives JSON events.
+The vertx [EventBus](https://vertx.io/docs/vertx-core/java/#event_bus) sends and receives Java objects that it has a message codec for: a `String`, a byte array, a number or a boolean, a `JsonObject`, a `JsonArray`, a `Buffer`, or a `Serializable` object.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -125,6 +125,30 @@ Enum values:
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
+## Message Body
+
+The message body at each side of the Vert.x component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The body of the event bus message, as the sender sent it: a String, a byte array, a number or a boolean, a JsonObject or a JsonArray, or a Serializable object such as a HashMap. A Buffer becomes a stream with stream caching enabled. |
+| **Consumer reply** | `text`, `bytes`, `value`, `map`, `list`, `pojo` or `null` | A message with a reply address is answered with the body the route ends with, as the producer sends it. A stream, such as a received Buffer the route did not change, or a POJO that is not Serializable sends no reply, and the requester times out. |
+| **Producer input** | `text`, `bytes`, `value`, `map`, `list` or `pojo` | Sent as is, with the event bus codec of its type: a String, a byte array, a number or a boolean, a JsonObject, a JsonArray or a Buffer, or a Serializable object such as a HashMap. A stream, a POJO that is not Serializable (without a codec registered for it) or no body fails: convert it first. |
+| **Producer output** | `unknown` | 
+Unchanged for a message that expects no reply (InOnly). A message that expects one (InOut) is sent as a request, also with pubSub, and gets the body of the reply.
+
+-   With `exchangePattern=InOnly`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The producer sends the message body to the event bus address, and a consumer of that address receives it. A message goes to one consumer, or to all consumers with `pubSub`:
@@ -152,6 +176,8 @@ The producer sends the message body to the event bus address, and a consumer of 
             message: "Received order ${body}"
 ```
 
+The body is sent as is, without type conversion: a stream, or a POJO that is not `Serializable` and has no codec registered on the event bus, fails with `No message codec for type`, so convert it to a `String` or a byte array first. A message without a body fails as well.
+
 When the exchange is InOut, the producer sends a request and the reply of the consumer becomes the message body:
 
 ```yaml
@@ -173,6 +199,8 @@ When the exchange is InOut, the producer sends a request and the reply of the co
               simple:
                 expression: "Hello ${body}"
 ```
+
+The consumer replies with the body the route ends with, which needs a codec too. A `Buffer` the consumer receives is a stream when stream caching is enabled (the default), so convert a stream body before the route ends.
 
 ## Connecting to the existing Vert.x instance
 

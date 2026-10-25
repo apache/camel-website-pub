@@ -15,6 +15,17 @@ The Remove Headers eip supports the following options which are listed below.
 | **pattern** | **Required** Name or pattern of headers to remove. The pattern supports exact match, wildcard (pattern ends with ), and regular expression (all case-insensitive). |  | String |
 | **excludePattern** | Name or pattern of headers to not remove. You can use comma to separate multiple patterns. |  | String |
 
+## Message Body
+
+The message body at each side of the Remove Headers EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Removes headers: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Remove Headers eip has no exchange properties.

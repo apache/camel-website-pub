@@ -397,6 +397,20 @@ The Debezium PostgreSQL Connector component supports the following message heade
 | **CamelDebeziumBefore** (consumer) Constant: [`HEADER_BEFORE`](https://javadoc.io/doc/org.apache.camel/camel-debezium-postgres/latest/org/apache/camel/component/debezium/DebeziumConstants.html#HEADER_BEFORE) | If presents, contains the state of the row before the event occurred. |  | Struct |
 | **CamelDebeziumDdlSQL** (consumer) Constant: [`HEADER_DDL_SQL`](https://javadoc.io/doc/org.apache.camel/camel-debezium-postgres/latest/org/apache/camel/component/debezium/DebeziumConstants.html#HEADER_DDL_SQL) | If presents, the ddl sql text of the event. |  | String |
 
+## Message Body
+
+The message body at each side of the Debezium PostgreSQL Connector component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` or `null` (`org.apache.kafka.connect.data.Struct`) | The row after the change as a Kafka Connect Struct, which converts to a Map: convert it before a marshal, as its toString is not JSON. No body for a delete or a tombstone; the operation, the key and the row before the change are in headers.
+Not known when `additionalProperties` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 For more information about configuration: [https://debezium.io/documentation/reference/0.10/operations/embedded.html#engine-properties](https://debezium.io/documentation/reference/0.10/operations/embedded.html#engine-properties) [https://debezium.io/documentation/reference/0.10/connectors/postgresql.html#connector-properties](https://debezium.io/documentation/reference/0.10/connectors/postgresql.html#connector-properties)
 
 ## Usage

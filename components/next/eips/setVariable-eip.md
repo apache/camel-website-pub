@@ -15,6 +15,17 @@ The Set Variable eip supports the following options which are listed below.
 | **name** | **Required** Name of variable to set a new value. The simple language can be used to define a dynamic evaluated variable name. Otherwise a constant name will be used. |  | String |
 | **expression** | **Required** The expression whose result is used as the variable value. |  | ExpressionDefinition |
 
+## Message Body
+
+The message body at each side of the Set Variable EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Sets a variable: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Set Variable eip has no exchange properties.

@@ -504,6 +504,57 @@ In addition to the parameters above, the dhis2 API can also use any of the [Quer
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelDhis2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelDhis2.myParameterNameHere` header.
 
+## Message Body
+
+The message body at each side of the DHIS2 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` | 
+One message per poll with the return value of the method: the JSON response of get/resource as a stream; get/collection gives an Iterator of Dhis2Resource, which are Maps of the JSON fields, in one message, not split: split the body to get one message per item.
+
+-   With `methodName=collection`: `iterator`
+    
+-   With `apiName=RESOURCE_TABLES`: `null`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `map`, `list`, `pojo` or `null` | 
+
+post, put and delete send the body as the JSON resource of the request, also without inBody: text as it is, and a Map, a List or a POJO, such as a DHIS2 model class, serialized to JSON by Jackson; no body sends none. Bytes and a file are serialized as a JSON string and a stream fails: convertBodyTo String first. A body left by an earlier step is sent too, also by delete. get and resourceTables do not use the body.
+
+-   With `apiName=GET`: `any`
+    
+-   With `apiName=RESOURCE_TABLES`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `stream` | 
+
+The JSON response of DHIS2 as a stream, such as the resource of get/resource or the import summary of post, put and delete: unmarshal it with json. get/collection gives an Iterator of Dhis2Resource, read once, which are Maps of the JSON fields that convertBodyTo turns into a class of org.hisp.dhis.api.model; resourceTables/analytics gives null.
+
+-   With `methodName=collection`: `iterator`
+    
+-   With `apiName=RESOURCE_TABLES`: `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 

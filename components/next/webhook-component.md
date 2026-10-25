@@ -134,6 +134,18 @@ Enum values:
 
  |  | ExchangePattern |
 
+## Message Body
+
+The message body at each side of the Webhook component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The body the webhook handler of the delegate component (endpointUri) makes of the HTTP request: the same body as its polling consumer, such as an IncomingMessage (or another update) for Telegram, an Event for ClickUp, or the JSON as a String for WhatsApp. |
+| **Consumer reply** | `any` | The delegate component sets the HTTP response body itself after the route: Telegram and ClickUp reply with an empty body, WhatsApp with the request content, whatever body the route ends with. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 Put `webhook:` in front of the URI of a component that supports webhooks. The options that start with `webhook` are for this component, and the other options are for the delegate endpoint.

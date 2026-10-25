@@ -117,6 +117,38 @@ The Kubernetes Cronjob component supports the following message header(s), which
 | **CamelKubernetesCronJobSpec** (producer) Constant: [`KUBERNETES_CRON_JOB_SPEC`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_CRON_JOB_SPEC) | The spec for a Job. |  | CronJobSpec |
 | **CamelKubernetesCronJobAnnotations** (producer) Constant: [`KUBERNETES_CRON_JOB_ANNOTATIONS`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_CRON_JOB_ANNOTATIONS) | The Cron Job annotations. |  | Map |
 
+## Message Body
+
+The message body at each side of the Kubernetes Cronjob component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operations take their input from headers, such as the name of the CronJob in CamelKubernetesCronJobName and its CronJobSpec in CamelKubernetesCronJobSpec. |
+| **Producer output** | `list`, `pojo`, `null` or `unchanged` | 
+A List of the CronJobs for the list operations, the CronJob of get, create and update (null when getCronJob finds none), and the body as it was after deleteCronJob.
+
+-   With `operation=listCronJob`: `list`
+    
+-   With `operation=listCronJobByLabels`: `list`
+    
+-   With `operation=getCronJob`: `pojo` or `null`
+    
+-   With `operation=createCronJob`: `pojo` (`io.fabric8.kubernetes.api.model.batch.v1.CronJob`)
+    
+-   With `operation=updateCronJob`: `pojo` (`io.fabric8.kubernetes.api.model.batch.v1.CronJob`)
+    
+-   With `operation=deleteCronJob`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Supported producer operation
 
 -   `listCronJob`

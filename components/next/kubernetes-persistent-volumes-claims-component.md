@@ -117,6 +117,38 @@ The Kubernetes Persistent Volume Claim component supports the following message 
 | **CamelKubernetesPersistentVolumeClaimName** (producer) Constant: [`KUBERNETES_PERSISTENT_VOLUME_CLAIM_NAME`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_PERSISTENT_VOLUME_CLAIM_NAME) | The persistent volume claim name. |  | String |
 | **CamelKubernetesPersistentVolumeClaimSpec** (producer) Constant: [`KUBERNETES_PERSISTENT_VOLUME_CLAIM_SPEC`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_PERSISTENT_VOLUME_CLAIM_SPEC) | The spec for a persistent volume claim. |  | PersistentVolumeClaimSpec |
 
+## Message Body
+
+The message body at each side of the Kubernetes Persistent Volume Claim component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesPersistentVolumeClaimName, the labels in CamelKubernetesPersistentVolumesClaimsLabels and the PersistentVolumeClaimSpec in CamelKubernetesPersistentVolumeClaimSpec. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of PersistentVolumeClaim for listPersistentVolumesClaims and listPersistentVolumesClaimsByLabels; the PersistentVolumeClaim for getPersistentVolumeClaim (null when not found), createPersistentVolumeClaim and updatePersistentVolumeClaim; a Boolean for deletePersistentVolumeClaim, false when not found.
+
+-   With `operation=listPersistentVolumesClaims`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.PersistentVolumeClaim>`)
+    
+-   With `operation=listPersistentVolumesClaimsByLabels`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.PersistentVolumeClaim>`)
+    
+-   With `operation=getPersistentVolumeClaim`: `pojo` or `null` (`io.fabric8.kubernetes.api.model.PersistentVolumeClaim`)
+    
+-   With `operation=createPersistentVolumeClaim`: `pojo` (`io.fabric8.kubernetes.api.model.PersistentVolumeClaim`)
+    
+-   With `operation=updatePersistentVolumeClaim`: `pojo` (`io.fabric8.kubernetes.api.model.PersistentVolumeClaim`)
+    
+-   With `operation=deletePersistentVolumeClaim`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

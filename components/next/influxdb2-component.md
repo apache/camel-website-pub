@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-This component allows you to interact with [InfluxDB](https://influxdata.com/time-series-platform/influxdb/) 2.x, a time series database. The native body type for this component is `Point` (the native InfluxDB class). However, it can also accept `Map<String, Object>` as message body, and it will get converted to `Point.class`, please note that the map must contain an element with `camelInfluxDB.MeasurementName` as key.
+This component allows you to interact with [InfluxDB](https://influxdata.com/time-series-platform/influxdb/) 2.x, a time series database. The native body type for this component is `Point` (the native InfluxDB class). However, it can also accept `Map<String, Object>` as message body, and it will get converted to `Point.class`, please note that the map must contain an element with `CamelInfluxDB2MeasurementName` as key.
 
 Additionally, you may register your own Converters to your data type to `Point`, or use the (un)marshalling tools provided by Camel.
 
@@ -171,6 +171,39 @@ Enum values:
 
 
  |  | WritePrecision |
+
+## Message Body
+
+The message body at each side of the InfluxDB2 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo` or `map` | 
+A com.influxdb.client.write.Point, or the Measurement, Record, Points, Measurements or Records wrappers of the component (package org.apache.camel.component.influxdb2.data), or a Map of the field names and their values with the measurement name under the CamelInfluxDB2MeasurementName key. Text, a List or an annotated class that is not wrapped fail: wrap a line protocol String in a Record and an annotated object in a Measurement. Ping does not read the body.
+
+-   With `operation=PING`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+An insert leaves the body unchanged; ping gives a Boolean, true when the server answered.
+
+-   With `operation=PING`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Example
 

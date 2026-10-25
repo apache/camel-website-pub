@@ -293,6 +293,75 @@ The Git component supports the following message header(s), which is/are listed 
 | **CamelGitBranchLeaf** (consumer) Constant: [`GIT_BRANCH_LEAF`](https://javadoc.io/doc/org.apache.camel/camel-git/latest/org/apache/camel/component/git/GitConstants.html#GIT_BRANCH_LEAF) | The leaf. |  | String |
 | **CamelGitBranchObjectId** (consumer) Constant: [`GIT_BRANCH_OBJECT_ID`](https://javadoc.io/doc/org.apache.camel/camel-git/latest/org/apache/camel/component/git/GitConstants.html#GIT_BRANCH_OBJECT_ID) | The object id. |  | String |
 
+## Message Body
+
+The message body at each side of the Git component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The full message of the commit with type=commit, the name of the ref, such as refs/heads/main or refs/tags/v1, with type=branch and tag. The commit id, author, committer and time, or the object id of the ref, are in headers. |
+| **Producer input** | `any` | Not used: the operations take their input from the options and headers, such as the file in CamelGitFilename and the message in CamelGitCommitMessage. |
+| **Producer output** | `unchanged`, `pojo`, `list`, `iterator` or `map` | 
+The result of JGit for the operation: the Status of status, the commits of log as a RevWalk read once, a List of Refs for showBranches and showTags, the PushResults of push, the Properties of the statistics of gc. The operations that change the repository, such as add and commit, keep the body. Without the operation option the operation is taken from the CamelGitOperation header.
+
+-   With `operation=status`: `pojo` (`org.eclipse.jgit.api.Status`)
+    
+-   With `operation=log`: `iterator` (`org.eclipse.jgit.revwalk.RevWalk`)
+    
+-   With `operation=push`: `list`
+    
+-   With `operation=pushTag`: `list`
+    
+-   With `operation=pull`: `pojo` (`org.eclipse.jgit.api.PullResult`)
+    
+-   With `operation=merge`: `pojo` (`org.eclipse.jgit.api.MergeResult`)
+    
+-   With `operation=cherryPick`: `pojo` (`org.eclipse.jgit.api.CherryPickResult`)
+    
+-   With `operation=showBranches`: `list`
+    
+-   With `operation=showTags`: `list`
+    
+-   With `operation=clean`: `list`
+    
+-   With `operation=gc`: `map` (`java.util.Properties`)
+    
+-   With `operation=remoteAdd`: `pojo` (`org.eclipse.jgit.transport.RemoteConfig`)
+    
+-   With `operation=remoteList`: `list`
+    
+-   With `operation=add`: `unchanged`
+    
+-   With `operation=checkout`: `unchanged`
+    
+-   With `operation=clone`: `unchanged`
+    
+-   With `operation=commit`: `unchanged`
+    
+-   With `operation=commitAll`: `unchanged`
+    
+-   With `operation=createBranch`: `unchanged`
+    
+-   With `operation=createTag`: `unchanged`
+    
+-   With `operation=deleteBranch`: `unchanged`
+    
+-   With `operation=deleteTag`: `unchanged`
+    
+-   With `operation=init`: `unchanged`
+    
+-   With `operation=remove`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 ### Producer Example

@@ -43,7 +43,7 @@ The message body at each side of the TOON data format: _Marshal input_ and _Unma
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Marshal input** | `text`, `value`, `map`, `list` or `pojo` | A Map, a List, a POJO or a value to write as TOON. A String must be JSON text; bytes, a stream or a file are not read as text. |
+| **Marshal input** | `text`, `bytes`, `stream`, `file`, `value`, `map`, `list` or `pojo` | A Map, a List, a POJO or a value to write as TOON. A String, bytes, a stream or a file must be JSON text, read in the charset of the exchange. |
 | **Marshal output** | `stream`, as text | The TOON in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | 
  |
@@ -58,6 +58,8 @@ Marshalling converts a JSON-compatible message body to TOON text:
 -   `Map`, `List`, POJOs, numbers, booleans, and `null` are encoded with JToon `encode`.
     
 -   A Java `String` body is always treated as a JSON document and encoded with JToon `encodeJson`. This is the path to use when transforming existing JSON text to TOON.
+    
+-   A `byte[]`, an `InputStream` or a file (`java.io.File`, or the file of a file consumer) holds JSON text as well: it is read in the exchange charset and encoded as a `String` body is.
     
 
 > **Important**

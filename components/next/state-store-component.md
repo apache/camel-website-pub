@@ -175,6 +175,34 @@ Enum values:
 | **CamelStateStoreKey** (producer) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-state-store/latest/org/apache/camel/component/statestore/StateStoreConstants.html#KEY) | The key to use for the operation. |  | String |
 | **CamelStateStoreTtl** (producer) Constant: [`TTL`](https://javadoc.io/doc/org.apache.camel/camel-state-store/latest/org/apache/camel/component/statestore/StateStoreConstants.html#TTL) | Per-message TTL override in milliseconds. Takes precedence over the endpoint ttl option. |  | Long |
 
+## Message Body
+
+The message body at each side of the State Store component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The value to store for put and putIfAbsent, as it is: a stream is stored as the stream and shared by the later gets, so convert it to text or bytes first. The other operations do not use the body. |
+| **Producer output** | `unknown` | 
+By the operation, which the CamelStateStoreOperation header can set: the stored value for get, the previous value for put, the value already there for putIfAbsent and the removed value for delete, each no body when there is none; a Boolean for contains, the Set of the keys for keys, the count for size and no body for clear. The value is the object the backend gives back: the in-memory one the object stored, another may give a copy.
+
+-   With `operation=contains`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=keys`: `list` (`java.util.Set<java.lang.String>`)
+    
+-   With `operation=size`: `value` (`java.lang.Integer`)
+    
+-   With `operation=clear`: `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Operations
 
 The operation to perform is set via the URI option `operation` or the header `CamelStateStoreOperation`.

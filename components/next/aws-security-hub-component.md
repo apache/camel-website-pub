@@ -410,21 +410,21 @@ The AWS Security Hub component supports the following message header(s), which i
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelAwsSecurityHubOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#OPERATION) | The operation we want to perform. |  | String |
-| **CamelAwsSecurityHubFindings** (producer) Constant: [`FINDINGS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FINDINGS) | The list of findings to import. |  | List |
+| **CamelAwsSecurityHubFindings** (producer) Constant: [`FINDINGS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FINDINGS) | The findings to import, as a List of AwsSecurityFinding. When not set, the findings are taken from the body: a Collection or an array of AwsSecurityFinding, or one AwsSecurityFinding. |  | List |
 | **CamelAwsSecurityHubFindingIdentifiers** (producer) Constant: [`FINDING_IDENTIFIERS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FINDING_IDENTIFIERS) | The finding identifiers for batch update. |  | List |
-| **CamelAwsSecurityHubFilters** (producer) Constant: [`FILTERS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FILTERS) | The filters to apply when retrieving findings. |  | AwsSecurityFindingFilters |
-| **CamelAwsSecurityHubNote** (producer) Constant: [`NOTE`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#NOTE) | The note to add to findings during update. |  | NoteUpdate |
-| **CamelAwsSecurityHubSeverity** (producer) Constant: [`SEVERITY`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#SEVERITY) | The severity to set on findings during update. |  | SeverityUpdate |
-| **CamelAwsSecurityHubWorkflow** (producer) Constant: [`WORKFLOW`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#WORKFLOW) | The workflow status to set on findings. |  | WorkflowUpdate |
+| **CamelAwsSecurityHubFilters** (producer) Constant: [`FILTERS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FILTERS) | The filters to apply when retrieving findings. It must be an AwsSecurityFindingFilters object; a value of another type, such as JSON text, fails the exchange. |  | AwsSecurityFindingFilters |
+| **CamelAwsSecurityHubNote** (producer) Constant: [`NOTE`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#NOTE) | The note to add to findings during update. It must be a NoteUpdate object; a value of another type fails the exchange. |  | NoteUpdate |
+| **CamelAwsSecurityHubSeverity** (producer) Constant: [`SEVERITY`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#SEVERITY) | The severity to set on findings during update. It must be a SeverityUpdate object; a value of another type fails the exchange. |  | SeverityUpdate |
+| **CamelAwsSecurityHubWorkflow** (producer) Constant: [`WORKFLOW`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#WORKFLOW) | The workflow status to set on findings. It must be a WorkflowUpdate object; a value of another type fails the exchange. |  | WorkflowUpdate |
 | **CamelAwsSecurityHubVerificationState** (producer) Constant: [`VERIFICATION_STATE`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#VERIFICATION_STATE) | The verification state to set on findings. |  | String |
 | **CamelAwsSecurityHubConfidence** (producer) Constant: [`CONFIDENCE`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#CONFIDENCE) | The confidence level to set on findings. |  | Integer |
 | **CamelAwsSecurityHubCriticality** (producer) Constant: [`CRITICALITY`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#CRITICALITY) | The criticality level to set on findings. |  | Integer |
 | **CamelAwsSecurityHubUserDefinedFields** (producer) Constant: [`USER_DEFINED_FIELDS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#USER_DEFINED_FIELDS) | User-defined fields to add to findings. |  | Map |
 | **CamelAwsSecurityHubRelatedFindings** (producer) Constant: [`RELATED_FINDINGS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#RELATED_FINDINGS) | Related findings to associate. |  | List |
 | **CamelAwsSecurityHubTypes** (producer) Constant: [`TYPES`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#TYPES) | The types to assign to findings. |  | List |
-| **CamelAwsSecurityHubNextToken** (getFindings listEnabledProductsForImport getFindingHistory) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#NEXT_TOKEN) | The token for the next set of results. |  | String |
+| **CamelAwsSecurityHubNextToken** (getFindings listEnabledProductsForImport getFindingHistory) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#NEXT_TOKEN) | The token for the next set of results. It is both an input and an output: the operation sends it and then sets it to the token of the response, so remove it before calling a different list operation in the same route. |  | String |
 | **CamelAwsSecurityHubMaxResults** (getFindings) Constant: [`MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#MAX_RESULTS) | The maximum number of results to return. |  | Integer |
-| **CamelAwsSecurityHubFailedCount** (batchImportFindings) Constant: [`FAILED_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FAILED_COUNT) | The count of findings that failed to import. |  | Integer |
+| **CamelAwsSecurityHubFailedCount** (batchImportFindings) Constant: [`FAILED_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#FAILED_COUNT) | The count of findings that failed to import. When it is more than zero, the exchange fails with an exception naming the failed findings. |  | Integer |
 | **CamelAwsSecurityHubSuccessCount** (batchImportFindings) Constant: [`SUCCESS_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#SUCCESS_COUNT) | The count of findings that were successfully imported. |  | Integer |
 | **CamelAwsSecurityHubUnprocessedFindings** (batchUpdateFindings) Constant: [`UNPROCESSED_FINDINGS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#UNPROCESSED_FINDINGS) | The list of findings that were not updated. |  | List |
 | **CamelAwsSecurityHubProcessedFindings** (batchUpdateFindings) Constant: [`PROCESSED_FINDINGS`](https://javadoc.io/doc/org.apache.camel/camel-aws-security-hub/latest/org/apache/camel/component/aws/securityhub/SecurityHubConstants.html#PROCESSED_FINDINGS) | The list of findings that were updated successfully. |  | List |
@@ -440,7 +440,7 @@ The message body at each side of the AWS Security Hub component: _Consumer_ is t
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-batchImportFindings, the default, imports the findings of the CamelAwsSecurityHubFindings header, or else of the body: a List of the AwsSecurityFinding of the AWS SDK, or one AwsSecurityFinding. JSON text, a Map, an array or a List of anything else fails. The other operations take their input from headers, such as CamelAwsSecurityHubFilters. With pojoRequest=true the request of the AWS SDK for the operation, such as a GetFindingsRequest: another body fails.
+batchImportFindings, the default, imports the findings of the CamelAwsSecurityHubFindings header, or else of the body: a Collection or an array of the AwsSecurityFinding of the AWS SDK, or one AwsSecurityFinding. JSON text, a Map, or a Collection or an array of anything else fails. The other operations take their input from headers, such as CamelAwsSecurityHubFilters. With pojoRequest=true the request of the AWS SDK for the operation, such as a GetFindingsRequest: another body fails.
 
 -   With `pojoRequest=true`: `pojo`
     
@@ -450,7 +450,7 @@ batchImportFindings, the default, imports the findings of the CamelAwsSecurityHu
 
 
  |
-| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the BatchImportFindingsResponse of batchImportFindings, with the counts in the CamelAwsSecurityHubSuccessCount and CamelAwsSecurityHubFailedCount headers: a finding that is not imported does not fail the exchange. getFindings gives a GetFindingsResponse, with the token of the next page in the CamelAwsSecurityHubNextToken header. |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the BatchImportFindingsResponse of batchImportFindings, with the counts in the CamelAwsSecurityHubSuccessCount and CamelAwsSecurityHubFailedCount headers: a finding that is not imported fails the exchange. getFindings gives a GetFindingsResponse, with the token of the next page in the CamelAwsSecurityHubNextToken header. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
@@ -497,10 +497,20 @@ Camel-AWS Security Hub component provides the following operation on the produce
     
 -   listEnabledProductsForImport
     
+-   getFindingAggregator
+    
+
+The SDK model headers (`CamelAwsSecurityHubFilters`, `CamelAwsSecurityHubNote`, `CamelAwsSecurityHubSeverity` and `CamelAwsSecurityHubWorkflow`) must hold the AWS SDK object of the type the header lists, such as `AwsSecurityFindingFilters`. A value of another type, such as JSON text, fails the exchange with an `IllegalArgumentException`, as there is no type converter for these classes. To send a request built elsewhere, set `pojoRequest=true` and put the request object, such as `GetFindingsRequest`, in the body.
+
+The `CamelAwsSecurityHubNextToken` header is both an input and an output of `getFindings`, `getFindingHistory` and `listEnabledProductsForImport`: the operation sends the token in the header, and then sets the header to the token of the next page. A route that calls a different list operation afterwards must remove the header first, for example with `removeHeader("CamelAwsSecurityHubNextToken")`, or that operation sends a token it does not know.
 
 #### BatchImportFindings
 
 Import security findings into Security Hub. This is the primary way to send findings from custom integrations.
+
+The findings are taken from the `CamelAwsSecurityHubFindings` header, or else from the body, which can be a `Collection` or an array of `AwsSecurityFinding`, or one `AwsSecurityFinding`. An element of another type fails the exchange with an `IllegalArgumentException`.
+
+When Security Hub does not import some of the findings, the exchange fails with an `IllegalStateException` whose message names the failed finding ids with their error codes and messages. The `CamelAwsSecurityHubFailedCount` and `CamelAwsSecurityHubSuccessCount` headers, and the response in the body, are set before the exchange fails.
 
 _Java-only: uses inline Processor with AWS SDK builder API_
 

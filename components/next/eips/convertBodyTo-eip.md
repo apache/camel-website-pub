@@ -13,6 +13,38 @@ The Convert Body To eip supports the following options which are listed below.
 | **type** | **Required** The java type to convert to. |  | String |
 | **mandatory** | Whether the conversion is mandatory. If mandatory and conversion is not possible, a NoTypeConversionAvailableException is thrown. Setting this to false means null may be returned if conversion is not possible. | true | Boolean |
 | **charset** | To use a specific charset when converting. |  | String |
+
+## Message Body
+
+The message body at each side of the Convert Body To EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unknown` | 
+An object of the type the type option names; null when there is no conversion and mandatory is false.
+
+-   With `type=String`: `text` (`java.lang.String`)
+    
+-   With `type=java.lang.String`: `text` (`java.lang.String`)
+    
+-   With `type=byte[]`: `bytes` (`byte[]`)
+    
+-   With `type=java.io.InputStream`: `stream` (`java.io.InputStream`)
+    
+-   With `type=java.util.Map`: `map` (`java.util.Map`)
+    
+-   With `type=java.util.List`: `list` (`java.util.List`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 > **Note**
 > The type is a FQN class name (fully qualified), so for example `java.lang.String`, `com.foo.MyBean` etc. However, Camel has shorthand for common Java types, most noticeable `String` can be used instead of `java.lang.String`. You can also use `byte[]` for a byte array.
 

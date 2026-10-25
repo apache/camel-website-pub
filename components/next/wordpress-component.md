@@ -150,6 +150,42 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **password** (security) | Password from authorized user. |  | String |
 
+## Message Body
+
+The message body at each side of the WordPress component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | 
+One message per post or user of the search at every poll, the same ones again on the next poll, or the one of the id option: a Post or a User of org.apache.camel.component.wordpress.api.model.
+
+-   With `operation=post`: `pojo` (`org.apache.camel.component.wordpress.api.model.Post`)
+    
+-   With `operation=user`: `pojo` (`org.apache.camel.component.wordpress.api.model.User`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `pojo` | 
+
+The Post or User (org.apache.camel.component.wordpress.api.model) to create, or to update with the id option: JSON text, a Map or another body fails, so unmarshal it to the class first. A delete does not read the body.
+
+-   With `operationDetail=delete`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | The Post or User that WordPress answers: the one created, updated or deleted. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 Most of the parameters needed when performing a read operation mirrors from the official [API](https://developer.wordpress.org/rest-api/reference/). When performing searches operations, the `criteria.` suffix is needed. Take the following `Consumer` as example:
 
 wordpress:post?criteria.perPage=10&criteria.orderBy=author&criteria.categories=camel,dozer,json

@@ -249,6 +249,29 @@ The OPC UA Client component supports the following message header(s), which is/a
 | **CamelMiloAwait** (producer) Constant: [`HEADER_AWAIT`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_AWAIT) | The await setting for writes. |  | Boolean |
 | **CamelMiloNodeId** (consumer) Constant: [`HEADER_NODE_ID`](https://javadoc.io/doc/org.apache.camel/camel-milo/latest/org/apache/camel/component/milo/MiloConstants.html#HEADER_NODE_ID) | The node ID of the value, as configured in the node or nodes option. Not to be confused with CamelMiloNodeIds, the list of nodes that the producer reads. |  | String |
 
+## Message Body
+
+The message body at each side of the OPC UA Client component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`org.eclipse.milo.opcua.stack.core.types.builtin.DataValue`) | The Milo DataValue of each change of a monitored node: its getValue().getValue() is the value, and the status code tells a good value from a lost connection. The node is in the CamelMiloNodeId header. |
+| **Producer input** | `text`, `bytes`, `value`, `pojo` or `null` | The value to write to the node, or the input arguments of the method: an OPC UA built-in value such as a String, a number, a boolean, a Variant or a DataValue. A stream, a file, a Map or a bean fails with Bad\_EncodingError. With the CamelMiloNodeIds header the body is not read: the producer reads the values of those nodes. |
+| **Producer output** | `unchanged` | 
+The producer does not wait, unless the CamelMiloAwait header or defaultAwaitWrites says so; it then sets the result: the StatusCode of a write, the CallMethodResult of a method call, or a List of DataValue of the nodes read.
+
+-   With `defaultAwaitWrites=true`: `pojo` or `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Discovery
 
 If the server uses a dedicated discovery endpoint (e.g. `/discovery`), which may support different (less secure) security policies, then you can make use of this via the parameter `discoveryEndpointSuffix`, which will be appended to the `endpointUri`. Or by using an explicit `discoveryEndpointUri`.

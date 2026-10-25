@@ -190,6 +190,19 @@ Enum values:
 
  |  | TimeUnit |
 
+## Message Body
+
+The message body at each side of the JGroups raft component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body: an event for each change of the role of this member (only with enableRoleChangeEvents), with LEADER or FOLLOWER in the CamelJGroupsRaftEventType header and the state of the raft in the other headers. |
+| **Producer input** | `bytes`, `text`, `stream` or `file` | The bytes to set() in the replicated log: a byte array, or text, a stream or a file converted to bytes. A null body, a Map, a number or a POJO has no conversion to bytes and is skipped without an error: nothing is set. |
+| **Producer output** | `bytes` or `unchanged` | The byte array the state machine returns for the set (an empty array with the default NopStateMachine), with the state of the raft in the headers. A body that was skipped is left as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 Using `jgroups-raft` component with `enableRoleChangeEvents=true` on the consumer side of the route will capture change in JGroups-raft role and forward them to the Camel route. JGroups-raft consumer processes incoming messages [asynchronously](http://camel.apache.org/asynchronous-routing-engine.md).

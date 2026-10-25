@@ -209,6 +209,63 @@ The PubNub component supports the following message header(s), which is/are list
 | **CamelPubNubOverrideChannel** (producer) Constant: [`OVERRIDE_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#OVERRIDE_CHANNEL) | The channel to use instead of the channel configured on the endpoint. |  | String |
 | **CamelPubNubUUID** (producer) Constant: [`UUID`](https://javadoc.io/doc/org.apache.camel/camel-pubnub/latest/org/apache/camel/component/pubnub/PubNubConstants.html#UUID) | UUID to be used as a device identifier. |  | String |
 
+## Message Body
+
+The message body at each side of the PubNub component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.pubnub.api.models.consumer.pubsub.PNMessageResult`) | 
+The PubNub PNMessageResult; its getMessage() is the payload as a Gson JsonElement, and it does not convert to the payload text. With withPresence, a presence event comes as a PNPresenceEventResult. The channel and timetoken are in the CamelPubNubChannel and CamelPubNubTimeToken headers.
+
+-   With `withPresence=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `value`, `map`, `list` or `pojo` | 
+
+The message to publish or fire, serialized to JSON by the PubNub client: text is sent as a JSON string (not parsed), a Map or a POJO as a JSON object, bytes as an array of numbers; a stream or a file fails, and an empty body fails. SETSTATE needs a Map or a POJO (a JSON object); the other operations do not read the body.
+
+-   With `operation=SETSTATE`: `map` or `pojo`
+    
+-   With `operation=GETHISTORY`: `any`
+    
+-   With `operation=GETSTATE`: `any`
+    
+-   With `operation=HERENOW`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+PUBLISH and FIRE leave the body unchanged, with the timetoken in the CamelPubNubTimeToken header. GETHISTORY gives a List of PNHistoryItemResult; GETSTATE, HERENOW and SETSTATE the result object of the PubNub client.
+
+-   With `operation=GETHISTORY`: `list` or `unchanged`
+    
+-   With `operation=GETSTATE`: `pojo` (`com.pubnub.api.models.consumer.presence.PNGetStateResult`)
+    
+-   With `operation=HERENOW`: `pojo` (`com.pubnub.api.models.consumer.presence.PNHereNowResult`)
+    
+-   With `operation=SETSTATE`: `pojo` (`com.pubnub.api.models.consumer.presence.PNSetStateResult`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message body

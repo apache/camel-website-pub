@@ -439,6 +439,64 @@ The Olingo4 component supports the following message header(s), which is/are lis
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelOlingo4.responseHttpHeaders** (producer) Constant: [`FULL_RESPONSE_HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-olingo4/latest/org/apache/camel/component/olingo4/internal/Olingo4Constants.html#FULL_RESPONSE_HTTP_HEADERS) | The response Http headers. |  | Map |
+
+## Message Body
+
+The message body at each side of the Olingo4 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` or `value` | 
+The result of read for the resourcePath, as in the producer: an entity set is split into one message per ClientEntity and a collection property into one message per ClientValue; with splitResult=false the ClientEntitySet or the ClientCollectionValue comes in one message. uread gives the response unparsed as a stream.
+
+-   With `methodName=uread`: `stream`
+    
+-   With `filterAlreadySeen=true`: `pojo`, `value` or `list`
+    
+
+
+
+
+
+ |
+| **Producer input** | `pojo` or `text` | create, update, patch, merge and action send the body as their data, passed as it is without type conversion: a ClientEntity, or the entity as JSON text, which is sent as application/json. A Map, bytes or a stream fails: convertBodyTo String for JSON in bytes or a stream. An action may have no body, and batch takes a List of Olingo4BatchRequest. read, uread and delete do not use the body.
+
+-   With `methodName=read`: `any`
+    
+-   With `methodName=uread`: `any`
+    
+-   With `methodName=delete`: `any`
+    
+-   With `methodName=action`: `pojo`, `text` or `null`
+    
+-   With `methodName=batch`: `list`
+    
+
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo` or `value` | 
+
+read gives the Olingo client object of the resource: a ClientEntitySet, a ClientEntity, the Edm of $metadata or the ClientServiceDocument; a ClientPrimitiveValue, ClientComplexValue or ClientCollectionValue for a property or $value, and a Long for $count. uread gives the response as a stream. create, update, patch, merge and action give the ClientEntity of the response, or the HttpStatusCode when it has no content, as delete does; batch gives a List of Olingo4BatchResponse. With filterAlreadySeen, a result read before is null, and a complex or collection value becomes a List.
+
+-   With `methodName=uread`: `stream`
+    
+-   With `methodName=delete`: `value`
+    
+-   With `methodName=batch`: `list`
+    
+-   With `filterAlreadySeen=true`: `pojo`, `value`, `list` or `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 
@@ -458,7 +516,7 @@ The result of **read** endpoint and data type of **data** option depends on the 
 | Entity data model | $metadata | `org.apache.olingo.commons.api.edm.Edm` |
 | Service document | / | `org.apache.olingo.client.api.domain.ClientServiceDocument` |
 | OData entity set | <entity-set> | `org.apache.olingo.client.api.domain.ClientEntitySet` |
-| OData entity | <entity-set>(<key-predicate>) | `org.apache.olingo.client.api.domain.ClientEntity` for Out body (response) `java.util.Map<String, Object>` for In body (request) |
+| OData entity | <entity-set>(<key-predicate>) | `org.apache.olingo.client.api.domain.ClientEntity` for Out body (response) `org.apache.olingo.client.api.domain.ClientEntity`, or the entity as JSON `String`, for In body (request) |
 | Simple property | <entity-set>(<key-predicate>)/<simple-property> | `org.apache.olingo.client.api.domain.ClientPrimitiveValue` |
 | Simple property value | <entity-set>(<key-predicate>)/<simple-property>/$value | `org.apache.olingo.client.api.domain.ClientPrimitiveValue` |
 | Complex property | <entity-set>(<key-predicate>)/<complex-property> | `org.apache.olingo.client.api.domain.ClientComplexValue` |

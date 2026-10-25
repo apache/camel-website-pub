@@ -173,6 +173,21 @@ The CometD component supports the following message header(s), which is/are list
 | **CometdClientId** (common) Constant: [`COMETD_CLIENT_ID_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-cometd/latest/org/apache/camel/component/cometd/CometdBinding.html#COMETD_CLIENT_ID_HEADER_NAME) | The clientId of the session. |  | String |
 | **subscription** (common) Constant: [`COMETD_SUBSCRIPTION_HEADER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-cometd/latest/org/apache/camel/component/cometd/CometdBinding.html#COMETD_SUBSCRIPTION_HEADER_NAME) | The subscription. |  | String |
 
+## Message Body
+
+The message body at each side of the CometD component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text`, `value`, `map`, `list` or `null` | The data of the Bayeux message, parsed from JSON: a String, a number or a boolean, a Map for an object, a List for an array, or null. From a cometd producer in the same JVM the body that producer sent, as is. |
+| **Consumer reply** | `text`, `value`, `map` or `list` | Only when the exchange is InOut (exchangePattern=InOut, or set in the route): the body the route ends with is sent back to the client that published, as JSON. Bytes become an array of numbers; a stream, a file or another object is sent as the text of its toString. |
+| **Producer input** | `text`, `value`, `map` or `list` | The data published to the channel, sent as JSON to the subscribed clients: text, a number or a boolean, a Map or a List. Bytes become an array of numbers; a stream, a file or another object is sent as the text of its toString: convert it first. The headers go in the ext field of the message. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 Below, you can find some examples of how to pass the parameters.

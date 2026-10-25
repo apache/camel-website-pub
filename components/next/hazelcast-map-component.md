@@ -234,6 +234,51 @@ Enum values:
 | **CamelHazelcastCacheName** (consumer) Constant: [`CACHE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#CACHE_NAME) | The name of the cache - e.g. foo. |  | String |
 | **CamelHazelcastOperationType** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#OPERATION) | The operation to perform. |  | String |
 
+## Message Body
+
+The message body at each side of the Hazelcast Map component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The value of the entry for an added or updated event, as any member of the cluster stored it, and no body for removed and evicted: the key is in the CamelHazelcastObjectId header and the event in CamelHazelcastListenerAction. |
+| **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The value that put, putIfAbsent and update store under the key in the CamelHazelcastObjectId header, and that containsValue looks for: an object Hazelcast can serialize, so a stream fails (convert it to bytes or text first), and no body fails. The other operations do not use the body. |
+| **Producer output** | `unknown` | 
+By the operation, which the CamelHazelcastOperationType header sets, or else the defaultOperation option (without either the producer fails): the value of the key for get, or null when the key is not in the map, a Map of the keys in the Set of the CamelHazelcastObjectId header to their values for getAll, the keys for getKeys and the values that match the SQL predicate of the CamelHazelcastQuery header for query as a Collection, and a Boolean for containsKey and containsValue. The other operations keep the body.
+
+-   With `defaultOperation=put`: `unchanged`
+    
+-   With `defaultOperation=putIfAbsent`: `unchanged`
+    
+-   With `defaultOperation=update`: `unchanged`
+    
+-   With `defaultOperation=delete`: `unchanged`
+    
+-   With `defaultOperation=evict`: `unchanged`
+    
+-   With `defaultOperation=evictAll`: `unchanged`
+    
+-   With `defaultOperation=clear`: `unchanged`
+    
+-   With `defaultOperation=containsKey`: `value` (`java.lang.Boolean`)
+    
+-   With `defaultOperation=containsValue`: `value` (`java.lang.Boolean`)
+    
+-   With `defaultOperation=getAll`: `map`
+    
+-   With `defaultOperation=getKeys`: `list`
+    
+-   With `defaultOperation=query`: `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Map cache producer - to("hazelcast-map:foo")
 
 If you want to store a value in a map, you can use the map cache producer.

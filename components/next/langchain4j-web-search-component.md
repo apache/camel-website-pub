@@ -126,6 +126,24 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **webSearchRequest** (advanced) | **Autowired** The webSearchRequest is the custom WebSearchRequest - advanced. |  | WebSearchRequest |
 
+## Message Body
+
+The message body at each side of the LangChain4j Web Search component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The search terms as text; another body is converted to text, so a Map or a POJO is searched as its toString(), and no body fails. With webSearchRequest the body is not read. |
+| **Producer output** | `text` or `null` | The content of the first result as text (its snippet with resultType SNIPPET, the WebSearchOrganicResult with LANGCHAIN4J\_WEB\_SEARCH\_ORGANIC\_RESULT), or null when there is no result or the engine gives no content. With maxResults above 1 it is a List of them, which can hold nulls.
+-   With `resultType=LANGCHAIN4J_WEB_SEARCH_ORGANIC_RESULT`: `pojo` or `null`
+    
+
+Not known when `maxResults` or `webSearchRequest` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Using a specific Web Search Engine

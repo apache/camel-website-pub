@@ -150,6 +150,39 @@ Enum values:
 | **password** (security) | The password for authentication with CyberArk Conjur. |  | String |
 | **username** (security) | The username for authentication with CyberArk Conjur. |  | String |
 
+## Message Body
+
+The message body at each side of the CyberArk Vault component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+getSecret, the default operation, does not read the body. createSecret stores the body as text, unless the CamelCyberArkVaultSecretValue header is set: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), so marshal it first, and no body fails.
+
+-   With `operation=createSecret`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` (`java.lang.String`) | 
+
+The value of the secret as text for getSecret, also in the CamelCyberArkVaultSecretValue header: unmarshal a JSON secret to read its fields. createSecret leaves the body unchanged.
+
+-   With `operation=createSecret`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Authentication Methods
 
 The component supports multiple authentication methods with CyberArk Conjur:

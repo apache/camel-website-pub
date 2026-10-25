@@ -192,6 +192,31 @@ Enum values:
 | **CamelODataOrderBy** (producer) Constant: [`ORDER_BY`](https://javadoc.io/doc/org.apache.camel/camel-odata/latest/org/apache/camel/component/odata/ODataConstants.html#ORDER_BY) | The OData orderby expression. |  | String |
 | **CamelODataTop** (producer) Constant: [`TOP`](https://javadoc.io/doc/org.apache.camel/camel-odata/latest/org/apache/camel/component/odata/ODataConstants.html#TOP) | The OData top query option. |  | Integer |
 | **CamelODataSkip** (producer) Constant: [`SKIP`](https://javadoc.io/doc/org.apache.camel/camel-odata/latest/org/apache/camel/component/odata/ODataConstants.html#SKIP) | The OData skip query option. |  | Integer |
+
+## Message Body
+
+The message body at each side of the OData component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The body is not read by READ\_SET, READ\_ENTRY and DELETE. CREATE and UPDATE send a String body as the JSON payload as it is, and serialize a Map or a List to JSON; a stream, a file or a POJO fails, and bytes are sent as a JSON array of numbers: convert them to a String first. The operation can also be set with the CamelODataOperation header.
+
+-   With `operation=CREATE`: `text`, `map` or `list`
+    
+-   With `operation=UPDATE`: `text`, `map` or `list`
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` or `null` | The JSON object of the response parsed into a Map (a JsonObject); for READ\_SET the entities are in its value entry. No body for a 204 or an empty response, such as of a DELETE. The response code, the ETag, the count and the next link are in headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is a producer-only component. Per-message options can be supplied through `CamelOData` headers in addition to endpoint options.
 

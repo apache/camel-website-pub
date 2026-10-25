@@ -164,6 +164,43 @@ The JCache component supports the following message header(s), which is/are list
 | **CamelJCacheEntryProcessor** (producer) Constant: [`ENTRY_PROCESSOR`](https://javadoc.io/doc/org.apache.camel/camel-jcache/latest/org/apache/camel/component/jcache/JCacheConstants.html#ENTRY_PROCESSOR) | The EntryProcessor to invoke. |  | EntryProcessor |
 | **CamelJCacheEntryArgs** (producer) Constant: [`ARGUMENTS`](https://javadoc.io/doc/org.apache.camel/camel-jcache/latest/org/apache/camel/component/jcache/JCacheConstants.html#ARGUMENTS) | The additional arguments to pass to the EntryProcessor. |  | Collection |
 
+## Message Body
+
+The message body at each side of the JCache component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The value of the entry, as it was put, with the key in the CamelJCacheKey header and the event (CREATED, UPDATED, REMOVED or EXPIRED) in CamelJCacheEventType; with oldValueRequired the previous value is in the CamelJCacheOldValue header. A REMOVED or EXPIRED event has the old value as body when the provider gives it (Hazelcast does with oldValueRequired), else no body. |
+| **Producer input** | `any` | The value to store for PUT, PUTIFABSENT, REPLACE, GETANDPUT and GETANDREPLACE, as it is, and a Map of the entries for PUTALL; no body, or a body that is not a Map for PUTALL, fails. A provider that stores by value serializes it: a stream fails, so convert it to text or bytes first. The other actions do not use the body. |
+| **Producer output** | `unknown` | 
+By the action, which the CamelJCacheAction header can set: the value of the key for GET, or no body when it is not in the cache; the previous value, or no body, for GETANDPUT, GETANDREPLACE and GETANDREMOVE; a Map of the keys found to their values for GETALL; the result of the EntryProcessor for INVOKE, a Map of the keys to their EntryProcessorResult with CamelJCacheKeys. The other actions keep the body; PUTIFABSENT, REPLACE and REMOVE put whether they changed the cache in the CamelJCacheResult header.
+
+-   With `action=GETALL`: `map` (`java.util.Map`)
+    
+-   With `action=PUT`: `unchanged`
+    
+-   With `action=PUTALL`: `unchanged`
+    
+-   With `action=PUTIFABSENT`: `unchanged`
+    
+-   With `action=REPLACE`: `unchanged`
+    
+-   With `action=REMOVE`: `unchanged`
+    
+-   With `action=REMOVEALL`: `unchanged`
+    
+-   With `action=CLEAR`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Producer operations

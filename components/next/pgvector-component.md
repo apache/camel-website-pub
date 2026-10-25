@@ -352,3 +352,15 @@ Enum values:
 | **CamelPgVectorMetadata** (producer) Constant: [`METADATA`](https://javadoc.io/doc/org.apache.camel/camel-pgvector/latest/org/apache/camel/component/pgvector/PgVectorHeaders.html#METADATA) | The metadata associated with the vector record, stored as JSON. |  | String |
 | **CamelPgVectorFilter** (producer) Constant: [`FILTER`](https://javadoc.io/doc/org.apache.camel/camel-pgvector/latest/org/apache/camel/component/pgvector/PgVectorHeaders.html#FILTER) | Filter condition for similarity search. Applied as a SQL WHERE clause on the text\_content and metadata columns. Supports parameterized queries using placeholders with values provided via the CamelPgVectorFilterParams header. WARNING: When not using parameterized queries, the filter value is appended directly as SQL. Never use untrusted input as the filter value without parameterization, as this could lead to SQL injection. |  | String |
 | **CamelPgVectorFilterParams** (producer) Constant: [`FILTER_PARAMS`](https://javadoc.io/doc/org.apache.camel/camel-pgvector/latest/org/apache/camel/component/pgvector/PgVectorHeaders.html#FILTER_PARAMS) | Parameter values for parameterized filter queries. Use with placeholders in the CamelPgVectorFilter header. Example: filter = 'text\_content LIKE AND metadata::jsonb-'category' = ' with filterParams = List.of(%hello%, science). |  | List |
+
+## Message Body
+
+The message body at each side of the PGVector component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `list` or `null` | By the action in the CamelPgVectorAction header: the vector as a List of Float or a float array for UPSERT and SIMILARITY\_SEARCH, with the id, text and metadata of UPSERT in headers. CREATE\_TABLE, CREATE\_INDEX, DROP\_TABLE and DELETE do not read the body, DELETE takes the id from the CamelPgVectorRecordId header. Another body fails, a List of Double too: the pgvector:embeddings data type transformer builds the vector from the output of langchain4j-embeddings. |
+| **Producer output** | `value`, `text` or `list` | By the action: a Boolean for CREATE\_TABLE, CREATE\_INDEX, DROP\_TABLE and DELETE (false when no record had the id), the record id as a String for UPSERT, and a List of Map with the keys id, text\_content, metadata and distance for SIMILARITY\_SEARCH. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).

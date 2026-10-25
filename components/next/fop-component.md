@@ -166,6 +166,18 @@ The FOP component supports the following message header(s), which is/are listed 
 | --- | --- | --- | --- |
 | **CamelFop.Output.Format** (producer) Constant: [`CAMEL_FOP_OUTPUT_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-fop/latest/org/apache/camel/component/fop/FopConstants.html#CAMEL_FOP_OUTPUT_FORMAT) | The output format. |  | String |
 
+## Message Body
+
+The message body at each side of the FOP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file`, as xml | The XSL-FO document to render, as text, bytes, a stream or a file. A DOM Document, a Map or no body fails. |
+| **Producer output** | `bytes` (`java.io.ByteArrayOutputStream`) | The rendered document as bytes, in a ByteArrayOutputStream: PDF, or the outputType, or the format of the CamelFop.Output.Format header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Configuration file
 
 The location of a configuration file with the following [structure](http://xmlgraphics.apache.org/fop/1.0/configuration.md). The file is loaded from the classpath by default. You can use `file:`, or `classpath:` as prefix to load the resource from file or classpath. In previous releases, the file is always loaded from the file system.

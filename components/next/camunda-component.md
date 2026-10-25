@@ -180,6 +180,41 @@ The Camunda component supports the following message header(s), which is/are lis
 | **CamelCamundaVersion** (producer) Constant: [`VERSION`](https://javadoc.io/doc/org.apache.camel/camel-camunda/latest/org/apache/camel/component/camunda/CamundaConstants.html#VERSION) | The version of a deployed process. |  | int |
 | **CamelCamundaProcessDefinitionKey** (producer) Constant: [`PROCESS_DEFINITION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-camunda/latest/org/apache/camel/component/camunda/CamundaConstants.html#PROCESS_DEFINITION_KEY) | The process definition key of a deployed process. |  | long |
 
+## Message Body
+
+The message body at each side of the Camunda component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`org.apache.camel.component.camunda.model.JobWorkerMessage`) | 
+The job of the worker: a JobWorkerMessage with its key, type, custom headers and variables (formatJSON: the same as JSON text). The CamelCamundaJobKey header has the key of the job.
+
+-   With `formatJSON=true`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `any` | When the route ends the job is completed: a Map body gives its entries as the output variables, another body completes it without variables. A route that fails fails the job. |
+| **Producer input** | `pojo`, `text`, `map`, `bytes`, `stream` or `null` | The request of the operation: a request object of org.apache.camel.component.camunda.model, or the same as JSON text with snake\_case names. The job operations also take the JobWorkerMessage, or with the CamelCamundaJobKey header a Map of the variables or no body; deployResource takes text, bytes or a stream of the resource with the CamelCamundaResourceName header. JSON as bytes or a stream fails: convert it to text first. |
+| **Producer output** | `pojo` | 
+
+The response of the operation: a ProcessResponse, MessageResponse, JobResponse or DeploymentResponse, with success false and the error when the call failed (formatJSON: the same as JSON text).
+
+-   With `formatJSON=true`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Connection Modes
 
 ### Camunda SaaS (Cloud)

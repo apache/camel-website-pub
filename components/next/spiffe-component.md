@@ -197,6 +197,30 @@ The SPIFFE component supports the following message header(s), which is/are list
 | **CamelSpiffeSpiffeId** (producer) Constant: [`SPIFFE_ID`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#SPIFFE_ID) | The SPIFFE ID of the returned SVID. |  | String |
 | **CamelSpiffeExpiry** (producer) Constant: [`EXPIRY`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#EXPIRY) | The expiry of the returned SVID: the token expiry for fetchJwtSvid, or the leaf certificate’s notAfter for fetchX509Svid. |  | Date |
 
+## Message Body
+
+The message body at each side of the SPIFFE component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Only validateJwtSvid reads the body: the token as text, when neither the CamelSpiffeToken header nor an Authorization: Bearer header carries it. The fetch operations ignore the body. |
+| **Producer output** | `list` (`java.util.List<java.security.cert.X509Certificate>`) | fetchX509Svid: the certificate chain without the private key; the X509Svid with its private key with x509Response=svid, or the body kept with x509Response=id. fetchJwtSvid: the token. validateJwtSvid: the validated JwtSvid. The SPIFFE ID is in the CamelSpiffeSpiffeId header.
+-   With `x509Response=svid`: `pojo` (`io.spiffe.svid.x509svid.X509Svid`)
+    
+-   With `x509Response=id`: `unchanged`
+    
+-   With `operation=fetchJwtSvid`: `text` (`java.lang.String`)
+    
+-   With `operation=validateJwtSvid`: `pojo` (`io.spiffe.svid.jwtsvid.JwtSvid`)
+    
+
+Not known when `allowOperationHeader` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Workload API endpoint
 
 The address of the SPIFFE Workload API is taken from the `spiffeSocketPath` option, or, when that is not set, from the standard `SPIFFE_ENDPOINT_SOCKET` environment variable — for example `unix:///tmp/spire-agent/public/api.sock`. For advanced scenarios an already-configured `io.spiffe.workloadapi.WorkloadApiClient` can be supplied through the `workloadApiClient` option; in that case the component neither creates nor closes the client.

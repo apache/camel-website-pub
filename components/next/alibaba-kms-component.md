@@ -143,6 +143,30 @@ The Alibaba Key Management Service (KMS) component supports the following messag
 | **CamelAlibabaKmsNumberOfBytes** (producer) Constant: [`NUMBER_OF_BYTES`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#NUMBER_OF_BYTES) | Number of bytes for generateDataKey. |  | Integer |
 | **CamelAlibabaKmsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#REQUEST_ID) | Alibaba Cloud request id. |  | String |
 
+## Message Body
+
+The message body at each side of the Alibaba Key Management Service (KMS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+encrypt encrypts the body unless the plaintext option or header is set: text and bytes as they are, a stream or a file read as text, which corrupts binary data, and a Map or a POJO as its toString(), so marshal it first. decrypt takes the ciphertext blob as text, unless the ciphertextBlob option or header is set. No body fails both; generateDataKey does not use the body.
+
+-   With `operation=encrypt`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=decrypt`: `text`
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` (`java.util.Map`) | A Map with the statusCode and the fields of the response: the ciphertextBlob and keyId of encrypt, the plaintext of decrypt, which is Base64 when this component encrypted it, and the plaintext and ciphertextBlob of generateDataKey. The request id is in the CamelAlibabaKmsRequestId header too. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Operations

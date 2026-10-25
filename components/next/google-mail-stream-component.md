@@ -231,6 +231,27 @@ The Google Mail Stream component supports the following message header(s), which
 | **CamelGoogleMailStreamMessageId** (consumer) Constant: [`MAIL_MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-mail/latest/org/apache/camel/component/google/mail/stream/GoogleMailStreamConstants.html#MAIL_MESSAGE_ID) | The Message-ID of the message. |  | String |
 | **CamelGoogleMailStreamLabelIds** (consumer) Constant: [`MAIL_LABEL_IDS`](https://javadoc.io/doc/org.apache.camel/camel-google-mail/latest/org/apache/camel/component/google/mail/stream/GoogleMailStreamConstants.html#MAIL_LABEL_IDS) | The label IDs of the message. |  | List |
 
+## Message Body
+
+The message body at each side of the Google Mail Stream component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `null` | 
+One message per mail of the query (unread mails by default): the content of the first part of the mail that carries data, such as the text/plain part, decoded as UTF-8 text, or null when no part has data. With raw the whole RFC 2822 mail as base64url-encoded text. The id, subject, from, to and the other mail headers are CamelGoogleMail headers.
+
+-   With `raw=true`: `text`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The consumer polls the mailbox for the messages that match `query`, and marks them as read. `is:unread` and `markAsRead` are the defaults. The headers carry the sender, the subject and the other fields:

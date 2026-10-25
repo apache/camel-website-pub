@@ -1381,6 +1381,22 @@ In addition to the parameters above, the google-drive API can also use any of th
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
+## Message Body
+
+The message body at each side of the Google Drive component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | One message per poll with the return value of the method: a Google Drive model object, such as the FileList of drive-files/list, which is one message and not split per file. The model classes are GenericJson, which is also a Map of the JSON fields. |
+| **Producer input** | `any` | The body is used only when inBody names a parameter of the method, and must then be of the type of that parameter: a File for content of drive-files/create, or text for fileId. JSON text or a Map is not turned into a model object: build it first. To upload a file, convertBodyTo com.google.api.services.drive.model.File after a file consumer: it also sets the CamelGoogleDrive.content and CamelGoogleDrive.mediaContent headers, so drive-files/create sends the content of the file. Without inBody the arguments come from the options and the CamelGoogleDrive. headers.
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo` or `null` | The return value of the method: a Google Drive model object, such as the File of drive-files/create and drive-files/get or the FileList of drive-files/list, never the content of a file; null for the methods without a response, such as the deletes and drive-files/emptyTrash, and for drive-files/export. The model classes are GenericJson, which is also a Map of the JSON fields. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 

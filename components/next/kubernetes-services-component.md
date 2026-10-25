@@ -166,6 +166,39 @@ Enum values:
  |  | Action |
 | **CamelKubernetesEventTimestamp** (consumer) Constant: [`KUBERNETES_EVENT_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_EVENT_TIMESTAMP) | Timestamp of the action watched by the consumer. |  | long |
 
+## Message Body
+
+The message body at each side of the Kubernetes Services component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`io.fabric8.kubernetes.api.model.Service`) | The Service that changed, one message per watch event, with the action (ADDED, MODIFIED, DELETED) in the CamelKubernetesEventAction header. |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesServiceName, the labels in CamelKubernetesServiceLabels and the ServiceSpec in CamelKubernetesServiceSpec. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of Service for listServices and listServicesByLabels; the Service for getService (null when not found), createService and updateService; a Boolean for deleteService, false when not found.
+
+-   With `operation=listServices`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.Service>`)
+    
+-   With `operation=listServicesByLabels`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.Service>`)
+    
+-   With `operation=getService`: `pojo` or `null` (`io.fabric8.kubernetes.api.model.Service`)
+    
+-   With `operation=createService`: `pojo` (`io.fabric8.kubernetes.api.model.Service`)
+    
+-   With `operation=updateService`: `pojo` (`io.fabric8.kubernetes.api.model.Service`)
+    
+-   With `operation=deleteService`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

@@ -138,6 +138,28 @@ The Alibaba Function Compute (FC) component supports the following message heade
 | **CamelAlibabaFcRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#REQUEST_ID) | Alibaba Cloud request id. |  | String |
 | **CamelAlibabaFcStatusCode** (producer) Constant: [`STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#STATUS_CODE) | HTTP status code from FC invoke response. |  | Integer |
 
+## Message Body
+
+The message body at each side of the Alibaba Function Compute (FC) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+invokeFunction sends the body as the payload of the function: text and bytes as they are, a stream or a file read as text, which corrupts binary data, a Map or a POJO as its toString(), so marshal it first, and no body as an empty payload. getFunction does not use the body.
+
+-   With `operation=invokeFunction`: `text`, `bytes`, `stream`, `file` or `null`
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` (`java.util.Map`) | A Map: for invokeFunction the statusCode, the headers and the body of the response, which holds the payload the function returns as bytes, with the status code in the CamelAlibabaFcStatusCode header too; for getFunction the fields of the function, such as functionName, runtime and handler. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Operations

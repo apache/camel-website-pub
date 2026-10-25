@@ -4,7 +4,7 @@
 
 The [Flatpack](../flatpack-component.md) component ships with the Flatpack data format that can be used to format between fixed width or delimited text messages to a `List` of rows as `Map`.
 
--   marshal = from `List<Map<String, Object>>` to `OutputStream` (can be converted to `String`)
+-   marshal = from `List<Map<String, Object>>`, or a single `Map<String, Object>` as one row, to `OutputStream` (can be converted to `String`). Any other body fails with an `InvalidPayloadException`.
     
 -   unmarshal = from `java.io.InputStream` (such as a `File` or `String`) to a `java.util.List` as an `org.apache.camel.component.flatpack.DataSetList` instance.  
     The result of the operation will contain all the data. If you need to process each row one by one you can split the exchange, using Splitter.
@@ -35,7 +35,7 @@ The message body at each side of the Flatpack data format: _Marshal input_ and _
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Marshal input** | `list` | The rows as a List of Maps, such as the DataSetList unmarshal gives; a single Map fails. Without a definition, the keys of the first Map name the columns. |
+| **Marshal input** | `list` or `map` | The rows as a List of Maps, such as the DataSetList unmarshal gives, or a single Map as one row. Other bodies fail. Without a definition, the keys of the first Map name the columns. |
 | **Marshal output** | `stream`, as text | The records in the stream cache, or a byte array when stream caching is off. An empty List writes nothing. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as text | 
  |

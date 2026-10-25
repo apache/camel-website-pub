@@ -174,7 +174,7 @@ This is the idiomatic approach for Camel applications.
 2.  Use the `camel-mdc` component to automatically copy these headers into the MDC. Configure it in `application.properties`:
     
     ```properties
-    camel.mdc.customHeaders=CAMEL_TRACE_ID,CAMEL_SPAN_ID
+    camel.mdc.customExchangeHeaders=CAMEL_TRACE_ID,CAMEL_SPAN_ID
     ```
     
 

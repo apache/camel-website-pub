@@ -108,9 +108,9 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **tikaParseOutputEncoding** (producer) | Tika Parse Output Encoding. |  | String |
+| **tikaParseOutputEncoding** (producer) | The character encoding of the parsed output. Defaults to the default charset of the JVM. The parse operation sets this encoding as the charset of the exchange, so converting the output to text decodes it with this encoding. |  | String |
 | **tikaParseOutputFormat** (producer) | 
-Tika Output Format. Supported output formats. xml: Returns Parsed Content as XML. html: Returns Parsed Content as HTML. text: Returns Parsed Content as Text. textMain: Uses the boilerpipe library to automatically extract the main content from a web page.
+Tika Output Format. Supported output formats. xml: Returns Parsed Content as XML. html: Returns Parsed Content as HTML. text: Returns Parsed Content as Text.
 
 Enum values:
 
@@ -189,6 +189,10 @@ from("direct:start")
 ### To Parse a File
 
 The body is the document: text, bytes, a stream or a file. After `parse`, the body is a `ByteArrayOutputStream` with the content as XHTML, or as HTML or plain text with `tikaParseOutputFormat`, which converts to a `String`, and the metadata of the document are headers, such as `dc:title`. The component has the Tika parsers of HTML and text: other types need their Tika parser module, such as `org.apache.tika:tika-parser-pdf-module` for PDF, or the content is empty.
+
+The body of `detect` and `parse` must convert to an `InputStream`, such as a `java.io.File`, a `byte[]`, a `String` or a stream. A missing body or a body that does not convert, such as a `Map`, fails with an `InvalidPayloadException`.
+
+The `parse` operation writes its output in the `tikaParseOutputEncoding` and sets that encoding as the charset of the exchange (the `CamelCharsetName` exchange property), so converting the output to a `String` decodes it right.
 
 -   Java
     

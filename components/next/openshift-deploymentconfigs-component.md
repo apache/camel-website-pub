@@ -168,6 +168,41 @@ Enum values:
  |  | Action |
 | **CamelKubernetesEventTimestamp** (consumer) Constant: [`KUBERNETES_EVENT_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_EVENT_TIMESTAMP) | Timestamp of the action watched by the consumer. |  | long |
 
+## Message Body
+
+The message body at each side of the OpenShift Deployment Configs component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`io.fabric8.openshift.api.model.DeploymentConfig`) | The DeploymentConfig that changed, one message per watch event, with the action (ADDED, MODIFIED, DELETED) in the CamelKubernetesEventAction header. |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesDeploymentName, the labels in CamelKubernetesDeploymentsLabels, the DeploymentConfigSpec in CamelKubernetesDeploymentConfigSpec and the replicas in CamelKubernetesDeploymentReplicas. The list and get operations do not read the namespace header: they use the namespace of the client. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of DeploymentConfig for listDeploymentConfigs and listDeploymentConfigsByLabels; the DeploymentConfig for getDeploymentConfig (null when not found), createDeploymentConfig and updateDeploymentConfig; a Boolean for deleteDeploymentConfig, false when not found; for scaleDeploymentConfig the replicas of its status, as an Integer.
+
+-   With `operation=listDeploymentConfigs`: `list` (`java.util.List<io.fabric8.openshift.api.model.DeploymentConfig>`)
+    
+-   With `operation=listDeploymentConfigsByLabels`: `list` (`java.util.List<io.fabric8.openshift.api.model.DeploymentConfig>`)
+    
+-   With `operation=getDeploymentConfig`: `pojo` or `null` (`io.fabric8.openshift.api.model.DeploymentConfig`)
+    
+-   With `operation=createDeploymentConfig`: `pojo` (`io.fabric8.openshift.api.model.DeploymentConfig`)
+    
+-   With `operation=updateDeploymentConfig`: `pojo` (`io.fabric8.openshift.api.model.DeploymentConfig`)
+    
+-   With `operation=deleteDeploymentConfig`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=scaleDeploymentConfig`: `value` (`java.lang.Integer`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

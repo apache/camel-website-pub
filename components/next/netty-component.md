@@ -477,6 +477,63 @@ The Netty component supports the following message header(s), which is/are liste
 | **CamelNettyRequestTimeout** (common) Constant: [`NETTY_REQUEST_TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-netty/latest/org/apache/camel/component/netty/NettyConstants.html#NETTY_REQUEST_TIMEOUT) | The read timeout. |  | Long |
 | **CamelNettyChannel** (common) Constant: [`NETTY_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-netty/latest/org/apache/camel/component/netty/NettyConstants.html#NETTY_CHANNEL) | The Netty Channel object. |  | Channel |
 
+## Message Body
+
+The message body at each side of the Netty component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The data received as a String in the encoding (UTF-8 by default). Over TCP the default codec has no framing, so a message may arrive split over several exchanges; textline=true gives one line per exchange.
+-   With `udpByteArrayCodec=true`: `bytes` (`byte[]`)
+    
+-   With `allowDefaultCodec=false`: `pojo` (`io.netty.buffer.ByteBuf`)
+    
+
+Not known when `encoders` or `decoders` or `transferExchange` is set.
+
+ |
+| **Consumer reply** | `null` or `text` | With sync=true (the default) the body the route ends with is written back: a String or a Netty ByteBuf. Bytes, a stream, a Map or a POJO cannot be written and the caller gets no reply: convert it to a String first (textline=true converts any body to a line of text). No body sends nothing and closes the connection (disconnectOnNoReply).
+
+-   With `textline=true`: `any`
+    
+-   With `udpByteArrayCodec=true`: `null` or `bytes`
+    
+-   With `allowDefaultCodec=false`: `null` or `pojo` (`io.netty.buffer.ByteBuf`)
+    
+
+Not known when `encoders` or `decoders` or `transferExchange` is set.
+
+ |
+| **Producer input** | `null` or `text` | The data to send: a String, or a Netty ByteBuf over TCP. Bytes, a stream, a file, a Map or a POJO fail with an unsupported message type: convert it to a String first, or use textline=true, which converts any body to a line of text. No body sends nothing.
+
+-   With `textline=true`: `any`
+    
+-   With `udpByteArrayCodec=true`: `null` or `bytes`
+    
+-   With `useByteBuf=true`: `null`, `text`, `bytes` or `stream`
+    
+-   With `allowDefaultCodec=false`: `null` or `pojo` (`io.netty.buffer.ByteBuf`)
+    
+
+Not known when `encoders` or `decoders` or `transferExchange` is set.
+
+ |
+| **Producer output** | `text` or `null` (`java.lang.String`) | With sync=true (the default) the reply of the server as a String: over TCP without textline, the data of the first read. No body is not sent and stays null.
+
+-   With `sync=false`: `unchanged`
+    
+-   With `udpByteArrayCodec=true`: `bytes` or `null` (`byte[]`)
+    
+-   With `allowDefaultCodec=false`: `pojo` or `null` (`io.netty.buffer.ByteBuf`)
+    
+
+Not known when `encoders` or `decoders` or `transferExchange` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Registry-based Options

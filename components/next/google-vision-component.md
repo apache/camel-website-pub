@@ -194,6 +194,61 @@ Enum values:
  |  | GoogleCloudVisionOperations |
 | **CamelGoogleCloudVisionResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-vision/latest/org/apache/camel/component/google/vision/GoogleCloudVisionConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Cloud Vision API invocation. |  | AnnotateImageResponse |
 
+## Message Body
+
+The message body at each side of the Google Cloud Vision component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `bytes`, `stream` or `file` | 
+The image to annotate, sent inline. A stream or a file is read into bytes and a String is sent as its bytes, a Map, a POJO or no body fails. With pojoRequest=true an AnnotateImageRequest of the Google Cloud SDK: another body fails.
+
+-   With `pojoRequest=true`: `pojo` (`com.google.cloud.vision.v1.AnnotateImageRequest`)
+    
+
+
+
+
+
+ |
+| **Producer output** | `list` or `pojo` | 
+
+The annotations of the operation: a List of them for the detections that find several things, such as labelDetection, and one annotation of the Google Cloud SDK for the others, such as the SafeSearchAnnotation of safeSearchDetection. The whole AnnotateImageResponse is in the CamelGoogleCloudVisionResponseObject header, and is the body with pojoRequest=true.
+
+-   With `operation=labelDetection`: `list` (`java.util.List<com.google.cloud.vision.v1.EntityAnnotation>`)
+    
+-   With `operation=textDetection`: `list` (`java.util.List<com.google.cloud.vision.v1.EntityAnnotation>`)
+    
+-   With `operation=faceDetection`: `list` (`java.util.List<com.google.cloud.vision.v1.FaceAnnotation>`)
+    
+-   With `operation=landmarkDetection`: `list` (`java.util.List<com.google.cloud.vision.v1.EntityAnnotation>`)
+    
+-   With `operation=logoDetection`: `list` (`java.util.List<com.google.cloud.vision.v1.EntityAnnotation>`)
+    
+-   With `operation=objectLocalization`: `list` (`java.util.List<com.google.cloud.vision.v1.LocalizedObjectAnnotation>`)
+    
+-   With `operation=safeSearchDetection`: `pojo` (`com.google.cloud.vision.v1.SafeSearchAnnotation`)
+    
+-   With `operation=imagePropertiesDetection`: `pojo` (`com.google.cloud.vision.v1.ImageProperties`)
+    
+-   With `operation=webDetection`: `pojo` (`com.google.cloud.vision.v1.WebDetection`)
+    
+-   With `operation=cropHintsDetection`: `pojo` (`com.google.cloud.vision.v1.CropHintsAnnotation`)
+    
+-   With `operation=documentTextDetection`: `pojo` (`com.google.cloud.vision.v1.TextAnnotation`)
+    
+-   With `pojoRequest=true`: `pojo` (`com.google.cloud.vision.v1.AnnotateImageResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message body

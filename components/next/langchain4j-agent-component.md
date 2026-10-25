@@ -265,6 +265,18 @@ Enum values:
 | **CamelLangChain4jAgentToolExecutions** (producer) Constant: [`TOOL_EXECUTIONS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#TOOL_EXECUTIONS) | Tool executions performed during agent invocation. |  | List |
 | **CamelLangChain4jAgentModerationFlagged** (producer) Constant: [`MODERATION_FLAGGED`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-agent/latest/org/apache/camel/component/langchain4j/agent/api/Headers.html#MODERATION_FLAGGED) | Set to true when user input is rejected by the configured moderation model; not set on success. |  | Boolean |
 
+## Message Body
+
+The message body at each side of the LangChain4j Agent component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `pojo`, `bytes`, `stream` or `file` | The user message as text, or an AiAgentBody with the user message, the system message, the memory id and a content. Bytes, a stream or a file of the file consumers is sent as an image, audio, video, PDF or text content after the text of the CamelLangChain4jAgentUserMessage header; bytes and a stream need the CamelLangChain4jAgentMediaType or Content-Type header. A Map, a java.io.File or another object fails, and no body fails. |
+| **Producer output** | `text` | The answer of the agent as text, also with outputClass or jsonSchema: unmarshal the JSON to read its fields. The token counts, the finish reason, the sources and the tool executions are in headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## OAuth Authentication
 
 ### Quarkus Runtime

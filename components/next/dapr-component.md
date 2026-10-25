@@ -494,6 +494,56 @@ Enum values:
 | **CamelDaprTimeout** (producer) Constant: [`TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#TIMEOUT) | The amount of time to wait for the workflow instance to start/complete. |  | Duration |
 | **CamelDaprEventName** (producer) Constant: [`EVENT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#EVENT_NAME) | The name of the event. Event names are case-insensitive. |  | String |
 
+## Message Body
+
+The message body at each side of the Dapr component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` or `map` | 
+For pubSub the data of the cloud event as bytes, with its id, type, source and content type in headers. For configuration a Map of the changed keys and their values, with the ConfigurationItems in the CamelDaprRawConfigResponse header.
+
+-   With `operation=pubSub`: `bytes` (`byte[]`)
+    
+-   With `operation=configuration`: `map` (`java.util.Map<java.lang.String, java.lang.String>`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `text`, `bytes`, `value`, `map`, `list`, `pojo` or `null` | The data of invokeService, pubSub, invokeBinding, state save and the workflow input, event and output, given to the Dapr client as is: bytes are sent as they are, other bodies are serialized as JSON (text as a JSON string), and a stream fails: convert it to bytes first. State save needs a body; the other operations do not read it. |
+| **Producer output** | `bytes`, `pojo`, `list`, `map`, `value`, `unchanged` or `null` | 
+
+The response as bytes for invokeService and invokeBinding (null when there is none), the PublishEventRequest for pubSub, the State for state get and save, a List of State for getBulk and the request for the other state operations, a Map for secret and configuration, true or false for tryLock and the UnlockResponseStatus for unlock. For workflow the NewWorkflowOptions for scheduleNew, the WorkflowState for state and the waits, unchanged for terminate and raiseEvent, and null otherwise.
+
+-   With `operation=invokeService`: `bytes` or `null`
+    
+-   With `operation=invokeBinding`: `bytes` or `null`
+    
+-   With `operation=pubSub`: `pojo` (`io.dapr.client.domain.PublishEventRequest`)
+    
+-   With `operation=state`: `pojo` or `list`
+    
+-   With `operation=secret`: `map`
+    
+-   With `operation=configuration`: `map` (`java.util.Map<java.lang.String, java.lang.String>`)
+    
+-   With `operation=lock`: `value`
+    
+-   With `operation=workflow`: `pojo`, `unchanged` or `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ### Dapr Producer operations
 
 Camel Dapr component provides a wide range of operations on the producer side:

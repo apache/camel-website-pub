@@ -191,6 +191,17 @@ Enum values:
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 
+## Message Body
+
+The message body at each side of the PostgreSQL Replication Slot component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | One message of the output plugin of the slot, as bytes: text for test\_decoding, JSON for wal2json, the binary protocol for pgoutput; convert it to a String for the text plugins. The exchange id is the LSN of the message. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Tips

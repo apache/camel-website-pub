@@ -213,6 +213,33 @@ Enum values:
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 
+## Message Body
+
+The message body at each side of the JOOQ component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | One row of the table of the entityType per message, as the jOOQ UpdatableRecord of that class. |
+| **Producer input** | `pojo` | A jOOQ object, by the operation: a record of the entityType to store for NONE, an org.jooq.Query for EXECUTE, an org.jooq.ResultQuery (a select) for FETCH. Text, a Map or a List fails: there is no conversion to them. With the query option the SQL is that query and the body is not read.
+Not known when `query` is set.
+
+ |
+| **Producer output** | `unchanged` | 
+
+NONE stores the record and EXECUTE runs the query, both leave the body unchanged. FETCH gives the org.jooq.Result of the query, a List of its records, which is empty for no row.
+
+-   With `operation=FETCH`: `list` (`org.jooq.Result`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 JOOQ provides DSL to create queries. There are two types of queries:
@@ -288,9 +315,9 @@ When using jooq as a producer you can use any of the following `JooqOperation` o
  
 | Operation | Description |
 | --- | --- |
-| none | Execute a query (default) |
-| execute | Execute a query with no expected results |
-| fetch | Execute a query and the result of the query is stored as the new message body |
+| none | Store the entity (the record of the entity type) in the message body (default) |
+| execute | Execute a query (an `org.jooq.Query` in the message body, or the `query` option) with no expected results |
+| fetch | Execute a query (an `org.jooq.ResultQuery` in the message body, or the `query` option) and the `org.jooq.Result` of the query is stored as the new message body |
 
 ## Example
 

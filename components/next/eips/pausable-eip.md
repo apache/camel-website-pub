@@ -15,6 +15,17 @@ The Pausable eip supports the following options which are listed below.
 | **consumerListener** | **Required** The consumer listener to use for pausing and resuming the consumer. |  | ConsumerListener |
 | **untilCheck** | **Required** Predicate to evaluate whether the processing can resume. Returns true if consumption can resume, or false otherwise. |  | Predicate |
 
+## Message Body
+
+The message body at each side of the Pausable EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Pauses the consumer while the condition holds: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Example
 
 To use the Pausable EIP, you need an instance of a consumer listener along with a predicate that tests whether consumption should continue.

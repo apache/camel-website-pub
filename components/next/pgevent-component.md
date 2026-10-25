@@ -138,6 +138,20 @@ The PostgreSQL Event component supports the following message header(s), which i
 | --- | --- | --- | --- |
 | **channel** (consumer) Constant: [`HEADER_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-pgevent/latest/org/apache/camel/component/pgevent/PgEventConstants.html#HEADER_CHANNEL) | The name of the channel. |  | String |
 
+## Message Body
+
+The message body at each side of the PostgreSQL Event component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The payload of the notification as a String, empty when it was sent without one; the channel is in the channel header. |
+| **Producer input** | `any` | The payload of the notification, converted to a String: text, or bytes, a stream or a file of it; a Map or a POJO is sent as its toString(), so marshal it first. PostgreSQL takes a payload of less than 8000 bytes, and no body sends an empty payload. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Listening and notifying

@@ -148,6 +148,17 @@ Enum values:
 
  |  | ExchangePattern |
 
+## Message Body
+
+The message body at each side of the ZooKeeper Master component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The body the consumer of the delegate endpoint (consumerEndpointUri) makes, such as the file of a file consumer: only the node that holds the leadership of the group runs it. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 You can protect a clustered Camel application to only consume files from one active node.

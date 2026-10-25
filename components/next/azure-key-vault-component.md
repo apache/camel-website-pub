@@ -156,6 +156,51 @@ The Azure Key Vault component supports the following message header(s), which is
 | **CamelAzureKeyVaultSecretName** (producer) Constant: [`SECRET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-azure-key-vault/latest/org/apache/camel/component/azure/key/vault/KeyVaultConstants.html#SECRET_NAME) | The secret name to be used in Key Vault. |  | String |
 | **CamelAzureKeyVaultSecretProperties** (producer) Constant: [`SECRET_PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-azure-key-vault/latest/org/apache/camel/component/azure/key/vault/KeyVaultConstants.html#SECRET_PROPERTIES) | The secret properties to be used in Key Vault for updating a secret. |  | String |
 
+## Message Body
+
+The message body at each side of the Azure Key Vault component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The value of the secret for createSecret, the default, read as text: a Map or a POJO is stored as its toString(), and no body fails. The name of the secret is in the CamelAzureKeyVaultSecretName header, and updateSecretProperties takes the SecretProperties from the CamelAzureKeyVaultSecretProperties header: the other operations do not use the body.
+
+-   With `operation=getSecret`: `any`
+    
+-   With `operation=updateSecretProperties`: `any`
+    
+-   With `operation=deleteSecret`: `any`
+    
+-   With `operation=purgeDeletedSecret`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` (`com.azure.security.keyvault.secrets.models.KeyVaultSecret`) | 
+
+The KeyVaultSecret of the SDK for createSecret, the default; the value of the secret as text for getSecret; the SecretProperties for updateSecretProperties. No body after deleteSecret, which waits until the secret is deleted.
+
+-   With `operation=getSecret`: `text` (`java.lang.String`)
+    
+-   With `operation=updateSecretProperties`: `pojo` (`com.azure.security.keyvault.secrets.models.SecretProperties`)
+    
+-   With `operation=deleteSecret`: `null`
+    
+-   With `operation=purgeDeletedSecret`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Using Azure Key Vault Property Function
@@ -163,10 +208,10 @@ The Azure Key Vault component supports the following message header(s), which is
 To use this function, you’ll need to provide credentials to Azure Key Vault Service as environment variables:
 
 ```bash
-export $CAMEL_VAULT_AZURE_TENANT_ID=tenantId
-export $CAMEL_VAULT_AZURE_CLIENT_ID=clientId
-export $CAMEL_VAULT_AZURE_CLIENT_SECRET=clientSecret
-export $CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
+export CAMEL_VAULT_AZURE_TENANT_ID=tenantId
+export CAMEL_VAULT_AZURE_CLIENT_ID=clientId
+export CAMEL_VAULT_AZURE_CLIENT_SECRET=clientSecret
+export CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -184,8 +229,8 @@ camel.vault.azure.vaultName = vaultName
 Or you can enable the usage of Azure Identity in the following way:
 
 ```bash
-export $CAMEL_VAULT_AZURE_IDENTITY_ENABLED=true
-export $CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
+export CAMEL_VAULT_AZURE_IDENTITY_ENABLED=true
+export CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
 ```
 
 You can also enable the usage of Azure Identity in the `application.properties` file such as:
@@ -456,10 +501,10 @@ Being able to reload Camel context on a Secret Refresh could be done by specifyi
 With Environment variables:
 
 ```bash
-export $CAMEL_VAULT_AZURE_TENANT_ID=tenantId
-export $CAMEL_VAULT_AZURE_CLIENT_ID=clientId
-export $CAMEL_VAULT_AZURE_CLIENT_SECRET=clientSecret
-export $CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
+export CAMEL_VAULT_AZURE_TENANT_ID=tenantId
+export CAMEL_VAULT_AZURE_CLIENT_ID=clientId
+export CAMEL_VAULT_AZURE_CLIENT_SECRET=clientSecret
+export CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
 ```
 
 or as plain Camel main properties:
@@ -474,8 +519,8 @@ camel.vault.azure.vaultName = vaultName
 If you want to use Azure Identity with environment variables, you can do in the following way:
 
 ```bash
-export $CAMEL_VAULT_AZURE_IDENTITY_ENABLED=true
-export $CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
+export CAMEL_VAULT_AZURE_IDENTITY_ENABLED=true
+export CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
 ```
 
 You can also enable the usage of Azure Identity in the `application.properties` file such as:

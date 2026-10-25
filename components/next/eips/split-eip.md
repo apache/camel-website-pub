@@ -40,6 +40,21 @@ The Split eip supports the following options which are listed below.
 | **watermarkExpression** | Sets a Simple expression to evaluate on each completed sub-exchange to determine the new watermark value. When set, enables value-based watermarking instead of index-based. The expression is evaluated using the Simple language. |  | String |
 | **outputs** | **Required** |  | List |
 
+## Message Body
+
+The message body at each side of the Split EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | The body as it was before the split, unless an aggregationStrategy is set.
+Not known when `aggregationStrategy` is set.
+
+ |
+| **Steps** | `unknown` | Each part of what the expression gives, such as an element of a List or a line of text. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Split eip supports the following exchange properties which are listed below.

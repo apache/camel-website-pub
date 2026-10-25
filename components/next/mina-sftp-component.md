@@ -156,7 +156,7 @@ Enum values:
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **streamDownload** (consumer) | Sets the download method to use when not using a local working directory. If set to true, the remote files are streamed to the route as they are read. When set to false, the remote files are loaded into memory before being sent into the route. If enabling this option then you must set stepwise=false as both cannot be enabled at the same time. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
-| **download** (consumer (advanced)) | Whether the FTP consumer should download the file. If this option is set to false, then the message body will be null, but the consumer will still trigger a Camel Exchange that has details about the file such as file name, file size, etc. It’s just that the file will not be downloaded. | false | boolean |
+| **download** (consumer (advanced)) | Whether the FTP consumer should download the file. If this option is set to false, then the message body will be null, but the consumer will still trigger a Camel Exchange that has details about the file such as file name, file size, etc. It’s just that the file will not be downloaded. | true | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
 
@@ -487,6 +487,40 @@ The MINA SFTP component supports the following message header(s), which is/are l
 | **CamelFileHost** (consumer) Constant: [`FILE_HOST`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FILE_HOST) | The remote hostname. |  | String |
 | **CamelFtpReplyCode** (common) Constant: [`FTP_REPLY_CODE`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FTP_REPLY_CODE) | The FTP client reply code. |  | int |
 | **CamelFtpReplyString** (common) Constant: [`FTP_REPLY_STRING`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FTP_REPLY_STRING) | The FTP client reply string. |  | String |
+
+## Message Body
+
+The message body at each side of the MINA SFTP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `file` | The file as read: a RemoteFile, which converts to text, bytes or a stream; a stream with streamDownload; with preMove its content, a byte array.
+-   With `streamDownload=true`: `stream`
+    
+-   With `download=false`: `null`
+    
+
+Not known when `preMove` is set.
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+
+What converts to an InputStream: text, bytes, a stream or a file. A Map or a List fails: marshal it first.
+
+-   With `allowNullBody=true`: `null`, `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Sub-Pages
 

@@ -158,6 +158,28 @@ The Alibaba Simple Log Service (SLS) component supports the following message he
 | **CamelAlibabaSlsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sls/latest/org/apache/camel/component/alibaba/sls/constants/AlibabaSlsHeaders.html#REQUEST_ID) | Alibaba Cloud request id. |  | String |
 | **CamelAlibabaSlsStatusCode** (producer) Constant: [`STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sls/latest/org/apache/camel/component/alibaba/sls/constants/AlibabaSlsHeaders.html#STATUS_CODE) | HTTP status code from SLS response. |  | Integer |
 
+## Message Body
+
+The message body at each side of the Alibaba Simple Log Service (SLS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The logs to write for putLogs: a LogGroup or a PutLogsRequest of the SLS SDK, any other body fails. getLogs and listLogStores do not read the body, they take their input from options and headers.
+
+-   With `operation=putLogs`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` | A Map of the response with its statusCode and headers. For getLogs the GetLogsResponseBody of the SLS SDK is under body, for listLogStores the names under logstores with count and total. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Operations
@@ -173,7 +195,7 @@ The component supports the following operations:
 
 ### Producer examples
 
-Put logs:
+Put logs, where the message body must be a `LogGroup` or a `PutLogsRequest` of the SLS SDK (any other body fails):
 
 -   Java
     

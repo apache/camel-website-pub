@@ -31,7 +31,7 @@ The message body at each side of the QuickJS language: _Expression input_ is the
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression input** | `text`, `bytes`, `value`, `map`, `list` or `pojo` | A JSON copy of the body, in the variable body: bytes as Base64 text, and a POJO through Jackson. A stream fails: convert it to text first. |
-| **Expression result** | `text`, `value`, `map`, `list` or `null` | The JSON value the script returns: an object as a Map, an array as a List, and undefined, NaN or a function as null.
+| **Expression result** | `text`, `value`, `map`, `list` or `null` | The JSON value the script returns: an object or a Map as a Map, an array, a Set or a typed array as a List, a Date as its ISO text, and undefined, NaN or a function as null.
 Not known when `resultType` is set.
 
  |
@@ -142,7 +142,7 @@ Serialization failures of the message body raise a Camel evaluation exception th
 
 ## Expression and predicate
 
-As an expression, the JSON value of the script becomes the Camel result (then converted with Camel type converters when a result type is requested): an object becomes a `Map` and an array a `List`, a `Date` becomes its ISO text, and `undefined`, `NaN` or a function becomes `null`. A `Set` or a typed array does not keep its values. In `setBody` and `transform` this result replaces a body the script set with `camel.setBody(…​)`.
+As an expression, the JSON value of the script becomes the Camel result (then converted with Camel type converters when a result type is requested): an object becomes a `Map` and an array a `List`, a `Date` becomes its ISO text, and `undefined`, `NaN` or a function becomes `null`. A `Set` becomes a `List`, a JavaScript `Map` a `Map` (its keys as text), a typed array or an `ArrayBuffer` a `List` of numbers, and a `DataView` a `List` of its bytes, also when nested. A result that has no JSON form, such as a `BigInt` or a cyclic object, fails the evaluation, as does a `Promise` that is rejected; a `Promise` that resolves gives its value. In `setBody` and `transform` this result replaces a body the script set with `camel.setBody(…​)`.
 
 As a predicate (`.when().quickjs(…​)` or `.filter().quickjs(…​)`), the result is converted to boolean with Camel’s standard `ObjectHelper.evaluateValuePredicate` rules: a `Boolean` is used directly; the strings `true`/`false` are parsed; any other non-empty, non-null value is true.
 

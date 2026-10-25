@@ -199,6 +199,53 @@ Enum values:
 | **CamelOpenstackName** (producer) Constant: [`NAME`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#NAME) | The name. |  | String |
 | **CamelOpenstackProperties** (producer) Constant: [`PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-openstack/latest/org/apache/camel/component/openstack/common/OpenstackConstants.html#PROPERTIES) | The image properties. |  | Map |
 
+## Message Body
+
+The message body at each side of the OpenStack Glance component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+For create and upload the image data: an InputStream, a File, a URL or a Payload of openstack4j; text, bytes or the file of the file consumer fail: convert it to a File or an InputStream first. reserve and update take an Image of openstack4j, or else the fields from headers such as CamelOpenstackName.
+
+-   With `operation=create`: `stream`, `file` or `pojo`
+    
+-   With `operation=upload`: `stream`, `file` or `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo`, `list`, `null` or `unchanged` | 
+
+The Image of openstack4j reserved, created, uploaded, updated or read (null when get finds none), a List of them for getAll; delete keeps the body.
+
+-   With `operation=reserve`: `pojo`
+    
+-   With `operation=create`: `pojo`
+    
+-   With `operation=upload`: `pojo`
+    
+-   With `operation=update`: `pojo`
+    
+-   With `operation=get`: `pojo` or `null`
+    
+-   With `operation=getAll`: `list`
+    
+-   With `operation=delete`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
  

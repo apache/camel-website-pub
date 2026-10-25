@@ -190,7 +190,7 @@ Enum values:
 
  |  | String |
 | **timestamp** (producer) | The metric timestamp. |  | Instant |
-| **unit** (producer) | The metric unit. |  | String |
+| **unit** (producer) | The metric unit, the name of a StandardUnit such as Count or Bytes, in any case. |  | String |
 | **uriEndpointOverride** (producer) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **value** (producer) | The metric value. |  | Double |
 | **amazonCwClient** (advanced) | **Autowired** To use the AmazonCloudWatch as the client. |  | CloudWatchClient |
@@ -362,7 +362,7 @@ Enum values:
 
  |  | String |
 | **timestamp** (producer) | The metric timestamp. |  | Instant |
-| **unit** (producer) | The metric unit. |  | String |
+| **unit** (producer) | The metric unit, the name of a StandardUnit such as Count or Bytes, in any case. |  | String |
 | **uriEndpointOverride** (producer) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **value** (producer) | The metric value. |  | Double |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -405,8 +405,8 @@ The AWS CloudWatch component supports the following message header(s), which is/
 | **CamelAwsCwMetricNamespace** (producer) Constant: [`METRIC_NAMESPACE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_NAMESPACE) | The Amazon CW metric namespace. |  | String |
 | **CamelAwsCwMetricName** (producer) Constant: [`METRIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_NAME) | The Amazon CW metric name. |  | String |
 | **CamelAwsCwMetricValue** (producer) Constant: [`METRIC_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_VALUE) | The Amazon CW metric value. |  | Double |
-| **CamelAwsCwMetricUnit** (producer) Constant: [`METRIC_UNIT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_UNIT) | The Amazon CW metric unit. |  | String |
-| **CamelAwsCwMetricTimestamp** (producer) Constant: [`METRIC_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_TIMESTAMP) | The Amazon CW metric timestamp. |  | Date |
+| **CamelAwsCwMetricUnit** (producer) Constant: [`METRIC_UNIT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_UNIT) | The Amazon CW metric unit, the name of a StandardUnit such as Count or Bytes, in any case. |  | String |
+| **CamelAwsCwMetricTimestamp** (producer) Constant: [`METRIC_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_TIMESTAMP) | The Amazon CW metric timestamp. A java.util.Date works too. |  | Instant |
 | **CamelAwsCwMetricDimensions** (producer) Constant: [`METRIC_DIMENSIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_DIMENSIONS) | A map of dimension names and dimension values. |  | Map |
 | **CamelAwsCwMetricDimensionName** (producer) Constant: [`METRIC_DIMENSION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_DIMENSION_NAME) | The Amazon CW metric dimension name. |  | String |
 | **CamelAwsCwMetricDimensionValue** (producer) Constant: [`METRIC_DIMENSION_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-cw/latest/org/apache/camel/component/aws2/cw/Cw2Constants.html#METRIC_DIMENSION_VALUE) | The Amazon CW metric dimension value. |  | String |
@@ -423,7 +423,7 @@ The message body at each side of the AWS CloudWatch component: _Consumer_ is the
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | putMetricData sends a body that is a MetricDatum of the AWS SDK or a List of them, and a List of anything else fails; with another body the metric comes from the CamelAwsCwMetric\* headers or the name, value and unit options. The other operations do not use the body. |
+| **Producer input** | `any` | putMetricData sends a body that is a MetricDatum of the AWS SDK or a collection or an array of them, and one with another element fails; with another body the metric comes from the CamelAwsCwMetric\* headers or the name, value and unit options. The other operations do not use the body. |
 | **Producer output** | `unchanged` | 
 Unchanged after putMetricData, the default. The response of the AWS SDK for listMetrics, describeAlarms and describeAlarmsForMetric.
 
@@ -566,3 +566,9 @@ exchange.getIn().setHeader(Cw2Constants.METRIC_NAME, "ExchangesCompleted");
 exchange.getIn().setHeader(Cw2Constants.METRIC_VALUE, "2.0");
 exchange.getIn().setHeader(Cw2Constants.METRIC_UNIT, "Count");
 ```
+
+### The metric data of putMetricData
+
+The `putMetricData` operation sends the body when it is a `MetricDatum`, or a collection or an array of `MetricDatum` (each element must be a `MetricDatum`, otherwise the exchange fails). For any other body, the metric is built from the headers and the options: `CamelAwsCwMetricName` or the `name` option, `CamelAwsCwMetricValue` or the `value` option (1 by default), `CamelAwsCwMetricUnit` or the `unit` option (`Count` by default), and `CamelAwsCwMetricTimestamp` or the `timestamp` option.
+
+The unit is the name of a `StandardUnit` of the AWS SDK, such as `Count`, `Bytes` or `Kilobytes/Second`, in any case; an unknown unit fails the exchange. The timestamp header is an `Instant` or a `java.util.Date`.

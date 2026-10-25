@@ -169,6 +169,18 @@ Enum values:
 | **CamelMetricsGaugeSubject** (producer) Constant: [`HEADER_GAUGE_SUBJECT`](https://javadoc.io/doc/org.apache.camel/camel-metrics/latest/org/apache/camel/component/metrics/MetricsConstants.html#HEADER_GAUGE_SUBJECT) | Override subject value in URI. |  | Object |
 | **CamelMetricsName** (producer) Constant: [`HEADER_METRIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-metrics/latest/org/apache/camel/component/metrics/MetricsConstants.html#HEADER_METRIC_NAME) | Override name value in URI. |  | String |
 
+## Message Body
+
+The message body at each side of the Metrics component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the values come from the options or the CamelMetrics headers, such as CamelMetricsCounterIncrement or CamelMetricsGaugeSubject. |
+| **Producer output** | `unchanged` | Unchanged; the CamelMetrics headers are removed. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Metric Registry
 
 Camel Metrics component uses by default a `MetricRegistry` instance with a `Slf4jReporter` that has a 60-second reporting interval. This default registry can be replaced with a custom one by providing a `MetricRegistry` bean. If multiple `MetricRegistry` beans exist in the application, the one with name `metricRegistry` is used.

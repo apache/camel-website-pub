@@ -197,6 +197,30 @@ The CoAP component supports the following message header(s), which is/are listed
 | **CamelCoapResponseCode** (common) Constant: [`COAP_RESPONSE_CODE`](https://javadoc.io/doc/org.apache.camel/camel-coap/latest/org/apache/camel/coap/CoAPConstants.html#COAP_RESPONSE_CODE) | The CoAP response code sent by the external server. See RFC 7252 for details of what each code means. |  | String |
 | **Content-Type** (common) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-coap/latest/org/apache/camel/coap/CoAPConstants.html#CONTENT_TYPE) | The content type. |  | String |
 
+## Message Body
+
+The message body at each side of the CoAP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The request payload as a byte array, empty for a request without a payload, such as a GET; with observe, the payload of each notification of the observed resource. |
+| **Consumer reply** | `null`, `text`, `bytes`, `stream` or `file` | The response payload: text, bytes, a stream, a file or no body. A Map, a POJO or a number is sent as an empty payload: convert or marshal it first. |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The payload of a POST or a PUT: text, bytes, a stream or a file. A Map, a POJO or a number is sent as an empty payload: marshal it first. Without CamelCoapMethod, no body sends a GET and a body a POST. |
+| **Producer output** | `bytes` or `value` | 
+The response payload as a byte array, empty for a response without a payload; a Boolean for a PING (CamelCoapMethod=PING). The response code is in the CamelCoapResponseCode header.
+
+-   With `notify=true`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 Camel supports the DTLS, TCP and TLS protocols via the following URI schemes:

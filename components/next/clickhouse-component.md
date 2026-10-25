@@ -150,6 +150,43 @@ The ClickHouse component supports the following message header(s), which is/are 
 | **CamelClickHouseReadRows** (producer) Constant: [`READ_ROWS`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#READ_ROWS) | The number of rows read by a query operation. |  | long |
 | **CamelClickHousePingOk** (producer) Constant: [`PING_OK`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#PING_OK) | The boolean result of a ping operation. |  | boolean |
 
+## Message Body
+
+The message body at each side of the ClickHouse component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | 
+The rows to insert, in the format option (JSONEachRow: one JSON object per line), as text, bytes, a stream or a file; or a List of objects whose class is registered on the Client. A Map or a List of Maps fails: marshal it first. Query takes the SQL statement.
+
+-   With `operation=QUERY`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=PING`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+Insert leaves the body unchanged, with the count in the CamelClickHouseWrittenRows header. Query gives the result as a String in the format option (JSONEachRow: one JSON object per line); binary formats such as RowBinary do not survive the String. Ping gives a Boolean. The CamelClickHouseOperation header overrides the operation.
+
+-   With `operation=QUERY`: `text` (`java.lang.String`)
+    
+-   With `operation=PING`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Operations
 
 The component is producer-only and supports the following operations, selected with the `operation` option or the `CamelClickHouseOperation` header:

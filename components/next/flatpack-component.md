@@ -204,6 +204,20 @@ The Flatpack component supports the following message header(s), which is/are li
 | --- | --- | --- | --- |
 | **CamelFlatpackCounter** (producer) Constant: [`FLATPACK_COUNTER`](https://javadoc.io/doc/org.apache.camel/camel-flatpack/latest/org/apache/camel/component/flatpack/FlatpackConstants.html#FLATPACK_COUNTER) | The current row index. For splitRows=false the counter is the total number of rows. |  | int |
 
+## Message Body
+
+The message body at each side of the Flatpack component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`net.sf.flatpack.DataSet`) | The Flatpack DataSet the producer parsed. With splitRows, one message per row, with the DataSet at that row: convert it to a Map before any asynchronous step, as the next row moves it; a List reads all the rows and ends the split. With splitRows=false, the whole DataSet: convert it to a List of Maps. |
+| **Producer input** | `text`, `bytes`, `stream` or `file`, as text | The fixed-width or delimited data to parse, such as a file from the file consumer; a java.io.File, a Map or a List fails. The rows go to the consumer of the same endpoint. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 -   `flatpack:fixed:foo.pzmap.xml` creates a fixed-width endpoint using the `foo.pzmap.xml` file configuration.
@@ -215,7 +229,7 @@ The Flatpack component supports the following message header(s), which is/are li
 
 ### Message Body
 
-The component delivers the data in the IN message as a `org.apache.camel.component.flatpack.DataSetList` object that has converters for `java.util.Map` or `java.util.List`.  
+The component delivers the data in the IN message as a Flatpack `net.sf.flatpack.DataSet` object that has converters for `java.util.Map` or `java.util.List`.  
 Usually you want the `Map` if you process one row at a time (`splitRows=true`). Use `List` for the entire content (`splitRows=false`), where each element in the list is a `Map`.  
 Each `Map` contains the key for the column name and its corresponding value.
 
@@ -228,15 +242,7 @@ _Java-only: accessing row data from the exchange body_
   String firstName = row.get("FIRSTNAME");
 ```
 
-However, you can also always get it as a `List` (even for `splitRows=true`). The same example:
-
-_Java-only: accessing row data as a List from the exchange body_
-
-```java
-  List data = exchange.getIn().getBody(List.class);
-  Map row = (Map)data.get(0);
-  String firstName = row.get("FIRSTNAME");
-```
+With `splitRows=true`, every message shares the same `DataSet`, positioned at its row. Convert the body to a `Map` before any asynchronous step (such as `seda` or `wireTap`), as the next row moves the `DataSet`. Do not convert it to a `List`: that reads all the rows and the remaining rows are then not sent.
 
 ### Header and Trailer records
 

@@ -27,7 +27,7 @@ The message body at each side of the Python 3 language: _Expression input_ is th
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression input** | `any` | The body as it is, in the variable body: a Map, a List or an array can be indexed, and other Java objects have no methods unless the language is created with createWithHostAccess(). |
-| **Expression result** | `unknown` | What the script returns: a dict as a Map, a list or a tuple as a List, a set as a Set, bytes as a List of numbers, and None as null. |
+| **Expression result** | `unknown` | What the script returns: a dict as a Map, a list or a tuple as a List, a set as a Set, bytes as bytes, and None as null. A function fails. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 

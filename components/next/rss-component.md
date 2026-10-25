@@ -196,11 +196,22 @@ The RSS component supports the following message header(s), which is/are listed 
 | --- | --- | --- | --- |
 | **CamelRssFeed** (consumer) Constant: [`RSS_FEED`](https://javadoc.io/doc/org.apache.camel/camel-rss/latest/org/apache/camel/component/rss/RssConstants.html#RSS_FEED) | The entire SyncFeed object. |  | Object |
 
+## Message Body
+
+The message body at each side of the RSS component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.rometools.rome.feed.synd.SyndFeed`) | A ROME SyndFeed: with splitEntries (the default) a copy of the feed with the one entry in its entries, with splitEntries=false the whole feed with all its entries. The CamelRssFeed header carries the whole feed unless feedHeader=false. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Exchange data types
 
-Camel initializes the In body on the Exchange with a ROME `SyndFeed`. Depending on the value of the `splitEntries` flag, Camel returns either a `SyndFeed` with one `SyndEntry` or a `java.util.List` of `SyndEntrys`.
+Camel initializes the In body on the Exchange with a ROME `SyndFeed`. Depending on the value of the `splitEntries` flag, Camel returns either a `SyndFeed` with one `SyndEntry` or the whole `SyndFeed` with all its `SyndEntrys`.
 
   
 | Option | Value | Behavior |

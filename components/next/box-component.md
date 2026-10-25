@@ -1695,6 +1695,23 @@ The Box component supports the following message header(s), which is/are listed 
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelBox.** (common) Constant: [`PROPERTY_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-box/latest/org/apache/camel/component/box/internal/BoxConstants.html#PROPERTY_PREFIX) | The prefix of the headers that carry the parameters of the API method: the header CamelBox.fileName holds the fileName parameter. |  | Object |
+
+## Message Body
+
+The message body at each side of the Box component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.box.sdk.BoxEvent`) | events/listen is the only consumer: one message per event of the Box event stream, a BoxEvent. |
+| **Producer input** | `any` | The body is used only when inBody names a parameter of the method, and must then be of the type of that parameter: an InputStream for content of files/uploadFile and fileContent of files/uploadNewFileVersion (convertBodyTo java.io.InputStream after a file consumer), or text for an id such as fileId. Without inBody the arguments come from the options and the CamelBox. headers.
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo`, `list` or `null` | The return value of the method: a Box SDK object, such as the BoxFile of files/uploadFile, the BoxFolder of folders/createFolder or the Info of files/getFileInfo; a Collection or a List for the methods that list, such as folders/getFolderItems; null for the deletes and the other methods without a result. files/downloadFile writes the content to the OutputStream of the output option or the CamelBox.output header and gives that OutputStream, not the content. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 

@@ -425,7 +425,7 @@ The AWS Elastic Compute Cloud (EC2) component supports the following message hea
 | --- | --- | --- | --- |
 | **CamelAwsEC2ImageId** (producer) Constant: [`IMAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#IMAGE_ID) | An image ID of the AWS marketplace. |  | String |
 | **CamelAwsEC2InstanceType** (producer) Constant: [`INSTANCE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCE_TYPE) | 
-The instance type we want to create and run.
+The instance type we want to create and run, as an InstanceType, its AWS value (such as t2.micro) or the name of the constant (such as T2\_MICRO).
 
 Enum values:
 
@@ -3318,7 +3318,7 @@ Enum values:
 | **CamelAwsEC2InstanceKernelId** (producer) Constant: [`INSTANCE_KERNEL_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCE_KERNEL_ID) | The ID of the kernel. |  | String |
 | **CamelAwsEC2InstanceEbsOptimized** (producer) Constant: [`INSTANCE_EBS_OPTIMIZED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCE_EBS_OPTIMIZED) | Define if the creating instance is optimized for EBS I/O. |  | Boolean |
 | **CamelAwsEC2InstanceSecurityGroups** (producer) Constant: [`INSTANCE_SECURITY_GROUPS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCE_SECURITY_GROUPS) | The security groups to associate to the instances. |  | Collection |
-| **CamelAwsEC2InstancesIds** (producer) Constant: [`INSTANCES_IDS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCES_IDS) | A collection of instances IDS to execute start, stop, describe and terminate operations on. |  | Collection |
+| **CamelAwsEC2InstancesIds** (producer) Constant: [`INSTANCES_IDS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCES_IDS) | A collection of instances IDS to execute start, stop, describe and terminate operations on. A String of ids separated by commas is accepted too. |  | Collection |
 | **CamelAwsEC2InstancesKeyPair** (producer) Constant: [`INSTANCES_KEY_PAIR`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCES_KEY_PAIR) | The name of the key pair. |  | String |
 | **CamelAwsEC2InstancesClientToken** (producer) Constant: [`INSTANCES_CLIENT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCES_CLIENT_TOKEN) | Unique, case-sensitive identifier you provide to ensure the idempotency of the request. |  | String |
 | **CamelAwsEC2InstancesPlacement** (producer) Constant: [`INSTANCES_PLACEMENT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ec2/latest/org/apache/camel/component/aws2/ec2/AWS2EC2Constants.html#INSTANCES_PLACEMENT) | The placement for the instance. |  | Placement |
@@ -3506,6 +3506,8 @@ from("direct:createAndRun")
 
 -   startInstances: this operation will start a list of EC2 instances
     
+
+The `CamelAwsEC2InstancesIds` header is a collection of instance IDs, or a String of IDs separated by commas (such as `i-1,i-2`), which can be set from XML and YAML routes too.
 
 _Java-only: sets a collection header for instance IDs_
 

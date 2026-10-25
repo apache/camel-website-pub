@@ -257,7 +257,47 @@ The MyBatis component supports the following message header(s), which is/are lis
 
 ## Message Body
 
-The response from MyBatis will only be set as the body if it’s a `SELECT` statement. That means, for example, for `INSERT` statements Camel will not replace the body. This allows you to continue routing and keep the original body. The response from MyBatis is always stored in the header with the key `CamelMyBatisResult`.
+The message body at each side of the MyBatis component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | One row of the select per message, as the resultType or resultMap of the statement maps it: a bean, a Map or a single value, and null for a row of only nulls. With useIterator=false a List of all the rows in one message; with outputHeader the row goes in that header and the body is null.
+-   With `useIterator=false`: `list`
+    
+
+Not known when `outputHeader` is set.
+
+ |
+| **Producer input** | `any` | The parameter of the statement, given to MyBatis as it is, without type conversion: it must fit the parameterType, so the text 123 fails an int parameter. A bean or a Map for several parameters; no body runs the statement without one. Insert, Update and Delete run once per element of a List, an array or an Iterator, the List variants once with the whole List. With inputHeader the parameter is that header and the body is not read. |
+| **Producer output** | `unknown` | By the statementType, which the producer needs: SelectOne gives the one row as the statement maps it (a bean, a Map or a value), or null for no row; SelectList a List of the rows. Insert, Update and Delete leave the body unchanged, with the count of rows in the CamelMyBatisResult header. With outputHeader the result goes in that header and the body is unchanged.
+
+-   With `statementType=SelectOne`: `unknown`
+    
+-   With `statementType=SelectList`: `list`
+    
+-   With `statementType=Insert`: `unchanged`
+    
+-   With `statementType=InsertList`: `unchanged`
+    
+-   With `statementType=Update`: `unchanged`
+    
+-   With `statementType=UpdateList`: `unchanged`
+    
+-   With `statementType=Delete`: `unchanged`
+    
+-   With `statementType=DeleteList`: `unchanged`
+    
+
+Not known when `outputHeader` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
+## Message Body
+
+The response from MyBatis will only be set as the body if it’s a `SELECT` statement. That means, for example, for `INSERT` statements Camel will not replace the body. This allows you to continue routing and keep the original body. The response from MyBatis is stored in the header with the key `CamelMyBatisResult`, or in the header that the `outputHeader` option names, which leaves the body unchanged for a `SELECT` as well.
 
 ## Examples
 

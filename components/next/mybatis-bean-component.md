@@ -131,11 +131,26 @@ The MyBatis Bean component supports the following message header(s), which is/ar
 | --- | --- | --- | --- |
 | **CamelMyBatisResult** (producer) Constant: [`MYBATIS_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-mybatis/latest/org/apache/camel/component/mybatis/MyBatisConstants.html#MYBATIS_RESULT) | The response returned from MyBatis in any of the operations. Such as INSERT could return the auto-generated key, or number of rows etc. |  | Object |
 
+## Message Body
+
+The message body at each side of the MyBatis Bean component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The argument of the method of the mapper, converted to its parameter type by the bean binding, so the text 123 fits an int parameter. With inputHeader the argument is that header and the body is not read. |
+| **Producer output** | `unknown` | What the method of the mapper returns, as it declares it: a bean, a List of rows, a Map, a value such as the count of an update, or null for no row; also in the CamelMyBatisResult header. A void method leaves the body unchanged. With outputHeader the result goes in that header and the body is unchanged.
+Not known when `outputHeader` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message Body
 
-The response from MyBatis will only be set as the body if it’s a `SELECT` statement. That means, for example, for `INSERT` statements Camel will not replace the body. This allows you to continue routing and keep the original body. The response from MyBatis is always stored in the header with the key `CamelMyBatisResult`.
+The value the mapper method returns is set as the body, and is also stored in the header with the key `CamelMyBatisResult`. That is the bean, the `List` or the `Map` of a select (or null when there is no row), and the count of rows of an `INSERT`, `UPDATE` or `DELETE` method that returns an `int`. A `void` method leaves the body as it was, which allows you to continue routing with the original body. With the `outputHeader` option the result is stored in that header instead, and the body is not changed.
 
 ## Examples
 

@@ -131,7 +131,7 @@ The File Watch component supports the following message header(s), which is/are 
 | **CamelFileRelativePath** (consumer) Constant: [`FILE_RELATIVE_PATH`](https://javadoc.io/doc/org.apache.camel/camel-file-watch/latest/org/apache/camel/component/file/watch/FileWatchConstants.html#FILE_RELATIVE_PATH) | The relative path. |  | String |
 | **CamelFileNameConsumed** (consumer) Constant: [`FILE_NAME_CONSUMED`](https://javadoc.io/doc/org.apache.camel/camel-file-watch/latest/org/apache/camel/component/file/watch/FileWatchConstants.html#FILE_NAME_CONSUMED) | The name of the file that has been consumed. |  | String |
 | **CamelFileParent** (consumer) Constant: [`FILE_PARENT`](https://javadoc.io/doc/org.apache.camel/camel-file-watch/latest/org/apache/camel/component/file/watch/FileWatchConstants.html#FILE_PARENT) | The parent path. |  | String |
-| **CamelFileLastModified** (consumer) Constant: [`FILE_LAST_MODIFIED`](https://javadoc.io/doc/org.apache.camel/camel-file-watch/latest/org/apache/camel/component/file/watch/FileWatchConstants.html#FILE_LAST_MODIFIED) | A Long value containing the last modified timestamp of the file. |  | long |
+| **CamelFileLastModified** (consumer) Constant: [`FILE_LAST_MODIFIED`](https://javadoc.io/doc/org.apache.camel/camel-file-watch/latest/org/apache/camel/component/file/watch/FileWatchConstants.html#FILE_LAST_MODIFIED) | A Long value containing the last modified timestamp of the file. Not set when the file no longer exists, such as for a DELETE event. |  | long |
 
 ## Message Body
 
@@ -157,13 +157,13 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ```java
 from("file-watch://some-directory")
-    .log("File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}");
+    .log("File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelMessageTimestamp}");
 ```
 
 ```xml
 <route>
   <from uri="file-watch://some-directory"/>
-  <log message="File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}"/>
+  <log message="File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelMessageTimestamp}"/>
 </route>
 ```
 
@@ -173,7 +173,7 @@ from("file-watch://some-directory")
       uri: file-watch://some-directory
       steps:
         - log:
-            message: "File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}"
+            message: "File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelMessageTimestamp}"
 ```
 
 ### Recursive watch for creation and deletion of txt files:
@@ -187,13 +187,13 @@ from("file-watch://some-directory")
 
 ```java
 from("file-watch://some-directory?events=DELETE,CREATE&antInclude=**/*.txt")
-    .log("File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}");
+    .log("File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelMessageTimestamp}");
 ```
 
 ```xml
 <route>
   <from uri="file-watch://some-directory?events=DELETE,CREATE&amp;antInclude=**/*.txt"/>
-  <log message="File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}"/>
+  <log message="File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelMessageTimestamp}"/>
 </route>
 ```
 
@@ -206,7 +206,7 @@ from("file-watch://some-directory?events=DELETE,CREATE&antInclude=**/*.txt")
         antInclude: "**/*.txt"
       steps:
         - log:
-            message: "File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelFileLastModified}"
+            message: "File event: ${header.CamelFileEventType} occurred on file ${header.CamelFileName} at ${header.CamelMessageTimestamp}"
 ```
 
 ### Create a snapshot of file when modified:

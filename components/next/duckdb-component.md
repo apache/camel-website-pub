@@ -163,6 +163,43 @@ The DuckDB component supports the following message header(s), which is/are list
 | **CamelDuckDbRowsRead** (producer) Constant: [`ROWS_READ`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#ROWS_READ) | The number of rows returned by a query. |  | long |
 | **CamelDuckDbPingOk** (producer) Constant: [`PING_OK`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#PING_OK) | The boolean result of a ping operation. |  | boolean |
 
+## Message Body
+
+The message body at each side of the DuckDB component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The SQL statement as text, or bytes, a stream or a file of it; the query option or the CamelDuckDbQuery header takes its place. Insert takes a List of Maps of the column names and their values (a Map alone fails), copy a File or the path of the csv, parquet or json file to load.
+-   With `operation=INSERT`: `list`
+    
+-   With `operation=COPY`: `file` or `text`
+    
+-   With `operation=PING`: `any`
+    
+
+Not known when `query` is set.
+
+ |
+| **Producer output** | `value` (`java.lang.Long`) | 
+
+The count of rows written or affected as a Long, also in the CamelDuckDbRowsWritten header. Query gives the rows as a List of Maps of the column names and their values (a JSON array String with resultFormat=JSON), ping a Boolean. The CamelDuckDbOperation header overrides the operation.
+
+-   With `operation=QUERY`: `list` (`java.util.List<java.util.Map<String, Object>>`)
+    
+-   With `operation=PING`: `value` (`java.lang.Boolean`)
+    
+-   With `resultFormat=JSON`: `text` or `value`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Operations
 
 The producer supports:

@@ -1372,7 +1372,7 @@ One message per poll with the return value of the method: a MethodOutcome for cr
 
 
  |
-| **Producer input** | `any` | The body is used only when inBody names the argument of the method it is, and then passed as it is, without type conversion: resourceAsString, stringBundle and url take text (convertBodyTo String first), and resource, bundle and resources a HAPI FHIR object or a List of them (unmarshal with fhirJson or fhirXml first). Without inBody the arguments come from the options and the CamelFhir. headers.
+| **Producer input** | `any` | The body is used only when inBody names the argument of the method it is, and then converted to the type of that argument: resourceAsString, stringBundle and url take text, which a byte array, a stream or a file converts to, and resource, bundle and resources a HAPI FHIR object or a List of them (unmarshal with fhirJson or fhirXml first). A body that cannot be converted fails the exchange before the call. Without inBody the arguments come from the options and the CamelFhir. headers.
 
 Not known when `inBody` is set.
 
@@ -1446,6 +1446,6 @@ The URI names the API and its method, such as `fhir://read/resourceById`. The pa
             message: "Found ${body.total} patients"
 ```
 
-The `inBody` option names the parameter of the method that the message body is, such as `resourceAsString` in the first route. The body is passed as it is, without type conversion, so a parameter of type String needs a String body: convert a byte array or a stream with `convertBodyTo` first. Without `inBody` the body is not used.
+The `inBody` option names the parameter of the method that the message body is, such as `resourceAsString` in the first route. The body is converted to the type of that parameter, so a byte array, a stream or a file works for a parameter of type String. A body that cannot be converted fails the exchange before the call, with an error that names the parameter. Without `inBody` the body is not used.
 
 After the call the message body is the result of the method: a `MethodOutcome` for create, update, patch, delete and validate, and a HAPI FHIR model object for the others, such as the `Bundle` of a search or the resource of a read. Marshal a resource or a `Bundle` with `fhirJson` or `fhirXml` to get text.

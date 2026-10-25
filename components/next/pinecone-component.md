@@ -318,6 +318,79 @@ Enum values:
 | **CamelPineconeQueryIncludeValues** (producer) Constant: [`QUERY_INCLUDE_VALUES`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_INCLUDE_VALUES) | Query Include Values. |  | boolean |
 | **CamelPineconeQueryIncludeMetadata** (producer) Constant: [`QUERY_INCLUDE_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_INCLUDE_METADATA) | Query Include Metadata. |  | Struct |
 
+## Message Body
+
+The message body at each side of the Pinecone component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `list` or `null` | 
+By the action in the action option or the CamelPineconeAction header: the vector as a List of Float or a float array for UPSERT, UPDATE and QUERY, with the id in the CamelPineconeIndexId header, and the ids as a List of String for FETCH and DELETE\_BY\_ID. The other actions do not read the body. Another body fails, a List of Double too: the pinecone:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
+
+-   With `action=UPSERT`: `list`
+    
+-   With `action=UPDATE`: `list`
+    
+-   With `action=QUERY`: `list`
+    
+-   With `action=FETCH`: `list`
+    
+-   With `action=DELETE_BY_ID`: `list`
+    
+-   With `action=QUERY_BY_ID`: `any`
+    
+-   With `action=CREATE_COLLECTION`: `any`
+    
+-   With `action=CREATE_SERVERLESS_INDEX`: `any`
+    
+-   With `action=CREATE_POD_INDEX`: `any`
+    
+-   With `action=DELETE_INDEX`: `any`
+    
+-   With `action=DELETE_COLLECTION`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` or `unchanged` | 
+
+By the action: the response of the Pinecone SDK, such as an UpsertResponse, a FetchResponse or a QueryResponseWithUnsignedIndices with the matches. DELETE\_INDEX and DELETE\_COLLECTION keep the body.
+
+-   With `action=UPSERT`: `pojo` (`io.pinecone.proto.UpsertResponse`)
+    
+-   With `action=UPDATE`: `pojo` (`io.pinecone.proto.UpdateResponse`)
+    
+-   With `action=QUERY`: `pojo` (`io.pinecone.unsigned_indices_model.QueryResponseWithUnsignedIndices`)
+    
+-   With `action=QUERY_BY_ID`: `pojo` (`io.pinecone.unsigned_indices_model.QueryResponseWithUnsignedIndices`)
+    
+-   With `action=FETCH`: `pojo` (`io.pinecone.proto.FetchResponse`)
+    
+-   With `action=DELETE_BY_ID`: `pojo` (`io.pinecone.proto.DeleteResponse`)
+    
+-   With `action=CREATE_COLLECTION`: `pojo` (`org.openapitools.db_control.client.model.CollectionModel`)
+    
+-   With `action=CREATE_SERVERLESS_INDEX`: `pojo` (`org.openapitools.db_control.client.model.IndexModel`)
+    
+-   With `action=CREATE_POD_INDEX`: `pojo` (`org.openapitools.db_control.client.model.IndexModel`)
+    
+-   With `action=DELETE_INDEX`: `unchanged`
+    
+-   With `action=DELETE_COLLECTION`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The `action` option, or the `CamelPineconeAction` header, selects the operation. The first route below creates a serverless index. The second route queries the index with a vector, and the `CamelPineconeQueryTopK` header sets how many matches it returns:

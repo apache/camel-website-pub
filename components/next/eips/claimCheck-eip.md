@@ -43,6 +43,31 @@ Enum values:
 | **aggregationStrategy** | Reference to a custom AggregationStrategy to use for merging data back from the claim check repository. |  | AggregationStrategy |
 | **aggregationStrategyMethodName** | The method name to use when using a POJO as the AggregationStrategy. |  | String |
 
+## Message Body
+
+The message body at each side of the Claim Check EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unknown` | Set and Push keep the body; Get, GetAndRemove and Pop give the body that was stored.
+-   With `operation=Set`: `unchanged`
+    
+-   With `operation=Push`: `unchanged`
+    
+-   With `operation=Get`: `unknown`
+    
+-   With `operation=GetAndRemove`: `unknown`
+    
+-   With `operation=Pop`: `unknown`
+    
+
+Not known when `aggregationStrategy` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Claim Check eip has no exchange properties.

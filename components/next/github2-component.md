@@ -168,7 +168,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
-| **encoding** (producer) | To use the given encoding when getting a git commit file. |  | String |
+| **encoding** (producer) | The charset of the content of the file for the getCommitFile producer (the default charset of the JVM if not set). |  | String |
 | **state** (producer) | 
 
 To set git commit status state.
@@ -269,7 +269,8 @@ The GitHub2 component supports the following message header(s), which is/are lis
 | **CamelGitHubIssueTitle** (producer) Constant: [`GITHUB_ISSUE_TITLE`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_ISSUE_TITLE) | The title of the issue. |  | String |
 | **CamelGitHubCommitAuthor** (consumer) Constant: [`GITHUB_COMMIT_AUTHOR`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_COMMIT_AUTHOR) | The commit author. |  | String |
 | **CamelGitHubCommitCommitter** (consumer) Constant: [`GITHUB_COMMIT_COMMITTER`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_COMMIT_COMMITTER) | The committer name. |  | String |
-| **CamelGitHubCommitSha** (consumer) Constant: [`GITHUB_COMMIT_SHA`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_COMMIT_SHA) | The commit sha. |  | String |
+| **CamelGitHubCommitSha** (common) Constant: [`GITHUB_COMMIT_SHA`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_COMMIT_SHA) | The commit sha. The getCommitFile producer reads the file at this commit (a commit id of 40 hexadecimal characters). |  | String |
+| **CamelGitHubFilePath** (producer) Constant: [`GITHUB_FILE_PATH`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_FILE_PATH) | The path of the file in the repository for the getCommitFile producer. If not set, the body is the path. |  | String |
 | **CamelGitHubCommitUrl** (consumer) Constant: [`GITHUB_COMMIT_URL`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_COMMIT_URL) | The commit URL. |  | String |
 | **CamelGitHubEventPayload** (consumer) Constant: [`GITHUB_EVENT_PAYLOAD`](https://javadoc.io/doc/org.apache.camel/camel-github2/latest/org/apache/camel/component/github2/GitHub2Constants.html#GITHUB_EVENT_PAYLOAD) | The event payload. |  | GHEventPayload |
 
@@ -301,7 +302,7 @@ One message per new item, oldest first. commit gives the commit message (null wh
  |
 | **Producer input** | `any` | 
 
-Read as text: the comment for pullRequestComment, which needs a body, and the description of the issue for createIssue and of the commit status for pullRequestState; a Map or a POJO is sent as its toString(), so marshal it first. getCommitFile reads the sha from the body when the CamelGitHubCommitSha header is not set, and the other types read only headers.
+Read as text: the comment for pullRequestComment, which needs a body, and the description of the issue for createIssue and of the commit status for pullRequestState; a Map or a POJO is sent as its toString(), so marshal it first. getCommitFile reads the path of the file from the body when the CamelGitHubFilePath header is not set, and the other types read only headers.
 
 -   With `type=PULLREQUESTCOMMENT`: `text`, `bytes`, `stream` or `file`
     
@@ -412,7 +413,7 @@ from("github2:commit/main?repoOwner=myorg&repoName=myrepo&apiUrl=https://github.
 | createIssue | String (issue body text) | \- `CamelGitHubIssueTitle` (String) (REQUIRED): Issue Title. |
 | pullRequestState | String (description of the status) | \- `CamelGitHubPullRequestHeadCommitSha` (String) (REQUIRED): The sha of the commit to set the status on. Sets the commit status on a pull request. |
 | pullRequestFiles | none | \- `CamelGitHubPullRequest` (integer) (REQUIRED): Pull request number. Returns the list of files changed in a pull request. |
-| getCommitFile | none | \- `CamelGitHubCommitSha` (String) (REQUIRED): Commit SHA. - `CamelGitHubFilePath` (String) (REQUIRED): File path. Returns the content of a file at a specific commit. |
+| getCommitFile | String (the path of the file, if the `CamelGitHubFilePath` header is not set) | \- `CamelGitHubCommitSha` (String) (REQUIRED): The commit id (40 hexadecimal characters; a branch or tag name is not accepted). - `CamelGitHubFilePath` (String): The path of the file in the repository, such as `docs/README.md`. If not set, the body is the path. Returns the content of the file in the tree of that commit, as a `String` (decoded with the `encoding` option, or the default charset of the JVM). |
 
 ### Example: Consuming commits
 

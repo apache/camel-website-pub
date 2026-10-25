@@ -26,7 +26,7 @@ stream:header\[?options\]
 stream:file?fileName=/foo/bar.txt
 stream:http?httpUrl=http:myserver:8080/data
 
-If the `stream:header` URI is specified, the `stream` header is used to find the stream to write to. This option is available only for stream producers (that is, it cannot appear in `from()`).
+If the `stream:header` URI is specified, the `stream` header is used to find the stream to write to. This option is available only for stream producers (that is, it cannot appear in `from()`). A message without a `stream` header, or with one that is not a `java.io.OutputStream`, fails with a `NoSuchHeaderException`.
 
 ## Configuring Options
 

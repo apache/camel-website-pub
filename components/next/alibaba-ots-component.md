@@ -138,6 +138,45 @@ The Alibaba Tablestore (OTS) component supports the following message header(s),
 | **CamelAlibabaOtsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-ots/latest/org/apache/camel/component/alibaba/ots/constants/AlibabaOtsHeaders.html#OPERATION) | Operation override. |  | String |
 | **CamelAlibabaOtsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-ots/latest/org/apache/camel/component/alibaba/ots/constants/AlibabaOtsHeaders.html#REQUEST_ID) | Tablestore request id. |  | String |
 
+## Message Body
+
+The message body at each side of the Alibaba Tablestore (OTS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The request of the Tablestore SDK for the row operations, such as a PutRowRequest for putRow: any other body fails. listTables does not read the body.
+
+-   With `operation=putRow`: `pojo` (`com.alicloud.openservices.tablestore.model.PutRowRequest`)
+    
+-   With `operation=getRow`: `pojo` (`com.alicloud.openservices.tablestore.model.GetRowRequest`)
+    
+-   With `operation=updateRow`: `pojo` (`com.alicloud.openservices.tablestore.model.UpdateRowRequest`)
+    
+-   With `operation=deleteRow`: `pojo` (`com.alicloud.openservices.tablestore.model.DeleteRowRequest`)
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` | 
+
+A Map of the response for the row operations: the requestId, the consumedCapacity and the row as a Map of its primaryKey and columns. listTables gives a List of the table names.
+
+-   With `operation=listTables`: `list` (`java.util.List<String>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Operations

@@ -160,6 +160,17 @@ Enum values:
 | **CamelTahuMessageUUID** (consumer) Constant: [`MESSAGE_UUID`](https://javadoc.io/doc/org.apache.camel/camel-tahu/latest/org/apache/camel/component/tahu/TahuConstants.html#MESSAGE_UUID) | The UUID of a Sparkplug message. |  | UUID |
 | **CamelTahuMessageSequenceNumber** (consumer) Constant: [`MESSAGE_SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-tahu/latest/org/apache/camel/component/tahu/TahuConstants.html#MESSAGE_SEQUENCE_NUMBER) | The sequence number of a Sparkplug message. |  | Long |
 
+## Message Body
+
+The message body at each side of the Tahu Host Application component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` or `bytes` | The body of the Sparkplug payload as a byte array when it has one, else no body, as for most messages and for the exchange of each metric. The metrics are the CamelTahuMetric.<name> headers, each a Tahu Metric. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 A Host Application consumer receives the Sparkplug messages of the Edge Nodes and Devices. Each metric of a message is a header named `CamelTahuMetric.` followed by the name of the metric, and its value is a Tahu `Metric`. The following route logs the temperature of the device in the [Tahu Edge](tahu-edge-component.md) example:

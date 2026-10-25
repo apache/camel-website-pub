@@ -180,6 +180,32 @@ The Hazelcast Ringbuffer component supports the following message header(s), whi
 | --- | --- | --- | --- |
 | **CamelHazelcastOperationType** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#OPERATION) | The operation to perform. |  | String |
 
+## Message Body
+
+The message body at each side of the Hazelcast Ringbuffer component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The item that add appends: an object Hazelcast can serialize, so a stream or no body fails. The other operations do not use the body. |
+| **Producer output** | `unknown` | 
+By the operation, which the CamelHazelcastOperationType header sets, or else the defaultOperation option (without either the producer fails): the sequence of the added item as a Long for add, a Long for capacity and remainingCapacity, and the item at the head (readOnceHead) or the tail (readOnceTail) of the ringbuffer.
+
+-   With `defaultOperation=add`: `value` (`java.lang.Long`)
+    
+-   With `defaultOperation=capacity`: `value` (`java.lang.Long`)
+    
+-   With `defaultOperation=remainingCapacity`: `value` (`java.lang.Long`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## ringbuffer cache producer
 
 The ringbuffer producer provides 5 operations:

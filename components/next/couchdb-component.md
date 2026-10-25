@@ -186,11 +186,28 @@ The CouchDB component supports the following message header(s), which is/are lis
 | **CamelCouchDbMethod** (common) Constant: [`HEADER_METHOD`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#HEADER_METHOD) | The method (delete / update). |  | String |
 | **CamelCouchDbResumeAction** (consumer) Constant: [`COUCHDB_RESUME_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-couchdb/latest/org/apache/camel/component/couchdb/CouchDbConstants.html#COUCHDB_RESUME_ACTION) | The resume action to execute when resuming. |  | String |
 
-Headers are set by the consumer once the message is received. The producer will also set the headers for downstream processors once the insert/update has taken place. Any headers set prior to the producer are ignored. That means, for example, if you set CamelCouchDbId as a header, it will not be used as the id for insertion, the id of the document will still be used.
+## Message Body
+
+The message body at each side of the CouchDB component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.google.gson.JsonObject`) | One message per change of the database: the change as a Gson JsonObject with its seq, id, changes (the revisions) and deleted, not the document itself. The CamelCouchDbId and CamelCouchDbMethod (UPDATE or DELETE) headers say which document and how. |
+| **Producer input** | `text` or `pojo`, as json | The document to save as a JSON object: JSON text, a Gson JsonElement or a Cloudant Document, with \_id and \_rev to update it. A Map, bytes, a stream or no body fail: marshal it to JSON text first. The CamelCouchDbMethod header DELETE deletes the document of the body; GET reads the document of the CamelCouchDbId header, yet still needs one of these bodies. |
+| **Producer output** | `unchanged` or `pojo` | Unchanged after a save or delete, with the id and the new revision in the CamelCouchDbId and CamelCouchDbRev headers; the document read as a Cloudant Document for the GET method. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
+Headers are set by the consumer once the message is received. The producer will also set the headers for downstream processors once the insert/update has taken place. The producer only reads the CamelCouchDbMethod header, and the CamelCouchDbId header for the `GET` method. That means, for example, if you set CamelCouchDbId as a header, it will not be used as the id for insertion, the id of the document will still be used.
 
 ## Message Body
 
-The component will use the message body as the document to be inserted. If the body is an instance of String, then it will be marshaled into a GSON object before insert. This means that the string must be valid JSON or the insert / update will fail. If the body is an instance of a `com.google.gson.JsonElement` then it will be inserted as is. Otherwise, the producer will throw an unsupported body type exception.
+The component will use the message body as the document to be inserted. If the body is an instance of String, then it will be marshaled into a GSON object before insert. This means that the string must be valid JSON or the insert / update will fail. If the body is an instance of a `com.google.gson.JsonElement` or a `com.ibm.cloud.cloudant.v1.model.Document` then it will be inserted as is. Otherwise (such as a `Map`, bytes or a stream), the producer will throw an unsupported body type exception. The JSON must be an object: a JSON array is not saved and fails.
+
+After an insert, update or delete the body is unchanged, and the `CamelCouchDbId` and `CamelCouchDbRev` headers hold the id and the new revision of the document. With the `CamelCouchDbMethod` header set to `GET`, the producer reads the document whose id is in the `CamelCouchDbId` header and sets it as the body, as a `com.ibm.cloud.cloudant.v1.model.Document`; the body must still be one of the types above, as it is read first. With the header set to `DELETE`, the body is the document to delete, with its `_id` and `_rev`.
+
+The consumer creates one message per change of the database: the body is the change as a `com.google.gson.JsonObject` with its `seq`, `id`, `changes` (the revisions) and `deleted` for a deleted document. It does not hold the document itself: read it by its id with the `GET` method when needed.
 
 > **Note**
 > To update a CouchDB document, its `id` and `rev` field must be part of the json payload routed to CouchDB by Camel.

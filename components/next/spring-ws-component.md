@@ -197,6 +197,20 @@ The Spring WebService component supports the following message header(s), which 
 | **CamelSpringWebserviceAddressingReplyTo** (producer) Constant: [`SPRING_WS_ADDRESSING_PRODUCER_REPLY_TO`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#SPRING_WS_ADDRESSING_PRODUCER_REPLY_TO) | Signifies the value for the replyTo response WS-Addressing ReplyTo header that is provided by the method. See org.springframework.ws.soap.addressing.server.annotation.Action annotation for more details. |  | URI |
 | **breadcrumbId** (consumer) Constant: [`BREADCRUMB_ID`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#BREADCRUMB_ID) | The breadcrumb id. |  | String |
 
+## Message Body
+
+The message body at each side of the Spring WebService component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo`, as xml | The payload of the SOAP body as a javax.xml.transform.Source (a DOMSource with the default SAAJ message factory); convertBodyTo String gives the XML. The SOAP header is in the CamelSpringWebserviceSoapHeader header. |
+| **Consumer reply** | `text`, `bytes`, `stream` or `pojo`, as xml | The response payload as XML: a String, bytes, a stream cache, a Source or a DOM Document. A body that does not convert to a Source, such as a Map, gives an empty SOAP body without an error. |
+| **Producer input** | `text`, `bytes`, `stream` or `pojo`, as xml | The request payload as XML: a String, bytes, a stream cache, a Source or a DOM Document. No body, a File, a Map or a number fails: read or marshal it to XML first. |
+| **Producer output** | `pojo` or `null`, as xml | The payload of the SOAP response as a javax.xml.transform.Source (a DOMSource with the default SAAJ message factory), null for an empty SOAP body; also with the InOnly pattern. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Accessing web services

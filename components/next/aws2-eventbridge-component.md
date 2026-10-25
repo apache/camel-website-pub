@@ -4,7 +4,7 @@
 
 **Both producer and consumer are supported**
 
-The AWS2 Eventbridge component supports assumeRole operation. [AWS Eventbridge](https://aws.amazon.com/eventbridge/).
+The AWS2 Eventbridge component manages the rules and targets of an [AWS Eventbridge](https://aws.amazon.com/eventbridge/) event bus, sends events to it, and consumes its events.
 
 Prerequisites
 
@@ -15,7 +15,9 @@ You must have a valid Amazon Web Services developer account, and be signed up to
 
 ## URI Format
 
-aws2-eventbridge://label\[?options\]
+aws2-eventbridge://eventbusNameOrArn\[?options\]
+
+The path is the name or the ARN of the event bus, such as `default`.
 
 You can append query options to the URI in the following format:
 
@@ -539,7 +541,7 @@ The AWS Eventbridge component supports the following message header(s), which is
 | **CamelAwsEventbridgeLimit** (listRules listTargetsByRule listRuleNamesByTarget) Constant: [`LIMIT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#LIMIT) | The maximum number of results to return. |  | Integer |
 | **CamelAwsEventbridgeIsTruncated** (listRules listTargetsByRule listRuleNamesByTarget) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
 | **CamelAwsEventbridgeRuleArn** (putRule describeRule) Constant: [`RULE_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#RULE_ARN) | The Amazon Resource Name (ARN) of the rule. |  | String |
-| **CamelAwsEventbridgeFailedEntryCount** (putEvent putTargets removeTargets) Constant: [`FAILED_ENTRY_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#FAILED_ENTRY_COUNT) | The number of failed entries in the response. |  | Integer |
+| **CamelAwsEventbridgeFailedEntryCount** (putEvent putTargets removeTargets) Constant: [`FAILED_ENTRY_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#FAILED_ENTRY_COUNT) | The number of failed entries in the response. The putEvent operation fails the exchange when an entry failed. |  | Integer |
 | **CamelAwsEventbridgeMessageId** (consumer) Constant: [`MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#MESSAGE_ID) | The SQS message ID. |  | String |
 | **CamelAwsEventbridgeReceiptHandle** (consumer) Constant: [`RECEIPT_HANDLE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-eventbridge/latest/org/apache/camel/component/aws2/eventbridge/EventbridgeConstants.html#RECEIPT_HANDLE) | The SQS receipt handle for message deletion. |  | String |
 
@@ -562,7 +564,7 @@ Not used by putRule, the default, and the other operations, which take their inp
 
 
  |
-| **Producer output** | `pojo` | The response of the AWS SDK for the operation: a PutRuleResponse for putRule, the default, and a PutEventsResponse for putEvent. An event that AWS rejects, such as one whose detail is not a JSON object, does not fail the exchange: check the CamelAwsEventbridgeFailedEntryCount header. |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation: a PutRuleResponse for putRule, the default, and a PutEventsResponse for putEvent. An event that AWS rejects, such as one whose detail is not a JSON object, fails the exchange with the error code and message of the rejected event. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
@@ -664,7 +666,7 @@ from("direct:putRule")
             uri: mock:result
 ```
 
-This operation will create a rule named _firstrule_, and it will use a json file for defining the EventPattern.
+This operation will create a rule named _firstrule_, and it will use a json file for defining the EventPattern. The event pattern is taken from the `CamelAwsEventbridgeEventPattern` header, else from the file of the `eventPatternFile` option; the operation fails when neither is set.
 
 -   PutTargets: this operation will add a target to the rule
     
@@ -1093,7 +1095,7 @@ from("direct:start")
             uri: mock:result
 ```
 
-The message body is then the `PutEventsResponse`, with the id of each event in its entries. An event that AWS rejects, such as one whose detail is not a JSON object, does not fail the exchange: the `CamelAwsEventbridgeFailedEntryCount` header counts the events that were rejected.
+This operation will return the `PutEventsResponse` with the ID of the sent event. The exchange fails when EventBridge rejects the event, for example a detail that is not a JSON object is rejected with `MalformedDetail`; the exception gives the error code and message of the rejected event, and the `CamelAwsEventbridgeFailedEntryCount` header is still set. A message without a body fails with an `InvalidPayloadException`.
 
 ### Updating the rule
 

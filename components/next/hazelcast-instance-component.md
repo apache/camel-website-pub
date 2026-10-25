@@ -201,6 +201,17 @@ The Hazelcast Instance component supports the following message header(s), which
 | **CamelHazelcastInstanceHost** (consumer) Constant: [`INSTANCE_HOST`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#INSTANCE_HOST) | The host name of the instance. |  | String |
 | **CamelHazelcastInstancePort** (consumer) Constant: [`INSTANCE_PORT`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#INSTANCE_PORT) | The port number of the instance. |  | Integer |
 
+## Message Body
+
+The message body at each side of the Hazelcast Instance component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body: the CamelHazelcastListenerAction header says whether a member was added to or removed from the cluster, and CamelHazelcastInstanceHost and CamelHazelcastInstancePort give its address. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## instance consumer - from("hazelcast-instance:foo")
 
 The instance consumer fires if a new cache instance joins or leaves the cluster.

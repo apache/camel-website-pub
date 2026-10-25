@@ -322,6 +322,26 @@ The Weather component supports the following message header(s), which is/are lis
 | **CamelWeatherLocation** (producer) Constant: [`WEATHER_LOCATION`](https://javadoc.io/doc/org.apache.camel/camel-weather/latest/org/apache/camel/component/weather/WeatherConstants.html#WEATHER_LOCATION) | Used by the producer to override the endpoint location and use the location from this header instead. |  | String |
 | **CamelWeatherQuery** (common) Constant: [`WEATHER_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-weather/latest/org/apache/camel/component/weather/WeatherConstants.html#WEATHER_QUERY) | The original query URL sent to the Open Weather Map site. |  | String |
 
+## Message Body
+
+The message body at each side of the Weather component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`), as json | The OpenWeatherMap response as a String: JSON, or XML or HTML with mode. With headerName the response is in that header and the body is null.
+Not known when `mode` or `headerName` is set.
+
+ |
+| **Producer input** | `any` | The body is not read: the query comes from the options, and the CamelWeatherLocation header overrides the location. |
+| **Producer output** | `text` (`java.lang.String`), as json | The OpenWeatherMap response as a String: JSON, or XML or HTML with mode. With headerName the response is in that header and the body is left unchanged.
+
+Not known when `mode` or `headerName` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Exchange data format

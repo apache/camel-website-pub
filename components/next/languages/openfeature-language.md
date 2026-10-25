@@ -20,7 +20,7 @@ This language is provided by the `camel-openfeature` component:
 
 ## Usage
 
-As a predicate, the language evaluates the given flag key as a boolean. As an expression, it gives the string value of the flag, or the `defaultValue` of the endpoint (`false` unless set) when the flag is missing or is not a string flag, see below. It uses the `openfeature:flags` endpoint by default, inheriting component-level configuration such as `flagsResource` or `host`.
+As a predicate, the language evaluates the given flag key as a boolean. As an expression, it gives the value of the flag: the text of a string flag or the `Boolean` of a boolean flag, or the `defaultValue` of the endpoint (`false` unless set) when the flag is missing or is another type, see below. It uses the `openfeature:flags` endpoint by default, inheriting component-level configuration such as `flagsResource` or `host`.
 
 The language does not modify the exchange — it reads targeting context from message headers but does not set any properties or headers itself. This means it is safe to use before a producer `to("openfeature:…​")` call without leaking settings.
 
@@ -126,7 +126,7 @@ from("direct:start")
             uri: "direct:route-${exchangeProperty.routingAlgorithm}"
 ```
 
-The `language()` expression defaults to variant (string) evaluation, so the property receives the string variant value directly.
+The `language()` expression defaults to variant (string) evaluation, so the property receives the string variant value directly. A boolean flag is evaluated as a boolean instead, and the property receives a `Boolean`. Number and object flags are not supported: they give the `defaultValue` and log a `TYPE_MISMATCH` warning.
 
 ## Evaluation context
 
@@ -207,14 +207,14 @@ from("direct:start")
     .end();
 ```
 
-`createExpression` defaults to variant (string) evaluation and returns an `Expression`. When called with `evaluate(exchange, Boolean.class)`, it automatically switches to boolean evaluation for that call without affecting other callers:
+`createExpression` defaults to variant (string) evaluation and returns an `Expression`, which gives a `Boolean` for a boolean flag. When called with `evaluate(exchange, Boolean.class)`, it automatically switches to boolean evaluation for that call without affecting other callers:
 
 ```java
 Expression variant = context.resolveLanguage("openfeature").createExpression(
     "hazmat-compliance-v2",
     new Object[] { null, "order-123", Map.of("customer_tier", "ENTERPRISE") });
 
-Object result = variant.evaluate(exchange, Object.class); // returns String
+Object result = variant.evaluate(exchange, Object.class); // returns String, or Boolean for a boolean flag
 ```
 
 ```java

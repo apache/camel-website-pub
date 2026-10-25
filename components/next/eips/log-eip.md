@@ -52,6 +52,17 @@ Enum values:
 | **logger** | Reference to a custom SLF4J logger instance to use. |  | Logger |
 | **logLanguage** | The language to use for evaluating the log message, such as simple, groovy, or ognl. |  | String |
 
+## Message Body
+
+The message body at each side of the Logger EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Logs the message: the body stays as it was, also when the message logs it. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Logger eip has no exchange properties.

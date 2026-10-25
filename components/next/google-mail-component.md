@@ -1040,6 +1040,22 @@ In addition to the parameters above, the google-mail API can also use any of the
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleMail.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleMail.myParameterNameHere` header.
 
+## Message Body
+
+The message body at each side of the Google Mail component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | One message per poll with the return value of the method: a Gmail model object, such as the ListMessagesResponse of messages/list, which is one message and not split per mail. The model classes are GenericJson, which is also a Map of the JSON fields. |
+| **Producer input** | `any` | The body is used only when inBody names a parameter of the method, and must then be of the type of that parameter: a Message for content of messages/send, a Draft for content of drafts/create, a ModifyMessageRequest for modifyMessageRequest of messages/modify, or text for id. JSON text or a Map is not turned into a model object: the google-mail:draft and google-mail:update-message-labels transformers build the Draft and the ModifyMessageRequest. Without inBody the arguments come from the options and the CamelGoogleMail. headers.
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo` or `null` | The return value of the method: a Gmail model object, such as the Message of messages/send and messages/get, the Draft of drafts/create or the ListMessagesResponse of messages/list; null for the methods without a response, such as the deletes, messages/batchModify and users/stop. The model classes are GenericJson, which is also a Map of the JSON fields. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 
@@ -1065,6 +1081,8 @@ Both system labels (INBOX, UNREAD, STARRED, SPAM, TRASH, IMPORTANT, etc.) and cu
 
 ### Examples
 
+The `messages/modify` method takes the `ModifyMessageRequest` from the body with `inBody=modifyMessageRequest`, and the id of the message from the `CamelGoogleMailId` header, which `google-mail-stream` sets.
+
 -   Java
     
 -   YAML
@@ -1077,7 +1095,7 @@ from("google-mail-stream:0")
     .setVariable("addLabels", constant("Work"))
     .setVariable("removeLabels", constant("INBOX,UNREAD"))
     .transformDataType(new DataType("google-mail:update-message-labels"))
-    .to("google-mail:messages/modify");
+    .to("google-mail:messages/modify?userId=me&inBody=modifyMessageRequest");
 ```
 
 ```yaml
@@ -1095,6 +1113,9 @@ from("google-mail-stream:0")
             toType: "google-mail:update-message-labels"
         - to:
             uri: "google-mail:messages/modify"
+            parameters:
+              userId: me
+              inBody: modifyMessageRequest
 ```
 
 ```xml
@@ -1107,7 +1128,7 @@ from("google-mail-stream:0")
         <constant>INBOX,UNREAD</constant>
     </setVariable>
     <transformDataType toType="google-mail:update-message-labels"/>
-    <to uri="google-mail:messages/modify"/>
+    <to uri="google-mail:messages/modify?userId=me&amp;inBody=modifyMessageRequest"/>
 </route>
 ```
 
@@ -1163,7 +1184,7 @@ The transformer:
 from("google-mail-stream:0")
     .setBody(constant("Thank you for your message. I will respond soon."))
     .transformDataType(new DataType("google-mail:draft"))
-    .to("google-mail:drafts/create?inBody=content");
+    .to("google-mail:drafts/create?userId=me&inBody=content");
 
 // Create a new draft (no threading)
 from("direct:newDraft")
@@ -1172,7 +1193,7 @@ from("direct:newDraft")
     .setHeader("CamelGoogleMailStreamTo", constant("recipient@example.com"))
     .setHeader("CamelGoogleMailStreamSubject", constant("New Draft"))
     .transformDataType(new DataType("google-mail:draft"))
-    .to("google-mail:drafts/create?inBody=content");
+    .to("google-mail:drafts/create?userId=me&inBody=content");
 ```
 
 ```yaml
@@ -1188,6 +1209,7 @@ from("direct:newDraft")
         - to:
             uri: "google-mail:drafts/create"
             parameters:
+              userId: me
               inBody: content
 
 # Create a new draft (no threading)
@@ -1211,6 +1233,7 @@ from("direct:newDraft")
         - to:
             uri: "google-mail:drafts/create"
             parameters:
+              userId: me
               inBody: content
 ```
 
@@ -1222,7 +1245,7 @@ from("direct:newDraft")
         <constant>Thank you for your message. I will respond soon.</constant>
     </setBody>
     <transformDataType toType="google-mail:draft"/>
-    <to uri="google-mail:drafts/create?inBody=content"/>
+    <to uri="google-mail:drafts/create?userId=me&amp;inBody=content"/>
 </route>
 
 <!-- Create a new draft (no threading) -->
@@ -1241,7 +1264,7 @@ from("direct:newDraft")
         <constant>New Draft</constant>
     </setHeader>
     <transformDataType toType="google-mail:draft"/>
-    <to uri="google-mail:drafts/create?inBody=content"/>
+    <to uri="google-mail:drafts/create?userId=me&amp;inBody=content"/>
 </route>
 ```
 

@@ -24,7 +24,7 @@ The message body at each side of the Groovy JSon data format: _Marshal input_ an
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Marshal input** | `text`, `bytes`, `stream`, `file`, `map` or `pojo` | A Map, a Groovy Node or a Jackson JsonNode to write as JSON. Text, bytes, a stream or a file is written as it is; a List is not supported. |
+| **Marshal input** | `text`, `bytes`, `stream`, `file`, `map`, `list` or `pojo` | A Map, a List, a Groovy Node or a Jackson JsonNode to write as JSON. Text, bytes, a stream or a file is written as it is. |
 | **Marshal output** | `stream`, as json | The JSON in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
  |

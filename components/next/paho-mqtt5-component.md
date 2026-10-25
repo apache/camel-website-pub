@@ -228,7 +228,7 @@ The message body at each side of the Paho MQTT 5 component: _Consumer_ is the bo
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `bytes` (`byte[]`) | The payload of the MQTT message. |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload. A Map, a POJO or no body fails: marshal it first. |
 | **Producer output** | `unchanged` | 
  |
 

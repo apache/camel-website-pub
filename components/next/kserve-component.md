@@ -146,6 +146,57 @@ The KServe component supports the following message header(s), which is/are list
 | **CamelKServeModelName** (producer) Constant: [`MODEL_NAME`](https://javadoc.io/doc/org.apache.camel/camel-kserve/latest/org/apache/camel/component/kserve/KServeConstants.html#MODEL_NAME) | The name of the model used for inference. |  | String |
 | **CamelKServeModelVersion** (producer) Constant: [`MODEL_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-kserve/latest/org/apache/camel/component/kserve/KServeConstants.html#MODEL_VERSION) | The version of the model used for inference. |  | String |
 
+## Message Body
+
+The message body at each side of the KServe component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo` | 
+infer takes the protobuf ModelInferRequest with the input tensors, or its Builder; another body, such as text, JSON or bytes, is not read and a request without inputs is sent. model/ready and model/metadata need no body, and read a ModelReadyRequest or ModelMetadataRequest when it is one; the server apis do not use the body. The model comes from the CamelKServeModelName header, or else the modelName option.
+
+-   With `api=model/ready`: `any`
+    
+-   With `api=model/metadata`: `any`
+    
+-   With `api=server/ready`: `any`
+    
+-   With `api=server/live`: `any`
+    
+-   With `api=server/metadata`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The protobuf response of the api, such as a ModelInferResponse whose outputs are often in its raw output contents as bytes, or a ModelReadyResponse with the ready flag.
+
+-   With `api=infer`: `pojo` (`inference.GrpcPredictV2$ModelInferResponse`)
+    
+-   With `api=model/ready`: `pojo` (`inference.GrpcPredictV2$ModelReadyResponse`)
+    
+-   With `api=model/metadata`: `pojo` (`inference.GrpcPredictV2$ModelMetadataResponse`)
+    
+-   With `api=server/ready`: `pojo` (`inference.GrpcPredictV2$ServerReadyResponse`)
+    
+-   With `api=server/live`: `pojo` (`inference.GrpcPredictV2$ServerLiveResponse`)
+    
+-   With `api=server/metadata`: `pojo` (`inference.GrpcPredictV2$ServerMetadataResponse`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component supports the following APIs.

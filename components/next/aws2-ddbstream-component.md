@@ -460,6 +460,20 @@ Enum values:
 | **useProfileCredentialsProvider** (security) | Set whether the Cloudtrail client should expect to load credentials through a profile credentials provider. | false | boolean |
 | **useSessionCredentials** (security) | Set whether the DDB Streams client should expect to use Session Credentials. This is useful in situation in which the user needs to assume a IAM role for doing operations in DDB. | false | boolean |
 
+## Message Headers
+
+The AWS DynamoDB Streams component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelAwsDdbStreamEventSource** (consumer) Constant: [`EVENT_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddbstream/Ddb2StreamConstants.html#EVENT_SOURCE) | The Amazon Web Services service from which the stream record originated. For DynamoDB Streams, this is aws:dynamodb. |  | String |
+| **CamelAwsDdbStreamEventId** (consumer) Constant: [`EVENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddbstream/Ddb2StreamConstants.html#EVENT_ID) | A globally unique identifier for the event that was recorded in this stream record. |  | String |
+| **CamelAwsDdbStreamEventName** (consumer) Constant: [`EVENT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddbstream/Ddb2StreamConstants.html#EVENT_NAME) | The type of data modification that was performed on the DynamoDB table (INSERT, MODIFY, REMOVE). |  | String |
+| **CamelAwsDdbStreamSequenceNumber** (consumer) Constant: [`SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddbstream/Ddb2StreamConstants.html#SEQUENCE_NUMBER) | The sequence number of the stream record. |  | String |
+| **CamelAwsDdbStreamApproximateCreationDateTime** (consumer) Constant: [`APPROXIMATE_CREATION_DATE_TIME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddbstream/Ddb2StreamConstants.html#APPROXIMATE_CREATION_DATE_TIME) | The approximate date and time when the stream record was created. |  | Instant |
+| **CamelAwsDdbStreamSizeBytes** (consumer) Constant: [`SIZE_BYTES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddbstream/Ddb2StreamConstants.html#SIZE_BYTES) | The size of the stream record, in bytes. |  | Long |
+
 ## Message Body
 
 The message body at each side of the AWS DynamoDB Streams component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
@@ -473,13 +487,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 Required DynamoDBStream component options
 
-You have to provide the DynamoDbStreamsClient in the Registry with proxies and relevant credentials configured.
-
-## Sequence Numbers
-
-You can provide a literal string as the sequence number or provide a bean in the registry. An example of using the bean would be to save your current position in the change feed and restore it on Camel startup.
-
-It is an error to provide a sequence number that is greater than the largest sequence number in the describe-streams result, as this will lead to the AWS call returning an HTTP 400.
+You have to provide the credentials to access the stream: the `accessKey` and `secretKey` options, one of the credentials providers (see below), or your own `DynamoDbStreamsClient` with the `amazonDynamoDbStreamsClient` option.
 
 ## Usage
 

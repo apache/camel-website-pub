@@ -175,6 +175,41 @@ Enum values:
 | **CamelSpringAiVectorStoreDocumentsAdded** (producer) Constant: [`DOCUMENTS_ADDED`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#DOCUMENTS_ADDED) | Number of documents added. |  | Integer |
 | **CamelSpringAiVectorStoreDocumentsDeleted** (producer) Constant: [`DOCUMENTS_DELETED`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#DOCUMENTS_DELETED) | Number of documents deleted. |  | Integer |
 
+## Message Body
+
+The message body at each side of the Spring AI Vector Store component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+ADD takes a Document, a List of Document or of texts, or text (another body is added as its text). After spring-ai-embeddings it adds the texts in the CamelSpringAiEmbeddingInputText(s) headers instead of the body. DELETE takes the id or a List of ids, unless the CamelSpringAiVectorStoreDocumentIds header has them, and SIMILARITY\_SEARCH the query text. No body fails. The CamelSpringAiVectorStoreOperation header overrides operation.
+
+-   With `operation=DELETE`: `text` or `list`
+    
+-   With `operation=SIMILARITY_SEARCH`: `text`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+SIMILARITY\_SEARCH gives the List of Document found. ADD and DELETE keep the body, with the ids and the count in headers.
+
+-   With `operation=SIMILARITY_SEARCH`: `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Operations
 
 The component supports three main operations:

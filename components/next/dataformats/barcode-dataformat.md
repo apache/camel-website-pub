@@ -26,7 +26,7 @@ The Barcode dataformat supports the following options which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **barcodeFormat** (common) | `QR_CODE` | `Enum` | 
-Barcode format such as QR-Code.
+Barcode format such as QR-Code. MAXICODE, RSS\_14, RSS\_EXPANDED and UPC\_EAN\_EXTENSION cannot be written by marshal, as there is no encoder for them; unmarshal reads the format of the image.
 
 Enum values:
 

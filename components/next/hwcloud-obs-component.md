@@ -220,6 +220,56 @@ The Huawei Object Storage Service (OBS) component supports the following message
 | **Content-Type** (consumer) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-huaweicloud-obs/latest/org/apache/camel/component/huaweicloud/obs/constants/OBSHeaders.html#CONTENT_TYPE) | The type of content stored in the object. |  | String |
 | **CamelFileName** (consumer) Constant: [`FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-huaweicloud-obs/latest/org/apache/camel/component/huaweicloud/obs/constants/OBSHeaders.html#FILE_NAME) | Name of the object with which the operation is to be performed. |  | String |
 
+## Message Body
+
+The message body at each side of the Huawei Object Storage Service (OBS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The content of the object as a byte array, one message per object, with its bucket, key and metadata in headers such as CamelHwCloudObsObjectKey, and the key in CamelFileName too. Folders are consumed too, with an empty body, unless includeFolders=false. |
+| **Producer input** | `any` | 
+For putObject the content to upload: text, bytes, a stream or a file, such as the file of a file consumer, whose name is the object name when objectName is not set. A Map or a POJO fails: marshal it first. createBucket takes a CreateBucketRequest of the OBS SDK or its JSON as text, and listObjects a ListObjectsRequest or its JSON, and with another body use the options. The other operations do not use the body.
+
+-   With `operation=putObject`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=createBucket`: `text` or `pojo`
+    
+-   With `operation=listObjects`: `text` or `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+The JSON of the result as text: the PutObjectResult of putObject, the array of the objects or the buckets for listObjects and listBuckets, the bucket for createBucket, the response headers for deleteBucket and the metadata for getBucketMetadata. getObject gives the content of the object as a byte array with its metadata in headers. Unchanged after checkBucketExists, which sets the CamelHwCloudObsBucketExists exchange property.
+
+-   With `operation=putObject`: `text` (`java.lang.String`)
+    
+-   With `operation=getObject`: `bytes` (`byte[]`)
+    
+-   With `operation=listObjects`: `text` (`java.lang.String`)
+    
+-   With `operation=listBuckets`: `text` (`java.lang.String`)
+    
+-   With `operation=createBucket`: `text` (`java.lang.String`)
+    
+-   With `operation=deleteBucket`: `text` (`java.lang.String`)
+    
+-   With `operation=getBucketMetadata`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message properties evaluated by the OBS producer

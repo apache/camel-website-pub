@@ -204,6 +204,87 @@ The CXF component supports the following message header(s), which is/are listed 
 | **CamelAuthentication** (common) Constant: [`AUTHENTICATION`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#AUTHENTICATION) | The authentication. |  | Subject |
 | **RequestContext** (common) Constant: [`REQUEST_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-cxf-soap/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#REQUEST_CONTEXT) | The request context. |  | Object |
 
+## Message Body
+
+The message body at each side of the CXF component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `list` or `null` | 
+POJO: a MessageContentsList of the parameters of the operation, typed as the service class declares them, with its name in the CamelCxfOperationName header; null for an operation without parameters. PAYLOAD: a CxfPayload of the elements of the soap:Body and the SOAP headers. RAW: the stream of the whole SOAP envelope, without the operation name. CXF\_MESSAGE: the SAAJ SOAPMessage.
+
+-   With `dataFormat=PAYLOAD`: `pojo` (`org.apache.camel.component.cxf.common.CxfPayload`)
+    
+-   With `dataFormat=RAW`: `stream`
+    
+-   With `dataFormat=MESSAGE`: `stream`
+    
+-   With `dataFormat=CXF_MESSAGE`: `pojo` (`jakarta.xml.soap.SOAPMessage`)
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `text`, `value`, `pojo`, `list` or `null` | 
+
+POJO: the return value of the operation, of the type the service class declares, or a List or array of it and the out and holder parameters; another type is a SOAP fault, so the request MessageContentsList only fits an echo. PAYLOAD: a CxfPayload, or the XML of the soap:Body contents as text, bytes, a stream or a DOM; a body that does not convert sends an empty soap:Body. RAW: the whole SOAP envelope as text, bytes, a stream or a file. CXF\_MESSAGE: a SOAPMessage or a javax.xml.transform Source; text or a stream sends an empty envelope.
+
+-   With `dataFormat=PAYLOAD`: `pojo`, `text`, `bytes`, `stream` or `null`
+    
+-   With `dataFormat=RAW`: `text`, `bytes`, `stream`, `file` or `null`
+    
+-   With `dataFormat=MESSAGE`: `text`, `bytes`, `stream`, `file` or `null`
+    
+-   With `dataFormat=CXF_MESSAGE`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer input** | `list`, `text`, `value`, `pojo` or `null` | 
+
+POJO: the parameters of the operation (the CamelCxfOperationName header or defaultOperationName) as a List or an array, or the one parameter as the body; each of the type the service class declares. A body that is not a List is split like the split EIP does, so text with a comma or a byte array is several parameters: wrap it in a List. PAYLOAD: a CxfPayload, or the XML of the soap:Body contents as text, bytes, a stream, a file or a DOM. RAW: the whole SOAP envelope. CXF\_MESSAGE: a SOAPMessage or a javax.xml.transform Source.
+
+-   With `dataFormat=PAYLOAD`: `pojo`, `text`, `bytes`, `stream` or `file`
+    
+-   With `dataFormat=RAW`: `text`, `bytes`, `stream` or `file`
+    
+-   With `dataFormat=MESSAGE`: `text`, `bytes`, `stream` or `file`
+    
+-   With `dataFormat=CXF_MESSAGE`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `list`, `null` or `unchanged` | 
+
+POJO: a MessageContentsList with the return value of the operation first, then the out and holder parameters; null for a void operation, and the body unchanged for a one-way one. PAYLOAD: a CxfPayload of the soap:Body contents. RAW: the stream of the SOAP envelope of the response, read once. CXF\_MESSAGE: the SAAJ SOAPMessage.
+
+-   With `dataFormat=PAYLOAD`: `pojo` (`org.apache.camel.component.cxf.common.CxfPayload`)
+    
+-   With `dataFormat=RAW`: `stream`
+    
+-   With `dataFormat=MESSAGE`: `stream`
+    
+-   With `dataFormat=CXF_MESSAGE`: `pojo` (`jakarta.xml.soap.SOAPMessage`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 The `serviceName` and `portName` are [QNames](http://en.wikipedia.org/wiki/QName), so if you provide them be sure to prefix them with their _{namespace}_ as shown in the examples above.
 
 ### Descriptions of the data formats
@@ -646,7 +727,7 @@ assertEquals("echo " + TEST_MESSAGE, result.get(0), "Reply body on Camel is wron
 
 ### How to consume a message from a Camel CXF endpoint in PAYLOAD data format
 
-`PAYLOAD` means that you process the payload from the SOAP envelope as a native CxfPayload. `Message.getBody()` will return a `org.apache.camel.component.cxf.CxfPayload` object, with getters for SOAP message headers and the SOAP body.
+`PAYLOAD` means that you process the payload from the SOAP envelope as a native CxfPayload. `Message.getBody()` will return a `org.apache.camel.component.cxf.common.CxfPayload` object, with getters for SOAP message headers and the SOAP body.
 
 See [CxfConsumerPayloadTest](https://github.com/apache/camel/blob/main/components/camel-cxf/camel-cxf-soap/src/test/java/org/apache/camel/component/cxf/jaxws/CxfConsumerPayloadTest.java#L68):
 

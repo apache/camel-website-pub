@@ -311,13 +311,17 @@ If the placeholder value contains data that interfere with the property placehol
 
 ```java
 from("direct:start")
-    .to("elasticsearch:foo?query={{myQuery?nested=false}}");
+    .setBody(constant("{{myQuery?nested=false}}"))
+    .to("elasticsearch:foo?operation=Search");
 ```
 
 ```xml
 <route>
     <from uri="direct:start"/>
-    <to uri="elasticsearch:foo?query={{myQuery?nested=false}}"/>
+    <setBody>
+        <constant>{{myQuery?nested=false}}</constant>
+    </setBody>
+    <to uri="elasticsearch:foo?operation=Search"/>
 </route>
 ```
 
@@ -326,13 +330,15 @@ from("direct:start")
     from:
       uri: direct:start
       steps:
+        - setBody:
+            constant: "{{myQuery?nested=false}}"
         - to:
             uri: elasticsearch:foo
             parameters:
-              query: "{{myQuery?nested=false}}"
+              operation: Search
 ```
 
-In the example above the placeholder _myQuery_ placeholder value is as follows
+In the example above the query of the search is the body, and the _myQuery_ placeholder value is as follows
 
 ```properties
 myQuery = {"query":{"match_all":{}}}

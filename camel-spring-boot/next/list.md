@@ -914,7 +914,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [AWS Kinesis Firehose](../../components/next/aws2-kinesis-firehose-component.md) | camel-aws2-kinesis-starter | Stable | 3.2 | Produce data to AWS Kinesis Firehose streams. |
 | [AWS Lambda](../../components/next/aws2-lambda-component.md) | camel-aws2-lambda-starter | Stable | 3.2 | Manage and invoke AWS Lambda functions. |
 | [AWS Managed Streaming for Apache Kafka (MSK)](../../components/next/aws2-msk-component.md) | camel-aws2-msk-starter | Stable | 3.1 | Manage AWS MSK instances. |
-| [AWS MQ](../../components/next/aws2-mq-component.md) | camel-aws2-mq-starter | Stable | 3.1 | Send messages to AWS MQ. |
+| [AWS MQ](../../components/next/aws2-mq-component.md) | camel-aws2-mq-starter | Stable | 3.1 | Manage AWS MQ instances. |
 | [AWS Parameter Store](../../components/next/aws-parameter-store-component.md) | camel-aws-parameter-store-starter | Stable | 4.17 | Manage parameters using AWS Systems Manager (SSM) Parameter Store. |
 | [AWS Polly](../../components/next/aws2-polly-component.md) | camel-aws2-polly-starter | Stable | 4.18 | Synthesize speech using AWS Polly and AWS SDK version 2.x. |
 | [AWS RedshiftData](../../components/next/aws2-redshift-data-component.md) | camel-aws2-redshift-starter | Stable | 4.1 | Perform operations on AWS Redshift using Redshift Data API. |

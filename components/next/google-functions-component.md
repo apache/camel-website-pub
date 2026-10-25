@@ -267,6 +267,47 @@ Enum values:
 | **CamelGoogleCloudFunctionsSourceArchiveUrl** (producer) Constant: [`SOURCE_ARCHIVE_URL`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#SOURCE_ARCHIVE_URL) | The Google Cloud Storage URL, starting with gs://, pointing to the zip archive which contains the function. Used for createFunction operation. |  | String |
 | **CamelGoogleCloudFunctionsResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-functions/latest/org/apache/camel/component/google/functions/GoogleCloudFunctionsConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Functions Client invocation. |  | Object |
 
+## Message Body
+
+The message body at each side of the Google Cloud Functions component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes` or `stream` | The data to call the function with, for callFunction (the default), converted to text: a Map or a POJO is sent as its toString(), so marshal it first, and no body fails. The other operations take their input from options and headers. With pojoRequest=true the request object of the operation, such as a CallFunctionRequest.
+-   With `pojoRequest=true`: `pojo`
+    
+
+Not known when `operation` is set.
+
+ |
+| **Producer output** | `text` (`java.lang.String`) | 
+
+The result of the function as text for callFunction, with the whole CallFunctionResponse, which has the error of a failed call, in the CamelGoogleCloudFunctionsResponseObject header. By the operation: a List of CloudFunction for listFunctions, the CloudFunction for getFunction, createFunction and updateFunction, Empty for deleteFunction and the signed URL as text for the URL operations.
+
+-   With `operation=listFunctions`: `list` (`java.util.List<com.google.cloud.functions.v1.CloudFunction>`)
+    
+-   With `operation=getFunction`: `pojo` (`com.google.cloud.functions.v1.CloudFunction`)
+    
+-   With `operation=createFunction`: `pojo` (`com.google.cloud.functions.v1.CloudFunction`)
+    
+-   With `operation=updateFunction`: `pojo` (`com.google.cloud.functions.v1.CloudFunction`)
+    
+-   With `operation=deleteFunction`: `pojo` (`com.google.protobuf.Empty`)
+    
+-   With `operation=generateDownloadUrl`: `text` (`java.lang.String`)
+    
+-   With `operation=generateUploadUrl`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Google Functions Producer operations

@@ -382,6 +382,35 @@ The REST Postman component supports the following message header(s), which is/ar
 | **CamelRestPostmanRequestCount** (common) Constant: [`REQUEST_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-rest-postman/latest/org/apache/camel/component/rest/postman/RestPostmanConstants.html#REQUEST_COUNT) | The number of requests executed when running a folder or a whole collection. |  | Integer |
 | **CamelRestPostmanFailedCount** (common) Constant: [`FAILED_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-rest-postman/latest/org/apache/camel/component/rest/postman/RestPostmanConstants.html#FAILED_COUNT) | The number of requests that failed when running a folder or a whole collection with runFailFast disabled. |  | Integer |
 
+## Message Body
+
+The message body at each side of the REST Postman component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream`, `bytes`, `null`, `map` or `file` | The request body as the HTTP consumer gives it (platform-http by default), null for a request without a body. It is handed to the direct route of the matched request (direct:<requestId>); the route of this endpoint then has the body that route left, or the saved example as a String with missingRequest=mock.
+Not known when `consumerComponentName` is set.
+
+ |
+| **Consumer reply** | `null`, `text`, `bytes` or `stream` | The response body as the HTTP consumer writes it: text, bytes, a stream or no body. A Map or a List fails: marshal it first.
+
+Not known when `consumerComponentName` is set.
+
+ |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | For a single request, the body sent, by the http component by default: text, bytes, a stream or a file. A Map, a List or a number fails: marshal it first. A folder or the whole collection (no requestId) sends the bodies written in the collection and ignores the message body.
+
+Not known when `componentName` is set.
+
+ |
+| **Producer output** | `stream`, `bytes`, `null` or `list` | For a single request, the response body as the http component gives it: the stream cache, or null for a response without a body. For a folder or the whole collection (no requestId), a List of PostmanRunResult, one per request, with its status and response body.
+
+Not known when `componentName` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Identifying requests

@@ -115,6 +115,32 @@ The Kubernetes Persistent Volume component supports the following message header
 | **CamelKubernetesPersistentVolumesLabels** (producer) Constant: [`KUBERNETES_PERSISTENT_VOLUMES_LABELS`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_PERSISTENT_VOLUMES_LABELS) | The persistent volume labels. |  | Map |
 | **CamelKubernetesPersistentVolumeName** (producer) Constant: [`KUBERNETES_PERSISTENT_VOLUME_NAME`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_PERSISTENT_VOLUME_NAME) | The persistent volume name. |  | String |
 
+## Message Body
+
+The message body at each side of the Kubernetes Persistent Volume component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the name in CamelKubernetesPersistentVolumeName and the labels in CamelKubernetesPersistentVolumesLabels. |
+| **Producer output** | `list`, `pojo` or `null` | 
+A List of PersistentVolume for listPersistentVolumes and listPersistentVolumesByLabels; the PersistentVolume for getPersistentVolume (null when not found).
+
+-   With `operation=listPersistentVolumes`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.PersistentVolume>`)
+    
+-   With `operation=listPersistentVolumesByLabels`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.PersistentVolume>`)
+    
+-   With `operation=getPersistentVolume`: `pojo` or `null` (`io.fabric8.kubernetes.api.model.PersistentVolume`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

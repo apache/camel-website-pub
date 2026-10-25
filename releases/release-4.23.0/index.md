@@ -2,7 +2,7 @@
 
 ## New and Noteworthy
 
-This release is the new Camel 4.23.0 LTS release.
+This release is the new Camel 4.23.0 release.
 
 ## Supported Java version
 

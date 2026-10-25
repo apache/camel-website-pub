@@ -129,6 +129,18 @@ The Drill component supports the following message header(s), which is/are liste
 | --- | --- | --- | --- |
 | **CamelDrillQuery** (producer) Constant: [`DRILL_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-drill/latest/org/apache/camel/component/drill/DrillConstants.html#DRILL_QUERY) | The drill query. |  | String |
 
+## Message Body
+
+The message body at each side of the Drill component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The body is not read: the query comes from the CamelDrillQuery header, and a query in the body without that header fails. |
+| **Producer output** | `list` (`java.util.List<java.util.Map<String, Object>>`) | The rows of the query: a List of Maps of the column names (case insensitive) and their values, an empty List for no rows. A statement such as CREATE TABLE AS, DROP or ALTER SESSION gives the one row Drill answers with, such as ok and summary. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Drill Producer

@@ -202,6 +202,19 @@ The OAI-PMH component supports the following message header(s), which is/are lis
 | **CamelOaimphResumptionToken** (producer) Constant: [`RESUMPTION_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-oaipmh/latest/org/apache/camel/oaipmh/component/model/OAIPMHConstants.html#RESUMPTION_TOKEN) | This header is obtained when onlyFirst option is enable. Return resumption token of the request when data is still available. |  | String |
 | **CamelOaimphHttpHeaders** (producer) Constant: [`HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-oaipmh/latest/org/apache/camel/oaipmh/component/model/OAIPMHConstants.html#HTTP_HEADERS) | Custom HTTP headers to send with the request, overriding any httpHeader. endpoint parameters. |  | Map |
 
+## Message Body
+
+The message body at each side of the OAI-PMH component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`), as xml | The XML response of one OAI-PMH request as a String: one message per page, following the resumption tokens until the last page. |
+| **Producer input** | `any` | The body is not read: the request comes from the options, which the CamelOaimph headers override. |
+| **Producer output** | `list` (`java.util.List`) | A List of Strings, the XML response of each page of the request until the last; with onlyFirst only the first page, and the token for the next page in the CamelOaimphResumptionToken header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The OAI-PMH component supports both consumer and producer endpoints.

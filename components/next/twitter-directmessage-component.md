@@ -276,3 +276,16 @@ The Twitter Direct Message component supports the following message header(s), w
 | --- | --- | --- | --- |
 | **CamelTwitterUser** (common) Constant: [`TWITTER_USER`](https://javadoc.io/doc/org.apache.camel/camel-twitter/latest/org/apache/camel/component/twitter/TwitterConstants.html#TWITTER_USER) | The user. |  | String |
 | **CamelTwitterEventType** (common) Constant: [`TWITTER_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-twitter/latest/org/apache/camel/component/twitter/TwitterConstants.html#TWITTER_EVENT_TYPE) | The type of event. The supported values are the values of the enum org.apache.camel.component.twitter.consumer.TwitterEventType. |  | String |
+
+## Message Body
+
+The message body at each side of the Twitter Direct Message component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`twitter4j.v1.DirectMessage`) | One direct message of the account per exchange, with its text in getText(). It converts to text as the date, the sender id and the text. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the direct message: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(). The CamelTwitterUser header overrides the user to send to. |
+| **Producer output** | `unchanged` | Unchanged. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).

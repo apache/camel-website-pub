@@ -19,6 +19,18 @@ The Loop eip supports the following options which are listed below.
 | **onPrepare** | Uses a processor when preparing the exchange for each loop iteration. This can be used to deep-clone messages, or any custom logic needed before the looping executes. |  | Processor |
 | **outputs** | **Required** |  | List |
 
+## Message Body
+
+The message body at each side of the Loop EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what its steps end with | What the last iteration ends with. |
+| **Steps** | `unchanged` | The first iteration starts with the body; each next one with what the last ended with, or with the body again with copy. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Loop eip supports the following exchange properties which are listed below.

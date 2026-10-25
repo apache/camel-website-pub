@@ -56,7 +56,7 @@ The following table lists all available producer operations. Operations marked *
 | `deleteBlobContainer` | Delete a blob container. |  |
 | `listBlobs` | List blobs in a container. |  |
 | `listBlobVersions` | List all versions of blobs in a container. Versioning must be enabled on the storage account. | Use `CamelAzureStorageBlobPrefix` header to filter by blob name |
-| `getBlob` | Download a blob. Returns an `InputStream`, or writes to an `OutputStream` if one is set in the body. | See [getBlob](#getBlob) |
+| `getBlob` | Download a blob. Writes to the body when the body is an `OutputStream`; any other body is replaced by an `InputStream` of the blob content. | See [getBlob](#getBlob) |
 | `deleteBlob` | Delete a blob. |  |
 | `downloadBlobToFile` | Download a blob directly to a file. Use the `fileDir` option to set the target directory. |  |
 | `downloadLink` | Generate a download link for a blob. The link is returned in the `CamelAzureStorageBlobDownloadLink` header. |  |
@@ -102,7 +102,7 @@ from("direct:start")
     .to("mock:result");
 ```
 
-If you don’t set a body, then this operation will give you an `InputStream` instance which can be processed further downstream.
+Only a body that is an `OutputStream` is written to. Any other body, or no body, is replaced by an `InputStream` of the blob content, which can be processed further downstream. So a `File`, `Path` or the file of a file consumer in the body is not written to: to save a blob into a file, use the `downloadBlobToFile` operation, or a `file` endpoint after `getBlob`.
 
 ### uploadBlockBlobChunked
 

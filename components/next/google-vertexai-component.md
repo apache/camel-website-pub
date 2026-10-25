@@ -290,6 +290,49 @@ Enum values:
 | **CamelGoogleVertexAIRawResponse** (producer) Constant: [`RAW_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#RAW_RESPONSE) | The raw JSON response from rawPredict operation. |  | String |
 | **CamelGoogleVertexAIAnthropicVersion** (producer) Constant: [`ANTHROPIC_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#ANTHROPIC_VERSION) | Anthropic API version for Claude models. |  | String |
 
+## Message Body
+
+The message body at each side of the Google Vertex AI component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | 
+The prompt for generateText, the default, and the other generate operations, unless the CamelGoogleVertexAIPrompt header has it: bytes, a stream or a file are read as text, a Map or a POJO is sent as its toString(), and no body fails. generateEmbeddings also takes a List of texts. generateMultimodal takes the text, or the bytes of an image with the CamelGoogleVertexAIMediaMimeType header, only when the CamelGoogleVertexAIMediaData and CamelGoogleVertexAIMediaGcsUri headers are not set: a stream or a file is not used. rawPredict and streamRawPredict take the JSON request as a String or a Map, or a plain text prompt: bytes, a stream or a file fail, so convert them to a String first.
+
+-   With `operation=generateEmbeddings`: `text`, `bytes`, `stream`, `file` or `list`
+    
+-   With `operation=generateMultimodal`: `text` or `bytes`
+    
+-   With `operation=rawPredict`: `text` or `map`
+    
+-   With `operation=streamRawPredict`: `text` or `map`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` | 
+
+The text the model answers for generateText, the default, and the other generate operations, JSON with jsonMode=true, with the token counts and the finish reason in headers. generateChatStreaming joins the chunks, or gives the List of them with streamOutputMode=chunks. The List of the generated images for generateImage, and one vector of Floats per input text for generateEmbeddings. rawPredict and streamRawPredict give the JSON the model answers, or for publisher anthropic the text of Claude with the JSON in the CamelGoogleVertexAIRawResponse header.
+
+-   With `streamOutputMode=chunks`: `list` (`java.util.List<String>`)
+    
+-   With `operation=generateImage`: `list` (`java.util.List<com.google.genai.types.Image>`)
+    
+-   With `operation=generateEmbeddings`: `list` (`java.util.List<java.util.List<Float>>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Authentication
 
 The component supports two authentication methods:

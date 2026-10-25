@@ -134,6 +134,27 @@ The Ignite Messaging component supports the following message header(s), which i
 | **CamelIgniteMessagingTopic** (common) Constant: [`IGNITE_MESSAGING_TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_MESSAGING_TOPIC) | (producer) Allows you to dynamically change the topic to send messages to. (consumer) It also carries the topic on which a message was received. |  | String |
 | **CamelIgniteMessagingUUID** (consumer) Constant: [`IGNITE_MESSAGING_UUID`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_MESSAGING_UUID) | This header is filled in with the UUID of the subscription when a message arrives. |  | UUID |
 
+## Message Body
+
+The message body at each side of the Ignite Messaging component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The message as it was sent to the topic, with the topic in the CamelIgniteMessagingTopic header and the id of the subscription in CamelIgniteMessagingUUID. |
+| **Producer input** | `text`, `bytes`, `value`, `map`, `list` or `pojo` | The message to send, as the object: it must be serializable for the other nodes, so a stream is not read. In UNORDERED mode a Collection is one message per element, unless treatCollectionsAsCacheObjects=true. No body fails. The topic is the CamelIgniteMessagingTopic header, or else the endpoint topic. |
+| **Producer output** | `unchanged` | 
+-   With `propagateIncomingBodyIfNoReturnValue=false`: `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one.

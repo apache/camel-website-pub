@@ -182,9 +182,9 @@ Hashicorp Vault, IBM Secrets Manager, and CyberArk Conjur support retrieving a s
 To use AWS Secrets Manager, you need to provide _accessKey_, _secretKey_ and the _region_. This can be done using environmental variables before starting the application:
 
 ```bash
-export $CAMEL_VAULT_AWS_ACCESS_KEY=accessKey
-export $CAMEL_VAULT_AWS_SECRET_KEY=secretKey
-export $CAMEL_VAULT_AWS_REGION=region
+export CAMEL_VAULT_AWS_ACCESS_KEY=accessKey
+export CAMEL_VAULT_AWS_SECRET_KEY=secretKey
+export CAMEL_VAULT_AWS_REGION=region
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -198,8 +198,8 @@ camel.vault.aws.region = region
 If you want instead to use the [AWS default credentials provider](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md), you’ll need to provide the following env variables:
 
 ```bash
-export $CAMEL_VAULT_AWS_USE_DEFAULT_CREDENTIALS_PROVIDER=true
-export $CAMEL_VAULT_AWS_REGION=region
+export CAMEL_VAULT_AWS_USE_DEFAULT_CREDENTIALS_PROVIDER=true
+export CAMEL_VAULT_AWS_REGION=region
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -212,9 +212,9 @@ camel.vault.aws.region = region
 It is also possible to specify a particular profile name for accessing AWS Secrets Manager:
 
 ```bash
-export $CAMEL_VAULT_AWS_USE_PROFILE_CREDENTIALS_PROVIDER=true
-export $CAMEL_VAULT_AWS_PROFILE_NAME=test-account
-export $CAMEL_VAULT_AWS_REGION=region
+export CAMEL_VAULT_AWS_USE_PROFILE_CREDENTIALS_PROVIDER=true
+export CAMEL_VAULT_AWS_PROFILE_NAME=test-account
+export CAMEL_VAULT_AWS_REGION=region
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -234,8 +234,8 @@ The only requirement is adding `camel-aws-secrets-manager` JAR to your Camel app
 To use GCP Secret Manager, you need to provide _serviceAccountKey_ file and GCP _projectId_. This can be done using environmental variables before starting the application:
 
 ```bash
-export $CAMEL_VAULT_GCP_SERVICE_ACCOUNT_KEY=file:////path/to/service.accountkey
-export $CAMEL_VAULT_GCP_PROJECT_ID=projectId
+export CAMEL_VAULT_GCP_SERVICE_ACCOUNT_KEY=file:////path/to/service.accountkey
+export CAMEL_VAULT_GCP_PROJECT_ID=projectId
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -248,8 +248,8 @@ camel.vault.gcp.projectId = secretKey
 If you want instead to use the [GCP default client instance](https://cloud.google.com/docs/authentication/production), you’ll need to provide the following env variables:
 
 ```bash
-export $CAMEL_VAULT_GCP_USE_DEFAULT_INSTANCE=true
-export $CAMEL_VAULT_GCP_PROJECT_ID=projectId
+export CAMEL_VAULT_GCP_USE_DEFAULT_INSTANCE=true
+export CAMEL_VAULT_GCP_PROJECT_ID=projectId
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -268,10 +268,10 @@ There are only two requirements: - Adding `camel-google-secret-manager` JAR to y
 To use this function, you’ll need to provide credentials to Azure Key Vault Service as environment variables:
 
 ```bash
-export $CAMEL_VAULT_AZURE_TENANT_ID=tenantId
-export $CAMEL_VAULT_AZURE_CLIENT_ID=clientId
-export $CAMEL_VAULT_AZURE_CLIENT_SECRET=clientSecret
-export $CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
+export CAMEL_VAULT_AZURE_TENANT_ID=tenantId
+export CAMEL_VAULT_AZURE_CLIENT_ID=clientId
+export CAMEL_VAULT_AZURE_CLIENT_SECRET=clientSecret
+export CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -286,8 +286,8 @@ camel.vault.azure.vaultName = vaultName
 Or you can enable the usage of Azure Identity in the following way:
 
 ```bash
-export $CAMEL_VAULT_AZURE_IDENTITY_ENABLED=true
-export $CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
+export CAMEL_VAULT_AZURE_IDENTITY_ENABLED=true
+export CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
 ```
 
 You can also enable the usage of Azure Identity in the `application.properties` file such as:
@@ -306,10 +306,10 @@ The only requirement is adding the `camel-azure-key-vault` JAR to your Camel app
 To use this function, you’ll need to provide credentials for Hashicorp vault as environment variables:
 
 ```bash
-export $CAMEL_VAULT_HASHICORP_TOKEN=token
-export $CAMEL_VAULT_HASHICORP_HOST=host
-export $CAMEL_VAULT_HASHICORP_PORT=port
-export $CAMEL_VAULT_HASHICORP_SCHEME=http/https
+export CAMEL_VAULT_HASHICORP_TOKEN=token
+export CAMEL_VAULT_HASHICORP_HOST=host
+export CAMEL_VAULT_HASHICORP_PORT=port
+export CAMEL_VAULT_HASHICORP_SCHEME=http/https
 ```
 
 You can also configure the credentials in the `application.properties` file such as:
@@ -420,14 +420,14 @@ Being able to reload Camel context on a Secret Refresh, could be done by specify
 With Environment variables:
 
 ```bash
-export $CAMEL_VAULT_AWS_USE_DEFAULT_CREDENTIALS_PROVIDER=accessKey
-export $CAMEL_VAULT_AWS_REGION=region
+export CAMEL_VAULT_AWS_USE_DEFAULT_CREDENTIALS_PROVIDER=true
+export CAMEL_VAULT_AWS_REGION=region
 ```
 
 or as plain Camel main properties:
 
 ```properties
-camel.vault.aws.useDefaultCredentialProvider = true
+camel.vault.aws.defaultCredentialsProvider = true
 camel.vault.aws.region = region
 ```
 
@@ -514,15 +514,15 @@ Being able to reload Camel context on a Secret Refresh, could be done by specify
 With Environment variables:
 
 ```bash
-export $CAMEL_VAULT_GCP_USE_DEFAULT_INSTANCE=true
-export $CAMEL_VAULT_GCP_PROJECT_ID=projectId
+export CAMEL_VAULT_GCP_USE_DEFAULT_INSTANCE=true
+export CAMEL_VAULT_GCP_PROJECT_ID=projectId
 ```
 
 or as plain Camel main properties:
 
 ```properties
 camel.vault.gcp.useDefaultInstance = true
-camel.vault.aws.projectId = projectId
+camel.vault.gcp.projectId = projectId
 ```
 
 Or by specifying a path to a service account key file, instead of using the default instance.
@@ -555,10 +555,10 @@ Being able to reload Camel context on a Secret Refresh, could be done by specify
 With Environment variables:
 
 ```bash
-export $CAMEL_VAULT_AZURE_TENANT_ID=tenantId
-export $CAMEL_VAULT_AZURE_CLIENT_ID=clientId
-export $CAMEL_VAULT_AZURE_CLIENT_SECRET=clientSecret
-export $CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
+export CAMEL_VAULT_AZURE_TENANT_ID=tenantId
+export CAMEL_VAULT_AZURE_CLIENT_ID=clientId
+export CAMEL_VAULT_AZURE_CLIENT_SECRET=clientSecret
+export CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
 ```
 
 or as plain Camel main properties:
@@ -573,8 +573,8 @@ camel.vault.azure.vaultName = vaultName
 If you want to use Azure Identity with environment variables, you can do in the following way:
 
 ```bash
-export $CAMEL_VAULT_AZURE_IDENTITY_ENABLED=true
-export $CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
+export CAMEL_VAULT_AZURE_IDENTITY_ENABLED=true
+export CAMEL_VAULT_AZURE_VAULT_NAME=vaultName
 ```
 
 You can also enable the usage of Azure Identity in the `application.properties` file such as:

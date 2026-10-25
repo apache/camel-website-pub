@@ -140,6 +140,45 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **ignoreSslVerification** (security) | Ignore SSL verification. | false | boolean |
 
+## Message Body
+
+The message body at each side of the Huawei Distributed Message Service (DMS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not used by deleteInstance, listInstances and queryInstance, which take the instance id and the engine from the options or exchange properties such as CamelHwCloudDmsInstanceId. createInstance takes a CreateInstanceRequestBody or its JSON as text, and with another body, JSON as bytes or a stream too, creates the instance from the options. updateInstance needs an UpdateInstanceRequestBody or its JSON as text: another body fails.
+
+-   With `operation=createInstance`: `text` or `pojo`
+    
+-   With `operation=updateInstance`: `text` or `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+The JSON of the response as text: the id of the new instance for createInstance, the array of the instances for listInstances and the instance for queryInstance. Unchanged after deleteInstance and updateInstance, which set the CamelHwCloudDmsInstanceDeleted or CamelHwCloudDmsInstanceUpdated exchange property to true. The CamelHwCloudDmsOperation exchange property overrides the operation.
+
+-   With `operation=createInstance`: `text` (`java.lang.String`)
+    
+-   With `operation=listInstances`: `text` (`java.lang.String`)
+    
+-   With `operation=queryInstance`: `text` (`java.lang.String`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message properties evaluated by the DMS producer

@@ -6726,6 +6726,22 @@ In addition to the parameters above, the zendesk API can also use any of the [Qu
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelZendesk.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelZendesk.myParameterNameHere` header.
 
+## Message Body
+
+The message body at each side of the Zendesk component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` or `map` | One message per poll with the return value of the method: a Zendesk model object, such as the Ticket of getTicket. An Iterable or a List, such as the tickets of getTickets, is split into one message per element, and all its pages are read. getIncrementalTicketsResult gives a Map. |
+| **Producer input** | `any` | The body is used only when inBody names a parameter of the method, and must then be of the type of that parameter: a Zendesk model object such as a Ticket for ticket of createTicket, a Long for id, or a byte\[\] for content of createUpload. JSON text or a Map is not turned into a model object: build it first. Without inBody the arguments come from the options and the CamelZendesk. headers.
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo`, `iterator`, `list`, `map` or `null` | The return value of the method: a Zendesk model object, such as the Ticket of getTicket and createTicket; an Iterable for the methods that list, such as getTickets, which reads the pages from Zendesk while it is iterated, with split for example; a List for some, such as the tags of addTagToTicket; a ListenableFuture for the Async methods; a Map for getIncrementalTicketsResult; null for the methods without a result, such as deleteTicket. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 

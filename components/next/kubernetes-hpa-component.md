@@ -166,6 +166,39 @@ Enum values:
  |  | Action |
 | **CamelKubernetesEventTimestamp** (consumer) Constant: [`KUBERNETES_EVENT_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_EVENT_TIMESTAMP) | Timestamp of the action watched by the consumer. |  | long |
 
+## Message Body
+
+The message body at each side of the Kubernetes HPA component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`io.fabric8.kubernetes.api.model.autoscaling.v1.HorizontalPodAutoscaler`) | The HorizontalPodAutoscaler that changed, with the action (ADDED, MODIFIED or DELETED) in the CamelKubernetesEventAction header. |
+| **Producer input** | `any` | Not used: the operations take their input from headers, such as the name of the HorizontalPodAutoscaler in CamelKubernetesHPAName and its HorizontalPodAutoscalerSpec in CamelKubernetesHPASpec. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of the HorizontalPodAutoscalers for the list operations, the HorizontalPodAutoscaler of get, create and update (null when getHPA finds none), and a Boolean of whether deleteHPA deleted it.
+
+-   With `operation=listHPA`: `list`
+    
+-   With `operation=listHPAByLabels`: `list`
+    
+-   With `operation=getHPA`: `pojo` or `null`
+    
+-   With `operation=createHPA`: `pojo` (`io.fabric8.kubernetes.api.model.autoscaling.v1.HorizontalPodAutoscaler`)
+    
+-   With `operation=updateHPA`: `pojo` (`io.fabric8.kubernetes.api.model.autoscaling.v1.HorizontalPodAutoscaler`)
+    
+-   With `operation=deleteHPA`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

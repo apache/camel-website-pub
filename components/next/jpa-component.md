@@ -258,6 +258,38 @@ The JPA component supports the following message header(s), which is/are listed 
 | **CamelJpaMaximumResults** (producer) Constant: [`JPA_MAXIMUM_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-jpa/latest/org/apache/camel/component/jpa/JpaConstants.html#JPA_MAXIMUM_RESULTS) | Defines the maximum number of results to retrieve on the query; takes precedence over the value set on the endpoint, if any. |  |  |
 | **CamelJpaFirstResult** (producer) Constant: [`JPA_FIRST_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-jpa/latest/org/apache/camel/component/jpa/JpaConstants.html#JPA_FIRST_RESULT) | Defines the position of the first result to retrieve; takes precedence over the value set on the endpoint, if any. |  |  |
 
+## Message Body
+
+The message body at each side of the JPA component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | One entity of the entityType class per message. A query that selects columns gives one row per message: an Object array, or the value of a single column; a nativeQuery gives an Object array unless resultClass is set.
+Not known when `query` or `namedQuery` or `nativeQuery` is set.
+
+ |
+| **Producer input** | `pojo` or `list` | The entity to persist, merge or remove, converted to the entityType class; a List or an array of entities needs entityType java.util.List (or java.lang.Object). Text, bytes or a Map fail. With findEntity, the primary key. With a query the body is not read: the parameters come from the parameters option or the CamelJpaParameters header.
+
+-   With `findEntity=true`: `value` or `text`
+    
+
+Not known when `query` or `namedQuery` or `nativeQuery` is set.
+
+ |
+| **Producer output** | `pojo` or `list` | The managed entity that merge returns, or a List or array of them; usePersist leaves the body as sent. findEntity gives the entity, or null when there is none. A query gives the List of its results (entities, Object arrays or values), the one result with singleResult, or the count of an update or delete as an Integer; with outputTarget the result goes to that header (or property:name) and the body is unchanged.
+
+-   With `usePersist=true`: `unchanged`
+    
+-   With `findEntity=true`: `pojo` or `null`
+    
+
+Not known when `query` or `namedQuery` or `nativeQuery` or `outputTarget` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Sending to the endpoint

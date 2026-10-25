@@ -169,8 +169,8 @@ The service function is for looking up a service which is defined using OS envir
 in other words the service uses `_SERVICE_HOST` and `_SERVICE_PORT` as prefix. So if the service is named FOO, then the OS environment variables should be set as
 
 ```bash
-export $FOO_SERVICE_HOST=myserver
-export $FOO_SERVICE_PORT=8888
+export FOO_SERVICE_HOST=myserver
+export FOO_SERVICE_PORT=8888
 ```
 
 For example if the FOO service a remote HTTP service, then we can refer to the service in the Camel endpoint uri, and use the HTTP component to make the HTTP call:

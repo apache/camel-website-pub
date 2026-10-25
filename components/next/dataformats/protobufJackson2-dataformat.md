@@ -74,7 +74,7 @@ The message body at each side of the Protobuf Jackson 2 data format: _Marshal in
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Marshal input** | `map` or `pojo` | A POJO, a Map or a JsonNode to write as the message of the protobuf schema of the schemaResolver. Text, bytes or a stream are written as they are, not encoded. |
+| **Marshal input** | `map` or `pojo` | A POJO, a Map or a JsonNode to write as the message of the protobuf schema of the schemaResolver. Text, bytes or a stream are not written as they are: marshal fails for them. |
 | **Marshal output** | `stream`, as binary | The protobuf binary data in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `bytes`, `stream` or `file`, as binary | Protobuf binary data of the schema of the schemaResolver. A String fails. |
 | **Unmarshal output** | `map` | A Map (LinkedHashMap) of the fields of the message; an object of the class unmarshalType names, such as JsonNode.

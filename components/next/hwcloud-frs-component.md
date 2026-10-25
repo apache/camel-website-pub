@@ -121,6 +121,19 @@ With the following _path_ and _query_ parameters:
 | **videoUrl** (producer) | This param can be used when operation is faceLiveDetection, indicating the URL of a video. Any one of videoBase64, videoUrl and videoFilePath needs to be set, and the priority is videoBase64 videoUrl videoFilePath. Currently, only the URL of an OBS bucket on HUAWEI CLOUD is supported and FRS must have the permission to read data in the OBS bucket. For details about how to enable the read permission, see Service Authorization. The video requirements are as follows: 1.The video size after Base64 encoding cannot exceed 8 MB. 2.The video duration must be 1 to 15 seconds. 3.The recommended frame rate is 10 fps to 30 fps. 4.The encapsulation format can be MP4, AVI, FLV, WEBM, ASF, or MOV. 5.The video encoding format can be H.261, H.263, H.264, HEVC, VC-1, VP8, VP9, or WMV3. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **ignoreSslVerification** (security) | Ignore SSL verification. | false | boolean |
+
+## Message Body
+
+The message body at each side of the Huawei Cloud Face Recognition Service (FRS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used, not even for the image: the image comes from the options or the exchange properties as base64 (CamelHwCloudFrsImageBase64), a URL (CamelHwCloudFrsImageUrl) or a local file path (CamelHwCloudFrsImageFilePath), the second image of faceVerification from the CamelHwCloudFrsAnotherImage properties, and the video of faceLiveDetection from the CamelHwCloudFrsVideo properties. |
+| **Producer output** | `pojo` | The response of the Huawei Cloud SDK for the operation and the source of the image, such as the DetectFaceByBase64Response of faceDetection with base64, which holds the faces found. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > When using imageBase64 or videoBase64 option, we suggest you use RAW(base64\_value) to avoid encoding issue.
 

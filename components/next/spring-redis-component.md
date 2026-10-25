@@ -397,7 +397,7 @@ The Spring Redis component supports the following message header(s), which is/ar
 | --- | --- | --- | --- |
 | **CamelRedis.Command** (producer) Constant: [`COMMAND`](https://javadoc.io/doc/org.apache.camel/camel-spring-redis/latest/org/apache/camel/component/redis/RedisConstants.html#COMMAND) | The command to perform. |  | String |
 | **CamelRedis.Key** (common) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-spring-redis/latest/org/apache/camel/component/redis/RedisConstants.html#KEY) | The key. |  | String |
-| **CamelRedis.Keys** (common) Constant: [`KEYS`](https://javadoc.io/doc/org.apache.camel/camel-spring-redis/latest/org/apache/camel/component/redis/RedisConstants.html#KEYS) | The keys. |  | Collection |
+| **CamelRedis.Keys** (common) Constant: [`KEYS`](https://javadoc.io/doc/org.apache.camel/camel-spring-redis/latest/org/apache/camel/component/redis/RedisConstants.html#KEYS) | The keys: a collection of keys, or a String with one key or several keys separated by comma. |  | Collection or String |
 | **CamelRedis.Field** (common) Constant: [`FIELD`](https://javadoc.io/doc/org.apache.camel/camel-spring-redis/latest/org/apache/camel/component/redis/RedisConstants.html#FIELD) | The field. |  | String |
 | **CamelRedis.Fields** (common) Constant: [`FIELDS`](https://javadoc.io/doc/org.apache.camel/camel-spring-redis/latest/org/apache/camel/component/redis/RedisConstants.html#FIELDS) | The fields. |  | Collection |
 | **CamelRedis.Value** (common) Constant: [`VALUE`](https://javadoc.io/doc/org.apache.camel/camel-spring-redis/latest/org/apache/camel/component/redis/RedisConstants.html#VALUE) | The value. |  | Object |
@@ -432,9 +432,9 @@ The message body at each side of the Spring Redis component: _Consumer_ is the b
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `unknown` | The message as the serializer reads it: with the default JDK serializer the Java object the publisher serialized, such as the String a PUBLISH of this component sent, with the channel in the CamelRedis.Channel header. A message that is not Java serialized, such as one from redis-cli, is dropped with a WARN: set a StringRedisSerializer as the serializer to receive text. |
+| **Consumer** | `unknown` | The message as the serializer reads it: with the default JDK serializer the Java object the publisher serialized, such as the String a PUBLISH of this component sent, with the channel in the CamelRedis.Channel header. A message the serializer cannot read, such as text from redis-cli, is given as its raw bytes: set a StringRedisSerializer as the serializer to receive text. |
 | **Producer input** | `any` | The body is not used: the key, the value and the other arguments of the command come from headers, such as CamelRedis.Key and CamelRedis.Value, or CamelRedis.Channel and CamelRedis.Message for PUBLISH. Set CamelRedis.Value from the body to store the body: with the default serializer it must be Serializable, so a stream fails. |
-| **Producer output** | `unchanged` | The result of the command, which the CamelRedis.Command header can pick instead of the command option: SET, the default, PUBLISH and the other commands without a result keep the body; a Boolean or a number for those that test, count or increment, a Set or a List for those that read several members, a Map for HGETALL, and the stored object, which can be anything, for GET, HGET, LINDEX, LPOP, RPOP, SPOP and the other commands that read or pop one value: these are not known. A null result, such as GET of a missing key, keeps the body as well.
+| **Producer output** | `unchanged` | The result of the command, which the CamelRedis.Command header can pick instead of the command option: SET, the default, PUBLISH and the other commands without a result keep the body; a Boolean or a number for those that test, count or increment, a Set or a List for those that read several members, a Map for HGETALL, and the stored object, which can be anything, for GET, HGET, LINDEX, LPOP, RPOP, SPOP and the other commands that read or pop one value: these are not known. These set the body to null when there is no value, such as GET of a missing key. An unknown command, or one the producer does not run, fails.
 -   With `command=SET`: `unchanged`
     
 -   With `command=SETEX`: `unchanged`
@@ -462,6 +462,8 @@ The message body at each side of the Spring Redis component: _Consumer_ is the b
 -   With `command=EXPIRE`: `value` (`java.lang.Boolean`)
     
 -   With `command=SETNX`: `value` (`java.lang.Boolean`)
+    
+-   With `command=MSETNX`: `value` (`java.lang.Boolean`)
     
 -   With `command=HEXISTS`: `value` (`java.lang.Boolean`)
     
@@ -528,7 +530,7 @@ See also the unit tests available at [https://github.com/apache/camel/tree/main/
 
 ### Examples
 
-The producer runs the command of the `command` option, or of the `CamelRedis.Command` header. The parameters of the command come from headers, such as `CamelRedis.Key` and `CamelRedis.Value`, not from the message body. The tables below list the parameters of each command. The result of the command becomes the message body, and a command without a result, such as `SET`, or a result that is null, such as `GET` of a missing key, leaves the body as it was:
+The producer runs the command of the `command` option, or of the `CamelRedis.Command` header. The parameters of the command come from headers, such as `CamelRedis.Key` and `CamelRedis.Value`, not from the message body. The tables below list the parameters of each command. The result of the command becomes the message body, and a command without a result, such as `SET`, leaves the body as it was. A command that reads one value sets the body to `null` when there is no value, such as `GET` of a missing key:
 
 ```yaml
 - route:
@@ -622,9 +624,27 @@ By default, keys and values are stored with Java serialization, so other Redis c
               serializer: "#class:org.springframework.data.redis.serializer.StringRedisSerializer"
 ```
 
+The `KEYS` command sends its pattern through the key serializer too. With the default Java serialization a stored key starts with the bytes of the serialization header, so a pattern such as `order-*` matches no key. Use `KEYS` with keys stored as plain strings: set a `StringRedisSerializer` as the `serializer` as above, or, to keep Java serialization for the values, a `redisTemplate` with a `StringRedisSerializer` as its key serializer:
+
+```java
+RedisTemplate<String, Object> template = new RedisTemplate<>();
+template.setConnectionFactory(connectionFactory);
+template.setKeySerializer(new StringRedisSerializer());
+template.setHashKeySerializer(new StringRedisSerializer());
+template.afterPropertiesSet();
+```
+
+The consumer deserializes each message with the `serializer`, which is Java serialization by default. A message that the serializer cannot read, such as one posted as text by `redis-cli PUBLISH` or another Redis client, is given to the route as its raw bytes (`byte[]`). To receive such messages as text, set `serializer=#class:org.springframework.data.redis.serializer.StringRedisSerializer` on the consumer. When the route fails to process a message, the exchange is handed to the exception handler of the consumer (see the `exceptionHandler` and `bridgeErrorHandler` options).
+
 ### Message headers evaluated by the Redis producer
 
-The producer issues commands to the server, and each command has a different set of parameters with specific types. The result of the command becomes the message body. A command whose result is void, and a result that is null, leave the body as it was. The value commands, such as `GET`, `HGET` and `LPOP`, return the object that was stored: with the default serializer the Java object the `CamelRedis.Value` header held.
+The producer issues commands to the server, and each command has a different set of parameters with specific types. The result from the command execution is returned in the message body. A command whose result is `void` leaves the body as it was. The value commands, such as `GET`, `HGET` and `LPOP`, return the object that was stored: with the default serializer the Java object the `CamelRedis.Value` header held.
+
+The commands that read one value set the body to `null` when there is no value, such as `GET` of a key that does not exist, so a route can tell a miss from a value. These are `GET`, `GETSET`, `HGET`, `LINDEX`, `LPOP`, `RPOP`, `BLPOP`, `BRPOP` (also when the timeout passes), `RPOPLPUSH`, `BRPOPLPUSH`, `SPOP`, `SRANDMEMBER`, `RANDOMKEY`, `ZSCORE`, `ZRANK`, `ZREVRANK` and `GEODIST`.
+
+The `CamelRedis.Keys` header is a `Collection<String>`, or a `String` with one key or several keys separated by comma (a key that holds a comma needs the `Collection` form).
+
+The producer fails the exchange when the command is not one of the commands listed below: an unknown command fails with an `IllegalArgumentException`, and a command of the `command` option that the producer does not run (such as `AUTH`, `FLUSHDB`, `INFO` or `SELECT`) fails with an `UnsupportedOperationException`. `SUBSCRIBE` and `PSUBSCRIBE` are for the consumer; the producer posts messages with `PUBLISH`.
 
    
 | Hash Commands | Description | Parameters | Result |
@@ -668,12 +688,12 @@ The producer issues commands to the server, and each command has a different set
 | `SMOVE` | Move a member from one set to another | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (Object), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | Boolean |
 | `SCARD` | Get the number of members in a set | `RedisConstants.KEY`/"CamelRedis.Key" (String) | Long |
 | `SISMEMBER` | Determine if a given value is a member of a set | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (Object) | Boolean |
-| `SINTER` | Intersect multiple sets | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (String) | Set<Object> |
-| `SINTERSTORE` | Intersect multiple sets and store the resulting set in a key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |
-| `SUNION` | Add multiple sets | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (String) | Set<Object> |
-| `SUNIONSTORE` | Add multiple sets and store the resulting set in a key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |
-| `SDIFF` | Subtract multiple sets | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (String) | Set<Object> |
-| `SDIFFSTORE` | Subtract multiple sets and store the resulting set in a key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |
+| `SINTER` | Intersect multiple sets | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String) | Set<Object> |
+| `SINTERSTORE` | Intersect multiple sets and store the resulting set in a key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |
+| `SUNION` | Add multiple sets | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String) | Set<Object> |
+| `SUNIONSTORE` | Add multiple sets and store the resulting set in a key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |
+| `SDIFF` | Subtract multiple sets | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String) | Set<Object> |
+| `SDIFFSTORE` | Subtract multiple sets and store the resulting set in a key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |
 | `SRANDMEMBER` | Get one or multiple random members from a set | `RedisConstants.KEY`/"CamelRedis.Key" (String) | Object |   
 | Ordered set Commands | Description | Parameters | Result |
 | --- | --- | --- | --- |
@@ -684,14 +704,15 @@ The producer issues commands to the server, and each command has a different set
 | `ZRANK` | Determine the index of a member in a sorted set | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (Object) | Long |
 | `ZREVRANK` | Determine the index of a member in a sorted set, with scores ordered from high to low | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (Object) | Long |
 | `ZREVRANGE` | Return a range of members in a sorted set, by index, with scores ordered from high to low | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.START`/"CamelRedis.Start"Long), `RedisConstants.END`/"CamelRedis.End" (Long), `RedisConstants.WITHSCORE`/"CamelRedis.WithScore" (Boolean) | Object |
+| `ZSCORE` | Get the score of a member in a sorted set | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (Object) | Double |
 | `ZCARD` | Get the number of members in a sorted set | `RedisConstants.KEY`/"CamelRedis.Key" (String) | Long |
 | `ZCOUNT` | Count the members in a sorted set with scores within the given values | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.MIN`/"CamelRedis.Min" (Double), `RedisConstants.MAX`/"CamelRedis.Max" (Double) | Long |
 | `ZRANGEBYSCORE` | Return a range of members in a sorted set, by score | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.MIN`/"CamelRedis.Min" (Double), `RedisConstants.MAX`/"CamelRedis.Max" (Double) | Set<Object> |
 | `ZREVRANGEBYSCORE` | Return a range of members in a sorted set, by score, with scores ordered from high to low | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.MIN`/"CamelRedis.Min" (Double), `RedisConstants.MAX`/"CamelRedis.Max" (Double) | Set<Object> |
 | `ZREMRANGEBYRANK` | Remove all members in a sorted set within the given indexes | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.START`/"CamelRedis.Start"Long), `RedisConstants.END`/"CamelRedis.End" (Long) | void |
 | `ZREMRANGEBYSCORE` | Remove all members in a sorted set within the given scores | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.START`/"CamelRedis.Start"Long), `RedisConstants.END`/"CamelRedis.End" (Long) | void |
-| `ZUNIONSTORE` | Add multiple sorted sets and store the resulting-sorted set in a new key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |
-| `ZINTERSTORE` | Intersect multiple sorted sets and store the resulting sorted set in a new key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |   
+| `ZUNIONSTORE` | Add multiple sorted sets and store the resulting-sorted set in a new key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |
+| `ZINTERSTORE` | Intersect multiple sorted sets and store the resulting sorted set in a new key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String), `RedisConstants.DESTINATION`/"CamelRedis.Destination" (String) | void |   
 | String Commands | Description | Parameters | Result |
 | --- | --- | --- | --- |
 | `SET` | Set the string value of a key | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (Object) | void |
@@ -710,14 +731,14 @@ The producer issues commands to the server, and each command has a different set
 | `INCR` | Increment the integer value of a key by one | `RedisConstants.KEY`/"CamelRedis.Key" (String) | Long |
 | `MGET` | Get the values of all the given keys | `RedisConstants.FIELDS`/"CamelRedis.Fields" (Collection<String>) | List<Object> |
 | `MSET` | Set multiple keys to multiple values | `RedisConstants.VALUES`/"CamelRedis.Values" (Map<String, Object>) | void |
-| `MSETNX` | Set multiple keys to multiple values only if none of the keys exist | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (Object) | void |
+| `MSETNX` | Set multiple keys to multiple values only if none of the keys exist | `RedisConstants.VALUES`/"CamelRedis.Values" (Map<String, Object>) | Boolean |
 | `GETSET` | Set the string value of a key and return its old value | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (Object) | Object |   
 | Key Commands | Description | Parameters | Result |
 | --- | --- | --- | --- |
 | `EXISTS` | Determine if a key exists | `RedisConstants.KEY`/"CamelRedis.Key" (String) | Boolean |
-| `DEL` | Delete a key | `RedisConstants.KEYS`/"CamelRedis.Keys" (String) | void |
+| `DEL` | Delete a key | `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String) | void |
 | `TYPE` | Determine the type stored at key | `RedisConstants.KEY`/"CamelRedis.Key" (String) | String |
-| `KEYS` | Find all keys matching the given pattern | `RedisConstants.PATERN`/"CamelRedis.Pattern" (String) | Set<String> |
+| `KEYS` | Find all keys matching the given pattern (needs keys stored as strings, see above) | `RedisConstants.PATERN`/"CamelRedis.Pattern" (String) | Set<String> |
 | `RANDOMKEY` | Return a random key from the keyspace | `RedisConstants.PATERN`/"CamelRedis.Pattern" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (String) | String |
 | `RENAME` | Rename a key | `RedisConstants.KEY`/"CamelRedis.Key" (String) | void |
 | `RENAMENX` | Rename a key, only if the new key does not exist | `RedisConstants.KEY`/"CamelRedis.Key" (String), `RedisConstants.VALUE`/"CamelRedis.Value" (String) | Boolean |
@@ -742,9 +763,9 @@ The producer issues commands to the server, and each command has a different set
 | `MULTI` | Mark the start of a transaction block | none | void |
 | `DISCARD` | Discard all commands issued after MULTI | none | void |
 | `EXEC` | Execute all commands issued after MULTI | none | void |
-| `WATCH` | Watch the given keys to determine execution of the MULTI/EXEC block | `RedisConstants.KEYS`/"CamelRedis.Keys" (String) | void |
+| `WATCH` | Watch the given keys to determine execution of the MULTI/EXEC block | `RedisConstants.KEYS`/"CamelRedis.Keys" (Collection<String> or String) | void |
 | `UNWATCH` | Forget about all watched keys | none | void |
-| `ECHO` | Echo the given string | `RedisConstants.VALUE`/"CamelRedis.Value" (String) | String |
+| `ECHO` | Echo the given string (fails when the header is missing) | `RedisConstants.VALUE`/"CamelRedis.Value" (String) | String |
 | `PING` | Ping the server | none | String |
 | `QUIT` | Close the connection | none | void |
 | `PUBLISH` | Post a message to a channel | `RedisConstants.CHANNEL`/"CamelRedis.Channel" (String), `RedisConstants.MESSAGE`/"CamelRedis.Message" (Object) | void |

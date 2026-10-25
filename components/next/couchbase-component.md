@@ -103,7 +103,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **bucket** (common) | **Required** The bucket to use. |  | String |
 | **collection** (common) | The collection to use. |  | String |
-| **key** (common) | The key to use. |  | String |
+| **key** (common) | The id of the document the producer puts, gets or deletes, when the message has no CamelCouchbaseId header. |  | String |
 | **scope** (common) | The scope to use. |  | String |
 | **consumerProcessedStrategy** (consumer) | Define the consumer Processed strategy to use. | none | String |
 | **consumerRetryPause** (consumer) | Define the consumer retry pause between different attempts. | 5000 | int |
@@ -115,7 +115,7 @@ With the following _path_ and _query_ parameters:
 | **rangeStartKey** (consumer) | Define a range for the start key. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **skip** (consumer) | Define the skip to use. | \-1 | int |
-| **statement** (consumer) | A SQL (N1QL) query statement for consuming documents. When set, the consumer uses SQL queries instead of MapReduce views. The query should select META().id AS _id to identify documents. Example: SELECT META().id AS_ id, FROM myCollection WHERE type = 'order' LIMIT 100. If not set and useView is false, a SQL query is auto-generated from the bucket, scope, collection, limit, skip, descending, rangeStartKey, and rangeEndKey options. |  | String |
+| **statement** (consumer) | A SQL (N1QL) query statement for consuming documents. When set, the consumer uses SQL queries instead of MapReduce views. The query should select META().id AS _id to identify documents. The query runs on the scope (the default scope when the scope option is not set), so a single name in FROM is a collection of that scope; use bucket.scope.collection for another one. Example: SELECT META().id AS_ id, FROM \_default WHERE type = 'order' LIMIT 100. If not set and useView is false, a SQL query is auto-generated from the bucket, scope, collection, limit, skip, descending, rangeStartKey, and rangeEndKey options. |  | String |
 | **useView** (consumer) | If true, use the deprecated MapReduce Views to query documents via designDocumentName and viewName. If false (default), use SQL queries instead. | false | boolean |
 | **viewName** (consumer) | **Deprecated** The view name to use. Deprecated: use the statement option with SQL queries instead. | brewery\_beers | String |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -137,7 +137,24 @@ Enum values:
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
 | **autoStartIdForInserts** (producer) | Define if we want an autostart Id when we are doing an insert operation. | false | boolean |
-| **operation** (producer) | The operation to do. | CCB\_PUT | String |
+| **operation** (producer) | 
+
+The operation to do: CCB\_PUT stores the message body as the document (upsert), CCB\_GET reads the document and CCB\_DEL removes it.
+
+Enum values:
+
+-   CCB\_PUT
+    
+-   CCB\_GET
+    
+-   CCB\_DEL
+    
+
+
+
+
+
+ | CCB\_PUT | String |
 | **persistTo** (producer) | Where to persist the data. | 0 | int |
 | **producerRetryAttempts** (producer) | Define the number of retry attempts. | 2 | int |
 | **producerRetryPause** (producer) | Define the producer retry pause between different attempts. | 5000 | int |
@@ -235,11 +252,11 @@ The message body at each side of the Couchbase component: _Consumer_ is the body
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `pojo` (`com.couchbase.client.java.kv.GetResult`) | 
-One message per document the query finds, read by its id (the CamelCouchbaseId header) as the GetResult of the Couchbase SDK: contentAsObject() gives the JSON document. With fullDocument=false the row of the SQL++ query as JSON text, or with useView=true the value the view emits.
+One message per document the query finds, read by its id (the CamelCouchbaseId header) as the GetResult of the Couchbase SDK: contentAsObject() gives the JSON document. With fullDocument=false the row of the SQL++ query as JSON text, or with useView=true the value the view emits. A row of a reduce view has no id: its value is the body, also with fullDocument=true.
 
 -   With `fullDocument=false`: `text` (`java.lang.String`)
     
--   With `useView=true`: `pojo` (`com.couchbase.client.java.kv.GetResult`)
+-   With `useView=true`: `pojo`, `text`, `value`, `map` or `list`
     
 
 
@@ -247,12 +264,12 @@ One message per document the query finds, read by its id (the CamelCouchbaseId h
 
 
  |
-| **Producer input** | `text`, `map`, `list` or `pojo` | The document that CCB\_PUT, the default, stores as JSON: a Map, a List or a POJO becomes JSON, and text is stored as a JSON string, so unmarshal JSON text first. Bytes, a stream or no body fail. CCB\_GET and CCB\_DEL do not use the body: the id is the CamelCouchbaseId header.
+| **Producer input** | `text`, `bytes`, `stream`, `map`, `list` or `pojo` | The document that CCB\_PUT, the default, stores: text or bytes that hold a JSON object or array as that JSON document, other text as a JSON string, other bytes as a binary document, and a stream is read as bytes. A Map, a List or a POJO becomes JSON. No body fails. CCB\_GET and CCB\_DEL do not use the body: the id is the CamelCouchbaseId header, else the key option.
 
 Not known when `operation` is set.
 
  |
-| **Producer output** | `value` (`java.lang.Boolean`) | true for CCB\_PUT, the default; the GetResult of the Couchbase SDK for CCB\_GET, and the MutationResult as text for CCB\_DEL. The producer removes the CamelCouchbaseId header.
+| **Producer output** | `value` (`java.lang.Boolean`) | true for CCB\_PUT, the default; the GetResult of the Couchbase SDK for CCB\_GET, and the MutationResult as text for CCB\_DEL. The CamelCouchbaseId header stays on the message.
 
 -   With `operation=CCB_GET`: `pojo` (`com.couchbase.client.java.kv.GetResult`)
     
@@ -313,7 +330,9 @@ from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass&lim
             uri: direct:result
 ```
 
-This generates: ``SELECT META().id AS \__id, * FROM \`myBucket\`` ORDER BY META().id DESC LIMIT 10\`
+This generates: ``SELECT META().id AS \__id, * FROM \`myBucket\``.\`\_default\\\`.\`\_default\\\` AS \`myBucket\\\` ORDER BY META().id DESC LIMIT 10\`
+
+The query runs on the scope of the endpoint (the default scope when `scope` is not set). With the `collection` option, the query reads that collection of the scope (`` FROM \`myCollection\` ``). Without it, the query reads the default collection of the bucket, which is the collection the consumer fetches the documents from.
 
 #### Explicit SQL++ statements
 
@@ -323,11 +342,13 @@ _Java-only: string concatenation in endpoint URI_
 
 ```java
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
-    + "&statement=SELECT META().id AS __id, * FROM `myCollection` WHERE type = 'order' LIMIT 100")
+    + "&statement=SELECT META().id AS __id, * FROM `_default` WHERE type = 'order' LIMIT 100")
     .to("direct:result");
 ```
 
 The query must include `META().id AS \__id` in the SELECT clause so the consumer can identify each document.
+
+The statement runs on the scope of the endpoint (the default scope when `scope` is not set), so a single name in `FROM` is a collection of that scope: in the default scope, `` FROM \`_default` `` is the default collection of the bucket, and the bucket name alone fails with "Keyspace not found". Use the full path ``\`bucket\``.\`scope\\\`.\`collection\\\`\` for a collection of another scope.
 
 When `fullDocument` is `true` (the default), the consumer fetches the document from the KV store by its id, and the message body is the `GetResult` of the Couchbase SDK, with the id in the `CamelCouchbaseId` header: `contentAsObject()` gives the JSON document. When `false`, the message body is the query result row as JSON text, or with views the value the view emits.
 
@@ -345,6 +366,8 @@ from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
     + "&useView=true&designDocumentName=myDoc&viewName=myView&limit=10")
     .to("direct:result");
 ```
+
+Reduce views and compound keys work in view mode too. A row of a reduce view has no document ID: its value is the message body, with or without `fullDocument`, and the `CamelCouchbaseId` header is not set. A key that is not a string, such as the compound key `[2024, "orders"]`, is set in the `CamelCouchbaseKey` header as its JSON text.
 
 ### Migrating from Views to SQL++
 
@@ -384,14 +407,33 @@ _Java-only: string concatenation in endpoint URI_
 
 ```java
 from("couchbase:http://localhost?bucket=myBucket&username=user&password=pass"
-    + "&statement=SELECT META().id AS __id, * FROM `myBucket` ORDER BY META().id DESC LIMIT 10")
+    + "&statement=SELECT META().id AS __id, * FROM `_default` ORDER BY META().id DESC LIMIT 10")
 ```
 
 ## Producing documents
 
-The producer runs the operation of the `operation` option: `CCB_PUT` (the default) stores the message body as the document with the id of the `CamelCouchbaseId` header, `CCB_GET` reads the document of that id, and `CCB_DEL` deletes it. The producer removes the `CamelCouchbaseId` header after each call, so set it again before the next one.
+The producer works on one document per message. The document id is the `CamelCouchbaseId` header, or the `key` option when the message has no such header. The call fails when neither gives an id, unless `autoStartIdForInserts` is enabled, which gives every document the next number as id. The producer leaves the `CamelCouchbaseId` header on the message, so a `CCB_GET` after a `CCB_PUT` in the same route reads the document the `CCB_PUT` stored.
 
-`CCB_PUT` stores the body as JSON: a Map, a List or a POJO becomes a JSON document, and text is stored as a JSON string, so unmarshal JSON text to a Map first. A byte array, a stream or no body fail. After the call the message body is `true` for `CCB_PUT`, the `GetResult` of the Couchbase SDK for `CCB_GET`, and the `MutationResult` as text for `CCB_DEL`.
+The `operation` option is one of the following; any other value fails when the producer starts:
+
+  
+| Operation | What it does | Message body afterwards |
+| --- | --- | --- |
+| `CCB_PUT` (default) | Stores the message body as the document (an upsert), with the expiry of the `CamelCouchbaseTtl` header | `true` |
+| `CCB_GET` | Reads the document | The `GetResult` of the SDK, for example `getBody(GetResult.class).contentAsObject()` |
+| `CCB_DEL` | Removes the document | The text of the `MutationResult` of the SDK |
+
+`CCB_PUT` stores the message body as follows:
+
+ 
+| Message body | Stored as |
+| --- | --- |
+| Text (`String`) holding a JSON object or array | That JSON document, as it is (`RawJsonTranscoder`) |
+| Other text | A JSON string |
+| `byte[]` holding a JSON object or array | That JSON document, as it is (`RawJsonTranscoder`) |
+| Other `byte[]` | A binary document (`RawBinaryTranscoder`); read it with `contentAsBytes()` |
+| A stream (`InputStream` or stream cache) | Read as bytes, and then stored as a `byte[]` body is |
+| A `Map`, a `List`, a `JsonObject`, a `JsonArray` or a POJO | A JSON document, serialized by the SDK |
 
 ## Couchbase SDK compatibility
 

@@ -21,6 +21,18 @@ The Choice eip supports the following options which are listed below.
 | **otherwise** | The otherwise clause to execute when none of the when predicates matched. |  | OtherwiseDefinition |
 | **precondition** | If enabled then the choice is evaluated at route initialization time (precondition). Only when predicates with property placeholders or simple expressions using only property placeholders are supported. | false | Boolean |
 
+## Message Body
+
+The message body at each side of the Choice EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what its steps end with | What the steps of the branch that ran end with; the body as it was when no branch ran. |
+| **Steps** | `unchanged` | Each branch starts with the body the choice got. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Choice eip has no exchange properties.

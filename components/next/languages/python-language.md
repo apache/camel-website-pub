@@ -25,10 +25,7 @@ The message body at each side of the Python language: _Expression input_ is the 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Expression input** | `any` | The body as it is, in the variable body: a String is a Python unicode string, and other Java objects keep their methods. |
-| **Expression result** | `text` (`java.lang.String`) | The Python text, str(), of what the script returns: a dict as its Python text, and None as the text None.
-Not known when `resultType` is set.
-
- |
+| **Expression result** | `unknown` | The Java value of what the script returns: a dict as a Map, a list or a tuple as a List, a set as a Set, and None as null. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 
@@ -57,7 +54,7 @@ The variables have the same names as in the [Groovy](groovy-language.md) languag
 
 The `variable` and `variables` bindings are the exchange-scoped variables (for example set with the [Set Variable](../eips/setVariable-eip.md) EIP). Global and route variables, such as `global:foo`, are not in this map; use `exchange.getVariable('global:foo')` for those.
 
-The result of a script is its Python text, as `str()` gives it: a dict gives its Python text, and `None` gives the text `None`. Set `resultType` to convert the text to another type.
+The result of a script is its Java value: `None` is `null`, a string, a number or a boolean is the Java `String`, number or `Boolean`, a dict, list, tuple or set is a `Map`, `List` or `Set` of Java values, and a Java object, such as the body, is returned as it is. Set `resultType` to convert the result to another type.
 
 ## Examples
 

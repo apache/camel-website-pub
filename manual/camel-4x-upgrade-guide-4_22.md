@@ -109,6 +109,14 @@ The `user` and `password` are now offered only to the nodes the client talks to:
 
 The undertow producer writes the path, query and header values of the outgoing request to the socket one character at a time, without validating them. A carriage return or line feed therefore broke the request into further lines, and a character above `0xFF` was written as a single, different byte (for example `U+010A` became a line feed). The producer now refuses to send a request path, query or header value that contains a control character or a character above `0xFF`, and fails the exchange with an `IllegalArgumentException` instead. A space and a tab, which do not change the framing, are still allowed. Routes that put a percent-encoded control character (such as `%0D%0A`) into the `CamelHttpPath` or `CamelHttpQuery` header, which the producer decodes before building the request, are the ones most likely to be affected.
 
+### camel-aws2-athena - the queryString option takes precedence over the message body
+
+The `startQueryExecution` operation of the `aws2-athena` producer, which is its default operation, now takes the SQL to run from the `CamelAwsAthenaQueryString` header, then from the `queryString` option, and from the message body only when neither the header nor the option is set. Previously the message body came first, so an endpoint configured with `queryString` used the message body as the SQL whenever the message had one.
+
+Routes that set the SQL in the message body and configure no `queryString` option, as the examples in the component documentation do, keep working. Routes that set both now run the `queryString` option; remove the option, or set the SQL in the `CamelAwsAthenaQueryString` header, to keep running the SQL of the message body.
+
+With `includeTrace=true`, the URI of the from endpoint in the SQL comment is now sanitized, as Camel does when it logs an endpoint URI, and it is left out when the exchange has no from endpoint, which failed with a `NullPointerException` before.
+
 ### camel-core - pollEnrich: the body is null after a timeout also for a message that creates its body on demand
 
 When `pollEnrich` (or `poll`) times out and no `aggregationStrategy` is configured, the body is set to `null`, and with `variableReceive` the variable is `null`. For a message that creates its body on demand, the `null` did not stick: the next read created the body again. The message of a file consumer creates its body from its file, so after a timeout the body, or the variable of `variableReceive`, was the file of the incoming exchange instead of `null`. The messages of the JMS, sjms, mail, HTTP, XMPP, SMPP, SNMP and Spring WS consumers create their body on demand as well, so there it was the payload of the consumer again.
@@ -126,6 +134,14 @@ The `sign`, `verify`, `hybridSign` and `hybridVerify` operations now read a `jav
 A body with no binary representation (for example a `Map` or a POJO) is no longer signed over its `toString()`: it is now rejected with an `InvalidPayloadException`. Convert such a body to a `String`, `byte[]` or other binary type earlier in the route.
 
 Signatures created by earlier versions over a `File`, `Path`, `GenericFile` or other non-`byte[]`/`InputStream` body may not verify and need to be created again.
+
+### camel-github2 - getCommitFile
+
+getCommitFile now takes the commit from the `CamelGitHubCommitSha` header, which must be a commit id of 40 hexadecimal characters, and the path of the file from the new `CamelGitHubFilePath` header, or else the body, and gives the content of the file at that commit. Previously the body was taken as the commit when the header was not set, and the operation could not give the content of a file.
+
+### camel-support - the error of a failed API component call names its arguments only
+
+When the call of an API component fails, such as one of fhir, box, google-drive or twilio, the error message now names the arguments of the call, as in `Error invoking resourceById with [password, resourceClass, serverUrl, stringId, username]: …​`, and no longer shows their values. The arguments hold the options of the endpoint, such as a password or a token, and the message data. The debug log of the call masks the values of the sensitive options.
 
 ## Upgrading from 4.22.1 to 4.22.2
 

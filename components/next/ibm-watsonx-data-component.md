@@ -233,6 +233,43 @@ The IBM watsonx.data component supports the following message header(s), which i
 | **CamelIBMWatsonxDataStorageType** (producer) Constant: [`STORAGE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-data/latest/org/apache/camel/component/ibm/watsonx/data/WatsonxDataConstants.html#STORAGE_TYPE) | The storage type (e.g., ibm\_cos, aws\_s3, google\_cs). |  | String |
 | **CamelIBMWatsonxDataAuthInstanceId** (producer) Constant: [`AUTH_INSTANCE_ID`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-data/latest/org/apache/camel/component/ibm/watsonx/data/WatsonxDataConstants.html#AUTH_INSTANCE_ID) | The auth instance ID for watsonx.data API calls. |  | String |
 
+## Message Body
+
+The message body at each side of the IBM watsonx.data component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Only updateTable reads the body: the patch of the table as a Map, sent as JSON. JSON text, bytes or no body fail: unmarshal the JSON to a Map first. The other operations take their input from the options and headers.
+
+-   With `operation=updateTable`: `map`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+The response of the IBM watsonx.data SDK, such as a CatalogCollection for listCatalogs or a Table for getTable and updateTable; converted to text, it is its JSON. The delete operations set no body.
+
+-   With `operation=deleteCatalog`: `null`
+    
+-   With `operation=deleteSchema`: `null`
+    
+-   With `operation=deleteTable`: `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Authentication
 
 The component supports authentication via IBM Cloud API Key:

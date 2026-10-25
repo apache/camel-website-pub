@@ -255,6 +255,51 @@ The gRPC component supports the following message header(s), which is/are listed
 | **CamelGrpcUserAgent** (consumer) Constant: [`GRPC_USER_AGENT_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-grpc/latest/org/apache/camel/component/grpc/GrpcConstants.html#GRPC_USER_AGENT_HEADER) | If provided, the given agent will prepend the gRPC library’s user agent information. |  | String |
 | **CamelGrpcEventType** (consumer) Constant: [`GRPC_EVENT_TYPE_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-grpc/latest/org/apache/camel/component/grpc/GrpcConstants.html#GRPC_EVENT_TYPE_HEADER) | Received event type from the sent request. Possible values: onNext onCompleted onError. |  | String |
 
+## Message Body
+
+The message body at each side of the gRPC component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | 
+The protobuf request message of the called method, with the method name in the CamelGrpcMethodName header. A streaming request gives one exchange per message, or with the AGGREGATION strategy a List of all its messages. forwardOnCompleted sends no body at the end of the stream, forwardOnError the Throwable.
+
+-   With `consumerStrategy=AGGREGATION`: `pojo` or `list`
+    
+-   With `forwardOnCompleted=true`: `pojo` or `null`
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `pojo`, `list` or `null` | The protobuf response message, or a List of them for a streaming response; no body sends an empty message. Text, bytes or a Map fail: build the message of the method. With routeControlledStreamObserver the route replies through a producer with toRouteControlledStreamObserver.
+
+Not known when `routeControlledStreamObserver` is set.
+
+ |
+| **Producer input** | `pojo` or `list` | The protobuf request message of the method, or a List of them for a streaming request. Text, bytes or a Map fail with an argument type mismatch: build the message first. |
+| **Producer output** | `list` | 
+
+A List of the protobuf response messages. With synchronous=true the response message itself, or a List of them for a streaming response. With the STREAMING strategy the body is unchanged and each response goes to the streamRepliesTo endpoint.
+
+-   With `synchronous=true`: `pojo` or `list`
+    
+-   With `producerStrategy=STREAMING`: `unchanged`
+    
+-   With `toRouteControlledStreamObserver=true`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Transport security and authentication support

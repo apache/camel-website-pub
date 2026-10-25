@@ -16,6 +16,18 @@ The Specialized tokenizer for AI applications eip supports the following options
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **tokenizerImplementation** | **Required** The tokenizer implementation to use, such as LangChain4j character, line, paragraph, sentence, or word tokenizers. |  | TokenizerImplementationDefinition |
 
+## Message Body
+
+The message body at each side of the Specialized tokenizer for AI applications EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP input** | `text` | The text to split into chunks. |
+| **EIP output** | `list` (`java.lang.String[]`) | The chunks of the text, as an array. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Supported Splitters
 
 The following type of splitters is supported:

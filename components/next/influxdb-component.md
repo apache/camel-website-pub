@@ -126,6 +126,45 @@ The InfluxDB component supports the following message header(s), which is/are li
 | **camelInfluxDB.databaseName** (producer) Constant: [`DBNAME_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-influxdb/latest/org/apache/camel/component/influxdb/InfluxDbConstants.html#DBNAME_HEADER) | The name of the database where the time series will be stored. |  | String |
 | **camelInfluxDB.query** (producer) Constant: [`INFLUXDB_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-influxdb/latest/org/apache/camel/component/influxdb/InfluxDbConstants.html#INFLUXDB_QUERY) | Define the query in case of operation query. |  | String |
 
+## Message Body
+
+The message body at each side of the InfluxDB component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo` or `map` | 
+The org.influxdb.dto.Point to write, or a Map of the field names and their values with the measurement name under the camelInfluxDB.MeasurementName key. Text, bytes or a List of Points fail: line protocol is not parsed. With batch=true the body must be a BatchPoints. The query and ping operations do not read the body: the query comes from the camelInfluxDB.query header or the query option.
+
+-   With `batch=true`: `pojo` (`org.influxdb.dto.BatchPoints`)
+    
+-   With `operation=query`: `any`
+    
+-   With `operation=ping`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+An insert leaves the body unchanged. A query gives the QueryResult of InfluxDB, which carries an error the server reports (such as an unknown database) instead of failing the exchange; ping gives the Pong with the version of the server.
+
+-   With `operation=query`: `pojo` (`org.influxdb.dto.QueryResult`)
+    
+-   With `operation=ping`: `pojo` (`org.influxdb.dto.Pong`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Example
 
 Below is an example route that stores a point into the db (taking the db name from the URI) specific key:

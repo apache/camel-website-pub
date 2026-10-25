@@ -179,6 +179,21 @@ The Reactive Streams component supports the following message header(s), which i
 | **CamelReactiveStreamsEventType** (consumer) Constant: [`REACTIVE_STREAMS_EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-reactive-streams/latest/org/apache/camel/component/reactive/streams/ReactiveStreamsConstants.html#REACTIVE_STREAMS_EVENT_TYPE) | Every exchange consumed by Camel has this header set to indicate if the exchange contains an item (value=onNext), an error (value=onError) or a completion event (value=onComplete). Errors and completion notification are not forwarded by default. |  | String |
 | **CamelReactiveStreamsCallback** (common) Constant: [`REACTIVE_STREAMS_CALLBACK`](https://javadoc.io/doc/org.apache.camel/camel-reactive-streams/latest/org/apache/camel/component/reactive/streams/ReactiveStreamsConstants.html#REACTIVE_STREAMS_CALLBACK) | The callback. |  | DispatchCallback |
 
+## Message Body
+
+The message body at each side of the Reactive Streams component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The item the publisher emits, as it is (an Exchange it emits is routed as it is). With forwardOnComplete, the end of the stream comes as an exchange without a body; with forwardOnError, the error as a Throwable body. The CamelReactiveStreamsEventType header says which. |
+| **Consumer reply** | `any` | A caller of toStream or to() gets the exchange the route ends with, or its body converted to the type it asks for. |
+| **Producer input** | `any` | The exchange is handed to the subscribers of the stream as it is; a subscriber that asks for a type gets the body converted to it. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The library is aimed to support all the communication modes needed by an application to interact with Camel data:

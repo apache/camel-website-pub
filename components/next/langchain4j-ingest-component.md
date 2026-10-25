@@ -162,6 +162,28 @@ The LangChain4j Ingest component supports the following message header(s), which
 | --- | --- | --- | --- |
 | **CamelLangChain4jIngestDocumentId** (producer) Constant: [`DOCUMENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-ingest/latest/org/apache/camel/component/langchain4j/ingest/LangChain4jIngestHeaders.html#DOCUMENT_ID) | The stable document id of the ingested payload, read when the documentIdHeader endpoint option does not name another header. The CamelLangChain4jIngestDocumentId exchange property, when set, takes precedence over any header. |  | String |
 
+## Message Body
+
+The message body at each side of the LangChain4j Ingest component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | 
+The document read as a String, then split and embedded; another body, such as a Map or a TextSegment, is ingested as its toString(). With modality=MEDIA it is read as bytes and embedded whole, and a Map or a POJO fails. No body or a blank one writes nothing. The document id comes from the CamelLangChain4jIngestDocumentId header or exchange property.
+
+-   With `modality=MEDIA`: `bytes`, `stream`, `file` or `null`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` (`org.apache.camel.component.langchain4j.ingest.IngestResult`) | An IngestResult with the pipeline, the document id, the number of segments written and the outcome: INGESTED, EMPTY, SKIPPED or FILTERED. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Ingesting a directory

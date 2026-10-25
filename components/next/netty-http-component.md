@@ -9,9 +9,9 @@ The Netty HTTP component is an extension to [Netty](netty-component.md) componen
 > **Note**
 > **Stream**
 >
-> Netty is stream-based, which means the input it receives is submitted to Camel as a stream. That means you will only be able to read the content of the stream **once**. If you find a situation where the message body appears to be empty, or you need to access the data multiple times (eg: doing multicasting, or redelivery error handling), you should use Stream caching or convert the message body to a `String` which is safe to be re-read multiple times.
+> Netty HTTP reads the entire request into memory using `io.netty.handler.codec.http.HttpObjectAggregator` to build the entire full http message. The consumer gives the request body as a Camel stream cache, which can be read multiple times, and the producer gives the response body as a byte array.
 >
-> Note also that Netty HTTP reads the entire stream into memory using `io.netty.handler.codec.http.HttpObjectAggregator` to build the entire full http message. But the resulting message is still a stream-based message that is readable once.
+> With `disableStreamCache=true` the body is the raw Netty `ByteBuf` instead (or an `InputStream` for a chunked message), which you can only read **once**. If you find a situation where the message body then appears to be empty, or you need to access the data multiple times (eg: doing multicasting, or redelivery error handling), convert the message body to a `String` or a `byte[]` which is safe to be re-read multiple times.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -498,6 +498,35 @@ The Netty HTTP component supports the following message header(s), which is/are 
 | **CamelNettySSLClientCertNotAfter** (common) Constant: [`NETTY_SSL_CLIENT_CERT_NOT_AFTER`](https://javadoc.io/doc/org.apache.camel/camel-netty-http/latest/org/apache/camel/component/netty/NettyConstants.html#NETTY_SSL_CLIENT_CERT_NOT_AFTER) | The SSL client certificate not after. |  | Date |
 | **CamelNettyRequestTimeout** (common) Constant: [`NETTY_REQUEST_TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-netty-http/latest/org/apache/camel/component/netty/NettyConstants.html#NETTY_REQUEST_TIMEOUT) | The read timeout. |  | Long |
 | **CamelNettyChannel** (common) Constant: [`NETTY_CHANNEL`](https://javadoc.io/doc/org.apache.camel/camel-netty-http/latest/org/apache/camel/component/netty/NettyConstants.html#NETTY_CHANNEL) | The Netty Channel object. |  | Channel |
+
+## Message Body
+
+The message body at each side of the Netty HTTP component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `stream` (`org.apache.camel.component.netty.http.NettyChannelBufferStreamCache`) | The request body as the stream cache of Camel, which can be read many times; empty for a request without a body, such as a GET. The fields of a form POST are also headers. With disableStreamCache the Netty ByteBuf of the request, or an InputStream for a chunked request, read once.
+-   With `disableStreamCache=true`: `pojo` or `stream`
+    
+-   With `protocol=proxy`: `pojo` (`io.netty.buffer.ByteBuf`)
+    
+
+Not known when `nettyHttpBinding` is set.
+
+ |
+| **Consumer reply** | `null`, `text`, `bytes`, `stream`, `file` or `value` | The response body: text, bytes, a stream, a file, or a Netty ByteBuf or HttpResponse; no body sends 204. A Map or a POJO is written as its toString() and a List is not written at all: marshal it first. A failed exchange sends 500 with an empty body (muteException). |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The request body: text, bytes, a stream or a file, or a Netty ByteBuf or HttpRequest. A Map, a List or a POJO fails: marshal it first. Without the CamelHttpMethod header, no body sends a GET and a body a POST. |
+| **Producer output** | `bytes` (`byte[]`) | The response body as a byte array, empty for a response without a body. With disableStreamCache the Netty ByteBuf of the response, or an InputStream for a chunked response; the ByteBuf is released when the exchange is done.
+
+-   With `disableStreamCache=true`: `pojo` or `stream`
+    
+
+Not known when `nettyHttpBinding` or `sync` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Usage
 

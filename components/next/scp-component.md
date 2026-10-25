@@ -224,6 +224,10 @@ The SCP component copies the message body to a file on the remote host. In the f
               strictHostKeyChecking: "yes"
 ```
 
+The directory of the endpoint (`/upload` above) must exist on the remote host, as scp does not create it: when it does not exist, each file is written to a file named like the directory, and the last one wins. The sub directories in the `CamelFileName` header (such as `mysub/hello.txt`) are created in that directory.
+
+Without a known hosts file (`useUserKnownHostsFile=false` and no `knownHostsFile`), no host is known, so the option `strictHostKeyChecking` decides: with `yes` the connection fails, with `no` (the default) the host key is not checked.
+
 ## OpenSSH Certificate Authentication
 
 Camel supports OpenSSH certificate-based authentication for SCP connections, where a user’s public key is signed by a Certificate Authority (CA). This is configured using the `certFile`, `certUri`, or `certBytes` parameters alongside the private key:

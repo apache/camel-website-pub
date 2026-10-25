@@ -41,6 +41,17 @@ Enum values:
 
  | Singleton | String |
 
+## Message Body
+
+The message body at each side of the Bean EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unknown` | The return value of the method, or the body as it was for a void method. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Bean eip has no exchange properties.

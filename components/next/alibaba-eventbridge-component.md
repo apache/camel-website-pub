@@ -147,6 +147,18 @@ The Alibaba EventBridge component supports the following message header(s), whic
 | **CamelAlibabaEventBridgeEventSourceCacheTtl** (producer) Constant: [`EVENT_SOURCE_CACHE_TTL`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#EVENT_SOURCE_CACHE_TTL) | TTL in milliseconds for cached bus event sources and types. |  | Long |
 | **CamelAlibabaEventBridgeRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#REQUEST_ID) | Alibaba Cloud request id. |  | String |
 
+## Message Body
+
+The message body at each side of the Alibaba EventBridge component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `map`, `list` or `pojo` | The event to publish: the JSON text of the data of the event, with the source, the type and the bus from the options or headers; a Map of the event fields, such as eventSource, eventType and eventData, where a Map or a POJO as data is serialized to JSON; a CloudEvent of the Alibaba SDK; or a List of these for a batch. Bytes, a stream, a file, another POJO or no body fail: convert to text first. |
+| **Producer output** | `map` (`java.util.Map`) | A Map with the requestId, the failedEntryCount, the resourceOwnerAccountId and the entryList of the response, with the request id in the CamelAlibabaEventBridgeRequestId header too. An event that EventBridge rejects does not fail the exchange: check failedEntryCount. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message Headers and Properties
@@ -248,7 +260,9 @@ The component supports a 3-level hierarchical validation model: `EventBus (N) â†
 > ```java
 > from("platform-http:/ingress")
 >     .removeHeaders("CamelAlibabaEventBridge*")
->     .to("alibaba-eventbridge:putEvents?eventBusName=orders-bus&allowedEventSources=RAW(app.orders -> order:created:v1)&region=cn-hangzhou");
+>     .convertBodyTo(String.class)
+>     .to("alibaba-eventbridge:putEvents?eventBusName=orders-bus&allowedEventSources=RAW(app.orders -> order:created:v1)&region=cn-hangzhou")
+>     .marshal().json();
 > ```
 >
 > ```yaml
@@ -258,12 +272,16 @@ The component supports a 3-level hierarchical validation model: `EventBus (N) â†
 >       steps:
 >         - removeHeaders:
 >             pattern: CamelAlibabaEventBridge*
+>         - convertBodyTo:
+>             type: String
 >         - to:
 >             uri: alibaba-eventbridge:putEvents
 >             parameters:
 >               eventBusName: orders-bus
 >               allowedEventSources: "RAW(app.orders -> order:created:v1)"
 >               region: cn-hangzhou
+>         - marshal:
+>             json: {}
 > ```
 
 ### Allowed Event Sources Configuration

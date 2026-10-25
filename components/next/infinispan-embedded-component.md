@@ -34,6 +34,16 @@ The producer allows sending messages to a local infinispan cache. The consumer a
 
 If no cache configuration is provided, embedded cacheContainer is created directly in the component.
 
+### Options read on the component only
+
+All the endpoints of the component share one cache manager, which the component creates when it starts. So the options that configure the cache manager are read on the component only: `configurationUri`, `cacheContainer`, `cacheContainerConfiguration` and `flags`. Set on an endpoint, these options are not used. Configure them on the component instead, for example in `application.properties`:
+
+```properties
+camel.component.infinispan-embedded.configuration-uri = file:/etc/infinispan/infinispan.xml
+```
+
+The `configurationUri` is read with the resource loader of Camel, so it can be a name on the class path, a `classpath:` or `file:` uri, or an absolute path, and it can use property placeholders.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -152,10 +162,10 @@ Enum values:
  | PUT | InfinispanOperation |
 | **value** (producer) | Set a specific value for producer operations. |  | Object |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
-| **cacheContainer** (advanced) | **Autowired** Specifies the cache Container to connect. |  | EmbeddedCacheManager |
-| **cacheContainerConfiguration** (advanced) | **Autowired** The CacheContainer configuration. Used if the cacheContainer is not defined. |  | Configuration |
+| **cacheContainer** (advanced) | **Autowired** Specifies the cache Container to connect Read on the component only, as the cache manager is shared by all the endpoints of the component: set on an endpoint, this option is not used. |  | EmbeddedCacheManager |
+| **cacheContainerConfiguration** (advanced) | **Autowired** The CacheContainer configuration. Used if the cacheContainer is not defined. Read on the component only, as the cache manager is shared by all the endpoints of the component: set on an endpoint, this option is not used. |  | Configuration |
 | **configurationUri** (advanced) | An implementation specific URI for the CacheManager. |  | String |
-| **flags** (advanced) | A comma separated list of org.infinispan.context.Flag to be applied by default on each cache invocation. |  | String |
+| **flags** (advanced) | A comma separated list of org.infinispan.context.Flag to be applied by default on each cache invocation Read on the component only, as the cache manager is shared by all the endpoints of the component: set on an endpoint, this option is not used. |  | String |
 | **remappingFunction** (advanced) | Set a specific remappingFunction to use in a compute operation. |  | BiFunction |
 | **resultHeader** (advanced) | Store the operation result in a header instead of the message body. By default, resultHeader == null and the query result is stored in the message body, any existing content in the message body is discarded. If resultHeader is set, the value is used as the name of the header to store the query result and the original message body is preserved. This value can be overridden by an in message header named: CamelInfinispanOperationResultHeader. |  | String |
 
@@ -260,10 +270,10 @@ Enum values:
  | PUT | InfinispanOperation |
 | **value** (producer) | Set a specific value for producer operations. |  | Object |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **cacheContainer** (advanced) | **Autowired** Specifies the cache Container to connect. |  | EmbeddedCacheManager |
-| **cacheContainerConfiguration** (advanced) | **Autowired** The CacheContainer configuration. Used if the cacheContainer is not defined. |  | Configuration |
+| **cacheContainer** (advanced) | **Autowired** Specifies the cache Container to connect Read on the component only, as the cache manager is shared by all the endpoints of the component: set on an endpoint, this option is not used. |  | EmbeddedCacheManager |
+| **cacheContainerConfiguration** (advanced) | **Autowired** The CacheContainer configuration. Used if the cacheContainer is not defined. Read on the component only, as the cache manager is shared by all the endpoints of the component: set on an endpoint, this option is not used. |  | Configuration |
 | **configurationUri** (advanced) | An implementation specific URI for the CacheManager. |  | String |
-| **flags** (advanced) | A comma separated list of org.infinispan.context.Flag to be applied by default on each cache invocation. |  | String |
+| **flags** (advanced) | A comma separated list of org.infinispan.context.Flag to be applied by default on each cache invocation Read on the component only, as the cache manager is shared by all the endpoints of the component: set on an endpoint, this option is not used. |  | String |
 | **remappingFunction** (advanced) | Set a specific remappingFunction to use in a compute operation. |  | BiFunction |
 | **resultHeader** (advanced) | Store the operation result in a header instead of the message body. By default, resultHeader == null and the query result is stored in the message body, any existing content in the message body is discarded. If resultHeader is set, the value is used as the name of the header to store the query result and the original message body is preserved. This value can be overridden by an in message header named: CamelInfinispanOperationResultHeader. |  | String |
 
@@ -672,10 +682,10 @@ from("infinispan-embedded:source")
         .setHeader(InfinispanConstants.OPERATION).constant(InfinispanOperation.PUT) (1)
         .setHeader(InfinispanConstants.KEY).constant("123") (2)
         .setHeader(InfinispanConstants.VALUE).constant("Hello") (3)
-        .to("infinispan-embedded:myCacheName?cacheContainer=#cacheContainer"); (4)
+        .to("infinispan-embedded:myCacheName"); (4)
     ```
     
-    <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the operation to perform</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the key used to identify the element in the cache</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Set the value to store: the message body is not used</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Use the configured cache manager <code>cacheContainer</code> from the registry to put an element to the cache named <code>myCacheName</code></td></tr></tbody></table>
+    <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Set the operation to perform</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Set the key used to identify the element in the cache</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Set the value to store: the message body is not used</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Put an element to the cache named <code>myCacheName</code> of the cache manager of the component</td></tr></tbody></table>
     
     It is possible to configure the lifetime and/or the idle time before the entry expires and gets evicted from the cache, as example:
     
@@ -705,7 +715,7 @@ from("infinispan-embedded:source")
                 return qf.from(User.class).having("name").like("%abc%").build();
             }
         })
-        .to("infinispan-embedded:myCacheName?cacheContainer=#cacheManager") ;
+        .to("infinispan-embedded:myCacheName");
     ```
     
 -   Custom Listeners
@@ -718,13 +728,13 @@ from("infinispan-embedded:source")
         
     
     ```java
-    from("infinispan-embedded:myCacheName?cacheContainer=#cacheManager&customListener=#myCustomListener")
+    from("infinispan-embedded:myCacheName?customListener=#myCustomListener")
       .to("mock:result");
     ```
     
     ```xml
     <route>
-      <from uri="infinispan-embedded:myCacheName?cacheContainer=#cacheManager&amp;customListener=#myCustomListener"/>
+      <from uri="infinispan-embedded:myCacheName?customListener=#myCustomListener"/>
       <to uri="mock:result"/>
     </route>
     ```
@@ -734,7 +744,6 @@ from("infinispan-embedded:source")
         from:
           uri: infinispan-embedded:myCacheName
           parameters:
-            cacheContainer: "#cacheManager"
             customListener: "#myCustomListener"
           steps:
             - to:
@@ -782,7 +791,7 @@ context.addRoutes(new RouteBuilder() {
   <constructor-arg value="idempotent"/> (1)
   <property name="configuration"> (2)
     <bean class="org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedConfiguration">
-      <property name="configurationUrl" value="classpath:infinispan.xml"/>
+      <property name="configurationUri" value="classpath:infinispan.xml"/>
     </bean>
   </property>
 </bean>
@@ -846,7 +855,7 @@ context.addRoutes(new RouteBuilder() {
   <constructor-arg value="aggregation"/> (1)
   <property name="configuration"> (2)
     <bean class="org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedConfiguration">
-      <property name="configurationUrl" value="classpath:infinispan.xml"/>
+      <property name="configurationUri" value="classpath:infinispan.xml"/>
     </bean>
   </property>
 </bean>

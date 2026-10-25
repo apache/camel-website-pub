@@ -75,7 +75,7 @@ The AWS Lambda component supports the following options which are listed below.
 | **configuration** (producer) | Component configuration. |  | Lambda2Configuration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
-The operation to perform. It can be listFunctions, getFunction, createFunction, deleteFunction or invokeFunction.
+The operation to perform. See the list of available operations in the component documentation.
 
 Enum values:
 
@@ -298,7 +298,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-The operation to perform. It can be listFunctions, getFunction, createFunction, deleteFunction or invokeFunction.
+The operation to perform. See the list of available operations in the component documentation.
 
 Enum values:
 
@@ -509,10 +509,10 @@ The AWS Lambda component supports the following message header(s), which is/are 
 | **CamelAwsLambdaS3Bucket** (createFunction) Constant: [`S3_BUCKET`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#S3_BUCKET) | Amazon S3 bucket name where the .zip file containing your deployment package is stored. This bucket must reside in the same AWS region where you are creating the Lambda function. |  | String |
 | **CamelAwsLambdaS3Key** (createFunction) Constant: [`S3_KEY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#S3_KEY) | The Amazon S3 object (the deployment package) key name you want to upload. |  | String |
 | **CamelAwsLambdaS3ObjectVersion** (createFunction) Constant: [`S3_OBJECT_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#S3_OBJECT_VERSION) | The Amazon S3 object (the deployment package) version you want to upload. |  | String |
-| **CamelAwsLambdaZipFile** (createFunction) Constant: [`ZIP_FILE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#ZIP_FILE) | The local path of the zip file (the deployment package). Content of zip file can also be put in Message body. |  | String |
+| **CamelAwsLambdaZipFile** (createFunction) Constant: [`ZIP_FILE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#ZIP_FILE) | The local path of the zip file (the deployment package). Without this header and the S3 headers, the message body is the zip. |  | String |
 | **CamelAwsLambdaDescription** (createFunction) Constant: [`DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#DESCRIPTION) | The user-provided description. |  | String |
 | **CamelAwsLambdaRole** (createFunction) Constant: [`ROLE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#ROLE) | **Required** The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources. |  | String |
-| **CamelAwsLambdaRuntime** (createFunction) Constant: [`RUNTIME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#RUNTIME) | **Required** The runtime environment for the Lambda function you are uploading. (nodejs, nodejs4.3, nodejs6.10, java8, python2.7, python3.6, dotnetcore1.0, odejs4.3-edge). |  | String |
+| **CamelAwsLambdaRuntime** (createFunction) Constant: [`RUNTIME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#RUNTIME) | **Required** The runtime environment for the Lambda function you are uploading. (for example nodejs22.x, java21 or python3.13). |  | String |
 | **CamelAwsLambdaHandler** (createFunction) Constant: [`HANDLER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#HANDLER) | **Required** The function within your code that Lambda calls to begin execution. For Node.js, it is the module-name.export value in your function. For Java, it can be package.class-name::handler or package.class-name. |  | String |
 | **CamelAwsLambdaTargetArn** (createFunction) Constant: [`TARGET_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#TARGET_ARN) | The parent object that contains the target ARN (Amazon Resource Name) of an Amazon SQS queue or Amazon SNS topic. |  | String |
 | **CamelAwsLambdaMemorySize** (createFunction) Constant: [`MEMORY_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#MEMORY_SIZE) | The memory size, in MB, you configured for the function. Must be a multiple of 64 MB. |  | Integer |
@@ -540,7 +540,7 @@ The AWS Lambda component supports the following message header(s), which is/are 
 | **CamelAwsLambdaIsTruncated** (listFunctions listVersions listAliases listEventSourceMapping) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
 | **CamelAwsLambdaFunctionArn** (createFunction getFunction publishVersion createAlias getAlias) Constant: [`FUNCTION_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_ARN) | The Amazon Resource Name (ARN) of the function. |  | String |
 | **CamelAwsLambdaStatusCode** (invokeFunction) Constant: [`STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#STATUS_CODE) | The HTTP status code of the function invocation. |  | Integer |
-| **CamelAwsLambdaFunctionError** (invokeFunction) Constant: [`FUNCTION_ERROR`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_ERROR) | If present, indicates that an error occurred during function execution. |  | String |
+| **CamelAwsLambdaFunctionError** (invokeFunction) Constant: [`FUNCTION_ERROR`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_ERROR) | If present, indicates that an error occurred during function execution. The exchange does not fail: the body is the JSON of the error. |  | String |
 | **CamelAwsLambdaLogResult** (invokeFunction) Constant: [`LOG_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#LOG_RESULT) | The last 4 KB of the execution log. |  | String |
 | **CamelAwsLambdaFunctionUrlAuthType** (createFunctionUrlConfig updateFunctionUrlConfig) Constant: [`FUNCTION_URL_AUTH_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_URL_AUTH_TYPE) | **Required** The type of authentication that the function URL uses. Set to AWS\_IAM to restrict access to authenticated users only. Set to NONE to bypass IAM authentication and allow any user to invoke the function. |  | String |
 | **CamelAwsLambdaFunctionUrlQualifier** (createFunctionUrlConfig updateFunctionUrlConfig getFunctionUrlConfig deleteFunctionUrlConfig) Constant: [`FUNCTION_URL_QUALIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_URL_QUALIFIER) | The alias name or $LATEST for the function URL. |  | String |
@@ -570,9 +570,9 @@ The message body at each side of the AWS Lambda component: _Consumer_ is the bod
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-The payload of invokeFunction, the default, as JSON text: bytes, a stream or a file are read as text, a Map or a POJO is sent as its toString(), so marshal it first, and no body fails. createFunction and updateFunction take the zip of the code as bytes, a stream or a file, or no body with the CamelAwsLambdaZipFile header or the S3 headers. The other operations take their input from headers, or with pojoRequest=true from the request of the AWS SDK in the body.
+The payload of invokeFunction, the default, as JSON text: bytes and a stream are sent as they are, a file is read as text, a Map or a POJO is sent as its toString(), so marshal it first, and no body invokes the function without a payload. createFunction and updateFunction take the code from the CamelAwsLambdaZipFile header or the S3 headers, which win over the body, else the body is the zip of the code as bytes, a stream or a file, and a body that does not convert to bytes fails. The other operations take their input from headers, or with pojoRequest=true from the request of the AWS SDK in the body.
 
--   With `operation=invokeFunction`: `text`, `bytes`, `stream` or `file`
+-   With `operation=invokeFunction`: `text`, `bytes`, `stream`, `file` or `null`
     
 -   With `operation=createFunction`: `bytes`, `stream`, `file` or `null`
     
@@ -746,7 +746,7 @@ _Java-only: Java test API (ProducerTemplate with file upload)_
 
 ```java
 template.send("direct:createFunction", ExchangePattern.InOut, exchange -> {
-    exchange.getIn().setHeader("CamelAwsLambdaRuntime", "nodejs6.10");
+    exchange.getIn().setHeader("CamelAwsLambdaRuntime", "nodejs22.x");
     exchange.getIn().setHeader("CamelAwsLambdaHandler", "GetHelloWithName.handler");
     exchange.getIn().setHeader("CamelAwsLambdaDescription", "Hello with node.js on Lambda");
     exchange.getIn().setHeader("CamelAwsLambdaRole",
@@ -760,6 +760,15 @@ template.send("direct:createFunction", ExchangePattern.InOut, exchange -> {
     exchange.getIn().setBody(new FileInputStream(file));
 });
 ```
+
+The code of the function is the zip file of the `CamelAwsLambdaZipFile` header, or the S3 location of the `CamelAwsLambdaS3Bucket` and `CamelAwsLambdaS3Key` headers (and optionally `CamelAwsLambdaS3ObjectVersion`). When neither is set, the message body is the zip, as bytes, a stream or a file. A body that does not convert to bytes fails the exchange, and text is sent as its bytes, which AWS rejects as not a zip. The `updateFunction` operation takes the code in the same way. The zip file header and the S3 headers cannot be used together, and the S3 location needs both the bucket and the key.
+
+-   InvokeFunction: this operation invokes the function with the message body as the payload
+    
+
+The body is sent as the payload: a `byte[]` or a stream as it is, any other body as text in UTF-8. Without a body the function is invoked without a payload. The body of the reply is the payload the function returned, as a String.
+
+An error of the function does not fail the exchange: the body is the JSON of the error that the function returned, and the `CamelAwsLambdaFunctionError` header is set (for example to `Unhandled`). Check this header, for example with a filter or a choice, to handle the error.
 
 ### Function URL Operations
 

@@ -282,6 +282,20 @@ Enum values:
 | **tlsEnabled** (security) | Whether to enable TLS for the connection to the Iggy server. | false | boolean |
 | **username** (security) | Iggy username. |  | String |
 
+## Message Body
+
+The message body at each side of the Iggy component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The payload of the Iggy message, decoded as text with the default charset of the JVM: a binary payload does not survive. |
+| **Producer input** | `any` | The body is converted to text and sent as one message, so bytes are decoded as text (a binary payload is corrupted) and a Map or a POJO is sent as its toString(): marshal it first. A List of String or of Iggy Message is sent as one message per element, and an Iggy Message as it is. No body or an empty List fails. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Iggy Headers
 
 The following headers are set on the exchange when consuming messages from Iggy:

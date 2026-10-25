@@ -207,6 +207,43 @@ The Hazelcast List component supports the following message header(s), which is/
 | **CamelHazelcastCacheName** (consumer) Constant: [`CACHE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#CACHE_NAME) | The name of the cache - e.g. foo. |  | String |
 | **CamelHazelcastOperationType** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#OPERATION) | The operation to perform. |  | String |
 
+## Message Body
+
+The message body at each side of the Hazelcast List component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.hazelcast.collection.ItemEvent`) | The Hazelcast ItemEvent of an item added to or removed from the list, not the item: ${body.item} is the item, and the CamelHazelcastListenerAction header is added or removed. |
+| **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The item that add and setValue store, at the index in the CamelHazelcastObjectIndex header when set, and that removeValue removes when the header is not set: an object Hazelcast can serialize, so a stream or no body fails. A Collection for addAll, removeAll and retainAll. The other operations do not use the body. |
+| **Producer output** | `unknown` | 
+By the operation, which the CamelHazelcastOperationType header sets, or else the defaultOperation option (without either the producer fails): the item at the index in the CamelHazelcastObjectIndex header for get, which needs the header, and the Hazelcast list itself for getAll: a live distributed List, not a copy. The other operations keep the body.
+
+-   With `defaultOperation=add`: `unchanged`
+    
+-   With `defaultOperation=setValue`: `unchanged`
+    
+-   With `defaultOperation=removeValue`: `unchanged`
+    
+-   With `defaultOperation=clear`: `unchanged`
+    
+-   With `defaultOperation=addAll`: `unchanged`
+    
+-   With `defaultOperation=removeAll`: `unchanged`
+    
+-   With `defaultOperation=retainAll`: `unchanged`
+    
+-   With `defaultOperation=getAll`: `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## List producer – to(“hazelcast-list:foo”)
 
 The list producer provides eight operations:

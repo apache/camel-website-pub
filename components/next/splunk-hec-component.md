@@ -120,6 +120,30 @@ The Splunk HEC component supports the following message header(s), which is/are 
 | --- | --- | --- | --- |
 | **CamelSplunkHECIndexTime** (producer) Constant: [`INDEX_TIME`](https://javadoc.io/doc/org.apache.camel/camel-splunk-hec/latest/org/apache/camel/component/splunkhec/SplunkHECConstants.html#INDEX_TIME) | Epoch-formatted time. Specify with the time query string parameter. Sets a default for all events in the request. The default time can be overridden. |  | Long |
 
+## Message Body
+
+The message body at each side of the Splunk HEC component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `value`, `map`, `list`, `pojo` or `null` | 
+The event, written as JSON by Jackson with the headers beside it, or alone with bodyOnly. A stream fails, bytes become base64 and a File its path: convert them to text first. With headersOnly the body is not sent.
+
+-   With `headersOnly=true`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message body

@@ -70,6 +70,17 @@ Enum values:
  |  | ThreadPoolRejectedPolicy |
 | **callerRunsWhenRejected** | Whether to use the caller thread as fallback when a task is rejected being added to the thread pool (when its full). This is only used as fallback if no rejectedPolicy has been configured, or the thread pool has no configured rejection handler. | true | Boolean |
 
+## Message Body
+
+The message body at each side of the Threads EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Continues the routing on another thread: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Threads eip has no exchange properties.

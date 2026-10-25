@@ -188,6 +188,18 @@ The Crypto (JCE) component supports the following message header(s), which is/ar
 | **CamelSignatureKeyStoreAlias** (producer) Constant: [`KEYSTORE_ALIAS`](https://javadoc.io/doc/org.apache.camel/camel-crypto/latest/org/apache/camel/component/crypto/DigitalSignatureConstants.html#KEYSTORE_ALIAS) | The alias used to query the KeyStore for keys and Certificates to be used in signing and verifying exchanges. |  | String |
 | **CamelSignatureKeyStorePassword** (producer) Constant: [`KEYSTORE_PASSWORD`](https://javadoc.io/doc/org.apache.camel/camel-crypto/latest/org/apache/camel/component/crypto/DigitalSignatureConstants.html#KEYSTORE_PASSWORD) | The password used to access an aliased PrivateKey in the KeyStore. |  | char\[\] |
 
+## Message Body
+
+The message body at each side of the Crypto (JCE) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | The payload to sign or verify, read as a stream: text, bytes, a stream or a file; no body is an empty payload. A Map, a POJO or a number fails: marshal it first. Without stream caching a stream body is used up. The signature is not in the body: sign sets it, Base64 encoded, in the CamelDigitalSignature header (signatureHeaderName), which verify reads. |
+| **Producer output** | `unchanged` | The body is unchanged: a signature that does not verify fails the exchange with a SignatureException. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Raw keys

@@ -400,6 +400,107 @@ The IBM watsonx.ai component supports the following message header(s), which is/
 | **CamelIBMWatsonxAiHasToolCalls** (producer) Constant: [`HAS_TOOL_CALLS`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-ai/latest/org/apache/camel/component/ibm/watsonx/ai/WatsonxAiConstants.html#HAS_TOOL_CALLS) | Whether the assistant response contains tool calls. |  | Boolean |
 | **CamelIBMWatsonxAiAssistantMessage** (producer) Constant: [`ASSISTANT_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-ai/latest/org/apache/camel/component/ibm/watsonx/ai/WatsonxAiConstants.html#ASSISTANT_MESSAGE) | The full assistant message from chat response. |  | AssistantMessage |
 
+## Message Body
+
+The message body at each side of the IBM watsonx.ai component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The prompt or text for textGeneration, tokenize, detect and deploymentGenerate, the file path, ID or file name for the text extraction and classification operations that do not upload, read as text unless a header such as CamelIBMWatsonxAiInput gives it: a Map or a POJO is sent as its toString(). chat takes the user message as a String or a List of ChatMessage, embedding and rerank a String or a List of Strings: bytes or a stream fail there. The upload operations take a file, a stream or bytes, with the CamelIBMWatsonxAiFileName header unless it is a file. runTool takes a Map (structured) or a String; forecast a TimeSeriesRequest unless the CamelIBMWatsonxAiForecastInputSchema and CamelIBMWatsonxAiForecastData headers give it.
+
+-   With `operation=chat`: `text` or `list`
+    
+-   With `operation=chatStreaming`: `text` or `list`
+    
+-   With `operation=deploymentChat`: `text` or `list`
+    
+-   With `operation=embedding`: `text` or `list`
+    
+-   With `operation=rerank`: `text` or `list`
+    
+-   With `operation=textExtractionUpload`: `file`, `stream`, `bytes` or `text`
+    
+-   With `operation=textExtractionUploadAndFetch`: `file`, `stream`, `bytes` or `text`
+    
+-   With `operation=textExtractionUploadFile`: `file`, `stream`, `bytes` or `text`
+    
+-   With `operation=textClassificationUpload`: `file`, `stream`, `bytes` or `text`
+    
+-   With `operation=textClassificationUploadAndFetch`: `file`, `stream`, `bytes` or `text`
+    
+-   With `operation=textClassificationUploadFile`: `file`, `stream`, `bytes` or `text`
+    
+-   With `operation=runTool`: `text` or `map`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` (`java.lang.String`) | 
+
+The generated text for textGeneration, chat, deploymentGenerate, deploymentChat and the streaming operations, the extracted text for textExtractionUploadAndFetch and textExtractionReadFile, the tool output for runTool, with token counts and the stop reason in headers. embedding gives a List with one List of Floats per input, even for one input; rerank, detect, forecast and the list operations a List of results of the watsonx.ai SDK; tokenize the token count; the uploadFile and delete operations a Boolean. processToolCalls leaves the body and puts the messages in the CamelIBMWatsonxAiMessages header.
+
+-   With `operation=embedding`: `list`
+    
+-   With `operation=rerank`: `list`
+    
+-   With `operation=tokenize`: `value` (`java.lang.Integer`)
+    
+-   With `operation=detect`: `list`
+    
+-   With `operation=forecast`: `list`
+    
+-   With `operation=deploymentForecast`: `list`
+    
+-   With `operation=listModels`: `list`
+    
+-   With `operation=listTasks`: `list`
+    
+-   With `operation=listTools`: `list`
+    
+-   With `operation=textExtraction`: `pojo` (`com.ibm.watsonx.ai.textprocessing.textextraction.TextExtractionResponse`)
+    
+-   With `operation=textExtractionFetch`: `pojo` (`com.ibm.watsonx.ai.textprocessing.textextraction.TextExtractionResponse`)
+    
+-   With `operation=textExtractionUpload`: `pojo` (`com.ibm.watsonx.ai.textprocessing.textextraction.TextExtractionResponse`)
+    
+-   With `operation=textExtractionUploadFile`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=textExtractionDeleteFile`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=textExtractionDeleteRequest`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=textClassification`: `pojo` (`com.ibm.watsonx.ai.textprocessing.textclassification.TextClassificationResponse`)
+    
+-   With `operation=textClassificationFetch`: `pojo` (`com.ibm.watsonx.ai.textprocessing.textclassification.TextClassificationResponse`)
+    
+-   With `operation=textClassificationUpload`: `pojo` (`com.ibm.watsonx.ai.textprocessing.textclassification.TextClassificationResponse`)
+    
+-   With `operation=textClassificationUploadAndFetch`: `pojo` (`com.ibm.watsonx.ai.textprocessing.textclassification.TextClassificationResponse$ClassificationResult`)
+    
+-   With `operation=textClassificationUploadFile`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=textClassificationDeleteFile`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=textClassificationDeleteRequest`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=deploymentInfo`: `pojo` (`com.ibm.watsonx.ai.deployment.DeploymentResource`)
+    
+-   With `operation=processToolCalls`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Required watsonx.ai component options
 
 You must provide the following options to use this component:

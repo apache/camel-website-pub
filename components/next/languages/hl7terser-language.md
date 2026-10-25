@@ -23,7 +23,7 @@ The message body at each side of the HL7 Terser language: _Expression input_ is 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Expression input** | `text`, `bytes` or `pojo`, as hl7 | An HL7 message as text or bytes, in ER7 or XML, a HAPI Message, or a DOM of HL7 XML. A stream or a file fails: convert it to text first.
+| **Expression input** | `text`, `bytes`, `stream`, `file` or `pojo`, as hl7 | An HL7 message as text or bytes, in ER7 or XML, a stream or a file of it, read in the charset of MSH-18, a HAPI Message, or a DOM of HL7 XML. Another body fails.
 Not known when `source` is set.
 
  |

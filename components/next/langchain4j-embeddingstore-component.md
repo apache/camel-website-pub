@@ -194,6 +194,43 @@ Enum values:
 | **CamelLangchain4jEmbeddingStoreEmbeddingId** (producer) Constant: [`EMBEDDING_ID`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#EMBEDDING_ID) | Caller-supplied embedding ID for single ADD operations. |  | String |
 | **CamelLangchain4jEmbeddingStoreEmbeddingIds** (producer) Constant: [`EMBEDDING_IDS`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddingstore/latest/org/apache/camel/component/langchain4j/embeddingstore/LangChain4jEmbeddingStoreHeaders.html#EMBEDDING_IDS) | Caller-supplied embedding IDs for batch ADD operations. |  | List |
 
+## Message Body
+
+The message body at each side of the LangChain4j Embedding Store component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+ADD and SEARCH take the embedding from the CamelLangChain4jEmbeddingsEmbedding header (a batch ADD from the CamelLangChain4jEmbeddingsEmbeddings header) and ignore the body, but with an embeddingModel and no such header they embed the body read as a String, so no body fails and another body, a TextSegment too, is embedded as its toString(). REMOVE takes the id as text or a Collection of ids, unless the CamelLangchain4jEmbeddingStoreFilter header is set.
+
+-   With `action=REMOVE`: `text` or `list`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text`, `list` or `unchanged` | 
+
+By the action, from the endpoint or the CamelLangchain4jEmbeddingStoreAction header: the id of the added embedding as a String for ADD, a List of the ids for a batch ADD, and a List of EmbeddingMatch for SEARCH (a List of the matched texts with returnTextContent). REMOVE keeps the body.
+
+-   With `action=ADD`: `text` or `list`
+    
+-   With `action=REMOVE`: `unchanged`
+    
+-   With `action=SEARCH`: `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring an Embedding Store

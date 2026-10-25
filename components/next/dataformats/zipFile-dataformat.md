@@ -27,7 +27,7 @@ The message body at each side of the Zip File data format: _Marshal input_ and _
 | **Marshal output** | `stream`, as binary | The zip file in the stream cache, or a byte array when stream caching is off. The CamelFileName header is the entry name with .zip. |
 | **Unmarshal input** | `bytes`, `stream` or `file`, as binary | A zip file with one entry, or with several when usingIterator. |
 | **Unmarshal output** | `stream` | 
-The content of the one entry in the stream cache, or a byte array when stream caching is off; a zip with more entries, a folder too, fails. With usingIterator, an Iterator for the split EIP: of messages with the content of one file each, in a stream cache.
+The content of the one file in the stream cache, or a byte array when stream caching is off; folder entries are skipped, and a zip with more files fails. With usingIterator, an Iterator for the split EIP: of messages with the content of one file each, in a stream cache.
 
 -   With `usingIterator=true`: `iterator` (`org.apache.camel.dataformat.zipfile.ZipIterator`)
     

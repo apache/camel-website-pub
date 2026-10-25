@@ -120,6 +120,18 @@ The Spring AI Embeddings component supports the following message header(s), whi
 | **CamelSpringAiEmbeddings** (producer) Constant: [`EMBEDDINGS`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-embeddings/latest/org/apache/camel/component/springai/embeddings/SpringAiEmbeddingsHeaders.html#EMBEDDINGS) | List of Embedding objects. |  | List |
 | **CamelSpringAiEmbeddingInputTexts** (producer) Constant: [`INPUT_TEXTS`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-embeddings/latest/org/apache/camel/component/springai/embeddings/SpringAiEmbeddingsHeaders.html#INPUT_TEXTS) | List of input texts that were embedded. |  | List |
 
+## Message Body
+
+The message body at each side of the Spring AI Embeddings component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The text to embed, or a List of texts for a batch. Another body is converted to text (a Map or a POJO as its toString()), and no body fails. |
+| **Producer output** | `list` | The vector as a float\[\] for one text, also for a List with one text, and a List of float\[\] for a List of more texts. The Embedding and the input text are in headers, which spring-ai-vector-store reads. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component accepts two types of input:

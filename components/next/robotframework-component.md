@@ -287,6 +287,19 @@ The Robot Framework component supports the following message header(s), which is
 | **CamelRobotReturnCode** (common) Constant: [`CAMEL_ROBOT_RETURN_CODE`](https://javadoc.io/doc/org.apache.camel/camel-robotframework/latest/org/apache/camel/component/robotframework/RobotFrameworkCamelConstants.html#CAMEL_ROBOT_RETURN_CODE) | The return code. |  | Integer |
 | **CamelRobotResourceUri** (common) Constant: [`CAMEL_ROBOT_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-robotframework/latest/org/apache/camel/component/robotframework/RobotFrameworkCamelConstants.html#CAMEL_ROBOT_RESOURCE_URI) | The new resource URI. |  | String |
 
+## Message Body
+
+The message body at each side of the Robot Framework component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `null` | No body: each poll runs the test, and the outcome is in the CamelRobotReturnCode header (0 when all tests pass). |
+| **Producer input** | `any` | The test gets the body converted to a String as the body variable, and the headers and exchange properties as headers.name and properties.name; a null body or header value fails the exchange. |
+| **Producer output** | `unchanged` | The body is left as it is. The CamelRobotReturnCode header has the return code of the run (0 when all tests pass, non-zero otherwise), and CamelRobotVariables the variables passed to it; a failed test does not fail the exchange. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 For example, you could use something like:

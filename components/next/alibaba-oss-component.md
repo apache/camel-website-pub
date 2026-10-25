@@ -238,6 +238,44 @@ The Alibaba Object Storage Service (OSS) component supports the following messag
 | **CamelAlibabaOssContentType** (consumer) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#CONTENT_TYPE) | The type of content stored in the object. |  | String |
 | **CamelFileName** (consumer) Constant: [`FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#FILE_NAME) | Name of the object with which the operation is to be performed. |  | String |
 
+## Message Body
+
+The message body at each side of the Alibaba Object Storage Service (OSS) component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The content of the object as a byte array, one message per object, with its bucket, key and metadata in headers. |
+| **Producer input** | `any` | 
+The content to upload for putObject: text, bytes, a stream or a file (a file without objectName is stored under its file name). A Map, a List or a POJO fails: marshal it first. The other operations do not read the body, they take their input from options and headers.
+
+-   With `operation=putObject`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `map` | 
+
+A Map of the result for putObject, deleteObject, copyObject and headObject, such as the eTag and the status code. getObject gives the content of the object as a byte array with its metadata in headers, listObjects and listBuckets a List of a Map per object or bucket.
+
+-   With `operation=getObject`: `bytes` (`byte[]`)
+    
+-   With `operation=listObjects`: `list` (`java.util.List<java.util.Map<String, Object>>`)
+    
+-   With `operation=listBuckets`: `list` (`java.util.List<java.util.Map<String, Object>>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message headers evaluated by the OSS producer
@@ -313,7 +351,7 @@ In YAML, the object name is the `objectName` option, which the producer uses whe
               secretKey: "{{alibaba.secret-key}}"
 ```
 
-Producer operations return structured response metadata in the message body (`Map` or `List<Map>` depending on the operation).
+The `getObject` operation returns the content of the object as a `byte[]` in the message body, with its metadata in headers. `listObjects` and `listBuckets` return a `List<Map>`, and the other operations return the response metadata as a `Map`.
 
 ### Consume objects from a bucket
 

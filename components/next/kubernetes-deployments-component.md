@@ -168,6 +168,41 @@ Enum values:
  |  | Action |
 | **CamelKubernetesEventTimestamp** (consumer) Constant: [`KUBERNETES_EVENT_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_EVENT_TIMESTAMP) | Timestamp of the action watched by the consumer. |  | long |
 
+## Message Body
+
+The message body at each side of the Kubernetes Deployments component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`io.fabric8.kubernetes.api.model.apps.Deployment`) | The Deployment that changed, with the action (ADDED, MODIFIED or DELETED) in the CamelKubernetesEventAction header. |
+| **Producer input** | `any` | Not used: the operations take their input from headers, such as the name of the Deployment in CamelKubernetesDeploymentName, its DeploymentSpec in CamelKubernetesDeploymentSpec and the replicas of scaleDeployment in CamelKubernetesDeploymentReplicas. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of the Deployments for the list operations, the Deployment of get, create and update (null when getDeployment finds none), and a Boolean of whether deleteDeployment deleted it. scaleDeployment gives the number of replicas in the status of the Deployment.
+
+-   With `operation=listDeployments`: `list`
+    
+-   With `operation=listDeploymentsByLabels`: `list`
+    
+-   With `operation=getDeployment`: `pojo` or `null`
+    
+-   With `operation=createDeployment`: `pojo` (`io.fabric8.kubernetes.api.model.apps.Deployment`)
+    
+-   With `operation=updateDeployment`: `pojo` (`io.fabric8.kubernetes.api.model.apps.Deployment`)
+    
+-   With `operation=deleteDeployment`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=scaleDeployment`: `value` (`java.lang.Integer`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

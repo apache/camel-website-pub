@@ -297,6 +297,27 @@ The Google Sheets Stream component supports the following message header(s), whi
 | **CamelGoogleSheetsRangeIndex** (consumer) Constant: [`RANGE_INDEX`](https://javadoc.io/doc/org.apache.camel/camel-google-sheets/latest/org/apache/camel/component/google/sheets/stream/GoogleSheetsStreamConstants.html#RANGE_INDEX) | The index of the range. |  | int |
 | **CamelGoogleSheetsValueIndex** (consumer) Constant: [`VALUE_INDEX`](https://javadoc.io/doc/org.apache.camel/camel-google-sheets/latest/org/apache/camel/component/google/sheets/stream/GoogleSheetsStreamConstants.html#VALUE_INDEX) | The index of the value. |  | int |
 
+## Message Body
+
+The message body at each side of the Google Sheets Stream component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | 
+One message per poll with the Spreadsheet, or, when range is set, one message per range with its ValueRange. splitResults with range gives one message per row (or column, by majorDimension) with the List of its values. The Spreadsheet and the ValueRange are GenericJson, which is also a Map of the JSON fields.
+
+-   With `splitResults=true`: `list` or `pojo`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The consumer polls a range of the spreadsheet. With `splitResults`, each row is a message, and the `CamelGoogleSheetsValueIndex` header is its position in the range:

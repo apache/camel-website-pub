@@ -48,6 +48,20 @@ The Poll Enrich eip supports the following options which are listed below.
 | **autoStartComponents** | Whether to auto startup components when poll enricher is starting up. | true | Boolean |
 | **allowedSchemes** | Sets an optional comma-separated allow-list of component schemes that the dynamic recipient may resolve to (e.g. http,https). When set, a dynamic endpoint whose scheme is not in the list is rejected. This is a defence-in-depth restriction, useful for low-code / Kamelet deployments; by default (unset) any scheme is allowed. |  | String |
 
+## Message Body
+
+The message body at each side of the Poll Enrich EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what the consumer of its endpoint receives | The message the consumer of the endpoint receives, with the default aggregation strategy, or null when none came before the timeout. With variableReceive it goes into the variable, and the body stays as it was.
+Not known when `aggregationStrategy` or `variableReceive` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Poll Enrich eip supports the following exchange properties which are listed below.

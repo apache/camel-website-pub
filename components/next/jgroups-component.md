@@ -139,6 +139,24 @@ The JGroups component supports the following message header(s), which is/are lis
 | **CamelJGroupsSrc** (common) Constant: [`HEADER_JGROUPS_SRC`](https://javadoc.io/doc/org.apache.camel/camel-jgroups/latest/org/apache/camel/component/jgroups/JGroupsConstants.html#HEADER_JGROUPS_SRC) | Consumer : The org.jgroups.Address instance extracted by org.jgroups.Message.getSrc() method of the consumed message. Producer: The custom source org.jgroups.Address of the message to be sent. |  | Address |
 | **CamelJGroupsOriginalMessage** (common) Constant: [`HEADER_JGROUPS_ORIGINAL_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-jgroups/latest/org/apache/camel/component/jgroups/JGroupsConstants.html#HEADER_JGROUPS_ORIGINAL_MESSAGE) | The original org.jgroups.Message instance from which the body of the consumed message has been extracted. |  | Message |
 
+## Message Body
+
+The message body at each side of the JGroups component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The object the sender put in the message, Java-deserialized: what a jgroups producer sent, such as a String, a byte array, a Map or a Serializable POJO, if the deserialization filter accepts its class. With enableViewMessages an org.jgroups.View also arrives on each change of the members of the cluster.
+Not known when `enableViewMessages` is set.
+
+ |
+| **Producer input** | `text`, `bytes`, `value`, `map`, `list`, `file` or `pojo` | The body as is, Java-serialized into the message, so it must be Serializable: a stream or another object that is not fails with a NotSerializableException. A null body is not sent. The CamelJGroupsDest header sends it to one member instead of the cluster. |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Security
 
 The `jgroups` consumer converts an incoming cluster message into the exchange body by calling `org.jgroups.Message.getObject()`, which Java-deserializes the payload carried by the message. Deserialization is performed by JGroups on its own receive path, and the bodies a consumer receives originate from any peer that has joined the cluster.

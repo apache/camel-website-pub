@@ -304,6 +304,10 @@ _Java-only: creating Slack Block Kit messages with the API model_
     }
 ```
 
+The message body can be a `com.slack.api.model.Message`, an `org.apache.camel.component.slack.helper.SlackMessage` (text and attachments), or any other body, which is sent as the text of the message. The `channel`, `username`, `iconUrl` and `iconEmoji` options of the endpoint apply to the message sent; the message body itself is not changed by the send.
+
+In webhook mode, the message is posted as JSON with the snake\_case keys Slack reads, such as `icon_emoji`, `thread_ts` and `image_url`. In token mode, the text and the attachments of a `SlackMessage` body are sent, and the text, the blocks and the attachments of a `Message` body.
+
 You’ll need to create a Slack app and use it in your workspace.
 
 For token usage, set the 'OAuth Token'.

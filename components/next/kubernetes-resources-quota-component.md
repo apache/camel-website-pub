@@ -117,6 +117,38 @@ The Kubernetes Resources Quota component supports the following message header(s
 | **CamelKubernetesResourcesQuotaName** (producer) Constant: [`KUBERNETES_RESOURCES_QUOTA_NAME`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_RESOURCES_QUOTA_NAME) | The resource quota name. |  | String |
 | **CamelKubernetesResourceQuotaSpec** (producer) Constant: [`KUBERNETES_RESOURCE_QUOTA_SPEC`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_RESOURCE_QUOTA_SPEC) | The spec for a resource quota. |  | ResourceQuotaSpec |
 
+## Message Body
+
+The message body at each side of the Kubernetes Resources Quota component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesResourcesQuotaName, the labels in CamelKubernetesResourcesQuotaLabels and the ResourceQuotaSpec in CamelKubernetesResourceQuotaSpec. |
+| **Producer output** | `list`, `pojo`, `null` or `value` | 
+A List of ResourceQuota for listResourcesQuota and listResourcesQuotaByLabels; the ResourceQuota for getResourceQuota (null when not found), createResourceQuota and updateResourceQuota; a Boolean for deleteResourceQuota, false when not found.
+
+-   With `operation=listResourcesQuota`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.ResourceQuota>`)
+    
+-   With `operation=listResourcesQuotaByLabels`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.ResourceQuota>`)
+    
+-   With `operation=getResourceQuota`: `pojo` or `null` (`io.fabric8.kubernetes.api.model.ResourceQuota`)
+    
+-   With `operation=createResourceQuota`: `pojo` (`io.fabric8.kubernetes.api.model.ResourceQuota`)
+    
+-   With `operation=updateResourceQuota`: `pojo` (`io.fabric8.kubernetes.api.model.ResourceQuota`)
+    
+-   With `operation=deleteResourceQuota`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

@@ -104,7 +104,7 @@ With the following _path_ and _query_ parameters:
 | **allowTemplateFromHeader** (producer) | Whether to allow to use resource template from header or not (default false). Enabling this allows to specify dynamic templates via message header. However this can be seen as a potential security vulnerability if the header is coming from a malicious user, so use this with care. | false | boolean |
 | **contentCache** (producer) | Sets whether to use resource content cache or not. | true | boolean |
 | **inputType** (producer) | 
-Specifies if the input is hydrated JSON or a JSON String.
+Specifies if the input is hydrated JSON or a JSON String. With Hydrated, a body that is JSON text (its first non-whitespace character is \\{ or ), bytes, a stream or a file is parsed as JSON, and any other body, such as a Map or a List, is used as it is. With JsonString, the body is always parsed as JSON.
 
 Enum values:
 
@@ -175,8 +175,8 @@ The message body at each side of the JOLT component: _Consumer_ is the body of t
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `map` or `list`, as json | 
-Parsed JSON: a Map or a List. JSON as text, bytes, a stream or a file needs inputType=JsonString: without it the body reaches the spec unparsed, and the result is most likely null.
+| **Producer input** | `map`, `list`, `text`, `bytes`, `stream` or `file`, as json | 
+Parsed JSON (a Map or a List), or JSON as text, bytes, a stream or a file, which is parsed. Text that does not start with { or \[ reaches the spec as it is. With inputType=JsonString the body is always parsed as JSON.
 
 -   With `inputType=JsonString`: `text`, `bytes`, `stream` or `file`
     
@@ -201,11 +201,30 @@ The JSON the spec makes: a Map for an object, a List for an array; JSON text wit
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
+## Usage
+
+### Input and output types
+
+With the default `inputType`, `Hydrated`, the body can be:
+
+-   JSON text (a `String` or other text whose first non-whitespace character is `{` or `[`), which is parsed as JSON;
+    
+-   bytes, an `InputStream` (including a stream cache) or a file (`java.io.File`, `java.nio.file.Path` or the file of the [File](file-component.md) component), which is parsed as JSON. The text is decoded in the charset of the exchange (`Exchange.CHARSET_NAME`) when one is set; otherwise the JSON parser detects the encoding;
+    
+-   a `Map` or a `List` (hydrated JSON), which is used as it is.
+    
+
+Text that does not start with `{` or `[` is passed to the specification as it is. Text that starts with `{` or `[` but is not valid JSON fails with the parse error.
+
+With `inputType=JsonString`, the body is always parsed as JSON.
+
+The output is hydrated JSON (a `Map` or a `List`) by default; set `outputType=JsonString` to get a JSON `String`.
+
 ## Examples
 
 For example, you could use something like
 
-The messages of the queue are JSON text, so the examples set `inputType` and `outputType` to `JsonString`: with the default, `Hydrated`, the body must be parsed JSON (a Map or a List), such as after `unmarshal: json`, and the result is parsed JSON too.
+The messages of the queue are JSON text, so the examples set `inputType` and `outputType` to `JsonString`: the body is always parsed as JSON, and the result is JSON text. With the default, `Hydrated`, the result is parsed JSON (a Map or a List).
 
 -   Java
     

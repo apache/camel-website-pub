@@ -404,7 +404,7 @@ Enum values:
     
 -   getObject
     
--   getPartialObject
+-   getObjectRange
     
 -   createDownloadLink
     
@@ -510,7 +510,7 @@ Camel-Minio component provides the following operation on the producer side:
     
 -   `getObject` (this will return the content of the object as a stream)
     
--   `getObjectRange` (this will return the range of the content as a stream)
+-   `getObjectRange` (this will return the range of the content as a stream). The former name `getPartialObject` still works, but is deprecated.
     
 -   `createDownloadLink` (this will return a Presigned download Url)
     

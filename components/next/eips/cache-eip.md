@@ -133,6 +133,19 @@ The Cache eip supports the following options which are listed below.
 | **cacheNull** | Whether to cache null results. By default, null message bodies are not cached. | false | Boolean |
 | **outputs** | **Required** |  | List |
 
+## Message Body
+
+The message body at each side of the Cache EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what its steps end with | The body cached for the key, or, on a cache miss, what its steps end with. |
+| **Steps** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Error Handling
 
 Cache errors are handled gracefully:

@@ -23,9 +23,11 @@ as2://apiName/methodName
 
 apiName can be one of:
 
--   client
+-   client: `client/send` sends an EDI message to a trading partner
     
--   server
+-   server: `server/listen` receives EDI messages
+    
+-   receipt: `receipt/receive` receives the asynchronous MDNs (receipts) that a `client/send` asked for with `receiptDeliveryOption`
     
 
 ## Configuring Options
@@ -195,7 +197,7 @@ Enum values:
 | **ediMessageTransferEncoding** (common) | The transfer encoding of EDI message. |  | String |
 | **ediMessageType** (common) | 
 
-The content type of EDI message. One of application/edifact, application/edi-x12, application/edi-consent, application/xml.
+**Deprecated** The content type of EDI message. One of application/edifact, application/edi-x12, application/edi-consent, application/xml. client/send uses this value only when ediMessageContentType is not set. Deprecation note: Use ediMessageContentType instead.
 
 Enum values:
 
@@ -229,6 +231,7 @@ Enum values:
 | **targetHostname** (common) | The host name (IP or DNS name) of target host. |  | String |
 | **targetPortNumber** (common) | The port number of target host. -1 indicates the scheme default port. | 80 | Integer |
 | **userAgent** (common) | The value included in the User-Agent message header identifying the AS2 user agent. | Camel AS2 Client Endpoint | String |
+| **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side (server listen or receipt receive), the HTTP response only says that the message or the receipt could not be processed, and not the message of the exception. | true | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
 
@@ -480,7 +483,7 @@ The as2/send API method has the parameters listed in the table below:
 | **attachedFileName** | The name of the attached file or null if user doesn’t want to specify it | String |
 | **compressionAlgorithm** | The algorithm used to compress the message or null if sending EDI message uncompressed | AS2CompressionAlgorithm |
 | **dispositionNotificationTo** | An RFC2822 address to request a receipt or null if no receipt requested | String |
-| **ediMessage** | EDI message to transport | Object |
+| **ediMessage** | EDI message to transport: a String, an InputStream or a byte array | Object |
 | **ediMessageCharset** | The charset of the EDI message | String |
 | **ediMessageContentType** | The content type of EDI message | String |
 | **ediMessageTransferEncoding** | The transfer encoding used to transport EDI message | String |
@@ -593,12 +596,12 @@ The EDI message that server/listen receives, decrypted, decompressed and without
 
 
  |
-| **Producer input** | `any` | The body is used only when inBody names the argument of the method it is: with inBody=ediMessage it is the EDI message of client/send, passed as it is, which must be text, encoded in ediMessageCharset (us-ascii when not set), or a stream; convert bytes or a file to text first. Without inBody the message comes from the ediMessage option or the CamelAs2.ediMessage header.
+| **Producer input** | `any` | The body is used only when inBody names the argument of the method it is: with inBody=ediMessage it is the EDI message of client/send: text, encoded in ediMessageCharset (us-ascii when not set), a stream, or bytes, a file or another body that converts to bytes, sent as those bytes; a body that does not convert fails. Without inBody the message comes from the ediMessage option or the CamelAs2.ediMessage header.
 
 Not known when `inBody` is set.
 
  |
-| **Producer output** | `pojo` or `null` | The receipt (MDN) in the response when dispositionNotificationTo asks for one: a DispositionNotificationMultipartReportEntity, or a MultipartSignedEntity when it is signed. null without a receipt, when receiptDeliveryOption sends it to a receipt/receive consumer, or when the response has none, such as an HTTP error, which does not fail the exchange: the CamelAs2.interchange exchange property holds the HttpCoreContext with the response. |
+| **Producer output** | `pojo` or `null` | The receipt (MDN) in the response when dispositionNotificationTo asks for one: a DispositionNotificationMultipartReportEntity, or a MultipartSignedEntity when it is signed. null without a receipt, when receiptDeliveryOption sends it to a receipt/receive consumer, or when the response has none. An HTTP status outside 2xx fails the exchange. The CamelAs2.interchange exchange property holds the HttpCoreContext with the response. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
@@ -607,7 +610,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ## Usage
 
-An `as2://server/listen` consumer receives AS2 messages on `serverPortNumber`, for the request URIs that match `requestUriPattern`. An `as2://client/send` producer sends the message body (`inBody: ediMessage`) to `targetHostname` and `targetPortNumber`. The following routes send a plain EDIFACT message from one to the other:
+An `as2://server/listen` consumer receives AS2 messages on `serverPortNumber`, for the request URIs that match `requestUriPattern`. When its route fails, the partner gets an HTTP 500 that only says the message could not be processed; set `muteException=false` to send the message of the exception too. An `as2://client/send` producer sends the message body (`inBody: ediMessage`) to `targetHostname` and `targetPortNumber`. The following routes send a plain EDIFACT message from one to the other:
 
 ```yaml
 - route:
@@ -645,6 +648,16 @@ An `as2://server/listen` consumer receives AS2 messages on `serverPortNumber`, f
 ```
 
 A `SIGNED`, `ENCRYPTED` or `SIGNED_ENCRYPTED` message structure also needs the keys and certificates of the signing and encrypting options.
+
+### Sending with client/send
+
+The EDI message (`inBody: ediMessage`) can be text, a stream, a `byte[]` or a file, such as the `java.io.File` or the file of a `file` consumer, so a route can send the files of a folder without converting them first. Text is encoded with `ediMessageCharset` (US-ASCII when it is not set); the other types are sent as their bytes. Any other body that the type converters can turn into bytes is sent as those bytes, and a body that cannot be converted fails the exchange with a message that names its type.
+
+`requestUri` defaults to `/`. The content type of the message is set with `ediMessageContentType`; the older `ediMessageType` option is deprecated, and it is used only when `ediMessageContentType` is not set.
+
+`ediMessageTransferEncoding` can be `7bit`, `8bit`, `binary`, `base64` or `quoted-printable`.
+
+When the trading partner answers with an HTTP status outside 2xx, such as a 500 when the route of an AS2 server fails, the exchange fails with an exception that names the status code and reason. The exchange property `CamelAs2.interchange` still holds the `HttpCoreContext` with the request and the response. A 2xx answer sets the body to the receipt (MDN) when the partner returned one, and to `null` when there is none, such as a send without `dispositionNotificationTo` or with an asynchronous receipt.
 
 Several `as2://server/listen` consumers can share a `serverPortNumber`, each with its own `requestUriPattern`. Each consumer applies its own keys and certificates and its own asynchronous MDN settings (`mdnUserName`, `mdnPassword`, `mdnAccessToken` and `asyncMdnAllowedHosts`) to the messages received on its own pattern.
 

@@ -319,6 +319,43 @@ The Ehcache component supports the following message header(s), which is/are lis
 | **CamelEhcacheOldValue** (common) Constant: [`OLD_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-ehcache/latest/org/apache/camel/component/ehcache/EhcacheConstants.html#OLD_VALUE) | The old value associated to a key for actions like PUT\_IF\_ABSENT or the Object used for comparison for actions like REPLACE. |  | Object |
 | **CamelEhcacheEventType** (common) Constant: [`EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-ehcache/latest/org/apache/camel/component/ehcache/EhcacheConstants.html#EVENT_TYPE) | The type of event received. |  | EventType |
 
+## Message Body
+
+The message body at each side of the Ehcache component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | The new value of the entry, as it was put, with the key in the CamelEhcacheKey header, the event in CamelEhcacheEventType and the previous value in CamelEhcacheOldValue. A REMOVED, EXPIRED or EVICTED event has no body. |
+| **Producer input** | `any` | The value to store for PUT, PUT\_IF\_ABSENT and REPLACE, converted to the valueType when set, and a Map of the entries for PUT\_ALL, unless the CamelEhcacheValue header gives it. The value is stored as it is: a stream is read once, so convert it to text or bytes first. The other actions do not use the body. |
+| **Producer output** | `unknown` | 
+By the action, which the CamelEhcacheAction header can set: the value of the key for GET, or the body as it was when the key is not in the cache, and for GET\_ALL a Map of the keys in the CamelEhcacheKeys header to their values, null for a key not found. The other actions keep the body; PUT\_IF\_ABSENT and REPLACE put the previous value in the CamelEhcacheOldValue header.
+
+-   With `action=GET_ALL`: `map` (`java.util.Map`)
+    
+-   With `action=PUT`: `unchanged`
+    
+-   With `action=PUT_ALL`: `unchanged`
+    
+-   With `action=PUT_IF_ABSENT`: `unchanged`
+    
+-   With `action=REPLACE`: `unchanged`
+    
+-   With `action=REMOVE`: `unchanged`
+    
+-   With `action=REMOVE_ALL`: `unchanged`
+    
+-   With `action=CLEAR`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 ### Using the cache in a route

@@ -197,6 +197,61 @@ The CXF-RS component supports the following message header(s), which is/are list
 | **CamelCxfRsQueryMap** (common) Constant: [`CAMEL_CXF_RS_QUERY_MAP`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#CAMEL_CXF_RS_QUERY_MAP) | The query map. |  | Map |
 | **CamelCxfRsOperationResourceInfoStack** (common) Constant: [`CAMEL_CXF_RS_OPERATION_RESOURCE_INFO_STACK`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#CAMEL_CXF_RS_OPERATION_RESOURCE_INFO_STACK) | The stack of MethodInvocationInfo representing resources path when JAX-RS invocation looks for target. |  | OperationResourceInfoStack |
 
+## Message Body
+
+The message body at each side of the CXF-RS component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `list` (`org.apache.cxf.message.MessageContentsList`) | Default: a MessageContentsList of the parameters of the resource method, with its name in the CamelCxfOperationName header. SimpleConsumer: the request entity as the method declares it (a String, an InputStream, a JAXB bean), with the path, query and header parameters in headers; the MessageContentsList when the method has no entity, such as a GET.
+-   With `bindingStyle=SimpleConsumer`: `unknown`
+    
+-   With `bindingStyle=Custom`: `unknown`
+    
+
+Not known when `performInvocation` is set.
+
+ |
+| **Consumer reply** | `null`, `text`, `bytes`, `stream`, `file` or `pojo` | 
+
+The response entity: a jakarta.ws.rs.core.Response, or text, bytes, a stream, a file, or an object a JAX-RS provider writes for the Content-Type (a JAXB bean as XML); a Map or a List fails without a provider for it. With the Default binding the request MessageContentsList fails: set the reply body.
+
+-   With `bindingStyle=Custom`: `any`
+    
+
+
+
+
+
+ |
+| **Producer input** | `null`, `text`, `bytes`, `stream`, `file` or `pojo` | 
+
+The request entity, written for the Content-Type header: text, bytes, a stream, a file or an object a JAX-RS provider writes; of a List only the first element is sent, and a Map fails. A GET sends no body. With httpClientAPI=false: the parameters of the resource method named by the CamelCxfOperationName header, as a List or the one parameter.
+
+-   With `httpClientAPI=false`: `list`, `text`, `value`, `pojo` or `null`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo` | 
+
+A jakarta.ws.rs.core.Response whose entity is the response stream, read once (it converts to a String or an InputStream); the entity read as the class in the CamelCxfRsResponseClass header when that is set. With httpClientAPI=false: the return value of the resource method, null for a void one.
+
+-   With `httpClientAPI=false`: `unknown`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 You can also configure the CXF REST endpoint through the spring configuration.
 
 > **Note**
@@ -251,9 +306,9 @@ In contrast, the `SimpleConsumer` binding style performs the following mappings,
 
 Additionally, the following rules apply to the **Response mapping**:
 
--   If the message body type is different to `javax.ws.rs.core.Response` (user-built response), a new `Response` is created and the message body is set as the entity (so long it’s not null). The response status code is taken from the `Exchange.HTTP_RESPONSE_CODE` header, or defaults to 200 OK if not present.
+-   If the message body type is different to `jakarta.ws.rs.core.Response` (user-built response), a new `Response` is created and the message body is set as the entity (so long it’s not null). The response status code is taken from the `Exchange.HTTP_RESPONSE_CODE` header, or defaults to 200 OK if not present.
     
--   If the message body type is equal to `javax.ws.rs.core.Response`, it means that the user has built a custom response, and therefore it is respected, and it becomes the final response.
+-   If the message body type is equal to `jakarta.ws.rs.core.Response`, it means that the user has built a custom response, and therefore it is respected, and it becomes the final response.
     
 -   In all cases, Camel headers permitted by custom or default `HeaderFilterStrategy` are added to the HTTP response.
     

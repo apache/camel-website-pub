@@ -180,6 +180,47 @@ Enum values:
  |  | GoogleCloudTextToSpeechOperations |
 | **CamelGoogleCloudTextToSpeechResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-text-to-speech/latest/org/apache/camel/component/google/texttospeech/GoogleCloudTextToSpeechConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Cloud Text-to-Speech API invocation. |  | SynthesizeSpeechResponse |
 
+## Message Body
+
+The message body at each side of the Google Cloud Text To Speech component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+The text to speak for synthesize: bytes, a stream or a file are read as text, a Map or a POJO is spoken as its toString(), so take the text out of it first, and no body fails. listVoices does not use the body. With pojoRequest=true a SynthesizeSpeechRequest of the Google Cloud SDK, whatever the operation: another body fails.
+
+-   With `operation=synthesize`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=listVoices`: `any`
+    
+-   With `pojoRequest=true`: `pojo` (`com.google.cloud.texttospeech.v1.SynthesizeSpeechRequest`)
+    
+
+
+
+
+
+ |
+| **Producer output** | `bytes` or `list` | 
+
+The audio of synthesize as bytes, in the audioEncoding option (MP3 by default), with the SynthesizeSpeechResponse in the CamelGoogleCloudTextToSpeechResponseObject header. The List of the voices for listVoices, of the languageCode option (en-US by default).
+
+-   With `operation=synthesize`: `bytes` (`byte[]`)
+    
+-   With `operation=listVoices`: `list` (`java.util.List<com.google.cloud.texttospeech.v1.Voice>`)
+    
+-   With `pojoRequest=true`: `bytes` (`byte[]`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message body

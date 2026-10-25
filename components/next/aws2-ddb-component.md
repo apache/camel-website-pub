@@ -12,7 +12,9 @@ You must have a valid Amazon Web Services developer account, and be signed up to
 
 ## URI Format
 
-aws2-ddb://domainName\[?options\]
+aws2-ddb://tableName\[?options\]
+
+The `tableName` is the DynamoDB table the operations work on. The `CamelAwsDdbTableName` header, when set, names another table for a message.
 
 You can append query options to the URI in the following format:
 
@@ -456,17 +458,18 @@ The AWS DynamoDB component supports the following message header(s), which is/ar
 | **CamelAwsDdbBatchItems** (producer) Constant: [`BATCH_ITEMS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#BATCH_ITEMS) | A map of the table name and corresponding items to get by primary key. |  | Map |
 | **CamelAwsDdbBatchResponse** (BatchGetItems) Constant: [`BATCH_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#BATCH_RESPONSE) | Table names and the respective item attributes from the tables. |  | Map |
 | **CamelAwsDdbConsistentRead** (producer) Constant: [`CONSISTENT_READ`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#CONSISTENT_READ) | If set to true, then a consistent read is issued, otherwise eventually consistent is used. |  | Boolean |
-| **CamelAwsDdbConsumedCapacity** (Query Scan) Constant: [`CONSUMED_CAPACITY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#CONSUMED_CAPACITY) | The number of Capacity Units of the provisioned throughput of the table consumed during the operation. |  | Double |
+| **CamelAwsDdbConsumedCapacity** (Query Scan) Constant: [`CONSUMED_CAPACITY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#CONSUMED_CAPACITY) | The capacity the operation consumed: its capacityUnits are the total Capacity Units of the table and its indexes used by the operation. |  | ConsumedCapacity |
 | **CamelAwsDdbCount** (Query Scan) Constant: [`COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#COUNT) | Number of items in the response. |  | Integer |
-| **CamelAwsDdbCreationDate** (DeleteTable DescribeTable) Constant: [`CREATION_DATE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#CREATION_DATE) | Creation DateTime of this table. |  | Date |
+| **CamelAwsDdbCreationDate** (DeleteTable DescribeTable UpdateTable) Constant: [`CREATION_DATE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#CREATION_DATE) | Creation DateTime of this table. |  | Instant |
 | **CamelAwsDdbIndexName** (producer) Constant: [`INDEX_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#INDEX_NAME) | If set will be used as Secondary Index for Query operation. |  | String |
 | **CamelAwsDdbItem** (producer) Constant: [`ITEM`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#ITEM) | A map of the attributes for the item, and must include the primary key values that define the item. |  | Map |
 | **CamelAwsDdbItems** (Query Scan) Constant: [`ITEMS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#ITEMS) | The list of attributes returned by the operation. |  | List |
-| **CamelAwsDdbTableItemCount** (DeleteTable DescribeTable) Constant: [`ITEM_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#ITEM_COUNT) | Item count for this table. |  | Long |
+| **CamelAwsDdbTableItemCount** (DeleteTable DescribeTable UpdateTable) Constant: [`ITEM_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#ITEM_COUNT) | Item count for this table. |  | Long |
+| **CamelAwsDdbNextToken** (ExecuteStatement) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#NEXT_TOKEN) | ExecuteStatement reads it as the token of the page to read, and sets it to the token of the next page (null on the last page). A loop can page through a statement with it; remove it before running another statement, as that statement would read this page of the earlier one. |  | String |
 | **CamelAwsDdbKey** (producer) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#KEY) | The primary key that uniquely identifies each item in a table. |  | Map |
 | **CamelAwsDdbKeyConditions** (producer) Constant: [`KEY_CONDITIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#KEY_CONDITIONS) | This header specify the selection criteria for the query, and merge together the two old headers CamelAwsDdbHashKeyValue and CamelAwsDdbScanRangeKeyCondition. |  | Map |
-| **CamelAwsDdbKeySchema** (DeleteTable DescribeTable) Constant: [`KEY_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#KEY_SCHEMA) | The KeySchema that identifies the primary key for this table. From Camel 2.16.0 the type of this header is List and not KeySchema. |  | List |
-| **CamelAwsDdbLastEvaluatedKey** (Query Scan) Constant: [`LAST_EVALUATED_KEY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#LAST_EVALUATED_KEY) | Primary key of the item where the query operation stopped, inclusive of the previous result set. |  | Key |
+| **CamelAwsDdbKeySchema** (DeleteTable DescribeTable UpdateTable) Constant: [`KEY_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#KEY_SCHEMA) | The KeySchema that identifies the primary key for this table. From Camel 2.16.0 the type of this header is List and not KeySchema. |  | List |
+| **CamelAwsDdbLastEvaluatedKey** (Query Scan) Constant: [`LAST_EVALUATED_KEY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#LAST_EVALUATED_KEY) | Primary key of the item where the query operation stopped, inclusive of the previous result set. |  | Map |
 | **CamelAwsDdbIsTruncated** (Query Scan) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). If true, use LAST\_EVALUATED\_KEY as START\_KEY for the next page. |  | Boolean |
 | **CamelAwsDdbLimit** (producer) Constant: [`LIMIT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#LIMIT) | The maximum number of items to return. |  | Integer |
 | **CamelAwsDdbOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#OPERATION) | 
@@ -510,20 +513,49 @@ Enum values:
 
 
  |  | Ddb2Operations |
-| **CamelAwsDdbProvisionedThroughput** (DeleteTable DescribeTable) Constant: [`PROVISIONED_THROUGHPUT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#PROVISIONED_THROUGHPUT) | The value of the ProvisionedThroughput property for this table. |  | ProvisionedThroughputDescription |
-| **CamelAwsDdbReadCapacity** (UpdateTable DescribeTable) Constant: [`READ_CAPACITY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#READ_CAPACITY) | ReadCapacityUnits property of this table. |  | Long |
+| **CamelAwsDdbProvisionedThroughput** (DeleteTable DescribeTable UpdateTable) Constant: [`PROVISIONED_THROUGHPUT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#PROVISIONED_THROUGHPUT) | The value of the ProvisionedThroughput property for this table. |  | ProvisionedThroughputDescription |
+| **CamelAwsDdbReadCapacity** (UpdateTable DescribeTable) Constant: [`READ_CAPACITY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#READ_CAPACITY) | ReadCapacityUnits property of this table. UpdateTable reads it as the read capacity to set, and DescribeTable sets it to the read capacity of the table: remove it before an UpdateTable that follows a DescribeTable, or the UpdateTable sets the capacity the DescribeTable read instead of the readCapacity option. |  | Long |
 | **CamelAwsDdbReturnValues** (producer) Constant: [`RETURN_VALUES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#RETURN_VALUES) | Use this parameter if you want to get the attribute name-value pairs before or after they are modified(NONE, ALL\_OLD, UPDATED\_OLD, ALL\_NEW, UPDATED\_NEW). |  | String |
 | **CamelAwsDdbScannedCount** (Scan) Constant: [`SCANNED_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#SCANNED_COUNT) | Number of items in the complete scan before any filters are applied. |  | Integer |
 | **CamelAwsDdbScanIndexForward** (producer) Constant: [`SCAN_INDEX_FORWARD`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#SCAN_INDEX_FORWARD) | Specifies forward or backward traversal of the index. |  | Boolean |
 | **CamelAwsDdbScanFilter** (producer) Constant: [`SCAN_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#SCAN_FILTER) | Evaluates the scan results and returns only the desired values. |  | Map |
 | **CamelAwsDdbStartKey** (producer) Constant: [`START_KEY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#START_KEY) | Primary key of the item from which to continue an earlier query. |  | Map |
-| **CamelAwsDdbTableName** (producer) Constant: [`TABLE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#TABLE_NAME) | Table Name for this operation. |  | String |
-| **CamelAwsDdbTableSize** (DeleteTable DescribeTable) Constant: [`TABLE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#TABLE_SIZE) | The table size in bytes. |  | Long |
-| **CamelAwsDdbTableStatus** (DeleteTable DescribeTable) Constant: [`TABLE_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#TABLE_STATUS) | The status of the table: CREATING, UPDATING, DELETING, ACTIVE. |  | String |
+| **CamelAwsDdbTableName** (producer) Constant: [`TABLE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#TABLE_NAME) | Table Name for this operation, instead of the table of the endpoint. |  | String |
+| **CamelAwsDdbTableSize** (DeleteTable DescribeTable UpdateTable) Constant: [`TABLE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#TABLE_SIZE) | The table size in bytes. |  | Long |
+| **CamelAwsDdbTableStatus** (DeleteTable DescribeTable UpdateTable) Constant: [`TABLE_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#TABLE_STATUS) | 
+
+The status of the table: CREATING, UPDATING, DELETING, ACTIVE.
+
+Enum values:
+
+-   CREATING
+    
+-   UPDATING
+    
+-   DELETING
+    
+-   ACTIVE
+    
+-   INACCESSIBLE\_ENCRYPTION\_CREDENTIALS
+    
+-   ARCHIVING
+    
+-   ARCHIVED
+    
+-   REPLICATION\_NOT\_AUTHORIZED
+    
+-   null
+    
+
+
+
+
+
+ |  | TableStatus |
 | **CamelAwsDdbUpdateCondition** (producer) Constant: [`UPDATE_CONDITION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#UPDATE_CONDITION) | Designates an attribute for a conditional modification. |  | Map |
 | **CamelAwsDdbUpdateValues** (producer) Constant: [`UPDATE_VALUES`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#UPDATE_VALUES) | Map of attribute name to the new value and action for the update. |  | Map |
 | **CamelAwsDdbUnprocessedKeys** (BatchGetItems) Constant: [`UNPROCESSED_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#UNPROCESSED_KEYS) | Contains a map of tables and their respective keys that were not processed with the current response. |  | Map |
-| **CamelAwsDdbWriteCapacity** (UpdateTable DescribeTable) Constant: [`WRITE_CAPACITY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#WRITE_CAPACITY) | WriteCapacityUnits property of this table. |  | Long |
+| **CamelAwsDdbWriteCapacity** (UpdateTable DescribeTable) Constant: [`WRITE_CAPACITY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#WRITE_CAPACITY) | WriteCapacityUnits property of this table. UpdateTable reads it as the write capacity to set, and DescribeTable sets it to the write capacity of the table: remove it before an UpdateTable that follows a DescribeTable, or the UpdateTable sets the capacity the DescribeTable read instead of the writeCapacity option. |  | Long |
 | **CamelAwsDdbStatement** (ExecuteStatement) Constant: [`STATEMENT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#STATEMENT) | A PartiQL statement that uses parameters. |  | String |
 | **CamelAwsDdbStatementParameters** (ExecuteStatement) Constant: [`STATEMENT_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#STATEMENT_PARAMETERS) | The parameters for the PartiQL statement, if any. |  | List |
 | **CamelAwsDdbBatchStatements** (BatchExecuteStatement) Constant: [`BATCH_STATEMENTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-ddb/latest/org/apache/camel/component/aws2/ddb/Ddb2Constants.html#BATCH_STATEMENTS) | The list of PartiQL statements representing the batch to run. |  | List |
@@ -600,7 +632,7 @@ DynamoDbClient client = DynamoDbClient.builder()
 getCamelContext().getRegistry().bind("client", client);
 
 from("direct:start")
-    .to("aws2-ddb://domainName?amazonDDBClient=#client");
+    .to("aws2-ddb://tableName?amazonDDBClient=#client");
 ```
 
 The `#client` refers to a `DynamoDbClient` in the Registry.
@@ -637,6 +669,61 @@ The `#client` refers to a `DynamoDbClient` in the Registry.
     
 -   UpdateTable
     
+
+### Result headers that are also inputs
+
+The operations put their results in headers and keep the body. A few of these headers are also read as input by a later aws2-ddb step of the same route:
+
+-   DescribeTable sets `CamelAwsDdbReadCapacity` and `CamelAwsDdbWriteCapacity` to the capacity of the table. A following UpdateTable reads them as the capacity to set, before the `readCapacity` and `writeCapacity` options, so remove them before that UpdateTable.
+    
+-   ExecuteStatement sets `CamelAwsDdbNextToken` to the token of the next page of the statement, and reads it as the token of the page to read. A loop can page through the results of a statement with it, but remove it before running another statement.
+    
+
+DescribeTable, DeleteTable and UpdateTable do not set the `CamelAwsDdbTableName` header, so the next step works on the table it is configured with.
+
+```yaml
+- route:
+    from:
+      uri: direct:resize
+      steps:
+        - to:
+            uri: aws2-ddb:orders
+            parameters:
+              operation: DescribeTable
+        - log:
+            message: "The orders table reads ${header.CamelAwsDdbReadCapacity} units"
+        - removeHeader:
+            name: CamelAwsDdbReadCapacity
+        - removeHeader:
+            name: CamelAwsDdbWriteCapacity
+        - to:
+            uri: aws2-ddb:orders
+            parameters:
+              operation: UpdateTable
+              readCapacity: 10
+              writeCapacity: 10
+```
+
+### JSON data type transformer
+
+The `aws2-ddb:application-json` data type transformer turns a JSON body into the headers of PutItem, UpdateItem and DeleteItem. The JSON properties become the attributes of the item. The body can also have a top-level `key` property with the key attributes and a top-level `item` property with the item attributes, such as for UpdateItem.
+
+The route chooses the operation with the `CamelAwsDdbOperation` header or the `operation` exchange property; the transformer then sets the headers of that operation. When the route sets neither, the transformer leaves the operation to the `operation` option of the endpoint, and sets the `CamelAwsDdbItem`, `CamelAwsDdbKey` and `CamelAwsDdbUpdateValues` headers.
+
+The JSON body does not choose the operation: a body with a top-level `operation` property fails, unless the route sets that same operation.
+
+```yaml
+- route:
+    from:
+      uri: direct:remove
+      steps:
+        - transformDataType:
+            toType: aws2-ddb:application-json
+        - to:
+            uri: aws2-ddb:orders
+            parameters:
+              operation: DeleteItem
+```
 
 ## Dependencies
 

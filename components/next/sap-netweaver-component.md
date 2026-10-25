@@ -124,6 +124,32 @@ The SAP NetWeaver component supports the following message header(s), which is/a
 | **CamelHttpPath** (producer) Constant: [`HTTP_PATH`](https://javadoc.io/doc/org.apache.camel/camel-sap-netweaver/latest/org/apache/camel/component/sap/netweaver/NetWeaverConstants.html#HTTP_PATH) | The http path. |  | String |
 | **Accept** (producer) Constant: [`ACCEPT`](https://javadoc.io/doc/org.apache.camel/camel-sap-netweaver/latest/org/apache/camel/component/sap/netweaver/NetWeaverConstants.html#ACCEPT) | The media type. |  | String |
 
+## Message Body
+
+The message body at each side of the SAP NetWeaver component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The body is not sent: the producer makes a GET of the OData command in the CamelNetWeaverCommand header. |
+| **Producer output** | `map`, `list` or `null` | 
+The JSON response read into a Map; when it has one entry, such as the d of OData, the value of that entry instead, a Map or a List. Null for a response without a body; a JSON array or a response that is not JSON fails. With jsonAsMap=false or json=false the response as text.
+
+-   With `flatternMap=false`: `map` or `null`
+    
+-   With `jsonAsMap=false`: `text` or `null`
+    
+-   With `json=false`: `text` or `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Examples
 
 This example is using the flight demo example from SAP, which is available online over the internet [here](http://scn.sap.com/docs/DOC-31221).

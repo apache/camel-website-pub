@@ -180,6 +180,59 @@ Enum values:
 
  |  | ElasticsearchRestClientOperation |
 
+## Message Body
+
+The message body at each side of the Elasticsearch Low level Rest Client component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `value`, `map` or `null` | 
+By the operation, set by the operation option or the CamelElasticsearchOperation header. INDEX\_OR\_UPDATE sends the body as the JSON document: text, bytes, a stream or a file of it; a Map or a POJO is sent as its toString() and fails, so marshal it to JSON first. GET\_BY\_ID and DELETE take the id as the body, or from the CamelElasticsearchId header when the body is empty. SEARCH takes a Map of field names and values to match, or else the JSON query of the CamelElasticsearchSearchQuery header; a JSON text body is not used, and with neither all documents match. CREATE\_INDEX and DELETE\_INDEX do not use the body: the settings of a new index are in the CamelElasticsearchIndexSettings header.
+
+-   With `operation=INDEX_OR_UPDATE`: `text`, `bytes`, `stream` or `file`
+    
+-   With `operation=GET_BY_ID`: `text`, `value` or `null`
+    
+-   With `operation=DELETE`: `text`, `value` or `null`
+    
+-   With `operation=SEARCH`: `map` or `null`
+    
+-   With `operation=CREATE_INDEX`: `any`
+    
+-   With `operation=DELETE_INDEX`: `any`
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` or `value` | 
+
+The id of the document as text for INDEX\_OR\_UPDATE. GET\_BY\_ID gives the source of the document as JSON text, and SEARCH a JSON array of the sources of the hits as text: unmarshal them to read their fields. DELETE, CREATE\_INDEX and DELETE\_INDEX give true. A missing id or index, or an index that is already there, fails with the error of the server: a GET\_BY\_ID of a missing id fails with 404 rather than giving null.
+
+-   With `operation=INDEX_OR_UPDATE`: `text` (`java.lang.String`)
+    
+-   With `operation=GET_BY_ID`: `text` (`java.lang.String`)
+    
+-   With `operation=SEARCH`: `text` (`java.lang.String`)
+    
+-   With `operation=DELETE`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=CREATE_INDEX`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=DELETE_INDEX`: `value` (`java.lang.Boolean`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Elasticsearch Low level Rest Client Operations
 
 Set an endpoint URI option or exchange header with a name of `operation` and a value of one of the following supported options.
@@ -192,7 +245,7 @@ Set an endpoint URI option or exchange header with a name of `operation` and a v
 | `DELETE` | `String` id of content to delete | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. You must provide the index id of the content to delete either in the message body, or via a message header with the key `ID` . |
 | `CREATE_INDEX` |  | Creates the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. You may also provide a header with the key `CamelElasticsearchIndexSettings` where the value is a JSON String representation of the index settings. |
 | `DELETE_INDEX` |  | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. |
-| `SEARCH` | `Map` (optional) | Search for content with either a `Map` of `String` keys & values of query criteria. Or a JSON string representation of the query. Matching documents are returned as a JSON string set on the message exchange body. You can set the JSON query String by providing a message header with the key `CamelElasticsearchSearchQuery`. You can set the message exchange body to a `Map` of `String` keys & values for the query criteria. |
+| `SEARCH` | `Map` (optional) | Search for content with either a `Map` of `String` keys & values of query criteria in the body, or a JSON string representation of the query in the `CamelElasticsearchSearchQuery` header, which wins over the body. A JSON string in the body is not used: with no `Map` body and no header, all documents match. Matching documents are returned as a JSON array string of their sources set on the message exchange body. You can set the JSON query String by providing a message header with the key `CamelElasticsearchSearchQuery`. You can set the message exchange body to a `Map` of `String` keys & values for the query criteria. |
 
 ## Examples
 

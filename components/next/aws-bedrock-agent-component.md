@@ -4,7 +4,7 @@
 
 **Both producer and consumer are supported**
 
-The AWS2 Bedrock component supports invoking a supported LLM model from [AWS Bedrock](https://aws.amazon.com/bedrock/) service.
+The AWS Bedrock Agent component works with the ingestion jobs of the knowledge bases of the [AWS Bedrock](https://aws.amazon.com/bedrock/) service: an ingestion job syncs a data source into a knowledge base. The producer starts, lists and gets ingestion jobs, and the consumer polls the state of one ingestion job.
 
 Prerequisites
 
@@ -12,7 +12,7 @@ You must have a valid Amazon Web Services developer account, and be signed up to
 
 ## URI Format
 
-aws-bedrock-agent-runtime://label\[?options\]
+aws-bedrock-agent://label\[?options\]
 
 You can append query options to the URI in the following format:
 
@@ -71,10 +71,11 @@ The AWS Bedrock Agent component supports the following options which are listed 
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **configuration** (common) | Component configuration. |  | BedrockAgentConfiguration |
-| **dataSourceId** (common) | Define the Data source Id we are going to use. |  | String |
-| **knowledgeBaseId** (common) | Define the Knowledge Base Id we are going to use. |  | String |
+| **dataSourceId** (common) | Define the Data source Id we are going to use. The consumer and all the operations need it; the CamelAwsBedrockAgentDataSourceId header overrides it for the producer. |  | String |
+| **ingestionJobId** (common) | Define the Ingestion Job Id we want to track. The consumer and the getIngestionJob operation need it; the CamelAwsBedrockAgentIngestionJobId header overrides it for the producer. |  | String |
+| **knowledgeBaseId** (common) | Define the Knowledge Base Id we are going to use. The consumer and all the operations need it; the CamelAwsBedrockAgentKnowledgeBaseId header overrides it for the producer. |  | String |
 | **operation** (common) | 
-**Required** The operation to perform.
+**Required** The operation to perform. It can be startIngestionJob, listIngestionJobs or getIngestionJob.
 
 Enum values:
 
@@ -141,7 +142,6 @@ Enum values:
 | **useDefaultCredentialsProvider** (common) | Set whether the Bedrock Agent client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | false | boolean |
 | **useProfileCredentialsProvider** (common) | Set whether the Bedrock Agent client should expect to load credentials through a profile credentials provider. | false | boolean |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
-| **ingestionJobId** (consumer) | Define the Ingestion Job Id we want to track. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **bedrockAgentClient** (advanced) | **Autowired** To use an existing configured AWS Bedrock Agent client. |  | BedrockAgentClient |
@@ -191,10 +191,11 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **dataSourceId** (common) | Define the Data source Id we are going to use. |  | String |
-| **knowledgeBaseId** (common) | Define the Knowledge Base Id we are going to use. |  | String |
+| **dataSourceId** (common) | Define the Data source Id we are going to use. The consumer and all the operations need it; the CamelAwsBedrockAgentDataSourceId header overrides it for the producer. |  | String |
+| **ingestionJobId** (common) | Define the Ingestion Job Id we want to track. The consumer and the getIngestionJob operation need it; the CamelAwsBedrockAgentIngestionJobId header overrides it for the producer. |  | String |
+| **knowledgeBaseId** (common) | Define the Knowledge Base Id we are going to use. The consumer and all the operations need it; the CamelAwsBedrockAgentKnowledgeBaseId header overrides it for the producer. |  | String |
 | **operation** (common) | 
-**Required** The operation to perform.
+**Required** The operation to perform. It can be startIngestionJob, listIngestionJobs or getIngestionJob.
 
 Enum values:
 
@@ -260,7 +261,6 @@ Enum values:
 | **uriEndpointOverride** (common) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **useDefaultCredentialsProvider** (common) | Set whether the Bedrock Agent client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | false | boolean |
 | **useProfileCredentialsProvider** (common) | Set whether the Bedrock Agent client should expect to load credentials through a profile credentials provider. | false | boolean |
-| **ingestionJobId** (consumer) | Define the Ingestion Job Id we want to track. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
@@ -376,32 +376,36 @@ The AWS Bedrock Agent component supports the following message header(s), which 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAwsBedrockAgentRuntimeOperation** (common) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#OPERATION) | The operation we want to perform. |  | String |
-| **CamelAwsBedrockAgentRuntimeCitations** (common) Constant: [`CITATIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#CITATIONS) | When retrieving and generating a response, this header will contain the citations. |  | String |
-| **CamelAwsBedrockAgentRuntimeSessionId** (common) Constant: [`SESSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#SESSION_ID) | When retrieving and generating a response, this header will contain he unique identifier of the session. Reuse the same value to continue the same session with the knowledge base. |  | String |
-| **CamelAwsBedrockAgentRuntimeAgentId** (common) Constant: [`AGENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_ID) | The unique identifier of the agent to invoke. Overrides the agentId configured on the endpoint. |  | String |
-| **CamelAwsBedrockAgentRuntimeAgentAliasId** (common) Constant: [`AGENT_ALIAS_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_ALIAS_ID) | The unique identifier of the agent alias to invoke. Overrides the agentAliasId configured on the endpoint. |  | String |
-| **CamelAwsBedrockAgentRuntimeAgentEnableTrace** (common) Constant: [`AGENT_ENABLE_TRACE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_ENABLE_TRACE) | Enables tracing for the agent invocation. When set, overrides the enableTrace option on the endpoint. |  | Boolean |
-| **CamelAwsBedrockAgentRuntimeAgentEndSession** (common) Constant: [`AGENT_END_SESSION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_END_SESSION) | Ends the agent session after this invocation. |  | Boolean |
-| **CamelAwsBedrockAgentRuntimeAgentMemoryId** (common) Constant: [`AGENT_MEMORY_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_MEMORY_ID) | The unique identifier of the agent memory to use across sessions. |  | String |
-| **CamelAwsBedrockAgentRuntimeAgentStreamOutputMode** (common) Constant: [`AGENT_STREAM_OUTPUT_MODE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_STREAM_OUTPUT_MODE) | The streaming output mode (complete or chunks) for an agent invocation. When set, overrides the streamOutputMode option on the endpoint. |  | String |
-| **CamelAwsBedrockAgentRuntimeAgentFoundationModel** (common) Constant: [`AGENT_FOUNDATION_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_FOUNDATION_MODEL) | The foundation model used by an inline agent. Overrides the foundationModel configured on the endpoint. |  | String |
-| **CamelAwsBedrockAgentRuntimeAgentInstruction** (common) Constant: [`AGENT_INSTRUCTION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_INSTRUCTION) | The instruction given to an inline agent. Overrides the instruction configured on the endpoint. |  | String |
-| **CamelAwsBedrockAgentRuntimeAgentTraces** (common) Constant: [`AGENT_TRACES`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_TRACES) | When invoking an agent with tracing enabled, this header will contain the list of TracePart emitted during the invocation. The elements are TracePart for invokeAgent and InlineAgentTracePart for invokeInlineAgent. |  | List |
-| **CamelAwsBedrockAgentRuntimeAgentReturnControl** (common) Constant: [`AGENT_RETURN_CONTROL`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_RETURN_CONTROL) | When an agent invocation requires the caller to fulfil an action, this header will contain the list of return-control payloads emitted by the agent. The elements are ReturnControlPayload for invokeAgent and InlineAgentReturnControlPayload for invokeInlineAgent. |  | List |
-| **CamelAwsBedrockAgentRuntimeAgentFiles** (common) Constant: [`AGENT_FILES`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_FILES) | When an agent invocation returns files, this header will contain the files emitted by the agent. The elements are FilePart for invokeAgent and InlineAgentFilePart for invokeInlineAgent. |  | List |
-| **CamelAwsBedrockAgentRuntimeFlowIdentifier** (common) Constant: [`FLOW_IDENTIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_IDENTIFIER) | The unique identifier of the flow to invoke. Overrides the flowIdentifier configured on the endpoint. |  | String |
-| **CamelAwsBedrockAgentRuntimeFlowAliasIdentifier** (common) Constant: [`FLOW_ALIAS_IDENTIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_ALIAS_IDENTIFIER) | The unique identifier of the flow alias to invoke. Overrides the flowAliasIdentifier configured on the endpoint. |  | String |
-| **CamelAwsBedrockAgentRuntimeFlowEnableTrace** (common) Constant: [`FLOW_ENABLE_TRACE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_ENABLE_TRACE) | Enables tracing for the flow invocation. When set, overrides the enableTrace option on the endpoint. |  | Boolean |
-| **CamelAwsBedrockAgentRuntimeFlowExecutionId** (common) Constant: [`FLOW_EXECUTION_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_EXECUTION_ID) | The unique identifier of an in-progress flow execution to continue. Used for multi-turn flow conversations. |  | String |
-| **CamelAwsBedrockAgentRuntimeFlowOutputs** (common) Constant: [`FLOW_OUTPUTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_OUTPUTS) | When invoking a flow, this header will contain the list of FlowOutputEvent emitted by the flow. |  | List |
-| **CamelAwsBedrockAgentRuntimeFlowTraces** (common) Constant: [`FLOW_TRACES`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_TRACES) | When invoking a flow with tracing enabled, this header will contain the list of FlowTraceEvent emitted during execution. |  | List |
-| **CamelAwsBedrockAgentRuntimeFlowCompletionReason** (common) Constant: [`FLOW_COMPLETION_REASON`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#FLOW_COMPLETION_REASON) | When invoking a flow, this header will contain the reason the flow completed (set when a FlowCompletionEvent is received). |  | String |
-| **CamelAwsBedrockAgentRuntimeRetrievedResults** (common) Constant: [`RETRIEVED_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#RETRIEVED_RESULTS) | When performing a retrieve operation, this header will contain the list of KnowledgeBaseRetrievalResult chunks returned by the knowledge base. |  | List |
-| **CamelAwsBedrockAgentRuntimeNumberOfResults** (common) Constant: [`NUMBER_OF_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#NUMBER_OF_RESULTS) | Overrides the maximum number of results returned by the retrieve operation. Must be a positive Integer; when not set the AWS service default is used. |  | Integer |
-| **CamelAwsBedrockAgentRuntimeSearchType** (common) Constant: [`OVERRIDE_SEARCH_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#OVERRIDE_SEARCH_TYPE) | Overrides the search type used by the retrieve operation. Accepts the AWS SearchType enum (HYBRID, SEMANTIC) or its String representation. |  | String |
-| **CamelAwsBedrockAgentRuntimeNextToken** (common) Constant: [`NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#NEXT_TOKEN) | Pagination token used by the retrieve operation. Set on the in-message to request the next page; set on the out-message when the response carries one. |  | String |
-| **CamelAwsBedrockAgentRuntimeRetrieveGuardrailAction** (common) Constant: [`RETRIEVE_GUARDRAIL_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#RETRIEVE_GUARDRAIL_ACTION) | When performing a retrieve operation, this header will contain the guardrail action (if any) applied by the knowledge base. |  | String |
+| **CamelAwsBedrockAgentOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agent/BedrockAgentConstants.html#OPERATION) | The operation we want to perform. |  | String |
+| **CamelAwsBedrockAgentDataSourceId** (producer) Constant: [`DATASOURCE_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agent/BedrockAgentConstants.html#DATASOURCE_ID) | The data source Id of the operation; it overrides the dataSourceId option. |  | String |
+| **CamelAwsBedrockAgentKnowledgeBaseId** (producer) Constant: [`KNOWLEDGE_BASE_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agent/BedrockAgentConstants.html#KNOWLEDGE_BASE_ID) | The knowledge base Id of the operation; it overrides the knowledgeBaseId option. |  | String |
+| **CamelAwsBedrockAgentIngestionJobId** (producer) Constant: [`INGESTION_JOB_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agent/BedrockAgentConstants.html#INGESTION_JOB_ID) | The id of the ingestion job of the getIngestionJob operation; it overrides the ingestionJobId option. |  | String |
+| **CamelAwsBedrockAgentIngestionJobStatus** (common) Constant: [`INGESTION_JOB_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agent/BedrockAgentConstants.html#INGESTION_JOB_STATUS) | 
+The status of the ingestion job, set by the consumer and by the getIngestionJob operation.
+
+Enum values:
+
+-   STARTING
+    
+-   IN\_PROGRESS
+    
+-   COMPLETE
+    
+-   FAILED
+    
+-   STOPPING
+    
+-   STOPPED
+    
+-   null
+    
+
+
+
+
+
+ |  | IngestionJobStatus |
+| **CamelAwsBedrockAgentIngestionJobFailureReasons** (common) Constant: [`INGESTION_JOB_FAILURE_REASONS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agent/BedrockAgentConstants.html#INGESTION_JOB_FAILURE_REASONS) | The failure reasons of the ingestion job, set by the consumer and by the getIngestionJob operation when the job has failure reasons. |  | List |
 
 ## Message Body
 
@@ -412,7 +416,7 @@ The message body at each side of the AWS Bedrock Agent component: _Consumer_ is 
 | --- | --- | --- |
 | **Consumer** | `pojo` (`software.amazon.awssdk.services.bedrockagent.model.IngestionJob`) | The ingestion job of the knowledgeBaseId, dataSourceId and ingestionJobId options, one message per poll, also when the job did not change, with its status in the CamelAwsBedrockAgentIngestionJobStatus header. |
 | **Producer input** | `any` | 
-Not used: the knowledge base, the data source and the ingestion job come from the options, or from headers such as CamelAwsBedrockAgentKnowledgeBaseId when the option is not set. With pojoRequest=true the request of the AWS SDK for the operation, such as a StartIngestionJobRequest: another body fails.
+Not used: the knowledge base, the data source and the ingestion job come from the options, or from headers such as CamelAwsBedrockAgentKnowledgeBaseId, which override the options. With pojoRequest=true the request of the AWS SDK for the operation, such as a StartIngestionJobRequest: another body fails.
 
 -   With `pojoRequest=true`: `pojo`
     
@@ -439,9 +443,9 @@ The id of the ingestion job as text for startIngestionJob, a List of IngestionJo
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
-Required Bedrock component options
+Required Bedrock Agent component options
 
-You have to provide the bedrockRuntimeClient in the Registry or your accessKey and secretKey to access the [Amazon Bedrock](https://aws.amazon.com/bedrock/) service.
+You have to provide the bedrockAgentClient in the Registry or your accessKey and secretKey to access the [Amazon Bedrock](https://aws.amazon.com/bedrock/) service.
 
 ## Usage
 
@@ -469,6 +473,25 @@ You have also the possibility of using Profile Credentials Provider, by specifyi
 Only one of static, default and profile credentials could be used at the same time.
 
 For more information about this you can look at [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### Bedrock Agent Producer operations
+
+The producer supports the following operations, set with the `operation` option or the `CamelAwsBedrockAgentOperation` header:
+
+-   startIngestionJob: starts an ingestion job of the data source `dataSourceId` into the knowledge base `knowledgeBaseId`. The body is set to the id of the new ingestion job.
+    
+-   listIngestionJobs: lists the ingestion jobs of the data source `dataSourceId` of the knowledge base `knowledgeBaseId`. The body is set to the list of `IngestionJobSummary` of the AWS SDK.
+    
+-   getIngestionJob: gets the ingestion job `ingestionJobId` of the data source `dataSourceId` of the knowledge base `knowledgeBaseId`. The body is set to the `IngestionJob` of the AWS SDK, the `CamelAwsBedrockAgentIngestionJobStatus` header to its status, and the `CamelAwsBedrockAgentIngestionJobFailureReasons` header to its failure reasons, if it has any.
+    
+
+The knowledge base, data source and ingestion job ids are taken from the `CamelAwsBedrockAgentKnowledgeBaseId`, `CamelAwsBedrockAgentDataSourceId` and `CamelAwsBedrockAgentIngestionJobId` headers, and else from the `knowledgeBaseId`, `dataSourceId` and `ingestionJobId` options. So the options are the defaults of the endpoint, and a header overrides them for one message, for example to get the ingestion job that startIngestionJob returned in the body.
+
+With `pojoRequest=true`, the body is the request of the AWS SDK instead (`StartIngestionJobRequest`, `ListIngestionJobsRequest` or `GetIngestionJobRequest`), and the ids are taken from it.
+
+### Bedrock Agent Consumer
+
+The consumer polls the ingestion job `ingestionJobId` of the data source `dataSourceId` of the knowledge base `knowledgeBaseId`; the three options must be set. On every poll it sends an exchange with the `IngestionJob` of the AWS SDK as the body and the `CamelAwsBedrockAgentIngestionJobStatus` and `CamelAwsBedrockAgentIngestionJobFailureReasons` headers, as the getIngestionJob operation does. It does so on every poll, also when the job did not change since the previous poll, so filter on the status to act once the job is done, and set the poll `delay` to how often the job should be checked.
 
 ### Example
 

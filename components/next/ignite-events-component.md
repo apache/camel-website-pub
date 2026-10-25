@@ -108,6 +108,17 @@ Enum values:
 
  |  | ExchangePattern |
 
+## Message Body
+
+The message body at each side of the Ignite Events component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`org.apache.ignite.events.Event`) | The Ignite Event, such as a CacheEvent or a JobEvent, with its type in type(); no headers are set. Ignite fires only the event types its configuration includes (includeEventTypes). |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one.

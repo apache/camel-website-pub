@@ -206,9 +206,9 @@ from("direct:start")
 - route:
     from:
       uri: direct:start
-    steps:
-      - to:
-          uri: azure-eventgrid:https://my-topic.eastus-1.eventgrid.azure.net/api/events
-          parameters:
-            accessKey: "RAW(myKey)"
+      steps:
+        - to:
+            uri: azure-eventgrid:https://my-topic.eastus-1.eventgrid.azure.net/api/events
+            parameters:
+              accessKey: "RAW(myKey)"
 ```

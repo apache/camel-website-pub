@@ -95,7 +95,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **metricsType** (producer) | 
-**Required** Type of metrics.
+Type of metrics.
 
 Enum values:
 
@@ -110,7 +110,7 @@ Enum values:
 
 
 
- |  | Type |
+ | counter | Type |
 | **metricsName** (producer) | **Required** Name of metrics. |  | String |
 
 ### Query Parameters
@@ -162,7 +162,7 @@ Enum values:
 
 
  |  | MicrometerTimerAction |
-| **CamelMetricsHistogramValue** (producer) Constant: [`HEADER_HISTOGRAM_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_HISTOGRAM_VALUE) | Override histogram value in URI. |  | long |
+| **CamelMetricsHistogramValue** (producer) Constant: [`HEADER_HISTOGRAM_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_HISTOGRAM_VALUE) | Override histogram value in URI. |  | Double |
 | **CamelMetricsCounterDecrement** (producer) Constant: [`HEADER_COUNTER_DECREMENT`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_COUNTER_DECREMENT) | Override decrement value in URI. |  | Double |
 | **CamelMetricsCounterIncrement** (producer) Constant: [`HEADER_COUNTER_INCREMENT`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_COUNTER_INCREMENT) | Override increment value in URI. |  | Double |
 | **CamelMetricsName** (producer) Constant: [`HEADER_METRIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_METRIC_NAME) | Override name value in URI. |  | String |
@@ -260,7 +260,7 @@ from("direct:in")
 
 will update a counter with name `new.name` instead of `name.not.used` using the tag `dynamic-key` with value `dynamic-value` in addition to the tag `key` with value `value`.
 
-All Metrics specific headers are removed from the message once the Micrometer endpoint finishes processing of exchange. While processing exchange Micrometer endpoint will catch all exceptions and write log entry using level `warn`.
+All Metrics specific headers are removed from the message once the Micrometer endpoint finishes processing of exchange. If the Micrometer endpoint cannot update the meter, then the exchange fails with the exception, which the error handler of the route handles as any other failure. For example, a `value`, `increment` or `decrement` that is not a number, or a timer `action` that is not `start` or `stop`, fails the exchange with a `TypeConversionException`.
 
 ### Counter
 
@@ -484,7 +484,7 @@ micrometer:summary:metricname\[?options\]
 | --- | --- | --- |
 | value | \- | Value to use in histogram |
 
-If no `value` is not set, nothing is added to histogram and warning is logged.
+If `value` is not set, and there is no `CamelMetricsHistogramValue` header, then nothing is added to the distribution summary, and nothing is logged. A value that is not a number fails the exchange with a `TypeConversionException`.
 
 -   Java
     
@@ -529,7 +529,7 @@ from("direct:in")
     
 
 ```java
-// nothing is added to simple.histogram; warning is logged
+// nothing is added to simple.histogram
 from("direct:in")
     .to("micrometer:summary:simple.histogram")
     .to("direct:out");
@@ -597,7 +597,7 @@ Like in `camel-metrics`, a specific Message header can be used to override the v
   
 | Name | Description | Expected type |
 | --- | --- | --- |
-| CamelMetricsHistogramValue | Override histogram value in URI | Long |
+| CamelMetricsHistogramValue | Override histogram value in URI | Double |
 
 -   Java
     
@@ -652,7 +652,7 @@ micrometer:timer:metricname\[?options\]
 | --- | --- | --- |
 | action | \- | start or stop |
 
-If no `action` or invalid value is provided then warning is logged without any timer update. If action `start` is called on an already running timer or `stop` is called on an unknown timer, nothing is updated and warning is logged.
+If no `action` is provided, then the timer is not updated, and nothing is logged. An `action` that is not `start` or `stop` fails the exchange with a `TypeConversionException`. If action `start` is called on an already running timer or `stop` is called on an unknown timer, nothing is updated, and nothing is logged.
 
 -   Java
     

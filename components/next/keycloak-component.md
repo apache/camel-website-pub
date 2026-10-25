@@ -973,6 +973,257 @@ Enum values:
 | **CamelKeycloakFederatedUserId** (common) Constant: [`FEDERATED_USER_ID`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#FEDERATED_USER_ID) | The user id at the external identity provider. |  | String |
 | **CamelKeycloakFederatedUsername** (common) Constant: [`FEDERATED_USERNAME`](https://javadoc.io/doc/org.apache.camel/camel-keycloak/latest/org/apache/camel/component/keycloak/KeycloakConstants.html#FEDERATED_USERNAME) | The username at the external identity provider. |  | String |
 
+## Message Body
+
+The message body at each side of the Keycloak component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`org.keycloak.representations.idm.EventRepresentation`) | 
+One message per event: the EventRepresentation of a user event such as a login, or the AdminEventRepresentation with eventType=admin-events. The CamelKeycloakEventType header says event or admin-event.
+
+-   With `eventType=admin-events`: `pojo` (`org.keycloak.representations.idm.AdminEventRepresentation`)
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | 
+
+Mostly not read: the operations take their input from headers, such as CamelKeycloakRealmName and CamelKeycloakUserId. With pojoRequest=true the create and update operations take the Keycloak representation, such as a UserRepresentation for createUser; a body of another type does nothing and keeps the body. The bulk operations take a List when the header is not set: of UserRepresentation for bulkCreateUsers and bulkUpdateUsers, of String ids or role names for the others. introspectToken, revokeAccessToken and revokeRefreshToken take the token as text when the CamelKeycloakToken header is not set.
+
+-   With `pojoRequest=true`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unknown` | 
+
+Depends on the operation, which the CamelKeycloakOperation header can set: get gives the Keycloak representation, such as a UserRepresentation, and list and search a List of them. Most create operations, deleteUser and some organization operations give the JAX-RS Response, whose status says whether it worked (a 409 or 404 is no error); the others a confirmation text such as Realm deleted successfully. The bulk operations give a Map with total, success, failed and results.
+
+-   With `operation=createRealm`: `text` (`java.lang.String`)
+    
+-   With `operation=deleteRealm`: `text` (`java.lang.String`)
+    
+-   With `operation=getRealm`: `pojo` (`org.keycloak.representations.idm.RealmRepresentation`)
+    
+-   With `operation=updateRealm`: `text` (`java.lang.String`)
+    
+-   With `operation=createUser`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteUser`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=getUser`: `pojo` (`org.keycloak.representations.idm.UserRepresentation`)
+    
+-   With `operation=updateUser`: `text` (`java.lang.String`)
+    
+-   With `operation=listUsers`: `list` (`java.util.List<org.keycloak.representations.idm.UserRepresentation>`)
+    
+-   With `operation=searchUsers`: `list` (`java.util.List<org.keycloak.representations.idm.UserRepresentation>`)
+    
+-   With `operation=createRole`: `text` (`java.lang.String`)
+    
+-   With `operation=deleteRole`: `text` (`java.lang.String`)
+    
+-   With `operation=getRole`: `pojo` (`org.keycloak.representations.idm.RoleRepresentation`)
+    
+-   With `operation=updateRole`: `text` (`java.lang.String`)
+    
+-   With `operation=listRoles`: `list` (`java.util.List<org.keycloak.representations.idm.RoleRepresentation>`)
+    
+-   With `operation=assignRoleToUser`: `text` (`java.lang.String`)
+    
+-   With `operation=removeRoleFromUser`: `text` (`java.lang.String`)
+    
+-   With `operation=getUserRoles`: `list` (`java.util.List<org.keycloak.representations.idm.RoleRepresentation>`)
+    
+-   With `operation=createGroup`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteGroup`: `text` (`java.lang.String`)
+    
+-   With `operation=getGroup`: `pojo` (`org.keycloak.representations.idm.GroupRepresentation`)
+    
+-   With `operation=updateGroup`: `text` (`java.lang.String`)
+    
+-   With `operation=listGroups`: `list` (`java.util.List<org.keycloak.representations.idm.GroupRepresentation>`)
+    
+-   With `operation=addUserToGroup`: `text` (`java.lang.String`)
+    
+-   With `operation=removeUserFromGroup`: `text` (`java.lang.String`)
+    
+-   With `operation=listUserGroups`: `list` (`java.util.List<org.keycloak.representations.idm.GroupRepresentation>`)
+    
+-   With `operation=createClient`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteClient`: `text` (`java.lang.String`)
+    
+-   With `operation=getClient`: `pojo` (`org.keycloak.representations.idm.ClientRepresentation`)
+    
+-   With `operation=updateClient`: `text` (`java.lang.String`)
+    
+-   With `operation=listClients`: `list` (`java.util.List<org.keycloak.representations.idm.ClientRepresentation>`)
+    
+-   With `operation=resetUserPassword`: `text` (`java.lang.String`)
+    
+-   With `operation=createClientRole`: `text` (`java.lang.String`)
+    
+-   With `operation=deleteClientRole`: `text` (`java.lang.String`)
+    
+-   With `operation=getClientRole`: `pojo` (`org.keycloak.representations.idm.RoleRepresentation`)
+    
+-   With `operation=updateClientRole`: `text` (`java.lang.String`)
+    
+-   With `operation=listClientRoles`: `list` (`java.util.List<org.keycloak.representations.idm.RoleRepresentation>`)
+    
+-   With `operation=assignClientRoleToUser`: `text` (`java.lang.String`)
+    
+-   With `operation=removeClientRoleFromUser`: `text` (`java.lang.String`)
+    
+-   With `operation=listUserSessions`: `list` (`java.util.List<org.keycloak.representations.idm.UserSessionRepresentation>`)
+    
+-   With `operation=logoutUser`: `text` (`java.lang.String`)
+    
+-   With `operation=logoutAllUsers`: `text` (`java.lang.String`)
+    
+-   With `operation=revokeAccessToken`: `text` (`java.lang.String`)
+    
+-   With `operation=revokeRefreshToken`: `text` (`java.lang.String`)
+    
+-   With `operation=introspectToken`: `map` (`java.util.Map<java.lang.String, java.lang.Object>`)
+    
+-   With `operation=pushNotBefore`: `text` (`java.lang.String`)
+    
+-   With `operation=createClientScope`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteClientScope`: `text` (`java.lang.String`)
+    
+-   With `operation=getClientScope`: `pojo` (`org.keycloak.representations.idm.ClientScopeRepresentation`)
+    
+-   With `operation=updateClientScope`: `text` (`java.lang.String`)
+    
+-   With `operation=listClientScopes`: `list` (`java.util.List<org.keycloak.representations.idm.ClientScopeRepresentation>`)
+    
+-   With `operation=createIdentityProvider`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteIdentityProvider`: `text` (`java.lang.String`)
+    
+-   With `operation=getIdentityProvider`: `pojo` (`org.keycloak.representations.idm.IdentityProviderRepresentation`)
+    
+-   With `operation=updateIdentityProvider`: `text` (`java.lang.String`)
+    
+-   With `operation=listIdentityProviders`: `list` (`java.util.List<org.keycloak.representations.idm.IdentityProviderRepresentation>`)
+    
+-   With `operation=createResource`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteResource`: `text` (`java.lang.String`)
+    
+-   With `operation=getResource`: `pojo` (`org.keycloak.representations.idm.authorization.ResourceRepresentation`)
+    
+-   With `operation=updateResource`: `text` (`java.lang.String`)
+    
+-   With `operation=listResources`: `list` (`java.util.List<org.keycloak.representations.idm.authorization.ResourceRepresentation>`)
+    
+-   With `operation=createResourcePolicy`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteResourcePolicy`: `text` (`java.lang.String`)
+    
+-   With `operation=getResourcePolicy`: `pojo` (`org.keycloak.representations.idm.authorization.PolicyRepresentation`)
+    
+-   With `operation=updateResourcePolicy`: `text` (`java.lang.String`)
+    
+-   With `operation=listResourcePolicies`: `list` (`java.util.List<org.keycloak.representations.idm.authorization.PolicyRepresentation>`)
+    
+-   With `operation=createResourcePermission`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteResourcePermission`: `text` (`java.lang.String`)
+    
+-   With `operation=getResourcePermission`: `pojo` (`org.keycloak.representations.idm.authorization.PolicyRepresentation`)
+    
+-   With `operation=updateResourcePermission`: `text` (`java.lang.String`)
+    
+-   With `operation=listResourcePermissions`: `list` (`java.util.List<org.keycloak.representations.idm.authorization.PolicyRepresentation>`)
+    
+-   With `operation=evaluatePermission`: `map` (`java.util.Map<java.lang.String, java.lang.Object>`)
+    
+-   With `operation=getUserAttributes`: `map` (`java.util.Map<java.lang.String, java.util.List<java.lang.String>>`)
+    
+-   With `operation=setUserAttribute`: `text` (`java.lang.String`)
+    
+-   With `operation=deleteUserAttribute`: `text` (`java.lang.String`)
+    
+-   With `operation=getUserCredentials`: `list` (`java.util.List<org.keycloak.representations.idm.CredentialRepresentation>`)
+    
+-   With `operation=deleteUserCredential`: `text` (`java.lang.String`)
+    
+-   With `operation=sendVerifyEmail`: `text` (`java.lang.String`)
+    
+-   With `operation=sendPasswordResetEmail`: `text` (`java.lang.String`)
+    
+-   With `operation=addRequiredAction`: `text` (`java.lang.String`)
+    
+-   With `operation=removeRequiredAction`: `text` (`java.lang.String`)
+    
+-   With `operation=executeActionsEmail`: `text` (`java.lang.String`)
+    
+-   With `operation=getClientSecret`: `pojo` (`org.keycloak.representations.idm.CredentialRepresentation`)
+    
+-   With `operation=regenerateClientSecret`: `pojo` (`org.keycloak.representations.idm.CredentialRepresentation`)
+    
+-   With `operation=bulkCreateUsers`: `map` (`java.util.Map<java.lang.String, java.lang.Object>`)
+    
+-   With `operation=bulkDeleteUsers`: `map` (`java.util.Map<java.lang.String, java.lang.Object>`)
+    
+-   With `operation=bulkAssignRolesToUser`: `map` (`java.util.Map<java.lang.String, java.lang.Object>`)
+    
+-   With `operation=bulkAssignRoleToUsers`: `map` (`java.util.Map<java.lang.String, java.lang.Object>`)
+    
+-   With `operation=bulkUpdateUsers`: `map` (`java.util.Map<java.lang.String, java.lang.Object>`)
+    
+-   With `operation=createOrganization`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=updateOrganization`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=deleteOrganization`: `text` (`java.lang.String`)
+    
+-   With `operation=getOrganization`: `pojo` (`org.keycloak.representations.idm.OrganizationRepresentation`)
+    
+-   With `operation=listOrganizations`: `list` (`java.util.List<org.keycloak.representations.idm.OrganizationRepresentation>`)
+    
+-   With `operation=searchOrganizations`: `list` (`java.util.List<org.keycloak.representations.idm.OrganizationRepresentation>`)
+    
+-   With `operation=addOrganizationMember`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=removeOrganizationMember`: `text` (`java.lang.String`)
+    
+-   With `operation=listOrganizationMembers`: `list` (`java.util.List<org.keycloak.representations.idm.MemberRepresentation>`)
+    
+-   With `operation=linkOrganizationIdentityProvider`: `pojo` (`jakarta.ws.rs.core.Response`)
+    
+-   With `operation=unlinkOrganizationIdentityProvider`: `text` (`java.lang.String`)
+    
+-   With `operation=listOrganizationIdentityProviders`: `list` (`java.util.List<org.keycloak.representations.idm.IdentityProviderRepresentation>`)
+    
+-   With `operation=addFederatedIdentity`: `text` (`java.lang.String`)
+    
+-   With `operation=removeFederatedIdentity`: `text` (`java.lang.String`)
+    
+-   With `operation=getFederatedIdentities`: `list` (`java.util.List<org.keycloak.representations.idm.FederatedIdentityRepresentation>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Overview
 
 ### Producer

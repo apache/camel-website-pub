@@ -214,17 +214,38 @@ The Atom component supports the following message header(s), which is/are listed
 | --- | --- | --- | --- |
 | **CamelAtomFeed** (consumer) Constant: [`ATOM_FEED`](https://javadoc.io/doc/org.apache.camel/camel-atom/latest/org/apache/camel/component/atom/AtomConstants.html#ATOM_FEED) | When consuming the List object is set to this header. |  | List |
 
+## Message Body
+
+The message body at each side of the Atom component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.apptasticsoftware.rssreader.Item`) | 
+One entry of the feed, a com.apptasticsoftware.rssreader.Item with its title, link, author, dates and content; with splitEntries=false the List of all the entries, empty for a feed without entries. The CamelAtomFeed header carries the List of the entries unless feedHeader=false.
+
+-   With `splitEntries=false`: `list` (`java.util.List`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Exchange data format
 
-Camel will set the In body on the returned `Exchange` with the entries. Depending on the `splitEntries` flag Camel will either return one `Entry` or a `List<Entry>`.
+Camel will set the In body on the returned `Exchange` with the entries. Depending on the `splitEntries` flag Camel will either return one entry (a `com.apptasticsoftware.rssreader.Item`) or a `List<Item>`.
 
   
 | Option | Value | Behavior |
 | --- | --- | --- |
-| `splitEntries` | `true` | Only a single entry from the currently being processed feed is set: `exchange.in.body(Entry)` |
-| `splitEntries` | `false` | The entire list of entries from the feed is set: `exchange.in.body(List<Entry>)` |
+| `splitEntries` | `true` | Only a single entry from the currently being processed feed is set: `exchange.in.body(Item)` |
+| `splitEntries` | `false` | The entire list of entries from the feed is set: `exchange.in.body(List<Item>)` |
 
-Camel can set the `Feed` object on the In header (see `feedHeader` option to disable this):
+Camel sets the `List<Item>` of all the entries of the feed on the `CamelAtomFeed` header (see the `feedHeader` option to disable this).
 
 ## Usage
 

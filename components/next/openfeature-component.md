@@ -178,6 +178,28 @@ The OpenFeature component supports the following message header(s), which is/are
 | **CamelOpenFeatureReason** (producer) Constant: [`EVALUATION_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#EVALUATION_REASON) | The reason string returned by the provider for this evaluation. |  | String |
 | **CamelOpenFeatureErrorCode** (producer) Constant: [`EVALUATION_ERROR_CODE`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#EVALUATION_ERROR_CODE) | The error code when the evaluation failed (e.g. FLAG\_NOT\_FOUND, TYPE\_MISMATCH). |  | String |
 
+## Message Body
+
+The message body at each side of the OpenFeature component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not read: the flag key, the targeting key and the context come from the options and the CamelOpenFeature headers. With contextFromBody, a Map body is the evaluation context, and any other body is ignored. |
+| **Producer output** | `value` or `text` | The value of the flag: a Boolean for a boolean evaluation, which is the default when defaultValue is true or false, or else a String; the defaultValue when the flag is missing or of another type. The CamelOpenFeatureEvaluationType header overrides the evaluation type. With resultProperty the value goes to that exchange property and the body is unchanged.
+-   With `evaluationType=boolean`: `value` (`java.lang.Boolean`)
+    
+-   With `evaluationType=isEnabled`: `value` (`java.lang.Boolean`)
+    
+-   With `evaluationType=variant`: `text` (`java.lang.String`)
+    
+
+Not known when `resultProperty` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Provider resolution
 
 The component resolves the feature flag provider in this order:

@@ -20,6 +20,17 @@ The Throw Exception eip supports the following options which are listed below.
 | **exceptionType** | The fully qualified class name of the exception to throw. Used together with message. |  | String |
 | **ref** | Reference to an existing exception instance to lookup from the registry and throw. |  | String |
 
+## Message Body
+
+The message body at each side of the Throw Exception EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Fails the exchange with the exception: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Throw Exception eip has no exchange properties.

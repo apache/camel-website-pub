@@ -131,6 +131,18 @@ The Spring AI Image component supports the following message header(s), which is
 | **CamelSpringAiImageGeneration** (producer) Constant: [`IMAGE_GENERATION`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-image/latest/org/apache/camel/component/springai/image/SpringAiImageHeaders.html#IMAGE_GENERATION) | The ImageGeneration object for single image results. |  | ImageGeneration |
 | **CamelSpringAiImageGenerations** (producer) Constant: [`IMAGE_GENERATIONS`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-image/latest/org/apache/camel/component/springai/image/SpringAiImageHeaders.html#IMAGE_GENERATIONS) | List of ImageGeneration objects for multiple image results. |  | List |
 
+## Message Body
+
+The message body at each side of the Spring AI Image component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | The prompt as text, or an ImagePrompt, which keeps its own options: n, width and the other options and headers then do not apply. Another body is converted to text, and no body fails. |
+| **Producer output** | `pojo` or `list` | The generated org.springframework.ai.image.Image, with a URL or base64 data, or a List of Image when the model returns more than one (n above 1). An Image converts to byte\[\] by decoding the base64 data; an Image with only a URL gives the bytes of the URL text. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Configuring the ImageModel
@@ -233,7 +245,7 @@ from("direct:generate")
             uri: file:output?fileName=generated.png
 ```
 
-The `Image` → `byte[]` conversion decodes the base64 data automatically.
+The `Image` → `byte[]` conversion decodes the base64 data automatically. Set `responseFormat=b64_json` when the provider returns a URL by default, as the URL is not downloaded.
 
 ### Using with Ollama (Local Image Generation)
 
@@ -324,8 +336,8 @@ The component registers automatic type converters for `Image` objects:
   
 | From | To | Behavior |
 | --- | --- | --- |
-| `Image` | `byte[]` | Decodes base64 data |
-| `Image` | `InputStream` | Wraps decoded bytes in ByteArrayInputStream |
+| `Image` | `byte[]` | Decodes base64 data. An `Image` with only a URL gives the bytes of the URL text: the image is not downloaded |
+| `Image` | `InputStream` | Wraps the `byte[]` above in ByteArrayInputStream |
 | `Image` | `String` | Returns base64 string or URL |
 
 ## See Also

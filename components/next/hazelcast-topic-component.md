@@ -207,6 +207,19 @@ The Hazelcast Topic component supports the following message header(s), which is
 | **CamelHazelcastCacheName** (consumer) Constant: [`CACHE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#CACHE_NAME) | The name of the cache - e.g. foo. |  | String |
 | **CamelHazelcastOperationType** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#OPERATION) | The operation to perform. |  | String |
 
+## Message Body
+
+The message body at each side of the Hazelcast Topic component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.hazelcast.topic.Message`) | The Hazelcast Message, not the published object: ${body.messageObject} is the object and ${body.publishingMember} the member that published it. The CamelHazelcastListenerAction header is received. |
+| **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The object to publish: an object Hazelcast can serialize, so convert a stream to bytes or text first; no body fails. |
+| **Producer output** | `unchanged` | The producer publishes the body and keeps it. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Topic producer – to(“hazelcast-topic:foo”)
 
 The topic producer provides only one operation (publish).

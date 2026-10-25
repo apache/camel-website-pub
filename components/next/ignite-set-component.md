@@ -151,6 +151,38 @@ Enum values:
 
  |  | IgniteSetOperation |
 
+## Message Body
+
+The message body at each side of the Ignite Sets component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | ADD, CONTAINS, REMOVE and RETAIN\_ALL use the body as the element, and a Collection as several elements unless treatCollectionsAsCacheObjects=true; no body fails them. SIZE, ITERATOR, ARRAY and CLEAR do not use the body. The operation is the operation option or the CamelIgniteSetsOperation header; with neither the producer fails. |
+| **Producer output** | `value`, `iterator`, `list` or `unchanged` | true or false for ADD, CONTAINS, REMOVE and RETAIN\_ALL (whether the set changed, or holds the element), the number of elements for SIZE, an Iterator for ITERATOR and an Object array for ARRAY. CLEAR leaves the body.
+-   With `operation=ADD`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=CONTAINS`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=REMOVE`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=RETAIN_ALL`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=SIZE`: `value` (`java.lang.Integer`)
+    
+-   With `operation=ITERATOR`: `iterator`
+    
+-   With `operation=ARRAY`: `list`
+    
+-   With `operation=CLEAR`: `unchanged`
+    
+
+Not known when `propagateIncomingBodyIfNoReturnValue` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component needs an Ignite node: [Ignite](ignite-summary.md) describes the ways to give it one. A node of its own with the default configuration takes one line in `application.properties`. On Java 17 and later, Ignite also needs the `--add-opens` JVM options that its documentation lists.

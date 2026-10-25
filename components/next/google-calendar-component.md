@@ -1100,6 +1100,22 @@ In addition to the parameters above, the google-calendar API can also use any of
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleCalendar.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleCalendar.myParameterNameHere` header.
 
+## Message Body
+
+The message body at each side of the Google Calendar component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` | One message per poll with the return value of the method: a Google Calendar model object, such as the Events of events/list, which is one message and not split per event. The model classes are GenericJson, which is also a Map of the JSON fields. |
+| **Producer input** | `any` | The body is used only when inBody names a parameter of the method, and must then be of the type of that parameter: an Event for content of events/insert, or text for text of events/quickAdd. JSON text or a Map is not turned into a model object: build it first. Without inBody the arguments come from the options and the CamelGoogleCalendar. headers.
+Not known when `inBody` is set.
+
+ |
+| **Producer output** | `pojo` or `null` | The return value of the method: a Google Calendar model object, such as the Event of events/insert and events/get or the Events of events/list; null for the methods without a response: events/delete, acl/delete, calendars/clear, calendars/delete, list/delete and channels/stop. The model classes are GenericJson, which is also a Map of the JSON fields. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
 

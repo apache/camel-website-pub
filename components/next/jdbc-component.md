@@ -125,8 +125,8 @@ Enum values:
 | **parameters** (producer) | Optional parameters to the java.sql.Statement. For example to set maxRows, fetchSize etc. This is a multi-value option with prefix: statement. |  | Map |
 | **readSize** (producer) | The default maximum number of rows that can be read by a polling query. The default value is 0. |  | int |
 | **resetAutoCommit** (producer) | Camel will set the autoCommit on the JDBC connection to be false, commit the change after executed the statement and reset the autoCommit flag of the connection at the end, if the resetAutoCommit is true. If the JDBC connection doesn’t support to reset the autoCommit flag, you can set the resetAutoCommit flag to be false, and Camel will not try to reset the autoCommit flag. When used with XA transactions you most likely need to set it to false so that the transaction manager is in charge of committing this tx. | true | boolean |
-| **transacted** (producer) | Whether transactions are in use. | false | boolean |
-| **useGetBytesForBlob** (producer) | To read BLOB columns as bytes instead of string data. This may be needed for certain databases such as Oracle where you must read BLOB columns as bytes. | false | boolean |
+| **transacted** (producer) | **Deprecated** Whether transactions are in use. Deprecation note: Not used: the producer does not read this option. | false | boolean |
+| **useGetBytesForBlob** (producer) | To read BLOB columns as bytes (a byte) instead of a java.sql.Blob, which cannot be read after the producer has closed the connection. This may be needed for certain databases such as Oracle where you must read BLOB columns as bytes. | false | boolean |
 | **useHeadersAsParameters** (producer) | Set this option to true to use the prepareStatementStrategy with named parameters. This allows to define queries with named placeholders, and use headers with the dynamic values for the query placeholders. | false | boolean |
 | **useJDBC4ColumnNameAndLabelSemantics** (producer) | Sets whether to use JDBC 4 or JDBC 3.0 or older semantic when retrieving column name. JDBC 4.0 uses columnLabel to get the column name where as JDBC 3.0 uses both columnName or columnLabel. Unfortunately JDBC drivers behave differently so you can use this option to work out issues around your JDBC driver if you get problem using this component This option is default true. | true | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -142,7 +142,7 @@ The JDBC component supports the following message header(s), which is/are listed
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelJdbcUpdateCount** (producer) Constant: [`JDBC_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_UPDATE_COUNT) | If the query is an UPDATE, query the update count is returned in this OUT header. |  | int |
-| **CamelJdbcRowCount** (producer) Constant: [`JDBC_ROW_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_ROW_COUNT) | If the query is a SELECT, query the row count is returned in this OUT header. |  | int |
+| **CamelJdbcRowCount** (producer) Constant: [`JDBC_ROW_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_ROW_COUNT) | If the query is a SELECT and the outputType is SelectList, the row count is returned in this OUT header. |  | int |
 | **CamelJdbcColumnNames** (producer) Constant: [`JDBC_COLUMN_NAMES`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_COLUMN_NAMES) | The column names from the ResultSet as a java.util.Set type. |  | Set |
 | **CamelJdbcParameters** (producer) Constant: [`JDBC_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_PARAMETERS) | A java.util.Map which has the headers to be used if useHeadersAsParameters has been enabled. |  | Map |
 | **CamelRetrieveGeneratedKeys** (producer) Constant: [`JDBC_RETRIEVE_GENERATED_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_RETRIEVE_GENERATED_KEYS) | Set its value to true to retrieve generated keys. | false | Boolean |
@@ -178,12 +178,20 @@ By default, the result of a select is returned in the OUT body as an `ArrayList<
 
 **Note:** This component fetches `ResultSetMetaData` to be able to return the column name as the key in the `Map`.
 
+With `outputType=SelectList` the header `CamelJdbcRowCount` holds the number of rows of the result.
+
+A `BLOB` or `CLOB` value of a row is a `java.sql.Blob` or `java.sql.Clob`, which can be read only while the connection is open, and the producer closes the connection before the route continues (except with `outputType=StreamList`, which closes it when the exchange is done). So read such a value inside the producer: set `useGetBytesForBlob=true` to get a `BLOB` as a `byte[]`, or convert a `CLOB` to text in the SQL query with a function of the database.
+
+The `SQL` of the message body is mandatory: a message without a body fails with an `InvalidPayloadException`.
+
+The `transacted` option is not used (and deprecated). To take part in a Spring transaction, use the [Spring JDBC Component](spring-jdbc-component.md).
+
 ### Generated keys
 
 If you insert data using SQL INSERT, then the RDBMS may support auto generated keys. You can instruct the [JDBC](#) producer to return the generated keys in headers.  
 To do that set the header `CamelRetrieveGeneratedKeys=true`. Then the generated keys will be provided as headers with the keys listed in the table above.
 
-Using generated keys does not work together with named parameters.
+The generated keys in the header `CamelGeneratedKeysRows` are a `List` of `Map` objects with the key columns, whatever the `outputClass` and `readSize` of the endpoint.
 
 ### Using named parameters
 

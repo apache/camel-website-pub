@@ -219,6 +219,36 @@ Enum values:
  |  | EventType |
 | **CamelZookeeperOperation** (producer) Constant: [`ZOOKEEPER_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-zookeeper/latest/org/apache/camel/component/zookeeper/ZooKeeperMessage.html#ZOOKEEPER_OPERATION) | The operation to perform. |  | String |
 
+## Message Body
+
+The message body at each side of the ZooKeeper component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` or `null` | The data of the znode as bytes, and no body when the znode is deleted; with listChildren, the List of the names of its child znodes. The CamelZooKeeperNode and CamelZookeeperStatistics headers say which znode and its version.
+-   With `listChildren=true`: `list`
+    
+
+Not known when `sendEmptyMessageOnDelete` is set.
+
+ |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The data to store in the znode, converted to bytes. A Map, a POJO or a number is not converted and stores no data; with the CamelZookeeperOperation header set to DELETE the body is not read. |
+| **Producer output** | `unchanged`, `bytes`, `text` or `value` | 
+
+InOnly writes without waiting and leaves the body unchanged. InOut waits and sets the bytes written, the path of the znode as text when it was created, or true for a DELETE; with listChildren, the List of the names of the child znodes of the path.
+
+-   With `listChildren=true`: `list` or `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Reading from a _znode_

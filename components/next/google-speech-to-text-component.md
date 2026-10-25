@@ -176,6 +176,28 @@ Enum values:
  |  | GoogleCloudSpeechToTextOperations |
 | **CamelGoogleCloudSpeechToTextResponseObject** (producer) Constant: [`RESPONSE_OBJECT`](https://javadoc.io/doc/org.apache.camel/camel-google-speech-to-text/latest/org/apache/camel/component/google/speechtotext/GoogleCloudSpeechToTextConstants.html#RESPONSE_OBJECT) | The response object resulting from the Google Cloud Speech-to-Text API invocation. |  | RecognizeResponse |
 
+## Message Body
+
+The message body at each side of the Google Cloud Speech To Text component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `bytes`, `stream` or `file` | 
+The audio to transcribe, sent inline in the encoding and sample rate of the encoding and sampleRateHertz options (LINEAR16 by default). A stream or a file is read into bytes and a String is sent as its bytes, a Map, a POJO or no body fails. With pojoRequest=true a RecognizeRequest of the Google Cloud SDK: another body fails.
+
+-   With `pojoRequest=true`: `pojo` (`com.google.cloud.speech.v1.RecognizeRequest`)
+    
+
+
+
+
+
+ |
+| **Producer output** | `text` (`java.lang.String`) | The transcript: the best alternative of each result, one line per result, or an empty String when nothing is recognized, also with pojoRequest=true. The RecognizeResponse is in the CamelGoogleCloudSpeechToTextResponseObject header. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Message body

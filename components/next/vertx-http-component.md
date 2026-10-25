@@ -352,7 +352,7 @@ The `vertx-http` producer supports URI parameters to be sent to the HTTP server.
 
 Camel will handle, according to the HTTP response code:
 
--   Response code is in the range 100..299, Camel regards it as a success response.
+-   Response code is in the range of the `okStatusCodeRange` option (200-299 by default), Camel regards it as a success response.
     
 -   Response code is in the range 300..399, Camel regards it as a redirection response and will throw a `HttpOperationFailedException` with the information.
     
@@ -386,11 +386,24 @@ The following algorithm determines the HTTP method to be used:
 5\. `POST` if there is data to send (body is not `null`).  
 6\. `GET` otherwise.
 
+### Request body
+
+The producer sends the message body as the request body:
+
+-   a `java.io.File`, a `java.nio.file.Path` or a file of a file based component (such as `file` or `ftp`) is sent as the content of the file (or as a multipart upload with the `multipartUpload` option);
+    
+-   a `String`, or a `java.io.Reader`, is sent as its text;
+    
+-   a Vert.x `Buffer`, `MultiMap` (a form), `MultipartForm` or `ReadStream` is sent as is;
+    
+-   another body must convert to a Vert.x `Buffer`, such as a `byte[]` or an `InputStream`.
+    
+
 ### HTTP form parameters
 
 You can send HTTP form parameters in one of two ways.
 
-1.  Set the `Exchange.CONTENT_TYPE` header to the value `application/x-www-form-urlencoded` and ensure the message body is a `String` formatted as form variables. For example `param1=value1&param2=value2`.
+1.  Set the `Exchange.CONTENT_TYPE` header to the value `application/x-www-form-urlencoded` and ensure the message body is a `String` formatted as form variables. For example `param1=value1&param2=value2`. The names and values are URL decoded (such as `a%26b` for `a&b`) and encoded again when sent, and a repeated name sends all its values.
     
 2.  Set the message body as a [MultiMap](https://vertx.io/docs/apidocs/io/vertx/core/MultiMap.md) which allows you to configure form parameter names and values.
     

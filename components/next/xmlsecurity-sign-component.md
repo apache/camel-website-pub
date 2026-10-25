@@ -174,6 +174,28 @@ The XML Security Sign component supports the following message header(s), which 
 | **CamelXmlSignatureXAdESPrefix** (producer) Constant: [`HEADER_XADES_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-xmlsecurity/latest/org/apache/camel/component/xmlsecurity/api/XmlSignatureConstants.html#HEADER_XADES_PREFIX) | overwrites the XAdES prefix parameter value. |  | String |
 | **CamelCharsetName** (producer) Constant: [`CHARSET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-xmlsecurity/latest/org/apache/camel/component/xmlsecurity/api/XmlSignatureConstants.html#CHARSET_NAME) | The name of the charset. |  | String |
 
+## Message Body
+
+The message body at each side of the XML Security Sign component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | 
+The XML document to sign: text, bytes, a stream, a file or a DOM Document. A Map, a POJO that is not XML or no body fails: marshal it first. With plainText (or the CamelXmlSignatureMessageIsPlainText header) the body is any text, which an enveloping signature wraps.
+
+-   With `plainText=true`: `text`, `bytes`, `stream` or `file`
+    
+
+
+
+
+
+ |
+| **Producer output** | `bytes` (`byte[]`), as xml | The signed XML document as bytes, in the outputXmlEncoding when set: the document with the signature for enveloped and detached, or the Signature element with the payload inside for enveloping. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## XML Signature Wrapping Modes
 
 XML Signature differs between enveloped, enveloping, and detached XML signature. In the [enveloped](http://www.w3.org/TR/xmldsig-core1/#def-SignatureEnveloped) XML signature case, the XML Signature is wrapped by the signed XML Document; which means that the XML signature element is a child element of a parent element, which belongs to the signed XML Document. In the [enveloping](http://www.w3.org/TR/xmldsig-core1/#def-SignatureEnveloping) XML signature case, the XML Signature contains the signed content. All other cases are called [detached](http://www.w3.org/TR/xmldsig-core1/#def-SignatureDetached) XML signatures.

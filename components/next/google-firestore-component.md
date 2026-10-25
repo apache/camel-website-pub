@@ -385,6 +385,41 @@ Enum values:
 | **CamelGoogleFirestoreMerge** (producer) Constant: [`MERGE`](https://javadoc.io/doc/org.apache.camel/camel-google-firestore/latest/org/apache/camel/component/google/firestore/GoogleFirestoreConstants.html#MERGE) | When true, merge the data with existing document data instead of overwriting. | false | Boolean |
 | **CamelGoogleFirestoreMergeFields** (producer) Constant: [`MERGE_FIELDS`](https://javadoc.io/doc/org.apache.camel/camel-google-firestore/latest/org/apache/camel/component/google/firestore/GoogleFirestoreConstants.html#MERGE_FIELDS) | List of field paths to merge when using merge option. |  | List |
 
+## Message Body
+
+The message body at each side of the Google Firestore component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `map` | The fields of the document as a Map, one message per document, with its id, path and times in headers, and with realtimeUpdates the change type. Numbers are Long or Double, a timestamp a com.google.cloud.Timestamp. |
+| **Producer input** | `map` or `text` | The fields to write for setDocument (the default), createDocument and updateDocument: a Map, or JSON object text, which is parsed into a Map. Bytes, a stream, a List, a POJO or no body fail: unmarshal it first. The other operations take their input from options and headers.
+Not known when `operation` is set.
+
+ |
+| **Producer output** | `map` | 
+
+The Map of the fields written for setDocument, createDocument and updateDocument (JSON text is now the parsed Map), with the document id and path in headers. By the operation: the fields of the document or null when it does not exist for getDocumentById, true for deleteDocument, a List of Maps with \_id and \_path entries for queryCollection and listDocuments, and the collection ids for listCollections.
+
+-   With `operation=getDocumentById`: `map` or `null`
+    
+-   With `operation=deleteDocument`: `value` (`java.lang.Boolean`)
+    
+-   With `operation=queryCollection`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `operation=listDocuments`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
+    
+-   With `operation=listCollections`: `list` (`java.util.List<java.lang.String>`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Google Firestore Producer Operations

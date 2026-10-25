@@ -495,6 +495,23 @@ Enum values:
 
  |  | String |
 
+## Message Body
+
+The message body at each side of the Kafka Share component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `null` | The value of the record: a String with the default valueDeserializer (StringDeserializer), null for a tombstone. The key of the record, when it has one, is in the CamelKafkaKey header.
+-   With `valueDeserializer=org.apache.kafka.common.serialization.ByteArrayDeserializer`: `bytes` or `null` (`byte[]`)
+    
+
+Not known when `valueDeserializer` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Broker requirements

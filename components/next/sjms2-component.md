@@ -318,6 +318,59 @@ The Simple JMS2 component supports the following message header(s), which is/are
 | **JMSReplyTo** (producer) Constant: [`JMS_REPLY_TO`](https://javadoc.io/doc/org.apache.camel/camel-sjms2/latest/org/apache/camel/component/sjms/SjmsConstants.html#JMS_REPLY_TO) | Provides an explicit ReplyTo destination (overrides any incoming value of Message.getJMSReplyTo() in consumer). |  | String |
 | **CamelSjmsBatchSize** (batch) Constant: [`SJMS_BATCH_SIZE_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-sjms2/latest/org/apache/camel/component/sjms/SjmsConstants.html#SJMS_BATCH_SIZE_HEADER) | The size of the batch when using the batching consumer option. |  | int |
 
+## Message Body
+
+The message body at each side of the Simple JMS2 component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text`, `bytes`, `map`, `pojo` or `null` | 
+By the JMS message received: a String for a TextMessage, a byte array for a BytesMessage, a Map for a MapMessage, the jakarta.jms.StreamMessage itself for a StreamMessage, and null for a plain Message. An ObjectMessage fails unless objectMessageEnabled.
+
+-   With `mapJmsMessage=false`: `pojo` (`jakarta.jms.Message`)
+    
+-   With `objectMessageEnabled=true`: `text`, `bytes`, `map`, `value`, `list`, `pojo` or `null`
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `text`, `bytes`, `stream`, `file`, `map` or `null` | The reply, sent as the producer sends a message. A reply that cannot be sent, such as a number or a List without objectMessageEnabled, is dropped and the caller times out.
+
+-   With `objectMessageEnabled=true`: `text`, `bytes`, `stream`, `file`, `map`, `value`, `list`, `pojo` or `null`
+    
+
+Not known when `jmsMessageType` is set.
+
+ |
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `map` or `null` | Text is sent as a TextMessage; bytes, a stream or a file as a BytesMessage; a Map of simple values as a MapMessage; null as an empty Message. A number, a List or another Serializable object fails unless objectMessageEnabled; a body that is not Serializable is sent as an empty Message.
+
+-   With `objectMessageEnabled=true`: `text`, `bytes`, `stream`, `file`, `map`, `value`, `list`, `pojo` or `null`
+    
+
+Not known when `jmsMessageType` or `allowNullBody` is set.
+
+ |
+| **Producer output** | `unknown` | 
+
+Unchanged for a message that expects no reply (InOnly). A message that expects one (InOut) gets the body of the reply, as the consumer gives it.
+
+-   With `exchangePattern=InOnly`: `unchanged`
+    
+-   With `disableReplyTo=true`: `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component was reworked from Camel 3.8 onwards to be similar to the existing Camel JMS component that is based on Spring JMS.
@@ -501,7 +554,21 @@ For the `exchange.in.header` the following rules apply for the header keys:
 
 ### Message Content
 
-To deliver content over the wire, we must ensure that the body of the message that is being delivered adheres to the JMS Message Specification. Therefore, all that are produced must either be primitives or their counter-objects (such as `Integer`, `Long`, `Character`). The types, `String`, `CharSequence`, `Date`, `BigDecimal` and `BigInteger` are all converted to their `toString()` representation. All other types are dropped.
+The values of the headers sent as JMS properties must either be primitives or their counter-objects (such as `Integer`, `Long`, `Character`). The types, `String`, `CharSequence`, `Date`, `BigDecimal` and `BigInteger` are all converted to their `toString()` representation. All other header values are dropped.
+
+The body is mapped to and from a JMS message as follows (unless the option `jmsMessageType` forces a type):
+
+  
+| Camel body | JMS message | Body when consumed |
+| --- | --- | --- |
+| `String` or XML `Node` | `TextMessage` | `String` |
+| `byte[]`, `InputStream`, `Reader`, `ByteBuffer`, `File`, `Path` or `StreamCache` | `BytesMessage` | `byte[]` |
+| `Map` (of simple values) | `MapMessage` | `Map` |
+| `null` | `Message` | `null` |
+| Other `Serializable` object (such as a number or a `List`) | `ObjectMessage` (only with `objectMessageEnabled=true`, fails otherwise) | the object |
+| Any other object | `Message` without a body (a WARN is logged) | `null` |
+
+A received `StreamMessage` is not mapped: the body is the `jakarta.jms.StreamMessage` itself. With `mapJmsMessage=false` the body is always the received `jakarta.jms.Message`.
 
 ### Clustering
 

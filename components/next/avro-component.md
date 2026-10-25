@@ -153,6 +153,30 @@ The Avro RPC component supports the following message header(s), which is/are li
 | --- | --- | --- | --- |
 | **CamelAvroMessageName** (common) Constant: [`AVRO_MESSAGE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-avro-rpc/latest/org/apache/camel/component/avro/AvroConstants.html#AVRO_MESSAGE_NAME) | The name of the message to send. In consumer overrides message name from URI (if any). |  | String |
 
+## Message Body
+
+The message body at each side of the Avro RPC component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `list` (`java.lang.Object[]`) | 
+An Object array of the parameters of the called message, in the order of the protocol, with the message name in the CamelAvroMessageName header. With singleParameter the one parameter itself, such as a record.
+
+-   With `singleParameter=true`: `unknown`
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `any` | The response of the message, of its type in the protocol, such as the record class; it is not converted, so text or a Map fails for a record. Ignored for a message with a null response. |
+| **Producer input** | `list`, `pojo`, `text` or `value` | An Object array of the parameters of the message, in the order of the protocol, or the one parameter itself, such as a record. A java.util.List is not unpacked and a Map is not a record: build the parameter types of the protocol. The message name comes from the CamelAvroMessageName header, or else from the endpoint. |
+| **Producer output** | `unknown` | The response of the message, of its type in the protocol, such as the record class; no body for a message with a null response. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Apache Avro Overview
 
 Avro allows you to define message types and a protocol using a json like format and then generate java code for the specified types and messages. An example of how a schema looks like is below.
@@ -410,7 +434,7 @@ from("avro:netty:localhost:{{avroport}}/get?protocolClassName=org.apache.camel.a
             ref: getProcessor
 ```
 
-In the example above, get takes only one parameter, so `singleParameter` is used and `getProcessor` will receive Value class directly in body, while `putProcessor` will receive an array of size 2 with `String` key and `Value` value filled as array contents.
+In the example above, get takes only one parameter, so `singleParameter` is used and `getProcessor` will receive the `Key` directly in the body, while `putProcessor` will receive an array of size 2 with the `Key` and the `Value` as its contents.
 
 ### Avro via HTTP SPI
 

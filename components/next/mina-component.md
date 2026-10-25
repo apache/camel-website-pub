@@ -288,6 +288,59 @@ The Mina component supports the following message header(s), which is/are listed
 | **CamelMinaLocalAddress** (consumer) Constant: [`MINA_LOCAL_ADDRESS`](https://javadoc.io/doc/org.apache.camel/camel-mina/latest/org/apache/camel/component/mina/MinaConstants.html#MINA_LOCAL_ADDRESS) | The socket address of local machine that received the message. |  | SocketAddress |
 | **CamelMinaRemoteAddress** (consumer) Constant: [`MINA_REMOTE_ADDRESS`](https://javadoc.io/doc/org.apache.camel/camel-mina/latest/org/apache/camel/component/mina/MinaConstants.html#MINA_REMOTE_ADDRESS) | The socket address of the remote machine that send the message. |  | SocketAddress |
 
+## Message Body
+
+The message body at each side of the Mina component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` (`java.lang.String`) | The data received as a String: one line with textline=true. The default object codec over TCP accepts only a String unless objectCodecPattern lists the classes to deserialize. Over UDP the datagram as a byte array.
+-   With `protocol=udp`: `bytes` (`byte[]`)
+    
+-   With `allowDefaultCodec=false`: `pojo` (`org.apache.mina.core.buffer.IoBuffer`)
+    
+
+Not known when `codec` or `objectCodecPattern` or `transferExchange` is set.
+
+ |
+| **Consumer reply** | `null` or `text` | The body the route ends with is written back to the caller, also with sync=false. Send a String: with textline=true other bodies are written with toString(), and the object codec writes any Serializable object, which a Mina client accepts only when its objectCodecPattern lists the class. No body sends nothing and closes the connection.
+
+-   With `protocol=udp`: `null`, `text`, `bytes`, `stream` or `file`
+    
+-   With `allowDefaultCodec=false`: `null` or `pojo` (`org.apache.mina.core.buffer.IoBuffer`)
+    
+
+Not known when `codec` or `transferExchange` is set.
+
+ |
+| **Producer input** | `null` or `text` | The data to send: a String. The default object codec over TCP serializes the body, but a Mina server accepts only a String unless its objectCodecPattern lists the class, and a stream fails; textline=true converts any body to a line of text. No body sends nothing.
+
+-   With `textline=true`: `any`
+    
+-   With `protocol=udp`: `null`, `text`, `bytes`, `stream` or `file`
+    
+-   With `allowDefaultCodec=false`: `null` or `pojo` (`org.apache.mina.core.buffer.IoBuffer`)
+    
+
+Not known when `codec` or `transferExchange` is set.
+
+ |
+| **Producer output** | `text` or `null` (`java.lang.String`) | With sync=true (the default) the reply of the server as a String, or a byte array over UDP. No body is not sent and stays null. With sync=false an InOut exchange ends with an empty message.
+
+-   With `sync=false`: `unchanged` or `null`
+    
+-   With `protocol=udp`: `bytes` or `null` (`byte[]`)
+    
+-   With `allowDefaultCodec=false`: `pojo` or `null` (`org.apache.mina.core.buffer.IoBuffer`)
+    
+
+Not known when `codec` or `objectCodecPattern` or `transferExchange` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Using a custom codec

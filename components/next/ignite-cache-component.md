@@ -6,7 +6,7 @@
 
 The Ignite Cache endpoint is one of camel-ignite endpoints that allow you to interact with an [Ignite Cache](https://apacheignite.readme.io/docs/data-grid). This offers both a Producer (to invoke cache operations on an Ignite cache) and a Consumer (to consume changes from a continuous query).
 
-The cache value is always the body of the message, whereas the cache key is always stored in the `CamelIgniteCacheKey` message header.
+The cache value is the body of the message, and the cache key is in the `CamelIgniteCacheKey` message header. GET and REMOVE take the key from the body when that header is not set, and a PUT of a `Map` body puts all its entries.
 
 Even if you configure a fixed operation in the endpoint URI, you can vary it per-exchange by setting the `CamelIgniteCacheOperation` message header.
 
@@ -252,6 +252,50 @@ Enum values:
  |  | EventType |
 | **CamelIgniteCacheName** (consumer) Constant: [`IGNITE_CACHE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_CACHE_NAME) | This header carries the cache name for which a continuous query event was received (consumer). It does not allow you to dynamically change the cache against which a producer operation is performed. Use EIPs for that (e.g. recipient list, dynamic router). |  | String |
 | **CamelIgniteCacheOldValue** (common) Constant: [`IGNITE_CACHE_OLD_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_CACHE_OLD_VALUE) | (producer) The old cache value to be replaced when invoking the REPLACE operation. (consumer) This header carries the old cache value when passed in the incoming cache event. |  | Object |
+
+## Message Body
+
+The message body at each side of the Ignite Cache component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `unknown` | 
+The new value of the cache entry that changed, with its key in the CamelIgniteCacheKey header, the old value in CamelIgniteCacheOldValue and the event type in CamelIgniteCacheEventType. With oneExchangePerUpdate=false a List of the CacheEntryEvents of Ignite per batch; with fireExistingQueryResults=true the entries the initial query finds come first, each as a JCache Cache.Entry.
+
+-   With `oneExchangePerUpdate=false`: `list`
+    
+-   With `fireExistingQueryResults=true`: `unknown`
+    
+
+
+
+
+
+ |
+| **Producer input** | `any` | PUT and REPLACE store the body as the value of the key in the CamelIgniteCacheKey header, and a PUT of a Map puts all its entries; no body fails. GET and REMOVE take the key from that header, or else from the body, where a Set is several keys. QUERY needs an Ignite Query in the body or the CamelIgniteCacheQuery header. SIZE, CLEAR and REBALANCE do not use the body. The operation is the operation option or the CamelIgniteCacheOperation header; with neither the producer fails. |
+| **Producer output** | `unknown` | GET gives the cached value, or null when the key is not cached, and a Map of the keys and their values for a Set of keys. QUERY gives an Iterator of the entries found, closed when the exchange completes. SIZE gives the number of entries. The others leave the body, but a PUT of a Map leaves no body.
+
+-   With `operation=PUT`: `unchanged` or `null`
+    
+-   With `operation=REPLACE`: `unchanged`
+    
+-   With `operation=REMOVE`: `unchanged`
+    
+-   With `operation=CLEAR`: `unchanged`
+    
+-   With `operation=REBALANCE`: `unchanged`
+    
+-   With `operation=SIZE`: `value` (`java.lang.Integer`)
+    
+-   With `operation=QUERY`: `iterator`
+    
+
+Not known when `propagateIncomingBodyIfNoReturnValue` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 ## Usage
 

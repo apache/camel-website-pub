@@ -201,6 +201,37 @@ Enum values:
 | **CamelHttpMethod** (producer) Constant: [`HTTP_METHOD`](https://javadoc.io/doc/org.apache.camel/camel-undertow/latest/org/apache/camel/component/undertow/UndertowConstants.html#HTTP_METHOD) | The http method. |  | String |
 | **Host** (producer) Constant: [`HOST_STRING`](https://javadoc.io/doc/org.apache.camel/camel-undertow/latest/org/apache/camel/component/undertow/UndertowConstants.html#HOST_STRING) | The host http header. |  | String |
 
+## Message Body
+
+The message body at each side of the Undertow component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes`, `null`, `map` or `text` | HTTP: the request body as a byte array for POST, PUT and PATCH, null for the other methods such as GET (a body they carry is dropped); a Map of the fields of a form or a multipart request, a file as a DataHandler (also an attachment). WebSocket: a String for a text message, a byte array for a binary one, null for the events of fireWebSocketChannelEvents.
+-   With `useStreaming=true`: `stream`, `null` or `map`
+    
+
+Not known when `undertowHttpBinding` is set.
+
+ |
+| **Consumer reply** | `null`, `text`, `bytes`, `stream` or `file` | HTTP: the response body: text, bytes, a stream or a file. A Map, a List or a POJO fails with an empty 200 response: marshal it first. A WebSocket consumer does not reply: send to the peers with a producer. |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | HTTP: the request body: text, bytes, a stream or a file; without the CamelHttpMethod header, a query string or no body sends a GET, and a body a POST. A Map, a List or a POJO is sent as an empty body: marshal it first. WebSocket: text and bytes or a stream to the peers connected to this endpoint, other bodies as their toString; no body sends nothing. |
+| **Producer output** | `bytes` or `unchanged` | 
+
+HTTP: the response body as a byte array, an empty one (not null) for a response without a body. WebSocket: the body is kept.
+
+-   With `useStreaming=true`: `stream` or `unchanged`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## OAuth Bearer token validation
 
 Undertow HTTP and WebSocket consumers can validate incoming `Authorization: Bearer` tokens by setting the `oauthProfile` endpoint option. The profile is resolved through Camel’s `OAuthTokenValidationFactory` SPI. The [camel-oauth](../4.22.x/others/oauth.md) component provides the default implementation for standalone Camel applications; see its documentation for validation profile options and production hardening (expected issuer and audience, HTTPS for JWKS, OIDC discovery, and introspection endpoints). Runtimes can also provide their own implementation.

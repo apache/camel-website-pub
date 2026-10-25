@@ -172,6 +172,31 @@ Enum values:
 
  |  | VertxWebsocketEvent |
 
+## Message Body
+
+The message body at each side of the Vert.x WebSocket component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `bytes` | 
+The message received: a String for a text frame, a byte array for a binary frame. With fireWebSocketConnectionEvents=true, the OPEN event has the Vert.x ServerWebSocket as body and the CLOSE event no body: the CamelVertxWebsocket.event header tells them apart.
+
+-   With `fireWebSocketConnectionEvents=true`: `text`, `bytes`, `pojo` or `null`
+    
+
+
+
+
+
+ |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | A String is sent as a text frame and a byte array as a binary frame; any other body is converted to a String and sent as a text frame, so a stream with binary content must be converted to bytes first, and a Map or a POJO is sent as its toString: marshal it first. No body sends nothing. |
+| **Producer output** | `unchanged` | 
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The following example shows how to expose a WebSocket on [http://localhost:8080/echo](http://localhost:8080/echo) and returns an '_echo_' response back to the same channel:

@@ -108,6 +108,18 @@ With the following _path_ and _query_ parameters:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **allowUrlBody** (security) | Whether to allow a message body that is not LDIF content to be dereferenced as a URL and fetched. When disabled (default), a body that does not start with version: 1 is rejected with an IllegalArgumentException instead of being fetched as a URL, which avoids a content-sniffed URL fetch (SSRF) from untrusted body content. | false | boolean |
 
+## Message Body
+
+The message body at each side of the LDIF component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The LDIF text, starting with version: 1, or bytes, a stream or a file of it. With allowUrlBody, a text that is not LDIF is read as the URL of the LDIF file; otherwise it fails, as does a Map or a POJO. |
+| **Producer output** | `list` or `null` | A List of one status String per LDIF entry: success, or the error message from the server, which can be empty. No body or an empty body gives null. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Body types:

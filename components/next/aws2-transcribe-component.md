@@ -385,26 +385,13 @@ Not used: AWS reads the audio from S3, at the URI in the CamelAwsTranscribeMedia
 
 
  |
-| **Producer output** | `pojo` | 
-
-The response of the AWS SDK for the operation, such as the StartTranscriptionJobResponse of startTranscriptionJob. The transcript is not in the body: the job writes it to S3, at the URI that getTranscriptionJob gives. deleteTranscriptionJob and deleteVocabulary keep the body.
-
--   With `operation=deleteTranscriptionJob`: `unchanged`
-    
--   With `operation=deleteVocabulary`: `unchanged`
-    
-
-
-
-
-
- |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the StartTranscriptionJobResponse of startTranscriptionJob. The transcript is not in the body: the job writes it to S3, at the URI that getTranscriptionJob gives. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 
 Required Transcribe component options
 
-You have to provide the amazonTranscribeClient in the Registry or your accessKey and secretKey to access the [Amazon Transcribe](https://aws.amazon.com/transcribe/) service.
+You have to provide the transcribeClient in the Registry or your accessKey and secretKey to access the [Amazon Transcribe](https://aws.amazon.com/transcribe/) service.
 
 ## Usage
 

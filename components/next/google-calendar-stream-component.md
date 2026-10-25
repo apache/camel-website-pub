@@ -231,6 +231,17 @@ The Google Calendar Stream component supports the following message header(s), w
 | --- | --- | --- | --- |
 | **CamelGoogleCalendarEventId** (consumer) Constant: [`EVENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-calendar/latest/org/apache/camel/component/google/calendar/stream/GoogleCalendarStreamConstants.html#EVENT_ID) | The calendar event id. |  | String |
 
+## Message Body
+
+The message body at each side of the Google Calendar Stream component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `pojo` (`com.google.api.services.calendar.model.Event`) | One message per event of the calendar that is new or changed since the last poll, with its id in the CamelGoogleCalendarEventId header. The Event is a GenericJson, which is also a Map of the JSON fields. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The consumer polls a calendar and sends each event as a message, with its id in the `CamelGoogleCalendarEventId` header. With `considerLastUpdate`, each poll starts from the last update of the events it has already seen:

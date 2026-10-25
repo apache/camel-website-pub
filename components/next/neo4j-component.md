@@ -207,6 +207,18 @@ Enum values:
 | **CamelNeo4jVectorEmbeddingId** (producer) Constant: [`VECTOR_ID`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#VECTOR_ID) | Vector Id for the embedding. |  | String |
 | **CamelNeo4jLabel** (producer) Constant: [`LABEL`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#LABEL) | Label for the Node - used when inserting from Embeddings. |  | String |
 
+## Message Body
+
+The message body at each side of the Neo4j component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | What the operation of the CamelNeo4jOperation header needs: CREATE\_NODE the properties of the node as a Map or as JSON text (bytes, a stream, a POJO or no body fail); the two Cypher operations the query as text (bytes or a stream are read as text); CREATE\_VECTOR a Neo4jEmbedding, or the text with the float\[\] vector in the CamelLangChain4jEmbeddingsVector header; VECTOR\_SIMILARITY\_SEARCH a Neo4jEmbedding, a float\[\] or a List of Float. The other operations do not use the body. |
+| **Producer output** | `list` or `unchanged` | RETRIEVE\_NODES, RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY and VECTOR\_SIMILARITY\_SEARCH give a List of Maps, the properties of each node found (empty when none; the first column a Cypher query returns must be a node), with the Records of the driver in the CamelNeo4jQueryResultListNeo4jNodes header. The other operations leave the body unchanged, with the counts in the CamelNeo4jQueryResult headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Graph database usage - simple operations
 
 ### Create a Node

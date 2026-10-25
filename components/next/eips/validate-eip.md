@@ -21,6 +21,17 @@ The Validate eip supports the following options which are listed below.
 | **expression** | **Required** The predicate expression to validate against the current message. If the predicate returns false, a PredicateValidationException is thrown. |  | ExpressionDefinition |
 | **predicateExceptionFactory** | Reference to a custom PredicateExceptionFactory for creating the exception when validation fails. |  | PredicateExceptionFactory |
 
+## Message Body
+
+The message body at each side of the Validate EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | `unchanged` | Fails the exchange when the predicate does not match: the body stays as it was. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Exchange properties
 
 The Validate eip has no exchange properties.

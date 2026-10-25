@@ -72,14 +72,14 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_5_yaml--panel" class="tabpanel" aria-labelledby="_tabs_5_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getParameter
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/config/endpoint
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: getParameter</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_getparameters"><a class="anchor" href="#_getparameters"></a>getParameters</h4> <div class="paragraph"> <p>This operation retrieves multiple parameters by their names.</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getParameters")
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/config/endpoint
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: getParameter</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_getparameters"><a class="anchor" href="#_getparameters"></a>getParameters</h4> <div class="paragraph"> <p>This operation retrieves multiple parameters by their names.</p> </div> <div id="_tabs_6" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_6_java" class="tab"> <p>Java</p> </li> <li id="_tabs_6_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_6_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_6_java--panel" class="tabpanel" aria-labelledby="_tabs_6_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getParameters")
     .setHeader(ParameterStoreConstants.PARAMETER_NAMES, constant("/myapp/config/host,/myapp/config/port"))
     .to("aws-parameter-store://test?operation=getParameters");</code></pre> </div> </div> </div> <div id="_tabs_6_xml--panel" class="tabpanel" aria-labelledby="_tabs_6_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getParameters"/&gt;
@@ -90,14 +90,14 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_6_yaml--panel" class="tabpanel" aria-labelledby="_tabs_6_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getParameters
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreNames
-          constant: "/myapp/config/host,/myapp/config/port"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: getParameters</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_getparametersbypath"><a class="anchor" href="#_getparametersbypath"></a>getParametersByPath</h4> <div class="paragraph"> <p>This operation retrieves all parameters within a hierarchy.</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getParametersByPath")
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreNames
+            constant: "/myapp/config/host,/myapp/config/port"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: getParameters</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_getparametersbypath"><a class="anchor" href="#_getparametersbypath"></a>getParametersByPath</h4> <div class="paragraph"> <p>This operation retrieves all parameters within a hierarchy.</p> </div> <div id="_tabs_7" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_7_java" class="tab"> <p>Java</p> </li> <li id="_tabs_7_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_7_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_7_java--panel" class="tabpanel" aria-labelledby="_tabs_7_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getParametersByPath")
     .setHeader(ParameterStoreConstants.PARAMETER_PATH, constant("/myapp/config"))
     .setHeader(ParameterStoreConstants.RECURSIVE, constant(true))
     .to("aws-parameter-store://test?operation=getParametersByPath");</code></pre> </div> </div> </div> <div id="_tabs_7_xml--panel" class="tabpanel" aria-labelledby="_tabs_7_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -112,17 +112,17 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_7_yaml--panel" class="tabpanel" aria-labelledby="_tabs_7_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getParametersByPath
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStorePath
-          constant: /myapp/config
-      - setHeader:
-          name: CamelAwsParameterStoreRecursive
-          constant: "true"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: getParametersByPath</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_putparameter"><a class="anchor" href="#_putparameter"></a>putParameter</h4> <div class="paragraph"> <p>This operation creates or updates a parameter.</p> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:putParameter")
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStorePath
+            constant: /myapp/config
+        - setHeader:
+            name: CamelAwsParameterStoreRecursive
+            constant: "true"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: getParametersByPath</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_putparameter"><a class="anchor" href="#_putparameter"></a>putParameter</h4> <div class="paragraph"> <p>This operation creates or updates a parameter.</p> </div> <div id="_tabs_8" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_8_java" class="tab"> <p>Java</p> </li> <li id="_tabs_8_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_8_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_8_java--panel" class="tabpanel" aria-labelledby="_tabs_8_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:putParameter")
     .setHeader(ParameterStoreConstants.PARAMETER_NAME, constant("/myapp/config/endpoint"))
     .setHeader(ParameterStoreConstants.PARAMETER_TYPE, constant("String"))
     .setBody(constant("http://localhost:8080"))
@@ -141,19 +141,19 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_8_yaml--panel" class="tabpanel" aria-labelledby="_tabs_8_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:putParameter
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/config/endpoint
-      - setHeader:
-          name: CamelAwsParameterStoreType
-          constant: String
-      - setBody:
-          constant: "http://localhost:8080"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: putParameter</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>For SecureString parameters:</p> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:putSecureParameter")
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/config/endpoint
+        - setHeader:
+            name: CamelAwsParameterStoreType
+            constant: String
+        - setBody:
+            constant: "http://localhost:8080"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: putParameter</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>For SecureString parameters:</p> </div> <div id="_tabs_9" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_9_java" class="tab"> <p>Java</p> </li> <li id="_tabs_9_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_9_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_9_java--panel" class="tabpanel" aria-labelledby="_tabs_9_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:putSecureParameter")
     .setHeader(ParameterStoreConstants.PARAMETER_NAME, constant("/myapp/secrets/api-key"))
     .setHeader(ParameterStoreConstants.PARAMETER_TYPE, constant("SecureString"))
     .setBody(constant("my-secret-api-key"))
@@ -172,19 +172,19 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_9_yaml--panel" class="tabpanel" aria-labelledby="_tabs_9_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:putSecureParameter
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/secrets/api-key
-      - setHeader:
-          name: CamelAwsParameterStoreType
-          constant: SecureString
-      - setBody:
-          constant: my-secret-api-key
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: putParameter</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_deleteparameter"><a class="anchor" href="#_deleteparameter"></a>deleteParameter</h4> <div class="paragraph"> <p>This operation deletes a single parameter.</p> </div> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteParameter")
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/secrets/api-key
+        - setHeader:
+            name: CamelAwsParameterStoreType
+            constant: SecureString
+        - setBody:
+            constant: my-secret-api-key
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: putParameter</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_deleteparameter"><a class="anchor" href="#_deleteparameter"></a>deleteParameter</h4> <div class="paragraph"> <p>This operation deletes a single parameter.</p> </div> <div id="_tabs_10" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_10_java" class="tab"> <p>Java</p> </li> <li id="_tabs_10_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_10_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_10_java--panel" class="tabpanel" aria-labelledby="_tabs_10_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteParameter")
     .setHeader(ParameterStoreConstants.PARAMETER_NAME, constant("/myapp/config/old-endpoint"))
     .to("aws-parameter-store://test?operation=deleteParameter");</code></pre> </div> </div> </div> <div id="_tabs_10_xml--panel" class="tabpanel" aria-labelledby="_tabs_10_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deleteParameter"/&gt;
@@ -195,14 +195,14 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_10_yaml--panel" class="tabpanel" aria-labelledby="_tabs_10_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteParameter
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/config/old-endpoint
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: deleteParameter</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_deleteparameters"><a class="anchor" href="#_deleteparameters"></a>deleteParameters</h4> <div class="paragraph"> <p>This operation deletes multiple parameters.</p> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteParameters")
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/config/old-endpoint
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: deleteParameter</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_deleteparameters"><a class="anchor" href="#_deleteparameters"></a>deleteParameters</h4> <div class="paragraph"> <p>This operation deletes multiple parameters.</p> </div> <div id="_tabs_11" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_11_java" class="tab"> <p>Java</p> </li> <li id="_tabs_11_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_11_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_11_java--panel" class="tabpanel" aria-labelledby="_tabs_11_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:deleteParameters")
     .setHeader(ParameterStoreConstants.PARAMETER_NAMES, constant("/myapp/config/old1,/myapp/config/old2"))
     .to("aws-parameter-store://test?operation=deleteParameters");</code></pre> </div> </div> </div> <div id="_tabs_11_xml--panel" class="tabpanel" aria-labelledby="_tabs_11_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:deleteParameters"/&gt;
@@ -213,14 +213,14 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_11_yaml--panel" class="tabpanel" aria-labelledby="_tabs_11_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:deleteParameters
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreNames
-          constant: "/myapp/config/old1,/myapp/config/old2"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: deleteParameters</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_describeparameters"><a class="anchor" href="#_describeparameters"></a>describeParameters</h4> <div class="paragraph"> <p>This operation lists parameter metadata.</p> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:describeParameters")
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreNames
+            constant: "/myapp/config/old1,/myapp/config/old2"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: deleteParameters</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_describeparameters"><a class="anchor" href="#_describeparameters"></a>describeParameters</h4> <div class="paragraph"> <p>This operation lists parameter metadata.</p> </div> <div id="_tabs_12" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_12_java" class="tab"> <p>Java</p> </li> <li id="_tabs_12_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_12_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_12_java--panel" class="tabpanel" aria-labelledby="_tabs_12_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:describeParameters")
     .setHeader(ParameterStoreConstants.MAX_RESULTS, constant(10))
     .to("aws-parameter-store://test?operation=describeParameters");</code></pre> </div> </div> </div> <div id="_tabs_12_xml--panel" class="tabpanel" aria-labelledby="_tabs_12_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:describeParameters"/&gt;
@@ -231,14 +231,14 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_12_yaml--panel" class="tabpanel" aria-labelledby="_tabs_12_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:describeParameters
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreMaxResults
-          constant: "10"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: describeParameters</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_getparameterhistory"><a class="anchor" href="#_getparameterhistory"></a>getParameterHistory</h4> <div class="paragraph"> <p>This operation retrieves the history of a parameter.</p> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getParameterHistory")
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreMaxResults
+            constant: "10"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: describeParameters</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect3"> <h4 id="_getparameterhistory"><a class="anchor" href="#_getparameterhistory"></a>getParameterHistory</h4> <div class="paragraph"> <p>This operation retrieves the history of a parameter.</p> </div> <div id="_tabs_13" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_13_java" class="tab"> <p>Java</p> </li> <li id="_tabs_13_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_13_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_13_java--panel" class="tabpanel" aria-labelledby="_tabs_13_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:getParameterHistory")
     .setHeader(ParameterStoreConstants.PARAMETER_NAME, constant("/myapp/config/endpoint"))
     .to("aws-parameter-store://test?operation=getParameterHistory");</code></pre> </div> </div> </div> <div id="_tabs_13_xml--panel" class="tabpanel" aria-labelledby="_tabs_13_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:getParameterHistory"/&gt;
@@ -249,14 +249,14 @@ camel.vault.aws.uriEndpointOverride = &lt;localstack_url&gt;</code></pre> </div>
 &lt;/route&gt;</code></pre> </div> </div> </div> <div id="_tabs_13_yaml--panel" class="tabpanel" aria-labelledby="_tabs_13_yaml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:getParameterHistory
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/config/endpoint
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: getParameterHistory</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>Maven users will need to add the following dependency to their pom.xml.</p> </div> <div class="paragraph"> <p><strong>pom.xml</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/config/endpoint
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: getParameterHistory</code></pre> </div> </div> </div> </div> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_dependencies"><a class="anchor" href="#_dependencies"></a>Dependencies</h2> <div class="sectionbody"> <div class="paragraph"> <p>Maven users will need to add the following dependency to their pom.xml.</p> </div> <div class="paragraph"> <p><strong>pom.xml</strong></p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel&lt;/groupId&gt;
     &lt;artifactId&gt;camel-aws-parameter-store&lt;/artifactId&gt;
     &lt;version&gt;${camel-version}&lt;/version&gt;

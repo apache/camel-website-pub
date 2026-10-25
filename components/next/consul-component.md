@@ -413,6 +413,116 @@ Enum values:
 | **CamelConsulPreparedQueryID** (producer) Constant: [`CONSUL_PREPARED_QUERY_ID`](https://javadoc.io/doc/org.apache.camel/camel-consul/latest/org/apache/camel/component/consul/ConsulConstants.html#CONSUL_PREPARED_QUERY_ID) | The id of the prepared query. |  | String |
 | **CamelConsulServiceId** (producer) Constant: [`CONSUL_SERVICE_ID`](https://javadoc.io/doc/org.apache.camel/camel-consul/latest/org/apache/camel/component/consul/ConsulConstants.html#CONSUL_SERVICE_ID) | The service id for agent deregistration. |  | String |
 
+## Message Body
+
+The message body at each side of the Consul component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `text` or `null` | The kv consumer: the value of the key (of each key under it with recursive) base64 encoded as Consul stores it, decoded with valueAsString=true, with the key, flags and indexes in headers; null for a key without value. The event consumer: the payload of the event as text, with its name and id in headers. |
+| **Producer input** | `any` | 
+PUT and LOCK store the body converted to text as the value, and FIRE sends it as the payload: a Map or a POJO is stored as its toString, so marshal it first. REGISTER, DEREGISTER of catalog and CREATE take the model object of the Consul client, such as a Registration or a Session; the session and prepared query actions read the id from the body when its header is not set; the other actions take their input from headers.
+
+-   With `action=PUT`: `text`, `bytes`, `stream`, `file`, `value` or `null`
+    
+-   With `action=LOCK`: `text`, `bytes`, `stream`, `file`, `value` or `null`
+    
+-   With `action=FIRE`: `text`, `bytes`, `stream`, `file` or `value`
+    
+-   With `action=REGISTER`: `pojo`
+    
+-   With `action=CREATE`: `pojo`
+    
+
+
+
+
+
+ |
+| **Producer output** | `pojo`, `list`, `map`, `text` or `unchanged` | 
+
+The response of Consul as the model objects of the Consul client: a List or a Map of them for the list actions, the Value of the key for GET\_VALUE (its value base64 encoded) or the value as text with valueAsString=true, and the Event for FIRE. Unchanged for the actions that only write (PUT, the deletes, LOCK, UNLOCK, REGISTER, DEREGISTER, DESTROY) and when nothing is found, with the outcome in the CamelConsulResult header.
+
+-   With `action=CHECKS`: `map` or `list`
+    
+-   With `action=SERVICES`: `map`
+    
+-   With `action=MEMBERS`: `list`
+    
+-   With `action=AGENT`: `pojo` (`org.kiwiproject.consul.model.agent.Agent`)
+    
+-   With `action=REGISTER`: `unchanged`
+    
+-   With `action=DEREGISTER`: `unchanged`
+    
+-   With `action=PUT`: `unchanged`
+    
+-   With `action=GET_VALUE`: `pojo`, `text` or `unchanged`
+    
+-   With `action=GET_VALUES`: `list`
+    
+-   With `action=GET_KEYS`: `list`
+    
+-   With `action=GET_SESSIONS`: `pojo` (`java.util.Optional<java.lang.String>`)
+    
+-   With `action=DELETE_KEY`: `unchanged`
+    
+-   With `action=DELETE_KEYS`: `unchanged`
+    
+-   With `action=LOCK`: `unchanged`
+    
+-   With `action=UNLOCK`: `unchanged`
+    
+-   With `action=LIST_DATACENTERS`: `list`
+    
+-   With `action=LIST_NODES`: `list`
+    
+-   With `action=LIST_SERVICES`: `map`
+    
+-   With `action=GET_SERVICE`: `list`
+    
+-   With `action=GET_NODE`: `pojo` (`org.kiwiproject.consul.model.catalog.CatalogNode`)
+    
+-   With `action=NODE_CHECKS`: `list`
+    
+-   With `action=SERVICE_CHECKS`: `list`
+    
+-   With `action=SERVICE_INSTANCES`: `list`
+    
+-   With `action=CREATE`: `pojo` or `text`
+    
+-   With `action=DESTROY`: `unchanged`
+    
+-   With `action=INFO`: `pojo` or `unchanged`
+    
+-   With `action=LIST`: `pojo` or `list`
+    
+-   With `action=RENEW`: `pojo` (`java.util.Optional<org.kiwiproject.consul.model.session.SessionInfo>`)
+    
+-   With `action=GET`: `pojo` (`java.util.Optional<org.kiwiproject.consul.model.query.StoredQuery>`)
+    
+-   With `action=EXECUTE`: `pojo` (`org.kiwiproject.consul.model.query.QueryResults`)
+    
+-   With `action=FIRE`: `pojo` (`org.kiwiproject.consul.model.event.Event`)
+    
+-   With `action=DATACENTERS`: `list`
+    
+-   With `action=NODES`: `list`
+    
+-   With `action=LEADER`: `text` (`java.lang.String`)
+    
+-   With `action=PEERS`: `list`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Api Endpoint
@@ -467,7 +577,7 @@ consul:agent?action=REGISTER
 
 ### Key-value store
 
-The `kv` endpoint reads and writes the key-value store of Consul. The action comes from the `action` option or the `CamelConsulAction` header (the header wins), and the key from the `key` option or the `CamelConsulKey` header. A PUT stores the message body as the value. A GET\_VALUE sets the value as the message body, and `valueAsString` makes it a string:
+The `kv` endpoint reads and writes the key-value store of Consul. The action comes from the `action` option or the `CamelConsulAction` header (the header wins), and the key from the `key` option or the `CamelConsulKey` header. A PUT stores the message body, converted to a string, as the value. A GET\_VALUE sets the `Value` of the Consul client as the message body, which holds the value base64 encoded, and `valueAsString` makes the body the value as a string:
 
 ```yaml
 - route:
@@ -501,7 +611,7 @@ The `kv` endpoint reads and writes the key-value store of Consul. The action com
             message: "The greeting is ${body}"
 ```
 
-A consumer of the `kv` endpoint watches a key with a blocking query of `blockSeconds` (10 by default). The route gets the value each time the query returns: when the value changes, or when the wait ends.
+A consumer of the `kv` endpoint watches a key with a blocking query of `blockSeconds` (10 by default). The route gets the value each time the query returns: when the value changes, or when the wait ends. The body is the value base64 encoded, as Consul stores it, unless `valueAsString` is set.
 
 ```yaml
 - route:

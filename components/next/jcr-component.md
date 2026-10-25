@@ -143,6 +143,19 @@ The JCR component supports the following message header(s), which is/are listed 
 | **CamelJcrOperation** (producer) Constant: [`JCR_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-jcr/latest/org/apache/camel/component/jcr/JcrConstants.html#JCR_OPERATION) | The operation to perform. Possible values: CamelJcrInsert or CamelJcrGetById. | CamelJcrInsert | String |
 | **CamelJcrNodeType** (producer) Constant: [`JCR_NODE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-jcr/latest/org/apache/camel/component/jcr/JcrConstants.html#JCR_NODE_TYPE) | The node type of the target node. |  | String |
 
+## Message Body
+
+The message body at each side of the JCR component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `list` (`java.util.List`) | The JCR events received in one callback: a List of javax.jcr.observation.Event. |
+| **Producer input** | `any` | Insert (the default) ignores the body and stores the headers as node properties; getById (CamelJcrOperation header) reads the node identifier from the body as a String. |
+| **Producer output** | `text` or `unchanged` | Insert sets the identifier of the node, a String; getById leaves the body and sets the node properties as headers. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Example
 
 The snippet below creates a node named `node` under the `/home/test` node in the content repository. One additional property is added to the node as well: `my.contents.property` which will contain the body of the message being sent.

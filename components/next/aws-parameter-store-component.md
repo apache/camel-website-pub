@@ -747,14 +747,14 @@ from("direct:getParameter")
 - route:
     from:
       uri: direct:getParameter
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/config/endpoint
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: getParameter
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/config/endpoint
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: getParameter
 ```
 
 #### getParameters
@@ -788,14 +788,14 @@ from("direct:getParameters")
 - route:
     from:
       uri: direct:getParameters
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreNames
-          constant: "/myapp/config/host,/myapp/config/port"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: getParameters
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreNames
+            constant: "/myapp/config/host,/myapp/config/port"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: getParameters
 ```
 
 #### getParametersByPath
@@ -833,17 +833,17 @@ from("direct:getParametersByPath")
 - route:
     from:
       uri: direct:getParametersByPath
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStorePath
-          constant: /myapp/config
-      - setHeader:
-          name: CamelAwsParameterStoreRecursive
-          constant: "true"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: getParametersByPath
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStorePath
+            constant: /myapp/config
+        - setHeader:
+            name: CamelAwsParameterStoreRecursive
+            constant: "true"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: getParametersByPath
 ```
 
 #### putParameter
@@ -885,19 +885,19 @@ from("direct:putParameter")
 - route:
     from:
       uri: direct:putParameter
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/config/endpoint
-      - setHeader:
-          name: CamelAwsParameterStoreType
-          constant: String
-      - setBody:
-          constant: "http://localhost:8080"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: putParameter
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/config/endpoint
+        - setHeader:
+            name: CamelAwsParameterStoreType
+            constant: String
+        - setBody:
+            constant: "http://localhost:8080"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: putParameter
 ```
 
 For SecureString parameters:
@@ -937,19 +937,19 @@ from("direct:putSecureParameter")
 - route:
     from:
       uri: direct:putSecureParameter
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/secrets/api-key
-      - setHeader:
-          name: CamelAwsParameterStoreType
-          constant: SecureString
-      - setBody:
-          constant: my-secret-api-key
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: putParameter
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/secrets/api-key
+        - setHeader:
+            name: CamelAwsParameterStoreType
+            constant: SecureString
+        - setBody:
+            constant: my-secret-api-key
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: putParameter
 ```
 
 #### deleteParameter
@@ -983,14 +983,14 @@ from("direct:deleteParameter")
 - route:
     from:
       uri: direct:deleteParameter
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/config/old-endpoint
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: deleteParameter
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/config/old-endpoint
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: deleteParameter
 ```
 
 #### deleteParameters
@@ -1024,14 +1024,14 @@ from("direct:deleteParameters")
 - route:
     from:
       uri: direct:deleteParameters
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreNames
-          constant: "/myapp/config/old1,/myapp/config/old2"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: deleteParameters
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreNames
+            constant: "/myapp/config/old1,/myapp/config/old2"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: deleteParameters
 ```
 
 #### describeParameters
@@ -1065,14 +1065,14 @@ from("direct:describeParameters")
 - route:
     from:
       uri: direct:describeParameters
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreMaxResults
-          constant: "10"
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: describeParameters
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreMaxResults
+            constant: "10"
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: describeParameters
 ```
 
 #### getParameterHistory
@@ -1106,14 +1106,14 @@ from("direct:getParameterHistory")
 - route:
     from:
       uri: direct:getParameterHistory
-    steps:
-      - setHeader:
-          name: CamelAwsParameterStoreName
-          constant: /myapp/config/endpoint
-      - to:
-          uri: aws-parameter-store://test
-          parameters:
-            operation: getParameterHistory
+      steps:
+        - setHeader:
+            name: CamelAwsParameterStoreName
+            constant: /myapp/config/endpoint
+        - to:
+            uri: aws-parameter-store://test
+            parameters:
+              operation: getParameterHistory
 ```
 
 ## Dependencies

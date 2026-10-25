@@ -116,6 +116,32 @@ The OpenShift Build Config component supports the following message header(s), w
 | **CamelKubernetesBuildConfigsLabels** (producer) Constant: [`KUBERNETES_BUILD_CONFIGS_LABELS`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_BUILD_CONFIGS_LABELS) | The OpenShift Config Build labels. |  | Map |
 | **CamelKubernetesBuildConfigName** (producer) Constant: [`KUBERNETES_BUILD_CONFIG_NAME`](https://javadoc.io/doc/org.apache.camel/camel-kubernetes/latest/org/apache/camel/component/kubernetes/KubernetesConstants.html#KUBERNETES_BUILD_CONFIG_NAME) | The Openshift Config Build name. |  | String |
 
+## Message Body
+
+The message body at each side of the OpenShift Build Config component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesBuildConfigName and the labels in CamelKubernetesBuildConfigsLabels. listBuildConfigs does not read the namespace header: it lists the build configs of all namespaces. |
+| **Producer output** | `list`, `pojo` or `null` | 
+A List of BuildConfig for listBuildConfigs and listBuildConfigsByLabels; the BuildConfig for getBuildConfig (null when not found).
+
+-   With `operation=listBuildConfigs`: `list` (`java.util.List<io.fabric8.openshift.api.model.BuildConfig>`)
+    
+-   With `operation=listBuildConfigsByLabels`: `list` (`java.util.List<io.fabric8.openshift.api.model.BuildConfig>`)
+    
+-   With `operation=getBuildConfig`: `pojo` or `null` (`io.fabric8.openshift.api.model.BuildConfig`)
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Supported producer operation

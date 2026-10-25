@@ -124,6 +124,18 @@ The WhatsApp component supports the following message header(s), which is/are li
 | **CamelWhatsAppPhoneNumberId** (producer) Constant: [`WHATSAPP_PHONE_NUMBER_ID`](https://javadoc.io/doc/org.apache.camel/camel-whatsapp/latest/org/apache/camel/component/whatsapp/WhatsAppConstants.html#WHATSAPP_PHONE_NUMBER_ID) | Phone Number ID taken from WhatsApp Meta for Developers Dashboard. |  | Object |
 | **CamelWhatsAppRecipientPhoneNumberId** (producer) Constant: [`WHATSAPP_RECIPIENT_PHONE_NUMBER_ID`](https://javadoc.io/doc/org.apache.camel/camel-whatsapp/latest/org/apache/camel/component/whatsapp/WhatsAppConstants.html#WHATSAPP_RECIPIENT_PHONE_NUMBER_ID) | Recipient phone number associated with Phone Number ID. |  | Object |
 
+## Message Body
+
+The message body at each side of the WhatsApp component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo` or `null` | A request of org.apache.camel.component.whatsapp.model: a TextMessageRequest, MediaMessageRequest, LocationMessageRequest, ContactMessageRequest, InteractiveMessageRequest or TemplateMessageRequest to send a message, or an UploadMediaRequest to upload a media file. Text, bytes, a Map or another POJO fails: build the request. No body sends nothing. |
+| **Producer output** | `pojo` or `unchanged` | The org.apache.camel.component.whatsapp.model.MessageResponse of WhatsApp, with the ids of the messages sent, or the id of the media uploaded. No body is left as it is. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The WhatsApp component supports only producer endpoints.

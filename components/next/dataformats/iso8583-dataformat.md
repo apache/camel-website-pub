@@ -13,7 +13,7 @@ The ISO-8583 dataformat supports the following options which are listed below.
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
-| **configFile** (common) | `j8583-config.xml` | `String` | The j8583 configuration file to load from classpath. |
+| **configFile** (common) | `j8583-config.xml` | `String` | The j8583 configuration file. It is loaded from the classpath by default; use the file: or http: prefix to load it from somewhere else. |
 | **isoType** (common) |  | `String` | The default ISO-Type to use. |
 | **allowAutoWiredMessageFormat** (advanced) | `true` | `Boolean` | Whether to auto-discover com.solab.iso8583.MessageFactory from the registry. |
 
@@ -46,6 +46,8 @@ See more information at the [j8583 docs](https://j8583.sourceforge.net/iso8583.m
 The J8583 parser can be configured using `j8583-config.xml` configuration file that should be located in `src/main/resources` so it can be loaded from the classpath.
 
 This configuration file should contain the support ISO-8583 mappings.
+
+The `configFile` option sets another configuration file. It is loaded from the classpath by default, and the prefixes `classpath:`, `file:` and `http:` select where to load it from, such as `file:/etc/myapp/j8583-config.xml`. The data format fails at startup when a `configFile` that is set cannot be found.
 
 ## Specifying ISO-Type per message
 

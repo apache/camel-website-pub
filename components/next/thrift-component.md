@@ -189,6 +189,30 @@ The Thrift component supports the following message header(s), which is/are list
 | --- | --- | --- | --- |
 | **CamelThriftMethodName** (consumer) Constant: [`THRIFT_METHOD_NAME_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-thrift/latest/org/apache/camel/component/thrift/ThriftConstants.html#THRIFT_METHOD_NAME_HEADER) | Method name handled by the consumer service. |  | String |
 
+## Message Body
+
+The message body at each side of the Thrift component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `list` or `null` | 
+A List of the arguments of the called method, in the order of the IDL, with the method name in the CamelThriftMethodName header. A method without arguments gives no body, or an empty List with synchronous=true.
+
+-   With `synchronous=true`: `list`
+    
+
+
+
+
+
+ |
+| **Consumer reply** | `any` | The result of the method: the body is converted to its return type, so text works for an i32, and a struct result needs the Thrift struct. Ignored for a void method. A body that does not convert gives the client an error, or a null result from the asynchronous server. |
+| **Producer input** | `list`, `pojo`, `text` or `null` | A List of the arguments of the method, in the order of the IDL; a body that is not a List is the one argument, no body calls a method without arguments. A binary argument is a ByteBuffer, not a byte array; a method whose one argument is a list needs it wrapped in a List. |
+| **Producer output** | `unknown` | The result of the method, of its return type in the IDL: a number, a boolean, a String, a ByteBuffer, a Thrift struct, or a List, Set or Map; no body for a void or oneway method. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Thrift method parameters mapping
 
 Parameters in the called procedure must be passed as a list of objects inside the message body. The primitives are converted from the objects on the fly. To correctly find the corresponding method, all types must be transmitted regardless of the values. Please see an example below, how to pass different parameters to the method with the Camel body:

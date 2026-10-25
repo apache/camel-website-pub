@@ -181,6 +181,28 @@ The OPA component supports the following message header(s), which is/are listed 
 | **CamelOpaDecisionFailedOpen** (producer) Constant: [`DECISION_FAILED_OPEN`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION_FAILED_OPEN) | Set to true only when the exchange proceeded because failOpen is enabled and the policy could not be evaluated - nothing authorized it. Absent on every decision an actual policy made, so a route or an audit trail can tell the two apart rather than seeing the same CamelOpaDecisionAllow=true for both. |  | Boolean |
 | **CamelOpaBatchDecision** (producer) Constant: [`BATCH_DECISION`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#BATCH_DECISION) | The per-element allow/deny verdicts of a batch evaluation (batch=true), as a List of Boolean parallel to the List body. Always overwritten by the component. An element whose evaluation could not be reached is denied, unless failOpen is set. |  | List |
 
+## Message Body
+
+The message body at each side of the OPA component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `any` | 
+Not read unless includeBody=true: then a String, number, boolean, Map or List goes into the input document as it is, and another body as its string form (a POJO as its toString). With batch=true a List, one input document per element: another body fails.
+
+-   With `batch=true`: `list`
+    
+
+
+
+
+
+ |
+| **Producer output** | `unchanged` | The body is kept: the verdict is in the CamelOpaDecisionAllow header and the decision document in CamelOpaDecision, or with batch=true a List of Boolean per element in CamelOpaBatchDecision. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The component is used in one of two ways, depending on whether a denied message should be filtered out or should stop the route.

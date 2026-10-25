@@ -116,7 +116,7 @@ Enum values:
  | StreamList | Athena2OutputType |
 | **overrideEndpoint** (producer) | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | boolean |
 | **queryExecutionId** (producer) | The unique ID identifying the query execution. |  | String |
-| **queryString** (producer) | The SQL query to run. Except for simple queries, prefer setting this as the body of the Exchange or as a header using Athena2Constants.QUERY\_STRING to avoid having to deal with URL encoding issues. |  | String |
+| **queryString** (producer) | The SQL query to run. The CamelAwsAthenaQueryString header takes precedence over this option, and the message body is used as the query only when neither the header nor this option is set. Except for simple queries, prefer setting the query in the header or as the body of the Exchange to avoid having to deal with URL encoding issues. |  | String |
 | **region** (producer) | 
 
 The region in which Athena client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example ap-east-1).
@@ -359,7 +359,7 @@ Enum values:
  | StreamList | Athena2OutputType |
 | **overrideEndpoint** (producer) | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | boolean |
 | **queryExecutionId** (producer) | The unique ID identifying the query execution. |  | String |
-| **queryString** (producer) | The SQL query to run. Except for simple queries, prefer setting this as the body of the Exchange or as a header using Athena2Constants.QUERY\_STRING to avoid having to deal with URL encoding issues. |  | String |
+| **queryString** (producer) | The SQL query to run. The CamelAwsAthenaQueryString header takes precedence over this option, and the message body is used as the query only when neither the header nor this option is set. Except for simple queries, prefer setting the query in the header or as the body of the Exchange to avoid having to deal with URL encoding issues. |  | String |
 | **region** (producer) | 
 
 The region in which Athena client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example ap-east-1).
@@ -611,7 +611,7 @@ Enum values:
 
  |  | QueryExecutionState |
 | **CamelAwsAthenaClientRequestToken** (startQueryExecution) Constant: [`CLIENT_REQUEST_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-athena/latest/org/apache/camel/component/aws2/athena/Athena2Constants.html#CLIENT_REQUEST_TOKEN) | A unique string to ensure issues queries are idempotent. It is unlikely you will need to set this. |  | String |
-| **CamelAwsAthenaQueryString** (startQueryExecution) Constant: [`QUERY_STRING`](https://javadoc.io/doc/org.apache.camel/camel-aws2-athena/latest/org/apache/camel/component/aws2/athena/Athena2Constants.html#QUERY_STRING) | The SQL query to run. Except for simple queries, prefer setting this as the body of the Exchange or as this header to avoid having to deal with URL encoding issues. |  | String |
+| **CamelAwsAthenaQueryString** (startQueryExecution) Constant: [`QUERY_STRING`](https://javadoc.io/doc/org.apache.camel/camel-aws2-athena/latest/org/apache/camel/component/aws2/athena/Athena2Constants.html#QUERY_STRING) | The SQL query to run. It takes precedence over the queryString option and the message body. Except for simple queries, prefer setting the query in this header or as the body of the Exchange to avoid having to deal with URL encoding issues. |  | String |
 | **CamelAwsAthenaEncryptionOption** (startQueryExecution) Constant: [`ENCRYPTION_OPTION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-athena/latest/org/apache/camel/component/aws2/athena/Athena2Constants.html#ENCRYPTION_OPTION) | 
 
 The encryption type to use when storing query results in S3.
@@ -645,6 +645,14 @@ Enum values:
 Required Athena component options
 
 You have to provide the amazonAthenaClient in the Registry or your accessKey and secretKey to access the [AWS Athena](https://aws.amazon.com/athena/) service.
+
+## Usage
+
+### Where the SQL comes from
+
+The `startQueryExecution` operation, which is the default operation, runs the SQL of the `CamelAwsAthenaQueryString` header, and when the header is not set, the SQL of the `queryString` option. The message body is used as the SQL only when neither the header nor the `queryString` option is set, as in the examples below. When no SQL is found, the exchange fails with an `IllegalArgumentException`.
+
+So an endpoint configured with `queryString` runs that query each time a message arrives, whatever its body.
 
 ## Examples
 

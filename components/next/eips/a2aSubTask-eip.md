@@ -22,6 +22,19 @@ The A2A Sub Task eip supports the following options which are listed below.
 | **failIfNoTaskContext** | Whether to fail if the current Exchange does not have an active A2A task context. | false | Boolean |
 | **outputs** | **Required** |  | List |
 
+## Message Body
+
+The message body at each side of the A2A Sub Task EIP: _EIP input_ is the body it needs, _EIP output_ the body after it, and _Steps_ the body its own steps start with.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **EIP output** | what its steps end with | What its steps end with. |
+| **Steps** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
+
 ## Example
 
 In this example, the route groups two stages of work and emits progress events for each:

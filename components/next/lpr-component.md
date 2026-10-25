@@ -163,6 +163,19 @@ The Printer component supports the following message header(s), which is/are lis
 | --- | --- | --- | --- |
 | **PrinterJobName** (producer) Constant: [`JOB_NAME`](https://javadoc.io/doc/org.apache.camel/camel-printer/latest/org/apache/camel/component/printer/PrinterEndpoint.html#JOB_NAME) | The name of the job. |  | String |
 
+## Message Body
+
+The message body at each side of the Printer component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The document to print, read as a stream: text, bytes, a stream or a file, in the format of the mimeType and flavor options. A Map, a POJO, a number or no body is not converted: the print job gets no data. |
+| **Producer output** | `unchanged` | 
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### Sending Messages to a Printer

@@ -119,6 +119,17 @@ Enum values:
 
  |  | ExchangePattern |
 
+## Message Body
+
+The message body at each side of the Lumberjack component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `map`, `list`, `text`, `value` or `null` | The log event: a Map of its fields, such as message, source and host, with the nested objects as Maps and the arrays as Lists. A JSON frame that is not an object gives a List, a String, a number, a boolean or null. |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 The result body is a `Map<String, Object>` object.

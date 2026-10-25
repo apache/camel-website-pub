@@ -25,9 +25,11 @@ The component supports polling OID values from an SNMP enabled device and receiv
 
 ## Snmp Producer
 
-It can also be used to request information using GET method.
+It can also be used to request information using GET method: the producer with `type=POLL`, or without a `type`, sends a GET request of the `oids` of the endpoint. With `type=GET_NEXT` the producer walks the `oids` (a GET\_NEXT request is for the producer only, the consumer supports the types `TRAP` and `POLL`). With `type=TRAP` the producer sends the `org.snmp4j.PDU` of the message body as a trap.
 
-After a `POLL`, the body is an `org.apache.camel.component.snmp.SnmpMessage`: a Camel message whose own body is the response as XML text. It does not convert to a `String` itself. A `GET_NEXT` gives a `List` of them, one per variable of the walk. A `TRAP` producer sends the body, which must be an `org.snmp4j.PDU`, and leaves it as it is.
+The response body type is `org.apache.camel.component.snmp.SnmpMessage` (a list of them for `GET_NEXT`), and it converts to `String` as the XML text shown in "The result of a poll" below.
+
+Without a port in the endpoint, the default port is 162 for `type=TRAP` and 161 otherwise.
 
 ## Configuring Options
 
@@ -149,7 +151,7 @@ Enum values:
 | **timeout** (common) | Sets the timeout value for the request in millis. | 1500 | int |
 | **type** (common) | 
 
-Which operation to perform such as poll, trap, etc.
+Which operation to perform such as poll, trap, etc. The consumer supports TRAP (receive traps) and POLL (poll the oids). The producer supports TRAP (send the PDU of the body as a trap), POLL (a GET of the oids, also done when no type is set) and GET\_NEXT (a walk of the oids, for the producer only).
 
 Enum values:
 
@@ -309,7 +311,7 @@ Not used by a POLL or GET\_NEXT, which requests the oids. A TRAP sends the body,
  |
 | **Producer output** | `pojo` (`org.apache.camel.component.snmp.SnmpMessage`) | 
 
-The response of a POLL as an SnmpMessage, a Camel message as the body, whose own body is the XML text of the consumer; it does not convert to text. A List of them, one per step of the walk, for GET\_NEXT. A TRAP leaves the body unchanged.
+The response of a POLL, or of a producer without type, as an SnmpMessage, a Camel message as the body, whose own body is the XML text of the consumer; it converts to that text. A List of them, one per step of the walk, for GET\_NEXT. A TRAP leaves the body unchanged.
 
 -   With `type=GET_NEXT`: `list` (`java.util.List<org.apache.camel.component.snmp.SnmpMessage>`)
     
@@ -370,7 +372,7 @@ As you maybe recognized, there is one more result than requested: `…​.1.3.6.
 
 .1.3.6.1.4.1.6527.3.1.2.21.2.1.50
 
-As you may notice, default `snmpVersion` is 0, which means `version1` in the endpoint if it is not set explicitly. Make sure you explicitly set `snmpVersion` which is not default value, in a case of where you are able to query SNMP tables with different versions. Other possible values are `version2c` and `version3`.
+As you may notice, default `snmpVersion` is 0, which means `version1` in the endpoint if it is not set explicitly. Make sure you explicitly set `snmpVersion` which is not default value, in a case of where you are able to query SNMP tables with different versions. Other possible values are 1, which means `version2c`, and 3, which means `version3`.
 
 ## Examples
 
@@ -382,7 +384,7 @@ Setting up a trap receiver (**Note that no OID info is needed here!**):
 
 snmp:127.0.0.1:162?protocol=udp&type=TRAP
 
-You can get the community of SNMP TRAP with message header `securityName`, peer address of the SNMP TRAP with message header `peerAddress`.
+You can get the community of SNMP TRAP with message header `securityName` (an `org.snmp4j.smi.OctetString`), peer address of the SNMP TRAP with message header `peerAddress` (an `org.snmp4j.smi.Address`).
 
 Routing example in Java: (the body of the consumer is the SNMP PDU as XML text)
 

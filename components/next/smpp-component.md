@@ -39,6 +39,14 @@ SMS is neither reliable nor secure. Users who require reliable and secure delive
 
 While the Camel component makes it as easy as possible to send messages to the SMS network, it cannot offer an easy solution to these problems.
 
+## Commands
+
+The `CamelSmppCommand` header selects the command the producer sends: `SubmitSm` (used when the header is missing), `ReplaceSm`, `QuerySm`, `SubmitMulti`, `CancelSm` or `DataSm`. The names are case-sensitive. Any other value fails the exchange with an `IllegalArgumentException` that lists the commands, so a misspelled command such as `querySm` is not sent as an SMS.
+
+`SubmitSm`, `SubmitMulti` and `ReplaceSm` send the message body as the short message, so they need a body: a message without one fails with an `SmppException` caused by an `InvalidPayloadException`. A body that can be read only once, such as a stream, is read once and replaced by its content (a String, or a byte array for an 8-bit message).
+
+The producer sets its result headers, such as `CamelSmppId` and `CamelSmppSentMessageCount`, on the message of the exchange. The body and the headers that were set before the send stay, also when the exchange pattern is `InOut`.
+
 ## Data coding, alphabet and international character sets
 
 Data coding and alphabet can be specified on a per-message basis. Default values can be specified for the endpoint. It is important to understand the relationship between these options and the way the component acts when more than one value is set.
@@ -60,7 +68,9 @@ When setting the data coding field in the outgoing message, the Camel component 
 -   the data coding specified in the endpoint configuration (URI parameter)
     
 
-In addition to trying to send the data coding value to the SMSC, the Camel component also tries to analyze the message body, converts it to a Java String (Unicode) and converts that to a byte array in the corresponding alphabet. When deciding which alphabet to use in the byte array, the Camel SMPP component does not consider the data coding value (header or configuration), it only considers the specified alphabet (from either the header or endpoint parameter). The exception is an 8-bit data coding or alphabet in a header: the body is then sent as the bytes it converts to, as they are. The same values in the endpoint parameters do not do this, so a byte array body is read as text first.
+In addition to trying to send the data coding value to the SMSC, the Camel component also tries to analyze the message body, converts it to a Java String (Unicode) and converts that to a byte array in the corresponding alphabet. When deciding which alphabet to use in the byte array, the Camel SMPP component does not consider the data coding value (header or configuration), it only considers the specified alphabet (from either the header or endpoint parameter). The exception is an 8-bit message, as described below: its body is sent as bytes, as they are.
+
+A body that is a byte array is sent as it is, without this conversion, when the message is 8-bit: the component looks at the data coding header, then the alphabet header, and, when neither header is set, at the `dataCoding` and `alphabet` endpoint options. The message is 8-bit when the value found is 8-bit (data coding `4`, or an 8-bit GSM message class such as `0xF7`; alphabet `4`), or, for the endpoint options, when either option is 8-bit. With an 8-bit header, a body of another type is converted to a byte array in the charset of the exchange. With the endpoint options, only a byte array is sent as it is: text is still encoded with the `encoding` option. An 8-bit message is split by its length in bytes.
 
 If some characters in the String cannot be represented in the chosen alphabet, they may be replaced by the question mark (`?`) symbol. Users of the API may want to consider checking if their message body can be converted to ISO-8859-1 before passing it to the component and if not, setting the alphabet header to request UCS-2 encoding. If the alphabet and data coding options are not specified at all, the component does not detect the required encoding or set the data coding for you: the text is encoded for the SMSC default alphabet (`0`), in the `encoding` of the endpoint, ISO-8859-1 by default.
 
@@ -70,7 +80,7 @@ The list of alphabet codes is specified in the SMPP specification v3.4, section 
 
 After transforming a message body from a String to a byte array, the Camel component is also responsible for splitting the message into parts (within the 140 byte SMS size limit) before passing it to JSMPP. This is completed automatically.
 
-If the GSM 3.38 alphabet is used, the component will pack up to 160 characters into the 140-byte message body. If the 8-bit alphabet (`4`) is used, then 140 bytes will be allowed within the 140-byte message body. Text in an 8-bit character set (e.g., ISO-8859-1 for Western Europe) is split by 140 bytes only with that alphabet; with the default alphabet, it is split by 160 characters. If 16 bit UCS-2 encoding is used, then just 70 characters fit into each 140-byte message.
+If the GSM 3.38 alphabet is used, the component will pack up to 160 characters into the 140-byte message body. If the 8-bit alphabet (`4`) is used, then 140 bytes will be allowed within the 140-byte message body. Text in an 8-bit character set (e.g., ISO-8859-1 for Western Europe) is split by 140 bytes only in an 8-bit message (the 8-bit alphabet, or an 8-bit data coding as described above); with the default alphabet, it is split by 160 characters. If 16 bit UCS-2 encoding is used, then just 70 characters fit into each 140-byte message.
 
 Some SMSC providers implement throttling rules. Each part of a message that has been split may be counted separately by the provider’s throttling mechanism. The Camel Throttler component can be useful for throttling messages in the SMPP route before handing them to the SMSC.
 
@@ -859,7 +869,7 @@ The SMPP component supports the following message header(s), which is/are listed
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelSmppAlphabet** (producer) Constant: [`ALPHABET`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#ALPHABET) | For SubmitSm, SubmitMulti and ReplaceSm The data coding according to the SMPP 3.4 specification, section 5.2.19. Use the URI option alphabet settings above. |  | Byte |
-| **CamelSmppCommand** (common) Constant: [`COMMAND`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#COMMAND) | The command. |  | String |
+| **CamelSmppCommand** (common) Constant: [`COMMAND`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#COMMAND) | The command to send: SubmitSm (the default when the header is missing), ReplaceSm, QuerySm, SubmitMulti, CancelSm or DataSm. The names are case-sensitive, and any other value fails. |  | String |
 | **CamelSmppCommandId** (consumer) Constant: [`COMMAND_ID`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#COMMAND_ID) | only for AlertNotification, DeliverSm and DataSm The command id field identifies the particular SMPP PDU. For the complete list of defined values see chapter 5.1.2.1 in the smpp specification v3.4. |  | Integer |
 | **CamelSmppCommandStatus** (consumer) Constant: [`COMMAND_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#COMMAND_STATUS) | only for DataSm The Command status of the message. |  | Integer |
 | **CamelSmppDataCoding** (producer) Constant: [`DATA_CODING`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#DATA_CODING) | For SubmitSm, SubmitMulti and ReplaceSm The data coding according to the SMPP 3.4 specification, section 5.2.19. Use the URI option alphabet settings above. |  | Byte |
@@ -869,7 +879,7 @@ The SMPP component supports the following message header(s), which is/are listed
 | **CamelSmppDestAddrNpi** (common) Constant: [`DEST_ADDR_NPI`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#DEST_ADDR_NPI) | Producer: only for SubmitSm, SubmitMulti, CancelSm and DataSm Defines the numeric plan indicator (NPI) to be used in the SME destination address parameters. Use the URI option sourceAddrNpi values defined above. Consumer: only for DataSm Defines the numeric plan indicator (NPI) in the destination address parameters. Use the URI option sourceAddrNpi values defined above. |  | Byte |
 | **CamelSmppDestAddrTon** (common) Constant: [`DEST_ADDR_TON`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#DEST_ADDR_TON) | Producer: only for SubmitSm, SubmitMulti, CancelSm and DataSm Defines the type of number (TON) to be used in the SME destination address parameters. Use the sourceAddrTon URI option values defined above. Consumer: only for DataSm Defines the type of number (TON) in the destination address parameters. Use the sourceAddrTon URI option values defined above. |  | Byte |
 | **CamelSmppDoneDate** (consumer) Constant: [`DONE_DATE`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#DONE_DATE) | only for smsc DeliveryReceipt The time and date at which the short message reached it’s final state. The format is as follows: YYMMDDhhmm. |  | Date |
-| **CamelSmppEncoding** (producer) Constant: [`ENCODING`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#ENCODING) | only for SubmitSm, SubmitMulti and ReplaceSm. Specifies the encoding (character set name) the text of the message body is encoded in, as the short message. A byte array body is first read as text, in the charset of the exchange, unless an 8-bit data coding or alphabet header sends it as it is. Default value is specified by the endpoint configuration parameter _encoding_. |  | String |
+| **CamelSmppEncoding** (producer) Constant: [`ENCODING`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#ENCODING) | only for SubmitSm, SubmitMulti and ReplaceSm. Specifies the encoding (character set name) the text of the message body is encoded in, as the short message. A byte array body is first read as text, in the charset of the exchange, unless an 8-bit data coding or alphabet (in a header, or in the endpoint options) sends it as it is. Default value is specified by the endpoint configuration parameter _encoding_. |  | String |
 | **CamelSmppError** (common) Constant: [`ERROR`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#ERROR) | Producer: only for SubmitMultiSm The errors which occurred by sending the short message(s) the form Map (messageID : (destAddr : address, error : errorCode)). Consumer: only for smsc DeliveryReceipt Where appropriate this may hold a Network specific error code or an SMSC error code for the attempted delivery of the message. These errors are Network or SMSC specific and are not included here. |  | String or Map |
 | **CamelSmppClass** (producer) Constant: [`ESM_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#ESM_CLASS) | the ASM class. |  | ESMClass |
 | **CamelSmppEsmeAddr** (consumer) Constant: [`ESME_ADDR`](https://javadoc.io/doc/org.apache.camel/camel-smpp/latest/org/apache/camel/component/smpp/SmppConstants.html#ESME_ADDR) | only for AlertNotification Defines the destination ESME address. For mobile terminated messages, this is the directory number of the recipient MS. |  | String |
@@ -935,20 +945,8 @@ The message body at each side of the SMPP component: _Consumer_ is the body of t
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `text`, `bytes` or `null` | A short message as text decoded by its data coding, or as bytes for an 8-bit data coding; the text of a delivery receipt, with its fields in headers. A data\_sm or an alert notification has no body. |
-| **Producer input** | `text`, `bytes` or `file` | The text of the short message: bytes or a file are read as text, unless an 8-bit CamelSmppDataCoding or CamelSmppAlphabet header sends bytes as they are. A stream is sent empty and no body fails: convert it to text first; a Map or a POJO is sent as its toString(). DataSm, QuerySm and CancelSm do not read the body. |
-| **Producer output** | `unknown` | 
-Unchanged, with the message ids in the CamelSmppId header. When the exchange expects a reply (InOut), a new message with no body and only the result headers.
-
--   With `exchangePattern=InOnly`: `unchanged`
-    
--   With `exchangePattern=InOut`: `null`
-    
-
-
-
-
-
- |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the short message: bytes, a stream or a file are read as text, unless an 8-bit CamelSmppDataCoding or CamelSmppAlphabet header, or an 8-bit dataCoding or alphabet option for a byte array, sends bytes as they are. A stream is read once and replaced by its content. No body fails; a Map or a POJO is sent as its toString(). DataSm, QuerySm and CancelSm do not read the body. |
+| **Producer output** | `unchanged` | Unchanged, with the message ids in the CamelSmppId header, also when the exchange expects a reply (InOut). |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
 

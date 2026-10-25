@@ -213,6 +213,22 @@ The RocketMQ component supports the following message header(s), which is/are li
 | **CamelRockerMQReconsumeTimes** (consumer) Constant: [`RECONSUME_TIMES`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#RECONSUME_TIMES) | Reconsume times. |  | int |
 | **CamelRockerMQPreparedTransactionOffset** (consumer) Constant: [`PREPARED_TRANSACTION_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#PREPARED_TRANSACTION_OFFSET) | Prepard transaction offset. |  | long |
 
+## Message Body
+
+The message body at each side of the RocketMQ component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Consumer** | `bytes` (`byte[]`) | The body of the RocketMQ message. The consumer does not reply: the body the route ends with is not sent back. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | What converts to a byte array: text, bytes, a stream or a file, sent as the body of the message. A Map, a POJO, a number or no body fails, and the broker rejects an empty body: marshal it first. |
+| **Producer output** | `unchanged` | The body is left as it was. With the InOut pattern and a replyToTopic, the producer waits for the reply and the body is the reply as a byte array.
+Not known when `replyToTopic` is set.
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Usage
 
 ### InOut Pattern

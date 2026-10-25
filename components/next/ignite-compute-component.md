@@ -158,6 +158,36 @@ Enum values:
 | **CamelIgniteComputeAffinityCacheName** (producer) Constant: [`IGNITE_COMPUTE_AFFINITY_CACHE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_COMPUTE_AFFINITY_CACHE_NAME) | Affinity cache name for the AFFINITY\_CALL and AFFINITY\_RUN operations. |  | String |
 | **CamelIgniteComputeAffinityKey** (producer) Constant: [`IGNITE_COMPUTE_AFFINITY_KEY`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_COMPUTE_AFFINITY_KEY) | Affinity key for the AFFINITY\_CALL and AFFINITY\_RUN operations. |  | Object |
 
+## Message Body
+
+The message body at each side of the Ignite Compute component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
+
+  
+| Side | Body | Description |
+| --- | --- | --- |
+| **Producer input** | `pojo` or `list` | The job to run on the cluster, by executionType: an IgniteCallable for CALL and AFFINITY\_CALL, an IgniteRunnable for RUN and AFFINITY\_RUN, a Collection of them for CALL and RUN, an IgniteCallable, IgniteRunnable or IgniteClosure for BROADCAST, an IgniteClosure for APPLY, and a ComputeTask or its Class for EXECUTE. Its parameters are in the CamelIgniteComputeParameters header. With taskName, EXECUTE runs that task with the body as its argument. Text or no body fails.
+Not known when `taskName` is set.
+
+ |
+| **Producer output** | `unknown` | 
+
+The result of the job. A Collection of callables, a broadcast and an APPLY of a Collection of parameters give a Collection of the results, unless an IgniteReducer in the CamelIgniteComputeReducer header reduces them. RUN, AFFINITY\_RUN and a broadcast IgniteRunnable leave no body.
+
+-   With `executionType=RUN`: `null`
+    
+-   With `executionType=AFFINITY_RUN`: `null`
+    
+-   With `executionType=BROADCAST`: `list` or `null`
+    
+
+
+
+
+
+ |
+
+The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../manual/camel-catalog.md).
+
 ## Expected payload types
 
 Each operation expects the indicated types:

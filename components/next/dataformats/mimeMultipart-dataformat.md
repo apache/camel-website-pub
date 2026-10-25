@@ -36,17 +36,7 @@ The message body at each side of the MIME Multipart data format: _Marshal input_
 | **Marshal input** | `text`, `bytes`, `stream` or `file` | The body of the first part, of the content type in the Content-Type header (application/octet-stream when not set); the attachments of the message are the other parts. |
 | **Marshal output** | `stream` | The MIME multipart in the stream cache, or a byte array when stream caching is off, with its MIME headers as Camel headers unless headersInline is true. Without attachments the body is written as it is, unless multipartWithoutAttachment or headersInline is true. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file` | A MIME multipart, with its Content-Type (multipart/\*) and MIME-Version as Camel headers, as marshal leaves them; with headersInline, the MIME headers are at the start of the body. |
-| **Unmarshal output** | `stream` | 
-The first part, decoded, as a stream, with the other parts as attachments and its Content-Type as a header. Without a multipart Content-Type header the body is given back as a stream; with headersInline, a body that is not a multipart stays as it was.
-
--   With `headersInline=true`: `stream` or `unchanged`
-    
-
-
-
-
-
- |
+| **Unmarshal output** | `stream` or `unchanged` | The first part, decoded, as a stream, with the other parts as attachments and its Content-Type as a header. A body that is not a multipart stays as it was: without headersInline, one without a multipart Content-Type header. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers are described in the [Camel Catalog](../../../manual/camel-catalog.md).
 
