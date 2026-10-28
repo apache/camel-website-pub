@@ -265,6 +265,10 @@ All `vertx-websocket` consumers on the same host and port are served by one HTTP
 
 The WordPress client no longer logs every HTTP request and response it exchanges with the WordPress server at `INFO` level (the `org.apache.cxf.services` loggers). The component no longer depends on `cxf-rt-features-logging`, and the `camel-wordpress` JAR no longer contains a `log4j.properties` file.
 
+### camel-oauth - session identifier logging and session rotation on login
+
+`InMemorySessionStore` no longer logs session identifiers. Additionally, `OAuthCodeFlowCallback` rotates the session identifier upon successful authentication, replacing the pre-login session identifier with a new session identifier and emitting an updated session cookie. The default `rotateSession` method of `OAuthSessionStore` keeps the session unchanged, so a custom `OAuthSessionStore` must override it to rotate the session identifier on login.
+
 ## Upgrading from 4.18.4 to 4.18.5
 
 ### camel-azure-eventhubs

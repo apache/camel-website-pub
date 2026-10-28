@@ -179,6 +179,10 @@ The WordPress client no longer logs every HTTP request and response it exchanges
 
 When the LRA saga service starts a new saga, it now checks the URL of the LRA that the coordinator returns, as it already did since 4.22.2 for the LRAs it joins: the URL must be under the configured coordinator (`coordinatorUrl` followed by `coordinatorContextPath`) or under one of the `allowedCoordinatorUrls`. When the coordinator returns LRA URLs under another base URL, for example behind a proxy, starting a saga now fails until that base URL is added to `allowedCoordinatorUrls` (`camel.lra.allowedCoordinatorUrls`). Before, the saga was started, and only a nested saga route that looked the LRA up again failed.
 
+### camel-oauth - session identifier logging and session rotation on login
+
+`InMemorySessionStore` no longer logs session identifiers. Additionally, `OAuthCodeFlowCallback` rotates the session identifier upon successful authentication, replacing the pre-login session identifier with a new session identifier and emitting an updated session cookie. The default `rotateSession` method of `OAuthSessionStore` keeps the session unchanged, so a custom `OAuthSessionStore` must override it to rotate the session identifier on login.
+
 ### camel-jbang - camel plugin add selects the plugin release built for the CLI
 
 `camel plugin add <name>` no longer registers a community plugin (such as `forage` or `kit`) with the Maven `LATEST` version when no version is given. It selects the newest release of the plugin built for the version of the CLI, from the `camel.jbang.plugin.camel-versions` property in the POM of the plugin, or else from the version of its `camel-jbang-core` dependency. The exact version is stored in `~/.camel-jbang-plugins.json`, so the plugin no longer moves to newer releases on its own: run `camel plugin add <name>` again to select the newest matching release. When the CLI is between the Camel versions of the releases, it selects the newest release for the nearest older Camel version, with a warning. When the CLI is newer than all the releases, or the releases cannot be read, it warns and uses `LATEST` as before.
