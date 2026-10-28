@@ -109,12 +109,31 @@ The LangChain4j Agent component supports the following options which are listed 
 | **maxToolCallingRoundTrips** (producer) | Maximum number of tool-calling round trips allowed per request. Each round trip is one LLM call plus execution of the tools requested in that call. Set to 0 to leave unset and use the LangChain4j default. Only supported in inline agent creation mode (agentConfiguration without agent or agentFactory). URI value overrides the same option on the agentConfiguration bean. | 0 | int |
 | **outputClass** (producer) | Java class to use for structured output. Camel derives the JSON schema from the class and instructs the model to produce matching JSON; the response body is left as a raw JSON string. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. The class must be a POJO with public fields or getters; simple types, enums, and collections are not supported. Mutually exclusive with jsonSchema. |  | Class |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
+| **toolSearch** (producer) | When true, route tools marked searchable and remote MCP tools are omitted from the initial model request and exposed through one synthetic search tool. Directly visible route tools and customTools stay in the request. Search is a visibility policy, not authorization. Enabling it does not skip MCP tools/list. A dynamic tool provider registered outside Camel is not searched. Only supported in inline agent creation mode. | false | boolean |
+| **toolSearchEmbeddingModel** (producer) | **Autowired** LangChain4j embedding model used when toolSearchStrategy=VECTOR. Required for vector search. |  | EmbeddingModel |
+| **toolSearchMaxResults** (producer) | Maximum number of tools returned by one tool search. Route and MCP tools are ranked together. | 5 | int |
+| **toolSearchStrategy** (producer) | 
+How tool search ranks route and MCP tools. 'KEYWORD' matches the tool name and description. 'VECTOR' uses cosine similarity and requires toolSearchEmbeddingModel. Vector search does not fall back to keyword search.
+
+Enum values:
+
+-   KEYWORD
+    
+-   VECTOR
+    
+
+
+
+
+
+ | KEYWORD | AiToolSearchStrategy |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **mcpClients** (advanced) | Pre-built MCP (Model Context Protocol) client instances for external tool integration. Reference beans from the registry, e.g., #myMcpClient1,#myMcpClient2. |  | List |
 | **mcpServer** (advanced) | MCP server definitions in the form of mcpServer..=. Supported properties: transportType (stdio, http or streamableHttp, default: stdio), command (comma-separated, for stdio), url (for http/streamableHttp), environment.= (for stdio), timeout (in seconds, default: 60), logRequests, logResponses, oauthProfile (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **baseUrl** (model) | The URL of the provider’s API ([http://localhost:11434](http://localhost:11434) for a local Ollama), when the model is created from the provider. The provider’s default when not set. |  | String |
 | **modelName** (model) | The name of the model at the provider (qwen2.5, gpt-4o-mini, …​), when the model is created from the provider. |  | String |
 | **provider** (model) | 
+
 The LangChain4j provider of the chat model that drives the agent, to create the model from the options here (modelName, baseUrl, apiKey, temperature, timeout, and provider-specific model. properties) instead of a AgentConfiguration bean. The LangChain4j module of the provider (dev.langchain4j:langchain4j-ollama, …​) must be on the classpath; Camel JBang downloads it. Ignored when a AgentConfiguration is configured. For a provider not listed, set customProvider instead.
 
 Enum values:
@@ -180,12 +199,31 @@ With the following _path_ and _query_ parameters:
 | **maxToolCallingRoundTrips** (producer) | Maximum number of tool-calling round trips allowed per request. Each round trip is one LLM call plus execution of the tools requested in that call. Set to 0 to leave unset and use the LangChain4j default. Only supported in inline agent creation mode (agentConfiguration without agent or agentFactory). URI value overrides the same option on the agentConfiguration bean. | 0 | int |
 | **outputClass** (producer) | Java class to use for structured output. Camel derives the JSON schema from the class and instructs the model to produce matching JSON; the response body is left as a raw JSON string. Only supported in inline agent creation mode: agentConfiguration must be set and neither agent nor agentFactory may be configured. The class must be a POJO with public fields or getters; simple types, enums, and collections are not supported. Mutually exclusive with jsonSchema. |  | Class |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
+| **toolSearch** (producer) | When true, route tools marked searchable and remote MCP tools are omitted from the initial model request and exposed through one synthetic search tool. Directly visible route tools and customTools stay in the request. Search is a visibility policy, not authorization. Enabling it does not skip MCP tools/list. A dynamic tool provider registered outside Camel is not searched. Only supported in inline agent creation mode. | false | boolean |
+| **toolSearchEmbeddingModel** (producer) | **Autowired** LangChain4j embedding model used when toolSearchStrategy=VECTOR. Required for vector search. |  | EmbeddingModel |
+| **toolSearchMaxResults** (producer) | Maximum number of tools returned by one tool search. Route and MCP tools are ranked together. | 5 | int |
+| **toolSearchStrategy** (producer) | 
+How tool search ranks route and MCP tools. 'KEYWORD' matches the tool name and description. 'VECTOR' uses cosine similarity and requires toolSearchEmbeddingModel. Vector search does not fall back to keyword search.
+
+Enum values:
+
+-   KEYWORD
+    
+-   VECTOR
+    
+
+
+
+
+
+ | KEYWORD | AiToolSearchStrategy |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **mcpClients** (advanced) | Pre-built MCP (Model Context Protocol) client instances for external tool integration. Reference beans from the registry, e.g., #myMcpClient1,#myMcpClient2. |  | List |
 | **mcpServer** (advanced) | MCP server definitions in the form of mcpServer..=. Supported properties: transportType (stdio, http or streamableHttp, default: stdio), command (comma-separated, for stdio), url (for http/streamableHttp), environment.= (for stdio), timeout (in seconds, default: 60), logRequests, logResponses, oauthProfile (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **baseUrl** (model) | The URL of the provider’s API ([http://localhost:11434](http://localhost:11434) for a local Ollama), when the model is created from the provider. The provider’s default when not set. |  | String |
 | **modelName** (model) | The name of the model at the provider (qwen2.5, gpt-4o-mini, …​), when the model is created from the provider. |  | String |
 | **provider** (model) | 
+
 The LangChain4j provider of the chat model that drives the agent, to create the model from the options here (modelName, baseUrl, apiKey, temperature, timeout, and provider-specific model. properties) instead of a AgentConfiguration bean. The LangChain4j module of the provider (dev.langchain4j:langchain4j-ollama, …​) must be on the classpath; Camel JBang downloads it. Ignored when a AgentConfiguration is configured. For a provider not listed, set customProvider instead.
 
 Enum values:
@@ -519,6 +557,28 @@ The same tool-calling options can also be set directly on the endpoint URI when 
 from("direct:start")
     .to("langchain4j-agent:assistant?agentConfiguration=#myConfig&tags=orders"
         + "&maxToolCallingRoundTrips=5&compensateOnToolErrors=true&executeToolsConcurrently=true");
+```
+
+#### Tool search
+
+`toolSearch=true` omits route tools marked `searchable=true`, and remote MCP tools that already passed the tag, server, and provider filters, from the initial model request. A route tool with `searchable=false` stays directly visible, as do `customTools`. The model finds hidden tools through one synthetic `tool_search_tool`. Route and MCP tools are ranked together. LangChain4j still executes a found tool through its original executor and restores tools found earlier from chat memory.
+
+Enabling tool search does not skip MCP `tools/list`. It only reduces the definitions sent to the model. `toolSearch=false` (the default) sends the current combined set, and the `searchable` flag has no effect.
+
+`toolSearchStrategy=VECTOR` requires an autowired `toolSearchEmbeddingModel` and does not fall back to keyword search. A dynamic tool provider registered outside Camel’s composite is refreshed by LangChain4j after search and is not part of this catalogue. Tool search is only applied in inline agent creation mode.
+
+```yaml
+- route:
+    from:
+      uri: direct:ask
+      steps:
+        - to:
+            uri: langchain4j-agent:ops
+            parameters:
+              agentConfiguration: "#cfg"
+              tags: erp
+              toolSearch: true
+              toolSearchMaxResults: 5
 ```
 
 #### Creating an Agent without Memory

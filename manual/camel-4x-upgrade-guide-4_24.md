@@ -7,6 +7,33 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.23 to 4.24
 
+### camel-a2a - consumer context is separate from producer headers
+
+An A2A consumer no longer populates producer control headers with the incoming operation and identity. Update consumer routes that read these headers:
+
+ 
+| Previous consumer header | Replacement consumer header / exchange property |
+| --- | --- |
+| `CamelA2AOperation` | `CamelA2ARequestOperation` |
+| `CamelA2ATaskId` | `CamelA2ARequestTaskId` |
+| `CamelA2AContextId` | `CamelA2ARequestContextId` |
+
+To control a consumer’s `SendMessage` reply, replace writes to `CamelA2ATaskState` with `CamelA2AReplyTaskState`, and writes to `CamelA2AResponseType` with `CamelA2AReplyType`. The old names continue to control producers or describe their responses. Explicit producer operation headers still override the endpoint’s `operation` option.
+
+Java code using `A2AConstants` must also migrate even though the existing constant names and values remain. For consumer metadata reads, replace `OPERATION`, `TASK_ID` and `CONTEXT_ID` with `REQUEST_OPERATION`, `REQUEST_TASK_ID` and `REQUEST_CONTEXT_ID`, respectively. For consumer reply controls, replace `TASK_STATE` and `RESPONSE_TYPE` with `REPLY_TASK_STATE` and `REPLY_TYPE`.
+
+No Endpoint DSL header helper methods were removed. The new `a2ARequestOperation()`, `a2ARequestTaskId()` and `a2ARequestContextId()` methods provide the consumer metadata header names; `a2AReplyTaskState()` and `a2AReplyType()` provide the consumer reply control header names. Existing helpers retain their producer roles.
+
+Downstream results no longer replace the outer task ID, context, state or reply type, and progress updates remain attached to the outer task. Consumer reply messages use the outer context and task identity. With `dataFormat=POJO`, forwarding the same incoming `Message` instance to another agent no longer carries the outer task/context IDs. A new message supplied by the route retains its IDs, including an equal copy made with `Message.builder(incoming).build()`. When copying or transforming the incoming message to start a new downstream conversation, clear inherited IDs with `.taskId(null).contextId(null)`. Set explicit downstream IDs when continuing a downstream conversation.
+
+### camel-shiro - ShiroSecurityPolicy scopes SecurityManager to policy instance
+
+The `ShiroSecurityPolicy` constructors that load configuration from an INI file or object no longer set the resulting `SecurityManager` as Shiro’s global security manager via `SecurityUtils.setSecurityManager(…​)`. `ShiroSecurityProcessor` now creates and authenticates the caller identity (principal) using the route policy’s `SecurityManager` directly. Applications configuring multiple `ShiroSecurityPolicy` instances in the same JVM now have their realms evaluated independently per policy.
+
+Code that accesses the ambient security context or calls `SecurityUtils.getSecurityManager()` outside the policy and previously relied on the policy constructor setting the global security manager will now receive `UnavailableSecurityManagerException`. Such applications should explicitly configure `SecurityUtils.setSecurityManager(policy.getSecurityManager())` at startup.
+
+Additionally: - A `ShiroSecurityPolicy` created with the no-arg constructor must be configured with `setSecurityManager(…​)`. - When `alwaysReauthenticate=true` (the default), no caller identity stays bound to the processing thread after the policy check completes.
+
 ### camel-ai-tool - required arguments with reserved names reject the call
 
 Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
@@ -38,6 +65,16 @@ Tools that read the default from the catalog or the schemas now see `true`.
 When `pollEnrich` (or `poll`) times out and no `aggregationStrategy` is configured, the body is set to `null`, and with `variableReceive` the variable is `null`. For a message that creates its body on demand, the `null` did not stick: the next read created the body again. The message of a file consumer creates its body from its file, so after a timeout the body, or the variable of `variableReceive`, was the file of the incoming exchange instead of `null`. The messages of the JMS, sjms, mail, HTTP, XMPP, SMPP, SNMP and Spring WS consumers create their body on demand as well, so there it was the payload of the consumer again.
 
 The body, or the variable, is now `null` after a timeout for these consumers too. A route that read the incoming file or payload from the body after a timed out `pollEnrich` must keep it before the `pollEnrich` instead, for example with `variableReceive`, which leaves the body as it was. To keep the body empty, the message is replaced by a plain message with the same message id, headers and attachments, so after a timeout it is no longer of the message type of the consumer (such as `GenericFileMessage` or `JmsMessage`).
+
+### camel-core - ThrottlingExceptionRoutePolicy counts the failures within the failure window
+
+The circuit of `ThrottlingExceptionRoutePolicy` now opens when `failureThreshold` failures occurred within the last `failureWindow` milliseconds, as documented. Before, it counted every failure since the circuit last closed (or since the route started), and only the last failure had to be within the window, so failures spread over hours opened the circuit on a single new failure. Routes whose failures are spread out therefore open their circuit less often now; to open it sooner, lower `failureThreshold` or raise `failureWindow`.
+
+In the half open state, a successful exchange now closes the circuit, and a failed exchange opens it again. Before, a successful exchange opened the circuit again as long as the failures that opened it were within `failureWindow`; with the defaults (a window of 60 seconds, a half open check after 30 seconds) a success in the first 30 seconds after the half open check therefore kept the circuit open. A `halfOpenHandler` decides as before.
+
+### camel-core - JsonObject and JsonArray convert to their JSON text
+
+The camel-util-json types `org.apache.camel.util.json.JsonObject` and `JsonArray` (given by `convertBodyTo: JsonObject`, graphql, kubernetes-custom-resources and typesafe-ai) now have type converters to `String`, `byte[]` and `InputStream` that give their JSON text, using the charset of the exchange for the bytes. Before, a `String` was the `toString` of the map or list (`{sku=CAMEL-MUG, qty=3}`, which is not JSON), and there was no conversion to `byte[]` or `InputStream`, so such a body sent to http or a file failed. A `JsonObject` or `JsonArray` that holds a value that is not JSON, such as a POJO, converts as before.
 
 ### camel-main - a failure to start is logged
 
@@ -131,6 +168,14 @@ The Gson and JSON-B data formats now use the `CamelGsonUnmarshalType` and `Camel
 
 The `google-mail`, `google-mail-stream`, `google-drive`, `google-calendar`, `google-calendar-stream`, `google-sheets` and `google-sheets-stream` components now create one API client per endpoint, from the options of that endpoint (`clientId`, `clientSecret`, `refreshToken`, `accessToken`, `serviceAccountKey`, `delegate`, `scopes` and `applicationName`, plus `emailAddress`, `p12FileName` and `user` on the two calendar components), instead of a single client per component that every endpoint of the component shared. Each endpoint keeps its client for its lifetime. The `clientFactory` option of a `google-drive` endpoint is now used to create the client of that endpoint. In addition, a `google-mail-stream` endpoint configured with neither `clientSecret` nor `serviceAccountKey` now fails with an `IllegalArgumentException` when its client is created, instead of getting a `null` client and failing at the first API call. The `google-mail:update-message-labels` data type transformer now uses a client created from the component-level configuration (the `camel.component.google-mail.*` options), kept until the component stops. Before, it used whichever client the component had already created, for example the one of a `google-mail:messages/modify` endpoint, so credentials set only on an endpoint URI no longer reach the transformer: set them on the component as well.
 
+### camel-spring-rabbitmq - confirm=auto waits for simple publisher confirms
+
+With the default `confirm=auto`, an InOnly producer now also waits for the publisher confirm when the connection factory has publisher confirms of type `SIMPLE` (for example `spring.rabbitmq.publisher-confirm-type=simple`), as it did for type `CORRELATED`. Before, it sent such messages without waiting, so a message that RabbitMQ negatively acknowledged, or did not confirm, was lost without an error. Each send now waits up to `confirmTimeout` (5 seconds by default). It fails with a `java.util.concurrent.TimeoutException` when RabbitMQ negatively acknowledges the message, and with an `org.springframework.amqp.AmqpTimeoutException` when RabbitMQ does not confirm it within `confirmTimeout`. Set `confirm=disabled` to send without waiting, as before.
+
+### camel-vertx-websocket - consumers on the same host and port must use the same SSLContextParameters
+
+All `vertx-websocket` consumers on the same host and port are served by one HTTP server, which is created from the `sslContextParameters` of the first consumer to start. A consumer started later with different `sslContextParameters` (including one with none while the server uses some, or the other way round) used to start and be served with the first consumer’s settings. Such a consumer now fails to start with an `IllegalArgumentException` naming the host and port. Give every consumer on a host and port the same `SSLContextParameters` instance (for example the same bean reference, or the global SSL context parameters), or move consumers that need other settings to another port.
+
 ### camel-jbang - camel validate and camel overview report the same endpoints no route consumes
 
 `camel validate source` and `camel overview` now use the same rules for a `direct:`, `seda:` or `disruptor:` endpoint that a route sends to and no route consumes, so they report the same endpoints on the same project:
@@ -155,6 +200,10 @@ A done file with a fixed name (such as `doneFileName=ready`) is no longer delete
 ### camel-file - poll and pollEnrich evaluate the fileName on the current message
 
 `poll` and `pollEnrich` with a file based component (file, ftp, ftps, sftp, smb and azure-files) evaluate a dynamic `fileName` that does not use the file functions on the current message, so `fileName=${body}` and `fileName=${body[customer]}.json` read its body. Before, the consumer evaluated it for each file found, with that file as the body, so `${body}` was the file found. A `fileName` that uses the file functions (`${file:…​}`, `${date:file:…​}`) is still evaluated for each file found, and headers, variables and exchange properties work as before. A `fileName` that read the file found through its headers, such as `${header.CamelFileName}`, must use the file functions instead (`${file:name}`).
+
+### camel-mina-sftp - the local work file is deleted when the exchange is done
+
+With `localWorkDirectory`, camel-mina-sftp now deletes the local work file of a consumed file when the exchange is done, also when it failed, as camel-sftp and camel-ftp do. Before, every consumed file stayed in the local work directory. A file producer in the route now moves the local work file to its target instead of copying it, while the message body still names the local work file. So a later step that reads the body again, such as a second file producer or a `convertBodyTo`, fails because the file is gone, and another exchange that keeps the `java.io.File` body (for example `wireTap`, `seda` without waiting, or `aggregate`) finds it deleted. Convert the body before the first file producer or before handing it on, for example with `convertBodyTo(byte[].class)` (which reads the file into memory). Routes that cleaned the local work directory themselves can stop doing so.
 
 ### camel-openstack - potential breaking change
 
@@ -771,6 +820,14 @@ Camel now fails to start when the management server shares the port and one of t
 
 The producer used the bucket named in the `CamelIBMCOSBucketName` header instead of the bucket of its endpoint. The consumer sets that header to the bucket an object was consumed from, so a route from one bucket to another (`from("ibm-cos:source…​").to("ibm-cos:target…​")`) stored each object back in the source bucket, and with the default `deleteAfterRead=true` the consumer then deleted it there. The producer now ignores `CamelIBMCOSBucketName` and uses the bucket of the endpoint, or the bucket named in the new `CamelIBMCOSOverrideBucketName` header (`IBMCOSConstants.OVERRIDE_BUCKET_NAME`), as camel-aws2-s3, camel-minio and camel-google-storage do since 4.10. A route that sets `CamelIBMCOSBucketName` to choose the bucket of a producer operation (for example `createBucket` or `deleteBucket`) must set `CamelIBMCOSOverrideBucketName` instead.
 
+### camel-xslt-saxon - external resource access is restricted for a Source message body
+
+`XsltSaxonAggregationStrategy` now configures its Saxon `TransformerFactory` the same way the `xslt-saxon` endpoint configures the factory it creates: `FEATURE_SECURE_PROCESSING` is enabled and `ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_STYLESHEET` are set to an empty string. Previously the strategy used the Saxon defaults, so the same stylesheet ran with different settings depending on whether it was used from the endpoint or from the strategy. On Saxon PE/EE, `FEATURE_SECURE_PROCESSING` also disables reflexive Java extension functions in the stylesheet.
+
+In addition, both the strategy and the `xslt-saxon` endpoint now parse a message body that is already a `javax.xml.transform.Source` still to be parsed, for example a `StreamSource` or the body after a `convertBodyTo(Source.class)`, with a reader that does not resolve references to external resources declared in the document. A `DOMSource`, a `StAXSource`, or a `Source` that already carries its own reader is left unchanged, and a declaration internal to the document is still applied. The other body types (`String`, `byte[]`, `InputStream`) are unaffected, as they already reach the transformer through Camel’s StAX/SAX conversion.
+
+On the `xslt-saxon` endpoint, `secureProcessing` now controls both: setting `secureProcessing=false` (for example so a Saxon PE/EE stylesheet can call Java extension functions) also restores the previous, unrestricted parsing of a `Source` body. The option is marked as a security knob (`security=insecure:dev`, `insecureValue=false`), so `camel.main.profile=prod` reports it when it is turned off. `XsltSaxonAggregationStrategy` has no switch for the `Source` parsing: `setTransformerFactory(…​)` replaces the factory, but the strategy’s `XsltSaxonBuilder` keeps `secureProcessing=true`, so the body is still parsed with the restricted reader.
+
 ### camel-ical - each unmarshal parses with its own calendar builder
 
 The `ical` data format used one ical4j `CalendarBuilder` for all exchanges. Two exchanges that were unmarshalled at the same time could get the events of each other, or the calendar of the other exchange. Each unmarshal now uses its own builder.
@@ -818,6 +875,10 @@ As before, a server whose host has entries without a marker is rejected when it 
 
 `ZipAggregationStrategy` replaced an entry of the zip file when a later message had the same entry name, for example two files `orders.csv` from different folders of a recursive file consumer (the folders are not kept by default), so the content of the earlier file was lost. The later entry is now added with a number before its extension: `orders (1).csv`, `orders (2).csv`, and so on. Entry names can therefore differ from the file names (or the `CamelFileName` header). Use `preserveFolderStructure=true` to keep the folders in the entry names instead.
 
+### camel-zip-deflater - gzipDeflater and zipDeflater limit the decompressed size
+
+The `gzipDeflater` and `zipDeflater` data formats have the `maxDecompressedSize` option of the `zipFile` and `tarFile` data formats, with the same default of 1073741824 bytes (1 GiB). An unmarshal of a message that decompresses to more than that now fails with an `IOException` ("The InputStream entry being copied exceeds the maximum allowed size"). Routes that unmarshal larger messages set a higher limit, or `-1` for no limit, for example `<gzipDeflater maxDecompressedSize="-1"/>` or `unmarshal(dataFormat().zipDeflater().maxDecompressedSize(-1).end())`. The limit counts the whole decompressed message. For example, when a `.tar.gz` file is unmarshalled with `gzipDeflater` and then split into its entries, the limit applies to the whole tar archive, not to each entry as the limit of `tarFile` does.
+
 ### camel-milo - each client connection has thread pools of its own
 
 A `milo-client` or `milo-browse` connection now handles the outcome of its write, method call, read and browse requests on a thread pool of its own named `MiloClient`, and runs its reconnects on a single thread named `MiloClientReconnect`. Before, it used the shared scheduled executor of Milo (`milo-shared-scheduled-executor`) for both. A route that continues after an awaited request now runs on a thread of the `MiloClient` pool. The pool has up to as many threads as there are processors, which end after they have been idle for the keep-alive time of the default thread pool profile (60 seconds). With virtual threads enabled and more than one processor, it starts a virtual thread for each task instead. The `MiloClientReconnect` thread starts with the first reconnect of the connection, and its reconnects run one after the other. The threads of a connection end when it is closed.
@@ -830,7 +891,7 @@ The LRA saga service now joins, completes or compensates an LRA only when its UR
 
 If your participants reach the same coordinator under different URLs, for example with different host names, list the other coordinator URLs, including the context path, in the new `allowedCoordinatorUrls` option (`camel.lra.allowedCoordinatorUrls`).
 
-This also applies to the LRAs the service starts itself, which a nested saga route looks up again: when the coordinator returns LRA URLs under another base URL than `coordinatorUrl`, for example behind a proxy, add that base URL to `allowedCoordinatorUrls` as well.
+This also applies to the LRAs the service starts itself: when the coordinator returns LRA URLs under another base URL than `coordinatorUrl`, for example behind a proxy, starting a saga fails until that base URL is added to `allowedCoordinatorUrls`.
 
 ### camel-lra - warning for unsigned participant callbacks, and reserved saga option names
 
@@ -860,6 +921,8 @@ Because the shipped AI events are now ``ExchangeEvent`s (via `AiEvent.ExchangeAi
 When the message comes from platform-http (on Vert.x or on Spring Boot), from a servlet based HTTP consumer (camel-servlet, camel-jetty) or from camel-netty-http, the bearer token and the session cookie are now read from the `Authorization` and `Cookie` headers of the HTTP request only. A query or form parameter of the same name, which these consumers also map into the message headers, is no longer used for them, and neither is an `Authorization` or `Cookie` message header that the route sets itself. For example `.setHeader("Authorization", simple("Bearer ${header.X-Forwarded-Access-Token}"))` before `OAuthBearerTokenProcessor` now results in a 401 response. A route that takes the token from elsewhere can validate it with `OAuthHelper.validateOAuthToken` from camel-support instead.
 
 For any other message, such as one from camel-undertow, the processors keep reading the message headers, but leave out a value that also appears in the query string of the request.
+
+`InMemorySessionStore` no longer logs session identifiers. Additionally, `OAuthCodeFlowCallback` rotates the session identifier upon successful authentication, replacing the pre-login session identifier with a new session identifier and emitting an updated session cookie. Custom `OAuthSessionStore` implementations can override the default `rotateSession` method to support session rotation on login.
 
 ### camel-platform-http-vertx - the charset parameter of the request Content-Type in any case
 
@@ -962,6 +1025,12 @@ On a WebSocket path whose producer applies a security provider or allowed roles,
 
 Once a consumer that configures `handlers` is started on a path, a connection opened on that path before the consumer first ran is no longer served: its messages no longer reach the route and it no longer receives what the producer sends, and the connection is closed. Clients that open a connection in this window must reconnect after the consumer has started.
 
+### camel-undertow, camel-vertx-http - CamelHttpPath with a query in the endpoint uri
+
+When the endpoint uri of an undertow or vertx-http producer has a query, the `CamelHttpPath` header now goes before that query, as in camel-http. Before, camel-undertow dropped the header path, and camel-vertx-http put it into the query (or dropped it when `CamelHttpQuery` was set). The query is chosen as before: a `CamelHttpQuery` header wins over the query of the endpoint.
+
+This changes the target of routes that bridge an HTTP consumer to such a producer, as the HTTP consumers (undertow, platform-http-vertx, servlet) set `CamelHttpPath` from the path of the request. For example the route `from("undertow:http://0.0.0.0:8080/api?matchOnUriPrefix=true").to("undertow:http://backend/svc?key=1")`, or the same with a `vertx-http:` producer and `bridgeEndpoint=true`, now sends a request for `/api/orders/123` to `/svc/orders/123` instead of `/svc`. To keep the old target, remove the header before the producer, for example with `removeHeader(Exchange.HTTP_PATH)`. The path comes from the client request, and the producer sends it with the query of the endpoint (`key=1` in the example): a proxy route should validate or restrict the path, or remove the header.
+
 ### camel-dapr - the saveBulk and executeTransaction state operations are sent
 
 The `saveBulk` and `executeTransaction` operations of `dapr:state` built their request but never sent it to Dapr, so nothing was stored and the exchange completed without an error. The requests are now sent, and the producer waits for the answer like the other state operations: the states are stored, and a request that Dapr rejects (or a sidecar that cannot be reached) fails the exchange.
@@ -1001,6 +1070,12 @@ With `preserveMessageQos=true`, a message without a `JMSExpiration` (header miss
 ### camel-pulsar - the producer continues the sequence ids of the broker
 
 The `pulsar` producer no longer passes the default `initialSequenceId=-1` to the Pulsar client, so the client continues after the last sequence id the broker has for the `producerName`. Before, every start began again at sequence id 0, and with deduplication enabled on the broker the messages sent after a restart were dropped as duplicates (the send succeeded) until the sequence ids passed the ones of the previous run. A configured `initialSequenceId` of 0 or more is still used as before.
+
+### camel-pulsar - the deadLetterTopic option applies in retry mode
+
+With `enableRetry=true`, the consumer did not pass `deadLetterTopic` to the Pulsar client, so a message that failed `maxRedeliverCount` times was sent to the client’s default dead letter topic (`<topic>-<subscription>-DLQ`, or `<subscription>-DLQ` when that topic already exists) instead of the configured one. It is now sent to `deadLetterTopic`. Messages already in the default topic stay there.
+
+With `enableRetry=true` and no `maxRedeliverCount`, the consumer failed to start with a `NullPointerException`. It now starts without a dead letter policy, as the `maxRedeliverCount` option documents, and the Pulsar client applies its own in retry mode: 16 redeliveries and its default retry letter and dead letter topics. As without retry mode, `retryLetterTopic` and `deadLetterTopic` only apply when `maxRedeliverCount` is set. The consumer logs a WARN when it starts with one of these topics but no `maxRedeliverCount` (and for `retryLetterTopic` without `enableRetry`).
 
 ### camel-twitter - twitter-search applies its query options again
 
@@ -1047,6 +1122,10 @@ The poll still fails, as before, when none of the listed objects could be got an
 ### camel-aws2-s3 - the producer stores the whole body when the content-length header is stale
 
 When the length of the body is known without reading it (a `byte[]`, `String`, file, `Path` or cached stream), the producer now uploads it with that length, and the `CamelAwsS3ContentLength` header is only used for a stream whose length is not known. Previously the header took precedence: after a route changed the body of an object read by the aws2-s3 consumer (which sets the header), a longer body was stored cut to the old length and a shorter one failed.
+
+### camel-minio - the producer stores the whole body when the content-length header is stale
+
+When the length of the body is known without reading it (a file, `byte[]`, `String`, `Path` or cached stream), the producer now uploads it with that length, and the `CamelMinioContentLength` header is only used for a stream whose length is not known. Previously the header took precedence, also over the length of a `java.io.File` body: after a route changed the body of an object read by the minio consumer (which sets the header), a longer body was stored cut to the old length and a shorter one failed.
 
 ### camel-mina - the host name of the server is verified over SSL
 
@@ -1101,6 +1180,10 @@ The servlet and Jetty consumers uncompressed a request body with `Content-Encodi
 ### camel-undertow - form fields are decoded as UTF-8
 
 The consumer now decodes the fields of an `application/x-www-form-urlencoded` or `multipart/form-data` request that declares no charset as UTF-8, the encoding browsers use. Before, Undertow’s default ISO-8859-1 was used, so `café` became `cafÃ©` in the headers and the body map. A charset that the request or a part declares is still used: a client that sends ISO-8859-1 form data without declaring a charset now gets U+FFFD replacement characters instead of its text, and must declare its charset (for example `application/x-www-form-urlencoded; charset=ISO-8859-1`).
+
+### camel-undertow - rest-dsl and plain consumers on the same port are both served
+
+When rest-dsl consumers and plain `undertow:` consumers use the same port, both kinds are now served. Before, only the kind that registered first on the port was served, the other answered 404, and stopping the last consumer of one kind stopped the server for the other. A request now goes to the rest-dsl consumers first, and to the plain endpoints when no rest-dsl consumer matches it, so a plain catch-all (for example `matchOnUriPrefix=true` on `/`, for static files) and a REST API can share a port. When a rest-dsl path and a plain path both match a request, the rest-dsl consumer gets it, even when the plain path is more specific (for example a plain `/users/me` next to a rest-dsl `/users/{id}`): give the plain endpoint another path or port. A request under the static part of a plain endpoint path with a template (such as `/api/x/y` for `/api/{name}`) that no template matches now gets 404 (it got 405 before).
 
 ### camel-huaweicloud-obs - a listed object that cannot be got is skipped
 
@@ -1179,6 +1262,10 @@ Signatures created by earlier versions over a `File`, `Path`, `GenericFile` or o
 
 When the consumer lists the bucket, a failure to stat or get one of the listed objects (for example access denied, or an object encrypted with a customer key the consumer does not have) no longer fails the poll, as long as another listed object could be got: the object is skipped, the other listed objects are consumed, and the skipped object is tried again by a later poll. The failure is given to the exception handler of the consumer, with the object name in the message (by default a `WARN` with the stack trace, at every poll that lists the object). Before, the objects listed after it in the same poll were not consumed, so one such object could keep the consumer from consuming the rest of the bucket. The poll still fails when none of the listed objects could be got, and when `objectName` is set. When a poll lists `maxMessagesPerPoll` objects, the next poll now continues after the last listed object (before, after the last object that was consumed), so an object that cannot be got at the end of a page does not hold the listing back.
 
+### camel-minio - Server-side encryption options now apply to MinioProducer
+
+The `serverSideEncryption` and `serverSideEncryptionCustomerKey` endpoint options now apply to producer operations: - Put operations apply the configured server-side encryption or customer-supplied key. - Copy operations apply the configured encryption to the destination object (and `serverSideEncryptionCustomerKey` to the source object when configured). - Get operations (`getObject` and `getObjectRange`) pass the customer key when configured. - Only one of `serverSideEncryption` or `serverSideEncryptionCustomerKey` can be configured on an endpoint; configuring both throws `IllegalArgumentException` on producer startup.
+
 ### camel-box - getEnterpriseEvents returns the events of every chunk
 
 The `getEnterpriseEvents` operation of the `event-logs` API now returns all the events between `after` and `before`. Previously it returned only the first chunk of the event log (at most 500 events), and the rest was dropped without any sign. A wide `after`/`before` window now returns every event in one list: that is one request per 500 events plus one that finds the end of the log, and more memory. Narrow the window when the event log is large.
@@ -1216,6 +1303,10 @@ A settlement request the broker rejects is now reported through the consumer’s
 ### camel-nats - the JetStream pull consumer subscribes again when its ephemeral consumer was deleted
 
 With `jetstreamEnabled=true` and a pull subscription (the default), the `nats` consumer kept fetching from a JetStream consumer that the server had deleted, and consumed nothing more until the route was restarted. It now subscribes again when the server no longer has its ephemeral consumer (no `durableName`, and no durable name in the `consumerConfiguration`), which the server deletes after about 5 seconds without a pull request, for example while the client is disconnected, or loses on a restart. The new consumer starts at the first message the route did not acknowledge, so the route can see again the messages after that one (with `ackPolicy=None`, after the last message fetched). On a stream with `WorkQueue` retention, and on a stream that was created again since the route subscribed, the new consumer uses the consumer configuration as it is. The consumer asks the server for its consumer only after a fetch that ended empty well before `pullFetchTimeout`, at most every 5 seconds. A durable consumer is not created again: when it is gone (deleted by an administrator, or after its `inactiveThreshold`), the consumer logs a WARN and keeps fetching, and the fetches work again when the durable is created again with the same name.
+
+### camel-azure-cosmosdb - a client set on the component or autowired is not closed by Camel
+
+A `CosmosAsyncClient` set with the `cosmosAsyncClient` option, or autowired from the registry, is shared by all the azure-cosmosdb endpoints. An endpoint that stopped (for example because its route was removed or reloaded) closed it, and from then on the other endpoints, and the application, failed every request until the application was restarted. Camel now closes only the clients that its endpoints create. Close a client you set yourself when the application no longer needs it (a client that is a Spring bean is closed by Spring).
 
 ### camel-telegram - a failed send fails the exchange once
 
@@ -1347,6 +1438,10 @@ Producer requests and `MiloClientConnection.getOpcUaClient()` no longer wait for
 
 A `sessionTimeout` configured on the `milo-client` or `milo-browse` component (for example `camel.component.milo-client.sessionTimeout`) did not reach its endpoints, so their sessions used the default of Milo, 120000 milliseconds. The endpoints now use it, unless they set `sessionTimeout` themselves.
 
+### camel-milo - a write of a null body fails the exchange
+
+A `milo-client` producer no longer writes a `null` body; the exchange now fails with an `InvalidPayloadException`, whether or not the write is awaited. Before, it wrote a null value, which a server typically refused with `Bad_TypeMismatch`, and an awaited write completed without an error and with that status as the body. To write a null value, set the body to `Variant.NULL_VALUE` or to a `DataValue` that carries it. A method call with a `null` body still calls the method without input arguments.
+
 ### camel-infinispan - the key option of the producer takes precedence over the key header
 
 The `infinispan` and `infinispan-embedded` producers now use the `key` option of the endpoint when it is set, and use the `CamelInfinispanKey` header only when the endpoint does not set `key`. Previously the header took precedence over the option, so a route that sent the events of an Infinispan consumer, which set `CamelInfinispanKey` to the key of the event, to a producer with a fixed `key` worked on the key of the event.
@@ -1376,7 +1471,7 @@ When a protobuf message is converted to a `Map` (for example `getBody(Map.class)
 
 ### camel-jbang-mcp - runtime tools that changed behaviour
 
-Some runtime tools of the Camel MCP server now do what their description says, which changes what a client sees:
+Some runtime tools of the Camel CLI MCP server now do what their description says, which changes what a client sees:
 
 -   `camel_runtime_receive` receives a message in one call: it starts a consumer on the endpoint, waits up to `timeoutSeconds` (default 10, at most 60) for a message, returns it and stops the consumer. It returns one message by default; `limit` returns up to that many, and `received` counts every message the consumer took, returned or not. Before, it started a consumer that kept running, took the messages from the routes, and returned none of them. It is now marked destructive, so the `read-write` access level (`camel.mcp.security.access-level`) no longer offers it, only `admin` does. It runs one call at a time per process, and refuses to run while `camel cmd receive` is receiving from the same process.
     
@@ -2012,3 +2107,59 @@ The `CamelFileLastModified` header is now the last modified time of the file, as
 ### camel-whatsapp - the component is no longer marked producer only
 
 The whatsapp component receives events in webhook mode (`webhook:whatsapp:…​`), so its metadata no longer marks it as producer only, and the catalog now describes the body that the webhook route gets. Tools that read the catalog, such as the YAML DSL validator and the Endpoint DSL, now accept a whatsapp endpoint as a consumer, and the Endpoint DSL builder of whatsapp gets the consumer options `bridgeErrorHandler`, `exceptionHandler` and `exchangePattern`. A whatsapp endpoint used directly in `from` still fails at startup: wrap it with the webhook component, as before.
+
+### camel-cometd - the JSONP transport is disabled by default
+
+The CometD JSONP transport (`callback-polling`) is now disabled by default. Only `long-polling` (and `websocket`, when the CometD WebSocket transport is on the classpath) is enabled by default. Applications that require JSONP clients can configure `allowedTransports` on the endpoint to include `callback-polling` (for example, `allowedTransports=websocket,long-polling,callback-polling`).
+
+### camel-avro-rpc - the http consumer listens on the host of the endpoint
+
+The `avro:http` consumer now uses the host of the endpoint URI (`avro:http:[host]:[port]`) for its HTTP server, as the `avro:netty` consumer does.
+
+Use `0.0.0.0` as the host to accept connections on all network interfaces.
+
+`AvroRpcHttpServerFactory` has a new method `create(SpecificResponder, String, int)` that receives the host. A custom factory should implement it.
+
+### camel-plc4x - PLC4X 1.0.0 and the triggered consumer
+
+`camel-plc4x` now uses PLC4X 1.0.0, which requires Java 21, as Camel 4.24 does.
+
+PLC4X 1.0.0 changes the connection strings of its drivers. Several parameters are renamed, for example `request-timeout` to `request-timeout-ms`, and the S7 driver reads the rack and slot as `cotp.remote-rack` and `cotp.remote-slot` instead of `remote-rack` and `remote-slot`. A parameter that a driver does not know, such as an old name, is logged as a warning and does not apply. The OPC UA driver now uses the security policy `Basic256Sha256` by default instead of `NONE`, `insecure-certificate-verification=true` becomes `tls.verify=false`, and a user name and password are refused over a channel that is neither signed nor encrypted unless `allow-insecure-credentials` is set. See the incompatible changes in the [PLC4X 1.0.0 release notes](https://github.com/apache/plc4x/releases/tag/v1.0.0) for the full list.
+
+PLC4X 1.0.0 writes the array selection of a tag address before the data type, and as a range instead of a count. An address written as `holding-register:1:INT[4]` or `%DB42:28.0:BYTE[4]` for four elements is now written `holding-register:1[0..3]:INT` or `%DB42:28.0[0..3]:BYTE`; `[4]` before the data type selects the single element at index 4. Addresses in the old form no longer parse. This applies to the `tag.*` options, to `trigger` and to the addresses in the body of the producer.
+
+The S7 driver of PLC4X 1.0.0 no longer includes the `s7-light` driver, so `plc4x:s7-light://` endpoints no longer find a driver. Use `plc4x:s7://` instead.
+
+A consumer with `trigger` now reads the trigger tag and the tags in one request on the connection of the endpoint, every `period` milliseconds from the start of the route. Before, it sampled the trigger first after about one second, and read the tags in a later, separate request on another connection. A failed read is now reported to the exception handler of the consumer (or to the error handler of the route with `bridgeErrorHandler=true`), and polling continues; before, the consumer stopped triggering after the first failed read of the trigger. After a failed poll the remembered trigger value is unknown, so a trigger that is still `true` when the PLC returns emits once. Since the consumer now uses the connection of the endpoint, `autoReconnect` governs its reconnects: without it, a lost connection stops the endpoint and the polling until the route is restarted. A connection that cannot be set up when the route starts fails the start of the route, unless `autoReconnect=true`, in which case the polls retry it. A route that starts with the CamelContext then fails the start of the CamelContext too, unless the route is supervised by the [supervising route controller](route-controller.md) or has `autoStartup=false`. As before, `period` must be positive when `trigger` is set. A trigger that reads as a value that is not a boolean, such as a number or an array, fails the poll. See the [PLC4X component](../components/4.22.x/plc4x-component.md) for how triggered reading works.
+
+With `autoReconnect=true`, a lost connection is now closed and replaced with a new one from the driver instead of being reconnected, because the PLC4X 1.0.0 S7 and EtherNet/IP drivers cannot connect a connection again once it is lost. This applies to the producer and to the consumers alike.
+
+The component now removes its own options (`trigger`, `period`, `tag.*`, `autoReconnect` and the generic consumer options such as `exceptionHandler`) from the connection string it hands to the driver. Before, the driver received them as connection string parameters too.
+
+The constant `Constants.PLC_NAME`, which was only used with the PLC4X scraper, was removed.
+
+### camel-stripe - endpoint request options isolate credentials across endpoints
+
+The `camel-stripe` producer now applies `apiKey` and `apiBase` using endpoint-scoped `RequestOptions` on each Stripe API request, rather than mutating JVM-global Stripe SDK static configuration at startup. Multiple Stripe endpoints configured in the same application now operate with complete configuration isolation.
+
+Additionally, configuring an `apiKey` on either the endpoint or the component is now validated at startup, throwing an `IllegalArgumentException` if missing rather than falling back to unauthenticated or globally-mutated SDK state.
+
+Applications whose custom code (such as beans calling `Customer.retrieve(…​)` directly) previously relied on `camel-stripe` setting `Stripe.apiKey` globally in the JVM at startup must now configure `Stripe.apiKey` directly or pass `RequestOptions` explicitly.
+
+### camel-lucene - inserted documents are indexed, one document per exchange
+
+The `lucene:…​:insert` endpoint now indexes the fields it writes, so a `lucene:…​:query` finds the inserted messages and the files of `srcDir`. Before, the fields were stored but not indexed, and a query never found them.
+
+**Breaking change:** an index directory written by an earlier Camel version cannot be appended to. Lucene does not let a field change from not indexed to indexed, so the insert fails with `IllegalArgumentException: cannot change field "exchangeId" from index options=NONE to inconsistent index options=DOCS_AND_FREQS_AND_POSITIONS` (or the same for another field). Delete the index directory (`indexDir`) and insert the messages again. A query on such an index does not fail, but it finds none of its documents, as before.
+
+Each exchange is now indexed as one document, with the body in `contents`, the exchange id in `exchangeId` and each header in a field of the header name. Each file of `srcDir` is one document with the `contents` and `path` fields. Before, each of these fields was a document of its own. The files of `srcDir` are indexed each time the insert endpoint is created, such as when the application starts; the document of a file now replaces the one with the same `path` instead of adding a copy. A query on a header, such as `author:carlin`, now gives a hit whose data is the body of the exchange, and with `CamelLuceneReturnLuceneDocs` the document of a hit carries all the fields of its exchange or file.
+
+### camel-wordpress - requests and responses are no longer logged
+
+The WordPress client no longer logs every HTTP request and response it exchanges with the WordPress server at `INFO` level (the `org.apache.cxf.services` loggers). The component no longer depends on `cxf-rt-features-logging`, and the `camel-wordpress` JAR no longer contains a `log4j.properties` file.
+
+### camel-jbang - camel plugin add selects the plugin release built for the CLI
+
+`camel plugin add <name>` no longer registers a community plugin (such as `forage` or `kit`) with the Maven `LATEST` version when no version is given. It selects the newest release of the plugin built for the version of the CLI, from the `camel.jbang.plugin.camel-versions` property in the POM of the plugin, or else from the version of its `camel-jbang-core` dependency. The exact version is stored in `~/.camel-jbang-plugins.json`, so the plugin no longer moves to newer releases on its own: run `camel plugin add <name>` again to select the newest matching release. When the CLI is between the Camel versions of the releases, it selects the newest release for the nearest older Camel version, with a warning. When the CLI is newer than all the releases, or the releases cannot be read, it warns and uses `LATEST` as before.
+
+`--version` and `--gav` are used as given, with a warning when the release is built for another Camel version. Plugins registered before are not changed. See [Plugin versions](camel-jbang-projects.html#_plugin_versions).

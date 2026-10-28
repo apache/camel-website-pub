@@ -145,4 +145,4 @@ The catalog of that version is downloaded as for `camel catalog`, and the schema
 
 The Simple expressions are parsed by the CLI’s own Simple language (the catalog of the other version supplies its functions), and the Java, XSLT and XML checks of `camel validate source` use the CLI’s classpath.
 
-The `camel_validate_source` tool of the MCP servers ([Camel MCP Server](camel-jbang-mcp.md)) does the same when it is given a `camelVersion`: the catalog and the schema of that version.
+The `camel_validate_source` tool of the MCP servers ([Camel CLI MCP Server](camel-jbang-mcp.md)) does the same when it is given a `camelVersion`: the catalog and the schema of that version.

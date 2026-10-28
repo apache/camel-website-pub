@@ -168,7 +168,7 @@ Once the AI descriptions are reviewed, `--apply-descriptions` puts them into the
 camel overview --apply-descriptions
 ```
 
-The same overview is available to AI agents through the `camel_project_overview` and `camel_save_project_summary` tools of the [Camel MCP Server](camel-jbang-mcp.md) and `camel tui --mcp`, and in the [Camel TUI](camel-jbang-tui.md) with the `/overview` command of the AI panel. The TUI draws the architecture in the Diagram tab: its top level, Architecture.
+The same overview is available to AI agents through the `camel_project_overview` and `camel_save_project_summary` tools of the [Camel CLI MCP Server](camel-jbang-mcp.md) and `camel tui --mcp`, and in the [Camel TUI](camel-jbang-tui.md) with the `/overview` command of the AI panel. The TUI draws the architecture in the Diagram tab: its top level, Architecture.
 
 ## Harden — security analysis
 

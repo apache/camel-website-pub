@@ -342,6 +342,8 @@ The following routes monitor one node and write another, on the server of the [O
               allowedSecurityPolicies: None
 ```
 
+A producer does not write a `null` body: the exchange fails with an `InvalidPayloadException`. To write a null value, set the body to `Variant.NULL_VALUE` or to a `DataValue` that carries it.
+
 ### Monitoring several nodes
 
 A consumer can monitor several nodes with the `nodes` option instead of `node` (the two options cannot be combined). The consumer creates the monitored items of all nodes together and deletes them together when it stops. Every value arrives in its own exchange, and the `CamelMiloNodeId` header holds the node ID as it was configured.

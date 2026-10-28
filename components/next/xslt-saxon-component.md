@@ -87,12 +87,12 @@ The XSLT Saxon component supports the following options which are listed below.
 | **saxonConfiguration** (advanced) | To use a custom Saxon configuration. |  | Configuration |
 | **saxonConfigurationProperties** (advanced) | To set custom Saxon configuration properties. |  | Map |
 | **saxonExtensionFunctions** (advanced) | Allows you to use a custom net.sf.saxon.lib.ExtensionFunctionDefinition. You would need to add camel-saxon to the classpath. The function is looked up in the registry, where you can use commas to separate multiple values to lookup. |  | String |
-| **secureProcessing** (advanced) | Feature for XML secure processing (see javax.xml.XMLConstants). This is enabled by default. However, when using Saxon Professional you may need to turn this off to allow Saxon to be able to use Java extension functions. | true | boolean |
 | **transformerFactoryClass** (advanced) | To use a custom XSLT transformer factory, specified as a FQN class name. |  | String |
 | **transformerFactoryConfigurationStrategy** (advanced) | A configuration strategy to apply on freshly created instances of TransformerFactory. |  | TransformerFactoryConfigurationStrategy |
 | **uriResolver** (advanced) | To use a custom UriResolver. Should not be used together with the option 'uriResolverFactory'. |  | URIResolver |
 | **uriResolverFactory** (advanced) | To use a custom UriResolver which depends on a dynamic endpoint resource URI. Should not be used together with the option 'uriResolver'. |  | XsltUriResolverFactory |
 | **xpathTotalOpLimit** (advanced) | Limits the total number of XPath operators in an XSL Stylesheet. The default (from JDK) is 10000. The limit is set per TransformerFactory instance used by each endpoint, not as a JVM-global system property. | 10000 | int |
+| **secureProcessing** (security) | Feature for XML secure processing (see javax.xml.XMLConstants). This is enabled by default. However, when using Saxon Professional you may need to turn this off to allow Saxon to be able to use Java extension functions. Note that turning it off also restores the previous, unrestricted parsing of a Source message body that is still to be parsed, so only do so for trusted input. | true | boolean |
 
 ## Endpoint Options
 
@@ -147,13 +147,13 @@ Enum values:
 | **resultHandlerFactory** (advanced) | Allows you to use a custom org.apache.camel.builder.xml.ResultHandlerFactory which is capable of using custom org.apache.camel.builder.xml.ResultHandler types. |  | ResultHandlerFactory |
 | **saxonConfiguration** (advanced) | To use a custom Saxon configuration. |  | Configuration |
 | **saxonExtensionFunctions** (advanced) | Allows you to use a custom net.sf.saxon.lib.ExtensionFunctionDefinition. You would need to add camel-saxon to the classpath. The function is looked up in the registry, where you can comma to separate multiple values to lookup. |  | String |
-| **secureProcessing** (advanced) | Feature for XML secure processing (see javax.xml.XMLConstants). This is enabled by default. However, when using Saxon Professional you may need to turn this off to allow Saxon to be able to use Java extension functions. | true | boolean |
 | **transformerFactory** (advanced) | To use a custom XSLT transformer factory. |  | TransformerFactory |
 | **transformerFactoryClass** (advanced) | To use a custom XSLT transformer factory, specified as a FQN class name. |  | String |
 | **transformerFactoryConfigurationStrategy** (advanced) | A configuration strategy to apply on freshly created instances of TransformerFactory. |  | TransformerFactoryConfigurationStrategy |
 | **uriResolver** (advanced) | To use a custom javax.xml.transform.URIResolver. |  | URIResolver |
 | **xpathTotalOpLimit** (advanced) | Limits the total number of XPath operators in an XSL Stylesheet. The default (from JDK) is 10000. The limit is set per TransformerFactory instance used by this endpoint. | 10000 | int |
 | **xsltMessageLogger** (advanced) | A consumer to messages generated during XSLT transformations. |  | XsltMessageLogger |
+| **secureProcessing** (security) | Feature for XML secure processing (see javax.xml.XMLConstants). This is enabled by default. However, when using Saxon Professional you may need to turn this off to allow Saxon to be able to use Java extension functions. Note that turning it off also restores the previous, unrestricted parsing of a Source message body that is still to be parsed, so only do so for trusted input. | true | boolean |
 
 ## Message Headers
 

@@ -14,7 +14,7 @@ See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
 | **1\. Built-in AI panel** | The AI panel (**F8**) in the TUI | An LLM provider the TUI calls: Anthropic, OpenAI, Gemini, or a local model through Ollama or an OpenAI-compatible server | The panel itself, in-process (no MCP) | `camel tui`, then **F8** |
 | **2\. Coding agent in the panel** | The AI panel (**F8**) in the TUI | An agent the TUI starts over ACP (Claude Code, Codex, opencode, Qwen, …​), with its own model and login | The TUI’s MCP server, started for the agent on a random localhost port | `camel tui`, then **F8**, **Ctrl+P** and an `acp:` provider |
 | **3\. Your agent drives the TUI** | Your agent, in its own terminal or IDE | Your agent’s own model | The TUI’s MCP server on `localhost:8123` | `camel tui --mcp`, and the server added to the agent’s MCP configuration |
-| **4\. Camel MCP server, no TUI** | Your agent, in its own terminal or IDE | Your agent’s own model | The `camel mcp` server, which the agent starts | `camel mcp`, registered in the agent’s MCP configuration |
+| **4\. Camel CLI MCP server, no TUI** | Your agent, in its own terminal or IDE | Your agent’s own model | The `camel mcp` server, which the agent starts | `camel mcp`, registered in the agent’s MCP configuration |
 
 In the first three the model gets the same tools from the same place: the TUI’s tool registry. The `tui_*` tools see and drive the screen (tabs, tables, traces, errors, logs, diagrams, drawing on the screen), and the `camel_*` tools build and run integrations (catalog documentation, validation, reading and writing the route sources). The `camel_*` tools are the same ones the `camel mcp` server offers, so an agent gets the same Camel through either door; only the `tui_*` tools need the TUI.
 
@@ -70,13 +70,13 @@ Ways 2 and 3 use the same MCP server inside the TUI, with the same tools. The di
 
 Either way the server listens on `127.0.0.1` only, has no authentication, and rejects requests from web pages. **F2** → _AI & MCP_ → _MCP Info_ shows the port and the client, and _MCP Log_ the calls it made.
 
-## 4\. The Camel MCP server, without the TUI
+## 4\. The Camel CLI MCP server, without the TUI
 
 `camel mcp` is a separate MCP server that does not need the TUI at all. It gives an agent the Camel catalog (components, EIPs, data formats, Kamelets, examples), the shared `camel_*` authoring tools, and tools to inspect integrations started with `camel run`. It has no screen, so it has no `tui_*` tools.
 
 Pick this when you do not use the TUI, or when the agent should know Camel while you work elsewhere. It can run next to the TUI; the agent then has both servers.
 
--   [Camel MCP Server](camel-jbang-mcp.md)
+-   [Camel CLI MCP Server](camel-jbang-mcp.md)
     
 
 ## What is the same in every way inside the TUI

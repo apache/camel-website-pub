@@ -567,6 +567,25 @@ Enum values:
 
 
  | failExchange | ToolExecutionErrorStrategy |
+| **toolSearch** (common) | When true, route tools marked searchable and remote MCP tools are omitted from the initial model request and exposed through one synthetic search tool. Directly visible tools stay in the request. Search is a visibility policy, not authorization. Enabling it does not skip MCP tools/list; it only reduces the definitions sent to the model. When false, every eligible tool is sent as before and the searchable flag has no effect. | false | boolean |
+| **toolSearchEmbeddingModel** (common) | Embedding model used when toolSearchStrategy=VECTOR, for example text-embedding-3-small. Required for vector search. It is not read from the embeddings operation model option. |  | String |
+| **toolSearchMaxResults** (common) | Maximum number of tools returned by one tool search. Route and MCP tools are ranked together against this limit. | 5 | int |
+| **toolSearchStrategy** (common) | 
+
+How tool search ranks route and MCP tools. 'KEYWORD' matches the tool name and description. 'VECTOR' uses cosine similarity and requires toolSearchEmbeddingModel. Vector search does not fall back to keyword search.
+
+Enum values:
+
+-   KEYWORD
+    
+-   VECTOR
+    
+
+
+
+
+
+ | KEYWORD | AiToolSearchStrategy |
 | **topP** (common) | Top P for response generation (0.0 to 1.0). |  | Double |
 | **userMessage** (common) | Default user message text to use when no prompt is provided. |  | String |
 | **writeTimeout** (common) | Timeout in milliseconds for writing the request body, which matters for large payloads such as audio and image uploads. When 0 or negative, requestTimeout applies. | 0 | long |
@@ -627,6 +646,7 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIMaxTokens** (common) Constant: [`MAX_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MAX_TOKENS) | The maximum number of tokens to generate in the completion. |  | Integer |
 | **CamelOpenAIPreviousResponseId** (common) Constant: [`PREVIOUS_RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#PREVIOUS_RESPONSE_ID) | Previous response id for server-side conversation state on the Responses API. |  | String |
 | **CamelOpenAIConversationId** (common) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#CONVERSATION_ID) | The id of a conversation created with the Conversations API to run the Responses API request in. |  | String |
+| **CamelOpenAIToolSearchSessionId** (common) Constant: [`TOOL_SEARCH_SESSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#TOOL_SEARCH_SESSION_ID) | Stable identifier used to retain OpenAI tool-search discoveries across exchanges, independently of Responses API conversation state. |  | String |
 | **CamelOpenAIStreaming** (common) Constant: [`STREAMING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STREAMING) | Whether to stream the response back incrementally. |  | Boolean |
 | **CamelOpenAIOutputClass** (common) Constant: [`OUTPUT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#OUTPUT_CLASS) | The Java class name (FQCN) to use for structured output parsing. |  | String |
 | **CamelOpenAIJsonSchema** (common) Constant: [`JSON_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA) | The JSON schema to use for structured output validation. |  | String |

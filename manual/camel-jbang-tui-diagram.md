@@ -117,7 +117,7 @@ Each route has one role:
     
 -   **Shared services** — routes that routes of two or more groups call or hand off to, such as an audit or notification route. Derived from the links between routes, and shown once instead of in every group that uses them.
     
--   **Utility** — plumbing with little business meaning: a route reached only while handling a failure (from a `doCatch`, an `onException` or a dead letter channel), a route that only logs, or one the AI marked as utility. Hidden until you press **u**; with **x** on, the routes reached only on error are shown in the error handling frame of the topology instead, and in the **Error handling** box of the architecture.
+-   **Utility** — plumbing with little business meaning: a route reached only while handling a failure (from a `doCatch`, an `onException` or a dead letter channel), a route that only logs, or one the AI marked as utility. Shown out of the box, so a project shows all its routes; **u** hides them; with **x** on, the routes reached only on error are shown in the error handling frame of the topology instead, and in the **Error handling** box of the architecture.
     
 -   **Error handling** — with **x** on, the routes reached only on error, out of Utility into a box of their own, drawn dashed, with a dashed arrow from each group whose failures go there: a route of the group sends there while it handles a failure, or uses an error handler of its file that does (a route with `noErrorHandler` leaves its failures to its caller). The Info panel names the groups the failures come from, and the Flow panel of a group lists where each of its routes sends its failures. The route view names this group in its header and Info panel too, while **x** is on.
     

@@ -313,7 +313,7 @@ For an `import` in a Java or Groovy source, a Camel component is also found by i
 
 A dependency you declare yourself, with `--dep`, `camel.jbang.dependencies`, or in the project’s POM, is on the classpath before any lookup, so it always takes precedence. Use that when a mapped library is not the one you want, for example the ActiveMQ 5 client where the mapping picks the ActiveMQ 6 client.
 
-`camel validate` and the write tools of the Camel MCP server consult the same three files, so a bean whose class Camel CLI would download is not reported as missing, and the MCP tool `camel_dependency_for_class` answers the coordinates and the declaration for a class from the same mapping, with an optional Maven Central search for the rest.
+`camel validate` and the write tools of the Camel CLI MCP server consult the same three files, so a bean whose class Camel CLI would download is not reported as missing, and the MCP tool `camel_dependency_for_class` answers the coordinates and the declaration for a class from the same mapping, with an optional Maven Central search for the rest.
 
 A library that is missing from the mapping can be added in `known-third-party-libraries.properties` of `camel-kamelet-main` in the Camel source; the file explains the format.
 

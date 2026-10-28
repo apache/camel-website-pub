@@ -133,11 +133,12 @@ See the [keyboard shortcuts](camel-jbang-tui-source-editor.html#_keyboard_shortc
 | `[name|pid|directory]` | Name, PID, or directory path of a Camel integration. When a directory is given, the TUI opens it as a project in the Source tab — you can browse the source code and run it with **F10**. When omitted, the TUI auto-discovers running integrations. |  |
 | `--mcp` | Enable the embedded MCP server for AI agent access to the TUI. | `false` |
 | `--mcp-port` | Port for the embedded MCP server. | `8123` |
-| `--web` | Enable the browser-accessible terminal (WebSocket) server. | `false` |
+| `--web` | Enable the browser-accessible terminal (WebSocket) server. Without an interactive terminal (a script, a CI job, a background shell) it serves browsers only. See [Web Browser Access](camel-jbang-tui-settings.html#_web_browser_access). | `false` |
 | `--web-port` | Port for the web terminal server. | `8090` |
 | `--refresh` | Screen refresh interval in milliseconds. | `100` |
 | `--theme` | Color theme for this session (e.g., `dark`, `tokyo-night`, `dracula`). See [Theme](camel-jbang-tui-settings.html#_theme) for the full list of 21 themes. Overrides the persisted `camel.tui.theme` preference when set. |  |
 | `--panel-theme` | Color theme of the shell (**F6**) and AI (**F8**) panels for this session, or `same` for the main theme. See [Panel Theme](camel-jbang-tui-settings.html#_panel_theme). Overrides the persisted `camel.tui.panelTheme` preference when set. |  |
+| `--defaults` | Start with the default settings, as a new user sees the TUI: the saved `camel.tui.*` settings are not read, and what you change lasts for the session only. See [Settings](camel-jbang-tui-settings.html#_settings). | `false` |
 | `--record` | Play a `.tape` file in the TUI and record it to an Asciinema `.cast` file. See [Scripted Recording](camel-jbang-tui-recording.html#_scripted_recording) for the tape commands. |  |
 | `--record-size` | Size of the recorded terminal for `--record`, as `<cols>x<rows>`. | `200x50` |
 | `--record-fps` | Frames per second captured by `--record`. | `10` |

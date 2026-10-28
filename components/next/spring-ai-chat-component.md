@@ -120,6 +120,25 @@ Enum values:
 | **systemMessage** (producer) | Default system message to set context for the conversation. Can be overridden by the CamelSpringAiChatSystemMessage header. |  | String |
 | **tags** (producer) | Tags for discovering and calling Camel route tools. |  | String |
 | **toolNames** (producer) | Comma-separated tool names for selecting tools by name. Names are resolved against a ToolCallbackResolver bound in the registry (Spring Boot applications get Spring AI’s auto-configured one), then against the tools discovered via tags and configured via toolCallbacks, and finally against a ToolCallback bound in the registry under that name. An unresolvable name fails the exchange. |  | String |
+| **toolSearch** (producer) | When true, route tools marked searchable and remote MCP tools are omitted from the initial model request and exposed through one synthetic search tool. Directly visible route tools and toolCallbacks stay in the request. Search is a visibility policy, not authorization. Enabling it does not skip MCP tools/list. Camel must build the ChatClient from chatModel. | false | boolean |
+| **toolSearchEmbeddingModel** (producer) | **Autowired** Spring AI embedding model used when toolSearchStrategy=VECTOR. Required for vector search. |  | EmbeddingModel |
+| **toolSearchMaxResults** (producer) | Maximum number of tools returned by one tool search. Route and MCP tools are ranked together. | 5 | int |
+| **toolSearchStrategy** (producer) | 
+
+How tool search ranks route and MCP tools. 'KEYWORD' matches the tool name and description. 'VECTOR' uses cosine similarity and requires toolSearchEmbeddingModel. Vector search does not fall back to keyword search.
+
+Enum values:
+
+-   KEYWORD
+    
+-   VECTOR
+    
+
+
+
+
+
+ | KEYWORD | AiToolSearchStrategy |
 | **userMessage** (producer) | Default user message text for multimodal requests. Can be combined with media data in the message body. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **advisors** (advanced) | List of custom advisors to add to the ChatClient. These advisors will be added after the built-in advisors (SimpleLogger, SafeGuard, ChatMemory, QuestionAnswer) in the order they are provided in the list. |  | List |
@@ -1209,6 +1228,28 @@ template.requestBodyAndHeader("direct:chat", "What is the capital of France?",
 ```
 
 Each name is resolved, in order, against a `ToolCallbackResolver` bound in the registry, then against the tools discovered via `tags` and configured via `toolCallbacks`, and finally against a `ToolCallback` bound in the registry under that name. A name that resolves nowhere fails the exchange with an `IllegalArgumentException` listing the available tools. You can combine `toolNames` with `tags` — both tool sources are additive.
+
+### Tool search
+
+`toolSearch=true` omits route tools marked `searchable=true`, and remote MCP tools that already passed the server filters, from the initial model request. A route tool with `searchable=false` stays directly visible, as do `toolCallbacks`. The model finds hidden tools through one synthetic `tool_search_tool`. Route and MCP tools are ranked together, and a match is executed by its original callback. Names discovered for a `CamelSpringAiChatConversationId` stay available on later turns of that conversation. Without that header, discovery lasts for the current request only.
+
+Enabling tool search does not skip MCP `tools/list`. It only reduces the definitions sent to the model. `toolSearch=false` (the default) sends the current combined set, and the `searchable` flag has no effect.
+
+Camel has to build the `ChatClient` from `chatModel`. A prebuilt `chatClient` cannot install the search advisor and fails at startup when `toolSearch=true`. `toolSearchStrategy=VECTOR` requires an autowired `toolSearchEmbeddingModel` and does not fall back to keyword search. Retained discoveries are keyed by `CamelSpringAiChatConversationId`. Sessions expire after 30 minutes of inactivity and each `SpringAiToolSearch` instance retains at most 10,000 sessions, evicting the least-recently-used session at capacity. Expired sessions are purged during later session operations; there is no background cleanup thread.
+
+```yaml
+- route:
+    from:
+      uri: direct:ask
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              tags: erp
+              toolSearch: true
+              toolSearchMaxResults: 5
+```
 
 ### Tool Context
 

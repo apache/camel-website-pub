@@ -169,6 +169,8 @@ The error handler is configured with the `errorHandlerRef` attribute.
 
 In this example, we configure a [Dead Letter Channel](../components/4.22.x/eips/dead-letter-channel.md) on the route that should redeliver at most 3 times and use a little delay before retrying.
 
+The route fails on purpose when an order is not reserved: a [Filter](../components/4.22.x/eips/filter-eip.md) with [Throw Exception](../components/4.22.x/eips/throwException-eip.md) in it. After the redeliveries, the order goes to the dead letter endpoint. Any exception does the same, such as one that a bean or a processor throws.
+
 -   XML
     
 -   Legacy Spring XML
@@ -184,7 +186,10 @@ In this example, we configure a [Dead Letter Channel](../components/4.22.x/eips/
         </deadLetterChannel>
     </errorHandler>
     <from uri="direct:in"/>
-    <process ref="myFailureProcessor"/>
+    <filter>
+        <simple>${header.status} != 'reserved'</simple>
+        <throwException exceptionType="java.lang.IllegalStateException" message="Order ${header.orderId} is not reserved"/>
+    </filter>
     <to uri="mock:result"/>
 </route>
 ```
@@ -214,7 +219,10 @@ Then we configure **myDeadLetterErrorHandler** that is our Dead Letter Channel. 
         <!-- set the errorHandlerRef to our DeadLetterChannel, this applies for this route only -->
         <route errorHandlerRef="myDeadLetterErrorHandler">
             <from uri="direct:in"/>
-            <process ref="myFailureProcessor"/>
+            <filter>
+                <simple>${header.status} != 'reserved'</simple>
+                <throwException exceptionType="java.lang.IllegalStateException" message="Order ${header.orderId} is not reserved"/>
+            </filter>
             <to uri="mock:result"/>
         </route>
     </camelContext>
@@ -231,8 +239,12 @@ Then we configure **myDeadLetterErrorHandler** that is our Dead Letter Channel. 
     from:
       uri: direct:in
       steps:
-        - process:
-            ref: myFailureProcessor
+        - filter:
+            simple: "${header.status} != 'reserved'"
+            steps:
+              - throwException:
+                  exceptionType: java.lang.IllegalStateException
+                  message: "Order ${header.orderId} is not reserved"
         - to:
             uri: mock:result
 ```

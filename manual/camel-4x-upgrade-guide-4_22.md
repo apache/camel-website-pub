@@ -157,6 +157,34 @@ When configuring TLS through `SSLContextParameters` with a standalone `TrustMana
 
 When both a `TrustManager` and a keystore are configured on `TrustManagersParameters`, the `TrustManager` is now used, as with the other components that use `SSLContextParameters`; before, the keystore-based trust options were used.
 
+### camel-cometd - the CORS filter allows credentials only for listed origins
+
+With `crossOriginFilterOn=true`, the CORS responses now include `Access-Control-Allow-Credentials: true` only when `allowedOrigins` lists the origins explicitly, without any **or `null`. When `allowedOrigins` is not set, is** , or has an entry with a wildcard such as `[https://*](https://*)` or an entry `null`, the origin is still allowed, but without credentials. Previously credentials were allowed for every origin. A cross-origin client that sends cookies or other credentials must have its origin listed in `allowedOrigins`.
+
+### camel-undertow - a WebSocket connection opened before a consumer with custom handlers started is no longer served
+
+On a WebSocket path whose producer applies a security provider or allowed roles, a connection could be accepted while only the producer served the path, before its consumer was started for the first time. Such a connection ran the producer checks but not the custom `handlers` the consumer configures, as those handlers run only for consumers. Once the consumer was started, the connection was still treated as having passed the consumer checks, so its messages reached the route and it kept receiving what the producer sent.
+
+Once a consumer that configures `handlers` is started on a path, a connection opened on that path before the consumer first ran is no longer served: its messages no longer reach the route and it no longer receives what the producer sends, and the connection is closed. Clients that open a connection in this window must reconnect after the consumer has started.
+
+### camel-vertx-websocket - consumers on the same host and port must use the same SSLContextParameters
+
+All `vertx-websocket` consumers on the same host and port are served by one HTTP server, which is created from the `sslContextParameters` of the first consumer to start. A consumer started later with different `sslContextParameters` (including one with none while the server uses some, or the other way round) used to start and be served with the first consumer’s settings. Such a consumer now fails to start with an `IllegalArgumentException` naming the host and port. Give every consumer on a host and port the same `SSLContextParameters` instance (for example the same bean reference, or the global SSL context parameters), or move consumers that need other settings to another port.
+
+### camel-wordpress - requests and responses are no longer logged
+
+The WordPress client no longer logs every HTTP request and response it exchanges with the WordPress server at `INFO` level (the `org.apache.cxf.services` loggers). The component no longer depends on `cxf-rt-features-logging`, and the `camel-wordpress` JAR no longer contains a `log4j.properties` file.
+
+### camel-lra - starting a saga checks the LRA URL returned by the coordinator
+
+When the LRA saga service starts a new saga, it now checks the URL of the LRA that the coordinator returns, as it already did since 4.22.2 for the LRAs it joins: the URL must be under the configured coordinator (`coordinatorUrl` followed by `coordinatorContextPath`) or under one of the `allowedCoordinatorUrls`. When the coordinator returns LRA URLs under another base URL, for example behind a proxy, starting a saga now fails until that base URL is added to `allowedCoordinatorUrls` (`camel.lra.allowedCoordinatorUrls`). Before, the saga was started, and only a nested saga route that looked the LRA up again failed.
+
+### camel-jbang - camel plugin add selects the plugin release built for the CLI
+
+`camel plugin add <name>` no longer registers a community plugin (such as `forage` or `kit`) with the Maven `LATEST` version when no version is given. It selects the newest release of the plugin built for the version of the CLI, from the `camel.jbang.plugin.camel-versions` property in the POM of the plugin, or else from the version of its `camel-jbang-core` dependency. The exact version is stored in `~/.camel-jbang-plugins.json`, so the plugin no longer moves to newer releases on its own: run `camel plugin add <name>` again to select the newest matching release. When the CLI is between the Camel versions of the releases, it selects the newest release for the nearest older Camel version, with a warning. When the CLI is newer than all the releases, or the releases cannot be read, it warns and uses `LATEST` as before.
+
+`--version` and `--gav` are used as given, with a warning when the release is built for another Camel version. Plugins registered before are not changed. See [Plugin versions](camel-jbang-projects.html#_plugin_versions).
+
 ## Upgrading from 4.22.1 to 4.22.2
 
 ### camel-lra - only an LRA hosted by the configured coordinator is joined

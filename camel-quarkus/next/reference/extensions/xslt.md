@@ -84,18 +84,7 @@ These restrictions remain in place when secure-processing is disabled.
 
 ### Extension functions support
 
-Java extension functions do work properly only when:
-
-1.  Secure-processing is disabled
-    
-2.  Functions are defined in a separate jar
-    
-3.  Functions are augmented during native build phase. For example, they can be registered for reflection:
-    
-
-@RegisterForReflection(targets = { my.Functions.class })
-public class FunctionsConfiguration {
-}
+Java extension functions only work when secure-processing is disabled.
 
 > **Note**
 > In native mode, the content of the XSLT source URIs is parsed and compiled into Java classes at build time. These Java classes are the only source of XSLT information at runtime. The XSLT source files may not be included in the application archive at all.

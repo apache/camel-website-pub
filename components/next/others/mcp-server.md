@@ -4,6 +4,9 @@
 
 The camel-mcp-server module exposes Camel routes registered via the [ai-tool](../ai-tool-component.md) and [ai-resource](../ai-resource-component.md) components as tools and resources of a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server, served over MCP streamable HTTP or stdio (stdin/stdout JSON-RPC). No route is needed for the server itself: add the dependency, configure which tags to expose, and every matching `ai-tool` route becomes an MCP tool and every matching `ai-resource` route an MCP resource, discoverable by any MCP client (another Camel application, an IDE, a coding agent).
 
+> **Note**
+> This component serves the routes of your own integration. To give your AI assistant Camel knowledge while you write routes (catalog, validation, inspecting running integrations), use the [Camel CLI MCP Server](../../../manual/camel-jbang-mcp.md) (`camel mcp`) instead.
+
 Maven users will need to add the following dependency to their `pom.xml`:
 
 ```xml

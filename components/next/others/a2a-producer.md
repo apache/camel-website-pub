@@ -351,6 +351,8 @@ The full push notification config CRUD is also available. `PUSH_CONFIG_GET` and 
     uri: "a2a:https://agent.example.com?protocolBinding=JSONRPC"
 ```
 
+When called from an A2A consumer route, producer controls and results are separate from the consumer’s `CamelA2ARequest*` metadata and `CamelA2AReply*` controls. See [the consumer guide](a2a-consumer.md) for nested agent calls and POJO identity handling.
+
 ### Parallel Multicast
 
 Call multiple agents concurrently using Camel’s `multicast` EIP:

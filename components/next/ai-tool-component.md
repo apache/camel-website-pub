@@ -88,6 +88,7 @@ The AI Tool component supports the following options which are listed below.
 | **parameters** (consumer) | Tool input parameters. Format: parameter.NAME=TYPE, parameter.NAME.description=TEXT, parameter.NAME.required=true or false, parameter.NAME.enum=val1,val2. Supported types: string, integer, number, boolean. Mutually exclusive with argSchema. This is a multi-value option with prefix: parameter. |  | Map |
 | **readOnlyHint** (consumer) | MCP hint that the tool only reads data and does not modify state. Advisory for MCP clients; not enforced by Camel. | false | Boolean |
 | **returnDirect** (consumer) | When true, AI producers that support agentic tool loops (such as camel-openai) return this tool’s result directly to the caller without sending it back to the model. Also published as an MCP tool annotation when the tool is exposed via camel-mcp-server. | false | Boolean |
+| **searchable** (consumer) | When true, this route tool is eligible for tool search and is omitted from the initial model request while the producer has tool search enabled. When false, the tool stays directly visible to the model. Searchability is a visibility policy, not an authorization policy, and has no effect when tool search is disabled. | false | boolean |
 | **tags** (consumer) | Comma-separated list of tags used to group tools. Producers filter the registry by these tags to select which tools to expose to the LLM. When omitted, the tool goes into a default pool available to all producers. |  | String |
 | **title** (consumer) | Optional display title for MCP tool listings. Advisory hint for MCP clients only. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
@@ -124,6 +125,7 @@ With the following _path_ and _query_ parameters:
 | **parameters** (consumer) | Tool input parameters. Format: parameter.NAME=TYPE, parameter.NAME.description=TEXT, parameter.NAME.required=true or false, parameter.NAME.enum=val1,val2. Supported types: string, integer, number, boolean. Mutually exclusive with argSchema. This is a multi-value option with prefix: parameter. |  | Map |
 | **readOnlyHint** (consumer) | MCP hint that the tool only reads data and does not modify state. Advisory for MCP clients; not enforced by Camel. | false | Boolean |
 | **returnDirect** (consumer) | When true, AI producers that support agentic tool loops (such as camel-openai) return this tool’s result directly to the caller without sending it back to the model. Also published as an MCP tool annotation when the tool is exposed via camel-mcp-server. | false | Boolean |
+| **searchable** (consumer) | When true, this route tool is eligible for tool search and is omitted from the initial model request while the producer has tool search enabled. When false, the tool stays directly visible to the model. Searchability is a visibility policy, not an authorization policy, and has no effect when tool search is disabled. | false | boolean |
 | **tags** (consumer) | Comma-separated list of tags used to group tools. Producers filter the registry by these tags to select which tools to expose to the LLM. When omitted, the tool goes into a default pool available to all producers. |  | String |
 | **title** (consumer) | Optional display title for MCP tool listings. Advisory hint for MCP clients only. |  | String |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -597,6 +599,27 @@ context.getManagementStrategy().addEventNotifier(new EventNotifierSupport() {
 ```
 
 The event is emitted best-effort: when no `EventNotifier` is registered nothing is published, and a failure to notify never affects the refusal returned to the model.
+
+### Tool search visibility
+
+`searchable` controls whether a route tool is sent to the model immediately or only after a producer with tool search enabled finds it. The default is `false`, so the tool stays directly visible. `searchable=true` omits the tool from the initial model request and makes it eligible for search together with remote MCP tools.
+
+Searchability is a visibility policy. It does not authorize the call. An `authorizationPolicy` on the tool is still applied when the model invokes it. With tool search disabled on the producer, `searchable` has no effect and the tool is exposed as before.
+
+```yaml
+- route:
+    from:
+      uri: ai-tool:invoice
+      parameters:
+        tags: erp
+        searchable: true
+        description: "Look up an invoice by id"
+        parameter.id: string
+        parameter.id.required: true
+      steps:
+        - to:
+            uri: bean:invoiceService
+```
 
 ## See Also
 

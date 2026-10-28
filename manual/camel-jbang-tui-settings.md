@@ -139,7 +139,7 @@ Figure 4. Catppuccin Latte: a light theme on the **Overview** tab
 
 Open the **F2** actions menu and choose **Settings…​** to change TUI preferences in one place. Use **↑**/**↓** to move between rows, **Space** (or **←**/**→**) to cycle a choice, type to edit a text field, **Enter** to save, and **Esc** to cancel.
 
-Each row is stored under a `camel.tui.*` key in the Camel CLI configuration file, so the same setting can also be written there by hand:
+Each row is stored under a `camel.tui.*` key in the Camel CLI configuration file, so the same setting can also be written there by hand. To see the TUI as a new user does, for a demo or to rule out a setting, start it with `camel tui --defaults`: the saved settings are not read, and what you change lasts for that session only, so your own settings are left as they are.
 
    
 | Setting | Key | Description | Default |
@@ -186,6 +186,8 @@ camel tui --web
 ```
 
 This starts a web terminal server on `localhost:8090` (configurable with `--web-port`). Open `[http://localhost:8090](http://localhost:8090)` in a browser to get a full xterm.js terminal driving the same TUI dashboard, with the same tabs, keyboard shortcuts, and F2 actions menu as a local session.
+
+Without an interactive terminal — started from a script, a CI job or a background shell — `camel tui --web` serves browsers only: it prints the address and keeps serving until you press **Ctrl+C** or stop the process. The MCP server drives the screen of the terminal, so `--mcp` needs one and is refused in this mode.
 
 Like the MCP server, the web server is bound to `127.0.0.1` only — it never listens on external interfaces — and there is no authentication beyond that. Each browser connection gets its own independent TUI session (its own process discovery and navigation state), the same as if you’d run `camel tui` again in a new terminal.
 

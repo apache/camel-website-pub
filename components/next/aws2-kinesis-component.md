@@ -603,6 +603,8 @@ The consumer supports a custom `KinesisResumeAction` for controlling where each 
 
 The consumer creates a separate instance per shard via reflection to avoid concurrent mutation when multiple shards are processed in parallel. Because of this, custom subclasses **must** provide a public no-arg constructor. Per-shard state (`builder`, `shardId`, `streamName`) is injected via setters after construction.
 
+When a shard needs a new shard iterator, `evalEntry` is called for every entry of the resume cache, with the shard id as key and the sequence number (a `String`, or the `KinesisOffset` stored by `KinesisResumeStrategy`) as value. The default action starts the shard after the sequence number of its own entry and ignores the entries of the other shards; a subclass should compare the key with `getShardId()` the same way.
+
 ### Batch Producer
 
 This component implements the Batch Producer.

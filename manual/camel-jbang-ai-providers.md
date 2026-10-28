@@ -123,4 +123,4 @@ Common OpenAI-compatible servers:
     
 -   [Camel TUI Local Models](camel-jbang-tui-local-models.md) — the tool set a local model gets in the TUI, what a question costs, and the Ollama tab
     
--   [Camel MCP Server](camel-jbang-mcp.md) — the other way round: your own AI assistant uses Camel tools
+-   [Camel CLI MCP Server](camel-jbang-mcp.md) — the other way round: your own AI assistant uses Camel tools

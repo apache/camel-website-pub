@@ -14,6 +14,7 @@ The GZip Deflater dataformat supports the following options which are listed bel
    
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
+| **maxDecompressedSize** (advanced) | `1073741824` | `Integer` | Set the maximum decompressed size of the data (in bytes). The default value if not specified corresponds to 1 gigabyte. An IOException is thrown if the decompressed size exceeds this amount. Set to -1 to disable setting a maximum decompressed size. |
 
 ## Message Body
 

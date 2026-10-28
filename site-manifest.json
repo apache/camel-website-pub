@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1792951552315,
+  "generated": 1793198214181,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -17934,6 +17934,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/hibernate.adoc",
+              "url": "/camel-spring-boot/next/starters/hibernate.html",
+              "title": "Hibernate"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/hivemq.adoc",
               "url": "/camel-spring-boot/next/starters/hivemq.html",
               "title": "HiveMQ"
@@ -25171,6 +25177,12 @@
               "path": "hazelcast-topic-component.adoc",
               "url": "/components/next/hazelcast-topic-component.html",
               "title": "Hazelcast Topic"
+            },
+            {
+              "module": "ROOT",
+              "path": "hibernate-component.adoc",
+              "url": "/components/next/hibernate-component.html",
+              "title": "Hibernate"
             },
             {
               "module": "ROOT",
@@ -35464,7 +35476,7 @@
               "module": "ROOT",
               "path": "camel-jbang-mcp.adoc",
               "url": "/manual/camel-jbang-mcp.html",
-              "title": "Camel MCP Server"
+              "title": "Camel CLI MCP Server"
             },
             {
               "module": "ROOT",
@@ -35795,6 +35807,12 @@
               "path": "getting-started.adoc",
               "url": "/manual/getting-started.html",
               "title": "Getting Started"
+            },
+            {
+              "module": "ROOT",
+              "path": "governed-ai-agents.adoc",
+              "url": "/manual/governed-ai-agents.html",
+              "title": "Governed AI Agents"
             },
             {
               "module": "ROOT",

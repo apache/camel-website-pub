@@ -38,10 +38,20 @@ quarkus.camel.langchain4j.ingest.products.embedding-store=products
 quarkus.camel.langchain4j.ingest.products.embedding-model=my-model
 ```
 
-Each file is read as UTF-8 text — unless a `parser` turns binary formats into text first, see below — split into overlapping segments (`max-segment-size`, `max-overlap-size`; or a `DocumentSplitter` CDI bean named by `document-splitter`, which then replaces the sizes), embedded in batches (`embedding-batch-size`, 32 by default) and written to the store; a document is held in memory whole while it is split, so `max-document-size` can cap it in characters — 0, the default, means no limit, and an oversized document fails the exchange cleanly. `embedding-store` and `embedding-model` name CDI beans and may be omitted when the application has exactly one of each. Every segment carries `camel_ingest_pipeline` and `camel_ingest_document_id` metadata, so retrieval can cite which document an answer came from (up to 3.39.x the keys were `camel_quarkus_pipeline` and `camel_quarkus_document_id` — see the migration guide). Apart from `enabled` and the `source.*` settings shown here, properties are fixed at build time. A pipeline declared through runtime properties alone — nothing but a `source.directory`, say — is invisible to build-time validation; its checks, including the clash with an equally named `@Ingest` pipeline, report at startup instead.
+Each file is read as UTF-8 text — unless a `parser` turns binary formats into text first, see below — split into overlapping segments (`max-segment-size`, `max-overlap-size`; or a `DocumentSplitter` CDI bean named by `document-splitter`, which then replaces the sizes), embedded in batches (`embedding-batch-size`, 32 by default) and written to the store; a document is held in memory whole while it is split, so `max-document-size` can cap it in characters — 0, the default, means no limit, and an oversized document fails the exchange cleanly. `embedding-store` and `embedding-model` name CDI beans and may be omitted when the application has exactly one of each. Every segment carries `camel_ingest_pipeline` and `camel_ingest_document_id` metadata, so retrieval can cite which document an answer came from (up to 3.39.x the keys were `camel_quarkus_pipeline` and `camel_quarkus_document_id` — see the migration guide). Apart from `enabled`, `filter.*` and the `source.*` settings shown here, properties are fixed at build time. A pipeline declared through runtime properties alone — nothing but a `source.directory`, say — is invisible to build-time validation; its checks, including the clash with an equally named `@Ingest` pipeline, report at startup instead. Each pipeline is composed from the catalog’s `langchain4j-ingest-file-source`, parser action and `langchain4j-ingest-sink` Kamelets: its route `langchain4j-ingest-<name>` plus one route per Kamelet it uses, `langchain4j-ingest-<name>-source` (directory pipelines), `-parser` (with a `parser`) and `-sink`. The pipelines always load these Kamelets from the classpath, whatever `camel.component.kamelet.location` says; shipping an equally named Kamelet replaces internal steps — including the identity capture — and is advanced surgery. Application-wide `camel.kamelet.<kamelet>.` **properties and `CAMEL_KAMELET_`** environment variables for these four Kamelets reach the pipelines too, for every option the extension leaves unset, so do not set them. To pause a directory pipeline, stop its `langchain4j-ingest-<name>-source` route, or both routes, for example with `camelContext.getRouteController().stopRoute(…​)`: with `langchain4j-ingest-<name>` alone stopped, the directory is still polled and each new file fails after the Kamelet’s 30 s timeout. Camel registers the Kamelet routes in JMX only with `camel.main.jmxManagementRegisterRoutesCreateByKamelet=true`.
 
 > **Note**
 > This experimental extension keeps no record of what it wrote: an edited document re-ingests on top of its old segments, and removing a document from the source removes nothing from the store. Replace and delete arrive with the synchronising engine in a later release. What is remembered is which documents were already ingested — the idempotent repository below.
+
+### Filtering deliveries
+
+Per pipeline, `filter.include-id` and `filter.exclude-id` take comma-separated Ant-style patterns matched against the document id — exclusion wins, and a rejected delivery never takes the sink’s dedup claim nor reads the body. Matching is case-sensitive, and an id starting with `/` (an absolute path, say) only matches a pattern that starts with `/` too. With a `parser` they are checked before the parse, so an excluded document is never parsed nor sent to Docling Serve. `filter.min-document-size` rejects documents too short to carry retrievable content, and `filter.document-filter` names a Camel `Predicate` bean evaluated with the body available. With a `parser` these two see the parsed text, so a document they reject has been parsed first — with `docling`, by the remote Docling Serve. A rejected delivery is answered with a `filtered` outcome; on a directory pipeline it is logged at DEBUG and the file is not read again until it changes, its key held in memory even with a persistent register: after a restart, a changed `filter.*` applies to it. An `@Ingest` pipeline is filtered the same way: the builder has no filter methods, and the `filter.*` properties apply to it too.
+
+```properties
+quarkus.camel.langchain4j.ingest.products.filter.include-id=**/*.pdf,**/*.md
+quarkus.camel.langchain4j.ingest.products.filter.exclude-id=**/draft-*
+quarkus.camel.langchain4j.ingest.products.filter.min-document-size=100
+```
 
 ### The idempotent repository
 
@@ -103,6 +113,20 @@ quarkus.camel.langchain4j.ingest.reports.parser=tika
 `docling` converts documents to structure-preserving markdown through a [Docling Serve](https://github.com/docling-project/docling-serve) instance, OCR included. It needs the `camel-quarkus-docling` extension and the instance’s address in `camel.component.docling.docling-serve-url`.
 
 A missing parser extension fails the build naming the artifact, the same way a missing consumer component does. The Java twin is `IngestPipeline.parser("tika")`, and a consumer-fed pipeline parses the same way — the payload the consumer delivers goes to the parser first. With a parser, `max-document-size` also rejects a raw payload larger than the cap (in bytes) before it reaches the parser, on top of capping the extracted text (in characters).
+
+### Ingesting media: images, audio, video and PDF
+
+`modality=media` embeds each document whole, as one vector, instead of reading it as text: the bytes go to a multimodal embedding model as audio, an image, video or a PDF, told apart by the MIME type, and the vector is stored with a placeholder segment whose text is the document id, stamped with the usual identity metadata, so retrieval cites it like any other. The model must declare the matching content type in its `supportedContentTypes()`: the pipeline fails to start with a text-only model, and a document whose medium the model does not declare fails before its bytes are read. `parser` and `document-splitter` must not be set, the splitter sizes and `embedding-batch-size` do not apply, and `max-document-size` and `filter.min-document-size` count bytes.
+
+```properties
+quarkus.camel.langchain4j.ingest.photos.source.directory=/var/data/photos
+quarkus.camel.langchain4j.ingest.photos.modality=media
+quarkus.camel.langchain4j.ingest.photos.embedding-model=my-multimodal-model
+quarkus.camel.langchain4j.ingest.photos.embedding-store=photos
+quarkus.camel.langchain4j.ingest.photos.filter.include-id=**/*.png,**/*.jpg
+```
+
+The MIME type handed to the model comes from `content-type` or, when unset, from the file extension through Camel’s MIME table (wav, mp3, flac, ogg, opus, m4a, aac and aiff for audio; png, jpg, gif and webp for images; mp4, mov and webm for video; pdf); a file whose type cannot be determined fails the exchange, and `content-type` without `modality=media` is rejected like the parser and splitter conflicts. On a directory pipeline such a file — `notes.txt`, `Thumbs.db` — fails again on every poll, so restrict the ids with `filter.include-id`, as above: it is checked before the media type. Images are embedded today by several LangChain4j providers; no provider embeds audio out of the box yet, so an audio model is a CDI bean of your own that declares `AUDIO` — typically a client of an audio embedding service — and either way the same bean embeds the query image or clip at retrieval time. The Java twin is `IngestPipeline.modality("media")`, and a consumer-fed pipeline embeds the delivered payload the same way.
 
 ### Other sources, declared in Java
 
@@ -181,6 +205,16 @@ The Camel consumer URI feeding this pipeline: any component, with its own option
 How a consumed payload becomes text before it is split: `tika` extracts plain text from PDF, office and similar formats in-process, `docling` converts to structure-preserving markdown through a Docling Serve instance (configure it with `camel.component.docling.*`). When not set, the payload is read as text as-is. Each value needs its extension on the classpath: `camel-quarkus-tika` or `camel-quarkus-docling`.
 
  | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".modality](#quarkus-camel-langchain4j-ingest-pipeline-name-modality)`
+
+What the consumed payload is. `text`, the default, is read as a String, split into segments and embedded segment by segment. `media` is read as bytes and embedded whole, as one vector: audio, an image, video or a PDF, told apart by the MIME type, each needing an embedding model that declares the matching content type — the pipeline fails to start with a text-only model. In media mode `parser` and `document-splitter` must not be set, the splitter sizes and `embedding-batch-size` do not apply, and `max-document-size` and `filter.min-document-size` count bytes.
+
+ | `string` | `text` |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".content-type](#quarkus-camel-langchain4j-ingest-pipeline-name-content-type)`
+
+MIME type of a media payload, such as `audio/wav` or `image/png`, handed to the embedding model. When not set, it is derived from the document id’s file extension through Camel’s MIME table; a document whose type cannot be determined, or whose medium the model does not declare, fails the exchange. Only valid with `modality=media`: set without it, the pipeline is rejected.
+
+ | `string` |  |
 | `[quarkus.camel.langchain4j.ingest."pipeline-name".embedding-store](#quarkus-camel-langchain4j-ingest-pipeline-name-embedding-store)`
 
 Name of the `EmbeddingStore` bean to write to. When not set, the only one present is used.
@@ -208,7 +242,7 @@ How many segments are embedded per request to the embedding model. Providers wit
  | `int` | `32` |
 | `[quarkus.camel.langchain4j.ingest."pipeline-name".max-document-size](#quarkus-camel-langchain4j-ingest-pipeline-name-max-document-size)`
 
-Maximum size of one document in characters, applied to the text about to be split; 0, the default, means no limit. The pipeline holds a document in memory whole, so the cap is the protection against oversized — on a consumer-fed pipeline, attacker-sized — payloads. An oversized document fails the exchange cleanly.
+Maximum size of one document in characters, applied to the text about to be split, or in bytes with `modality=media`; 0, the default, means no limit. The pipeline holds a document in memory whole, so the cap is the protection against oversized — on a consumer-fed pipeline, attacker-sized — payloads. An oversized document fails the exchange cleanly.
 
  | `int` | `0` |
 | `[quarkus.camel.langchain4j.ingest."pipeline-name".document-splitter](#quarkus-camel-langchain4j-ingest-pipeline-name-document-splitter)`
@@ -244,6 +278,26 @@ When `true`, an in-memory register (100 000 keys) is created and bound under the
 | `[quarkus.camel.langchain4j.ingest."pipeline-name".source.document-id](#quarkus-camel-langchain4j-ingest-pipeline-name-source-document-id)`
 
 Where the document id lives in the exchange the consumer delivers: normally the name of a header, such as `CamelAwsS3Key` for an S3 consumer or `CamelKafkaKey` for a Kafka one. For an id that is not a plain header, write a simple-language expression in the `$simple{...}` form — MicroProfile Config passes it through untouched, while a `${...}` in a properties file would be consumed as a config expansion before Camel ever saw it. When not set, a pipeline reading a directory uses the file name, and one consuming from a component uses the `CamelLangChain4jIngestDocumentId` header (the deprecated 3.39 name `CamelIngestDocumentId` is still read as a fallback).
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".filter.include-id](#quarkus-camel-langchain4j-ingest-pipeline-name-filter-include-id)`
+
+Comma-separated Ant-style patterns the document id must match to be ingested, for example `**/*.pdf,**/*.md` (`*.pdf` alone misses files in subdirectories). Matching is case-sensitive, and an id starting with `/` needs a pattern starting with `/`. A non-matching delivery is rejected before the sink’s dedup claim, without reading the body and, with a `parser`, before the parse. When not set, every id is accepted.
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".filter.exclude-id](#quarkus-camel-langchain4j-ingest-pipeline-name-filter-exclude-id)`
+
+Comma-separated Ant-style patterns for document ids to skip, for example `**/draft-*`. Exclusion wins over `include-id`.
+
+ | `string` |  |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".filter.min-document-size](#quarkus-camel-langchain4j-ingest-pipeline-name-filter-min-document-size)`
+
+Minimum size of one document in characters, in bytes with `modality=media`; 0, the default, means no minimum. A shorter document is answered `filtered` instead of being written.
+
+ | `int` | `0` |
+| `[quarkus.camel.langchain4j.ingest."pipeline-name".filter.document-filter](#quarkus-camel-langchain4j-ingest-pipeline-name-filter-document-filter)`
+
+Name of a Camel `Predicate` bean deciding whether a delivery is ingested, evaluated with the body available. Looked up by name only.
 
  | `string` |  |
 

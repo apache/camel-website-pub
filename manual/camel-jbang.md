@@ -17,7 +17,7 @@ Write a route in YAML, Java, or XML. Run it. Debug it. Trace messages flowing th
 
 **Full development lifecycle.** The CLI is not just a runner. It includes a built-in route debugger, a message tracer, health checks, metrics, a data-transformation prototyper, and an export command that produces a production-ready Spring Boot or Quarkus project from your prototype files.
 
-**Terminal-native and AI-ready.** Every capability is a structured CLI command — designed for both human operators and AI coding assistants that work through terminal prompts. The [Camel MCP Server](camel-jbang-mcp.md) exposes the full Camel catalog to AI tools (Claude Code, GitHub Copilot, JetBrains AI, and others), and the [Camel TUI](camel-jbang-tui.md) provides a visual dashboard in the terminal — useful over SSH, in containers, in CI, or in any environment where a browser is not available.
+**Terminal-native and AI-ready.** Every capability is a structured CLI command — designed for both human operators and AI coding assistants that work through terminal prompts. The [Camel CLI MCP Server](camel-jbang-mcp.md) exposes the full Camel catalog to AI tools (Claude Code, GitHub Copilot, JetBrains AI, and others), and the [Camel TUI](camel-jbang-tui.md) provides a visual dashboard in the terminal — useful over SSH, in containers, in CI, or in any environment where a browser is not available.
 
 **300+ connectors, one CLI.** The entire Apache Camel ecosystem — Kafka, AWS, databases, REST, messaging, files, and hundreds more — is available through a single `camel run` command. No dependency management required.
 
@@ -29,6 +29,12 @@ Install the CLI with the installer script (Linux and macOS; see [Installing the 
 
 ```bash
 curl -fsSL https://camel.apache.org/install.sh | sh
+```
+
+This installs the latest release, which can be newer than the current LTS release. To install the newest LTS release instead (`camel self-update` then keeps it on LTS releases):
+
+```bash
+curl -fsSL https://camel.apache.org/install.sh | sh -s -- --version LTS
 ```
 
 Or, if you use [JBang](https://www.jbang.dev/download/):
@@ -83,7 +89,7 @@ camel run hello.yaml --dev
 | [Kubernetes Plugin](camel-jbang-kubernetes.md) | Build and deploy Camel integrations to Kubernetes and OpenShift. |
 | [Testing Plugin](camel-jbang-test.md) | Automated testing with the Citrus test framework. |
 | [Camel TUI](camel-jbang-tui.md) | Terminal dashboard for developing, monitoring, and debugging Camel integrations with a source editor, route topology, message tracing, and AI integration. |
-| [Camel MCP Server](camel-jbang-mcp.md) | Expose the Camel catalog and tools to AI coding assistants via the Model Context Protocol. |
+| [Camel CLI MCP Server](camel-jbang-mcp.md) | Expose the Camel catalog and tools to AI coding assistants via the Model Context Protocol. |
 
 ## How It Works
 

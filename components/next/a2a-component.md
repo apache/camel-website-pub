@@ -259,13 +259,18 @@ The A2A component supports the following message header(s), which is/are listed 
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelA2AOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#OPERATION) | A2A operation to invoke. |  | String |
-| **CamelA2ATaskId** (common) Constant: [`TASK_ID`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#TASK_ID) | Task ID. |  | String |
+| **CamelA2ARequestOperation** (consumer) Constant: [`REQUEST_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#REQUEST_OPERATION) | Incoming operation, also retained as an exchange property. |  | String |
+| **CamelA2ARequestTaskId** (consumer) Constant: [`REQUEST_TASK_ID`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#REQUEST_TASK_ID) | Consumer task ID, also retained as an exchange property. |  | String |
+| **CamelA2ARequestContextId** (consumer) Constant: [`REQUEST_CONTEXT_ID`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#REQUEST_CONTEXT_ID) | Consumer context ID, also retained as an exchange property. |  | String |
+| **CamelA2AReplyTaskState** (consumer) Constant: [`REPLY_TASK_STATE`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#REPLY_TASK_STATE) | Task state to return from SendMessage; defaults to TASK\_STATE\_COMPLETED. |  | String |
+| **CamelA2AReplyType** (consumer) Constant: [`REPLY_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#REPLY_TYPE) | SendMessage reply type: task (default) or message. |  | String |
+| **CamelA2ATaskId** (producer) Constant: [`TASK_ID`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#TASK_ID) | Downstream task ID for producer requests and responses. |  | String |
 | **CamelA2APushConfigId** (common) Constant: [`PUSH_CONFIG_ID`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#PUSH_CONFIG_ID) | Push notification config ID. |  | String |
-| **CamelA2AContextId** (common) Constant: [`CONTEXT_ID`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#CONTEXT_ID) | Context ID for multi-turn conversations. |  | String |
+| **CamelA2AContextId** (producer) Constant: [`CONTEXT_ID`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#CONTEXT_ID) | Downstream context ID for producer requests and responses. |  | String |
 | **CamelA2AMessageId** (common) Constant: [`MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#MESSAGE_ID) | Message ID. |  | String |
-| **CamelA2ATaskState** (common) Constant: [`TASK_STATE`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#TASK_STATE) | Task state. |  | String |
+| **CamelA2ATaskState** (producer) Constant: [`TASK_STATE`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#TASK_STATE) | Task state from the producer response. |  | String |
 | **CamelA2AMethod** (producer) Constant: [`METHOD`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#METHOD) | A2A method name invoked. |  | String |
-| **CamelA2AResponseType** (common) Constant: [`RESPONSE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#RESPONSE_TYPE) | Response type: task or message. |  | String |
+| **CamelA2AResponseType** (producer) Constant: [`RESPONSE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#RESPONSE_TYPE) | Producer response type; does not control the consumer reply. |  | String |
 | **CamelA2AReturnImmediately** (common) Constant: [`RETURN_IMMEDIATELY`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#RETURN_IMMEDIATELY) | Return immediately flag. |  | Boolean |
 | **CamelA2AHistoryLength** (common) Constant: [`HISTORY_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#HISTORY_LENGTH) | Max history messages. |  | Integer |
 | **CamelA2AStreamEmitter** (consumer) Constant: [`STREAM_EMITTER`](https://javadoc.io/doc/org.apache.camel/camel-a2a/latest/org/apache/camel/component/a2a/A2AConstants.html#STREAM_EMITTER) | SSE stream emitter for route processors. |  | A2AStreamEmitter |
@@ -296,10 +301,10 @@ The message of the caller, for SendMessage and SendStreamingMessage (the compone
 
 
  |
-| **Consumer reply** | `text`, `bytes`, `stream`, `file` or `pojo` | The reply of the agent: text, sent as one text part (bytes, a stream or a file as their text), or a Message sent as it is. Another body is sent as text: a Task as the text of its last message, a Map or a POJO as its toString(): marshal it first. The reply goes in a Task, completed unless the CamelA2ATaskState header says another state, or as a Message when the CamelA2AResponseType header is message. |
+| **Consumer reply** | `text`, `bytes`, `stream`, `file` or `pojo` | The reply of the agent: text, sent as one text part (bytes, a stream or a file as their text), or Message content with the consumer task/context identity. Another body is sent as text: a Task as the text of its last message, a Map or a POJO as its toString(): marshal it first. The reply goes in a Task, completed unless the CamelA2AReplyTaskState header says another state, or as a Message when the CamelA2AReplyType header is message. |
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo` | 
 
-The message to send: text, sent as one text part (bytes, a stream or a file as their text), or a Message sent as it is; MESSAGE\_STREAM also takes a SendMessageRequest. Another body is sent as its toString(), so a Map or a POJO needs marshalling first, and JSON text is sent as text. PUSH\_CONFIG\_CREATE needs a TaskPushNotificationConfig, and the other operations read headers, not the body.
+The message to send: text, sent as one text part (bytes, a stream or a file as their text), or a Message. Forwarding the original consumer Message instance strips its task/context IDs; route-supplied copies retain theirs. MESSAGE\_STREAM also takes a SendMessageRequest. Another body is sent as its toString(), so a Map or a POJO needs marshalling first, and JSON text is sent as text. PUSH\_CONFIG\_CREATE needs a TaskPushNotificationConfig, and the other operations read headers, not the body.
 
 -   With `operation=TASK_GET`: `any`
     
@@ -428,14 +433,19 @@ steps:
   
 | Header | Type | Description |
 | --- | --- | --- |
-| `CamelA2AOperation` | `String` | A2A operation to invoke. Accepts both enum names (`TASK_GET`, `PUSH_CONFIG_CREATE`) and PascalCase method names (`GetTask`, `CreateTaskPushNotificationConfig`). |
+| `CamelA2AOperation` | `String` | Producer operation to invoke. The consumer does not set this header. Accepts both enum names (`TASK_GET`, `PUSH_CONFIG_CREATE`) and PascalCase method names (`GetTask`, `CreateTaskPushNotificationConfig`). |
 | `CamelA2ATaskId` | `String` | Task ID for `GetTask`, `CancelTask`, `SubscribeToTask`, and push notification operations. |
 | `CamelA2APushConfigId` | `String` | Push notification config ID for get/delete operations. |
-| `CamelA2AContextId` | `String` | Context ID for multi-turn conversations. Set automatically on consumer inbound and producer response. |
+| `CamelA2AContextId` | `String` | Downstream context ID for multi-turn conversations. Used by producers and set from producer responses. Consumer context is available separately in `CamelA2ARequestContextId`. |
 | `CamelA2AMessageId` | `String` | Message ID from the request/response. |
 | `CamelA2ATaskState` | `String` | Task state from the response (e.g., `TASK_STATE_COMPLETED`, `TASK_STATE_WORKING`). |
 | `CamelA2AMethod` | `String` | A2A method name invoked (set on producer response). |
-| `CamelA2AResponseType` | `String` | Response type after a producer call (`task`, `message`, `taskList`, `pushConfigList`, or `stream`). On consumer routes, set this header to `message` to return a message-only `SendMessage` response; the default is a task response. |
+| `CamelA2AResponseType` | `String` | Response type after a producer call (`task`, `message`, `taskList`, `pushConfigList`, or `stream`). This is a producer result; it does not select the consumer reply type. Use `CamelA2AReplyType` for that. |
+| `CamelA2ARequestOperation` | `String` | Incoming method name, such as `SendMessage` or `SendStreamingMessage`. Also retained as an exchange property. |
+| `CamelA2ARequestTaskId` | `String` | Consumer task ID. Also retained as an exchange property used for replies and progress updates. |
+| `CamelA2ARequestContextId` | `String` | Consumer context ID. Also retained as an exchange property used for replies. |
+| `CamelA2AReplyTaskState` | `String` | State of the task returned by `SendMessage`; defaults to `TASK_STATE_COMPLETED`. Producer results do not change it. |
+| `CamelA2AReplyType` | `String` | `SendMessage` reply type: `task` (default) or `message`. Producer results do not change it. |
 | `CamelA2AReturnImmediately` | `Boolean` | Override `returnImmediately` per-request. Takes precedence over endpoint-level config. |
 | `CamelA2AHistoryLength` | `Integer` | Producer request field for `GetTask` and `SubscribeToTask`. |
 | `CamelA2AUserProfile` | `Map<String, Object>` | Authenticated user profile (set as exchange **property**, not a header). Populated when `validateAuth=true` and authentication succeeds. Access via `$\{exchangeProperty.CamelA2AUserProfile}` in Simple expressions. |

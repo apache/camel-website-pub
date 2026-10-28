@@ -16,7 +16,13 @@ On Windows (PowerShell):
 irm https://camel.apache.org/install.ps1 | iex
 ```
 
-See [Installing the Camel CLI Launcher](camel-jbang-launcher-install.md) for upgrading and switching versions.
+Both install the latest release, which can be newer than the current LTS release. To install the newest LTS release, or an exact version such as `4.22.2`, pass `--version` (`-Version` on Windows):
+
+```bash
+curl -fsSL https://camel.apache.org/install.sh | sh -s -- --version LTS
+```
+
+See [Installing the Camel CLI Launcher](camel-jbang-launcher-install.md) for release line selectors, pinning, upgrading with `camel self-update` and switching versions.
 
 If you use [JBang](https://www.jbang.dev/), you can install the Camel CLI with it instead:
 
@@ -210,6 +216,10 @@ camel doctor
 ```
 
 This checks Camel and Java versions, JBang availability, Maven repository connectivity, container runtime (Docker/Podman), and disk space.
+
+The Maven check resolves `camel-api` for the bundled Camel version using the default Maven settings and repositories. It also honours the `camel.jbang.repos`, `camel.jbang.maven-settings`, `camel.jbang.maven-settings-security`, `camel.jbang.maven-central-enabled`, `camel.jbang.maven-apache-snapshot-enabled`, `camel.jbang.download`, and `camel.jbang.fresh` JVM system properties. Additional repositories configured through `camel.extra.repos` are also used.
+
+The command returns a non-zero exit code when a required check fails, including Maven artifact resolution. Missing optional tools, occupied ports, and low temporary disk space do not fail the command.
 
 ## Explore commands
 

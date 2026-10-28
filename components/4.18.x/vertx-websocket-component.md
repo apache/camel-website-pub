@@ -242,6 +242,8 @@ from("direct:broadcastMessage")
 
 By default, the `ws://` protocol is used, but secure connections with `wss://` are supported by configuring the consumer or producer via the `sslContextParameters` URI parameter and the [Camel JSSE Configuration Utility](../../manual/camel-configuration-utilities.md)
 
+All consumers on the same host and port are served by one HTTP server, so they must use the same `sslContextParameters` instance. A consumer whose `sslContextParameters` differ from those of the consumers already started on its host and port fails to start.
+
 ## Spring Boot Auto-Configuration
 
 When using vertx-websocket with Spring Boot make sure to use the following Maven dependency to have support for auto configuration:

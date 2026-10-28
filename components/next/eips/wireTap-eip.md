@@ -34,6 +34,17 @@ The message body at each side of the Wire Tap EIP: _EIP input_ is the body it ne
   
 | Side | Body | Description |
 | --- | --- | --- |
+| **EIP input** | what the producer of its endpoint sends | 
+The copy of the message goes to the producer of the endpoint. With variableSend the variable is sent, and the body is not read.
+
+-   With `variableSend` set: `any`
+    
+
+
+
+
+
+ |
 | **EIP output** | `unchanged` | Sends a copy of the message to the endpoint: the body of the route stays as it was. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).

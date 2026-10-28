@@ -1242,6 +1242,8 @@ GitConfigSpec defines the Git configuration of a project.
 string | the URL of the project |
 | `secret`  
 string | the Kubernetes secret where token is stored |
+| `username`  
+string | the username used to authenticate against the Git server, together with the token stored in `secret` (default `camel-k`). Some Git servers validate it, for example Bitbucket Cloud access tokens require `x-token-auth`. |
 | `branch`  
 string | the git branch to check out |
 | `tag`  

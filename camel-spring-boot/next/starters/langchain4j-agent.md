@@ -26,7 +26,7 @@ LangChain4j provider starters can create the `ChatModel` used by an agent. Add t
 
 See the [LangChain4j Spring Boot integration documentation](https://docs.langchain4j.dev/tutorials/spring-boot-integration) for provider configuration, and the component documentation for creating and configuring a Camel agent.
 
-The starter supports 23 options, which are listed below.
+The starter supports 27 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -54,3 +54,7 @@ The starter supports 23 options, which are listed below.
 | camel.component.langchain4j-agent.tags | Tags for discovering and calling Camel route tools |  | String |
 | camel.component.langchain4j-agent.temperature | The sampling temperature of the model, when the model is created from the provider. |  | Double |
 | camel.component.langchain4j-agent.timeout | The request timeout of the model (30s, 2m), when the model is created from the provider. |  | Duration |
+| camel.component.langchain4j-agent.tool-search | When true, route tools marked searchable and remote MCP tools are omitted from the initial model request and exposed through one synthetic search tool. Directly visible route tools and customTools stay in the request. Search is a visibility policy, not authorization. Enabling it does not skip MCP tools/list. A dynamic tool provider registered outside Camel is not searched. Only supported in inline agent creation mode. | false | Boolean |
+| camel.component.langchain4j-agent.tool-search-embedding-model | LangChain4j embedding model used when toolSearchStrategy=VECTOR. Required for vector search. The option is a dev.langchain4j.model.embedding.EmbeddingModel type. |  | EmbeddingModel |
+| camel.component.langchain4j-agent.tool-search-max-results | Maximum number of tools returned by one tool search. Route and MCP tools are ranked together. | 5 | Integer |
+| camel.component.langchain4j-agent.tool-search-strategy | How tool search ranks route and MCP tools. 'KEYWORD' matches the tool name and description. 'VECTOR' uses cosine similarity and requires toolSearchEmbeddingModel. Vector search does not fall back to keyword search. | keyword | AiToolSearchStrategy |

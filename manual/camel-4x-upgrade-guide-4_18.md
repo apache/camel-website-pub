@@ -23,7 +23,7 @@ The LRA saga service now joins, completes or compensates an LRA only when its UR
 
 If your participants reach the same coordinator under different URLs, for example with different host names, list the other coordinator URLs, including the context path, in the new `allowedCoordinatorUrls` option (`camel.lra.allowedCoordinatorUrls`).
 
-This also applies to the LRAs the service starts itself, which a nested saga route looks up again: when the coordinator returns LRA URLs under another base URL than `coordinatorUrl`, for example behind a proxy, add that base URL to `allowedCoordinatorUrls` as well.
+This also applies to the LRAs the service starts itself: when the coordinator returns LRA URLs under another base URL than `coordinatorUrl`, for example behind a proxy, starting a saga fails until that base URL is added to `allowedCoordinatorUrls`.
 
 ### camel-lra - warning for unsigned participant callbacks, and reserved saga option names
 
@@ -205,6 +205,8 @@ WebSocket endpoints (`ws://` and `wss://`) now apply the `UndertowSecurityProvid
 
 All the endpoints of a WebSocket path share its connections. The settings of the consumer apply to the path, including the messages sent by producers on that path, and keep applying while the consumer is stopped; a path that only has producers applies their settings. A connection that was opened before these settings applied does not receive the messages of the producers, and it is closed when it sends a message.
 
+A connection opened while only producers served a path did not pass the custom `handlers` of a consumer, as those handlers run only for consumers. When a consumer that configures `handlers` is started on that path, such a connection is therefore no longer served: its messages do not reach the route, it does not receive what the producers send, and it is closed. Clients that open a connection before the consumer has started must reconnect after it has started.
+
 A WebSocket client that connected without satisfying the configured security provider or allowed roles is now rejected: it must authenticate, or the option must be removed from the WebSocket endpoint.
 
 ### camel-undertow - the producer refuses a request target or header value with control characters
@@ -250,6 +252,18 @@ When the call of an API component fails, such as one of fhir, box, google-drive 
 When configuring TLS through `SSLContextParameters` with a standalone `TrustManager` instance (via `TrustManagersParameters.setTrustManager(…​)`), Vert.x components now wrap and apply the configured `TrustManager`. Previously, only `TrustAllTrustManager.INSTANCE` and KeyStore-backed configurations were applied, and other standalone `TrustManager` instances were not set on the underlying Vert.x options.
 
 When both a `TrustManager` and a keystore are configured on `TrustManagersParameters`, the `TrustManager` is now used, as with the other components that use `SSLContextParameters`; before, the keystore-based trust options were used.
+
+### camel-cometd - the CORS filter allows credentials only for listed origins
+
+With `crossOriginFilterOn=true`, the CORS responses now include `Access-Control-Allow-Credentials: true` only when `allowedOrigins` lists the origins explicitly, without any **or `null`. When `allowedOrigins` is not set, is** , or has an entry with a wildcard such as `[https://*](https://*)` or an entry `null`, the origin is still allowed, but without credentials. Previously credentials were allowed for every origin. A cross-origin client that sends cookies or other credentials must have its origin listed in `allowedOrigins`.
+
+### camel-vertx-websocket - consumers on the same host and port must use the same SSLContextParameters
+
+All `vertx-websocket` consumers on the same host and port are served by one HTTP server, which is created from the `sslContextParameters` of the first consumer to start. A consumer started later with different `sslContextParameters` (including one with none while the server uses some, or the other way round) used to start and be served with the first consumer’s settings. Such a consumer now fails to start with an `IllegalArgumentException` naming the host and port. Give every consumer on a host and port the same `SSLContextParameters` instance (for example the same bean reference, or the global SSL context parameters), or move consumers that need other settings to another port.
+
+### camel-wordpress - requests and responses are no longer logged
+
+The WordPress client no longer logs every HTTP request and response it exchanges with the WordPress server at `INFO` level (the `org.apache.cxf.services` loggers). The component no longer depends on `cxf-rt-features-logging`, and the `camel-wordpress` JAR no longer contains a `log4j.properties` file.
 
 ## Upgrading from 4.18.4 to 4.18.5
 

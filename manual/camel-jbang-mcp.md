@@ -1,12 +1,15 @@
-# Camel MCP Server
+# Camel CLI MCP Server
 
-The Camel MCP Server gives AI coding assistants deep knowledge of Apache Camel. It exposes the full Camel Catalog — components, EIPs, data formats, Kamelets, examples — plus runtime introspection tools for live Camel applications, all through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/).
+The Camel CLI MCP Server gives AI coding assistants deep knowledge of Apache Camel. It exposes the full Camel Catalog — components, EIPs, data formats, Kamelets, examples — plus runtime introspection tools for live Camel applications, all through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/).
 
 With the MCP server running, your AI assistant can look up component documentation, validate endpoints and routes, generate test scaffolds, diagnose errors from stack traces, check dependencies, plan migrations, review routes for security concerns, and interact with running Camel applications — without you having to copy-paste anything.
 
 Built on [Quarkus](https://quarkus.io/) with the [quarkus-mcp-server](https://docs.quarkiverse.io/quarkus-mcp-server/dev/index.md) extension.
 
 The Camel TUI has an MCP server of its own, `camel tui --mcp`, that also lets an agent see and drive the TUI screen; see [Camel TUI Ways to Use AI](camel-jbang-tui-ai-ways.md) for how the two compare.
+
+> **Note**
+> This page is about a developer tool that helps your AI assistant write Camel. To turn the routes of your own integration into MCP tools and resources, so that MCP clients can call them, use the [MCP Server component](../components/4.22.x/others/mcp-server.md) (`camel-mcp-server`) instead.
 
 ## Getting Started
 
@@ -150,7 +153,7 @@ Open [http://localhost:6274/](http://localhost:6274/), set Transport Type to `SS
 | `--http` | `false` | Enable HTTP transport (Streamable HTTP and SSE). Without this flag, the server uses STDIO transport. |
 | `--port` | `8080` | HTTP server port (only used with `--http`). |
 | `--log-level` | `WARN` | Log level: `ERROR`, `WARN`, `INFO`, `DEBUG`, `TRACE`. |
-| `--version` | _(current Camel version)_ | Camel MCP server version to use. Defaults to the version of the Camel CLI. |
+| `--version` | _(current Camel version)_ | Camel CLI MCP server version to use. Defaults to the version of the Camel CLI. |
 
 ## Examples
 
