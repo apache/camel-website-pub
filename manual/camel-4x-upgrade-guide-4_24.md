@@ -1374,6 +1374,22 @@ The `<camel-topology-diagram>` web component no longer draws the error paths of 
 
 Given Java source files, `camel cmd route-diagram`, `camel cmd route-structure` and `camel cmd route-topology` (and the `camel_render_route_diagram` MCP tool) now read the routes with the Java DSL parser, as `camel transform route` and `camel overview` do, instead of compiling the sources and loading their routes in a short-lived Camel. A step the parser cannot work out, such as a lambda or a processor, is shown as a placeholder, and the parts it could not read are listed (with `--json`, as an `unread` array in the JSON). Use the new `--compile` option to compile the sources and load their routes as before.
 
+### camel-diagram - a route diagram image draws the steps as cards
+
+The PNG image of a route diagram draws each step as a card: an icon for the kind of step, in a circle of the color of its kind, the kind in bold (such as `setBody`) and its detail below (such as `groovy: body.items`). Before, a step was a box filled with the color of its kind, with its code (`setBody[groovy{body.items}]`) in one line. This applies to the `dark`, `light` and `transparent` themes, in `camel cmd route-diagram`, `camel get history --diagram`, `camel get error --diagram`, the `camel_render_route_diagram` MCP tool, the `route-diagram` developer console (`format=png`) and the `RouteDiagramDumper`. A card is taller than a box, so the image of the same route is taller. The ASCII and Unicode diagrams, the topology diagram and the web component do not change.
+
+A custom color spec sets the colors of the cards with `card`, `cardBorder`, `cardText` and `cardDetail`. The `text` color no longer applies to the steps of a route diagram (it still does to the topology diagram).
+
+The `RouteDiagramRenderer(nodeWidth, fontSizeScaled, nodeTextPadding, metrics)` constructor is deprecated, as the text of a card starts after its icon and `nodeTextPadding` is not used. Use `RouteDiagramRenderer(nodeWidth, fontSizeScaled, metrics)` instead.
+
+A program that lays out routes with `RouteDiagramLayoutEngine` and draws them with `RouteDiagramRenderer` must call `engine.setCardStyle(true)` before `layoutRoute`. Without it, the cards get the height and text of the old boxes.
+
+`camel cmd route-diagram` of a running application whose message history recorded the body types (such as in the dev profile) shows them on the arrows, with longer arrows to hold them. Use `--body-types=false` for the diagram without them.
+
+`camel cmd route-diagram --output=diagram.png` without `--theme` now saves the PNG image in the `light` theme. Before, the default theme was `unicode` also for a file, so the command saved the text diagram in `diagram.txt` instead. A diagram in the terminal is still text (`unicode`) by default, and a file that does not end with `.png` still gets the text diagram. Use `--theme=unicode` to save the text diagram.
+
+The `camel_render_route_diagram` MCP tool also draws in the `light` theme when no theme is given (before, it failed without a theme).
+
 ### camel-jbang - export to Quarkus keeps the names in `quarkus.*` keys
 
 `camel export --runtime=quarkus` wrote every `quarkus.` **key except `quarkus.hawtio.`** in dash case: an upper-case letter became a dash and the lower-case letter, and an underscore became a dash. That also changed the names that a key holds, such as a log category, a datasource name or a map key. Now only option names in camel case are written in dash case, such as `quarkus.http.rootPath` as `quarkus.http.root-path`. A segment of the key that is quoted, that starts with an upper-case letter, or that has no upper-case letter is kept as it is. So `quarkus.log.category."com.example.MyRoute".level`, `quarkus.datasource.Orders.db-kind` and `quarkus.datasource.order_history.db-kind` are no longer exported as `quarkus.log.category."com.example.-my-route".level`, `quarkus.datasource.-orders.db-kind` and `quarkus.datasource.order-history.db-kind`. The same applies to `camel run --runtime=quarkus`, which exports the project in the same way.
