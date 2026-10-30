@@ -557,6 +557,36 @@ restConfiguration().apiContextPath("/api-doc").hostNameResolver(RestHostNameReso
     hostNameResolver: none
 ```
 
+### Restricting external references
+
+A contract can reference other documents with `$ref`: files on the classpath or the file system, and documents on an http(s) server. Camel loads every such document when the route starts. The `externalReferences` option restricts this: `all` (default) allows any reference, `local` allows references to the classpath and the file system only, and `none` allows only references inside the contract. The check follows the references into the local documents it allows, and a document it cannot read, or a fragment of it that it cannot find, fails the start too. A reference the option does not allow fails the start, with a message that names it.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+    rest().openApi().specification("petstore-v3.json").externalReferences("none");
+```
+
+```xml
+<rest>
+  <openApi specification="petstore-v3.json" externalReferences="none"/>
+</rest>
+```
+
+```yaml
+- rest:
+    openApi:
+      specification: petstore-v3.json
+      externalReferences: none
+```
+
+The option can also be set once on the `rest-openapi` component, for example with `camel.component.rest-openapi.external-references=none`, which covers every contract and the specification served as api-doc. See the [REST OpenAPI component](../components/4.22.x/rest-openapi-component.md) for the details.
+
 ## Examples
 
 You can find a few examples such as:

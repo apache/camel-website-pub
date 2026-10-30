@@ -256,7 +256,8 @@ Enum values:
 | **proxyHost** (proxy) | The host name of an HTTP proxy the client sends its AS2 messages through. The connection to the proxy is plain http; when an SSL context is configured, the AS2 message goes through a CONNECT tunnel to the target. |  | String |
 | **proxyPort** (proxy) | The port number of the HTTP proxy. |  | Integer |
 | **accessToken** (security) | The access token that is used by the client for bearer authentication. |  | String |
-| **asyncMdnAllowedHosts** (security) | Comma separated list of host names an asynchronous MDN may be delivered to. The delivery address is chosen by the sender of the AS2 message, so this is the list of hosts the operator vouches for. When set, an asynchronous MDN whose delivery address names a host outside the list is refused, and the configured mdnUserName/mdnPassword/mdnAccessToken are attached only to a host on the list. When not set, the MDN is still delivered to the sender-supplied address but no credentials are attached. The option applies to the consumer endpoint it is set on: consumers sharing a serverPortNumber each apply their own list. |  | String |
+| **asyncMdnAllowedHosts** (security) | Comma separated list of hosts an asynchronous MDN may be delivered to. The delivery address is chosen by the sender of the AS2 message, so this is the list of destinations the operator vouches for. Each entry is a host with an optional port in host:port form; an IPv6 literal is written in square brackets, as in a URL, optionally followed by :port. A bare-host entry (for example partner.example) matches only the default port for the scheme (80 or 443), so a non-default port is listed explicitly (for example partner.example:8443). When set, an asynchronous MDN whose delivery address is not on the list is refused, and the configured mdnUserName/mdnPassword/mdnAccessToken are attached only to an address on the list. When not set, the MDN is still delivered to the sender-supplied address but no credentials are attached. The option applies to the consumer endpoint it is set on: consumers sharing a serverPortNumber each apply their own list. |  | String |
+| **asyncMdnRequireHttps** (security) | Whether an asynchronous MDN may only be delivered over https. The delivery address, including its scheme, is chosen by the sender of the AS2 message; by default both http and https are accepted. When set to true, an asynchronous MDN whose delivery address does not use https is refused, before the connection is opened and before the configured mdnUserName/mdnPassword/mdnAccessToken are attached, so the credentials are never sent in cleartext to a sender-chosen address. The option applies to the consumer endpoint it is set on: consumers sharing a serverPortNumber each apply their own value. | false | boolean |
 | **decryptingPrivateKey** (security) | The key used to encrypt the EDI message. |  | PrivateKey |
 | **encryptingAlgorithm** (security) | 
 
@@ -692,3 +693,13 @@ If the proxy requires authentication, set `proxyAuthUsername` and `proxyAuthPass
               proxyAuthPassword: "{{proxy.password}}"
               # ... the AS2 message options
 ```
+
+### Delivering asynchronous MDNs
+
+When a received message asks for an asynchronous MDN, the `as2://server/listen` consumer delivers the MDN to the address that the sender gave in the `Receipt-Delivery-Option` header. When `asyncMdnAllowedHosts` is set, the MDN is delivered only to an address on the list, and the `mdnUserName`, `mdnPassword` and `mdnAccessToken` credentials are attached only for such an address. Each entry of the list is a host with an optional port:
+
+-   a bare host, such as `partner.example`, matches only the default port for the scheme (80 for `http`, 443 for `https`);
+    
+-   a host and a port, such as `partner.example:8443`, match that port only;
+    
+-   an IPv6 literal is written in square brackets, as in a URL: `[::1]` matches the default port, and `[::1]:8443` matches port 8443. Without the brackets, `::1:8443` is read as another IPv6 address, not as `::1` with a port.

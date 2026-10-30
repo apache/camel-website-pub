@@ -115,6 +115,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **allowedOrigins** (common) | The origins domain that support to cross, if the crosssOriginFilterOn is true. | \* | String |
+| **allowedTransports** (common) | A comma-separated list of transport names allowed by the CometD server (e.g. websocket, long-polling, callback-polling). callback-polling is the JSONP transport mechanism. This option applies to the shared CometD server on the host and port; the first endpoint to configure the server sets this value. | websocket,long-polling | String |
 | **baseResource** (common) | The root directory for the web resources or classpath. Use the protocol file: or classpath: depending if you want that the component loads the resource from file system or classpath. Classpath is required for OSGI deployment where the resources are packaged in the jar. |  | String |
 | **crossOriginFilterOn** (common) | If true, the server will support for cross-domain filtering. | false | boolean |
 | **filterPath** (common) | The filterPath will be used by the CrossOriginFilter, if the crosssOriginFilterOn is true. |  | String |
@@ -180,6 +181,41 @@ Below, you can find some examples of how to pass the parameters.
 For file, for webapp resources located in the Web Application directory -→ `cometd://localhost:8080?resourceBase=file./webapp`.
 
 For classpath, when, for example, the web resources are packaged inside the webapp folder -→ `cometd://localhost:8080?resourceBase=classpath:webapp`
+
+The following routes publish a message to the `/channel/orders` channel every five seconds, and receive the messages of that channel:
+
+```yaml
+- route:
+    from:
+      uri: cometd://0.0.0.0:9099/channel/orders
+      steps:
+        - log:
+            message: "Received ${body}"
+- route:
+    from:
+      uri: timer:publish
+      parameters:
+        period: 5000
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "Order ${exchangeId}"
+        - to:
+            uri: cometd://0.0.0.0:9099/channel/orders
+```
+
+### Allowed Transports and JSONP
+
+By default, the CometD server allows `websocket` and `long-polling` transports (`allowedTransports=websocket,long-polling`), disabling the legacy JSONP (`callback-polling`) transport mechanism.
+
+To allow JSONP clients, configure `allowedTransports` explicitly on the endpoint URI:
+
+```text
+cometd://localhost:8080/service/mychannel?allowedTransports=websocket,long-polling,callback-polling
+```
+
+Because `allowedTransports` configures the underlying Bayeux server for a given host and port, the setting applies to all endpoints sharing that server.
 
 ### Authentication
 

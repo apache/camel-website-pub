@@ -150,6 +150,24 @@ Enum values:
 | **consumes** (producer (advanced)) | What payload type this component capable of consuming. Could be one type, like application/json or multiple types as application/json, application/xml; q=0.5 according to the RFC7231. This equates to the value of Accept HTTP header. If set overrides any value found in the OpenApi specification. Can be overridden in endpoint configuration. |  | String |
 | **produces** (producer (advanced)) | What payload type this component is producing. For example application/json according to the RFC7231. This equates to the value of Content-Type HTTP header. If set overrides any value present in the OpenApi specification. Can be overridden in endpoint configuration. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **externalReferences** (security) | 
+
+Which external references ($ref) the OpenAPI specification may use: all allows any reference, local allows references to the classpath and the file system only, and none allows only references inside the document. A reference the option does not allow fails the start. Can be overridden in endpoint configuration.
+
+Enum values:
+
+-   all
+    
+-   local
+    
+-   none
+    
+
+
+
+
+
+ | all | String |
 | **sslContextParameters** (security) | Customize TLS parameters used by the component. If not set defaults to the TLS parameters set in the Camel context. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 
@@ -238,6 +256,24 @@ Enum values:
 | **requestValidationEnabled** (producer) | Enable validation of requests against the configured OpenAPI specification. | false | boolean |
 | **componentName** (producer (advanced)) | Name of the Camel component that will perform the requests. The component must be present in Camel registry and it must implement RestProducerFactory service provider interface. If not set CLASSPATH is searched for single component that implements RestProducerFactory SPI. Overrides component configuration. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **externalReferences** (security) | 
+
+Which external references ($ref) the OpenAPI specification may use. The parser loads every external reference when the consumer or producer is created, from the classpath, the file system or over http(s). all allows any reference, local allows references to the classpath and the file system only, and none allows only references inside the document. A reference the option does not allow fails the start, before the parser loads anything. Overrides component configuration.
+
+Enum values:
+
+-   all
+    
+-   local
+    
+-   none
+    
+
+
+
+
+
+ | all | String |
 | **oauthProfile** (security) | OAuth profile name passed to the HTTP consumer delegate for validating incoming Authorization: Bearer tokens. The selected consumer component must support the oauthProfile option; delegates that ignore unknown options will start without endpoint protection. |  | String |
 
 ## Message Body
@@ -457,6 +493,26 @@ from("rest-openapi:petstore-v3.json?consumerComponentName=platform-http&oauthPro
 ```
 
 The selected delegate component must support the `oauthProfile` endpoint option. The built-in `platform-http` delegate supports this option. An `OAuthTokenValidationFactory` must be available, for example from [camel-oauth](../4.22.x/others/oauth.md) or from the runtime integration. OpenAPI `securitySchemes` and operation security requirements are not converted into `oauthProfile` configuration; select the OAuth profile explicitly with the REST endpoint property or direct endpoint URI option. The `oauthProfile` option is a first-class `rest-openapi` endpoint option that is forwarded to the selected delegate, which is responsible for enforcing it. The route fails at startup when the resolved `RestOpenApiConsumerFactory` does not declare that its consumers enforce `oauthProfile`, so a misconfigured delegate cannot start without the expected protection. Custom factories that enforce the option must override `RestOpenApiConsumerFactory.supportsOAuthProfile()` to return `true`.
+
+### Restricting the external references of the specification
+
+An OpenAPI specification can reference other documents with `$ref`: files on the classpath or the file system, and documents on an http(s) server. The parser loads every such document when the consumer or producer is created, and a document it loads can reference further documents. The `externalReferences` option, on the endpoint or the component, restricts this:
+
+-   `all` (default) allows any reference.
+    
+-   `local` allows references to the classpath and the file system only. A specification loaded from a URL may then reference no other document at all, because the parser resolves its references against that URL.
+    
+-   `none` allows only references inside the document, such as `#/components/schemas/Pet`.
+    
+
+The check runs before the parser resolves anything, on the document tree the parser uses (YAML aliases expanded). It resolves every `$ref` the way the parser does: against the document that contains it and, for OpenAPI 3.1, against the enclosing `$id`. `file:` and `classpath:` references count as local. The local documents the option allows are read and checked in turn; for OpenAPI 3.1 that is the part of the document a reference selects (its JSON pointer or `$anchor`), as the parser reads it. A document that cannot be read, a fragment that cannot be found, and a reference the parser could resolve in another document, because an `$id` there resolves to the same location, fail the check. A reference the option does not allow fails the start, with a message that names the reference and where it is.
+
+```java
+from("direct:getPetById")
+    .to("rest-openapi:petstore-v3.json#getPetById?externalReferences=local");
+```
+
+The option can also be set once on the component, for example with `camel.component.rest-openapi.external-references=none`. For the contract-first Rest DSL, set it on the `openApi` element as shown in [REST DSL with contract-first OpenAPI](../../manual/rest-dsl-openapi.md); the component setting applies there as well, also to the specification served as api-doc.
 
 ## Request validation
 

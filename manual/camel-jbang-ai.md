@@ -47,6 +47,8 @@ The agent has access to tools that let it:
 -   Read and change the integration’s files, each change validated first
     
 
+A model that names an argument the way another tool names it, such as `query` for the `term` of `camel_catalog_find`, still gets its call answered, with a note of the name to use (see [Argument names](camel-jbang-mcp.html#_argument_names)).
+
 Use `--show-tools` to see tool calls and results as they happen:
 
 ```bash

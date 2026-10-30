@@ -1480,7 +1480,7 @@ The transaction API is defined in the syntax as follows:
 braintree:transaction/methodName?[parameters]
 ```
 
-The 15 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
+The 16 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
 
   
 | Method | Alias | Description |
@@ -1494,6 +1494,7 @@ The 15 method(s) is(are) listed in the table below, followed by detailed syntax 
 | [**packageTracking**](#_api_transaction_method_packageTracking) |  | Supplement the transaction with package tracking details |
 | [**refund**](#_api_transaction_method_refund) |  | Refunds all or part of a previous sale Transaction |
 | [**releaseFromEscrow**](#_api_transaction_method_releaseFromEscrow) |  | Submits the transaction with the given id for release |
+| [**reverse**](#_api_transaction_method_reverse) |  | Reverses a transaction |
 | [**sale**](#_api_transaction_method_sale) |  | Creates a sale Transaction |
 | [**search**](#_api_transaction_method_search) |  | Finds all Transactions that match the query and returns a ResourceCollection |
 | [**submitForPartialSettlement**](#_api_transaction_method_submitForPartialSettlement) |  | Submits a partial settlement transaction for the given id |
@@ -1633,6 +1634,23 @@ The braintree/releaseFromEscrow API method has the parameters listed in the tabl
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | Of the transaction to submit for release | String |
+
+#### Method reverse
+
+Signatures:
+
+-   com.braintreegateway.Result<com.braintreegateway.Transaction> reverse(String id);
+    
+-   com.braintreegateway.Result<com.braintreegateway.Transaction> reverse(String id, com.braintreegateway.TransactionReverseRequest request);
+    
+
+The braintree/reverse API method has the parameters listed in the table below:
+
+  
+| Parameter | Description | Type |
+| --- | --- | --- |
+| **id** | The id of the transaction to reverse | String |
+| **reverseRequest** | The request. It may be null; use it to supply an idempotency key. | TransactionReverseRequest |
 
 #### Method sale
 

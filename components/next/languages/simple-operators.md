@@ -167,6 +167,25 @@ For example the following elvis operator will return the username header unless 
 simple("${header.username} ?: 'Guest'");
 ```
 
+From Camel 4.24 the elvis operator can also be written inside the braces, where it means the same: `$\{a ?: b}` is `${a} ?: b`.
+
+```java
+simple("${header.username ?: 'Guest'}");
+simple("Hello ${header.nickname ?: ${header.username} ?: 'Guest'}");
+```
+
+The same values fall back (null, an empty value, `false` and `0`), and the fallback is a quoted literal, a number, `true`, `false`, `null` or a function, as after the braces.
+
+The form after the braces stays the one to use in general, as it also works before Camel 4.24. The form inside the braces is the one to use where a single `${…​}` is read, such as a [SQL](../../4.22.x/sql-component.md) parameter `:#${…​}`, which reads up to the first `}`. In a query read from a file (`sql:classpath:query.sql`) that is:
+
+```sql
+select * from orders limit :#${header.limit ?: 10}
+```
+
+The endpoint URI itself cannot hold it, as a `?` there starts the options of the endpoint.
+
+Like the other operators, `?:` is the operator only with a space on both sides: `${header.limit ?:10}` reads a header named `limit ?:10`, and in `${header.limit} ?:10` the `?:10` is text after the header.
+
 #### Chain Operator
 
 The syntax for the chain operator is:

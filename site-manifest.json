@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1793252045399,
+  "generated": 1793343275501,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -18606,6 +18606,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/mtconnect.adoc",
+              "url": "/camel-spring-boot/next/starters/mtconnect.html",
+              "title": "MTConnect"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/mustache.adoc",
               "url": "/camel-spring-boot/next/starters/mustache.html",
               "title": "Mustache"
@@ -24214,6 +24220,12 @@
             },
             {
               "module": "ROOT",
+              "path": "apicurio-registry-component.adoc",
+              "url": "/components/next/apicurio-registry-component.html",
+              "title": "Apicurio Registry"
+            },
+            {
+              "module": "ROOT",
               "path": "arangodb-component.adoc",
               "url": "/components/next/arangodb-component.html",
               "title": "ArangoDb"
@@ -25819,6 +25831,12 @@
               "path": "mongodb-gridfs-component.adoc",
               "url": "/components/next/mongodb-gridfs-component.html",
               "title": "MongoDB GridFS"
+            },
+            {
+              "module": "ROOT",
+              "path": "mtconnect-component.adoc",
+              "url": "/components/next/mtconnect-component.html",
+              "title": "MTConnect"
             },
             {
               "module": "ROOT",

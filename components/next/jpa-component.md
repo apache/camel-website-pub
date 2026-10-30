@@ -298,7 +298,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 You can store a Java entity bean in a database by sending it to a JPA producer endpoint. The body of the _In_ message is assumed to be an entity bean (that is a POJO with an [@Entity](https://jakarta.ee/specifications/persistence/3.2/apidocs/jakarta.persistence/jakarta/persistence/entity) annotation on it) or a collection or array of entity beans.
 
-If the body is a List of entities, make sure to use **entityType=java.util.List** as a configuration passed to the producer endpoint.
+If the body is a List or an array of entities, use `java.util.List` (or `java.lang.Object`) as the entity class name of the endpoint (`jpa:java.util.List`). With the class of the entity (`jpa:com.example.Customer`), the producer converts the body to that class, and a List or an array of entities fails with an `InvalidPayloadRuntimeException`.
 
 If the body does not contain one of the previous listed types, put a Message Translator in front of the endpoint to perform the necessary conversion first.
 
@@ -315,6 +315,8 @@ If you would rather perform some update on the entity to mark it as processed (s
 An entity bean is only deleted (or `@Consumed` invoked) when its exchange completed successfully. If the route marks the exchange rollback only (for example with `markRollbackOnly()`), the entity bean is not consumed and stays in the table, so the next poll consumes it again, as long as it still matches the query. With `transacted=false` the other entity beans of the poll are still consumed, and so is what a `@PreConsumed` method changed before routing: an entity bean that `@PreConsumed` moved out of the query is not polled again. With `transacted=true` the whole poll is rolled back, the changes of `@PreConsumed` included.
 
 You can use `@PreConsumed` (org.apache.camel.component.jpa.PreConsumed) which will be invoked on your entity bean before it has been processed (before routing).
+
+A query that selects values instead of entities, such as a column (`select x.address from Customer x`), or a native query without `resultClass`, gives one message per row (a NULL column gives a message with a null body). Such a value is not locked, and it cannot be deleted or marked with `@Consumed`, so each poll delivers the same rows again: set `consumeDelete=false` and make the query exclude the rows already handled, or select the entity instead.
 
 If you are consuming a lot of rows (100K+) and experience `OutOfMemory` problems, you should set the `maximumResults` to a sensible value.
 

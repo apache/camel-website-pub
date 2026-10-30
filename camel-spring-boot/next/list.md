@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 420 spring boot starter json files.
+There are 421 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -563,6 +563,8 @@ mongodb-gridfs
 
 mongodb
 
+mtconnect
+
 mustache
 
 mvel
@@ -890,6 +892,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Alibaba Simple Log Service (SLS)](../../components/next/alibaba-sls-component.md) | camel-alibaba-sls-starter | Preview | 4.23 | Manage logs on Alibaba Cloud Simple Log Service (SLS). |
 | [Alibaba Tablestore (OTS)](../../components/next/alibaba-ots-component.md) | camel-alibaba-ots-starter | Preview | 4.23 | Perform row operations on Alibaba Cloud Tablestore (OTS). |
 | [AMQP](../../components/next/amqp-component.md) | camel-amqp-starter | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
+| [Apicurio Registry](../../components/next/apicurio-registry-component.md) | camel-apicurio-registry-starter | Preview | 4.24 | Manage artifacts, versions, and groups in Apicurio Registry v3. |
 | [ArangoDb](../../components/next/arangodb-component.md) | camel-arangodb-starter | Stable | 3.5 | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](../../components/next/as2-component.md) | camel-as2-starter | Stable | 2.22 | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
 | [Asterisk](../../components/next/asterisk-component.md) | camel-asterisk-starter | Stable | 2.18 | Interact with Asterisk PBX Server (VoIP). |
@@ -1145,6 +1148,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Mock](../../components/next/mock-component.md) | camel-mock-starter | Stable | 1.0 | Test routes and mediation rules using mocks. |
 | [MongoDB](../../components/next/mongodb-component.md) | camel-mongodb-starter | Stable | 2.19 | Perform operations on MongoDB documents and collections. |
 | [MongoDB GridFS](../../components/next/mongodb-gridfs-component.md) | camel-mongodb-gridfs-starter | Stable | 2.18 | Interact with MongoDB GridFS. |
+| [MTConnect](../../components/next/mtconnect-component.md) | camel-mtconnect-starter | Preview | 4.24 | Receive the observations of an MTConnect agent through its streaming sample request or by polling it, one message per observation, or send the probe, current, sample and asset requests on demand. |
 | [Mustache](../../components/next/mustache-component.md) | camel-mustache-starter | Stable | 2.12 | Transform messages using a Mustache template. |
 | [MVEL](../../components/next/mvel-component.md) | camel-mvel-starter | Stable | 2.12 | Transform messages using an MVEL template. |
 | [MyBatis](../../components/next/mybatis-component.md) | camel-mybatis-starter | Stable | 2.7 | Performs a query, poll, insert, update or delete in a relational database using MyBatis. |

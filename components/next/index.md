@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 391 in 318 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 393 in 320 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -67,6 +67,7 @@ Number of Non-Core Components: 391 in 318 JAR artifacts (4 deprecated)
 | [Alibaba Simple Log Service (SLS)](alibaba-sls-component.md) | camel-alibaba-sls | Preview | 4.23 | Manage logs on Alibaba Cloud Simple Log Service (SLS). |
 | [Alibaba Tablestore (OTS)](alibaba-ots-component.md) | camel-alibaba-ots | Preview | 4.23 | Perform row operations on Alibaba Cloud Tablestore (OTS). |
 | [AMQP](amqp-component.md) | camel-amqp | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
+| [Apicurio Registry](apicurio-registry-component.md) | camel-apicurio-registry | Preview | 4.24 | Manage artifacts, versions, and groups in Apicurio Registry v3. |
 | [ArangoDb](arangodb-component.md) | camel-arangodb | Stable | 3.5 | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](as2-component.md) | camel-as2 | Stable | 2.22 | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
 | [Asterisk](asterisk-component.md) | camel-asterisk | Stable | 2.18 | Interact with Asterisk PBX Server (VoIP). |
@@ -315,6 +316,7 @@ Number of Non-Core Components: 391 in 318 JAR artifacts (4 deprecated)
 | [MLLP](mllp-component.md) | camel-mllp | Stable | 2.17 | Communicate with external systems using the MLLP protocol. |
 | [MongoDB](mongodb-component.md) | camel-mongodb | Stable | 2.19 | Perform operations on MongoDB documents and collections. |
 | [MongoDB GridFS](mongodb-gridfs-component.md) | camel-mongodb-gridfs | Stable | 2.18 | Interact with MongoDB GridFS. |
+| [MTConnect](mtconnect-component.md) | camel-mtconnect | Preview | 4.24 | Receive the observations of an MTConnect agent through its streaming sample request or by polling it, one message per observation, or send the probe, current, sample and asset requests on demand. |
 | [Mustache](mustache-component.md) | camel-mustache | Stable | 2.12 | Transform messages using a Mustache template. |
 | [MVEL](mvel-component.md) | camel-mvel | Stable | 2.12 | Transform messages using an MVEL template. |
 | [MyBatis](mybatis-component.md) | camel-mybatis | Stable | 2.7 | Performs a query, poll, insert, update or delete in a relational database using MyBatis. |

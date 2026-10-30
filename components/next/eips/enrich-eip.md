@@ -93,6 +93,58 @@ Enrich EIP is the most common content enricher that uses a `Producer` to obtain 
 
 The content enricher (`enrich`) retrieves additional data from a _resource endpoint_ to enrich an incoming message (contained in the _original exchange_).
 
+### Keeping the message: the reply in a variable
+
+By default, the reply of the resource endpoint becomes the message, as with `to`: the reply body replaces the body. To keep the message as it is, set `variableReceive`: the reply body is stored in that variable, and the message body and headers stay unchanged. This is the simplest way to enrich, with no aggregation strategy to write.
+
+For example, the body is an order that is sent to the stock service with request-reply, and the order stays the body, so it can be sent on after the stock service has answered:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jms:queue:orders")
+  .enrich().constant("jms:queue:stock").variableReceive("stock")
+  .log("Stock service answered for ${header.orderId}: ${variable.stock}")
+  .to("jms:queue:reserved");
+```
+
+```xml
+<route>
+  <from uri="jms:queue:orders"/>
+  <enrich variableReceive="stock">
+    <constant>jms:queue:stock</constant>
+  </enrich>
+  <log message="Stock service answered for ${header.orderId}: ${variable.stock}"/>
+  <to uri="jms:queue:reserved"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:queue:orders
+      steps:
+        - enrich:
+            expression:
+              constant: jms:queue:stock
+            variableReceive: stock
+        - log:
+            message: "Stock service answered for ${header.orderId}: ${variable.stock}"
+        - to:
+            uri: jms:queue:reserved
+```
+
+The headers of the reply are stored as variables too, using the pattern `header:<variable>.<headerName>`, for example `header:stock.JMSCorrelationID`. To send something other than the message body to the resource endpoint, set `variableSend` to the name of a variable that holds the request body; the message body is then not sent at all.
+
+`variableReceive` works the same with `to` when it uses request-reply (`exchangePattern: InOut`) and with [Poll Enrich](pollEnrich-eip.md). See [Variables](../../../manual/variables.md) for more about `variableSend` and `variableReceive`. When an aggregation strategy is set as well, the result of the strategy is stored in the variable.
+
+### Merging the reply with an aggregation strategy
+
 An `AggregationStrategy` is used to combine the original exchange and the _resource exchange_. The first parameter of the `AggregationStrategy.aggregate(Exchange, Exchange)` method corresponds to the original exchange, the second parameter the resource exchange.
 
 Here’s an example for implementing an `AggregationStrategy`, which merges the two data as a `String` with colon separator:
@@ -161,7 +213,7 @@ from("direct:start")
 
 ### Aggregation Strategy is optional
 
-The aggregation strategy is optional. If not provided, then Camel will just use the result exchange as the result.
+The aggregation strategy is optional. If not provided, then Camel will just use the result exchange as the result: the reply replaces the message body. To keep the message, store the reply in a variable with `variableReceive`, as shown above.
 
 The following example:
 
