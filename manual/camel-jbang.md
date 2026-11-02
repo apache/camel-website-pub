@@ -74,6 +74,7 @@ camel run hello.yaml --dev
 | [Managing Integrations](camel-jbang-managing.md) | Listing and stopping processes, route and group control, developer console, message history, log tailing, message tracing, health checks, metrics, circuit breaker status, Jolokia and Hawtio. |
 | [Diagnostics](camel-jbang-diagnostics.md) | Errors and inflight messages, memory leaks, heap and thread dumps, startup, SQL and Kafka, vault secrets. |
 | [Export to Maven](camel-jbang-projects.md) | Exporting to Spring Boot / Quarkus / Camel Main, SBOM generation, plugin management, version management, automated upgrades. |
+| [Java API for Export and Run](camel-jbang-java-api.md) | Exporting and running integrations from Java, for tools such as IDEs, visual designers and AI agents. |
 | [Tips and Recipes](camel-jbang-tips.md) | Run from GitHub or clipboard, stub components, inline code, interactive prompts, upload via HTTP. |
 | [Java Beans](camel-jbang-beans.md) | Writing and wiring Java beans into routes using Camel, Spring Boot, or Quarkus annotations. |
 | [Configuration](camel-jbang-configuration.md) | CLI configuration options, config commands, configuration precedence, troubleshooting. |

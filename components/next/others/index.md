@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 106 in 70 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 107 in 71 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -22,6 +22,7 @@ Number of Miscellaneous Components: 106 in 70 JAR artifacts (3 deprecated)
 | [Azure Storage Blob - Consumer Examples](azure-storage-blob-consumer.md) |  |  |  |  |
 | [Azure Storage Blob - Producer Operations](azure-storage-blob-operations.md) |  |  |  |  |
 | [Camel YAML DSL Validator Maven Plugin](camel-yaml-dsl-validator-maven-plugin.md) |  |  |  |  |
+| [Chaos](chaos.md) | camel-chaos | Preview | 4.24 | Turn on faults in a running Camel application during development, and report how the routes cope |
 | [CLI Connector](cli-connector.md) | camel-cli-connector | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
 | [CLI Debug](cli-debug.md) | camel-cli-debug | Stable | 4.17 | Remote CLI debugger |
 | [Cloudevents](cloudevents.md) | camel-cloudevents | Stable | 3.15 | Camel support for the CloudEvents specification |

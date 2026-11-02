@@ -16,6 +16,9 @@
 <loc>https://camel.apache.org/sitemap-camel-karaf.xml</loc>
 </sitemap>
 <sitemap>
+<loc>https://camel.apache.org/sitemap-camel-kit.xml</loc>
+</sitemap>
+<sitemap>
 <loc>https://camel.apache.org/sitemap-camel-quarkus.xml</loc>
 </sitemap>
 <sitemap>

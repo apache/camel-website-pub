@@ -31,7 +31,7 @@ Camel provides the following policies out of the box:
 
 -   `org.apache.camel.throttling.ThrottlingInflightRoutePolicy` - a throttling based policy that automatically suspends/resumes route(s) based on metrics from the current in flight exchanges. You can use this to dynamically throttle, e.g. a [JMS](../components/4.22.x/jms-component.md) consumer, to avoid it consuming too fast.
     
--   `org.apache.camel.throttling.ThrottlingExceptionRoutePolicy` - a throttling based policy modeled after the circuit breaker. This policy will stop consuming from an endpoint based on the type of exceptions that are thrown and the threshold setting.
+-   `org.apache.camel.throttling.ThrottlingExceptionRoutePolicy` - a throttling based policy modeled after the circuit breaker. This policy will stop consuming from an endpoint based on the type of exceptions that are thrown and the threshold setting. The exception an exchange fails with and its causes are matched against the exceptions to throttle on (the same as `onException` and `doCatch`). Suppressed exceptions, such as an exception thrown in a `doFinally` block, are not matched.
     
 -   `org.apache.camel.impl.cluster.ClusteredRoutePolicy` - is the foundation for `camel-cluster` which handles Camel routes to become active if a node becomes leader in a cluster.
     

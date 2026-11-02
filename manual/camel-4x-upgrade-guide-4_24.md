@@ -54,6 +54,14 @@ This method dropped the references a runtime route held to its model (the route 
 
 Applications that called `Route.clearRouteModel()` directly can remove the call. Implementations of the `Route` interface that override `clearRouteModel()` can remove the override.
 
+### camel-management - LastExchangeCompletedExchangeId is updated at most once per millisecond
+
+The JMX attribute `LastExchangeCompletedExchangeId`, of the `CamelContext`, route and processor MBeans, is now updated at most once per millisecond, so that the JMX statistics no longer generate an exchange id for every exchange. When several exchanges complete within the same millisecond, the attribute has the id of the first one, not of the last one. Failed exchanges are not affected: `LastExchangeFailureExchangeId` is still updated for every failed exchange.
+
+### camel-core - a nested split no longer changes the processed items of the outer split
+
+With `errorThreshold` or `maxFailedRecords` on a split that contains another split, the inner split changed the number of processed items of the outer split. It counted its own items when it had no thresholds, and hid the items of the outer split when it had them. `SplitResult.getProcessedItems()` now reports the items of that split only. A nested split with `errorThreshold` can now stop earlier than before, as the ratio is computed from the correct number.
+
 ### camel-core - RedeliveryErrorHandler.defensiveCopyExchangeIfNeeded is deprecated
 
 When redelivery is enabled, the error handler (`DefaultErrorHandler`, `DeadLetterChannel` and the transaction error handlers) keeps a copy of the message before each step of the route, so a redelivery starts again from the original message. It copied the whole exchange for that, at every step, also when the step succeeded, but a redelivery only ever restored the IN message from it. It now keeps a copy of the IN message only. Routes behave as before: exchange properties and variables were not restored on redelivery, and still are not.
@@ -72,27 +80,120 @@ When `pollEnrich` (or `poll`) times out and no `aggregationStrategy` is configur
 
 The body, or the variable, is now `null` after a timeout for these consumers too. A route that read the incoming file or payload from the body after a timed out `pollEnrich` must keep it before the `pollEnrich` instead, for example with `variableReceive`, which leaves the body as it was. To keep the body empty, the message is replaced by a plain message with the same message id, headers and attachments, so after a timeout it is no longer of the message type of the consumer (such as `GenericFileMessage` or `JmsMessage`).
 
+### camel-core - doFinally runs all its steps after a called route handled a failure
+
+When a `doTry` calls a route (such as with `direct`) whose error handler handles a failure (a dead letter channel or a handled `onException`), the `doFinally` block now runs all its steps. Before, in all Camel 4.x releases, it ran only its first step and skipped the rest, so a second or later step of the block (such as a `to`, a recipient list or a routing slip) did not send its message. A route called from such a `doFinally` that fails is now handled (or continued) by its own error handler, as anywhere else; before, its error handler left the failure alone and the exchange failed with that exception. As before, the route does not continue after the `doTry` once a called route handled the failure.
+
 ### camel-core - ThrottlingExceptionRoutePolicy counts the failures within the failure window
 
 The circuit of `ThrottlingExceptionRoutePolicy` now opens when `failureThreshold` failures occurred within the last `failureWindow` milliseconds, as documented. Before, it counted every failure since the circuit last closed (or since the route started), and only the last failure had to be within the window, so failures spread over hours opened the circuit on a single new failure. Routes whose failures are spread out therefore open their circuit less often now; to open it sooner, lower `failureThreshold` or raise `failureWindow`.
 
 In the half open state, a successful exchange now closes the circuit, and a failed exchange opens it again. Before, a successful exchange opened the circuit again as long as the failures that opened it were within `failureWindow`; with the defaults (a window of 60 seconds, a half open check after 30 seconds) a success in the first 30 seconds after the half open check therefore kept the circuit open. A `halfOpenHandler` decides as before.
 
+### camel-core - the failover load balancer does not fail over on a suppressed exception
+
+The failover load balancer with a list of exceptions now matches only the exception the attempt fails with and its causes, as `onException` and `doCatch` do. Before, it also matched the suppressed exceptions of that exception. Since 4.23, an exception thrown in a `doFinally` block is added as a suppressed exception to the exception from the `doTry` block, so a `doFinally` that threw one of the exceptions to fail over on made the load balancer fail over, and the exception from the `doTry` block was lost when the next processor succeeded. Now the exchange fails with that exception. The same applies to a failing `onCompletion` that runs before the consumer (`modeBeforeConsumer`) and a failing saga compensation, whose exceptions are also added as suppressed exceptions.
+
+The load balancer also no longer fails over when one of the exceptions to fail over on is only the suppressed exception of the exception the attempt fails with in these cases:
+
+-   An `onException` block (or another error handler) fails while it handles the exception: the exchange fails with the new exception, and the original exception is added to it as a suppressed exception (by the `FatalFallbackErrorHandler`). Unlike the `doFinally` case, this is not a 4.23 regression: it changes behaviour that dates back to Camel 2.16, intentionally, so that the load balancer matches exceptions as `onException` and `doCatch` do.
+    
+-   The error handler redelivers the attempt (with `inheritErrorHandler` enabled, or the error handler of the route the attempt calls) and the last redelivery fails with a different exception than the first attempt: the exchange fails with the exception of the last redelivery, and the exception of the first attempt is added to it as a suppressed exception. For example, with only `java.io.IOException` in the list, when the first attempt fails with a `java.net.ConnectException` and the redelivery with an `HttpOperationFailedException`, the load balancer used to fail over and now does not.
+    
+-   The `onWhen` predicate of a `doCatch` throws an exception: the exchange fails with the exception of the predicate, and the original exception is added to it as a suppressed exception.
+    
+-   A processor or component adds a suppressed exception itself (such as Java’s try-with-resources when closing a resource fails).
+    
+
+To fail over in these cases, add the type of the exception the attempt fails with to the list.
+
+### camel-core - ThrottlingExceptionRoutePolicy does not count a failure on a suppressed exception
+
+The exceptions of `ThrottlingExceptionRoutePolicy` (its `exceptions` option, or the list given to its constructor) are now matched against the exception the exchange fails with and its causes only, as `onException`, `doCatch` and the failover load balancer do. Before, they also matched the suppressed exceptions of that exception, so such a failure counted towards opening the circuit. Since 4.23, an exception thrown in a `doFinally` block is added as a suppressed exception to the exception from the `doTry` block, so a `doFinally` that threw one of the listed exceptions counted the failure, although the exception from the `doTry` block was not listed. The same applies, since 4.23, when the `onWhen` predicate of a `doCatch` throws an exception: the exchange fails with the exception of the predicate, and the original exception is added to it as a suppressed exception.
+
+A failure also no longer counts when one of the listed exceptions is only the suppressed exception of the exception the exchange fails with in other cases, for example:
+
+-   An `onException` block (or another error handler) fails while it handles the exception: the exchange fails with the new exception, and the original exception is added to it as a suppressed exception (by the `FatalFallbackErrorHandler`).
+    
+-   The error handler redelivers and the last redelivery fails with a different exception than the first attempt: the exchange fails with the exception of the last redelivery, and the exception of the first attempt is added to it as a suppressed exception.
+    
+-   An `onCompletion` that runs before the consumer (`modeBeforeConsumer`) or a saga compensation fails, or a processor or component adds a suppressed exception itself (such as Java’s try-with-resources when closing a resource fails).
+    
+
+Unlike the `doFinally` and `onWhen` cases, these are not 4.23 regressions; they change older behaviour intentionally, so that the policy matches exceptions as `onException` and `doCatch` do.
+
+To count these failures, add the type of the exception the exchange fails with to `exceptions`, or leave `exceptions` empty to count every failure.
+
 ### camel-core - JsonObject and JsonArray convert to their JSON text
 
 The camel-util-json types `org.apache.camel.util.json.JsonObject` and `JsonArray` (given by `convertBodyTo: JsonObject`, graphql, kubernetes-custom-resources and typesafe-ai) now have type converters to `String`, `byte[]` and `InputStream` that give their JSON text, using the charset of the exchange for the bytes. Before, a `String` was the `toString` of the map or list (`{sku=CAMEL-MUG, qty=3}`, which is not JSON), and there was no conversion to `byte[]` or `InputStream`, so such a body sent to http or a file failed. A `JsonObject` or `JsonArray` that holds a value that is not JSON, such as a POJO, converts as before.
+
+### camel-core - a route called from a doCatch handles its failure after the doTry called a route that failed
+
+When the `doTry` block calls a route (such as with `direct`) that fails without handling the failure (no `onException` handles it, and no dead letter channel), the error handler of a route called from the `doCatch` block now runs as it does anywhere else, as when the `doTry` failed in the same route: it redelivers, runs its `onException` (also one that does not handle the failure) and its dead letter channel, and logs the exhausted failure. Before, it gave the failure straight back, and the exchange failed with that route’s exception after one attempt. When that route handles its failure, the rest of the `doCatch` block and the steps after the `doTry` do not run, as for any failure that a called route handles; when it continues its failure, they run. When the `doCatch` block does not call a failing route, the route continues after the `doTry` as before.
+
+The exchange no longer keeps the marks of the caught failure, which also changes the following:
+
+-   the same applies to a later `doTry` in the same route, and to a `doTry` inside an `onCompletion`;
+    
+-   the same applies to a route called later from a `split`, `multicast`, `recipientList`, `enrich` or `wireTap` (their copies of the exchange carried the mark that the caught failure was not handled);
+    
+-   a `doTry` and `doCatch` inside an `onException(…​).handled(true)`, whose `doTry` calls such a route, no longer makes the exchange fail with the exception the `doCatch` caught;
+    
+-   with `bridgeErrorHandler=true` on the consumer, a failure of such an exchange that is not handled (a `doCatch` that fails, or a later failure in the route) now goes to the route’s error handler, as an exchange with the body `Error processing exchange`, instead of only being logged;
+    
+-   as when the `doTry` failed in the same route, the error registry (`camel get error`) now also lists the failure that such a `doCatch` caught, and the JMX `failuresHandled` counters of the steps inside the `doCatch` block no longer count it.
+    
+
+To keep the exchange failing after one attempt as before, give the route called from the `doCatch` no error handler (`noErrorHandler()`); this applies to every caller of that route.
+
+### camel-core - Simple: more predicates inside ${ } are read as predicates
+
+A predicate written inside the braces (CAMEL-24921, 4.23) is now also read as one when it uses the operators `equals`, `!equals`, `!startsWith` or `!endsWith`, and when its left side is a function with a quoted argument, such as `${substringAfter('ID-') == '42'}`. Before, the whole text was read as one function: `${header.type equals 'gold'}` answered null (a predicate that never matches) and `${uppercase('a') == 'B'}` answered `A` (a predicate that always matches). The condition of a ternary inside the braces accepts `equals` and `!equals` as well: `${header.type equals 'gold' ? 'a' : 'b'}` was refused. The same predicates written outside the braces, such as `${header.type} equals 'gold'`, are unchanged.
 
 ### camel-core - Simple: the elvis operator inside the braces
 
 The elvis operator can now be written inside the braces: `${header.limit ?: 10}` means `${header.limit} ?: 10`. In an expression this used to fail with `${ cannot accept ?:`. In a predicate it used to be read as one function whose name took in the rest of the text, such as a header named `limit ?: 10`, which is not set: so `${header.limit ?: 10} == 10` was false, and is true now. Without a space on both sides of `?:` nothing changes: `${header.limit ?:10}` still reads a header named `limit ?:10`. The default value of a property placeholder, `${properties:key:a ?: b}`, is not affected.
 
+### camel-core - Simple: iif and val return a quoted literal without its quotes
+
+In the Simple language, `${iif(${header.foo} > 0,'positive','negative')}` returns `positive` again, as it did before Camel 4.10.7 and 4.13.0 (CAMEL-22204, which made it return `'positive'`) and as the ternary operator `${header.foo > 0 ? 'positive' : 'negative'}` does. `${val('Hello')}` returns `Hello`; it returned `'Hello'` since `val` was added in Camel 4.18.1. A route that removed the quotes itself, or that relied on them, must be adjusted. Values without quotes, functions such as `${body}`, and the quotes inside the predicate of `iif` are not changed.
+
+### camel-core - Simple: a space after a comma is not part of a function argument
+
+The arguments of the `replace`, `substring`, `substringBefore`, `substringAfter`, `substringBetween` and `contains` functions no longer include the white space around them, as for the collection functions since 4.23 (CAMEL-24969): `${replace('o', '0')}` replaces `o` with `0` (it replaced it with `0`), and the documented `${replace(&quot; , &apos;)}` replaces double quotes with single quotes. The spaces inside quotes are kept, and an argument of only white space is kept as it is, so `${replace( ,-)}` still replaces a space. A route that relied on a space next to the comma, such as `${replace(a,b )}` for the text `b` , quotes it instead: `${replace(a,'b ')}`. Only the quotes around a whole argument are removed: a quote inside an argument, as in `a'b'c`, is now kept (it was removed).
+
+### camel-core - a route called from a doTry uses the error handler of its EIPs
+
+A route that a `doTry` calls from its steps, or from its `doCatch` or `doFinally` blocks (with `direct`, `seda`, `enrich` and so on), now uses the error handler per output of its routing slip, dynamic router, multicast and recipient list EIPs, as it does when it is called from outside a `doTry`. Before, these EIPs left out that error handler while the caller was in its `doTry`: a routing slip redelivered the whole slip (so an endpoint that had already succeeded got the message again), a multicast or recipient list did not redeliver the failed output, and a dynamic router that counts its calls could lose the failure. The same applies to a route called from the steps of a circuit breaker. A redelivery now starts at the failed output, so such a route can make more delivery attempts than before.
+
+When the called route handles failures (a dead letter channel, or an `onException` with `handled(true)`), a failed output of its multicast is now handled there (after the redeliveries of that error handler), and no longer reaches the `doCatch` of the caller.
+
+To turn off the error handler per output of such an EIP again (no redelivery of its outputs, and the failure goes to the caller), put the EIP in a `doTry` with only a `doFinally` in the called route, or turn off the error handler of the called route with `errorHandler(noErrorHandler())`, which turns it off for the other steps of that route too. Neither option brings back the redelivery of a whole routing slip or dynamic router.
+
 ### camel-util - FilterIterator.remove after hasNext throws IllegalStateException
 
 `FilterIterator.hasNext()` looks ahead in the iterator it wraps, so a `remove()` after `next()` and then `hasNext()` removed the element after the one `next()` returned, and a `remove()` before any `next()` removed an element as well. `remove()` now throws `IllegalStateException` unless it directly follows `next()`. Code that called `hasNext()` between `next()` and `remove()` must call `remove()` before `hasNext()`.
 
+The same applies to a `remove()` after a `next()` that failed after it looked at further elements: a `NoSuchElementException` because the filter rejected all the elements that were left (or they were null), or an exception thrown by the filter or by the iterator it wraps. Such a `remove()` could remove an element that `next()` never returned; it now throws `IllegalStateException` and removes nothing. A `next()` that fails at the end of the wrapped iterator, without looking at any element, still leaves the element returned before it removable.
+
 ### camel-util - CaseInsensitiveMap merges keys that differ only in the case of a supplementary letter
 
 `CaseInsensitiveMap`, which holds the message headers, now treats two keys that differ only in the case of a letter outside the Basic Multilingual Plane (such as U+10400 and U+10428) as the same key, as `String.equalsIgnoreCase` does; before, they were usually kept as two entries. Keys without such letters are not affected.
+
+### camel-core - ThrottlingExceptionRoutePolicy runs the half open check on a thread pool of Camel
+
+The half open check of `ThrottlingExceptionRoutePolicy` now runs on a thread pool created through the `ExecutorServiceManager` (one thread, named `ThrottlingExceptionRoutePolicy` and managed like the other thread pools of Camel), instead of a new `java.util.Timer` thread each time the circuit opens. The thread is created when the circuit opens the first time, and it ends when the last route of the policy is removed or the policy is stopped.
+
+`halfOpenAfter` must now be greater than 0: adding a route with a policy whose `halfOpenAfter` is 0 or less fails, and `setHalfOpenAfter` (also over JMX) rejects such a value with an `IllegalArgumentException`. With 0, a check that keeps the circuit open (`keepOpen`, or a `halfOpenHandler` that is not ready) scheduled the next check without delay, a busy loop. To half open the circuit almost at once, as 0 did, use a small value such as 1.
+
+An exception thrown by the `isReadyToBeClosed` method of a `halfOpenHandler` is now logged (by the exception handler of the policy), and the circuit is kept open and checked again after `halfOpenAfter`; before, the timer thread died and the circuit stayed open.
+
+### camel-core - Split EIP keeps the original message when maxFailedRecords or errorThreshold stops it
+
+When the Split EIP stops because `maxFailedRecords` or `errorThreshold` is reached, the exchange now keeps its original input message, headers, exchange properties and variables, and only gets the exception, as with `stopOnException`. Before, the message, headers, exchange properties and variables of the split item that reached the threshold, as the steps inside the split had changed them, were copied onto the exchange.
+
+So a `doCatch` around the split, an `onException`, an `onCompletion`, a dead letter channel or the caller of the route now receive the input that was split, instead of that one split item. A route that needs to know which items failed can read the `CamelSplitResult` exchange property, set as before: `SplitResult.getFailures()` has the index and the exception of the failed items.
 
 ### camel-main - a failure to start is logged
 
@@ -172,6 +273,12 @@ When the WebSocket that the `camel-vertx-websocket` producer sends to (a server 
 
 See the [Kubernetes client 8 migration guide](https://github.com/fabric8io/kubernetes-client/blob/main/doc/MIGRATION-v8.md) for the other changes.
 
+### camel-resilience4j, camel-microprofile-fault-tolerance - a circuit breaker in a doTry
+
+A circuit breaker in the steps of a `doTry` no longer ends that `doTry` for the steps after it. Before, when the circuit breaker was done, a later routing slip, dynamic router, multicast or recipient list of the same `doTry` used the error handler of the route (redelivery and the dead letter channel) instead of the `doCatch`. And after the fallback of the circuit breaker had recovered from a failure, no `doCatch` of that `doTry` caught a later failure: the failure was thrown from the `doTry`. Now such failures go to the `doCatch`, as for the other steps of the `doTry`. A failure of the fallback itself is now also caught by the `doCatch` (before, it was thrown from the `doTry`).
+
+To have those steps use the error handler of the route, move them out of the `doTry` block.
+
 ### camel-aws2-kinesis - each endpoint uses its own client
 
 Each `aws2-kinesis` endpoint now uses the Kinesis client of its own configuration (`region`, credentials, `uriEndpointOverride`, or `amazonKinesisClient` / `amazonKinesisAsyncClient`). Before, all endpoints of the component used the client of the endpoint that started first, and stopping one endpoint (for example by removing its route) closed that client for every other endpoint.
@@ -182,11 +289,21 @@ Camel now closes only the clients it created. A client set with `amazonKinesisCl
 
 The `CamelOaimphOnlyFirst` and `CamelOaimphIgnoreSSLWarnings` headers now apply only to the message that has them. Before, the producer wrote them onto the endpoint, so after one message with `CamelOaimphOnlyFirst=true` every later message sent to that endpoint returned only the first page, and after one message with `CamelOaimphIgnoreSSLWarnings=true` every later message accepted a self-signed certificate. A message without the header uses the `onlyFirst` and `ignoreSSLWarnings` options of the endpoint.
 
+### camel-cm-sms - the from of an SMSMessage is the sender of the SMS
+
+An `SMSMessage` with a `from` is now sent with that sender. Before, the sender was set only when `from` was empty (to `defaultFrom`), so a message with its own `from` was sent with an empty sender. A message without a `from` is still sent with `defaultFrom`.
+
+When the validation of an `SMSMessage` fails, the `InvalidPayloadRuntimeException` now names the invalid fields in its message, and its cause is an `org.apache.camel.ValidationException`.
+
 ### camel-aws - the HTTP client is no longer looked up on the classpath
 
 The camel-aws components now set the HTTP client of the AWS SDK clients they create for their endpoints: the Apache 5 client (`software.amazon.awssdk:apache5-client`) for synchronous clients, and the Netty client (`software.amazon.awssdk:netty-nio-client`) for asynchronous clients. These are the clients the AWS SDK selects itself with the Camel dependencies. Before, unless a proxy or `trustAllCertificates` was configured, the AWS SDK looked the HTTP client up on the classpath. That lookup fails with `java.util.ServiceConfigurationError` (`…​ not a subtype`) when the classpath registers an HTTP client from another copy of the AWS SDK, as on a Kafka Connect worker.
 
 If you replaced these dependencies to use another HTTP client implementation, name it with the AWS SDK system property `software.amazon.awssdk.http.service.impl` (synchronous clients) or `software.amazon.awssdk.http.async.service.impl` (asynchronous clients): Camel then leaves the choice of the HTTP client to the AWS SDK.
+
+### camel-weather - the CamelWeatherLocation header is the location that is queried
+
+The latitude and longitude of the current geolocation (a location of `current`, or no location) are no longer written onto the configuration of the endpoint. Before, they were, so every later query on that endpoint, including one with a `CamelWeatherLocation` header such as `Paris`, requested the weather of the current geolocation. An endpoint without a `location` already did the geolocation when its producer was created, so its `CamelWeatherLocation` header was never used. The `lat` and `lon` options of an endpoint are still used instead of the location.
 
 ### camel-gson, camel-jsonb - the unmarshal type header needs allowUnmarshallType
 
@@ -336,6 +453,10 @@ Such an exchange already failed when the key state could not be stored, so what 
 
 Signing a stateful key without a `keyLifecycleManager`, and signing any key without a `CamelPQCKeyId` header or with no stored metadata for the key, now logs a warning once per producer rather than being silently ignored. A non-stateful key without a `keyLifecycleManager` stays silent, as there is no `maxKeyUsage` threshold to miss. For a stateful key the warning names the index-reuse risk; for any other key it names the `usageCount` that will not advance.
 
+### camel-jsonpath - easy predicates with `<=` and `>=` match the boundary value
+
+An easy predicate (such as `store.book.price <= 10` or `$.store.book.price >= 10`) now matches the boundary value. Before, `price <= 10` ran as `price < 10` and `price >= 10` as `price > 10`, so a message with a price of exactly 10 was not matched, and a content-based router sent it to another branch. A route that worked around this (for example with `price <= 10.01`) can go back to the plain boundary. Also, an operator word inside a quoted value (`title == 'Java in Action'`) is now part of the value, and the type-safe operators `===` and `!==` are passed to JsonPath as written (before, they ran as `==` and `!=`).
+
 ### camel-jbang - camel get endpoint shows the scope of an endpoint
 
 `camel get endpoint` replaces the `REMOTE` column with `SCOPE`, which tells three kinds of endpoint apart: `remote` (an external system, as before), `internal` (Camel plumbing that stays inside the integration, such as `direct`, `seda` or `log`, as the catalog marks its component internal) and `local` (neither, such as `exec` or `bean`). Scripts that read the `REMOTE` column of the table must read `SCOPE` instead. The `--json` output keeps `remote` and adds `internal`.
@@ -376,23 +497,25 @@ PEM handling is also now explicitly UTF-8 rather than the platform default chars
 
 ### camel-jbang - exit codes, and errors on stderr
 
-The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](camel-jbang-exit-codes.md)): `0` success, `1` failed, `2` usage error, `3` not found, `70` internal error and `124` timed out. A script that checks the exit code of a command must take these changes into account:
+The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](camel-jbang-exit-codes.md)): `0` success, `1` failed, `2` usage error, `3` not found, `66` file not found, `70` internal error and `124` timed out. A script that checks the exit code of a command must take these changes into account:
 
 -   A command that ends with an unexpected exception exits with `70` instead of `1`, and prints `ERROR:`, the message and the stack trace on stderr. Add `--verbose` or set `CAMEL_CLI_DEBUG=true` to print the stack trace of other errors too.
     
--   Commands that exited with `255` now exit with `1`, `2`, `3` or `124`: `camel bind`, `camel debug`, `camel dependency update`, `camel eval expression`, `camel infra log`, `camel transform message` and `camel update run`. `camel debug` exits with the exit code of the debugged integration when it ends.
+-   Commands that exited with `255` now exit with `1`, `2`, `3`, `66` or `124`: `camel bind`, `camel debug`, `camel dependency update`, `camel eval expression`, `camel infra log`, `camel transform message` and `camel update run`. `camel debug` exits with the exit code of the debugged integration when it ends.
     
 -   `camel semantic` exits with `124` instead of `4` when the integration does not reply in time.
     
 -   `camel generate schema` exits with `2` for an empty argument, `3` when the class is not found, `1` when the schema cannot be generated and `70` for an unexpected error, instead of `4`, `2`, `3` and `4`.
     
--   `camel transform dataweave` exits with `2` without `--input` or `--expression`, and with `3` when the input path does not exist or holds no `.dwl` files, instead of `1`.
+-   `camel transform dataweave` exits with `2` without `--input` or `--expression`, and with `66` when the input path does not exist or holds no `.dwl` files, instead of `1`.
     
 -   `camel cmd sql` exits with `124` instead of `1` when the query does not answer in time.
     
--   A source file of `camel cmd route-diagram`, `camel cmd route-structure` and `camel cmd route-topology` that does not exist exits with `3` instead of `1`. The parts of a Java route the parser could not read are printed as a warning on stderr (also with `--json`, which lists them in `unread` as before).
+-   A source file of `camel cmd route-diagram`, `camel cmd route-structure` and `camel cmd route-topology` that does not exist exits with `66` instead of `1`. The parts of a Java route the parser could not read are printed as a warning on stderr (also with `--json`, which lists them in `unread` as before).
     
--   A file or a name that does not exist exits with `3` instead of `1`: a source file or `--source-dir` of `camel run`, the route file of `camel explain` and `camel harden` (checked before the LLM is contacted), the `pom.xml` of `camel dependency runtime`, the Kamelet of `camel init --from-kamelet`, the service of `camel infra run`, the key of `camel config get`, the name given to `camel doc`, and the plugin of `camel plugin delete`.
+-   A file or directory that does not exist exits with `66` instead of `1`: a source file or `--source-dir` of `camel run`, the route file of `camel explain` and `camel harden` (checked before the LLM is contacted), and the `pom.xml` of `camel dependency runtime`.
+    
+-   A name that does not exist exits with `3` instead of `1`: the Kamelet of `camel init --from-kamelet`, the service of `camel infra run`, the key of `camel config get`, the name given to `camel doc`, and the plugin of `camel plugin delete`.
     
 -   `camel cmd memory-leak` and `camel restart` exit with `3` when no running integration, or more than one, matches the name. `camel cmd memory-leak` exits with `124` when the integration does not reply in time.
     
@@ -403,7 +526,7 @@ The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](ca
 -   The first use of the command of a Camel plugin (such as `camel kubernetes`) installs the plugin and runs the command, instead of asking to run the command again and exiting with `0`.
     
 
-Errors, warnings and tips are printed on stderr instead of stdout, so stdout only has the output of the command, such as JSON. If a script reads the error text of a command from stdout, read stderr instead. The list of plugins that are not installed, after `camel --help`, is printed on stderr, and only in an interactive terminal.
+Errors, warnings and tips are printed on stderr instead of stdout, so stdout only has the output of the command, such as JSON. If a script reads the error text of a command from stdout, read stderr instead. The list of plugins that are not installed, after `camel` and `camel --help` (no longer after the help of a command, such as `camel run --help`), is printed on stderr, and only in an interactive terminal.
 
 ### camel-pqc - parameterSpec accepts MAYO and SNOVA, and the FIPS advisory no longer flags two aliases
 
@@ -550,7 +673,7 @@ Without an interactive terminal, such as in a script, a CI job (the `CI` environ
     
 -   `camel run` and `camel dev` with `--max-seconds`, `--max-messages` or `--max-idle-seconds` exit at the limit also in dev mode, which stopped the routes and kept running. A limit from the configuration (`camel.main.durationMax…​`) still only stops the routes in dev mode.
     
--   A file that does not exist exits with `3` and `File does not exist: <file>` for every kind of file, before anything is printed. Files together with `--source-dir`, and `--background` with a runtime that does not support it, exit with `2`.
+-   A file that does not exist exits with `66` and `File does not exist: <file>` for every kind of file, before anything is printed. Files together with `--source-dir`, and `--background` with a runtime that does not support it, exit with `2`.
     
 
 ### camel-jbang - camel explain and camel harden
@@ -603,7 +726,7 @@ Without an interactive terminal, such as in a script, a CI job (the `CI` environ
     
 -   `camel version list` exits with `1` when the versions cannot be downloaded. `camel version set --reset` removes the Kamelets version too, and `camel version get` shows a configuration with only the Kamelets version.
     
--   `camel validate yaml` and `camel validate properties` with no file to validate exit with `3`.
+-   `camel validate yaml` and `camel validate properties` with no file to validate exit with `66`.
     
 -   `camel doc` looks a name up in the catalog of Camel before it downloads the Kamelet catalog, so a component is documented also offline. `camel catalog kamelet` has `--repos`.
     
@@ -840,6 +963,12 @@ The `aws2-ddbstream` consumer now reads a closed shard to its end before it read
 ### camel-beanio - BeanIOSplitter decodes files and streams with the charset of the exchange or its encoding
 
 `BeanIOSplitter` read a file body with the default charset of the JVM, and a stream or byte array body with the charset of the exchange or the default charset of the JVM; its `encoding` option was not used. A file consumed with `charset=ISO-8859-1`, or a splitter with `setEncoding(StandardCharsets.ISO_8859_1)`, had every non-ASCII character replaced. The splitter now decodes a file, stream or byte array body with the charset of the exchange (the `CamelCharsetName` header or exchange property, as set by the `charset` option of the file consumer), else with its `encoding` (default: the default charset of the JVM). A `String` or `Reader` body is read as before, and other text (such as a `StringBuilder`, which failed before) is read as text.
+
+### camel-beanio - BeanIOSplitter keeps the records after a record that the error handler handled
+
+When a custom `BeanIOErrorHandler` calls `handleErrorAndAddAsResult` for an invalid record, the BeanIO reader goes on and returns the next record in the same read. `BeanIOSplitter` replaced that next record with the result of the error handler, and of two records handled in a row it kept only the last result. Those records were not split, and nothing was logged. The splitter now returns the results of the error handler in their order, followed by the record that the reader returned, as the `beanio` data format does when it unmarshals into a list. A route that splits data with handled invalid records now gets every valid record.
+
+The splitter also sets its error handler before it reads the first record. Before, an invalid, unexpected or unidentified first record failed the split even with `ignoreInvalidRecords`, `ignoreUnexpectedRecords`, `ignoreUnidentifiedRecords` or a custom error handler; now the first record is handled as the others are.
 
 ### camel-bindy - a number field without precision keeps all its decimals when marshalled
 
@@ -1425,6 +1554,10 @@ When a route is suspended (`RouteController.suspendRoute`, also when a route pol
 ### camel-core - the route structure leaves out onException clauses that never run
 
 A route with `noErrorHandler` runs none of its `onException` clauses, and a global `onException` is copied into every route of its route builder or file. The route structure now leaves these clauses out of such routes: the `route-structure` dev console, `camel cmd route-structure`, and the route diagrams drawn from it. Before, they were listed among the steps of the route.
+
+### camel-core - simple `==` compares a number and a numeric String by their values
+
+The `==` and `!=` operators of the simple language compare a number with a `String` that holds a number by their values, as `<`, `⇐`, `>` and `>=` (and `in` when the left value is a number) do since Camel 4.23. Before, when the two were written differently, the `String` was converted to the type of the number and compared with `equals` (which also compares the scale of a `BigDecimal`), or the two were compared as text. So `${header.amount} == '10'` is now `true` for a `BigDecimal` of `10.00` (it was `false`, while `${header.amount} ⇐ '10'` and `>= '10'` were `true`), and so are `${header.count} == '3.0'` for an `Integer` of `3` and `${header.text} == 10` for a `String` of `10.00`. Spaces around the number and an exponent (such as `' 10'` and `'1e1'`) are allowed, as in the `in` operator, and `<` and `>` compare such a `String` by its exact value too (it was compared as a double). The same applies to `=~`, to `contains` on a collection, and to the Java DSL and mock predicates such as `header("amount").isEqualTo("10")`. Two `String` values, and a `Double` or `Float` compared with a `String`, compare as before. Use `equals` to compare the two values as text.
 
 ### camel-diagram - a route diagram draws the steps of a route
 
@@ -2044,6 +2177,12 @@ With `useIterator=true` (the default), the producer now splits a Jackson JSON no
 -   `ediMessageTransferEncoding=quoted-printable` now encodes the message as quoted-printable. Previously it was encoded as Base64 but labelled quoted-printable, which the receiver rejected.
     
 
+### camel-as2 - server/listen - signature and MIC over the message as received
+
+The signature of a `multipart/signed` message is now verified over the signed part exactly as it was received, its MIME headers and its body in the transfer encoding the sender used (RFC 1847, section 2.1), and the `Received-Content-MIC` of the MDN is computed over the same bytes (RFC 4130, section 7.1). Previously both were computed over a re-serialisation of the parsed part, which matches the sender’s bytes only when the part is `binary`, `7bit` or `8bit` and its headers are formatted the way camel-as2 writes them: a `base64` or `quoted-printable` part from another AS2 implementation, encoded with a different line length or escaping, or a part with folded headers or no space after the colon, was refused with `authentication-failed` although correctly signed, and the MDN carried a MIC the sender could not match. Messages from camel-as2’s own client are not affected. `MultipartSignedEntity.getSignedDataRaw()` returns the part as received, `getSignedDataContent()` the bytes a signature is verified against.
+
+The text of a body part now ends exactly where the boundary delimiter begins: the line break before the delimiter line is removed as the sender wrote it, CRLF or a bare LF. Before, two characters were always removed, so a part framed with bare line feeds (as `openssl cms -sign` writes them without `-crlfeol`) lost its last byte.
+
 ### camel-graphql - the HTTP headers of the request
 
 The `Content-Type`, `Accept` and `Accept-Encoding` headers of the request are now always the ones of the producer (JSON), whatever headers the message has, and a `Content-Encoding` header of the message is no longer sent. The headers named by the `queryHeader` and `variablesHeader` options are no longer sent as HTTP headers. After the call the `CamelHttpMethod`, `Accept` and `Accept-Encoding` headers that the producer set no longer stay on the message, so a later http producer no longer sends a POST because of them. When the body is the query, a body that is not text, bytes, a stream or a file, such as a Map, now fails instead of being sent as its `toString()`, and a Map body (or a Map in the variables header) is used as the variables.
@@ -2293,3 +2432,38 @@ The log keeps 524,288 entries; after that it rolls over and holds the newest ent
 ### camel-core - a hook before each step of a route
 
 A new SPI `org.apache.camel.spi.StepHook`, set with `ExtendedCamelContext.setStepHook`, can fail or delay each step of a route. `ErrorHandlerRedeliveryCustomizer` has a new default method `useStepHook(String)`, so existing implementations need no change. A custom error handler that wants a failure from the hook handled like a failure of the step’s processor (with `onException` and redelivery) can override it.
+
+### camel-quartz - a route that keeps its trigger fires again when it is added again or after a restart
+
+With `deleteJob=false` (as with `pauseJob=true`), a route pauses its trigger when it stops, and only the same endpoint resumed it. A route that was removed and added again (a reload, a route template removed and added), and a route that started after a restart with a persistent job store that is not clustered, therefore never fired again. The route now marks the trigger it pauses, with the key `CamelQuartzTriggerPausedByCamel` in the `JobDataMap` of its job, and a route resumes a paused trigger with this mark when it starts. A trigger that was paused outside Camel (with the Quartz API or JMX) has no mark and stays paused; this now also holds when the same route is stopped and started again, which resumed such a trigger before. A trigger that Camel paused before this version has no mark either: resume it once with the Quartz API. A clustered job store is not changed, as Camel does not pause triggers there.
+
+### camel-langchain4j-ingest - a media document whose type cannot be told is filtered
+
+With `modality=media` and no `contentType` set, a document whose media type cannot be told from the extension of its id, such as a README or an editor backup beside the media, is now answered with a `filtered` result, as an id rejected by `includeId` or `excludeId` is. Before, it failed the exchange with an `IllegalArgumentException`, so such a file in a polled folder failed again on every poll. The exchange now completes, so a file consumer without `noop` moves such a file into `.camel` instead of leaving it in place. A hint is logged at INFO. A document whose type is known but is not a medium, or is one the embedding model does not support, still fails the exchange.
+
+### camel-jbang - camel export boots the integration in the same JVM, no longer through camel run
+
+To find the dependencies, `camel export` boots the integration silently, as before, but no longer goes through `camel run` for it. Some settings of `camel run` therefore no longer apply to an export:
+
+-   `camel.jbang.background` and `camel.jbang.jvmDebug` in `application.properties` are ignored by the export. Before, they made the export start a separate `camel run` process (in the background, or with a debugger), which kept running after the export, or which the export waited for.
+    
+-   `--camel-version` is accepted by `camel export` from `camel-launcher` too: it sets the Camel version of the exported project. Before, it failed with a usage error.
+    
+-   `camel export clipboard.yaml` no longer reads the route from the clipboard when there is no such file: it fails with exit code 66 (file not found), as for any other missing file. Save the content of the clipboard to a file and export that file.
+    
+-   `camel export --profile=<profile>` boots the integration with that profile to find the dependencies. Before, it always booted with the `dev` profile, so a component that only `application-<profile>.properties` uses was missing from the exported project: such an export can now have more (or other) dependencies. The security policy of the profile (such as `prod`, which fails on an insecure option) does not fail the export, nor does `camel.security.policy=fail`: the export only warns. Without `--profile` the dependencies are the same as before.
+    
+
+### camel-launcher - the distribution has the JARs in lib/
+
+The zip and tar of the Camel CLI (`camel-launcher-<version>-bin`, which Homebrew, SDKMAN, WinGet, Scoop, Chocolatey, the website installer and `camel self-update` install) no longer have the fat JAR in `bin/`. They have the JARs in `lib/`, with `lib/camel-launcher-<version>.jar`, whose manifest names the other JARs of `lib/` as its class path. The scripts in `bin/` run `java -jar lib/camel-launcher-<version>.jar`, so each command starts about 100 ms faster, and `camel --help` about 250 ms. A script or an image that runs the fat JAR from the extracted distribution runs `lib/camel-launcher-<version>.jar` instead, or the fat JAR from Maven Central, which has not changed.
+
+The JARs of `lib/` are in the order of the dependencies of `camel-launcher`, which is the class path its tests run with; the fat JAR had them in alphabetical order. `camel generate` no longer has `swagger-models` 2.2.52 next to `swagger-models-jakarta` 2.2.36, two JARs with the same classes.
+
+`bin/camel.sh` and `bin/camel.bat` turn on class data sharing: the JVM keeps the classes that a command loads in an archive, one per command and Camel version, in `${XDG_CACHE_HOME:-~/.cache}/camel-cli/cds` (`%LOCALAPPDATA%\camel-cli\cds` on Windows). The first run of a command creates its archive and takes longer (up to about a second), and the JVM creates it again when the JDK changes. `CAMEL_CDS=false` turns it off, and so do CDS or AOT options in `JAVA_OPTS` (such as `-Xshare:off`). The archives of a Camel version are not needed after an upgrade, and the directory can be removed at any time.
+
+### camel-once - the consumer fires on a Camel thread pool
+
+The once consumer now fires its route on a single thread scheduled executor that it creates through the `ExecutorServiceManager` when the route starts and shuts down when the route stops, so the thread is named `Camel (<context>) thread #N - <name>` instead of `<name>`. Before, each once consumer created a non-daemon `java.util.Timer` thread when it was created, and that thread stayed alive after its route was stopped and after the CamelContext was stopped (after its route was removed, until the consumer was garbage collected). A once route that is stopped and started again now fires again, and so does a once route after the CamelContext is stopped and started again; before, the start failed with `IllegalStateException: Task already scheduled or cancelled`.
+
+The protected method `OnceConsumer.scheduleTask(TimerTask, Timer)` is replaced by `scheduleTask()`.

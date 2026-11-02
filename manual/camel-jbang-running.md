@@ -343,6 +343,8 @@ Limitations compared to the `jbang` runtime:
     
 -   Options that only work in-process are not supported: `--background`, `--code`, `--open-api`, `--empty` and `--mcp-stdio`.
     
+-   `--chaos` works with Camel Main (it adds `camel-chaos`), but not with Spring Boot or Quarkus.
+    
 -   Dev mode reloads YAML and XML route files from the original source directory; Java sources cannot be live-reloaded (Spring Boot uses dev-tools and Quarkus its dev mode instead).
     
 -   Quarkus versions are locked to a specific Camel version (`camel version list --runtime=quarkus`)

@@ -28,6 +28,8 @@ At runtime, the `docling-convert-action` Kamelet relies upon the presence of the
     
 -   camel:kamelet
     
+-   camel:bean
+    
 
 ## Camel JBang usage
 

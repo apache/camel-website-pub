@@ -13,7 +13,7 @@ camel version list [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
-| `--date-format` | The format to show the date (such as dd-MM-yyyy) | DEFAULT\_DATE\_FORMAT | String |
+| `--date-format` | The format to show the date (such as dd-MM-yyyy) | MMMM yyyy | String |
 | `--days` | Whether to include days since release | true | boolean |
 | `--download` | Whether to allow automatic downloading JAR dependencies (over the internet) | true | boolean |
 | `--eol` | Include releases that are end-of-life | true | boolean |
@@ -23,7 +23,7 @@ camel version list [options]
 | `--json` | Output in JSON Format | false | boolean |
 | `--lts` | Only show LTS supported releases | false | boolean |
 | `--patch` | Whether to include patch releases (x.y.z) | true | boolean |
-| `--quarkus-ext-registry` | The base URI of Quarkus Extension Registry. The default is {@value RuntimeType#QUARKUS\_EXTENSION\_REGISTRY\_BASE\_URL} unless camel.jbang.quarkus.platform.url system property is set (the /client/platforms suffix is removed if present). |  | String |
+| `--quarkus-ext-registry` | The base URI of Quarkus Extension Registry. The default is https://registry.quarkus.io unless camel.jbang.quarkus.platform.url system property is set (the "/client/platforms" suffix is removed if present). |  | String |
 | `--rc` | Include also milestone or RC releases | false | boolean |
 | `--repo,--repos` | Additional maven repositories for download on-demand (Use commas to separate multiple repositories) |  | String |
 | `--runtime` | Runtime (camel-main, spring-boot, quarkus) | camel-main | RuntimeType |

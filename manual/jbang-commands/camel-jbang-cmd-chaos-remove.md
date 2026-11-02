@@ -1,0 +1,18 @@
+# camel cmd chaos-remove
+
+Remove a chaos rule of a running integration (camel-chaos, for development only)
+
+## Usage
+
+```bash
+camel cmd chaos-remove [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--id` | The id of the rule, such as r1 |  | String |
+| `--timeout` | How long to wait for the integration to answer, in millis or as a duration such as 30s | 10000 | long |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

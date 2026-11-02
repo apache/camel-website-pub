@@ -31,6 +31,8 @@ Engine resolution mirrors the platform-http engine: a bean of type `McpServerEng
 
 Resource support is opt-in on the SPI: `resourceAdded` and `resourceRemoved` default to no-ops and an engine declares `supportsResources()` when it serves them. An engine that serves tools only keeps working unchanged, and the bridge logs a WARN when `ai-resource` routes match the tags but the engine cannot serve them. The conformance kit follows the same split: resource assertions live in a separate `McpServerResourceConformanceTestSupport` class that an engine extends once it supports resources.
 
+An engine refuses a tool or resource it cannot serve, for example a name its runtime already serves, by throwing `McpServerRefusedException` from `toolAdded` or `resourceAdded`. The bridge logs an ERROR, as for its own name clashes, and does not track it: a later route can use the name or uri.
+
 ## Usage
 
 Define tools as regular `ai-tool` routes and give them tags:

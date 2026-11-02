@@ -79,7 +79,7 @@ Camel TUI has AI assistants: the model of the AI panel (a local or a hosted LLM)
 
 -   Before each write it shows the change as a diff, and the developer confirms it.
     
--   The developer confirms the same calls as in the TUI, and the calls that `camel ask` makes without a screen of the integration in front of the developer: stopping, killing or restarting the integration or its routes, running an integration, browsing an endpoint the integration does not have, writing a heap dump, and a `camel` command that changes something. The commands that only read, such as `camel get` and `camel ps`, run without asking.
+-   The developer confirms the same calls as in the TUI, and the calls that `camel ask` makes without a screen of the integration in front of the developer: stopping, killing or restarting the integration or its routes, running an integration, browsing an endpoint the integration does not have, writing a heap dump, and a `camel` command that changes something, such as `camel cmd chaos-add`, which turns on faults in the integration. The commands that only read, such as `camel get` and `camel ps`, run without asking.
     
 -   Without a terminal to ask on, such a call does not run, unless the developer passed `--yes`.
     
@@ -599,6 +599,7 @@ A small set of per-component options relaxes a security default when set to a no
 | `allowExternalEntities=true` (`camel-smooks`) | `false` | External entities and DTDs declared in the XML body are resolved (CVE-2026-88901). Marked `insecure:dev` on the `smooks:` endpoint. |
 | `logPhi=true` (`camel-mllp`) | `false` | HL7 payload content is written to the log (CVE-2026-85260). |
 | `allowUnmarshallType=true` (`camel-jackson`, `camel-gson`, `camel-jsonb`) | `false` | The `CamelJacksonUnmarshalType`, `CamelGsonUnmarshalType` or `CamelJsonbUnmarshallType` header selects the class that the body is unmarshalled into (CVE-2016-8749 for Jackson). |
+| `camel.chaos.enabled=true` (`camel-chaos`) | unset (on with profile `dev`, never with profile `prod`) | Chaos is switched on, and its rules fail, delay, drop and corrupt messages on purpose. The rules come only from the developer: `camel.chaos.rules` (marked `insecure:dev`), Java, and the `camel cmd chaos-*` commands over the CLI connector; the `chaos` developer console only reads. The `exception=` of a rule names any public `Throwable` class on the classpath, whose constructor runs when the fault fires. With profile `prod` chaos stays off, whatever `camel.chaos.enabled` and `camel.chaos.rules` say. |
 
 A machine-readable index of these variants, the entry-point trust levels, the in/out-of-scope component families, the claimed and disclaimed properties, the known non-findings and the triage dispositions is published alongside this page as `security-model.yaml` (an attachment); it is a derived index for automated triage and this prose page remains canonical.
 

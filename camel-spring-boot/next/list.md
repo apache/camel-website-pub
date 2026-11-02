@@ -1433,6 +1433,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Azure Storage Blob - Consumer Examples](../../components/next/others/azure-storage-blob-consumer.md) | undefined-starter |  |  |  |
 | [Azure Storage Blob - Producer Operations](../../components/next/others/azure-storage-blob-operations.md) | undefined-starter |  |  |  |
 | [Camel YAML DSL Validator Maven Plugin](../../components/next/others/camel-yaml-dsl-validator-maven-plugin.md) | undefined-starter |  |  |  |
+| [Chaos](../../components/next/others/chaos.md) | camel-chaos-starter | Preview | 4.24 | Turn on faults in a running Camel application during development, and report how the routes cope |
 | [CLI Connector](../../components/next/others/cli-connector.md) | camel-cli-connector-starter | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
 | [CLI Debug](../../components/next/others/cli-debug.md) | camel-cli-debug-starter | Stable | 4.17 | Remote CLI debugger |
 | [Cloudevents](../../components/next/others/cloudevents.md) | camel-cloudevents-starter | Stable | 3.15 | Camel support for the CloudEvents specification |

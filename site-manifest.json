@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1793343275501,
+  "generated": 1793601792830,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8327,6 +8327,182 @@
               "path": "security-model.adoc",
               "url": "/camel-karaf/4.9.x/security-model.html",
               "title": "Security Model"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "camel-kit",
+      "title": "Camel Kit",
+      "latest": "next",
+      "versions": [
+        {
+          "version": "next",
+          "displayVersion": "Next (Pre-release)",
+          "url": "/camel-kit/next/index.html",
+          "pages": [
+            {
+              "module": "ROOT",
+              "path": "agents.adoc",
+              "url": "/camel-kit/next/agents.html",
+              "title": "Supported AI agents"
+            },
+            {
+              "module": "ROOT",
+              "path": "architecture.adoc",
+              "url": "/camel-kit/next/architecture.html",
+              "title": "Architecture overview"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-brainstorm.adoc",
+              "url": "/camel-kit/next/camel-brainstorm.html",
+              "title": "camel-brainstorm"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-debug.adoc",
+              "url": "/camel-kit/next/camel-debug.html",
+              "title": "camel-debug"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-execute.adoc",
+              "url": "/camel-kit/next/camel-execute.html",
+              "title": "camel-execute"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-plan.adoc",
+              "url": "/camel-kit/next/camel-plan.html",
+              "title": "camel-plan"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-start.adoc",
+              "url": "/camel-kit/next/camel-start.html",
+              "title": "camel-start"
+            },
+            {
+              "module": "ROOT",
+              "path": "camel-validate.adoc",
+              "url": "/camel-kit/next/camel-validate.html",
+              "title": "camel-validate"
+            },
+            {
+              "module": "ROOT",
+              "path": "commands.adoc",
+              "url": "/camel-kit/next/commands.html",
+              "title": "Command reference"
+            },
+            {
+              "module": "ROOT",
+              "path": "constitution.adoc",
+              "url": "/camel-kit/next/constitution.html",
+              "title": "Constitution"
+            },
+            {
+              "module": "ROOT",
+              "path": "contributing.adoc",
+              "url": "/camel-kit/next/contributing.html",
+              "title": "Contributing and releasing"
+            },
+            {
+              "module": "ROOT",
+              "path": "eitl.adoc",
+              "url": "/camel-kit/next/eitl.html",
+              "title": "Environment-in-the-loop"
+            },
+            {
+              "module": "ROOT",
+              "path": "forage.adoc",
+              "url": "/camel-kit/next/forage.html",
+              "title": "Forage configuration catalog"
+            },
+            {
+              "module": "ROOT",
+              "path": "getting-started.adoc",
+              "url": "/camel-kit/next/getting-started.html",
+              "title": "Install and first project"
+            },
+            {
+              "module": "ROOT",
+              "path": "graph.adoc",
+              "url": "/camel-kit/next/graph.html",
+              "title": "Graph intelligence"
+            },
+            {
+              "module": "ROOT",
+              "path": "greenfield.adoc",
+              "url": "/camel-kit/next/greenfield.html",
+              "title": "Greenfield workflow"
+            },
+            {
+              "module": "ROOT",
+              "path": "index.adoc",
+              "url": "/camel-kit/next/index.html",
+              "title": "Camel Kit"
+            },
+            {
+              "module": "ROOT",
+              "path": "knowledge.adoc",
+              "url": "/camel-kit/next/knowledge.html",
+              "title": "Knowledge MCP"
+            },
+            {
+              "module": "ROOT",
+              "path": "mcp.adoc",
+              "url": "/camel-kit/next/mcp.html",
+              "title": "MCP servers"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-biztalk.adoc",
+              "url": "/camel-kit/next/migration-biztalk.html",
+              "title": "BizTalk migration"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-camel-upgrade.adoc",
+              "url": "/camel-kit/next/migration-camel-upgrade.html",
+              "title": "Camel 2.x and 3.x upgrade"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration-mulesoft.adoc",
+              "url": "/camel-kit/next/migration-mulesoft.html",
+              "title": "MuleSoft migration"
+            },
+            {
+              "module": "ROOT",
+              "path": "migration.adoc",
+              "url": "/camel-kit/next/migration.html",
+              "title": "Migration workflow"
+            },
+            {
+              "module": "ROOT",
+              "path": "pipeline.adoc",
+              "url": "/camel-kit/next/pipeline.html",
+              "title": "Stages, approval gate and Iron Laws"
+            },
+            {
+              "module": "ROOT",
+              "path": "ship.adoc",
+              "url": "/camel-kit/next/ship.html",
+              "title": "Ship workflow (Technology Preview)"
+            },
+            {
+              "module": "ROOT",
+              "path": "skills.adoc",
+              "url": "/camel-kit/next/skills.html",
+              "title": "Skills system"
+            },
+            {
+              "module": "ROOT",
+              "path": "verification.adoc",
+              "url": "/camel-kit/next/verification.html",
+              "title": "Runtime verification"
             }
           ]
         }
@@ -23560,6 +23736,12 @@
             },
             {
               "module": "others",
+              "path": "chaos.adoc",
+              "url": "/components/next/others/chaos.html",
+              "title": "Chaos"
+            },
+            {
+              "module": "others",
               "path": "cli-connector.adoc",
               "url": "/components/next/others/cli-connector.html",
               "title": "CLI Connector"
@@ -35462,6 +35644,12 @@
             },
             {
               "module": "ROOT",
+              "path": "camel-jbang-java-api.adoc",
+              "url": "/manual/camel-jbang-java-api.html",
+              "title": "Camel CLI - Java API for Export and Run"
+            },
+            {
+              "module": "ROOT",
               "path": "camel-jbang-kubernetes-advanced.adoc",
               "url": "/manual/camel-jbang-kubernetes-advanced.html",
               "title": "Camel CLI - Kubernetes Plugin Advanced Options"
@@ -35954,6 +36142,30 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-add.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-add.html",
+              "title": "camel cmd chaos-add"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-change.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-change.html",
+              "title": "camel cmd chaos-change"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-clear.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-clear.html",
+              "title": "camel cmd chaos-clear"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-remove.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-remove.html",
+              "title": "camel cmd chaos-remove"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-cmd-disable-processor.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-disable-processor.html",
               "title": "camel cmd disable-processor"
@@ -36281,6 +36493,12 @@
               "path": "jbang-commands/camel-jbang-get-blocked.adoc",
               "url": "/manual/jbang-commands/camel-jbang-get-blocked.html",
               "title": "camel get blocked"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-get-chaos.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-chaos.html",
+              "title": "camel get chaos"
             },
             {
               "module": "ROOT",

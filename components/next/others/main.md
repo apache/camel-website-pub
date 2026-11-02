@@ -741,6 +741,19 @@ The camel.aiObservability supports 1 options, which are listed below.
 | --- | --- | --- | --- |
 | `camel.aiObservability.enabled` | Enables GenAI observability for Camel AI producers (OpenTelemetry spans and Micrometer metrics when backends are present). | true | boolean |
 
+### Camel Chaos configurations
+
+The camel.chaos supports 5 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| `camel.chaos.enabled` | Whether to install the hooks of camel-chaos, which do nothing until a rule is added. The default is false, and true with profile dev. With profile prod chaos stays off, also when this is true. | false | Boolean |
+| `camel.chaos.maxDuration` | The longest time a rule runs: a rule without an until duration ends after it, and a longer until duration or delay is rejected when the rule is added. | 10m | String |
+| `camel.chaos.reportOnShutdown` | Whether to log the chaos report when the CamelContext stops, if any rule was added. | true | boolean |
+| `camel.chaos.rules` | Rules to add at startup, in the one-line text form of a rule, separated by semicolons. |  | String |
+| `camel.chaos.seed` | The seed of the random draws of the rules. Without it a seed is picked at startup, and shown in the report. |  | Long |
+
 ### Camel File Cluster Service configurations
 
 The camel.cluster.file supports 10 options, which are listed below.

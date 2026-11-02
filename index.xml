@@ -6341,14 +6341,14 @@
       <link>https://camel.apache.org/docs/building/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/docs/building/</guid>
-      <description>To learn how to build Camel, please check the documentation specific to the project you want to build:&#xA;Camel Core Camel K Camel Kafka Connector Camel Karaf Camel Quarkus Camel Spring Boot </description>
+      <description>To learn how to build Camel, please check the documentation specific to the project you want to build:&#xA;Camel Core Camel K Camel Kafka Connector Camel Karaf Camel Kit Camel Quarkus Camel Spring Boot </description>
     </item>
     <item>
       <title>Contributing</title>
       <link>https://camel.apache.org/community/contributing/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/community/contributing/</guid>
-      <description>Thank you for expressing your interest in contributing to Apache Camel, a versatile open-source integration framework. Apache Camel consists of various subprojects, each with its own specific contribution guidelines. To ensure a smooth and effective contribution process, it is important to familiarize yourself with the guidelines specific to the subproject you intend to contribute to. Check the pages for each of the subprojects for details about how to contribute:&#xA;Camel Core Camel K Camel Kafka Connector Camel Karaf Camel Quarkus Camel Spring Boot If in doubt about where to start, check the contributing guide from Camel Core, which provides the overall guidelines for the project and contains comprehensive documentation that may apply for the subprojects.</description>
+      <description>Thank you for expressing your interest in contributing to Apache Camel, a versatile open-source integration framework. Apache Camel consists of various subprojects, each with its own specific contribution guidelines. To ensure a smooth and effective contribution process, it is important to familiarize yourself with the guidelines specific to the subproject you intend to contribute to. Check the pages for each of the subprojects for details about how to contribute:&#xA;Camel Core Camel K Camel Kafka Connector Camel Karaf Camel Kit Camel Quarkus Camel Spring Boot If in doubt about where to start, check the contributing guide from Camel Core, which provides the overall guidelines for the project and contains comprehensive documentation that may apply for the subprojects.</description>
     </item>
     <item>
       <title>Install the Camel CLI Launcher</title>

@@ -1141,6 +1141,10 @@ Redirect 302 /camel-karaf/latest /camel-karaf/4.9.x
 RedirectMatch 302 "^/camel-karaf(/?)$" "/camel-karaf/4.9.x/"
 RedirectMatch 301 "^/camel-karaf/next$" "/camel-karaf/next/"
 RedirectMatch 302 "^/camel-karaf/(?![0-9].*|next/)(.+)$" "/camel-karaf/4.9.x/$1"
+Redirect 302 /camel-kit/latest /camel-kit/next
+RedirectMatch 302 "^/camel-kit(/?)$" "/camel-kit/next/"
+RedirectMatch 301 "^/camel-kit/next$" "/camel-kit/next/"
+RedirectMatch 302 "^/camel-kit/(?![0-9].*|next/)(.+)$" "/camel-kit/next/$1"
 Redirect 301 /camel-quarkus/next/cdi.html /camel-quarkus/next/user-guide/cdi.html
 Redirect 301 /camel-quarkus/next/ci.html /camel-quarkus/next/contributor-guide/ci.html
 Redirect 301 /camel-quarkus/next/contributor-guide.html /camel-quarkus/next/contributor-guide/index.html
@@ -1611,6 +1615,7 @@ Redirect 301 /_/img/books.svg /_/img/books-77a59b07e1.svg
 Redirect 301 /_/img/brand-logos.svg /_/img/brand-logos-a2b35bbdec.svg
 Redirect 301 /_/img/bugfix.svg /_/img/bugfix-4280bf9490.svg
 Redirect 301 /_/img/calendar.svg /_/img/calendar-b4b3ab1bf7.svg
+Redirect 301 /_/img/camel-kit.svg /_/img/camel-kit-9c8f16c70f.svg
 Redirect 301 /_/img/caret.svg /_/img/caret-8823676a4b.svg
 Redirect 301 /_/img/chevron.svg /_/img/chevron-63cb534773.svg
 Redirect 301 /_/img/cli.svg /_/img/cli-9cede0128a.svg

@@ -1,6 +1,6 @@
 # camel kubernetes delete
 
-Delete Camel application from Kubernetes. This operation will delete all resources associated to this app, such as: Deployment, Routes, Services, etc. filtering by label app.kubernetes.io/name=<name>.
+Delete Camel application from Kubernetes. This operation will delete all resources associated to this app, such as: Deployment, Routes, Services, etc. filtering by label "app.kubernetes.io/name=<name>".
 
 > **Note**
 > This command is provided by the `kubernetes` plugin. Install it with `camel plugin add kubernetes`.

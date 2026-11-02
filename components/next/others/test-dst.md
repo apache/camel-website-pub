@@ -34,21 +34,98 @@ The world (`SqsWorld`) builds a `CamelContext` with `DstCamel.newContext(dst)`, 
 
 A `Dst` is one run. The extension creates one per seed and closes it after the seed; a test that creates its own `new Dst(seed)` closes it in a `finally`. The virtual clock is JVM-wide, so only one run may be open at a time: a second `new Dst` while another run is open throws `IllegalStateException` ("another run (seed N) is still active"), and a DST test refuses to start when JUnit runs tests in parallel (`junit.jupiter.execution.parallel.enabled=true`).
 
-These worlds are in the Camel code base and are the examples to copy:
+These worlds are in the Camel code base and are the examples to copy. Each world class is annotated with `@DstWorld` (see step 10 of the guide below), and the build lists it in the `dstWorlds` section of the component in the Camel catalog. This table is generated from the catalog, which also has the faults each world injects and the invariants it checks:
 
-  
-| Component | Test | Regression test for |
-| --- | --- | --- |
-| camel-aws2-sqs | `SqsVisibilityDstTest` (the visibility timeout extender) | CAMEL-25700 |
-| camel-aws2-sqs | `SqsRedeliveryDstTest` (the extender while Camel’s error handler waits to redeliver, in virtual time) | \- |
-| camel-azure-eventhubs | `EventHubsCheckpointDstTest` (checkpointing by batch size and timeout) | CAMEL-25683 |
-| camel-kafka-share | `KafkaShareConsumerDstTest` (acknowledgements, acquisition locks, reconnects, and suspend and resume of the route and of the CamelContext) | CAMEL-25872 |
-| camel-pulsar | `PulsarConsumerDstTest` (subscribe failures, broker and route restarts while the route starts and consumes) | CAMEL-25869 |
-| camel-slack | `SlackSuspendDstTest` (route suspend in the middle of a poll) | CAMEL-25684 |
+    
+| Component | World (tests) | Fake | What it covers | Issues |
+| --- | --- | --- | --- | --- |
+| camel-aws2-sqs | `SqsWorld` (`SqsRedeliveryDstTest`, `SqsVisibilityDstTest`) | FakeSqs: a standard SQS queue (ReceiveMessage, DeleteMessage, ChangeMessageVisibilityBatch) bound as amazonSQSClient | 
+-   the visibility timeout extender (extendMessageVisibility=true)
+    
+-   short polling with one to three concurrent consumers and up to 10 messages per poll
+    
+-   processing that takes longer than the visibility timeout
+    
+-   synchronous redelivery by the error handler after a delay longer than the visibility timeout
+    
+
+
+
+
+
+ | CAMEL-25700, CAMEL-25737, CAMEL-25738, CAMEL-25911 |
+| camel-azure-eventhubs | `EventHubsWorld` (`EventHubsCheckpointDstTest`) | a mocked EventHubsClientFactory that delivers the events per partition, and a fake CheckpointStore | 
+
+-   checkpointing by checkpointBatchSize and checkpointBatchTimeout
+    
+-   one or two partitions with bursts and quiet periods of events
+    
+-   an asynchronous downstream step
+    
+
+
+
+
+
+ | CAMEL-25683, CAMEL-25738, CAMEL-25781 |
+| camel-kafka-share | `KafkaShareWorld` (`KafkaShareConsumerDstTest`) | FakeShareGroup: a share group (KIP-932) of one topic with one partition, behind ShareConsumer | 
+
+-   explicit acknowledgement with onFailure RELEASE or REJECT
+    
+-   commitMode SYNC and ASYNC
+    
+-   pollOnError ERROR\_HANDLER, RECONNECT, RETRY and DISCARD
+    
+-   acquisition locks and the delivery limit
+    
+-   the backoff when the share consumer cannot be created
+    
+-   route start, restart, suspend and resume
+    
+-   suspend and resume of the CamelContext
+    
+
+
+
+
+
+ | CAMEL-25872, CAMEL-25910 |
+| camel-pulsar | `PulsarWorld` (`PulsarConsumerDstTest`) | FakePulsar: a broker and client for one topic and one durable subscription | 
+
+-   subscription types Exclusive, Shared, Failover and Key\_Shared with one to three consumers
+    
+-   the message listener (messageListener=true, one consumer thread)
+    
+-   the ack timeout and the redelivery of a failed exchange after a negative acknowledgement
+    
+-   route start, restart, suspend and resume
+    
+-   an asynchronous downstream step
+    
+
+
+
+
+
+ | CAMEL-25869 |
+| camel-slack | `SlackWorld` (`SlackSuspendDstTest`) | a fake Slack Web API (conversations.history) returned by a mocked Slack.getInstance | 
+
+-   the polling consumer with maxResults and naturalOrder
+    
+-   the pages of conversations.history (oldest and cursor)
+    
+-   route suspend and resume while a batch is routed
+    
+
+
+
+
+
+ | CAMEL-25684, CAMEL-25738 |
 
 ## What the harness controls
 
-<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Thread pools</td><td class="tableblock halign-left valign-top">Every pool and scheduled executor created by Camel or the component through the <code>ExecutorServiceManager</code>. A single-thread executor keeps its FIFO order; an executor with n threads offers its first n runnable tasks to the seed.</td></tr><tr><td class="tableblock halign-left valign-top">Time reads</td><td class="tableblock halign-left valign-top"><code>System.currentTimeMillis()</code>, <code>System.nanoTime()</code>, <code>new Date()</code>, <code>Instant.now()</code>, <code>Clock.systemUTC()</code>, <code>Clock.systemDefaultZone()</code>, <code>Clock.system(ZoneId)</code> and <code>now()</code> / <code>now(ZoneId)</code> of <code>LocalDateTime</code>, <code>ZonedDateTime</code>, <code>OffsetDateTime</code>, <code>LocalDate</code>, <code>LocalTime</code> and <code>OffsetTime</code>, in the packages of <code>@DstInstrument</code>.</td></tr><tr><td class="tableblock halign-left valign-top">Sleeps</td><td class="tableblock halign-left valign-top"><code>Thread.sleep</code> and <code>TimeUnit.sleep</code>: on the loop thread a sleep is a virtual wait. The sleeping task keeps its thread and the other tasks run meanwhile.</td></tr><tr><td class="tableblock halign-left valign-top">Blocking waits</td><td class="tableblock halign-left valign-top"><code>CompletableFuture.get/join</code>, <code>Future.get</code>, <code>CountDownLatch.await</code>, <code>Semaphore.acquire/tryAcquire</code>, <code>DelayQueue</code> and <code>BlockingQueue</code> <code>take/poll</code>: the loop runs until the wait can end, and a timed wait gives up in virtual time. A wait that no task of the run can end fails the seed at once and names the call site.</td></tr><tr><td class="tableblock halign-left valign-top">Timed waits on tasks</td><td class="tableblock halign-left valign-top"><code>Future.get(timeout)</code> on a task of the run and <code>awaitTermination</code> time out in virtual time.</td></tr><tr><td class="tableblock halign-left valign-top">Parallel streams</td><td class="tableblock halign-left valign-top"><code>parallelStream()</code> of a <code>java.util</code> collection is rewritten to <code>stream()</code>: the elements are handled in order by the calling task, not on the common fork-join pool.</td></tr><tr><td class="tableblock halign-left valign-top">Camel core</td><td class="tableblock halign-left valign-top">The code of Camel core that waits, times tasks or throttles reads the clock and sleeps through <code>org.apache.camel.util.TimeSource</code>, an internal class of camel-util. A run installs its virtual clock there (<code>Dst</code> does it when the run is created) and puts the previous provider back when the run is closed, so no rewriting is needed: the synchronous redelivery (<code>RedeliveryPolicy</code>, <code>RedeliveryErrorHandler</code>), <code>ForegroundTask</code>, <code>BackgroundTask.schedule</code>, the budgets of both tasks, the wait loop of <code>DefaultShutdownStrategy</code>, the synchronous delayer, <code>MulticastProcessor</code>, <code>OptimisticLockRetryPolicy</code>, <code>DefaultStartupConditionStrategy</code>, <code>StopWatch</code>, <code>MonotonicClock</code>, <code>BackOffTimerTask</code>, <code>DefaultTimeoutMap</code>, the clocks of the throttlers and the counters of <code>ThrottlingExceptionRoutePolicy</code>. A sleep there is a virtual wait on the loop thread, traced with its call site. Three waits of these classes are not virtual (see below): the permit queue of <code>TotalRequestsThrottler</code>, the <code>Semaphore</code> of <code>ConcurrentRequestsThrottler</code> and the half-open timer of <code>ThrottlingExceptionRoutePolicy</code>. The sleep of the route <code>delayer</code> option is not virtual either (see below).</td></tr></tbody></table>
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Thread pools</td><td class="tableblock halign-left valign-top">Every pool and scheduled executor created by Camel or the component through the <code>ExecutorServiceManager</code>. A single-thread executor keeps its FIFO order; an executor with n threads offers its first n runnable tasks to the seed.</td></tr><tr><td class="tableblock halign-left valign-top">Time reads</td><td class="tableblock halign-left valign-top"><code>System.currentTimeMillis()</code>, <code>System.nanoTime()</code>, <code>new Date()</code>, <code>Instant.now()</code>, <code>Clock.systemUTC()</code>, <code>Clock.systemDefaultZone()</code>, <code>Clock.system(ZoneId)</code> and <code>now()</code> / <code>now(ZoneId)</code> of <code>LocalDateTime</code>, <code>ZonedDateTime</code>, <code>OffsetDateTime</code>, <code>LocalDate</code>, <code>LocalTime</code> and <code>OffsetTime</code>, in the packages of <code>@DstInstrument</code>.</td></tr><tr><td class="tableblock halign-left valign-top">Sleeps</td><td class="tableblock halign-left valign-top"><code>Thread.sleep</code> and <code>TimeUnit.sleep</code>: on the loop thread a sleep is a virtual wait. The sleeping task keeps its thread and the other tasks run meanwhile.</td></tr><tr><td class="tableblock halign-left valign-top">Blocking waits</td><td class="tableblock halign-left valign-top"><code>CompletableFuture.get/join</code>, <code>Future.get</code>, <code>CountDownLatch.await</code>, <code>Semaphore.acquire/tryAcquire</code>, <code>DelayQueue</code> and <code>BlockingQueue</code> <code>take/poll</code>: the loop runs until the wait can end, and a timed wait gives up in virtual time. A wait that no task of the run can end fails the seed at once and names the call site.</td></tr><tr><td class="tableblock halign-left valign-top">Timed waits on tasks</td><td class="tableblock halign-left valign-top"><code>Future.get(timeout)</code> on a task of the run and <code>awaitTermination</code> time out in virtual time.</td></tr><tr><td class="tableblock halign-left valign-top">Parallel streams</td><td class="tableblock halign-left valign-top"><code>parallelStream()</code> of a <code>java.util</code> collection is rewritten to <code>stream()</code>: the elements are handled in order by the calling task, not on the common fork-join pool.</td></tr><tr><td class="tableblock halign-left valign-top">Camel core</td><td class="tableblock halign-left valign-top">The code of Camel core that waits, times tasks or throttles reads the clock and sleeps through <code>org.apache.camel.util.TimeSource</code>, an internal class of camel-util. A run installs its virtual clock there (<code>Dst</code> does it when the run is created) and puts the previous provider back when the run is closed, so no rewriting is needed: the synchronous redelivery (<code>RedeliveryPolicy</code>, <code>RedeliveryErrorHandler</code>), <code>ForegroundTask</code>, <code>BackgroundTask.schedule</code>, the budgets of both tasks, the wait loop of <code>DefaultShutdownStrategy</code>, the synchronous delayer, <code>MulticastProcessor</code>, <code>OptimisticLockRetryPolicy</code>, <code>DefaultStartupConditionStrategy</code>, <code>StopWatch</code>, <code>MonotonicClock</code>, <code>BackOffTimerTask</code>, <code>DefaultTimeoutMap</code>, the clocks of the throttlers and the counters of <code>ThrottlingExceptionRoutePolicy</code>. A sleep there is a virtual wait on the loop thread, traced with its call site. Two waits of these classes are not virtual (see below): the permit queue of <code>TotalRequestsThrottler</code> and the <code>Semaphore</code> of <code>ConcurrentRequestsThrottler</code>. The sleep of the route <code>delayer</code> option is not virtual either (see below). The half-open check of <code>ThrottlingExceptionRoutePolicy</code> runs on a scheduler of the <code>ExecutorServiceManager</code>, so the circuit is half opened after <code>halfOpenAfter</code> of virtual time.</td></tr></tbody></table>
 
 Event timestamps, the clock of an exchange and the direct clock reads of the debugger, the tracer, management and the developer consoles stay on `System`. The durations they measure with `StopWatch` or `MonotonicClock` follow `TimeSource` (with the default provider this is the same `System.nanoTime()`), and so does the created time of `MonotonicClock`: the message history times (`MessageHistory.getTime()`) are virtual in a DST run. `@DstInstrument(alsoRewrite = …​)` applies the rewriting of the code under test to classes outside it, for example `org.apache.camel.support.ResetableClock` (the clock of an exchange) or a library the component calls. It is not needed for the core classes listed above, except for the permit queue of `TotalRequestsThrottler` (see below).
 
@@ -67,8 +144,6 @@ A wait in code that is not rewritten blocks the loop thread for real. A watchdog
 -   `ConcurrentRequestsThrottler` blocks on its `Semaphore` once `maxConcurrentRequests` exchanges are in flight. No task of the run releases a permit while the loop thread waits, so the seed ends on the watchdog. `alsoRewrite` does not help here (the call goes through a `Semaphore` subclass): keep `maxConcurrentRequests` above the number of exchanges the world has in flight.
     
 -   The route `delayer` option (`CamelInternalProcessor.DelayerAdvice`) calls `Thread.sleep` directly, not through `TimeSource`: the delay takes real time on the loop thread and the virtual clock does not move. Use the `delay` EIP in a world instead.
-    
--   The half-open check of `ThrottlingExceptionRoutePolicy` runs on a `java.util.Timer` thread, outside the harness. The timer fires after `halfOpenAfter` of real time (30 s by default, longer than the watchdog) and its clock read is an escape, so a world does not see the circuit half-open in virtual time.
     
 
 ### The one-stack model
@@ -107,6 +182,8 @@ Look for the place where the component gets its client:
 Fake the client at the level where the component calls it synchronously. If the client runs its own threads (Reactor, Netty, an HTTP client pool), fake it above them.
 
 ### 2\. Run the escape scan before writing anything
+
+Add the agent to the module’s pom first, see [Setup](#_setup): without it every test class with `@DstInstrument` fails with "The byte code agent of camel-test-dst is not loaded".
 
 Write the smallest test with `@DstInstrument("<component package>")` and one seed, run it, and read `target/dst/<Test>.escapes.txt`. Every line is a place where the component leaves the harness. For each one, decide:
 
@@ -243,9 +320,26 @@ A failing seed is not yet a bug. Before reporting one:
 4.  Reproduce a real bug outside DST too, with a plain unit test, before filing it.
     
 
+### 10\. Describe the world with @DstWorld
+
+Annotate the world class (the top-level class named after the file) with `@DstWorld`, so tools can find it: the build of the component reads the annotation from the test sources and writes the world into the `dstWorlds` section of the component’s JSON in the Camel catalog, with the DST tests of the same package that use it, and the table of worlds on this page is generated from the catalog.
+
+```java
+@DstWorld(component = "aws2-sqs",
+          fake = "FakeSqs: a standard SQS queue (ReceiveMessage, DeleteMessage, ChangeMessageVisibilityBatch) bound as"
+                 + " amazonSQSClient",
+          covers = { "the visibility timeout extender (extendMessageVisibility=true)", ... },
+          faults = { "ReceiveMessage fails", "ReceiveMessage answers slowly", "DeleteMessage is lost", ... },
+          invariants = { "no message is delivered again while the consumer holds it", ... },
+          issues = { "CAMEL-25700", "CAMEL-25737", "CAMEL-25738", "CAMEL-25911" })
+final class SqsWorld {
+```
+
+`component` is the scheme of the component (a scheme the module does not have fails the build); the invariants are named as in `dst.check(…​)`; the faults are the ones the world injects, not the ones it could. The values must be string literals (joined with `+` if needed), as the build reads the source. Commit what the build regenerates: the component’s JSON (built with the component), and its copy in the catalog and this page (built with `camel-catalog`).
+
 ### Pitfalls seen when agents wrote worlds
 
-Agents wrote nine worlds with this guide. These mistakes came up:
+Agents wrote nine worlds with this guide (not all of them are in the code base). These mistakes came up:
 
 -   **Timestamps at 0.** Give the times of the fake virtual wall clock time (`Dst.EPOCH_MILLIS + dst.now()`, or `dst.currentTimeMillis()`), not 0. A Service Bus fake with lock times in 1970 made the lock renewer renew on every run, so the world could not fail. The self-check (fail on the code before the fix) caught it.
     
@@ -277,6 +371,8 @@ Later worlds (IMAP, JMS, NATS JetStream, Azure Service Bus) showed more:
 
 ### Checklist
 
+-   The module’s pom loads the Byte Buddy agent with `-javaagent` (see [Setup](#_setup)).
+    
 -   The client is swapped through an endpoint option or a static mock, at a synchronous level.
     
 -   The escape scan was read; every escape is fixed, avoided or documented; the test runs in strict mode.
@@ -299,6 +395,8 @@ Later worlds (IMAP, JMS, NATS JetStream, Azure Service Bus) showed more:
     
 -   The world fails on the code before a past fix, passes on `main`, and a seed replays with the same SHA-256.
     
+-   The world class has `@DstWorld`, and the regenerated component JSON and catalog are committed.
+    
 
 ## Running the tests
 
@@ -309,14 +407,16 @@ DST=components/camel-test/camel-test-dst
 SQS=components/camel-aws/camel-aws2-sqs
 EH=components/camel-azure/camel-azure-eventhubs
 SLACK=components/camel-slack
+SHARE=components/camel-kafka-share
+PULSAR=components/camel-pulsar
 MVN="./mvnw -B -Papache-snapshots test -Dsurefire.failIfNoSpecifiedTests=false -Dsurefire.rerunFailingTestsCount=0"
 
 # the harness self-tests
 $MVN -pl $DST -Dtest='Dst*Test'
 
 # the worlds, 1000 seeds each, then 5000 seeds without stopping at the first failing one
-$MVN -pl $DST,$SQS,$EH,$SLACK -Dtest='*DstTest'
-$MVN -pl $DST,$SQS,$EH,$SLACK -Dtest='*DstTest' -Ddst.seeds=5000 -Ddst.maxFailures=100000
+$MVN -pl $DST,$SQS,$EH,$SLACK,$SHARE,$PULSAR -Dtest='*DstTest'
+$MVN -pl $DST,$SQS,$EH,$SLACK,$SHARE,$PULSAR -Dtest='*DstTest' -Ddst.seeds=5000 -Ddst.maxFailures=100000
 
 # the self-check: revert the main code of a past fix locally (do not commit), run the world, restore
 git show d09593b4a584 -- $SQS/src/main | git apply -R          # CAMEL-25700
@@ -330,7 +430,7 @@ $MVN -pl $DST,$SQS -Dtest=SqsVisibilityDstTest -Ddst.seed=8
 diff /tmp/seed-8.first $SQS/target/dst/SqsVisibilityDstTest.*/seed-8.trace && echo identical
 ```
 
-The past fixes of the other two worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs) and 68329f0919bc (CAMEL-25684, Slack). Two system properties belong to a world rather than to the harness: `dst.sqs.visibilityTimeouts` (the visibility timeouts the SQS world picks from, default `2,3,5,10`; `1` shows CAMEL-25737) and `dst.replayCheckSeed` (the seed of the in-JVM replay test of the Event Hubs world, default 1).
+The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 68329f0919bc (CAMEL-25684, Slack), the main code of b62e90ddb2d9 (CAMEL-25869, Pulsar) and the main code of 20c94435789e (CAMEL-25872, Kafka share, whose world was also checked with planted faults). Some system properties belong to a world rather than to the harness: `dst.sqs.visibilityTimeouts` (the visibility timeouts the SQS world picks from, default `2,3,5,10`; `1` shows CAMEL-25737), `dst.replayCheckSeed` (the seed of the in-JVM replay test of the Event Hubs world, default 1), `dst.share.pollOnError` (the pollOnError strategies the Kafka share world picks from) and `dst.pulsar.subscribeFailRates` (the subscribe failure rates of the Pulsar world, `0` runs without subscribe failures).
 
 ## Limits
 
@@ -351,7 +451,7 @@ The past fixes of the other two worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs
 
 ## The classes
 
-<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><code>Dst</code></td><td class="tableblock halign-left valign-top">the event loop: virtual clock, seeded random source, step trace with its SHA-256, timed and untimed waits, strict mode</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstThreadPoolFactory</code>, <code>DstExecutor</code>, <code>DstTask</code></td><td class="tableblock halign-left valign-top">Camel’s pools and schedulers backed by the loop</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstInstrumentation</code>, <code>DstClock</code>, <code>DstWaits</code></td><td class="tableblock halign-left valign-top">the byte code rewrite of the code under test: time reads, sleeps and blocking waits go to the loop; <code>DstClock</code> is also the <code>TimeSource</code> provider of Camel core during a run</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstEscapes</code>, <code>DstWatchdog</code></td><td class="tableblock halign-left valign-top">the escape scan, runtime escapes (strict mode), and the watchdog for waits in code that is not rewritten</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstLedger</code>, <code>Invariant</code>, <code>Invariants</code></td><td class="tableblock halign-left valign-top">what happened to each message, and reusable invariants</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstTest</code>, <code>DstSeed</code>, <code>DstInstrument</code>, <code>DstExtension</code></td><td class="tableblock halign-left valign-top">the JUnit integration</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstCamel</code></td><td class="tableblock halign-left valign-top">a <code>CamelContext</code> on the loop, and an asynchronous route step with a seeded latency</td></tr></tbody></table>
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><code>Dst</code></td><td class="tableblock halign-left valign-top">the event loop: virtual clock, seeded random source, step trace with its SHA-256, timed and untimed waits, strict mode</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstThreadPoolFactory</code>, <code>DstExecutor</code>, <code>DstTask</code></td><td class="tableblock halign-left valign-top">Camel’s pools and schedulers backed by the loop</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstInstrumentation</code>, <code>DstClock</code>, <code>DstWaits</code></td><td class="tableblock halign-left valign-top">the byte code rewrite of the code under test: time reads, sleeps and blocking waits go to the loop; <code>DstClock</code> is also the <code>TimeSource</code> provider of Camel core during a run</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstEscapes</code>, <code>DstWatchdog</code></td><td class="tableblock halign-left valign-top">the escape scan, runtime escapes (strict mode), and the watchdog for waits in code that is not rewritten</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstLedger</code>, <code>Invariant</code>, <code>Invariants</code></td><td class="tableblock halign-left valign-top">what happened to each message, and reusable invariants</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstTest</code>, <code>DstSeed</code>, <code>DstInstrument</code>, <code>DstExtension</code></td><td class="tableblock halign-left valign-top">the JUnit integration</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstWorld</code></td><td class="tableblock halign-left valign-top">the description of a world, which the build lists in the catalog</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstCamel</code></td><td class="tableblock halign-left valign-top">a <code>CamelContext</code> on the loop, and an asynchronous route step with a seeded latency</td></tr></tbody></table>
 
 ## Options
 
@@ -369,6 +469,8 @@ The past fixes of the other two worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs
 
 Reports in `target/dst/`: `<Test>.escapes.txt` (the scan), `<Test>.summary.txt` (seeds run, failing seeds, threads left alive, runtime escapes) and `<Test>.<method>/seed-<n>.trace` (the trace of each failing or replayed seed, with its SHA-256 on the second line).
 
+## Setup
+
 Add the module with test scope:
 
 ```xml
@@ -378,3 +480,65 @@ Add the module with test scope:
     <scope>test</scope>
 </dependency>
 ```
+
+The rewriting needs the Byte Buddy agent, loaded with `-javaagent` when the JVM of the tests starts. The harness does not attach it to the running JVM: the JDK warns about an agent loaded that way, and is to refuse it by default (JEP 451). Let the `properties` goal of the `maven-dependency-plugin` set the path of the agent jar (the property `net.bytebuddy:byte-buddy-agent:jar`; `byte-buddy-agent` comes with `camel-test-dst`), and add the agent to the surefire `argLine`. In a project of your own:
+
+```xml
+<properties>
+    <!-- empty by default: a plugin such as JaCoCo sets it, and surefire adds it through @{argLine} -->
+    <argLine/>
+</properties>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>dst-agent-path</id>
+                    <goals>
+                        <goal>properties</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+                <argLine>"-javaagent:${net.bytebuddy:byte-buddy-agent:jar}" @{argLine}</argLine>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+The `properties` goal runs in the `initialize` phase, so `mvn test` sets the property before surefire starts. Keep `@{argLine}` in the `argLine`, so that an agent another plugin sets (the JaCoCo agent of `prepare-agent`) is still loaded; the empty `<argLine/>` property keeps surefire from passing `@{argLine}` as it is when no plugin sets it. The quotes keep a path with a space in one argument (surefire splits the `argLine` at the spaces outside quotes).
+
+In the Camel build, a module with DST tests adds the agent to `camel.surefire.fork.additional-vmargs`, which the `argLine` of the parent includes (with `@{argLine}`):
+
+```xml
+<properties>
+    <camel.surefire.fork.additional-vmargs>"-javaagent:${net.bytebuddy:byte-buddy-agent:jar}"</camel.surefire.fork.additional-vmargs>
+</properties>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+                <execution>
+                    <id>dst-agent-path</id>
+                    <goals>
+                        <goal>properties</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
+
+Without the agent, every test class with `@DstInstrument` fails with "The byte code agent of camel-test-dst is not loaded". To run a DST test from an IDE, add `-javaagent:<path of byte-buddy-agent.jar>` to the JVM options of the run configuration.

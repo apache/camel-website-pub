@@ -100,6 +100,12 @@ camel config list
 camel config get gav
 ```
 
+A key is the name of a command option without `--`, and the value is its default for every command that has the option. An option with more than one name, such as `--reload` and `--dev` of `camel run`, can be set by any of them. To set the default for one command only, start the key with `camel.` and the command:
+
+```bash
+camel config set camel.run.dev=true
+```
+
 ### Placeholder substitution
 
 Configuration values can be referenced as placeholders with `#optionName`:

@@ -20,6 +20,9 @@ camel run clipboard.yaml --dev
 
 Edit your code, copy it again, and Camel reloads automatically.
 
+> **Note**
+> The clipboard is for `camel run` only. To export the route, save it to a file first, then export that file.
+
 ## Run with inline code
 
 For quick one-liners, pass the route directly on the command line:

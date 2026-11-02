@@ -26,6 +26,8 @@ At runtime, the `tika-extract-text-action` Kamelet relies upon the presence of t
     
 -   camel:kamelet
     
+-   camel:bean
+    
 
 ## Camel JBang usage
 

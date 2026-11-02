@@ -137,6 +137,30 @@ out.getJavaType();     // java.lang.String
 
 See [Message Body Types](body-types.md) for what the body types are, the tools that use them, how components declare them, and the JSON of each side with the rule to read it for the options of a step.
 
+### Simulation test worlds in the Catalog
+
+A component whose consumer has a fake world for the deterministic simulation tests of the `camel-test-dst` module has a `dstWorlds` section in the catalog, with an entry per world class: the fake of the external system, what the world covers, the faults it injects, the invariants it checks, its JIRA issues and the DST tests that run it. The worlds are test classes, so this is how tools (and AI agents asked to test a consumer) find out which components have a world, and which have none yet. The entries come from the `@DstWorld` annotation on each world class; `javaType` is a test class, which is in no JAR:
+
+```json
+"dstWorlds": {
+  "SqsWorld": { "javaType": "org.apache.camel.component.aws2.sqs.dst.SqsWorld",
+    "fake": "FakeSqs: a standard SQS queue (ReceiveMessage, DeleteMessage, ChangeMessageVisibilityBatch) bound as amazonSQSClient",
+    "covers": [ "the visibility timeout extender (extendMessageVisibility=true)", ... ],
+    "faults": [ "ReceiveMessage fails", ... ], "invariants": [ ... ],
+    "issues": [ "CAMEL-25700", "CAMEL-25737", "CAMEL-25738", "CAMEL-25911" ],
+    "tests": [ "SqsRedeliveryDstTest", "SqsVisibilityDstTest" ] }
+}
+```
+
+The Java API gives them on the model:
+
+```java
+CamelCatalog catalog = new DefaultCamelCatalog();
+
+List<DstWorldModel> worlds = catalog.componentModel("aws2-sqs").getDstWorlds();
+worlds.get(0).getTests();     // [SqsRedeliveryDstTest, SqsVisibilityDstTest]
+```
+
 ### Documentation in the Catalog
 
 The catalog includes the AsciiDoc documentation pages from all modules. This makes the full documentation available to tooling such as AI agents (via MCP tools), the Camel CLI/TUI, and IDE plugins — for every Camel version, including SNAPSHOT and non-LTS releases.

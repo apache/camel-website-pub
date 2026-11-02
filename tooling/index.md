@@ -36,9 +36,9 @@ The Camel CLI's MCP server (`camel mcp`) connects Apache Camel to AI coding assi
 
 Not to be confused with the [MCP Server component](../components/latest/others/mcp-server.md), which works the other way round: it exposes your own Camel routes (`ai-tool` and `ai-resource`) as MCP tools and resources that AI agents call. The first helps you write routes; the second lets agents use them.
 
-[Camel Kit](https://github.com/luigidemasi/camel-kit)
+[Camel Kit](../camel-kit/next/index.md)
 
-Structured slash commands for AI coding assistants that guide you through the complete integration lifecycle. Supports IBM Bob, Claude Code, Codex, GitHub Copilot CLI, and more.
+An Apache Camel subproject: structured workflows for AI coding agents that guide you through the complete integration lifecycle, with every component verified against the Camel catalog. Supports IBM Bob 2, Claude Code, Codex CLI, GitHub Copilot CLI, Antigravity, Pi, Qwen Code and OpenCode.
 
 [Wanaku](https://wanaku.ai)
 

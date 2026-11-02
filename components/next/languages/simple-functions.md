@@ -123,7 +123,7 @@ The `setHeader` function sets a message header from an expression. For example `
 
 The `setVariable` function works the same as `setHeader` but for exchange variables. For example `${setVariable(count,$\{body.length})}` stores the body length in a variable named `count`, which can later be used as `${variable.count}`.
 
-The `val` function returns its argument as a constant value (unchanged). For example `${val(abc)}` returns the string `abc`. When using a nested function `${val(${body})}`, it captures the current body value at evaluation time.
+The `val` function returns its argument as a constant value (unchanged, except that a quoted argument is returned without its quotes). For example `${val(abc)}` and `${val('abc')}` both return the string `abc`. When using a nested function `${val(${body})}`, it captures the current body value at evaluation time.
 
 The `kindOfType` function returns a string describing the _kind_ of a value. It returns one of: `null`, `string`, `number`, `boolean`, `array`, or `object`. For example `${kindOfType('Hello')}` returns `string`, `${kindOfType(123)}` returns `number`, and if the body is a `List` then `${kindOfType()}` returns `array`.
 

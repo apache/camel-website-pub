@@ -8,7 +8,7 @@ The next Apache Camel release, 4.23, is shaping up to be a great release, packed
 
 It lets you use your coding agent directly in the TUI, with its existing setup and tools. The same agent can build an integration, inspect its live behaviour, fix a route, and verify the next message—all in one conversation.
 
-To show what this means in practice, I’ll use [Camel Kit](https://luigidemasi.github.io/camel-kit-web/), an open-source project I maintain that provides coding agents with workflows for Apache Camel development. We’ll use those workflows to build a weather telemetry integration, then inspect it as it runs in Camel TUI.
+To show what this means in practice, I’ll use [Camel Kit](../../../../camel-kit/next/index.md), an open-source project I maintain that provides coding agents with workflows for Apache Camel development. We’ll use those workflows to build a weather telemetry integration, then inspect it as it runs in Camel TUI.
 
 ## Bring your agent’s setup with you
 
@@ -30,9 +30,9 @@ The implementation requires ACP v1 and HTTP MCP support. Presets cover IBM Bob, 
 
 ## What Camel Kit adds
 
-[Camel Kit](https://luigidemasi.github.io/camel-kit-web/) is an open-source toolkit, hosted on [GitHub](https://github.com/luigidemasi/camel-kit), that equips coding agents with skills and workflows for Apache Camel development. It guides you from requirements and design through implementation and testing, using MCP tools to consult documentation, check component options, and validate routes. This helps reduce repeated prompting, avoid guessed configuration options, and catch errors in generated routes. Because those skills live in the agent’s project setup, they remain available when you use the agent inside Camel TUI.
+[Camel Kit](../../../../camel-kit/next/index.md) is an open-source toolkit, hosted on [GitHub](https://github.com/apache/camel-kit), that equips coding agents with skills and workflows for Apache Camel development. It guides you from requirements and design through implementation and testing, using MCP tools to consult documentation, check component options, and validate routes. This helps reduce repeated prompting, avoid guessed configuration options, and catch errors in generated routes. Because those skills live in the agent’s project setup, they remain available when you use the agent inside Camel TUI.
 
-[Camel Kit Knowledge MCP](https://luigidemasi.github.io/camel-kit-web/architecture/knowledge/) gives the agent access to searchable Camel documentation, component metadata, release notes, and security advisories. It also validates endpoint URIs against the Camel catalog, helping the agent check its configuration choices. Its source is available in the [Camel Kit Knowledge repository](https://github.com/luigidemasi/camel-kit-knowledge).
+[Camel Kit Knowledge MCP](../../../../camel-kit/next/knowledge.md) gives the agent access to searchable Camel documentation, component metadata, release notes, and security advisories. It also validates endpoint URIs against the Camel catalog, helping the agent check its configuration choices. Its source is available in the [Camel Kit Knowledge repository](https://github.com/apache/camel-kit/tree/main/knowledge).
 
 ## The walkthrough: weather telemetry ingestion
 
@@ -75,7 +75,7 @@ The last command marks this project directory as trusted in Bob and starts an in
 
 `bob2` is Camel Kit’s target name for IBM Bob 2; `acp:bob` is the provider name in the TUI. Camel Kit installs Bob’s project skills and command definitions, along with its MCP configuration in `.bob/mcp.json`. That configuration includes the Camel, Camel Knowledge, and Citrus servers used by the workflows.
 
-The test plugin installed above supports Camel Kit’s runtime verification with Citrus. The [Camel Kit prerequisites](https://github.com/luigidemasi/camel-kit/blob/camel-kit-0.4.1/README.md#prerequisites) describe that setup and the Docker requirement for container-based checks.
+The test plugin installed above supports Camel Kit’s runtime verification with Citrus. The [Camel Kit prerequisites](https://github.com/apache/camel-kit/blob/camel-kit-0.4.1/README.md#prerequisites) describe that setup and the Docker requirement for container-based checks.
 
 ## Try the Camel 4.23 snapshot
 
@@ -123,7 +123,7 @@ Camel Kit is a concrete use of this mechanism: its project commands can appear a
 /agent:camel-brainstorm → /agent:camel-plan → /agent:camel-execute
 ```
 
-These commands cover design, planning, and implementation with verification. You can invoke a stage explicitly or follow the agent’s handoff to the next skill. Migration and troubleshooting have their own entry points, described in the [Camel Kit command reference](https://github.com/luigidemasi/camel-kit/blob/camel-kit-0.4.1/docs/commands.md).
+These commands cover design, planning, and implementation with verification. You can invoke a stage explicitly or follow the agent’s handoff to the next skill. Migration and troubleshooting have their own entry points, described in the [Camel Kit command reference](https://github.com/apache/camel-kit/blob/camel-kit-0.4.1/docs/commands.md).
 
 The command list belongs to the agent and may contain additional utilities or internal stage skills. You do not need to invoke every `camel-*` entry: the workflows call their supporting skills as needed.
 
@@ -248,6 +248,6 @@ Try it with your preferred compatible agent, and let us know how it fits your wo
 
 ## References
 
-For the development tools, see [Camel Kit](https://luigidemasi.github.io/camel-kit-web/), [Camel TUI and its ACP support](../../../../manual/camel-jbang-tui-ai-agents.html#_using_a_coding_agent_acp), [Camel JBang](../../../../manual/camel-jbang.md), and [IBM Bob Shell](https://bob.ibm.com/docs/shell).  
+For the development tools, see [Camel Kit](../../../../camel-kit/next/index.md), [Camel TUI and its ACP support](../../../../manual/camel-jbang-tui-ai-agents.html#_using_a_coding_agent_acp), [Camel JBang](../../../../manual/camel-jbang.md), and [IBM Bob Shell](https://bob.ibm.com/docs/shell).  
 For the integration, refer to [Camel Main](../../../../components/next/others/main.md), [YAML DSL](../../../../components/next/others/yaml-dsl.md), the [Paho MQTT 5 component](../../../../components/next/paho-mqtt5-component.md), the [InfluxDB 2 component](../../../../components/next/influxdb2-component.md), and the [Circuit Breaker EIP](../../../../components/next/eips/circuitBreaker-eip.md).  
 For the protocols, read the [Agent Client Protocol (ACP)](https://agentclientprotocol.com/get-started/introduction) and [Model Context Protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro) introductions.

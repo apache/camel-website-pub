@@ -12,7 +12,7 @@
       <link>https://camel.apache.org/docs/building/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://camel.apache.org/docs/building/</guid>
-      <description>To learn how to build Camel, please check the documentation specific to the project you want to build:&#xA;Camel Core Camel K Camel Kafka Connector Camel Karaf Camel Quarkus Camel Spring Boot </description>
+      <description>To learn how to build Camel, please check the documentation specific to the project you want to build:&#xA;Camel Core Camel K Camel Kafka Connector Camel Karaf Camel Kit Camel Quarkus Camel Spring Boot </description>
     </item>
     <item>
       <title>Sources</title>

@@ -16,5 +16,5 @@ camel wrapper [options]
 | `--camel-version` | Camel version to pin (defaults to current version) |  | String |
 | `--command-name` | The name of the command to use (camel or camelw) | camel | String |
 | `--dir,--directory` | Directory where wrapper files will be created | . | String |
-| `--repo-url` | Maven repository URL for downloading the launcher | DEFAULT\_REPO\_URL | String |
+| `--repo-url` | Maven repository URL for downloading the launcher | [https://repo1.maven.org/maven2](https://repo1.maven.org/maven2) | String |
 | `-h,--help` | Display the help and sub-commands |  | boolean |

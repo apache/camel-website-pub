@@ -16,7 +16,7 @@ camel kubernetes [options]
  
 | Subcommand | Description |
 | --- | --- |
-| [delete](camel-jbang-kubernetes-delete.md) | Delete Camel application from Kubernetes. This operation will delete all resources associated to this app, such as: Deployment, Routes, Services, etc. filtering by label app.kubernetes.io/name=<name>. |
+| [delete](camel-jbang-kubernetes-delete.md) | Delete Camel application from Kubernetes. This operation will delete all resources associated to this app, such as: Deployment, Routes, Services, etc. filtering by label "app.kubernetes.io/name=<name>". |
 | [export](camel-jbang-kubernetes-export.md) | Export as Maven project that contains a Kubernetes deployment manifest |
 | [logs](camel-jbang-kubernetes-logs.md) | Print the logs of a Kubernetes pod |
 | [run](camel-jbang-kubernetes-run.md) | Run Camel application on Kubernetes |

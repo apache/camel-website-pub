@@ -42,3 +42,4 @@
 -   [Camel Spring Boot](../camel-spring-boot/next/index.md)
 -   [Camel Kafka Connector](../camel-kafka-connector/next/index.md)
 -   [Camel Karaf](../camel-karaf/latest/)
+-   [Camel Kit](../camel-kit/next/index.md)

@@ -6,6 +6,7 @@ Thank you for expressing your interest in contributing to Apache Camel, a versat
 -   [Camel K](../../camel-k/latest/)
 -   [Camel Kafka Connector](../../camel-kafka-connector/latest/)
 -   [Camel Karaf](../../camel-karaf/latest/)
+-   [Camel Kit](../../camel-kit/next/contributing.md)
 -   [Camel Quarkus](../../camel-quarkus/latest)
 -   [Camel Spring Boot](../../camel-spring-boot/latest)
 

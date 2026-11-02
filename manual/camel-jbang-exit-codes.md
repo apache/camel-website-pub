@@ -12,11 +12,12 @@ The exit codes and streams on this page apply from Camel 4.24 onwards.
 | `0` | Success | The command did what it was asked to do. |
 | `1` | Failed | The command ran, but the outcome is negative: validation found errors, a check failed, or the integration rejected the action. |
 | `2` | Usage error | An unknown option, an invalid or missing argument, options that cannot be used together, or a command that needs an interactive terminal. |
-| `3` | Not found | A file, integration, route, component or service named on the command line does not exist, or a name matches more than one running integration. |
+| `3` | Not found | An integration, route, component, service or other name given on the command line is not running or does not exist, or a name matches more than one running integration. |
+| `66` | File not found | A file or directory given on the command line does not exist, or holds none of the files the command needs. |
 | `70` | Internal error | An unexpected exception, which is most often a bug in Camel. The error is printed with its stack trace. |
 | `124` | Timed out | The integration did not reply in time, is still starting, or did not stop in time. |
 
-Each code is the one that most tools already use for that meaning: `2` for a usage error is what picocli and other command line parsers use, `3` follows the LSB convention that a service is not running, `70` is `EX_SOFTWARE` from `sysexits.h`, and `124` is what the GNU `timeout` command returns. So a script or an AI agent can understand a code without this page.
+Each code is the one that most tools already use for that meaning: `2` for a usage error is what picocli and other command line parsers use, `3` follows the LSB convention that a service is not running (as `systemctl status` returns), `66` is `EX_NOINPUT` and `70` is `EX_SOFTWARE` from `sysexits.h`, and `124` is what the GNU `timeout` command returns. So a script or an AI agent can understand a code without this page.
 
 `camel --help` lists the exit codes as well.
 
@@ -105,7 +106,8 @@ The exit code tells a script or an AI agent what to do next:
 | --- | --- |
 | `1` | Fix the route, the configuration or the input, then run the command again. |
 | `2` | Fix the command line; `camel <command> --help` shows the options. |
-| `3` | Check the name or the path; `camel ps` lists the running integrations. |
+| `3` | Check the name; `camel ps` lists the running integrations. |
+| `66` | Check the path of the file or directory. |
 | `70` | Do not retry: read the stack trace, and report the error to the Camel project when it is a bug. |
 | `124` | Wait, or run the command again with a longer timeout. |
 
@@ -115,7 +117,7 @@ case $? in
   0) echo "converted" ;;
   1) echo "the script could not be converted" ;;
   2) echo "check the options" ;;
-  3) echo "mapping.dwl does not exist" ;;
+  66) echo "mapping.dwl does not exist" ;;
   *) echo "unexpected failure" ;;
 esac
 ```

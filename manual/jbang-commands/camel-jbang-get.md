@@ -16,6 +16,7 @@ camel get [options]
 | [activity](camel-jbang-get-activity.md) | Get recent completed exchange activity |
 | [bean](camel-jbang-get-bean.md) | List beans in a running Camel integration |
 | [blocked](camel-jbang-get-blocked.md) | Get blocked messages of Camel integrations |
+| [chaos](camel-jbang-get-chaos.md) | Get the chaos rules of running integrations, or their report (camel-chaos) |
 | [circuit-breaker](camel-jbang-get-circuit-breaker.md) | Get status of Circuit Breaker EIPs |
 | [consumer](camel-jbang-get-consumer.md) | Get status of Camel consumers |
 | [context](camel-jbang-get-context.md) | Get status of Camel integrations |

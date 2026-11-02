@@ -24,6 +24,8 @@ Notes:
     
 -   The `--profile` option is not supported when exporting to Quarkus.
     
+-   To find the dependencies, the export boots the integration with the profile of `--profile` (or the `dev` profile, as `camel run`, when none is given), so a component that only `application-<profile>.properties` uses is in the exported project.
+    
 -   For Spring Boot, you can override versions with `--camel-spring-boot-version`.
     
 
@@ -161,6 +163,23 @@ Use `--verbose` and `--logging` for more detail, or `--logging-level=DEBUG` for 
 ### Configuring exporting
 
 Export loads configuration from `application.properties`, where you can set runtime, Java version, and other parameters. See [Configuration](camel-jbang-configuration.md) for all `camel.jbang.*` options.
+
+### Exporting from Java
+
+**Since Camel 4.24 (preview)**
+
+Tools that create Camel projects, such as an IDE or a visual designer, can export (and run) from Java instead of running the `camel` command:
+
+```java
+ExportRequest request = new ExportRequest();
+request.files.add("hello.camel.yaml");
+request.runtime = RuntimeType.main; // or springBoot, quarkus
+request.exportDir = "target/hello";
+
+int exit = new ProjectExporter().export(request);
+```
+
+See [Java API for Export and Run](camel-jbang-java-api.md) for the export and run API of the `camel-jbang-run` module.
 
 ## Gathering list of dependencies
 
