@@ -1352,6 +1352,10 @@ When sending a JMS message, Camel converts the message body to the following JMS
 | `org.apache.camel.WrappedFile` | `jakarta.jms.BytesMessage` |  |
 | `org.apache.camel.StreamCache` | `jakarta.jms.BytesMessage` |  |
 | `java.nio.ByteBuffer` | `jakarta.jms.BytesMessage` |  |
+| `null` | `jakarta.jms.Message` | A message without a body. |
+
+A body of any other type is first converted to a `java.io.File` or `java.io.InputStream` and sent as a `jakarta.jms.BytesMessage`. When no conversion fits (for example a POJO that is not `Serializable`), sending fails with a `jakarta.jms.MessageFormatException` that names the class of the body, so the body is not lost. Implement `java.io.Serializable` (and enable `objectMessageEnabled`), force a type with the `jmsMessageType` option, or marshal the body (for example to JSON) before sending it.
+
 > **Note**
 > When the `streamMessageTypeEnabled` option is enabled, bodies of type `java.io.File`, `java.io.Reader`, `java.io.InputStream`, `org.apache.camel.WrappedFile` and `org.apache.camel.StreamCache` are sent as `jakarta.jms.StreamMessage` instead of `jakarta.jms.BytesMessage`. When `artemisStreamingEnabled` is in effect, Camel enforces `jakarta.jms.BytesMessage` even then, because ActiveMQ Artemis has an optimised streaming mode that requires bytes messages.
 

@@ -187,7 +187,7 @@ The message body at each side of the Geocoder component: _Consumer_ is the body 
 | --- | --- | --- |
 | **Producer input** | `any` | The body is not read: the address or the latitude and longitude come from the CamelGeoCoderAddress or CamelGeoCoderLatlng header, or else from the endpoint. |
 | **Producer output** | `list` or `unchanged` | 
-With Google, the array of com.google.maps.model.GeocodingResult, empty for no results; unchanged when Google denies the request, with the status in the CamelGeoCoderStatus header. With Nominatim, its jsonv2 response as text: an array of one place for an address, an object for a latitude and longitude. The first result is also in the headers.
+With Google, the array of com.google.maps.model.GeocodingResult, empty for no results; unchanged when Google denies the request, with the status in the CamelGeoCoderStatus header. With Nominatim, its jsonv2 response as text: an array of one place for an address (empty for no results), an object for a latitude and longitude. The first result is also in the headers.
 
 -   With `type=NOMINATIM`: `text` (`java.lang.String`)
     
@@ -208,7 +208,7 @@ Notice not all headers may be provided depending on available data and mode in u
 
 ### Body using a Nominatim Server
 
-Camel will deliver the body as a String with the JSON response of Nominatim (the `jsonv2` format): an array with one place for an address, and an object for a latitude and longitude.
+Camel will deliver the body as a String with the JSON response of Nominatim (the `jsonv2` format): an array with one place for an address, and an object for a latitude and longitude. When Nominatim finds no place (an empty array for an address, or `{"error":"Unable to geocode"}` for a latitude and longitude), the `CamelGeoCoderStatus` header is `ZERO_RESULTS`, and when it answers with an error, the header is `ERROR`.
 
 ### Body using a Google Server
 

@@ -105,6 +105,7 @@ With the following _path_ and _query_ parameters:
 | **objectName** (common) | Name of object to perform operation with. |  | String |
 | **region** (common) | **Required** OSS service region. |  | String |
 | **deleteAfterRead** (consumer) | Determines if objects should be deleted after they have been retrieved. | false | boolean |
+| **includeBody** (consumer) | If true, the content of each consumed object is read into a byte array, which is the body. If false, the body is the stream of the content of the object, which is closed when the exchange is done. For large objects, also disable stream caching for the route, or let stream caching spool to disk, so that an object is not read into memory. | true | boolean |
 | **maxMessagesPerPoll** (consumer) | The maximum number of messages to poll at each polling. | 10 | int |
 | **prefix** (consumer) | The object name prefix used for filtering objects to be listed. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
@@ -245,8 +246,19 @@ The message body at each side of the Alibaba Object Storage Service (OSS) compon
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `bytes` (`byte[]`) | The content of the object as a byte array, one message per object, with its bucket, key and metadata in headers. |
+| **Consumer** | `bytes` (`byte[]`) | 
+The content of the object as a byte array, one message per object, with its bucket, key and metadata in headers. With includeBody=false the stream of the content of the object, which is closed when the exchange is done.
+
+-   With `includeBody=false`: `stream`
+    
+
+
+
+
+
+ |
 | **Producer input** | `any` | 
+
 The content to upload for putObject: text, bytes, a stream or a file (a file without objectName is stored under its file name). A Map, a List or a POJO fails: marshal it first. The other operations do not read the body, they take their input from options and headers.
 
 -   With `operation=putObject`: `text`, `bytes`, `stream` or `file`
@@ -314,6 +326,8 @@ If any of the above headers are set, they will override their corresponding quer
 
 The consumer polls objects from a bucket using `listObjectsV2`, downloads each object body, and optionally deletes objects after they have been processed when `deleteAfterRead` is enabled.
 
+By default (`includeBody=true`) the consumer reads the content of each object into a `byte[]`, which is the body, so an object needs as much memory as its size. With `includeBody=false` the body is the `InputStream` of the content of the object instead, which the consumer closes when the exchange is done. Stream caching, which is enabled by default, would still read the stream into memory at the start of the route: to keep large objects out of memory, disable stream caching for the route, as in the example below, or enable the spooling of stream caching to disk. Closing a stream that was not read to its end still reads the rest of the object, without keeping it, as the HTTP client of the SDK does so to reuse the connection: a route that does not read the body of an object, and a consumer that stops before it processes all the objects of a poll, still download them.
+
 ## Examples
 
 ### Put an object
@@ -377,4 +391,34 @@ from("alibaba-oss:my-bucket?region=cn-hangzhou&accessKey=xxx&secretKey=yyy&delet
       steps:
         - to:
             uri: log:output
+```
+
+### Consume large objects as streams
+
+With `includeBody=false` and stream caching disabled for the route, the file producer writes the stream of each object to a file named after its key, without reading the object into memory:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("alibaba-oss:my-bucket?region=cn-hangzhou&accessKey=xxx&secretKey=yyy&includeBody=false")
+  .streamCache(false)
+  .to("file:/data/objects");
+```
+
+```yaml
+- route:
+    streamCache: false
+    from:
+      uri: alibaba-oss:my-bucket
+      parameters:
+        region: cn-hangzhou
+        accessKey: "{{alibaba.access-key}}"
+        secretKey: "{{alibaba.secret-key}}"
+        includeBody: false
+      steps:
+        - to:
+            uri: file:/data/objects
 ```

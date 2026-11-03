@@ -223,7 +223,7 @@ Enum values:
 | **pkChunkingParent** (common) | Specifies the parent object when you’re enabling PK chunking for queries on sharing objects. The chunks are based on the parent object’s records rather than the sharing object’s records. For example, when querying on AccountShare, specify Account as the parent object. PK chunking is supported for sharing objects as long as the parent object is supported. |  | String |
 | **pkChunkingStartRow** (common) | Specifies the 15-character or 18-character record ID to be used as the lower boundary for the first chunk. Use this parameter to specify a starting ID when restarting a job that failed between batches. |  | String |
 | **queryLocator** (common) | Query Locator provided by salesforce for use when a query results in more records than can be retrieved in a single call. Use this value in a subsequent call to retrieve additional records. |  | String |
-| **rawPayload** (common) | Use raw payload String for request and response (either JSON or XML depending on format), instead of DTOs, false by default. | false | boolean |
+| **rawPayload** (common) | Use raw payload for request and response, instead of DTOs, false by default. The REST, apexCall and composite operations return the response as is, as an InputStream, and the streaming subscribe consumer gives the message as JSON text. | false | boolean |
 | **reportId** (common) | Salesforce1 Analytics report Id. |  | String |
 | **reportMetadata** (common) | Salesforce1 Analytics report metadata for filtering. |  | ReportMetadata |
 | **resultId** (common) | Identifies one result set of a completed Bulk API v1 query batch, as returned by the getQueryResultIds operation. Used only by getQueryResult, together with jobId and batchId. |  | String |
@@ -658,7 +658,7 @@ Enum values:
 | **pkChunkingParent** (common) | Specifies the parent object when you’re enabling PK chunking for queries on sharing objects. The chunks are based on the parent object’s records rather than the sharing object’s records. For example, when querying on AccountShare, specify Account as the parent object. PK chunking is supported for sharing objects as long as the parent object is supported. |  | String |
 | **pkChunkingStartRow** (common) | Specifies the 15-character or 18-character record ID to be used as the lower boundary for the first chunk. Use this parameter to specify a starting ID when restarting a job that failed between batches. |  | String |
 | **queryLocator** (common) | Query Locator provided by salesforce for use when a query results in more records than can be retrieved in a single call. Use this value in a subsequent call to retrieve additional records. |  | String |
-| **rawPayload** (common) | Use raw payload String for request and response (either JSON or XML depending on format), instead of DTOs, false by default. | false | boolean |
+| **rawPayload** (common) | Use raw payload for request and response, instead of DTOs, false by default. The REST, apexCall and composite operations return the response as is, as an InputStream, and the streaming subscribe consumer gives the message as JSON text. | false | boolean |
 | **reportId** (common) | Salesforce1 Analytics report Id. |  | String |
 | **reportMetadata** (common) | Salesforce1 Analytics report metadata for filtering. |  | ReportMetadata |
 | **resultId** (common) | Identifies one result set of a completed Bulk API v1 query batch, as returned by the getQueryResultIds operation. Used only by getQueryResult, together with jobId and batchId. |  | String |
@@ -821,7 +821,7 @@ The subscribe operation gives a push topic record as a Map, or an object of sObj
 
 
  |
-| **Producer input** | `text`, `bytes`, `stream`, `file`, `pojo`, `list`, `map` or `null` | The REST operations send a generated DTO (an AbstractSObjectBase) as JSON, or JSON text, bytes, a stream or a file as is; a Map or another object is sent as its toString, not as JSON: marshal it first. Text in the body is the id, SOQL or SOSL when the option or header is not set. apexCall takes a Map as query parameters; bulk operations take a JobInfo, BatchInfo or Job, and createBatch the CSV or XML records as a stream; composite operations an SObjectComposite, SObjectBatch or SObjectTree, the SObject collections a List of DTOs; pubSubPublish a List of events; raw the request as a stream. |
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `pojo`, `list`, `map` or `null` | The REST operations send a generated DTO (an AbstractSObjectBase), a Map or another object as JSON, or JSON text, bytes, a stream or a file as is. Text in the body is the id, SOQL or SOSL when the option or header is not set. apexCall takes a Map as query parameters; bulk operations take a JobInfo, BatchInfo or Job, and createBatch the CSV or XML records as a stream; composite operations an SObjectComposite, SObjectBatch or SObjectTree, the SObject collections a List of DTOs; pubSubPublish a List of events; raw the request as a stream (a body that cannot be converted to a stream, such as a Map, fails). |
 | **Producer output** | `pojo`, `list`, `map`, `stream`, `unchanged` or `null` | The response as a DTO: a CreateSObjectResult, the SObject DTO of sObjectName or sObjectClass, a QueryRecords class for a query (an Iterator of the records with streamQueryResult=true), JobInfo or Job for bulk, a List for getVersions, the collections and pubSubPublish; a DTO class that is not in packages fails: set sObjectClass or use rawPayload. getBlobField, raw and the bulk results give a stream; an update or delete with no content leaves the body. rawPayload=true gives the JSON of the REST, apexCall and composite responses as a stream; format=JSON or XML only sets the content type of raw.
 
 -   With `operationName=createSObject`: `pojo` (`org.apache.camel.component.salesforce.api.dto.CreateSObjectResult`)
@@ -1047,7 +1047,7 @@ Sends HTTP requests to salesforce with full, raw control of all aspects of the c
     
 | Parameter | Type | Description | Default | Required |
 | --- | --- | --- | --- | --- |
-| Body | `String` or `InputStream` | Body of the HTTP request |  |  |
+| Body | `String` or `InputStream` | Body of the HTTP request. A body that cannot be converted to an `InputStream`, such as a `Map`, fails with an `InvalidPayloadException`. |  |  |
 | `rawPath` | `String` | The portion of the endpoint URL after the domain name, e.g., '/services/data/v51.0/sobjects/Account/' |  | x |
 | `rawMethod` | `String` | The HTTP method |  | x |
 | `rawQueryParameters` | `String` | Comma separated list of message headers to include as query parameters. Do not url-encode values as this will be done automatically. |  |  |

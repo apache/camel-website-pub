@@ -3,7 +3,7 @@
     .to("hazelcast-multimap:bar");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:put"/&gt;
     &lt;log message="put.."/&gt;
-    &lt;setHeader name="hazelcast.operation.type"&gt;
+    &lt;setHeader name="CamelHazelcastOperationType"&gt;
         &lt;constant&gt;put&lt;/constant&gt;
     &lt;/setHeader&gt;
     &lt;to uri="hazelcast-multimap:foo"/&gt;
@@ -12,15 +12,17 @@
       uri: direct:put
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: put
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: put
         - to:
             uri: hazelcast-multimap:foo</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_example_for_removevalue"><a class="anchor" href="#_example_for_removevalue"></a>Example for <strong>removevalue</strong>:</h3> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:removevalue")
     .setHeader("CamelHazelcastOperationType", constant("removeValue"))
     .to("hazelcast-multimap:bar");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:removevalue"/&gt;
     &lt;log message="removevalue..."/&gt;
-    &lt;setHeader name="hazelcast.operation.type"&gt;
+    &lt;setHeader name="CamelHazelcastOperationType"&gt;
         &lt;constant&gt;removevalue&lt;/constant&gt;
     &lt;/setHeader&gt;
     &lt;to uri="hazelcast-multimap:foo"/&gt;
@@ -29,8 +31,10 @@
       uri: direct:removevalue
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: removevalue
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: removevalue
         - to:
             uri: hazelcast-multimap:foo</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>To remove a value you have to provide the value you want to remove inside the message body. If you have a multimap object <code>\{`key: "4711" values: { "my-foo", "my-bar"</code>}}` you have to put <code>my-foo</code> inside the message body to remove the <code>my-foo</code> value.</p> </div> </div> <div class="sect2"> <h3 id="_example_for_get"><a class="anchor" href="#_example_for_get"></a>Example for <strong>get</strong>:</h3> <div id="_tabs_3" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_3_java" class="tab"> <p>Java</p> </li> <li id="_tabs_3_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_3_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_3_java--panel" class="tabpanel" aria-labelledby="_tabs_3_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:get")
     .setHeader("CamelHazelcastOperationType", constant("get"))
@@ -38,7 +42,7 @@
     .to("seda:out");</code></pre> </div> </div> </div> <div id="_tabs_3_xml--panel" class="tabpanel" aria-labelledby="_tabs_3_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:get"/&gt;
     &lt;log message="get.."/&gt;
-    &lt;setHeader name="hazelcast.operation.type"&gt;
+    &lt;setHeader name="CamelHazelcastOperationType"&gt;
         &lt;constant&gt;get&lt;/constant&gt;
     &lt;/setHeader&gt;
     &lt;to uri="hazelcast-multimap:foo"/&gt;
@@ -48,8 +52,10 @@
       uri: direct:get
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: get
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: get
         - to:
             uri: hazelcast-multimap:foo
         - to:
@@ -58,7 +64,7 @@
     .to("hazelcast-multimap:bar");</code></pre> </div> </div> </div> <div id="_tabs_4_xml--panel" class="tabpanel" aria-labelledby="_tabs_4_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:delete"/&gt;
     &lt;log message="delete.."/&gt;
-    &lt;setHeader name="hazelcast.operation.type"&gt;
+    &lt;setHeader name="CamelHazelcastOperationType"&gt;
         &lt;constant&gt;delete&lt;/constant&gt;
     &lt;/setHeader&gt;
     &lt;to uri="hazelcast-multimap:foo"/&gt;
@@ -67,8 +73,10 @@
       uri: direct:delete
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: delete
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: delete
         - to:
             uri: hazelcast-multimap:foo</code></pre> </div> </div> </div> </div> </div> <div class="paragraph"> <p>You can call them in your test class with:</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: uses ProducerTemplate API and Java constants</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">template.sendBodyAndHeader("direct:[put|get|removevalue|delete]", "my-foo", "CamelHazelcastObjectId", "4711");</code></pre> </div> </div> </div> </div> </div> <div class="sect1"> <h2 id="_multimap_cache_consumer_fromhazelcast_multimapfoo"><a class="anchor" href="#_multimap_cache_consumer_fromhazelcast_multimapfoo"></a>multimap cache consumer - from("hazelcast-multimap:foo")</h2> <div class="sectionbody"> <div class="paragraph"> <p>For the multimap cache this component provides the same listeners / variables as for the map cache consumer (except the update and eviction listener). The only difference is the <strong>multimap</strong> prefix inside the URI. Here is a sample:</p> </div> <div id="_tabs_5" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_5_java" class="tab"> <p>Java</p> </li> <li id="_tabs_5_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_5_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_5_java--panel" class="tabpanel" aria-labelledby="_tabs_5_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("hazelcast-multimap:bar")
     .log("object...")

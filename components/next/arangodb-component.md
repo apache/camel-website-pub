@@ -217,7 +217,7 @@ The message body at each side of the ArangoDb component: _Consumer_ is the body 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `map`, `pojo` or `list` | 
-By the operation: the document to save or update as a Map or a POJO (a List of them with the CamelArangoDbMultiInsert or CamelArangoDbMultiUpdate header), the key as text to find or delete (a List of keys with CamelArangoDbMultiDelete), and the AQL query as text unless the CamelArangoDbAqlQuery header has it. JSON text, bytes or a stream is not a document: unmarshal it to a Map first. The key of an update is the CamelArangoDbKey header.
+By the operation: the document to save or update as a Map or a POJO (a Collection of them saves several, with or without the CamelArangoDbMultiInsert header, and a List of them with the CamelArangoDbMultiUpdate header updates several), the key as text to find or delete (a List of keys with CamelArangoDbMultiDelete), and the AQL query as text unless the CamelArangoDbAqlQuery header has it. JSON text, bytes or a stream is not a document: unmarshal it to a Map first. The key of an update is the CamelArangoDbKey header.
 
 -   With `operation=FIND_DOCUMENT_BY_KEY`: `text`
     
@@ -249,7 +249,7 @@ By the operation: the document to save or update as a Map or a POJO (a List of t
  |
 | **Producer output** | `unknown` | 
 
-By the operation, which must be set: the result entity of the ArangoDB driver (DocumentCreateEntity, DocumentUpdateEntity, DocumentDeleteEntity, or a MultiDocumentEntity for the multi headers) for the document writes; the document found as a BaseDocument (or BaseEdgeDocument), or of the class in the CamelArangoDbResultClassType header, or null when there is none; a List of the AQL results, empty for a query that returns nothing; and true for a delete of a vertex or edge.
+By the operation, which must be set (the producer fails to start without it): the result entity of the ArangoDB driver (DocumentCreateEntity, DocumentUpdateEntity, DocumentDeleteEntity, or a MultiDocumentEntity for the multi headers and a Collection saved) for the document writes; the document found as a BaseDocument (or BaseEdgeDocument), or of the class in the CamelArangoDbResultClassType header, or null when there is none; a List of the AQL results, empty for a query that returns nothing; and true for a delete of a vertex or edge.
 
 -   With `operation=SAVE_DOCUMENT`: `pojo`
     
@@ -285,6 +285,8 @@ By the operation, which must be set: the result entity of the ArangoDB driver (D
  |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
+
+The `operation` option must be set, on the endpoint or on the component configuration: there is no default operation, and a route that sends to an arangodb endpoint without it fails to start.
 
 ## Examples
 
@@ -328,6 +330,8 @@ And you can set as body a BaseDocument class
 BaseDocument myObject = new BaseDocument();
 myObject.addAttribute("a", "Foo");
 myObject.addAttribute("b", 42);
+
+A `Collection` body, such as a `List` of documents, saves each of them as a document, with or without the `CamelArangoDbMultiInsert` header, and the body after the operation is a `MultiDocumentEntity`.
 
 #### Query a collection
 

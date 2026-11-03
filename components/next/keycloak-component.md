@@ -993,7 +993,7 @@ One message per event: the EventRepresentation of a user event such as a login, 
  |
 | **Producer input** | `any` | 
 
-Mostly not read: the operations take their input from headers, such as CamelKeycloakRealmName and CamelKeycloakUserId. With pojoRequest=true the create and update operations take the Keycloak representation, such as a UserRepresentation for createUser; a body of another type does nothing and keeps the body. The bulk operations take a List when the header is not set: of UserRepresentation for bulkCreateUsers and bulkUpdateUsers, of String ids or role names for the others. introspectToken, revokeAccessToken and revokeRefreshToken take the token as text when the CamelKeycloakToken header is not set.
+Mostly not read: the operations take their input from headers, such as CamelKeycloakRealmName and CamelKeycloakUserId. With pojoRequest=true the create and update operations take the Keycloak representation, such as a UserRepresentation for createUser, or a Map or JSON text of it; a body that does not convert fails. The bulk operations take a List when the header is not set: of UserRepresentation (or a Map or JSON text of it) for bulkCreateUsers and bulkUpdateUsers, of String ids or role names for the others. introspectToken, revokeAccessToken and revokeRefreshToken take the token as text when the CamelKeycloakToken header is not set.
 
 -   With `pojoRequest=true`: `pojo`
     
@@ -1005,7 +1005,7 @@ Mostly not read: the operations take their input from headers, such as CamelKeyc
  |
 | **Producer output** | `unknown` | 
 
-Depends on the operation, which the CamelKeycloakOperation header can set: get gives the Keycloak representation, such as a UserRepresentation, and list and search a List of them. Most create operations, deleteUser and some organization operations give the JAX-RS Response, whose status says whether it worked (a 409 or 404 is no error); the others a confirmation text such as Realm deleted successfully. The bulk operations give a Map with total, success, failed and results.
+Depends on the operation, which the CamelKeycloakOperation header can set: get gives the Keycloak representation, such as a UserRepresentation, and list and search a List of them. Most create operations, deleteUser and some organization operations give the closed JAX-RS Response, whose status and Location header (the URL of the created resource) can be read; a status other than 2xx fails with a WebApplicationException. The others give a confirmation text such as Realm deleted successfully. The bulk operations give a Map with total, success, failed and results.
 
 -   With `operation=createRealm`: `text` (`java.lang.String`)
     

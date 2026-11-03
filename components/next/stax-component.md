@@ -114,7 +114,7 @@ The message body at each side of the StAX component: _Consumer_ is the body of t
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `stream`, `file` or `pojo`, as xml | The XML to parse: text, a stream, a file or a javax.xml.transform.Source. Bytes, a DOM Document, a Map or no body fail: convert bytes to a String first. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `pojo`, as xml | The XML to parse: text, bytes, a stream, a file or path, a javax.xml.transform.Source or a DOM Document. A Map or no body fail. |
 | **Producer output** | `pojo` | The ContentHandler after the parse: a new instance of contentHandlerClass per message, or the one bean of a #bean reference.
 Not known when `contentHandlerClass` is set.
 
@@ -126,7 +126,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ### Usage of a content handler as StAX parser
 
-The message body after the handling is the handler itself.
+The message body to parse can be text, bytes, a stream, a file or path, a `javax.xml.transform.Source` or a DOM `Document`. The message body after the handling is the handler itself.
 
 Here is an example:
 

@@ -286,7 +286,7 @@ from("direct:put")
 <route>
     <from uri="direct:put"/>
     <log message="put.."/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>put</constant>
     </setHeader>
     <to uri="hazelcast-multimap:foo"/>
@@ -299,8 +299,10 @@ from("direct:put")
       uri: direct:put
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: put
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: put
         - to:
             uri: hazelcast-multimap:foo
 ```
@@ -324,7 +326,7 @@ from("direct:removevalue")
 <route>
     <from uri="direct:removevalue"/>
     <log message="removevalue..."/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>removevalue</constant>
     </setHeader>
     <to uri="hazelcast-multimap:foo"/>
@@ -337,8 +339,10 @@ from("direct:removevalue")
       uri: direct:removevalue
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: removevalue
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: removevalue
         - to:
             uri: hazelcast-multimap:foo
 ```
@@ -365,7 +369,7 @@ from("direct:get")
 <route>
     <from uri="direct:get"/>
     <log message="get.."/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>get</constant>
     </setHeader>
     <to uri="hazelcast-multimap:foo"/>
@@ -379,8 +383,10 @@ from("direct:get")
       uri: direct:get
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: get
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: get
         - to:
             uri: hazelcast-multimap:foo
         - to:
@@ -406,7 +412,7 @@ from("direct:delete")
 <route>
     <from uri="direct:delete"/>
     <log message="delete.."/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>delete</constant>
     </setHeader>
     <to uri="hazelcast-multimap:foo"/>
@@ -419,8 +425,10 @@ from("direct:delete")
       uri: direct:delete
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: delete
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: delete
         - to:
             uri: hazelcast-multimap:foo
 ```

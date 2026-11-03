@@ -157,7 +157,7 @@ The message body at each side of the Google BigQuery component: _Consumer_ is th
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `map` or `list` | The row to insert as a Map of column names to values, or a List of such Maps for one row each; the exchanges of a grouped aggregation are inserted together. Text such as JSON, bytes, a stream, a POJO or no body fails: unmarshal it into a Map first. |
+| **Producer input** | `map` or `list` | The row to insert as a Map of column names to values, or a List of such Maps for one row each; the exchanges of a grouped aggregation are inserted together. Text such as JSON, bytes, a stream, a POJO, a List with an element that is not a Map, or no body fails: unmarshal it into a Map first. When one exchange of a grouped aggregation has such a body, the grouped exchange fails and none of its rows is inserted. |
 | **Producer output** | `unchanged` | 
  |
 
@@ -172,6 +172,8 @@ Producer endpoints can accept and deliver to BigQuery individual and grouped exc
 Google BigQuery producer will send a grouped exchange in a single api call unless different table suffix or partition decorators are specified. In that case, it will break it down to ensure data is written with the correct suffix or partition decorator.
 
 Google BigQuery endpoint expects the payload to be either a map or list of maps. A payload containing a map will insert a single row, and a payload containing a list of maps will insert a row for each entry in the list.
+
+Any other payload, such as a list with an element that is not a map, fails the exchange with an `IllegalArgumentException`. When one exchange of a grouped exchange has such a payload, or has no table id, the grouped exchange fails and none of its rows is inserted.
 
 ### Template tables
 

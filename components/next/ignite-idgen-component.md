@@ -6,6 +6,8 @@
 
 The Ignite ID Generator endpoint is one of camel-ignite endpoints that allow you to interact with [Ignite Atomic Sequences and ID Generators](https://apacheignite.readme.io/docs/id-generator).
 
+`ADD_AND_GET` and `GET_AND_ADD` add the number in the body to the sequence, and fail without a body. The other operations do not use the body. The operation is the `operation` option, or the `CamelIgniteIdGenOperation` header; without either, the producer fails.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -148,7 +150,7 @@ The message body at each side of the Ignite ID Generator component: _Consumer_ i
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-ADD\_AND\_GET and GET\_AND\_ADD add the body to the sequence: a number, or text of one; no body fails. The other operations do not use the body, but text that is not a number still fails. The operation is the operation option or the CamelIgniteIdGenOperation header.
+ADD\_AND\_GET and GET\_AND\_ADD add the body to the sequence: a number, or text of one; no body fails. The other operations do not use the body. The operation is the operation option or the CamelIgniteIdGenOperation header; with neither the producer fails.
 
 -   With `operation=ADD_AND_GET`: `value` or `text`
     

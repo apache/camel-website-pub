@@ -219,6 +219,8 @@ Camel initializes the In body on the Exchange with a ROME `SyndFeed`. Depending 
 | `splitEntries` | `true` | A single entry from the current feed is set in the exchange. |
 | `splitEntries` | `false` | The entire list of entries from the current feed is set in the exchange. |
 
+With `splitEntries=true`, Camel copies the feed (with ROME’s `clone`) to hold the one entry. If the feed cannot be copied, the exchange fails with a `RuntimeCamelException` (caused by the `CloneNotSupportedException`) and the `SyndEntry` as the body, so the route’s error handler, such as a dead letter channel, receives the entry.
+
 ## Example
 
 If the URL for the RSS feed uses query parameters, this component will resolve them. For example, if the feed uses `alt=rss`, then the following example will be resolved:

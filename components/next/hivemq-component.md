@@ -238,7 +238,7 @@ The message body at each side of the HiveMQ component: _Consumer_ is the body of
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `bytes` (`byte[]`) | The payload of the MQTT message, an empty byte array for an empty payload. The topic is in the CamelHiveMQTopic header. |
-| **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload; no body is sent as an empty payload. A Map, a POJO or a number does not convert and is sent as an empty payload too, without an error: marshal it first. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload; no body is sent as an empty payload. A Map, a POJO or a number does not convert and fails the exchange: marshal it first. |
 | **Producer output** | `unchanged` | 
  |
 
@@ -273,6 +273,8 @@ String payload = consumerTemplate.receiveBody("hivemq:topic", String.class);
 String payload = "message";
 producerTemplate.sendBody("hivemq:topic", payload);
 ```
+
+The producer sends what converts to a byte array: text, bytes, a stream or a file. A message without a body is sent as an empty payload. A body that does not convert to a byte array, such as a `Map`, a POJO or a number, fails the exchange with an `InvalidPayloadException`: marshal it first, for example to JSON.
 
 ## Examples
 

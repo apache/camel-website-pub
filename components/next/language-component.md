@@ -405,3 +405,41 @@ from("direct:start")
         - to:
             uri: mock:result
 ```
+
+### Binary content
+
+With `binary=true`, the content of the resource is not evaluated as a script, but is the result as a stream (`java.io.InputStream`). This works with and without the `resource:` prefix, for example to return an image:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+    .to("language:constant:classpath:images/logo.png?binary=true")
+    .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="language:constant:classpath:images/logo.png?binary=true"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: language:constant:classpath:images/logo.png
+            parameters:
+              binary: true
+        - to:
+            uri: mock:result
+```

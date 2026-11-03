@@ -74,8 +74,6 @@ Enum values:
     
 -   FETCH
     
--   CONSUME
-    
 
 
 
@@ -139,8 +137,6 @@ Enum values:
 -   EXECUTE
     
 -   FETCH
-    
--   CONSUME
     
 
 
@@ -318,6 +314,8 @@ When using jooq as a producer you can use any of the following `JooqOperation` o
 | none | Store the entity (the record of the entity type) in the message body (default) |
 | execute | Execute a query (an `org.jooq.Query` in the message body, or the `query` option) with no expected results |
 | fetch | Execute a query (an `org.jooq.ResultQuery` in the message body, or the `query` option) and the `org.jooq.Result` of the query is stored as the new message body |
+
+A message with no body (and no `query` option for `execute` and `fetch`) fails with an `InvalidPayloadException`. The `none` operation does not store an empty record.
 
 ## Example
 

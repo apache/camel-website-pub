@@ -217,7 +217,7 @@ The message body at each side of the PubNub component: _Consumer_ is the body of
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `pojo` (`com.pubnub.api.models.consumer.pubsub.PNMessageResult`) | 
-The PubNub PNMessageResult; its getMessage() is the payload as a Gson JsonElement, and it does not convert to the payload text. With withPresence, a presence event comes as a PNPresenceEventResult. The channel and timetoken are in the CamelPubNubChannel and CamelPubNubTimeToken headers.
+The PubNub PNMessageResult; its getMessage() is the payload as a Gson JsonElement. It converts to a String: a string message as its text, any other message as JSON. With withPresence, a presence event comes as a PNPresenceEventResult. The channel and timetoken are in the CamelPubNubChannel and CamelPubNubTimeToken headers.
 
 -   With `withPresence=true`: `pojo`
     
@@ -274,7 +274,7 @@ The message body can contain any JSON serializable data, including Objects, Arra
 
 Object serialization when sending is done automatically. Pass the full object as the message payload. PubNub will take care of object serialization.
 
-When receiving the message body uses objects provided by the PubNub API.
+When receiving the message body uses objects provided by the PubNub API. A message is a `PNMessageResult`, and `getMessage()` is the payload as a Gson `JsonElement`. The `PNMessageResult` converts to a `String`, so `${body}` or `convertBodyTo(String.class)` gives the payload: a string message as its text, and any other message (an object, an array, a number) as JSON.
 
 ## Examples
 

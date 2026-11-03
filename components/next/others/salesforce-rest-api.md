@@ -69,6 +69,8 @@ The following operations are supported:
 
 Unless otherwise specified, DTO types for the following options are from `org.apache.camel.component.salesforce.api.dto` or one if its sub-packages.
 
+The operations that send a request body (such as `createSObject`, `updateSObject` and `upsertSObject`) send an SObject DTO, a `Map` or another object as JSON, and JSON text, bytes, a stream or a file as is.
+
 ## Versions
 
 `getVersions`

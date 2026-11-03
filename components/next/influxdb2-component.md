@@ -4,7 +4,7 @@
 
 **Only producer is supported**
 
-This component allows you to interact with [InfluxDB](https://influxdata.com/time-series-platform/influxdb/) 2.x, a time series database. The native body type for this component is `Point` (the native InfluxDB class). However, it can also accept `Map<String, Object>` as message body, and it will get converted to `Point.class`, please note that the map must contain an element with `CamelInfluxDB2MeasurementName` as key.
+This component allows you to interact with [InfluxDB](https://influxdata.com/time-series-platform/influxdb/) 2.x, a time series database. The native body type for this component is `Point` (the native InfluxDB class). However, it can also accept `Map<String, Object>` as message body, and it will get converted to `Point.class`, please note that the map must contain an element with `CamelInfluxDB2MeasurementName` as key. The other entries of the map are the fields of the point; the map itself is not changed, so it can be immutable.
 
 Additionally, you may register your own Converters to your data type to `Point`, or use the (un)marshalling tools provided by Camel.
 
@@ -180,7 +180,7 @@ The message body at each side of the InfluxDB2 component: _Consumer_ is the body
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `pojo` or `map` | 
-A com.influxdb.client.write.Point, or the Measurement, Record, Points, Measurements or Records wrappers of the component (package org.apache.camel.component.influxdb2.data), or a Map of the field names and their values with the measurement name under the CamelInfluxDB2MeasurementName key. Text, a List or an annotated class that is not wrapped fail: wrap a line protocol String in a Record and an annotated object in a Measurement. Ping does not read the body.
+A com.influxdb.client.write.Point, or the Measurement, Record, Points, Measurements or Records wrappers of the component (package org.apache.camel.component.influxdb2.data), or a Map of the field names and their values with the measurement name under the CamelInfluxDB2MeasurementName key. Text, a List or an annotated class that is not wrapped fail: wrap a line protocol String in a Record and an annotated object in a Measurement. A Point without a field that has a value (also from a Map or in Points) fails the exchange, as the client would skip it. Ping does not read the body.
 
 -   With `operation=PING`: `any`
     
@@ -245,3 +245,11 @@ from("direct:start")
 The producer writes with the synchronous write API of the InfluxDB client (`WriteApiBlocking`): the exchange continues when InfluxDB has answered the write request. A write that InfluxDB rejects (for example, a line it cannot parse, an unknown bucket or a token that is not authorized), or a request that cannot be sent, fails the exchange with a `CamelInfluxDb2Exception` whose cause is the `InfluxException` of the client, so the error handler of the route can redeliver it or move it to a dead letter channel.
 
 Each exchange is one write request. To write many points with one request, send a `Points`, `Measurements` or `Records` body, for example, from an [Aggregate](eips/aggregate-eip.md) EIP.
+
+InfluxDB needs at least one field in a point, and the client skips a point without a field that has a value (no field at all, or only fields whose value is `null`, NaN or infinite) instead of writing it. Such a `Point`, also one converted from a `Map` or one of the points of a `Points` body, fails the exchange with a `CamelInfluxDb2Exception`, and nothing is written.
+
+## Organization and bucket at startup
+
+When `autoCreateOrg` is `true` (the default), the endpoint looks the organization up when it starts and creates it when it does not exist. When `autoCreateBucket` is `true` (the default), it does the same for the bucket, in the organization of the endpoint. With `autoCreateOrg=false`, a missing bucket is created only when that organization exists, and otherwise the endpoint fails to start.
+
+A write names the organization and the bucket, so the endpoint does not need them to be looked up: with `autoCreateOrg=false` and `autoCreateBucket=false` it does not call InfluxDB when it starts, and the route starts while InfluxDB is down. An organization or a bucket that does not exist then fails the write, and so the exchange.

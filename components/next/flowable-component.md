@@ -8,7 +8,7 @@ Communicate with the Flowable Event Registry for sending and receiving messages 
 
 ## URI format
 
-flowable-event://\[channelKey\]?\[options\]
+flowable:channelKey\[?options\]
 
 Where **channelKey** is the unique key value of the channel model deployed in the Flowable Event Registry.
 
@@ -126,6 +126,10 @@ The bodies are the ones with the default options. A side that is not listed is n
 ### Body content
 
 The body content is defined by the event model deployed to the Flowable Event Registry. The event message can then be mapped to process or case variables in the process BPMN or case CMMN model.
+
+### Sending to a channel that is not deployed yet
+
+A route that sends to `flowable:channelKey` can start before the inbound channel model with that key is deployed in the Flowable Event Registry. Once the channel is deployed, the producer sends to it. Until then, every send fails with a `FlowableException` that names the channel key.
 
 ## Examples
 

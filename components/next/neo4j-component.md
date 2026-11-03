@@ -113,7 +113,7 @@ Enum values:
 
 
  |  | Neo4Operation |
-| **query** (producer) | Cypher Query. |  | String |
+| **query** (producer) | **Deprecated** Cypher Query. Deprecation note: Not used: RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY and ADD\_OR\_DELETE\_NODE\_WITH\_CYPHER\_QUERY take the Cypher query from the message body. |  | String |
 | **similarityFunction** (producer) | 
 
 Similarity Function of Vector Index.
@@ -195,7 +195,7 @@ Enum values:
 
 
  |  | Neo4Operation |
-| **query** (producer) | Cypher Query. |  | String |
+| **query** (producer) | **Deprecated** Cypher Query. Deprecation note: Not used: RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY and ADD\_OR\_DELETE\_NODE\_WITH\_CYPHER\_QUERY take the Cypher query from the message body. |  | String |
 | **similarityFunction** (producer) | 
 
 Similarity Function of Vector Index.
@@ -257,17 +257,17 @@ Enum values:
 
 
  |  | String |
-| **CamelNeo4jMatchProperties** (producer) Constant: [`MATCH_PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#MATCH_PROPERTIES) | MATCH properties for the generated MATCH query. Needed only if we are matching properties and values. Example: \\{name: 'Alice'}. |  | String |
-| **CamelNeo4jQueryResult** (producer) Constant: [`QUERY_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT) | Query Result. |  | String |
-| **CamelNeo4jQueryResultNodesCreated** (producer) Constant: [`QUERY_RESULT_NODES_CREATED`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_NODES_CREATED) | Query Number of nodes created. |  | Long |
-| **CamelNeo4jQueryResultNodesDeleted** (producer) Constant: [`QUERY_RESULT_NODES_DELETED`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_NODES_DELETED) | Query Number of nodes deleted. |  | Long |
+| **CamelNeo4jMatchProperties** (producer) Constant: [`MATCH_PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#MATCH_PROPERTIES) | MATCH properties for the generated MATCH query of RETRIEVE\_NODES and DELETE\_NODE, as a JSON object of the property names and values. Needed only if we are matching properties and values. |  | String |
+| **CamelNeo4jQueryResult** (producer) Constant: [`QUERY_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT) | The text of the Cypher query that the operation ran, set by CREATE\_NODE, DELETE\_NODE, ADD\_OR\_DELETE\_NODE\_WITH\_CYPHER\_QUERY, CREATE\_VECTOR\_INDEX, DROP\_VECTOR\_INDEX and CREATE\_VECTOR. |  | String |
+| **CamelNeo4jQueryResultNodesCreated** (producer) Constant: [`QUERY_RESULT_NODES_CREATED`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_NODES_CREATED) | Query Number of nodes created. |  | Integer |
+| **CamelNeo4jQueryResultNodesDeleted** (producer) Constant: [`QUERY_RESULT_NODES_DELETED`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_NODES_DELETED) | Query Number of nodes deleted. |  | Integer |
 | **CamelNeo4jQueryResultContainsUpdates** (producer) Constant: [`QUERY_RESULT_CONTAINS_UPDATES`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_CONTAINS_UPDATES) | Query executed contains update. |  | Boolean |
-| **CamelNeo4jQueryResultRelationshipsCreated** (producer) Constant: [`QUERY_RESULT_RELATIONSHIPS_CREATED`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_RELATIONSHIPS_CREATED) | Query executed number of relationships created. |  | Long |
-| **CamelNeo4jQueryResultRelationshipsDeleted** (producer) Constant: [`QUERY_RESULT_RELATIONSHIPS_DELETED`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_RELATIONSHIPS_DELETED) | Query executed number of relationships deleted. |  | Long |
-| **CamelNeo4jQueryResultRetrieveSize** (producer) Constant: [`QUERY_RETRIEVE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RETRIEVE_SIZE) | Number of nodes retrieved. |  | Long |
-| **CamelNeo4jQueryResultListNeo4jNodes** (producer) Constant: [`QUERY_RETRIEVE_LIST_NEO4J_NODES`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RETRIEVE_LIST_NEO4J_NODES) | Query execution time in Milliseconds. |  | Long |
+| **CamelNeo4jQueryResultRelationshipsCreated** (producer) Constant: [`QUERY_RESULT_RELATIONSHIPS_CREATED`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_RELATIONSHIPS_CREATED) | Query executed number of relationships created. |  | Integer |
+| **CamelNeo4jQueryResultRelationshipsDeleted** (producer) Constant: [`QUERY_RESULT_RELATIONSHIPS_DELETED`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RESULT_RELATIONSHIPS_DELETED) | Query executed number of relationships deleted. |  | Integer |
+| **CamelNeo4jQueryResultRetrieveSize** (producer) Constant: [`QUERY_RETRIEVE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RETRIEVE_SIZE) | The number of records that RETRIEVE\_NODES, RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY or VECTOR\_SIMILARITY\_SEARCH retrieved. |  | Integer |
+| **CamelNeo4jQueryResultListNeo4jNodes** (producer) Constant: [`QUERY_RETRIEVE_LIST_NEO4J_NODES`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#QUERY_RETRIEVE_LIST_NEO4J_NODES) | The records that RETRIEVE\_NODES, RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY or VECTOR\_SIMILARITY\_SEARCH retrieved, as the Records of the Neo4j driver, with all their columns. |  | List |
 | **CamelNeo4jVectorEmbeddingId** (producer) Constant: [`VECTOR_ID`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#VECTOR_ID) | Vector Id for the embedding. |  | String |
-| **CamelNeo4jLabel** (producer) Constant: [`LABEL`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#LABEL) | Label for the Node - used when inserting from Embeddings. |  | String |
+| **CamelNeo4jLabel** (producer) Constant: [`LABEL`](https://javadoc.io/doc/org.apache.camel/camel-neo4j/latest/org/apache/camel/component/neo4j/Neo4jHeaders.html#LABEL) | **Deprecated** Label for the Node - used when inserting from Embeddings. Deprecation note: Not used: the producer does not read this header. CREATE\_VECTOR takes the label of the node from the label option, and Embedding when the option is not set. |  | String |
 
 ## Message Body
 
@@ -277,7 +277,7 @@ The message body at each side of the Neo4j component: _Consumer_ is the body of 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-What the operation of the operation option or the CamelNeo4jOperation header needs: CREATE\_NODE the properties of the node as a Map or as JSON text (bytes, a stream, a POJO or no body fail); the two Cypher operations the query as text (bytes or a stream are read as text); CREATE\_VECTOR a Neo4jEmbedding, or the text with the float\[\] vector in the CamelLangChain4jEmbeddingsVector header; VECTOR\_SIMILARITY\_SEARCH a Neo4jEmbedding, a float\[\] or a List of Float. The other operations do not use the body.
+What the operation of the operation option or the CamelNeo4jOperation header needs: CREATE\_NODE the properties of the node as a Map or as JSON text (bytes, a stream, a POJO or no body fail); the two Cypher operations the query as text (bytes or a stream are read as text); CREATE\_VECTOR a Neo4jEmbedding, or the text with the float\[\] vector in the CamelLangChain4jEmbeddingsVector header; VECTOR\_SIMILARITY\_SEARCH a Neo4jEmbedding, a float\[\], or a List or an array of numbers (text or no body fail). The other operations do not use the body.
 
 -   With `operation=CREATE_NODE`: `map` or `text`
     
@@ -305,7 +305,7 @@ What the operation of the operation option or the CamelNeo4jOperation header nee
  |
 | **Producer output** | `list` or `unchanged` | 
 
-RETRIEVE\_NODES, RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY and VECTOR\_SIMILARITY\_SEARCH give a List of Maps, the properties of each node found (empty when none; the first column a Cypher query returns must be a node), with the Records of the driver in the CamelNeo4jQueryResultListNeo4jNodes header. The other operations leave the body unchanged, with the counts in the CamelNeo4jQueryResult headers.
+RETRIEVE\_NODES, RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY and VECTOR\_SIMILARITY\_SEARCH give a List of Maps (empty when none), the properties of each node found, with the Records of the driver in the CamelNeo4jQueryResultListNeo4jNodes header. A record of a Cypher query whose first column is not a node is a Map of its columns, and VECTOR\_SIMILARITY\_SEARCH adds the score of each node under the score key. The other operations leave the body unchanged, with the counts in the CamelNeo4jQueryResult headers.
 
 -   With `operation=RETRIEVE_NODES`: `list` (`java.util.List<java.util.Map<java.lang.String, java.lang.Object>>`)
     
@@ -338,7 +338,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ### Create a Node
 
-To create a node in a database named `test`, define the body as a string containing the JSON body. Use the operation `CREATE_NODE`. The URI endpoint should contain also specify the label and the alias.
+To create a node in a database named `test`, define the body as a string containing the JSON body. Use the operation `CREATE_NODE`. The URI endpoint should contain also specify the label and the alias. A message without a body fails with an `InvalidPayloadException`.
 
 _Java-only: ProducerTemplate test API_
 
@@ -492,6 +492,8 @@ To retrieve or update nodes with Cypher Query in a database named `test`, set th
 
 The operation is the same as `ADD_OR_DELETE_NODE_WITH_CYPHER_QUERY`, except that it returns a list of retrieved or updated nodes represented as `Map<String, Object>`.
 
+When the first column that the query returns is a node, each `Map` holds the properties of that node. Otherwise, such as for `MATCH (u:User) RETURN u.name AS name, u.age AS age` or a `count(*)`, each `Map` holds the columns of one record by name, such as `{name=Ethan, age=41}`. The `CamelNeo4jQueryResultListNeo4jNodes` header has the records of the Neo4j driver, with all their columns.
+
 _Java-only: ProducerTemplate test API with string concatenation_
 
 ```java
@@ -555,6 +557,10 @@ Exchange result = fluentTemplate.to("neo4j:test?vectorIndexName=myIndex&label=Te
 
 To perform a similarity search using vectors in a database named `test`, use the operation `VECTOR_SIMILARITY_SEARCH`. The URI endpoint should also specify the label, the alias and the vector index name.
 
+The body is the vector to search for: a `Neo4jEmbedding`, a `float[]`, or a `List` or an array of numbers, such as a `List<Double>`. Another body, such as text, or a message without a body, fails with an `InvalidPayloadException`.
+
+The result is a List of `Map<String, Object>`: the properties of each node found, and its similarity score as a `Double` under the `score` key (it replaces a property of the node named `score`). The `CamelNeo4jQueryResultListNeo4jNodes` header has the records of the Neo4j driver, with the `node` and `score` columns.
+
 _Java-only: ProducerTemplate test API with `List.of()` vector_
 
 ```java
@@ -568,6 +574,8 @@ Exchange result = fluentTemplate.to("neo4j:test?vectorIndexName=myIndex&label=Te
 
 You can generate embeddings with an Embedding Models using the camel Lancghain4j Embeddings components. Camel Neo4j introduces a DataType `neo4j:embeddings` that automates the transformations of the Lancghain4j embeddings to Neo4j vectors.
 
+The `label` option sets the label of the nodes that `CREATE_VECTOR` creates (`Embedding` when it is not set). The deprecated `CamelNeo4jLabel` header is not used.
+
 Example of a camel Route that create embeddings with Camel Langchain4j Embeddings, and ingest them into Neo4j database.
 
 -   Java
@@ -579,7 +587,6 @@ Example of a camel Route that create embeddings with Camel Langchain4j Embedding
 from("direct:in")
     .to("langchain4j-embeddings:test")
     .setHeader("CamelNeo4jOperation").constant(Neo4Operation.CREATE_VECTOR)
-    .setHeader("CamelNeo4jLabel").constant("Test")
     .transformDataType(new DataType("neo4j:embeddings"))
     .to("neo4j:neo4j?vectorIndexName=myIndex&label=Test");
 ```
@@ -596,11 +603,6 @@ from("direct:in")
             expression:
               constant:
                 expression: CREATE_VECTOR
-        - setHeader:
-            name: CamelNeo4jLabel
-            expression:
-              constant:
-                expression: Test
         - transformDataType:
             toType: neo4j:embeddings
         - to:

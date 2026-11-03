@@ -164,7 +164,7 @@ The message body at each side of the Stitch component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `pojo`, `map` or `list` | A StitchRequestBody, a StitchMessage, a Map of the Stitch batch JSON (table\_name, schema, messages, key\_names as a list), or a List of StitchMessage, Map of a message, StitchRequestBody, Message or Exchange. Text, bytes, a stream or no body fails. The tableName, keyNames and schema options or headers set the rest of the batch. |
+| **Producer input** | `pojo`, `map` or `list` | A StitchRequestBody, a StitchMessage, a Map of the Stitch batch JSON (table\_name, schema, messages, key\_names as a list or a comma separated String), or a List of StitchMessage, Map of a message, StitchRequestBody, Message or Exchange. Text, bytes, a stream or no body fails. The tableName, keyNames and schema options or headers set the rest of the batch. |
 | **Producer output** | `text` (`java.lang.String`) | The message of the response of Stitch, empty when it has none; the HTTP status code, the status and the response headers are in the CamelStitchCode, CamelStitchStatus and CamelStitchHeaders headers. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -287,7 +287,7 @@ from("direct:sendStitch")
 .to("stitch:table_1?token=RAW({{token}})");
 ```
 
-In YAML, a Groovy map has the same structure. The keys are those of the Stitch JSON message: `table_name`, `schema`, `messages` and `key_names`:
+In YAML, a Groovy map has the same structure. The keys are those of the Stitch JSON message: `table_name`, `schema`, `messages` and `key_names`. The `key_names` can be a list, or a String with one key name or comma separated key names. The `sequence` of a message can be any number, and when it is not set, it is the time the message is built (in millis):
 
 ```yaml
 - route:

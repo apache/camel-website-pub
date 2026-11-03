@@ -26,11 +26,11 @@ The `action` option of the endpoint, such as `pgvector:myTable?action=SIMILARITY
     
 -   `DROP_TABLE` - Drops the table
     
--   `UPSERT` - Inserts or updates a vector record. The body must be a `List<Float>`. Set `CamelPgVectorRecordId` for the ID (auto-generated UUID if not set), `CamelPgVectorTextContent` for text, and `CamelPgVectorMetadata` for metadata
+-   `UPSERT` - Inserts or updates a vector record. The body is the vector: a List of numbers, such as a `List<Float>` or the `List<Double>` a JSON array unmarshals to, or a `float[]` or `double[]`; each number is converted to a float, and another body fails. Set `CamelPgVectorRecordId` for the ID (auto-generated UUID if not set), `CamelPgVectorTextContent` for text, and `CamelPgVectorMetadata` for metadata
     
 -   `DELETE` - Deletes a record by `CamelPgVectorRecordId`
     
--   `SIMILARITY_SEARCH` - Searches for similar vectors. The body must be a `List<Float>` query vector. Set `CamelPgVectorQueryTopK` for max results (default 3). Optionally set `CamelPgVectorFilter` with a SQL WHERE clause to filter results (e.g., `text_content LIKE '%hello%'`). Returns a `List<Map<String, Object>>` with keys: id, text\_content, metadata, distance
+-   `SIMILARITY_SEARCH` - Searches for similar vectors. The body is the query vector, of the same types as for `UPSERT`. Set `CamelPgVectorQueryTopK` for max results (default 3). Optionally set `CamelPgVectorFilter` with a SQL WHERE clause to filter results (e.g., `text_content LIKE '%hello%'`). Returns a `List<Map<String, Object>>` with keys: id, text\_content, metadata, distance
     
 
 ## Defaults
@@ -409,7 +409,7 @@ The message body at each side of the PGVector component: _Consumer_ is the body 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `list` or `null` | 
-By the action in the action option or the CamelPgVectorAction header: the vector as a List of Float or a float array for UPSERT and SIMILARITY\_SEARCH, with the id, text and metadata of UPSERT in headers. CREATE\_TABLE, CREATE\_INDEX, DROP\_TABLE and DELETE do not read the body, DELETE takes the id from the CamelPgVectorRecordId header. Another body fails, a List of Double too: the pgvector:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
+By the action in the action option or the CamelPgVectorAction header: the vector as a List of numbers, such as the List of Double a JSON array unmarshals to, or a float or double array for UPSERT and SIMILARITY\_SEARCH, with the id, text and metadata of UPSERT in headers. CREATE\_TABLE, CREATE\_INDEX, DROP\_TABLE and DELETE do not read the body, DELETE takes the id from the CamelPgVectorRecordId header. Another body fails: the pgvector:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
 
 -   With `action=UPSERT`: `list`
     

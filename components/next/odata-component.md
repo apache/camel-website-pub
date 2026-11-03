@@ -140,7 +140,7 @@ Enum values:
 
 
 
- |  | ODataOperation |
+ | READ\_SET | ODataOperation |
 | **orderBy** (producer) | The OData $orderby query parameter. |  | String |
 | **select** (producer) | The OData $select query parameter. |  | String |
 | **skip** (producer) | The OData $skip query parameter. |  | Integer |
@@ -201,11 +201,11 @@ The message body at each side of the OData component: _Consumer_ is the body of 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-The body is not read by READ\_SET, READ\_ENTRY and DELETE. CREATE and UPDATE send a String body as the JSON payload as it is, and serialize a Map or a List to JSON; a stream, a file or a POJO fails, and bytes are sent as a JSON array of numbers: convert them to a String first. The operation can also be set with the CamelODataOperation header.
+The body is not read by READ\_SET, READ\_ENTRY and DELETE. CREATE and UPDATE send JSON text as a String, bytes, a stream or a file as the JSON payload as it is, and serialize a Map or a List to JSON; a POJO fails, and so does an empty body (use {} for an empty JSON object). The operation can also be set with the CamelODataOperation header.
 
--   With `operation=CREATE`: `text`, `map` or `list`
+-   With `operation=CREATE`: `text`, `bytes`, `stream`, `file`, `map` or `list`
     
--   With `operation=UPDATE`: `text`, `map` or `list`
+-   With `operation=UPDATE`: `text`, `bytes`, `stream`, `file`, `map` or `list`
     
 
 
@@ -213,7 +213,7 @@ The body is not read by READ\_SET, READ\_ENTRY and DELETE. CREATE and UPDATE sen
 
 
  |
-| **Producer output** | `map` or `null` | The JSON object of the response parsed into a Map (a JsonObject); for READ\_SET the entities are in its value entry. No body for a 204 or an empty response, such as of a DELETE. The response code, the ETag, the count and the next link are in headers. |
+| **Producer output** | `map`, `list`, `value`, `text` or `null` | The JSON object of the response parsed into a Map (a JsonObject); for READ\_SET the entities are in its value entry. A JSON array is parsed into a List (a JsonArray), and a plain value into a number, a String or a boolean. No body for a 204 or an empty response, such as of a DELETE. The response code, the ETag, the count and the next link are in headers. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -258,6 +258,19 @@ The key is treated as an OData key expression. The component does not automatica
 For example, a string key can be supplied as `'ABC-123'`, while a composite key can be supplied as `ProductID=101,CategoryID=5`.
 
 The key value should be a valid and trusted OData key expression.
+
+### Message Body
+
+`CREATE` and `UPDATE` send the JSON of the entity from the message body:
+
+-   JSON text as a `String`, a byte array, a stream or a file is sent as it is.
+    
+-   A `Map` or a `List` is serialized to JSON.
+    
+
+Other Java objects (POJOs) are not serialized: marshal them to JSON first, for example with the JSON data format. An empty body fails, as these operations need an entity: set the body to `{}` to send an empty JSON object.
+
+The other operations do not read the message body.
 
 ## Message Headers
 
@@ -503,7 +516,7 @@ exchange.getMessage().getHeader("CamelODataCount");
 exchange.getMessage().getHeader("CamelODataNextLink");
 ```
 
-The response body contains the parsed JSON response.
+The response body contains the parsed JSON response: a JSON object is a `Map`, a JSON array a `List`, and a plain value a number, a `String` or a boolean. A `204` or an empty response gives no body.
 
 ## SSL Configuration
 

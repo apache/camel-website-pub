@@ -208,7 +208,7 @@ The message body at each side of the Google Secret Manager component: _Consumer_
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `bytes`, `stream` or `file` | 
-The value of the secret for createSecret, the default operation, as text: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), so marshal it first, and no body fails. The other operations take the secret id from the CamelGoogleSecretManagerSecretId header. With pojoRequest=true the body is the request of the Google SDK for the operation, such as an AddSecretVersionRequest.
+The value of the secret for createSecret, the default operation, as text: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), so marshal it first, and no body fails before the secret is created. The other operations take the secret id from the CamelGoogleSecretManagerSecretId header. With pojoRequest=true the body is the request of the Google SDK for the operation: for createSecret a CreateSecretRequest, which creates the secret without a version, or an AddSecretVersionRequest, which adds a version to a secret that exists.
 
 -   With `operation=getSecretVersion`: `any`
     
@@ -216,15 +216,17 @@ The value of the secret for createSecret, the default operation, as text: bytes,
     
 -   With `operation=listSecrets`: `any`
     
+-   With `pojoRequest=true`: `pojo`
+    
 
 
 
 
 
  |
-| **Producer output** | `pojo` (`com.google.cloud.secretmanager.v1.SecretVersion`) | 
+| **Producer output** | `pojo` | 
 
-The SecretVersion of the Google SDK that createSecret added. The value of the secret as text for getSecretVersion: unmarshal a JSON secret to read its fields. A ListSecretsPagedResponse for listSecrets, whose iterateAll() gives the Secrets; deleteSecret leaves the body unchanged.
+The SecretVersion of the Google SDK that createSecret added, or with pojoRequest=true and a CreateSecretRequest the Secret it created. The value of the secret as text for getSecretVersion: unmarshal a JSON secret to read its fields. A ListSecretsPagedResponse for listSecrets, whose iterateAll() gives the Secrets; deleteSecret leaves the body unchanged.
 
 -   With `operation=getSecretVersion`: `text` (`java.lang.String`)
     
@@ -661,7 +663,7 @@ You could now use the projectId and the service account json file to recover the
 
 ### Google Secret Manager Producer operations
 
-Google Functions component provides the following operation on the producer side:
+Google Secret Manager component provides the following operations on the producer side:
 
 -   `createSecret`
     
@@ -725,6 +727,39 @@ from("direct:start")
               operation: createSecret
         - log:
             message: "body:${body}"
+```
+
+The message body is the value of the secret, as text: bytes, a stream or a file are read as text. This operation returns the `SecretVersion` it added. A message without a body fails with an `InvalidPayloadException` before the secret is created.
+
+With `pojoRequest=true`, the body is the request of the Google SDK instead: a `CreateSecretRequest` creates the secret, without a version, and returns the `Secret`, and an `AddSecretVersionRequest` adds a version to a secret that exists, and returns the `SecretVersion`.
+
+_Java-only: Google SDK CreateSecretRequest and AddSecretVersionRequest builders_
+
+```java
+from("direct:start")
+    .process(exchange -> {
+        CreateSecretRequest request = CreateSecretRequest.newBuilder()
+            .setParent(ProjectName.of("myProject").toString())
+            .setSecretId("test")
+            .setSecret(Secret.newBuilder()
+                .setReplication(Replication.newBuilder()
+                    .setAutomatic(Replication.Automatic.newBuilder().build())
+                    .build())
+                .build())
+            .build();
+        exchange.getIn().setBody(request);
+    })
+    .to("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=createSecret&pojoRequest=true")
+    .process(exchange -> {
+        Secret secret = exchange.getIn().getBody(Secret.class);
+        AddSecretVersionRequest request = AddSecretVersionRequest.newBuilder()
+            .setParent(secret.getName())
+            .setPayload(SecretPayload.newBuilder().setData(ByteString.copyFromUtf8("hello")).build())
+            .build();
+        exchange.getIn().setBody(request);
+    })
+    .to("google-secret-manager://myProject?serviceAccountKey=/home/user/Downloads/my-key.json&operation=createSecret&pojoRequest=true")
+    .log("body:${body}");
 ```
 
 -   `getSecretVersion`: This operation will retrieve a secret value with the latest version in the Secret Manager service

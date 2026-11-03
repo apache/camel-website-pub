@@ -165,24 +165,20 @@ The message body at each side of the Ignite Compute component: _Consumer_ is the
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `pojo` or `list` | The job to run on the cluster, by executionType: an IgniteCallable for CALL and AFFINITY\_CALL, an IgniteRunnable for RUN and AFFINITY\_RUN, a Collection of them for CALL and RUN, an IgniteCallable, IgniteRunnable or IgniteClosure for BROADCAST, an IgniteClosure for APPLY, and a ComputeTask or its Class for EXECUTE. Its parameters are in the CamelIgniteComputeParameters header. With taskName, EXECUTE runs that task with the body as its argument. Text or no body fails.
+| **Producer input** | `pojo` or `list` | The job to run on the cluster, by executionType: an IgniteCallable for CALL and AFFINITY\_CALL, an IgniteRunnable for RUN and AFFINITY\_RUN, a Collection of them for CALL and RUN, an IgniteCallable, IgniteRunnable or IgniteClosure for BROADCAST, an IgniteClosure for APPLY, and a ComputeTask or its Class for EXECUTE. Its parameters are in the CamelIgniteComputeParameters header. With taskName, EXECUTE runs that task with the body as its argument, or with that header when there is no body. Otherwise text or no body fails.
 Not known when `taskName` is set.
 
  |
-| **Producer output** | `unknown` | 
+| **Producer output** | `unknown` | The result of the job. A Collection of callables, a broadcast and an APPLY of a Collection of parameters give a Collection of the results, unless an IgniteReducer in the CamelIgniteComputeReducer header reduces them. RUN and AFFINITY\_RUN have no result and keep the body, or leave no body with propagateIncomingBodyIfNoReturnValue=false. A broadcast IgniteRunnable leaves no body.
 
-The result of the job. A Collection of callables, a broadcast and an APPLY of a Collection of parameters give a Collection of the results, unless an IgniteReducer in the CamelIgniteComputeReducer header reduces them. RUN, AFFINITY\_RUN and a broadcast IgniteRunnable leave no body.
-
--   With `executionType=RUN`: `null`
+-   With `executionType=RUN`: `unchanged`
     
--   With `executionType=AFFINITY_RUN`: `null`
+-   With `executionType=AFFINITY_RUN`: `unchanged`
     
 -   With `executionType=BROADCAST`: `list` or `null`
     
 
-
-
-
+Not known when `propagateIncomingBodyIfNoReturnValue` is set.
 
  |
 
@@ -202,6 +198,8 @@ Each operation expects the indicated types:
 | RUN | A Collection of IgniteRunnables, or a single IgniteRunnable. |
 | AFFINITY\_CALL | IgniteCallable. |
 | AFFINITY\_RUN | IgniteRunnable. |
+
+Without a body the producer fails, except EXECUTE with the `taskName` option, which then passes the `CamelIgniteComputeParameters` header to the task. RUN and AFFINITY\_RUN have no result: they keep the body, or leave no body when `propagateIncomingBodyIfNoReturnValue` is `false`.
 
 ## Usage
 

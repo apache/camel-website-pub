@@ -138,8 +138,6 @@ With the following _path_ and _query_ parameters:
 
 Enum values:
 
--   PUBLIC
-    
 -   HOME
     
 -   USER
@@ -147,8 +145,6 @@ Enum values:
 -   MENTIONS
     
 -   LIST
-    
--   UNKNOWN
     
 
 

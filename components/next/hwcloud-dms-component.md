@@ -148,11 +148,11 @@ The message body at each side of the Huawei Distributed Message Service (DMS) co
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-Not used by deleteInstance, listInstances and queryInstance, which take the instance id and the engine from the options or exchange properties such as CamelHwCloudDmsInstanceId. createInstance takes a CreateInstanceRequestBody or its JSON as text, and with another body, JSON as bytes or a stream too, creates the instance from the options. updateInstance needs an UpdateInstanceRequestBody or its JSON as text: another body fails.
+Not used by deleteInstance, listInstances and queryInstance, which take the instance id and the engine from the options or exchange properties such as CamelHwCloudDmsInstanceId. createInstance takes a CreateInstanceRequestBody or its JSON as text, bytes, a stream, a file or a Map (such as JSON unmarshalled by an earlier step), and with no body (or an empty one) creates the instance from the options: another body fails. updateInstance needs an UpdateInstanceRequestBody or its JSON as text, bytes, a stream, a file or a Map: another body fails.
 
--   With `operation=createInstance`: `text` or `pojo`
+-   With `operation=createInstance`: `text`, `bytes`, `stream`, `file`, `map`, `pojo` or `null`
     
--   With `operation=updateInstance`: `text` or `pojo`
+-   With `operation=updateInstance`: `text`, `bytes`, `stream`, `file`, `map` or `pojo`
     
 
 
@@ -230,7 +230,7 @@ If any of the above properties are set, they will override their corresponding q
 
 ### Create Instance
 
-To create an instance, you can pass the parameters through the endpoint, the exchange properties, and the exchange body as a CreateInstanceRequestBody object or a valid JSON String representation of it. Refer to this for the [Kafka parameters](https://support.huaweicloud.com/en-us/api-kafka/kafka-api-180514002.md) and the [RabbitMQ parameters](https://support.huaweicloud.com/en-us/api-rabbitmq/rabbitmq-api-180514002.md). If you choose to pass these parameters through the endpoint or through exchange properties, you can only input the mandatory parameters shown in those links. If you would like to have access to all the parameters, you must pass a CreateInstanceRequestBody object or a valid JSON String representation of it through the exchange body, as shown below:
+To create an instance, you can pass the parameters through the endpoint, the exchange properties, and the exchange body as a CreateInstanceRequestBody object or a valid JSON representation of it. Refer to this for the [Kafka parameters](https://support.huaweicloud.com/en-us/api-kafka/kafka-api-180514002.md) and the [RabbitMQ parameters](https://support.huaweicloud.com/en-us/api-rabbitmq/rabbitmq-api-180514002.md). If you choose to pass these parameters through the endpoint or through exchange properties, you can only input the mandatory parameters shown in those links. If you would like to have access to all the parameters, you must pass a CreateInstanceRequestBody object or a valid JSON representation of it through the exchange body, as shown below:
 
 _Java-only: requires SDK CreateInstanceRequestBody builder_
 
@@ -279,9 +279,11 @@ from("direct:triggerRoute")
               projectId: "*******"
 ```
 
+The JSON can be text, bytes, a stream or a file, such as the body of an HTTP request or the file of a file consumer, or a `Map` with the same field names, such as the JSON unmarshalled by an earlier step. The instance is created from the endpoint parameters and the exchange properties only when the exchange has no body, or an empty one. Any other body is the request: a body that is not a CreateInstanceRequestBody or a valid JSON representation of it fails the exchange with an `IllegalArgumentException`.
+
 ### Update Instance
 
-To update an instance, you must pass the parameters through the exchange body as an UpdateInstanceRequestBody or a valid JSON String representation of it. Refer to this for the [Kafka parameters](https://support.huaweicloud.com/en-us/api-kafka/kafka-api-180514004.md) and the [RabbitMQ parameters](https://support.huaweicloud.com/en-us/api-rabbitmq/rabbitmq-api-180514004.md). An example of how to do this is shown below:
+To update an instance, you must pass the parameters through the exchange body as an UpdateInstanceRequestBody or a valid JSON representation of it, as text, bytes, a stream, a file or a `Map`. Another body fails the exchange with an `IllegalArgumentException`. Refer to this for the [Kafka parameters](https://support.huaweicloud.com/en-us/api-kafka/kafka-api-180514004.md) and the [RabbitMQ parameters](https://support.huaweicloud.com/en-us/api-rabbitmq/rabbitmq-api-180514004.md). An example of how to do this is shown below:
 
 _Java-only: requires SDK UpdateInstanceRequestBody builder_
 

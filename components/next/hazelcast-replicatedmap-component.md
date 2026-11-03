@@ -4,7 +4,7 @@
 
 **Both producer and consumer are supported**
 
-The [Hazelcast](http://www.hazelcast.com/) instance component is one of Camel Hazelcast Components which allows you to consume join/leave events of the cache instance in the cluster. A replicated map is a weakly consistent, distributed key-value data structure with no data partition.
+The [Hazelcast](http://www.hazelcast.com/) Replicated Map component is one of Camel Hazelcast Components which allows you to access a Hazelcast replicated map. A replicated map is a weakly consistent, distributed key-value data structure with no data partition.
 
 ## Configuring Options
 
@@ -271,7 +271,7 @@ from("direct:put")
 <route>
     <from uri="direct:put"/>
     <log message="put.."/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>put</constant>
     </setHeader>
     <to uri="hazelcast-replicatedmap:foo"/>
@@ -284,8 +284,10 @@ from("direct:put")
       uri: direct:put
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: put
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: put
         - to:
             uri: hazelcast-replicatedmap:foo
 ```
@@ -310,7 +312,7 @@ from("direct:get")
 <route>
     <from uri="direct:get"/>
     <log message="get.."/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>get</constant>
     </setHeader>
     <to uri="hazelcast-replicatedmap:foo"/>
@@ -324,8 +326,10 @@ from("direct:get")
       uri: direct:get
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: get
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: get
         - to:
             uri: hazelcast-replicatedmap:foo
         - to:
@@ -351,7 +355,7 @@ from("direct:delete")
 <route>
     <from uri="direct:delete"/>
     <log message="delete.."/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>delete</constant>
     </setHeader>
     <to uri="hazelcast-replicatedmap:foo"/>
@@ -364,8 +368,10 @@ from("direct:delete")
       uri: direct:delete
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: delete
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: delete
         - to:
             uri: hazelcast-replicatedmap:foo
 ```

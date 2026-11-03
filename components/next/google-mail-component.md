@@ -137,7 +137,9 @@ Enum values:
 
 Enum values:
 
--   attachments
+-   batchDelete
+    
+-   batchModify
     
 -   create
     
@@ -629,12 +631,11 @@ The messages API is defined in the syntax as follows:
 google-mail:messages/methodName?[parameters]
 ```
 
-The 12 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
+The 11 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
 
   
 | Method | Alias | Description |
 | --- | --- | --- |
-| [**attachments**](#_api_messages_method_attachments) |  | An accessor for creating requests from the Attachments collection |
 | [**batchDelete**](#_api_messages_method_batchDelete) |  | Deletes many messages by message ID |
 | [**batchModify**](#_api_messages_method_batchModify) |  | Modifies the labels on the specified messages |
 | [**delete**](#_api_messages_method_delete) |  | Immediately and permanently deletes the specified message |
@@ -647,24 +648,11 @@ The 12 method(s) is(are) listed in the table below, followed by detailed syntax 
 | [**trash**](#_api_messages_method_trash) |  | Moves the specified message to the trash |
 | [**untrash**](#_api_messages_method_untrash) |  | Removes the specified message from the trash |
 
-#### Method attachments
-
-Signatures:
-
--   com.google.api.services.gmail.Gmail.Users.Messages.Attachments attachments();
-    
-
-The google-mail/attachments API method has the parameters listed in the table below:
-
-  
-| Parameter | Description | Type |
-| --- | --- | --- |
-
 #### Method batchDelete
 
 Signatures:
 
--   com.google.api.services.gmail.Gmail.Users.Messages.BatchDelete batchDelete(String userId, com.google.api.services.gmail.model.BatchDeleteMessagesRequest content);
+-   com.google.api.services.gmail.Gmail.Users.Messages.BatchDelete batchDelete(String userId, com.google.api.services.gmail.model.BatchDeleteMessagesRequest batchDeleteMessagesRequest);
     
 
 The google-mail/batchDelete API method has the parameters listed in the table below:
@@ -679,7 +667,7 @@ The google-mail/batchDelete API method has the parameters listed in the table be
 
 Signatures:
 
--   com.google.api.services.gmail.Gmail.Users.Messages.BatchModify batchModify(String userId, com.google.api.services.gmail.model.BatchModifyMessagesRequest content);
+-   com.google.api.services.gmail.Gmail.Users.Messages.BatchModify batchModify(String userId, com.google.api.services.gmail.model.BatchModifyMessagesRequest batchModifyMessagesRequest);
     
 
 The google-mail/batchModify API method has the parameters listed in the table below:
@@ -787,7 +775,7 @@ The google-mail/list API method has the parameters listed in the table below:
 
 Signatures:
 
--   com.google.api.services.gmail.Gmail.Users.Messages.Modify modify(String userId, String id, com.google.api.services.gmail.model.ModifyMessageRequest content);
+-   com.google.api.services.gmail.Gmail.Users.Messages.Modify modify(String userId, String id, com.google.api.services.gmail.model.ModifyMessageRequest modifyMessageRequest);
     
 
 The google-mail/modify API method has the parameters listed in the table below:

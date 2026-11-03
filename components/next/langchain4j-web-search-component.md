@@ -98,12 +98,12 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **additionalParams** (producer) | **Autowired** The additionalParams is the additional parameters for the search request are a map of key-value pairs that represent additional parameters for the search request. |  | Map |
+| **additionalParams** (producer) | The additionalParams is the additional parameters for the search request are a map of key-value pairs that represent additional parameters for the search request. |  | Map |
 | **geoLocation** (producer) | The geoLocation is the desired geolocation for search results. Each search engine may have a different set of supported geolocations. |  | String |
 | **language** (producer) | The language is the desired language for search results. The expected values may vary depending on the search engine. |  | String |
 | **maxResults** (producer) | **Required** The maxResults is the expected number of results to be found if the search request were made. Each search engine may have a different limit for the maximum number of results that can be returned. | 1 | Integer |
 | **resultType** (producer) | 
-**Required** The resultType is the result type of the request. Valid values are LANGCHAIN4J\_WEB\_SEARCH\_ORGANIC\_RESULT, CONTENT, or SNIPPET. CONTENT is the default value; it will return a list of String . You can also specify to return either the Langchain4j Web Search Organic Result object (using LANGCHAIN4J\_WEB\_SEARCH\_ORGANIC\_RESULT) or snippet (using SNIPPET) for each result. If maxResults is equal to 1, the response will be a single object instead of a list.
+**Required** The resultType is the result type of the request. Valid values are LANGCHAIN4J\_WEB\_SEARCH\_ORGANIC\_RESULT, CONTENT, or SNIPPET. CONTENT is the default value; it will return a list of String . You can also specify to return either the Langchain4j Web Search Organic Result object (using LANGCHAIN4J\_WEB\_SEARCH\_ORGANIC\_RESULT) or snippet (using SNIPPET) for each result. With CONTENT, a result without content returns its snippet, as some engines give no content. If maxResults is equal to 1, the response will be a single object instead of a list.
 
 Enum values:
 
@@ -124,7 +124,7 @@ Enum values:
 | **startPage** (producer) | The startPage is the start page number for search results. |  | Integer |
 | **webSearchEngine** (producer) | **Autowired** **Required** The WebSearchEngine engine to use. This is mandatory. Use one of the implementations from Langchain4j web search engines. |  | WebSearchEngine |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **webSearchRequest** (advanced) | **Autowired** The webSearchRequest is the custom WebSearchRequest - advanced. |  | WebSearchRequest |
+| **webSearchRequest** (advanced) | The webSearchRequest is the custom WebSearchRequest - advanced. When set, the message body and the other search options are not used. |  | WebSearchRequest |
 
 ## Message Body
 
@@ -134,7 +134,7 @@ The message body at each side of the LangChain4j Web Search component: _Consumer
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | The search terms as text; another body is converted to text, so a Map or a POJO is searched as its toString(), and no body fails. With webSearchRequest the body is not read. |
-| **Producer output** | `text` or `null` | The content of the first result as text (its snippet with resultType SNIPPET, the WebSearchOrganicResult with LANGCHAIN4J\_WEB\_SEARCH\_ORGANIC\_RESULT), or null when there is no result or the engine gives no content. With maxResults above 1 it is a List of them, which can hold nulls.
+| **Producer output** | `text` or `null` | The content of the first result as text (its snippet with resultType SNIPPET, the WebSearchOrganicResult with LANGCHAIN4J\_WEB\_SEARCH\_ORGANIC\_RESULT), or null when there is no result. A result without content gives its snippet. With maxResults above 1 it is a List of them, which can hold nulls.
 -   With `resultType=LANGCHAIN4J_WEB_SEARCH_ORGANIC_RESULT`: `pojo` or `null`
     
 
@@ -174,7 +174,7 @@ WebSearchEngine tavilyWebSearchEngine = TavilyWebSearchEngine.builder()
     .build();
 ```
 
-The web search engine will be autowired automatically if its bound name is `web-search-engine`. Otherwise, it should be added as a configured parameter to the Camel route.
+The web search engine is autowired when it is the only `WebSearchEngine` in the registry. Otherwise, it should be added as a configured parameter to the Camel route.
 
 Example:
 
@@ -187,13 +187,13 @@ Example:
 
 ```java
 from("direct:web-search")
-    .to("langchain4j-web-search:test?webSearchEngine=#web-search-engine-test");
+    .to("langchain4j-web-search:test?webSearchEngine=#web-search-engine");
 ```
 
 ```xml
 <route>
   <from uri="direct:web-search"/>
-  <to uri="langchain4j-web-search:test?webSearchEngine=#web-search-engine-test"/>
+  <to uri="langchain4j-web-search:test?webSearchEngine=#web-search-engine"/>
 </route>
 ```
 
@@ -205,7 +205,7 @@ from("direct:web-search")
         - to:
             uri: langchain4j-web-search:test
             parameters:
-              webSearchEngine: "#web-search-engine-test"
+              webSearchEngine: "#web-search-engine"
 ```
 
 > **Note**
@@ -237,6 +237,8 @@ List<String> responses = template.requestBody("langchain4j-web-search:test?maxRe
 
 You can get different types of Results.
 
+With the default `resultType` = CONTENT, a result without content returns its snippet instead. Some engines give no content: Google Custom Search never does, and Tavily only with `includeRawContent(true)`.
+
 When `resultType` = SNIPPET, you will get a single or list (depending on `maxResults` value) of Strings containing the snippets.
 
 When `resultType` = LANGCHAIN4J\_WEB\_SEARCH\_ORGANIC\_RESULT, you will get a single or list (depending on `maxResults` value) of Objects of type `WebSearchOrganicResult` containing all the response created under the hood by Langchain4j Web Search.
@@ -260,7 +262,7 @@ WebSearchRequest request = WebSearchRequest.builder()
     .build();
 ```
 
-The request will be autowired automatically if its bound name is `web-search-request`. Otherwise, it should be added as a configured parameter to the Camel route.
+The request is not autowired: set it on each endpoint that should use it with the `webSearchRequest` option.
 
 Example of route:
 
@@ -273,13 +275,13 @@ Example of route:
 
 ```java
 from("direct:web-search")
-    .to("langchain4j-web-search:test?webSearchRequest=#searchRequestTest");
+    .to("langchain4j-web-search:test?webSearchRequest=#web-search-request");
 ```
 
 ```xml
 <route>
   <from uri="direct:web-search"/>
-  <to uri="langchain4j-web-search:test?webSearchRequest=#searchRequestTest"/>
+  <to uri="langchain4j-web-search:test?webSearchRequest=#web-search-request"/>
 </route>
 ```
 
@@ -291,5 +293,5 @@ from("direct:web-search")
         - to:
             uri: langchain4j-web-search:test
             parameters:
-              webSearchRequest: "#searchRequestTest"
+              webSearchRequest: "#web-search-request"
 ```

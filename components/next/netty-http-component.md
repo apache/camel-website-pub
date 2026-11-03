@@ -214,7 +214,7 @@ Enum values:
 | **receiveBufferSizePredictor** (advanced) | Configures the buffer size predictor. See details at Jetty documentation and this mail thread. |  | int |
 | **sendBufferSize** (advanced) | The TCP/UDP buffer sizes to be used during outbound communication. Size is bytes. | 65536 | int |
 | **shutdownTimeout** (advanced) | Shutdown await timeout in milliseconds. | 100 | int |
-| **transferExchange** (advanced) | Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. | false | boolean |
+| **transferExchange** (advanced) | Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. The connection headers (CamelNettyRemoteAddress, CamelNettyLocalAddress, CamelNettyChannelHandlerContext, CamelNettySSLSession and the CamelNettySSLClientCert headers) and the CamelNettyRemoteAddress and CamelNettyChannel exchange properties are always the ones of the receiving side: the connection it accepted is the source of truth, and these values are never taken from the transferred exchange. | false | boolean |
 | **udpByteArrayCodec** (advanced) | For UDP only. If enabled the using byte array codec instead of Java serialization protocol. | false | boolean |
 | **unixDomainSocketPath** (advanced) | Path to unix domain socket to use instead of inet socket. Host and port parameters will not be used, however required. It is ok to set dummy values for them. Must be used with nativeTransport=true and clientMode=false. |  | String |
 | **workerCount** (advanced) | When netty works on nio mode, it uses default workerCount parameter from Netty (which is cpu\_core\_threads x 2). User can use this option to override the default workerCount from Netty. |  | int |
@@ -444,7 +444,7 @@ Enum values:
 | **shutdownTimeout** (advanced) | Shutdown await timeout in milliseconds. | 100 | int |
 | **synchronous** (advanced) | Sets whether synchronous processing should be strictly used. | false | boolean |
 | **transferException** (advanced) | If enabled and an Exchange failed processing on the consumer side, and if the caused Exception was send back serialized in the response as a application/x-java-serialized-object content type. On the producer side the exception will be deserialized and thrown as is, instead of the HttpOperationFailedException. The caused exception is required to be serialized. This is by default turned off. If you enable this then be aware that Java will deserialize the incoming data from the request to Java and that can be a potential security risk. | false | boolean |
-| **transferExchange** (advanced) | Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. | false | boolean |
+| **transferExchange** (advanced) | Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. The connection headers (CamelNettyRemoteAddress, CamelNettyLocalAddress, CamelNettyChannelHandlerContext, CamelNettySSLSession and the CamelNettySSLClientCert headers) and the CamelNettyRemoteAddress and CamelNettyChannel exchange properties are always the ones of the receiving side: the connection it accepted is the source of truth, and these values are never taken from the transferred exchange. | false | boolean |
 | **unixDomainSocketPath** (advanced) | Path to unix domain socket to use instead of inet socket. Host and port parameters will not be used, however required. It is ok to set dummy values for them. Must be used with nativeTransport=true and clientMode=false. |  | String |
 | **workerCount** (advanced) | When netty works on nio mode, it uses default workerCount parameter from Netty (which is cpu\_core\_threads x 2). User can use this option to override the default workerCount from Netty. |  | int |
 | **workerGroup** (advanced) | To use a explicit EventLoopGroup as the boss thread pool. For example to share a thread pool with multiple consumers or producers. By default each consumer or producer has their own worker pool with 2 x cpu count core threads. |  | EventLoopGroup |
@@ -515,7 +515,7 @@ The message body at each side of the Netty HTTP component: _Consumer_ is the bod
 Not known when `nettyHttpBinding` is set.
 
  |
-| **Consumer reply** | `null`, `text`, `bytes`, `stream`, `file` or `value` | The response body: text, bytes, a stream, a file, or a Netty ByteBuf or HttpResponse; no body sends 204. A Map or a POJO is written as its toString() and a List is not written at all: marshal it first. A failed exchange sends 500 with an empty body (muteException). |
+| **Consumer reply** | `null`, `text`, `bytes`, `stream`, `file` or `value` | The response body: text, bytes, a stream, a file, or a Netty ByteBuf or HttpResponse; no body sends 204. A Map, a List or a POJO is written as its toString(): marshal it first. A failed exchange sends 500 with an empty body (muteException). |
 | **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The request body: text, bytes, a stream or a file, or a Netty ByteBuf or HttpRequest. A Map, a List or a POJO fails: marshal it first. Without the CamelHttpMethod header, no body sends a GET and a body a POST. |
 | **Producer output** | `bytes` (`byte[]`) | The response body as a byte array, empty for a response without a body. With disableStreamCache the Netty ByteBuf of the response, or an InputStream for a chunked response; the ByteBuf is released when the exchange is done.
 
@@ -573,6 +573,12 @@ OAuth validation can perform blocking calls to identity-provider infrastructure 
 
 > **Note**
 > Automatic `OPTIONS` handling runs before OAuth validation. `OPTIONS` requests, including browser CORS preflight requests, are answered with an `Allow` header without authentication and without invoking the route, unless the endpoint is restricted to the `OPTIONS` method with `httpMethodRestrict`. All other HTTP methods are authenticated when `oauthProfile` is set.
+
+### Verifying the host name of the server
+
+Set `hostnameVerification=true` on a producer that calls an `https` URL to check that the certificate of the server matches the host it connects to, with the same rules as an HTTPS client: a connection to an IP address needs a certificate that lists that address as a subject alternative name of its own. A certificate that does not match makes the call fail with an `SSLHandshakeException`.
+
+The option applies to the producer only. On a consumer it is ignored, because the JDK does not support host name verification on the server side of a handshake. To control which clients may connect to a consumer, use client authentication (`needClientAuth=true`) with a trust store that holds only the certificates you accept.
 
 ### Access to Netty types
 

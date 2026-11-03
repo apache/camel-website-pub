@@ -119,7 +119,7 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **collect** (producer) | Indicates if results should be collected or counted. | true | boolean |
+| **collect** (producer) | Indicates if results should be collected or counted. A DataStream returned by a datastream callback cannot be collected: it is returned as is, unless collect is explicitly set to true, which fails. | true | boolean |
 | **dataSet** (producer) | DataSet to compute against. |  | DataSet |
 | **dataSetCallback** (producer) | Function performing action against a DataSet. |  | DataSetCallback |
 | **dataStream** (producer) | DataStream to compute against. |  | DataStream |
@@ -185,7 +185,7 @@ The message body at each side of the Flink component: _Consumer_ is the body of 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | The body is handed to the DataSet or DataStream callback as its payload, a List as one payload per element; the data to compute on is the DataSet or DataStream of the endpoint or of the CamelFlinkDataSet or CamelFlinkDataStream header. |
-| **Producer output** | `unknown` | What the callback returns, null for a void callback. A DataSet it returns is collected into a List; a DataStream it returns fails unless collect is false, then the DataStream (or DataSet) is the body and the CamelFlinkDataStream (or CamelFlinkDataSet) header. |
+| **Producer output** | `unknown` | What the callback returns, null for a void callback. A DataSet it returns is collected into a List unless collect is false; a DataStream it returns is not collected (it fails if collect is explicitly set to true). A DataSet or DataStream that is not collected is the body and the CamelFlinkDataSet or CamelFlinkDataStream header. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -452,7 +452,7 @@ from("direct:streamProcess")
 | parallelism | Integer | Default parallelism | Parallelism for the Flink job operations. |
 | maxParallelism | Integer | 128 | Maximum parallelism, which defines the upper bound for dynamic scaling. |
 | jobName | String | null | Name for the Flink job, useful for identification in Flink UI. |
-| collect | Boolean | true | Whether to collect results (not applicable for unbounded streams). |
+| collect | Boolean | true | Whether to collect the DataSet returned by a dataset callback into a List. A DataStream returned by a datastream callback is not collected: it is the message body and the `CamelFlinkDataStream` header, and an explicit `collect=true` fails. |
 
 ### Common Patterns
 

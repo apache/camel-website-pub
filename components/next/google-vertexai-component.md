@@ -268,15 +268,15 @@ Enum values:
 | **CamelGoogleVertexAIcandidateCount** (producer) Constant: [`CANDIDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#CANDIDATE_COUNT) | The number of candidate responses to generate. |  | Integer |
 | **CamelGoogleVertexAIStreamOutputMode** (producer) Constant: [`STREAM_OUTPUT_MODE`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#STREAM_OUTPUT_MODE) | The streaming output mode (complete or chunks). |  | String |
 | **CamelGoogleVertexAIPrompt** (producer) Constant: [`PROMPT`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#PROMPT) | The prompt text for text generation. |  | String |
-| **CamelGoogleVertexAIChatMessages** (producer) Constant: [`CHAT_MESSAGES`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#CHAT_MESSAGES) | The chat messages for chat generation. |  | List |
-| **CamelGoogleVertexAISystemInstruction** (producer) Constant: [`SYSTEM_INSTRUCTION`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#SYSTEM_INSTRUCTION) | The system instruction for the model. |  | String |
-| **CamelGoogleVertexAISafetySettings** (producer) Constant: [`SAFETY_SETTINGS`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#SAFETY_SETTINGS) | The safety settings for content filtering. |  | List |
+| **CamelGoogleVertexAIChatMessages** (producer) Constant: [`CHAT_MESSAGES`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#CHAT_MESSAGES) | **Deprecated** The chat messages for chat generation. Deprecation note: Not used: the producer does not read this header, and generateChat sends the prompt only, without a conversation history. |  | List |
+| **CamelGoogleVertexAISystemInstruction** (producer) Constant: [`SYSTEM_INSTRUCTION`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#SYSTEM_INSTRUCTION) | The system instruction for the model, for generateText, generateChat, generateChatStreaming, generateCode and generateMultimodal. |  | String |
+| **CamelGoogleVertexAISafetySettings** (producer) Constant: [`SAFETY_SETTINGS`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#SAFETY_SETTINGS) | The safety settings for content filtering, for generateText, generateChat, generateChatStreaming, generateCode and generateMultimodal. |  | List |
 | **CamelGoogleVertexAIFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#FINISH_REASON) | The finish reason from the response. |  | String |
 | **CamelGoogleVertexAIPromptTokenCount** (producer) Constant: [`PROMPT_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#PROMPT_TOKEN_COUNT) | The number of tokens in the prompt. |  | Integer |
 | **CamelGoogleVertexAICandidatesTokenCount** (producer) Constant: [`CANDIDATES_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#CANDIDATES_TOKEN_COUNT) | The number of tokens in the response. |  | Integer |
 | **CamelGoogleVertexAITotalTokenCount** (producer) Constant: [`TOTAL_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#TOTAL_TOKEN_COUNT) | The total token count (prompt response). |  | Integer |
-| **CamelGoogleVertexAISafetyRatings** (producer) Constant: [`SAFETY_RATINGS`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#SAFETY_RATINGS) | The safety ratings from the response. |  | List |
-| **CamelGoogleVertexAIContentBlocked** (producer) Constant: [`CONTENT_BLOCKED`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#CONTENT_BLOCKED) | Whether the content was blocked by safety filters. |  | Boolean |
+| **CamelGoogleVertexAISafetyRatings** (producer) Constant: [`SAFETY_RATINGS`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#SAFETY_RATINGS) | The safety ratings of the first candidate of the response, or of the prompt when it was blocked. |  | List |
+| **CamelGoogleVertexAIContentBlocked** (producer) Constant: [`CONTENT_BLOCKED`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#CONTENT_BLOCKED) | Whether the prompt was blocked by the safety filters: the response then has no text, and the body is null. A response that a safety filter stops fails the exchange. |  | Boolean |
 | **CamelGoogleVertexAIChunkCount** (producer generateChatStreaming streamRawPredict) Constant: [`CHUNK_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#CHUNK_COUNT) | The number of streaming chunks received. |  | Integer |
 | **CamelGoogleVertexAIImageNumberOfImages** (producer generateImage) Constant: [`IMAGE_NUMBER_OF_IMAGES`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#IMAGE_NUMBER_OF_IMAGES) | The number of images to generate. |  | Integer |
 | **CamelGoogleVertexAIImageAspectRatio** (producer generateImage) Constant: [`IMAGE_ASPECT_RATIO`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#IMAGE_ASPECT_RATIO) | The aspect ratio for generated images (e.g., 1:1, 16:9, 9:16, 3:4, 4:3). |  | String |
@@ -288,7 +288,7 @@ Enum values:
 | **CamelGoogleVertexAIMediaGcsUri** (producer generateMultimodal) Constant: [`MEDIA_GCS_URI`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#MEDIA_GCS_URI) | The GCS URI of the media file for multimodal input (e.g., gs://bucket/image.png). |  | String |
 | **CamelGoogleVertexAIPublisher** (producer) Constant: [`PUBLISHER`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#PUBLISHER) | Publisher name for partner models (e.g., anthropic, meta, mistralai). |  | String |
 | **CamelGoogleVertexAIRawResponse** (producer) Constant: [`RAW_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#RAW_RESPONSE) | The raw JSON response from rawPredict operation. |  | String |
-| **CamelGoogleVertexAIAnthropicVersion** (producer) Constant: [`ANTHROPIC_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#ANTHROPIC_VERSION) | Anthropic API version for Claude models. |  | String |
+| **CamelGoogleVertexAIAnthropicVersion** (producer) Constant: [`ANTHROPIC_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-google-vertexai/latest/org/apache/camel/component/google/vertexai/GoogleVertexAIConstants.html#ANTHROPIC_VERSION) | Anthropic API version for Claude models, for rawPredict and streamRawPredict with publisher anthropic: added to a request that has no anthropic\_version, in place of the anthropicVersion option. |  | String |
 
 ## Message Body
 
@@ -298,15 +298,13 @@ The message body at each side of the Google Vertex AI component: _Consumer_ is t
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `bytes`, `stream` or `file` | 
-The prompt for generateText, the default, and the other generate operations, unless the CamelGoogleVertexAIPrompt header has it: bytes, a stream or a file are read as text, a Map or a POJO is sent as its toString(), and no body fails. generateEmbeddings also takes a List of texts. generateMultimodal takes the text, or the bytes of an image with the CamelGoogleVertexAIMediaMimeType header, only when the CamelGoogleVertexAIMediaData and CamelGoogleVertexAIMediaGcsUri headers are not set: a stream or a file is not used. rawPredict and streamRawPredict take the JSON request as a String or a Map, or a plain text prompt: bytes, a stream or a file fail, so convert them to a String first.
+The prompt for generateText, the default, and the other generate operations, unless the CamelGoogleVertexAIPrompt header has it: bytes, a stream or a file are read as text, a Map or a POJO is sent as its toString(), and no body fails. generateEmbeddings also takes a List of texts. generateMultimodal uses the body only when the CamelGoogleVertexAIMediaData and CamelGoogleVertexAIMediaGcsUri headers are not set: a text body without the CamelGoogleVertexAIPrompt header is the prompt, and any other body, such as bytes, a stream or a file, is sent as media with the MIME type of the CamelGoogleVertexAIMediaMimeType header, or of the file name for a file; it fails without one, and an empty text or byte array is not sent. rawPredict and streamRawPredict take the JSON request as a Map, or as text, bytes, a stream or a file, which are read as text: text that is not JSON is a plain text prompt, and a POJO, a List or no body fails.
 
 -   With `operation=generateEmbeddings`: `text`, `bytes`, `stream`, `file` or `list`
     
--   With `operation=generateMultimodal`: `text` or `bytes`
+-   With `operation=rawPredict`: `text`, `bytes`, `stream`, `file` or `map`
     
--   With `operation=rawPredict`: `text` or `map`
-    
--   With `operation=streamRawPredict`: `text` or `map`
+-   With `operation=streamRawPredict`: `text`, `bytes`, `stream`, `file` or `map`
     
 
 
@@ -314,9 +312,9 @@ The prompt for generateText, the default, and the other generate operations, unl
 
 
  |
-| **Producer output** | `text` | 
+| **Producer output** | `text` or `null` | 
 
-The text the model answers for generateText, the default, and the other generate operations, JSON with jsonMode=true, with the token counts and the finish reason in headers. generateChatStreaming joins the chunks, or gives the List of them with streamOutputMode=chunks. The List of the generated images for generateImage, and one vector of Floats per input text for generateEmbeddings. rawPredict and streamRawPredict give the JSON the model answers, or for publisher anthropic the text of Claude with the JSON in the CamelGoogleVertexAIRawResponse header.
+The text the model answers for generateText, the default, and the other generate operations, JSON with jsonMode=true, with the token counts, the finish reason and the safety ratings in headers. When the prompt was blocked, the CamelGoogleVertexAIContentBlocked header is true and there is no text: no body, or an empty one for generateChatStreaming. generateChatStreaming joins the chunks, or gives the List of them with streamOutputMode=chunks. The List of the generated images for generateImage, and one vector of Floats per input text for generateEmbeddings. rawPredict and streamRawPredict give the JSON the model answers, or for publisher anthropic the text of Claude with the JSON in the CamelGoogleVertexAIRawResponse header.
 
 -   With `streamOutputMode=chunks`: `list` (`java.util.List<String>`)
     
@@ -450,6 +448,25 @@ from("direct:prompt")
         - log:
             message: "${body}"
 ```
+
+### System Instruction and Safety Settings
+
+The `generateText`, `generateChat`, `generateChatStreaming`, `generateCode` and `generateMultimodal` operations send the system instruction of the `CamelGoogleVertexAISystemInstruction` header, and the safety settings of the `CamelGoogleVertexAISafetySettings` header, a `List` of `com.google.genai.types.SafetySetting`. The response sets the `CamelGoogleVertexAISafetyRatings` header with the safety ratings of the answer.
+
+_Java-only: the safety settings are Java objects_
+
+```java
+from("direct:prompt")
+    .setHeader("CamelGoogleVertexAISystemInstruction", constant("You answer in one sentence"))
+    .setHeader("CamelGoogleVertexAISafetySettings", constant(List.of(SafetySetting.builder()
+            .category(HarmCategory.Known.HARM_CATEGORY_HARASSMENT)
+            .threshold(HarmBlockThreshold.Known.BLOCK_LOW_AND_ABOVE)
+            .build())))
+    .to("google-vertexai:my-project:us-central1:gemini-2.0-flash")
+    .log("${body}");
+```
+
+When the safety filters block the prompt, the response has no text: the body is null, and the `CamelGoogleVertexAIContentBlocked` header is `true`, with the safety ratings of the prompt in the `CamelGoogleVertexAISafetyRatings` header. When they stop the answer, the exchange fails with an `IllegalArgumentException` that names the finish reason, such as `SAFETY`.
 
 ### Calling Claude with rawPredict
 
@@ -691,7 +708,48 @@ from("direct:multimodal")
             message: "${body}"
 ```
 
-You can also pass inline image bytes via the `CamelGoogleVertexAIMediaData` header instead of a GCS URI.
+You can also pass inline image bytes via the `CamelGoogleVertexAIMediaData` header instead of a GCS URI. The `CamelGoogleVertexAIMediaMimeType` header is then required: without it the exchange fails.
+
+When neither the `CamelGoogleVertexAIMediaData` nor the `CamelGoogleVertexAIMediaGcsUri` header is set, the message body is used:
+
+-   A `String` body is the text prompt when the `CamelGoogleVertexAIPrompt` header is not set.
+    
+-   Any other body is the media: bytes, an `InputStream`, a `File`, a `Path` or the file of a file consumer, read with the type converter. Its MIME type is the `CamelGoogleVertexAIMediaMimeType` header or, for a file, the one of its file name extension (such as `image/png` for `photo.png`). When there is none, the exchange fails, so set the header for bytes or a stream, such as from the `Content-Type` of an HTTP request.
+    
+-   An empty or blank `String`, or an empty byte array, is not media: the request has the prompt only, so a body that an earlier step left does not fail it.
+    
+
+For example, to describe the images dropped in a folder:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("file:images")
+    .setHeader("CamelGoogleVertexAIPrompt", constant("Describe this image"))
+    .to("google-vertexai:my-project:us-central1:gemini-2.0-flash?operation=generateMultimodal")
+    .log("${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: file:images
+      steps:
+        - setHeader:
+            name: CamelGoogleVertexAIPrompt
+            expression:
+              constant:
+                expression: Describe this image
+        - to:
+            uri: google-vertexai:my-project:us-central1:gemini-2.0-flash
+            parameters:
+              operation: generateMultimodal
+        - log:
+            message: "${body}"
+```
 
 ### Streaming Claude with streamRawPredict
 
@@ -738,7 +796,7 @@ from("direct:stream-claude")
 
 ### Claude with Custom Request
 
-For more control, pass a JSON body:
+For more control, pass a JSON body. The request can be a `String`, bytes, a stream or a file (such as a JSON file or the body of an HTTP request), which is read as text, or a `Map`, which is written as JSON. Text that is not a JSON object is a plain text prompt, which the component wraps in the format of the publisher. For publisher `anthropic`, a request without `anthropic_version` gets the one of the `CamelGoogleVertexAIAnthropicVersion` header, or else of the `anthropicVersion` option.
 
 _Java-only: requires Java text block for JSON request body_
 

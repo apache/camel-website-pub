@@ -172,7 +172,7 @@ The message body at each side of the Tahu Edge Node / Device component: _Consume
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `pojo` or `null` | A Tahu SparkplugBPayload with the metrics to publish, or no body: the metrics are then made from the CamelTahuMetric.<name> headers. Text, bytes or another body fails, as it does not convert to a SparkplugBPayload. |
+| **Producer input** | `pojo`, `text`, `bytes` or `null` | A Tahu SparkplugBPayload with the metrics to publish. For any other body the metrics are made from the CamelTahuMetric.<name> headers, and the body, converted to bytes, is the body of the payload (no body gives a payload without body). A body that does not convert to bytes fails. |
 | **Producer output** | `unchanged` | 
  |
 
@@ -213,6 +213,10 @@ However if an Edge Node will be reporting Device-level metrics in addition to an
 Additionally, a Tahu `SparkplugBPayloadMap` instance is required to be set on each Edge Node and Device Endpoint to populate the NBIRTH/DBIRTH message with the required Sparkplug Metric names and data types. This is accomplished using the `metricDataTypePayloadMap` Endpoint property setter method.
 
 These requirements allow Sparkplug 3.0.0 compliant behavior.
+
+### Message Body
+
+A message body that is a Tahu `SparkplugBPayload` is published as it is. For any other body the producer makes the payload from the message: each `CamelTahuMetric.<name>` header is a metric (a header whose value is a Tahu `Metric` is added as it is), and the body, converted to bytes, is the body of the payload. A text or a byte array body is therefore the body of the published payload, and a message without a body gives a payload without body. A body that does not convert to bytes fails the exchange with an `InvalidPayloadException`.
 
 ### Example
 

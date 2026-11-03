@@ -199,10 +199,10 @@ The job of the worker: a JobWorkerMessage with its key, type, custom headers and
 
  |
 | **Consumer reply** | `any` | When the route ends the job is completed: a Map body gives its entries as the output variables, another body completes it without variables. A route that fails fails the job. |
-| **Producer input** | `pojo`, `text`, `map`, `bytes`, `stream` or `null` | The request of the operation: a request object of org.apache.camel.component.camunda.model, or the same as JSON text with snake\_case names. The job operations also take the JobWorkerMessage, or with the CamelCamundaJobKey header a Map of the variables or no body; deployResource takes text, bytes or a stream of the resource with the CamelCamundaResourceName header. JSON as bytes or a stream fails: convert it to text first. |
+| **Producer input** | `pojo`, `text`, `map`, `bytes`, `stream` or `null` | The request of the operation: a request object of org.apache.camel.component.camunda.model, or the same as JSON text with camelCase names, such as processId and jobKey. The job operations also take the JobWorkerMessage or its JSON, or with the CamelCamundaJobKey header a Map of the variables or no body; deployResource takes text, bytes or a stream of the resource with the CamelCamundaResourceName header. The JSON can also be bytes or a stream, such as the body of an HTTP consumer. |
 | **Producer output** | `pojo` | 
 
-The response of the operation: a ProcessResponse, MessageResponse, JobResponse or DeploymentResponse, with success false and the error when the call failed (formatJSON: the same as JSON text).
+The response of the operation: a ProcessResponse, MessageResponse, JobResponse or DeploymentResponse (formatJSON: the same as JSON text). When the call failed, the exchange fails with a CamelExchangeException, and the response with success false and the error stays in the body.
 
 -   With `formatJSON=true`: `text` (`java.lang.String`)
     
@@ -259,7 +259,11 @@ camunda.setRestAddress("http://localhost:8080");
 | `throwError` | Throws an error to indicate that a business error has occurred. |
 | `deployResource` | Deploys a process resource. Currently supports process definitions. |
 
-The endpoints accept either Java request objects as shown in the examples below or JSON. In JSON, camel case for property names is replaced with all lower case separated by underscores, e.g., processId becomes process\_id.
+The endpoints accept either Java request objects as shown in the examples below or JSON. The JSON property names are the camel case names of the request and response objects, as in Camunda itself, e.g., `processId`, `processInstanceKey` and `jobKey`.
+
+A JSON body can be a `String`, or any body that converts to a `String`, such as a `byte[]` or an `InputStream` (as an HTTP consumer gives).
+
+When an operation fails, the exchange fails with a `CamelExchangeException` that has the error message of Camunda. The response stays in the message body, with `success` set to `false` and the error message in `errorMessage`.
 
 **Examples**
 
@@ -299,7 +303,7 @@ from("direct:start")
         - marshal:
             json: {}
         - setBody:
-            simple: '{"process_id":"processId","variables":${body}}'
+            simple: '{"processId":"processId","variables":${body}}'
         - to:
             uri: camunda://startProcess
 ```
@@ -311,7 +315,7 @@ from("direct:start")
     <json/>
   </marshal>
   <setBody>
-    <simple>{"process_id":"processId","variables":${body}}</simple>
+    <simple>{"processId":"processId","variables":${body}}</simple>
   </setBody>
   <to uri="camunda://startProcess"/>
 </route>
@@ -321,7 +325,7 @@ from("direct:start")
 
 ```json
 {
-    "process_id" : "Process_0e3ldfm",
+    "processId" : "Process_0e3ldfm",
     "variables" : { "v1": "a", "v2": 10 }
 }
 ```
@@ -331,10 +335,10 @@ from("direct:start")
 ```json
 {
     "success": true,
-    "process_id": "Process_0e3ldfm",
-    "process_instance_key": 2251799813688297,
-    "process_version": 4,
-    "process_key": 2251799813685906
+    "processId": "Process_0e3ldfm",
+    "processInstanceKey": 2251799813688297,
+    "processVersion": 4,
+    "processKey": 2251799813685906
 }
 ```
 
@@ -364,7 +368,7 @@ from("direct:cancel")
       uri: direct:cancel
       steps:
         - setBody:
-            simple: '{"process_instance_key": 123}'
+            simple: '{"processInstanceKey": 123}'
         - to:
             uri: camunda://cancelProcess
 ```
@@ -373,7 +377,7 @@ from("direct:cancel")
 <route>
   <from uri="direct:cancel"/>
   <setBody>
-    <simple>{"process_instance_key": 123}</simple>
+    <simple>{"processInstanceKey": 123}</simple>
   </setBody>
   <to uri="camunda://cancelProcess"/>
 </route>
@@ -408,7 +412,7 @@ from("direct:message")
       uri: direct:message
       steps:
         - setBody:
-            simple: '{"name":"MessageName","correlation_key":"messageKey","time_to_live":100,"variables":{}}'
+            simple: '{"name":"MessageName","correlationKey":"messageKey","timeToLive":100,"variables":{}}'
         - to:
             uri: camunda://publishMessage
 ```
@@ -417,7 +421,7 @@ from("direct:message")
 <route>
   <from uri="direct:message"/>
   <setBody>
-    <simple>{"name":"MessageName","correlation_key":"messageKey","time_to_live":100,"variables":{}}</simple>
+    <simple>{"name":"MessageName","correlationKey":"messageKey","timeToLive":100,"variables":{}}</simple>
   </setBody>
   <to uri="camunda://publishMessage"/>
 </route>
@@ -473,6 +477,10 @@ from("direct:deploy")
 
 camel-camunda creates a route exchange per job type with a job in the body. The `CamelCamundaJobKey` header is set automatically for each job.
 
+With `formatJSON=true` the job is JSON with the property names of `JobWorkerMessage`, in camel case (e.g. `bpmnProcessId`), and its variables are in `variablesAsMap`.
+
+The JSON of a worker can be sent to the `completeJob`, `failJob`, `updateJobRetries` and `throwError` operations as is: they read the job key from its `key` property, as well as from `jobKey`. When the body has no job key, they use the `CamelCamundaJobKey` header.
+
 #### Auto-Complete / Auto-Fail
 
 The worker consumer follows the standard job worker pattern:
@@ -481,7 +489,7 @@ The worker consumer follows the standard job worker pattern:
     
 -   If the route throws an exception, the job is **automatically failed** with the exception message. The retry count is decremented by one.
     
--   If the route explicitly calls `completeJob`, `failJob`, or `throwError`, the auto-complete is **skipped** (the consumer detects this via the `CamundaJobHandled` exchange property).
+-   If the route explicitly calls `completeJob`, `failJob`, or `throwError`, the auto-complete is **skipped** (the consumer detects this via the `CamundaJobHandled` exchange property). When such a call fails, the exchange fails, and the job is not auto-failed.
     
 
 **Basic Example** — process a job (auto-completed on success):

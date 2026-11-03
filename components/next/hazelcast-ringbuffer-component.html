@@ -3,7 +3,7 @@
 .to("hazelcast-ringbuffer:bar");</code></pre> </div> </div> </div> <div id="_tabs_1_xml--panel" class="tabpanel" aria-labelledby="_tabs_1_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
     &lt;from uri="direct:put"/&gt;
     &lt;log message="put.."/&gt;
-    &lt;setHeader name="hazelcast.operation.type"&gt;
+    &lt;setHeader name="CamelHazelcastOperationType"&gt;
         &lt;constant&gt;add&lt;/constant&gt;
     &lt;/setHeader&gt;
     &lt;to uri="hazelcast-ringbuffer:foo"/&gt;
@@ -12,8 +12,10 @@
       uri: direct:put
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: add
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: add
         - to:
             uri: hazelcast-ringbuffer:foo</code></pre> </div> </div> </div> </div> </div> </div> <div class="sect2"> <h3 id="_example_for_readonce_from_head"><a class="anchor" href="#_example_for_readonce_from_head"></a>Example for <strong>readonce from head</strong>:</h3> <div id="_tabs_2" class="openblock tabs is-sync is-loading"> <div class="content"> <div class="ulist tablist"> <ul> <li id="_tabs_2_java" class="tab"> <p>Java</p> </li> <li id="_tabs_2_xml" class="tab"> <p>XML</p> </li> <li id="_tabs_2_yaml" class="tab"> <p>YAML</p> </li> </ul> </div> <div id="_tabs_2_java--panel" class="tabpanel" aria-labelledby="_tabs_2_java"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">from("direct:get")
     .setHeader("CamelHazelcastOperationType", constant("readOnceHead"))

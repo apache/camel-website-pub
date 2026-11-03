@@ -88,7 +88,7 @@ The Web3j Ethereum Blockchain component supports the following options which are
 | **fromBlock** (common) | The block number, or the string latest for the last mined block or pending, earliest for not yet mined transactions. | latest | String |
 | **fullTransactionObjects** (common) | If true it returns the full transaction objects, if false only the hashes of the transactions. | false | boolean |
 | **gasLimit** (common) | The maximum gas allowed in this block. |  | BigInteger |
-| **operation** (common) | Operation to use. | transaction | String |
+| **operation** (common) | Operation to use. The producer needs an operation, set with this option or the CamelWeb3jOperation header. The consumer needs one of the observable operations: ETH\_LOG\_OBSERVABLE, ETH\_BLOCK\_HASH\_OBSERVABLE, ETH\_PENDING\_TRANSACTION\_HASH\_OBSERVABLE, TRANSACTION\_OBSERVABLE, PENDING\_TRANSACTION\_OBSERVABLE, BLOCK\_OBSERVABLE, REPLAY\_BLOCKS\_OBSERVABLE or REPLAY\_TRANSACTIONS\_OBSERVABLE. | transaction | String |
 | **privateFor** (common) | A comma separated transaction privateFor nodes with public keys in a Quorum network. |  | String |
 | **quorumAPI** (common) | If true, this will support Quorum API. | false | boolean |
 | **toAddress** (common) | The address the transaction is directed to. |  | String |
@@ -146,7 +146,7 @@ With the following _path_ and _query_ parameters:
 | **fromBlock** (common) | The block number, or the string latest for the last mined block or pending, earliest for not yet mined transactions. | latest | String |
 | **fullTransactionObjects** (common) | If true it returns the full transaction objects, if false only the hashes of the transactions. | false | boolean |
 | **gasLimit** (common) | The maximum gas allowed in this block. |  | BigInteger |
-| **operation** (common) | Operation to use. | transaction | String |
+| **operation** (common) | Operation to use. The producer needs an operation, set with this option or the CamelWeb3jOperation header. The consumer needs one of the observable operations: ETH\_LOG\_OBSERVABLE, ETH\_BLOCK\_HASH\_OBSERVABLE, ETH\_PENDING\_TRANSACTION\_HASH\_OBSERVABLE, TRANSACTION\_OBSERVABLE, PENDING\_TRANSACTION\_OBSERVABLE, BLOCK\_OBSERVABLE, REPLAY\_BLOCKS\_OBSERVABLE or REPLAY\_TRANSACTIONS\_OBSERVABLE. | transaction | String |
 | **privateFor** (common) | A comma separated transaction privateFor nodes with public keys in a Quorum network. |  | String |
 | **quorumAPI** (common) | If true, this will support Quorum API. | false | boolean |
 | **toAddress** (common) | The address the transaction is directed to. |  | String |
@@ -272,7 +272,7 @@ Not known when `operation` is set.
 | **Producer input** | `any` | The operations take their input from headers and options, except WEB3\_SHA3, DB\_PUT\_STRING, DB\_PUT\_HEX and QUORUM\_GET\_PRIVATE\_PAYLOAD, which send the body converted to a String: a Map or a POJO is sent as its toString. |
 | **Producer output** | `unchanged` | 
 
-The result of the JSON-RPC call of the operation, selected by the CamelWeb3jOperation header or the operation option: a String for a hash, an address or hex data, a BigInteger for a quantity, a Boolean, a List, or a web3j object such as an EthBlock.Block, a Transaction (null when not found) or an Optional of a TransactionReceipt. On a JSON-RPC error the body is unchanged and the exchange fails, with the CamelWeb3jErrorCode, CamelWeb3jErrorData and CamelWeb3jErrorMessage headers.
+The result of the JSON-RPC call of the operation, selected by the CamelWeb3jOperation header or the operation option: a String for a hash, an address or hex data, a BigInteger for a quantity, a Boolean, a List, or a web3j object such as an EthBlock.Block, a Transaction or a TransactionReceipt (null when not found). On a JSON-RPC error the body is unchanged and the exchange fails, with the CamelWeb3jErrorCode, CamelWeb3jErrorData and CamelWeb3jErrorMessage headers.
 
 -   With `operation=WEB3_CLIENT_VERSION`: `text` (`java.lang.String`)
     
@@ -400,7 +400,7 @@ The result of the JSON-RPC call of the operation, selected by the CamelWeb3jOper
     
 -   With `operation=ETH_GET_TRANSACTION_BY_BLOCK_NUMBER_AND_INDEX`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.Transaction`)
     
--   With `operation=ETH_GET_TRANSACTION_RECEIPT`: `pojo` (`java.util.Optional<org.web3j.protocol.core.methods.response.TransactionReceipt>`)
+-   With `operation=ETH_GET_TRANSACTION_RECEIPT`: `pojo` or `null` (`org.web3j.protocol.core.methods.response.TransactionReceipt`)
     
 -   With `operation=QUORUM_NODE_INFO`: `pojo` (`org.web3j.protocol.core.methods.response.admin.AdminNodeInfo.NodeInfo`)
     

@@ -199,7 +199,7 @@ Enum values:
  |  | String |
 | **operation** (producer) | 
 
-**Required** The operation to perform.
+**Required** The operation to perform. The invokeImageModelStreaming and invokeEmbeddingsModelStreaming operations are deprecated, as the image generation and embedding models do not stream: use invokeImageModel, invokeEmbeddingsModel or invokeTextModelStreaming instead.
 
 Enum values:
 
@@ -469,7 +469,7 @@ Enum values:
  |  | String |
 | **operation** (producer) | 
 
-**Required** The operation to perform.
+**Required** The operation to perform. The invokeImageModelStreaming and invokeEmbeddingsModelStreaming operations are deprecated, as the image generation and embedding models do not stream: use invokeImageModel, invokeEmbeddingsModel or invokeTextModelStreaming instead.
 
 Enum values:
 
@@ -611,13 +611,13 @@ The AWS Bedrock component supports the following message header(s), which is/are
 | **CamelAwsBedrockConverseAdditionalFields** (producer) Constant: [`CONVERSE_ADDITIONAL_MODEL_REQUEST_FIELDS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_ADDITIONAL_MODEL_REQUEST_FIELDS) | The additional model request fields for Converse API. |  | Document |
 | **CamelAwsBedrockConverseStopReason** (producer) Constant: [`CONVERSE_STOP_REASON`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_STOP_REASON) | The stop reason from Converse API response. |  | String |
 | **CamelAwsBedrockConverseUsage** (producer) Constant: [`CONVERSE_USAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_USAGE) | The usage metrics from Converse API response. |  | TokenUsage |
-| **CamelAwsBedrockConverseOutputMessage** (producer) Constant: [`CONVERSE_OUTPUT_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_OUTPUT_MESSAGE) | The output message from Converse API response. |  | Message |
-| **CamelAwsBedrockGuardrailConfig** (producer) Constant: [`GUARDRAIL_CONFIG`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONFIG) | The guardrail configuration to apply to the request. |  | GuardrailConfiguration |
+| **CamelAwsBedrockConverseOutputMessage** (producer) Constant: [`CONVERSE_OUTPUT_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_OUTPUT_MESSAGE) | The output message from Converse API response (converse only). |  | Message |
+| **CamelAwsBedrockGuardrailConfig** (producer) Constant: [`GUARDRAIL_CONFIG`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONFIG) | The guardrail configuration to apply to the request. converseStream also takes a GuardrailStreamConfiguration. |  | GuardrailConfiguration |
 | **CamelAwsBedrockGuardrailIdentifier** (producer) Constant: [`GUARDRAIL_IDENTIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_IDENTIFIER) | The guardrail identifier to use for the ApplyGuardrail operation. |  | String |
 | **CamelAwsBedrockGuardrailContent** (producer) Constant: [`GUARDRAIL_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONTENT) | The content blocks for ApplyGuardrail operation. |  | List |
 | **CamelAwsBedrockGuardrailSource** (producer) Constant: [`GUARDRAIL_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_SOURCE) | The source type for ApplyGuardrail operation (INPUT or OUTPUT). |  | String |
-| **CamelAwsBedrockGuardrailOutput** (producer) Constant: [`GUARDRAIL_OUTPUT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_OUTPUT) | The guardrail assessment output from the response. |  | GuardrailAssessment |
-| **CamelAwsBedrockGuardrailTrace** (producer) Constant: [`GUARDRAIL_TRACE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_TRACE) | The trace information from guardrail evaluation. |  | GuardrailTrace |
+| **CamelAwsBedrockGuardrailOutput** (producer) Constant: [`GUARDRAIL_OUTPUT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_OUTPUT) | The output content of the ApplyGuardrail response. |  | List |
+| **CamelAwsBedrockGuardrailTrace** (producer) Constant: [`GUARDRAIL_TRACE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_TRACE) | The trace information from guardrail evaluation. |  | GuardrailTraceAssessment |
 | **CamelAwsBedrockGuardrailAssessments** (producer) Constant: [`GUARDRAIL_ASSESSMENTS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_ASSESSMENTS) | The guardrail assessments from ApplyGuardrail response. |  | List |
 | **CamelAwsBedrockGuardrailUsage** (producer) Constant: [`GUARDRAIL_USAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_USAGE) | The guardrail usage metrics from ApplyGuardrail response. |  | GuardrailUsage |
 
@@ -628,8 +628,8 @@ The message body at each side of the AWS Bedrock component: _Consumer_ is the bo
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text` | 
-The request of the model as JSON text for the invoke operations, which also need the CamelAwsBedrockContentType and CamelAwsBedrockAcceptContentType headers. Bytes, a stream or a file are sent as their toString(): convert them to a String first, and marshal a Map or a POJO to JSON. converse, converseStream and applyGuardrail take their input from headers, such as CamelAwsBedrockConverseMessages. With pojoRequest=true an InvokeModelRequest of the AWS SDK: another body fails.
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `map` | 
+The request of the model as JSON text for the invoke operations, which also need the CamelAwsBedrockContentType and CamelAwsBedrockAcceptContentType headers. Bytes, a stream or a file are sent as they are, and a Map or a Jackson JsonNode is marshalled to JSON: marshal another POJO to JSON first. No body fails. converse, converseStream and applyGuardrail take their input from headers, such as CamelAwsBedrockConverseMessages. With pojoRequest=true an InvokeModelRequest of the AWS SDK: another body fails.
 
 -   With `operation=converse`: `any`
     
@@ -645,7 +645,7 @@ The request of the model as JSON text for the invoke operations, which also need
  |
 | **Producer output** | `text` or `list` | 
 
-The streaming operations and converseStream give the text, or a List of the chunks with streamOutputMode=chunks. invokeTextModel gives the JSON response as text for the Amazon Titan models, and a Jackson JsonNode for the others: the response, or the generated text for Llama, Cohere and Claude 2. invokeImageModel gives a JsonNode array of the images as Base64 text, and invokeEmbeddingsModel the InvokeModelResponse of the AWS SDK. converse gives the answer as text, empty when the model asks for a tool, and applyGuardrail its action as text: NONE or GUARDRAIL\_INTERVENED.
+The streaming operations and converseStream give the text, or a List of the chunks with streamOutputMode=chunks: an image or embedding model fails, as it does not stream. invokeTextModel gives the JSON response as text for the Amazon Titan models, and a Jackson JsonNode for the others: the response, or the generated text for Llama, Cohere and Claude 2. invokeImageModel gives a JsonNode array of the images as Base64 text, and invokeEmbeddingsModel the InvokeModelResponse of the AWS SDK. converse gives the answer as text, empty when the model asks for a tool, and applyGuardrail its action as text: NONE or GUARDRAIL\_INTERVENED.
 
 -   With `operation=invokeTextModel`: `text` or `pojo`
     
@@ -709,9 +709,9 @@ Camel-AWS Bedrock component provides the following operation on the producer sid
     
 -   invokeTextModelStreaming
     
--   invokeImageModelStreaming
+-   invokeImageModelStreaming (deprecated)
     
--   invokeEmbeddingsModelStreaming
+-   invokeEmbeddingsModelStreaming (deprecated)
     
 -   converse
     
@@ -722,9 +722,20 @@ Camel-AWS Bedrock component provides the following operation on the producer sid
 
 The operation must match the model type. Text-generation models are used with `invokeTextModel`, image-generation models (for example `amazon.titan-image-generator-v1`, `amazon.nova-canvas-v1:0`, the `stability.*` models) with `invokeImageModel`, and embedding models (for example `amazon.titan-embed-text-v1`, `cohere.embed-english-v3`) with `invokeEmbeddingsModel`. Invoking `invokeTextModel` with an image, embedding, rerank or video/speech model fails fast with an `IllegalArgumentException` that names the model and points to the operation to use instead.
 
+The operation is set with the `operation` option or the `CamelAwsBedrockOperation` header: with neither, the producer fails with an `IllegalArgumentException`.
+
+The invoke operations send the message body as the request of the model, in the format the model expects (usually JSON), with the `CamelAwsBedrockContentType` and `CamelAwsBedrockAcceptContentType` headers. A String, a byte\[\], an InputStream or a file is sent as it is, and a `Map` or a Jackson `JsonNode` is marshalled to JSON. Marshal another POJO to JSON first. A message with no body fails with an `InvalidPayloadException`.
+
+With `pojoRequest=true`, the body is the request of the AWS SDK, and the model of the request is used to read the response, so the `modelId` option is not needed.
+
 ### Streaming Support
 
 The streaming operations (`invokeTextModelStreaming`, `invokeImageModelStreaming`, `invokeEmbeddingsModelStreaming`) enable real-time streaming of model responses, providing lower latency and better user experience for interactive applications.
+
+The streaming operations give the generated text. The image generation and embedding models do not stream their response, so the three streaming operations work the same way, and an image or embedding model fails with an `IllegalArgumentException` that points to `invokeImageModel` or `invokeEmbeddingsModel`.
+
+> **Note**
+> The `invokeImageModelStreaming` and `invokeEmbeddingsModelStreaming` operations are deprecated and will be removed in a later release. Use `invokeImageModel` or `invokeEmbeddingsModel` with an image generation or embedding model, and `invokeTextModelStreaming` to stream the text of a text model.
 
 #### Streaming Output Modes
 
@@ -754,7 +765,9 @@ When `includeStreamingMetadata` is true, the following headers are set:
 
 #### Supported Models for Streaming
 
-All text generation models support streaming: - Amazon Titan (all text models) - Anthropic Claude (all versions) - Meta Llama (all versions) - Mistral AI (all models) - Cohere Command models - Amazon Nova models
+All text generation models support streaming: - Amazon Titan (all text models) - Anthropic Claude (all versions) - Meta Llama (all versions) - Mistral AI (all models) - Cohere Command models - Amazon Nova models - AI21 Labs Jamba models
+
+A cross-region inference profile id (for example `us.anthropic.claude-3-haiku-20240307-v1:0`) or an inference profile ARN can be used as the model id, as with `invokeTextModel`.
 
 ### Converse API Support
 
@@ -814,7 +827,9 @@ When a conversation completes, the following headers are set:
     
 -   `CamelAwsBedrockConverseUsage`: TokenUsage object with input/output token counts
     
--   `CamelAwsBedrockConverseOutputMessage`: The complete Message object from the model
+-   `CamelAwsBedrockConverseOutputMessage`: The complete Message object from the model (converse only)
+    
+-   `CamelAwsBedrockGuardrailTrace`: The GuardrailTraceAssessment, when a guardrail with trace enabled is applied
     
 -   `CamelAwsBedrockChunkCount`: (streaming only) Number of chunks received
     
@@ -867,7 +882,7 @@ The Camel AWS Bedrock component provides comprehensive support for guardrails th
 
 **Message-level Configuration** (per-message override via headers):
 
--   `CamelAwsBedrockGuardrailConfig`: GuardrailConfiguration object for converse operations
+-   `CamelAwsBedrockGuardrailConfig`: GuardrailConfiguration object for converse operations (converseStream also takes a GuardrailStreamConfiguration)
     
 -   `CamelAwsBedrockGuardrailIdentifier`: Guardrail identifier String for the applyGuardrail operation (overrides the endpoint `guardrailIdentifier`)
     

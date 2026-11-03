@@ -282,6 +282,23 @@ Enum values:
 | **tlsEnabled** (security) | Whether to enable TLS for the connection to the Iggy server. | false | boolean |
 | **username** (security) | Iggy username. |  | String |
 
+## Message Headers
+
+The Iggy component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelIggyMessageId** (consumer) Constant: [`MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#MESSAGE_ID) | The unique identifier of the message. |  | MessageId |
+| **CamelIggyMessageOffset** (consumer) Constant: [`MESSAGE_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#MESSAGE_OFFSET) | The offset of the message in the partition. |  | BigInteger |
+| **CamelIggyMessageTimestamp** (consumer) Constant: [`MESSAGE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#MESSAGE_TIMESTAMP) | The timestamp of the message. |  | BigInteger |
+| **CamelIggyMessageOriginTimestamp** (consumer) Constant: [`MESSAGE_ORIGIN_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#MESSAGE_ORIGIN_TIMESTAMP) | The original timestamp of the message. |  | BigInteger |
+| **CamelIggyMessageChecksum** (consumer) Constant: [`MESSAGE_CHECKSUM`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#MESSAGE_CHECKSUM) | The checksum of the message. |  | BigInteger |
+| **CamelIggyMessageLength** (consumer) Constant: [`MESSAGE_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#MESSAGE_LENGTH) | The length of the payload of the message, in bytes. |  | Long |
+| **CamelIggyMessageSize** (consumer) Constant: [`MESSAGE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#MESSAGE_SIZE) | The size of the message, in bytes. |  | int |
+| **CamelIggyTopicOverride** (producer) Constant: [`TOPIC_OVERRIDE`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#TOPIC_OVERRIDE) | The name of the topic to send to, instead of the topic of the endpoint. |  | String |
+| **CamelIggyStreamOverride** (producer) Constant: [`STREAM_OVERRIDE`](https://javadoc.io/doc/org.apache.camel/camel-iggy/latest/org/apache/camel/component/iggy/IggyConstants.html#STREAM_OVERRIDE) | The name of the stream to send to, instead of the streamName of the endpoint. |  | String |
+
 ## Message Body
 
 The message body at each side of the Iggy component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
@@ -289,27 +306,18 @@ The message body at each side of the Iggy component: _Consumer_ is the body of t
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `text` (`java.lang.String`) | The payload of the Iggy message, decoded as text with the default charset of the JVM: a binary payload does not survive. |
-| **Producer input** | `any` | The body is converted to text and sent as one message, so bytes are decoded as text (a binary payload is corrupted) and a Map or a POJO is sent as its toString(): marshal it first. A List of String or of Iggy Message is sent as one message per element, and an Iggy Message as it is. No body or an empty List fails. |
+| **Consumer** | `bytes` (`byte[]`) | The payload of the Iggy message as a byte array: convert or unmarshal it. |
+| **Producer input** | `any` | Bytes, a stream or a file is sent as its bytes, and any other body is converted to text and sent as UTF-8, so a Map or a POJO is sent as its toString(): marshal it first. A List of String or of Iggy Message is sent as one message per element, and an Iggy Message as it is. An empty List sends nothing, and no body or a List with a null element fails. |
 | **Producer output** | `unchanged` | 
  |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
-## Iggy Headers
+## Message body
 
-The following headers are set on the exchange when consuming messages from Iggy:
+The producer sends a `byte[]`, an `InputStream`, a `ByteBuffer` or a file body as its bytes, unchanged. Any other body is converted to text and sent as UTF-8, so marshal a `Map` or a POJO first, or it is sent as its `toString()`. A `List` of `String` or of Iggy `Message` is sent as one message per element, and an Iggy `Message` as it is. An empty `List` sends nothing. No body, or a `List` with a `null` element, fails the exchange.
 
-  
-| Header | Type | Description |
-| --- | --- | --- |
-| `` `CamelIggyMessageId` `` | `` `String` `` | The unique identifier of the message. |
-| `` `CamelIggyMessageOffset` `` | `` `long` `` | The offset of the message in the partition. |
-| `` `CamelIggyMessageTimestamp` `` | `` `long` `` | The timestamp of the message. |
-| `` `CamelIggyMessageOriginTimestamp` `` | `` `long` `` | The original timestamp of the message. |
-| `` `CamelIggyMessageChecksum` `` | `` `long` `` | The checksum of the message. |
-| `` `CamelIggyMessageLength` `` | `` `int` `` | The length of the message. |
-| `` `CamelIggyMessageSize` `` | `` `int` `` | The size of the message. |
+The consumer sets the payload of the Iggy message as a `byte[]` body. Convert it to a `String` (for example with `convertBodyTo(String.class)`) or unmarshal it.
 
 ## Examples
 

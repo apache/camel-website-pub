@@ -214,7 +214,7 @@ The message body at each side of the Hazelcast Set component: _Consumer_ is the 
 | **Consumer** | `pojo` (`com.hazelcast.collection.ItemEvent`) | The Hazelcast ItemEvent of an item added to or removed from the set, not the item: ${body.item} is the item, and the CamelHazelcastListenerAction header is added or removed. |
 | **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The item that add adds and removeValue removes: an object Hazelcast can serialize, so a stream or no body fails. A Collection for addAll, removeAll and retainAll. clear and getAll do not use the body. |
 | **Producer output** | `unchanged` | 
-The operations that change the set keep the body. getAll gives the Hazelcast set itself: a live distributed Set, not a copy. The operation comes from the CamelHazelcastOperationType header, or else the defaultOperation option: without either the producer fails.
+The operations that change the set keep the body. getAll gives a copy of the items of the set as a Set. The operation comes from the CamelHazelcastOperationType header, or else the defaultOperation option: without either the producer fails.
 
 -   With `defaultOperation=getAll`: `list`
     
@@ -246,7 +246,7 @@ The set producer provides seven operations:
 -   getAll
     
 
-The operation comes from the `CamelHazelcastOperationType` header, or from the `defaultOperation` option when the header is not set. `add` and `removeValue` take the item from the message body, and `addAll`, `removeAll` and `retainAll` take a collection. `getAll` sets the set itself as the message body:
+The operation comes from the `CamelHazelcastOperationType` header, or from the `defaultOperation` option when the header is not set. `add` and `removeValue` take the item from the message body, and `addAll`, `removeAll` and `retainAll` take a collection. `getAll` sets a copy of the items of the set as the message body:
 
 ```yaml
 - route:

@@ -217,7 +217,7 @@ The message body at each side of the Spring AI Chat component: _Consumer_ is the
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-The prompt as text, or a UserMessage or another Spring AI Message. A byte\[\] is sent as media (image/png unless the CamelSpringAiChatMediaType header says otherwise), and a WrappedFile of a local file, or a List of them, as media files: these need userMessage or the CamelSpringAiChatUserMessage header for the text. A stream, a java.io.File or another body is sent as its text, and no body fails. CHAT\_SINGLE\_MESSAGE\_WITH\_PROMPT takes the variables of the template in the CamelSpringAiChatPromptTemplate header as a Map, and CHAT\_MULTIPLE\_MESSAGES a List of Message.
+The prompt as text, or a UserMessage or another Spring AI Message. A byte\[\] is sent as media (image/png unless the CamelSpringAiChatMediaType header says otherwise), and a WrappedFile of a local file, or a List of them, as media files. A java.io.File, a Path or a stream is sent as media when its media type (from the headers or the file name) is an image, audio, video or document, and as its text otherwise. Media needs userMessage or the CamelSpringAiChatUserMessage header for the text, else it fails. Another body is sent as its text, and no body fails. CHAT\_SINGLE\_MESSAGE\_WITH\_PROMPT takes the variables of the template in the CamelSpringAiChatPromptTemplate header as a Map, and CHAT\_MULTIPLE\_MESSAGES a List of Message or String (a String is a UserMessage).
 
 -   With `chatOperation=CHAT_SINGLE_MESSAGE_WITH_PROMPT`: `map`
     
@@ -361,6 +361,8 @@ conversation.add(new UserMessage("Can I make it vegetarian?"));
 
 String response = template.requestBody("direct:chat", conversation, String.class);
 ```
+
+The list can also hold plain `String` elements: each one is sent as a `UserMessage`. Any other element fails the exchange with an `IllegalArgumentException`.
 
 ### Retrieval Augmented Generation (RAG)
 
@@ -927,12 +929,18 @@ template.requestBody("direct:scan-analyzer", message, String.class);
     
 -   `List<WrappedFile>` - Multiple files for comparison or analysis
     
+-   `java.io.File` or `java.nio.file.Path` - Single media file, when its media type (from the headers or the file extension) is an image, audio, video or document (PDF, Word, Excel); a text file, or one with an unknown extension, is sent as its text
+    
+-   `InputStream` - Single media file, when the `CamelSpringAiChatMediaType`, `CamelFileContentType` or `Content-Type` header, or the extension in the `CamelFileName` header, gives an image, audio, video or document media type; otherwise the stream is read as text. A media stream is read up to `maxFileSize`
+    
 -   `UserMessage` - Spring AI UserMessage with text and/or media
     
 -   `Message` - Any Spring AI Message type
     
 -   `List<Message>` - Full conversation history (CHAT\_MULTIPLE\_MESSAGES operation)
     
+
+Spring AI needs a text with the media, so a media body (`byte[]`, `java.io.File`, `Path`, `InputStream`, `WrappedFile` or `List<WrappedFile>`) needs the `userMessage` option or the `CamelSpringAiChatUserMessage` header; without it the exchange fails with an `IllegalArgumentException` before the media is read.
 
 **MIME Type Detection Priority:**
 
@@ -1102,6 +1110,8 @@ from("direct:safeguard")
 The component supports structured output conversion, allowing you to convert LLM responses into typed Java objects, Maps, or Lists. This feature is based on [Spring AI’s Structured Output Converter](https://docs.spring.io/spring-ai/reference/api/structured-output-converter.md).
 
 Three output formats are supported: **BEAN** (Java records/POJOs), **MAP** (key-value structures), and **LIST** (arrays). Each can be configured via converter bean, endpoint parameters, or headers.
+
+The format instructions of the converter are appended to the user message, or to the last user message of a conversation, so the model gets both the question and the format to answer in.
 
 _Java-only: uses Java record definition and ProducerTemplate_
 

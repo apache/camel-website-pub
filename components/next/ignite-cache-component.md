@@ -6,9 +6,11 @@
 
 The Ignite Cache endpoint is one of camel-ignite endpoints that allow you to interact with an [Ignite Cache](https://apacheignite.readme.io/docs/data-grid). This offers both a Producer (to invoke cache operations on an Ignite cache) and a Consumer (to consume changes from a continuous query).
 
-The cache value is the body of the message, and the cache key is in the `CamelIgniteCacheKey` message header. GET and REMOVE take the key from the body when that header is not set, and a PUT of a `Map` body puts all its entries.
+The cache value is the body of the message, and the cache key is in the `CamelIgniteCacheKey` message header. GET and REMOVE take the key from the body when that header is not set. A PUT of a `Map` body without that header puts all its entries; with the header, or with `treatCollectionsAsCacheObjects=true`, the `Map` is stored as one value.
 
-Even if you configure a fixed operation in the endpoint URI, you can vary it per-exchange by setting the `CamelIgniteCacheOperation` message header.
+Even if you configure a fixed operation in the endpoint URI, you can vary it per-exchange by setting the `CamelIgniteCacheOperation` message header. Without either, the producer fails.
+
+With `fireExistingQueryResults=true`, the consumer first sends the entries that the initial query finds, each with the value as the body and the key in the `CamelIgniteCacheKey` header, like the events that follow.
 
 ## Configuring Options
 
@@ -261,11 +263,9 @@ The message body at each side of the Ignite Cache component: _Consumer_ is the b
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `unknown` | 
-The new value of the cache entry that changed, with its key in the CamelIgniteCacheKey header, the old value in CamelIgniteCacheOldValue and the event type in CamelIgniteCacheEventType. With oneExchangePerUpdate=false a List of the CacheEntryEvents of Ignite per batch; with fireExistingQueryResults=true the entries the initial query finds come first, each as a JCache Cache.Entry.
+The new value of the cache entry that changed, with its key in the CamelIgniteCacheKey header, the old value in CamelIgniteCacheOldValue and the event type in CamelIgniteCacheEventType. With oneExchangePerUpdate=false a List of the CacheEntryEvents of Ignite per batch; with fireExistingQueryResults=true the entries the initial query finds come first, each with its value as the body and its key in the CamelIgniteCacheKey header.
 
 -   With `oneExchangePerUpdate=false`: `list`
-    
--   With `fireExistingQueryResults=true`: `unknown`
     
 
 
@@ -273,10 +273,10 @@ The new value of the cache entry that changed, with its key in the CamelIgniteCa
 
 
  |
-| **Producer input** | `any` | PUT and REPLACE store the body as the value of the key in the CamelIgniteCacheKey header, and a PUT of a Map puts all its entries; no body fails. GET and REMOVE take the key from that header, or else from the body, where a Set is several keys. QUERY needs an Ignite Query in the body or the CamelIgniteCacheQuery header. SIZE, CLEAR and REBALANCE do not use the body. The operation is the operation option or the CamelIgniteCacheOperation header; with neither the producer fails. |
-| **Producer output** | `unknown` | GET gives the cached value, or null when the key is not cached, and a Map of the keys and their values for a Set of keys. QUERY gives an Iterator of the entries found, closed when the exchange completes. SIZE gives the number of entries. The others leave the body, but a PUT of a Map leaves no body.
+| **Producer input** | `any` | PUT and REPLACE store the body as the value of the key in the CamelIgniteCacheKey header, a Map as well. A PUT of a Map without that header puts all its entries, unless treatCollectionsAsCacheObjects=true; no body fails. GET and REMOVE take the key from that header, or else from the body, where a Set is several keys. QUERY needs an Ignite Query in the body or the CamelIgniteCacheQuery header. SIZE, CLEAR and REBALANCE do not use the body. The operation is the operation option or the CamelIgniteCacheOperation header; with neither the producer fails. |
+| **Producer output** | `unknown` | GET gives the cached value, or null when the key is not cached, and a Map of the keys and their values for a Set of keys. QUERY gives an Iterator of the entries found, closed when the exchange completes. SIZE gives the number of entries. The others leave the body.
 
--   With `operation=PUT`: `unchanged` or `null`
+-   With `operation=PUT`: `unchanged`
     
 -   With `operation=REPLACE`: `unchanged`
     

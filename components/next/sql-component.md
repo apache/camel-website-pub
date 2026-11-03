@@ -307,7 +307,7 @@ The SQL component supports the following message header(s), which is/are listed 
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelSqlQuery** (producer) Constant: [`SQL_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_QUERY) | Query to execute. This header is ignored unless the endpoint enables allowQueryFromHeader=true (disabled by default); when enabled it takes precedence over the query specified in the endpoint URI. Note that query parameters in the header are represented by a instead of a pass:# symbol. |  | String |
-| **CamelSqlUpdateCount** (producer) Constant: [`SQL_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_UPDATE_COUNT) | The number of rows updated for update operations, returned as an Integer object. This header is not provided when using outputType=StreamList. |  | Integer |
+| **CamelSqlUpdateCount** (producer) Constant: [`SQL_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_UPDATE_COUNT) | The number of rows updated for update operations, returned as an Integer object. This header is not provided when using outputType=StreamList. With batch=true, the sum of the update counts of the batch items; an item the JDBC driver returns no count for (Statement.SUCCESS\_NO\_INFO) is not counted, so the value can be lower than the number of rows updated, or 0. |  | Integer |
 | **CamelSqlRowCount** (producer) Constant: [`SQL_ROW_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_ROW_COUNT) | The number of rows returned for select operations, returned as an Integer object. This header is not provided when using outputType=StreamList. |  | Integer |
 | **CamelSqlRetrieveGeneratedKeys** (producer) Constant: [`SQL_RETRIEVE_GENERATED_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_RETRIEVE_GENERATED_KEYS) | Set its value to true to retrieve generated keys. | false | Boolean |
 | **CamelSqlGeneratedColumns** (producer) Constant: [`SQL_GENERATED_COLUMNS`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/SqlConstants.html#SQL_GENERATED_COLUMNS) | Set it to specify the expected generated columns. |  | String\[\] or int\[\] |
@@ -340,7 +340,7 @@ With `outputClass` set: an object of the class it names, or null.
 Not known when `outputHeader` or `useIterator` or `outputType` is set.
 
  |
-| **Producer input** | `any` | The parameters of the query: a Map for the named ones, a List or an array for the # ones; the query itself with useMessageBodyForSql. |
+| **Producer input** | `any` | The parameters of the query: a Map for the named ones, a List or an array for the # ones; the query itself with useMessageBodyForSql. With batch, a List or an Iterator of such parameters, one batch item each (a single Map is one batch item). |
 | **Producer output** | `list` or `unchanged` | The rows of a select: a List of Maps of the column names and their values (objects of outputClass when set). A query that is not a select leaves the body unchanged, with the count in the CamelSqlUpdateCount header.
 
 -   With `outputType=SelectOne`: `map`, `value` or `null`, or an object of the class `outputClass` names when it is set
@@ -362,7 +362,7 @@ The SQL component tries to convert the message body to an object of `java.util.I
 
 For example, if the message body is an instance of `java.util.List`, the first item in the list is substituted into the first occurrence of `#` in the SQL query, the second item in the list is substituted into the second occurrence of `#`, and so on.
 
-If `batch` is set to `true`, then the interpretation of the inbound message body changes slightly – instead of an iterator of parameters, the component expects an iterator that contains the parameter iterators; the size of the outer iterator determines the batch size.
+If `batch` is set to `true`, then the interpretation of the inbound message body changes slightly – instead of an iterator of parameters, the component expects an iterator that contains the parameter iterators; the size of the outer iterator determines the batch size. A single `Map` body (named parameters) is one batch item. The `CamelSqlUpdateCount` header holds the sum of the update counts of the batch items. A JDBC driver may not know the update count of an item and return `Statement.SUCCESS_NO_INFO` instead; such an item is not counted, so the header can be lower than the number of rows updated, or `0`.
 
 You can use the option `useMessageBodyForSql` that allows to use the message body as the SQL statement, and then the SQL parameters must be provided in a header with the key `CamelSqlParameters`. This allows the SQL component to work more dynamically as the SQL query is from the message body. Use templating (such as [Velocity](../4.22.x/velocity-component.md), [Freemarker](../4.22.x/freemarker-component.md)) for conditional processing, e.g., to include or exclude `where` clauses depending on the presence of query parameters.
 

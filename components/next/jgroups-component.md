@@ -150,7 +150,7 @@ The message body at each side of the JGroups component: _Consumer_ is the body o
 Not known when `enableViewMessages` is set.
 
  |
-| **Producer input** | `text`, `bytes`, `value`, `map`, `list`, `file` or `pojo` | The body as is, Java-serialized into the message, so it must be Serializable: a stream or another object that is not fails with a NotSerializableException. A null body is not sent. The CamelJGroupsDest header sends it to one member instead of the cluster. |
+| **Producer input** | `text`, `bytes`, `value`, `map`, `list`, `stream`, `file` or `pojo` | The body as is, Java-serialized into the message, so it must be Serializable. A stream (an InputStream, a Reader or a stream cache), a file from the file component or a Path is sent as a byte array of its content, and a java.io.File as is; another object that is not Serializable fails with an InvalidPayloadException. A null body is not sent. The CamelJGroupsDest header sends it to one member instead of the cluster. |
 | **Producer output** | `unchanged` | 
 
  |
@@ -244,6 +244,8 @@ from("jgroups:clusterName").to("seda:queue");
 ```
 
 Using `jgroups` component on the producer side of the route will forward body of the Camel exchanges to the `JChannel` instance managed by the endpoint.
+
+The body is Java-serialized into the JGroups message, so it must be `Serializable`. A stream body (such as an `InputStream`, a `Reader` or a stream cache), a file from the `file` component and a `java.nio.file.Path` are read and sent as a `byte[]` of their content. A `java.io.File` is `Serializable` and is sent as is. Any other body that is not `Serializable` fails with an `InvalidPayloadException` that says to convert it first, for example to a `String` or a `byte[]`.
 
 -   Java
     

@@ -127,7 +127,7 @@ Enum values:
 
 
  | EXECUTE | DuckDbOperation |
-| **query** (producer) | Static SQL for query when the message body is empty. |  | String |
+| **query** (producer) | Static SQL for the execute and query operations. When set, it is used instead of the message body; the CamelDuckDbQuery header takes precedence over it. |  | String |
 | **readOnly** (producer) | Open the embedded database file in read-only mode. Only applies to connections created by this endpoint from databasePath or jdbcUrl, and requires an existing database file. | false | boolean |
 | **resultFormat** (producer) | 
 
@@ -147,6 +147,7 @@ Enum values:
  | LIST\_MAP | DuckDbResultFormat |
 | **table** (producer) | Target table for insert and copy operations. Can be overridden per message with the CamelDuckDbTable header. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **allowDatabasePathFromHeader** (security) | Whether to allow overriding the database of the endpoint with the CamelDuckDbDatabasePath header, which opens a short-lived connection to the DuckDB file at that path (DuckDB creates the file when it does not exist) instead of using the databasePath, jdbcUrl or DataSource of the endpoint. Disabled by default; enable it only when the header source is trusted, since it lets a message choose the database file. | false | boolean |
 
 ## Message Headers
 
@@ -156,9 +157,9 @@ The DuckDB component supports the following message header(s), which is/are list
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelDuckDbOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#OPERATION) | Overrides the operation configured on the endpoint. |  | String |
-| **CamelDuckDbDatabasePath** (producer) Constant: [`DATABASE_PATH`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#DATABASE_PATH) | Overrides the database path configured on the endpoint. |  | String |
+| **CamelDuckDbDatabasePath** (producer) Constant: [`DATABASE_PATH`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#DATABASE_PATH) | Overrides the database of the endpoint for one message: a short-lived connection to the DuckDB file at this path is opened, and DuckDB creates the file when it does not exist. This header is ignored unless the endpoint enables allowDatabasePathFromHeader=true (disabled by default). |  | String |
 | **CamelDuckDbTable** (producer) Constant: [`TABLE`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#TABLE) | Overrides the target table configured on the endpoint. |  | String |
-| **CamelDuckDbQuery** (producer) Constant: [`QUERY`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#QUERY) | Overrides the SQL for query or execute operations. |  | String |
+| **CamelDuckDbQuery** (producer) Constant: [`QUERY`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#QUERY) | Overrides the SQL for query or execute operations. Takes precedence over the query option and the message body. |  | String |
 | **CamelDuckDbRowsWritten** (producer) Constant: [`ROWS_WRITTEN`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#ROWS_WRITTEN) | The number of rows written or affected. |  | long |
 | **CamelDuckDbRowsRead** (producer) Constant: [`ROWS_READ`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#ROWS_READ) | The number of rows returned by a query. |  | long |
 | **CamelDuckDbPingOk** (producer) Constant: [`PING_OK`](https://javadoc.io/doc/org.apache.camel/camel-duckdb/latest/org/apache/camel/component/duckdb/DuckDbConstants.html#PING_OK) | The boolean result of a ping operation. |  | boolean |
@@ -170,10 +171,10 @@ The message body at each side of the DuckDB component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | The SQL statement as text, or bytes, a stream or a file of it; the query option or the CamelDuckDbQuery header takes its place. Insert takes a List of Maps of the column names and their values (a Map alone fails), copy a File or the path of the csv, parquet or json file to load.
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The SQL statement as text, or bytes, a stream or a file of it; the query option or the CamelDuckDbQuery header takes its place. Insert takes a List of Maps of the column names and their values (a Map alone fails), copy a File, a Path or the path (as text or bytes) of the csv, parquet or json file to load.
 -   With `operation=INSERT`: `list`
     
--   With `operation=COPY`: `file` or `text`
+-   With `operation=COPY`: `file`, `text` or `bytes`
     
 -   With `operation=PING`: `any`
     
@@ -204,18 +205,39 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 The producer supports:
 
--   `execute` (default) — run DDL/DML from the message body (or `query` option / `CamelDuckDbQuery` header)
+-   `execute` (default) — run DDL/DML that returns no rows
     
 -   `query` — run a SELECT and return rows as `List<Map>` (default) or JSON (`resultFormat=JSON`)
     
 -   `insert` — insert a `List` of `Map` rows into `table`
     
--   `copy` — bulk load from a `File` or path `String` using DuckDB `read_csv` / `read_parquet` / `read_json`
+-   `copy` — bulk load from a `File`, a `Path` or a path as `String` (or bytes) using DuckDB `read_csv` / `read_parquet` / `read_json`
     
 -   `ping` — `SELECT 1` connectivity check; sets `CamelDuckDbPingOk`
     
 
-The endpoint reuses one JDBC connection for its configured `databasePath` / `jdbcUrl` and serializes access for thread safety. Prefer a shared `DataSource` when you need concurrent producers. Set the `CamelDuckDbDatabasePath` header to open a short-lived connection to a different database file for a single message.
+The SQL for `execute` and `query` is taken from the `CamelDuckDbQuery` header, else from the `query` option, else from the message body. So when the `query` option is set, the message body is not used as SQL.
+
+A statement that returns rows fails with `execute`, and a statement that returns no rows (such as DDL) fails with `query`; the error says which operation to use instead. DuckDB has run the statement when the error is raised.
+
+The endpoint reuses one JDBC connection for its configured `databasePath` / `jdbcUrl` and serializes access for thread safety. Prefer a shared `DataSource` when you need concurrent producers.
+
+## Headers that override the endpoint
+
+These headers take the place of an endpoint option for one message:
+
+-   `CamelDuckDbOperation` replaces the `operation` option.
+    
+-   `CamelDuckDbQuery` replaces the `query` option and the message body as the SQL of `execute` and `query`.
+    
+-   `CamelDuckDbTable` replaces the `table` option of `insert` and `copy`.
+    
+
+So a message that carries them chooses the operation, the SQL that runs and the table that is written to.
+
+The `CamelDuckDbDatabasePath` header is ignored unless the endpoint sets `allowDatabasePathFromHeader=true`. With that option, the header opens a short-lived connection to the DuckDB file at that path for one message, instead of the `databasePath`, `jdbcUrl` or `DataSource` of the endpoint, and DuckDB creates the file when it does not exist.
+
+When the messages come from an untrusted producer through a consumer that does not filter out `Camel*` headers, remove these headers with `removeHeaders("CamelDuckDb*")` before the `duckdb` endpoint.
 
 ## Example
 

@@ -56,6 +56,8 @@ Without `--source-dir`, Camel only watches the specific files you listed on the 
 > **Note**
 > You cannot combine files and source dir: `camel run abc.java --source-dir=mycode` is not allowed.
 
+A Citrus test, such as `test/orders.citrus.it.yaml`, is not a route. A run of nothing but Citrus tests, `camel run test/orders.citrus.it.yaml` or `camel run test/` of a folder that holds only Citrus tests, exits with code `2` and says to run them with `camel test run` (see [Testing Plugin](camel-jbang-test.md)). Citrus tests given with routes, such as by `camel run *`, are skipped with a line each, and the routes run. A directory or `--source-dir` with a `test` folder runs as before.
+
 ### Data folders in the source directory
 
 Routes often read and write files in folders of their own, such as an `inbox` they consume and an `archive` they move the processed files to. When such a folder is in the source directory, the files the routes write there are changes too, and dev mode reloads the routes for them; the reload restarts the routes, which write again, and so on. Tell Camel which folders hold data with `--data-dir` (comma separated, relative to the source directory):

@@ -170,7 +170,7 @@ The message body at each side of the LangChain4j Ingest component: _Consumer_ is
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | 
-The document read as a String, then split and embedded; another body, such as a Map or a TextSegment, is ingested as its toString(). With modality=MEDIA it is read as bytes and embedded whole, and a Map or a POJO fails. No body or a blank one writes nothing. The document id comes from the CamelLangChain4jIngestDocumentId header or exchange property.
+The document read as text, then split and embedded; a LangChain4j TextSegment or Document gives its text, and another body, such as a Map or a POJO, fails. With modality=MEDIA it is read as bytes and embedded whole, and a Map or a POJO fails. No body or a blank one writes nothing. The document id comes from the CamelLangChain4jIngestDocumentId header or exchange property.
 
 -   With `modality=MEDIA`: `bytes`, `stream`, `file` or `null`
     
@@ -255,6 +255,8 @@ from("aws2-s3://product-docs?region=eu-west-1&deleteAfterRead=false")
 ```
 
 Mind each component’s own defaults: the `aws2-s3` consumer **deletes objects after reading them** unless `deleteAfterRead=false` is set. Without a `documentIdHeader` the producer expects the `CamelLangChain4jIngestDocumentId` header and fails the exchange when no id is found — identity is what update and delete semantics are built on, so a generated fallback would silently break replacement.
+
+The body is read as text: a String, bytes, a stream, a `Reader` or a file. A LangChain4j `TextSegment` or `Document` gives its text; its metadata is not ingested, the written segments carry the identity metadata above. Any other body, such as a `Map` or a POJO, fails the exchange with an `InvalidPayloadException` instead of being ingested as its `toString()`: turn it into text first, with a marshal step, say. With `modality=media` the body is read as bytes instead (see below).
 
 After ingestion the message body is replaced with the `IngestResult`, so a request-reply caller receives the outcome of its call: the pipeline, the document id, the number of segments written and the outcome — `ingested`, `empty` (blank document, nothing written), `skipped` (duplicate id, see below) or `filtered` (rejected by a filter option, or media of a type that cannot be told; see below).
 

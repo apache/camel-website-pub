@@ -95,7 +95,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **host** (common) | **Required** Hostname for the chat server. |  | String |
 | **port** (common) | Port number for the chat server. | 5222 | int |
-| **participant** (common) | JID (Jabber ID) of person to receive messages. room parameter has precedence over participant. |  | String |
+| **participant** (common) | JID (Jabber ID) of the person to chat with: the producer sends the messages to this person, and the consumer only routes the chat messages from this person (without a participant, the consumer routes the chat messages of every sender). room parameter has precedence over participant. |  | String |
 
 ### Query Parameters
 
@@ -188,6 +188,10 @@ The bodies are the ones with the default options. A side that is not listed is n
 ### Connections
 
 The consumers and producers of one account (the same host, port, service name, user, password, resource and login settings) share one XMPP connection, also across endpoints with different participants or rooms. With the `connectionConfig` option, endpoints share a connection only when they refer to the same `ConnectionConfiguration` instance, for example the same bean in the registry, because that class has no `equals()`.
+
+### Receiving chat messages
+
+A consumer with a participant routes only the chat messages from that participant (any resource of its JID). A consumer without a participant routes the chat messages of every sender. The JID of the sender is in the `CamelXmppFrom` header. A consumer with a `room` routes the messages of the room, and the chat messages of every sender.
 
 ### Headers and setting Subject or Language
 

@@ -151,7 +151,7 @@ The message body at each side of the Alibaba Key Management Service (KMS) compon
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-encrypt encrypts the body unless the plaintext option or header is set: text and bytes as they are, a stream or a file read as text, which corrupts binary data, and a Map or a POJO as its toString(), so marshal it first. decrypt takes the ciphertext blob as text, unless the ciphertextBlob option or header is set. No body fails both; generateDataKey does not use the body.
+encrypt encrypts the body unless the plaintext option or header is set: text in UTF-8, bytes as they are, and a stream or a file as its bytes, so binary data is kept. A Map or a POJO fails, as it does not convert to bytes, so marshal it first. decrypt takes the ciphertext blob as text, unless the ciphertextBlob option or header is set. No body fails both; generateDataKey does not use the body.
 
 -   With `operation=encrypt`: `text`, `bytes`, `stream` or `file`
     
@@ -179,6 +179,10 @@ The component supports the following operations:
     
 -   `generateDataKey` - generate a data key (producer)
     
+
+### Plaintext of encrypt
+
+`encrypt` encrypts the `plaintext` option or the `CamelAlibabaKmsPlaintext` header when one is set, else the message body. A `String` is encrypted in UTF-8, and a `byte[]`, an `InputStream` or a file as its bytes, so binary data is kept. The component sends these bytes to KMS in Base64, so the `plaintext` that `decrypt` returns for them is Base64: decode it to get the original bytes back. A `Map` or a POJO does not convert to bytes and fails with an `InvalidPayloadException`, so marshal it first. A message without a body fails with an `IllegalArgumentException`.
 
 ### Producer example
 

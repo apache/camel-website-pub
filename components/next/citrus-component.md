@@ -143,7 +143,7 @@ The message body at each side of the Citrus component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text` or `stream` | The body Citrus validates, as text; a stream cache is read as text and reset. Any other body is compared by its toString(): bytes as a list of numbers, a file as its path, a Map as {key=value}, so convert it to a String first. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The body Citrus validates, read as text, or as bytes for the binary, binary\_base64, gzip and gzip\_base64 message types. A plain stream is cached first, so the next step can still read it. Any other body is compared by its toString(), such as a Map as {key=value}, so convert it to a String first. |
 | **Producer output** | `unchanged` | 
 validate leaves the body as it is. receive sets the body of the simulated response, as text with its Citrus variables resolved (or what the MessagePayloadBuilder given to it builds), and leaves the body as it is when the response has no body or no spec matches the exchange.
 
@@ -307,6 +307,12 @@ YAML validation compares YAML documents structurally, similar to JSON validation
     
 -   **`@ignore@` and validation matchers** within YAML values.
     
+
+#### Message body types
+
+The endpoint reads the message body as text before it validates it: a `String`, a `byte[]`, a file (`java.io.File`, `java.nio.file.Path` or the file of a file consumer) or a stream. For the `binary`, `binary_base64`, `gzip` and `gzip_base64` message types it reads the body as bytes instead.
+
+A stream body (an `InputStream` or a `Reader`) is cached first when stream caching is turned off, so the next step in the route can still read it. Any other body (such as a `Map`) is handed to Citrus as is, and compared by its `toString()`, so convert it to a `String` first.
 
 ### Validation specification API
 

@@ -139,8 +139,8 @@ The message body at each side of the HashiCorp Vault component: _Consumer_ is th
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `map` or `pojo` | 
-The fields of the secret for createSecret, the default operation: a Map of the keys and values, or a POJO written as JSON. Text, bytes, a stream, a file or a List fail, so unmarshal JSON first, and no body writes an empty version. The other operations take the secret from the secretPath option or the CamelHashicorpVaultSecretPath header.
+| **Producer input** | `map`, `pojo`, `text`, `bytes`, `stream` or `file` | 
+The fields of the secret for createSecret, the default operation: a Map of the keys and values, a POJO written as JSON, or text, bytes, a stream or a file with a JSON object. A List or no body fails. The other operations take the secret from the secretPath option or the CamelHashicorpVaultSecretPath header.
 
 -   With `operation=getSecret`: `any`
     
@@ -192,7 +192,7 @@ When using a HashiCorp Vault Cloud instance, in addition to the standard paramet
 
 -   `cloud`:: A boolean flag that must be explicitly set to `true` to indicate that the HashiCorp Vault instance is hosted in the cloud.
     
--   `namespace`:: The namespace of your secrets engine.
+-   `namespace`:: The namespace of your secrets engine. The operations work on `<namespace>/<secretsEngine>`; without a namespace they work on the secrets engine itself, as on-premise.
     
 
 ## Examples
@@ -203,7 +203,7 @@ The producer works on a secrets engine, given as the path of the endpoint (`secr
 
 #### Creating a secret
 
-The message body is the map of key/value pairs to store as the secret:
+The message body is the map of key/value pairs to store as the secret. A POJO is written as JSON, and text, bytes, a stream or a file must hold a JSON object of the fields. A message without a body fails, instead of writing a new, empty version of the secret:
 
 -   Java
     
@@ -237,7 +237,7 @@ from("direct:createSecret")
 
 #### Getting a secret
 
-The message body becomes a Map with the fields of the secret under `data` and its version details under `metadata`, or no body when the secret does not exist; the `CamelHashicorpVaultSecretVersion` header reads a given version instead of the latest:
+The message body becomes a Map with the fields of the secret under `data` and its version details under `metadata`, or no body when the secret does not exist; the `CamelHashicorpVaultSecretVersion` header reads a given version (a number) instead of the latest:
 
 -   Java
     

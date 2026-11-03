@@ -173,7 +173,11 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ## Usage
 
-A Host Application consumer receives the Sparkplug messages of the Edge Nodes and Devices. Each metric of a message is a header named `CamelTahuMetric.` followed by the name of the metric, and its value is a Tahu `Metric`. The following route logs the temperature of the device in the [Tahu Edge](tahu-edge-component.md) example:
+A Host Application consumer receives the Sparkplug messages of the Edge Nodes and Devices, and gives one exchange for each message, with the `CamelTahuMessageType` header. Each metric of a message is a header named `CamelTahuMetric.` followed by the name of the metric, and its value is a Tahu `Metric`.
+
+In addition, the consumer gives an exchange for each metric: each metric of a birth or data message, and each metric that turns stale when its Edge Node or Device dies. Such an exchange has the `CamelTahuEdgeNodeDescriptor` header and the header of its metric, but no `CamelTahuMessageType` header.
+
+The following route logs the temperature of the device in the [Tahu Edge](tahu-edge-component.md) example, once for each data message:
 
 ```yaml
 - route:
@@ -186,7 +190,7 @@ A Host Application consumer receives the Sparkplug messages of the Edge Nodes an
         - filter:
             expression:
               simple:
-                expression: "${header[CamelTahuMetric.temperature]} != null"
+                expression: "${header.CamelTahuMessageType} == 'DDATA' && ${header[CamelTahuMetric.temperature]} != null"
             steps:
               - log:
                   message: "Temperature: ${header[CamelTahuMetric.temperature].value}"

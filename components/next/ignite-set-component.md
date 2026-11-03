@@ -6,6 +6,8 @@
 
 The Ignite Sets endpoint is one of camel-ignite endpoints that allows you to interact with [Ignite Set data structures](https://apacheignite.readme.io/docs/queue-and-set).
 
+`ADD`, `CONTAINS`, `REMOVE` and `RETAIN_ALL` use the body as the element, and fail without a body. The operation is the `operation` option, or the `CamelIgniteSetsOperation` header; without either, the producer fails.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:

@@ -6,7 +6,7 @@
 
 The Camel Smooks component uses [Smooks](https://www.smooks.org/) to break up the structured data (EDI, CSV, POJO, etc…​) of a Camel message body into fragments. These fragments can be processed independently of one another from within Smooks.
 
-The body is read by the reader of the Smooks configuration (XML by default) as text, bytes, a stream or a file. A POJO is read when the body is a `org.smooks.io.source.JavaSource` that holds it: a POJO, a `Map` or a `List` as the body itself fails.
+The body is read by the reader of the Smooks configuration (XML by default) as text, bytes, a stream or a file (a `java.io.File`, a `java.nio.file.Path`, or the file of a file or remote file consumer). A `javax.xml.transform.sax.SAXSource` body is read from its `InputSource`: its `XMLReader` is not used. A POJO is read when the body is a `org.smooks.io.source.JavaSource` that holds it: a POJO, a `Map` or a `List` as the body itself fails.
 
 Common applications of Smooks include:
 
@@ -188,6 +188,8 @@ smooks-config.xml
 ```
 
 The `{https://www.smooks.org/xsd/smooks/smooks-core-1.6.xsd}exports` element in this example configures Smooks to export the execution result to Camel as a string. Keep in mind that exporting the result as string means that the whole result will be kept in-memory which could cause unexpected performance issues for large payloads.
+
+When several results are exported, the message body is a `List` of the results, ordered by the class name of their sink type (for example, the result of a `org.smooks.io.sink.JavaSink` comes before the result of a `org.smooks.io.sink.StringSink`).
 
 ### Bean routing
 

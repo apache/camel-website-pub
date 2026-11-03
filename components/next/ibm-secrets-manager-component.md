@@ -142,12 +142,12 @@ The message body at each side of the IBM Secrets Manager component: _Consumer_ i
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | 
-The payload of the secret for createArbitrarySecret, the default operation, as text: bytes, a stream or a file are read as text, a Map or a POJO is stored as its toString(), and no body fails. createKVSecret needs a Map of the keys and values: a JSON text fails, so unmarshal it first. updateSecret takes text for an arbitrary secret and a Map for a kv secret, unless the CamelIbmSecretsManagerSecretPayload or CamelIbmSecretsManagerSecretData header is set. The other operations take the secret id from a header.
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `map`, `list` or `pojo` | 
+The payload of the secret for createArbitrarySecret, the default operation, as text: bytes, a stream, a file or XML are read as text, a Map, a List or a POJO is stored as JSON, and no body fails. createKVSecret needs the keys and values as a Map or as a JSON object, which can be text, bytes, a stream or a file. updateSecret takes the same bodies for an arbitrary and a kv secret, unless the CamelIbmSecretsManagerSecretPayload or CamelIbmSecretsManagerSecretData header is set, and fails for the other secret types. The other operations take the secret id from a header.
 
--   With `operation=createKVSecret`: `map`
+-   With `operation=createKVSecret`: `map`, `text`, `bytes`, `stream` or `file`
     
--   With `operation=updateSecret`: `text`, `bytes`, `stream`, `file` or `map`
+-   With `operation=updateSecret`: `text`, `bytes`, `stream`, `file`, `map`, `list` or `pojo`
     
 -   With `operation=getSecret`: `any`
     
@@ -165,7 +165,7 @@ The payload of the secret for createArbitrarySecret, the default operation, as t
  |
 | **Producer output** | `text` (`java.lang.String`) | 
 
-The id of the new secret for createArbitrarySecret and createKVSecret. getSecret gives the payload text of an arbitrary secret, the Map of a kv secret, or the Secret of the IBM SDK for service credentials, and fails for other secret types. updateSecret gives the SecretVersion of the IBM SDK, the list operations the collection of the IBM SDK, and deleteSecret leaves the body unchanged.
+The id of the new secret for createArbitrarySecret and createKVSecret. getSecret gives the payload text of an arbitrary secret, the Map of a kv secret, and the Secret of the IBM SDK for the other secret types, such as service credentials, username and password, IAM credentials or certificates. updateSecret gives the SecretVersion of the IBM SDK, the list operations the collection of the IBM SDK, and deleteSecret leaves the body unchanged.
 
 -   With `operation=getSecret`: `text`, `map` or `pojo`
     
@@ -204,6 +204,14 @@ The component supports operations at the producer level. Specifically, it provid
     
 -   `listSecretVersions` - Lists all versions of a specific secret
     
+
+The payload of an arbitrary secret is the message body as text: bytes, a stream, a file, XML (a DOM node or a `Source`) or a `ByteBuffer` are read as text. A `Map`, a `List` or another object (POJO) is stored as JSON.
+
+The data of a key-value secret is a `Map` of the keys and values (or a body that converts to a `Map`), or a JSON object, which can be text, bytes, a stream or a file.
+
+`getSecret` gives the payload text of an arbitrary secret and the `Map` of a key-value secret. For the other secret types, such as `service_credentials`, `username_password`, `iam_credentials`, `imported_cert`, `public_cert` or `private_cert`, it gives the `Secret` of the IBM SDK, whose getters return the fields of the secret type, for example `getUsername()` and `getPassword()`.
+
+`updateSecret` supports arbitrary and key-value secrets: it creates a new version with the payload of the `CamelIbmSecretsManagerSecretPayload` header or the message body for an arbitrary secret, and with the data of the `CamelIbmSecretsManagerSecretData` header or the message body for a key-value secret. It fails for the other secret types.
 
 ## Examples
 
@@ -258,7 +266,54 @@ from("direct:createArbitrarySecret")
 
 #### Create a Key-Value Secret
 
-_Java-only: requires programmatic Map construction_
+The keys and values can be given as a JSON object:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:createKVSecret")
+    .setHeader("CamelIbmSecretsManagerSecretName", constant("database-creds"))
+    .setBody(constant("{\"username\": \"admin\", \"password\": \"secret123\"}"))
+    .to("ibm-secrets-manager://label?operation=createKVSecret&token={{token}}&serviceUrl={{serviceUrl}}");
+```
+
+```xml
+<route>
+  <from uri="direct:createKVSecret"/>
+  <setHeader name="CamelIbmSecretsManagerSecretName">
+    <constant>database-creds</constant>
+  </setHeader>
+  <setBody>
+    <constant>{"username": "admin", "password": "secret123"}</constant>
+  </setBody>
+  <to uri="ibm-secrets-manager://label?operation=createKVSecret&amp;token={{token}}&amp;serviceUrl={{serviceUrl}}"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:createKVSecret
+      steps:
+        - setHeader:
+            name: CamelIbmSecretsManagerSecretName
+            constant: database-creds
+        - setBody:
+            constant: '{"username": "admin", "password": "secret123"}'
+        - to:
+            uri: ibm-secrets-manager://label
+            parameters:
+              operation: createKVSecret
+              token: "{{token}}"
+              serviceUrl: "{{serviceUrl}}"
+```
+
+or as a `Map`:
 
 ```java
 from("direct:createKVSecret")

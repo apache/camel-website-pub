@@ -182,9 +182,9 @@ The message body at each side of the State Store component: _Consumer_ is the bo
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | The value to store for put and putIfAbsent, as it is: a stream is stored as the stream and shared by the later gets, so convert it to text or bytes first. The other operations do not use the body. |
+| **Producer input** | `any` | The value to store for put and putIfAbsent, as it is, except a stream: an InputStream or the stream cache of Camel is read into memory and stored as its bytes, and a Reader as its text, a String. The other operations do not use the body. |
 | **Producer output** | `unknown` | 
-By the operation, which the CamelStateStoreOperation header can set: the stored value for get, the previous value for put, the value already there for putIfAbsent and the removed value for delete, each no body when there is none; a Boolean for contains, the Set of the keys for keys, the count for size and no body for clear. The value is the object the backend gives back: the in-memory one the object stored, another may give a copy.
+By the operation, which the CamelStateStoreOperation header can set: the stored value for get, the previous value for put, the value already there for putIfAbsent and the removed value for delete, each no body when there is none; a Boolean for contains, the Set of the keys for keys, the count for size and no body for clear. The value is the object the backend gives back: the in-memory one the object stored, another may give a copy; a stream was stored as a byte array, and a Reader as a String.
 
 -   With `operation=contains`: `value` (`java.lang.Boolean`)
     
@@ -220,6 +220,10 @@ The operation to perform is set via the URI option `operation` or the header `Ca
 | `clear` | Remove all entries | ignored | null |
 
 The key is specified via the header `CamelStateStoreKey` (required for `put`, `putIfAbsent`, `get`, `delete`, `contains`).
+
+`put` and `putIfAbsent` store the body as it is, except a stream, which can be read only once. A stream body is read fully into memory, even by a `putIfAbsent` that finds the key already set: an `InputStream`, or a stream cache of one, is stored as its bytes, so a `get` returns a `byte[]`, and a `Reader`, cached or not, as its text, a `String`, like a text body.
+
+The charset of the stored bytes is not stored with them. A `convertBodyTo(String.class)` after a `get` decodes them in the charset of that exchange, UTF-8 by default, so use `convertBodyTo(String.class, "<charset>")` when the stored bytes are not UTF-8.
 
 ## TTL (Time-to-Live)
 

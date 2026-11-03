@@ -241,7 +241,7 @@ The message body at each side of the Hazelcast Map component: _Consumer_ is the 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `unknown` | The value of the entry for an added or updated event, as any member of the cluster stored it, and no body for removed and evicted: the key is in the CamelHazelcastObjectId header and the event in CamelHazelcastListenerAction. |
+| **Consumer** | `unknown` | The value of the entry for an added or updated event, as any member of the cluster stored it, and no body for removed, evicted and expired (the time to live of the entry ended): the key is in the CamelHazelcastObjectId header and the event in CamelHazelcastListenerAction. |
 | **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The value that put, putIfAbsent and update store under the key in the CamelHazelcastObjectId header, and that containsValue looks for: an object Hazelcast can serialize, so a stream fails (convert it to bytes or text first), and no body fails. The other operations do not use the body. |
 | **Producer output** | `unknown` | 
 By the operation, which the CamelHazelcastOperationType header sets, or else the defaultOperation option (without either the producer fails): the value of the key for get, or null when the key is not in the map, a Map of the keys in the Set of the CamelHazelcastObjectId header to their values for getAll, the keys for getKeys and the values that match the SQL predicate of the CamelHazelcastQuery header for query as a Collection, and a Boolean for containsKey and containsValue. The other operations keep the body.
@@ -575,7 +575,7 @@ template.sendBodyAndHeader("direct:query", null, "CamelHazelcastQuery", q1);
 
 ## Map cache consumer - from("hazelcast-map:foo")
 
-Hazelcast provides event listeners on their data grid. If you want to be notified if a cache is manipulated, you can use the map consumer. There are four events: **put**, **update**, **delete** and **envict**. The event type will be stored in the "**hazelcast.listener.action**" header variable. The map consumer provides some additional information inside these variables:
+Hazelcast provides event listeners on their data grid. If you want to be notified if a cache is manipulated, you can use the map consumer. There are five events: **added**, **updated**, **removed**, **evicted** and **expired** (the time to live of the entry ended). The event type is stored in the `CamelHazelcastListenerAction` header. The map consumer provides some additional information inside these variables:
 
 Header Variables inside the response message:
 
@@ -584,12 +584,12 @@ Header Variables inside the response message:
 | --- | --- | --- |
 | `CamelHazelcastListenerTime` | `Long` | time of the event in millis |
 | `CamelHazelcastListenerType` | `String` | the map consumer sets here "cachelistener" |
-| `CamelHazelcastListenerAction` | `String` | type of event (**added**, **updated**, **envicted** and **removed**). |
+| `CamelHazelcastListenerAction` | `String` | type of event (**added**, **updated**, **removed**, **evicted** and **expired**). |
 | `CamelHazelcastObjectId` | `String` | the oid of the object |
 | `CamelHazelcastCacheName` | `String` | the name of the cache (e.g., "foo") |
 | `CamelHazelcastCacheType` | `String` | the type of the cache (e.g., map) |
 
-The object value will be stored within **put** and **update** actions inside the message body.
+The object value will be stored within **added** and **updated** events inside the message body.
 
 Here’s a sample:
 
@@ -607,9 +607,9 @@ from("hazelcast-map:foo")
         .when(header("CamelHazelcastListenerAction").isEqualTo("added"))
             .log("...added")
             .to("mock:added")
-        .when(header("CamelHazelcastListenerAction").isEqualTo("envicted"))
-            .log("...envicted")
-            .to("mock:envicted")
+        .when(header("CamelHazelcastListenerAction").isEqualTo("evicted"))
+            .log("...evicted")
+            .to("mock:evicted")
         .when(header("CamelHazelcastListenerAction").isEqualTo("updated"))
             .log("...updated")
             .to("mock:updated")
@@ -631,9 +631,9 @@ from("hazelcast-map:foo")
       <to uri="mock:added"/>
     </when>
     <when>
-      <simple>${header.CamelHazelcastListenerAction} == 'envicted'</simple>
-      <log message="...envicted"/>
-      <to uri="mock:envicted"/>
+      <simple>${header.CamelHazelcastListenerAction} == 'evicted'</simple>
+      <log message="...evicted"/>
+      <to uri="mock:evicted"/>
     </when>
     <when>
       <simple>${header.CamelHazelcastListenerAction} == 'updated'</simple>
@@ -667,12 +667,12 @@ from("hazelcast-map:foo")
                       message: "...added"
                   - to:
                       uri: mock:added
-              - simple: "${header.CamelHazelcastListenerAction} == 'envicted'"
+              - simple: "${header.CamelHazelcastListenerAction} == 'evicted'"
                 steps:
                   - log:
-                      message: "...envicted"
+                      message: "...evicted"
                   - to:
-                      uri: mock:envicted
+                      uri: mock:evicted
               - simple: "${header.CamelHazelcastListenerAction} == 'updated'"
                 steps:
                   - log:

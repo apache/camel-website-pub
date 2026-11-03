@@ -67,7 +67,7 @@ Number of Miscellaneous Components: 107 in 71 JAR artifacts (3 deprecated)
 | [MINA SFTP Migration from JSch](mina-sftp-migration.md) |  |  |  |  |
 | [MINA SFTP SSH Security](mina-sftp-security.md) |  |  |  |  |
 | [Oauth](oauth.md) | camel-oauth | Preview | 4.12 | Camel OAuth (Preview) |
-| [Observability Services](observability-services.md) | camel-observability-services | Preview | 4.9 | Camel Observability Services |
+| [Observability Services](observability-services.md) | camel-observability-services | Stable | 4.9 | Camel Observability Services |
 | [OpenAI - Batch API Operations](openai-batch.md) |  |  |  |  |
 | [OpenAI - Compatible Providers](openai-providers.md) |  |  |  |  |
 | [OpenAI - Embeddings, Moderation, Audio and Image Operations](openai-operations.md) |  |  |  |  |

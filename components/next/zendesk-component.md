@@ -2162,7 +2162,7 @@ The zendesk/createOrUpdateUser API method has the parameters listed in the table
 
 Signatures:
 
--   org.zendesk.client.v2.model.JobStatus createOrUpdateUsers(java.util.List<org.zendesk.client.v2.model.User> users);
+-   org.zendesk.client.v2.model.JobStatus createOrUpdateUsers(java.util.List<org.zendesk.client.v2.model.User> usersList);
     
 -   org.zendesk.client.v2.model.JobStatus createOrUpdateUsers(org.zendesk.client.v2.model.User\[\] users);
     
@@ -2182,7 +2182,7 @@ The zendesk/createOrUpdateUsers API method has the parameters listed in the tabl
 
 Signatures:
 
--   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createOrUpdateUsersAsync(java.util.List<org.zendesk.client.v2.model.User> users);
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createOrUpdateUsersAsync(java.util.List<org.zendesk.client.v2.model.User> usersList);
     
 
 The zendesk/createOrUpdateUsersAsync API method has the parameters listed in the table below:
@@ -2232,7 +2232,7 @@ The zendesk/createOrganizationMembership API method has the parameters listed in
 
 Signatures:
 
--   org.zendesk.client.v2.model.JobStatus createOrganizationMemberships(java.util.List<org.zendesk.client.v2.model.OrganizationMembership> organizationMemberships);
+-   org.zendesk.client.v2.model.JobStatus createOrganizationMemberships(java.util.List<org.zendesk.client.v2.model.OrganizationMembership> organizationMembershipList);
     
 -   org.zendesk.client.v2.model.JobStatus createOrganizationMemberships(org.zendesk.client.v2.model.OrganizationMembership\[\] organizationMemberships);
     
@@ -2252,7 +2252,7 @@ The zendesk/createOrganizationMemberships API method has the parameters listed i
 
 Signatures:
 
--   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createOrganizationMembershipsAsync(java.util.List<org.zendesk.client.v2.model.OrganizationMembership> organizationMemberships);
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createOrganizationMembershipsAsync(java.util.List<org.zendesk.client.v2.model.OrganizationMembership> organizationMembershipList);
     
 
 The zendesk/createOrganizationMembershipsAsync API method has the parameters listed in the table below:
@@ -2267,7 +2267,7 @@ The zendesk/createOrganizationMembershipsAsync API method has the parameters lis
 
 Signatures:
 
--   org.zendesk.client.v2.model.JobStatus createOrganizations(java.util.List<org.zendesk.client.v2.model.Organization> organizations);
+-   org.zendesk.client.v2.model.JobStatus createOrganizations(java.util.List<org.zendesk.client.v2.model.Organization> organizationList);
     
 -   org.zendesk.client.v2.model.JobStatus createOrganizations(org.zendesk.client.v2.model.Organization\[\] organizations);
     
@@ -2287,7 +2287,7 @@ The zendesk/createOrganizations API method has the parameters listed in the tabl
 
 Signatures:
 
--   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createOrganizationsAsync(java.util.List<org.zendesk.client.v2.model.Organization> organizations);
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createOrganizationsAsync(java.util.List<org.zendesk.client.v2.model.Organization> organizationList);
     
 
 The zendesk/createOrganizationsAsync API method has the parameters listed in the table below:
@@ -2517,7 +2517,7 @@ The zendesk/createTicketIdempotentAsync API method has the parameters listed in 
 
 Signatures:
 
--   org.zendesk.client.v2.model.JobStatus createTickets(java.util.List<org.zendesk.client.v2.model.Ticket> tickets);
+-   org.zendesk.client.v2.model.JobStatus createTickets(java.util.List<org.zendesk.client.v2.model.Ticket> ticketList);
     
 -   org.zendesk.client.v2.model.JobStatus createTickets(org.zendesk.client.v2.model.Ticket\[\] tickets);
     
@@ -2537,7 +2537,7 @@ The zendesk/createTickets API method has the parameters listed in the table belo
 
 Signatures:
 
--   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createTicketsAsync(java.util.List<org.zendesk.client.v2.model.Ticket> tickets);
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createTicketsAsync(java.util.List<org.zendesk.client.v2.model.Ticket> ticketList);
     
 
 The zendesk/createTicketsAsync API method has the parameters listed in the table below:
@@ -2610,9 +2610,9 @@ The zendesk/createUpload API method has the parameters listed in the table below
 
 Signatures:
 
--   org.zendesk.client.v2.model.hc.ArticleAttachments createUploadArticle(long articleId, java.io.File file);
+-   org.zendesk.client.v2.model.hc.ArticleAttachments createUploadArticle(long articleId0, java.io.File file);
     
--   org.zendesk.client.v2.model.hc.ArticleAttachments createUploadArticle(long articleId, java.io.File file, boolean inline);
+-   org.zendesk.client.v2.model.hc.ArticleAttachments createUploadArticle(long articleId0, java.io.File file, boolean inline);
     
 
 The zendesk/createUploadArticle API method has the parameters listed in the table below:
@@ -2686,7 +2686,7 @@ The zendesk/createUserSegment API method has the parameters listed in the table 
 
 Signatures:
 
--   org.zendesk.client.v2.model.JobStatus createUsers(java.util.List<org.zendesk.client.v2.model.User> users);
+-   org.zendesk.client.v2.model.JobStatus createUsers(java.util.List<org.zendesk.client.v2.model.User> userList);
     
 -   org.zendesk.client.v2.model.JobStatus createUsers(org.zendesk.client.v2.model.User\[\] users);
     
@@ -2706,7 +2706,7 @@ The zendesk/createUsers API method has the parameters listed in the table below:
 
 Signatures:
 
--   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createUsersAsync(java.util.List<org.zendesk.client.v2.model.User> users);
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> createUsersAsync(java.util.List<org.zendesk.client.v2.model.User> userList);
     
 
 The zendesk/createUsersAsync API method has the parameters listed in the table below:
@@ -2738,7 +2738,7 @@ Signatures:
 
 -   void deleteArticleAttachment(long id);
     
--   void deleteArticleAttachment(org.zendesk.client.v2.model.hc.ArticleAttachments attachment);
+-   void deleteArticleAttachment(org.zendesk.client.v2.model.hc.ArticleAttachments articleAttachments);
     
 
 The zendesk/deleteArticleAttachment API method has the parameters listed in the table below:
@@ -2774,7 +2774,7 @@ The zendesk/deleteAttachment API method has the parameters listed in the table b
 
 Signatures:
 
--   void deleteAutomation(long automationId);
+-   void deleteAutomation(long automationId0);
     
 
 The zendesk/deleteAutomation API method has the parameters listed in the table below:
@@ -3035,7 +3035,7 @@ Signatures:
 
 -   void deleteSuspendedTicket(long id);
     
--   void deleteSuspendedTicket(org.zendesk.client.v2.model.SuspendedTicket ticket);
+-   void deleteSuspendedTicket(org.zendesk.client.v2.model.SuspendedTicket suspendedTicket);
     
 
 The zendesk/deleteSuspendedTicket API method has the parameters listed in the table below:
@@ -3556,7 +3556,7 @@ The zendesk/getAttachment API method has the parameters listed in the table belo
 
 Signatures:
 
--   java.util.List<org.zendesk.client.v2.model.hc.ArticleAttachments> getAttachmentsFromArticle(Long articleID);
+-   java.util.List<org.zendesk.client.v2.model.hc.ArticleAttachments> getAttachmentsFromArticle(Long articleId);
     
 
 The zendesk/getAttachmentsFromArticle API method has the parameters listed in the table below:
@@ -4772,7 +4772,7 @@ The zendesk/getTicketAudit API method has the parameters listed in the table bel
 
 Signatures:
 
--   Iterable<org.zendesk.client.v2.model.Audit> getTicketAudits(Long id);
+-   Iterable<org.zendesk.client.v2.model.Audit> getTicketAudits(Long ticketId0);
     
 -   Iterable<org.zendesk.client.v2.model.Audit> getTicketAudits(org.zendesk.client.v2.model.Ticket ticket);
     
@@ -5154,7 +5154,7 @@ Signatures:
 
 -   Iterable<org.zendesk.client.v2.model.Trigger> getTriggers();
     
--   Iterable<org.zendesk.client.v2.model.Trigger> getTriggers(String categoryId, boolean active, String sortBy, org.zendesk.client.v2.model.SortOrder sortOrder);
+-   Iterable<org.zendesk.client.v2.model.Trigger> getTriggers(String categoryId0, boolean active, String sortBy, org.zendesk.client.v2.model.SortOrder sortOrder);
     
 
 The zendesk/getTriggers API method has the parameters listed in the table below:
@@ -5377,7 +5377,7 @@ The zendesk/getUserSegmentsApplicable API method has the parameters listed in th
 
 Signatures:
 
--   Iterable<org.zendesk.client.v2.model.hc.Subscription> getUserSubscriptions(Long userId);
+-   Iterable<org.zendesk.client.v2.model.hc.Subscription> getUserSubscriptions(Long userId0);
     
 -   Iterable<org.zendesk.client.v2.model.hc.Subscription> getUserSubscriptions(org.zendesk.client.v2.model.User user);
     
@@ -5419,7 +5419,7 @@ Signatures:
 
 -   java.util.List<org.zendesk.client.v2.model.User> getUsersByExternalIds(String externalId, String\[\] externalIds);
     
--   java.util.List<org.zendesk.client.v2.model.User> getUsersByExternalIds(long externalId, long\[\] externalIds);
+-   java.util.List<org.zendesk.client.v2.model.User> getUsersByExternalIds(long externalId0, long\[\] externalId0s);
     
 
 The zendesk/getUsersByExternalIds API method has the parameters listed in the table below:
@@ -6031,7 +6031,7 @@ The zendesk/setUserPrimaryIdentity API method has the parameters listed in the t
 
 Signatures:
 
--   org.zendesk.client.v2.model.hc.Translation showArticleTranslation(long articleId, String locale);
+-   org.zendesk.client.v2.model.hc.Translation showArticleTranslation(long articleId0, String locale);
     
 
 The zendesk/showArticleTranslation API method has the parameters listed in the table below:
@@ -6049,7 +6049,7 @@ The zendesk/showArticleTranslation API method has the parameters listed in the t
 
 Signatures:
 
--   org.zendesk.client.v2.model.hc.Translation showCategoryTranslation(long categoryId, String locale);
+-   org.zendesk.client.v2.model.hc.Translation showCategoryTranslation(long categoryId1, String locale);
     
 
 The zendesk/showCategoryTranslation API method has the parameters listed in the table below:
@@ -6067,7 +6067,7 @@ The zendesk/showCategoryTranslation API method has the parameters listed in the 
 
 Signatures:
 
--   org.zendesk.client.v2.model.hc.Translation showSectionTranslation(long sectionId, String locale);
+-   org.zendesk.client.v2.model.hc.Translation showSectionTranslation(long sectionId0, String locale);
     
 
 The zendesk/showSectionTranslation API method has the parameters listed in the table below:
@@ -6332,7 +6332,7 @@ The zendesk/updateGroup API method has the parameters listed in the table below:
 
 Signatures:
 
--   void updateInstallation(int id, String json);
+-   void updateInstallation(int installationId, String json);
     
 
 The zendesk/updateInstallation API method has the parameters listed in the table below:
@@ -6350,7 +6350,7 @@ The zendesk/updateInstallation API method has the parameters listed in the table
 
 Signatures:
 
--   org.zendesk.client.v2.model.Macro updateMacro(Long macroId, org.zendesk.client.v2.model.Macro macro);
+-   org.zendesk.client.v2.model.Macro updateMacro(Long macroId0, org.zendesk.client.v2.model.Macro macro);
     
 
 The zendesk/updateMacro API method has the parameters listed in the table below:
@@ -6383,7 +6383,7 @@ The zendesk/updateOrganization API method has the parameters listed in the table
 
 Signatures:
 
--   org.zendesk.client.v2.model.JobStatus updateOrganizations(java.util.List<org.zendesk.client.v2.model.Organization> organizations);
+-   org.zendesk.client.v2.model.JobStatus updateOrganizations(java.util.List<org.zendesk.client.v2.model.Organization> organizationList);
     
 -   org.zendesk.client.v2.model.JobStatus updateOrganizations(org.zendesk.client.v2.model.Organization\[\] organizations);
     
@@ -6403,7 +6403,7 @@ The zendesk/updateOrganizations API method has the parameters listed in the tabl
 
 Signatures:
 
--   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> updateOrganizationsAsync(java.util.List<org.zendesk.client.v2.model.Organization> organizations);
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> updateOrganizationsAsync(java.util.List<org.zendesk.client.v2.model.Organization> organizationList);
     
 
 The zendesk/updateOrganizationsAsync API method has the parameters listed in the table below:
@@ -6529,7 +6529,7 @@ The zendesk/updateTicketForm API method has the parameters listed in the table b
 
 Signatures:
 
--   org.zendesk.client.v2.model.JobStatus updateTickets(java.util.List<org.zendesk.client.v2.model.Ticket> tickets);
+-   org.zendesk.client.v2.model.JobStatus updateTickets(java.util.List<org.zendesk.client.v2.model.Ticket> ticketList);
     
 -   org.zendesk.client.v2.model.JobStatus updateTickets(org.zendesk.client.v2.model.Ticket\[\] tickets);
     
@@ -6549,7 +6549,7 @@ The zendesk/updateTickets API method has the parameters listed in the table belo
 
 Signatures:
 
--   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> updateTicketsAsync(java.util.List<org.zendesk.client.v2.model.Ticket> tickets);
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> updateTicketsAsync(java.util.List<org.zendesk.client.v2.model.Ticket> ticketList);
     
 
 The zendesk/updateTicketsAsync API method has the parameters listed in the table below:
@@ -6579,7 +6579,7 @@ The zendesk/updateTopic API method has the parameters listed in the table below:
 
 Signatures:
 
--   org.zendesk.client.v2.model.Trigger updateTrigger(Long triggerId, org.zendesk.client.v2.model.Trigger trigger);
+-   org.zendesk.client.v2.model.Trigger updateTrigger(Long triggerId0, org.zendesk.client.v2.model.Trigger trigger);
     
 
 The zendesk/updateTrigger API method has the parameters listed in the table below:
@@ -6650,7 +6650,7 @@ The zendesk/updateUserSegment API method has the parameters listed in the table 
 
 Signatures:
 
--   org.zendesk.client.v2.model.JobStatus updateUsers(java.util.List<org.zendesk.client.v2.model.User> users);
+-   org.zendesk.client.v2.model.JobStatus updateUsers(java.util.List<org.zendesk.client.v2.model.User> usersList);
     
 -   org.zendesk.client.v2.model.JobStatus updateUsers(org.zendesk.client.v2.model.User\[\] users);
     
@@ -6670,7 +6670,7 @@ The zendesk/updateUsers API method has the parameters listed in the table below:
 
 Signatures:
 
--   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> updateUsersAsync(java.util.List<org.zendesk.client.v2.model.User> users);
+-   org.asynchttpclient.ListenableFuture<org.zendesk.client.v2.model.JobStatus> updateUsersAsync(java.util.List<org.zendesk.client.v2.model.User> usersList);
     
 
 The zendesk/updateUsersAsync API method has the parameters listed in the table below:

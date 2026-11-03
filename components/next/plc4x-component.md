@@ -119,7 +119,7 @@ The message body at each side of the PLC4X component: _Consumer_ is the body of 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `map` | A Map of the tag names and the values read from the PLC, such as an Integer or a String, as the driver reads them; the polling consumer and a trigger give the same Map. |
-| **Producer input** | `map` | A Map of the tag names, each to a Map of the address of the tag and the value to write, such as {temperature: {"%DB1:DINT": 21}}; another body fails. |
+| **Producer input** | `map` | A Map of the tag names, each to a Map of one address of the tag and the value to write, such as {temperature: {"%DB1:DINT": 21}}; another body, or a tag with no or several addresses, fails. |
 | **Producer output** | `pojo` (`org.apache.plc4x.java.api.messages.PlcWriteResponse`) | The write response of PLC4X, with the response code of each tag. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -209,10 +209,23 @@ The following route reads a register of a Modbus TCP device each time coil 1 goe
 
 ### Polling Consumer
 
-The polling consumer supports consecutive reading. The input and output are the same as for the regular consumer.
+The polling consumer supports consecutive reading. The input and output are the same as for the regular consumer. A read that fails, for example because the PLC does not have one of the tags, fails the exchange that it returns.
 
 ### Producer
 
-To write data to the PLC, we also use a `Map`. The difference with the Producer is that the `Value` of the Map has also to be a `Map`. Also, this `Map` has to be set into the `Body` of the `Message`
+To write data to the PLC, the body of the message must be a `Map<String,Map<String,Object>>`. Its keys are the names of the tags, and the value of each tag is a `Map` of one entry: the address of the tag and the value to write to it. To write several addresses, use one tag for each. A body that is not a `Map`, or a tag whose value is not a `Map` of exactly one address, fails the exchange with a `PlcInvalidTagException`, and nothing is written.
 
-The used `Map` would be a `Map<String,Map<String,Object>` where the `Map<String,Object>` represent the Query and the data we want to write to it.
+The following route writes `21` to the address `%DB1:DINT` under the tag name `temperature`:
+
+```yaml
+- route:
+    from:
+      uri: direct:write
+      steps:
+        - setBody:
+            expression:
+              groovy:
+                expression: "[temperature: ['%DB1:DINT': 21]]"
+        - to:
+            uri: plc4x:s7://192.168.0.10
+```

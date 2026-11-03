@@ -164,9 +164,9 @@ The message body at each side of the XChange component: _Consumer_ is the body o
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | Read only by ticker and currencyPairMetaData, as a CurrencyPair, and by currencyMetaData, as a Currency, when the CurrencyPair or Currency header is not set. Text such as BTC/USDT is not converted: use the currencyPair option, or a CurrencyPair object in the body or the header. |
-| **Producer output** | `pojo`, `list`, `null` or `unchanged` | 
-The XChange object of the method: a Ticker, a List of Currency, CurrencyPair, Balance, Wallet or FundingRecord, or the CurrencyMetaData or InstrumentMetaData, null for one the exchange does not know. A method of another service leaves the body unchanged.
+| **Producer input** | `any` | Read only by ticker and currencyPairMetaData, as a CurrencyPair, and by currencyMetaData, as a Currency, when the CurrencyPair or Currency header is not set. Text such as BTC/USDT or BTC is converted; a currency XChange does not know fails. |
+| **Producer output** | `pojo`, `list` or `null` | 
+The XChange object of the method: a Ticker, a List of Currency, CurrencyPair, Balance, Wallet or FundingRecord, or the CurrencyMetaData or InstrumentMetaData, null for one the exchange does not know.
 
 -   With `method=ticker`: `pojo` (`org.knowm.xchange.dto.marketdata.Ticker`)
     
@@ -209,6 +209,23 @@ Your API access keys can be stored in an exchange specific properties file in yo
 #
 apiKey = GuRW0\*\*\*\*\*\*\*\*\*
 secretKey = nKLki\*\*\*\*\*\*\*\*\*\*\*\*
+
+### Services and methods
+
+Each method belongs to one service, and an endpoint with a method of another service fails when it is created:
+
+ 
+| Service | Methods |
+| --- | --- |
+| `account` | `balances`, `fundingHistory`, `wallets` |
+| `marketdata` | `ticker` |
+| `metadata` | `currencies`, `currencyMetaData`, `currencyPairs`, `currencyPairMetaData` |
+
+### Currency and currency pair
+
+The `ticker` and `currencyPairMetaData` methods use the currency pair of the `CurrencyPair` header, else of the message body, else of the `currencyPair` option. The `currencyMetaData` method uses the currency of the `Currency` header, else of the message body, else of the `currency` option.
+
+The header, the body and the option can be an XChange `CurrencyPair` or `Currency`, or text such as `BTC/USDT` and `BTC`. Text in the header or the body with a currency that XChange does not know fails the exchange: Camel does not register a new currency in XChange for text that comes with a message.
 
 ## Examples
 

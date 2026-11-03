@@ -105,6 +105,10 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **channelProperties** (common) | Specifies configuration properties of the RaftHandle JChannel used by the endpoint (ignored if raftHandle ref is provided). Overrides the option of the component. | raft.xml | String |
+| **raftHandle** (common) | RaftHandle to use. Overrides the option of the component. |  | RaftHandle |
+| **raftId** (common) | Unique raftId to use. Overrides the option of the component. |  | String |
+| **stateMachine** (common) | StateMachine to use (ignored if raftHandle ref is provided). Overrides the option of the component. | NopStateMachine | StateMachine |
 | **enableRoleChangeEvents** (consumer) | If set to true, the consumer endpoint will receive roleChange event as well (not just connecting and/or using the state machine). By default it is set to false. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
@@ -198,8 +202,8 @@ The message body at each side of the JGroups raft component: _Consumer_ is the b
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `null` | No body: an event for each change of the role of this member (only with enableRoleChangeEvents), with LEADER or FOLLOWER in the CamelJGroupsRaftEventType header and the state of the raft in the other headers. |
-| **Producer input** | `bytes`, `text`, `stream` or `file` | The bytes to set() in the replicated log: a byte array, or text, a stream or a file converted to bytes. A null body, a Map, a number or a POJO has no conversion to bytes and is skipped without an error: nothing is set. |
-| **Producer output** | `bytes` or `unchanged` | The byte array the state machine returns for the set (an empty array with the default NopStateMachine), with the state of the raft in the headers. A body that was skipped is left as it was. |
+| **Producer input** | `bytes`, `text`, `stream` or `file` | The bytes to set() in the replicated log: a byte array, or text, a stream or a file converted to bytes. A null body is skipped: nothing is set. A Map, a List, a number or a POJO has no conversion to bytes and fails with an InvalidPayloadException. |
+| **Producer output** | `bytes` or `unchanged` | The byte array the state machine returns for the set (an empty array with the default NopStateMachine), with the state of the raft in the headers. A null body is left as it was. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -236,7 +240,7 @@ from("jgroups-raft:clusterName?enableRoleChangeEvents=true").to("seda:queue");
             uri: seda:queue
 ```
 
-Using `jgroups-raft` component on the producer side of the route will use the body of the camel exchange (which must be a `byte[]`) to perform a setX() operation on the raftHandle associated with the endpoint.
+Using `jgroups-raft` component on the producer side of the route will use the body of the camel exchange to perform a setX() operation on the raftHandle associated with the endpoint. The body is converted to a `byte[]` (such as from text, a stream or a file). A body that cannot be converted, such as a `Map`, a `List`, a number or a POJO, fails the exchange with an `InvalidPayloadException`. A null body is skipped: nothing is set.
 
 -   Java
     

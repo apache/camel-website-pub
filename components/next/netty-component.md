@@ -205,7 +205,7 @@ Enum values:
 | **receiveBufferSizePredictor** (advanced) | Configures the buffer size predictor. See details at Jetty documentation and this mail thread. |  | int |
 | **sendBufferSize** (advanced) | The TCP/UDP buffer sizes to be used during outbound communication. Size is bytes. | 65536 | int |
 | **shutdownTimeout** (advanced) | Shutdown await timeout in milliseconds. | 100 | int |
-| **transferExchange** (advanced) | Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. | false | boolean |
+| **transferExchange** (advanced) | Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. The connection headers (CamelNettyRemoteAddress, CamelNettyLocalAddress, CamelNettyChannelHandlerContext, CamelNettySSLSession and the CamelNettySSLClientCert headers) and the CamelNettyRemoteAddress and CamelNettyChannel exchange properties are always the ones of the receiving side: the connection it accepted is the source of truth, and these values are never taken from the transferred exchange. | false | boolean |
 | **udpByteArrayCodec** (advanced) | For UDP only. If enabled the using byte array codec instead of Java serialization protocol. | false | boolean |
 | **unixDomainSocketPath** (advanced) | Path to unix domain socket to use instead of inet socket. Host and port parameters will not be used, however required. It is ok to set dummy values for them. Must be used with nativeTransport=true and clientMode=false. |  | String |
 | **workerCount** (advanced) | When netty works on nio mode, it uses default workerCount parameter from Netty (which is cpu\_core\_threads x 2). User can use this option to override the default workerCount from Netty. |  | int |
@@ -416,7 +416,7 @@ Enum values:
 | **sendBufferSize** (advanced) | The TCP/UDP buffer sizes to be used during outbound communication. Size is bytes. | 65536 | int |
 | **shutdownTimeout** (advanced) | Shutdown await timeout in milliseconds. | 100 | int |
 | **synchronous** (advanced) | Sets whether synchronous processing should be strictly used. | false | boolean |
-| **transferExchange** (advanced) | Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. | false | boolean |
+| **transferExchange** (advanced) | Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. The connection headers (CamelNettyRemoteAddress, CamelNettyLocalAddress, CamelNettyChannelHandlerContext, CamelNettySSLSession and the CamelNettySSLClientCert headers) and the CamelNettyRemoteAddress and CamelNettyChannel exchange properties are always the ones of the receiving side: the connection it accepted is the source of truth, and these values are never taken from the transferred exchange. | false | boolean |
 | **udpByteArrayCodec** (advanced) | For UDP only. If enabled the using byte array codec instead of Java serialization protocol. | false | boolean |
 | **unixDomainSocketPath** (advanced) | Path to unix domain socket to use instead of inet socket. Host and port parameters will not be used, however required. It is ok to set dummy values for them. Must be used with nativeTransport=true and clientMode=false. |  | String |
 | **workerCount** (advanced) | When netty works on nio mode, it uses default workerCount parameter from Netty (which is cpu\_core\_threads x 2). User can use this option to override the default workerCount from Netty. |  | int |
@@ -584,6 +584,12 @@ In Consumer mode, the component provides the ability to:
 The consumer mode supports both one-way and request-response based operations.
 
 When a request-response exchange fails, the consumer writes a generic exception back to the client instead of the exception thrown by the route, so the reply carries neither its class name nor its message. With the textline codec the client receives the line `java.lang.Exception: Exchange processing failed`. Set `muteException=false` to write the exception of the route, as in earlier versions.
+
+The default codec (no `textline`, no custom `encoders` or `decoders`) only writes text. The consumer therefore converts a reply that is not a `String` (or a `ByteBuf`), such as bytes, a stream, a file, a `Map` or the exception of a failed exchange, to a `String` before writing it, as it does with the textline codec. If no reply can be written, the consumer closes the TCP channel, so the client does not wait for a reply that never comes.
+
+With `useByteBuf=true` a body that cannot be converted to a `ByteBuf` fails the exchange instead of sending nothing.
+
+With `sync=false` the producer continues routing as soon as the request is written, and ignores any message the remote server sends back. The message of the exchange stays as it was, also for an `InOut` exchange.
 
 #### Using Multiple Codecs
 

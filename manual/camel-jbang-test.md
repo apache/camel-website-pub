@@ -13,24 +13,25 @@ camel plugin add test
 
 ## Initialize tests
 
-Create an empty test file as a starting point:
+Create a test file as a starting point:
 
 ```bash
-camel test init route-test.yaml
+camel test init orders.citrus.it.yaml
 ```
 
-The file extension determines the test language: YAML, Java, XML, or Cucumber (`.feature`).
+The test is created as `test/orders.citrus.it.yaml`: tests go in a `test` folder, apart from the routes.
 
-> **Note**
-> Tests are created in a `test` subfolder to separate them from runtime sources. You don’t need to navigate there — the plugin handles the working directory automatically.
+The end of the file name says that the file is a test, and in which language: `orders.citrus.it.yaml` (YAML), `orders.citrus.it.xml` (XML), `OrdersIT.java` (Java) or `orders.feature` (Cucumber). `camel test run` only runs a file whose name ends like that.
 
 ## Run tests
 
-Run tests locally with JUnit Jupiter — no project setup needed:
+Run a test from the project folder. It runs with JUnit Jupiter, and needs no project setup:
 
 ```bash
-camel test run route-test.yaml
+camel test run test/orders.citrus.it.yaml
 ```
+
+`camel run` does not run a test: `camel run test/orders.citrus.it.yaml` exits with code `2` and says to use `camel test run`, and a test given with routes is skipped. A test usually starts the integration itself, see [Running the Camel integration](#_running_the_camel_integration).
 
 ## Project export
 

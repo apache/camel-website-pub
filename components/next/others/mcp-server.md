@@ -145,7 +145,7 @@ camel run tools.yaml --mcp-stdio --mcp-tags=crm,agent
 > **Note**
 > `--mcp-tags` configures the ai-tool MCP server (`camel.server.mcp-tags`) and works with `--mcp-stdio` or HTTP transport when `camel.server.mcp-enabled` is set in properties. It is not used by `--mcp`, which exposes dev/diagnostics MCP tools on the management HTTP server.
 
-Logging and startup summaries are routed to stderr so stdout carries MCP JSON-RPC only. Camel JBang configures a stderr Log4j2 appender automatically when `--mcp-stdio` is used or when `camel.server.mcp-transport=stdio` is set in the profile. On Camel Main, configure logging to stderr yourself (for example using the `log4j2-mcp-stdio.properties` resource shipped in `camel-mcp-server`). Configure your MCP client (for example in `mcp.json`) to launch the Camel process as a subprocess:
+Logging and startup summaries are routed to stderr so stdout carries MCP JSON-RPC only. Camel JBang configures a stderr Log4j2 appender automatically when `--mcp-stdio` is used or when `camel.server.mcp-transport=stdio` is set in the profile. On Camel Main, configure logging to stderr yourself (for example using the `log4j2-mcp-stdio.properties` resource shipped in `camel-mcp-server`). Anything else written to `System.out` while the MCP server runs, such as a `stream:out` endpoint or a `System.out.println` in a bean, goes to stderr as well. When the MCP client closes stdin, Camel stops and the process exits. Configure your MCP client (for example in `mcp.json`) to launch the Camel process as a subprocess:
 
 ```json
 {
@@ -218,7 +218,7 @@ Tools and resources appearing or disappearing (routes starting and stopping) emi
 
 ### Stdio engine
 
-The stdio engine uses the MCP Java SDK `StdioServerTransportProvider`. MCP JSON-RPC is read from stdin and written to stdout. Logging and startup banners must not appear on stdout — Camel Main/JBang configure Log4j2 to write logs to stderr in stdio mode. No HTTP port is opened and no session management headers apply.
+The stdio engine uses the MCP Java SDK `StdioServerTransportProvider`. MCP JSON-RPC is read from stdin and written to stdout. Logging and startup banners must not appear on stdout — Camel Main/JBang configure Log4j2 to write logs to stderr in stdio mode. While the engine runs, `System.out` points at stderr, and the transport writes to the original stdout. When stdin reaches its end (the client went away), the engine stops the CamelContext. No HTTP port is opened and no session management headers apply.
 
 ## Security
 

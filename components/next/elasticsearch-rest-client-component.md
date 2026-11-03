@@ -188,7 +188,7 @@ The message body at each side of the Elasticsearch Low level Rest Client compone
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `bytes`, `stream`, `file`, `value`, `map` or `null` | 
-By the operation, set by the operation option or the CamelElasticsearchOperation header. INDEX\_OR\_UPDATE sends the body as the JSON document: text, bytes, a stream or a file of it; a Map or a POJO is sent as its toString() and fails, so marshal it to JSON first. GET\_BY\_ID and DELETE take the id as the body, or from the CamelElasticsearchId header when the body is empty. SEARCH takes a Map of field names and values to match, or else the JSON query of the CamelElasticsearchSearchQuery header; a JSON text body is not used, and with neither all documents match. CREATE\_INDEX and DELETE\_INDEX do not use the body: the settings of a new index are in the CamelElasticsearchIndexSettings header.
+By the operation, set by the operation option or the CamelElasticsearchOperation header. INDEX\_OR\_UPDATE sends the body as the JSON document: text, bytes, a stream or a file of it; a Map or a POJO is sent as its toString() and fails, so marshal it to JSON first. GET\_BY\_ID and DELETE take the id of the CamelElasticsearchId header, or else the body. SEARCH takes the JSON query of the CamelElasticsearchSearchQuery header, or else the body: a Map of field names and values to match, or the JSON query as text, bytes, a stream or a file; with no body all documents match. CREATE\_INDEX and DELETE\_INDEX do not use the body: the settings of a new index are in the CamelElasticsearchIndexSettings header.
 
 -   With `operation=INDEX_OR_UPDATE`: `text`, `bytes`, `stream` or `file`
     
@@ -196,7 +196,7 @@ By the operation, set by the operation option or the CamelElasticsearchOperation
     
 -   With `operation=DELETE`: `text`, `value` or `null`
     
--   With `operation=SEARCH`: `map` or `null`
+-   With `operation=SEARCH`: `text`, `bytes`, `stream`, `file`, `map` or `null`
     
 -   With `operation=CREATE_INDEX`: `any`
     
@@ -240,12 +240,12 @@ Set an endpoint URI option or exchange header with a name of `operation` and a v
   
 | operation | message body | description |
 | --- | --- | --- |
-| `INDEX_OR_UPDATE` | `String`, `byte[]`, `Reader` or `InputStream` content to index or update | Adds or updates content to an index and returns the resulting `id` in the message body. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. When updating indexed content, you must provide its id via a message header with the key `ID` . |
-| `GET_BY_ID` | `String` id of content to retrieve | Retrieves a JSON String representation of the indexed document, corresponding to the given index id and sets it as the message exchange body. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. You must provide the index id of the content to retrieve either in the message body, or via a message header with the key `ID` . |
-| `DELETE` | `String` id of content to delete | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `INDEX_NAME`. You must provide the index id of the content to delete either in the message body, or via a message header with the key `ID` . |
+| `INDEX_OR_UPDATE` | `String`, `byte[]`, `Reader` or `InputStream` content to index or update | Adds or updates content to an index and returns the resulting `id` in the message body. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. When updating indexed content, you must provide its id via a message header with the key `CamelElasticsearchId`. |
+| `GET_BY_ID` | `String` id of content to retrieve | Retrieves a JSON String representation of the indexed document, corresponding to the given index id and sets it as the message exchange body. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. You must provide the index id of the content to retrieve either via a message header with the key `CamelElasticsearchId`, or in the message body: the header wins over the body. A missing id fails with the error of the server (404). |
+| `DELETE` | `String` id of content to delete | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. You must provide the index id of the content to delete either via a message header with the key `CamelElasticsearchId`, or in the message body: the header wins over the body. |
 | `CREATE_INDEX` |  | Creates the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. You may also provide a header with the key `CamelElasticsearchIndexSettings` where the value is a JSON String representation of the index settings. |
 | `DELETE_INDEX` |  | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. |
-| `SEARCH` | `Map` (optional) | Search for content with either a `Map` of `String` keys & values of query criteria in the body, or a JSON string representation of the query in the `CamelElasticsearchSearchQuery` header, which wins over the body. A JSON string in the body is not used: with no `Map` body and no header, all documents match. Matching documents are returned as a JSON array string of their sources set on the message exchange body. You can set the JSON query String by providing a message header with the key `CamelElasticsearchSearchQuery`. You can set the message exchange body to a `Map` of `String` keys & values for the query criteria. |
+| `SEARCH` | `Map` or JSON `String` (optional) | Search for content with either a `Map` of `String` keys & values of query criteria in the body, a JSON string representation of the query in the body, or one in the `CamelElasticsearchSearchQuery` header, which wins over the body. With no body and no header, all documents match. Matching documents are returned as a JSON array string of their sources set on the message exchange body. You can set the JSON query String by providing a message header with the key `CamelElasticsearchSearchQuery`, or as the message body. You can set the message exchange body to a `Map` of `String` keys & values for the query criteria. |
 
 ## Examples
 
@@ -290,7 +290,7 @@ from("direct:index")
               indexName: myIndex
 ```
 
-To update existing indexed content, provide the `ID` message header and the message body with the updated content.
+To update existing indexed content, provide the `CamelElasticsearchId` message header and the message body with the updated content.
 
 -   Java
     
@@ -378,7 +378,7 @@ from("direct:getById")
 
 ### Delete Example
 
-To delete indexed content, provide the `ID` message header.
+To delete indexed content, provide the `CamelElasticsearchId` message header.
 
 -   Java
     
@@ -544,6 +544,16 @@ from("direct:search")
             parameters:
               operation: SEARCH
               indexName: myIndex
+```
+
+The JSON query can also be the message body, when the `CamelElasticsearchSearchQuery` header is not set.
+
+_Java-only: ProducerTemplate with the JSON query as the body_
+
+```java
+String query = "{\"query\":{\"match\":{\"content\":\"ElasticSearch With Camel\"}}}";
+String hits = template.requestBody("elasticsearch-rest-client://myCluster?operation=SEARCH&indexName=myIndex", query,
+        String.class);
 ```
 
 Search on specific field(s) using `Map`.

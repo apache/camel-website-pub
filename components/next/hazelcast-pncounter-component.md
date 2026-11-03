@@ -173,6 +173,15 @@ Enum values:
 | **hazelcastInstanceName** (producer) | The hazelcast instance reference name which can be used for hazelcast endpoint. If you don’t specify the instance reference, camel use the default hazelcast instance from the camel-hazelcast instance. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
+## Message Headers
+
+The Hazelcast PN Counter component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelHazelcastOperationType** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-hazelcast/latest/org/apache/camel/component/hazelcast/HazelcastConstants.html#OPERATION) | The operation to perform. |  | String |
+
 ## Message Body
 
 The message body at each side of the Hazelcast PN Counter component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
@@ -231,7 +240,7 @@ from("direct:increment")
 ```xml
 <route>
     <from uri="direct:increment"/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>increment</constant>
     </setHeader>
     <to uri="hazelcast-pncounter:foo"/>
@@ -244,8 +253,10 @@ from("direct:increment")
       uri: direct:increment
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: increment
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: increment
         - to:
             uri: hazelcast-pncounter:foo
 ```
@@ -270,7 +281,7 @@ from("direct:decrement")
 ```xml
 <route>
     <from uri="direct:decrement"/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>decrement</constant>
     </setHeader>
     <to uri="hazelcast-pncounter:foo"/>
@@ -283,8 +294,10 @@ from("direct:decrement")
       uri: direct:decrement
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: decrement
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: decrement
         - to:
             uri: hazelcast-pncounter:foo
 ```
@@ -309,7 +322,7 @@ from("direct:get")
 ```xml
 <route>
     <from uri="direct:get"/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>get</constant>
     </setHeader>
     <to uri="hazelcast-pncounter:foo"/>
@@ -322,8 +335,10 @@ from("direct:get")
       uri: direct:get
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: get
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: get
         - to:
             uri: hazelcast-pncounter:foo
 ```
@@ -348,7 +363,7 @@ from("direct:getAndAdd")
 ```xml
 <route>
     <from uri="direct:getAndAdd"/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>getAndAdd</constant>
     </setHeader>
     <to uri="hazelcast-pncounter:foo"/>
@@ -361,15 +376,17 @@ from("direct:getAndAdd")
       uri: direct:getAndAdd
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: getAndAdd
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: getAndAdd
         - to:
             uri: hazelcast-pncounter:foo
 ```
 
 Provide the delta value in the message body (e.g., 5 to add 5 to the counter): `long previousValue = template.requestBody("direct:getAndAdd", 5L, Long.class);`
 
-The previous value (before the add) will be returned in the message body.
+The previous value (before the add) will be returned in the message body. Without a numeric body the producer fails.
 
 ### Example for **destroy**:
 
@@ -389,7 +406,7 @@ from("direct:destroy")
 ```xml
 <route>
     <from uri="direct:destroy"/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>destroy</constant>
     </setHeader>
     <to uri="hazelcast-pncounter:foo"/>
@@ -402,8 +419,10 @@ from("direct:destroy")
       uri: direct:destroy
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: destroy
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: destroy
         - to:
             uri: hazelcast-pncounter:foo
 ```

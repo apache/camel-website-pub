@@ -222,12 +222,12 @@ The message body at each side of the Elasticsearch component: _Consumer_ is the 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream`, `map`, `list` or `pojo` | 
-By the operation, set by the operation option or the CamelElasticsearchOperation header. Index and Update take the document as JSON text, bytes or a stream, a Map or a POJO (written as JSON), or the request builder of the Elasticsearch client; text that is not JSON, a List, a java.io.File or no body fail. Update expects the Update API form, {"doc": {…​}}, unless enableDocumentOnlyMode is set. GetById and Delete take the id as text, Bulk and MultiGet a List of documents or ids, Search a query as JSON text or a Map (only its query member when it has one), and MultiSearch only an MsearchRequest.Builder; each also takes its request builder. DeleteIndex needs a text body but deletes the index of the CamelElasticsearchIndexName header or indexName, not the one in the body. Exists and Ping do not use the body.
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `map`, `list` or `pojo` | 
+By the operation, set by the operation option or the CamelElasticsearchOperation header, or by the request of the Elasticsearch client in the body. Index and Update take the document as JSON text, bytes, a stream or a file of it, or a Map or a POJO (written as JSON); text that is not JSON, a List or no body fail. Update expects the Update API form, {"doc": {…​}}, unless enableDocumentOnlyMode is set. GetById and Delete take the id as text, Bulk and MultiGet a List of documents or ids, Search the search request as JSON text or a Map, with its query, size, sort, aggregations and the rest (an object with a single member other than query is the query alone), and DeleteIndex the name of the index as text, used when neither the CamelElasticsearchIndexName header nor indexName is set. Each also takes its request of the Elasticsearch client, or the builder of it, which is sent as it is; MultiSearch takes only those. Exists and Ping do not use the body.
 
--   With `operation=Index`: `text`, `bytes`, `stream`, `map` or `pojo`
+-   With `operation=Index`: `text`, `bytes`, `stream`, `file`, `map` or `pojo`
     
--   With `operation=Update`: `text`, `bytes`, `stream`, `map` or `pojo`
+-   With `operation=Update`: `text`, `bytes`, `stream`, `file`, `map` or `pojo`
     
 -   With `operation=Bulk`: `list` or `pojo`
     
@@ -292,19 +292,21 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 The following Elasticsearch operations are currently supported. Set an endpoint URI option or exchange header with a key of "operation" and a value set to one of the following. Some operations also require other parameters or the message body to be set.
 
+A request of the Elasticsearch client in the message body, such as an `IndexRequest`, a `GetRequest` or a `SearchRequest`, sets the operation by its type, whatever the option or header say, and is sent as it is: its index, id and the rest are not changed by the headers or options.
+
   
 | operation | message body | description |
 | --- | --- | --- |
-| Index | **Map**, **String**, **byte\[\]**, **Reader**, **InputStream** or **IndexRequest.Builder** content to index | Adds content to an index and returns the content’s indexId in the body. You can set the name of the target index by setting the message header with the key "indexName". You can set the indexId by setting the message header with the key "indexId". |
-| GetById | **String** or **GetRequest.Builder** index id of content to retrieve | Retrieves the document corresponding to the given index id and returns a `GetResponse` object in the body. You can set the name of the target index by setting the message header with the key "indexName". You can set the type of document by setting the message header with the key "documentClass". |
-| Delete | **String** or **DeleteRequest.Builder** index id of content to delete | Deletes the specified indexName and returns a Result object in the body. You can set the name of the target index by setting the message header with the key "indexName". |
-| DeleteIndex | **String** (its text is not used) or **DeleteIndexRequest.Builder** | Deletes the index named by the indexName header or option, not the one in a `String` body, and returns a `Boolean` in the body that is true when the deletion is acknowledged. You can set the name of the target index by setting the message header with the key "indexName". |
-| Bulk | **Iterable** or **BulkRequest.Builder** of any type that is already accepted (DeleteOperation.Builder for delete operation, UpdateOperation.Builder for update operation, CreateOperation.Builder for create operation, byte\[\], InputStream, String, Reader, Map or any document type for index operation) | Adds/Updates/Deletes content from/to an index and returns a List<BulkResponseItem> object in the body You can set the name of the target index by setting the message header with the key "indexName". |
-| Search | **Map**, **String** or **SearchRequest.Builder** | Search the content with the map of query string. You can set the name of the target index by setting the message header with the key "indexName". You can set the number of hits to return by setting the message header with the key "size". You can set the starting document offset by setting the message header with the key "from". |
-| MultiSearch | **MsearchRequest.Builder** | Multiple search in one |
-| MultiGet | **Iterable<String>** or **MgetRequest.Builder** the id of the document to retrieve | Multiple get in one You can set the name of the target index by setting the message header with the key "indexName". |
+| Index | **Map**, **String**, **byte\[\]**, **Reader**, **InputStream**, a file (`java.io.File`, `Path` or the file of the file component), **IndexRequest** or **IndexRequest.Builder** content to index | Adds content to an index and returns the content’s indexId in the body. A file is read as the JSON of the document, and a null body fails. You can set the name of the target index by setting the message header with the key "indexName". You can set the indexId by setting the message header with the key "indexId". |
+| GetById | **String**, **GetRequest** or **GetRequest.Builder** index id of content to retrieve | Retrieves the document corresponding to the given index id and returns a `GetResponse` object in the body. You can set the name of the target index by setting the message header with the key "indexName". You can set the type of document by setting the message header with the key "documentClass". |
+| Delete | **String**, **DeleteRequest** or **DeleteRequest.Builder** index id of content to delete | Deletes the specified indexName and returns a Result object in the body. You can set the name of the target index by setting the message header with the key "indexName". |
+| DeleteIndex | **String** name of the index, **DeleteIndexRequest** or **DeleteIndexRequest.Builder** | Deletes the index named by the indexName header or option, or else the one named by a `String` body, and returns a `Boolean` in the body that is true when the deletion is acknowledged. You can set the name of the target index by setting the message header with the key "indexName". |
+| Bulk | **Iterable**, **BulkRequest** or **BulkRequest.Builder** of any type that is already accepted (DeleteOperation.Builder for delete operation, UpdateOperation.Builder for update operation, CreateOperation.Builder for create operation, byte\[\], InputStream, String, Reader, Map or any document type for index operation) | Adds/Updates/Deletes content from/to an index and returns a List<BulkResponseItem> object in the body You can set the name of the target index by setting the message header with the key "indexName". |
+| Search | **Map**, **String**, **SearchRequest** or **SearchRequest.Builder** | Search the content with the search request as a JSON `String` or a `Map`: its query, size, from, sort, aggregations, \_source and the rest are used. A JSON object with a single member other than query, such as `{"match": {…​}}`, is the query alone. You can set the name of the target index by setting the message header with the key "indexName". You can set the number of hits to return by setting the message header with the key "size". You can set the starting document offset by setting the message header with the key "from". The size and from headers or options, when set, override those of the body. |
+| MultiSearch | **MsearchRequest** or **MsearchRequest.Builder** | Multiple search in one |
+| MultiGet | **Iterable<String>**, **MgetRequest** or **MgetRequest.Builder** the id of the document to retrieve | Multiple get in one You can set the name of the target index by setting the message header with the key "indexName". |
 | Exists | None | Check whether the index exists or not and returns a Boolean flag in the body. You must set the name of the target index by setting the message header with the key "indexName". |
-| Update | **byte\[\]**, **InputStream**, **String**, **Reader**, **Map** or any document type content to update | Updates content to an index and returns the content’s indexId in the body. You can set the name of the target index by setting the message header with the key "indexName". You can set the indexId by setting the message header with the key "indexId". Be aware of the fact that unlike the component _camel-elasticsearch-rest_, by default, the expected content of an update request must be the same as what the [Update API expects](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.md), consequently if you want to update one part of an existing document, you need to embed the content to update into a "doc" object. To change the default behavior, it is possible to configure it globally at the component level thanks to the option _enableDocumentOnlyMode_ or by request by setting the header `CamelElasticsearchEnableDocumentOnlyMode` to true. |
+| Update | **byte\[\]**, **InputStream**, **String**, **Reader**, **Map**, a file, **UpdateRequest**, **UpdateRequest.Builder** or any document type content to update | Updates content to an index and returns the content’s indexId in the body. A file is read as JSON, and a null body fails. You can set the name of the target index by setting the message header with the key "indexName". You can set the indexId by setting the message header with the key "indexId". Be aware of the fact that unlike the component _camel-elasticsearch-rest_, by default, the expected content of an update request must be the same as what the [Update API expects](https://www.elastic.co/guide/en/elasticsearch/reference/current/docs-update.md), consequently if you want to update one part of an existing document, you need to embed the content to update into a "doc" object. To change the default behavior, it is possible to configure it globally at the component level thanks to the option _enableDocumentOnlyMode_ or by request by setting the header `CamelElasticsearchEnableDocumentOnlyMode` to true. |
 | Ping | None | Pings the Elasticsearch cluster and returns true if the ping succeeded, false otherwise |
 
 ## Usage
@@ -429,7 +431,7 @@ String indexId = template.requestBody("direct:index", map, String.class);
 
 ### Search Example
 
-Searching on specific field(s) and value use the Operation ´Search´. Pass in the query JSON String or the Map
+Searching on specific field(s) and value use the Operation ´Search´. Pass in the search request as a JSON String or a Map: its size, sort, aggregations and the other members are used with its query.
 
 -   Java
     
@@ -465,7 +467,7 @@ from("direct:search")
 _Java-only: ProducerTemplate test API_
 
 ```java
-String query = "{\"query\":{\"match\":{\"content\":\"new release of ApacheCamel\"}}}";
+String query = "{\"query\":{\"match\":{\"content\":\"new release of ApacheCamel\"}},\"size\":5}";
 HitsMetadata<?> response = template.requestBody("direct:search", query, HitsMetadata.class);
 ```
 

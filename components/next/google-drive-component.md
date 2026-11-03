@@ -147,25 +147,33 @@ Enum values:
 
 -   copy
     
+-   create
+    
 -   delete
+    
+-   download
+    
+-   emptyTrash
+    
+-   export
+    
+-   generateIds
     
 -   get
     
--   getIdForEmail
+-   getStartPageToken
     
--   insert
+-   hide
     
 -   list
     
--   patch
+-   listLabels
+    
+-   modifyLabels
     
 -   stop
     
--   touch
-    
--   trash
-    
--   untrash
+-   unhide
     
 -   update
     
@@ -366,7 +374,7 @@ The google-drive/list API method has the parameters listed in the table below:
 
 Signatures:
 
--   com.google.api.services.drive.Drive.Changes.Watch watch(String pageToken, com.google.api.services.drive.model.Channel content);
+-   com.google.api.services.drive.Drive.Changes.Watch watch(String pageToken, com.google.api.services.drive.model.Channel contentChannel);
     
 
 The google-drive/watch API method has the parameters listed in the table below:
@@ -415,7 +423,7 @@ The 1 method(s) is(are) listed in the table below, followed by detailed syntax f
 
 Signatures:
 
--   com.google.api.services.drive.Drive.Channels.Stop stop(com.google.api.services.drive.model.Channel content);
+-   com.google.api.services.drive.Drive.Channels.Stop stop(com.google.api.services.drive.model.Channel contentChannel);
     
 
 The google-drive/stop API method has the parameters listed in the table below:
@@ -701,7 +709,7 @@ The 13 method(s) is(are) listed in the table below, followed by detailed syntax 
 
 Signatures:
 
--   com.google.api.services.drive.Drive.Files.Copy copy(String fileId, com.google.api.services.drive.model.File content);
+-   com.google.api.services.drive.Drive.Files.Copy copy(String fileId, com.google.api.services.drive.model.File file);
     
 
 The google-drive/copy API method has the parameters listed in the table below:
@@ -892,7 +900,7 @@ The google-drive/listLabels API method has the parameters listed in the table be
 
 Signatures:
 
--   com.google.api.services.drive.Drive.Files.ModifyLabels modifyLabels(String fileId, com.google.api.services.drive.model.ModifyLabelsRequest content);
+-   com.google.api.services.drive.Drive.Files.ModifyLabels modifyLabels(String fileId, com.google.api.services.drive.model.ModifyLabelsRequest modifyLabelsRequest);
     
 
 The google-drive/modifyLabels API method has the parameters listed in the table below:
@@ -907,9 +915,9 @@ The google-drive/modifyLabels API method has the parameters listed in the table 
 
 Signatures:
 
--   com.google.api.services.drive.Drive.Files.Update update(String fileId, com.google.api.services.drive.model.File content);
+-   com.google.api.services.drive.Drive.Files.Update update(String fileId, com.google.api.services.drive.model.File file);
     
--   com.google.api.services.drive.Drive.Files.Update update(String fileId, com.google.api.services.drive.model.File content, com.google.api.client.http.AbstractInputStreamContent mediaContent);
+-   com.google.api.services.drive.Drive.Files.Update update(String fileId, com.google.api.services.drive.model.File file, com.google.api.client.http.AbstractInputStreamContent mediaContent);
     
 
 The google-drive/update API method has the parameters listed in the table below:
@@ -935,7 +943,7 @@ The google-drive/update API method has the parameters listed in the table below:
 
 Signatures:
 
--   com.google.api.services.drive.Drive.Files.Watch watch(String fileId, com.google.api.services.drive.model.Channel content);
+-   com.google.api.services.drive.Drive.Files.Watch watch(String fileId, com.google.api.services.drive.model.Channel channel);
     
 
 The google-drive/watch API method has the parameters listed in the table below:
@@ -1381,6 +1389,15 @@ In addition to the parameters above, the google-drive API can also use any of th
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelGoogleDrive.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelGoogleDrive.myParameterNameHere` header.
 
+## Message Headers
+
+The Google Drive component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelGoogleDrive.** (common) Constant: [`PROPERTY_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-google-drive/latest/org/apache/camel/component/google/drive/internal/GoogleDriveConstants.html#PROPERTY_PREFIX) | The prefix of the headers that carry the parameters of the API method and of its request: the header CamelGoogleDrive.fileId holds the fileId parameter, and CamelGoogleDrive.alt set to media gives the content of a file with drive-files/get and drive-revisions/get. |  | Object |
+
 ## Message Body
 
 The message body at each side of the Google Drive component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
@@ -1388,12 +1405,12 @@ The message body at each side of the Google Drive component: _Consumer_ is the b
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `pojo` | One message per poll with the return value of the method: a Google Drive model object, such as the FileList of drive-files/list, which is one message and not split per file. The model classes are GenericJson, which is also a Map of the JSON fields. |
+| **Consumer** | `pojo` or `stream` | One message per poll with the return value of the method: a Google Drive model object, such as the FileList of drive-files/list, which is one message and not split per file, or the exported content as an InputStream for drive-files/export, which is closed when the exchange is done. The model classes are GenericJson, which is also a Map of the JSON fields. |
 | **Producer input** | `any` | The body is used only when inBody names a parameter of the method, and must then be of the type of that parameter: a File for content of drive-files/create, or text for fileId. JSON text or a Map is not turned into a model object: build it first. To upload a file, convertBodyTo com.google.api.services.drive.model.File after a file consumer: it also sets the CamelGoogleDrive.content and CamelGoogleDrive.mediaContent headers, so drive-files/create sends the content of the file. Without inBody the arguments come from the options and the CamelGoogleDrive. headers.
 Not known when `inBody` is set.
 
  |
-| **Producer output** | `pojo` or `null` | The return value of the method: a Google Drive model object, such as the File of drive-files/create and drive-files/get or the FileList of drive-files/list, never the content of a file; null for the methods without a response, such as the deletes and drive-files/emptyTrash, and for drive-files/export. The model classes are GenericJson, which is also a Map of the JSON fields. |
+| **Producer output** | `pojo`, `stream` or `null` | The return value of the method: a Google Drive model object, such as the File of drive-files/create and drive-files/get or the FileList of drive-files/list; null for the methods without a response, such as the deletes and drive-files/emptyTrash. The content of a file is an InputStream: the exported content of drive-files/export, and the content of drive-files/get and drive-revisions/get with the CamelGoogleDrive.alt header set to media. The stream holds the connection until it is read to the end or closed: stream caching reads it before the next step of a route. The model classes are GenericJson, which is also a Map of the JSON fields. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -1420,6 +1437,69 @@ The endpoint is the API name and the method name, such as `drive-files/list`. Th
               applicationName: camel-example
         - log:
             message: "Found ${body.files.size()} files"
+```
+
+### Downloading the content of a file
+
+The methods return a model object, such as the `File` of `drive-files/get`, which holds the metadata of a file and not its content. These methods give the content of a file as the body:
+
+-   `drive-files/export` exports a Google Workspace document, such as a Google Docs document, to the MIME type of the `mimeType` option, such as `text/plain` or `application/pdf`.
+    
+-   `drive-files/get` and `drive-revisions/get` download the content of a file that is stored in Drive, when the `CamelGoogleDrive.alt` header is set to `media`.
+    
+
+The body is then an `InputStream`, which holds the connection to Google Drive until it is read to the end or closed. In a route, stream caching (enabled by default) reads it into the stream cache before the next step: if nothing follows the google-drive step, read or close the body yourself. The consumer closes it when the exchange is done. The caller of a `ProducerTemplate` gets the stream and must close it.
+
+The following route exports a Google Docs document as text and writes it to a file:
+
+```yaml
+- route:
+    from:
+      uri: timer:export
+      parameters:
+        repeatCount: 1
+      steps:
+        - to:
+            uri: google-drive:drive-files/export
+            parameters:
+              fileId: "{{google.documentId}}"
+              mimeType: text/plain
+              clientId: "{{google.clientId}}"
+              clientSecret: "{{google.clientSecret}}"
+              refreshToken: "{{google.refreshToken}}"
+              applicationName: camel-example
+        - to:
+            uri: file:target/export
+            parameters:
+              fileName: document.txt
+```
+
+And the following downloads a file that is stored in Drive:
+
+```yaml
+- route:
+    from:
+      uri: timer:download
+      parameters:
+        repeatCount: 1
+      steps:
+        - setHeader:
+            name: CamelGoogleDrive.alt
+            expression:
+              constant:
+                expression: media
+        - to:
+            uri: google-drive:drive-files/get
+            parameters:
+              fileId: "{{google.fileId}}"
+              clientId: "{{google.clientId}}"
+              clientSecret: "{{google.clientSecret}}"
+              refreshToken: "{{google.refreshToken}}"
+              applicationName: camel-example
+        - to:
+            uri: file:target/download
+            parameters:
+              fileName: report.pdf
 ```
 
 ## More Information

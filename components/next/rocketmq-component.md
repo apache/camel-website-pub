@@ -92,7 +92,7 @@ The RocketMQ component supports the following options which are listed below.
 | **producerGroup** (producer) | Producer group name. |  | String |
 | **replyToConsumerGroup** (producer) | Consumer group name used for receiving response. |  | String |
 | **replyToTopic** (producer) | Topic used for receiving response when using in-out pattern. |  | String |
-| **waitForSendResult** (producer) | Whether waiting for send result before routing to next endpoint. | false | boolean |
+| **waitForSendResult** (producer) | Whether waiting for send result before routing to next endpoint. When true, a failed send fails the exchange. When false, an InOnly exchange continues as soon as the message is handed to the RocketMQ client, and a failed send is only logged. An InOut exchange always waits for its reply. | true | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **requestTimeoutCheckerIntervalMillis** (advanced) | Check interval milliseconds of request timeout. | 1000 | long |
 | **requestTimeoutMillis** (advanced) | Timeout milliseconds of receiving response when using in-out pattern. | 10000 | long |
@@ -178,7 +178,7 @@ Enum values:
 | **replyToConsumerGroup** (producer) | Consumer group name used for receiving response. |  | String |
 | **replyToTopic** (producer) | Topic used for receiving response when using in-out pattern. |  | String |
 | **sendTag** (producer) | Each message would be sent with this tag. |  | String |
-| **waitForSendResult** (producer) | Whether waiting for send result before routing to next endpoint. | false | boolean |
+| **waitForSendResult** (producer) | Whether waiting for send result before routing to next endpoint. When true, a failed send fails the exchange. When false, an InOnly exchange continues as soon as the message is handed to the RocketMQ client, and a failed send is only logged. An InOut exchange always waits for its reply. | true | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **requestTimeoutCheckerIntervalMillis** (advanced) | Check interval milliseconds of request timeout. | 1000 | long |
 | **requestTimeoutMillis** (advanced) | Timeout milliseconds of receiving response when using in-out pattern. | 10000 | long |
@@ -192,26 +192,26 @@ The RocketMQ component supports the following message header(s), which is/are li
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelRockerMQTopic** (consumer) Constant: [`TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#TOPIC) | Topic of message. |  | String |
-| **CamelRockerMQTag** (consumer) Constant: [`TAG`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#TAG) | Tag of message. |  | String |
-| **CamelRockerMQKey** (consumer) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#KEY) | Key of message. |  | String |
-| **CamelRockerMQOverrideTopicName** (producer) Constant: [`OVERRIDE_TOPIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#OVERRIDE_TOPIC_NAME) | If this header is set, the message will be routed to the topic specified by this header instead of the origin topic in endpoint. |  | String |
-| **CamelRockerMQOverrideTag** (producer) Constant: [`OVERRIDE_TAG`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#OVERRIDE_TAG) | If this header is set, the message’s tag will be set to value specified by this header instead of the sendTag defined in endpoint. |  | String |
-| **CamelRockerMQOverrideMessageKey** (producer) Constant: [`OVERRIDE_MESSAGE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#OVERRIDE_MESSAGE_KEY) | Set keys for the message. When using in-out pattern, the value will be prepended to the generated keys. |  | String |
-| **CamelRockerMQBrokerName** (consumer) Constant: [`BROKER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#BROKER_NAME) | Broker name. |  | String |
-| **CamelRockerMQQueueId** (consumer) Constant: [`QUEUE_ID`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#QUEUE_ID) | Queue ID. |  | int |
-| **CamelRockerMQStoreSize** (consumer) Constant: [`STORE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#STORE_SIZE) | Store size. |  | int |
-| **CamelRockerMQQueueOffset** (consumer) Constant: [`QUEUE_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#QUEUE_OFFSET) | Queue offset. |  | long |
-| **CamelRockerMQSysFlag** (consumer) Constant: [`SYS_FLAG`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#SYS_FLAG) | Sys flag. |  | int |
-| **CamelRockerMQBornTimestamp** (consumer) Constant: [`BORN_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#BORN_TIMESTAMP) | Born timestamp. |  | long |
-| **CamelRockerMQBornHost** (consumer) Constant: [`BORN_HOST`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#BORN_HOST) | Born host. |  | SocketAddress |
-| **CamelRockerMQStoreTimestamp** (consumer) Constant: [`STORE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#STORE_TIMESTAMP) | Store timestamp. |  | long |
-| **CamelRockerMQStoreHost** (consumer) Constant: [`STORE_HOST`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#STORE_HOST) | Store host. |  | SocketAddress |
-| **CamelRockerMQMsgId** (consumer) Constant: [`MSG_ID`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#MSG_ID) | Msg ID. |  | String |
-| **CamelRockerMQCommitLogOffset** (consumer) Constant: [`COMMIT_LOG_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#COMMIT_LOG_OFFSET) | Commit log offset. |  | long |
-| **CamelRockerMQBodyCrc** (consumer) Constant: [`BODY_CRC`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#BODY_CRC) | Body CRC. |  | int |
-| **CamelRockerMQReconsumeTimes** (consumer) Constant: [`RECONSUME_TIMES`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#RECONSUME_TIMES) | Reconsume times. |  | int |
-| **CamelRockerMQPreparedTransactionOffset** (consumer) Constant: [`PREPARED_TRANSACTION_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#PREPARED_TRANSACTION_OFFSET) | Prepard transaction offset. |  | long |
+| **CamelRocketMQTopic** (consumer) Constant: [`TOPIC`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#TOPIC) | Topic of message. |  | String |
+| **CamelRocketMQTag** (consumer) Constant: [`TAG`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#TAG) | Tag of message. |  | String |
+| **CamelRocketMQKey** (consumer) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#KEY) | Key of message. |  | String |
+| **CamelRocketMQOverrideTopicName** (producer) Constant: [`OVERRIDE_TOPIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#OVERRIDE_TOPIC_NAME) | If this header is set, the message will be routed to the topic specified by this header instead of the origin topic in endpoint. |  | String |
+| **CamelRocketMQOverrideTag** (producer) Constant: [`OVERRIDE_TAG`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#OVERRIDE_TAG) | If this header is set, the message’s tag will be set to value specified by this header instead of the sendTag defined in endpoint. |  | String |
+| **CamelRocketMQOverrideMessageKey** (producer) Constant: [`OVERRIDE_MESSAGE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#OVERRIDE_MESSAGE_KEY) | Set keys for the message. When using in-out pattern, the value will be prepended to the generated keys. |  | String |
+| **CamelRocketMQBrokerName** (consumer) Constant: [`BROKER_NAME`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#BROKER_NAME) | Broker name. |  | String |
+| **CamelRocketMQQueueId** (consumer) Constant: [`QUEUE_ID`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#QUEUE_ID) | Queue ID. |  | int |
+| **CamelRocketMQStoreSize** (consumer) Constant: [`STORE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#STORE_SIZE) | Store size. |  | int |
+| **CamelRocketMQQueueOffset** (consumer) Constant: [`QUEUE_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#QUEUE_OFFSET) | Queue offset. |  | long |
+| **CamelRocketMQSysFlag** (consumer) Constant: [`SYS_FLAG`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#SYS_FLAG) | Sys flag. |  | int |
+| **CamelRocketMQBornTimestamp** (consumer) Constant: [`BORN_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#BORN_TIMESTAMP) | Born timestamp. |  | long |
+| **CamelRocketMQBornHost** (consumer) Constant: [`BORN_HOST`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#BORN_HOST) | Born host. |  | SocketAddress |
+| **CamelRocketMQStoreTimestamp** (consumer) Constant: [`STORE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#STORE_TIMESTAMP) | Store timestamp. |  | long |
+| **CamelRocketMQStoreHost** (consumer) Constant: [`STORE_HOST`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#STORE_HOST) | Store host. |  | SocketAddress |
+| **CamelRocketMQMsgId** (consumer) Constant: [`MSG_ID`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#MSG_ID) | Msg ID. |  | String |
+| **CamelRocketMQCommitLogOffset** (consumer) Constant: [`COMMIT_LOG_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#COMMIT_LOG_OFFSET) | Commit log offset. |  | long |
+| **CamelRocketMQBodyCrc** (consumer) Constant: [`BODY_CRC`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#BODY_CRC) | Body CRC. |  | int |
+| **CamelRocketMQReconsumeTimes** (consumer) Constant: [`RECONSUME_TIMES`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#RECONSUME_TIMES) | Reconsume times. |  | int |
+| **CamelRocketMQPreparedTransactionOffset** (consumer) Constant: [`PREPARED_TRANSACTION_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-rocketmq/latest/org/apache/camel/component/rocketmq/RocketMQConstants.html#PREPARED_TRANSACTION_OFFSET) | Prepard transaction offset. |  | long |
 
 ## Message Body
 
@@ -298,7 +298,7 @@ from("rocketmq:FROM_TOPIC?namesrvAddr=localhost:9876&consumerGroup=consumer")
               producerGroup: producer
 ```
 
-Setting specific headers can change routing behaviour. For example, if header `CamelRockerMQOverrideTopicName` was set, the message will be sent to `ACTUAL_TARGET` instead of `ORIGIN_TARGET`.
+Setting specific headers can change routing behaviour. For example, if header `CamelRocketMQOverrideTopicName` was set, the message will be sent to `ACTUAL_TARGET` instead of `ORIGIN_TARGET`.
 
 -   Java
     
@@ -309,9 +309,9 @@ Setting specific headers can change routing behaviour. For example, if header `C
 
 ```java
 from("rocketmq:FROM?consumerGroup=consumer")
-    .setHeader("CamelRockerMQOverrideTopicName", constant("ACTUAL_TARGET"))
-    .setHeader("CamelRockerMQOverrideTag", constant("OVERRIDE_TAG"))
-    .setHeader("CamelRockerMQOverrideMessageKey", constant("OVERRIDE_MESSAGE_KEY"))
+    .setHeader("CamelRocketMQOverrideTopicName", constant("ACTUAL_TARGET"))
+    .setHeader("CamelRocketMQOverrideTag", constant("OVERRIDE_TAG"))
+    .setHeader("CamelRocketMQOverrideMessageKey", constant("OVERRIDE_MESSAGE_KEY"))
     .to("rocketmq:ORIGIN_TARGET?producerGroup=producer")
     .to("log:RocketRoute?showAll=true");
 ```
@@ -319,13 +319,13 @@ from("rocketmq:FROM?consumerGroup=consumer")
 ```xml
 <route>
   <from uri="rocketmq:FROM?consumerGroup=consumer"/>
-  <setHeader name="CamelRockerMQOverrideTopicName">
+  <setHeader name="CamelRocketMQOverrideTopicName">
     <constant>ACTUAL_TARGET</constant>
   </setHeader>
-  <setHeader name="CamelRockerMQOverrideTag">
+  <setHeader name="CamelRocketMQOverrideTag">
     <constant>OVERRIDE_TAG</constant>
   </setHeader>
-  <setHeader name="CamelRockerMQOverrideMessageKey">
+  <setHeader name="CamelRocketMQOverrideMessageKey">
     <constant>OVERRIDE_MESSAGE_KEY</constant>
   </setHeader>
   <to uri="rocketmq:ORIGIN_TARGET?producerGroup=producer"/>
@@ -341,13 +341,13 @@ from("rocketmq:FROM?consumerGroup=consumer")
         consumerGroup: consumer
       steps:
         - setHeader:
-            name: CamelRockerMQOverrideTopicName
+            name: CamelRocketMQOverrideTopicName
             constant: ACTUAL_TARGET
         - setHeader:
-            name: CamelRockerMQOverrideTag
+            name: CamelRocketMQOverrideTag
             constant: OVERRIDE_TAG
         - setHeader:
-            name: CamelRockerMQOverrideMessageKey
+            name: CamelRocketMQOverrideMessageKey
             constant: OVERRIDE_MESSAGE_KEY
         - to:
             uri: rocketmq:ORIGIN_TARGET

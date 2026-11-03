@@ -154,11 +154,11 @@ The message body at each side of the KServe component: _Consumer_ is the body of
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `pojo` | 
-infer takes the protobuf ModelInferRequest with the input tensors, or its Builder; another body, such as text, JSON or bytes, is not read and a request without inputs is sent. model/ready and model/metadata need no body, and read a ModelReadyRequest or ModelMetadataRequest when it is one; the server apis do not use the body. The model comes from the CamelKServeModelName header, or else the modelName option.
+infer takes the protobuf ModelInferRequest with the input tensors, or its Builder. Another body that is not empty, such as text, JSON, bytes or a Map, is not parsed and fails the exchange with an InvalidPayloadException that names the request of the api: build the protobuf request before the endpoint. No body, a blank String or an empty byte array builds the request from the options and headers only, which is all model/ready and model/metadata need; they read a ModelReadyRequest or ModelMetadataRequest when the body is one. The server apis do not use the body. The model comes from the CamelKServeModelName header, or else the modelName option.
 
--   With `api=model/ready`: `any`
+-   With `api=model/ready`: `null` or `pojo`
     
--   With `api=model/metadata`: `any`
+-   With `api=model/metadata`: `null` or `pojo`
     
 -   With `api=server/ready`: `any`
     
@@ -217,6 +217,8 @@ kserve:<api>\[?options\]
 | `server/ready` | Indicates if the server is ready for inferencing. |  |  | `ServerReadyResponse` \[[7](#_footnotedef_7 "View footnote.")\] |
 | `server/live` | Indicates if the inference server is able to receive and respond to metadata and inference requests. |  |  | `ServerLiveResponse` \[[8](#_footnotedef_8 "View footnote.")\] |
 | `server/metadata` | Provides information about the server. |  |  | `ServerMetadataResponse` \[[9](#_footnotedef_9 "View footnote.")\] |
+
+The input body of `infer`, `model/ready` and `model/metadata` is the protobuf request of the API or its `Builder`. The component does not parse any other body that is not empty, such as text, JSON, bytes or a `Map`: the exchange fails with an `InvalidPayloadException` that names the request type of the API, so build the protobuf request before the endpoint. Without a body, or with an empty one (a blank `String` or an empty `byte[]`), the request is built from the options and headers only, which is all that `model/ready` and `model/metadata` need. The `server/ready`, `server/live` and `server/metadata` APIs do not use the body.
 
 ## Examples
 

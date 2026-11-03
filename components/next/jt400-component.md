@@ -304,7 +304,7 @@ The message body at each side of the JT400 component: _Consumer_ is the body of 
 Not known when `objectPath` is set.
 
  |
-| **Producer input** | `any` | A queue writes the body converted to a String, or to a byte array with format=binary (text, bytes or a stream). A program call (.PGM, .SRVPGM) needs an Object\[\] of the parameters: a List fails.
+| **Producer input** | `any` | A queue writes the body converted to a String, or to a byte array with format=binary (text, bytes or a stream). A program call (.PGM, .SRVPGM) needs an Object\[\] of the parameters (a List is converted to an array).
 
 Not known when `objectPath` or `format` is set.
 
@@ -333,7 +333,7 @@ You can explicitly configure a connection pool on the Jt400Component, or as an u
 
 ### Program call
 
-This endpoint expects the input to be an `Object[]`, whose object types are `int`, `long`, `CharSequence` (such as `String`), or `byte[]`. All other data types in the input array will be converted to `String`. For character inputs, CCSID handling is performed through the native jt400 library mechanisms. A parameter can be _omitted_ by passing null as the value in its position (the program has to support it). After the program execution, the endpoint returns an `Object[]` in the message body. Depending on _format_, the returned array will be populated with `byte[]` or `String` objects representing the values as they were returned by the program. Input-only parameters will contain the same data as the beginning of the invocation. This endpoint does not implement a provider endpoint!
+This endpoint expects the input to be an `Object[]` (a `List` is converted to an array), whose object types are `int`, `long`, `CharSequence` (such as `String`), or `byte[]`. All other data types in the input array will be converted to `String`. For character inputs, CCSID handling is performed through the native jt400 library mechanisms. A parameter can be _omitted_ by passing null as the value in its position (the program has to support it). The `outputFieldsIdx` option lists the output parameters (in any order); when it is not set, all parameters are input-only. The `fieldsLength` option gives the length of each parameter. A length is needed for output parameters and for text and `byte[]` input parameters, but not for `int` and `long` inputs. After the program execution, the endpoint returns an `Object[]` in the message body. Depending on _format_, the returned array will be populated with `byte[]` or `String` objects representing the values as they were returned by the program. Input-only parameters will contain the same data as the beginning of the invocation. This endpoint does not implement a provider endpoint!
 
 ## Example
 

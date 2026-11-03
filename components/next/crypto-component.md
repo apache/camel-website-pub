@@ -42,6 +42,8 @@ crypto:verify:name\[?options\]
 -   `crypto:verify` will read in the contents of this header and do the verification calculation.
     
 
+The message body is the payload that is signed or verified, and it is not changed. A stream body is cached, so the next step of the route still gets the body, also when stream caching is turned off. A message without body is signed as an empty payload by `crypto:sign`, and `crypto:verify` fails it with a `SignatureException`.
+
 To correctly function, the sign and verify process needs a pair of keys to be shared, signing requiring a `PrivateKey` and verifying a `PublicKey` (or a `Certificate` containing one). Using the JCE it is very simple to generate these key pairs, but it is usually most secure to use a KeyStore to house and share your keys. The DSL is very flexible about how keys are supplied and provides a number of mechanisms.
 
 Note a `crypto:sign` endpoint is typically defined in one route and the complimentary `crypto:verify` in another, though for simplicity in the examples they appear one after the other. It goes without saying that both signing and verifying should be configured identically.
@@ -183,7 +185,7 @@ The Crypto (JCE) component supports the following message header(s), which is/ar
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelSignaturePrivateKey** (producer) Constant: [`SIGNATURE_PRIVATE_KEY`](https://javadoc.io/doc/org.apache.camel/camel-crypto/latest/org/apache/camel/component/crypto/DigitalSignatureConstants.html#SIGNATURE_PRIVATE_KEY) | The PrivateKey that should be used to sign the message. |  | PrivateKey |
-| **CamelSignaturePublicKeyOrCert** (producer) Constant: [`SIGNATURE_PUBLIC_KEY_OR_CERT`](https://javadoc.io/doc/org.apache.camel/camel-crypto/latest/org/apache/camel/component/crypto/DigitalSignatureConstants.html#SIGNATURE_PUBLIC_KEY_OR_CERT) | The Certificate or PublicKey that should be used to verify the signature. |  | Certificate or PublicKey |
+| **CamelSignaturePublicKeyOrCert** (producer) Constant: [`SIGNATURE_PUBLIC_KEY_OR_CERT`](https://javadoc.io/doc/org.apache.camel/camel-crypto/latest/org/apache/camel/component/crypto/DigitalSignatureConstants.html#SIGNATURE_PUBLIC_KEY_OR_CERT) | The Certificate or PublicKey that should be used to verify the signature. When set, it is used instead of the publicKey, certificate or keystore of the endpoint. |  | Certificate or PublicKey |
 | **CamelDigitalSignature** (producer) Constant: [`SIGNATURE`](https://javadoc.io/doc/org.apache.camel/camel-crypto/latest/org/apache/camel/component/crypto/DigitalSignatureConstants.html#SIGNATURE) | The signature of the message, set by the sign operation and read by the verify operation (the signatureHeaderName option changes the header name). |  | byte\[\] (Base64 encoded) |
 | **CamelSignatureKeyStoreAlias** (producer) Constant: [`KEYSTORE_ALIAS`](https://javadoc.io/doc/org.apache.camel/camel-crypto/latest/org/apache/camel/component/crypto/DigitalSignatureConstants.html#KEYSTORE_ALIAS) | The alias used to query the KeyStore for keys and Certificates to be used in signing and verifying exchanges. |  | String |
 | **CamelSignatureKeyStorePassword** (producer) Constant: [`KEYSTORE_PASSWORD`](https://javadoc.io/doc/org.apache.camel/camel-crypto/latest/org/apache/camel/component/crypto/DigitalSignatureConstants.html#KEYSTORE_PASSWORD) | The password used to access an aliased PrivateKey in the KeyStore. |  | char\[\] |
@@ -195,7 +197,7 @@ The message body at each side of the Crypto (JCE) component: _Consumer_ is the b
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | The payload to sign or verify, read as a stream: text, bytes, a stream or a file; no body is an empty payload. A Map, a POJO or a number fails: marshal it first. Without stream caching a stream body is used up. The signature is not in the body: sign sets it, Base64 encoded, in the CamelDigitalSignature header (signatureHeaderName), which verify reads. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `null` | The payload to sign or verify, read as a stream: text, bytes, a stream or a file. A Map, a POJO or a number fails: marshal it first. A stream body is cached, so the next step still gets it. No body: sign signs an empty payload, and verify fails with a SignatureException. The signature is not in the body: sign sets it, Base64 encoded, in the CamelDigitalSignature header (signatureHeaderName), which verify reads. |
 | **Producer output** | `unchanged` | The body is unchanged: a signature that does not verify fails the exchange with a SignatureException. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -370,6 +372,8 @@ When using a Recipient list or similar EIP, the recipient of an exchange can var
     
 -   `CamelSignaturePublicKeyOrCert`
     
+
+The `CamelSignaturePublicKeyOrCert` header, when set, wins over the `publicKey`, `certificate` or `keystore` of the `crypto:verify` endpoint. The `CamelSignaturePrivateKey` header is used only when the `crypto:sign` endpoint has no private key (no `privateKey`, and no `keystore` with a key for the alias).
 
 Even better would be to dynamically supply a keystore alias. Again, the alias can be supplied in a message header
 

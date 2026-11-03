@@ -241,10 +241,10 @@ In Listen mode, the default, the Hazelcast ItemEvent of an item added to or remo
 
 
  |
-| **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The item that add, the default, put and offer add to the queue, and that removeValue removes (without a body it removes the head): an object Hazelcast can serialize, so a stream or no body fails. A Collection for removeAll and retainAll. The other operations do not use the body. |
+| **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The item that add, the default, put and offer add to the queue, and that removeValue removes (without a body it removes the head): an object Hazelcast can serialize, so a stream or no body fails. A Collection for removeAll and retainAll, and a java.util.function.Predicate for removeIf, which fails without one. The other operations do not use the body. |
 | **Producer output** | `unchanged` | 
 
-Unchanged for add, the default, and the other operations that change the queue. poll and peek give the head of the queue, or null when it is empty, and take waits for one; remainingCapacity gives an Integer, and drainTo the number of items it moved into the Collection of the CamelHazelcastDrainToCollection header. The CamelHazelcastOperationType header overrides the defaultOperation option.
+Unchanged for add, the default, and the other operations that change the queue. poll and peek give the head of the queue, or null when it is empty, and take waits for one; remainingCapacity gives an Integer, and drainTo the number of items it moved into the Collection of the CamelHazelcastDrainToCollection header, which it needs. removeIf gives a Boolean, true when it removed an item. The CamelHazelcastOperationType header overrides the defaultOperation option.
 
 -   With `defaultOperation=poll`: `unknown`
     
@@ -255,6 +255,8 @@ Unchanged for add, the default, and the other operations that change the queue. 
 -   With `defaultOperation=remainingCapacity`: `value` (`java.lang.Integer`)
     
 -   With `defaultOperation=drainTo`: `value` (`java.lang.Integer`)
+    
+-   With `defaultOperation=removeIf`: `value` (`java.lang.Boolean`)
     
 
 
@@ -627,6 +629,8 @@ from("direct:removeIf")
             uri: hazelcast-queue:bar
 ```
 
+The message body is the `java.util.function.Predicate` that selects the items to remove, and after the call the body is `true` when an item was removed. A Hazelcast queue cannot remove through its iterator, so the producer tests the items the queue holds and then removes the matching ones in one call: the operation is not atomic.
+
 ### Example for **drain to**:
 
 -   Java
@@ -663,6 +667,8 @@ from("direct:drainTo")
         - to:
             uri: hazelcast-queue:bar
 ```
+
+The **CamelHazelcastDrainToCollection** header must hold the `Collection` the items are moved into: without it the producer fails. After the call the body is the number of items moved.
 
 ### Example for **take**:
 

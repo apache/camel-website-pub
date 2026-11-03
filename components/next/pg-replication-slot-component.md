@@ -191,6 +191,15 @@ Enum values:
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 
+## Message Headers
+
+The PostgreSQL Replication Slot component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelPgReplicationSlotLsn** (consumer) Constant: [`LSN`](https://javadoc.io/doc/org.apache.camel/camel-pg-replication-slot/latest/org/apache/camel/component/pg/replication/slot/PgReplicationSlotConstants.html#LSN) | The log sequence number (LSN) of the message, in the text form of PostgreSQL such as 0/16B3748. Several messages can have the same LSN, for example the BEGIN and the first change of a transaction. |  | String |
+
 ## Message Body
 
 The message body at each side of the PostgreSQL Replication Slot component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
@@ -198,7 +207,7 @@ The message body at each side of the PostgreSQL Replication Slot component: _Con
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `bytes` (`byte[]`) | One message of the output plugin of the slot, as bytes: text for test\_decoding, JSON for wal2json, the binary protocol for pgoutput; convert it to a String for the text plugins. The exchange id is the LSN of the message. |
+| **Consumer** | `bytes` (`byte[]`) | One message of the output plugin of the slot, as bytes: text for test\_decoding, JSON for wal2json, the binary protocol for pgoutput; convert it to a String for the text plugins. The LSN of the message is in the CamelPgReplicationSlotLsn header. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -209,6 +218,8 @@ The bodies are the ones with the default options. A side that is not listed is n
 PostgreSQL can generate a huge number of empty transactions on certain operations (e.g. `VACUUM`). These transactions can congest your route. Using `greedy=true` query parameter can help with this problem. It will help your route filter out empty transactions quickly without waiting for the `delay`\*`timeUnit` parameter between each exchange.
 
 The order of the messages is guaranteed, but the same message might come more than once. So, for example, if you’re using this component to sync data from PostgreSQL to another database, make sure your operations are idempotent (e.g., use `UPSERT` instead of `INSERT`, etc). This will make sure repeated messages won’t affect your system negatively.
+
+The log sequence number (LSN) of a message is in the `CamelPgReplicationSlotLsn` header. It is not unique: several messages can have the same LSN, for example the `BEGIN` and the first change of a transaction with `test_decoding`.
 
 ## Examples
 

@@ -433,7 +433,7 @@ The `concat` function is used for putting together two values as a single String
 
 The simple function works like `${concat('Hello ',${body})}`. Notice how you can use nested functions so the 2nd parameter is the `${body}` function. In the example we had to add a space after `"Hello "`, but you can also use the separator parameter, such as `${concat('Hello',${body},' ')}`.
 
-The `join` function is a more complex function to join together a set of values, separated by comma (by default) as a single combined String. For example if the message body contains a list of \[A, B, C\] then `${join()}` would return `A,B,C`. To use semicolon as separator you would use `${join(;)}`. The `prefix` argument can be used to prefix each value, so for example `${join(&,id=)}` would return `id=A&id=B&id=C`.
+The `join` function is a more complex function to join together a set of values, separated by comma (by default) as a single combined String. For example if the message body contains a list of \[A, B, C\] then `${join()}` would return `A,B,C`. To use semicolon as separator you would use `${join(;)}`. The `prefix` argument can be used to prefix each value, so for example `${join(&,id=)}` would return `id=A&id=B&id=C`. The white space around the prefix and the expression is not part of them, so `${join(&, id=)}` returns the same. An unquoted separator is kept as written, so `${join(; )}` returns `A; B; C`; a quoted one is the text inside its quotes.
 
 The `escape` function escapes special characters so a value can be safely embedded in another format, instead of chaining multiple `replace` calls or using a custom bean. The first argument is the kind of escaping:
 

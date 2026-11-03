@@ -207,7 +207,7 @@ A List of the arguments of the called method, in the order of the IDL, with the 
 
 
  |
-| **Consumer reply** | `any` | The result of the method: the body is converted to its return type, so text works for an i32, and a struct result needs the Thrift struct. Ignored for a void method. A body that does not convert gives the client an error, or a null result from the asynchronous server. |
+| **Consumer reply** | `any` | The result of the method: the body is converted to its return type, so text works for an i32, and a struct result needs the Thrift struct. Ignored for a void method. No body, or a body that does not convert, gives the client an error. |
 | **Producer input** | `list`, `pojo`, `text` or `null` | A List of the arguments of the method, in the order of the IDL; a body that is not a List is the one argument, no body calls a method without arguments. A binary argument is a ByteBuffer, not a byte array; a method whose one argument is a list needs it wrapped in a List. |
 | **Producer output** | `unknown` | The result of the method, of its return type in the IDL: a number, a boolean, a String, a ByteBuffer, a Thrift struct, or a List, Set or Map; no body for a void or oneway method. |
 
@@ -238,7 +238,11 @@ requestBody.add(new HashMap<String, Long>()); // map parameter
 Object responseBody = template.requestBody("direct:thrift-alltypes", requestBody);
 ```
 
+A method with one argument can also take that argument as the body itself, without a list, and it is mapped the same way: an `Integer` body calls a method with one `i32` argument. A method whose one argument is a list still needs it wrapped in a list.
+
 Incoming parameters in the service consumer will also be passed to the message body as a list of objects.
+
+The body at the end of the consumer route is the result of the method, converted to its return type. For a method with a return type, no body, or a body that does not convert to that type, fails the call: the client gets a `TApplicationException` instead of a null result, or `0` for a numeric result. The body is ignored for a `void` method.
 
 ## Examples
 

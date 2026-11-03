@@ -181,8 +181,8 @@ The MongoDB GridFS component supports the following message header(s), which is/
 | --- | --- | --- | --- |
 | **CamelFileContentType** (consumer) Constant: [`FILE_CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#FILE_CONTENT_TYPE) | The content type of the file. |  | String |
 | **CamelFileLength** (consumer) Constant: [`FILE_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#FILE_LENGTH) | The size of the file. |  | long |
-| **CamelFileLastModified** (consumer) Constant: [`FILE_LAST_MODIFIED`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#FILE_LAST_MODIFIED) | The size of the file. |  | Date |
-| **CamelFileName** (producer) Constant: [`FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#FILE_NAME) | The name of the file. |  | String |
+| **CamelFileLastModified** (consumer) Constant: [`FILE_LAST_MODIFIED`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#FILE_LAST_MODIFIED) | The upload date of the file. |  | Date |
+| **CamelFileName** (common) Constant: [`FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#FILE_NAME) | (producer) The name of the file: the name that create gives the file, and the file that findOne, remove, listAll and count look for. (consumer) The name of the file that was found. |  | String |
 | **Content-Type** (producer) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#CONTENT_TYPE) | The content type of the file. |  | String |
 | **CamelFileNameProduced** (producer) Constant: [`FILE_NAME_PRODUCED`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#FILE_NAME_PRODUCED) | The file name produced. |  | String |
 | **CamelGridFsMetadata** (common) Constant: [`GRIDFS_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-mongodb-gridfs/latest/org/apache/camel/component/mongodb/gridfs/GridFsConstants.html#GRIDFS_METADATA) | Any additional metadata stored along with the file in JSON format. |  | String |
@@ -198,7 +198,7 @@ The message body at each side of the MongoDB GridFS component: _Consumer_ is the
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `stream` | One message per new file: a stream of the content of the file (the stream cache when stream caching is on), with its length, upload date, content type and metadata in headers. |
+| **Consumer** | `stream` | One message per new file: a stream of the content of the file (the stream cache when stream caching is on), closed when the exchange is done, with its name, length, upload date, content type and metadata in headers. |
 | **Producer input** | `text`, `bytes`, `stream` or `file` | 
 The content of the file that create, the default operation, uploads under the name in the CamelFileName header: text, bytes, a stream or a file. A Map, a POJO or no body fail. The other operations do not use the body; the CamelGridFsOperation header sets the operation when the option is not set.
 
@@ -218,7 +218,7 @@ The content of the file that create, the default operation, uploads under the na
  |
 | **Producer output** | `unchanged` | 
 
-create, the default, leaves the body unchanged, with the id of the file in the CamelGridFsFileId header. findOne gives a stream of the content of the file named by CamelFileName; listAll a Reader of text, one line per file with its name and id separated by a tab; count the number of files as a Long; remove leaves the body unchanged.
+create, the default, leaves the body unchanged, with the id of the file in the CamelGridFsFileId header. findOne gives a stream of the content of the file named by CamelFileName; listAll a Reader of text, one line per file with its name and id (the hex string of an ObjectId) separated by a tab; count the number of files as a Long; remove leaves the body unchanged.
 
 -   With `operation=findOne`: `stream`
     
@@ -240,6 +240,8 @@ The bodies are the ones with the default options. A side that is not listed is n
 ## Usage
 
 ### GridFS operations - producer endpoint
+
+The `operation` option, or the `CamelGridFsOperation` header when the option is not set, chooses the operation: `create` (the default), `remove`, `findOne`, `listAll` or `count`. Another operation fails the exchange with an `IllegalArgumentException` that lists the supported operations.
 
 #### count
 
@@ -264,13 +266,13 @@ Long count = template.requestBodyAndHeaders("direct:count", "irrelevantBody", he
 
 #### listAll
 
-Returns a Reader that lists all the filenames and their IDs in a tab separated stream.
+Returns a Reader that lists all the filenames and their IDs in a tab separated stream. The ID of a file is the hex string of its ObjectId.
 
 // from("direct:listAll").to("mongodb-gridfs?database=tickets&operation=listAll");
 Reader result = template.requestBodyAndHeader("direct:listAll", "irrelevantBody");
 
-filename1.txt   1252314321
-filename2.txt   2897651254
+filename1.txt   665f1c2e8b3e4a5d6c7b8a90
+filename2.txt   665f1c2e8b3e4a5d6c7b8a91
 
 #### findOne
 
@@ -311,6 +313,21 @@ Map<String, Object> headers = new HashMap<String, Object>();
 headers.put(Exchange.FILE_NAME, "filename.txt");
 template.requestBodyAndHeaders("direct:remove", "", headers);
 ```
+
+### GridFS consumer
+
+The consumer polls the bucket for new files, as the `queryStrategy` option chooses, and routes one message per file. The body is a stream of the content of the file, which is closed when the exchange is done. The `CamelFileName`, `CamelFileLength`, `CamelFileLastModified` (the upload date), `CamelFileContentType` and `CamelGridFsMetadata` headers describe the file.
+
+When the exchange of a file fails, the consumer reports the failure to its exception handler (which logs it, unless the `exceptionHandler` or `bridgeErrorHandler` option is set) and leaves the file as it was, so that the next poll offers it again:
+
+-   With a file attribute (`FileAttribute`, `TimeStampAndFileAttribute` and `PersistentTimestampAndFileAttribute`), the file is not marked as processed, and the poll goes on with the other files.
+    
+-   With `TimeStamp` and `PersistentTimestamp`, the files are routed in the order of their upload date, and the poll stops at the file that failed: the timestamp stays before that file, so the next poll offers it again, and then the files uploaded after it. A file that always fails holds back the files after it.
+    
+
+Only the first failure of a file is reported to the exception handler: when the file fails again at the next poll, the consumer logs the failure at `DEBUG`. A file is reported again when it fails after a poll that routed it or did not offer it.
+
+A failure that the route handles, such as with a dead letter channel or `onException` with `handled(true)`, does not fail the exchange: the file is then done.
 
 ## Examples
 

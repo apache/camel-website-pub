@@ -168,7 +168,7 @@ The message body at each side of the Azure Event Grid component: _Consumer_ is t
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `map`, `pojo` or `list` | The data of the event, serialized to JSON by the Azure SDK: a Map or a POJO becomes a JSON object and a number a JSON number. Text becomes a JSON string and is not parsed, so unmarshal JSON text first; bytes become a base64 string, a stream an empty object and a file its path. A List is sent as one event per element, and no body fails. |
+| **Producer input** | `map`, `pojo`, `value`, `text`, `bytes`, `stream`, `file` or `list` | The data of the event: a Map or a POJO is serialized to JSON by the Azure SDK, and a number becomes a JSON number. Text that is a JSON object or array is sent as it is, and other text as a JSON string. Bytes, a stream or a file are sent as binary data (data\_base64): convert JSON in bytes or a stream to a String to send it as JSON. A List is sent as one event per element, and no body fails. |
 | **Producer output** | `unchanged` | Unchanged: publishing gives no result, and no header is set. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -224,3 +224,18 @@ from("direct:start")
             parameters:
               accessKey: "RAW(myKey)"
 ```
+
+### The data of the event
+
+The message body is the data of the CloudEvent:
+
+-   A `Map` or a POJO is serialized to JSON by the Azure SDK, and a number becomes a JSON number.
+    
+-   Text that is a JSON object or array is sent as it is, and other text as a JSON string.
+    
+-   Bytes, a stream or a file (also the file of a file consumer) are sent as binary data, in the `data_base64` field of the CloudEvent. To send JSON held in bytes or a stream as JSON, convert it to a `String` first, for example with `convertBodyTo(String.class)`.
+    
+-   A `List` is sent as one event per element.
+    
+
+A message without a body fails. The source of the events is `/camel`. The `CamelAzureEventGridEventType`, `CamelAzureEventGridSubject`, `CamelAzureEventGridId` and `CamelAzureEventGridEventTime` headers set the type, the subject, the id and the time of the events; without them the type is `Camel.Event`, the subject `/camel/event`, the id a random UUID and the time the current time.

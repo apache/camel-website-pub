@@ -2,7 +2,7 @@
   "username": "name here",
   "botname": "name here",
   "message": "message here"
-}</code></pre> </div> </div> <div class="paragraph"> <p>The bot name comes from the endpoint, and the reply is the <code>reply</code> field of the <code>ChatScriptMessage</code> the producer returns (<code>response</code> in its JSON form). The following route sends the message body to the bot <code>Harry</code> as the user in the <code>user</code> header:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+}</code></pre> </div> </div> <div class="paragraph"> <p>The bot name comes from the endpoint, and the reply is the <code>reply</code> field of the <code>ChatScriptMessage</code> the producer returns (<code>response</code> in its JSON form). The headers of the message are kept.</p> </div> <div class="paragraph"> <p>The first message of the endpoint starts the conversation of its user with an empty message, as the ChatScript protocol requires, and is then sent to the bot. A first message with an empty text only starts the conversation, and its reply is the greeting of the bot. With <code>resetChat=true</code> every message first resets the conversation of its user (the <code>username</code> of the message, or the <code>chatUserName</code> option when the message has none) and then starts a new one.</p> </div> <div class="paragraph"> <p>The following route sends the message body to the bot <code>Harry</code> as the user in the <code>user</code> header:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     from:
       uri: direct:chat
       steps:

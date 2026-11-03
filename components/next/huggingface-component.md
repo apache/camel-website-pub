@@ -73,8 +73,12 @@ The component supports the following tasks:
 | text-to-image | String (prompt) | byte\[\] (PNG image bytes) | revision, device | Diffusion-based generation models (e.g., CompVis/stable-diffusion-v1-4 for general images, runwayml/stable-diffusion-v1-5 for improved quality) |
 | automatic-speech-recognition | _ai.djl.modality.audio.Audio_ (the waveform) | String (transcribed text) | revision, device | ASR-tuned models (e.g., facebook/wav2vec2-base-960h) |
 | text-to-speech | String (text prompt) | _ai.djl.modality.audio.Audio_ | revision, device | TTS-tuned models (e.g., facebook/mms-tts-eng for English TTS, microsoft/speecht5\_tts for multi-speaker) |
-| chat | String (user message) | String (LLM response) | revision, device, maxTokens, temperature, systemPrompt, userRole, memoryIdHeader | Instruct-tuned/chat models (e.g., mistralai/Mistral-7B-Instruct-v0.2 for conversational, microsoft/Phi-3-mini-4k-instruct for efficient chat) |
+| chat | String (user message) | String (LLM response) | revision, device, maxTokens, temperature, systemPrompt, userRole, memoryIdHeader, maxChatHistories, maxHistoryMessages | Instruct-tuned/chat models (e.g., mistralai/Mistral-7B-Instruct-v0.2 for conversational, microsoft/Phi-3-mini-4k-instruct for efficient chat) |
 | custom | TBD | TBD | predictorBean (required), revision, device | Any HF model compatible with the custom predictor bean (e.g., Helsinki-NLP/opus-mt-en-fr for translation, distilgpt2 for custom generation) |
+
+A task fails with a `RuntimeCamelException` when its Python handler reports an error, which the handler does by returning a JSON object with the single field `error`. Any other output is the result, also a text or a JSON that has the word `error` in it. A task with no output fails too. A custom predictor (the `predictorBean` option) fails on the error payload only when its `processOutput` calls `failOnPythonError`, as shown in the custom task example below.
+
+The text-to-speech task gives the waveform as a DJL `Audio`, not as encoded audio bytes, so it removes the `Content-Type` header from the message.
 
 ## Configuring Options
 
@@ -132,6 +136,8 @@ The Hugging Face component supports the following options which are listed below
 | **configuration** (producer) | The configuration. |  | HuggingFaceConfiguration |
 | **device** (producer) | Device for inference (cpu, gpu, auto). |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **maxChatHistories** (producer) | The maximum number of chat histories, one per memory ID, that the chat task keeps in memory. When there are more, the history that was updated least recently is evicted first. Zero or a negative value keeps them all. | 1000 | int |
+| **maxHistoryMessages** (producer) | The maximum number of messages that the chat task keeps in a chat history, besides the system prompt. The oldest messages are dropped first, and the kept messages start with a user message, so an odd value keeps one message less. 0 keeps every message. 1 and negative values are rejected, as they would keep no reply. | 50 | int |
 | **maxTokens** (producer) | Max tokens for generation tasks. |  | int |
 | **memoryIdHeader** (producer) | Header name for conversation memory ID (for multi-user chats). | CamelChatMemoryId | String |
 | **minLength** (producer) | Min tokens for summarization tasks. |  | int |
@@ -206,6 +212,8 @@ Enum values:
 | --- | --- | --- | --- |
 | **autoSelect** (producer) | If true, auto-select the best label (highest score) for zero-shot classification. | true | boolean |
 | **device** (producer) | Device for inference (cpu, gpu, auto). |  | String |
+| **maxChatHistories** (producer) | The maximum number of chat histories, one per memory ID, that the chat task keeps in memory. When there are more, the history that was updated least recently is evicted first. Zero or a negative value keeps them all. | 1000 | int |
+| **maxHistoryMessages** (producer) | The maximum number of messages that the chat task keeps in a chat history, besides the system prompt. The oldest messages are dropped first, and the kept messages start with a user message, so an odd value keeps one message less. 0 keeps every message. 1 and negative values are rejected, as they would keep no reply. | 50 | int |
 | **maxTokens** (producer) | Max tokens for generation tasks. |  | int |
 | **memoryIdHeader** (producer) | Header name for conversation memory ID (for multi-user chats). | CamelChatMemoryId | String |
 | **minLength** (producer) | Min tokens for summarization tasks. |  | int |
@@ -418,6 +426,8 @@ from("direct:start-chat")
 
 Send multiple messages to "direct:start-chat" — history is maintained automatically.
 
+The chat task keeps the history of each conversation in memory, keyed by the `CamelChatMemoryId` header (the header named by the `memoryIdHeader` option), or `default` when the header is not set. It keeps at most `maxChatHistories` histories (1000 by default); when there are more, the history that was updated least recently is evicted first. The `maxHistoryMessages` option limits the messages of each history (50 by default, `0` for no limit, and at least 2 otherwise): the oldest messages are dropped first, the system prompt is kept, and the kept messages start with a user message, so an odd value keeps one message less. For long-running conversations, keep `maxHistoryMessages` within what the context of the model can take: a history that outgrows it makes every message of that conversation fail until the history is cleared. Set the `CamelChatClearHistory` header to `true` to clear the history of the conversation before the message is sent.
+
 Custom Task
 
 For a custom task (e.g., _translation_): Define a custom predictor bean in your application or test:
@@ -427,6 +437,14 @@ _Java-only: defining a custom predictor bean_
 ```java
 public class TranslationPredictor extends AbstractTaskPredictor {
     // Implement
+
+    @Override
+    protected void processOutput(Exchange exchange, Output output) throws Exception {
+        String result = output.getAsString("data");
+        // fails on the error payload of the Python handler, or when there is no output
+        failOnPythonError(result);
+        exchange.getMessage().setBody(result);
+    }
 }
 
 @Bean

@@ -170,7 +170,7 @@ The message body at each side of the Printer component: _Consumer_ is the body o
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | The document to print, read as a stream: text, bytes, a stream or a file, in the format of the mimeType and flavor options. A Map, a POJO, a number or no body is not converted: the print job gets no data. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The document to print, read as a stream: text, bytes, a stream or a file, in the format of the mimeType and flavor options. A Map, a POJO, a number or no body fails with an InvalidPayloadException. |
 | **Producer output** | `unchanged` | 
  |
 

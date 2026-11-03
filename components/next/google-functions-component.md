@@ -274,7 +274,7 @@ The message body at each side of the Google Cloud Functions component: _Consumer
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes` or `stream` | The data to call the function with, for callFunction (the default), converted to text: a Map or a POJO is sent as its toString(), so marshal it first, and no body fails. The other operations take their input from options and headers. With pojoRequest=true the request object of the operation, such as a CallFunctionRequest.
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `value`, `map`, `list` or `pojo` | The data to call the function with, for callFunction (the default): text is sent as it is; bytes, a stream, a file, XML (a DOM Node or a Source), an enum or a character are converted to text; and a Map, a List or another POJO is marshalled to JSON with a plain Jackson ObjectMapper, so marshal a POJO that needs custom JSON, such as one with java.time fields, yourself. No body fails, as the data is required. The other operations take their input from options and headers. With pojoRequest=true the request object of the operation, such as a CallFunctionRequest.
 -   With `pojoRequest=true`: `pojo`
     
 
@@ -283,7 +283,7 @@ Not known when `operation` is set.
  |
 | **Producer output** | `text` (`java.lang.String`) | 
 
-The result of the function as text for callFunction, with the whole CallFunctionResponse, which has the error of a failed call, in the CamelGoogleCloudFunctionsResponseObject header. By the operation: a List of CloudFunction for listFunctions, the CloudFunction for getFunction, createFunction and updateFunction, Empty for deleteFunction and the signed URL as text for the URL operations.
+The result of the function as text for callFunction, with the whole CallFunctionResponse in the CamelGoogleCloudFunctionsResponseObject header: a response with an error, of a function that failed, fails the exchange with a CamelExchangeException. By the operation: a List of CloudFunction for listFunctions, the CloudFunction for getFunction, createFunction and updateFunction, Empty for deleteFunction and the signed URL as text for the URL operations.
 
 -   With `operation=listFunctions`: `list` (`java.util.List<com.google.cloud.functions.v1.CloudFunction>`)
     
@@ -506,6 +506,10 @@ from("direct:start")
         - to:
             uri: mock:result
 ```
+
+The message body is the data to call the function with. A `String` is sent as it is, and bytes, a stream, a file, XML (a DOM `Node` or a `javax.xml.transform.Source`), a `ByteBuffer`, an enum or a character are converted to text. A `Map`, a `List` or another Java object is marshalled to JSON with a plain Jackson `ObjectMapper`, without extra modules: a POJO with `java.time` fields fails, so marshal the body to JSON yourself (for example with the Jackson data format) when you need custom JSON. A message without a body fails with an `InvalidPayloadException`, as the Cloud Functions API requires the data.
+
+This operation will return the result of the function as a `String`, with the whole `CallFunctionResponse` in the `CamelGoogleCloudFunctionsResponseObject` header. When the response has an error, because the function failed, the exchange fails with a `CamelExchangeException` whose message has the error; the `CallFunctionResponse` is still in the `CamelGoogleCloudFunctionsResponseObject` header, for an error handler to read.
 
 -   `GenerateDownloadUrl`: this operation generates the signed URL for downloading deployed function source code.
     

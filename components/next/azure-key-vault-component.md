@@ -163,8 +163,8 @@ The message body at each side of the Azure Key Vault component: _Consumer_ is th
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | 
-The value of the secret for createSecret, the default, read as text: a Map or a POJO is stored as its toString(), and no body fails. The name of the secret is in the CamelAzureKeyVaultSecretName header, and updateSecretProperties takes the SecretProperties from the CamelAzureKeyVaultSecretProperties header: the other operations do not use the body.
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `map`, `list` or `pojo` | 
+The value of the secret for createSecret, the default: text, bytes, a stream or a file is read as text, and a Map, a List or a POJO is stored as JSON, of which the azure properties function can read a field. No body fails. The name of the secret is in the CamelAzureKeyVaultSecretName header, and updateSecretProperties takes the SecretProperties from the CamelAzureKeyVaultSecretProperties header: the other operations do not use the body.
 
 -   With `operation=getSecret`: `any`
     
@@ -182,13 +182,13 @@ The value of the secret for createSecret, the default, read as text: a Map or a 
  |
 | **Producer output** | `pojo` (`com.azure.security.keyvault.secrets.models.KeyVaultSecret`) | 
 
-The KeyVaultSecret of the SDK for createSecret, the default; the value of the secret as text for getSecret; the SecretProperties for updateSecretProperties. No body after deleteSecret, which waits until the secret is deleted.
+The KeyVaultSecret of the SDK for createSecret, the default; the value of the secret as text for getSecret; the SecretProperties for updateSecretProperties; the DeletedSecret for deleteSecret, which waits until the secret is deleted, with the recovery id and the dates of the deletion and of the scheduled purge.
 
 -   With `operation=getSecret`: `text` (`java.lang.String`)
     
 -   With `operation=updateSecretProperties`: `pojo` (`com.azure.security.keyvault.secrets.models.SecretProperties`)
     
--   With `operation=deleteSecret`: `null`
+-   With `operation=deleteSecret`: `pojo` (`com.azure.security.keyvault.secrets.models.DeletedSecret`)
     
 -   With `operation=purgeDeletedSecret`: `unchanged`
     
@@ -704,7 +704,7 @@ Azure Key Vault component provides the following operation on the producer side:
 
 ### Producer Examples
 
--   createSecret: this operation will create a secret in Azure Key Vault
+-   createSecret: this operation will create a secret in Azure Key Vault. The message body is the value of the secret: text, bytes, a stream or a file is stored as its text, and a `Map`, a `List` or a POJO as JSON, such as `{"username":"admin","password":"secret"}`, of which the `azure:` properties function can read one field, as in `{{azure:database#username}}`. The message body after the operation is the `KeyVaultSecret` that was stored.
     
 
 -   Java
@@ -795,7 +795,7 @@ from("direct:getSecret")
               operation: getSecret
 ```
 
--   deleteSecret: this operation will delete a Secret from Azure Key Vault
+-   deleteSecret: this operation will delete a Secret from Azure Key Vault. It waits until the secret is deleted, and the message body is then the `DeletedSecret`, with the recovery id and the dates of the deletion and of the scheduled purge.
     
 
 -   Java

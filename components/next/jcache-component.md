@@ -205,7 +205,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ### Producer operations
 
-The producer performs one cache operation per message: the `action` option sets the default, and the `CamelJCacheAction` header overrides it per message. The operations are `PUT`, `PUTALL`, `PUTIFABSENT`, `GET`, `GETALL`, `GETANDREMOVE`, `GETANDREPLACE`, `GETANDPUT`, `REPLACE`, `REMOVE`, `REMOVEALL`, `CLEAR` and `INVOKE`. The `CamelJCacheKey` header names the entry (`CamelJCacheKeys`, a set of keys, for the `ALL` operations), the message body is the value to store, and a `GET` puts the value found in the body.
+The producer performs one cache operation per message: the `action` option sets the default, and the `CamelJCacheAction` header overrides it per message. The operations are `PUT`, `PUTALL`, `PUTIFABSENT`, `GET`, `GETALL`, `GETANDREMOVE`, `GETANDREPLACE`, `GETANDPUT`, `REPLACE`, `REMOVE`, `REMOVEALL`, `CLEAR` and `INVOKE`. The `CamelJCacheKey` header names the entry (`CamelJCacheKeys`, a set of keys, for the `ALL` operations), the message body is the value to store, and a `GET` puts the value found in the body. `PUTALL` takes no key header: the body is a `Map` of the keys and the values to store, and any other body fails with an `InvalidPayloadException`.
 
 Storing a value under a key:
 

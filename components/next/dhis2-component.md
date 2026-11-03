@@ -512,9 +512,9 @@ The message body at each side of the DHIS2 component: _Consumer_ is the body of 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `stream` | 
-One message per poll with the return value of the method: the JSON response of get/resource as a stream; get/collection gives an Iterator of Dhis2Resource, which are Maps of the JSON fields, in one message, not split: split the body to get one message per item.
+The return value of the method: one message per poll with the JSON response of get/resource as a stream; get/collection gives one message per item, a Dhis2Resource, which is a Map of the JSON fields.
 
--   With `methodName=collection`: `iterator`
+-   With `methodName=collection`: `map`
     
 -   With `apiName=RESOURCE_TABLES`: `null`
     
@@ -524,11 +524,13 @@ One message per poll with the return value of the method: the JSON response of g
 
 
  |
-| **Producer input** | `text`, `map`, `list`, `pojo` or `null` | 
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `map`, `list`, `pojo` or `null` | 
 
-post, put and delete send the body as the JSON resource of the request, also without inBody: text as it is, and a Map, a List or a POJO, such as a DHIS2 model class, serialized to JSON by Jackson; no body sends none. Bytes and a file are serialized as a JSON string and a stream fails: convertBodyTo String first. A body left by an earlier step is sent too, also by delete. get and resourceTables do not use the body.
+post and put send the body as the JSON resource of the request, also without inBody: text, bytes, a stream or a file as the JSON it holds, and a Map, a List or a POJO, such as a DHIS2 model class, serialized to JSON by Jackson; no body sends none. delete sends a resource only when given by inBody=resource or the CamelDhis2.resource header. get and resourceTables do not use the body.
 
 -   With `apiName=GET`: `any`
+    
+-   With `apiName=DELETE`: `any`
     
 -   With `apiName=RESOURCE_TABLES`: `any`
     
@@ -557,6 +559,12 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 > **Note**
 > This is an API-based component, so per-call parameters can be supplied through `Camel`\-prefixed exchange headers in addition to the endpoint options. If the route consumes messages from untrusted producers, strip these internal headers at the trust boundary — for example with `removeHeaders("Camel*")` — before the message reaches this component, so that a sender cannot override the API call. See [the Camel security model](../../manual/security-model.md) for details.
+
+## Message body
+
+`post/resource` and `put/resource` send the message body as the JSON resource of the request: text, bytes, a stream or a file as the JSON they hold, and a `Map`, a `List` or a POJO, such as a DHIS2 model class, serialized to JSON. `delete/resource` does not send the message body: set `inBody=resource` or the `CamelDhis2.resource` header to send a resource with the delete.
+
+The `get/collection` consumer sends one message per item of the collection, a `Dhis2Resource`, which is a `Map` of the JSON fields of the item.
 
 ## Examples
 

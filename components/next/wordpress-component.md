@@ -170,9 +170,9 @@ One message per post or user of the search at every poll, the same ones again on
 
 
  |
-| **Producer input** | `pojo` | 
+| **Producer input** | `pojo`, `text`, `bytes`, `stream` or `map` | 
 
-The Post or User (org.apache.camel.component.wordpress.api.model) to create, or to update with the id option: JSON text, a Map or another body fails, so unmarshal it to the class first. A delete does not read the body.
+The Post or User (org.apache.camel.component.wordpress.api.model) to create, or to update with the id option. JSON text or a Map is converted to the class with Jackson; another body fails. A delete does not read the body.
 
 -   With `operationDetail=delete`: `any`
     
@@ -253,6 +253,8 @@ Producer performs write operations on WordPress like adding a new user or update
     
 -   `wordpress:post:delete?id=1` deletes a specific post
     
+
+The message body can also be JSON text (a `String`, `byte[]` or `InputStream`) or a `Map`, with the same field names as the `Post` or `User` that WordPress answers (for example `first_name` for a user). It is converted to the `Post` or `User` class with Jackson. Any other body fails with an `InvalidPayloadException`.
 
 ### Authentication
 

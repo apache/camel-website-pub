@@ -193,9 +193,9 @@ The message body at each side of the QuickFix component: _Consumer_ is the body 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `pojo` or `null` | The FIX message: a quickfix.Message, such as a quickfix.fix44.Email, with the kind of event in the EventCategory header and the MsgType in the MessageType header. SessionCreated, SessionLogon and SessionLogoff events have no body. |
-| **Consumer reply** | `pojo`, `text` or `bytes` | With exchangePattern=InOut, the reply sent back on the session of the request: a quickfix.Message, or the FIX message as text or bytes. Every event is answered with the body the route ends with: a route that sets no reply sends back the message it received. |
+| **Consumer reply** | `pojo`, `text` or `bytes` | With exchangePattern=InOut, the reply sent back on the session of the request: a quickfix.Message, or the FIX message as text or bytes. Only an application message received (AppMessageReceived) is answered, with the body the route ends with: a new message or the received message changed in place. A route that does not change the body sends back the message it received, and a null body sends no reply. A reply that is not a FIX message, such as a Map, goes to the exception handler. |
 | **Producer input** | `pojo`, `text` or `bytes` | The FIX message to send: a quickfix.Message, or the FIX message as text or bytes, parsed with the DataDictionary exchange property or the data dictionary of the session. A stream, a Map or no body fails. |
-| **Producer output** | `unchanged` or `pojo` | The body is left as it was. An InOut exchange waits for the reply that matches the CorrelationCriteria exchange property, and the reply quickfix.Message is the body. |
+| **Producer output** | `unchanged` or `pojo` | The body is left as it was. An InOut exchange waits for the reply that matches the CorrelationCriteria exchange property, and the reply quickfix.Message is the body. An InOut exchange without the property fails before the message is sent. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -281,7 +281,7 @@ Although the FIX protocol is event-driven and asynchronous, there are specific p
 
 #### Implementing InOut Exchanges for Consumers
 
-Add `exchangePattern=InOut` to the QuickFIX/J endpoint URI. The `MessageOrderStatusService` in the example below is a bean with a synchronous service method. The method returns the response to the request (an ExecutionReport in this case) which is then sent back to the requestor session.
+Add `exchangePattern=InOut` to the QuickFIX/J endpoint URI. The `MessageOrderStatusService` in the example below is a bean with a synchronous service method. The method returns the response to the request (an ExecutionReport in this case) which is then sent back to the requestor session. The `otherwise` sets a null body, so the other messages are not answered.
 
 -   Java
     
@@ -290,8 +290,11 @@ Add `exchangePattern=InOut` to the QuickFIX/J endpoint URI. The `MessageOrderSta
 
 ```java
     from("quickfix:examples/inprocess.qf.cfg?sessionID=FIX.4.2:MARKET->TRADER&exchangePattern=InOut")
-        .filter(header(QuickfixjEndpoint.MESSAGE_TYPE_KEY).isEqualTo(MsgType.ORDER_STATUS_REQUEST))
-        .bean(new MarketOrderStatusService());
+        .choice()
+            .when(header(QuickfixjEndpoint.MESSAGE_TYPE_KEY).isEqualTo(MsgType.ORDER_STATUS_REQUEST))
+                .bean(new MarketOrderStatusService())
+            .otherwise()
+                .setBody(simple("${null}"));
 ```
 
 ```yaml
@@ -302,16 +305,25 @@ Add `exchangePattern=InOut` to the QuickFIX/J endpoint URI. The `MessageOrderSta
         sessionID: "FIX.4.2:MARKET->TRADER"
         exchangePattern: InOut
       steps:
-        - filter:
-            expression:
-              simple:
-                expression: "${header.MessageType} == 'H'"
-            steps:
-              - bean:
-                  beanType: com.example.MarketOrderStatusService
+        - choice:
+            when:
+              - expression:
+                  simple:
+                    expression: "${header.MessageType} == 'H'"
+                steps:
+                  - bean:
+                      beanType: com.example.MarketOrderStatusService
+            otherwise:
+              steps:
+                - setBody:
+                    expression:
+                      simple:
+                        expression: "${null}"
 ```
 
 In YAML, the headers are written by name: `MessageType` is `QuickfixjEndpoint.MESSAGE_TYPE_KEY`, and the type of an OrderStatusRequest is `H`.
+
+A reply is sent only for an application message received (the `AppMessageReceived` event): the reply is the body the route ends with. This can be a new FIX message, or the received message changed in place. A route that does not change the body sends the received message back, so set a null body when a message must not be answered (for example in the `otherwise` of a `choice`). The other events (such as the Logon being sent) are never answered. A reply that is not a FIX message, such as a `Map`, is not sent: the error goes to the exception handler of the consumer (logged at WARN by default). No reply is sent when the exchange failed.
 
 The reply is always sent on the session the request was received on. Changing the `SessionID` header while routing does not change where the reply goes. To send a message to another session, use a QuickFIX/J producer endpoint with the `sessionID` option.
 
@@ -325,7 +337,7 @@ For producers, sending a message will block until a reply is received or a timeo
 | Correlation Criteria | `CorrelationCriteria` | `QuickfixjProducer.CORRELATION_CRITERIA_KEY` | None |
 | Correlation Timeout in Milliseconds | `CorrelationTimeout` | `QuickfixjProducer.CORRELATION_TIMEOUT_KEY` | 1000 |
 
-The correlation criteria is defined with a `MessagePredicate` object. The following example will treat a FIX `ExecutionReport` from the specified session where the transaction type is STATUS and the Order ID matches our request. The SenderCompID and TargetCompID of the session ID are matched as given against the header of the reply, so use the session ID as the _replier_ sees it: for a request sent on `FIX.4.2:TRADER→MARKET`, use `FIX.4.2:MARKET→TRADER`. The correlation criteria is required for an InOut exchange.
+The correlation criteria is defined with a `MessagePredicate` object. The following example will treat a FIX `ExecutionReport` from the specified session where the transaction type is STATUS and the Order ID matches our request. The SenderCompID and TargetCompID of the session ID are matched as given against the header of the reply, so use the session ID as the _replier_ sees it: for a request sent on `FIX.4.2:TRADER→MARKET`, use `FIX.4.2:MARKET→TRADER`. The correlation criteria is required for an InOut exchange: without it, the exchange fails with an `IllegalArgumentException` before the message is sent. Use the `InOnly` exchange pattern to send a message without waiting for a reply.
 
 _Java-only: programmatic correlation criteria setup using QuickFIX/J API_
 

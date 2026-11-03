@@ -71,10 +71,10 @@ The AWS Bedrock Agent Runtime component supports the following options which are
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **configuration** (producer) | Component configuration. |  | BedrockAgentRuntimeConfiguration |
-| **knowledgeBaseId** (producer) | **Required** Define the Knowledge Base Id we are going to use. |  | String |
+| **knowledgeBaseId** (producer) | Define the Knowledge Base Id we are going to use (used by the retrieve and retrieveAndGenerate operations). |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **modelId** (producer) | 
-**Required** Define the model Id we are going to use.
+Define the model Id we are going to use (used by the retrieveAndGenerate operation).
 
 Enum values:
 
@@ -339,9 +339,9 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **knowledgeBaseId** (producer) | **Required** Define the Knowledge Base Id we are going to use. |  | String |
+| **knowledgeBaseId** (producer) | Define the Knowledge Base Id we are going to use (used by the retrieve and retrieveAndGenerate operations). |  | String |
 | **modelId** (producer) | 
-**Required** Define the model Id we are going to use.
+Define the model Id we are going to use (used by the retrieveAndGenerate operation).
 
 Enum values:
 
@@ -592,7 +592,7 @@ The AWS Bedrock Agent Runtime component supports the following message header(s)
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelAwsBedrockAgentRuntimeOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#OPERATION) | The operation we want to perform. |  | String |
-| **CamelAwsBedrockAgentRuntimeCitations** (producer) Constant: [`CITATIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#CITATIONS) | When retrieving and generating a response, this header will contain the citations. |  | String |
+| **CamelAwsBedrockAgentRuntimeCitations** (producer) Constant: [`CITATIONS`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#CITATIONS) | When retrieving and generating a response, this header will contain the citations. |  | List |
 | **CamelAwsBedrockAgentRuntimeSessionId** (producer) Constant: [`SESSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#SESSION_ID) | When retrieving and generating a response, this header will contain he unique identifier of the session. Reuse the same value to continue the same session with the knowledge base. |  | String |
 | **CamelAwsBedrockAgentRuntimeAgentId** (producer) Constant: [`AGENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_ID) | The unique identifier of the agent to invoke. Overrides the agentId configured on the endpoint. |  | String |
 | **CamelAwsBedrockAgentRuntimeAgentAliasId** (producer) Constant: [`AGENT_ALIAS_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/agentruntime/BedrockAgentRuntimeConstants.html#AGENT_ALIAS_ID) | The unique identifier of the agent alias to invoke. Overrides the agentAliasId configured on the endpoint. |  | String |
@@ -625,10 +625,10 @@ The message body at each side of the AWS Bedrock Agent Runtime component: _Consu
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | 
-The question, the query or the input of the agent as text for retrieveAndGenerate, retrieve, invokeAgent and invokeInlineAgent: bytes, a stream or a file are read as text, a Map or a POJO is sent as its toString(), so take the text out of it first, and no body fails. invokeFlow takes a String, which becomes the document of the input node FlowInputNode, or a FlowInput or a List of FlowInput of the AWS SDK: another body fails. With pojoRequest=true the request of the AWS SDK for the operation, such as a RetrieveAndGenerateRequest: another body fails.
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `map` | 
+The question, the query or the input of the agent as text for retrieveAndGenerate, retrieve, invokeAgent and invokeInlineAgent: bytes, a stream or a file are read as text, a Map or a Jackson JsonNode is sent as JSON text, another POJO as its toString(), so take the text out of it first, and no body fails. invokeFlow takes a String, which becomes the document of the input node FlowInputNode, or a FlowInput or a List of FlowInput of the AWS SDK: another body is read as text, as for the other operations. With pojoRequest=true the request of the AWS SDK for the operation, such as a RetrieveAndGenerateRequest: another body fails.
 
--   With `operation=invokeFlow`: `text`, `list` or `pojo`
+-   With `operation=invokeFlow`: `text`, `bytes`, `stream`, `file`, `map`, `list` or `pojo`
     
 
 
@@ -657,7 +657,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 Required Bedrock component options
 
-You have to provide the bedrockRuntimeClient in the Registry or your accessKey and secretKey to access the [Amazon Bedrock](https://aws.amazon.com/bedrock/) service.
+You have to provide the bedrockAgentRuntimeClient in the Registry or your accessKey and secretKey to access the [Amazon Bedrock](https://aws.amazon.com/bedrock/) service.
 
 ## Usage
 
@@ -676,6 +676,8 @@ The component supports the following operations on the `operation` URI option:
 -   `invokeInlineAgent` — Invoke an agent defined inline at invocation time (foundation model plus instruction).
     
 
+The `CamelAwsBedrockAgentRuntimeOperation` header overrides the `operation` option per exchange. With neither set, the exchange fails with an `IllegalArgumentException`.
+
 ### Retrieving from a Bedrock Knowledge Base
 
 The `retrieve` operation performs a semantic search against a Bedrock Knowledge Base and returns the matching chunks without invoking an LLM. Use this when you want to plug retrieval into your own generation step, inspect retrieval quality, or build pagination on top of the knowledge base.
@@ -685,7 +687,7 @@ Mandatory options:
 -   `knowledgeBaseId` — the id of the Bedrock Knowledge Base to query.
     
 
-The body of the in-message must be a `String` containing the search query. When `pojoRequest=true`, the body must be a `RetrieveRequest` (any retrieval-config knobs in that POJO are honored verbatim).
+The body of the in-message is the search query as a `String`. A `Map` or a Jackson `JsonNode` body is sent as JSON text, and another body is converted to a `String`. When `pojoRequest=true`, the body must be a `RetrieveRequest` (any retrieval-config knobs in that POJO are honored verbatim).
 
 The retrieval configuration can be tuned per exchange via the following headers:
 
@@ -707,7 +709,7 @@ The producer surfaces the matched chunks as the out-message body (a `List<Knowle
 
 ### Invoking a Bedrock Flow
 
-The `invokeFlow` operation streams flow events using the AWS SDK async client; the producer transparently allocates a `BedrockAgentRuntimeAsyncClient` when the endpoint is configured with `operation=invokeFlow`.
+The `invokeFlow` operation streams flow events using the AWS SDK async client; the producer transparently allocates a `BedrockAgentRuntimeAsyncClient` when the endpoint is configured with `operation=invokeFlow`. When the `CamelAwsBedrockAgentRuntimeOperation` header picks `invokeFlow`, `invokeAgent` or `invokeInlineAgent` on an endpoint of another operation, the async client is created when the first exchange needs it.
 
 Mandatory options:
 
@@ -727,7 +729,11 @@ The body of the in-message can be:
     
 -   a `FlowInput` instance — used as the sole input to the flow;
     
--   a `List<FlowInput>` — passed verbatim to the request (use this form to chain multiple flow inputs).
+-   a `List<FlowInput>` — passed verbatim to the request (use this form to chain multiple flow inputs);
+    
+-   a `Map` or a Jackson `JsonNode` — marshalled to JSON text and used as above;
+    
+-   another body, such as a `byte[]`, an `InputStream` or a file, is converted to a `String` and used as above.
     
 
 When `pojoRequest=true`, the body must be an `InvokeFlowRequest` and is sent unchanged.
@@ -754,7 +760,7 @@ Mandatory options:
 -   `agentAliasId` — the unique id of the agent alias (overridable via the `CamelAwsBedrockAgentRuntimeAgentAliasId` header).
     
 
-The in-message body is the input text sent to the agent. When `pojoRequest=true`, the body must be an `InvokeAgentRequest` and is sent unchanged.
+The in-message body is the input text sent to the agent. A `Map` or a Jackson `JsonNode` body is sent as JSON text, and another body is converted to a `String`. When `pojoRequest=true`, the body must be an `InvokeAgentRequest` and is sent unchanged.
 
 The agent APIs are session based. Set `sessionId` on the endpoint, or the `CamelAwsBedrockAgentRuntimeSessionId` header, to continue an existing conversation; when neither is supplied a random session id is generated for the invocation. The session id used is always echoed back on the `CamelAwsBedrockAgentRuntimeSessionId` header of the out-message so a route can reuse it on the next call.
 

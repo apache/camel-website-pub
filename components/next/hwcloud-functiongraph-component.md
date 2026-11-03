@@ -118,8 +118,8 @@ The message body at each side of the Huawei FunctionGraph component: _Consumer_ 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `map` or `text` | The event of the function, as a Map or a JSON object as text. Bytes, a stream, a file, a JSON array, a POJO or no body fail: convert the body to a String or a Map first. |
-| **Producer output** | `text` or `null` | The body field of the result of the function as text: a string as it is, an object or an array as JSON. No body when the result has no body field. With the CamelHwCloudFgXCffLogType exchange property set, the log of the call is in the CamelHwCloudFgXCffLogs exchange property. |
+| **Producer input** | `map`, `text`, `bytes`, `stream` or `file` | The event of the function, which FunctionGraph takes as a JSON object: a Map, or a JSON object as text, bytes, a stream or a file. A JSON array or another JSON value fails: wrap it in a JSON object. A POJO fails unless its text is JSON: marshal it to JSON first. No body fails. |
+| **Producer output** | `text` or `null` | The result of the function as text. When the result is a JSON object with a top-level body field, such as the result of a function behind an API Gateway trigger, the body field: a string as it is, an object or an array as JSON, and no body when the field is null. Otherwise the whole result as it is. No body when the function gives no result. With the CamelHwCloudFgXCffLogType exchange property set, the log of the call is in the CamelHwCloudFgXCffLogs exchange property. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -147,6 +147,17 @@ If the operation, function name, or function package are set, they will override
 ### List of Supported FunctionGraph Operations
 
 -   invokeFunction - to invoke a serverless function
+    
+
+### Message body
+
+The body of the message is the event of the function, which FunctionGraph takes as a JSON object. It can be a `Map`, or a JSON object as a `String`, bytes, a stream or a file. A JSON array or another JSON value that is not an object fails with an `IllegalArgumentException`: wrap it in a JSON object, such as `{"items": [1, 2, 3]}`. Marshal a POJO to JSON first.
+
+After the call, the body of the message is the result of the function as text:
+
+-   When the result is a JSON object with a top-level `body` field, such as the result of a function behind an API Gateway trigger (`{"statusCode": 200, "headers": {…​}, "body": "…​"}`), the body is that field: a string as it is, an object or an array as JSON. The body is null when the field is null.
+    
+-   Otherwise, the body is the whole result as it is, such as a JSON object without a `body` field, a JSON array or plain text.
     
 
 ### Using ServiceKey Configuration Bean

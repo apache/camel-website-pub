@@ -205,8 +205,8 @@ The message body at each side of the CoAP component: _Consumer_ is the body of t
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `bytes` (`byte[]`) | The request payload as a byte array, empty for a request without a payload, such as a GET; with observe, the payload of each notification of the observed resource. |
-| **Consumer reply** | `null`, `text`, `bytes`, `stream` or `file` | The response payload: text, bytes, a stream, a file or no body. A Map, a POJO or a number is sent as an empty payload: convert or marshal it first. |
-| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The payload of a POST or a PUT: text, bytes, a stream or a file. A Map, a POJO or a number is sent as an empty payload: marshal it first. Without CamelCoapMethod, no body sends a GET and a body a POST. |
+| **Consumer reply** | `null`, `text`, `bytes`, `stream` or `file` | The response payload: text, bytes, a stream, a file or no body. A Map, a POJO or a number is answered with 5.00 Internal Server Error: convert or marshal it first. |
+| **Producer input** | `null`, `text`, `bytes`, `stream` or `file` | The payload of a POST or a PUT: text, bytes, a stream or a file. A Map, a POJO or a number fails the exchange: marshal it first. Without CamelCoapMethod, no body sends a GET and a body a POST. |
 | **Producer output** | `bytes` or `value` | 
 The response payload as a byte array, empty for a response without a payload; a Boolean for a PING (CamelCoapMethod=PING). The response code is in the CamelCoapResponseCode header.
 
@@ -248,9 +248,11 @@ The following rules determine which request method the CoAP producer will use to
 4.  `GET` otherwise.
     
 
+The payload of a `POST` or a `PUT` is the message body converted to `byte[]`, and a message without a body sends an empty payload. A body that cannot be converted, such as a `Map`, a POJO or a number, fails the exchange with an `InvalidPayloadException`: marshal it first (for example to JSON) or convert it to a `String`.
+
 ### Error responses from the CoAP consumer
 
-When the exchange fails, the CoAP consumer answers the request with `5.00 Internal Server Error`. The same applies when the response cannot be built once the route has completed, for example when the body cannot be converted to the response payload.
+When the exchange fails, the CoAP consumer answers the request with `5.00 Internal Server Error`. The same applies when the response cannot be built once the route has completed, for example when the body cannot be converted to the response payload, such as a `Map`, a POJO or a number. A route without a reply body answers `2.05 Content` with an empty payload.
 
 By default the error response has no payload, so the exception’s message is not sent to the client. Set `muteException=false` on the endpoint to send the exception’s message as the payload instead.
 

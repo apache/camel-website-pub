@@ -35,7 +35,7 @@ The following route polls the direct messages of the account every minute, and l
             message: "${body.text}"
 ```
 
-A producer sends the message body as a direct message to the user of the URI. The `CamelTwitterUser` header overrides it:
+A producer sends the message body as a direct message to the user of the URI. The `CamelTwitterUser` header overrides it. A message with no body fails with an `InvalidPayloadException`, and no direct message is sent:
 
 ```yaml
 - route:
@@ -285,7 +285,7 @@ The message body at each side of the Twitter Direct Message component: _Consumer
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `pojo` (`twitter4j.v1.DirectMessage`) | One direct message of the account per exchange, with its text in getText(). It converts to text as the date, the sender id and the text. |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the direct message: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(). The CamelTwitterUser header overrides the user to send to. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The text of the direct message: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(). The CamelTwitterUser header overrides the user to send to. No body fails. |
 | **Producer output** | `unchanged` | Unchanged. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).

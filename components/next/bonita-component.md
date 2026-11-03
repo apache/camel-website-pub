@@ -106,6 +106,15 @@ Enum values:
 | **password** (security) | Password to authenticate to Bonita engine. |  | String |
 | **username** (security) | Username to authenticate to Bonita engine. |  | String |
 
+## Message Headers
+
+The Bonita component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelBonitaCaseId** (producer) Constant: [`CASE_ID`](https://javadoc.io/doc/org.apache.camel/camel-bonita/latest/org/apache/camel/component/bonita/BonitaConstants.html#CASE_ID) | The id of the case that the startCase operation started. |  | String |
+
 ## Message Body
 
 The message body at each side of the Bonita component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
@@ -113,8 +122,8 @@ The message body at each side of the Bonita component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `map` | The contract inputs of the process: a Map of the input names and their Serializable values, a FileInput for a file to upload. Any other body, also JSON text, fails as no contract input: unmarshal it to a Map first. |
-| **Producer output** | `unchanged` | The Map of the inputs, in which each FileInput is replaced by a Map of its filename and the tempPath of the upload. The id of the case started is not kept. |
+| **Producer input** | `map`, `text`, `bytes` or `stream` | The contract inputs of the process: a Map of the input names and their Serializable values, a FileInput for a file to upload, or a JSON object as text that is parsed into that Map with Jackson. Any other body, also JSON text that is not an object, fails with an InvalidPayloadException. |
+| **Producer output** | `unchanged` | The body as sent: a Map of the inputs has each FileInput replaced by a Map of its filename and the tempPath of the upload. The id of the case started is in the CamelBonitaCaseId header. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -122,7 +131,9 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ### Body content
 
-For the startCase operation, the input variables are retrieved from the body message. This one has to contain a `Map<String,Serializable>`.
+For the startCase operation, the input variables are retrieved from the body message. This one has to contain a `Map<String,Serializable>`, or a JSON object as text (`String`, `byte[]` or `InputStream`) such as `{"amount": 1}`, which is parsed into that `Map`. Any other body, also JSON text that is not an object (such as a JSON array), fails with an `InvalidPayloadException`.
+
+After the operation, the body is still the `Map` of the inputs, or the JSON text that was sent. The id of the started case is set in the `CamelBonitaCaseId` header.
 
 ## Examples
 

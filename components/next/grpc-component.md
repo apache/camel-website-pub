@@ -275,7 +275,7 @@ The protobuf request message of the called method, with the method name in the C
 
 
  |
-| **Consumer reply** | `pojo`, `list` or `null` | The protobuf response message, or a List of them for a streaming response; no body sends an empty message. Text, bytes or a Map fail: build the message of the method. With routeControlledStreamObserver the route replies through a producer with toRouteControlledStreamObserver.
+| **Consumer reply** | `pojo`, `list` or `null` | The protobuf response message of the method, or a List of them for a streaming response; no body sends an empty message. Another type is converted to the response message, or the call ends with an INTERNAL error: text, bytes, a Map or the unchanged request fail, build the message of the method. With routeControlledStreamObserver the route replies through a producer with toRouteControlledStreamObserver.
 
 Not known when `routeControlledStreamObserver` is set.
 
@@ -330,6 +330,12 @@ To enable these features, the following component properties combinations must b
 |  |  | jwtSecret |  | Required |
 |  |  | jwtIssuer |  | Optional |
 |  |  | jwtSubject |  | Optional |
+
+### gRPC consumer reply
+
+The message body at the end of the consumer route is the reply to the client: the response message of the called method, or a `List` of them for a streaming response. A message without a body sends an empty response message.
+
+A body of another type is converted to the response message type with a Camel type converter. When there is no such conversion, nothing is sent, and the call ends with an `INTERNAL` status error. For example, a route that leaves the request message unchanged fails the call instead of sending the request as the response. This does not apply with `routeControlledStreamObserver=true`, where the route sends the responses itself.
 
 ### gRPC producer resource type mapping
 

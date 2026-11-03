@@ -114,13 +114,11 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **accountEndpoint** (common) | **Required** MNS account endpoint, for example [https://123456.mns.cn-hangzhou.aliyuncs.com](https://123456.mns.cn-hangzhou.aliyuncs.com). |  | String |
 | **operation** (common) | 
-Operation to perform.
+Operation to perform by the producer. The consumer does not use it: it receives the messages of the queue.
 
 Enum values:
 
 -   sendMessage
-    
--   receiveMessage
     
 -   deleteMessage
     
@@ -250,9 +248,9 @@ The message body at each side of the Alibaba Message Service (MNS) component: _C
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `text` (`java.lang.String`) | The body of the MNS message as text, with the message id, the receipt handle and the dequeue count in headers. |
+| **Consumer** | `text` or `bytes` | The body of the MNS message: a String when it is UTF-8 text, else a byte array, such as for the bytes of a file a producer sent, with the message id, the receipt handle and the dequeue count in headers. Binary data that is valid UTF-8 arrives as a String, so getBody(byte\[\].class) is the reliable way to get the bytes of a message. |
 | **Producer input** | `text`, `bytes`, `stream` or `file` | 
-The body of the message to send or publish, as text: bytes, a stream or a file are read as text, which corrupts binary data, a Map or a POJO is sent as its toString(), so marshal it first, and no body fails. deleteMessage does not use the body: it takes the receipt handle from the CamelAlibabaMnsReceiptHandle header.
+The body of the message to send or publish: text is sent as it is, and bytes, a stream or a file as their bytes, so binary data is kept. A Map, a List or a POJO is sent as its toString(), so marshal it first, and no body fails. deleteMessage does not use the body: it takes the receipt handle from the CamelAlibabaMnsReceiptHandle header.
 
 -   With `operation=deleteMessage`: `any`
     
@@ -262,7 +260,7 @@ The body of the message to send or publish, as text: bytes, a stream or a file a
 
 
  |
-| **Producer output** | `unchanged` | Unchanged: the message id, the request id and the MD5 of the body are set as exchange properties, not headers. |
+| **Producer output** | `unchanged` | Unchanged: the message id and the MD5 of the body are set in headers (and also as exchange properties, as before), and the request id as an exchange property. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -270,16 +268,22 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ### Operations
 
-The component supports the following operations:
+The producer supports the following operations:
 
--   `sendMessage` - send a message to a queue (producer)
+-   `sendMessage` - send a message to a queue
     
--   `receiveMessage` - receive messages from a queue (consumer)
+-   `deleteMessage` - delete a message from a queue using its receipt handle
     
--   `deleteMessage` - delete a message from a queue using its receipt handle (producer)
+-   `publishMessage` - publish a message to a topic
     
--   `publishMessage` - publish a message to a topic (producer)
-    
+
+The consumer receives the messages of a queue: it does not use the `operation` option.
+
+### Message body
+
+The producer sends a `String` body as it is, and a `byte[]`, a stream or a file as its bytes, so binary data is kept. Any other body, such as a `Map`, a `List` or a POJO, is sent as its `toString()`: marshal it first, for example to JSON. A message without a body fails.
+
+The consumer gives the body of a message as a `String` when it is UTF-8 text, and as a `byte[]` otherwise, such as for the bytes of a file that a producer sent. Binary data whose bytes happen to be valid UTF-8 also arrives as a `String`, so when a route needs the bytes of a message, use `getBody(byte[].class)` (or `convertBodyTo(byte[].class)`), which gives back the same bytes in both cases, as UTF-8 is the default charset of Camel.
 
 ### Queue producer example
 
@@ -382,14 +386,26 @@ from("alibaba-mns:myQueue?region=cn-hangzhou&accountEndpoint=https://123456.mns.
 | `CamelAlibabaMnsTopicName` | `String` | Topic name for publish operations |
 | `CamelAlibabaMnsReceiptHandle` | `String` | Receipt handle for delete operations |
 
-### Exchange properties set by the producer
+### Headers and exchange properties set by the producer
+
+`sendMessage` and `publishMessage` set these headers, as the consumer does:
+
+  
+| Header | Type | Description |
+| --- | --- | --- |
+| `CamelAlibabaMnsMessageId` | `String` | Message id returned by MNS |
+| `CamelAlibabaMnsMessageBodyMd5` | `String` | MD5 digest of the message body |
+
+They also set these exchange properties:
 
   
 | Property | Type | Description |
 | --- | --- | --- |
-| `CamelAlibabaMnsMessageId` | `String` | Message id returned by MNS |
 | `CamelAlibabaMnsRequestId` | `String` | Request id returned by MNS |
-| `CamelAlibabaMnsMessageBodyMd5` | `String` | MD5 digest of the message body |
+| `CamelAlibabaMnsMessageId` | `String` | Message id returned by MNS, as the header of the same name |
+| `CamelAlibabaMnsMessageBodyMd5` | `String` | MD5 digest of the message body, as the header of the same name |
+
+In Camel 4.23 the producer set the message id and the MD5 only as exchange properties. They are still set as properties, so that routes that read them keep working, but prefer the headers.
 
 ## Examples
 

@@ -274,7 +274,7 @@ micrometer:counter:name\[?options\]
 | increment | \- | Double value to add to the counter |
 | decrement | \- | Double value to subtract from the counter |
 
-If neither `increment` or `decrement` is defined then value of the counter will be incremented by one. If `increment` and `decrement` are both defined only increment operation is called.
+If neither `increment` or `decrement` is defined then value of the counter will be incremented by one. If `increment` and `decrement` are both defined only increment operation is called. If `increment` or `decrement` is defined, but neither of them gives a number (for example `increment=${body}` with a `Map`, a POJO or a `null` body, or `increment=${header.amount}` with no such header), the exchange fails with an `IllegalArgumentException`, and the counter is not updated.
 
 -   Java
     

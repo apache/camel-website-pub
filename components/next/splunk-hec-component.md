@@ -127,8 +127,8 @@ The message body at each side of the Splunk HEC component: _Consumer_ is the bod
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `value`, `map`, `list`, `pojo` or `null` | 
-The event, written as JSON by Jackson with the headers beside it, or alone with bodyOnly. A stream fails, bytes become base64 and a File its path: convert them to text first. With headersOnly the body is not sent.
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `value`, `map`, `list`, `pojo` or `null` | 
+The event, written as JSON by Jackson with the headers beside it, or alone with bodyOnly. Bytes, a stream or a file are sent as text. With headersOnly the body is not sent.
 
 -   With `headersOnly=true`: `any`
     
@@ -151,6 +151,8 @@ The bodies are the ones with the default options. A side that is not listed is n
 The body must be serializable to JSON, so it may be sent to Splunk.
 
 A `String` or a `java.util.Map` object can be serialized easily.
+
+A byte array, an `InputStream`, a `Reader` or a file (such as the body of the file consumer) is converted to text and sent as a JSON string. The payload is written as JSON before the request is sent, so a body that cannot be serialized fails the exchange without sending anything to Splunk.
 
 ## Use Cases
 

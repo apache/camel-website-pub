@@ -1,9 +1,11 @@
-urls[943]{loc,lastmod}:
+urls[944]{loc,lastmod}:
+  https://camel.apache.org/categories/AI/,2026-11-03T00:00:00+00:00
+  https://camel.apache.org/blog/,2026-11-03T00:00:00+00:00
+  https://camel.apache.org/categories/Camel/,2026-11-03T00:00:00+00:00
+  https://camel.apache.org/blog/2026/11/camel-document-ingestion-rag/,2026-11-03T00:00:00+00:00
+  https://camel.apache.org/,2026-11-03T00:00:00+00:00
   https://camel.apache.org/security/CVE-2026-71569.md,2026-10-23T10:00:00+02:00
-  https://camel.apache.org/,2026-10-23T10:00:00+02:00
   https://camel.apache.org/security/,2026-10-23T10:00:00+02:00
-  https://camel.apache.org/categories/AI/,2026-10-23T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-10-23T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/,2026-10-23T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.23.0/,2026-10-23T00:00:00+00:00
   https://camel.apache.org/releases/,2026-10-23T00:00:00+00:00
@@ -64,7 +66,6 @@ urls[943]{loc,lastmod}:
   https://camel.apache.org/security/CVE-2026-88901.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/security/CVE-2026-91858.md,2026-10-15T10:00:00+02:00
   https://camel.apache.org/blog/2026/10/camel423-whatsnew/,2026-10-15T00:00:00+00:00
-  https://camel.apache.org/categories/Camel/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/releases/release-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/,2026-10-14T00:00:00+00:00

@@ -49,6 +49,8 @@ The following example shows how to take a request from the direct:a endpoint the
 > **Important**
 > When using new-line (`\n`) as tokenizer, then XML and YAML DSL must use the `token` option\\ as done in the following example.
 
+The token is matched as literal text, so a delimiter such as `|`, `.` or `*` splits at that character. To use a regular expression as token, such as `\s+`, set the `regex` option to `true`. In the XML and YAML DSL, the escapes `\n`, `\r` and `\t` in a token are the new line, carriage return and tab characters, so `\r\n` splits Windows lines.
+
 -   Java
     
 -   XML

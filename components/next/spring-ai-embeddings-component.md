@@ -127,8 +127,8 @@ The message body at each side of the Spring AI Embeddings component: _Consumer_ 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | The text to embed, or a List of texts for a batch. Another body is converted to text (a Map or a POJO as its toString()), and no body fails. |
-| **Producer output** | `list` | The vector as a float\[\] for one text, also for a List with one text, and a List of float\[\] for a List of more texts. The Embedding and the input text are in headers, which spring-ai-vector-store reads. |
+| **Producer input** | `any` | The text to embed, or a List of texts for a batch. Another body, and each element of a List, is converted to text (a Map or a POJO as its toString()); no body, or a null element in a List, fails. |
+| **Producer output** | `list` | The vector as a float\[\] for one text, and a List of float\[\] for a List of texts, also for a List with one text or none. The Embedding and the input text are in headers, which spring-ai-vector-store reads. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -140,6 +140,8 @@ The component accepts two types of input:
     
 -   **Batch processing**: A List<String> containing multiple texts to embed at once
     
+
+Another body, and each element of a List, is converted to a String. A `null` element in a List fails the exchange with an `IllegalArgumentException`.
 
 The embedding vectors are returned in the message body, with additional metadata available in headers.
 
@@ -233,7 +235,7 @@ from("direct:batch")
             message: "Number of embeddings: ${body.size()}"
 ```
 
-When processing a List<String>, the component returns:
+When processing a List<String>, the component returns the following, also for a List with a single text. An empty List gives an empty List, without calling the embedding model.
 
 -   **Message Body**: List of embedding vectors as `List<float[]>`
     

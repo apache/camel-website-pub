@@ -259,6 +259,8 @@ The `rejectedPolicy` option controls what happens when a thread pool cannot acce
 | **Abort** | The task is rejected with a `RejectedExecutionException`. Use this for HTTP APIs or latency-sensitive systems where failing fast is preferred over blocking. |
 | **Block** | The caller blocks indefinitely until capacity becomes available. No timeout, no rejection. Use this for message broker consumers and batch workloads where losing a task is unacceptable and latency is less critical. |
 
+With virtual threads, a task of the pool that submits more work to the same pool runs it at once when no permit is free, for `CallerRuns` and `Block`, instead of waiting (see [Virtual Threads](#virtual-threads)).
+
 With platform threads, these policies apply when the `ThreadPoolExecutor` work queue is full. With virtual threads, the same policies apply when the concurrency semaphore has no available permits (see [Virtual Threads](#virtual-threads)).
 
 ## Virtual Threads
@@ -273,7 +275,7 @@ Be aware that even if it is enabled, there are some use cases where platform thr
 
 When `maxQueueSize` is set to a positive value, Camel wraps the virtual thread executor with a semaphore-based concurrency limit. This ensures that `maxQueueSize` is honored for backpressure, even though virtual threads do not use a traditional work queue.
 
-Unlike `ThreadPoolExecutor` where pool threads and queued tasks are distinct concepts, the virtual thread executor enforces a flat concurrency cap: the maximum number of concurrently executing tasks equals `maxQueueSize`. Pool sizing parameters (`poolSize`, `maxPoolSize`) are ignored since virtual threads are not pooled. All permitted tasks execute immediately on virtual threads — there is no queue of waiting tasks.
+Unlike `ThreadPoolExecutor` where pool threads and queued tasks are distinct concepts, the virtual thread executor enforces a flat concurrency cap: the maximum number of concurrently executing tasks equals `maxQueueSize`. Pool sizing parameters (`poolSize`, `maxPoolSize`) do not size the virtual thread executor since virtual threads are not pooled, but they are still validated (`maxPoolSize` must not be below `poolSize`, and `poolSize` must not be negative). A scheduled pool is the exception: its `poolSize` is the number of threads that run its scheduled tasks. All permitted tasks execute immediately on virtual threads — there is no queue of waiting tasks.
 
 The `rejectedPolicy` controls what happens when the concurrency limit is reached:
 
@@ -283,6 +285,8 @@ The `rejectedPolicy` controls what happens when the concurrency limit is reached
     
 -   **Block**: the caller blocks indefinitely until a permit becomes available.
     
+
+A task of the pool that submits more work to the same pool (for example a parallel `split` that submits its items) can hold the permit it would wait for. So with `CallerRuns` and `Block`, when no permit is free, that work runs at once on the submitting thread instead of waiting. For `Block` this applies even when other tasks hold the permits. Such work runs outside the concurrency limit, as does the work handed to a new task when it is nested too deeply. `Abort` is not affected: it still waits and is rejected as usual.
 
 While waiting for a permit, the calling thread is blocked. When callers are virtual threads this is inexpensive (the carrier thread is released). When callers are platform threads (e.g., HTTP server threads) the blocked thread is unavailable for other work.
 

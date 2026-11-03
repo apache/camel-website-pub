@@ -408,17 +408,17 @@ The message body at each side of the IBM watsonx.ai component: _Consumer_ is the
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-The prompt or text for textGeneration, tokenize, detect and deploymentGenerate, the file path, ID or file name for the text extraction and classification operations that do not upload, read as text unless a header such as CamelIBMWatsonxAiInput gives it: a Map or a POJO is sent as its toString(). chat takes the user message as a String or a List of ChatMessage, embedding and rerank a String or a List of Strings: bytes or a stream fail there. The upload operations take a file, a stream or bytes, with the CamelIBMWatsonxAiFileName header unless it is a file. runTool takes a Map (structured) or a String; forecast a TimeSeriesRequest unless the CamelIBMWatsonxAiForecastInputSchema and CamelIBMWatsonxAiForecastData headers give it.
+The prompt or text for textGeneration, tokenize, detect and deploymentGenerate, the file path, ID or file name for the text extraction and classification operations that do not upload, read as text unless a header such as CamelIBMWatsonxAiInput gives it: a Map or a POJO is sent as its toString(). chat, chatStreaming and deploymentChat take the user message, read as text the same way, a ChatMessage, or the conversation as a List of ChatMessage in which a String is a user message (any other element fails); embedding and rerank take one text, read as text the same way, or a List of Strings. The upload operations take a file, a stream or bytes, with the CamelIBMWatsonxAiFileName header unless it is a file. runTool takes a Map (structured) or a String; forecast a TimeSeriesRequest unless the CamelIBMWatsonxAiForecastInputSchema and CamelIBMWatsonxAiForecastData headers give it.
 
--   With `operation=chat`: `text` or `list`
+-   With `operation=chat`: `text`, `bytes`, `stream` or `list`
     
--   With `operation=chatStreaming`: `text` or `list`
+-   With `operation=chatStreaming`: `text`, `bytes`, `stream` or `list`
     
--   With `operation=deploymentChat`: `text` or `list`
+-   With `operation=deploymentChat`: `text`, `bytes`, `stream` or `list`
     
--   With `operation=embedding`: `text` or `list`
+-   With `operation=embedding`: `text`, `bytes`, `stream` or `list`
     
--   With `operation=rerank`: `text` or `list`
+-   With `operation=rerank`: `text`, `bytes`, `stream` or `list`
     
 -   With `operation=textExtractionUpload`: `file`, `stream`, `bytes` or `text`
     
@@ -588,15 +588,21 @@ The IBM watsonx.ai component provides the following operations:
 -   `chatStreaming` - Chat with streaming responses via callback consumer
     
 
+The messages come from the `CamelIBMWatsonxAiMessages` header when it is set. Otherwise the message body gives them: a `List` is the conversation, in which each element is a `ChatMessage` or a `String` (a user message), and any other element fails; a single `ChatMessage` is a conversation of one message; any other body is the user message, read as text (so a `String`, a `byte[]` or an `InputStream` works), after the system message of the `CamelIBMWatsonxAiSystemMessage` header if that is set. The `CamelIBMWatsonxAiUserMessage` header takes the place of the body. `deploymentChat` reads its messages the same way.
+
 #### Embeddings
 
 -   `embedding` - Generate embeddings for text inputs (single or batch)
     
 
+The texts come from the `CamelIBMWatsonxAiInputs` header, or from the message body: a `List` of `String`, or one text, read as text (so a `String`, a `byte[]` or an `InputStream` works).
+
 #### Reranking
 
 -   `rerank` - Rerank documents by relevance to a query
     
+
+The query comes from the `CamelIBMWatsonxAiRerankQuery` header, and the documents from the `CamelIBMWatsonxAiInputs` header or the message body, as for `embedding`.
 
 #### Tokenization
 

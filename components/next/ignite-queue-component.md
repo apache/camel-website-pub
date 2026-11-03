@@ -6,6 +6,8 @@
 
 The Ignite Queue endpoint is one of camel-ignite endpoints that allow you to interact with [Ignite Queue data structures](https://apacheignite.readme.io/docs/queue-and-set).
 
+`ADD`, `OFFER`, `PUT`, `CONTAINS`, `REMOVE` and `RETAIN_ALL` use the body as the element, and fail without a body. The operation is the `operation` option, or the `CamelIgniteQueueOperation` header; without either, the producer fails.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -191,7 +193,7 @@ The message body at each side of the Ignite Queues component: _Consumer_ is the 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | ADD, OFFER, PUT, CONTAINS, REMOVE and RETAIN\_ALL use the body as the element, and a Collection as several elements unless treatCollectionsAsCacheObjects=true; no body fails ADD, CONTAINS, REMOVE and RETAIN\_ALL. DRAIN drains into a Collection body, or a new List. The other operations do not use the body. The operation is the operation option or the CamelIgniteQueueOperation header; with neither the producer fails. |
+| **Producer input** | `any` | ADD, OFFER, PUT, CONTAINS, REMOVE and RETAIN\_ALL use the body as the element, and a Collection as several elements unless treatCollectionsAsCacheObjects=true; no body fails them. DRAIN drains into a Collection body, or a new List. The other operations do not use the body. The operation is the operation option or the CamelIgniteQueueOperation header; with neither the producer fails. |
 | **Producer output** | `unknown` | true or false for ADD, OFFER, CONTAINS, REMOVE and RETAIN\_ALL, the number of elements for SIZE, an Iterator for ITERATOR, an Object array for ARRAY, and the Collection of the drained elements for DRAIN, with their count in the CamelIgniteQueueTransferredCount header. ELEMENT, TAKE, PEEK and POLL give the head element; PEEK and POLL give null for an empty queue. CLEAR and PUT leave the body.
 -   With `operation=ADD`: `value` (`java.lang.Boolean`)
     

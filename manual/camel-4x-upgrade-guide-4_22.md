@@ -17,6 +17,12 @@ The signature of a `multipart/signed` message is now verified over the signed pa
 
 The text of a body part now ends exactly where the boundary delimiter begins: the line break before the delimiter line is removed as the sender wrote it, CRLF or a bare LF. Before, two characters were always removed, so a part framed with bare line feeds (as `openssl cms -sign` writes them without `-crlfeol`) lost its last byte.
 
+### camel-as2 - the asynchronous MDN allow-list matches the host and port
+
+The `asyncMdnAllowedHosts` option now matches the full authority - host and port - of the asynchronous MDN delivery address, rather than the host alone. Each entry is a host with an optional port in `host:port` form (IPv6 literals use bracket notation, for example `[::1]` or `[::1]:8080`). A bare-host entry (for example `partner.example`) now matches only the default port of `http` (80); to deliver to another port, list it explicitly (for example `partner.example:8080`).
+
+A deployment that lists a bare host and receives asynchronous MDNs on a non-default port must add the port to the entry.
+
 ### camel-azure-eventhubs - an event that completes when the checkpoint timer of its window has run is checkpointed
 
 With `checkpointBatchTimeout`, the consumer now starts a new checkpoint window when the timer of the current window has run, and no longer when the wall clock passes the time the timer was scheduled for. Before, an event that completed in the millisecond in which the timer ran (or while the timer was taking the count) was counted in the window whose count had already been taken: it was checkpointed only with the next event, and when the partition stayed quiet it was delivered again after a restart.
@@ -70,6 +76,10 @@ The `user` and `password` are now offered only to the nodes the client talks to:
 ### camel-netty - errors sent to the client
 
 A new `muteException` consumer option, enabled by default, makes a consumer with `sync=true` write a generic exception (`java.lang.Exception` with the message `Exchange processing failed` and no stack trace) back to the client when the exchange failed, instead of the exception of the route. With `textline=true` the client now receives the line `java.lang.Exception: Exchange processing failed`, where it used to receive the class name and the message of the exception of the route. With an encoder that accepts any object, the serialised exception no longer carries the class, message, cause or stack trace of the exception of the route. Set `muteException=false` to write the exception as before. `transferExchange=true` is not affected.
+
+### camel-netty - with transferExchange the consumer keeps its own connection headers
+
+With `transferExchange=true` the connection headers `CamelNettyRemoteAddress`, `CamelNettyLocalAddress`, `CamelNettyChannelHandlerContext`, `CamelNettySSLSession` and the `CamelNettySSLClientCert*` headers (and the `CamelNettyRemoteAddress` and `CamelNettyChannel` exchange properties) are now always the ones of the receiving side: the connection it accepted is the source of truth. Before, the headers of the transferred exchange replaced them. Such a header in the transferred exchange is no longer used, also when the receiving side has no value for it (for example the `CamelNettySSLClientCert*` headers on a connection without a client certificate). This also applies to the reply the producer receives. Send any such value of the sender under a header name of your own.
 
 ### camel-elasticsearch-rest-client - the credentials are only sent to the nodes of the cluster
 
@@ -210,6 +220,45 @@ For OpenID Connect / Keycloak login flows, Keycloak access tokens commonly carry
 The remote object name is untrusted input, so the consumer now also checks it whatever `downloadFileName` looks like. An absolute object name (one starting with `/` or `\`, or with a drive letter such as `C:`) and an object name with a `..` path segment are rejected, even when the name would normalize back inside the download directory (for example `a/../b.txt`). When the consumer lists the bucket, a rejected object is skipped and reported to the consumer’s exception handler, which logs a warning by default, and the other objects of the poll are consumed as usual. The rejected object stays in the bucket, so it is reported again on every poll until it is removed or renamed. With `objectName`, which consumes a single object, the poll fails instead, and the failure is reported on every poll.
 
 The containment check is now also applied when `downloadFileName` is configured as a directory followed by an expression, such as `downloadFileName=/tmp/downloads/${file:name}`: the destination must stay within the static directory prefix configured before the first expression token (`/tmp/downloads` in the example). When `downloadFileName` is fully dynamic and has no static directory prefix (for example `downloadFileName=${file:name}`), a relative destination must stay within the working directory. An absolute destination that comes from the route’s own expression is not confined.
+
+### camel-openstack - the remaining Swift header constants follow the Camel naming convention
+
+The four remaining Exchange header constants of `SwiftConstants` have been renamed to follow the Camel naming convention used by the rest of the component, completing the rename done in 4.21. The Java field names are unchanged; only the header string values have changed.
+
+  
+| Constant | Previous value | New value |
+| --- | --- | --- |
+| `SwiftConstants.CONTAINER_METADATA_PREFIX` | `X-Container-Meta-` | `CamelOpenstackSwiftContainerMetadata` |
+| `SwiftConstants.VERSIONS_LOCATION` | `X-Versions-Location` | `CamelOpenstackSwiftVersionsLocation` |
+| `SwiftConstants.CONTAINER_READ` | `X-Container-Read` | `CamelOpenstackSwiftContainerRead` |
+| `SwiftConstants.CONTAINER_WRITE` | `X-Container-Write` | `CamelOpenstackSwiftContainerWrite` |
+
+The previous values were kept in 4.21 on the understanding that they were part of the Swift HTTP contract. They are not: the container producer passes the values to the openstack4j `CreateUpdateContainerOptions`, which builds the `X-Container-Meta-`, `X-Versions-Location`, `X-Container-Read` and `X-Container-Write` names of the Swift request itself. The request Camel sends to Swift is therefore unchanged by this rename.
+
+Routes that reference the constants symbolically (for example `setHeader(SwiftConstants.CONTAINER_READ, …​)`) continue to work without changes. Routes that set one of these headers by its literal string value (for example `setHeader("X-Container-Read", …​)` in an XML or YAML route) must be updated to the new value (`setHeader("CamelOpenstackSwiftContainerRead", …​)`); the previous names are no longer read.
+
+The generated Endpoint DSL header accessors on the Swift `HeaderNameBuilder` are renamed accordingly (`xContainerMeta()` → `openstackSwiftContainerMetadata()`, `xVersionsLocation()` → `openstackSwiftVersionsLocation()`, `xContainerRead()` → `openstackSwiftContainerRead()`, `xContainerWrite()` → `openstackSwiftContainerWrite()`).
+
+### camel-telemetry, camel-tracing - the http.url, url.path and server.address span attributes are presented like camel.uri
+
+This applies to `camel-opentelemetry2`, `camel-micrometer-observability`, `camel-telemetry-dev`, `camel-opentelemetry` and `camel-observation`. The `http.url`, `url.path` and `server.address` attributes of a span are now presented the same way as the `camel.uri` attribute, which shows the endpoint URI as `Endpoint.toString()` does:
+
+-   `http.url`, when the message has neither a `CamelHttpUrl` nor a `CamelHttpUri` header, is now the HTTP address the endpoint sends to, with the query parameters it sends but without the Camel endpoint options. Before, it was the endpoint URI from the last `http:` onwards, with all the endpoint options. A `camel-http` endpoint with an `https` address now sets the attribute as well, and for a `camel-vertx-http` endpoint with an `https` address the value no longer starts with `[http://https://](http://https://)`.
+    
+-   `url.path` no longer includes the user info in front of the host of the endpoint URI.
+    
+-   `server.address`, and `http.url` taken from the `CamelHttpUrl` or `CamelHttpUri` header, are presented as `camel.uri` is.
+    
+
+Dashboards or queries that use the old values may need a change.
+
+### camel-netty-http - endpoints that differ only in their options are distinct endpoints
+
+Two `netty-http` endpoints whose URIs differ only in their endpoint options, for example `netty-http:http://localhost:8080/foo` and `netty-http:http://localhost:8080/foo?throwExceptionOnFailure=false`, are no longer equal. Each of them now gets its own producer when a `ProducerTemplate`, `toD` or another EIP with a dynamic URI sends to them. Before, these endpoints used the producer of the endpoint that was used first, with the options of that endpoint.
+
+The endpoint URI does not change: it is still the HTTP address, such as `[http://localhost:8080/foo](http://localhost:8080/foo)`, so JMX names, auto-mock names, tracing and metrics are the same as before.
+
+Two routes that consume from the same address with different endpoint options are no longer rejected at startup as "Multiple consumers for the same endpoint is not allowed". Use one consumer per address.
 
 ## Upgrading from 4.22.1 to 4.22.2
 

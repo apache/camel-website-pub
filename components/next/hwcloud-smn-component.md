@@ -120,10 +120,10 @@ The message body at each side of the Huawei Simple Message Notification (SMN) co
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | 
-The message to publish, as text: bytes, a stream or a file are read as text, and a Map or a POJO is sent as its toString(): marshal it first. No body fails for publishAsTextMessage, while publishAsTemplatedMessage can have no body, with the template from the CamelHwCloudSmnTemplateName exchange property. The topic comes from the CamelHwCloudSmnTopic exchange property.
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `map`, `list` or `pojo` | 
+The message to publish, as text: bytes, a stream or a file are read as text, an XML Source or a DOM node as its XML text, and a Map, a List or a POJO is published as JSON. No body fails for publishAsTextMessage, while publishAsTemplatedMessage can have no body, with the template from the CamelHwCloudSmnTemplateName exchange property. The topic comes from the CamelHwCloudSmnTopic exchange property.
 
--   With `operation=publishAsTemplatedMessage`: `text`, `bytes`, `stream`, `file` or `null`
+-   With `operation=publishAsTemplatedMessage`: `text`, `bytes`, `stream`, `file`, `map`, `list`, `pojo` or `null`
     
 
 
@@ -131,7 +131,7 @@ The message to publish, as text: bytes, a stream or a file are read as text, and
 
 
  |
-| **Producer output** | `unchanged` | Unchanged, with the ids of the message and of the request in the CamelHwCloudSmnMesssageId and CamelHwCloudSmnRequestId exchange properties. |
+| **Producer output** | `unchanged` | Unchanged, with the ids of the message and of the request in the CamelHwCloudSmnMessageId and CamelHwCloudSmnRequestId exchange properties. The message id is also in the deprecated CamelHwCloudSmnMesssageId exchange property. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -153,8 +153,15 @@ The bodies are the ones with the default options. A side that is not listed is n
   
 | Header | Type | Description |
 | --- | --- | --- |
-| `CamelHwCloudSmnMesssageId` | `String` | Unique message id returned by Simple Message Notification server after processing the request |
+| `CamelHwCloudSmnMessageId` | `String` | Unique message id returned by Simple Message Notification server after processing the request |
 | `CamelHwCloudSmnRequestId` | `String` | Unique request id returned by Simple Message Notification server after processing the request |
+| `CamelHwCloudSmnMesssageId` | `String` | **Deprecated**: the message id under a name with a typo (three s). Use `CamelHwCloudSmnMessageId` instead. |
+
+### Message body
+
+The body of the message is the message to publish, as text. A `String` is published as it is, and bytes, a stream or a file are read as text. An XML `Source` or a DOM node is published as its XML text. A `Map`, a `List` or a POJO is published as JSON. The `publishAsTextMessage` operation fails when there is no body, while `publishAsTemplatedMessage` can have no body.
+
+The body of the message is not changed by the producer.
 
 ### Supported list of smn services and corresponding operations
 

@@ -417,7 +417,7 @@ The google-calendar/update API method has the parameters listed in the table bel
 
 Signatures:
 
--   com.google.api.services.calendar.Calendar.Acl.Watch watch(String calendarId, com.google.api.services.calendar.model.Channel content);
+-   com.google.api.services.calendar.Calendar.Acl.Watch watch(String calendarId, com.google.api.services.calendar.model.Channel contentChannel);
     
 
 The google-calendar/watch API method has the parameters listed in the table below:
@@ -569,7 +569,7 @@ The 1 method(s) is(are) listed in the table below, followed by detailed syntax f
 
 Signatures:
 
--   com.google.api.services.calendar.Calendar.Channels.Stop stop(com.google.api.services.calendar.model.Channel content);
+-   com.google.api.services.calendar.Calendar.Channels.Stop stop(com.google.api.services.calendar.model.Channel contentChannel);
     
 
 The google-calendar/stop API method has the parameters listed in the table below:
@@ -821,7 +821,7 @@ The google-calendar/update API method has the parameters listed in the table bel
 
 Signatures:
 
--   com.google.api.services.calendar.Calendar.Events.Watch watch(String calendarId, com.google.api.services.calendar.model.Channel content);
+-   com.google.api.services.calendar.Calendar.Events.Watch watch(String calendarId, com.google.api.services.calendar.model.Channel contentChannel);
     
 
 The google-calendar/watch API method has the parameters listed in the table below:
@@ -1010,7 +1010,7 @@ The google-calendar/update API method has the parameters listed in the table bel
 
 Signatures:
 
--   com.google.api.services.calendar.Calendar.CalendarList.Watch watch(com.google.api.services.calendar.model.Channel content);
+-   com.google.api.services.calendar.Calendar.CalendarList.Watch watch(com.google.api.services.calendar.model.Channel contentChannel);
     
 
 The google-calendar/watch API method has the parameters listed in the table below:
@@ -1083,7 +1083,7 @@ The google-calendar/list API method has the parameters listed in the table below
 
 Signatures:
 
--   com.google.api.services.calendar.Calendar.Settings.Watch watch(com.google.api.services.calendar.model.Channel content);
+-   com.google.api.services.calendar.Calendar.Settings.Watch watch(com.google.api.services.calendar.model.Channel contentChannel);
     
 
 The google-calendar/watch API method has the parameters listed in the table below:

@@ -115,7 +115,7 @@ The Spring Batch component supports the following message header(s), which is/ar
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelSpringBatchJobName** (producer) Constant: [`JOB_NAME`](https://javadoc.io/doc/org.apache.camel/camel-spring-batch/latest/org/apache/camel/component/spring/batch/SpringBatchConstants.html#JOB_NAME) | The name of the Batch Job to use. |  | String |
+| **CamelSpringBatchJobName** (producer) Constant: [`JOB_NAME`](https://javadoc.io/doc/org.apache.camel/camel-spring-batch/latest/org/apache/camel/component/spring/batch/SpringBatchConstants.html#JOB_NAME) | The name of the Batch Job to use. Only used when the endpoint has jobFromHeader=true. |  | String |
 
 ## Message Body
 
@@ -124,7 +124,7 @@ The message body at each side of the Spring Batch component: _Consumer_ is the b
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | The body is not read: the job parameters are the message headers (Date, Long and Double values as such, other values as text; a null header value fails). |
+| **Producer input** | `any` | The body is not read: the job parameters are the message headers (Date, Long and Double values as such, other values as text; headers with a null value are skipped). |
 | **Producer output** | `pojo` (`org.springframework.batch.core.job.JobExecution`) | The JobExecution of the launched job, with its status and exit status; the headers stay as they were. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -142,7 +142,9 @@ When the Spring Batch component receives the message, it triggers the job execut
 -   if none of the steps above allow resolving the `JobLauncher` and there is exactly one `JobLauncher` instance in the Camel Registry, then use it.
     
 
-All headers found in the message are passed to the `JobLauncher` as job parameters. `String`, `Long`, `Double` and `java.util.Date` values are copied to the `org.springframework.batch.core.JobParametersBuilder` - other data types are converted to Strings.
+All headers found in the message are passed to the `JobLauncher` as job parameters. `String`, `Long`, `Double` and `java.util.Date` values are copied to the `org.springframework.batch.core.JobParametersBuilder` - other data types are converted to Strings. Headers with a `null` value are skipped, as Spring Batch does not accept a job parameter without a value.
+
+By default, the job to launch is the one named in the endpoint URI. To pick the job per message, set `jobFromHeader=true` on the endpoint and put the job name in the `CamelSpringBatchJobName` header. Without `jobFromHeader=true` that header is ignored when choosing the job.
 
 ## Examples
 

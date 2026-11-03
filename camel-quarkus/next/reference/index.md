@@ -55,7 +55,7 @@ level | Description |
 | [AWS Secrets Manager](extensions/aws-secrets-manager.md) | camel-quarkus-aws-secrets-manager | 2.0.0 | 3.19.0 | Stable | Manage secrets using AWS Secrets Manager. |
 | [Azure CosmosDB](extensions/azure-cosmosdb.md) | camel-quarkus-azure-cosmosdb | 2.0.0 | n/a | Preview | To read and write records to the CosmosDB database on Azure cloud platform. |
 | [Azure Event Hubs](extensions/azure-eventhubs.md) | camel-quarkus-azure-eventhubs | 1.7.0 | 1.7.0 | Stable | Send and receive events to/from Azure Event Hubs using AMQP protocol. |
-| [Azure Files](extensions/azure-files.md) | camel-quarkus-azure-files | 3.22.0 | n/a | Preview | Send and receive files to Azure storage file share |
+| [Azure Files](extensions/azure-files.md) | camel-quarkus-azure-files | 3.22.0 | n/a | Stable | Send and receive files to Azure storage file share |
 | [Azure Key Vault](extensions/azure-key-vault.md) | camel-quarkus-azure-key-vault | 2.10.0 | 3.13.0 | Stable | Manage secrets and keys in Azure Key Vault Service |
 | [Azure ServiceBus](extensions/azure-servicebus.md) | camel-quarkus-azure-servicebus | 2.8.0 | 3.19.0 | Stable | Send and receive messages to/from Azure Service Bus. |
 | [Azure Storage Blob Service](extensions/azure-storage-blob.md) | camel-quarkus-azure-storage-blob | 1.1.0 | 1.6.0 | Stable | Store and retrieve blobs from Azure Storage Blob Service. |
@@ -104,7 +104,7 @@ level | Description |
 | [Debug](extensions/debug.md) | camel-quarkus-debug | 2.10.0 | 3.2.0 | Stable | Enables Camel Route Debugging |
 | [Deep Java Library](extensions/djl.md) | camel-quarkus-djl | 1.1.0 | n/a | Preview | Infer Deep Learning models from message exchanges data using Deep Java Library (DJL). |
 | [DFDL](extensions/dfdl.md) | camel-quarkus-dfdl | 3.22.0 | n/a | Preview | Transforms fixed format data such as EDI message from/to XML using a Data Format Description Language (DFDL). |
-| [Diagram](extensions/diagram.md) | camel-quarkus-diagram | 3.38.0 | n/a | Preview | Camel Route Diagram rendering |
+| [Diagram](extensions/diagram.md) | camel-quarkus-diagram | 3.38.0 | n/a | Stable | Camel Route Diagram rendering |
 | [Direct](extensions/direct.md) | camel-quarkus-direct | 0.0.1 | 0.0.1 | Stable | Call another endpoint from the same Camel Context synchronously. |
 | [Disruptor](extensions/disruptor.md) | camel-quarkus-disruptor | 1.1.0 | 1.2.0 | Stable | Provides asynchronous SEDA behavior using LMAX Disruptor. |
 | [DNS](extensions/dns.md) | camel-quarkus-dns | 1.1.0 | n/a | Preview | Perform DNS queries using DNSJava. |
@@ -266,7 +266,7 @@ level | Description |
 | [Protobuf Jackson](extensions/jackson-protobuf.md) | camel-quarkus-jackson-protobuf | 2.0.0 | 2.0.0 | Stable | Marshal POJOs to Protobuf and back using Jackson. |
 | [PubNub](extensions/pubnub.md) | camel-quarkus-pubnub | 1.0.0 | 1.7.0 | Stable | Send and receive messages to/from PubNub data stream network for connected devices. |
 | [Pulsar](extensions/pulsar.md) | camel-quarkus-pulsar | 1.1.0 | n/a | Preview | Send and receive messages from/to Apache Pulsar messaging system. |
-| [Python](extensions/python.md) | camel-quarkus-python | 3.24.0 | n/a | Preview | Evaluates a Python expression |
+| [Python](extensions/python.md) | camel-quarkus-python | 3.24.0 | n/a | Stable | Evaluates a Python expression |
 | [Qdrant](extensions/qdrant.md) | camel-quarkus-qdrant | 3.10.0 | 3.10.0 | Stable | Perform operations on the Qdrant Vector Database. |
 | [Quartz](extensions/quartz.md) | camel-quarkus-quartz | 1.0.0 | 1.0.0 | Stable | Schedule sending of messages using the Quartz 2.x scheduler. |
 | [QuickFix](extensions/quickfix.md) | camel-quarkus-quickfix | 1.1.0 | n/a | Preview | Open a Financial Interchange (FIX) session using an embedded QuickFix/J engine. |

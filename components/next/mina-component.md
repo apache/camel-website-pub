@@ -9,8 +9,8 @@ The Mina component is a transport mechanism for working with [Apache MINA 2.x](h
 > **Tip**
 > Favor using [Netty](netty-component.md) as Netty is a much more active maintained and popular project than Apache Mina currently is.
 
-> **Warning**
-> Be careful with `sync=false` on consumer endpoints. In camel-mina, all consumer exchanges are `InOut`. This is different to camel-mina.
+> **Note**
+> With `sync=false` the endpoint is one-way: the consumer does not write a reply back to the client, and the producer does not wait for a reply and leaves the message of the exchange as it was. Use `sync=true` (the default) for request-reply.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -304,8 +304,10 @@ The message body at each side of the Mina component: _Consumer_ is the body of t
 Not known when `codec` or `objectCodecPattern` or `transferExchange` is set.
 
  |
-| **Consumer reply** | `null` or `text` | The body the route ends with is written back to the caller, also with sync=false. Send a String: with textline=true other bodies are written with toString(), and the object codec writes any Serializable object, which a Mina client accepts only when its objectCodecPattern lists the class. No body sends nothing and closes the connection.
+| **Consumer reply** | `null` or `text` | With sync=true (the default) the body the route ends with is written back to the caller; with sync=false nothing is written. Send a String: textline=true converts any body to a line of text, and the object codec writes any Serializable object, which a Mina client accepts only when its objectCodecPattern lists the class (a byte array needs \[B). No body sends nothing and closes the connection (disconnectOnNoReply).
 
+-   With `textline=true`: `any`
+    
 -   With `protocol=udp`: `null`, `text`, `bytes`, `stream` or `file`
     
 -   With `allowDefaultCodec=false`: `null` or `pojo` (`org.apache.mina.core.buffer.IoBuffer`)
@@ -326,9 +328,9 @@ Not known when `codec` or `transferExchange` is set.
 Not known when `codec` or `transferExchange` is set.
 
  |
-| **Producer output** | `text` or `null` (`java.lang.String`) | With sync=true (the default) the reply of the server as a String, or a byte array over UDP. No body is not sent and stays null. With sync=false an InOut exchange ends with an empty message.
+| **Producer output** | `text` or `null` (`java.lang.String`) | With sync=true (the default) the reply of the server as a String, or a byte array over UDP. The object codec accepts another reply only when objectCodecPattern lists its class (a byte array needs \[B). No body is not sent and stays null. With sync=false the message is unchanged.
 
--   With `sync=false`: `unchanged` or `null`
+-   With `sync=false`: `unchanged`
     
 -   With `protocol=udp`: `bytes` or `null` (`byte[]`)
     
@@ -346,6 +348,14 @@ The bodies are the ones with the default options. A side that is not listed is n
 ### Using a custom codec
 
 See the Mina how to write your own codec. To use your custom codec with `camel-mina`, you should register your codec in the Registry; for example, by creating a bean in the Spring XML file. Then use the `codec` option to specify the bean ID of your codec. See [HL7](dataformats/hl7-dataformat.md) that has a custom codec.
+
+### The reply of the consumer
+
+With `sync=true` (the default) the consumer writes the body the route ends with back to the client. With `textline=true` the body is converted to a `String` first, so a `byte[]` or a stream is written as its text.
+
+The default object codec (no `textline` and no `codec`) only deserializes the classes that `objectCodecPattern` lists, and a `String`. This applies to the reply as well: a producer that should receive a `byte[]` reply needs `objectCodecPattern=[B`. Without it the producer fails to decode the reply with a `StreamCorruptedException` (such as `invalid type code: 42`). Keep `objectCodecPattern` as narrow as the replies need.
+
+When the route ends with no body, the consumer writes nothing, logs it at `noReplyLogLevel` and closes the session, so the client does not wait for a reply. Set `disconnectOnNoReply=false` to keep the session open.
 
 ### Get the IoSession for message
 

@@ -154,7 +154,7 @@ The message body at each side of the Alibaba EventBridge component: _Consumer_ i
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `map`, `list` or `pojo` | The event to publish: the JSON text of the data of the event, with the source, the type and the bus from the options or headers; a Map of the event fields, such as eventSource, eventType and eventData, where a Map or a POJO as data is serialized to JSON; a CloudEvent of the Alibaba SDK; or a List of these for a batch. Bytes, a stream, a file, another POJO or no body fail: convert to text first. |
+| **Producer input** | `text`, `bytes`, `stream`, `file`, `map`, `list` or `pojo` | The event to publish: the JSON text of the data of the event, as text, or as bytes, a stream or a file read in the charset of the exchange (UTF-8 by default), with the source, the type and the bus from the options or headers; a Map of the event fields, such as eventSource, eventType and eventData, where a Map or a POJO as data is serialized to JSON; a CloudEvent of the Alibaba SDK; or a List of these for a batch. Another POJO or no body fails. |
 | **Producer output** | `map` (`java.util.Map`) | A Map with the requestId, the failedEntryCount, the resourceOwnerAccountId and the entryList of the response, with the request id in the CamelAlibabaEventBridgeRequestId header too. An event that EventBridge rejects does not fail the exchange: check failedEntryCount. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -260,8 +260,7 @@ The component supports a 3-level hierarchical validation model: `EventBus (N) â†
 > ```java
 > from("platform-http:/ingress")
 >     .removeHeaders("CamelAlibabaEventBridge*")
->     .convertBodyTo(String.class)
->     .to("alibaba-eventbridge:putEvents?eventBusName=orders-bus&allowedEventSources=RAW(app.orders -> order:created:v1)&region=cn-hangzhou")
+>     .to("alibaba-eventbridge:putEvents?eventBusName=orders-bus&eventSource=app.orders&eventType=order:created:v1&allowedEventSources=RAW(app.orders -> order:created:v1)&region=cn-hangzhou")
 >     .marshal().json();
 > ```
 >
@@ -272,12 +271,12 @@ The component supports a 3-level hierarchical validation model: `EventBus (N) â†
 >       steps:
 >         - removeHeaders:
 >             pattern: CamelAlibabaEventBridge*
->         - convertBodyTo:
->             type: String
 >         - to:
 >             uri: alibaba-eventbridge:putEvents
 >             parameters:
 >               eventBusName: orders-bus
+>               eventSource: app.orders
+>               eventType: order:created:v1
 >               allowedEventSources: "RAW(app.orders -> order:created:v1)"
 >               region: cn-hangzhou
 >         - marshal:
@@ -457,6 +456,8 @@ The component supports the following operations:
 ## Examples
 
 ### Publish event with String / JSON body
+
+The body is the JSON text of the data of the event, and the event source, type and bus come from the options or the headers. The JSON text can also be bytes, a stream or a file, such as the body of an HTTP or Kafka consumer: the producer reads it in the charset of the exchange (the `CamelCharsetName` header or property, UTF-8 by default).
 
 -   Java
     

@@ -214,7 +214,7 @@ The message body at each side of the LangChain4j Embeddings component: _Consumer
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `pojo` or `list` | The text to embed as a String or a TextSegment, or a non-empty List of them to embed in one batch. Bytes, a stream, a file, a Map and no body fail: convert the body to a String first. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | The text to embed: a String, bytes, a stream or a file read as text, or a LangChain4j TextSegment; or a non-empty List of them to embed in one batch. Another body or List element, such as a Map or a POJO, fails, as does no body: convert it to text first. |
 | **Producer output** | `unchanged` | The body is kept. The vector goes in the CamelLangChain4jEmbeddingsVector header as a float array, with the Embedding and the TextSegment in the CamelLangChain4jEmbeddingsEmbedding and CamelLangChain4jEmbeddingsTextSegment headers; a List body gives Lists of them in the CamelLangChain4jEmbeddingsEmbeddings and CamelLangChain4jEmbeddingsTextSegments headers instead. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -392,6 +392,14 @@ from("direct:embeddings")
             parameters:
               embeddingModel: "#myEmbeddingModel"
 ```
+
+### The text to embed
+
+The body is the text to embed: a `String` or a LangChain4j `TextSegment`. Bytes, a stream and a file (such as the body of a `file` consumer) are read as text, so a `from("file:…​")` route needs no `convertBodyTo(String.class)`. A non-empty `List` of them is embedded in one batch.
+
+Any other body, or element of a `List` body, such as a `Map` or a POJO, fails the exchange with an `InvalidPayloadException` instead of being embedded as its `toString()`: turn it into text first, with `convertBodyTo(String.class)` or a marshal to JSON, say. No body fails too.
+
+The body is kept. A single text sets the `CamelLangChain4jEmbeddingsEmbedding`, `CamelLangChain4jEmbeddingsVector` and `CamelLangChain4jEmbeddingsTextSegment` headers, and a `List` the `CamelLangChain4jEmbeddingsEmbeddings` and `CamelLangChain4jEmbeddingsTextSegments` headers. Each call removes the headers of an earlier call on the same exchange, so a single text after a batch is not stored as the old batch by a later embedding store `ADD`.
 
 ### Integration with Vector Stores
 

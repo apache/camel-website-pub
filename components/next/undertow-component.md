@@ -316,6 +316,14 @@ Camel uses the same message headers as the [HTTP](http-component.md) component. 
 
 Camel also populates **all** `request.parameter` and `request.headers`. For example, given a client request with the URL, `http://myserver/myserver?orderid=123`, the exchange will contain a header named `orderid` with the value `123`.
 
+### Message body
+
+The consumer reads the body of a request of any method that has one (a Content-Length above 0 or a chunked body).
+
+The body of a reply (consumer) or a request (producer) is sent as bytes. Text is written in the charset that the `Content-Type` declares (UTF-8 otherwise), and a number, a boolean, a character or an enum as its text. A Map, a List or an object must be marshalled first (for example with `marshal().json()`): the consumer answers `500` for such a reply, and the producer fails the exchange for a POST, PUT or PATCH with such a body.
+
+The producer gives a null body for a `204` or `304` response and for the response to a HEAD request.
+
 ### Using localhost as host
 
 When you specify `localhost` in a URL, Camel exposes the endpoint only on the local TCP/IP network interface, so it cannot be accessed from outside the machine it operates on.

@@ -185,8 +185,8 @@ Enum values:
 
  |  | OpenTelemetryTimerAction |
 | **CamelMetricsHistogramValue** (producer) Constant: [`HEADER_HISTOGRAM_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_HISTOGRAM_VALUE) | Override histogram value in URI. |  | long |
-| **CamelMetricsCounterDecrement** (producer) Constant: [`HEADER_COUNTER_DECREMENT`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_COUNTER_DECREMENT) | Override decrement value in URI. |  | Double |
-| **CamelMetricsCounterIncrement** (producer) Constant: [`HEADER_COUNTER_INCREMENT`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_COUNTER_INCREMENT) | Override increment value in URI. |  | Double |
+| **CamelMetricsCounterDecrement** (producer) Constant: [`HEADER_COUNTER_DECREMENT`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_COUNTER_DECREMENT) | Override decrement value in URI. |  | long |
+| **CamelMetricsCounterIncrement** (producer) Constant: [`HEADER_COUNTER_INCREMENT`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_COUNTER_INCREMENT) | Override increment value in URI. |  | long |
 | **CamelMetricsName** (producer) Constant: [`HEADER_METRIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_METRIC_NAME) | Override name value in URI. |  | String |
 | **CamelMetricsDescription** (producer) Constant: [`HEADER_METRIC_DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_METRIC_DESCRIPTION) | Override description value in URI. |  | String |
 | **CamelMetricsAttributes** (producer) Constant: [`HEADER_METRIC_ATTRIBUTES`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_METRIC_ATTRIBUTES) | To augment meter attributes defined as URI parameters. |  | Attributes |
@@ -255,7 +255,7 @@ opentelemetry-metrics:counter:name\[?options\]
 | increment | \- | Long value to add to the counter |
 | decrement | \- | Long value to subtract from the counter |
 
-If neither `increment` or `decrement` is defined then value of the counter will be incremented by one. If `increment` and `decrement` are both defined only the increment operation is called.
+If neither `increment` or `decrement` is defined then value of the counter will be incremented by one. If `increment` and `decrement` are both defined only the increment operation is called. If `increment` or `decrement` is defined, but neither of them gives a number (for example `increment=${body}` with a `Map`, a POJO or a `null` body), the exchange fails with an `IllegalArgumentException`, and the counter is not updated.
 
 -   Java
     

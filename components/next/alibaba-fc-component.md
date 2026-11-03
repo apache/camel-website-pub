@@ -146,7 +146,7 @@ The message body at each side of the Alibaba Function Compute (FC) component: _C
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-invokeFunction sends the body as the payload of the function: text and bytes as they are, a stream or a file read as text, which corrupts binary data, a Map or a POJO as its toString(), so marshal it first, and no body as an empty payload. getFunction does not use the body.
+invokeFunction sends the body as the payload of the function: text in UTF-8, bytes as they are, a stream or a file as its bytes, so binary data is kept, and no body as an empty payload. A Map or a POJO fails, as it does not convert to bytes, so marshal it first. getFunction does not use the body.
 
 -   With `operation=invokeFunction`: `text`, `bytes`, `stream`, `file` or `null`
     
@@ -170,6 +170,10 @@ The component supports the following operations:
     
 -   `getFunction` - retrieve function metadata (producer)
     
+
+### Payload of invokeFunction
+
+The message body is the payload of the function. A `String` is sent in UTF-8, and a `byte[]`, an `InputStream` or a file is sent as its bytes, so binary data is kept. Without a body the function is invoked with an empty payload. A `Map` or a POJO does not convert to bytes and fails with an `InvalidPayloadException`, so marshal it first, for example to JSON with `marshal().json()`.
 
 ### Producer example
 

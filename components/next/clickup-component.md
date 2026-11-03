@@ -82,4 +82,6 @@ In YAML, the `is` operator of the simple language checks the type of the event:
                     message: "Unknown Event: ${body}"
 ```
 
+The `events` option accepts only `taskTimeTrackedUpdated`, the one kind with a class of its own, `TaskTimeTrackedUpdatedEvent`. A webhook set up in ClickUp itself (`webhookAutoRegister=false`) can send other kinds too: such an event reaches the route as a `GenericEvent`, where `getEvent()` gives the kind (such as `taskCreated`) and `getProperties()` the other fields of the JSON as they are. ClickUp gets 204 for it, as for any event the route processes without failing.
+
 You can follow the [set-up webhooks guide](https://clickup.com/api/developer-portal/webhooks) to enable and configure the webhook.

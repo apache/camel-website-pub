@@ -73,6 +73,10 @@ _Java-only: inline Processor accessing Vertx request and response objects_
 });
 ```
 
+## Response body
+
+The body of the reply is written as text, bytes or a stream. Text is written in the charset that the response `Content-Type` declares (UTF-8 otherwise), and a number, a boolean, a character or an enum as its text, so `setBody(constant(42))` replies with `42`. A Map, a List or an object must be marshalled first (for example with `marshal().json()`), or the consumer answers `500`.
+
 ## Handling large request / response payloads
 
 When large request / response payloads are expected, there is a `useStreaming` option, which can be enabled to improve performance. When `useStreaming` is `true`, it will take advantage of [stream caching](../../../manual/stream-caching.md). In conjunction with enabling disk spooling, you can avoid having to store the entire request body payload in memory.

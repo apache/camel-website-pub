@@ -143,7 +143,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **fileNameExtWhitelist** (consumer (advanced)) | Whitelist of accepted filename extensions for accepting uploaded files. Multiple extensions can be separated by comma, such as txt,xml. |  | String |
-| **mapHttpMessageBody** (consumer (advanced)) | If this option is true then IN exchange Body of the exchange will be mapped to HTTP body. Setting this to false will avoid the HTTP mapping. | true | boolean |
+| **mapHttpMessageBody** (consumer (advanced)) | If this option is true then the HTTP request body is mapped to the IN message body. If this option is false then the request body is not read and the message body is null, and no attachments, Java serialized objects or form fields are mapped. | true | boolean |
 | **mapHttpMessageFormUrlEncodedBody** (consumer (advanced)) | If this option is true then IN exchange Form Encoded body of the exchange will be mapped to HTTP. Setting this to false will avoid the HTTP Form Encoded body mapping. | true | boolean |
 | **mapHttpMessageHeaders** (consumer (advanced)) | If this option is true then IN exchange Headers of the exchange will be mapped to HTTP headers. Setting this to false will avoid the HTTP Headers mapping. | true | boolean |
 | **optionsEnabled** (consumer (advanced)) | Specifies whether to enable HTTP OPTIONS for this Servlet consumer. By default OPTIONS is turned off. | false | boolean |

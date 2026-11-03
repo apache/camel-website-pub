@@ -100,7 +100,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **configFile** (common) | If SolverManager is absent from the header OptaPlannerConstants.SOLVER\_MANAGER then a SolverManager will be created using this Optaplanner config file. |  | String |
+| **configFile** (common) | If SolverManager is absent from the header OptaPlannerConstants.SOLVER\_MANAGER then a SolverManager will be created using this Optaplanner config file. The endpoint creates it once, on first use, and closes it when the endpoint stops. |  | String |
 | **problemId** (common) | In case of using SolverManager : the problem id. | 1 | long |
 | **solverId** (common) | Specifies the solverId to user for the solver instance key. | DEFAULT\_SOLVER | String |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -145,7 +145,7 @@ The message body at each side of the OptaPlanner component: _Consumer_ is the bo
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `null` | The body is empty: the new best solution is in the CamelOptaPlannerBestSolution header. Events come only from producers that solve asynchronously, with the same problemId. |
+| **Consumer** | `null` | The body is empty: the new best solution is in the CamelOptaPlannerBestSolution header. Events come from the producers of the same CamelContext that solve a problem with the same problemId. |
 | **Producer input** | `pojo` | The planning problem: an instance of the PlanningSolution class of the solver configuration, or a ProblemChange to apply to the problem being solved. Any other body fails to solve, and no body fails. |
 | **Producer output** | `pojo` or `unchanged` | The best solution found, a new instance of the problem class, with the CamelOptaPlannerIsSolving header false (also with async, the exchange waits for it); a ProblemChange leaves the body unchanged. |
 
@@ -162,7 +162,9 @@ Camel takes the planning problem from the message body, solves it and sets the b
 -   Any other body fails the exchange, as the solver cannot solve it.
     
 
-The consumer receives an exchange each time a producer solving asynchronously, with the same `problemId`, finds a new best solution. Its body is empty: the best solution is in the `CamelOptaPlannerBestSolution` header.
+The consumer receives an exchange each time a producer of the same CamelContext, solving a problem with the same `problemId`, finds a new best solution. This applies to producers solving synchronously and asynchronously. Its body is empty: the best solution is in the `CamelOptaPlannerBestSolution` header.
+
+When no `SolverManager` is given, neither with the `solverManager` option nor with the `CamelOptaPlannerSolverManager` header, the endpoint creates one `SolverManager` from the `configFile` on first use, and closes it when the endpoint stops. As the exchanges of the endpoint share this `SolverManager`, a `ProblemChange` sent to the same endpoint reaches the problem being solved, and solving a problem while another one with the same `problemId` is still being solved fails.
 
 ### Examples
 

@@ -148,7 +148,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **serviceAccountKey** (common) | Service account key to authenticate an application as a service account. |  | String |
 | **audioEncoding** (producer) | The audio encoding of the output. Supported values: MP3, LINEAR16, OGG\_OPUS, MULAW, ALAW. | MP3 | String |
-| **languageCode** (producer) | The language code for the voice (e.g., en-US, fr-FR). | en-US | String |
+| **languageCode** (producer) | The language code for the voice (e.g., en-US, fr-FR). The default applies to synthesize only: listVoices lists the voices of all languages unless this option is set. | en-US | String |
 | **pitch** (producer) | The pitch, from -20.0 to 20.0 semitones. Default is 0.0. |  | Double |
 | **pojoRequest** (producer) | Specifies if the request is a pojo request. | false | boolean |
 | **speakingRate** (producer) | The speaking rate, from 0.25 to 4.0. Default is 1.0. |  | Double |
@@ -188,13 +188,13 @@ The message body at each side of the Google Cloud Text To Speech component: _Con
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-The text to speak for synthesize: bytes, a stream or a file are read as text, a Map or a POJO is spoken as its toString(), so take the text out of it first, and no body fails. listVoices does not use the body. With pojoRequest=true a SynthesizeSpeechRequest of the Google Cloud SDK, whatever the operation: another body fails.
+The text to speak for synthesize: bytes, a stream or a file are read as text, a Map or a POJO is spoken as its toString(), so take the text out of it first, and no body fails. listVoices does not use the body. With pojoRequest=true the request of the Google Cloud SDK for the operation: a SynthesizeSpeechRequest for synthesize, a ListVoicesRequest for listVoices; another body fails.
 
 -   With `operation=synthesize`: `text`, `bytes`, `stream` or `file`
     
 -   With `operation=listVoices`: `any`
     
--   With `pojoRequest=true`: `pojo` (`com.google.cloud.texttospeech.v1.SynthesizeSpeechRequest`)
+-   With `pojoRequest=true`: `pojo`
     
 
 
@@ -204,13 +204,11 @@ The text to speak for synthesize: bytes, a stream or a file are read as text, a 
  |
 | **Producer output** | `bytes` or `list` | 
 
-The audio of synthesize as bytes, in the audioEncoding option (MP3 by default), with the SynthesizeSpeechResponse in the CamelGoogleCloudTextToSpeechResponseObject header. The List of the voices for listVoices, of the languageCode option (en-US by default).
+The audio of synthesize as bytes, in the audioEncoding option (MP3 by default), with the SynthesizeSpeechResponse in the CamelGoogleCloudTextToSpeechResponseObject header. The List of the voices for listVoices: of the language in the languageCode option when it is set, of all languages when it is not, and with pojoRequest=true of the ListVoicesRequest.
 
 -   With `operation=synthesize`: `bytes` (`byte[]`)
     
 -   With `operation=listVoices`: `list` (`java.util.List<com.google.cloud.texttospeech.v1.Voice>`)
-    
--   With `pojoRequest=true`: `bytes` (`byte[]`)
     
 
 
@@ -229,7 +227,7 @@ For the `synthesize` operation, the message body should contain the text to synt
 
 For the `listVoices` operation, the message body is ignored.
 
-When `pojoRequest=true`, the body should be a `com.google.cloud.texttospeech.v1.SynthesizeSpeechRequest` instance instead.
+When `pojoRequest=true`, the body should be the request of the Google Cloud SDK for the operation instead: a `com.google.cloud.texttospeech.v1.SynthesizeSpeechRequest` for `synthesize`, and a `com.google.cloud.texttospeech.v1.ListVoicesRequest` for `listVoices`. Another body fails with an `InvalidPayloadException`.
 
 ### Google Cloud Text-to-Speech Producer operations
 
@@ -240,7 +238,7 @@ Google Cloud Text-to-Speech component provides the following operations on the p
 -   listVoices
     
 
-The operation is specified as part of the endpoint URI (e.g., `google-text-to-speech://synthesize`). You can override the operation at runtime by setting the `GoogleCloudTextToSpeechOperation` message header.
+The operation is specified as part of the endpoint URI (e.g., `google-text-to-speech://synthesize`). You can override the operation at runtime by setting the `CamelGoogleCloudTextToSpeechOperation` message header, also when `pojoRequest=true`.
 
 ### Advanced component configuration
 
@@ -425,7 +423,7 @@ from("direct:start")
             uri: mock:result
 ```
 
-This operation will return a `List<Voice>` with the available voices for the specified language.
+This operation will return a `List<Voice>` with the available voices for the language in the `languageCode` option. Without the `languageCode` option, it returns the voices of all languages: the default value of the option (`en-US`) applies to `synthesize` only.
 
 -   Using POJO request for full control:
     
@@ -458,6 +456,26 @@ from("direct:start")
 ```
 
 When using `pojoRequest=true`, the body should be a `SynthesizeSpeechRequest` and the audio bytes are returned as body.
+
+-   Using POJO request to list voices:
+    
+
+_Java-only: Google Cloud SDK ListVoicesRequest builder_
+
+```java
+from("direct:start")
+    .process(exchange -> {
+        ListVoicesRequest request = ListVoicesRequest.newBuilder()
+            .setLanguageCode("fr-FR")
+            .build();
+        exchange.getIn().setBody(request);
+    })
+    .to("google-text-to-speech://listVoices?serviceAccountKey=/home/user/Downloads/my-key.json&pojoRequest=true")
+    .log("body:${body}")
+    .to("mock:result");
+```
+
+When using `pojoRequest=true` with `listVoices`, the body should be a `ListVoicesRequest` and the `List<Voice>` is returned as body. The `languageCode` option is not used then: the request says which voices to list.
 
 -   Overriding the operation at runtime via header:
     

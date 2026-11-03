@@ -133,6 +133,7 @@ Enum values:
 | **runtime** (producer) | Runtime stack (java, node, python, dotnet). |  | String |
 | **runtimeVersion** (producer) | Runtime version. |  | String |
 | **storageAccountConnectionString** (producer) | Storage account connection string for function app. |  | String |
+| **throwExceptionOnFailure** (producer) | Option to disable throwing the HttpOperationFailedException when the function answers invokeFunction with an HTTP status of 400 or above. This allows you to get all responses regardless of the HTTP status code, with the status in the CamelAzureFunctionsStatusCode header. | true | boolean |
 | **appServiceManager** (advanced) | **Autowired** An AppServiceManager instance for management operations. |  | AppServiceManager |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **clientId** (security) | Azure AD Client ID for service principal authentication. |  | String |
@@ -233,6 +234,7 @@ Enum values:
 | **runtime** (producer) | Runtime stack (java, node, python, dotnet). |  | String |
 | **runtimeVersion** (producer) | Runtime version. |  | String |
 | **storageAccountConnectionString** (producer) | Storage account connection string for function app. |  | String |
+| **throwExceptionOnFailure** (producer) | Option to disable throwing the HttpOperationFailedException when the function answers invokeFunction with an HTTP status of 400 or above. This allows you to get all responses regardless of the HTTP status code, with the status in the CamelAzureFunctionsStatusCode header. | true | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **appServiceManager** (advanced) | **Autowired** An AppServiceManager instance for management operations. |  | AppServiceManager |
 | **clientId** (security) | Azure AD Client ID for service principal authentication. |  | String |
@@ -337,8 +339,8 @@ The message body at each side of the Azure Functions component: _Consumer_ is th
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes` or `null` | 
-The request body of invokeFunction, the default, sent as text: bytes are read as UTF-8, and any other body, a stream, a file or a Map included, is sent as its toString(): marshal it first. GET and DELETE send no body. The management operations do not use the body: they take their input from headers, such as the app settings and the tags.
+| **Producer input** | `text`, `value`, `bytes`, `stream`, `file` or `null` | 
+The request body of invokeFunction, the default: text, a number or a boolean is sent as text (UTF-8), and bytes, a stream or a file as their content. A Map or a POJO is not marshalled: marshal it to JSON first, as a body that does not convert to bytes fails. The Content-Type is application/json unless the CamelAzureFunctionsHttpHeaders header sets one. GET and DELETE send no body. The management operations do not use the body: they take their input from headers, such as the app settings and the tags.
 
 -   With `operation=listFunctionApps`: `any`
     
@@ -378,7 +380,7 @@ The request body of invokeFunction, the default, sent as text: bytes are read as
  |
 | **Producer output** | `text` (`java.lang.String`) | 
 
-The response body of the function as text for invokeFunction, the default, also for an error status, with the status in the CamelAzureFunctionsStatusCode header. A List of Maps that describe the function apps or the functions for the list operations, a Map for the get and create operations, the settings or the tags as a Map, and true for delete, start, stop and restart.
+The response body of the function as text for invokeFunction, the default, with the status in the CamelAzureFunctionsStatusCode header. A status of 400 or above fails the exchange with an HttpOperationFailedException, unless throwExceptionOnFailure=false, which keeps the response as text. A List of Maps that describe the function apps or the functions for the list operations, a Map for the get and create operations, the settings or the tags as a Map, and true for delete, start, stop and restart.
 
 -   With `operation=listFunctionApps`: `list` (`java.util.List<java.util.Map<String, Object>>`)
     
@@ -563,6 +565,14 @@ from("direct:manage")
               clientSecret: your-client-secret
               tenantId: your-tenant-id
 ```
+
+### Invoking a function
+
+The `invokeFunction` operation sends the message body to the function: text, a number or a boolean is sent as text (UTF-8), and bytes, a stream or a file (also the file of a file consumer) as their content. A `Map` or a POJO is not marshalled: marshal it to JSON first, for example with `marshal().json()`, as a body that does not convert to bytes fails the exchange. `GET` and `DELETE` send no body.
+
+A request with a body has the `Content-Type: application/json` header, unless the `CamelAzureFunctionsHttpHeaders` header, a `Map<String, String>` of HTTP headers to send, sets a `Content-Type`.
+
+The response body of the function becomes the message body, as text, with the HTTP status in the `CamelAzureFunctionsStatusCode` header and the HTTP headers of the response in the `CamelAzureFunctionsResponseHeaders` header. A status of 400 or above fails the exchange with an `org.apache.camel.http.base.HttpOperationFailedException`, as the HTTP components do: it holds the status, the response body and the response headers. The message body is then still the request body, as in camel-http, with the status in the `CamelAzureFunctionsStatusCode` header. Set `throwExceptionOnFailure=false` to get the response of every status as the message body instead.
 
 ## Operations
 

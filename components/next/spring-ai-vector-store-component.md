@@ -170,10 +170,10 @@ Enum values:
 | **CamelSpringAiVectorStoreTopK** (producer) Constant: [`TOP_K`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#TOP_K) | The maximum number of similar documents to return (topK). |  | Integer |
 | **CamelSpringAiVectorStoreSimilarityThreshold** (producer) Constant: [`SIMILARITY_THRESHOLD`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#SIMILARITY_THRESHOLD) | The similarity threshold (0-1). |  | Double |
 | **CamelSpringAiVectorStoreFilterExpression** (producer) Constant: [`FILTER_EXPRESSION`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#FILTER_EXPRESSION) | Filter expression for metadata-based filtering. |  | String |
-| **CamelSpringAiVectorStoreDocumentIds** (producer) Constant: [`DOCUMENT_IDS`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#DOCUMENT_IDS) | List of document IDs (input for DELETE, output for ADD and SIMILARITY\_SEARCH). |  | List |
+| **CamelSpringAiVectorStoreDocumentIds** (producer) Constant: [`DOCUMENT_IDS`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#DOCUMENT_IDS) | List of document IDs (output of ADD and SIMILARITY\_SEARCH, and input of DELETE when the message has no body). |  | List |
 | **CamelSpringAiVectorStoreSimilarDocuments** (producer) Constant: [`SIMILAR_DOCUMENTS`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#SIMILAR_DOCUMENTS) | List of similar documents found. |  | List |
 | **CamelSpringAiVectorStoreDocumentsAdded** (producer) Constant: [`DOCUMENTS_ADDED`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#DOCUMENTS_ADDED) | Number of documents added. |  | Integer |
-| **CamelSpringAiVectorStoreDocumentsDeleted** (producer) Constant: [`DOCUMENTS_DELETED`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#DOCUMENTS_DELETED) | Number of documents deleted. |  | Integer |
+| **CamelSpringAiVectorStoreDocumentsDeleted** (producer) Constant: [`DOCUMENTS_DELETED`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-vector-store/latest/org/apache/camel/component/springai/vectorstore/SpringAiVectorStoreHeaders.html#DOCUMENTS_DELETED) | Number of document IDs that DELETE gave to the vector store, as the vector store does not tell how many of them existed. |  | Integer |
 
 ## Message Body
 
@@ -183,11 +183,11 @@ The message body at each side of the Spring AI Vector Store component: _Consumer
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-ADD takes a Document, a List of Document or of texts, or text (another body is added as its text). After spring-ai-embeddings it adds the texts in the CamelSpringAiEmbeddingInputText(s) headers instead of the body. DELETE takes the id or a List of ids, unless the CamelSpringAiVectorStoreDocumentIds header has them, and SIMILARITY\_SEARCH the query text. No body fails. The CamelSpringAiVectorStoreOperation header overrides operation.
+ADD takes a Document, a List of Document or of texts, or text (another body is added as its text); a List with another element fails. After spring-ai-embeddings it adds the float\[\] (or List of float\[\]) body with the text of the CamelSpringAiEmbeddingInputText(s) header, and a vector without its text fails. DELETE takes the id, a Document, or a List of ids or Documents (such as the result of SIMILARITY\_SEARCH); the CamelSpringAiVectorStoreDocumentIds header is used only without a body. SIMILARITY\_SEARCH takes the query text, or after spring-ai-embeddings the float\[\] body with the CamelSpringAiEmbeddingInputText header. Otherwise no body fails. The CamelSpringAiVectorStoreOperation header overrides operation.
 
--   With `operation=DELETE`: `text` or `list`
+-   With `operation=DELETE`: `text`, `list`, `pojo` or `null`
     
--   With `operation=SIMILARITY_SEARCH`: `text`
+-   With `operation=SIMILARITY_SEARCH`: `text` or `list`
     
 
 
@@ -222,10 +222,12 @@ Stores documents in the vector store. Can accept:
     
 -   Document objects
     
--   List of Documents
+-   List of Documents or of String texts (an element of another type fails)
     
--   Output from the spring-ai-embeddings component (semi-automatic integration, this depends on the underlying Spring AI Vectore Store implementation)
+-   Output from the spring-ai-embeddings component (semi-automatic integration, this depends on the underlying Spring AI Vectore Store implementation): a `float[]` body with the `CamelSpringAiEmbeddingInputText` header, or a List of `float[]` body with the `CamelSpringAiEmbeddingInputTexts` header with one text per vector. A vector without its text fails.
     
+
+The `CamelSpringAiEmbeddingInputText(s)` headers are only used together with a vector body, so a header left over from an earlier spring-ai-embeddings call does not replace a Document or text body.
 
 After documents are added, the component sets the `CamelSpringAiVectorStoreDocumentIds` header containing a list of the IDs of the added documents. This allows you to reference or track the stored documents in subsequent processing steps.
 
@@ -234,11 +236,13 @@ After documents are added, the component sets the `CamelSpringAiVectorStoreDocum
 
 ### DELETE Operation
 
-Removes documents from the vector store by their IDs.
+Removes documents from the vector store by their IDs. The body has the documents to delete: an ID, a Document, or a List of IDs or of Documents (such as the result of SIMILARITY\_SEARCH). Only when there is no body, the IDs are taken from the `CamelSpringAiVectorStoreDocumentIds` header. The body comes first because ADD and SIMILARITY\_SEARCH set this header to their own output IDs.
+
+The `CamelSpringAiVectorStoreDocumentsDeleted` header is the number of IDs given to the vector store. The Spring AI `VectorStore` API does not tell how many of them existed, so IDs that are not in the store are counted too.
 
 ### SIMILARITY\_SEARCH Operation
 
-Searches for documents similar to a query text.
+Searches for documents similar to a query text. After the spring-ai-embeddings component, where the body is the `float[]` vector of the text, the query is the text in the `CamelSpringAiEmbeddingInputText` header (the vector store embeds the query itself).
 
 The component returns matching documents in the message body and sets the following headers:
 
@@ -379,17 +383,17 @@ from("direct:search")
 
 ### Delete Documents
 
-Delete documents by specifying their IDs:
+Delete documents by specifying their IDs in the body:
 
-_Java-only: Java constants and Arrays.asList()_
+_Java-only: Arrays.asList()_
 
 ```java
 from("direct:delete")
-    .setHeader(SpringAiVectorStoreHeaders.DOCUMENT_IDS, constant(Arrays.asList("doc1", "doc2")))
+    .setBody(constant(Arrays.asList("doc1", "doc2")))
     .to("spring-ai-vector-store:myStore?operation=DELETE");
 ```
 
-You can also chain operations to search for documents and then delete them using the returned IDs:
+You can also chain operations to search for documents and then delete the documents found:
 
 _Java-only: Java constants and enum values_
 
@@ -398,7 +402,7 @@ from("direct:searchAndDelete")
     .setBody(constant("outdated content"))
     .to("spring-ai-vector-store:myStore?operation=SIMILARITY_SEARCH&topK=10")
     .log("Found ${header.CamelSpringAiVectorStoreDocumentIds.size()} documents to delete")
-    // The DOCUMENT_IDS header from SIMILARITY_SEARCH is automatically used by DELETE
+    // DELETE deletes the List of Document that SIMILARITY_SEARCH gives in the body
     .setHeader(SpringAiVectorStoreHeaders.OPERATION, constant(SpringAiVectorStoreOperation.DELETE))
     .to("spring-ai-vector-store:myStore");
 ```

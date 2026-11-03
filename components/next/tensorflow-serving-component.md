@@ -155,11 +155,11 @@ The message body at each side of the TensorFlow Serving component: _Consumer_ is
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `pojo` | 
-The protobuf request of the api, or its Builder: a PredictRequest for predict, a ClassificationRequest or RegressionRequest, or the Input of one, for classify and regress. Another body, such as text, JSON or bytes, is not read: an empty request is sent and the server rejects it. model-status and model-metadata need no body, and read a GetModelStatusRequest or GetModelMetadataRequest when it is one. The model comes from the CamelTensorFlowServingModelName header, or else the modelName option.
+The protobuf request of the api, or its Builder: a PredictRequest for predict, a ClassificationRequest or RegressionRequest, or the Input of one, for classify and regress. Another body that is not empty, such as text, JSON, bytes or a Map, is not parsed and fails the exchange with an InvalidPayloadException that names the request of the api: build the protobuf request before the endpoint. No body, a blank String or an empty byte array builds the request from the options and headers only, which is all model-status and model-metadata need; they read a GetModelStatusRequest or GetModelMetadataRequest when the body is one, and model-metadata asks for signature\_def unless the request names its metadata fields. The model comes from the CamelTensorFlowServingModelName header, or else the modelName option.
 
--   With `api=model-status`: `any`
+-   With `api=model-status`: `null` or `pojo`
     
--   With `api=model-metadata`: `any`
+-   With `api=model-metadata`: `null` or `pojo`
     
 
 
@@ -221,6 +221,8 @@ tensorflow-serving:<api>\[?options\]
 `modelVersion`  
 `modelVersionLabel`  
 `signatureName` | `PredictRequest` \[[11](#_footnotedef_11 "View footnote.")\] | `PredictResponse` \[[12](#_footnotedef_12 "View footnote.")\] |
+
+The input body is the protobuf request of the API or its `Builder`, and for `classify` and `regress` also an `Input` or its `Builder`. The component does not parse any other body that is not empty, such as text, JSON, bytes or a `Map`: the exchange fails with an `InvalidPayloadException` that names the request type of the API, so build the protobuf request before the endpoint. Without a body, or with an empty one (a blank `String` or an empty `byte[]`), the request is built from the options and headers only, which is all that `model-status` and `model-metadata` need.
 
 ## Examples
 
@@ -318,6 +320,8 @@ from("direct:model-status-with-headers")
 ### Model Metadata API
 
 Currently, TensorFlow Serving only supports `signature_def` as the metadata field. See: [get\_model\_metadata.proto](https://github.com/tensorflow/serving/blob/2.18.0/tensorflow_serving/apis/get_model_metadata.proto#L26-L28)
+
+The component asks for `signature_def`, unless the `GetModelMetadataRequest` in the body names the metadata fields itself.
 
 Fetch model metadata
 

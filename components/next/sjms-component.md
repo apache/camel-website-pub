@@ -333,7 +333,7 @@ By the JMS message received: a String for a TextMessage, a byte array for a Byte
 
 
  |
-| **Consumer reply** | `text`, `bytes`, `stream`, `file`, `map` or `null` | The reply, sent as the producer sends a message. A reply that cannot be sent, such as a number or a List without objectMessageEnabled, is dropped and the caller times out.
+| **Consumer reply** | `text`, `bytes`, `stream`, `file`, `map` or `null` | The reply, sent as the producer sends a message. A reply that cannot be sent, such as a number or a List without objectMessageEnabled, fails the incoming message (rolled back when transacted) and the caller times out.
 
 -   With `objectMessageEnabled=true`: `text`, `bytes`, `stream`, `file`, `map`, `value`, `list`, `pojo` or `null`
     
@@ -561,9 +561,10 @@ The body is mapped to and from a JMS message as follows (unless the option `jmsM
 | `Map` (of simple values) | `MapMessage` | `Map` |
 | `null` | `Message` | `null` |
 | Other `Serializable` object (such as a number or a `List`) | `ObjectMessage` (only with `objectMessageEnabled=true`, fails otherwise) | the object |
-| Any other object | `Message` without a body (a WARN is logged) | `null` |
+| Any other object that converts to an `InputStream` (or `File`) | `BytesMessage` | `byte[]` |
+| Any other object | none: sending fails with a `MessageFormatException` that names the class of the body | \- |
 
-A received `StreamMessage` is not mapped: the body is the `jakarta.jms.StreamMessage` itself. With `mapJmsMessage=false` the body is always the received `jakarta.jms.Message`.
+With `jmsMessageType=Stream` the body is converted to an `InputStream`, and its bytes are written to a `StreamMessage`. A received `StreamMessage` is not mapped: the body is the `jakarta.jms.StreamMessage` itself. With `mapJmsMessage=false` the body is always the received `jakarta.jms.Message`.
 
 ### Clustering
 
@@ -573,6 +574,8 @@ When using _InOut_ with SJMS in a clustered environment, you must either use Tem
 > You should only use queues as reply-to destination types, topics are not recommended or fully supported.
 
 Currently, the only correlation strategy is to use the `JMSCorrelationId`. The _InOut_ Consumer uses this strategy as well ensuring that all response messages to the included `JMSReplyTo` destination also have the `JMSCorrelationId` copied from the request as well.
+
+When the _InOut_ consumer cannot send the reply (for example, as its body cannot be mapped to a JMS message), the incoming message fails as if the route had failed: it is rolled back when `transacted=true` (or recovered with `CLIENT_ACKNOWLEDGE`), and the error is logged. No reply is sent, so the caller waits until its `requestTimeout`.
 
 ### Batch consuming
 

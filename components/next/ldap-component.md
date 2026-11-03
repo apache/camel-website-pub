@@ -93,7 +93,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **dirContextName** (producer) | **Required** Name of either a javax.naming.directory.DirContext, or java.util.Hashtable, or Map bean to lookup in the registry. If the bean is either a Hashtable or Map then a new javax.naming.directory.DirContext instance is created for each use. If the bean is a javax.naming.directory.DirContext then the bean is used as given. The latter may not be possible in all situations where the javax.naming.directory.DirContext must not be shared, and in those situations it can be better to use java.util.Hashtable or Map instead. |  | String |
+| **dirContextName** (producer) | **Required** Name of either a javax.naming.directory.DirContext, or java.util.Hashtable, or Map bean to lookup in the registry. If the bean is either a Hashtable or Map then a new javax.naming.directory.DirContext instance is created for each use. If the bean is a javax.naming.directory.DirContext then the bean is used as given, and it is closed after each use, so the bean must be prototype scoped (a new instance for each lookup). A singleton javax.naming.directory.InitialDirContext bean works for one exchange only, so in those situations use java.util.Hashtable or Map instead. |  | String |
 
 ### Query Parameters
 
@@ -194,6 +194,10 @@ In YAML, the bean is the environment of the context, as a `Hashtable`. The compo
 
 The preceding example declares a regular Sun-based LDAP `DirContext` that connects anonymously to a locally hosted LDAP server.
 
+The producer closes the `DirContext` after each search. A `DirContext` bean must therefore be prototype scoped (`scope="prototype"` in Spring, `@Dependent` in Quarkus), so the registry gives a new instance for each message. A singleton `InitialDirContext` bean works for the first message only; the next message fails with an `IllegalStateException` that says the bean was closed. To share one bean, bind a `Hashtable` or `Map` with the environment of the `DirContext` instead, as in the YAML example, and the component creates and closes a new `DirContext` for each message.
+
+If no bean is found in the registry for the name in the URI, the message fails with a `NoSuchBeanException`.
+
 > **Note**
 > `DirContext` objects are **not** required to support concurrency by contract. It is therefore important to manage the directory context’s lifecycle appropriately. In the Spring framework, `prototype` scoped objects are instantiated each time they are looked up to ensure concurrency and avoid sharing the same context between multiple threads.
 >
@@ -276,8 +280,9 @@ props.setProperty(Context.SECURITY_AUTHENTICATION, "simple");
 props.setProperty(Context.SECURITY_PRINCIPAL, "cn=Manager");
 props.setProperty(Context.SECURITY_CREDENTIALS, "secret");
 
+// bind the environment (a Properties is a Hashtable), so a new DirContext is created for each message
 DefaultRegistry reg = new DefaultRegistry();
-reg.bind("myldap", new InitialLdapContext(props, null));
+reg.bind("myldap", props);
 
 from("direct:start").to("ldap:myldap?base=ou=test");
 ```

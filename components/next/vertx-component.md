@@ -105,7 +105,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **pubSub** (common) | Whether to use publish/subscribe instead of point to point when sending to a vertx endpoint. | false | Boolean |
+| **pubSub** (common) | Whether to use publish/subscribe instead of point to point when sending to a vertx endpoint. This only applies when the exchange pattern is InOnly: an InOut exchange is sent as a request to one consumer, which replies. | false | Boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
@@ -132,9 +132,9 @@ The message body at each side of the Vert.x component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `unknown` | The body of the event bus message, as the sender sent it: a String, a byte array, a number or a boolean, a JsonObject or a JsonArray, or a Serializable object such as a HashMap. A Buffer becomes a stream with stream caching enabled. |
-| **Consumer reply** | `text`, `bytes`, `value`, `map`, `list`, `pojo` or `null` | A message with a reply address is answered with the body the route ends with, as the producer sends it. A stream, such as a received Buffer the route did not change, or a POJO that is not Serializable sends no reply, and the requester times out. |
-| **Producer input** | `text`, `bytes`, `value`, `map`, `list` or `pojo` | Sent as is, with the event bus codec of its type: a String, a byte array, a number or a boolean, a JsonObject, a JsonArray or a Buffer, or a Serializable object such as a HashMap. A stream, a POJO that is not Serializable (without a codec registered for it) or no body fails: convert it first. |
+| **Consumer** | `unknown` | The body of the event bus message, as the sender sent it: a String, a byte array, a number or a boolean, a JsonObject or a JsonArray, or a Serializable object such as a HashMap. A Buffer becomes a stream with stream caching enabled. A message sent without a body has a null body. |
+| **Consumer reply** | `text`, `bytes`, `stream`, `value`, `map`, `list`, `pojo` or `null` | A message with a reply address is answered with the body the route ends with, as the producer sends it. A stream, such as a received Buffer the route did not change, is replied as a Buffer. A POJO that is not Serializable (without a codec registered for it) is answered with a failure. |
+| **Producer input** | `text`, `bytes`, `stream`, `value`, `map`, `list`, `pojo` or `null` | Sent as is, with the event bus codec of its type: a String, a byte array, a number or a boolean, a JsonObject, a JsonArray or a Buffer, or a Serializable object such as a HashMap. A stream, such as a received Buffer the route did not change, is sent as a Buffer. A POJO that is not Serializable (without a codec registered for it) fails: convert it first. A message without a body is sent with a null body. |
 | **Producer output** | `unknown` | 
 Unchanged for a message that expects no reply (InOnly). A message that expects one (InOut) is sent as a request, also with pubSub, and gets the body of the reply.
 
@@ -176,7 +176,9 @@ The producer sends the message body to the event bus address, and a consumer of 
             message: "Received order ${body}"
 ```
 
-The body is sent as is, without type conversion: a stream, or a POJO that is not `Serializable` and has no codec registered on the event bus, fails with `No message codec for type`, so convert it to a `String` or a byte array first. A message without a body fails as well.
+The `pubSub` option only applies to InOnly exchanges: an InOut exchange is always sent as a request to one consumer, which replies.
+
+The body is sent as is, without type conversion, except for a stream, which is sent as a `Buffer`: a `Buffer` the consumer receives is a stream when stream caching is enabled (the default), so a route from one `vertx` endpoint to another sends it on as a `Buffer`. A POJO that is not `Serializable` and has no codec registered on the event bus fails with `No message codec for type`, so convert it to a `String` or a byte array first. A message without a body is sent with a `null` body, which the event bus supports with its built-in null codec, so it can be used as a trigger or ping signal: the consumer receives a message without a body. This applies to send, publish and request alike.
 
 When the exchange is InOut, the producer sends a request and the reply of the consumer becomes the message body:
 
@@ -200,7 +202,7 @@ When the exchange is InOut, the producer sends a request and the reply of the co
                 expression: "Hello ${body}"
 ```
 
-The consumer replies with the body the route ends with, which needs a codec too. A `Buffer` the consumer receives is a stream when stream caching is enabled (the default), so convert a stream body before the route ends.
+The consumer replies with the body the route ends with. A stream body is replied as a `Buffer`: a `Buffer` the consumer receives is a stream when stream caching is enabled (the default), so a route that does not change the body replies with a `Buffer` again. Any other body needs a codec too: when the reply cannot be sent, such as for a POJO that is not `Serializable`, the consumer logs the error and the sender gets a failure reply (a `ReplyException` with failure code 500) instead of waiting until its reply timeout.
 
 ## Connecting to the existing Vert.x instance
 

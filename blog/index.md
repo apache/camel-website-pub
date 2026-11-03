@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[263]{title,link,pubDate,description}:
+posts[264]{title,link,pubDate,description}:
+  Document Ingestion for RAG in Camel 4.23: From Folder to Vector Store|https://camel.apache.org/blog/2026/11/camel-document-ingestion-rag/index.md|Tue, 03 Nov 2026 00:00:00 +0000|Camel 4.23 can turn a folder of documents into a knowledge base for retrieval-augmented generation (RAG). The new camel-langchain4j-ingest component splits a message body, embeds the segments and writ
   Building an Agentic RAG Application with Apache Camel and LangChain4j|https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/index.md|Fri, 23 Oct 2026 00:00:00 +0000|Introduction Large language models (LLMs) can reason about a question, but they do not know your organization&rsquo;s past production incidents, and they cannot look up what changed in the world last 
   RELEASE 4.22.2|https://camel.apache.org/blog/2026/10/RELEASE-4.22.2/index.md|Thu, 22 Oct 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.22.2 LTS release with 86 bug fixes and improvements. The artifacts are published and ready for you to download from the Central 
   Round 4: making Camel work for any AI model, now with intermediate examples|https://camel.apache.org/blog/2026/10/camel-local-model-benchmark-round-4/index.md|Wed, 21 Oct 2026 00:00:00 +0000|This is the fourth post in a series about making Camel easy to use for any AI model: the frontier models in the cloud, and especially the models that are small enough to run on your own laptop or a mi

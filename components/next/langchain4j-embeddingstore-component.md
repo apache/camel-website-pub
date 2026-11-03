@@ -201,9 +201,11 @@ The message body at each side of the LangChain4j Embedding Store component: _Con
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | 
-ADD and SEARCH take the embedding from the CamelLangChain4jEmbeddingsEmbedding header (a batch ADD from the CamelLangChain4jEmbeddingsEmbeddings header) and ignore the body, but with an embeddingModel and no such header they embed the body read as a String, so no body fails and another body, a TextSegment too, is embedded as its toString(). REMOVE takes the id as text or a Collection of ids, unless the CamelLangchain4jEmbeddingStoreFilter header is set.
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | 
+ADD and SEARCH take the embedding from the CamelLangChain4jEmbeddingsEmbedding header (a batch ADD from the CamelLangChain4jEmbeddingsEmbeddings header) and ignore the body, but with an embeddingModel and no such header they embed the body: text, bytes, a stream or a file read as text, or a LangChain4j TextSegment as is with its metadata. Another body, such as a Map or a POJO, fails, as does no body: convert it to text first. ADD embeds a List of String or TextSegment as a batch, one entry per element, and SEARCH fails on a List. REMOVE takes the id as text or a Collection of String ids, unless the CamelLangchain4jEmbeddingStoreFilter header is set, and fails on another body.
 
+-   With `action=SEARCH`: `text`, `bytes`, `stream` or `file`
+    
 -   With `action=REMOVE`: `text` or `list`
     
 
@@ -258,6 +260,19 @@ context.getRegistry().bind("myEmbeddingStore", embeddingStore);
 When an `EmbeddingModel` is configured (either explicitly or via autowiring from the registry), the ADD and SEARCH operations can accept plain text in the message body instead of requiring a pre-computed embedding in the `CamelLangChain4jEmbeddingsEmbedding` header. The component will automatically compute the embedding from the body text.
 
 If the `CamelLangChain4jEmbeddingsEmbedding` header is present, it always takes precedence over auto-embedding.
+
+The body is embedded as follows:
+
+-   A `TextSegment` body is embedded and stored as is, with its metadata.
+    
+-   Text, bytes, a stream or a file is read as a `String`, and stored as a `TextSegment` of that text.
+    
+-   Any other body, such as a `Map` or a POJO, fails the exchange with an `InvalidPayloadException` instead of being embedded as its `toString()`: turn it into text first, with `convertBodyTo(String.class)` or a marshal to JSON, say. When the `CamelLangChain4jEmbeddingsTextSegment` header is set, the body is not embedded and not checked.
+    
+-   For ADD, a `List` of `String` or `TextSegment` is embedded and stored as a batch, one entry per element, and the response body is the `List` of the generated IDs (the `CamelLangchain4jEmbeddingStoreEmbeddingIds` header supplies your own IDs). A `List` with another element type, or an empty `List`, fails with `IllegalArgumentException`.
+    
+-   For SEARCH, the body is one query: a `List` body fails with `IllegalArgumentException`.
+    
 
 -   Java
     
@@ -427,7 +442,7 @@ The REMOVE operation supports multiple strategies:
 
 #### Remove by Single ID
 
-Delete a single embedding by its ID (body is a `String`):
+Delete a single embedding by its ID (body is a `String`, or bytes or a stream read as a `String`). Another body type, such as a `Map` or a number, fails with `IllegalArgumentException`:
 
 -   Java
     
@@ -457,7 +472,7 @@ from("direct:remove")
 
 #### Remove by Collection of IDs
 
-Delete multiple embeddings by passing a `Collection<String>` as the body:
+Delete multiple embeddings by passing a `Collection<String>` as the body. A collection with an element that is not a `String` fails with `IllegalArgumentException`:
 
 ```java
 from("direct:remove-batch")

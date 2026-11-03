@@ -240,7 +240,7 @@ from("direct:put")
 <route>
     <from uri="direct:put"/>
     <log message="put.."/>
-    <setHeader name="hazelcast.operation.type">
+    <setHeader name="CamelHazelcastOperationType">
         <constant>add</constant>
     </setHeader>
     <to uri="hazelcast-ringbuffer:foo"/>
@@ -253,8 +253,10 @@ from("direct:put")
       uri: direct:put
       steps:
         - setHeader:
-            name: hazelcast.operation.type
-            constant: add
+            name: CamelHazelcastOperationType
+            expression:
+              constant:
+                expression: add
         - to:
             uri: hazelcast-ringbuffer:foo
 ```

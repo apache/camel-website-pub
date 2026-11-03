@@ -182,10 +182,10 @@ The message body at each side of the Google BigQuery Standard SQL component: _Co
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | The query is set on the endpoint. A Map body gives the values of the @name parameters, before the headers of the same name; any other body is ignored. |
-| **Producer output** | `list` or `value` | 
-For a SELECT the rows of the page, a Map per row whose scalar values are the text BigQuery returns, with the next page token and the job id in headers; with outputType=STREAM\_LIST an Iterator of those Maps over all pages. For a DML statement the number of affected rows as a Long.
+| **Producer output** | `list`, `value` or `null` | 
+For a SELECT the rows of the page, a Map per row whose scalar values are the text BigQuery returns, with the next page token and the job id in headers; with outputType=STREAM\_LIST an Iterator of those Maps over all pages. For a DML statement the number of affected rows as a Long, and no body for another statement, such as DDL (CREATE TABLE), which has no such number.
 
--   With `outputType=STREAM_LIST`: `iterator` or `value`
+-   With `outputType=STREAM_LIST`: `iterator`, `value` or `null`
     
 
 
@@ -254,6 +254,8 @@ The component supports both SELECT and DML (INSERT, UPDATE, DELETE) queries:
 -   **SELECT queries** - Return data based on configured `outputType` (SELECT\_LIST or STREAM\_LIST)
     
 -   **DML queries** - Return the number of affected rows as `Long`
+    
+-   **Other statements**, such as DDL (CREATE TABLE, DROP TABLE) - Return no body (`null`), as BigQuery gives no number of affected rows for them
     
 
 ## Output Types

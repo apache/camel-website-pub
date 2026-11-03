@@ -215,7 +215,7 @@ Not known when `performInvocation` is set.
  |
 | **Consumer reply** | `null`, `text`, `bytes`, `stream`, `file` or `pojo` | 
 
-The response entity: a jakarta.ws.rs.core.Response, or text, bytes, a stream, a file, or an object a JAX-RS provider writes for the Content-Type (a JAXB bean as XML); a Map or a List fails without a provider for it. With the Default binding the request MessageContentsList fails: set the reply body.
+The response entity: a jakarta.ws.rs.core.Response, or text, bytes, a stream, a file, or an object a JAX-RS provider writes for the Content-Type (a JAXB bean as XML); a Map or a List fails without a provider for it. With the Default binding an unchanged request MessageContentsList replies with its single element, or no content when empty (unless the method returns a collection); one of several parameters fails: set the reply body.
 
 -   With `bindingStyle=Custom`: `any`
     
@@ -227,7 +227,7 @@ The response entity: a jakarta.ws.rs.core.Response, or text, bytes, a stream, a 
  |
 | **Producer input** | `null`, `text`, `bytes`, `stream`, `file` or `pojo` | 
 
-The request entity, written for the Content-Type header: text, bytes, a stream, a file or an object a JAX-RS provider writes; of a List only the first element is sent, and a Map fails. A GET sends no body. With httpClientAPI=false: the parameters of the resource method named by the CamelCxfOperationName header, as a List or the one parameter.
+The request entity, written for the Content-Type header: text, bytes, a stream, a file or an object a JAX-RS provider writes, such as a List as a whole (of a MessageContentsList or an Object\[\] only the first element is sent); a Map fails. A GET sends no body. With httpClientAPI=false: the parameters of the resource method named by the CamelCxfOperationName header, as a List or the one parameter.
 
 -   With `httpClientAPI=false`: `list`, `text`, `value`, `pojo` or `null`
     
@@ -291,7 +291,7 @@ _Java-only: inline exchange header manipulation_
 
 **Since Camel 2.11**
 
-The `Default` binding style is rather low-level, requiring the user to manually process the `MessageContentsList` object coming into the route. Thus, it tightly couples the route logic with the method signature and parameter indices of the JAX-RS operation. Somewhat inelegant, difficult and error-prone.
+The `Default` binding style is rather low-level, requiring the user to manually process the `MessageContentsList` object coming into the route. Thus, it tightly couples the route logic with the method signature and parameter indices of the JAX-RS operation. Somewhat inelegant, difficult and error-prone. When a route with the `Default` binding style does not set a reply body, the request `MessageContentsList` of one parameter is the response entity, and one without parameters replies with no content (204), unless the resource method returns a collection. A `MessageContentsList` of several parameters fails with HTTP 500, so set the reply body in the route.
 
 In contrast, the `SimpleConsumer` binding style performs the following mappings, to **make the request data more accessible** to you within the Camel Message:
 
@@ -544,7 +544,7 @@ assertEquals(200, exchange.getMessage().getHeader(Exchange.HTTP_RESPONSE_CODE), 
 assertEquals("value", exchange.getMessage().getHeader("key"), "Get a wrong header value");
 ```
 
-The [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md) also provides [an HTTP centric client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-CXFWebClientAPI). You can also invoke this API from `camel-cxfrs` producer. You need to specify the [HTTP\_PATH](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_PATH) and the [HTTP\_METHOD](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_METHOD) and let the producer use the http centric client API by using the URI option **httpClientAPI** or by setting the message header `CamelCxfRsUsingHttpAPI`. You can turn the response object to the type class specified with the message header `CamelCxfRsResponseClass`.
+The [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md) also provides [an HTTP centric client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-CXFWebClientAPI). You can also invoke this API from `camel-cxfrs` producer. You need to specify the [HTTP\_PATH](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_PATH) and the [HTTP\_METHOD](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_METHOD) and let the producer use the http centric client API by using the URI option **httpClientAPI** or by setting the message header `CamelCxfRsUsingHttpAPI`. You can turn the response object to the type class specified with the message header `CamelCxfRsResponseClass`. The message body is the request entity (a GET sends none): a `List` or an array of primitives (such as `byte[]` or `int[]`) is sent as a whole, and of a `MessageContentsList` (such as the body from a `cxfrs` consumer with the `Default` binding style) or an `Object[]` only the first element is sent, as they carry the parameters of a method call.
 
 _Java-only: Java test API (ProducerTemplate with inline Processor)_
 

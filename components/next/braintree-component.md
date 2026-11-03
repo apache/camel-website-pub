@@ -819,7 +819,7 @@ The braintree/all API method has the parameters listed in the table below:
 
 Signatures:
 
--   com.braintreegateway.Result<com.braintreegateway.MerchantAccount> createForCurrency(com.braintreegateway.MerchantAccountCreateForCurrencyRequest request);
+-   com.braintreegateway.Result<com.braintreegateway.MerchantAccount> createForCurrency(com.braintreegateway.MerchantAccountCreateForCurrencyRequest currencyRequest);
     
 
 The braintree/createForCurrency API method has the parameters listed in the table below:
@@ -895,7 +895,7 @@ The 4 method(s) is(are) listed in the table below, followed by detailed syntax f
 
 Signatures:
 
--   String connectUrl(com.braintreegateway.OAuthConnectUrlRequest request);
+-   String connectUrl(com.braintreegateway.OAuthConnectUrlRequest connectRequest);
     
 
 The braintree/connectUrl API method has the parameters listed in the table below:
@@ -1009,7 +1009,7 @@ Signatures:
 
 -   com.braintreegateway.Result<com.braintreegateway.? extends PaymentMethod> delete(String token);
     
--   com.braintreegateway.Result<com.braintreegateway.? extends PaymentMethod> delete(String token, com.braintreegateway.PaymentMethodDeleteRequest request);
+-   com.braintreegateway.Result<com.braintreegateway.? extends PaymentMethod> delete(String token, com.braintreegateway.PaymentMethodDeleteRequest deleteRequest);
     
 
 The braintree/delete API method has the parameters listed in the table below:
@@ -1539,7 +1539,7 @@ The braintree/cancelRelease API method has the parameters listed in the table be
 
 Signatures:
 
--   com.braintreegateway.Result<com.braintreegateway.Transaction> cloneTransaction(String id, com.braintreegateway.TransactionCloneRequest request);
+-   com.braintreegateway.Result<com.braintreegateway.Transaction> cloneTransaction(String id, com.braintreegateway.TransactionCloneRequest cloneRequest);
     
 
 The braintree/cloneTransaction API method has the parameters listed in the table below:
@@ -1602,7 +1602,7 @@ Signatures:
 
 -   com.braintreegateway.Result<com.braintreegateway.Transaction> refund(String id);
     
--   com.braintreegateway.Result<com.braintreegateway.Transaction> refund(String id, com.braintreegateway.TransactionRefundRequest request);
+-   com.braintreegateway.Result<com.braintreegateway.Transaction> refund(String id, com.braintreegateway.TransactionRefundRequest refundRequest);
     
 -   com.braintreegateway.Result<com.braintreegateway.Transaction> refund(String id, java.math.BigDecimal amount);
     
@@ -1641,7 +1641,7 @@ Signatures:
 
 -   com.braintreegateway.Result<com.braintreegateway.Transaction> reverse(String id);
     
--   com.braintreegateway.Result<com.braintreegateway.Transaction> reverse(String id, com.braintreegateway.TransactionReverseRequest request);
+-   com.braintreegateway.Result<com.braintreegateway.Transaction> reverse(String id, com.braintreegateway.TransactionReverseRequest reverseRequest);
     
 
 The braintree/reverse API method has the parameters listed in the table below:
@@ -1754,7 +1754,7 @@ Signatures:
 
 -   com.braintreegateway.Result<com.braintreegateway.Transaction> voidTransaction(String id);
     
--   com.braintreegateway.Result<com.braintreegateway.Transaction> voidTransaction(String id, com.braintreegateway.TransactionVoidRequest request);
+-   com.braintreegateway.Result<com.braintreegateway.Transaction> voidTransaction(String id, com.braintreegateway.TransactionVoidRequest voidRequest);
     
 
 The braintree/voidTransaction API method has the parameters listed in the table below:

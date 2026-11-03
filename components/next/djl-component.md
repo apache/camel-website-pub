@@ -39,16 +39,16 @@ Currently, the component supports the following applications.
 | `cv/word_recognition` | `ai.djl.modality.cv.Image   byte[]   InputStream   File` | `String` |
 | `cv/image_generation` | `int[]` | `ai.djl.modality.cv.Image[]` |
 | `cv/image_enhancement` | `ai.djl.modality.cv.Image   byte[]   InputStream   File` | `ai.djl.modality.cv.Image` |
-| `nlp/fill_mask` | `String` | `String[]` |
+| `nlp/fill_mask` | `String   byte[]   InputStream` | `String[]` |
 | `nlp/question_answer` | `ai.djl.modality.nlp.qa.QAInput   String[]` | `String` |
-| `nlp/text_classification` | `String` | `ai.djl.modality.Classifications` |
-| `nlp/sentiment_analysis` | `String` | `ai.djl.modality.Classifications` |
-| `nlp/token_classification` | `String` | `ai.djl.modality.Classifications` |
-| `nlp/text_generation` | `String` | `String` |
-| `nlp/machine_translation` | `String` | `String` |
-| `nlp/multiple_choice` | `String` | `String` |
-| `nlp/text_embedding` | `String` | `ai.djl.ndarray.NDArray` |
-| `nlp/word_embedding` (custom model only) | `String` | `byte[]` (the encoded `ai.djl.ndarray.NDList`) |
+| `nlp/text_classification` | `String   byte[]   InputStream` | `ai.djl.modality.Classifications` |
+| `nlp/sentiment_analysis` | `String   byte[]   InputStream` | `ai.djl.modality.Classifications` |
+| `nlp/token_classification` | `String   byte[]   InputStream` | `ai.djl.modality.Classifications` |
+| `nlp/text_generation` | `String   byte[]   InputStream` | `String` |
+| `nlp/machine_translation` | `String   byte[]   InputStream` | `String` |
+| `nlp/multiple_choice` | `String   byte[]   InputStream` | `String` |
+| `nlp/text_embedding` | `String   byte[]   InputStream` | `ai.djl.ndarray.NDArray` |
+| `nlp/word_embedding` (custom model only) | `String   byte[]   InputStream` | `byte[]` (the encoded `ai.djl.ndarray.NDList`) |
 | `audio` | `ai.djl.modality.audio.Audio   byte[]   InputStream   File` | `String` |
 | `timeseries/forecasting` | `ai.djl.timeseries.TimeSeriesData` | `ai.djl.timeseries.Forecast` |
 | `tabular/linear_regression` (custom model only) | Any body: the input type of the translator | The output type of the translator |
@@ -153,7 +153,7 @@ The message body at each side of the Deep Java Library component: _Consumer_ is 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `bytes`, `stream`, `file`, `pojo`, `text` or `list` | 
-Depends on the application. The cv applications and audio take an image or audio clip as bytes, a stream, a File or a Path, or a DJL Image or Audio (a BufferedImage or a file name as text is not converted); cv/image\_generation an int\[\] of seeds. The nlp applications take a String only (bytes or a stream fail: convert to text first), nlp/question\_answer a QAInput or a String\[\] of the question and the paragraph, timeseries/forecasting a TimeSeriesData. No body fails.
+Depends on the application. The cv applications and audio take an image or audio clip as bytes, a stream, a File or a Path, or a DJL Image or Audio (a BufferedImage or a file name as text is not converted); cv/image\_generation an int\[\] of seeds. The nlp applications take text: a String, bytes or a stream, nlp/question\_answer a QAInput or a String\[\] of the question and the paragraph, timeseries/forecasting a TimeSeriesData. No body fails.
 
 -   With `application=cv/image_classification`: `bytes`, `stream`, `file` or `pojo`
     
@@ -173,23 +173,23 @@ Depends on the application. The cv applications and audio take an image or audio
     
 -   With `application=cv/image_generation`: `list` (`int[]`)
     
--   With `application=nlp/fill_mask`: `text` (`java.lang.String`)
+-   With `application=nlp/fill_mask`: `text`, `bytes` or `stream`
     
--   With `application=nlp/text_classification`: `text` (`java.lang.String`)
+-   With `application=nlp/text_classification`: `text`, `bytes` or `stream`
     
--   With `application=nlp/sentiment_analysis`: `text` (`java.lang.String`)
+-   With `application=nlp/sentiment_analysis`: `text`, `bytes` or `stream`
     
--   With `application=nlp/token_classification`: `text` (`java.lang.String`)
+-   With `application=nlp/token_classification`: `text`, `bytes` or `stream`
     
--   With `application=nlp/word_embedding`: `text` (`java.lang.String`)
+-   With `application=nlp/word_embedding`: `text`, `bytes` or `stream`
     
--   With `application=nlp/text_generation`: `text` (`java.lang.String`)
+-   With `application=nlp/text_generation`: `text`, `bytes` or `stream`
     
--   With `application=nlp/machine_translation`: `text` (`java.lang.String`)
+-   With `application=nlp/machine_translation`: `text`, `bytes` or `stream`
     
--   With `application=nlp/multiple_choice`: `text` (`java.lang.String`)
+-   With `application=nlp/multiple_choice`: `text`, `bytes` or `stream`
     
--   With `application=nlp/text_embedding`: `text` (`java.lang.String`)
+-   With `application=nlp/text_embedding`: `text`, `bytes` or `stream`
     
 -   With `application=nlp/question_answer`: `pojo` or `list`
     
@@ -595,3 +595,5 @@ context.getRegistry().bind("MyTranslator", translator);
 from("file:/data/mnist/0/10.png")
     .to("djl:cv/image_classification?model=MyModel&translator=MyTranslator");
 ```
+
+The `model` and `translator` beans are looked up in the registry once, at the first message, and are kept until the route is stopped. A missing bean fails the message with a `NoSuchBeanException` that names the bean.

@@ -98,7 +98,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **ldapConnectionName** (producer) | **Required** The name of the LdapConnection bean to pull from the registry. Note that this must be of scope prototype to avoid it being shared among threads or using a connection that has timed out. |  | String |
+| **ldapConnectionName** (producer) | **Required** The name of the LdapConnection bean to pull from the registry. Note that this must be of scope prototype to avoid it being shared among threads or using a connection that has timed out. The connection is closed after each message, and bound again with its configured name and credentials when it is used for the next message. |  | String |
 
 ### Query Parameters
 
@@ -116,7 +116,7 @@ The message body at each side of the LDIF component: _Consumer_ is the body of t
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `bytes`, `stream` or `file` | The LDIF text, starting with version: 1, or bytes, a stream or a file of it. With allowUrlBody, a text that is not LDIF is read as the URL of the LDIF file; otherwise it fails, as does a Map or a POJO. |
-| **Producer output** | `list` or `null` | A List of one status String per LDIF entry: success, or the error message from the server, which can be empty. No body or an empty body gives null. |
+| **Producer output** | `list` or `text` | A List of one status String per LDIF entry: success, or the LDAP result code, the DN and the message from the server, such as entryAlreadyExists (68) on uid=a,dc=example,dc=org. No body or an empty body gives an empty String. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -132,11 +132,20 @@ If not, the component reads the body as a URL, but only when the `allowUrlBody` 
 
 ### Result
 
-The result is returned in the Out body as a `ArrayList<java.lang.String>` object. This contains either `success` or the error message for each LDIF entry.
+The result is returned in the Out body as a `ArrayList<java.lang.String>` object. This contains a status for each LDIF entry: either `success`, or for a failed change the LDAP result code, the DN of the entry and the message from the server, such as:
+
+entryAlreadyExists (68) on uid=test1,ou=test,dc=example,dc=org
+noSuchObject (32) on uid=test2,ou=test,dc=example,dc=org: no such entry
+
+The message is left out when the server sends none (OpenLDAP sends none for an entry that already exists).
+
+An empty or null body is not sent to the server, and the result is an empty String.
 
 ### LdapConnection
 
 The URI, `ldif:ldapConnectionName`, references a bean with the ID, `ldapConnectionName`. The ldapConnection can be configured using a `LdapConnectionConfig` bean. Note that the scope must have a scope of `prototype` to avoid the connection being shared or picking up a stale connection.
+
+The component closes the connection after each message. When the bean is not a prototype, the next message uses the same connection: the component then binds it again, with the name and credentials of its `LdapConnectionConfig`, before the changes are applied.
 
 The `LdapConnection` bean may be defined as follows in Spring XML:
 
@@ -173,7 +182,7 @@ In YAML, a Groovy script can make the connection:
         new org.apache.directory.ldap.client.api.DefaultLdapConnectionFactory(config).newLdapConnection()
 ```
 
-A YAML bean is created once, and the component closes the connection after each message. The YAML route in the examples below therefore binds the connection again before each message. This works when the route processes one message at a time.
+A YAML bean is created once, and the component closes the connection after each message, and binds it again for the next message. As the connection is shared, this works when the route processes one message at a time.
 
 ## Examples
 
@@ -202,10 +211,6 @@ The following YAML route applies each LDIF file of a folder to the server, with 
     from:
       uri: file:ldif
       steps:
-        # the component closes the connection after each message, so bind it again
-        - bean:
-            ref: ldapConnection
-            method: "bind()"
         - to:
             uri: ldif:ldapConnection
         - log:

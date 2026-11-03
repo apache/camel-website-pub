@@ -86,7 +86,7 @@ The ZooKeeper component supports the following options which are listed below.
 | **timeout** (common) | The time interval to wait on connection before timing out. | 5000 | int |
 | **backoff** (consumer) | The time interval to backoff for after an error before retrying. | 5000 | long |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
-| **repeat** (consumer) | Should changes to the znode be 'watched' and repeatedly processed. | false | boolean |
+| **repeat** (consumer) | Should changes to the znode be 'watched' and repeatedly processed. Without it, the consumer emits the data (or the child listing) of the znode once and does not follow later changes. | false | boolean |
 | **sendEmptyMessageOnDelete** (consumer) | Upon the delete of a znode, should an empty message be send to the consumer. | true | boolean |
 | **create** (producer) | Should the endpoint create the node if it does not currently exist. | false | boolean |
 | **createMode** (producer) | 
@@ -136,7 +136,7 @@ With the following _path_ and _query_ parameters:
 | **listChildren** (common) | Whether the children of the node should be listed. | false | boolean |
 | **timeout** (common) | The time interval to wait on connection before timing out. | 5000 | int |
 | **backoff** (consumer) | The time interval to backoff for after an error before retrying. | 5000 | long |
-| **repeat** (consumer) | Should changes to the znode be 'watched' and repeatedly processed. | false | boolean |
+| **repeat** (consumer) | Should changes to the znode be 'watched' and repeatedly processed. Without it, the consumer emits the data (or the child listing) of the znode once and does not follow later changes. | false | boolean |
 | **sendEmptyMessageOnDelete** (consumer) | Upon the delete of a znode, should an empty message be send to the consumer. | true | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
@@ -233,10 +233,10 @@ The message body at each side of the ZooKeeper component: _Consumer_ is the body
 Not known when `sendEmptyMessageOnDelete` is set.
 
  |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | The data to store in the znode, converted to bytes. A Map, a POJO or a number is not converted and stores no data; with the CamelZookeeperOperation header set to DELETE the body is not read. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The data to store in the znode, converted to bytes; a null body stores no data. A Map, a POJO or a number is not converted and fails the exchange; with the CamelZookeeperOperation header set to DELETE the body is not read. |
 | **Producer output** | `unchanged`, `bytes`, `text` or `value` | 
 
-InOnly writes without waiting and leaves the body unchanged. InOut waits and sets the bytes written, the path of the znode as text when it was created, or true for a DELETE; with listChildren, the List of the names of the child znodes of the path.
+Both wait for the write or delete, and fail the exchange when it failed. InOnly leaves the body unchanged. InOut sets the bytes written, the path of the znode as text when it was created, or true for a DELETE; with listChildren, the List of the names of the child znodes of the path.
 
 -   With `listChildren=true`: `list` or `unchanged`
     
@@ -284,6 +284,8 @@ from("zookeeper://localhost:39913/somepath/somenode").to("mock:result");
 
 If the node does not exist yet, the consumer waits for it to be created before reading it.
 
+The consumer reads the data of the node (or its list of children with `listChildren=true`) once, and does not follow later changes. To receive each change as well, set `repeat=true`, for example `zookeeper://localhost:39913/somepath/somenode?repeat=true`.
+
 ### Reading from a _znode_
 
 When data is read due to a `WatchedEvent` received from the ZooKeeper ensemble, the `CamelZookeeperEventType` header holds ZooKeeper’s [`EventType`](http://zookeeper.apache.org/doc/current/api/org/apache/zookeeper/Watcher.Event.EventType.md) value from that `WatchedEvent`. If the data is read initially (not triggered by a `WatchedEvent`) the `CamelZookeeperEventType` header will not be set.
@@ -323,7 +325,7 @@ from("direct:write-to-znode")
 For flexibility, the endpoint allows the target _znode_ to be specified dynamically as a message header. If a header keyed by the string `CamelZooKeeperNode` is present then the value of the header will be used as the path to the _znode_ on the server. For instance using the same route definition above, the following code snippet will write the data not to `/somepath/somenode` but to the path from the header `/somepath/someothernode`.
 
 > **Warning**
-> the `testPayload` must be convertible to `byte[]` as the data stored in ZooKeeper is byte-based.
+> the `testPayload` must be convertible to `byte[]` as the data stored in ZooKeeper is byte-based. A body that cannot be converted, such as a `Map`, a POJO or a number, fails the exchange with an `InvalidPayloadException`. A null body stores no data in the _znode_.
 
 _Java-only: ProducerTemplate with dynamic znode header_
 
@@ -364,7 +366,9 @@ from("direct:create-and-write-to-znode")
               create: true
 ```
 
-It is also possible to **delete** a node using the header `CamelZookeeperOperation` by setting it to `DELETE`:
+The producer waits for ZooKeeper to confirm the write, for an InOnly exchange too, and a failed write fails the exchange: for example a _znode_ that does not exist without the `create` option, or a `CamelZooKeeperVersion` header that is not the current version of the _znode_. An InOnly exchange keeps its body; an InOut exchange gets the result of the write as its body.
+
+It is also possible to **delete** a node using the header `CamelZookeeperOperation` by setting it to `DELETE`. A delete of a _znode_ that does not exist fails the exchange with a `NoNodeException`; the `create` option does not apply to a delete:
 
 -   Java
     

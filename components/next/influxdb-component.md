@@ -6,7 +6,7 @@
 
 This component allows you to interact with [InfluxDB](https://influxdata.com/time-series-platform/influxdb/) v1, a time series database.
 
-The native body type for this component is `Point` (the native influxdb class). However, it can also accept `Map<String, Object>` as message body, and it will get converted to `Point.class`, please note that the map must contain an element with `camelInfluxDB.MeasurementName` as key.
+The native body type for this component is `Point` (the native influxdb class). However, it can also accept `Map<String, Object>` as message body, and it will get converted to `Point.class`, please note that the map must contain an element with `camelInfluxDB.MeasurementName` as key. The other entries of the map are the fields of the point; the map itself is not changed, so it can be immutable.
 
 Additionally, you may register your own Converters to your data type to `Point`, or use the (un)marshalling tools provided by Camel.
 
@@ -110,7 +110,23 @@ With the following _path_ and _query_ parameters:
 | **batch** (producer) | Define if this operation is a batch operation or not. | false | boolean |
 | **checkDatabaseExistence** (producer) | Define if we want to check the database existence while starting the endpoint. | false | boolean |
 | **databaseName** (producer) | The name of the database where the time series will be stored. |  | String |
-| **operation** (producer) | Define if this operation is an insert or a query. | insert | String |
+| **operation** (producer) | 
+Define if this operation is an insert, a query or a ping. The value is not case-sensitive.
+
+Enum values:
+
+-   insert
+    
+-   query
+    
+-   ping
+    
+
+
+
+
+
+ | insert | String |
 | **query** (producer) | Define the query in case of operation query. |  | String |
 | **retentionPolicy** (producer) | The string that defines the retention policy to the data created by the endpoint. | default | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -150,7 +166,7 @@ The org.influxdb.dto.Point to write, or a Map of the field names and their value
  |
 | **Producer output** | `unchanged` | 
 
-An insert leaves the body unchanged. A query gives the QueryResult of InfluxDB, which carries an error the server reports (such as an unknown database) instead of failing the exchange; ping gives the Pong with the version of the server.
+An insert leaves the body unchanged. A query gives the QueryResult of InfluxDB; an error the server reports in it (such as an unknown database) fails the exchange instead. Ping gives the Pong with the version of the server.
 
 -   With `operation=query`: `pojo` (`org.influxdb.dto.QueryResult`)
     
@@ -164,6 +180,12 @@ An insert leaves the body unchanged. A query gives the QueryResult of InfluxDB, 
  |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
+
+## Operations
+
+The `operation` option selects what the producer does with each message: `insert` (the default) writes the body, `query` runs the query of the `camelInfluxDB.query` header or of the `query` option and gives its `QueryResult`, and `ping` gives the `Pong` of the server. The value is not case-sensitive, and an endpoint with another operation fails to start.
+
+InfluxDB answers a query it cannot run, such as a query on a database that does not exist, with the error in the result instead of an error status, so the client returns that result. An error in the result of the query, or of one of its statements, fails the exchange with a `CamelInfluxDbException` whose message holds the error of the server.
 
 ## Example
 

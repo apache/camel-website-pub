@@ -68,7 +68,7 @@ The Docker component supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **configuration** (common) | To use the shared docker configuration. |  | DockerConfiguration |
 | **email** (common) | Email address associated with the user. |  | String |
-| **host** (common) | **Required** Docker host. | localhost | String |
+| **host** (common) | **Required** Docker host. In socket mode (socket=true), the path of the unix socket of the Docker daemon, where the default localhost means /var/run/docker.sock. A host with a tcp:// or unix:// scheme (such as tcp://myhost:2376 or unix:///var/run/docker.sock) is used as is, and then the port and socket options are not used. | localhost | String |
 | **port** (common) | Docker port. | 2375 | Integer |
 | **requestTimeout** (common) | Request timeout for response (in seconds). |  | Integer |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -81,7 +81,7 @@ The Docker component supports the following options which are listed below.
 | **maxTotalConnections** (advanced) | Maximum total connections. | 100 | Integer |
 | **parameters** (advanced) | Additional configuration parameters as key/value pairs. |  | Map |
 | **serverAddress** (advanced) | Server address for docker registry. | [https://index.docker.io/v1/](https://index.docker.io/v1/) | String |
-| **socket** (advanced) | Socket connection mode. | true | boolean |
+| **socket** (advanced) | Socket connection mode. When enabled, connects to the unix socket of the Docker daemon, whose path is given by the host option (the default localhost means /var/run/docker.sock), and the port is not used. When disabled, connects over TCP to the host and port. | false | boolean |
 | **certPath** (security) | Location containing the SSL certificate chain. |  | String |
 | **password** (security) | Password to authenticate with. |  | String |
 | **secure** (security) | Use HTTPS communication. | false | boolean |
@@ -193,7 +193,7 @@ Enum values:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **email** (common) | Email address associated with the user. |  | String |
-| **host** (common) | **Required** Docker host. | localhost | String |
+| **host** (common) | **Required** Docker host. In socket mode (socket=true), the path of the unix socket of the Docker daemon, where the default localhost means /var/run/docker.sock. A host with a tcp:// or unix:// scheme (such as tcp://myhost:2376 or unix:///var/run/docker.sock) is used as is, and then the port and socket options are not used. | localhost | String |
 | **port** (common) | Docker port. | 2375 | Integer |
 | **requestTimeout** (common) | Request timeout for response (in seconds). |  | Integer |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -221,7 +221,7 @@ Enum values:
 | **maxTotalConnections** (advanced) | Maximum total connections. | 100 | Integer |
 | **parameters** (advanced) | Additional configuration parameters as key/value pairs. |  | Map |
 | **serverAddress** (advanced) | Server address for docker registry. | [https://index.docker.io/v1/](https://index.docker.io/v1/) | String |
-| **socket** (advanced) | Socket connection mode. | true | boolean |
+| **socket** (advanced) | Socket connection mode. When enabled, connects to the unix socket of the Docker daemon, whose path is given by the host option (the default localhost means /var/run/docker.sock), and the port is not used. When disabled, connects over TCP to the host and port. | false | boolean |
 | **certPath** (security) | Location containing the SSL certificate chain. |  | String |
 | **password** (security) | Password to authenticate with. |  | String |
 | **secure** (security) | Use HTTPS communication. | false | boolean |
@@ -243,7 +243,7 @@ The Docker component supports the following message header(s), which is/are list
 | **CamelDockerMaxTotalConnections** (common) Constant: [`DOCKER_MAX_TOTAL_CONNECTIONS`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_MAX_TOTAL_CONNECTIONS) | The maximum total connections. |  | Integer |
 | **CamelDockerSecure** (common) Constant: [`DOCKER_SECURE`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_SECURE) | Use HTTPS communication. | false | Boolean |
 | **CamelDockerTlsVerify** (common) Constant: [`DOCKER_TLSVERIFY`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_TLSVERIFY) | Check TLS. | false | Boolean |
-| **CamelDockerSocketEnabled** (common) Constant: [`DOCKER_SOCKET_ENABLED`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_SOCKET_ENABLED) | Socket connection mode. | true | Boolean |
+| **CamelDockerSocketEnabled** (common) Constant: [`DOCKER_SOCKET_ENABLED`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_SOCKET_ENABLED) | Socket connection mode: connect to the unix socket of the Docker daemon, whose path is given by the host (the default localhost means /var/run/docker.sock). | false | Boolean |
 | **CamelDockerCmdExecFactory** (common) Constant: [`DOCKER_CMD_EXEC_FACTORY`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_CMD_EXEC_FACTORY) | The fully qualified class name of the DockerCmdExecFactory implementation to use. |  | String |
 | **CamelDockerFilter** (common) Constant: [`DOCKER_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_FILTER) | With label filter. |  | String |
 | **CamelDockerShowAll** (common) Constant: [`DOCKER_SHOW_ALL`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_SHOW_ALL) | With show all flag. |  | Boolean |
@@ -260,7 +260,7 @@ The Docker component supports the following message header(s), which is/are list
 | **CamelDockerTerm** (common) Constant: [`DOCKER_TERM`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_TERM) | The term to search. |  | String |
 | **CamelDockerForce** (common) Constant: [`DOCKER_FORCE`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_FORCE) | With force flag. |  | Boolean |
 | **CamelDockerNoPrune** (common) Constant: [`DOCKER_NO_PRUNE`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_NO_PRUNE) | With no prune flag. |  | Boolean |
-| **CamelDockerInitialRange** (common) Constant: [`DOCKER_INITIAL_RANGE`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_INITIAL_RANGE) | The initial range. |  | Long |
+| **CamelDockerInitialRange** (common) Constant: [`DOCKER_INITIAL_RANGE`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_INITIAL_RANGE) | The time in milliseconds before the start of the events consumer from which it also receives the past events. |  | Long |
 | **CamelDockerBefore** (common) Constant: [`DOCKER_BEFORE`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_BEFORE) | With before. |  | String |
 | **CamelDockerLimit** (common) Constant: [`DOCKER_LIMIT`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_LIMIT) | With limit. |  | Integer |
 | **CamelDockerShowSize** (common) Constant: [`DOCKER_SHOW_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-docker/latest/org/apache/camel/component/docker/DockerConstants.html#DOCKER_SHOW_SIZE) | With show size flag. |  | Boolean |
@@ -340,11 +340,11 @@ The object of docker-java for each item of the stream: an Event of the daemon wi
  |
 | **Producer input** | `any` | 
 
-Not used by most operations, which take their input from the options and headers, such as the container in CamelDockerContainerId. imagecreate reads the image as a stream; imagebuild needs an InputStream or a java.io.File of the build context, and another body is logged as an error.
+Not used by most operations, which take their input from the options and headers, such as the container in CamelDockerContainerId. imagecreate reads the image as a stream; imagebuild needs the build context as a tar archive (an InputStream, a byte\[\] or another body that converts to an InputStream) or as a java.io.File of the Dockerfile or its directory, and fails without one.
 
 -   With `operation=imagecreate`: `stream`, `bytes`, `text` or `file`
     
--   With `operation=imagebuild`: `stream` or `file`
+-   With `operation=imagebuild`: `stream`, `bytes` or `file`
     
 
 
@@ -352,9 +352,9 @@ Not used by most operations, which take their input from the options and headers
 
 
  |
-| **Producer output** | `pojo`, `list`, `text`, `stream`, `null` or `unchanged` | 
+| **Producer output** | `pojo`, `list`, `text`, `stream`, `value` or `unchanged` | 
 
-The response of docker-java for the operation, such as the Version of version and a List of Containers for containerlist; the operations without a response, such as ping and containerstart, keep the body. The streaming operations (imagepull, imagepush, containerattach, containerlog, containerwait, execstart) give the docker-java callback once the stream is done, not its frames; imagebuild gives the image id of the last line of the output, null when it is not the Successfully built line.
+The response of docker-java for the operation, such as the Version of version and a List of Containers for containerlist; the operations without a response, such as ping and containerstart, keep the body. The streaming operations wait until the stream is done: containerattach, containerlog and execstart give the output of stdout and stderr as text, containerwait the exit code of the container, imagebuild the id of the built image, imagepull and imagepush the last item of the progress; a failed build, pull or push fails the exchange.
 
 -   With `operation=auth`: `pojo` (`com.github.dockerjava.api.model.AuthResponse`)
     
@@ -364,7 +364,7 @@ The response of docker-java for the operation, such as the Version of version an
     
 -   With `operation=version`: `pojo` (`com.github.dockerjava.api.model.Version`)
     
--   With `operation=imagebuild`: `text` or `null`
+-   With `operation=imagebuild`: `text` (`java.lang.String`)
     
 -   With `operation=imagecreate`: `pojo` (`com.github.dockerjava.api.command.CreateImageResponse`)
     
@@ -372,9 +372,9 @@ The response of docker-java for the operation, such as the Version of version an
     
 -   With `operation=imagelist`: `list`
     
--   With `operation=imagepull`: `pojo` (`com.github.dockerjava.api.command.PullImageResultCallback`)
+-   With `operation=imagepull`: `pojo` (`com.github.dockerjava.api.model.PullResponseItem`)
     
--   With `operation=imagepush`: `pojo`
+-   With `operation=imagepush`: `pojo` (`com.github.dockerjava.api.model.PushResponseItem`)
     
 -   With `operation=imageremove`: `unchanged`
     
@@ -382,7 +382,7 @@ The response of docker-java for the operation, such as the Version of version an
     
 -   With `operation=imagetag`: `unchanged`
     
--   With `operation=containerattach`: `pojo`
+-   With `operation=containerattach`: `text` (`java.lang.String`)
     
 -   With `operation=containercommit`: `text` (`java.lang.String`)
     
@@ -398,7 +398,7 @@ The response of docker-java for the operation, such as the Version of version an
     
 -   With `operation=containerlist`: `list`
     
--   With `operation=containerlog`: `pojo`
+-   With `operation=containerlog`: `text` (`java.lang.String`)
     
 -   With `operation=containerpause`: `unchanged`
     
@@ -414,11 +414,11 @@ The response of docker-java for the operation, such as the Version of version an
     
 -   With `operation=containerunpause`: `unchanged`
     
--   With `operation=containerwait`: `pojo` (`com.github.dockerjava.api.command.WaitContainerResultCallback`)
+-   With `operation=containerwait`: `value` (`java.lang.Integer`)
     
 -   With `operation=execcreate`: `pojo` (`com.github.dockerjava.api.command.ExecCreateCmdResponse`)
     
--   With `operation=execstart`: `pojo`
+-   With `operation=execstart`: `text` (`java.lang.String`)
     
 -   With `operation=networkconnect`: `unchanged`
     
@@ -437,6 +437,22 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ## Usage
 
+### Connecting to the Docker daemon
+
+By default, the component connects over TCP to `host` and `port` (`tcp://localhost:2375`). Docker does not open this TCP port by default; it has to be enabled in the configuration of the daemon.
+
+To connect to the local unix socket of the daemon instead, set `socket=true`. In socket mode `host` is the path of the socket and `port` is not used. The default host `localhost` means `/var/run/docker.sock`:
+
+```java
+from("timer:info?repeatCount=1")
+    .to("docker:info?socket=true")
+    .log("${body}");
+```
+
+For a socket in another place, set its path as the host, for example `docker:info?socket=true&host=/run/user/1000/docker.sock`.
+
+The host can also be a full Docker host URL with a `tcp://` or `unix://` scheme, in the same form as the `DOCKER_HOST` environment variable, such as `tcp://myhost:2376` or `unix:///var/run/docker.sock`. Such a host is used as is, and the `port` and `socket` options are not used. Windows named pipes (`npipe://`) are not supported by the Docker client of the component.
+
 ### Header Strategy
 
 All URI options can be passed as Header properties. Values found in a message header take precedence over URI parameters. A header property takes the form of a URI option prefixed with **CamelDocker** as shown below
@@ -445,6 +461,24 @@ All URI options can be passed as Header properties. Values found in a message he
 | URI Option | Header Property |
 | --- | --- |
 | containerId | CamelDockerContainerId |
+
+### Streaming operations
+
+The operations `imagebuild`, `imagepull`, `imagepush`, `containerattach`, `containerlog`, `containerwait` and `execstart` wait until Docker has finished, and set the result as the message body:
+
+-   `imagebuild`: the id of the built image. The body is the build context: a tar archive as an `InputStream`, a `byte[]` or another body that converts to an `InputStream`, or a `java.io.File` of the Dockerfile or its directory.
+    
+-   `containerattach`, `containerlog` and `execstart`: the output of stdout and stderr as a `String`.
+    
+-   `containerwait`: the exit code of the container as an `Integer`.
+    
+-   `imagepull` and `imagepush`: the last `PullResponseItem` or `PushResponseItem` of the progress.
+    
+
+When the operation fails, for example a build step that fails, the exchange fails.
+
+> **Note**
+> With `followStream=true`, `containerattach` and `containerlog` wait until the container stops.
 
 ## Examples
 

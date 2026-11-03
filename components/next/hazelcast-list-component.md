@@ -217,7 +217,7 @@ The message body at each side of the Hazelcast List component: _Consumer_ is the
 | **Consumer** | `pojo` (`com.hazelcast.collection.ItemEvent`) | The Hazelcast ItemEvent of an item added to or removed from the list, not the item: ${body.item} is the item, and the CamelHazelcastListenerAction header is added or removed. |
 | **Producer input** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The item that add and setValue store, at the index in the CamelHazelcastObjectIndex header when set, and that removeValue removes when the header is not set: an object Hazelcast can serialize, so a stream or no body fails. A Collection for addAll, removeAll and retainAll. The other operations do not use the body. |
 | **Producer output** | `unknown` | 
-By the operation, which the CamelHazelcastOperationType header sets, or else the defaultOperation option (without either the producer fails): the item at the index in the CamelHazelcastObjectIndex header for get, which needs the header, and the Hazelcast list itself for getAll: a live distributed List, not a copy. The other operations keep the body.
+By the operation, which the CamelHazelcastOperationType header sets, or else the defaultOperation option (without either the producer fails): the item at the index in the CamelHazelcastObjectIndex header for get, which needs the header, and a copy of the items of the list as a List for getAll. The other operations keep the body.
 
 -   With `defaultOperation=add`: `unchanged`
     
@@ -417,7 +417,7 @@ from("direct:removevalue")
             uri: hazelcast-list:bar
 ```
 
-Note that **CamelHazelcastObjectIndex** header is used for indexing purpose.
+Note that **CamelHazelcastObjectIndex** header is used for indexing purpose. The **get** operation needs it: without the header the producer fails. The **getAll** operation sets a copy of the items of the list as the message body.
 
 ## List consumer – from(“hazelcast-list:foo”)
 

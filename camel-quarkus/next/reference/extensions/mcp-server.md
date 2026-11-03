@@ -4,7 +4,7 @@ JVM since3.39.0 Native since3.39.0
 
 The MCP Server extension exposes Camel routes registered via the `ai-tool` component as tools, and `ai-resource` routes as resources, of a Model Context Protocol (MCP) server, served through the quarkiverse [quarkus-mcp-server](https://docs.quarkiverse.io/quarkus-mcp-server/dev/index.md) extension. No route is needed for the server itself: add the extension, tag the `ai-tool` and `ai-resource` routes to expose, and any MCP client (another Camel application, an IDE, a coding agent) can discover and use them.
 
-Tool semantics — tag-based opt-in (the untagged default pool is never exposed), flat-namespace collision refusal, per-call timeout and error sanitization — are owned by the runtime-agnostic `camel-mcp-server-api` bridge and are identical on every Camel runtime. Serving concerns (endpoint path, transports, authentication) are owned by quarkus-mcp-server and configured via `quarkus.mcp.server.*`.
+The server is exposed over streamable HTTP. Tool semantics — tag-based opt-in (the untagged default pool is never exposed), flat-namespace collision refusal, per-call timeout and error sanitization — are owned by the `camel-mcp-server-api` bridge. Serving concerns (endpoint path, authentication) are owned by quarkus-mcp-server and configured via `quarkus.mcp.server.*`.
 
 ## What’s inside
 
@@ -71,7 +71,7 @@ Add the `camel-quarkus-ai-resource` extension to define [`ai-resource`](../../..
 
 ### Combining the Camel and quarkus-mcp-server configuration
 
-The configuration is split by ownership: `quarkus.camel.mcp-server.` **decides \*which tools and resources exist and how they execute** (identical semantics on every Camel runtime, except for the tool and resource clashes refused by quarkus-mcp-server), while `quarkus.mcp.server.` **decides \*how the server is exposed**. Both are set side by side in `application.properties`:
+The configuration is split by ownership: `quarkus.camel.mcp-server.` **decides \*which tools and resources exist and how they execute** (semantics owned by the `camel-mcp-server-api` bridge, except for the tool and resource clashes refused by quarkus-mcp-server), while `quarkus.mcp.server.` **decides \*how the server is exposed**. Both are set side by side in `application.properties`:
 
 ```properties
 # Camel-owned: tool and resource selection and execution
@@ -89,7 +89,7 @@ quarkus.mcp.server.traffic-logging.enabled = true
 quarkus.mcp.server.traffic-logging.text-limit = 200
 ```
 
-See the [quarkus-mcp-server configuration reference](https://docs.quarkiverse.io/quarkus-mcp-server/dev/index.html#configuration-reference) for the full list of `quarkus.mcp.server.*` properties (transports, dev UI, authentication, guardrails, pagination, timeouts).
+See the [quarkus-mcp-server configuration reference](https://docs.quarkiverse.io/quarkus-mcp-server/dev/index.html#configuration-reference) for the full list of `quarkus.mcp.server.*` properties (dev UI, authentication, guardrails, pagination, timeouts).
 
 ### Connecting MCP clients
 
@@ -117,41 +117,7 @@ A coding agent or IDE is configured with the same URL, e.g. in an `mcp.json`\-st
 }
 ```
 
-### Serving over stdio
-
-Out of the box the tools are served over streamable HTTP. MCP clients that launch the server as a subprocess speak over stdin/stdout instead — add the stdio transport alongside the extension:
-
-```xml
-<dependency>
-    <groupId>io.quarkiverse.mcp</groupId>
-    <artifactId>quarkus-mcp-server-stdio</artifactId>
-    <!-- the same version as the quarkus-mcp-server-http extension pulled in
-         by camel-quarkus-mcp-server; the transports share their core module -->
-    <version>1.13.1</version>
-</dependency>
-```
-
-The stdio transport is active as soon as it is on the classpath (`quarkus.mcp.server.stdio.enabled` defaults to `true`), and the same Camel tools are then served over both transports. To serve over stdio **only**, disable the HTTP transport of the default MCP server:
-
-```properties
-quarkus.mcp.server."<default>".http.enabled = false
-```
-
-The server name of the default MCP server is the literal string `<default>`, so it has to be quoted. Conversely, `quarkus.mcp.server.stdio.enabled = false` keeps the stdio extension on the classpath without activating it, which is useful when the same application is deployed both ways.
-
-Because stdout carries the MCP protocol, nothing else may be written to it; `quarkus-mcp-server-stdio` takes care of this by routing console logging to stderr. A stdio server is typically built as a native executable and launched by the client:
-
-```json
-{
-  "mcpServers": {
-    "my-integration-app": {
-      "command": "/path/to/target/my-integration-app-1.0.0-runner"
-    }
-  }
-}
-```
-
-See the [quarkus-mcp-server stdio guide](https://docs.quarkiverse.io/quarkus-mcp-server/dev/getting-started-stdio.md) and the [configuration reference](https://docs.quarkiverse.io/quarkus-mcp-server/dev/reference-configuration.md) for the transport options. On Spring Boot the equivalent setup is described in the [Spring AI MCP Server Boot Starter documentation](https://docs.spring.io/spring-ai/reference/api/mcp/mcp-server-boot-starter-docs.md).
+The tools are served over streamable HTTP only. The stdio transport, used by MCP clients that launch the server as a subprocess, is not supported by this extension.
 
 ### Mixing with quarkus-mcp-server annotated tools
 
@@ -183,8 +149,6 @@ camelContext.getRouteController().startRoute("query-db-route");  // tool is back
 ### Error handling
 
 Results returned to MCP clients are sanitized by the bridge: a route exception produces an error result with the generic message `Tool execution failed` (the cause is logged server-side and never sent to the client), a missing or invalid argument returns the validation message, and a call exceeding `quarkus.camel.mcp-server.tool-timeout` returns `Tool execution timed out` while the route keeps running until it completes on its own.
-
-On Camel Main and Camel JBang the equivalent setup is the `camel-mcp-server` module with the `camel.server.mcp-*` options; on Spring Boot it is the `camel-mcp-server-starter`.
 
 ## Additional Camel Quarkus configuration
 

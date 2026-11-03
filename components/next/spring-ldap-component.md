@@ -168,7 +168,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 ## Usage
 
 The component supports producer endpoint only. An attempt to create a consumer endpoint will result in an `UnsupportedOperationException`.  
-The body of the message must be a map (an instance of `java.util.Map`). Unless a base DN is specified by in the configuration of your ContextSource, this map must contain at least an entry with the key **`dn`** (not needed for function\_driven operation) that specifies the root node for the LDAP operation to be performed. Other entries of the map are operation-specific (see below).
+The body of the message must be a map (an instance of `java.util.Map`); another body, or no body, fails with an `InvalidPayloadException`. Unless a base DN is specified by in the configuration of your ContextSource, this map must contain at least an entry with the key **`dn`** (not needed for function\_driven operation) that specifies the root node for the LDAP operation to be performed. Other entries of the map are operation-specific (see below).
 
 The body of the message remains unchanged for the `bind`, `unbind`, `authenticate` and `modify_attributes` operations. For the `search` and `function_driven` operations, the body is set to the result of the search, see [http://static.springsource.org/spring-ldap/site/apidocs/org/springframework/ldap/core/LdapTemplate.html#search%28java.lang.String,%20java.lang.String,%20int,%20org.springframework.ldap.core.AttributesMapper%29](http://static.springsource.org/spring-ldap/site/apidocs/org/springframework/ldap/core/LdapTemplate.html#search%28java.lang.String,%20java.lang.String,%20int,%20org.springframework.ldap.core.AttributesMapper%29).
 

@@ -230,7 +230,7 @@ POJO: a MessageContentsList of the parameters of the operation, typed as the ser
  |
 | **Consumer reply** | `text`, `value`, `pojo`, `list` or `null` | 
 
-POJO: the return value of the operation, of the type the service class declares, or a List or array of it and the out and holder parameters; another type is a SOAP fault, so the request MessageContentsList only fits an echo. PAYLOAD: a CxfPayload, or the XML of the soap:Body contents as text, bytes, a stream or a DOM; a body that does not convert sends an empty soap:Body. RAW: the whole SOAP envelope as text, bytes, a stream or a file. CXF\_MESSAGE: a SOAPMessage or a javax.xml.transform Source; text or a stream sends an empty envelope.
+POJO: the return value of the operation, of the type the service class declares (a byte array is one value), or a List or an Object array of it and the out and holder parameters; another type is a SOAP fault, so the request MessageContentsList only fits an echo. PAYLOAD: a CxfPayload, or the XML of the soap:Body contents as text, bytes, a stream or a DOM. RAW: the whole SOAP envelope as text, bytes, a stream or a file. CXF\_MESSAGE: a SOAPMessage, a javax.xml.transform Source, or the whole SOAP envelope as text, bytes, a stream or a DOM. A body that does not convert is a SOAP fault.
 
 -   With `dataFormat=PAYLOAD`: `pojo`, `text`, `bytes`, `stream` or `null`
     
@@ -238,7 +238,7 @@ POJO: the return value of the operation, of the type the service class declares,
     
 -   With `dataFormat=MESSAGE`: `text`, `bytes`, `stream`, `file` or `null`
     
--   With `dataFormat=CXF_MESSAGE`: `pojo`
+-   With `dataFormat=CXF_MESSAGE`: `pojo`, `text`, `bytes` or `stream`
     
 
 
@@ -248,7 +248,7 @@ POJO: the return value of the operation, of the type the service class declares,
  |
 | **Producer input** | `list`, `text`, `value`, `pojo` or `null` | 
 
-POJO: the parameters of the operation (the CamelCxfOperationName header or defaultOperationName) as a List or an array, or the one parameter as the body; each of the type the service class declares. A body that is not a List is split like the split EIP does, so text with a comma or a byte array is several parameters: wrap it in a List. PAYLOAD: a CxfPayload, or the XML of the soap:Body contents as text, bytes, a stream, a file or a DOM. RAW: the whole SOAP envelope. CXF\_MESSAGE: a SOAPMessage or a javax.xml.transform Source.
+POJO: the parameters of the operation (the CamelCxfOperationName header or defaultOperationName) as a List (or another Collection) or an Object array, or the one parameter as the body; each of the type the service class declares. Any other body, such as text or a byte array, is the one parameter. PAYLOAD: a CxfPayload, or the XML of the soap:Body contents as text, bytes, a stream, a file or a DOM. RAW: the whole SOAP envelope. CXF\_MESSAGE: a SOAPMessage, a javax.xml.transform Source, or the whole SOAP envelope as text, bytes, a stream or a DOM; another body fails.
 
 -   With `dataFormat=PAYLOAD`: `pojo`, `text`, `bytes`, `stream` or `file`
     
@@ -256,7 +256,7 @@ POJO: the parameters of the operation (the CamelCxfOperationName header or defau
     
 -   With `dataFormat=MESSAGE`: `text`, `bytes`, `stream` or `file`
     
--   With `dataFormat=CXF_MESSAGE`: `pojo`
+-   With `dataFormat=CXF_MESSAGE`: `pojo`, `text`, `bytes` or `stream`
     
 
 
@@ -330,6 +330,8 @@ Attachments are not supported as it does not process the message at all.
 ### CXF\_MESSAGE Mode
 
 MTOM is supported, and Attachments can be retrieved by Camel Message APIs mentioned above. Note that when receiving a multipart (i.e., MTOM) message, the default ``SOAPMessag`e to `String`` converter will provide the complete multipart payload on the body. If you require just the SOAP XML as a String, you can set the message body with `message.getSOAPPart()`, and the Camel converter can do the rest of the work for you.
+
+The message body that a producer sends, and the reply of a consumer, is a `SOAPMessage` or a `javax.xml.transform.Source` of the whole SOAP envelope. Any other body, such as the envelope as a `String`, `byte[]`, `InputStream` or DOM `Document`, is converted to a `DOMSource`; a body that cannot be converted fails the exchange (a SOAP fault for a consumer).
 
 ### Streaming Support in PAYLOAD mode
 
@@ -695,6 +697,8 @@ from("cxf:textServiceResponseFromRoute?serviceClass=org.apache.camel.component.c
 ### How to prepare the message for the Camel CXF endpoint in POJO data format
 
 The Camel CXF endpoint producer is based on the [CXF client API](https://github.com/apache/cxf/blob/master/core/src/main/java/org/apache/cxf/endpoint/Client.java). First, you need to specify the operation name in the message header, then add the method parameters to a list, and initialize the message with this parameter list. The response message’s body is a messageContentsList, you can get the result from that list.
+
+A `List` (or another `Collection`) or an `Object[]` body holds the parameters. Any other body, such as a `String` or a `byte[]`, is the one parameter of the operation: a `String` with a comma is not split into several parameters.
 
 If you don’t specify the operation name in the message header, `CxfProducer` will try to use the `defaultOperationName` from `CxfEndpoint`, if there is no `defaultOperationName` set on `CxfEndpoint`, it will pick up the first operationName from the Operation list.
 

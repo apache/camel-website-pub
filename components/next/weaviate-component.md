@@ -226,7 +226,7 @@ The message body at each side of the weaviate component: _Consumer_ is the body 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `list`, `text` or `null` | 
-By the action in the action option or the CamelWeaviateAction header: the vector as a List of Float or a float array for CREATE, UPDATE\_BY\_ID and QUERY, with the properties in the CamelWeaviateProperties header, a List of WeaviateObject for BATCH\_CREATE, and the query text for HYBRID\_QUERY and BM25\_QUERY. CREATE\_COLLECTION, DELETE\_COLLECTION, QUERY\_BY\_ID, DELETE\_BY\_ID and AGGREGATE do not read the body, the id is in the CamelWeaviateIndexId header. Another body fails, a List of Double too: the weaviate:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
+By the action in the action option or the CamelWeaviateAction header: the vector as a List of numbers, such as the List of Double a JSON array unmarshals to, or a float or double array for CREATE, UPDATE\_BY\_ID and QUERY, with the properties in the CamelWeaviateProperties header, a List of WeaviateObject for BATCH\_CREATE, and the query text for HYBRID\_QUERY and BM25\_QUERY. CREATE\_COLLECTION, DELETE\_COLLECTION, QUERY\_BY\_ID, DELETE\_BY\_ID and AGGREGATE do not read the body, the id is in the CamelWeaviateIndexId header. Another body fails: the weaviate:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
 
 -   With `action=CREATE`: `list`
     
@@ -352,3 +352,5 @@ The `action` option of the endpoint, such as `weaviate:myCollection?action=BM25_
         - log:
             message: "${body}"
 ```
+
+The vector of CREATE, UPDATE\_BY\_ID and QUERY is the message body, and the optional vector of HYBRID\_QUERY is the `CamelWeaviateQueryVector` header. Either is a List of numbers, such as the List of Double a JSON array unmarshals to, or a `float[]` or a `double[]`; each number is converted to a float. Another body fails, and so does a List with an element that is not a number.

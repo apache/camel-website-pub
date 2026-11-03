@@ -61,6 +61,8 @@ Where `operation` is one of the following:
 -   `balanceTransactions` - Retrieve and list balance transactions
     
 
+The `CamelStripeOperation` header overrides the operation of the endpoint for a single call.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -203,7 +205,7 @@ The Stripe component supports the following message header(s), which is/are list
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelStripeOperation** (producer) Constant: [`OPERATION_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-stripe/latest/org/apache/camel/component/stripe/StripeConstants.html#OPERATION_HEADER) | The operation to perform. |  | String |
+| **CamelStripeOperation** (producer) Constant: [`OPERATION_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-stripe/latest/org/apache/camel/component/stripe/StripeConstants.html#OPERATION_HEADER) | The operation to perform, such as customers or paymentIntents. Overrides the operation of the endpoint. |  | String |
 | **CamelStripeMethod** (producer) Constant: [`METHOD_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-stripe/latest/org/apache/camel/component/stripe/StripeConstants.html#METHOD_HEADER) | The method to invoke (create, retrieve, update, delete, list, cancel, capture). |  | String |
 | **CamelStripeObjectId** (producer) Constant: [`OBJECT_ID`](https://javadoc.io/doc/org.apache.camel/camel-stripe/latest/org/apache/camel/component/stripe/StripeConstants.html#OBJECT_ID) | The ID of the object to retrieve, update, or delete. |  | String |
 
@@ -214,7 +216,7 @@ The message body at each side of the Stripe component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `map`, `text` or `null` | The request parameters of the call: a Map, or a JSON object as text; null for none. Bytes, a stream or a POJO fails: convert it to a String first. retrieve, delete and cancel ignore the body; they and update and capture take the id of the object from the CamelStripeObjectId header. |
+| **Producer input** | `map`, `text`, `bytes`, `stream` or `null` | The request parameters of the call: a Map, or a JSON object as text, bytes or a stream; null for none. A POJO fails. retrieve, delete and cancel ignore the body; they and update and capture take the id of the object from the CamelStripeObjectId header. |
 | **Producer output** | `pojo` | The Stripe object the call returns, such as a com.stripe.model.Customer; list gives a collection of them, such as a CustomerCollection, with the objects in its data. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -464,7 +466,7 @@ from("direct:payment")
     .log("Payment intent created: ${body.id}");
 ```
 
-Using JSON (useful when integrating with REST endpoints):
+Using JSON (useful when integrating with REST endpoints). The JSON can be a String, bytes or a stream, such as the body of a `rest` or `platform-http` route:
 
 -   Java
     
@@ -475,7 +477,6 @@ Using JSON (useful when integrating with REST endpoints):
 
 ```java
 from("rest:post:/payments")
-    .convertBodyTo(String.class)
     .log("Received payment request: ${body}")
     .to("stripe:paymentIntents?apiKey={{stripe.apiKey}}")
     .log("Payment intent created: ${body.id}");
@@ -484,7 +485,6 @@ from("rest:post:/payments")
 ```xml
 <route>
   <from uri="rest:post:/payments"/>
-  <convertBodyTo type="java.lang.String"/>
   <log message="Received payment request: ${body}"/>
   <to uri="stripe:paymentIntents?apiKey={{stripe.apiKey}}"/>
   <log message="Payment intent created: ${body.id}"/>
@@ -496,8 +496,6 @@ from("rest:post:/payments")
     from:
       uri: rest:post:/payments
       steps:
-        - convertBodyTo:
-            type: java.lang.String
         - log:
             message: "Received payment request: ${body}"
         - to:

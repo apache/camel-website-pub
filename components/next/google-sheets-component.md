@@ -135,17 +135,29 @@ Enum values:
 
 Enum values:
 
+-   append
+    
+-   batchClear
+    
+-   batchClearByDataFilter
+    
+-   batchGet
+    
+-   batchGetByDataFilter
+    
+-   batchUpdate
+    
+-   batchUpdateByDataFilter
+    
+-   clear
+    
 -   create
     
 -   get
     
+-   getByDataFilter
+    
 -   update
-    
--   append
-    
--   batchUpdate
-    
--   clear
     
 
 
@@ -298,7 +310,7 @@ The 10 method(s) is(are) listed in the table below, followed by detailed syntax 
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.Append append(String spreadsheetId, String range, com.google.api.services.sheets.v4.model.ValueRange content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.Append append(String spreadsheetId, String range, com.google.api.services.sheets.v4.model.ValueRange values);
     
 
 The google-sheets/append API method has the parameters listed in the table below:
@@ -319,7 +331,7 @@ The google-sheets/append API method has the parameters listed in the table below
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.BatchClear batchClear(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchClearValuesRequest content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.BatchClear batchClear(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchClearValuesRequest batchClearValuesRequest);
     
 
 The google-sheets/batchClear API method has the parameters listed in the table below:
@@ -367,7 +379,7 @@ The google-sheets/batchGet API method has the parameters listed in the table bel
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.BatchGetByDataFilter batchGetByDataFilter(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchGetValuesByDataFilterRequest content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.BatchGetByDataFilter batchGetByDataFilter(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchGetValuesByDataFilterRequest batchGetValuesByDataFilterRequest);
     
 
 The google-sheets/batchGetByDataFilter API method has the parameters listed in the table below:
@@ -382,7 +394,7 @@ The google-sheets/batchGetByDataFilter API method has the parameters listed in t
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.BatchUpdate batchUpdate(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.BatchUpdate batchUpdate(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchUpdateValuesRequest batchUpdateValuesRequest);
     
 
 The google-sheets/batchUpdate API method has the parameters listed in the table below:
@@ -397,7 +409,7 @@ The google-sheets/batchUpdate API method has the parameters listed in the table 
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.BatchUpdateByDataFilter batchUpdateByDataFilter(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchUpdateValuesByDataFilterRequest content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.BatchUpdateByDataFilter batchUpdateByDataFilter(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchUpdateValuesByDataFilterRequest batchUpdateValuesByDataFilterRequest);
     
 
 The google-sheets/batchUpdateByDataFilter API method has the parameters listed in the table below:
@@ -412,7 +424,7 @@ The google-sheets/batchUpdateByDataFilter API method has the parameters listed i
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.Clear clear(String spreadsheetId, String range, com.google.api.services.sheets.v4.model.ClearValuesRequest content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.Clear clear(String spreadsheetId, String range, com.google.api.services.sheets.v4.model.ClearValuesRequest clearValuesRequest);
     
 
 The google-sheets/clear API method has the parameters listed in the table below:
@@ -446,7 +458,7 @@ The google-sheets/get API method has the parameters listed in the table below:
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.Update update(String spreadsheetId, String range, com.google.api.services.sheets.v4.model.ValueRange content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values.Update update(String spreadsheetId, String range, com.google.api.services.sheets.v4.model.ValueRange values);
     
 
 The google-sheets/update API method has the parameters listed in the table below:
@@ -476,24 +488,21 @@ The spreadsheets API is defined in the syntax as follows:
 google-sheets:spreadsheets/methodName?[parameters]
 ```
 
-The 7 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
+The 4 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
 
   
 | Method | Alias | Description |
 | --- | --- | --- |
 | [**batchUpdate**](#_api_spreadsheets_method_batchUpdate) |  | Applies one or more updates to the spreadsheet |
 | [**create**](#_api_spreadsheets_method_create) |  | Creates a spreadsheet, returning the newly created spreadsheet |
-| [**developerMetadata**](#_api_spreadsheets_method_developerMetadata) |  | An accessor for creating requests from the DeveloperMetadata collection |
 | [**get**](#_api_spreadsheets_method_get) |  | Returns the spreadsheet at the given ID |
 | [**getByDataFilter**](#_api_spreadsheets_method_getByDataFilter) |  | Returns the spreadsheet at the given ID |
-| [**sheets**](#_api_spreadsheets_method_sheets) |  | An accessor for creating requests from the SheetsOperations collection |
-| [**values**](#_api_spreadsheets_method_values) |  | An accessor for creating requests from the Values collection |
 
 #### Method batchUpdate
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.BatchUpdate batchUpdate(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.BatchUpdate batchUpdate(String spreadsheetId, com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest batchUpdateSpreadsheetRequest);
     
 
 The google-sheets/batchUpdate API method has the parameters listed in the table below:
@@ -518,19 +527,6 @@ The google-sheets/create API method has the parameters listed in the table below
 | --- | --- | --- |
 | **content** | The com.google.api.services.sheets.v4.model.Spreadsheet | Spreadsheet |
 
-#### Method developerMetadata
-
-Signatures:
-
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.DeveloperMetadata developerMetadata();
-    
-
-The google-sheets/developerMetadata API method has the parameters listed in the table below:
-
-  
-| Parameter | Description | Type |
-| --- | --- | --- |
-
 #### Method get
 
 Signatures:
@@ -552,7 +548,7 @@ The google-sheets/get API method has the parameters listed in the table below:
 
 Signatures:
 
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.GetByDataFilter getByDataFilter(String spreadsheetId, com.google.api.services.sheets.v4.model.GetSpreadsheetByDataFilterRequest content);
+-   com.google.api.services.sheets.v4.Sheets.Spreadsheets.GetByDataFilter getByDataFilter(String spreadsheetId, com.google.api.services.sheets.v4.model.GetSpreadsheetByDataFilterRequest getSpreadsheetByDataFilterRequest);
     
 
 The google-sheets/getByDataFilter API method has the parameters listed in the table below:
@@ -562,32 +558,6 @@ The google-sheets/getByDataFilter API method has the parameters listed in the ta
 | --- | --- | --- |
 | **getSpreadsheetByDataFilterRequest** | The com.google.api.services.sheets.v4.model.GetSpreadsheetByDataFilterRequest | GetSpreadsheetByDataFilterRequest |
 | **spreadsheetId** | The spreadsheet to request | String |
-
-#### Method sheets
-
-Signatures:
-
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.SheetsOperations sheets();
-    
-
-The google-sheets/sheets API method has the parameters listed in the table below:
-
-  
-| Parameter | Description | Type |
-| --- | --- | --- |
-
-#### Method values
-
-Signatures:
-
--   com.google.api.services.sheets.v4.Sheets.Spreadsheets.Values values();
-    
-
-The google-sheets/values API method has the parameters listed in the table below:
-
-  
-| Parameter | Description | Type |
-| --- | --- | --- |
 
 In addition to the parameters above, the google-sheets API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -600,7 +570,7 @@ The message body at each side of the Google Sheets component: _Consumer_ is the 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `pojo` | One message per poll with the return value of the method: a Google Sheets model object, such as the ValueRange of data/get, which is one message and not split per row. The model classes are GenericJson, which is also a Map of the JSON fields. |
+| **Consumer** | `pojo` | One message per poll with the return value of the method: a Google Sheets model object, such as the ValueRange of data/get, which is one message and not split per row. No method returns a list, so splitResult has no effect: google-sheets-stream with splitResults gives one message per row. The model classes are GenericJson, which is also a Map of the JSON fields. |
 | **Producer input** | `any` | The body is used only when inBody names a parameter of the method, and must then be of the type of that parameter: a ValueRange for values of data/append and data/update, a Spreadsheet for content of spreadsheets/create, or text for spreadsheetId. A List of rows, JSON text or a Map is not turned into a model object: put the rows in a ValueRange, or use the google-sheets:application-x-struct transformer on JSON. Without inBody the arguments come from the options and the CamelGoogleSheets. headers.
 Not known when `inBody` is set.
 
@@ -633,6 +603,10 @@ The endpoint is the API name and the method name, such as `data/get`. The parame
         - log:
             message: "Rows: ${body.values}"
 ```
+
+The values of a spreadsheet are read and written with the `data` API, such as `data/get`, `data/update` and `data/append`; the `spreadsheets` API works on the spreadsheet itself, such as `spreadsheets/create` and `spreadsheets/get`.
+
+The consumer calls the method on every poll and sends one message with the result, such as the `ValueRange` of `data/get` with all the rows of the range. No method returns a list, so the `splitResult` option has no effect on this component: it does not give one message per row. For one message per row, use the [Google Sheets Stream](google-sheets-stream-component.md) component with `splitResults=true`.
 
 ## ValueInputOption
 

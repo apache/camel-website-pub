@@ -17,7 +17,7 @@ The component supports the following:
 -   A Camel producer using a TCP Client
     
 
-The MLLP consumer gives the HL7 payload as a `String` by default (`stringPayload=true`), or as a `byte[]` with `stringPayload=false`. The MLLP producer sends a `String` or a `byte[]` body.
+The MLLP consumer gives the HL7 payload as a `String` by default (`stringPayload=true`), or as a `byte[]` with `stringPayload=false`. The MLLP producer sends a `String` (or another `CharSequence`) or a `byte[]` body, with text encoded in the `charsetName` charset. Another body, such as an `InputStream` or a file, is converted to a `byte[]` with the Camel type converter. A body that cannot be converted fails the exchange with a `MllpInvalidMessageException`.
 
 Maven users will need to add the following dependency to their pom.xml for this component:
 
@@ -278,7 +278,7 @@ The HL7 message without the MLLP envelope, as a String in the charset of MSH-18 
 
  |
 | **Consumer reply** | `any` | The body is not sent back: the acknowledgement is the CamelMllpAcknowledgement or CamelMllpAcknowledgementString exchange property, or with autoAck an HL7 ACK (AA, or AE when the exchange failed). |
-| **Producer input** | `text` or `bytes` | The HL7 message as a String or a byte array. No body fails; another body, such as a stream, is sent as an empty message: convert it to a String first. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The HL7 message as a String (in the charset of charsetName) or a byte array. Another body, such as a stream or a file, is converted to a byte array; no body, or a body that cannot be converted, fails. |
 | **Producer output** | `unchanged` | The body is left as it was: with InOut the acknowledgement is in the CamelMllpAcknowledgement (byte array) and CamelMllpAcknowledgementString headers. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).

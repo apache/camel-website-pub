@@ -248,7 +248,7 @@ Enum values:
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **accessToken** (security) | The access token that is used by the client for bearer authentication. |  | String |
-| **asyncMdnAllowedHosts** (security) | Comma separated list of host names an asynchronous MDN may be delivered to. The delivery address is chosen by the sender of the AS2 message, so this is the list of hosts the operator vouches for. When set, an asynchronous MDN whose delivery address names a host outside the list is refused, and the configured mdnUserName/mdnPassword/mdnAccessToken are attached only to a host on the list. When not set, the MDN is still delivered to the sender-supplied address but no credentials are attached. |  | String |
+| **asyncMdnAllowedHosts** (security) | Comma separated list of host names an asynchronous MDN may be delivered to. The delivery address is chosen by the sender of the AS2 message, so this is the list of hosts the operator vouches for. When set, an asynchronous MDN whose delivery address names a host outside the list is refused, and the configured mdnUserName/mdnPassword/mdnAccessToken are attached only to a host on the list. When not set, the MDN is still delivered to the sender-supplied address but no credentials are attached. The option applies to the consumer endpoint it is set on: consumers sharing a serverPortNumber each apply their own list. |  | String |
 | **decryptingPrivateKey** (security) | The key used to encrypt the EDI message. |  | PrivateKey |
 | **encryptingAlgorithm** (security) | 
 
@@ -304,9 +304,9 @@ Enum values:
  |  | AS2EncryptionAlgorithm |
 | **encryptingCertificateChain** (security) | The chain of certificates used to encrypt EDI message. |  | Certificate\[\] |
 | **hostnameVerifier** (security) | Set hostname verifier for SSL session. |  | HostnameVerifier |
-| **mdnAccessToken** (security) | The access token that is used by the server when it sends an async MDN. |  | String |
-| **mdnPassword** (security) | The password that is used by the server for basic authentication when it sends an async MDN. |  | String |
-| **mdnUserName** (security) | The user-name that is used by the server for basic authentication when it sends an async MDN. If options for basic authentication and bearer authentication are both set then basic authentication takes precedence. |  | String |
+| **mdnAccessToken** (security) | The access token that is used by the server when it sends an async MDN. The option applies to the consumer endpoint it is set on, like mdnUserName. |  | String |
+| **mdnPassword** (security) | The password that is used by the server for basic authentication when it sends an async MDN. The option applies to the consumer endpoint it is set on, like mdnUserName. |  | String |
+| **mdnUserName** (security) | The user-name that is used by the server for basic authentication when it sends an async MDN. If options for basic authentication and bearer authentication are both set then basic authentication takes precedence. The option applies to the consumer endpoint it is set on: consumers sharing a serverPortNumber each send their async MDNs with their own values. |  | String |
 | **password** (security) | The password that is used by the client for basic authentication. |  | String |
 | **signedReceiptMicAlgorithms** (security) | The list of algorithms, in order of preference, requested to generate a message integrity check (MIC) returned in message disposition notification (MDN). Multiple algorithms can be separated by comma. |  | String |
 | **signingAlgorithm** (security) | 
@@ -568,6 +568,10 @@ The as2/listen API method has the parameters listed in the table below:
 In addition to the parameters above, the as2 API can also use any of the [Query Parameters (48 parameters)](#_query_parameters).
 
 Any of the parameters can be provided in either the endpoint URI, or dynamically in a message header. The message header name must be of the format `CamelAs2.parameter`. The `inBody` parameter overrides message header, i.e., the endpoint parameter `inBody=myParameterNameHere` would override a `CamelAs2.myParameterNameHere` header.
+
+Several `as2://server/listen` consumers can share a `serverPortNumber`, each with its own `requestUriPattern`. Each consumer applies its own keys and certificates and its own asynchronous MDN settings (`mdnUserName`, `mdnPassword`, `mdnAccessToken` and `asyncMdnAllowedHosts`) to the messages received on its own pattern.
+
+The settings of the shared server connection still come from the first endpoint created on the port: `sslContextParameters` and `sslContext` (used for the TLS listener), `mdnMessageTemplate`, `server`, `serverFqdn` and `as2Version`. They are per port, not per consumer.
 
 ## Spring Boot Auto-Configuration
 

@@ -128,9 +128,10 @@ Enum values:
 
  | INSERT | ClickHouseOperation |
 | **serverUrl** (producer) | The ClickHouse HTTP endpoint URL, e.g. [http://localhost:8123](http://localhost:8123). Required unless a shared Client bean is autowired or configured on the component. |  | String |
-| **table** (producer) | The target table for insert operations. Can also be given in the path as database.table or overridden per message with the CamelClickHouseTable header. |  | String |
+| **table** (producer) | The target table for insert operations. Can also be given in the path as database.table or overridden per message with the CamelClickHouseTable header when allowDatabaseAndTableFromHeaders is enabled. |  | String |
 | **waitForAsyncInsert** (producer) | When asyncInsert is enabled, whether the server should wait for the async insert to be flushed before acknowledging (wait\_for\_async\_insert). | true | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **allowDatabaseAndTableFromHeaders** (security) | Whether to allow overriding the database and the table of the endpoint with the CamelClickHouseDatabase and CamelClickHouseTable headers. Disabled by default; enable it only when the header source is trusted, since it lets a message choose the database that an insert or a query runs in and the table that an insert writes to. | false | boolean |
 | **password** (security) | The password used to authenticate to ClickHouse. |  | String |
 | **ssl** (security) | Whether to connect to ClickHouse over a secure (HTTPS) connection. | false | boolean |
 | **username** (security) | The username used to authenticate to ClickHouse. | default | String |
@@ -143,11 +144,11 @@ The ClickHouse component supports the following message header(s), which is/are 
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelClickHouseOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#OPERATION) | Overrides the operation configured on the endpoint (insert, query or ping). |  | String |
-| **CamelClickHouseDatabase** (producer) Constant: [`DATABASE`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#DATABASE) | Overrides the target database configured on the endpoint. |  | String |
-| **CamelClickHouseTable** (producer) Constant: [`TABLE`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#TABLE) | Overrides the target table configured on the endpoint. |  | String |
+| **CamelClickHouseDatabase** (producer) Constant: [`DATABASE`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#DATABASE) | Overrides the target database configured on the endpoint. This header is ignored unless the endpoint enables allowDatabaseAndTableFromHeaders=true (disabled by default). |  | String |
+| **CamelClickHouseTable** (producer) Constant: [`TABLE`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#TABLE) | Overrides the target table configured on the endpoint. This header is ignored unless the endpoint enables allowDatabaseAndTableFromHeaders=true (disabled by default). |  | String |
 | **CamelClickHouseFormat** (producer) Constant: [`FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#FORMAT) | Overrides the data format configured on the endpoint. |  | String |
 | **CamelClickHouseWrittenRows** (producer) Constant: [`WRITTEN_ROWS`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#WRITTEN_ROWS) | The number of rows written by an insert operation. |  | long |
-| **CamelClickHouseReadRows** (producer) Constant: [`READ_ROWS`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#READ_ROWS) | The number of rows read by a query operation. |  | long |
+| **CamelClickHouseReadRows** (producer) Constant: [`READ_ROWS`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#READ_ROWS) | The number of rows the server read (scanned) to run a query operation. This is not the number of rows in the result: with a WHERE or a LIMIT it is usually more. |  | long |
 | **CamelClickHousePingOk** (producer) Constant: [`PING_OK`](https://javadoc.io/doc/org.apache.camel/camel-clickhouse/latest/org/apache/camel/component/clickhouse/ClickHouseConstants.html#PING_OK) | The boolean result of a ping operation. |  | boolean |
 
 ## Message Body
@@ -172,9 +173,9 @@ The rows to insert, in the format option (JSONEachRow: one JSON object per line)
  |
 | **Producer output** | `unchanged` | 
 
-Insert leaves the body unchanged, with the count in the CamelClickHouseWrittenRows header. Query gives the result as a String in the format option (JSONEachRow: one JSON object per line); binary formats such as RowBinary do not survive the String. Ping gives a Boolean. The CamelClickHouseOperation header overrides the operation.
+Insert leaves the body unchanged, with the count in the CamelClickHouseWrittenRows header. Query gives the result in the format option: a String for text formats (JSONEachRow: one JSON object per line), a byte\[\] for binary formats such as RowBinary, Native or Parquet. Ping gives a Boolean. The CamelClickHouseOperation header overrides the operation.
 
--   With `operation=QUERY`: `text` (`java.lang.String`)
+-   With `operation=QUERY`: `text` or `bytes`
     
 -   With `operation=PING`: `value` (`java.lang.Boolean`)
     
@@ -194,9 +195,17 @@ The component is producer-only and supports the following operations, selected w
  
 | Operation | Description |
 | --- | --- |
-| `insert` (default) | Streams the message body into the target table using the configured `format`. Accepted body types are `InputStream`, `byte[]`, `String`, `java.io.File` (matched to the `format`), or a `List` of objects whose class has been registered on the shared `Client`. When the body is a `List` and `batchSize` is greater than 0, the list is split into batches of that size, each sent as a separate insert. The number of written rows is set on the `CamelClickHouseWrittenRows` header. |
-| `query` | Runs the SQL statement contained in the message body and returns the result set (in the configured `format`) as a `String` body. The number of read rows is set on the `CamelClickHouseReadRows` header. |
+| `insert` (default) | Streams the message body into the target table using the configured `format`. Accepted body types are `InputStream`, `byte[]`, `String`, `java.io.File` (matched to the `format`), or a `List` of objects whose class has been registered on the shared `Client` with `Client.register(Class, TableSchema)`. A `List` of `Map` is not supported: marshal the rows to the `format` (such as `JSONEachRow`) first. When the body is a `List` and `batchSize` is greater than 0, the list is split into batches of that size, each sent as a separate insert. An empty `List` is a 0-row insert: nothing is sent to ClickHouse. The number of written rows is set on the `CamelClickHouseWrittenRows` header. |
+| `query` | Runs the SQL statement contained in the message body and returns the result set in the configured `format`: a `String` body for text formats (such as `JSONEachRow`, `CSV` or `TSV`), and a `byte[]` body for binary formats (such as `RowBinary`, `Native`, `Parquet`, `Arrow` or `Avro`). The `CamelClickHouseReadRows` header is set to the number of rows the server read to run the query, which is not the number of rows in the result. |
 | `ping` | Pings the ClickHouse server and sets the boolean result on both the message body and the `CamelClickHousePingOk` header. |
+
+## Headers that override the endpoint
+
+The `CamelClickHouseOperation` and `CamelClickHouseFormat` headers take the place of the `operation` and `format` options for one message. As `query` runs the message body as SQL, a message that sets `CamelClickHouseOperation` to `query` on an insert endpoint chooses the SQL that runs.
+
+The `CamelClickHouseDatabase` and `CamelClickHouseTable` headers are ignored unless the endpoint sets `allowDatabaseAndTableFromHeaders=true`. With that option, they take the place of the database and the table of the endpoint for one message, so the message chooses the database that an insert or a query runs in and the table that an insert writes to.
+
+When the messages come from an untrusted producer through a consumer that does not filter out `Camel*` headers, remove these headers with `removeHeaders("CamelClickHouse*")` before the `clickhouse` endpoint.
 
 ## Examples
 

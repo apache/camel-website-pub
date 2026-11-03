@@ -176,7 +176,21 @@ The message body at each side of the Asterisk component: _Consumer_ is the body 
 | --- | --- | --- |
 | **Consumer** | `pojo` (`org.asteriskjava.manager.event.ManagerEvent`) | The AMI event: a subclass of ManagerEvent such as NewChannelEvent or HangupEvent, with its simple class name in the CamelAsteriskEventName header. The ConnectEvent of the login comes first. |
 | **Producer input** | `any` | The body is not read: the action comes from the action option or the CamelAsteriskAction header, and the extension and context of EXTENSION\_STATE from the CamelAsteriskExtension and CamelAsteriskContext headers. |
-| **Producer output** | `pojo` (`org.asteriskjava.manager.response.ManagerResponse`) | The ManagerResponse of the action, such as an ExtensionStateResponse; a ManagerError when Asterisk answers with an error. QUEUE\_STATUS and SIP\_PEERS give only the first response, not the events of the list. |
+| **Producer output** | `pojo` | 
+QUEUE\_STATUS and SIP\_PEERS give the ResponseEvents of asterisk-java: the ManagerResponse in getResponse() and the events of the list in getEvents(), such as QueueParamsEvent and QueueMemberEvent or PeerEntryEvent, ending with the complete event. EXTENSION\_STATE gives the ManagerResponse, an ExtensionStateResponse. A ManagerError is the response when Asterisk answers with an error.
+
+-   With `action=QUEUE_STATUS`: `pojo` (`org.asteriskjava.manager.ResponseEvents`)
+    
+-   With `action=SIP_PEERS`: `pojo` (`org.asteriskjava.manager.ResponseEvents`)
+    
+-   With `action=EXTENSION_STATE`: `pojo` (`org.asteriskjava.manager.response.ManagerResponse`)
+    
+
+
+
+
+
+ |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -190,6 +204,10 @@ Supported actions are:
     
 -   EXTENSION\_STATE: Check extension status
     
+
+QUEUE\_STATUS and SIP\_PEERS are answered with a list of events. The producer waits for the whole list and sets the `org.asteriskjava.manager.ResponseEvents` as the message body: `getResponse()` is the response of Asterisk, and `getEvents()` the events of the list, such as `QueueParamsEvent` and `QueueMemberEvent` for QUEUE\_STATUS or `PeerEntryEvent` for SIP\_PEERS, ending with the complete event (`QueueStatusCompleteEvent` or `PeerlistCompleteEvent`). To route each event on its own, split on `${body.events}`.
+
+EXTENSION\_STATE sets the `ManagerResponse` (an `ExtensionStateResponse`) as the message body. When Asterisk answers with an error, the response is a `ManagerError`.
 
 ## Examples
 

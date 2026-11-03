@@ -139,7 +139,7 @@ The SQL Stored Procedure component supports the following message header(s), whi
 | --- | --- | --- | --- |
 | **CamelSqlStoredTemplate** (producer) Constant: [`SQL_STORED_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_TEMPLATE) | The stored-procedure template to execute. This header is ignored unless the endpoint enables allowTemplateFromHeader=true (disabled by default); when enabled it overrides the endpoint-configured template. |  | String |
 | **CamelSqlStoredParameters** (producer) Constant: [`SQL_STORED_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_PARAMETERS) | The parameters. |  | Iterator |
-| **CamelSqlStoredUpdateCount** (producer) Constant: [`SQL_STORED_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_UPDATE_COUNT) | The update count. |  | Integer |
+| **CamelSqlStoredUpdateCount** (producer) Constant: [`SQL_STORED_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-sql/latest/org/apache/camel/component/sql/stored/SqlStoredConstants.html#SQL_STORED_UPDATE_COUNT) | The update count. With batch=true, the sum of the update counts of the batch items; an item the JDBC driver returns no count for (Statement.SUCCESS\_NO\_INFO) is not counted, so the value can be lower than the number of rows updated, or 0. |  | Integer |
 
 ## Message Body
 
@@ -149,9 +149,9 @@ The message body at each side of the SQL Stored Procedure component: _Consumer_ 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-What the expressions of the IN parameters read: a :#name parameter takes its value from a Map body, or else from the header. With batch, a List or an Iterator of such bodies, one batch item each (a single Map is not a batch); with useMessageBodyForTemplate, the template as text, with the parameters in the CamelSqlStoredParameters header.
+What the expressions of the IN parameters read: a :#name parameter takes its value from a Map body, or else from the header. With batch, a List or an Iterator of such bodies, one batch item each (a single Map is one batch item); with useMessageBodyForTemplate, the template as text, with the parameters in the CamelSqlStoredParameters header.
 
--   With `batch=true`: `list` or `iterator`
+-   With `batch=true`: `list`, `iterator` or `map`
     
 -   With `useMessageBodyForTemplate=true`: `text`
     
@@ -161,7 +161,7 @@ What the expressions of the IN parameters read: a :#name parameter takes its val
 
 
  |
-| **Producer output** | `map` (`java.util.Map<String, Object>`) | A Map of the names of the OUT and INOUT parameters and their values, with a result set the procedure returns under #result-set-1 (a List of Maps) and the update count under #update-count-1, which is also in the CamelSqlStoredUpdateCount header. With outputHeader the Map is in that header and the body is unchanged; batch leaves the body unchanged, with the total update count in the header.
+| **Producer output** | `map` (`java.util.Map<String, Object>`) | A Map of the names of the OUT and INOUT parameters and their values, with a result set the procedure returns under #result-set-1 (a List of Maps) and the update count under #update-count-1, which is also in the CamelSqlStoredUpdateCount header. With outputHeader the Map is in that header and the body is unchanged; batch leaves the body unchanged, with the total of the known update counts in the header.
 
 -   With `noop=true`: `unchanged`
     
@@ -301,6 +301,23 @@ _XML-only: stored procedure call with query timeout_
 ```
 
 This will be overridden by the remaining transaction timeout when executing within a transaction that has a timeout specified at the transaction level.
+
+#### Batch
+
+With `batch=true` the stored procedure is called once for each batch item, and all calls are sent to the database as one JDBC batch. The batch items are taken from the message body (or from the `CamelSqlStoredParameters` header when `useMessageBodyForTemplate=true`):
+
+-   a `List` or an `Iterator`, where each element is one batch item, typically a `Map` with the values of the IN parameters.
+    
+-   a single `Map`, which is one batch item.
+    
+
+_XML-only: stored procedure call in batch mode_
+
+```xml
+<to uri="sql-stored:BATCHFN(INTEGER :#num)?batch=true"/>
+```
+
+The message body is not changed, and the `CamelSqlStoredUpdateCount` header holds the sum of the update counts of the batch items. A JDBC driver may not know the update count of an item and return `Statement.SUCCESS_NO_INFO` instead (HSQLDB does this for stored procedure calls). Such an item is not counted, so the header can be lower than the number of rows updated, or `0`.
 
 ### Camel SQL Starter
 

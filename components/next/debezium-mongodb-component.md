@@ -313,6 +313,7 @@ The Debezium MongoDB Connector component supports the following message header(s
 | **CamelDebeziumTimestamp** (consumer) Constant: [`HEADER_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-debezium-mongodb/latest/org/apache/camel/component/debezium/DebeziumConstants.html#HEADER_TIMESTAMP) | If presents, the time (using the system clock in the JVM) at which the connector processed the event. |  | Long |
 | **CamelDebeziumBefore** (consumer) Constant: [`HEADER_BEFORE`](https://javadoc.io/doc/org.apache.camel/camel-debezium-mongodb/latest/org/apache/camel/component/debezium/DebeziumConstants.html#HEADER_BEFORE) | If presents, contains the state of the row before the event occurred. |  | Struct |
 | **CamelDebeziumDdlSQL** (consumer) Constant: [`HEADER_DDL_SQL`](https://javadoc.io/doc/org.apache.camel/camel-debezium-mongodb/latest/org/apache/camel/component/debezium/DebeziumConstants.html#HEADER_DDL_SQL) | If presents, the ddl sql text of the event. |  | String |
+| **CamelDebeziumUpdateDescription** (consumer) Constant: [`HEADER_UPDATE_DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-debezium-mongodb/latest/org/apache/camel/component/debezium/DebeziumConstants.html#HEADER_UPDATE_DESCRIPTION) | If presents, the description of an update: updatedFields (the changed fields as a JSON String), removedFields (the names of the removed fields) and truncatedArrays (the arrays that were truncated, with their field and new size). |  | Map |
 
 ## Message Body
 
@@ -321,22 +322,26 @@ The message body at each side of the Debezium MongoDB Connector component: _Cons
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `text` or `null` (`java.lang.String`), as json | The document after the change as a JSON String (MongoDB extended JSON): unmarshal it to work with its fields. No body for a delete or a tombstone, nor for an update when captureMode does not look up the full document or the document is gone by then; the operation and the key are in headers.
+| **Consumer** | `text` or `null` (`java.lang.String`), as json | The document after the change as a JSON String (MongoDB extended JSON): unmarshal it to work with its fields. No body for a delete or a tombstone, nor for an update when captureMode does not look up the full document or the document is gone by then; the operation and the key are in headers, and the changed fields of an update in the CamelDebeziumUpdateDescription header.
 Not known when `additionalProperties` is set.
 
  |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
-For more information about configuration: [https://debezium.io/documentation/reference/0.10/operations/embedded.html#engine-properties](https://debezium.io/documentation/reference/0.10/operations/embedded.html#engine-properties) [https://debezium.io/documentation/reference/0.10/connectors/mongodb.html#connector-properties](https://debezium.io/documentation/reference/0.10/connectors/mongodb.html#connector-properties)
+For more information about configuration: [Debezium engine properties](https://debezium.io/documentation/reference/stable/development/engine.html#engine-properties) [Debezium MongoDB connector properties](https://debezium.io/documentation/reference/stable/connectors/mongodb.html#mongodb-connector-properties)
 
-**Note**: Debezium Mongodb uses MongoDB’s oplog to populate the CDC events, the update events in MongoDB’s oplog don’t have the before or after states of the changed document, so there’s no way for the Debezium connector to provide this information, therefore header key `CamelDebeziumBefore` is not available in this component.
+**Note**: The `CamelDebeziumBefore` header holds the document before the change only when the connector captures pre-images, that is with `captureMode` set to `change_streams_with_pre_image` or `change_streams_update_full_with_pre_image` (MongoDB 6.0 or later, with pre-images enabled on the collection). With the other capture modes, such as the default `change_streams_update_full`, the header is `null`.
 
 ## Usage
 
 ### Message body
 
 If the message body is not `null` (in case of tombstones), it contains the state of the row after the event occurred. It is in `String` JSON format, and you can unmarshal using Camel JSON Data Format.
+
+An update has no body when `captureMode` does not look up the full document (such as `change_streams`). The changed fields of an update are in the `CamelDebeziumUpdateDescription` header, as a `Map` with `updatedFields` (the changed fields as a JSON String), `removedFields` (the names of the removed fields) and `truncatedArrays`.
+
+With the Debezium `ExtractNewDocumentState` single message transformation (`additionalProperties.transforms=unwrap` and `additionalProperties.transforms.unwrap.type=io.debezium.connector.mongodb.transforms.ExtractNewDocumentState`), the event is flattened to the document, and the body is that document as a `Struct`. The `CamelDebeziumOperation` header is then set only when the transformation adds the operation, with `additionalProperties.transforms.unwrap.add.fields=op` or `additionalProperties.transforms.unwrap.add.headers=op` (with the default `__` prefix).
 
 See below for more details.
 

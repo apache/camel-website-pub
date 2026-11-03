@@ -295,7 +295,7 @@ The message body at each side of the Robot Framework component: _Consumer_ is th
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `null` | No body: each poll runs the test, and the outcome is in the CamelRobotReturnCode header (0 when all tests pass). |
-| **Producer input** | `any` | The test gets the body converted to a String as the body variable, and the headers and exchange properties as headers.name and properties.name; a null body or header value fails the exchange. |
+| **Producer input** | `any` | The test gets the body converted to a String as the body variable, and the headers and exchange properties as headers.name and properties.name; a null body, header or property is not passed. |
 | **Producer output** | `unchanged` | The body is left as it is. The CamelRobotReturnCode header has the return code of the run (0 when all tests pass, non-zero otherwise), and CamelRobotVariables the variables passed to it; a failed test does not fail the exchange. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -361,7 +361,7 @@ And the `template.robot` file:
     *** Test Cases ***
     Set Variable Camel Body Test Case
     ${myvar} =    Set Variable    ${body}
-    Should Be True    ${myvar} == ${body}
+    Should Be Equal    ${myvar}    ${body}
 ```
 
 _Java-only: dynamic template via header_
@@ -379,25 +379,30 @@ And the `template.robot` file:
     *** Test Cases ***
     Set Variable Camel Header Test Case
     ${myvar} =    Set Variable    ${headers.testHeader}
-    Should Be True    ${myvar} == ${headers.testHeader}
+    Should Be Equal    ${myvar}    ${headers.testHeader}
 ```
 
 _Java-only: dynamic template via header_
 
 ```java
 from("direct:in")
-    .setProperty"testProperty", constant("testPropertyValue"))
+    .setProperty("testProperty", constant("testPropertyValue"))
     .setHeader("CamelRobotResourceUri").constant("path/to/my/template.robot")
-    .to("robotframework:dummy?allowTemplateFromHeader=true");
+    .to("robotframework:dummy?allowTemplateFromHeader=true&allowContextMapAll=true");
 ```
 
 And the `template.robot` file:
 
 ```text
     *** Test Cases ***
-    Set Variable Camel Header Test Case
+    Set Variable Camel Property Test Case
     ${myvar} =    Set Variable    ${properties.testProperty}
-    Should Be True    ${myvar} == ${properties.testProperty}
+    Should Be Equal    ${myvar}    ${properties.testProperty}
 ```
 
-Please note that when you pass values through Camel Exchange to test cases, they will be available as case-sensitive `body`, `headers.[yourHeaderName]` and `properties.[yourPropertyName]`
+Please note that when you pass values through Camel Exchange to test cases, they will be available as case-sensitive `body`, `headers.[yourHeaderName]`, `variables.[yourVariableName]` and `properties.[yourPropertyName]`. The exchange properties are only passed when `allowContextMapAll=true`.
+
+The values are passed as strings. A `null` body, header, variable or property is not passed at all, as a Robot Framework variable cannot be `null`. So with no message body (such as the consumer, which polls with an empty exchange), there is no `${body}` variable. A test can give such a variable a default value in its own `*** Variables** *` table, as the values passed from Camel override that table.
+
+> **Important**
+> Compare the values as strings, for example with `Should Be Equal`. Do not put them into an expression that Robot Framework evaluates as Python, such as `Should Be True` or `Evaluate`, as the message body and headers may come from an untrusted sender.

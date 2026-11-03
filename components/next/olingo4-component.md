@@ -448,11 +448,9 @@ The message body at each side of the Olingo4 component: _Consumer_ is the body o
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `pojo` or `value` | 
-The result of read for the resourcePath, as in the producer: an entity set is split into one message per ClientEntity and a collection property into one message per ClientValue; with splitResult=false the ClientEntitySet or the ClientCollectionValue comes in one message. uread gives the response unparsed as a stream.
+The result of read for the resourcePath, as in the producer: an entity set is split into one message per ClientEntity and a collection property into one message per ClientValue; with splitResult=false the ClientEntitySet or the ClientCollectionValue comes in one message. With filterAlreadySeen only the entities or values not read before come. uread gives the response unparsed as a stream.
 
 -   With `methodName=uread`: `stream`
-    
--   With `filterAlreadySeen=true`: `pojo`, `value` or `list`
     
 
 
@@ -478,7 +476,7 @@ Not known when `inBody` is set.
  |
 | **Producer output** | `pojo` or `value` | 
 
-read gives the Olingo client object of the resource: a ClientEntitySet, a ClientEntity, the Edm of $metadata or the ClientServiceDocument; a ClientPrimitiveValue, ClientComplexValue or ClientCollectionValue for a property or $value, and a Long for $count. uread gives the response as a stream. create, update, patch, merge and action give the ClientEntity of the response, or the HttpStatusCode when it has no content, as delete does; batch gives a List of Olingo4BatchResponse. With filterAlreadySeen, a result read before is null, and a complex or collection value becomes a List.
+read gives the Olingo client object of the resource: a ClientEntitySet, a ClientEntity, the Edm of $metadata or the ClientServiceDocument; a ClientPrimitiveValue, ClientComplexValue or ClientCollectionValue for a property or $value, and a Long for $count. uread gives the response as a stream. create, update, patch, merge and action give the ClientEntity of the response, or the HttpStatusCode when it has no content, as delete does; batch gives a List of Olingo4BatchResponse. With filterAlreadySeen, a result read before is null, and an entity set or a collection value keeps only the entities or values not read before.
 
 -   With `methodName=uread`: `stream`
     
@@ -486,7 +484,7 @@ read gives the Olingo client object of the resource: a ClientEntitySet, a Client
     
 -   With `methodName=batch`: `list`
     
--   With `filterAlreadySeen=true`: `pojo`, `value`, `list` or `null`
+-   With `filterAlreadySeen=true`: `pojo`, `value` or `null`
     
 
 
