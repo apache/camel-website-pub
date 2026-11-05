@@ -189,7 +189,7 @@ Enum values:
 | **CamelMetricsCounterIncrement** (producer) Constant: [`HEADER_COUNTER_INCREMENT`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_COUNTER_INCREMENT) | Override increment value in URI. |  | Double |
 | **CamelMetricsName** (producer) Constant: [`HEADER_METRIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_METRIC_NAME) | Override name value in URI. |  | String |
 | **CamelMetricsDescription** (producer) Constant: [`HEADER_METRIC_DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_METRIC_DESCRIPTION) | Override description value in URI. |  | String |
-| **CamelMetricsAttributes** (producer) Constant: [`HEADER_METRIC_ATTRIBUTES`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_METRIC_ATTRIBUTES) | To augment meter attributes defined as URI parameters. |  | Attributes |
+| **CamelMetricsAttributes** (producer) Constant: [`HEADER_METRIC_ATTRIBUTES`](https://javadoc.io/doc/org.apache.camel/camel-opentelemetry-metrics/latest/org/apache/camel/opentelemetry/metrics/OpenTelemetryConstants.html#HEADER_METRIC_ATTRIBUTES) | To augment meter attributes defined as URI parameters. The attributes from the header are used as given; use the attributes URI parameters for Simple expressions. |  | Attributes |
 
 ## Usage
 
@@ -226,6 +226,8 @@ from("direct:in")
 ```
 
 will update a counter with name `new.name` (instead of `name.not.used`) using the attribute `dynamic-key` with value `dynamic-value` in addition to the attribute `key` with value `value`.
+
+The attributes from the `CamelMetricsAttributes` header are used as given: unlike the `attributes` URI parameters, their keys and values are not evaluated as `Simple` expressions. An attribute from the header overrides an attribute from the URI with the same key. To add an attribute with a value from the message, use an `attributes` URI parameter such as `attributes.customer=${header.customerId}`, or compute the value in the route before setting the header.
 
 All Metrics specific headers are removed from the message once the OpenTelemetry endpoint finishes processing the exchange. While processing the exchange the OpenTelemetry endpoint will catch all exceptions and write log entry using level `warn`.
 

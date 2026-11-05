@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.22.2 to 4.22.3
 
+### camel-aws2-sns - string array message attributes
+
+String values in list-valued message headers are now JSON-escaped when mapped to SNS `String.Array` message attributes. Quotes, backslashes and control characters are preserved as string data. Routes should supply the original strings rather than pre-escaping them. Other member types, such as enums, characters, UUIDs and dates, are serialized as JSON strings. Non-finite floating-point values (`NaN` and infinities) are also serialized as strings; finite numbers, booleans and null remain JSON primitives. The JSON utility also escapes forward slashes and some Unicode characters, so raw `String.Array` attribute text may differ even when its decoded string values are unchanged.
+
 ### camel-ai-tool - required arguments with reserved names reject the call
 
 Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
@@ -277,6 +281,12 @@ Two `netty-http` endpoints whose URIs differ only in their endpoint options, for
 The endpoint URI does not change: it is still the HTTP address, such as `[http://localhost:8080/foo](http://localhost:8080/foo)`, so JMX names, auto-mock names, tracing and metrics are the same as before.
 
 Two routes that consume from the same address with different endpoint options are no longer rejected at startup as "Multiple consumers for the same endpoint is not allowed". Use one consumer per address.
+
+### camel-micrometer, camel-opentelemetry-metrics - tags and attributes from headers are used as given
+
+The `micrometer` and `opentelemetry-metrics` producers now use the tags of the `CamelMetricsTags` header and the attributes of the `CamelMetricsAttributes` header as given. Before, their keys and values were evaluated as Simple expressions, in the same way as the `tags` and `attributes` URI options. The URI options are still evaluated per exchange, and a tag or attribute from the header still overrides one from the URI with the same key.
+
+A route that relied on a Simple expression in a header tag or attribute should use the `tags` / `attributes` URI option instead (for example `tags.customer=${header.customerId}`), or compute the value in the route before setting the header.
 
 ## Upgrading from 4.22.1 to 4.22.2
 

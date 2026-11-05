@@ -167,7 +167,7 @@ Enum values:
 | **CamelMetricsCounterIncrement** (producer) Constant: [`HEADER_COUNTER_INCREMENT`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_COUNTER_INCREMENT) | Override increment value in URI. |  | Double |
 | **CamelMetricsName** (producer) Constant: [`HEADER_METRIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_METRIC_NAME) | Override name value in URI. |  | String |
 | **CamelMetricsDescription** (producer) Constant: [`HEADER_METRIC_DESCRIPTION`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_METRIC_DESCRIPTION) | Override description value in URI. |  | String |
-| **CamelMetricsTags** (producer) Constant: [`HEADER_METRIC_TAGS`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_METRIC_TAGS) | To augment meter tags defined as URI parameters. |  | Iterable |
+| **CamelMetricsTags** (producer) Constant: [`HEADER_METRIC_TAGS`](https://javadoc.io/doc/org.apache.camel/camel-micrometer/latest/org/apache/camel/component/micrometer/MicrometerConstants.html#HEADER_METRIC_TAGS) | To augment meter tags defined as URI parameters. The tags from the header are used as given; use the tags URI parameters for Simple expressions. |  | Iterable |
 
 ## Usage
 
@@ -243,6 +243,8 @@ from("direct:in")
 ```
 
 will update a counter with name `new.name` instead of `name.not.used` using the tag `dynamic-key` with value `dynamic-value` in addition to the tag `key` with value `value`.
+
+The tags from the `CamelMetricsTags` header are used as given: unlike the `tags` URI parameters, their keys and values are not evaluated as `Simple` expressions. A tag from the header overrides a tag from the URI with the same key. To tag a meter with a value from the message, use a `tags` URI parameter such as `tags.customer=${header.customerId}`, or compute the value in the route before setting the header.
 
 All Metrics specific headers are removed from the message once the Micrometer endpoint finishes processing of exchange. While processing exchange Micrometer endpoint will catch all exceptions and write log entry using level `warn`.
 

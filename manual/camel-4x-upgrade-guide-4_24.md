@@ -80,6 +80,10 @@ Additionally: - A `ShiroSecurityPolicy` created with the no-arg constructor must
 
 Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
 
+### camel-mina-sftp - TCP\_NODELAY is set on the connections
+
+The `mina-sftp` component now sets `TCP_NODELAY` on its connections, as the JSch-based `sftp` component does. Apache MINA SSHD leaves it off by default, so a small request, such as one that reads the next part of a directory listing, could wait for the server to acknowledge the previous reply. The `org.apache.sshd.config.tcp-nodelay` system property no longer applies to the connections of `mina-sftp`.
+
 ### Java
 
 **Breaking change:** Camel 4.24 requires **Java 21** as the minimum runtime version. Java 17 is no longer supported. Upgrade your JDK to 21 or later before upgrading to Camel 4.24.
@@ -396,6 +400,8 @@ See the [Kubernetes client 8 migration guide](https://github.com/fabric8io/kuber
 -   The producers of the namespaced `kubernetes-*` components (config-maps, cronjob, deployments, events, hpa, job, persistent-volumes-claims, pods, replication-controllers, resources-quota, secrets, service-accounts and services) use the `namespace` endpoint option when the `CamelKubernetesNamespaceName` header is not set; the header still wins. Before, these producers ignored the option: the get, create, update and delete operations failed without the header, and the list operations listed all namespaces. A route that sets the `namespace` option on a producer endpoint and lists without the header now lists that namespace only.
     
 -   The `kubernetes-custom-resources` producer uses the `crdName`, `crdGroup`, `crdScope`, `crdVersion` and `crdPlural` endpoint options. Before, it checked them but then built the custom resource definition from the headers only.
+    
+-   The `kubernetes-custom-resources` producer takes the namespace from the `CamelKubernetesNamespaceName` header, or else from the `namespace` endpoint option, like the other producers. Before, the option won over the header.
     
 -   `createCustomResource` and `updateCustomResource` fail the exchange with the `KubernetesClientException` of a 409 Conflict (the instance already exists, or the update is based on an old resource version). Before, the conflict was logged at INFO and the body was an empty `GenericKubernetesResource`.
     
@@ -733,10 +739,6 @@ When the change feed processor of an `azure-cosmosdb` consumer cannot start (Cos
 
 Its readiness health check (`consumer:<routeId>`, with the consumer health checks of Camel enabled, the default) is now the initial state (`camel.health.initial-state`, DOWN by default) while the first attempt to start runs, and DOWN while the change feed processor cannot start, with the failure of the last attempt; before, it was UP. To leave the check out, as before, set `camel.health.exclude-pattern=consumer:<routeId>`.
 
-### camel-test-infra-azure - the azure.container property holds the Floci AZ image
-
-The Azure test-infra runs its new local Data Lake Storage Gen2 service (`camel infra run azure storage-datalake`) on [Floci AZ](https://github.com/floci-io/floci-az), and the `azure.container` property of `camel-test-infra-azure-common` now holds the Floci AZ image. The Blob and Queue services still run on Azurite, whose image is now set with the `azure.storage.blob.container` and `azure.storage.queue.container` properties: to run them on another Azurite image, set these instead of `azure.container`.
-
 ### camel-vertx-websocket - consumers on the same host and port must use the same SSLContextParameters
 
 All `vertx-websocket` consumers on the same host and port are served by one HTTP server, which is created from the `sslContextParameters` of the first consumer to start. A consumer started later with different `sslContextParameters` (including one with none while the server uses some, or the other way round) used to start and be served with the first consumer’s settings. Such a consumer now fails to start with an `IllegalArgumentException` naming the host and port. Give every consumer on a host and port the same `SSLContextParameters` instance (for example the same bean reference, or the global SSL context parameters), or move consumers that need other settings to another port.
@@ -853,6 +855,10 @@ A consumer now gets the best solutions of the producers of its own CamelContext 
 
 With `checksumFileAlgorithm`, the file producer calculated the checksum from the body before it was written. With `charset` set, it also decoded that body with the default charset of the JVM instead of the charset of the exchange. So with `charset`, the checksum (the `CamelFileChecksum` header and the checksum file) did not match the written file as soon as the encoding changed a byte, a body read with another charset (such as the bytes of a file consumed with `charset=ISO-8859-1`) was written with its non-ASCII characters replaced, and a String body could fail with an `UnmappableCharacterException`; with `fileExist=Append` and `appendChars`, the checksum left out the appended characters. The checksum is now calculated from the bytes written to the file, and the body is decoded as it is without `checksumFileAlgorithm`. Checksums of such files differ from the ones written before.
 
+### camel-file - path separator normalization for getFile/directory consistency
+
+On Linux and macOS, a backslash in the `file:` URI path (e.g. `file:target\subdir`) is now normalized to a forward slash, so that `getFile().getPath()` and `getConfiguration().getDirectory()` return the same value. Previously, `getFile()` preserved the backslash while `getDirectory()` replaced it with `/`, which could cause the producer to create a spurious directory with a backslash in its name and the consumer to miss files in a backslash-named directory. On Windows, where `java.io.File` already normalizes both separators to `\`, this change has no effect.
+
 ### camel-flatpack - with splitRows each message has its own row, and a failing row fails the producer
 
 With `splitRows=true` (the default), every row message shared the one parsed `DataSet`, so the next row moved the row of a message that was not yet converted. The body of each row message is now its own read-only `DataSet` with only that row (`org.apache.camel.component.flatpack.DataSetRow`): it converts to a `Map` as before, converting it to a `List` gives that one row instead of all the rows, and the methods that change the `DataSet` (such as `setValue` or `remove`) throw an `UnsupportedOperationException`.
@@ -931,6 +937,12 @@ The `debezium-mongodb` consumer no longer reads the `patch` field for an update,
 
 The `Struct` to `Map` type converter now also converts a `Struct` inside a list or a map.
 
+### camel-debezium-mysql - a signed TINYINT column is a Byte
+
+Debezium has been upgraded to 3.7.0.Final, which maps a signed MySQL `TINYINT` column to the Kafka Connect `INT8` type instead of `INT16` (debezium/dbz#2235). In the `Struct` of the message body, and in the `Map` it converts to, the value of such a column is now a `Byte` instead of a `Short`. Code that casts the value to `Short` must read it as a `Number` (or a `Byte`) instead. A `TINYINT UNSIGNED` column is still a `Short`.
+
+The new Debezium options of 3.7 are available on all `debezium-*` components. The `ddlParserType` option of `debezium-mysql` is kept, although Debezium 3.7 no longer lists it in the configuration of its MySQL connector.
+
 ### camel-docker - the streaming operations give their result, and their failures fail the exchange
 
 The operations `imagebuild`, `imagepull`, `imagepush`, `containerattach`, `containerlog`, `containerwait` and `execstart` now fail the exchange when they fail. Before, an error such as a missing build context was only logged and the exchange completed with the body unchanged. A failed build or push, reported by Docker in the output of the operation, now also fails the exchange.
@@ -971,6 +983,12 @@ The `SecretKeyWithEncapsulation` produced by `generateSecretKeyEncapsulation` no
 This is only visible for the two algorithms whose enum name differs from the JCE name: `DESEDE` now yields `DESede` (was `DESEDE`), and `GOST3412_2015` now yields `GOST3412-2015` (was `GOST3412_2015`). The raw names are not resolvable cipher algorithms, so a key labelled with one could not be passed to `Cipher.getInstance(key.getAlgorithm())`, and the generate and extract ends of the same exchange disagreed on the key’s identity. Code asserting on the old value must be updated.
 
 `generateSecretKeyEncapsulation` now also rejects a missing `symmetricKeyAlgorithm` with `Symmetric Algorithm needs to be specified`, as the extract operations already did, instead of failing later inside BouncyCastle with `Missing argument`.
+
+### camel-pqc - the hybrid KEM operations stamp the JCE algorithm name too
+
+`hybridGenerateSecretKeyEncapsulation` and `hybridExtractSecretKeyEncapsulation` label the `SecretKey` they produce with the mapped JCE algorithm name, as the non-hybrid operations do. `DESEDE` now yields `DESede` and `GOST3412_2015` now yields `GOST3412-2015`; every other algorithm is unaffected, since its configured name and its JCE name are the same.
+
+Only the label changes. The derived key itself is unchanged: the configured name is also the HKDF info the two shared secrets are combined with, and that keeps its original value, so an encapsulation produced by an earlier version still decrypts.
 
 ### camel-jbang - camel ask asks before a call that changes something, reaches out or runs code
 
@@ -1566,6 +1584,12 @@ The default webhook path is a hash of the endpoint URI, so adding an option to t
 
 To restore the previous behaviour, set `webhookSecretTokenEnabled=false`: the webhook is then registered without a secret token, and webhook requests are not verified.
 
+### camel-whatsapp - webhook events are verified by default
+
+In webhook mode (`webhook:whatsapp:…​`), the `X-Hub-Signature-256` signature of every event that WhatsApp posts is now verified with the `webhookSecret` option, the app secret from the Meta app dashboard. A webhook route without `webhookSecret` now fails to start. Set `webhookSecret` to the app secret, or set the new `webhookVerification` option to `false` to accept the events without verifying their signature, for example in development. An event without a valid signature is answered with HTTP 403 and does not reach the route. A client that posts events to the webhook endpoint directly, for example in a test, must sign them too.
+
+An event that reaches the route is now answered with HTTP 200 and an empty body. Before, the reply carried the event back to the caller. The reply to the verification request (`GET`) is still the `hub.challenge`.
+
 ### camel-paho-mqtt5 - a failed message with manualAcksEnabled is delivered again or acknowledged
 
 With `manualAcksEnabled=true`, a message whose exchange failed was left unacknowledged. For a QoS 1 message the broker never sent it again during the connection, and after `receiveMaximum` such messages it sent the consumer nothing more (the client completes the QoS 2 flow on its own, so QoS 2 messages did not stop the consumer). Now, for a QoS 1 message on a session that the broker keeps after the disconnect (`cleanStart=false` and `sessionExpiryInterval` greater than 0), the consumer connects again after a failed exchange (after one second, doubled for each failed exchange in a row up to `maxReconnectDelay`, and back to one second after any exchange that succeeds; logged at WARN), and the broker sends the message again. In all other cases (a clean session, which is the default, a QoS 2 message, or `cleanStart=false` without `sessionExpiryInterval`, where the session ends with the connection) the broker never sends the message again, so the failed message is acknowledged and the failure is left to the Camel error handler. A consumer that uses a client set with the `client` option leaves a failed QoS 1 message on a session that the broker keeps unacknowledged, as before; as the consumer does not connect that client, set the `cleanStart` and `sessionExpiryInterval` of the endpoint to match its connection options.
@@ -1834,6 +1858,10 @@ The consumer now reads the charset parameter of the request `Content-Type` whate
 ### camel-platform-http-vertx - a number, a boolean, a character or an enum reply is written as text
 
 A reply body that is a number, a boolean, a character or an enum is now written as its text, in the charset of the response `Content-Type` (UTF-8 otherwise), as camel-undertow does: `setBody(constant(42))` replies with `42`. Before, an `Integer`, `Long`, `Short`, `Float` or `Double` was written in its binary form (`42` became the 4 bytes `00 00 00 2A`), and a boolean, a character or an enum failed with 500. A `StringBuilder` or another `CharSequence` is now also written in the charset of the response `Content-Type`, as a `String` is, rather than in the charset of the exchange. To send the binary form of a number, convert the body to `byte[]` first.
+
+### camel-platform-http-vertx - the HTTP server fails to start when it cannot listen on its port
+
+The Vert.x HTTP server of platform-http now fails to start when it cannot listen on its port, for example because another process already uses the port, and so Camel fails to start, with the bind error as the cause. This also applies to the HTTP server and the HTTP management server of camel-platform-http-main (`camel.server.` **and `camel.management.`**), which `camel run` uses: a second `camel run` with the same `--port` now fails to start. Before, the failure was only logged at WARN, and Camel started, with its platform-http routes reported as started, although nothing listened on the port.
 
 ### camel-quickfix - an InOut consumer replies only to application messages, and an InOut producer needs CorrelationCriteria
 

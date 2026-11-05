@@ -129,7 +129,8 @@ Enum values:
 | **webhookPath** (advanced) | Webhook path. | webhook | String |
 | **whatsappService** (advanced) | WhatsApp service implementation. |  | WhatsAppService |
 | **authorizationToken** (security) | **Required** The authorization access token taken from whatsapp-business dashboard. |  | String |
-| **webhookSecret** (security) | The app secret used to verify the X-Hub-Signature-256 signature of inbound webhook event payloads (from the Meta/WhatsApp app dashboard). When set, event callbacks with a missing or invalid signature are rejected with HTTP 403; when not set, no signature verification is performed. |  | String |
+| **webhookSecret** (security) | The app secret used to verify the X-Hub-Signature-256 signature of inbound webhook event payloads (from the Meta/WhatsApp app dashboard). An event callback with a missing or invalid signature is rejected with HTTP 403. Required in webhook mode, unless webhookVerification is false. |  | String |
+| **webhookVerification** (security) | Whether, in webhook mode, the X-Hub-Signature-256 signature of every event callback is verified with webhookSecret. When true, the webhook route fails to start without webhookSecret. Set it to false to accept event callbacks without verifying their signature, for example in development. | true | boolean |
 | **webhookVerifyToken** (security) | Webhook verify token. |  | String |
 
 ## Message Headers
@@ -149,8 +150,8 @@ The message body at each side of the WhatsApp component: _Consumer_ is the body 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `text` or `null` | In webhook mode (webhook:whatsapp:…​), the event that WhatsApp posts, as JSON text. The verification request of WhatsApp (a GET) also reaches the route, with the hub.challenge as the body when hub.mode is subscribe and hub.verify\_token matches webhookVerifyToken, else with no body (403, or 400 when the parameters are missing). With webhookSecret, an event without a valid X-Hub-Signature-256 is answered with 403 and does not reach the route. |
-| **Consumer reply** | `any` | The body at the end of the route is not sent: the reply is the body the route got, the event or the hub.challenge. |
+| **Consumer** | `text` or `null` | In webhook mode (webhook:whatsapp:…​), the event that WhatsApp posts, as JSON text. The verification request of WhatsApp (a GET) also reaches the route, with the hub.challenge as the body when hub.mode is subscribe and hub.verify\_token matches webhookVerifyToken, else with no body (403, or 400 when the parameters are missing). An event without a valid X-Hub-Signature-256 is answered with 403 and does not reach the route, unless webhookVerification is false. |
+| **Consumer reply** | `any` | The body at the end of the route is not sent: an event is answered with an empty 200, and the verification request with the hub.challenge. |
 | **Producer input** | `pojo` or `null` | A request of org.apache.camel.component.whatsapp.model: a TextMessageRequest, MediaMessageRequest, LocationMessageRequest, ContactMessageRequest, InteractiveMessageRequest or TemplateMessageRequest to send a message, or an UploadMediaRequest to upload a media file. Text, bytes, a Map or another POJO fails: build the request. No body sends nothing. |
 | **Producer output** | `pojo` or `unchanged` | The org.apache.camel.component.whatsapp.model.MessageResponse of WhatsApp, with the ids of the messages sent, or the id of the media uploaded. No body is left as it is. |
 
@@ -228,7 +229,7 @@ Once done, you need to prepend the webhook URI to the whatsapp URI you want to u
     
 
 ```java
-fromF("webhook:whatsapp:%s?authorizationToken=%s&webhookVerifyToken=%s", "<phoneNumberId>", "<AuthorizationToken>", "<webhookVerifyToken>").log("${body}")
+fromF("webhook:whatsapp:%s?authorizationToken=%s&webhookVerifyToken=%s&webhookSecret=%s", "<phoneNumberId>", "<AuthorizationToken>", "<webhookVerifyToken>", "<appSecret>").log("${body}")
 ```
 
 ```yaml
@@ -238,11 +239,14 @@ fromF("webhook:whatsapp:%s?authorizationToken=%s&webhookVerifyToken=%s", "<phone
       parameters:
         authorizationToken: "{{whatsapp.authorization-token}}"
         webhookVerifyToken: "{{whatsapp.webhook-verify-token}}"
+        webhookSecret: "{{whatsapp.app-secret}}"
       steps:
         - log:
             message: "${body}"
 ```
 
 You can follow the [set up webhooks guide](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/set-up-webhooks) to enable and configure the webhook. The webhook component will expose an endpoint that can be used into the whatsapp administration console.
+
+WhatsApp signs every event it posts to the webhook with the app secret of the Meta app, in the `X-Hub-Signature-256` header. Set `webhookSecret` to that app secret (from the Meta app dashboard): an event without a valid signature is answered with HTTP 403 and does not reach the route, and an event that reaches the route is answered with an empty HTTP 200. A webhook route without `webhookSecret` fails to start. To accept the events without verifying their signature, for example in development, set `webhookVerification` to `false`.
 
 Refer to the [camel-webhook component](webhook-component.md) documentation for instructions on how to set it.

@@ -248,7 +248,7 @@ Enum values:
 | **antExclude** (filter) | Ant style filter exclusion. If both antInclude and antExclude are used, antExclude takes precedence over antInclude. Multiple exclusions may be specified in comma-delimited format. |  | String |
 | **antFilterCaseSensitive** (filter) | Sets case sensitive flag on ant filter. | true | boolean |
 | **antInclude** (filter) | Ant style filter inclusion. Multiple inclusions may be specified in comma-delimited format. |  | String |
-| **eagerMaxMessagesPerPoll** (filter) | Allows for controlling whether the limit from maxMessagesPerPoll is eager or not. If eager then the limit is during the scanning of files. Where as false would scan all files, and then perform sorting. Setting this option to false allows for sorting all files first, and then limit the poll. Mind that this requires a higher memory usage as all file details are in memory to perform the sorting. | true | boolean |
+| **eagerMaxMessagesPerPoll** (filter) | Allows for controlling whether the limit from maxMessagesPerPoll is eager or not. If eager then the limit is during the scanning of files, and the file, sftp, mina-sftp and smb consumers stop reading the directory once the limit is hit, unless preSort or doneFileName is used, as they need the whole directory. Where as false would scan all files, and then perform sorting. Setting this option to false allows for sorting all files first, and then limit the poll. Mind that this requires a higher memory usage as all file details are in memory to perform the sorting. | true | boolean |
 | **exclude** (filter) | Is used to exclude files, if filename matches the regex pattern (matching is case in-sensitive). Notice if you use symbols such as plus sign and others you would need to configure this using the RAW() syntax if configuring this as an endpoint uri. See more details at configuring endpoint uris. |  | String |
 | **excludeExt** (filter) | Is used to exclude files matching file extension name (case insensitive). For example to exclude bak files, then use excludeExt=bak. Multiple extensions can be separated by comma, for example to exclude bak and dat files, use excludeExt=bak,dat. Note that the file extension includes all parts, for example having a file named mydata.tar.gz will have extension as tar.gz. For more flexibility then use the include/exclude options. |  | String |
 | **filter** (filter) | Pluggable filter as a org.apache.camel.component.file.GenericFileFilter class. Will skip files if filter returns false in its accept() method. |  | GenericFileFilter |
@@ -542,6 +542,12 @@ In YAML, a route that polls the share and logs the content of each file looks li
 ```
 
 The consumer leaves the files on the share by default, and reads them again on the next poll. Set `move` (as above), `delete` or `noop`, so that each file is read once.
+
+### Polling large directories
+
+With `maxMessagesPerPoll`, the consumer stops reading the directory once it has the files of the poll, rather than listing the whole directory first. It reads the whole directory when `preSort` or `doneFileName` is used, or with `eagerMaxMessagesPerPoll=false`.
+
+It also reads the whole directory when the server supports SMB 3 directory leases, such as Samba and Windows, and no `searchPattern` is set: the SMB client then serves a repeat listing from its cache while it holds the lease, which costs less than reading the start of the directory again.
 
 ### Polling files (advanced)
 

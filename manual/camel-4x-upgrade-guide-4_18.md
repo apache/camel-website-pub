@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.18.5 to 4.18.6
 
+### camel-aws2-sns - string array message attributes
+
+String values in list-valued message headers are now JSON-escaped when mapped to SNS `String.Array` message attributes. Quotes, backslashes and control characters are preserved as string data. Routes should supply the original strings rather than pre-escaping them. Other member types, such as enums, characters, UUIDs and dates, are serialized as JSON strings. Non-finite floating-point values (`NaN` and infinities) are also serialized as strings; finite numbers, booleans and null remain JSON primitives. The JSON utility also escapes forward slashes and some Unicode characters, so raw `String.Array` attribute text may differ even when its decoded string values are unchanged.
+
 ### camel-as2 - server/listen - signature and MIC over the message as received
 
 The signature of a `multipart/signed` message is now verified over the signed part exactly as it was received, its MIME headers and its body in the transfer encoding the sender used (RFC 1847, section 2.1), and the `Received-Content-MIC` of the MDN is computed over the same bytes (RFC 4130, section 7.1). Previously both were computed over a re-serialisation of the parsed part, which matches the sender’s bytes only when the part is `binary`, `7bit` or `8bit` and its headers are formatted the way camel-as2 writes them: a `base64` or `quoted-printable` part from another AS2 implementation, encoded with a different line length or escaping, or a part with folded headers or no space after the colon, was refused with `authentication-failed` although correctly signed, and the MDN carried a MIC the sender could not match. Messages from camel-as2’s own client are not affected. `MultipartSignedEntity.getSignedDataRaw()` returns the part as received, `getSignedDataContent()` the bytes a signature is verified against.
@@ -353,6 +357,12 @@ Two `netty-http` endpoints whose URIs differ only in their endpoint options, for
 The endpoint URI does not change: it is still the HTTP address, such as `[http://localhost:8080/foo](http://localhost:8080/foo)`, so JMX names, auto-mock names, tracing and metrics are the same as before.
 
 Two routes that consume from the same address with different endpoint options are no longer rejected at startup as "Multiple consumers for the same endpoint is not allowed". Use one consumer per address.
+
+### camel-micrometer, camel-opentelemetry-metrics - tags and attributes from headers are used as given
+
+The `micrometer` and `opentelemetry-metrics` producers now use the tags of the `CamelMetricsTags` header and the attributes of the `CamelMetricsAttributes` header as given. Before, their keys and values were evaluated as Simple expressions, in the same way as the `tags` and `attributes` URI options. The URI options are still evaluated per exchange, and a tag or attribute from the header still overrides one from the URI with the same key.
+
+A route that relied on a Simple expression in a header tag or attribute should use the `tags` / `attributes` URI option instead (for example `tags.customer=${header.customerId}`), or compute the value in the route before setting the header.
 
 ## Upgrading from 4.18.4 to 4.18.5
 
