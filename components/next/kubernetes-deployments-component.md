@@ -178,7 +178,7 @@ The message body at each side of the Kubernetes Deployments component: _Consumer
 | **Consumer** | `pojo` (`io.fabric8.kubernetes.api.model.apps.Deployment`) | The Deployment that changed, with the action (ADDED, MODIFIED or DELETED) in the CamelKubernetesEventAction header. |
 | **Producer input** | `any` | Not used: the operations take their input from headers, such as the name of the Deployment in CamelKubernetesDeploymentName, its DeploymentSpec in CamelKubernetesDeploymentSpec and the replicas of scaleDeployment in CamelKubernetesDeploymentReplicas. |
 | **Producer output** | `list`, `pojo`, `null` or `value` | 
-A List of the Deployments for the list operations, the Deployment of get, create and update (null when getDeployment finds none), and a Boolean of whether deleteDeployment deleted it. scaleDeployment gives the number of replicas in the status of the Deployment.
+A List of the Deployments for the list operations, the Deployment of get, create and update (null when getDeployment finds none), and a Boolean of whether deleteDeployment deleted it. scaleDeployment gives the number of replicas in the spec of the scaled Deployment.
 
 -   With `operation=listDeployments`: `list`
     

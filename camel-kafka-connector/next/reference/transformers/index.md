@@ -7,4 +7,5 @@ In addition to the [prebuilt transformations](https://kafka.apache.org/documenta
  
 | Transform | Description |
 | --- | --- |
+| [CamelTypeConverter](camelTypeConverter.md) | Convert a kafka connect record’s key or value to another Java type with the Camel type converters |
 | [FieldsToHeaders](fieldsToHeaders.md) | Extract fields from a kafka connect record’s value or key and copy the value in configured headers (struct + schema, map or copy the whole value/key are the supported options) |

@@ -74,7 +74,7 @@ Enum values:
 
 
  |
-| **symmetricKeyLength** (common) | `128` | `Integer` | The length (in bits) of the symmetric key. |
+| **symmetricKeyLength** (common) | `256` | `Integer` | The length (in bits) of the symmetric key. SEED and SM4 only accept 128; GOST3412\_2015 and CHACHA7539 only accept 256. |
 | **keyPair** (common) |  | `Object` | Refers to the KeyPair to lookup from the registry to use for KEM operations. |
 | **provider** (advanced) |  | `String` | The JCE security provider to use. |
 | **keyGenerator** (advanced) |  | `Object` | Refers to a custom KeyGenerator to lookup from the registry for KEM operations. |
@@ -192,7 +192,7 @@ from("file:encrypted")
 | --- | --- | --- | --- |
 | keyEncapsulationAlgorithm | String | MLKEM | PQC KEM algorithm (MLKEM, BIKE, HQC, CMCE, SABER, FRODO, NTRU, NTRULPRime, SNTRUPrime, KYBER) |
 | symmetricKeyAlgorithm | String | AES | Symmetric encryption algorithm. Only AEAD-capable algorithms are supported: AES, ARIA, CAMELLIA, CAST6, DSTU7624, GOST3412-2015, SEED, SM4 (GCM) and CHACHA7539 (ChaCha20-Poly1305) |
-| symmetricKeyLength | int | 128 | Length of the symmetric key in bits (128, 192, or 256 for AES) |
+| symmetricKeyLength | int | 256 | Length of the symmetric key in bits (128, 192 or 256 for AES). SEED and SM4 only accept 128; GOST3412-2015 and CHACHA7539 only accept 256 |
 | keyPair | KeyPair | null | KeyPair to use for encryption/decryption. Can also be provided via header. |
 | provider | String | null | JCE security provider (defaults to Bouncy Castle PQC provider) |
 | keyGenerator | KeyGenerator | null | Custom KeyGenerator for KEM operations, shared by every operation of the data format. If not set, a new one is created for every operation |

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1793726612245,
+  "generated": 1793892214542,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -3547,6 +3547,12 @@
             },
             {
               "module": "ROOT",
+              "path": "reference/transformers/camelTypeConverter.adoc",
+              "url": "/camel-kafka-connector/next/reference/transformers/camelTypeConverter.html",
+              "title": "CamelTypeConverter"
+            },
+            {
+              "module": "ROOT",
               "path": "reference/transformers/fieldsToHeaders.adoc",
               "url": "/camel-kafka-connector/next/reference/transformers/fieldsToHeaders.html",
               "title": "FieldsToHeaders"
@@ -3580,6 +3586,12 @@
               "path": "user-guide/basic-configuration.adoc",
               "url": "/camel-kafka-connector/next/user-guide/basic-configuration.html",
               "title": "Basic Configuration"
+            },
+            {
+              "module": "ROOT",
+              "path": "user-guide/data-formats.adoc",
+              "url": "/camel-kafka-connector/next/user-guide/data-formats.html",
+              "title": "Data Formats"
             },
             {
               "module": "ROOT",

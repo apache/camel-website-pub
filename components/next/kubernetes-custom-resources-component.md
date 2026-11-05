@@ -182,7 +182,7 @@ The message body at each side of the Kubernetes Custom Resources component: _Con
 | **Consumer** | `text` (`java.lang.String`), as json | The custom resource that changed as JSON text, with the action (ADDED, MODIFIED or DELETED) in the CamelKubernetesCRDEventAction header. |
 | **Producer input** | `any` | Not used: the operations take their input from headers, such as the name of the instance in CamelKubernetesCRDInstanceName and, for createCustomResource and updateCustomResource, the instance as JSON text in CamelKubernetesCRDInstance. |
 | **Producer output** | `list`, `map`, `pojo` or `unchanged` | 
-A JsonArray of the GenericKubernetesResource of the instances for the list operations, a JsonObject of the instance for getCustomResource, and the GenericKubernetesResource of create and update (an empty one when it already exists). deleteCustomResource leaves the body as it was, with whether it deleted the instance in the CamelKubernetesDeleteResult header.
+A JsonArray of the GenericKubernetesResource of the instances for the list operations, a JsonObject of the instance for getCustomResource (an empty one when it is not found), and the GenericKubernetesResource of create and update. deleteCustomResource leaves the body as it was, with whether it deleted the instance in the CamelKubernetesDeleteResult header.
 
 -   With `operation=listCustomResources`: `list` (`org.apache.camel.util.json.JsonArray`)
     

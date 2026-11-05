@@ -120,7 +120,7 @@ Enum values:
 | **openOptions** (common) | set open options for creating file. |  | Set |
 | **path** (common) | path in azure data lake for operations. |  | String |
 | **permission** (common) | permission string for the file. |  | String |
-| **position** (common) | This parameter allows the caller to upload data in parallel and control the order in which it is appended to the file. |  | Long |
+| **position** (common) | The final length of the file, including previously committed data, used by flushToFile. |  | Long |
 | **recursive** (common) | recursively include all paths. | false | Boolean |
 | **regex** (common) | regular expression for matching file names. |  | String |
 | **retainUncommitedData** (common) | Whether or not uncommitted data is to be retained after the operation. | false | Boolean |
@@ -241,7 +241,7 @@ Enum values:
 | **openOptions** (common) | set open options for creating file. |  | Set |
 | **path** (common) | path in azure data lake for operations. |  | String |
 | **permission** (common) | permission string for the file. |  | String |
-| **position** (common) | This parameter allows the caller to upload data in parallel and control the order in which it is appended to the file. |  | Long |
+| **position** (common) | The final length of the file, including previously committed data, used by flushToFile. |  | Long |
 | **recursive** (common) | recursively include all paths. | false | Boolean |
 | **regex** (common) | regular expression for matching file names. |  | String |
 | **retainUncommitedData** (common) | Whether or not uncommitted data is to be retained after the operation. | false | Boolean |
@@ -962,6 +962,8 @@ from("direct:start")
 -   `getFile`
     
 
+The `CamelAzureStorageDataLakeFileRange` header selects the byte range to read. Otherwise, set both `fileOffset` and `dataCount` on the endpoint to select a range. This applies whether the operation returns an `InputStream` or writes to an `OutputStream` supplied as the message body. The `CamelAzureStorageDataLakeRequestCondition` header applies request conditions, such as an ETag or lease, to both download paths, including streaming reads without a range. Consumers without `fileDir` also use the streaming path and honor the endpoint `fileOffset` and `dataCount` options. Remove these options to consume the entire file.
+
 This can be done in two ways. We can either set an `OutputStream` in the exchange body:
 
 _Java-only: sets an `OutputStream` for the file content to be written to_
@@ -1102,6 +1104,8 @@ from("direct:start")
 -   `flushToFile`
     
 
+Set `position` or the `CamelAzureStorageDataLakePosition` header to the final file length in bytes, including any previously committed data. For example, after appending 20 bytes to a 100-byte file, set the position to `120`. The header overrides the endpoint option. If neither is set, the operation uses the current committed file length; set the final position explicitly to commit newly appended data.
+
 -   Java
     
 -   XML
@@ -1111,7 +1115,7 @@ from("direct:start")
 
 ```java
 from("direct:start")
-    .setHeader("CamelAzureStorageDataLakePosition", constant(0))
+    .setHeader("CamelAzureStorageDataLakePosition", constant(120))
     .to("azure-storage-datalake:cameltesting/filesystem?operation=flushToFile&fileName=test.txt&serviceClient=#serviceClient")
     .to("mock:results");
 ```
@@ -1120,7 +1124,7 @@ from("direct:start")
 <route>
   <from uri="direct:start"/>
   <setHeader name="CamelAzureStorageDataLakePosition">
-    <constant>0</constant>
+    <constant>120</constant>
   </setHeader>
   <to uri="azure-storage-datalake:cameltesting/filesystem?operation=flushToFile&amp;fileName=test.txt&amp;serviceClient=#serviceClient"/>
   <to uri="mock:results"/>
@@ -1134,7 +1138,7 @@ from("direct:start")
       steps:
         - setHeader:
             name: CamelAzureStorageDataLakePosition
-            constant: 0
+            constant: 120
         - to:
             uri: azure-storage-datalake:cameltesting/filesystem
             parameters:

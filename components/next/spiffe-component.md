@@ -278,6 +278,11 @@ Peer authentication must be constrained explicitly: set `acceptedSpiffeIds` to a
 
 Because it extends `SSLContextParameters`, the inherited configuration is still honoured: set `serverParameters.clientAuthentication` (for a server that must require client certificates), `cipherSuites` and `secureSocketProtocols` as usual, and the base handshake protocol comes from `secureSocketProtocol` (default `TLSv1.3`). The underlying `X509Source` is created lazily (bounded by `initTimeout`, default 30s), closed on `CamelContext` shutdown, and the cached context is invalidated at the same time so a restarted context rebuilds a fresh source.
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 SpiffeSSLContextParameters ssl = new SpiffeSSLContextParameters();
 // ssl.setSpiffeSocketPath("unix:///tmp/spire-agent/public/api.sock"); // or SPIFFE_ENDPOINT_SOCKET
@@ -288,9 +293,31 @@ from("direct:start")
     .to("https://backend.example.org/api?sslContextParameters=#spiffeSsl");
 ```
 
+```yaml
+- beans:
+    - name: spiffeSsl
+      type: org.apache.camel.component.spiffe.SpiffeSSLContextParameters
+      properties:
+        # spiffeSocketPath: unix:///tmp/spire-agent/public/api.sock  # or SPIFFE_ENDPOINT_SOCKET
+        acceptedSpiffeIds: spiffe://example.org/backend
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: https://backend.example.org/api
+            parameters:
+              sslContextParameters: "#spiffeSsl"
+```
+
 ## Authorizing a route on the peer SPIFFE ID (SpiffeSecurityPolicy)
 
 `SpiffeSSLContextParameters` decides **which peers may connect**; `org.apache.camel.component.spiffe.SpiffeSecurityPolicy` decides **what a given peer may reach**. It is an `AuthorizationPolicy` - the SPIFFE sibling of `ShiroSecurityPolicy`, `KeycloakSecurityPolicy` and `OpaSecurityPolicy` - that wraps a route segment and authorizes it on the caller’s verified SPIFFE ID:
+
+-   Java
+    
+-   YAML
+    
 
 ```java
 // the server must REQUIRE a client certificate, or the policy has no verified peer to authorize
@@ -307,6 +334,32 @@ getCamelContext().getRegistry().bind("spiffePolicy", spiffePolicy);
 from("netty-http:https://0.0.0.0:8443?sslContextParameters=#spiffeSsl")
     .policy(spiffePolicy)
     .to("direct:handleOrder");
+```
+
+```yaml
+- beans:
+    - name: spiffeSsl
+      type: org.apache.camel.component.spiffe.SpiffeSSLContextParameters
+      properties:
+        acceptedSpiffeIds: spiffe://example.org/frontend
+        # the server must REQUIRE a client certificate, or the policy has no verified peer to authorize
+        serverParameters:
+          clientAuthentication: REQUIRE
+    - name: spiffePolicy
+      type: org.apache.camel.component.spiffe.SpiffeSecurityPolicy
+      properties:
+        acceptedSpiffeIds: spiffe://example.org/frontend
+- route:
+    from:
+      uri: netty-http:https://0.0.0.0:8443
+      parameters:
+        sslContextParameters: "#spiffeSsl"
+      steps:
+        - policy:
+            ref: spiffePolicy
+            steps:
+              - to:
+                  uri: direct:handleOrder
 ```
 
 > **Important**
@@ -334,11 +387,40 @@ Setting both is rejected and setting neither fails closed, mirroring `SpiffeSSLC
 
 The policy answers "is the peer who they claim to be"; it is designed to **compose** with `camel-opa` ("may they do this") rather than duplicate it. On a successful authorization the verified SPIFFE ID is stored as the `CamelSpiffePeerId` exchange property, so an OPA policy downstream can forward it to a Rego rule through its `includeProperties` option:
 
+-   Java
+    
+-   YAML
+    
+
 ```java
 from("netty-http:https://0.0.0.0:8443?sslContextParameters=#spiffeSsl")
     .policy(spiffePolicy)   // authenticates the peer, sets CamelSpiffePeerId
     .policy(opaPolicy)      // opaPolicy.setIncludeProperties("CamelSpiffePeerId")
     .to("direct:handleOrder");
+```
+
+```yaml
+- beans:
+    - name: opaPolicy
+      type: org.apache.camel.component.opa.security.OpaSecurityPolicy
+      properties:
+        policyPath: authz/orders/allow
+        includeProperties: CamelSpiffePeerId
+- route:
+    from:
+      uri: netty-http:https://0.0.0.0:8443
+      parameters:
+        sslContextParameters: "#spiffeSsl"
+      steps:
+        # authenticates the peer, and sets the CamelSpiffePeerId exchange property
+        - policy:
+            ref: spiffePolicy
+            steps:
+              - policy:
+                  ref: opaPolicy
+                  steps:
+                    - to:
+                        uri: direct:handleOrder
 ```
 
 For a TLS consumer that exposes the `SSLSession` under a different header name, set `sslSessionHeader` accordingly. The identity is always read from the verified `SSLSession`, never from a certificate object placed on a message header - nothing would prove the TLS layer had verified such a certificate.

@@ -111,7 +111,7 @@ Launch a Camel integration as a separate process with test-specific configuratio
 ```yaml
 actions:
   - camel:
-      jbang:
+      cli:
         run:
           integration:
             file: "../route.yaml"

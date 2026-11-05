@@ -177,7 +177,7 @@ The message body at each side of the Kubernetes Replication Controller component
 | **Consumer** | `pojo` (`io.fabric8.kubernetes.api.model.ReplicationController`) | The ReplicationController that changed, one message per watch event, with the action (ADDED, MODIFIED, DELETED) in the CamelKubernetesEventAction header. |
 | **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesReplicationControllerName, the labels in CamelKubernetesReplicationControllersLabels, the ReplicationControllerSpec in CamelKubernetesReplicationControllerSpec and the replicas in CamelKubernetesReplicationControllerReplicas. |
 | **Producer output** | `list`, `pojo`, `null` or `value` | 
-A List of ReplicationController for listReplicationControllers and listReplicationControllersByLabels; the ReplicationController for getReplicationController (null when not found), createReplicationController and updateReplicationController; a Boolean for deleteReplicationController, false when not found; for scaleReplicationController the replicas of its status, as an Integer.
+A List of ReplicationController for listReplicationControllers and listReplicationControllersByLabels; the ReplicationController for getReplicationController (null when not found), createReplicationController and updateReplicationController; a Boolean for deleteReplicationController, false when not found; for scaleReplicationController the replicas of its spec, as an Integer.
 
 -   With `operation=listReplicationControllers`: `list` (`java.util.List<io.fabric8.kubernetes.api.model.ReplicationController>`)
     

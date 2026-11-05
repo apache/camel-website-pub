@@ -422,13 +422,13 @@ The message body at each side of the Consul component: _Consumer_ is the body of
 | --- | --- | --- |
 | **Consumer** | `text` or `null` | The kv consumer: the value of the key (of each key under it with recursive) base64 encoded as Consul stores it, decoded with valueAsString=true, with the key, flags and indexes in headers; null for a key without value. The event consumer: the payload of the event as text, with its name and id in headers. |
 | **Producer input** | `any` | 
-PUT and LOCK store the body converted to text as the value, and FIRE sends it as the payload: a Map or a POJO is stored as its toString, so marshal it first. REGISTER, DEREGISTER of catalog and CREATE take the model object of the Consul client, such as a Registration or a Session; the session and prepared query actions read the id from the body when its header is not set; the other actions take their input from headers.
+PUT and LOCK store the body converted to text as the value, and FIRE sends it as the payload (an event without payload for a null body): a Map or a POJO is stored as its toString, so marshal it first. REGISTER, DEREGISTER of catalog and CREATE take the model object of the Consul client, such as a Registration or a Session; the session and prepared query actions read the id from the body when its header is not set; the other actions take their input from headers.
 
 -   With `action=PUT`: `text`, `bytes`, `stream`, `file`, `value` or `null`
     
 -   With `action=LOCK`: `text`, `bytes`, `stream`, `file`, `value` or `null`
     
--   With `action=FIRE`: `text`, `bytes`, `stream`, `file` or `value`
+-   With `action=FIRE`: `text`, `bytes`, `stream`, `file`, `value` or `null`
     
 -   With `action=REGISTER`: `pojo`
     
@@ -464,7 +464,7 @@ The response of Consul as the model objects of the Consul client: a List or a Ma
     
 -   With `action=GET_KEYS`: `list`
     
--   With `action=GET_SESSIONS`: `pojo` (`java.util.Optional<java.lang.String>`)
+-   With `action=GET_SESSIONS`: `text` or `unchanged` (`java.lang.String`)
     
 -   With `action=DELETE_KEY`: `unchanged`
     
@@ -498,9 +498,9 @@ The response of Consul as the model objects of the Consul client: a List or a Ma
     
 -   With `action=LIST`: `pojo` or `list`
     
--   With `action=RENEW`: `pojo` (`java.util.Optional<org.kiwiproject.consul.model.session.SessionInfo>`)
+-   With `action=RENEW`: `pojo` or `unchanged` (`org.kiwiproject.consul.model.session.SessionInfo`)
     
--   With `action=GET`: `pojo` (`java.util.Optional<org.kiwiproject.consul.model.query.StoredQuery>`)
+-   With `action=GET`: `pojo` or `unchanged` (`org.kiwiproject.consul.model.query.StoredQuery`)
     
 -   With `action=EXECUTE`: `pojo` (`org.kiwiproject.consul.model.query.QueryResults`)
     

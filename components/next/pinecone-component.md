@@ -311,12 +311,13 @@ Enum values:
 
 
  |  | String |
-| **CamelPineconeIndexId** (producer) Constant: [`INDEX_ID`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#INDEX_ID) | Index Upsert Id. |  | String |
-| **CamelPineconeQueryTopK** (producer) Constant: [`QUERY_TOP_K`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_TOP_K) | Query Top K. |  | Integer |
+| **CamelPineconeIndexId** (producer) Constant: [`INDEX_ID`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#INDEX_ID) | The id of the vector for UPSERT, UPDATE and QUERY\_BY\_ID. Without it, UPSERT generates a random UUID and sets this header to it. |  | String |
+| **CamelPineconeQueryTopK** (producer) Constant: [`QUERY_TOP_K`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_TOP_K) | The number of matches QUERY and QUERY\_BY\_ID return. | 10 | Integer |
 | **CamelPineconeNamespace** (producer) Constant: [`NAMESPACE`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#NAMESPACE) | Namespace for actions (query/upsert/etc). |  | String |
-| **CamelPineconeQueryFilter** (producer) Constant: [`QUERY_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_FILTER) | Query Filter. |  | String |
+| **CamelPineconeQueryFilter** (producer) Constant: [`QUERY_FILTER`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_FILTER) | Query Filter. |  | Struct |
 | **CamelPineconeQueryIncludeValues** (producer) Constant: [`QUERY_INCLUDE_VALUES`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_INCLUDE_VALUES) | Query Include Values. |  | boolean |
-| **CamelPineconeQueryIncludeMetadata** (producer) Constant: [`QUERY_INCLUDE_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_INCLUDE_METADATA) | Query Include Metadata. |  | Struct |
+| **CamelPineconeQueryIncludeMetadata** (producer) Constant: [`QUERY_INCLUDE_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#QUERY_INCLUDE_METADATA) | Query Include Metadata. |  | boolean |
+| **CamelPineconeMetadata** (producer) Constant: [`METADATA`](https://javadoc.io/doc/org.apache.camel/camel-pinecone/latest/org/apache/camel/component/pinecone/PineconeVectorDbHeaders.html#METADATA) | The metadata UPSERT stores with the vector, and the fields of the metadata UPDATE sets. The pinecone:embeddings data type transformer puts the text of the embedding in its text\_segment field, which the pinecone:rag data type transformer reads. |  | Struct |
 
 ## Message Body
 
@@ -326,7 +327,7 @@ The message body at each side of the Pinecone component: _Consumer_ is the body 
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `list` or `null` | 
-By the action in the action option or the CamelPineconeAction header: the vector as a List of Float or a float array for UPSERT, UPDATE and QUERY, with the id in the CamelPineconeIndexId header, and the ids as a List of String for FETCH and DELETE\_BY\_ID. The other actions do not read the body. Another body fails, a List of Double too: the pinecone:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
+By the action in the action option or the CamelPineconeAction header: the vector as a List of numbers, such as the List of Double a JSON array unmarshals to, or a float or double array for UPSERT, UPDATE and QUERY, with the id in the CamelPineconeIndexId header (UPSERT generates one without it), and the ids as a List of String for FETCH and DELETE\_BY\_ID. The other actions do not read the body. Another body fails: the pinecone:embeddings data type transformer builds the vector from the output of langchain4j-embeddings.
 
 -   With `action=UPSERT`: `list`
     
@@ -393,7 +394,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ## Usage
 
-The `action` option, or the `CamelPineconeAction` header, selects the operation. The first route below creates a serverless index. The second route queries the index with a vector, and the `CamelPineconeQueryTopK` header sets how many matches it returns:
+The `action` option, or the `CamelPineconeAction` header, selects the operation. The first route below creates a serverless index. The second route queries the index with a vector, and the `CamelPineconeQueryTopK` header sets how many matches it returns (10 without it):
 
 ```yaml
 - route:
@@ -432,3 +433,11 @@ The `action` option, or the `CamelPineconeAction` header, selects the operation.
         - log:
             message: "${body}"
 ```
+
+The vector of UPSERT, UPDATE and QUERY is the message body: a List of numbers, such as the List of Double a JSON array unmarshals to, or a `float[]` or a `double[]`; each number is converted to a float. Another body fails, and so does a List with an element that is not a number. UPSERT stores the vector under the id in the `CamelPineconeIndexId` header; without the header, it generates a random UUID and sets the header to it.
+
+UPSERT stores the `CamelPineconeMetadata` header, a `com.google.protobuf.Struct`, as the metadata of the vector, and UPDATE sets the fields of that header in the metadata of the vector.
+
+The `pinecone:embeddings` data type transformer turns the embedding of the `CamelLangChain4jEmbeddingsVector` header, which the langchain4j-embeddings component sets, into the vector of the message body, and fails when the header is missing. It puts the text of a LangChain4j `TextSegment` or `String` body in the `text_segment` field of the `CamelPineconeMetadata` header, and keeps the other fields of that header. Without the `CamelPineconeIndexName` and `CamelPineconeIndexId` headers, it sets them to `embeddings` and to a random UUID.
+
+The `pinecone:rag` data type transformer turns the result of a QUERY or QUERY\_BY\_ID into the List of the texts of its matches, read from their `text_segment` metadata, which the query returns when the `CamelPineconeQueryIncludeMetadata` header is `true`.

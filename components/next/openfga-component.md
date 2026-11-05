@@ -584,7 +584,7 @@ For a server started with `--authn-method preshared`, set `apiToken`. For one be
 `sslContextParameters` configures TLS, including presenting a client certificate to a server that requires mutual TLS. A SPIFFE X.509-SVID obtained through `camel-spiffe` works here, which closes the loop: the workload authenticates to the authorization decision point as itself.
 
 > **Note**
-> `useGlobalSslContextParameters` on the component has no effect on `OpenFgaSecurityPolicy`. The policy is a standalone bean and is not bound to a component instance, so set `sslContextParameters` on it explicitly.
+> `useGlobalSslContextParameters` on the component does not reach `OpenFgaSecurityPolicy`, which is a bean rather than an endpoint of the component. Set `useGlobalSslContextParameters`, or `sslContextParameters`, on the policy itself.
 
 ### Timeouts
 
@@ -643,6 +643,71 @@ It applies to `check`, `batchCheck`, `listObjects`, `listRelations` and `listUse
 > The option is split on `,` into its three parts **before** those parts are compiled, so a Simple expression containing a comma — `${header.x.substring(0,3)}`, or a bean call with two arguments — breaks the triple. It cannot be misinterpreted silently: the split yields either the wrong number of parts, or a part that is not a parsable expression — `user:${bean:ids.pick(1,2)},member` splits into three and the first fails to compile with `missing } to close the function` — so the route fails before it carries a message rather than checking something other than what was written. Pre-compute such a value into an exchange property and reference that instead.
 
 `conditionContext` supplies the values that any conditioned relation’s CEL expression is evaluated with, as a map resolved from the registry — `conditionContext=#myContext`. A map rather than an expression on purpose: OpenFGA types every condition parameter in the authorization model (`int`, `bool`, `timestamp`, `ipaddress`), and a map lets you supply the right Java type instead of a string the server would reject.
+
+YAML, like a properties file, hands every value over as a string, the entries of a map included. OpenFGA converts a string for an `int`, `uint`, `double`, `duration`, `timestamp` or `ipaddress` parameter, so those can be written as they are, but it rejects one for a `bool` parameter: give that as `#valueAs(boolean):true`. A `list` or `map` parameter cannot be written inline at all; declare it as a bean of its own and refer to it with `#bean:`:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+Map<String, Object> networkContext = Map.of(
+        "trusted", true,
+        "allowed_regions", List.of("eu", "us"));
+context.getRegistry().bind("networkContext", networkContext);
+
+from("direct:checkFromTrustedNetwork")
+    .to("openfga:check?storeId={{fga.store}}&relation=reader"
+        + "&user=user:${exchangeProperty.CamelKeycloakTokenSubject}"
+        + "&object=document:${header.documentId}&conditionContext=#networkContext");
+```
+
+```yaml
+- beans:
+    - name: allowedRegions
+      type: java.util.ArrayList
+      properties:
+        "0": eu
+        "1": us
+    - name: networkContext
+      type: java.util.LinkedHashMap
+      properties:
+        # a bool parameter needs a boolean: the string "true" is rejected
+        trusted: "#valueAs(boolean):true"
+        # a list parameter needs a list
+        allowed_regions: "#bean:allowedRegions"
+- route:
+    from:
+      uri: direct:checkFromTrustedNetwork
+      steps:
+        - to:
+            uri: openfga:check
+            parameters:
+              storeId: "{{fga.store}}"
+              relation: reader
+              user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+              object: "document:${header.documentId}"
+              conditionContext: "#networkContext"
+```
+
+`OpenFgaSecurityPolicy` also takes the map inline, under the same rules:
+
+```yaml
+- beans:
+    - name: documentReaders
+      type: org.apache.camel.component.openfga.security.OpenFgaSecurityPolicy
+      properties:
+        storeId: "{{fga.store}}"
+        relation: reader
+        user: "user:${exchangeProperty.CamelKeycloakTokenSubject}"
+        object: "document:${header.documentId}"
+        conditionContext:
+          trusted: "#valueAs(boolean):true"
+          max_amount: 100
+```
+
+A value of the wrong type fails the check with an HTTP 400 from OpenFGA, naming the parameter it could not convert. That is an answer rather than an unavailable decision point, so the exchange is refused even when `failOpen` is set.
 
 > **Important**
 > A contextual tuple grants

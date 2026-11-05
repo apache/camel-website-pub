@@ -404,7 +404,7 @@ The camel.rest supports 31 options, which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | `camel.rest.apiComponent` | Sets the name of the Camel component to use as the REST API (such as swagger or openapi) |  | String |
-| `camel.rest.apiContextPath` | Sets a leading API context-path the REST API services will be using. This can be used when using components such as camel-servlet where the deployed web application is deployed using a context-path. |  | String |
+| `camel.rest.apiContextPath` | The path, such as /api-doc, where the REST DSL serves the API documentation of the REST services, as an OpenAPI document. The API documentation is only served when this option is set. This requires camel-openapi-java on the classpath. The document is JSON by default, or YAML when the request path ends with .yaml. The path is relative to contextPath, when that option is set. |  | String |
 | `camel.rest.apiContextRouteId` | Sets the route id to use for the route that services the REST API. The route will by default use an auto assigned route id. |  | String |
 | `camel.rest.apiHost` | To use a specific hostname for the API documentation (such as swagger or openapi) This can be used to override the generated host with this configured hostname |  | String |
 | `camel.rest.apiProperties` | Sets additional options on api level |  | Map |
@@ -515,20 +515,27 @@ The camel.vault.kubernetescm supports 2 options, which are listed below.
 
 ### Camel Hashicorp Vault configurations
 
-The camel.vault.hashicorp supports 9 options, which are listed below.
+The camel.vault.hashicorp supports 16 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| `camel.vault.hashicorp.authentication` | How to log in to hashicorp vault: token (a fixed token), approle (a role ID and a secret ID), kubernetes (the service account token of the pod) or jwt (a JWT, such as a workload identity token). Camel renews the token before it expires, and logs in again when the token can no longer be renewed. | token | String |
+| `camel.vault.hashicorp.authMountPath` | The path the login method is mounted at in hashicorp vault (without auth/), when it is not the default path of the login method: approle, kubernetes or jwt |  | String |
 | `camel.vault.hashicorp.cloud` | Determine if the Hashicorp Vault is deployed on Hashicorp Cloud or not | false | boolean |
 | `camel.vault.hashicorp.host` | Host to access hashicorp vault |  | String |
+| `camel.vault.hashicorp.jwt` | The JWT to log in with, for the jwt and kubernetes logins. For a JWT that is replaced over time, such as a projected service account token, use jwtFile instead. |  | String |
+| `camel.vault.hashicorp.jwtFile` | The file to read the JWT from at every login, for the jwt and kubernetes logins. The kubernetes login reads /var/run/secrets/kubernetes.io/serviceaccount/token when neither jwt nor jwtFile is set. |  | String |
 | `camel.vault.hashicorp.namespace` | If the Hashicorp Vault instance is deployed on Hashicorp Cloud, this field will determine the namespace |  | String |
 | `camel.vault.hashicorp.port` | Port to access hashicorp vault |  | String |
 | `camel.vault.hashicorp.refreshEnabled` | Whether to automatically reload Camel upon secrets being updated in Hashicorp Vault. | false | boolean |
 | `camel.vault.hashicorp.refreshPeriod` | The period (millis) between checking Hashicorp Vault for updated secrets. | 60000 | long |
+| `camel.vault.hashicorp.role` | The hashicorp vault role to log in as, for the kubernetes and jwt logins. The jwt login can leave it out when the login method has a default role. |  | String |
+| `camel.vault.hashicorp.roleId` | The role ID of the AppRole, for the approle login |  | String |
 | `camel.vault.hashicorp.scheme` | Scheme to access hashicorp vault |  | String |
+| `camel.vault.hashicorp.secretId` | The secret ID of the AppRole, for the approle login |  | String |
 | `camel.vault.hashicorp.secrets` | Specify the secret names (or pattern) to check for updates. Multiple secrets can be separated by comma. |  | String |
-| `camel.vault.hashicorp.token` | Token to access hashicorp vault |  | String |
+| `camel.vault.hashicorp.token` | Token to access hashicorp vault, for the token login |  | String |
 
 ### Camel IBM Secrets Manager Vault configurations
 

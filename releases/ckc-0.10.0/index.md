@@ -35,6 +35,22 @@ git checkout camel-kafka-connector-0.10.0
 
 Here is a list of all the issues that have been resolved for this release
 
+[#745](https://github.com/apache/camel-kafka-connector/issues/745)
+
+Add Integration test for Camel-SFTP Kafka Connector
+
+[#744](https://github.com/apache/camel-kafka-connector/issues/744)
+
+Add integration test for Camel-FTPS kafka connector
+
+[#743](https://github.com/apache/camel-kafka-connector/issues/743)
+
+Add Integration test for Camel-FTP kafka connector
+
+[#651](https://github.com/apache/camel-kafka-connector/issues/651)
+
+Add Dataformat documentation
+
 [#629](https://github.com/apache/camel-kafka-connector/issues/629)
 
 Couchbase fails due to incorrect URI format

@@ -1342,9 +1342,10 @@ When sending a JMS message, Camel converts the message body to the following JMS
 | Body Type | JMS Message | Comment |
 | --- | --- | --- |
 | `String` | `jakarta.jms.TextMessage` |  |
+| `CharSequence` | `jakarta.jms.TextMessage` | Other text, such as a `StringBuilder` or a Groovy GString, is converted to `String`. |
 | `org.w3c.dom.Node` | `jakarta.jms.TextMessage` | The DOM will be converted to `String`. |
 | `Map` | `jakarta.jms.MapMessage` |  |
-| `java.io.Serializable` | `jakarta.jms.ObjectMessage` |  |
+| `java.io.Serializable` | `jakarta.jms.ObjectMessage` | Only with `objectMessageEnabled=true`. Otherwise sending fails, and the error names the class of the body. |
 | `byte[]` | `jakarta.jms.BytesMessage` |  |
 | `java.io.File` | `jakarta.jms.BytesMessage` |  |
 | `java.io.Reader` | `jakarta.jms.BytesMessage` |  |

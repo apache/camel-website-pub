@@ -176,9 +176,9 @@ The message body at each side of the OpenShift Deployment Configs component: _Co
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `pojo` (`io.fabric8.openshift.api.model.DeploymentConfig`) | The DeploymentConfig that changed, one message per watch event, with the action (ADDED, MODIFIED, DELETED) in the CamelKubernetesEventAction header. |
-| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesDeploymentName, the labels in CamelKubernetesDeploymentsLabels, the DeploymentConfigSpec in CamelKubernetesDeploymentConfigSpec and the replicas in CamelKubernetesDeploymentReplicas. The list and get operations do not read the namespace header: they use the namespace of the client. |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName (else the namespace option), the name in CamelKubernetesDeploymentName, the labels in CamelKubernetesDeploymentsLabels, the DeploymentConfigSpec in CamelKubernetesDeploymentConfigSpec and the replicas in CamelKubernetesDeploymentReplicas. Without a namespace the list and get operations use the namespace of the client. |
 | **Producer output** | `list`, `pojo`, `null` or `value` | 
-A List of DeploymentConfig for listDeploymentConfigs and listDeploymentConfigsByLabels; the DeploymentConfig for getDeploymentConfig (null when not found), createDeploymentConfig and updateDeploymentConfig; a Boolean for deleteDeploymentConfig, false when not found; for scaleDeploymentConfig the replicas of its status, as an Integer.
+A List of DeploymentConfig for listDeploymentConfigs and listDeploymentConfigsByLabels; the DeploymentConfig for getDeploymentConfig (null when not found), createDeploymentConfig and updateDeploymentConfig; a Boolean for deleteDeploymentConfig, false when not found; for scaleDeploymentConfig the replicas in the spec of the scaled deployment config, as an Integer.
 
 -   With `operation=listDeploymentConfigs`: `list` (`java.util.List<io.fabric8.openshift.api.model.DeploymentConfig>`)
     
@@ -209,7 +209,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 -   `listDeploymentConfigs`
     
--   `listDeploymentsConfigsByLabels`
+-   `listDeploymentConfigsByLabels`
     
 -   `getDeploymentConfig`
     
@@ -221,6 +221,8 @@ The bodies are the ones with the default options. A side that is not listed is n
     
 -   `scaleDeploymentConfig`
     
+
+The operations use the namespace of the `CamelKubernetesNamespaceName` header, or else of the `namespace` option. Without a namespace, `listDeploymentConfigs`, `listDeploymentConfigsByLabels` and `getDeploymentConfig` use the namespace of the Kubernetes client; the other operations require one. `listDeploymentConfigsByLabels` requires the `CamelKubernetesDeploymentsLabels` header. `scaleDeploymentConfig` returns the replicas in the spec of the scaled deployment config.
 
 ## Examples
 

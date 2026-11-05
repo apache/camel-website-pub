@@ -660,6 +660,7 @@ The AWS Simple Queue Service (SQS) component supports the following message head
 | **CamelAwsSqsSequenceNumber** (producer) Constant: [`SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sqs/latest/org/apache/camel/component/aws2/sqs/Sqs2Constants.html#SEQUENCE_NUMBER) | The sequence number for FIFO queues. |  | String |
 | **CamelAwsSqsFailedMessageCount** (sendBatchMessage) Constant: [`FAILED_MESSAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sqs/latest/org/apache/camel/component/aws2/sqs/Sqs2Constants.html#FAILED_MESSAGE_COUNT) | The number of failed messages in a batch send operation. |  | Integer |
 | **CamelAwsSqsSuccessfulMessageCount** (sendBatchMessage) Constant: [`SUCCESSFUL_MESSAGE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sqs/latest/org/apache/camel/component/aws2/sqs/Sqs2Constants.html#SUCCESSFUL_MESSAGE_COUNT) | The number of successful messages in a batch send operation. |  | Integer |
+| **CamelAwsSqsQueueName** (consumer) Constant: [`QUEUE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sqs/latest/org/apache/camel/component/aws2/sqs/Sqs2Constants.html#QUEUE_NAME) | The name of the queue the message was received from. |  | String |
 
 ## Message Body
 

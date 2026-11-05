@@ -254,7 +254,7 @@ The JPA component supports 4 message header(s), which is/are listed below:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelEntityManager** (common) Constant: [`ENTITY_MANAGER`](https://javadoc.io/doc/org.apache.camel/camel-jpa/latest/org/apache/camel/component/jpa/JpaConstants.html#ENTITY_MANAGER) | The JPA EntityManager object. |  | EntityManager |
-| **CamelJpaParameters** (producer) Constant: [`JPA_PARAMETERS_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-jpa/latest/org/apache/camel/component/jpa/JpaConstants.html#JPA_PARAMETERS_HEADER) | Alternative way for passing query parameters as an Exchange header. |  | Map |
+| **CamelJpaParameters** (producer) Constant: [`JPA_PARAMETERS_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-jpa/latest/org/apache/camel/component/jpa/JpaConstants.html#JPA_PARAMETERS_HEADER) | Alternative way for passing query parameters as an Exchange header. The parameter values are used as-is without expression evaluation. |  | Map |
 | **CamelJpaMaximumResults** (producer) Constant: [`JPA_MAXIMUM_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-jpa/latest/org/apache/camel/component/jpa/JpaConstants.html#JPA_MAXIMUM_RESULTS) | Defines the maximum number of results to retrieve on the query; takes precedence over the value set on the endpoint, if any. |  |  |
 | **CamelJpaFirstResult** (producer) Constant: [`JPA_FIRST_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-jpa/latest/org/apache/camel/component/jpa/JpaConstants.html#JPA_FIRST_RESULT) | Defines the position of the first result to retrieve; takes precedence over the value set on the endpoint, if any. |  |  |
 

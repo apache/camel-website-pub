@@ -169,7 +169,7 @@ The message body at each side of the OpenStack Swift component: _Consumer_ is th
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | For create of an object the content: an InputStream, a File, a URL or a Payload of openstack4j; text, bytes or the file of the file consumer fail: convert it to a File or an InputStream first. createUpdateMetadata and deleteMetadata take the metadata as a Map. The containers take a CreateUpdateContainerOptions or ContainerListOptions of openstack4j, or else headers. |
+| **Producer input** | `any` | For create of an object the content: an InputStream, a File, a URL or a Payload of openstack4j, or else a body that converts to an InputStream such as text, bytes or the file of the file consumer. createUpdateMetadata and deleteMetadata take the metadata as a Map. The containers take a CreateUpdateContainerOptions or ContainerListOptions of openstack4j, or else headers. |
 | **Producer output** | `text`, `pojo`, `list`, `map`, `null` or `unchanged` | 
 For objects: the ETag as text after create, the SwiftObject of openstack4j for get (its download() gives the content), a List of them for getAll. For containers: a List of SwiftContainer for get and getAll; create and update keep the body. getMetadata gives a Map of the metadata; delete and the metadata updates keep the body.
 
@@ -231,7 +231,7 @@ If you need more precise container settings, you can create a new object of the 
 
 ### Example
 
-The following route stores each file of the `outbox` folder as an object of the `reports` container. The body must be an `InputStream`, a `File`, a `URL` or a `Payload` of openstack4j, so the route converts the file of the file consumer to a `java.io.File` first. The endpoint is the address of the identity service (Keystone), and the credentials are property placeholders:
+The following route stores each file of the `outbox` folder as an object of the `reports` container. The body is the content of the object: an `InputStream`, a `File`, a `URL` or a `Payload` of openstack4j, or else a body that converts to an `InputStream`, such as text, bytes or the file of the file consumer. The endpoint is the address of the identity service (Keystone), and the credentials are property placeholders:
 
 ```yaml
 - route:
@@ -248,8 +248,6 @@ The following route stores each file of the `outbox` folder as an object of the 
             expression:
               simple:
                 expression: "${header.CamelFileName}"
-        - convertBodyTo:
-            type: java.io.File
         - to:
             uri: openstack-swift:http://controller:5000/v3
             parameters:

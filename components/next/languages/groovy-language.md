@@ -74,6 +74,10 @@ bar = "baz"
 result = body * 2 + 1
 ```
 
+### Text with placeholders (GString)
+
+In Groovy, a double-quoted string with placeholders, such as `"Hello ${body}"` or `"Hello $name"`, is a GString, not a `java.lang.String`. When a script returns a GString, Camel gives it as a `String`. So the body, header or variable is text: it is equal to a `String`, and components such as JMS send it as text.
+
 ### Customizing Groovy Shell
 
 For very special use-cases you may need to use a custom `GroovyShell` instance in your Groovy expressions. To provide the custom `GroovyShell`, add an implementation of the `org.apache.camel.language.groovy.GroovyShellFactory` SPI interface to the Camel registry.

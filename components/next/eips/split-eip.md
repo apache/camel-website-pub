@@ -1512,6 +1512,8 @@ The reason is that we have shared the unit of work, so the split message will re
 
 The error handler will yet again kick in, as the `Exchange` has been marked as rollback. No redelivery attempts are performed (as it was marked for rollback) and the `Exchange` will be moved into the dead letter queue.
 
+With a shared unit of work, the on completions of the message (such as the consumer committing or rolling back the file) run when the Splitter is done, with its outcome. A split message sent to an asynchronous endpoint such as `seda` hands over only the on completions that the split message added itself; use `waitForTaskToComplete=Always` on the endpoint to make the split wait for it.
+
 ## See Also
 
 Because [Multicast](multicast-eip.md) EIP is a baseline for the [Recipient List](recipientList-eip.md) and Split EIPs, then you can find more information in those EIPs about features that are also available with Split EIP.

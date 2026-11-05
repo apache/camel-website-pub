@@ -160,7 +160,7 @@ For example, the body is an order as a Map, and the route reads the file of its 
 
 ```java
 from("direct:order")
-  .pollEnrich().simple("file:customers?fileName=${body[customer]}.json&noop=true")
+  .pollEnrich().simple("file:customers?fileName=${body[customer]}.json&noop=true&idempotent=false")
     .timeout(5000).variableReceive("customer")
   .log("Order ${body[orderId]} for customer ${variable.customer}");
 ```
@@ -169,7 +169,7 @@ from("direct:order")
 <route>
   <from uri="direct:order"/>
   <pollEnrich timeout="5000" variableReceive="customer">
-    <simple>file:customers?fileName=${body[customer]}.json&amp;noop=true</simple>
+    <simple>file:customers?fileName=${body[customer]}.json&amp;noop=true&amp;idempotent=false</simple>
   </pollEnrich>
   <log message="Order ${body[orderId]} for customer ${variable.customer}"/>
 </route>
@@ -183,14 +183,14 @@ from("direct:order")
         - pollEnrich:
             expression:
               simple:
-                expression: "file:customers?fileName=${body[customer]}.json&noop=true"
+                expression: "file:customers?fileName=${body[customer]}.json&noop=true&idempotent=false"
             timeout: 5000
             variableReceive: customer
         - log:
             message: "Order ${body[orderId]} for customer ${variable.customer}"
 ```
 
-`noop=true` leaves the customer file where it is: without it, the file is moved into `customers/.camel` once it was read, and the next order of the same customer finds no file. When no file is found within the timeout, the variable is `null`. The variable holds the content of the file as text: to read its fields, unmarshal it, such as `unmarshal` with `json` and both `variableSend` and `variableReceive` set to `customer`, and then `${variable.customer[name]}`.
+`noop=true` leaves the customer file where it is: without it, the file is moved into `customers/.camel` once it was read. `idempotent=false` lets the file be read again: `noop=true` alone turns on `idempotent`, so the endpoint remembers each file it has read and skips it the next time. Both options are needed. Otherwise, the next order of the same customer finds no file. The timeout ends the wait when there is no file: without a timeout, `pollEnrich` waits until the file is there, as the default timeout is `-1`. When no file is found within the timeout, the variable is `null`. The variable holds the content of the file as text: to read its fields, unmarshal it, such as `unmarshal` with `json` and both `variableSend` and `variableReceive` set to `customer`, and then `${variable.customer[name]}`.
 
 Or to `pollEnrich` from an endpoint that uses a header to indicate a SEDA queue name:
 
@@ -321,7 +321,7 @@ rest("/report")
     .to("direct:report");
 
 from("direct:report")
-  .pollEnrich("aws-s3:xavier-dev?amazonS3Client=#s3client&amp;deleteAfterRead=false&amp;fileName=report-file.pdf");
+  .pollEnrich("aws2-s3:xavier-dev?amazonS3Client=#s3client&deleteAfterRead=false&fileName=report-file.pdf", 5000);
 ```
 
 ```xml
@@ -333,8 +333,8 @@ from("direct:report")
 
 <route>
   <from uri="direct:report"/>
-    <pollEnrich>
-        <constant>aws-s3:xavier-dev?amazonS3Client=#s3client&amp;deleteAfterRead=false&amp;fileName=report-file.pdf</constant>
+    <pollEnrich timeout="5000">
+        <constant>aws2-s3:xavier-dev?amazonS3Client=#s3client&amp;deleteAfterRead=false&amp;fileName=report-file.pdf</constant>
     </pollEnrich>
 </route>
 ```
@@ -354,8 +354,11 @@ from("direct:report")
         - pollEnrich:
             expression:
               constant:
-                expression: "aws-s3:xavier-dev?amazonS3Client=#s3client&deleteAfterRead=false&fileName=report-file.pdf"
+                expression: "aws2-s3:xavier-dev?amazonS3Client=#s3client&deleteAfterRead=false&fileName=report-file.pdf"
+            timeout: 5000
 ```
+
+The timeout (5000 milliseconds) ends the wait when the file is not in the bucket; without a timeout, `pollEnrich` waits until it is there.
 
 Notice that the enriched endpoint is a constant, however, Camel also supports dynamic endpoints which is covered next.
 

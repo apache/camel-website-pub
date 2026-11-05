@@ -123,7 +123,7 @@ The message body at each side of the OpenShift Build Config component: _Consumer
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesBuildConfigName and the labels in CamelKubernetesBuildConfigsLabels. listBuildConfigs does not read the namespace header: it lists the build configs of all namespaces. |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName (else the namespace option), the name in CamelKubernetesBuildConfigName and the labels in CamelKubernetesBuildConfigsLabels. Without a namespace the list operations list the build configs of all namespaces. |
 | **Producer output** | `list`, `pojo` or `null` | 
 A List of BuildConfig for listBuildConfigs and listBuildConfigsByLabels; the BuildConfig for getBuildConfig (null when not found).
 
@@ -152,6 +152,8 @@ The bodies are the ones with the default options. A side that is not listed is n
     
 -   `getBuildConfig`
     
+
+The operations use the namespace of the `CamelKubernetesNamespaceName` header, or else of the `namespace` option. Without a namespace, `listBuildConfigs` and `listBuildConfigsByLabels` list the build configs of all namespaces; `getBuildConfig` requires one. `listBuildConfigsByLabels` requires the `CamelKubernetesBuildConfigsLabels` header.
 
 ## Examples
 
@@ -197,7 +199,7 @@ from("direct:list")
 
 This operation returns a list of builds from your Openshift cluster
 
--   `listBuildsByLabels`: this operation lists the build configs by labels on an Openshift cluster
+-   `listBuildConfigsByLabels`: this operation lists the build configs by labels on an Openshift cluster
     
 
 _Java-only: sets a Map header for label selection_

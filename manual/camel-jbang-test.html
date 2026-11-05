@@ -16,7 +16,7 @@ run.D=citrus.camel.jbang.dump.integration.output=true</code></pre> </div> </div>
         kafka: {}</code></pre> </div> </div> <div class="paragraph"> <p>Connection settings are exposed as test variables (<code>CITRUS_CAMEL_INFRA_SERVICE_&lt;NAME&gt;_&lt;PROP&gt;</code> or <code>CITRUS_TESTCONTAINERS_&lt;NAME&gt;_&lt;PROP&gt;</code>) for use in <code>application.properties</code>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">camel.database.url=${CITRUS_CAMEL_INFRA_POSTGRES_SERVICE_ADDRESS}
 camel.kafka.bootstrapServers=${CITRUS_TESTCONTAINERS_KAFKA_BOOTSTRAP_SERVERS}</code></pre> </div> </div> <div class="paragraph"> <p>See <a href="https://citrusframework.org/citrus/reference/html/#camel-infra">Camel infra</a> and <a href="https://citrusframework.org/citrus/reference/html/#testcontainers">Testcontainers</a> in the Citrus docs.</p> </div> </div> <div class="sect2"> <h3 id="_running_the_camel_integration"><a class="anchor" href="#_running_the_camel_integration"></a>Running the Camel integration</h3> <div class="paragraph"> <p>Launch a Camel integration as a separate process with test-specific configuration:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">actions:
   - camel:
-      jbang:
+      cli:
         run:
           integration:
             file: "../route.yaml"

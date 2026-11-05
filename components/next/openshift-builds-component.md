@@ -123,7 +123,7 @@ The message body at each side of the OpenShift Builds component: _Consumer_ is t
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName, the name in CamelKubernetesBuildName and the labels in CamelKubernetesBuildsLabels. listBuilds does not read the namespace header: it lists the builds of all namespaces. |
+| **Producer input** | `any` | Not used: the operation (the operation option, or else the CamelKubernetesOperation header) takes its input from headers: the namespace in CamelKubernetesNamespaceName (else the namespace option), the name in CamelKubernetesBuildName and the labels in CamelKubernetesBuildsLabels. Without a namespace the list operations list the builds of all namespaces. |
 | **Producer output** | `list`, `pojo` or `null` | 
 A List of Build for listBuilds and listBuildsByLabels; the Build for getBuild (null when not found).
 
@@ -152,6 +152,8 @@ The bodies are the ones with the default options. A side that is not listed is n
     
 -   `getBuild`
     
+
+The operations use the namespace of the `CamelKubernetesNamespaceName` header, or else of the `namespace` option. Without a namespace, `listBuilds` and `listBuildsByLabels` list the builds of all namespaces; `getBuild` requires one. `listBuildsByLabels` requires the `CamelKubernetesBuildsLabels` header.
 
 ## Examples
 

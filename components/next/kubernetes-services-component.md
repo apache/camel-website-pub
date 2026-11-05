@@ -211,6 +211,8 @@ The bodies are the ones with the default options. A side that is not listed is n
     
 -   `createService`
     
+-   `updateService`
+    
 -   `deleteService`
     
 

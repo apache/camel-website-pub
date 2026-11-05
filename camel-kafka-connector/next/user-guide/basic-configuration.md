@@ -7,8 +7,8 @@ For a Sink connector the basic options are:
    
 | Name | Description | Default | Priority |
 | --- | --- | --- | --- |
-| camel.sink.marshal | The camel dataformat name to use to marshal data to the destination | null | HIGH |
-| camel.sink.unmarshal | The camel dataformat name to use to unmarshal data from the topic | null | HIGH |
+| camel.sink.marshal | The camel dataformat name to use to marshal data to the destination, see [Data formats](data-formats.md) | null | HIGH |
+| camel.sink.unmarshal | The camel dataformat name to use to unmarshal data from the topic, see [Data formats](data-formats.md) | null | HIGH |
 | camel.sink.contentLogLevel | Log level for the record’s content. Valid values: TRACE, DEBUG, INFO, WARN, ERROR, OFF. | OFF | HIGH |
 | camel.beans.aggregate | A reference to an aggregate bean, in the form of #class: | null | MEDIUM |
 | camel.aggregation.size | The size of the aggregation, to be used in combination with camel.beans.aggregate | 10 | MEDIUM |
@@ -17,6 +17,7 @@ For a Sink connector the basic options are:
 | camel.error.handler.max.redeliveries | The maximum redeliveries to be use in case of Default Error Handler | 0 | MEDIUM |
 | camel.error.handler.redelivery.delay | The initial redelivery delay in milliseconds in case of Default Error Handler | 1000L | MEDIUM |
 | camel.remove.headers.pattern | The pattern of the headers we want to exclude from the exchange | null | MEDIUM |
+| camel.connector.dumpRoutes | Whether to log the Camel routes of the task as XML when it starts. Camel resolves property placeholders in the dump, so it can contain configuration values: keep it disabled in production. | false | LOW |
 | camel.idempotency.enabled | If idempotency must be enabled or not | false | LOW |
 | camel.idempotency.repository.type | The idempotent repository type to use, possible values are memory and kafka | memory | LOW |
 | camel.idempotency.expression.type | How the idempotency will be evaluated: possible values are body and header | body | LOW |
@@ -26,14 +27,15 @@ For a Sink connector the basic options are:
 | camel.idempotency.kafka.bootstrap.servers | A comma-separated list of host and port pairs that are the addresses of the Kafka brokers where the idempotent repository should live | localhost:9092 | LOW |
 | camel.idempotency.kafka.max.cache.size | Sets the maximum size of the local key cache | 1000 | LOW |
 | camel.idempotency.kafka.poll.duration.ms | Sets the poll duration (in milliseconds) of the Kafka consumer | 100 | LOW |
+| camel.idempotency.kafka.client.<property> | A Kafka client property (for example security.protocol, sasl.jaas.config or ssl.truststore.location) passed, with the prefix removed, to the consumer and the producer of the Kafka idempotent repository, see [Idempotency](idempotency.md) |  | LOW |
 
 For a Source connector the basic options are:
 
    
 | Name | Description | Default | Priority |
 | --- | --- | --- | --- |
-| camel.source.marshal | The camel dataformat name to use to marshal data to the destination | null | HIGH |
-| camel.source.unmarshal | The camel dataformat name to use to unmarshal data from the topic | null | HIGH |
+| camel.source.marshal | The camel dataformat name to use to marshal data to the topic, see [Data formats](data-formats.md) | null | HIGH |
+| camel.source.unmarshal | The camel dataformat name to use to unmarshal data from the source, see [Data formats](data-formats.md) | null | HIGH |
 | camel.source.contentLogLevel | Log level for the record’s content. Valid values: TRACE, DEBUG, INFO, WARN, ERROR, OFF. | OFF | HIGH |
 | camel.source.maxBatchPollSize | The max number of messages retrieved in a single poll() | 1000L | MEDIUM |
 | camel.source.maxPollDuration | The maximum time in milliseconds spent in a single call to poll() | 1000L | MEDIUM |
@@ -48,6 +50,7 @@ For a Source connector the basic options are:
 | camel.error.handler.max.redeliveries | The maximum redeliveries to be use in case of Default Error Handler | 0 | MEDIUM |
 | camel.error.handler.redelivery.delay | The initial redelivery delay in milliseconds in case of Default Error Handler | 1000L | MEDIUM |
 | camel.remove.headers.pattern | The pattern of the headers we want to exclude from the exchange | null | MEDIUM |
+| camel.connector.dumpRoutes | Whether to log the Camel routes of the task as XML when it starts. Camel resolves property placeholders in the dump, so it can contain configuration values: keep it disabled in production. | false | LOW |
 | camel.idempotency.enabled | If idempotency must be enabled or not | false | LOW |
 | camel.idempotency.repository.type | The idempotent repository type to use, possible values are memory and kafka | memory | LOW |
 | camel.idempotency.expression.type | How the idempotency will be evaluated: possible values are body and header | body | LOW |
@@ -57,9 +60,103 @@ For a Source connector the basic options are:
 | camel.idempotency.kafka.bootstrap.servers | A comma-separated list of host and port pairs that are the addresses of the Kafka brokers where the idempotent repository should live | localhost:9092 | LOW |
 | camel.idempotency.kafka.max.cache.size | Sets the maximum size of the local key cache | 1000 | LOW |
 | camel.idempotency.kafka.poll.duration.ms | Sets the poll duration (in milliseconds) of the Kafka consumer | 100 | LOW |
+| camel.idempotency.kafka.client.<property> | A Kafka client property (for example security.protocol, sasl.jaas.config or ssl.truststore.location) passed, with the prefix removed, to the consumer and the producer of the Kafka idempotent repository, see [Idempotency](idempotency.md) |  | LOW |
 
 For more options related to single connector you can have a look at [Connectors list](../reference/index.md).
 
+## Source Record Values
+
+A source connector uses the body of each Camel message as the value of the Kafka record. Text, numbers and booleans keep their type. Binary content and stream bodies become a `byte[]` value with a `BYTES` schema. Stream bodies are common: with stream caching, which Camel enables by default, the output of a `marshal` step (many Kamelets end with one, for example to produce JSON) is a stream.
+
+To write these bytes to the topic unchanged, configure the connector with:
+
+```properties
+value.converter=org.apache.kafka.connect.converters.ByteArrayConverter
+```
+
+The `StringConverter` used in the generated example configurations writes a `byte[]` value as a Java object reference (`[B@…​`). If you need the value as a string, for example for JSON produced by a Kamelet, convert it first with the `CamelTypeConverterTransform` SMT:
+
+```properties
+transforms=toString
+transforms.toString.type=org.apache.camel.kafkaconnector.transforms.CamelTypeConverterTransform$Value
+transforms.toString.target.type=java.lang.String
+```
+
 ## Message Level Headers
 
+A sink connector sets these headers on each Camel message it sends:
+
+ 
+| Header | Value |
+| --- | --- |
+| camel.kafka.connector.record.key | The key of the record |
+| camel.kafka.connector.record.topic | The topic of the record |
+| camel.kafka.connector.record.partition | The partition of the record, as an `Integer` |
+| camel.kafka.connector.record.offset | The offset of the record, as a `Long` |
+| camel.kafka.connector.record.timestamp | The timestamp of the record in milliseconds, as a `Long`, when the record has one |
+
+The topic, partition, offset and timestamp are set after the record headers described below are mapped, so a `CamelHeader.` record header cannot replace them. The topic is the one the record has when it reaches the connector, after any SMT that changes it. Header names that contain dots are written in brackets in the Camel Simple language. For example, `camel-file-kafka-connector` can write each record to its own file, named after the record’s position in Kafka:
+
+```properties
+camel.sink.endpoint.fileName=${header[camel.kafka.connector.record.topic]}-${header[camel.kafka.connector.record.partition]}-${header[camel.kafka.connector.record.offset]}.txt
+```
+
 Certain sink components offer additional configuration and adjustment of behavior by setting specific headers on the message sent via Kafka. For example the file sink connector allows the user to set the file name either via the configuration property or via the header `CamelHeader.CamelFileName`. This is usually noted on the connector documentation, but as a rule of thumb, users are advised to also check the Camel components documentation to verify what message headers are available. If they are available, to configure them directly from your Kafka producer, you can append them with the string `CamelHeader.` (i.e.: `CamelHeader.CamelFileName`, `CamelHeader.CamelFilePath`, etc) and include them on the message headers from Kafka.
+
+## Referencing classes and beans in option values
+
+Some options take an object rather than a text value, for example an exception handler, a data source, the TLS settings of an endpoint or an aggregation strategy. For these options the value has to tell Camel how to get the object, with the reference syntax of the Camel [property binding](../../../manual/property-binding.md). A plain class name is only a string: Camel cannot convert it to the type of the option, and the connector task fails to start.
+
+ 
+| Value | Meaning |
+| --- | --- |
+| `#class:com.example.MyHandler` | A new instance of the class, created with its public no-argument constructor. If the class implements `org.apache.camel.CamelContextAware`, the `CamelContext` is set on the new instance. |
+| `#class:com.example.MyHandler('my-prefix', 5)` | A new instance of the class, created with the constructor that matches the arguments. Text arguments are quoted with single quotes. |
+| `#class:com.example.MyHandler#create` | The object returned by the public static factory method `create` of the class. Arguments go in parentheses, as in `#class:com.example.MyHandler#create('my-prefix')`. |
+| `#bean:myHandler` | The bean registered under the name `myHandler`, for example one declared with `camel.beans.myHandler`. |
+| `#type:com.example.MyHandler` | The only bean of that type in the registry. The task fails to start when there is no such bean, or more than one. |
+
+Camel supports a few more forms, such as `#property:` and `#autowired`, described in the property binding documentation. The classes you reference must be on the classpath of the connector: put their jar in the connector’s directory under the Kafka Connect `plugin.path`.
+
+References can be used in:
+
+-   the `camel.source.endpoint.*` and `camel.sink.endpoint.*` options of the component-based connectors, such as `camel-file-kafka-connector`, `camel-https-kafka-connector` or `camel-jdbc-kafka-connector`, and in the query parameters of `camel.source.url` and `camel.sink.url`;
+    
+-   the component options `camel.component.<scheme>.<option>`, for example `camel.component.jdbc.dataSource=#class:org.postgresql.ds.PGSimpleDataSource`, where `camel.component.jdbc.dataSource.url=…​` then sets a property of the new data source;
+    
+-   the bean definitions: `camel.beans.<name>` creates an object and registers it under `<name>`, and `camel.beans.<name>.<property>` sets one of its properties, with a plain value or with a reference. This is how `camel.beans.aggregate` sets the aggregation strategy.
+    
+
+The Kamelet-based connectors, the ones configured with `camel.kamelet.<kamelet name>.*` options, build their endpoint from the Kamelet and do not read `camel.source.endpoint.*` or `camel.sink.endpoint.*`. The `camel.component.*` and `camel.beans.*` properties still apply to them.
+
+For example, a custom exception handler for `camel-file-kafka-connector` needs the `#class:` prefix in front of the class name:
+
+```properties
+# wrong: the value is a plain string and the task fails to start
+camel.source.endpoint.onCompletionExceptionHandler=org.apache.camel.kafkaconnector.CustomLoggingExceptionHandler
+# right: Camel creates an instance of the class
+camel.source.endpoint.onCompletionExceptionHandler=#class:org.apache.camel.kafkaconnector.CustomLoggingExceptionHandler
+```
+
+With this form the class needs a public no-argument constructor. A handler that needs the `CamelContext` can implement `org.apache.camel.CamelContextAware`, and Camel sets the context on the new instance.
+
+To share an object between options, or to set its properties, declare it as a bean and reference it with `#bean:`. This `camel-https-kafka-connector` configuration builds the TLS settings of the endpoint out of three beans:
+
+```properties
+camel.beans.ksp=#class:org.apache.camel.support.jsse.KeyStoreParameters
+camel.beans.ksp.resource=file:/opt/kafka/ssl/truststore.jks
+camel.beans.ksp.password=<truststore password>
+camel.beans.tmp=#class:org.apache.camel.support.jsse.TrustManagersParameters
+camel.beans.tmp.keyStore=#bean:ksp
+camel.beans.scp=#class:org.apache.camel.support.jsse.SSLContextParameters
+camel.beans.scp.trustManagers=#bean:tmp
+camel.sink.endpoint.sslContextParameters=#bean:scp
+```
+
+In YAML, for example in the `config` of a Strimzi `KafkaConnector` resource, quote the values that start with `#`: YAML reads an unquoted hash sign that follows a space as the start of a comment.
+
+```yaml
+camel.source.endpoint.onCompletionExceptionHandler: '#class:org.apache.camel.kafkaconnector.CustomLoggingExceptionHandler'
+```
+
+These references create objects from classes named in the configuration, so whoever can write a connector configuration can run code in the Kafka Connect worker. See the [Security Model](../security-model.md).

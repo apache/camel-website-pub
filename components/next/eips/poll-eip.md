@@ -172,10 +172,10 @@ You can also use `poll` with [Rest DSL](../../../manual/rest-dsl.md) to, for exa
 ```java
 rest("/report")
   .get("/{id}/payload")
-    .to*("direct:payload");
+    .to("direct:payload");
 
 from("direct:payload")
-  .poll("aws-s3:xavier-dev?amazonS3Client=#s3client&amp;deleteAfterRead=false&amp;fileName=report-file.pdf")
+  .poll("aws2-s3:xavier-dev?amazonS3Client=#s3client&deleteAfterRead=false&fileName=report-file.pdf");
 ```
 
 ```xml
@@ -187,7 +187,7 @@ from("direct:payload")
 
 <route>
     <from uri="direct:payload"/>
-    <poll uri="aws-s3:xavier-dev?amazonS3Client=#s3client&amp;deleteAfterRead=false&amp;fileName=report-file.pdf"/>
+    <poll uri="aws2-s3:xavier-dev?amazonS3Client=#s3client&amp;deleteAfterRead=false&amp;fileName=report-file.pdf"/>
 </route>
 ```
 
@@ -203,7 +203,7 @@ from("direct:payload")
       uri: direct:payload
       steps:
         - poll:
-            uri: aws-s3:xavier-dev
+            uri: aws2-s3:xavier-dev
             parameters:
               amazonS3Client: "#s3client"
               deleteAfterRead: false

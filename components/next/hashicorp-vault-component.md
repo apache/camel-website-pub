@@ -119,7 +119,33 @@ Enum values:
 | **secretPath** (producer) | Hashicorp Vault instance secret Path to be used. |  | String |
 | **vaultTemplate** (producer) | **Autowired** Instance of Vault template. |  | VaultTemplate |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **token** (security) | Token to be used. |  | String |
+| **authentication** (security) | 
+
+How to log in to HashiCorp Vault: token (a fixed token), approle (a role ID and a secret ID), kubernetes (the service account token of the pod) or jwt (a JWT, such as a workload identity token). The token is renewed before it expires, and the endpoint logs in again when the token can no longer be renewed.
+
+Enum values:
+
+-   token
+    
+-   approle
+    
+-   kubernetes
+    
+-   jwt
+    
+
+
+
+
+
+ | token | String |
+| **authMountPath** (security) | The path the login method is mounted at in HashiCorp Vault (without auth/), when it is not the default path of the login method: approle, kubernetes or jwt. |  | String |
+| **jwt** (security) | The JWT to log in with, for the jwt and kubernetes logins. For a JWT that is replaced over time, such as a projected service account token, use jwtFile instead. |  | String |
+| **jwtFile** (security) | The file to read the JWT from at every login, for the jwt and kubernetes logins. The kubernetes login reads /var/run/secrets/kubernetes.io/serviceaccount/token when neither jwt nor jwtFile is set. |  | String |
+| **role** (security) | The HashiCorp Vault role to log in as, for the kubernetes and jwt logins. The jwt login can leave it out when the login method has a default role. |  | String |
+| **roleId** (security) | The role ID of the AppRole, for the approle login. |  | String |
+| **secretId** (security) | The secret ID of the AppRole, for the approle login. |  | String |
+| **token** (security) | Token to be used, for the token login. |  | String |
 
 ## Message Headers
 
@@ -194,6 +220,37 @@ When using a HashiCorp Vault Cloud instance, in addition to the standard paramet
     
 -   `namespace`:: The namespace of your secrets engine. The operations work on `<namespace>/<secretsEngine>`; without a namespace they work on the secrets engine itself, as on-premise.
     
+
+### Logging in to HashiCorp Vault
+
+The `authentication` option chooses how the component logs in to HashiCorp Vault:
+
+ 
+| Login | Settings |
+| --- | --- |
+| `token` (the default) | `token`: a token created in Vault beforehand. |
+| `approle` | `roleId` and `secretId`: the role ID and a secret ID of an AppRole. |
+| `kubernetes` | `role`: the Vault role of the application. The login sends the service account token of the pod, which it reads from `/var/run/secrets/kubernetes.io/serviceaccount/token`, or from the file set with `jwtFile`. |
+| `jwt` | `jwt`, or `jwtFile` to read the JWT from a file. `role` is the Vault role to log in as, which can be left out when the JWT login of Vault has a default role. |
+
+When the login method is not mounted at its default path in Vault (`approle`, `kubernetes` or `jwt`), set the path with `authMountPath`, without `auth/`.
+
+Camel renews the token before it expires, and logs in again when the token can no longer be renewed, such as when it reached its maximum time to live. A JWT read from a file is read again at every login, so a token that the platform replaces in the file, such as a projected service account token, is picked up. When the endpoint stops, Camel revokes the token of its login. A token given for the token login is renewed when it is renewable, but never revoked.
+
+On HashiCorp Cloud (`cloud=true` and a `namespace`), the login is made in the namespace, as are the renewal and the revocation of the token.
+
+For example, an endpoint that logs in with an AppRole, whose role ID and secret ID are in environment variables:
+
+```java
+from("direct:start")
+    .to("hashicorp-vault:secret?operation=getSecret&host=vault.example.com&authentication=approle"
+        + "&roleId={{env:VAULT_ROLE_ID}}&secretId=RAW({{env:VAULT_SECRET_ID}})")
+    .log("${body}");
+```
+
+### OpenBao
+
+The component, the properties function and the secret refresh task also work with [OpenBao](https://openbao.org/), the open source fork of HashiCorp Vault, which keeps the API of Vault. OpenBao has the token, AppRole, Kubernetes and JWT logins built in.
 
 ## Examples
 
@@ -428,11 +485,23 @@ camel.vault.hashicorp.namespace = namespace
 
 This will make the Properties function works even in the HashiCorp Cloud deployment option.
 
+The properties function logs in with a token by default. To log in another way, set the options of [Logging in to HashiCorp Vault](#_logging_in_to_hashicorp_vault) with the `camel.vault.hashicorp` prefix. For example, an application in a Kubernetes pod logs in with the service account of the pod:
+
+```properties
+camel.vault.hashicorp.host = vault.example.com
+camel.vault.hashicorp.port = 8200
+camel.vault.hashicorp.scheme = https
+camel.vault.hashicorp.authentication = kubernetes
+camel.vault.hashicorp.role = my-application
+```
+
+The properties function also reads these options from the environment variables `CAMEL_HASHICORP_VAULT_AUTHENTICATION`, `CAMEL_HASHICORP_VAULT_ROLE_ID`, `CAMEL_HASHICORP_VAULT_SECRET_ID`, `CAMEL_HASHICORP_VAULT_ROLE`, `CAMEL_HASHICORP_VAULT_JWT`, `CAMEL_HASHICORP_VAULT_JWT_FILE` and `CAMEL_HASHICORP_VAULT_AUTH_MOUNT_PATH`. When any of the `CAMEL_HASHICORP_VAULT_*` environment variables is set, the properties function takes all its settings from the environment variables, and none from the `camel.vault.hashicorp` configuration. The secret refresh task logs in the same way as the properties function.
+
 > **Note**
 > if you’re running the application on a Kubernetes based cloud platform, you can initialize the environment variables from a Secret or Configmap to enhance security. You can also enhance security by [setting a Secret property placeholder](../../manual/using-propertyplaceholder.html#_resolving_property_placeholders_on_cloud) which will be initialized at application runtime only.
 
 > **Note**
-> `camel.vault.hashicorp` configuration only applies to the HashiCorp Vault properties function (E.g when resolving properties). When using the `operation` option to create, get, list secrets etc., you should provide the `host`, `port`, `scheme` (if required) & `token` options.
+> `camel.vault.hashicorp` configuration only applies to the HashiCorp Vault properties function (E.g when resolving properties). When using the `operation` option to create, get, list secrets etc., you should provide the `host`, `port`, `scheme` (if required) and the options of the login, such as `token`.
 
 At this point, you’ll be able to reference a property in the following way:
 

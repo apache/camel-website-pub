@@ -50,7 +50,7 @@ CxfEndpoint soapMtomEnabledServerPayloadModeEndpoint() {
     &lt;constructor-arg value="write"/&gt;
 &lt;/bean&gt;
 
-&lt;cxf:cxfEndpoint id="serviceEndpoint" address="http://localhost:${CXFTestSupport.port2}/LoggingInterceptorInMessageModeTest/helloworld"
+&lt;cxf:cxfEndpoint id="serviceEndpoint" address="http://localhost:${LoggingInterceptorInMessageModeTest.port2}/LoggingInterceptorInMessageModeTest/helloworld"
     serviceClass="org.apache.camel.component.cxf.HelloService"&gt;
     &lt;cxf:outInterceptors&gt;
         &lt;ref bean="loggingOutInterceptor"/&gt;

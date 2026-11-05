@@ -40,9 +40,9 @@ The starter supports 21 options, which are listed below.
 | camel.component.neo4j.min-score | Minimum score for Vector Similarity search |  | Double |
 | camel.component.neo4j.operation | The operation to perform. The CamelNeo4jOperation header, when set, wins over this option. |  | Neo4Operation |
 | camel.component.neo4j.password | Basic authentication database password |  | String |
-| camel.component.neo4j.query | Cypher Query |  | String |
 | camel.component.neo4j.realm | Basic authentication database realm |  | String |
 | camel.component.neo4j.similarity-function | Similarity Function of Vector Index | cosine | Neo4jSimilarityFunction |
 | camel.component.neo4j.token | Bearer authentication database realm |  | String |
 | camel.component.neo4j.username | Basic authentication database user |  | String |
 | camel.component.neo4j.vector-index-name | Vector Index Name |  | String |
+| camel.component.neo4j.query | Cypher Query. Deprecation note: Not used: RETRIEVE\_NODES\_AND\_UPDATE\_WITH\_CYPHER\_QUERY and ADD\_OR\_DELETE\_NODE\_WITH\_CYPHER\_QUERY take the Cypher query from the message body |  | String |

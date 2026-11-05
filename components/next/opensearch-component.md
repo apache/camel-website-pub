@@ -158,6 +158,7 @@ Enum values:
 | **documentClass** (advanced) | The class to use when deserializing the documents. | ObjectNode | Class |
 | **enableSniffer** (advanced) | Enable automatically discover nodes from a running OpenSearch cluster. If this option is used in conjunction with Spring Boot, then it’s managed by the Spring Boot configuration (see: Disable Sniffer in Spring Boot). | false | boolean |
 | **hostnameVerifier** (advanced) | The class to use as HostnameVerifier. By default there is no HostnameVerifier. |  | HostnameVerifier |
+| **openSearchClient** (advanced) | **Autowired** To use a custom configured OpenSearchClient instance for this endpoint. This takes precedence over the component’s OpenSearchClient and RestClient options. The application is responsible for closing the client. |  | OpenSearchClient |
 | **sniffAfterFailureDelay** (advanced) | The delay of a sniff execution scheduled after a failure (in milliseconds). | 60000 | int |
 | **snifferInterval** (advanced) | The interval between consecutive ordinary sniff executions in milliseconds. Will be honoured when sniffOnFailure is disabled or when there are no failures between consecutive sniff executions. | 300000 | int |
 | **certificatePath** (security) | The certificate that can be used to access the ES Cluster. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
@@ -333,6 +334,23 @@ opensearchComponent.setPassword("secure!!");
 
 camelContext.addComponent("opensearch", opensearchComponent);
 ```
+
+### Custom clients per endpoint
+
+Use the `openSearchClient` endpoint option to reference an `org.opensearch.client.opensearch.OpenSearchClient` in the Camel registry. Each endpoint can use a different client, allowing a single route to connect to different OpenSearch services with their own authentication and transport settings.
+
+```java
+camelContext.getRegistry().bind("firstClient", firstClient);
+camelContext.getRegistry().bind("secondClient", secondClient);
+
+from("direct:ping")
+    .to("opensearch:first?operation=Ping&openSearchClient=#bean:firstClient")
+    .to("opensearch:second?operation=Ping&openSearchClient=#bean:secondClient");
+```
+
+The endpoint client takes precedence over the component’s `openSearchClient` and `client` options. Without an endpoint override, the component’s client configuration continues to apply. Configure connection and authentication settings on the supplied client; `hostAddresses` is not required when supplying a client.
+
+The application owns supplied clients and must close them when they are no longer needed. Camel does not close them when a route stops or when `disconnect=true`.
 
 ### Document type
 

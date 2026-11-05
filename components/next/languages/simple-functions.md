@@ -7,7 +7,7 @@
 The Simple language has many built-in functions which allows access to various part of Camel and the current `Exchange`, the message payload such as body and headers, and much more.
 
 > **Note**
-> Some functions take 1 or more arguments enclosed in parentheses, and arguments separated by comma (ie `${replace('custID','customerId')}`.
+> Some functions take 1 or more arguments enclosed in parentheses, and arguments separated by comma (ie `${replace('custID','customerId')}`. In the arguments of `replace`, `substring`, `substringBefore`, `substringAfter`, `substringBetween`, `contains`, `join`, `split`, `sort`, `setHeader`, `setVariable`, `forEach`, `filter`, `listAdd`, `listRemove`, `mapAdd` and `mapRemove`, a comma inside quotes or inside a nested function such as `$\{header.name.substring(1,3)}` does not separate arguments. An argument left out, as in `${replace(a,,$\{header.name})}`, stays in its place: it means the default where the function has one (the message body for an expression, a comma for a separator, the empty text for the `to` of `replace`) and is refused otherwise; `''` is the empty text.
 
 ### Inlined Result Type Function
 
@@ -433,7 +433,7 @@ The `concat` function is used for putting together two values as a single String
 
 The simple function works like `${concat('Hello ',${body})}`. Notice how you can use nested functions so the 2nd parameter is the `${body}` function. In the example we had to add a space after `"Hello "`, but you can also use the separator parameter, such as `${concat('Hello',${body},' ')}`.
 
-The `join` function is a more complex function to join together a set of values, separated by comma (by default) as a single combined String. For example if the message body contains a list of \[A, B, C\] then `${join()}` would return `A,B,C`. To use semicolon as separator you would use `${join(;)}`. The `prefix` argument can be used to prefix each value, so for example `${join(&,id=)}` would return `id=A&id=B&id=C`. The white space around the prefix and the expression is not part of them, so `${join(&, id=)}` returns the same. An unquoted separator is kept as written, so `${join(; )}` returns `A; B; C`; a quoted one is the text inside its quotes.
+The `join` function is a more complex function to join together a set of values, separated by comma (by default) as a single combined String. For example if the message body contains a list of \[A, B, C\] then `${join()}` would return `A,B,C`. To use semicolon as separator you would use `${join(;)}`. The `prefix` argument can be used to prefix each value, so for example `${join(&,id=)}` would return `id=A&id=B&id=C`. The white space around the prefix and the expression is not part of them, so `${join(&, id=)}` returns the same. An unquoted separator is kept as written, so `${join(; )}` returns `A; B; C`; a quoted one is the text inside its quotes, so `${join('')}` returns `ABC`. An empty separator is the default, so `${join(,id=)}` returns `id=A,id=B,id=C`.
 
 The `escape` function escapes special characters so a value can be safely embedded in another format, instead of chaining multiple `replace` calls or using a custom bean. The first argument is the kind of escaping:
 

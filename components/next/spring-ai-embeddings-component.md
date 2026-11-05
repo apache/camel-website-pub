@@ -127,7 +127,7 @@ The message body at each side of the Spring AI Embeddings component: _Consumer_ 
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | The text to embed, or a List of texts for a batch. Another body, and each element of a List, is converted to text (a Map or a POJO as its toString()); no body, or a null element in a List, fails. |
+| **Producer input** | `text`, `bytes`, `stream`, `file` or `list` | The text to embed: a String, bytes, a stream or a file read as text, or a Spring AI Document as its text; or a java.util.List of them for a batch (a Set or an array of them fails). Another body or List element, such as a Map or a POJO, fails, as do no body and a null element: convert it to text first. |
 | **Producer output** | `list` | The vector as a float\[\] for one text, and a List of float\[\] for a List of texts, also for a List with one text or none. The Embedding and the input text are in headers, which spring-ai-vector-store reads. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -141,7 +141,7 @@ The component accepts two types of input:
 -   **Batch processing**: A List<String> containing multiple texts to embed at once
     
 
-Another body, and each element of a List, is converted to a String. A `null` element in a List fails the exchange with an `IllegalArgumentException`.
+Bytes, a stream, a `Reader` or a file is read as text, and a Spring AI `Document` is embedded as its text, as a body and as an element of a List. Any other body or List element, such as a `Map`, a POJO or a number, fails the exchange with an `InvalidPayloadException` instead of being embedded as its `toString()`: turn it into text first, with `convertBodyTo(String.class)` or a marshal to JSON, say. No body, or a `null` element in a List, fails the exchange with an `IllegalArgumentException`.
 
 The embedding vectors are returned in the message body, with additional metadata available in headers.
 
@@ -215,7 +215,7 @@ from("direct:batch")
 <route>
   <from uri="direct:batch"/>
   <setBody>
-    <constant>["text 1", "text 2", "text 3"]</constant>
+    <simple>${list(text 1,text 2,text 3)}</simple>
   </setBody>
   <to uri="spring-ai-embeddings:myEmbedding"/>
   <log message="Number of embeddings: ${body.size()}"/>
@@ -228,7 +228,9 @@ from("direct:batch")
       uri: direct:batch
       steps:
         - setBody:
-            constant: '["text 1", "text 2", "text 3"]'
+            expression:
+              simple:
+                expression: "${list(text 1,text 2,text 3)}"
         - to:
             uri: spring-ai-embeddings:myEmbedding
         - log:

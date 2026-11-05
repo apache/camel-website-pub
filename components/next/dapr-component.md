@@ -514,7 +514,7 @@ For pubSub the data of the cloud event as bytes, with its id, type, source and c
 
 
  |
-| **Producer input** | `text`, `bytes`, `value`, `map`, `list`, `pojo` or `null` | The data of invokeService, pubSub, invokeBinding, state save and the workflow input, event and output, given to the Dapr client as is: bytes are sent as they are, other bodies are serialized as JSON (text as a JSON string), and a stream fails: convert it to bytes first. State save needs a body; the other operations do not read it. |
+| **Producer input** | `text`, `bytes`, `stream`, `value`, `map`, `list`, `pojo` or `null` | The data of invokeService, pubSub, invokeBinding, state save and the workflow input, event and output. For invokeService, pubSub, invokeBinding and state save, text and streams are converted to bytes, bytes are sent as they are, and other bodies are serialized as JSON. The workflow operations give the body to the workflow client as is, which serializes it as JSON, so a stream fails there: convert it first. State save needs a body; the other operations do not read it. |
 | **Producer output** | `bytes`, `pojo`, `list`, `map`, `value`, `unchanged` or `null` | 
 
 The response as bytes for invokeService and invokeBinding (null when there is none), the PublishEventRequest for pubSub, the State for state get and save, a List of State for getBulk and the request for the other state operations, a Map for secret and configuration, true or false for tryLock and the UnlockResponseStatus for unlock. For workflow the NewWorkflowOptions for scheduleNew, the WorkflowState for state and the waits, unchanged for terminate and raiseEvent, and null otherwise.
@@ -547,6 +547,10 @@ The bodies are the ones with the default options. A side that is not listed is n
 ### Dapr Producer operations
 
 Camel Dapr component provides a wide range of operations on the producer side:
+
+The producer keeps the headers of the message, and adds the headers of the Dapr response, such as `CamelDaprRawConfigResponse` for the configuration operation.
+
+The `invokeService`, `pubSub`, `invokeBinding` and `state` `save` operations send the message body as the data: a text or stream body is converted to bytes and sent as it is, bytes are sent as they are, and other bodies, such as a `Map` or a POJO, are serialized as JSON. For `pubSub`, set the content type of the data with the `contentType` option or the `CamelDaprContentType` header.
 
 ### 1\. **invokeService**:
 
@@ -943,7 +947,7 @@ from("direct:start")
 ```java
 from("direct:start")
   .to("dapr:secret?secretStore=myStore&key=mySecret")
-  .log("Received secret from Dapr: ${body}")
+  .log("Received secret mySecret from Dapr")
   .to("mock:result");
 ```
 
@@ -951,7 +955,7 @@ from("direct:start")
 <route>
   <from uri="direct:start"/>
   <to uri="dapr:secret?secretStore=myStore&amp;key=mySecret"/>
-  <log message="Received secret from Dapr: ${body}"/>
+  <log message="Received secret mySecret from Dapr"/>
   <to uri="mock:result"/>
 </route>
 ```
@@ -966,7 +970,7 @@ from("direct:start")
             parameters:
               secretStore: myStore
               key: mySecret
-        - log: "Received secret from Dapr: ${body}"
+        - log: "Received secret mySecret from Dapr"
         - to:
             uri: mock:result
 ```
@@ -985,7 +989,7 @@ from("direct:start")
 from("direct:start")
   // when no secret key is passed, bulk retrieval is performed on secret store
   .to("dapr:secret?secretStore=myStore")
-  .log("Received bulk secrets from Dapr: ${body}")
+  .log("Received ${body.size()} secrets from Dapr")
   .to("mock:result");
 ```
 
@@ -993,7 +997,7 @@ from("direct:start")
 <route>
   <from uri="direct:start"/>
   <to uri="dapr:secret?secretStore=myStore"/>
-  <log message="Received bulk secrets from Dapr: ${body}"/>
+  <log message="Received ${body.size()} secrets from Dapr"/>
   <to uri="mock:result"/>
 </route>
 ```
@@ -1007,7 +1011,7 @@ from("direct:start")
             uri: dapr:secret
             parameters:
               secretStore: myStore
-        - log: "Received bulk secrets from Dapr: ${body}"
+        - log: "Received ${body.size()} secrets from Dapr"
         - to:
             uri: mock:result
 ```

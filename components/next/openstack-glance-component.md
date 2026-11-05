@@ -207,11 +207,11 @@ The message body at each side of the OpenStack Glance component: _Consumer_ is t
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-For create and upload the image data: an InputStream, a File, a URL or a Payload of openstack4j; text, bytes or the file of the file consumer fail: convert it to a File or an InputStream first. reserve and update take an Image of openstack4j, or else the fields from headers such as CamelOpenstackName.
+For create and upload the image data: an InputStream, a File, a URL or a Payload of openstack4j, or else a body that converts to an InputStream such as text, bytes or the file of the file consumer. reserve and update take an Image of openstack4j, or else the fields from headers such as CamelOpenstackName.
 
--   With `operation=create`: `stream`, `file` or `pojo`
+-   With `operation=create`: `stream`, `file`, `text`, `bytes` or `pojo`
     
--   With `operation=upload`: `stream`, `file` or `pojo`
+-   With `operation=upload`: `stream`, `file`, `text`, `bytes` or `pojo`
     
 
 

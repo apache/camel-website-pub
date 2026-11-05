@@ -115,6 +115,12 @@ A new `muteException` consumer option, enabled by default, makes a consumer with
 
 With `transferExchange=true` the connection headers `CamelNettyRemoteAddress`, `CamelNettyLocalAddress`, `CamelNettyChannelHandlerContext`, `CamelNettySSLSession` and the `CamelNettySSLClientCert*` headers (and the `CamelNettyRemoteAddress` and `CamelNettyChannel` exchange properties) are now always the ones of the receiving side: the connection it accepted is the source of truth. Before, the headers of the transferred exchange replaced them. Such a header in the transferred exchange is no longer used, also when the receiving side has no value for it (for example the `CamelNettySSLClientCert*` headers on a connection without a client certificate). This also applies to the reply the producer receives. Send any such value of the sender under a header name of your own.
 
+### camel-mina - the producer closes its session when a request times out
+
+A synchronous `mina` producer (`sync=true`) now always closes its session when a request times out while waiting for a reply. Because a synchronous producer is pooled and reused for later exchanges, a session kept open after a timeout could receive the late reply to the timed-out exchange and hand it to the next exchange that reused the same producer. The producer now discards that session, so the next exchange opens a fresh one.
+
+The default behaviour is unchanged: `disconnectOnNoReply` defaults to `true`, which already closed the session on a timeout. Setting `disconnectOnNoReply=false` no longer keeps the producer session open after a timeout.
+
 ### camel-oauth - the bearer token processor is stateless and reads the HTTP request headers
 
 `OAuthBearerTokenProcessor` no longer creates or updates the OAuth session, and no longer sets the `camel.oauth.session` cookie nor the `CamelOAuthSessionId` header: a bearer token authenticates the request that carries it, and nothing else. The authenticated `UserProfile` is available in the `CamelOAuthUserProfile` exchange property (`OAuth.CAMEL_OAUTH_USER_PROFILE`). A route that read the profile from the OAuth session after `OAuthBearerTokenProcessor` must read it from that exchange property instead.
@@ -132,6 +138,10 @@ A Smooks configuration whose `<reader>` declares no `class` only sets handlers, 
 A document with a document type declaration (`<!DOCTYPE …​>`) is now processed with these settings for every body type, `String`, `byte[]` and `InputStream` bodies included, which failed before: the entities of its internal subset are expanded, and the declaration itself is not passed on to Smooks.
 
 Set `allowExternalEntities=true` on the endpoint or on the data format for documents that rely on external entities or an external DTD.
+
+### camel-flowable - xml inbound channels parse the event with the Camel XML settings
+
+The `flowable` producer now parses the event of an inbound channel of type `camel` with `deserializerType` set to `xml` with the XML parser settings that Camel uses, which are also the settings of Flowable 8: external DTDs are not loaded, external general and parameter entities are not included, entity references are kept as entity reference nodes, and XInclude is not processed. Before, the Flowable 7 deserializer parsed the event with the JDK defaults. An event that relies on an external DTD or an external entity no longer gets their content. A channel that sets `deserializerDelegateExpression` keeps its own deserializer, which can parse such events.
 
 ### camel-chunk - message data printed with a direct tag is rendered literally
 
@@ -294,6 +304,16 @@ For OpenID Connect / Keycloak login flows, Keycloak access tokens commonly carry
 The remote object name is untrusted input, so the consumer now also checks it whatever `downloadFileName` looks like. An absolute object name (one starting with `/` or `\`, or with a drive letter such as `C:`) and an object name with a `..` path segment are rejected, even when the name would normalize back inside the download directory (for example `a/../b.txt`). When the consumer lists the bucket, a rejected object is skipped and reported to the consumer’s exception handler, which logs a warning by default, and the other objects of the poll are consumed as usual. The rejected object stays in the bucket, so it is reported again on every poll until it is removed or renamed. With `objectName`, which consumes a single object, the poll fails instead, and the failure is reported on every poll.
 
 The containment check is now also applied when `downloadFileName` is configured as a directory followed by an expression, such as `downloadFileName=/tmp/downloads/${file:name}`: the destination must stay within the static directory prefix configured before the first expression token (`/tmp/downloads` in the example). When `downloadFileName` is fully dynamic and has no static directory prefix (for example `downloadFileName=${file:name}`), a relative destination must stay within the working directory. An absolute destination that comes from the route’s own expression is not confined.
+
+### camel-xslt-saxon - external resource access is restricted for a Source message body
+
+`XsltSaxonAggregationStrategy` now configures its Saxon `TransformerFactory` the same way the `xslt-saxon` endpoint configures the factory it creates: `FEATURE_SECURE_PROCESSING` is enabled and `ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_STYLESHEET` are set to an empty string. Previously the strategy used the Saxon defaults, so the same stylesheet ran with different settings depending on whether it was used from the endpoint or from the strategy. On Saxon PE/EE, `FEATURE_SECURE_PROCESSING` also disables reflexive Java extension functions in the stylesheet.
+
+In addition, both the strategy and the `xslt-saxon` endpoint now parse a message body that is already a `javax.xml.transform.Source` still to be parsed, for example a `StreamSource` or the body after a `convertBodyTo(Source.class)`, with a reader that does not resolve references to external resources declared in the document. A `DOMSource`, a `StAXSource`, or a `Source` that already carries its own reader is left unchanged, and a declaration internal to the document is still applied. The other body types (`String`, `byte[]`, `InputStream`) are unaffected, as they already reach the transformer through Camel’s StAX/SAX conversion.
+
+On the `xslt-saxon` endpoint, `secureProcessing` now controls both: setting `secureProcessing=false` (for example so a Saxon PE/EE stylesheet can call Java extension functions) also restores the previous, unrestricted parsing of a `Source` body. `XsltSaxonAggregationStrategy` has no switch for the `Source` parsing: `setTransformerFactory(…​)` replaces the factory, but the strategy’s `XsltSaxonBuilder` keeps `secureProcessing=true`, so the body is still parsed with the restricted reader.
+
+On 4.18.x the `xslt-saxon` endpoint factory configuration changes as well, as it did in 4.22.0: `secureProcessing` (default `true`) is now applied to the Saxon `TransformerFactory` also when no `saxonExtensionFunctions` are configured, including a factory set with the `transformerFactory` option, and a factory the endpoint creates itself now has `ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_STYLESHEET` set to an empty string. A Saxon PE/EE stylesheet that calls Java extension functions now needs `secureProcessing=false`.
 
 ### camel-openstack - the remaining Swift header constants follow the Camel naming convention
 

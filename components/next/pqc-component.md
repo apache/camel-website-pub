@@ -337,9 +337,10 @@ Enum values:
 
 
  |  | String |
-| **symmetricKeyLength** (advanced) | The required length of the symmetric key used. | 128 | int |
+| **symmetricKeyLength** (advanced) | The required length of the symmetric key used. The default of 256 keeps the strength of the shared secret the KEM produces; the fixed-size ciphers, such as SEED and SM4, only accept 128, and GOST3412-2015 and CHACHA7539 only accept 256. | 256 | int |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
+| **allowSharedStatefulKey** (security (advanced)) | Whether to sign with a stateful key (XMSS, XMSSMT, LMS/HSS) that the configured KeyLifecycleManager cannot claim for this process alone. These are one-time-signature schemes: when two processes load the same key from a shared store, both sign from the same index and the key is broken. Only enable it when something outside Camel guarantees a single signer. | false | boolean |
 
 ## Endpoint Options
 
@@ -611,7 +612,8 @@ Enum values:
 
 
  |  | String |
-| **symmetricKeyLength** (advanced) | The required length of the symmetric key used. | 128 | int |
+| **symmetricKeyLength** (advanced) | The required length of the symmetric key used. The default of 256 keeps the strength of the shared secret the KEM produces; the fixed-size ciphers, such as SEED and SM4, only accept 128, and GOST3412-2015 and CHACHA7539 only accept 256. | 256 | int |
+| **allowSharedStatefulKey** (security (advanced)) | Whether to sign with a stateful key (XMSS, XMSSMT, LMS/HSS) that the configured KeyLifecycleManager cannot claim for this process alone. These are one-time-signature schemes: when two processes load the same key from a shared store, both sign from the same index and the key is broken. Only enable it when something outside Camel guarantees a single signer. | false | boolean |
 
 ## Message Headers
 

@@ -87,7 +87,7 @@ The Google Calendar Stream component supports 23 options, which are listed below
 | **considerLastUpdate** (consumer) | Take into account the lastUpdate of the last event polled as start date for the next poll. | false | boolean |
 | **consumeFromNow** (consumer) | Consume events in the selected calendar from now on. | true | boolean |
 | **delegate** (consumer) | Delegate for wide-domain service account. |  | String |
-| **maxResults** (consumer) | Max results to be returned. | 10 | int |
+| **maxResults** (consumer) | Maximum number of events returned per Google Calendar API page. With syncFlow=false and considerLastUpdate=true, each poll reads all pages; otherwise each poll reads one page. | 10 | int |
 | **query** (consumer) | The query to execute on calendar. |  | String |
 | **scopes** (consumer) | Specifies the level of permissions you want a calendar application to have to a user account. See [https://developers.google.com/identity/protocols/googlescopes](https://developers.google.com/identity/protocols/googlescopes) for more info. Multiple scopes can be separated by comma. |  | String |
 | **syncFlow** (consumer) | Sync events, see [https://developers.google.com/calendar/v3/sync](https://developers.google.com/calendar/v3/sync) Note: not compatible with: 'query' and 'considerLastUpdate' parameters. | false | boolean |
@@ -129,7 +129,7 @@ With the following _path_ and _query_ parameters:
 | **considerLastUpdate** (consumer) | Take into account the lastUpdate of the last event polled as start date for the next poll. | false | boolean |
 | **consumeFromNow** (consumer) | Consume events in the selected calendar from now on. | true | boolean |
 | **delegate** (consumer) | Delegate for wide-domain service account. |  | String |
-| **maxResults** (consumer) | Max results to be returned. | 10 | int |
+| **maxResults** (consumer) | Maximum number of events returned per Google Calendar API page. With syncFlow=false and considerLastUpdate=true, each poll reads all pages; otherwise each poll reads one page. | 10 | int |
 | **query** (consumer) | The query to execute on calendar. |  | String |
 | **scopes** (consumer) | Specifies the level of permissions you want a calendar application to have to a user account. See [https://developers.google.com/identity/protocols/googlescopes](https://developers.google.com/identity/protocols/googlescopes) for more info. Multiple scopes can be separated by comma. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
@@ -230,6 +230,28 @@ The Google Calendar Stream component supports 1 message header(s), which is/are 
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelGoogleCalendarEventId** (consumer) Constant: [`EVENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-calendar/latest/org/apache/camel/component/google/calendar/stream/GoogleCalendarStreamConstants.html#EVENT_ID) | The calendar event id. |  | String |
+
+## Usage
+
+The consumer polls a calendar and sends each event as a message, with its id in the `CamelGoogleCalendarEventId` header. With `syncFlow=false` and `considerLastUpdate=true`, each poll reads all result pages. In this mode, `maxResults` controls the API page size rather than the total number of events delivered by a poll. This lets the consumer move past a page containing only events already seen at the last update timestamp. With `considerLastUpdate=false`, non-sync polling continues to read only one page per poll.
+
+With `considerLastUpdate`, each poll starts from the last update of the events it has already seen:
+
+```yaml
+- route:
+    from:
+      uri: google-calendar-stream:events
+      parameters:
+        calendarId: primary
+        considerLastUpdate: true
+        clientId: "{{google.clientId}}"
+        clientSecret: "{{google.clientSecret}}"
+        refreshToken: "{{google.refreshToken}}"
+        applicationName: camel-example
+      steps:
+        - log:
+            message: "Event ${header.CamelGoogleCalendarEventId}: ${body.summary}"
+```
 
 ## Spring Boot Auto-Configuration
 

@@ -259,7 +259,7 @@ The `rejectedPolicy` option controls what happens when a thread pool cannot acce
 | **Abort** | The task is rejected with a `RejectedExecutionException`. Use this for HTTP APIs or latency-sensitive systems where failing fast is preferred over blocking. |
 | **Block** | The caller blocks indefinitely until capacity becomes available. No timeout, no rejection. Use this for message broker consumers and batch workloads where losing a task is unacceptable and latency is less critical. |
 
-With virtual threads, a task of the pool that submits more work to the same pool runs it at once when no permit is free, for `CallerRuns` and `Block`, instead of waiting (see [Virtual Threads](#virtual-threads)).
+With virtual threads, a task of the pool that submits more work to the same pool runs it at once when no permit is free, whatever the policy, instead of waiting (see [Virtual Threads](#virtual-threads)).
 
 With platform threads, these policies apply when the `ThreadPoolExecutor` work queue is full. With virtual threads, the same policies apply when the concurrency semaphore has no available permits (see [Virtual Threads](#virtual-threads)).
 
@@ -286,7 +286,7 @@ The `rejectedPolicy` controls what happens when the concurrency limit is reached
 -   **Block**: the caller blocks indefinitely until a permit becomes available.
     
 
-A task of the pool that submits more work to the same pool (for example a parallel `split` that submits its items) can hold the permit it would wait for. So with `CallerRuns` and `Block`, when no permit is free, that work runs at once on the submitting thread instead of waiting. For `Block` this applies even when other tasks hold the permits. Such work runs outside the concurrency limit, as does the work handed to a new task when it is nested too deeply. `Abort` is not affected: it still waits and is rejected as usual.
+A task of the pool that submits more work to the same pool (for example a parallel `split` that submits its items) can hold the permit it would wait for. So when no permit is free, that work runs at once on the submitting thread instead of waiting, whatever the `rejectedPolicy`, also when other tasks hold the permits. Waiting would only delay the work while the task holds a permit: a parallel `split` would run one item fewer at a time than the limit, or wait for the permit it holds itself. Such work runs outside the concurrency limit, as does the work handed to a new task when it is nested too deeply. The `rejectedPolicy` only applies to a submitter that is not a task of the pool.
 
 While waiting for a permit, the calling thread is blocked. When callers are virtual threads this is inexpensive (the carrier thread is released). When callers are platform threads (e.g., HTTP server threads) the blocked thread is unavailable for other work.
 

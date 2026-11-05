@@ -300,7 +300,9 @@ from("direct:start")
 
 #### Turning off nested placeholders (advanced)
 
-If the placeholder value contains data that interfere with the property placeholder syntax `{{` and `}}` (such as JSon data), you can be then explicit turn off nested placeholder by `?nested=false` in the key name, such as shown:
+The value of a placeholder is parsed for nested placeholders only when it contains `{{`. A value without `{{` is used as it is, even when it contains `}}`, such as JSON that ends with a nested object (`{"query":{"match_all":{}}}`).
+
+If the placeholder value contains `{{` that is not a Camel placeholder (such as JSON with a Mustache template), you can be then explicit turn off nested placeholder by `?nested=false` in the key name, such as shown:
 
 -   Java
     
@@ -341,10 +343,10 @@ from("direct:start")
 In the example above the query of the search is the body, and the _myQuery_ placeholder value is as follows
 
 ```properties
-myQuery = {"query":{"match_all":{}}}
+myQuery = {"query":{"match":{"body":"Hello {{name}}"}}}
 ```
 
-Notice how the JSon query ends with `}}` which interfere with the Camel property placeholder syntax.
+Notice how the JSON query searches for the text `{{name}}`, which interferes with the Camel property placeholder syntax.
 
 Nested placeholders can also be turned off globally on the [Properties](../components/4.22.x/properties-component.md) component, such as:
 
@@ -353,18 +355,18 @@ CamelContext context = ...
 context.getPropertiesComponent().setNestedPlaceholder(false);
 ```
 
-In the situation with the JSon query ending with `}}` which clashes with Camels property placeholder syntax, then its also possible to use escaping as explained in the following section.
+In the situation with the JSON query with `{{` which clashes with Camel’s property placeholder syntax, then it’s also possible to use escaping as explained in the following section.
 
 #### Escaping a property placeholder
 
-The property placeholder can be problematic if the double curly brackets are used by a third party library like for example a query in ElasticSearch of type `{"query":{"match_all":{}}}`.
+The property placeholder can be problematic if the double curly brackets are used by a third party library like for example a Mustache template, such as `Hello {{name}}`.
 
 To work around that it is possible to escape the double curly brackets with a backslash character like for example `\{{ property-name \}}`. This way, it won’t be interpreted as a property placeholder to resolve and will be resolved as `{{ property-name }}`.
 
-The previous example can then use escaping (see how the value ends with `\\}}`)
+The previous example can then use escaping (see how `{{name}}` is written as `\\{{name\\}}`)
 
 ```properties
-myQuery = {"query":{"match_all":{}\\}}
+myQuery = {"query":{"match":{"body":"Hello \\{{name\\}}"}}}
 ```
 
 If for some reason, the backslash character before the double curly brackets must not be interpreted as an escape character, it is possible to add another backslash in front of it to escape it, it will then be seen as a backslash.
