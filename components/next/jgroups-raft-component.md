@@ -164,8 +164,8 @@ Enum values:
 
 
  |  | JGroupsRaftEventType |
-| **CamelJGroupsRaftSetOffset** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_OFFSET) | Offset to use in the byte buffer to be set(). |  | Integer |
-| **CamelJGroupsRaftSetLength** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_LENGTH) | Length to use in the byte buffer to be set(). |  | Integer |
+| **CamelJGroupsRaftSetOffset** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_OFFSET`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_OFFSET) | Offset to use in the byte\[\] buffer to be set(). |  | Integer |
+| **CamelJGroupsRaftSetLength** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_LENGTH) | Length to use in the byte\[\] buffer to be set(). |  | Integer |
 | **CamelJGroupsRaftSetTimeout** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_TIMEOUT`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_TIMEOUT) | Timeout to be used in set() operation. |  | Long |
 | **CamelJGroupsRaftSetTimeUnit** (producer) Constant: [`HEADER_JGROUPSRAFT_SET_TIMEUNIT`](https://javadoc.io/doc/org.apache.camel/camel-jgroups-raft/latest/org/apache/camel/component/jgroups/raft/JGroupsRaftConstants.html#HEADER_JGROUPSRAFT_SET_TIMEUNIT) | 
 

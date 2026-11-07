@@ -267,7 +267,7 @@ When aggregation [Exchange](../../../manual/exchange.md)s at some point, you nee
     
 -   _completionFromBatchConsumer_: Special option for [Batch Consumer](../../../manual/batch-consumer.md), which allows you to complete when all the messages from the batch have been aggregated.
     
--   _forceCompletionOnStop_: Indicates to complete all current aggregated exchanges when the context is stopped
+-   _forceCompletionOnStop_: Indicates to complete all current aggregated exchanges when the context (or the route) is stopped. A suspend does not force their completion: the groups go on aggregating after the resume (completionTimeout and completionInterval still apply).
     
 -   _AggregateController_: which allows to use an external source (`AggregateController` implementation) to complete groups or all groups. This can be done using Java or JMX API.
     

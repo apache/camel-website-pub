@@ -78,16 +78,16 @@ The RocketMQ component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **accessChannel** (common) | Access channel of RocketMQ cluster. LOCAL or CLOUD, LOCAL by default. | LOCAL | String |
+| **accessChannel** (common) | Access channel of RocketMQ cluster. LOCAL or CLOUD, \[LOCAL\] by default. | LOCAL | String |
 | **enableTrace** (common) | Whether to enable trace. | false | boolean |
 | **namespace** (common) | Namespace of RocketMQ cluster. You need to specify this if you are using serverless version of RocketMQ. |  | String |
 | **namesrvAddr** (common) | Name server address of RocketMQ cluster. | localhost:9876 | String |
 | **sendTag** (common) | Each message would be sent with this tag. |  | String |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **consumerGroup** (consumer) | Consumer group name. |  | String |
-| **messageSelectorType** (consumer) | Message Selector Type, TAG or SQL TAG by default. | tag | String |
+| **messageSelectorType** (consumer) | Message Selector Type, TAG or SQL \[TAG\] by default. | tag | String |
 | **subscribeSql** (consumer) | Subscribe SQL of consumer. See [https://rocketmq.apache.org/docs/featureBehavior/07messagefilter/#attribute-based-sql-filtering](https://rocketmq.apache.org/docs/featureBehavior/07messagefilter/#attribute-based-sql-filtering) for more details. | 1 = 1 | String |
-| **subscribeTags** (consumer) | Subscribe tags of consumer. Multiple tags could be split by , such as TagATagB. | \* | String |
+| **subscribeTags** (consumer) | Subscribe tags of consumer. Multiple tags could be split by ||, such as TagA||TagB. | \* | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **producerGroup** (producer) | Producer group name. |  | String |
 | **replyToConsumerGroup** (producer) | Consumer group name used for receiving response. |  | String |
@@ -120,7 +120,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **accessChannel** (common) | 
-Access channel of RocketMQ cluster. LOCAL or CLOUD, LOCAL by default.
+Access channel of RocketMQ cluster. LOCAL or CLOUD, \[LOCAL\] by default.
 
 Enum values:
 
@@ -140,7 +140,7 @@ Enum values:
 | **consumerGroup** (consumer) | Consumer group name. |  | String |
 | **messageSelectorType** (consumer) | 
 
-Message Selector Type, TAG or SQL TAG by default.
+Message Selector Type, TAG or SQL \[TAG\] by default.
 
 Enum values:
 
@@ -155,7 +155,7 @@ Enum values:
 
  | tag | String |
 | **subscribeSql** (consumer) | Subscribe SQL of consumer. See [https://rocketmq.apache.org/docs/featureBehavior/07messagefilter/#attribute-based-sql-filtering](https://rocketmq.apache.org/docs/featureBehavior/07messagefilter/#attribute-based-sql-filtering) for more details. | 1 = 1 | String |
-| **subscribeTags** (consumer) | Subscribe tags of consumer. Multiple tags could be split by , such as TagATagB. | \* | String |
+| **subscribeTags** (consumer) | Subscribe tags of consumer. Multiple tags could be split by ||, such as TagA||TagB. | \* | String |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 

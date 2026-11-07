@@ -162,7 +162,7 @@ Enum values:
  | PersistentOnly | RegexSubscriptionMode |
 | **subscriptionType** (consumer) | 
 
-Type of the subscription EXCLUSIVESHAREDFAILOVERKEY\_SHARED, defaults to EXCLUSIVE.
+Type of the subscription \[EXCLUSIVE|SHARED|FAILOVER|KEY\_SHARED\], defaults to EXCLUSIVE.
 
 Enum values:
 
@@ -244,7 +244,7 @@ Enum values:
 | **initialSequenceId** (producer) | The first message published will have a sequence Id of initialSequenceId plus one. The default -1 leaves it to the Pulsar client, which continues after the last sequence id the broker has for the producer name. | \-1 | long |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **maxPendingMessages** (producer) | Size of the pending massages queue. When the queue is full, by default, any further sends will fail unless blockIfQueueFull=true. | 1000 | int |
-| **maxPendingMessagesAcrossPartitions** (producer) | **Deprecated** The maximum number of pending messages for partitioned topics. The maxPendingMessages value will be reduced if (number of partitions maxPendingMessages) exceeds this value. Partitioned topics have a pending message queue for each partition. | 50000 | int |
+| **maxPendingMessagesAcrossPartitions** (producer) | **Deprecated** The maximum number of pending messages for partitioned topics. The maxPendingMessages value will be reduced if (number of partitions \* maxPendingMessages) exceeds this value. Partitioned topics have a pending message queue for each partition. | 50000 | int |
 | **messageRouter** (producer) | Custom Message Router to use. |  | MessageRouter |
 | **messageRoutingMode** (producer) | 
 
@@ -396,7 +396,7 @@ Enum values:
  | PersistentOnly | RegexSubscriptionMode |
 | **subscriptionType** (consumer) | 
 
-Type of the subscription EXCLUSIVESHAREDFAILOVERKEY\_SHARED, defaults to EXCLUSIVE.
+Type of the subscription \[EXCLUSIVE|SHARED|FAILOVER|KEY\_SHARED\], defaults to EXCLUSIVE.
 
 Enum values:
 
@@ -494,7 +494,7 @@ Enum values:
  | JavaStringHash | String |
 | **initialSequenceId** (producer) | The first message published will have a sequence Id of initialSequenceId plus one. The default -1 leaves it to the Pulsar client, which continues after the last sequence id the broker has for the producer name. | \-1 | long |
 | **maxPendingMessages** (producer) | Size of the pending massages queue. When the queue is full, by default, any further sends will fail unless blockIfQueueFull=true. | 1000 | int |
-| **maxPendingMessagesAcrossPartitions** (producer) | **Deprecated** The maximum number of pending messages for partitioned topics. The maxPendingMessages value will be reduced if (number of partitions maxPendingMessages) exceeds this value. Partitioned topics have a pending message queue for each partition. | 50000 | int |
+| **maxPendingMessagesAcrossPartitions** (producer) | **Deprecated** The maximum number of pending messages for partitioned topics. The maxPendingMessages value will be reduced if (number of partitions \* maxPendingMessages) exceeds this value. Partitioned topics have a pending message queue for each partition. | 50000 | int |
 | **messageRouter** (producer) | Custom Message Router to use. |  | MessageRouter |
 | **messageRoutingMode** (producer) | 
 

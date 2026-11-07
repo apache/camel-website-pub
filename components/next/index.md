@@ -131,7 +131,7 @@ Number of Non-Core Components: 393 in 320 JAR artifacts (4 deprecated)
 | [Caffeine Cache](caffeine-cache-component.md) | camel-caffeine | Stable | 2.20 | Perform caching operations using Caffeine Cache. |
 | [Caffeine LoadCache](caffeine-loadcache-component.md) | camel-caffeine | Stable | 2.20 | Perform caching operations using Caffeine Cache with an attached CacheLoader. |
 | [Camunda](camunda-component.md) | camel-camunda | Preview | 4.19 | Interact with Camunda 8 Orchestration Clusters using the Camunda Java Client. |
-| [Cassandra CQL](cql-component.md) | camel-cassandraql | Stable | 2.15 | Integrate with Cassandra 2.0 using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
+| [Cassandra CQL](cql-component.md) | camel-cassandraql | Stable | 2.15 | Integrate with Cassandra 2.0+ using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
 | [ChatScript](chatscript-component.md) | camel-chatscript | Stable | 3.0 | Chat with a ChatScript Server. |
 | [Chunk](chunk-component.md) | camel-chunk | Stable | 2.15 | Transform messages using Chunk templating engine. |
 | [Citrus](citrus-component.md) | camel-test-citrus | Preview | 4.24 | Citrus message validation component for testing |
@@ -141,7 +141,7 @@ Number of Non-Core Components: 393 in 320 JAR artifacts (4 deprecated)
 | [CoAP](coap-component.md) | camel-coap | Stable | 2.16 | Send and receive messages to/from CoAP (Constrained Application Protocol) capable devices. |
 | [CometD](cometd-component.md) | camel-cometd | Stable | 2.0 | Offers publish/subscribe, peer-to-peer (via a server), and RPC style messaging using the CometD/Bayeux protocol. |
 | [Consul](consul-component.md) | camel-consul | Stable | 2.18 | Integrate with Consul service discovery and configuration store. |
-| [Couchbase](couchbase-component.md) | camel-couchbase | Stable | 2.19 | Query Couchbase databases using SQL (N1QL) queries or MapReduce Views with a poll strategy and/or perform various operations against Couchbase databases. |
+| [Couchbase](couchbase-component.md) | camel-couchbase | Stable | 2.19 | Query Couchbase databases using SQL++ (N1QL) queries or MapReduce Views with a poll strategy and/or perform various operations against Couchbase databases. |
 | [CouchDB](couchdb-component.md) | camel-couchdb | Stable | 2.11 | Consume changesets for inserts, updates and deletes in a CouchDB database, as well as get, save, update and delete documents from a CouchDB database. |
 | [Cron](cron-component.md) | camel-cron | Stable | 3.1 | A generic interface for triggering events at times specified through the Unix cron syntax. |
 | [Crypto (JCE)](crypto-component.md) | camel-crypto | Stable | 2.3 | Sign and verify exchanges using the Signature Service of the Java Cryptographic Extension (JCE). |

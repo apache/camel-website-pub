@@ -193,7 +193,7 @@ Enum values:
 | **onErrorDelay** (seda) | Milliseconds before consumer continues polling after an error has occurred. | 1000 | int |
 | **pollTimeout** (seda) | The timeout used when consuming from the SEDA queue. When a timeout occurs, the consumer can check whether it is allowed to continue running. Setting a lower value allows the consumer to react more quickly upon shutdown. | 1000 | int |
 | **transacted** (seda) | If set to true then the consumer runs in transaction mode, where the messages in the seda queue will only be removed if the transaction commits, which happens when the processing is complete. A Hazelcast transaction belongs to the thread that began it, so each consumer thread waits for its exchange to complete, also when the route continues on another thread, before it takes the next message. The exchange must complete within the Hazelcast transaction timeout (2 minutes by default): when it takes longer, the commit fails, the transaction is rolled back and the message is consumed again. | false | boolean |
-| **transferExchange** (seda) | If set to true the whole Exchange will be transfered. If header or body contains not serializable objects, they will be skipped. | false | boolean |
+| **transferExchange** (seda) | If set to true the whole Exchange will be transfered. If header or body contains not serializable objects, they will be skipped. Set it on both the producer and the consumer: the producer puts the whole Exchange on the queue, and the consumer restores its headers and exchange properties. A consumer without it takes only the body. | false | boolean |
 
 ## Message Body
 
@@ -202,7 +202,7 @@ The message body at each side of the Hazelcast SEDA component: _Consumer_ is the
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The body the producer put on the Hazelcast queue, as Hazelcast deserializes it: a body that is not Serializable, such as a stream, arrives as bytes. With transferExchange=true on the producer the headers and exchange properties come along. |
+| **Consumer** | `text`, `bytes`, `file`, `value`, `map`, `list` or `pojo` | The body the producer put on the Hazelcast queue, as Hazelcast deserializes it: a body that is not Serializable, such as a stream, arrives as bytes. With transferExchange=true on both the producer and the consumer the headers and exchange properties come along: a consumer without it takes only the body. |
 | **Producer input** | `text`, `bytes`, `stream`, `file`, `value`, `map`, `list` or `pojo` | A Serializable body goes on the queue as is, and another one converted to bytes, so a stream works, but a POJO that does not convert to bytes fails, as does no body. |
 | **Producer output** | `unchanged` | The producer puts the message on the queue and does not wait for the consumer, also for a message that expects a reply (InOut). |
 
@@ -267,6 +267,29 @@ from("hazelcast-seda:foo")
 - route:
     from:
       uri: hazelcast-seda:foo
+      steps:
+        - to:
+            uri: mock:result
+```
+
+## Transferring the whole exchange
+
+By default only the message body goes on the queue. With `transferExchange=true` the producer puts the whole exchange on the queue: the body, and the headers and exchange properties whose values are text, numbers, booleans or dates. A consumer with `transferExchange=true` restores them. A consumer without the option takes only the body of such an exchange: set `transferExchange=true` on both endpoints to keep the headers and exchange properties.
+
+```yaml
+- route:
+    from:
+      uri: direct:foo
+      steps:
+        - to:
+            uri: hazelcast-seda:foo
+            parameters:
+              transferExchange: true
+- route:
+    from:
+      uri: hazelcast-seda:foo
+      parameters:
+        transferExchange: true
       steps:
         - to:
             uri: mock:result

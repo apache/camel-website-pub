@@ -130,6 +130,7 @@ Enum values:
 
  | tryLock | LockOperation |
 | **lockOwner** (producer) | The lock owner identifier for the lock. |  | String |
+| **metadata** (producer) | Additional key-value pairs to pass to the Dapr building block, such as metadata.namespace=production. The CamelDaprMetadata header takes the place of these for one message, except for the secret operation unless allowSecretStoreAndKeyFromHeaders is enabled. This is a multi-value option with prefix: metadata. |  | Map |
 | **methodToInvoke** (producer) | The name of the method or route to invoke on the target service. |  | String |
 | **reason** (producer) | Reason for suspending/resuming the workflow instance. |  | String |
 | **resourceId** (producer) | The resource Id for the lock. |  | String |
@@ -200,6 +201,7 @@ Enum values:
 | **workflowVersion** (producer) | The version of the workflow to start. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
+| **allowSecretStoreAndKeyFromHeaders** (security) | Whether to allow overriding the secret store, the key and the metadata of the endpoint with the CamelDaprSecretStore, CamelDaprKey and CamelDaprMetadata headers for the secret operation. Disabled by default; enable it only when the header source is trusted, since it lets a message choose the secret store and the secret that the secret operation reads. | false | boolean |
 
 ## Endpoint Options
 
@@ -328,6 +330,7 @@ Enum values:
 
  | tryLock | LockOperation |
 | **lockOwner** (producer) | The lock owner identifier for the lock. |  | String |
+| **metadata** (producer) | Additional key-value pairs to pass to the Dapr building block, such as metadata.namespace=production. The CamelDaprMetadata header takes the place of these for one message, except for the secret operation unless allowSecretStoreAndKeyFromHeaders is enabled. This is a multi-value option with prefix: metadata. |  | Map |
 | **methodToInvoke** (producer) | The name of the method or route to invoke on the target service. |  | String |
 | **reason** (producer) | Reason for suspending/resuming the workflow instance. |  | String |
 | **resourceId** (producer) | The resource Id for the lock. |  | String |
@@ -398,6 +401,7 @@ Enum values:
 | **workflowVersion** (producer) | The version of the workflow to start. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
+| **allowSecretStoreAndKeyFromHeaders** (security) | Whether to allow overriding the secret store, the key and the metadata of the endpoint with the CamelDaprSecretStore, CamelDaprKey and CamelDaprMetadata headers for the secret operation. Disabled by default; enable it only when the header source is trusted, since it lets a message choose the secret store and the secret that the secret operation reads. | false | boolean |
 
 ## Message Headers
 
@@ -414,9 +418,9 @@ The Dapr component supports the following message header(s), which is/are listed
 | **CamelDaprHttpExtension** (producer) Constant: [`HTTP_EXTENSION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#HTTP_EXTENSION) | The HttpExtension object for service invocation. Takes precedence over verb. |  | HttpExtension |
 | **CamelDaprStateOperation** (producer) Constant: [`STATE_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#STATE_OPERATION) | The state operation to perform on the state store. Required for DaprOperation.state operation. | get | StateOperation |
 | **CamelDaprStateStore** (producer) Constant: [`STATE_STORE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#STATE_STORE) | The name of the Dapr state store to interact with, defined in statestore.yaml config. |  | String |
-| **CamelDaprSecretStore** (producer) Constant: [`SECRET_STORE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#SECRET_STORE) | The name of the Dapr secret store to interact with, defined in local-secret-store.yaml config. |  | String |
+| **CamelDaprSecretStore** (producer) Constant: [`SECRET_STORE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#SECRET_STORE) | The name of the Dapr secret store to interact with, defined in local-secret-store.yaml config. For the secret operation, this header is ignored unless the endpoint enables allowSecretStoreAndKeyFromHeaders=true (disabled by default). |  | String |
 | **CamelDaprConfigStore** (producer) Constant: [`CONFIG_STORE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#CONFIG_STORE) | The name of the Dapr config store to interact with, defined in statestore.yaml config. |  | String |
-| **CamelDaprKey** (producer) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#KEY) | The key used to identify the state/secret object within the specified state/secret store. |  | String |
+| **CamelDaprKey** (producer) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#KEY) | The key used to identify the state/secret object within the specified state/secret store. For the secret operation, this header is ignored unless the endpoint enables allowSecretStoreAndKeyFromHeaders=true (disabled by default). |  | String |
 | **CamelDaprETag** (producer) Constant: [`E_TAG`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#E_TAG) | The eTag for optimistic concurrency during state save or delete operations. |  | String |
 | **CamelDaprConcurrency** (producer) Constant: [`CONCURRENCY`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#CONCURRENCY) | 
 Concurrency mode to use with state operations.
@@ -449,7 +453,7 @@ Enum values:
 
 
  |  | Consistency |
-| **CamelDaprMetadata** (producer) Constant: [`METADATA`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#METADATA) | Additional key-value pairs to be passed to the state store. |  | Map |
+| **CamelDaprMetadata** (producer) Constant: [`METADATA`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#METADATA) | Additional key-value pairs to be passed to the Dapr building block, in place of the metadata option. For the secret operation, this header is ignored unless the endpoint enables allowSecretStoreAndKeyFromHeaders=true (disabled by default). |  | Map |
 | **CamelDaprStates** (producer) Constant: [`STATES`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#STATES) | List of states for bulk save operation. |  | List |
 | **CamelDaprKeys** (producer) Constant: [`KEYS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#KEYS) | List of keys for bulk get operation. |  | List |
 | **CamelDaprTransactions** (producer) Constant: [`TRANSACTIONS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#TRANSACTIONS) | List of transactions for execute transactions state operations. |  | List |
@@ -584,6 +588,8 @@ Dapr’s bindings building block allows interaction with external systems via in
 
 Dapr’s secret management building block enables secure retrieval of secrets from external secret stores. The secret operation fetches a secret from the specified secret store. If a key is provided, the operation retrieves the corresponding secret; if no key is specified, a bulk retrieval of all secrets from the store is performed. This operation requires the secretStore name, and optionally the key.
 
+The secret operation takes the secret store, the key and the metadata from the `secretStore`, `key` and `metadata` options of the endpoint, unless the endpoint sets `allowSecretStoreAndKeyFromHeaders=true`: only then do the `CamelDaprSecretStore`, `CamelDaprKey` and `CamelDaprMetadata` headers take their place. An endpoint without a key fails, instead of reading all the secrets of the store, when the message has a `CamelDaprKey` header that it ignores.
+
 ### 5\. **configuration**:
 
 Dapr’s configuration building block allows applications to retrieve dynamic configuration values from external configuration stores. The configuration operation fetches values associated with keys specified in configKeys. This operation requires the configStore name, and the configKeys.
@@ -618,6 +624,16 @@ Dapr Workflows enable developers to write long-running, persistent, and reliable
 | `waitForInstanceStart` | Waits for a workflow instance to start running. Requires `workflowInstanceId` and a `timeout`. |
 | `waitForInstanceCompletion` | Waits for a workflow instance to complete. Requires `workflowInstanceId` and a `timeout`. |
 | `raiseEvent` | Sends an event to a running workflow instance that is waiting for it. Requires `workflowInstanceId` and `eventName`. The message body is used as the event payload. |
+
+### Headers that override the endpoint
+
+The producer headers, such as `CamelDaprServiceToInvoke`, `CamelDaprStateStore`, `CamelDaprKey`, `CamelDaprMetadata`, `CamelDaprPubSubName`, `CamelDaprTopic`, `CamelDaprBindingName`, `CamelDaprStoreName` or `CamelDaprWorkflowInstanceId`, take the place of the endpoint option of the same name for one message.
+
+The metadata that an operation sends to the Dapr building block is set on the endpoint with `metadata.` options, such as `metadata.ttlInSeconds=60` for `pubSub`, or for one message with the `CamelDaprMetadata` header (a `Map<String, String>`).
+
+For the `secret` operation, the `CamelDaprSecretStore`, `CamelDaprKey` and `CamelDaprMetadata` headers are ignored unless the endpoint sets `allowSecretStoreAndKeyFromHeaders=true`. With that option, they take the place of the secret store, the key and the metadata of the endpoint for one message, so the message chooses the secret that the operation reads.
+
+As the producer keeps the headers of the message, a `CamelDapr*` header also applies to the next `dapr` call of the route. When the messages come from an untrusted producer through a consumer that does not filter out `Camel*` headers, or when a `dapr` call must use only the options of its endpoint, remove these headers with `removeHeaders("CamelDapr*")` before the `dapr` endpoint.
 
 ### Dapr Consumer operations
 

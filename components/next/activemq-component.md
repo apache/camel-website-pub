@@ -304,7 +304,7 @@ Enum values:
  |  | ReplyToType |
 | **requestTimeout** (producer) | The timeout for waiting for a reply when using the InOut Exchange Pattern (in milliseconds). The default is 20 seconds. You can include the header CamelJmsRequestTimeout to override this endpoint configured timeout value, and thus have per message individual timeout values. See also the requestTimeoutCheckerInterval option. | 20000 | long |
 | **timeToLive** (producer) | When sending messages, specifies the time-to-live of the message (in milliseconds). | \-1 | long |
-| **allowAdditionalHeaders** (producer (advanced)) | This option is used to allow additional headers which may have values that are invalid according to JMS specification. For example, some message systems, such as WMQ, do this with header names using prefix JMS\_IBM\_MQMD\_ containing values with byte array or other invalid types. You can specify multiple header names separated by comma, and use as suffix for wildcard matching. |  | String |
+| **allowAdditionalHeaders** (producer (advanced)) | This option is used to allow additional headers which may have values that are invalid according to JMS specification. For example, some message systems, such as WMQ, do this with header names using prefix JMS\_IBM\_MQMD\_ containing values with byte array or other invalid types. You can specify multiple header names separated by comma, and use \* as suffix for wildcard matching. |  | String |
 | **allowNullBody** (producer (advanced)) | Whether to allow sending messages with no body. If this option is false and the message body is null, then an JMSException is thrown. | true | boolean |
 | **alwaysCopyMessage** (producer (advanced)) | If true, Camel will always make a JMS message copy of the message when it is passed to the producer for sending. Copying the message is needed in some situations, such as when a replyToDestinationSelectorName is set (incidentally, Camel will set the alwaysCopyMessage option to true, if a replyToDestinationSelectorName is set). | false | boolean |
 | **correlationProperty** (producer (advanced)) | When using InOut exchange pattern use this JMS property instead of JMSCorrelationID JMS property to correlate messages. If set messages will be correlated solely on the value of this property JMSCorrelationID property will be ignored and not set by Camel. |  | String |
@@ -419,7 +419,7 @@ Enum values:
 
  | WARN | LoggingLevel |
 | **errorHandlerLogStackTrace** (logging) | Allows to control whether stack-traces should be logged or not, by the default errorHandler. | true | boolean |
-| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. is applied. |  | String |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. **and otherwise allowing java.**, javax. **and org.apache.camel.** is applied. |  | String |
 | **password** (security) | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **username** (security) | Username to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **transacted** (transaction) | Specifies whether to use transacted mode. | false | boolean |
@@ -700,7 +700,7 @@ Enum values:
  |  | ReplyToType |
 | **requestTimeout** (producer) | The timeout for waiting for a reply when using the InOut Exchange Pattern (in milliseconds). The default is 20 seconds. You can include the header CamelJmsRequestTimeout to override this endpoint configured timeout value, and thus have per message individual timeout values. See also the requestTimeoutCheckerInterval option. | 20000 | long |
 | **timeToLive** (producer) | When sending messages, specifies the time-to-live of the message (in milliseconds). | \-1 | long |
-| **allowAdditionalHeaders** (producer (advanced)) | This option is used to allow additional headers which may have values that are invalid according to JMS specification. For example, some message systems, such as WMQ, do this with header names using prefix JMS\_IBM\_MQMD\_ containing values with byte array or other invalid types. You can specify multiple header names separated by comma, and use as suffix for wildcard matching. |  | String |
+| **allowAdditionalHeaders** (producer (advanced)) | This option is used to allow additional headers which may have values that are invalid according to JMS specification. For example, some message systems, such as WMQ, do this with header names using prefix JMS\_IBM\_MQMD\_ containing values with byte array or other invalid types. You can specify multiple header names separated by comma, and use \* as suffix for wildcard matching. |  | String |
 | **allowNullBody** (producer (advanced)) | Whether to allow sending messages with no body. If this option is false and the message body is null, then an JMSException is thrown. | true | boolean |
 | **alwaysCopyMessage** (producer (advanced)) | If true, Camel will always make a JMS message copy of the message when it is passed to the producer for sending. Copying the message is needed in some situations, such as when a replyToDestinationSelectorName is set (incidentally, Camel will set the alwaysCopyMessage option to true, if a replyToDestinationSelectorName is set). | false | boolean |
 | **correlationProperty** (producer (advanced)) | When using InOut exchange pattern use this JMS property instead of JMSCorrelationID JMS property to correlate messages. If set messages will be correlated solely on the value of this property JMSCorrelationID property will be ignored and not set by Camel. |  | String |
@@ -808,7 +808,7 @@ Enum values:
 
  | WARN | LoggingLevel |
 | **errorHandlerLogStackTrace** (logging) | Allows to control whether stack-traces should be logged or not, by the default errorHandler. | true | boolean |
-| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. is applied. |  | String |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. **and otherwise allowing java.**, javax. **and org.apache.camel.** is applied. |  | String |
 | **password** (security) | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **username** (security) | Username to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **transacted** (transaction) | Specifies whether to use transacted mode. | false | boolean |
@@ -986,3 +986,19 @@ from("activemq:queue:HELLO.WORLD")
         - log:
             message: "Received a message - ${body}"
 ```
+
+## Connection factory and transactions
+
+With only `brokerURL` set, each endpoint creates its own connection factory, and with `usePooledConnection=true` (the default) its own pool, which needs `org.messaginghub:pooled-jms` on the classpath. A message sent from a transacted route, for example `from("activemq:queue:in?transacted=true").to("activemq:queue:out")`, is then not part of the transaction of the consumed message: when the route fails, the consumed message is rolled back and delivered again, but the message sent to `out` is not rolled back.
+
+To send in the transaction of the consumer, set one `connectionFactory` on the component, for example a pooled one, so that the endpoints share it. A `transactionManager` that you set must use that same connection factory: a transaction manager on another connection factory does not make the message part of the transaction.
+
+```properties
+camel.beans.activemqCF = #class:org.apache.activemq.ActiveMQConnectionFactory
+camel.beans.activemqCF.brokerURL = tcp://localhost:61616
+camel.beans.pooledCF = #class:org.messaginghub.pooled.jms.JmsPoolConnectionFactory
+camel.beans.pooledCF.connectionFactory = #bean:activemqCF
+camel.component.activemq.connection-factory = #bean:pooledCF
+```
+
+When the endpoints share one pool, they get the same connection, whose client id cannot be changed: give an endpoint with its own `clientId` (for example for a durable subscription) a `connectionFactory` of its own, otherwise its consumer cannot connect and keeps retrying. `useSingleConnection=true` cannot be combined with a `clientId`: the shared connection of the Spring `SingleConnectionFactory` refuses to set a client id.

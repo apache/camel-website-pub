@@ -317,7 +317,7 @@ Enum values:
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **rawHttpHeaders** (producer) | Comma separated list of message headers to include as HTTP parameters for Raw operation. |  | String |
 | **rawMethod** (producer) | HTTP method to use for the Raw operation. |  | String |
-| **rawPath** (producer) | The portion of the endpoint URL after the domain name. E.g., '/services/data/v52.0/sobjects/Account/'. |  | String |
+| **rawPath** (producer) | The portion of the endpoint URL after the domain name. E.g., + '/services/data/v52.0/sobjects/Account/'. |  | String |
 | **rawQueryParameters** (producer) | Comma separated list of message headers to include as query parameters for Raw operation. Do not url-encode values as this will be done automatically. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **httpProxyExcludedAddresses** (proxy) | A list of addresses for which HTTP proxy server should not be used. |  | Set |
@@ -764,7 +764,7 @@ Enum values:
 | **eventSchemaId** (producer) | The ID of the event schema. |  | String |
 | **rawHttpHeaders** (producer) | Comma separated list of message headers to include as HTTP parameters for Raw operation. |  | String |
 | **rawMethod** (producer) | HTTP method to use for the Raw operation. |  | String |
-| **rawPath** (producer) | The portion of the endpoint URL after the domain name. E.g., '/services/data/v52.0/sobjects/Account/'. |  | String |
+| **rawPath** (producer) | The portion of the endpoint URL after the domain name. E.g., + '/services/data/v52.0/sobjects/Account/'. |  | String |
 | **rawQueryParameters** (producer) | Comma separated list of message headers to include as query parameters for Raw operation. Do not url-encode values as this will be done automatically. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 

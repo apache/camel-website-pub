@@ -118,7 +118,7 @@ Enum values:
 
 
  | UNIX | PathSeparator |
-| **fastExistsCheck** (common (advanced)) | If set this option to be true, camel-ftp will use the list file directly to check if the file exists. Since some FTP server may not support to list the file directly, if the option is false, camel-ftp will use the old way to list the directory and check if the file exists. This option also influences readLock=changed to control whether it performs a fast check to update file information or not. This can be used to speed up the process if the FTP server has a lot of files. | false | boolean |
+| **fastExistsCheck** (common (advanced)) | If set this option to be true, camel-ftp will use the list file directly to check if the file exists. Since some FTP server may not support to list the file directly, if the option is false, camel-ftp will use the old way to list the directory and check if the file exists. This option also influences readLock=changed to control whether it performs a fast check to update file information or not. This can be used to speed up the process if the FTP server has a lot of files. The sftp and mina-sftp components check whether a file exists, also for readLock=changed, with a single request whatever the number of files, so this option makes no difference for them. | false | boolean |
 | **sendNoop** (common (advanced)) | Whether to send a noop command to check that the connection is still valid, as a pre-write check before uploading files (producer) and before each poll (consumer). This is enabled by default, which allows to silently re-connect if the connection was lost. However if this causes problems, you can turn this option off, and then a lost connection may only be found when the next operation fails. | true | boolean |
 | **delete** (consumer) | If true, the file will be deleted after it is processed successfully. | false | boolean |
 | **moveFailed** (consumer) | Sets the move failure expression based on Simple language. For example, to move files into a .error subdirectory use: .error. Note: When moving the files to the fail location Camel will handle the error and will not pick up the file again. |  | String |
@@ -298,25 +298,15 @@ Enum values:
 | **exclusiveReadLockStrategy** (lock) | Pluggable read-lock as a org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy implementation. |  | GenericFileExclusiveReadLockStrategy |
 | **readLock** (lock) | 
 
-Used by consumer, to only poll the files if it has exclusive read-lock on the file (i.e. the file is not in-progress or being written). Camel will wait until the file lock is granted. This option provides the build in strategies: - none - No read lock is in use - markerFile - Camel creates a marker file (fileName.camelLock) and then holds a lock on it. This option is not available for the FTP component - changed - Changed is using file length/modification timestamp to detect whether the file is currently being copied or not. Will at least use 1 sec to determine this, so this option cannot consume files as fast as the others, but can be more reliable as the JDK IO API cannot always determine whether a file is currently being used by another process. The option readLockCheckInterval can be used to set the check frequency. - fileLock - is for using java.nio.channels.FileLock. This option is not avail for Windows OS and the FTP component. This approach should be avoided when accessing a remote file system via a mount/share unless that file system supports distributed file locks. - rename - rename is for using a try to rename the file as a test if we can get exclusive read-lock. - idempotent - (only for file component) idempotent is for using a idempotentRepository as the read-lock. This allows to use read locks that supports clustering if the idempotent repository implementation supports that. - idempotent-changed - (only for file component) idempotent-changed is for using a idempotentRepository and changed as the combined read-lock. This allows to use read locks that supports clustering if the idempotent repository implementation supports that. - idempotent-rename - (only for file component) idempotent-rename is for using a idempotentRepository and rename as the combined read-lock. This allows to use read locks that supports clustering if the idempotent repository implementation supports that.Notice: The various read locks is not all suited to work in clustered mode, where concurrent consumers on different nodes is competing for the same files on a shared file system. The markerFile using a close to atomic operation to create the empty marker file, but its not guaranteed to work in a cluster. The fileLock may work better but then the file system need to support distributed file locks, and so on. Using the idempotent read lock can support clustering if the idempotent repository supports clustering, such as Hazelcast Component or Infinispan.
+Used by consumer, to only poll the files if it has exclusive read-lock on the file (i.e. the file is not in-progress or being written). Camel will wait until the file lock is granted. This option provides the build in strategies: - none - No read lock is in use - changed - Changed is using file length/modification timestamp to detect whether the file is currently being copied or not, so this option cannot consume files as fast as the others. The option readLockCheckInterval can be used to set the check frequency. - rename - rename is for using a try to rename the file as a test if we can get exclusive read-lock. The other read locks of the file component (markerFile, fileLock and the idempotent read locks) are not supported, and fail when the consumer is created.
 
 Enum values:
 
 -   none
     
--   markerFile
-    
--   fileLock
-    
 -   rename
     
 -   changed
-    
--   idempotent
-    
--   idempotent-changed
-    
--   idempotent-rename
     
 
 
@@ -325,11 +315,6 @@ Enum values:
 
  | none | String |
 | **readLockCheckInterval** (lock) | Interval in millis for the read-lock, if supported by the read lock. This interval is used for sleeping between attempts to acquire the read lock. For example when using the changed read lock, you can set a higher interval period to cater for slow writes. The default of 1 sec. may be too fast if the producer is very slow writing the file. Notice: For FTP the default readLockCheckInterval is 5000. The readLockTimeout value must be higher than readLockCheckInterval, but a rule of thumb is to have a timeout that is at least 2 or more times higher than the readLockCheckInterval. This is needed to ensure that ample time is allowed for the read lock process to try to grab the lock before the timeout was hit. | 1000 | long |
-| **readLockDeleteOrphanLockFiles** (lock) | Whether or not read lock with marker files should upon startup delete any orphan read lock files, which may have been left on the file system, if Camel was not properly shutdown (such as a JVM crash). If turning this option to false then any orphaned lock file will cause Camel to not attempt to pickup that file, this could also be due another node is concurrently reading files from the same shared directory. | true | boolean |
-| **readLockIdempotentReleaseAsync** (lock) | Whether the delayed release task should be synchronous or asynchronous. See more details at the readLockIdempotentReleaseDelay option. | false | boolean |
-| **readLockIdempotentReleaseAsyncPoolSize** (lock) | The number of threads in the scheduled thread pool when using asynchronous release tasks. Using a default of 1 core threads should be sufficient in almost all use-cases, only set this to a higher value if either updating the idempotent repository is slow, or there are a lot of files to process. This option is not in-use if you use a shared thread pool by configuring the readLockIdempotentReleaseExecutorService option. See more details at the readLockIdempotentReleaseDelay option. |  | int |
-| **readLockIdempotentReleaseDelay** (lock) | Whether to delay the release task for a period of millis. This can be used to delay the release tasks to expand the window when a file is regarded as read-locked, in an active/active cluster scenario with a shared idempotent repository, to ensure other nodes cannot potentially scan and acquire the same file, due to race-conditions. By expanding the time-window of the release tasks helps prevents these situations. Note delaying is only needed if you have configured readLockRemoveOnCommit to true. |  | int |
-| **readLockIdempotentReleaseExecutorService** (lock) | To use a custom and shared thread pool for asynchronous release tasks. See more details at the readLockIdempotentReleaseDelay option. |  | ScheduledExecutorService |
 | **readLockLoggingLevel** (lock) | 
 
 Logging level used when a read lock could not be acquired. By default a DEBUG is logged. You can change this level, for example to OFF to not have any logging. This option is only applicable for readLock of types: changed, fileLock, idempotent, idempotent-changed, idempotent-rename, rename.
@@ -357,8 +342,6 @@ Enum values:
 | **readLockMarkerFile** (lock) | Whether to use marker file with the changed, rename, or exclusive read lock types. By default a marker file is used as well to guard against other processes picking up the same files. This behavior can be turned off by setting this option to false. For example if you do not want to write marker files to the file systems by the Camel application. | true | boolean |
 | **readLockMinAge** (lock) | This option is applied only for readLock=changed. It allows to specify a minimum age the file must be before attempting to acquire the read lock. For example use readLockMinAge=300s to require the file is at last 5 minutes old. This can speedup the changed read lock as it will only attempt to acquire files which are at least that given age. | 0 | long |
 | **readLockMinLength** (lock) | This option is applied only for readLock=changed. It allows you to configure a minimum file length. By default Camel expects the file to contain data, and thus the default value is 1. You can set this option to zero, to allow consuming zero-length files. | 1 | long |
-| **readLockRemoveOnCommit** (lock) | This option is applied only for readLock=idempotent. It allows to specify whether to remove the file name entry from the idempotent repository when processing the file is succeeded and a commit happens. By default the file is not removed which ensures that any race-condition do not occur so another active node may attempt to grab the file. Instead the idempotent repository may support eviction strategies that you can configure to evict the file name entry after X minutes - this ensures no problems with race conditions. See more details at the readLockIdempotentReleaseDelay option. | false | boolean |
-| **readLockRemoveOnRollback** (lock) | This option is applied only for readLock=idempotent. It allows to specify whether to remove the file name entry from the idempotent repository when processing the file failed and a rollback happens. If this option is false, then the file name entry is confirmed (as if the file did a commit). | true | boolean |
 | **readLockTimeout** (lock) | Optional timeout in millis for the read-lock, if supported by the read-lock. If the read-lock could not be granted and the timeout triggered, then Camel will skip the file. At next poll Camel, will try the file again, and this time maybe the read-lock could be granted. Use a value of 0 or lower to indicate forever. Currently fileLock, changed and rename support the timeout. Notice: For FTP the default readLockTimeout value is 20000 instead of 10000. The readLockTimeout value must be higher than readLockCheckInterval, but a rule of thumb is to have a timeout that is at least 2 or more times higher than the readLockCheckInterval. This is needed to ensure that ample time is allowed for the read lock process to try to grab the lock before the timeout was hit. | 10000 | long |
 | **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffIdleThreshold** (scheduler) | The number of subsequent idle polls that should happen before the backoffMultipler should kick-in. |  | int |
@@ -434,7 +417,7 @@ Enum values:
 | **knownHostsUri** (security) | Sets the known\_hosts file (loaded from classpath by default), so that the SFTP endpoint can do host key verification. |  | String |
 | **password** (security) | Password to use for login. |  | String |
 | **preferredAuthentications** (security) | Set the preferred authentications which SFTP endpoint will used. Some example include: password,publickey. If not specified the default list will be used. |  | String |
-| **privateKey** (security) | Set the private key as byte so that the SFTP endpoint can do private key verification. |  | byte\[\] |
+| **privateKey** (security) | Set the private key as byte\[\] so that the SFTP endpoint can do private key verification. |  | byte\[\] |
 | **privateKeyFile** (security) | Set the private key file so that the SFTP endpoint can do private key verification. |  | String |
 | **privateKeyPassphrase** (security) | Set the private key file passphrase so that the SFTP endpoint can do private key verification. |  | String |
 | **privateKeyUri** (security) | Set the private key file (loaded from classpath by default) so that the SFTP endpoint can do private key verification. |  | String |
@@ -480,7 +463,7 @@ The MINA SFTP component supports the following message header(s), which is/are l
 | **CamelFilePath** (consumer) Constant: [`FILE_PATH`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FILE_PATH) | The file path. For relative files this is the starting directory. For absolute files this is the absolute path. |  | String |
 | **CamelFileRelativePath** (consumer) Constant: [`FILE_RELATIVE_PATH`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FILE_RELATIVE_PATH) | The relative path. |  | String |
 | **CamelFileParent** (common) Constant: [`FILE_PARENT`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FILE_PARENT) | The parent path. |  | String |
-| **CamelFileNameProduced** (producer) Constant: [`FILE_NAME_PRODUCED`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FILE_NAME_PRODUCED) | The actual absolute filepath (path name) for the output file that was written. This header is set by Camel and its purpose is providing end-users with the name of the file that was written. |  | String |
+| **CamelFileNameProduced** (producer) Constant: [`FILE_NAME_PRODUCED`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FILE_NAME_PRODUCED) | The actual absolute filepath (path + name) for the output file that was written. This header is set by Camel and its purpose is providing end-users with the name of the file that was written. |  | String |
 | **CamelOverruleFileName** (producer) Constant: [`OVERRULE_FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#OVERRULE_FILE_NAME) | Is used for overruling CamelFileName header and use the value instead (but only once, as the producer will remove this header after writing the file). The value can be only be a String. Notice that if the option fileName has been configured, then this is still being evaluated. |  | Object |
 | **CamelFileLocalWorkPath** (consumer) Constant: [`FILE_LOCAL_WORK_PATH`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#FILE_LOCAL_WORK_PATH) | Path to the local work file, if local work directory is used. |  | String |
 | **CamelRemoteFileInputStream** (consumer) Constant: [`REMOTE_FILE_INPUT_STREAM`](https://javadoc.io/doc/org.apache.camel/camel-mina-sftp/latest/org/apache/camel/component/file/remote/FtpConstants.html#REMOTE_FILE_INPUT_STREAM) | The remote file input stream. |  | InputStream |
@@ -822,6 +805,18 @@ from("mina-sftp://user@sftp.example.com/download?password=secret&localWorkDirect
     .to("file:inbox")
     .to("file:archive");
 ```
+
+## Read locks
+
+The mina-sftp consumer supports the read locks `none`, `rename` and `changed`. `readLock=false` and `readLock=off` mean `none`. Any other `readLock` value, such as the `markerFile`, `fileLock`, `idempotent`, `idempotent-changed` and `idempotent-rename` read locks of the [File](file-component.md) component, fails when the consumer is created, also with `poll` and `pollEnrich`, with `IllegalArgumentException: ReadLock invalid`. The `readLock` option is not checked when a custom `exclusiveReadLockStrategy` or `processStrategy` is set, as it does not apply then.
+
+## Checking whether a file exists
+
+The `mina-sftp` component checks whether a remote file exists with a single `lstat` request, whatever the number of files in the directory. This applies to `fileExist=Ignore`, `Fail` and `Move`, to `tempFileName` and `tempPrefix`, to a producer `doneFileName`, and to `readLock=changed`, which reads the size and modification time of the file with the same request on every check. So the `fastExistsCheck` option makes no difference for these checks with `mina-sftp`.
+
+The answer comes from the server for the path itself. A symbolic link is not followed, as in a directory listing: a dangling link exists, and `readLock=changed` compares the size and modification time of the link, not those of its target.
+
+When the server answers the request with another status than "no such file", for example because it does not permit or support it on the path, the component lists the directory instead and compares the names. When the server does not answer that listing either, or the connection fails, the check fails with an error, rather than answering that the file is missing.
 
 ## Error Handling
 

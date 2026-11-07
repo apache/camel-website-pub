@@ -227,7 +227,7 @@ No further entries necessary, the node with the specified **`dn`** is deleted.
 
 ### Authenticate
 
-The message body must have entries with the keys **`filter`** and **`password`**. The values must be an instance of `String` representing a valid LDAP filter and a user password, respectively.
+The message body must have entries with the keys **`filter`** and **`password`**. The values must be an instance of `String` representing a valid LDAP filter and a user password, respectively. A missing or empty password fails the operation with an `org.springframework.ldap.AuthenticationException`, without contacting the LDAP server.
 
 ### Modify Attributes
 

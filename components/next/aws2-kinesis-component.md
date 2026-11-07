@@ -198,7 +198,7 @@ Enum values:
 
 
  | TRIM\_HORIZON | ShardIteratorType |
-| **maxResultsPerRequest** (consumer) | Maximum number of records that will be fetched in each poll. | 1 | int |
+| **maxResultsPerRequest** (consumer) | Maximum number of records fetched from each shard in each poll: the Limit of the GetRecords request, from 1 to 10000. Not used by the KCL consumer (useKclConsumers). | 1000 | int |
 | **messageTimestamp** (consumer) | The message timestamp to start polling from. Required if iteratorType is set to AT\_TIMESTAMP. |  | String |
 | **sequenceNumber** (consumer) | The sequence number to start polling from. Required if iteratorType is set to AFTER\_SEQUENCE\_NUMBER or AT\_SEQUENCE\_NUMBER. |  | String |
 | **shardClosed** (consumer) | 
@@ -220,6 +220,7 @@ Enum values:
 
  | ignore | Kinesis2ShardClosedStrategyEnum |
 | **shardId** (consumer) | Defines which shardId in the Kinesis stream to get records from. |  | String |
+| **kclStopCheckpointOnFailure** (consumer (advanced)) | If we want to use a KCL Consumer and keep the checkpoint of a shard before the first record whose exchange fails, so the next holder of the lease of the shard (the route started again, or another worker) consumes the records from that one on again. The consumer goes on routing the shard, so these records can be routed twice and out of order. By default a failed record is reported to the exception handler and checkpointed with its batch. See the KCL consumer section of the docs. | false | boolean |
 | **shardMonitorInterval** (consumer (advanced)) | The interval in milliseconds to wait between shard polling. | 10000 | long |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **amazonKinesisAsyncClient** (advanced) | **Autowired** Supply a pre-constructed Amazon Kinesis async client to use for the KCL Consumer. |  | KinesisAsyncClient |
@@ -402,7 +403,7 @@ Enum values:
 
 
  | TRIM\_HORIZON | ShardIteratorType |
-| **maxResultsPerRequest** (consumer) | Maximum number of records that will be fetched in each poll. | 1 | int |
+| **maxResultsPerRequest** (consumer) | Maximum number of records fetched from each shard in each poll: the Limit of the GetRecords request, from 1 to 10000. Not used by the KCL consumer (useKclConsumers). | 1000 | int |
 | **messageTimestamp** (consumer) | The message timestamp to start polling from. Required if iteratorType is set to AT\_TIMESTAMP. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **sequenceNumber** (consumer) | The sequence number to start polling from. Required if iteratorType is set to AFTER\_SEQUENCE\_NUMBER or AT\_SEQUENCE\_NUMBER. |  | String |
@@ -443,6 +444,7 @@ Enum values:
 
 
  |  | ExchangePattern |
+| **kclStopCheckpointOnFailure** (consumer (advanced)) | If we want to use a KCL Consumer and keep the checkpoint of a shard before the first record whose exchange fails, so the next holder of the lease of the shard (the route started again, or another worker) consumes the records from that one on again. The consumer goes on routing the shard, so these records can be routed twice and out of order. By default a failed record is reported to the exception handler and checkpointed with its batch. See the KCL consumer section of the docs. | false | boolean |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
 | **shardMonitorInterval** (consumer (advanced)) | The interval in milliseconds to wait between shard polling. | 10000 | long |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -550,7 +552,7 @@ The AWS Kinesis component supports the following message header(s), which is/are
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAwsKinesisSequenceNumber** (common) Constant: [`SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#SEQUENCE_NUMBER) | The sequence number of the record, as defined in [http://docs.aws.amazon.com/kinesis/latest/APIReference/API\_PutRecord.html#API\_PutRecord\_ResponseSyntaxResponse](http://docs.aws.amazon.com/kinesis/latest/APIReference/API_PutRecord.html#API_PutRecord_ResponseSyntaxResponse) Syntax. |  | String |
+| **CamelAwsKinesisSequenceNumber** (common) Constant: [`SEQUENCE_NUMBER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#SEQUENCE_NUMBER) | The sequence number of the record, as defined in [Response Syntax](http://docs.aws.amazon.com/kinesis/latest/APIReference/API_PutRecord.html#API_PutRecord_ResponseSyntax). |  | String |
 | **CamelAwsKinesisApproximateArrivalTimestamp** (common) Constant: [`APPROX_ARRIVAL_TIME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#APPROX_ARRIVAL_TIME) | The time AWS assigned as the arrival time of the record. |  | String |
 | **CamelAwsKinesisPartitionKey** (common) Constant: [`PARTITION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#PARTITION_KEY) | Identifies which shard in the stream the data record is assigned to. |  | String |
 | **CamelMessageTimestamp** (common) Constant: [`MESSAGE_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-aws2-kinesis/latest/org/apache/camel/component/aws2/kinesis/Kinesis2Constants.html#MESSAGE_TIMESTAMP) | The timestamp of the message. |  | long |
@@ -597,6 +599,34 @@ This allows you, for instance, to know how many messages exist in this batch and
 
 The consumer is able to consume either from a single specific shard or all available shards (multiple shards consumption) of Amazon Kinesis, therefore, if you leave the 'shardId' property in the DSL configuration empty, then it’ll consume all available shards otherwise only the specified shard corresponding to the shardId will be consumed.
 
+### Consumer throughput and the Kinesis read quotas
+
+In each poll the consumer sends one `GetRecords` request to each shard it reads. The request asks for up to `maxResultsPerRequest` records (1000 by default; Kinesis accepts 1 to 10,000), so a poll routes up to `maxResultsPerRequest` records per shard.
+
+Kinesis limits the reads of each shard:
+
+-   5 `GetRecords` requests per second;
+    
+-   2 MiB of data per second;
+    
+-   at most 10,000 records or 10 MiB in one response.
+    
+
+A request over these quotas fails with a `ProvisionedThroughputExceededException`. After a response of 10 MiB, the requests of the next 5 seconds to that shard fail too.
+
+The scheduler options decide how often a shard is read:
+
+-   With `greedy=false` (the default), the next poll starts `delay` milliseconds (500 by default) after the previous one ended. A shard then gets at most about 2 requests per second, so up to about twice `maxResultsPerRequest` records per second.
+    
+-   With `greedy=true`, the next poll starts at once after a poll that routed records, and `delay` applies only after a poll that routed none. With a backlog and a fast route, the consumer can then send more than 5 requests per second to a shard.
+    
+
+To keep up with a shard, choose `maxResultsPerRequest` and `delay` so that the records of a poll times the polls per second stay within 2 MiB per second. For example, 1000 records of 1 KiB every 500 ms is about 2 MiB per second. For larger records, lower `maxResultsPerRequest` or raise `delay`. While the records of a response are routed, the consumer holds that response in memory, one for each shard of the poll.
+
+A [graceful shutdown](../../manual/graceful-shutdown.md) waits until the consumer has routed all the records of the poll that is running. Choose `maxResultsPerRequest` so that the route handles the records of a poll within the shutdown timeout (45 seconds by default). Otherwise the shutdown is forced, and the records of the poll that are not routed yet fail with a `RouteStoppingException`.
+
+These options apply to the polling consumer only. The KCL consumer (`useKclConsumers=true`) fetches the records with the settings of the Kinesis Client Library and does not use `maxResultsPerRequest`, `delay` or `greedy`.
+
 ### Custom Resume Action
 
 The consumer supports a custom `KinesisResumeAction` for controlling where each shard starts reading (e.g., resuming from a persisted sequence number). Register a subclass in the Camel registry under the key `CamelKinesisDbResumeAction`.
@@ -609,9 +639,17 @@ When a shard needs a new shard iterator, `evalEntry` is called for every entry o
 
 This component implements the Batch Producer.
 
-This allows you to send multiple messages in a single request to Amazon Kinesis. Messages with batch size more than 500 is allowed. Producer will split them into multiple requests.
+This allows you to send multiple messages in a single request to Amazon Kinesis. A batch can have any number of records: the producer splits it into `PutRecords` requests of at most 500 records and 10 MiB, the limits of a request (the size of a record is its data plus its partition key). A record above 10 MiB, the largest record that Kinesis accepts, fails the exchange with an `IllegalArgumentException` before any request is sent. A stream can have a lower limit for the size of its records (1 to 10 MiB), which Kinesis checks.
 
 The batch type needs to implement the `Iterable` interface. For example, it can be a `List`, `Set` or any other collection type. The message type can be one or more of types `byte[]`, `ByteBuffer`, UTF-8 `String`, or `InputStream`. Other types are not supported. A `java.nio.file.Path` body is not a batch: like a `java.io.File`, it is sent as a single record with the content of the file.
+
+A `PutRecords` request can be partly written: Kinesis writes some of its records and returns an error code for the others (for example `ProvisionedThroughputExceededException`). The producer then sends only the records that failed again, up to 3 times, waiting 100, 200 and 400 milliseconds plus a random part of up to a quarter of the delay (so that producers throttled at the same time do not all send again at the same time), and then goes on with the next requests of the batch. When every record fails, for example when the whole stream is throttled, each request waits 700 to 875 milliseconds in total before its records are counted as not written, so a batch of 10,000 records (20 requests of 500 records) can block the caller for 14 to 17.5 seconds, plus the time of the 80 calls and of the retries of the AWS SDK client.
+
+A record that is sent again is written after the next records of its request: if record A fails and record B, with the same partition key, is written, the stream has B before A. `PutRecords` does not guarantee the order of the records either. When the order of the records of a partition key matters, send them one by one, with a body that is not an `Iterable`.
+
+After the last request, the `CamelAwsKinesisRecordCount` header has the number of records of the batch, and the `CamelAwsKinesisFailedRecordCount` header the number of records that are still not written. When that number is not 0, the exchange fails with an exception that gives both numbers and the first error code. When a `PutRecords` call throws, for example an `InvalidArgumentException`, a KMS error, or an error of the AWS SDK client after its own retries, the exchange fails at once with that exception, and the next requests of the batch are not sent. Both headers are set in that case too: the records of that call and of the requests that were not sent are counted as not written, even if the call may have written some of them (for example after a timeout).
+
+A failure does not undo the records that are already written. A redelivery of the exchange, by the error handler of the route or by the source of the message (for example a transacted JMS or an SQS consumer), sends the whole batch again, so the records that were written before the failure are written twice. `PutRecords` has no idempotency token: a request whose outcome is unknown, for example after a timeout, can also write a record twice when it is sent again, for example by the retries of the AWS SDK client. A consumer of the stream that must not process a record twice needs an id in the data of the record to detect a duplicate.
 
 A body that is not an `Iterable` is sent as a single record, converted to a `byte[]`. A body that does not convert to a `byte[]` fails with an `InvalidPayloadException`.
 
@@ -727,6 +765,19 @@ Everything will work out of the box, by simply using your AWS Credentials.
 
 > **Note**
 > In the beginning the consumer will require 60/70 seconds for preparing everything, listing the shards, creating/querying the Lease table on Dynamo DB. Keep it in mind while working with the KCL consumer.
+
+### Failed records with the KCL consumer
+
+By default, a record whose exchange fails (the route ends with an exception) is reported to the exception handler of the consumer and checkpointed with its batch, so it is not consumed again. Use a dead letter channel or redelivery in the route when a failed record must not be lost.
+
+With `kclStopCheckpointOnFailure=true`, the checkpoint of a shard stays before the first record of it that failed. KCL does not deliver records of a shard again while the consumer holds the lease of the shard, so the consumer goes on routing the next records, but it checkpoints only the records before the failed one, also when the route stops. The next holder of the lease (the route started again, or another worker taking over the lease) consumes the records from the failed one on again. This has a cost:
+
+-   the records after the failed one are routed again, so they can be routed twice and out of order: the route must be idempotent;
+    
+-   only one WARN, with the sequence number of the first failed record, shows that the checkpoint stays behind: the lag metrics do not, as the consumer still reads the shard. A record that fails each time keeps the checkpoint of its shard before it: each new holder of the lease routes again everything since that record, up to the retention period of the stream;
+    
+-   at the end of a shard (resharding) the end is still checkpointed, as KCL requires, so the failed records of that shard are not consumed again.
+    
 
 ## Dependencies
 

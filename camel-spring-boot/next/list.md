@@ -956,7 +956,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Caffeine Cache](../../components/next/caffeine-cache-component.md) | camel-caffeine-starter | Stable | 2.20 | Perform caching operations using Caffeine Cache. |
 | [Caffeine LoadCache](../../components/next/caffeine-loadcache-component.md) | camel-caffeine-starter | Stable | 2.20 | Perform caching operations using Caffeine Cache with an attached CacheLoader. |
 | [Camunda](../../components/next/camunda-component.md) | camel-camunda-starter | Preview | 4.19 | Interact with Camunda 8 Orchestration Clusters using the Camunda Java Client. |
-| [Cassandra CQL](../../components/next/cql-component.md) | camel-cassandraql-starter | Stable | 2.15 | Integrate with Cassandra 2.0 using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
+| [Cassandra CQL](../../components/next/cql-component.md) | camel-cassandraql-starter | Stable | 2.15 | Integrate with Cassandra 2.0+ using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
 | [ChatScript](../../components/next/chatscript-component.md) | camel-chatscript-starter | Stable | 3.0 | Chat with a ChatScript Server. |
 | [Chunk](../../components/next/chunk-component.md) | camel-chunk-starter | Stable | 2.15 | Transform messages using Chunk templating engine. |
 | [Citrus](../../components/next/citrus-component.md) | camel-test-citrus-starter | Preview | 4.24 | Citrus message validation component for testing |
@@ -968,7 +968,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [CometD](../../components/next/cometd-component.md) | camel-cometd-starter | Stable | 2.0 | Offers publish/subscribe, peer-to-peer (via a server), and RPC style messaging using the CometD/Bayeux protocol. |
 | [Consul](../../components/next/consul-component.md) | camel-consul-starter | Stable | 2.18 | Integrate with Consul service discovery and configuration store. |
 | [Control Bus](../../components/next/controlbus-component.md) | camel-controlbus-starter | Stable | 2.11 | Manage and monitor Camel routes. |
-| [Couchbase](../../components/next/couchbase-component.md) | camel-couchbase-starter | Stable | 2.19 | Query Couchbase databases using SQL (N1QL) queries or MapReduce Views with a poll strategy and/or perform various operations against Couchbase databases. |
+| [Couchbase](../../components/next/couchbase-component.md) | camel-couchbase-starter | Stable | 2.19 | Query Couchbase databases using SQL++ (N1QL) queries or MapReduce Views with a poll strategy and/or perform various operations against Couchbase databases. |
 | [CouchDB](../../components/next/couchdb-component.md) | camel-couchdb-starter | Stable | 2.11 | Consume changesets for inserts, updates and deletes in a CouchDB database, as well as get, save, update and delete documents from a CouchDB database. |
 | [Cron](../../components/next/cron-component.md) | camel-cron-starter | Stable | 3.1 | A generic interface for triggering events at times specified through the Unix cron syntax. |
 | [Crypto (JCE)](../../components/next/crypto-component.md) | camel-crypto-starter | Stable | 2.3 | Sign and verify exchanges using the Signature Service of the Java Cryptographic Extension (JCE). |

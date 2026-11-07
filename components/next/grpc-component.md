@@ -105,7 +105,7 @@ With the following _path_ and _query_ parameters:
 | **maxMessageSize** (common) | The maximum message size allowed to be received/sent (MiB). | 4194304 | int |
 | **autoDiscoverServerInterceptors** (consumer) | Setting the autoDiscoverServerInterceptors mechanism, if true, the component will look for a ServerInterceptor instance in the registry automatically otherwise it will skip that checking. | true | boolean |
 | **consumerStrategy** (consumer) | 
-This option specifies the top-level strategy for processing service requests and responses in streaming mode. If an aggregation strategy is selected, all requests will be accumulated in the list, then transferred to the flow, and the accumulated responses will be sent to the sender. If a propagation strategy is selected, request is sent to the stream, and the response will be immediately sent back to the sender. If a delegation strategy is selected, request is sent to the stream, but no response generated under the assumption that all necessary responses will be sent at another part of route. Delegation strategy always comes with routeControlledStreamObserver=true to be able to achieve the assumption.
+This option specifies the top-level strategy for processing service requests and responses in streaming mode. If an aggregation strategy is selected, all requests will be accumulated in the list, then transferred to the flow, and the accumulated responses will be sent to the sender. If a propagation strategy is selected, request is sent to the stream, and the response will be immediately sent back to the sender. If a delegation strategy is selected, request is sent to the stream, but no response generated under the assumption that all necessary responses will be sent at another part of route. Delegation strategy always comes with routeControlledStreamObserver=true to be able to achieve the assumption. With routeControlledStreamObserver=true, the propagation strategy does not send responses either: it sends the requests to the route one at a time, and the route sends the responses.
 
 Enum values:
 
@@ -125,7 +125,7 @@ Enum values:
 | **keepAliveTime** (consumer) | Sets a custom keepalive time in milliseconds, the delay time for sending next keepalive ping. A value of Long.MAX\_VALUE or a value greater or equal to NettyServerBuilder.AS\_LARGE\_AS\_INFINITE will disable keepalive. | 7200000 | long |
 | **keepAliveTimeout** (consumer) | Sets a custom keepalive timeout in milliseconds, the timeout for keepalive ping requests. | 20000 | long |
 | **maxConcurrentCallsPerConnection** (consumer) | The maximum number of concurrent calls permitted for each incoming server connection. Defaults to no limit. | 2147483647 | int |
-| **maxConnectionAge** (consumer) | Sets a custom max connection age in milliseconds. Connections lasting longer than which will be gracefully terminated. A random jitter of /-10% will be added to the value. A value of Long.MAX\_VALUE (the default) or a value greater or equal to NettyServerBuilder.AS\_LARGE\_AS\_INFINITE will disable max connection age. | 9223372036854776000 | long |
+| **maxConnectionAge** (consumer) | Sets a custom max connection age in milliseconds. Connections lasting longer than which will be gracefully terminated. A random jitter of +/-10% will be added to the value. A value of Long.MAX\_VALUE (the default) or a value greater or equal to NettyServerBuilder.AS\_LARGE\_AS\_INFINITE will disable max connection age. | 9223372036854776000 | long |
 | **maxConnectionAgeGrace** (consumer) | Sets a custom grace time in milliseconds for the graceful connection termination. A value of Long.MAX\_VALUE (the default) or a value greater or equal to NettyServerBuilder.AS\_LARGE\_AS\_INFINITE is considered infinite. | 9223372036854776000 | long |
 | **maxConnectionIdle** (consumer) | Sets a custom max connection idle time in milliseconds. Connection being idle for longer than which will be gracefully terminated. A value of Long.MAX\_VALUE (the default) or a value greater or equal to NettyServerBuilder.AS\_LARGE\_AS\_INFINITE will disable max connection idle. | 9223372036854776000 | long |
 | **maxInboundMetadataSize** (consumer) | Sets the maximum size of metadata allowed to be received. The default is 8 KiB. | 8192 | int |
@@ -341,7 +341,7 @@ With `routeControlledStreamObserver=true` the route sends the responses itself, 
 
 The body of an `onError` event must be a `Throwable`, which ends the call. Any other body, or no body, fails the exchange with an `IllegalArgumentException`; the call still ends with an `INTERNAL` status error that has the text of the body as description, so the client does not wait until its deadline.
 
-The producer sends the event named by the `CamelGrpcEventType` header (`onNext`, `onCompleted` or `onError`). The consumer sets this header for the `DELEGATION` events, and the reply exchanges of a `streamRepliesTo` producer have it. When a route calls the producer with an exchange without the header, for example in a unary call, it must set the header itself: without it, or with another value, nothing is sent and the exchange fails with an `IllegalArgumentException`. An exchange without the `grpcResponseObserver` exchange property, that did not come from a consumer with `routeControlledStreamObserver=true`, also fails with an `IllegalArgumentException`.
+The producer sends the event named by the `CamelGrpcEventType` header (`onNext`, `onCompleted` or `onError`). The consumer sets this header for the events of client streaming and bidirectional streaming calls, and the reply exchanges of a `streamRepliesTo` producer have it. When a route calls the producer with an exchange without the header, for example in a unary call, it must set the header itself: without it, or with another value, nothing is sent and the exchange fails with an `IllegalArgumentException`. An exchange without the `grpcResponseObserver` exchange property, that did not come from a consumer with `routeControlledStreamObserver=true`, also fails with an `IllegalArgumentException`.
 
 ### gRPC producer resource type mapping
 
@@ -471,7 +471,7 @@ Both client streaming and bidirectional streaming gRPC methods expose `StreamObs
 
 But there is another thing: requests also come in streaming mode. So you need the following:
 
-1.  Set consumer strategy to DELEGATION - that differs from the default PROPAGATION option in the fact that consumer will not produce responses at all. If you set PROPAGATION, then you will receive more responses than you expected;
+1.  Choose the consumer strategy. With `routeControlledStreamObserver=true` the consumer sends no responses itself with either strategy: the default `PROPAGATION` routes the events of a call one at a time, in order, while `DELEGATION` does not wait for an event to be done before it routes the next one;
     
 2.  Forward `onError` and `onCompletion` on consumer;
     

@@ -13,7 +13,7 @@ camel get [options]
  
 | Subcommand | Description |
 | --- | --- |
-| [activity](camel-jbang-get-activity.md) | Get recent completed exchange activity |
+| [about](camel-jbang-get-about.md) | Get what an integration does and what has happened: its purpose, what comes in, its routes, what goes out, and the last minutes |
 | [bean](camel-jbang-get-bean.md) | List beans in a running Camel integration |
 | [blocked](camel-jbang-get-blocked.md) | Get blocked messages of Camel integrations |
 | [chaos](camel-jbang-get-chaos.md) | Get the chaos rules of running integrations, or their report (camel-chaos) |
@@ -44,6 +44,7 @@ camel get [options]
 | [source](camel-jbang-get-source.md) | Display Camel route source code |
 | [sql-trace](camel-jbang-get-sql-trace.md) | Get SQL query trace data |
 | [startup-recorder](camel-jbang-get-startup-recorder.md) | Display startup recording |
+| [timeline](camel-jbang-get-timeline.md) | Get what the routes did per second, the errors, and the failed and slowest exchanges |
 | [transformer](camel-jbang-get-transformer.md) | Get list of data type transformers |
 | [variable](camel-jbang-get-variable.md) | List variables of Camel integrations |
 | [vault](camel-jbang-get-vault.md) | List secrets from security vaults |

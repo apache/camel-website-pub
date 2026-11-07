@@ -120,7 +120,7 @@ The SAP NetWeaver component supports the following message header(s), which is/a
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelNetWeaverCommand** (producer) Constant: [`COMMAND`](https://javadoc.io/doc/org.apache.camel/camel-sap-netweaver/latest/org/apache/camel/component/sap/netweaver/NetWeaverConstants.html#COMMAND) | **Required** The command to execute in [http://msdn.microsoft.com/en-us/library/cc956153.aspxMS](http://msdn.microsoft.com/en-us/library/cc956153.aspxMS) ADO.Net Data Service format. |  | String |
+| **CamelNetWeaverCommand** (producer) Constant: [`COMMAND`](https://javadoc.io/doc/org.apache.camel/camel-sap-netweaver/latest/org/apache/camel/component/sap/netweaver/NetWeaverConstants.html#COMMAND) | **Required** The command to execute in [MS ADO.Net Data Service](http://msdn.microsoft.com/en-us/library/cc956153.aspx) format. |  | String |
 | **CamelHttpPath** (producer) Constant: [`HTTP_PATH`](https://javadoc.io/doc/org.apache.camel/camel-sap-netweaver/latest/org/apache/camel/component/sap/netweaver/NetWeaverConstants.html#HTTP_PATH) | The http path. |  | String |
 | **Accept** (producer) Constant: [`ACCEPT`](https://javadoc.io/doc/org.apache.camel/camel-sap-netweaver/latest/org/apache/camel/component/sap/netweaver/NetWeaverConstants.html#ACCEPT) | The media type. |  | String |
 

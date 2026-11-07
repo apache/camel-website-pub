@@ -91,7 +91,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **events** (consumer) | **Required** Comma-separated list of event types to subscribe to. Event types correspond to CamelEvent.Type enum values (case-insensitive), for example: RouteStarted, RouteStopped, ExchangeCompleted, ExchangeFailed. Wildcard patterns are supported using a suffix, for example: Route matches all route events, Exchange matches all exchange events, and matches all events. |  | String |
+| **events** (consumer) | **Required** Comma-separated list of event types to subscribe to. Event types correspond to CamelEvent.Type enum values (case-insensitive), for example: RouteStarted, RouteStopped, ExchangeCompleted, ExchangeFailed. Wildcard patterns are supported using a \* suffix, for example: Route\* matches all route events, Exchange\* matches all exchange events, and \* matches all events. |  | String |
 
 ### Query Parameters
 

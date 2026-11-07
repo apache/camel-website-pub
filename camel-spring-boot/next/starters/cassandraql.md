@@ -1,6 +1,6 @@
 # Cassandra CQL
 
-Integrate with Cassandra 2.0 using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax.
+Integrate with Cassandra 2.0+ using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax.
 
 ## What’s inside
 

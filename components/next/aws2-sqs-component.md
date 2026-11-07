@@ -194,7 +194,7 @@ Enum values:
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **messageDeduplicationIdStrategy** (producer) | 
 
-Only for FIFO queues. Strategy for setting the messageDeduplicationId on the message. It can be one of the following options: useExchangeId, useContentBasedDeduplication. For the useContentBasedDeduplication option, no messageDeduplicationId will be set on the message.
+Only for FIFO queues. Strategy for setting the messageDeduplicationId on the message. It can be one of the following options: **useExchangeId**, **useContentBasedDeduplication**. For the **useContentBasedDeduplication** option, no messageDeduplicationId will be set on the message.
 
 Enum values:
 
@@ -210,7 +210,7 @@ Enum values:
  | useExchangeId | String |
 | **messageGroupIdStrategy** (producer) | 
 
-Only for FIFO queues. Strategy for setting the messageGroupId on the message. It can be one of the following options: useConstant, useExchangeId, usePropertyValue. For the usePropertyValue option, the value of property CamelAwsMessageGroupId will be used.
+Only for FIFO queues. Strategy for setting the messageGroupId on the message. It can be one of the following options: **useConstant**, **useExchangeId**, **usePropertyValue**. For the **usePropertyValue** option, the value of property CamelAwsMessageGroupId will be used.
 
 Enum values:
 
@@ -437,7 +437,7 @@ Enum values:
 | **extendMessageVisibility** (consumer) | If enabled, then a scheduled background task will keep extending the message visibility on SQS. This is needed if it takes a long time to process the message. If set to true defaultVisibilityTimeout must be set. See details at Amazon docs. | false | boolean |
 | **kmsDataKeyReusePeriodSeconds** (consumer) | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). Default: 300 (5 minutes). |  | Integer |
 | **kmsMasterKeyId** (consumer) | The ID of an AWS-managed customer master key (CMK) for Amazon SQS or a custom CMK. |  | String |
-| **maxMessagesPerPoll** (consumer) | Gets the maximum number of messages as a limit to poll at each polling. Is default unlimited, but use 0 or negative number to disable it as unlimited. |  | int |
+| **maxMessagesPerPoll** (consumer) | The maximum number of messages to receive in each poll. A receive request returns at most 10 messages, so a value above 10 is split into several receive requests of at most 10 messages each, and 0 or a negative value receives one message per poll. The messages of a poll are routed one after the other, and the visibility timeout of each one runs from its receive: with a slow route, enable extendMessageVisibility together with visibilityTimeout, or use a visibility timeout that covers the whole batch. | 10 | int |
 | **messageAttributeNames** (consumer) | A list of message attribute names to receive when consuming. Multiple names can be separated by comma. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **serverSideEncryptionEnabled** (consumer) | Define if Server Side Encryption is enabled or not on the queue. | false | boolean |
@@ -467,7 +467,7 @@ Enum values:
 | **delaySeconds** (producer) | Delay sending messages for a number of seconds. |  | Integer |
 | **messageDeduplicationIdStrategy** (producer) | 
 
-Only for FIFO queues. Strategy for setting the messageDeduplicationId on the message. It can be one of the following options: useExchangeId, useContentBasedDeduplication. For the useContentBasedDeduplication option, no messageDeduplicationId will be set on the message.
+Only for FIFO queues. Strategy for setting the messageDeduplicationId on the message. It can be one of the following options: **useExchangeId**, **useContentBasedDeduplication**. For the **useContentBasedDeduplication** option, no messageDeduplicationId will be set on the message.
 
 Enum values:
 
@@ -483,7 +483,7 @@ Enum values:
  | useExchangeId | String |
 | **messageGroupIdStrategy** (producer) | 
 
-Only for FIFO queues. Strategy for setting the messageGroupId on the message. It can be one of the following options: useConstant, useExchangeId, usePropertyValue. For the usePropertyValue option, the value of property CamelAwsMessageGroupId will be used.
+Only for FIFO queues. Strategy for setting the messageGroupId on the message. It can be one of the following options: **useConstant**, **useExchangeId**, **usePropertyValue**. For the **usePropertyValue** option, the value of property CamelAwsMessageGroupId will be used.
 
 Enum values:
 
@@ -715,6 +715,14 @@ You have to provide the amazonSQSClient in the Registry or your accessKey and se
 This component implements the Batch Consumer.
 
 This allows you, for instance, to know how many messages exist in this batch and for instance, let the Aggregator aggregate this number of messages.
+
+Each poll receives up to `maxMessagesPerPoll` messages, 10 by default, which is the most that SQS returns to one receive request. With a higher value, each poll sends several receive requests of at most 10 messages, up to `concurrentRequestLimit` of them at the same time. With 0 or a negative value, each poll receives one message.
+
+Without long polling, SQS answers a receive request from a sample of its servers, so it often returns fewer messages than asked for, or none, while more are in the queue. Set `waitTimeSeconds` (up to 20 seconds), or give the queue a `ReceiveMessageWaitTimeSeconds` attribute above 0, so that a receive request waits for messages.
+
+The messages of a poll are routed one after the other, and the visibility timeout of each one runs from its receive. If the route is slow, the last messages of a poll can become visible again before their turn comes, and SQS then delivers them a second time. Enable `extendMessageVisibility` together with `visibilityTimeout`, which keeps every message of the poll invisible until it is processed, or use a visibility timeout that covers the processing of a whole poll.
+
+With a FIFO queue, a poll can receive several messages of the same message group. A message that fails is not deleted, but the next messages of its group in the same poll are still routed and deleted, so the failed message is delivered again after them. Set `maxMessagesPerPoll=1` if the messages of a group must keep their order when one of them fails.
 
 ### Static credentials, Default Credential Provider and Profile Credentials Provider
 

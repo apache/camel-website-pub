@@ -386,8 +386,8 @@ The AWS Security Token Service (STS) component supports the following message he
 | **CamelAwsStsFederatedName** (producer) Constant: [`FEDERATED_NAME`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#FEDERATED_NAME) | The name of the federated user. |  | String |
 | **CamelAwsStsAssumeRoleDurationSeconds** (producer) Constant: [`ASSUME_ROLE_DURATION_SECONDS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#ASSUME_ROLE_DURATION_SECONDS) | The duration, in seconds, of the role session. It could go from 900 seconds, to 1 to 12 hours (dependent on administrator settings. The default if not specified is 3600 seconds. |  | Integer |
 | **CamelAwsStsAccessKeyId** (assumeRole getSessionToken getFederationToken) Constant: [`ACCESS_KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#ACCESS_KEY_ID) | The temporary access key ID. |  | String |
-| **CamelAwsStsSecretKey** (assumeRole getSessionToken getFederationToken) Constant: [`SECRET_KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#SECRET_KEY_ID) | The temporary secret access key. |  | String |
-| **CamelAwsStsSessionToken** (assumeRole getSessionToken getFederationToken) Constant: [`SESSION_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#SESSION_TOKEN) | The temporary session token. |  | String |
+| **CamelAwsStsSecretKey** (assumeRole getSessionToken getFederationToken) Constant: [`SECRET_KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#SECRET_KEY_ID) | **Deprecated** The temporary secret access key. Deprecation note: The producer no longer sets this header. Take the secret access key from the body, such as $\\{body.credentials().secretAccessKey()}. |  | String |
+| **CamelAwsStsSessionToken** (assumeRole getSessionToken getFederationToken) Constant: [`SESSION_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#SESSION_TOKEN) | **Deprecated** The temporary session token. Deprecation note: The producer no longer sets this header. Take the session token from the body, such as $\\{body.credentials().sessionToken()}. |  | String |
 | **CamelAwsStsExpiration** (assumeRole getSessionToken getFederationToken) Constant: [`EXPIRATION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#EXPIRATION) | The expiration date and time of the credentials. |  | Instant |
 | **CamelAwsStsAssumedRoleArn** (assumeRole) Constant: [`ASSUMED_ROLE_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-sts/latest/org/apache/camel/component/aws2/sts/STS2Constants.html#ASSUMED_ROLE_ARN) | The Amazon Resource Name (ARN) of the assumed role. |  | String |
 
@@ -454,6 +454,12 @@ Camel-AWS STS component provides the following operation on the producer side:
     
 -   getFederationToken
     
+
+### The temporary credentials
+
+The body of the message is the response of the AWS SDK, such as an `AssumeRoleResponse`, and its `credentials()` hold the temporary credentials.
+
+The producer also sets the `CamelAwsStsAccessKeyId` and `CamelAwsStsExpiration` headers, and for `assumeRole` the `CamelAwsStsAssumedRoleArn` header. It does not set headers with the secret access key and the session token: take them from the body, such as `${body.credentials().secretAccessKey()}` and `${body.credentials().sessionToken()}` with the [Simple](languages/simple-language.md) language. To keep them for later steps of the route, store them in a variable rather than in a header, as message headers are logged, traced and sent on by many producers.
 
 ## Examples
 

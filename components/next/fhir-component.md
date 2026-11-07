@@ -544,7 +544,7 @@ The fhir/resource API method has the parameters listed in the table below:
 | **preferReturn** | Add a Prefer header to the request, which requests that the server include or suppress the resource body as a part of the result. If a resource is returned by the server it will be parsed an accessible to the client via MethodOutcome#getResource() , may be null | PreferReturnEnum |
 | **resource** | The resource to create | IBaseResource |
 | **resourceAsString** | The resource to create | String |
-| **url** | The search URL to use. The format of this URL should be of the form ResourceTypeParameters, for example: Patientname=Smith&identifier=13.2.4.11.4%7C847366, may be null | String |
+| **url** | The search URL to use. The format of this URL should be of the form \[ResourceType\]?\[Parameters\], for example: Patient?name=Smith&identifier=13.2.4.11.4%7C847366, may be null | String |
 
 In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -616,7 +616,7 @@ The fhir/resourceConditionalByUrl API method has the parameters listed in the ta
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
-| **url** | The search URL to use. The format of this URL should be of the form ResourceTypeParameters, for example: Patientname=Smith&identifier=13.2.4.11.4%7C847366 | String |
+| **url** | The search URL to use. The format of this URL should be of the form \[ResourceType\]?\[Parameters\], for example: Patient?name=Smith&identifier=13.2.4.11.4%7C847366 | String |
 
 In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -658,7 +658,7 @@ The fhir/onInstance API method has the parameters listed in the table below:
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 | **iCutoff** | Request that the server return only resource versions that were created at or after the given time (inclusive), may be NULL | IPrimitiveType |
 | **id** | The IIdType which must be populated with both a resource type and a resource ID at | IIdType |
-| **returnType** | Request that the method return a Bundle resource (such as ca.uhn.fhir.model.dstu2.resource.Bundle). Use this method if you are accessing a DSTU2 server. | Class |
+| **returnType** | Request that the method return a Bundle resource (such as ca.uhn.fhir.model.dstu2.resource.Bundle). Use this method if you are accessing a DSTU2+ server. | Class |
 
 #### Method onServer
 
@@ -676,7 +676,7 @@ The fhir/onServer API method has the parameters listed in the table below:
 | **cutoff** | Request that the server return only resource versions that were created at or after the given time (inclusive), may be NULL | Date |
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 | **iCutoff** | Request that the server return only resource versions that were created at or after the given time (inclusive), may be NULL | IPrimitiveType |
-| **returnType** | Request that the method return a Bundle resource (such as ca.uhn.fhir.model.dstu2.resource.Bundle). Use this method if you are accessing a DSTU2 server. | Class |
+| **returnType** | Request that the method return a Bundle resource (such as ca.uhn.fhir.model.dstu2.resource.Bundle). Use this method if you are accessing a DSTU2+ server. | Class |
 
 #### Method onType
 
@@ -695,7 +695,7 @@ The fhir/onType API method has the parameters listed in the table below:
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 | **iCutoff** | Request that the server return only resource versions that were created at or after the given time (inclusive), may be NULL | IPrimitiveType |
 | **resourceType** | The resource type to search for | Class |
-| **returnType** | Request that the method return a Bundle resource (such as ca.uhn.fhir.model.dstu2.resource.Bundle). Use this method if you are accessing a DSTU2 server. | Class |
+| **returnType** | Request that the method return a Bundle resource (such as ca.uhn.fhir.model.dstu2.resource.Bundle). Use this method if you are accessing a DSTU2+ server. | Class |
 
 In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -1049,7 +1049,7 @@ The fhir/patchByUrl API method has the parameters listed in the table below:
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
 | **patchBody** | The body of the patch document serialized in either XML or JSON which conforms to [http://jsonpatch.com/](http://jsonpatch.com/) or [http://tools.ietf.org/html/rfc5261](http://tools.ietf.org/html/rfc5261) | String |
 | **preferReturn** | Add a Prefer header to the request, which requests that the server include or suppress the resource body as a part of the result. If a resource is returned by the server it will be parsed an accessible to the client via MethodOutcome#getResource() | PreferReturnEnum |
-| **url** | The search URL to use. The format of this URL should be of the form ResourceTypeParameters, for example: Patientname=Smith&identifier=13.2.4.11.4%7C847366 | String |
+| **url** | The search URL to use. The format of this URL should be of the form \[ResourceType\]?\[Parameters\], for example: Patient?name=Smith&identifier=13.2.4.11.4%7C847366 | String |
 
 In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -1187,7 +1187,7 @@ The fhir/searchByUrl API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **extraParameters** | See ExtraParameters for a full list of parameters that can be passed, may be NULL | Map |
-| **url** | The URL to search for. Note that this URL may be complete (e.g. [http://example.com/base/Patientname=foo](http://example.com/base/Patientname=foo)) in which case the client’s base URL will be ignored. Or it can be relative (e.g. Patientname=foo) in which case the client’s base URL will be used. | String |
+| **url** | The URL to search for. Note that this URL may be complete (e.g. [http://example.com/base/Patient?name=foo](http://example.com/base/Patient?name=foo)) in which case the client’s base URL will be ignored. Or it can be relative (e.g. Patient?name=foo) in which case the client’s base URL will be used. | String |
 
 In addition to the parameters above, the fhir API can also use any of the [Query Parameters](#_query_parameters).
 

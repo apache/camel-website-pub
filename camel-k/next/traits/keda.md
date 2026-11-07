@@ -33,9 +33,11 @@ The following configuration options are available:
 
 When `keda.auto` is enabled, Camel K inspects the consumer endpoints in an Integration and creates KEDA triggers for components with a registered scaler mapping. A scaler is the KEDA adapter that reads metrics from an external system and uses them to determine when a workload should scale. See the [KEDA scaler concepts](https://keda.sh/docs/latest/concepts/scaling-deployments/) documentation for more information.
 
-Automatic discovery currently supports the following Camel component:
+Automatic discovery currently supports the following Camel components:
 
 -   `kafka`: creates an Apache Kafka trigger from the topic, broker, and consumer-group values in the endpoint URI. See the [KEDA Apache Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) documentation for the available trigger metadata.
+    
+-   `pulsar`: creates an Apache Pulsar trigger from the topic in the endpoint URI and the `subscriptionName` option (Camel’s default `subs` when it is not set). When the service URL (`serviceUrl` option or `camel.component.pulsar.service-url` property) uses the `pulsar://` scheme, `adminURL` is set to `[http://<host>:8080](http://\<host\>:8080)`; for TLS or a custom admin port, set it with `keda.autoMetadata`. See the [KEDA Apache Pulsar scaler](https://keda.sh/docs/latest/scalers/pulsar/) documentation for the available trigger metadata.
     
 
 Unsupported Camel components do not produce an automatically discovered trigger. You can still configure their KEDA triggers explicitly with `keda.triggers`.

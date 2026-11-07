@@ -111,7 +111,8 @@ With the following _path_ and _query_ parameters:
 | **webhookPath** (advanced) | Webhook path. | webhook | String |
 | **whatsappService** (advanced) | WhatsApp service implementation. |  | WhatsAppService |
 | **authorizationToken** (security) | **Required** The authorization access token taken from whatsapp-business dashboard. |  | String |
-| **webhookSecret** (security) | The app secret used to verify the X-Hub-Signature-256 signature of inbound webhook event payloads (from the Meta/WhatsApp app dashboard). When set, event callbacks with a missing or invalid signature are rejected with HTTP 403; when not set, no signature verification is performed. |  | String |
+| **webhookSecret** (security) | The app secret used to verify the X-Hub-Signature-256 signature of inbound webhook event payloads (from the Meta/WhatsApp app dashboard). An event callback with a missing or invalid signature is rejected with HTTP 403. Required in webhook mode, unless webhookVerification is false. |  | String |
+| **webhookVerification** (security) | Whether, in webhook mode, the X-Hub-Signature-256 signature of every event callback is verified with webhookSecret. When true, the webhook route fails to start without webhookSecret. Set it to false to accept event callbacks without verifying their signature, for example in development. | true | boolean |
 | **webhookVerifyToken** (security) | Webhook verify token. |  | String |
 
 ## Message Headers
@@ -173,9 +174,11 @@ In Java DSL:
 _Java-only: uses fromF with string formatting_
 
 ```java
-fromF("webhook:whatsapp:%s?authorizationToken=%s&webhookVerifyToken=%s", "<phoneNumberId>", "<AuthorizationToken>", "<webhookVerifyToken>").log("${body}")
+fromF("webhook:whatsapp:%s?authorizationToken=%s&webhookVerifyToken=%s&webhookSecret=%s", "<phoneNumberId>", "<AuthorizationToken>", "<webhookVerifyToken>", "<appSecret>").log("${body}")
 ```
 
 You can follow the [set up webhooks guide](https://developers.facebook.com/docs/whatsapp/cloud-api/guides/set-up-webhooks) to enable and configure the webhook. The webhook component will expose an endpoint that can be used into the whatsapp administration console.
+
+WhatsApp signs every event it posts to the webhook with the app secret of the Meta app, in the `X-Hub-Signature-256` header. Set `webhookSecret` to that app secret (from the Meta app dashboard): an event without a valid signature is answered with HTTP 403 and does not reach the route, and an event that reaches the route is answered with an empty HTTP 200. A webhook route without `webhookSecret` fails to start. To accept the events without verifying their signature, for example in development, set `webhookVerification` to `false`.
 
 Refer to the [camel-webhook component](webhook-component.md) documentation for instructions on how to set it.

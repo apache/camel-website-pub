@@ -80,7 +80,7 @@ The AWS Simple Notification System (SNS) component supports the following option
 | **kmsMasterKeyId** (producer) | The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **messageDeduplicationIdStrategy** (producer) | 
-Only for FIFO Topic. Strategy for setting the messageDeduplicationId on the message. It can be one of the following options: useExchangeId, useContentBasedDeduplication. For the useContentBasedDeduplication option, no messageDeduplicationId will be set on the message.
+Only for FIFO Topic. Strategy for setting the messageDeduplicationId on the message. It can be one of the following options: **useExchangeId**, **useContentBasedDeduplication**. For the **useContentBasedDeduplication** option, no messageDeduplicationId will be set on the message.
 
 Enum values:
 
@@ -96,7 +96,7 @@ Enum values:
  | useExchangeId | String |
 | **messageGroupIdStrategy** (producer) | 
 
-Only for FIFO Topic. Strategy for setting the messageGroupId on the message. It can be one of the following options: useConstant, useExchangeId, usePropertyValue. For the usePropertyValue option, the value of property CamelAwsSnsMessageGroupId will be used.
+Only for FIFO Topic. Strategy for setting the messageGroupId on the message. It can be one of the following options: **useConstant**, **useExchangeId**, **usePropertyValue**. For the **usePropertyValue** option, the value of property CamelAwsSnsMessageGroupId will be used.
 
 Enum values:
 
@@ -272,7 +272,7 @@ With the following _path_ and _query_ parameters:
 | **headerFilterStrategy** (producer) | To use a custom HeaderFilterStrategy to map headers to/from Camel. |  | HeaderFilterStrategy |
 | **kmsMasterKeyId** (producer) | The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. |  | String |
 | **messageDeduplicationIdStrategy** (producer) | 
-Only for FIFO Topic. Strategy for setting the messageDeduplicationId on the message. It can be one of the following options: useExchangeId, useContentBasedDeduplication. For the useContentBasedDeduplication option, no messageDeduplicationId will be set on the message.
+Only for FIFO Topic. Strategy for setting the messageDeduplicationId on the message. It can be one of the following options: **useExchangeId**, **useContentBasedDeduplication**. For the **useContentBasedDeduplication** option, no messageDeduplicationId will be set on the message.
 
 Enum values:
 
@@ -288,7 +288,7 @@ Enum values:
  | useExchangeId | String |
 | **messageGroupIdStrategy** (producer) | 
 
-Only for FIFO Topic. Strategy for setting the messageGroupId on the message. It can be one of the following options: useConstant, useExchangeId, usePropertyValue. For the usePropertyValue option, the value of property CamelAwsSnsMessageGroupId will be used.
+Only for FIFO Topic. Strategy for setting the messageGroupId on the message. It can be one of the following options: **useConstant**, **useExchangeId**, **usePropertyValue**. For the **usePropertyValue** option, the value of property CamelAwsSnsMessageGroupId will be used.
 
 Enum values:
 

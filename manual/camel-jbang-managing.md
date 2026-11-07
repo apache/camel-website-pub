@@ -717,13 +717,13 @@ REJECT counts the calls the open breaker refused without calling the service, FA
 With [camel-chaos](../components/next/others/chaos.md) (`camel run --chaos`), turn on faults in a running integration and see how its routes cope:
 
 ```bash
-camel cmd chaos-add myapp --rule='endpoint=kafka:orders* error rate=0.3 until=1m'
+camel cmd chaos-add --rule='endpoint=kafka:orders* error rate=0.3 until=1m'
 camel get chaos
 camel get chaos myapp --report
 camel cmd chaos-clear
 ```
 
-`camel get chaos` lists the current rules with their id, version, state, matches and the faults that fired, and `--report` shows the report: the verdict, the seed, every version of every rule and the counts per route. Chaos is for development only: it stays off with profile `prod`, and the commands cannot switch it on.
+`chaos-add`, `chaos-change` and `chaos-remove` take the name or pid of the integration; without it they act on the only integration that runs, or the only one with chaos switched on, and otherwise fail with the list of the running integrations. `chaos-add` prints the rule in plain words too (`fail 30% of the sends to kafka:orders*, for 1 minute`), and with `--dry-run` it adds nothing, and prints what the rule would hit now: the sends, polls, routes or steps, with their route. `camel get chaos` lists the current rules with their id, version, state, matches and the faults that fired, and `--report` shows the report: the verdict, the seed, every version of every rule and the counts per route. Chaos is for development only: it stays off with profile `prod`, and the commands cannot switch it on.
 
 ## Using Jolokia and Hawtio
 

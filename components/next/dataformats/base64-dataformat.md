@@ -13,7 +13,7 @@ The Base64 dataformat supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **lineLength** (common) | `76` | `Integer` | To specific a maximum line length for the encoded data. By default 76 is used. |
 | **lineSeparator** (advanced) |  | `String` | The line separators to use. By default \\r\\n is used. |
-| **urlSafe** (advanced) | `false` | `Boolean` | Instead of emitting and / we emit - and \_ respectively. urlSafe is only applied to encode operations. Decoding seamlessly handles both modes. |
+| **urlSafe** (advanced) | `false` | `Boolean` | Instead of emitting + and / we emit - and \_ respectively. urlSafe is only applied to encode operations. Decoding seamlessly handles both modes. |
 
 ## Message Body
 

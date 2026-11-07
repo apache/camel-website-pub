@@ -77,6 +77,7 @@ The AMQP component supports the following options which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **brokerUrl** (common) | Remote URL to broker. The URL is used to setup connection factory and is broker specific (such as ActiveMQ). |  | String |
+| **cacheConnection** (common) | Whether the producers send over one shared connection to the broker, when the component creates the connection factory: from brokerUrl, from the host, port, username, password and useSsl options, or with the amqpComponent factory methods. Turn it off to open and close a connection for every message sent. The consumers keep their own connections. A connectionFactory that you set yourself, on the component or on the endpoint, is used as it is. | true | boolean |
 | **clientId** (common) | Sets the JMS client ID to use. Note that this value, if specified, must be unique and can only be used by a single JMS connection instance. It is typically only required for durable topic subscriptions with JMS 1.1. |  | String |
 | **connectionFactory** (common) | The connection factory to be use. A connection factory must be configured either on the component or endpoint. |  | ConnectionFactory |
 | **disableReplyTo** (common) | Specifies whether Camel ignores the JMSReplyTo header in messages. If true, Camel does not send a reply back to the destination specified in the JMSReplyTo header. You can use this option if you want Camel to consume from a route and you do not want Camel to automatically send back a reply message because another component in your code handles the reply message. You can also use this option if you want to use Camel as a proxy between different message brokers and you want to route message from one system to another. | false | boolean |
@@ -301,7 +302,7 @@ Enum values:
  |  | ReplyToType |
 | **requestTimeout** (producer) | The timeout for waiting for a reply when using the InOut Exchange Pattern (in milliseconds). The default is 20 seconds. You can include the header CamelJmsRequestTimeout to override this endpoint configured timeout value, and thus have per message individual timeout values. See also the requestTimeoutCheckerInterval option. | 20000 | long |
 | **timeToLive** (producer) | When sending messages, specifies the time-to-live of the message (in milliseconds). | \-1 | long |
-| **allowAdditionalHeaders** (producer (advanced)) | This option is used to allow additional headers which may have values that are invalid according to JMS specification. For example, some message systems, such as WMQ, do this with header names using prefix JMS\_IBM\_MQMD\_ containing values with byte array or other invalid types. You can specify multiple header names separated by comma, and use as suffix for wildcard matching. |  | String |
+| **allowAdditionalHeaders** (producer (advanced)) | This option is used to allow additional headers which may have values that are invalid according to JMS specification. For example, some message systems, such as WMQ, do this with header names using prefix JMS\_IBM\_MQMD\_ containing values with byte array or other invalid types. You can specify multiple header names separated by comma, and use \* as suffix for wildcard matching. |  | String |
 | **allowNullBody** (producer (advanced)) | Whether to allow sending messages with no body. If this option is false and the message body is null, then an JMSException is thrown. | true | boolean |
 | **alwaysCopyMessage** (producer (advanced)) | If true, Camel will always make a JMS message copy of the message when it is passed to the producer for sending. Copying the message is needed in some situations, such as when a replyToDestinationSelectorName is set (incidentally, Camel will set the alwaysCopyMessage option to true, if a replyToDestinationSelectorName is set). | false | boolean |
 | **correlationProperty** (producer (advanced)) | When using InOut exchange pattern use this JMS property instead of JMSCorrelationID JMS property to correlate messages. If set messages will be correlated solely on the value of this property JMSCorrelationID property will be ignored and not set by Camel. |  | String |
@@ -415,7 +416,7 @@ Enum values:
 
  | WARN | LoggingLevel |
 | **errorHandlerLogStackTrace** (logging) | Allows to control whether stack-traces should be logged or not, by the default errorHandler. | true | boolean |
-| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. is applied. |  | String |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. **and otherwise allowing java.**, javax. **and org.apache.camel.** is applied. |  | String |
 | **keyStorePassword** (security) | The SSL keystore password. |  | String |
 | **password** (security) | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **trustStorePassword** (security) | The SSL truststore password. |  | String |
@@ -697,7 +698,7 @@ Enum values:
  |  | ReplyToType |
 | **requestTimeout** (producer) | The timeout for waiting for a reply when using the InOut Exchange Pattern (in milliseconds). The default is 20 seconds. You can include the header CamelJmsRequestTimeout to override this endpoint configured timeout value, and thus have per message individual timeout values. See also the requestTimeoutCheckerInterval option. | 20000 | long |
 | **timeToLive** (producer) | When sending messages, specifies the time-to-live of the message (in milliseconds). | \-1 | long |
-| **allowAdditionalHeaders** (producer (advanced)) | This option is used to allow additional headers which may have values that are invalid according to JMS specification. For example, some message systems, such as WMQ, do this with header names using prefix JMS\_IBM\_MQMD\_ containing values with byte array or other invalid types. You can specify multiple header names separated by comma, and use as suffix for wildcard matching. |  | String |
+| **allowAdditionalHeaders** (producer (advanced)) | This option is used to allow additional headers which may have values that are invalid according to JMS specification. For example, some message systems, such as WMQ, do this with header names using prefix JMS\_IBM\_MQMD\_ containing values with byte array or other invalid types. You can specify multiple header names separated by comma, and use \* as suffix for wildcard matching. |  | String |
 | **allowNullBody** (producer (advanced)) | Whether to allow sending messages with no body. If this option is false and the message body is null, then an JMSException is thrown. | true | boolean |
 | **alwaysCopyMessage** (producer (advanced)) | If true, Camel will always make a JMS message copy of the message when it is passed to the producer for sending. Copying the message is needed in some situations, such as when a replyToDestinationSelectorName is set (incidentally, Camel will set the alwaysCopyMessage option to true, if a replyToDestinationSelectorName is set). | false | boolean |
 | **correlationProperty** (producer (advanced)) | When using InOut exchange pattern use this JMS property instead of JMSCorrelationID JMS property to correlate messages. If set messages will be correlated solely on the value of this property JMSCorrelationID property will be ignored and not set by Camel. |  | String |
@@ -805,7 +806,7 @@ Enum values:
 
  | WARN | LoggingLevel |
 | **errorHandlerLogStackTrace** (logging) | Allows to control whether stack-traces should be logged or not, by the default errorHandler. | true | boolean |
-| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. is applied. |  | String |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied as a defense-in-depth check on the class of the body returned by jakarta.jms.ObjectMessage.getObject(). The pattern is evaluated after the JMS provider has deserialized the payload, so this option alone does not prevent gadget-chain execution that happens inside the provider’s ObjectInputStream; to block such attacks, also configure the JMS provider’s own deserialization filter and/or the JVM-wide -Djdk.serialFilter. When this option is not set and no JVM-wide filter is configured, a conservative default filter denying java.net. **and otherwise allowing java.**, javax. **and org.apache.camel.** is applied. |  | String |
 | **password** (security) | Password to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **username** (security) | Username to use with the ConnectionFactory. You can also configure username/password directly on the ConnectionFactory. |  | String |
 | **transacted** (transaction) | Specifies whether to use transacted mode. | false | boolean |
@@ -968,10 +969,10 @@ AMQPComponent amqp = AMQPComponent.amqpComponent("amqp://localhost:5672");
 AMQPComponent authorizedAmqp = AMQPComponent.amqpComponent("amqp://localhost:5672", "user", "password");
 ```
 
-Without Java code, for example with YAML routes, set the connection factory of the component in `application.properties`:
+Without Java code, for example with YAML routes, set the URL of the broker on the component in `application.properties`:
 
 ```properties
-camel.component.amqp.connection-factory = #class:org.apache.qpid.jms.JmsConnectionFactory("amqp://localhost:5672")
+camel.component.amqp.broker-url = amqp://localhost:5672
 ```
 
 Alternatively, the AMQP Component can be initialized by providing one or more of the available options for configuring SSL, authentication, and AMQP Broker host and port.
@@ -1018,6 +1019,18 @@ amqpComponent.setPort(5555);
 ```
 
 If `host` or `port` options have not been provided and the component is initialized using one or more of the other available options the host on the AMQP JMSConnectionFactory URI is set to 'localhost' if not provided, and the port is set to '5672' if not provided.
+
+**Connections of the producers**
+
+When the component creates the connection factory, from `brokerUrl`, from the `host`, `port`, `username`, `password` and `useSsl` options, or with the `amqpComponent` factory methods, its producers send over one shared connection to the broker. The component closes it when it stops. This also applies to request/reply and to the polling consumer (for example `pollEnrich`). The consumers keep their own connections, and a message sent in a transacted route takes part in the transaction as before.
+
+To open and close a connection for every message sent instead, turn the `cacheConnection` option off:
+
+```properties
+camel.component.amqp.cache-connection = false
+```
+
+A `connectionFactory` that you set yourself, on the component or on an endpoint, is used as it is, and so is the connection factory of an endpoint with its own `username` and `password`. Without a connection pool around such a factory, the producer opens a new connection for every message it sends: put a pool around it, for example the `JmsPoolConnectionFactory` of [pooled-jms](https://github.com/messaginghub/pooled-jms), as shown for the [JMS](jms-component.md) component.
 
 **Enabling AMQP specific options**
 

@@ -133,7 +133,7 @@ Enum values:
 | **createDatabase** (common) | Creates the database if it does not already exist. | false | boolean |
 | **deletes** (consumer) | Document deletes are published as events. | true | boolean |
 | **heartbeat** (consumer) | How often to send an empty message to keep socket alive in millis. | 30000 | long |
-| **maxMessagesPerPoll** (consumer) | Gets the maximum number of messages as a limit to poll at each polling. Gets the maximum number of messages as a limit to poll at each polling. The default value is 10. Use 0 or a negative number to set it as unlimited. | 10 | int |
+| **maxMessagesPerPoll** (consumer) | Gets the maximum number of messages as a limit to poll at each polling. The default value is 10. Use 0 or a negative number to set it as unlimited. | 10 | int |
 | **style** (consumer) | 
 Specifies how many revisions are returned in the changes array. The default, main\_only, will only return the current winning revision; all\_docs will return all leaf revisions (including conflicts and deleted former conflicts.).
 

@@ -112,7 +112,7 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **allowedEventSources** (producer) | Allowed event sources and source-scoped event types per event bus. Supports multi-bus DSL (bussrc - type1,type2), single-bus shorthand (src - type1,type2), JSON string, or Map/List objects. |  | String |
+| **allowedEventSources** (producer) | Allowed event sources and source-scoped event types per event bus. Supports multi-bus DSL (bus\[src - type1,type2\]), single-bus shorthand (src - type1,type2), JSON string, or Map/List objects. |  | String |
 | **endpoint** (producer) | EventBridge endpoint URL. Carries higher precedence than region based client initialization. |  | String |
 | **eventBusName** (producer) | Default event bus name. |  | String |
 | **eventSource** (producer) | Default event source. |  | String |

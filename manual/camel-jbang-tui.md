@@ -21,7 +21,7 @@ Camel TUI is a terminal dashboard for developing, prototyping, and understanding
     
 -   **See the integration** — the [diagram](camel-jbang-tui-diagram.md) from the architecture down to one route, with live message counts.
     
--   **Watch and troubleshoot** — [live activity, message history, errors, traces](camel-jbang-tui-observe.md), and deep dives into Kafka, SQL, memory leaks, JFR and CVEs.
+-   **Watch and troubleshoot** — [the timeline, message history, errors, traces](camel-jbang-tui-observe.md), and deep dives into Kafka, SQL, memory leaks, JFR and CVEs.
     
 -   **Ask the AI** — the [AI panel](camel-jbang-tui-ai.md) (**F8**) with a hosted or a local model, and [AI coding agents](camel-jbang-tui-ai-agents.md) that see and drive the TUI over MCP and ACP.
     
@@ -53,10 +53,10 @@ The TUI organizes information into tabs. Press number keys **1** through **0** t
   
 | Key | Tab | What It Shows |
 | --- | --- | --- |
-| 1 | Overview | All running integrations and infrastructure services. Start here. |
+| 1 | Overview | About an integration, what it does and what has happened, or all running integrations and infrastructure services. Start here. |
 | 2 | Source | File explorer and editor for your project code, with Camel checks, completion and documentation. |
 | 3 | Log | Real-time application logs with search and filtering. |
-| 4 | Activity | Live exchange activity with elapsed times, endpoint sends, and failure tracking. |
+| 4 | Timeline | Per second, the errors and what each route did, and the failed, handled and slowest exchanges of a second. |
 | 5 | Diagram | Visual route topology with drill-down into individual routes. |
 | 6 | Routes | Route list with message counts, throughput, and processing times. |
 | 7 | Endpoints | All registered endpoints with usage statistics. |
@@ -68,7 +68,7 @@ The **More** menu (key **0**) opens a popup with tabs organized into groups:
 
 -   **Routing** — Browse Endpoints, Consumers, HTTP, Inflight, Producers, Route Controller
     
--   **Observability** — Circuit Breaker, Health, JFR, Metrics, Network Services, Exchange Events, Recovery Tasks, OpenTelemetry Spans
+-   **Observability** — Chaos, Circuit Breaker, Health, JFR, Metrics, Network Services, Exchange Events, Recovery Tasks, OpenTelemetry Spans
     
 -   **AI** — Semantic (definitions, expert contracts, relationships, sample evaluation, Audit and Monitoring), Ollama (listed when an Ollama server is detected)
     
@@ -79,7 +79,7 @@ The **More** menu (key **0**) opens a popup with tabs organized into groups:
 -   **Project** — Beans, Catalog, Configuration, CVE Audit, Maven Dependencies, Type Converters, Data Type Transformers
     
 
-Tabs appear dynamically based on what the integration uses. For example, the Kafka tab appears when a Kafka component is in use, SQL tabs when a DataSource is present, Circuit Breaker when resilience4j is in use, Spans when OpenTelemetry is enabled, and JFR when `camel-jfr` is on the classpath. The TUI adapts to show only what’s relevant to your integration.
+Tabs appear dynamically based on what the integration uses. For example, the Kafka tab appears when a Kafka component is in use, SQL tabs when a DataSource is present, Chaos when the integration has [camel-chaos](../components/next/others/chaos.md) (`camel run --chaos`), Circuit Breaker when resilience4j is in use, Spans when OpenTelemetry is enabled, and JFR when `camel-jfr` is on the classpath. The TUI adapts to show only what’s relevant to your integration.
 
 Tab badges show live counts — the Errors tab shows a red badge when errors exist and Routes shows the route count.
 
@@ -93,7 +93,7 @@ Two panels can be opened on top of any tab: **F6** opens an [embedded shell](cam
 | [Getting Started](camel-jbang-tui-getting-started.md) | Your own routes, the built-in examples, opening a project, connecting Spring Boot and Quarkus applications |
 | [Source Editor](camel-jbang-tui-source-editor.md) | Reading and writing routes: checks as you type, quick fixes, fix with AI, completion, quick documentation, navigation, live run data |
 | [Diagram](camel-jbang-tui-diagram.md) | The architecture, topology and route views, external endpoints, metrics |
-| [Observing Integrations](camel-jbang-tui-observe.md) | Activity, message history, errors, spans, process, HTTP probe, CVE audit, Kafka, SQL, memory leaks, JFR, catalog |
+| [Observing Integrations](camel-jbang-tui-observe.md) | Timeline, message history, errors, spans, process, HTTP probe, CVE audit, Kafka, SQL, memory leaks, JFR, catalog |
 | [Ways to Use AI](camel-jbang-tui-ai-ways.md) | The AI panel, a coding agent over ACP, your agent over MCP, and `camel mcp`, side by side with a diagram |
 | [AI Panel](camel-jbang-tui-ai.md) | AI providers, slash commands, project overview, AI log |
 | [Local Models](camel-jbang-tui-local-models.md) | Ollama and OpenAI-compatible servers, the tool set for local models, what a question costs, the Ollama tab |

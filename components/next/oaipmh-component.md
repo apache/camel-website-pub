@@ -200,7 +200,7 @@ The OAI-PMH component supports the following message header(s), which is/are lis
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelOaimphResumptionToken** (producer) Constant: [`RESUMPTION_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-oaipmh/latest/org/apache/camel/oaipmh/component/model/OAIPMHConstants.html#RESUMPTION_TOKEN) | This header is obtained when onlyFirst option is enable. Return resumption token of the request when data is still available. |  | String |
-| **CamelOaimphHttpHeaders** (producer) Constant: [`HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-oaipmh/latest/org/apache/camel/oaipmh/component/model/OAIPMHConstants.html#HTTP_HEADERS) | Custom HTTP headers to send with the request, overriding any httpHeader. endpoint parameters. |  | Map |
+| **CamelOaimphHttpHeaders** (producer) Constant: [`HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-oaipmh/latest/org/apache/camel/oaipmh/component/model/OAIPMHConstants.html#HTTP_HEADERS) | Custom HTTP headers to send with the request, overriding any httpHeader.\* endpoint parameters. |  | Map |
 
 ## Message Body
 

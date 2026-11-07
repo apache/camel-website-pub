@@ -71,7 +71,7 @@ The LangChain4j Embeddings component supports the following options which are li
 | **baseUrl** (model) | The URL of the provider’s API ([http://localhost:11434](http://localhost:11434) for a local Ollama), when the model is created from the provider. The provider’s default when not set. |  | String |
 | **modelName** (model) | The name of the model at the provider (qwen2.5, gpt-4o-mini, …​), when the model is created from the provider. |  | String |
 | **provider** (model) | 
-The LangChain4j provider of the embedding model, to create the model from the options here (modelName, baseUrl, apiKey, temperature, timeout, and provider-specific model. properties) instead of a EmbeddingModel bean. The LangChain4j module of the provider (dev.langchain4j:langchain4j-ollama, …​) must be on the classpath; Camel JBang downloads it. Ignored when a EmbeddingModel is configured. For a provider not listed, set customProvider instead.
+The LangChain4j provider of the embedding model, to create the model from the options here (modelName, baseUrl, apiKey, temperature, timeout, and provider-specific model.\* properties) instead of a EmbeddingModel bean. The LangChain4j module of the provider (dev.langchain4j:langchain4j-ollama, …​) must be on the classpath; Camel JBang downloads it. Ignored when a EmbeddingModel is configured. For a provider not listed, set customProvider instead.
 
 Enum values:
 
@@ -132,7 +132,7 @@ With the following _path_ and _query_ parameters:
 | **baseUrl** (model) | The URL of the provider’s API ([http://localhost:11434](http://localhost:11434) for a local Ollama), when the model is created from the provider. The provider’s default when not set. |  | String |
 | **modelName** (model) | The name of the model at the provider (qwen2.5, gpt-4o-mini, …​), when the model is created from the provider. |  | String |
 | **provider** (model) | 
-The LangChain4j provider of the embedding model, to create the model from the options here (modelName, baseUrl, apiKey, temperature, timeout, and provider-specific model. properties) instead of a EmbeddingModel bean. The LangChain4j module of the provider (dev.langchain4j:langchain4j-ollama, …​) must be on the classpath; Camel JBang downloads it. Ignored when a EmbeddingModel is configured. For a provider not listed, set customProvider instead.
+The LangChain4j provider of the embedding model, to create the model from the options here (modelName, baseUrl, apiKey, temperature, timeout, and provider-specific model.\* properties) instead of a EmbeddingModel bean. The LangChain4j module of the provider (dev.langchain4j:langchain4j-ollama, …​) must be on the classpath; Camel JBang downloads it. Ignored when a EmbeddingModel is configured. For a provider not listed, set customProvider instead.
 
 Enum values:
 

@@ -70,7 +70,7 @@ The AWS Secrets Manager component supports the following options which are liste
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **binaryPayload** (producer) | Set if the secret is binary or not. When true, the createSecret, updateSecret and putSecretValue operations store the bytes of the message body as the binary of the secret. The getSecret and batchGetSecret operations give the value the secret has, whatever this option says: a byte for a binary secret, a String for a string secret. | false | boolean |
+| **binaryPayload** (producer) | Set if the secret is binary or not. When true, the createSecret, updateSecret and putSecretValue operations store the bytes of the message body as the binary of the secret. The getSecret and batchGetSecret operations give the value the secret has, whatever this option says: a byte\[\] for a binary secret, a String for a string secret. | false | boolean |
 | **configuration** (producer) | Component configuration. |  | SecretsManagerConfiguration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
@@ -256,7 +256,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **binaryPayload** (producer) | Set if the secret is binary or not. When true, the createSecret, updateSecret and putSecretValue operations store the bytes of the message body as the binary of the secret. The getSecret and batchGetSecret operations give the value the secret has, whatever this option says: a byte for a binary secret, a String for a string secret. | false | boolean |
+| **binaryPayload** (producer) | Set if the secret is binary or not. When true, the createSecret, updateSecret and putSecretValue operations store the bytes of the message body as the binary of the secret. The getSecret and batchGetSecret operations give the value the secret has, whatever this option says: a byte\[\] for a binary secret, a String for a string secret. | false | boolean |
 | **operation** (producer) | 
 **Required** The operation to perform.
 

@@ -126,10 +126,10 @@ The OPC UA Client component supports the following options which are listed belo
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
 | **certificateValidator** (security) | A custom validator for the certificate of the OPC UA server. When set, it is used instead of the trust list configured with trustListDirectory. Endpoints share a connection only when they use the same validator instance. |  | CertificateValidator |
-| **password** (security) | The password for authentication. Use this instead of embedding credentials in the endpoint URI when the password contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
+| **password** (security) | The password for authentication. Use this instead of embedding credentials in the endpoint URI when the password contains special characters (such as ?, /, , &). |  | String |
 | **trustAllCertificates** (security) | Whether to accept any certificate presented by the OPC UA server. This is insecure: the connection is encrypted, but the client does not authenticate the server it talks to. It only applies when neither certificateValidator nor trustListDirectory is configured. | false | boolean |
 | **trustListDirectory** (security) | The directory holding the trust list used to validate the certificate of the OPC UA server, in the layout used by Eclipse Milo: trusted certificates in trusted/certs, CRLs of trusted certificates in trusted/crl, certificates of issuing CAs in issuer/certs and their CRLs in issuer/crl. The directories are created if they do not exist. Besides the chain of trust, the validity period, the revocation by a CRL of the trust list and the application URI of the server certificate are checked. A certificate issued by a CA is refused when the trust list holds no CRL of that CA; an empty CRL is enough. A server certificate that does not chain up to a trusted certificate is written to rejected/certs, from where it can be moved to trusted/certs once it has been checked. |  | String |
-| **username** (security) | The username for authentication. Use this instead of embedding credentials in the endpoint URI when the username contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
+| **username** (security) | The username for authentication. Use this instead of embedding credentials in the endpoint URI when the username contains special characters (such as ?, /, , &). |  | String |
 
 ## Endpoint Options
 
@@ -233,10 +233,10 @@ Enum values:
 | **sessionName** (client) | Session name. |  | String |
 | **sessionTimeout** (client) | Session timeout in milliseconds. |  | Long |
 | **certificateValidator** (security) | A custom validator for the certificate of the OPC UA server. When set, it is used instead of the trust list configured with trustListDirectory. Endpoints share a connection only when they use the same validator instance. |  | CertificateValidator |
-| **password** (security) | The password for authentication. Use this instead of embedding credentials in the endpoint URI when the password contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
+| **password** (security) | The password for authentication. Use this instead of embedding credentials in the endpoint URI when the password contains special characters (such as ?, /, , &). |  | String |
 | **trustAllCertificates** (security) | Whether to accept any certificate presented by the OPC UA server. This is insecure: the connection is encrypted, but the client does not authenticate the server it talks to. It only applies when neither certificateValidator nor trustListDirectory is configured. | false | boolean |
 | **trustListDirectory** (security) | The directory holding the trust list used to validate the certificate of the OPC UA server, in the layout used by Eclipse Milo: trusted certificates in trusted/certs, CRLs of trusted certificates in trusted/crl, certificates of issuing CAs in issuer/certs and their CRLs in issuer/crl. The directories are created if they do not exist. Besides the chain of trust, the validity period, the revocation by a CRL of the trust list and the application URI of the server certificate are checked. A certificate issued by a CA is refused when the trust list holds no CRL of that CA; an empty CRL is enough. A server certificate that does not chain up to a trusted certificate is written to rejected/certs, from where it can be moved to trusted/certs once it has been checked. |  | String |
-| **username** (security) | The username for authentication. Use this instead of embedding credentials in the endpoint URI when the username contains special characters (such as \\{code }, \\{code /}, \\{code }, \\{code &}). |  | String |
+| **username** (security) | The username for authentication. Use this instead of embedding credentials in the endpoint URI when the username contains special characters (such as ?, /, , &). |  | String |
 
 ## Message Headers
 

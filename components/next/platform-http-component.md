@@ -150,7 +150,7 @@ Enum values:
 
 
  |  | ExchangePattern |
-| **fileNameExtWhitelist** (consumer (advanced)) | A comma or whitespace separated list of file extensions. Uploads having these extensions will be stored locally. Null value or asterisk () will allow all files. |  | String |
+| **fileNameExtWhitelist** (consumer (advanced)) | A comma or whitespace separated list of file extensions. Uploads having these extensions will be stored locally. Null value or asterisk (\*) will allow all files. |  | String |
 | **unmatchedRequestHandling** (consumer (advanced)) | 
 
 Who answers requests that match no registered operation when using rest-dsl contract-first (such as the rest-openapi component): the HTTP layer (platform) or Camel via the route (camel). When set to camel, a catch-all is registered so unmatched requests are routed to Camel. Currently supported by camel-platform-http-vertx (Camel Main, Quarkus) and the Spring Boot platform-http-starter.

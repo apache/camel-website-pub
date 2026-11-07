@@ -147,7 +147,7 @@ Enum values:
 | **entityClass** (advanced) | The Java class to use for entity response conversion using ChatClient.entity(Class). When specified, the response will be automatically converted to this type instead of returning a String. |  | Class |
 | **maxFileSize** (advanced) | Maximum file size in bytes for multimodal content (images, audio, PDFs, etc.). Files exceeding this size will be rejected with an exception. Default is 1048576 bytes (1MB). Set to 0 to disable size checking (not recommended). | 1048576 | long |
 | **maxTokens** (advanced) | Maximum tokens in the response. |  | Integer |
-| **mcpServer** (advanced) | MCP server configurations. Define servers using prefix notation: mcpServer..transportType=stdiosse, mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
+| **mcpServer** (advanced) | MCP server configurations. Define servers using prefix notation: mcpServer..transportType=stdio|sse, mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **mcpTimeout** (advanced) | Timeout in seconds for MCP operations including tool execution and initialization. | 20 | int |
 | **outputClass** (advanced) | The Java class to use for BEAN output format conversion. Required when outputFormat is BEAN. |  | Class |
 | **outputFormat** (advanced) | The output format for structured output conversion (BEAN, MAP, LIST). Used in conjunction with outputClass for BEAN format. |  | String |

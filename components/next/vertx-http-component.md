@@ -74,7 +74,7 @@ The Vert.x HTTP Client component supports the following options which are listed
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **responsePayloadAsByteArray** (producer) | Whether the response body should be byte or as io.vertx.core.buffer.Buffer. | true | boolean |
+| **responsePayloadAsByteArray** (producer) | Whether the response body should be byte\[\] or as io.vertx.core.buffer.Buffer. | true | boolean |
 | **allowJavaSerializedObject** (advanced) | Whether to allow java serialization when a request has the Content-Type application/x-java-serialized-object This is disabled by default. If you enable this, be aware that Java will deserialize the incoming data from the request. This can be a potential security risk. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **tracingPolicy** (advanced) | 
@@ -227,7 +227,7 @@ Enum values:
 | **multipartUpload** (producer) | Whether to force using multipart/form-data for easy file uploads. This is only to be used for uploading the message body as a single entity form-data. For uploading multiple entries then use io.vertx.ext.web.multipart.MultipartForm to build the form. | false | boolean |
 | **multipartUploadName** (producer) | The name of the multipart/form-data when multipartUpload is enabled. | data | String |
 | **okStatusCodeRange** (producer) | The status codes which are considered a success response. The values are inclusive. Multiple ranges can be defined, separated by comma, e.g. 200-204,209,301-304. Each range must be a single number or from-to with the dash included. | 200-299 | String |
-| **responsePayloadAsByteArray** (producer) | Whether the response body should be byte or as io.vertx.core.buffer.Buffer. | true | boolean |
+| **responsePayloadAsByteArray** (producer) | Whether the response body should be byte\[\] or as io.vertx.core.buffer.Buffer. | true | boolean |
 | **sessionManagement** (producer) | Enables session management via WebClientSession. By default the client is configured to use an in-memory CookieStore. The cookieStore option can be used to override this. | false | boolean |
 | **throwExceptionOnFailure** (producer) | Disable throwing HttpOperationFailedException in case of failed responses from the remote server. | true | boolean |
 | **timeout** (producer) | The amount of time in milliseconds after which if the request does not return any data within the timeout period a TimeoutException fails the request. Setting zero or a negative value disables the timeout. | \-1 | long |

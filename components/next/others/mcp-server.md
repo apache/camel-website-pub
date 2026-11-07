@@ -179,6 +179,7 @@ The options, configurable as `camel.server.mcp-*` properties on Camel Main / JBa
 | `camel.server.mcp-server-icons` | JSON array of MCP server icons advertised to clients in `serverInfo.icons`. Each entry must include a `src` URL and may include `mimeType`, `sizes` and `theme`. |  | engine |
 | `camel.server.mcp-session-keep-alive-interval` | Keep-alive ping interval in milliseconds for MCP sessions on the Vert.x streamable transport. Dead sessions are evicted after consecutive ping failures. `0` disables keep-alive pings. | `30000` | engine |
 | `camel.server.mcp-session-idle-ttl` | Idle TTL in milliseconds for MCP sessions on the Vert.x streamable transport. Sessions with no activity for longer than this interval are evicted. `0` disables idle eviction. | `300000` | engine |
+| `camel.server.mcp-allowed-origins` | Comma-separated list of origins allowed to call the MCP endpoint, such as `https://app.example.com` or `http://localhost:*` (`:*` matches any port). A request without an `Origin` header is always served; a request with an `Origin` header that is not in the list gets HTTP 403. Scheme and host are compared ignoring case, and a default port may be left out. `*` is not supported. When not set, only loopback origins are allowed. See [Origins and binding](#_origins_and_binding). | loopback origins | engine |
 
 Bridge-owned options are honored identically on every runtime. Engine-owned options are consumed by the Vert.x HTTP engine or the stdio engine on Camel Main/JBang; on runtimes with a native engine (Quarkus, Spring Boot) the native configuration decides serving concerns and a startup WARN is logged when an ignored option is set.
 
@@ -213,6 +214,8 @@ The Vert.x engine implements the MCP streamable HTTP transport:
     
 -   active session eviction: keep-alive pings (default every 30 seconds) remove sessions whose ping fails repeatedly, and an idle TTL (default 5 minutes) removes sessions with no traffic. Configure with `camel.server.mcp-session-keep-alive-interval` and `camel.server.mcp-session-idle-ttl` (set either to `0` to disable).
     
+-   an `Origin` header check on every method (`POST`, `GET` and `DELETE`), see [Origins and binding](#_origins_and_binding).
+    
 
 Tools and resources appearing or disappearing (routes starting and stopping) emit `notifications/tools/list_changed` and `notifications/resources/list_changed` to connected clients. Per-resource subscriptions (`resources/subscribe`) are not offered: the server advertises `resources` with `listChanged` only.
 
@@ -236,6 +239,37 @@ External MCP clients are **untrusted senders** under the [Camel security model](
     
 -   **Authentication (stdio)**: stdio mode has no HTTP transport and therefore no HTTP authentication layer. Trust is the parent process that launched the Camel subprocess (local IDE or agent). Route authors remain fully trusted; only explicitly tagged tools are exposed.
     
+
+### Origins and binding
+
+The MCP streamable HTTP transport requires a server to validate the `Origin` header. The Vert.x engine on Camel Main and Camel JBang does so on every request to the MCP endpoint (`POST`, the SSE `GET` and `DELETE`):
+
+-   A request **without** an `Origin` header is served. MCP clients run as a process (an IDE, an agent, another Camel integration) and send none.
+    
+-   A request **with** an `Origin` header is served only when the origin is allowed. Any other origin gets HTTP 403 with a JSON-RPC error that has no `id`, and no tool or resource route is called.
+    
+-   By default only loopback origins are allowed: `localhost`, `127.0.0.1` and `[::1]`, over `http` or `https`, on any port. Browser-based tools on the same machine, such as the MCP Inspector, keep working.
+    
+-   `camel.server.mcp-allowed-origins` replaces the default with your own list. Each entry is an origin (scheme, host and port), or ends with `:*` to match any port. Add the loopback entries again if you still need them:
+    
+
+```properties
+camel.server.mcp-allowed-origins = https://app.example.com, http://localhost:*
+```
+
+Entries are compared in the form a browser sends the `Origin` header: the scheme and host ignoring case, and without the default port, so `https://App.Example.com:443/` and `https://app.example.com` are the same origin. An entry that can never match an `Origin` header fails the startup with a message saying why: `*` (the check cannot be turned off; clients that are not browsers send no `Origin` header and are always served), an entry with a path such as `https://app.example.com/mcp`, an entry without a scheme such as `app.example.com`, or a wildcard in the host such as `https://*.example.com`.
+
+A refused request is logged at `DEBUG` level by the `org.apache.camel.component.mcp.server.vertx.VertxMcpStreamableServerTransportProvider` logger, with the `Origin` it carried.
+
+The check is independent of the platform-http CORS configuration: CORS only adds response headers for the browser, while the origin check refuses the request on the server.
+
+The main HTTP server listens on all network interfaces by default (`camel.server.host = 0.0.0.0`). When the MCP server is only meant for clients on the same machine, bind it to the loopback interface:
+
+```properties
+camel.server.host = 127.0.0.1
+```
+
+Stdio mode has no HTTP transport and is not affected.
 
 ## Runtime notes
 

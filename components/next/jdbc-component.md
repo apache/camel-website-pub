@@ -126,8 +126,8 @@ Enum values:
 | **readSize** (producer) | The default maximum number of rows that can be read by a polling query. The default value is 0. |  | int |
 | **resetAutoCommit** (producer) | Camel will set the autoCommit on the JDBC connection to be false, commit the change after executed the statement and reset the autoCommit flag of the connection at the end, if the resetAutoCommit is true. If the JDBC connection doesn’t support to reset the autoCommit flag, you can set the resetAutoCommit flag to be false, and Camel will not try to reset the autoCommit flag. When used with XA transactions you most likely need to set it to false so that the transaction manager is in charge of committing this tx. | true | boolean |
 | **transacted** (producer) | **Deprecated** Whether transactions are in use. Deprecation note: Not used: the producer does not read this option. | false | boolean |
-| **useGetBytesForBlob** (producer) | To read BLOB columns as bytes (a byte) instead of a java.sql.Blob, which cannot be read after the producer has closed the connection. This may be needed for certain databases such as Oracle where you must read BLOB columns as bytes. | false | boolean |
-| **useHeadersAsParameters** (producer) | Set this option to true to use the prepareStatementStrategy with named parameters. This allows to define queries with named placeholders, and use headers with the dynamic values for the query placeholders. | false | boolean |
+| **useGetBytesForBlob** (producer) | To read BLOB columns as bytes (a byte\[\]) instead of a java.sql.Blob, which cannot be read after the producer has closed the connection. This may be needed for certain databases such as Oracle where you must read BLOB columns as bytes. | false | boolean |
+| **useHeadersAsParameters** (producer) | Set this option to true to use the prepareStatementStrategy with named parameters. This allows to define queries with named placeholders, and use headers with the dynamic values for the query placeholders. A query with only positional placeholders (no named parameters) takes their values, in order, only from the CamelJdbcParameters header (a List). | false | boolean |
 | **useJDBC4ColumnNameAndLabelSemantics** (producer) | Sets whether to use JDBC 4 or JDBC 3.0 or older semantic when retrieving column name. JDBC 4.0 uses columnLabel to get the column name where as JDBC 3.0 uses both columnName or columnLabel. Unfortunately JDBC drivers behave differently so you can use this option to work out issues around your JDBC driver if you get problem using this component This option is default true. | true | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **beanRowMapper** (advanced) | To use a custom org.apache.camel.component.jdbc.BeanRowMapper when using outputClass. The default implementation will lower case the row names and skip underscores, and dashes. For example CUST\_ID is mapped as custId. |  | BeanRowMapper |
@@ -144,7 +144,7 @@ The JDBC component supports the following message header(s), which is/are listed
 | **CamelJdbcUpdateCount** (producer) Constant: [`JDBC_UPDATE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_UPDATE_COUNT) | If the query is an UPDATE, query the update count is returned in this OUT header. |  | int |
 | **CamelJdbcRowCount** (producer) Constant: [`JDBC_ROW_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_ROW_COUNT) | If the query is a SELECT and the outputType is SelectList, the row count is returned in this OUT header. |  | int |
 | **CamelJdbcColumnNames** (producer) Constant: [`JDBC_COLUMN_NAMES`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_COLUMN_NAMES) | The column names from the ResultSet as a java.util.Set type. |  | Set |
-| **CamelJdbcParameters** (producer) Constant: [`JDBC_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_PARAMETERS) | A java.util.Map which has the headers to be used if useHeadersAsParameters has been enabled. |  | Map |
+| **CamelJdbcParameters** (producer) Constant: [`JDBC_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_PARAMETERS) | The values of the query parameters when useHeadersAsParameters has been enabled: a java.util.Map with the values of the named parameters, or a java.util.List with the values of the positional placeholders, in order (a single value for one placeholder). |  | Object |
 | **CamelRetrieveGeneratedKeys** (producer) Constant: [`JDBC_RETRIEVE_GENERATED_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_RETRIEVE_GENERATED_KEYS) | Set its value to true to retrieve generated keys. | false | Boolean |
 | **CamelGeneratedColumns** (producer) Constant: [`JDBC_GENERATED_COLUMNS`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_GENERATED_COLUMNS) | Set it to specify the expected generated columns. |  | String\[\] or int\[\] |
 | **CamelGeneratedKeysRowCount** (producer) Constant: [`JDBC_GENERATED_KEYS_ROW_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-jdbc/latest/org/apache/camel/component/jdbc/JdbcConstants.html#JDBC_GENERATED_KEYS_ROW_COUNT) | The number of rows in the header that contains generated keys. |  | int |
@@ -157,7 +157,7 @@ The message body at each side of the JDBC component: _Consumer_ is the body of t
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | The SQL statement as text, or bytes, a stream or a file of it; a Map or a List is not a statement: set the SQL as the body. With useHeadersAsParameters, the values of its placeholders come from the CamelJdbcParameters header, or else from the headers. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The SQL statement as text, or bytes, a stream or a file of it; a Map or a List is not a statement: set the SQL as the body. With useHeadersAsParameters, the values of its named parameters (:?name) come from the CamelJdbcParameters header, or else from the headers, and the values of plain ? placeholders, in order, only from the CamelJdbcParameters header. |
 | **Producer output** | `list` or `unchanged` | 
 The rows of a select: a List of Maps of the column names and their values (beans of outputClass when set). SelectOne gives the Map of the one row, the value of its column as the driver reads it when it has one, or null for no row; StreamList an Iterator of the rows, read once. A statement that is not a select leaves the body unchanged, with the count in the CamelJdbcUpdateCount header.
 
@@ -251,7 +251,20 @@ from("direct:projects")
               useHeadersAsParameters: true
 ```
 
-You can also store the header values in a `java.util.Map` and store the map on the headers with the key `CamelJdbcParameters`.
+You can also store the header values in a `java.util.Map` and store the map on the headers with the key `CamelJdbcParameters`. When `CamelJdbcParameters` is not a `Map` (such as the `List` of an earlier query with plain `?` placeholders in the same route), the named parameters take their values from the message headers.
+
+### Using plain ? placeholders
+
+A query with plain `?` placeholders (and no named parameters) takes the values of the placeholders, in order, only from the `CamelJdbcParameters` header, as a `java.util.List` (a `java.util.Map` works too, with its values taken in the order of its entries, so use a `LinkedHashMap`). An object array works like a `List`, and any other value is the value of a query with one `?` placeholder: a `String` is not split by comma, and a `byte[]` is one value. The other message headers are not used. When the header is not set, or has more or fewer values than the query has `?` placeholders, the exchange fails.
+
+_Java-only: inline Processor that sets the List of the values_
+
+```java
+from("direct:projects")
+    .process(exchange -> exchange.getIn().setHeader(JdbcConstants.JDBC_PARAMETERS, List.of("ASF", 123)))
+    .setBody(constant("select * from projects where license = ? and id > ? order by id"))
+    .to("jdbc:myDataSource?useHeadersAsParameters=true");
+```
 
 ## Examples
 

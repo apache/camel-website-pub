@@ -327,7 +327,7 @@ The google-mail/get API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **id** | The ID of the attachment | String |
 | **messageId** | The ID of the message containing the attachment | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -371,7 +371,7 @@ The google-mail/create API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **content** | The com.google.api.services.gmail.model.Draft media metadata or null if none | Draft |
 | **mediaContent** | The media HTTP content | AbstractInputStreamContent |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method delete
 
@@ -386,7 +386,7 @@ The google-mail/delete API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | The ID of the draft to delete | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method get
 
@@ -402,7 +402,7 @@ The google-mail/get API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **format** | The format to return the draft in | String |
 | **id** | The ID of the draft to retrieve | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method list
 
@@ -420,7 +420,7 @@ The google-mail/list API method has the parameters listed in the table below:
 | **maxResults** | Maximum number of drafts to return | Long |
 | **pageToken** | Page token to retrieve a specific page of results in the list | String |
 | **q** | Only return draft messages matching the specified query | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method send
 
@@ -438,7 +438,7 @@ The google-mail/send API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **content** | The com.google.api.services.gmail.model.Draft media metadata or null if none | Draft |
 | **mediaContent** | The media HTTP content | AbstractInputStreamContent |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method update
 
@@ -458,7 +458,7 @@ The google-mail/update API method has the parameters listed in the table below:
 | **id** | 
  | String |
 | **mediaContent** | The media HTTP content | AbstractInputStreamContent |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -498,7 +498,7 @@ The google-mail/list API method has the parameters listed in the table below:
 | **maxResults** | Maximum number of history records to return | Long |
 | **pageToken** | Page token to retrieve a specific page of results in the list | String |
 | **startHistoryId** | Required | BigInteger |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -539,7 +539,7 @@ The google-mail/create API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **content** | The com.google.api.services.gmail.model.Label | Label |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method delete
 
@@ -554,7 +554,7 @@ The google-mail/delete API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | The ID of the label to delete | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method get
 
@@ -569,7 +569,7 @@ The google-mail/get API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | The ID of the label to retrieve | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method list
 
@@ -583,7 +583,7 @@ The google-mail/list API method has the parameters listed in the table below:
   
 | Parameter | Description | Type |
 | --- | --- | --- |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method patch
 
@@ -599,7 +599,7 @@ The google-mail/patch API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **content** | The com.google.api.services.gmail.model.Label | Label |
 | **id** | The ID of the label to update | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method update
 
@@ -615,7 +615,7 @@ The google-mail/update API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **content** | The com.google.api.services.gmail.model.Label | Label |
 | **id** | The ID of the label to update | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -661,7 +661,7 @@ The google-mail/batchDelete API method has the parameters listed in the table be
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **batchDeleteMessagesRequest** | The com.google.api.services.gmail.model.BatchDeleteMessagesRequest | BatchDeleteMessagesRequest |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method batchModify
 
@@ -676,7 +676,7 @@ The google-mail/batchModify API method has the parameters listed in the table be
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **batchModifyMessagesRequest** | The com.google.api.services.gmail.model.BatchModifyMessagesRequest | BatchModifyMessagesRequest |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method delete
 
@@ -691,7 +691,7 @@ The google-mail/delete API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | The ID of the message to delete | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method get
 
@@ -708,7 +708,7 @@ The google-mail/get API method has the parameters listed in the table below:
 | **format** | The format to return the message in | String |
 | **id** | The ID of the message to retrieve. This ID is usually retrieved using messages.list. The ID is also contained in the result when a message is inserted (messages.insert) or imported (messages.import). | String |
 | **metadataHeaders** | When given and format is METADATA, only include headers specified | List |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method gmailImport
 
@@ -730,7 +730,7 @@ The google-mail/gmailImport API method has the parameters listed in the table be
 | **mediaContent** | The media HTTP content | AbstractInputStreamContent |
 | **neverMarkSpam** | Ignore the Gmail spam classifier decision and never mark this email as SPAM in the mailbox | Boolean |
 | **processForCalendar** | Process calendar invites in the email and add any extracted meetings to the Google Calendar for this user | Boolean |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method insert
 
@@ -750,7 +750,7 @@ The google-mail/insert API method has the parameters listed in the table below:
 | **deleted** | Mark the email as permanently deleted (not TRASH) and only visible in Google Vault to a Vault administrator | Boolean |
 | **internalDateSource** | Source for Gmail’s internal date of the message | String |
 | **mediaContent** | The media HTTP content | AbstractInputStreamContent |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method list
 
@@ -769,7 +769,7 @@ The google-mail/list API method has the parameters listed in the table below:
 | **maxResults** | Maximum number of messages to return | Long |
 | **pageToken** | Page token to retrieve a specific page of results in the list | String |
 | **q** | Only return messages matching the specified query | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method modify
 
@@ -785,7 +785,7 @@ The google-mail/modify API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **id** | The ID of the message to modify | String |
 | **modifyMessageRequest** | The com.google.api.services.gmail.model.ModifyMessageRequest | ModifyMessageRequest |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method send
 
@@ -803,7 +803,7 @@ The google-mail/send API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **content** | The com.google.api.services.gmail.model.Message media metadata or null if none | Message |
 | **mediaContent** | The media HTTP content | AbstractInputStreamContent |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method trash
 
@@ -818,7 +818,7 @@ The google-mail/trash API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | The ID of the message to Trash | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method untrash
 
@@ -833,7 +833,7 @@ The google-mail/untrash API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | The ID of the message to remove from Trash | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -874,7 +874,7 @@ The google-mail/delete API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | ID of the Thread to delete | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method get
 
@@ -891,7 +891,7 @@ The google-mail/get API method has the parameters listed in the table below:
 | **format** | The format to return the messages in | String |
 | **id** | The ID of the thread to retrieve | String |
 | **metadataHeaders** | When given and format is METADATA, only include headers specified | List |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method list
 
@@ -910,7 +910,7 @@ The google-mail/list API method has the parameters listed in the table below:
 | **maxResults** | Maximum number of threads to return | Long |
 | **pageToken** | Page token to retrieve a specific page of results in the list | String |
 | **q** | Only return threads matching the specified query | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method modify
 
@@ -926,7 +926,7 @@ The google-mail/modify API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **content** | The com.google.api.services.gmail.model.ModifyThreadRequest | ModifyThreadRequest |
 | **id** | The ID of the thread to modify | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method trash
 
@@ -941,7 +941,7 @@ The google-mail/trash API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | The ID of the thread to Trash | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method untrash
 
@@ -956,7 +956,7 @@ The google-mail/untrash API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **id** | The ID of the thread to remove from Trash | String |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 
@@ -993,7 +993,7 @@ The google-mail/getProfile API method has the parameters listed in the table bel
   
 | Parameter | Description | Type |
 | --- | --- | --- |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method stop
 
@@ -1007,7 +1007,7 @@ The google-mail/stop API method has the parameters listed in the table below:
   
 | Parameter | Description | Type |
 | --- | --- | --- |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 #### Method watch
 
@@ -1022,7 +1022,7 @@ The google-mail/watch API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **content** | The com.google.api.services.gmail.model.WatchRequest | WatchRequest |
-| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. default: me | String |
+| **userId** | The user’s email address. The special value me can be used to indicate the authenticated user. \[default: me\] | String |
 
 In addition to the parameters above, the google-mail API can also use any of the [Query Parameters](#_query_parameters).
 

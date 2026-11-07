@@ -308,7 +308,7 @@ The lookup walks up from the class name:
     
 2.  Each enclosing package in turn, `org.postgresql.ds`, then `org.postgresql`, until a key matches or no package is left. The deepest key wins, so `org.apache.activemq.artemis` is found before `org.apache.activemq`.
     
-3.  The value is a Maven coordinate. A `camel:xxx` short form uses its Camel catalog coordinates when available, or the running Camel version otherwise. A `${…​}` placeholder in the hand-written file is resolved from the `camel-dependencies` POM of that version; the generated third-party file carries the versions already resolved.
+3.  The value is a Maven coordinate. A `camel:xxx` short form uses its Camel catalog coordinates when available, or the running Camel version otherwise. A `${…​}` placeholder in the hand-written file is resolved from the `camel-dependencies` POM of that version; the generated third-party file carries the versions already resolved. The Quarkus dependencies of the hand-written file use `--quarkus-version` (or `camel.jbang.quarkusVersion`) when it is given, and the version of the Quarkus Platform with the Quarkus runtime.
     
 4.  The dependency and its transitive dependencies are downloaded and added to the classpath, and the class is loaded again.
     

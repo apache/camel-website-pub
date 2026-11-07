@@ -150,7 +150,7 @@ Enum values:
 
  |  | SubQueue |
 | **subscriptionName** (consumer) | Sets the name of the subscription in the topic to listen to. topicOrQueueName and serviceBusType=topic must also be set. This property is required if serviceBusType=topic and the consumer is in use. |  | String |
-| **binary** (producer) | Set binary mode. If true, message body will be sent as byte. By default, it is false. | false | boolean |
+| **binary** (producer) | Set binary mode. If true, message body will be sent as byte\[\]. By default, it is false. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **producerOperation** (producer) | 
 
@@ -310,7 +310,7 @@ Enum values:
 
 
  |  | ExchangePattern |
-| **binary** (producer) | Set binary mode. If true, message body will be sent as byte. By default, it is false. | false | boolean |
+| **binary** (producer) | Set binary mode. If true, message body will be sent as byte\[\]. By default, it is false. | false | boolean |
 | **producerOperation** (producer) | 
 
 Sets the desired operation to be used in the producer.

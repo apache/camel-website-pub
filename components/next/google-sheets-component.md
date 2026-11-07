@@ -99,7 +99,7 @@ The Google Sheets component supports the following options which are listed belo
 | **accessToken** (security) | OAuth 2 access token. This typically expires after an hour so refreshToken is recommended for long term usage. |  | String |
 | **clientSecret** (security) | Client secret of the sheets application. |  | String |
 | **refreshToken** (security) | OAuth 2 refresh token. Using this, the Google Sheets component can obtain a new accessToken whenever the current one expires - a necessity if the application is long-lived. |  | String |
-| **serviceAccountKey** (security) | Sets .json file with credentials for Service account. |  | String |
+| **serviceAccountKey** (security) | Sets \*.json file with credentials for Service account. |  | String |
 
 ## Endpoint Options
 
@@ -262,7 +262,7 @@ Enum values:
 | **accessToken** (security) | OAuth 2 access token. This typically expires after an hour so refreshToken is recommended for long term usage. |  | String |
 | **clientSecret** (security) | Client secret of the sheets application. |  | String |
 | **refreshToken** (security) | OAuth 2 refresh token. Using this, the Google Sheets component can obtain a new accessToken whenever the current one expires - a necessity if the application is long-lived. |  | String |
-| **serviceAccountKey** (security) | Sets .json file with credentials for Service account. |  | String |
+| **serviceAccountKey** (security) | Sets \*.json file with credentials for Service account. |  | String |
 
 ## API Parameters (2 APIs)
 
@@ -320,7 +320,7 @@ The google-sheets/append API method has the parameters listed in the table below
 | --- | --- | --- |
 | **includeValuesInResponse** | Determines if the update response should include the values of the cells that were appended | Boolean |
 | **insertDataOption** | How the input data should be inserted | String |
-| **range** | The A1 notation([https://developers.google.com/workspace/sheets/api/guides/concepts#cell](https://developers.google.com/workspace/sheets/api/guides/concepts#cell)) of a range to search for a logical table of data. Values are appended after the last row of the table. | String |
+| **range** | The \[A1 notation\]([https://developers.google.com/workspace/sheets/api/guides/concepts#cell](https://developers.google.com/workspace/sheets/api/guides/concepts#cell)) of a range to search for a logical table of data. Values are appended after the last row of the table. | String |
 | **responseDateTimeRenderOption** | Determines how dates, times, and durations in the response should be rendered | String |
 | **responseValueRenderOption** | Determines how values in the response should be rendered | String |
 | **spreadsheetId** | The ID of the spreadsheet to update | String |
@@ -371,7 +371,7 @@ The google-sheets/batchGet API method has the parameters listed in the table bel
 | --- | --- | --- |
 | **dateTimeRenderOption** | How dates, times, and durations should be represented in the output | String |
 | **majorDimension** | The major dimension that results should use | String |
-| **ranges** | The A1 notation or R1C1 notation([https://developers](https://developers) | List |
+| **ranges** | The \[A1 notation or R1C1 notation\]([https://developers](https://developers) | List |
 | **spreadsheetId** | The ID of the spreadsheet to retrieve data from | String |
 | **valueRenderOption** | How values should be represented in the output | String |
 
@@ -433,7 +433,7 @@ The google-sheets/clear API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **clearValuesRequest** | The com.google.api.services.sheets.v4.model.ClearValuesRequest | ClearValuesRequest |
-| **range** | The A1 notation or R1C1 notation([https://developers.google.com/workspace/sheets/api/guides/concepts#cell](https://developers.google.com/workspace/sheets/api/guides/concepts#cell)) of the values to clear. | String |
+| **range** | The \[A1 notation or R1C1 notation\]([https://developers.google.com/workspace/sheets/api/guides/concepts#cell](https://developers.google.com/workspace/sheets/api/guides/concepts#cell)) of the values to clear. | String |
 | **spreadsheetId** | The ID of the spreadsheet to update | String |
 
 #### Method get
@@ -450,7 +450,7 @@ The google-sheets/get API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **dateTimeRenderOption** | How dates, times, and durations should be represented in the output | String |
 | **majorDimension** | The major dimension that results should use | String |
-| **range** | The A1 notation or R1C1 notation([https://developers.google.com/workspace/sheets/api/guides/concepts#cell](https://developers.google.com/workspace/sheets/api/guides/concepts#cell)) of the range to retrieve values from. | String |
+| **range** | The \[A1 notation or R1C1 notation\]([https://developers.google.com/workspace/sheets/api/guides/concepts#cell](https://developers.google.com/workspace/sheets/api/guides/concepts#cell)) of the range to retrieve values from. | String |
 | **spreadsheetId** | The ID of the spreadsheet to retrieve data from | String |
 | **valueRenderOption** | How values should be represented in the output | String |
 
@@ -467,7 +467,7 @@ The google-sheets/update API method has the parameters listed in the table below
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **includeValuesInResponse** | Determines if the update response should include the values of the cells that were updated | Boolean |
-| **range** | The A1 notation([https://developers.google.com/workspace/sheets/api/guides/concepts#cell](https://developers.google.com/workspace/sheets/api/guides/concepts#cell)) of the values to update. | String |
+| **range** | The \[A1 notation\]([https://developers.google.com/workspace/sheets/api/guides/concepts#cell](https://developers.google.com/workspace/sheets/api/guides/concepts#cell)) of the values to update. | String |
 | **responseDateTimeRenderOption** | Determines how dates, times, and durations in the response should be rendered | String |
 | **responseValueRenderOption** | Determines how values in the response should be rendered | String |
 | **spreadsheetId** | The ID of the spreadsheet to update | String |

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1793907485389,
+  "generated": 1794087579574,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -36490,9 +36490,9 @@
             },
             {
               "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-get-activity.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-get-activity.html",
-              "title": "camel get activity"
+              "path": "jbang-commands/camel-jbang-get-about.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-about.html",
+              "title": "camel get about"
             },
             {
               "module": "ROOT",
@@ -36673,6 +36673,12 @@
               "path": "jbang-commands/camel-jbang-get-startup-recorder.adoc",
               "url": "/manual/jbang-commands/camel-jbang-get-startup-recorder.html",
               "title": "camel get startup-recorder"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-get-timeline.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-timeline.html",
+              "title": "camel get timeline"
             },
             {
               "module": "ROOT",

@@ -182,7 +182,7 @@ Enum values:
 | **privateKey** (security) | Set the configured private key for use with Raw Public Key. |  | PrivateKey |
 | **publicKey** (security) | Set the configured public key for use with Raw Public Key. |  | PublicKey |
 | **recommendedCipherSuitesOnly** (security) | The CBC cipher suites are not recommended. If you want to use them, you first need to set the recommendedCipherSuitesOnly option to false. | true | boolean |
-| **sslContextParameters** (security) | Set the SSLContextParameters object for setting up TLS. This is required for coapstcp, and for coaps when we are using certificates for TLS (as opposed to RPK or PKS). |  | SSLContextParameters |
+| **sslContextParameters** (security) | Set the SSLContextParameters object for setting up TLS. This is required for coaps+tcp, and for coaps when we are using certificates for TLS (as opposed to RPK or PKS). |  | SSLContextParameters |
 
 ## Message Headers
 

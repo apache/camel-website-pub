@@ -92,7 +92,7 @@ The TypeSafe AI component supports the following options which are listed below.
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **resultProperty** (producer) | Store the producer response in this exchange property, preserving the original message body. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
-| **threshold** (advanced) | Default inclusive probability threshold for the TypeSafe AI language. Must be within 0,1. | 0.5 | double |
+| **threshold** (advanced) | Default inclusive probability threshold for the TypeSafe AI language. Must be within \[0,1\]. | 0.5 | double |
 | **uncertainty** (advanced) | Default half-width of the inclusive uncertainty band for the TypeSafe AI language. Zero disables the band. | 0 | double |
 | **uncertaintyPolicy** (advanced) | 
 Default action for the TypeSafe AI language within the uncertainty band: NonMatch or Fail.
@@ -141,7 +141,7 @@ With the following _path_ and _query_ parameters:
 | **state** (common) | The Simple expression selecting state for configured producer questions and the TypeSafe AI language. If not set, the message body is used. |  | String |
 | **resultProperty** (producer) | Store the producer response in this exchange property, preserving the original message body. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **threshold** (advanced) | Default inclusive probability threshold for the TypeSafe AI language. Must be within 0,1. | 0.5 | double |
+| **threshold** (advanced) | Default inclusive probability threshold for the TypeSafe AI language. Must be within \[0,1\]. | 0.5 | double |
 | **uncertainty** (advanced) | Default half-width of the inclusive uncertainty band for the TypeSafe AI language. Zero disables the band. | 0 | double |
 | **uncertaintyPolicy** (advanced) | 
 Default action for the TypeSafe AI language within the uncertainty band: NonMatch or Fail.

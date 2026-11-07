@@ -1,6 +1,6 @@
 # Couchbase
 
-Query Couchbase databases using SQL (N1QL) queries or MapReduce Views with a poll strategy and/or perform various operations against Couchbase databases.
+Query Couchbase databases using SQL++ (N1QL) queries or MapReduce Views with a poll strategy and/or perform various operations against Couchbase databases.
 
 ## What’s inside
 

@@ -154,7 +154,7 @@ Enum values:
 | **connectTimeout** (advanced) | Sets the connect timeout for waiting for a connection to be established Used by both FTPClient and JSCH. | 10000 | int |
 | **soTimeout** (advanced) | Sets the so timeout FTP and FTPS Is the SocketOptions.SO\_TIMEOUT value in millis. Recommended option is to set this to 300000 so as not have a hanged connection. On SFTP this option is set as timeout on the JSCH Session instance. | 300000 | int |
 | **timeout** (advanced) | Sets the data timeout for waiting for reply Used only by FTPClient. | 30000 | int |
-| **caSignatureAlgorithms** (security) | Set a comma separated list of CA signature algorithms accepted for host certificate verification. If not specified the default list from JSch will be used (matches OpenSSH 8.2 defaults). |  | String |
+| **caSignatureAlgorithms** (security) | Set a comma separated list of CA signature algorithms accepted for host certificate verification. If not specified the default list from JSch will be used (matches OpenSSH 8.2+ defaults). |  | String |
 | **certBytes** (security) | Set the OpenSSH certificate as a byte array for certificate-based authentication. |  | byte\[\] |
 | **certFile** (security) | Set the OpenSSH certificate file path for certificate-based authentication. |  | String |
 | **certUri** (security) | Set the OpenSSH certificate (loaded from classpath by default) for certificate-based authentication. |  | String |
@@ -181,7 +181,7 @@ Enum values:
 
  | no | String |
 | **username** (security) | Username to use for login. |  | String |
-| **useUserKnownHostsFile** (security) | If knownHostFile has not been explicit configured, then use the host file from System.getProperty(user.home) /.ssh/known\_hosts. | true | boolean |
+| **useUserKnownHostsFile** (security) | If knownHostFile has not been explicit configured, then use the host file from System.getProperty(user.home) + /.ssh/known\_hosts. | true | boolean |
 | **ciphers** (security (advanced)) | Set a comma separated list of ciphers that will be used in order of preference. Possible cipher names are defined by JCraft JSCH. Some examples include: aes128-ctr,aes128-cbc,3des-ctr,3des-cbc,blowfish-cbc,aes192-cbc,aes256-cbc. If not specified the default list from JSCH will be used. |  | String |
 
 ## Message Body
@@ -225,6 +225,8 @@ The SCP component copies the message body to a file on the remote host. In the f
 ```
 
 The directory of the endpoint (`/upload` above) must exist on the remote host, as scp does not create it: when it does not exist, each file is written to a file named like the directory, and the last one wins. The sub directories in the `CamelFileName` header (such as `mysub/hello.txt`) are created in that directory.
+
+scp sends the name of each sub directory and of the file on a protocol line that ends with a line feed, so a file name with a line feed or a NUL character is refused with a `GenericFileOperationFailedException` before anything is sent to the remote host. Any other character, such as a carriage return or a tab, is sent as is.
 
 Without a known hosts file (`useUserKnownHostsFile=false` and no `knownHostsFile`), no host is known, so the option `strictHostKeyChecking` decides: with `yes` the connection fails, with `no` (the default) the host key is not checked.
 

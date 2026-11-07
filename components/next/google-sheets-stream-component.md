@@ -131,7 +131,7 @@ Enum values:
 | **accessToken** (security) | OAuth 2 access token. This typically expires after an hour so refreshToken is recommended for long term usage. |  | String |
 | **clientSecret** (security) | Client secret of the sheets application. |  | String |
 | **refreshToken** (security) | OAuth 2 refresh token. Using this, the Google Sheets component can obtain a new accessToken whenever the current one expires - a necessity if the application is long-lived. |  | String |
-| **serviceAccountKey** (security) | Sets .json file with credentials for Service account. |  | String |
+| **serviceAccountKey** (security) | Sets \*.json file with credentials for Service account. |  | String |
 
 ## Endpoint Options
 
@@ -281,7 +281,7 @@ Enum values:
 | **accessToken** (security) | OAuth 2 access token. This typically expires after an hour so refreshToken is recommended for long term usage. |  | String |
 | **clientSecret** (security) | Client secret of the sheets application. |  | String |
 | **refreshToken** (security) | OAuth 2 refresh token. Using this, the Google Sheets component can obtain a new accessToken whenever the current one expires - a necessity if the application is long-lived. |  | String |
-| **serviceAccountKey** (security) | Sets .json file with credentials for Service account. |  | String |
+| **serviceAccountKey** (security) | Sets \*.json file with credentials for Service account. |  | String |
 
 ## Message Headers
 

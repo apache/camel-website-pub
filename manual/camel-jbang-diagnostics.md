@@ -7,7 +7,7 @@ All commands take the name or PID of a running integration (see [Managing Integr
 > **Tip**
 > The [Camel TUI](camel-jbang-tui.md) shows the same data in tabs, see [Camel TUI Observing Integrations](camel-jbang-tui-observe.md).
 
-## Errors and activity
+## Errors and timeline
 
 ### Routing errors
 
@@ -34,17 +34,36 @@ camel get error myApp --last --diagram
 > **Note**
 > The error registry is enabled by the `dev` profile, which `camel run` uses by default. For another profile, or for a Spring Boot or Quarkus application, set `camel.errorRegistry.enabled=true`.
 
-### Recent activity
+### About
 
-`camel get activity` lists the most recently completed exchanges, with their route, status, elapsed time, the number of messages sent to endpoints, and the endpoint they came from:
+`camel get about` says what an integration does and what has happened, without an AI: its purpose (the comment at the top of its main source file, else the descriptions of its routes), what comes in, its routes (a route called with `direct` or `seda` under the route that calls it), what goes out, the exchanges of each route and the sends to each endpoint since it started, and the last minutes from its timeline.
 
 ```bash
-camel get activity
-camel get activity --filter=route1
-camel get activity --watch
+camel get about
+camel get about myApp --json
 ```
 
-Activity tracking is enabled by the `dev` profile.
+It is the About view of the TUI as text. The `camel_project_overview` MCP tool has the same purpose, and the running part when the project runs.
+
+### Timeline
+
+`camel get timeline` shows what each route did in the last minute: how many exchanges completed, were recovered by a redelivery, were handled by the error handler, or failed, the redelivery attempts, the mean and max time, and the exchanges per second as a sparkline:
+
+```bash
+camel get timeline
+camel get timeline myApp --seconds=300 --filter=orders
+camel get timeline --errors
+camel get timeline --exchanges --sort=elapsed
+camel get timeline --watch
+```
+
+`--errors` lists the errors by route and exception, with the HTTP status code, and the camel-chaos rule that made an error. `--exchanges` lists the exchanges kept per second: the failed, handled and recovered ones and the 3 slowest, with their status (`OK`, `RECOVERED`, `HANDLED` or `FAILED`), elapsed time, and the number of calls to remote endpoints.
+
+With [camel-chaos](../components/next/others/chaos.md), the timeline also has the faults of each chaos rule per second (listed by `--errors` as `chaos faults`), and the seconds a stall or lifecycle rule had a route down (the `DOWN` column).
+
+A route with a circuit breaker (the Circuit Breaker EIP with camel-resilience4j or camel-microprofile-fault-tolerance, or the throttling exception route policy) has the seconds its circuit breaker was open in the `CB OPEN` column: why a route went quiet, or ran its fallback, without failing.
+
+The integration records the timeline itself, for the last 5 minutes, with the `timeline` dev console. It is on when the dev consoles are, as with the `dev` profile that `camel run` uses by default. The number of seconds is set with `camel.devConsole.timeline.seconds` (60 to 3600).
 
 ### Inflight and blocked messages
 

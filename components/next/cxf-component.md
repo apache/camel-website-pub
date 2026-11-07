@@ -139,7 +139,7 @@ Enum values:
 
  | POJO | DataFormat |
 | **wrappedStyle** (common) | The WSDL style that describes how parameters are represented in the SOAP body. If the value is false, CXF will chose the document-literal unwrapped style, If the value is true, CXF will chose the document-literal wrapped style. | false | Boolean |
-| **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side, and the exception is not a SOAP fault the service contract declares, the SOAP fault returned to the caller won’t contain the exception’s class or message. Faults the route raises deliberately - a CXF Fault, an exception annotated \\{code WebFault}, or a Throwable set as the message body - are part of the contract and are always returned in full. | true | boolean |
+| **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side, and the exception is not a SOAP fault the service contract declares, the SOAP fault returned to the caller won’t contain the exception’s class or message. Faults the route raises deliberately - a CXF Fault, an exception annotated WebFault, or a Throwable set as the message body - are part of the contract and are always returned in full. | true | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
@@ -170,7 +170,7 @@ Enum values:
 | **bus** (advanced) | To use a custom configured CXF Bus. |  | Bus |
 | **continuationTimeout** (advanced) | This option is used to set the CXF continuation timeout which could be used in CxfConsumer by default when the CXF server is using Jetty or Servlet transport. | 30000 | long |
 | **cxfBinding** (advanced) | To use a custom CxfBinding to control the binding between Camel Message and CXF Message. |  | CxfBinding |
-| **cxfConfigurer** (advanced) | This option could apply the implementation of org.apache.camel.component.cxf.CxfEndpointConfigurer which supports to configure the CXF endpoint in programmatic way. User can configure the CXF server and client by implementing configure{ServerClient} method of CxfEndpointConfigurer. |  | CxfConfigurer |
+| **cxfConfigurer** (advanced) | This option could apply the implementation of org.apache.camel.component.cxf.CxfEndpointConfigurer which supports to configure the CXF endpoint in programmatic way. User can configure the CXF server and client by implementing configure\\{Server|Client} method of CxfEndpointConfigurer. |  | CxfConfigurer |
 | **defaultBus** (advanced) | Will set the default bus when CXF endpoint create a bus by itself. | false | boolean |
 | **headerFilterStrategy** (advanced) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **mergeProtocolHeaders** (advanced) | Whether to merge protocol headers. If enabled then propagating headers between Camel and CXF becomes more consistent and similar. For more details see CAMEL-6393. | false | boolean |
@@ -185,7 +185,7 @@ Enum values:
 | **username** (security) | This option is used to set the basic authentication information of username for the CXF client. |  | String |
 | **bindingId** (service) | The bindingId for the service model to use. |  | String |
 | **portName** (service) | The endpoint name this service is implementing, it maps to the wsdl:portname. In the format of ns:PORT\_NAME where ns is a namespace prefix valid at this scope. |  | String |
-| **publishedEndpointUrl** (service) | This option can override the endpointUrl that published from the WSDL which can be accessed with service address url plus wsd. |  | String |
+| **publishedEndpointUrl** (service) | This option can override the endpointUrl that published from the WSDL which can be accessed with service address url plus ?wsd. |  | String |
 | **serviceClass** (service) | The class name of the SEI (Service Endpoint Interface) class which could have JSR181 annotation or not. |  | Class |
 | **serviceName** (service) | The service name this service is implementing, it maps to the wsdl:servicename. |  | String |
 | **wsdlURL** (service) | The location of the WSDL. Can be on the classpath, file system, or be hosted remotely. |  | String |

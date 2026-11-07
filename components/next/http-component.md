@@ -106,7 +106,7 @@ The HTTP component supports the following options which are listed below.
 | **redirectHandlingDisabled** (advanced) | Disables automatic redirect handling. | false | boolean |
 | **useSystemProperties** (advanced) | To use System Properties as fallback for configuration for configuring HTTP Client. | false | boolean |
 | **headerFilterStrategy** (filter) | To use a custom org.apache.camel.spi.HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
-| **nonProxyHosts** (proxy) | Comma-separated list of hosts that should bypass the proxy. Supports wildcards, e.g., localhost,.example.com,192.168.. |  | String |
+| **nonProxyHosts** (proxy) | Comma-separated list of hosts that should bypass the proxy. Supports wildcards, e.g., localhost,**.example.com,192.168.**. |  | String |
 | **proxyAuthDomain** (proxy) | Proxy authentication domain to use with NTLM. |  | String |
 | **proxyAuthHost** (proxy) | **Deprecated** Proxy server host. |  | String |
 | **proxyAuthMethod** (proxy) | 
@@ -148,7 +148,7 @@ Enum values:
 | **proxyAuthUsername** (proxy) | Proxy server username. |  | String |
 | **proxyHost** (proxy) | Proxy server host. |  | String |
 | **proxyPort** (proxy) | Proxy server port. |  | Integer |
-| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied when deserializing Java objects from requests or responses with Content-Type application/x-java-serialized-object (only used when allowJavaSerializedObject or transferException is enabled). When not set, the JVM-wide jdk.serialFilter is used if present; otherwise a conservative default filter denying java.net. and otherwise allowing java., javax. and org.apache.camel. packages is applied. |  | String |
+| **deserializationFilter** (security) | Sets an ObjectInputFilter pattern (jdk.serialFilter syntax) applied when deserializing Java objects from requests or responses with Content-Type application/x-java-serialized-object (only used when allowJavaSerializedObject or transferException is enabled). When not set, the JVM-wide jdk.serialFilter is used if present; otherwise a conservative default filter denying java.net.\* and otherwise allowing java.**, javax.** and org.apache.camel.\* packages is applied. |  | String |
 | **hostnameVerificationPolicy** (security) | 
 
 Controls how hostname verification is performed during the TLS handshake. CLIENT (default) delegates entirely to the configured x509HostnameVerifier, preserving the behaviour of httpclient 5.5 and earlier a NoopHostnameVerifier will disable verification. BUILTIN uses the JDK SSLParameters hostname check only, ignoring the configured verifier. BOTH runs the JDK built-in check first and then the configured verifier; a NoopHostnameVerifier cannot bypass the built-in check under BUILTIN or BOTH. Prefer BOTH when no custom verifier semantics are needed for stronger out-of-the-box security.
@@ -258,7 +258,7 @@ Enum values:
 | **httpContext** (advanced) | To use a custom HttpContext instance. |  | HttpContext |
 | **maxTotalConnections** (advanced) | The maximum number of connections. | 200 | int |
 | **useSystemProperties** (advanced) | To use System Properties as fallback for configuration for configuring HTTP Client. | false | boolean |
-| **nonProxyHosts** (proxy) | Comma-separated list of hosts that should bypass the proxy. Supports wildcards, e.g., localhost,.example.com,192.168.. |  | String |
+| **nonProxyHosts** (proxy) | Comma-separated list of hosts that should bypass the proxy. Supports wildcards, e.g., localhost,**.example.com,192.168.**. |  | String |
 | **proxyAuthDomain** (proxy) | **Deprecated** Proxy authentication domain to use with NTLM. |  | String |
 | **proxyAuthHost** (proxy) | **Deprecated** Proxy server host. |  | String |
 | **proxyAuthMethod** (proxy) | 

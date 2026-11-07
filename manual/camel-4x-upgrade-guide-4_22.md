@@ -33,6 +33,12 @@ With `checkpointBatchTimeout`, the consumer now starts a new checkpoint window w
 
 The `CamelAzureEventHubsCheckpointUpdatedBy` header can now be `timeout`. An event that completes after the scheduled time of its window, but before the (late) timer has run, joins that window and gets `timeout`; its offset is checkpointed by that timer. Before, such an event always started a new window, so `timeout` was practically never set. Routes that read this header can now see `timeout` as well as `size`.
 
+### camel-hazelcast - the hazelcast-seda consumer restores a transferred exchange only with transferExchange=true
+
+A `hazelcast-seda` consumer now restores the headers and exchange properties of an exchange that a producer with `transferExchange=true` put on the queue only when the consumer has `transferExchange=true` as well. A consumer without the option, the default, now takes only the body of such an exchange, as it does for any other item of the queue, and logs a warning the first time. Before, the consumer restored the headers and exchange properties whatever its `transferExchange` option said.
+
+Set `transferExchange=true` on both the producer and the consumer endpoints to keep transferring the headers and exchange properties.
+
 ### camel-milo - the OPC UA client validates the server certificate
 
 When the endpoint it selects uses a security policy other than `None`, the `milo-client` and `milo-browse` components now validate the certificate of the OPC UA server. Before, any server certificate was accepted, and no option allowed to validate it.
@@ -42,6 +48,10 @@ Configure the trusted certificates with the new `trustListDirectory` option: put
 With neither option, the client does not connect to such an endpoint. It logs a `WARN` message `Failed to connect: The certificate of the OPC UA server cannot be validated`, followed by the endpoint and its security policy, and tries again every 10 seconds. A producer fails with `IllegalStateException: No connected`, caused by the same message. A server certificate refused by the trust list or by a `certificateValidator` is logged at `WARN` as `Failed to connect, because a certificate or security check failed`. To restore the previous behaviour, set the new `trustAllCertificates` option to `true`. This is insecure: the client then does not authenticate the server.
 
 The certificate that the user name and password are encrypted with is checked by the same validator. Endpoints that use the security policy `None` are not affected.
+
+### camel-google-calendar-stream
+
+With `syncFlow=false` and `considerLastUpdate=true`, the consumer now follows all result pages in each poll. Previously it only read the first page, which could prevent later events from ever being delivered. In this mode, `maxResults` controls the API page size; a poll can now deliver more events than this value. Non-sync polling with `considerLastUpdate=false` continues to read only one page per poll.
 
 ### camel-google-mail, camel-google-drive, camel-google-calendar, camel-google-sheets - one API client per endpoint
 
@@ -61,6 +71,16 @@ When the HTTP server (`camel.server.enabled=true`) and the HTTP management serve
     
 
 Camel now fails to start when the management server shares the port and one of them is configured, with a message that lists them. Set `camel.management.port` to another port, so that the management server runs a server of its own and applies them. To keep a single port, remove them and configure the HTTP server instead: for example, authentication configured on the HTTP server for `/*` also applies to the management endpoints.
+
+### camel-platform-http-vertx - the HTTP server fails to start when it cannot listen on its port
+
+The Vert.x HTTP server of platform-http now fails to start when it cannot listen on its port, for example because another process already uses the port, and so Camel fails to start, with the bind error as the cause. This also applies to the HTTP server and the HTTP management server of camel-platform-http-main (`camel.server.` **and `camel.management.`**), which `camel run` uses: a second `camel run` with the same `--port` now fails to start. Before, the failure was only logged at WARN, and Camel started, with its platform-http routes reported as started, although nothing listened on the port.
+
+### camel-whatsapp - webhook events are verified by default
+
+In webhook mode (`webhook:whatsapp:…​`), the `X-Hub-Signature-256` signature of every event that WhatsApp posts is now verified with the `webhookSecret` option, the app secret from the Meta app dashboard. Before, the signature was only verified when `webhookSecret` was set. A webhook route without `webhookSecret` now fails to start. Set `webhookSecret` to the app secret, or set the new `webhookVerification` option to `false` to accept the events without verifying their signature, for example in development. An event without a valid signature is answered with HTTP 403 and does not reach the route. A client that posts events to the webhook endpoint directly, for example in a test, must sign them too.
+
+An event that reaches the route is now answered with HTTP 200 and an empty body. Before, the reply carried the event back to the caller. The reply to the verification request (`GET`) is still the `hub.challenge`.
 
 ### camel-elasticsearch - the credentials are only sent to the nodes of the cluster
 
@@ -207,6 +227,10 @@ The camel-aws components now set the HTTP client of the AWS SDK clients they cre
 
 If you replaced these dependencies to use another HTTP client implementation, name it with the AWS SDK system property `software.amazon.awssdk.http.service.impl` (synchronous clients) or `software.amazon.awssdk.http.async.service.impl` (asynchronous clients): Camel then leaves the choice of the HTTP client to the AWS SDK.
 
+### camel-aws-bedrock - retrieval pagination
+
+The `retrieve` operation of `aws-bedrock-agent-runtime` now removes the `CamelAwsBedrockAgentRuntimeNextToken` header when the response has no continuation token. Previously, an incoming token could remain on the final page. Pagination loops should stop when this header is absent. The `CamelAwsBedrockAgentRuntimeRetrieveGuardrailAction` header is also removed when the response has no guardrail action, so an action from an earlier page cannot survive.
+
 ### camel-wordpress - requests and responses are no longer logged
 
 The WordPress client no longer logs every HTTP request and response it exchanges with the WordPress server at `INFO` level (the `org.apache.cxf.services` loggers). The component no longer depends on `cxf-rt-features-logging`, and the `camel-wordpress` JAR no longer contains a `log4j.properties` file.
@@ -287,6 +311,16 @@ Two routes that consume from the same address with different endpoint options ar
 The `micrometer` and `opentelemetry-metrics` producers now use the tags of the `CamelMetricsTags` header and the attributes of the `CamelMetricsAttributes` header as given. Before, their keys and values were evaluated as Simple expressions, in the same way as the `tags` and `attributes` URI options. The URI options are still evaluated per exchange, and a tag or attribute from the header still overrides one from the URI with the same key.
 
 A route that relied on a Simple expression in a header tag or attribute should use the `tags` / `attributes` URI option instead (for example `tags.customer=${header.customerId}`), or compute the value in the route before setting the header.
+
+### camel-jsch - the scp producer refuses a file name with a line feed or a NUL character
+
+The `scp` producer now refuses a file name with a line feed or a NUL character, in the file name or in one of its directories, with a `GenericFileOperationFailedException`. It does so before it starts scp on the remote host, so nothing is written there. Any other character, such as a carriage return or a tab, is sent as before.
+
+scp sends each name on a protocol line that ends with a line feed. Before, a line feed in the file name ended that line early: the remote scp wrote a file named after the part of the name before the line feed, with the rest of the name at the start of its content, and the exchange did not fail. A line feed in a directory failed the exchange, but left a directory named after the part before it. A NUL character failed the exchange on the remote host, or, with an OpenSSH server before 10.6, cut the name short there. Remove or replace these characters in the `CamelFileName` header or in the `fileName` option before the message reaches the producer.
+
+### camel-azure-storage-blob - copyBlob validates the source account and container name
+
+`copyBlob` now rejects invalid source account or container names (headers `CamelAzureStorageBlobSourceBlobAccountName` and `CamelAzureStorageBlobSourceBlobContainerName`) with an `IllegalArgumentException`.
 
 ## Upgrading from 4.22.1 to 4.22.2
 

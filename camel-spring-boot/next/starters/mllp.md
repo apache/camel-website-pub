@@ -35,7 +35,7 @@ The starter supports 36 options, which are listed below.
 | camel.component.mllp.charset-name | Sets the default charset to use |  | String |
 | camel.component.mllp.configuration | Sets the default configuration to use when creating MLLP endpoints. The option is a org.apache.camel.component.mllp.MllpConfiguration type. |  | MllpConfiguration |
 | camel.component.mllp.connect-timeout | Timeout (in milliseconds) for establishing for a TCP connection TCP Client only | 30000 | Integer |
-| camel.component.mllp.default-charset | Set the default character set to use for byte to/from String conversions. | ISO-8859-1 | String |
+| camel.component.mllp.default-charset | Set the default character set to use for byte\[\] to/from String conversions. | ISO-8859-1 | String |
 | camel.component.mllp.enabled | Whether to enable auto configuration of the mllp component. This is enabled by default. |  | Boolean |
 | camel.component.mllp.exchange-pattern | Sets the exchange pattern when the consumer creates an exchange. | inout | ExchangePattern |
 | camel.component.mllp.hl7-headers | Enable/Disable the automatic generation of message headers from the HL7 Message MLLP Consumers only | true | Boolean |
@@ -53,7 +53,7 @@ The starter supports 36 options, which are listed below.
 | camel.component.mllp.read-timeout | The SO\_TIMEOUT value (in milliseconds) used after the start of an MLLP frame has been received | 5000 | Integer |
 | camel.component.mllp.receive-buffer-size | Sets the SO\_RCVBUF option to the specified value (in bytes) | 8192 | Integer |
 | camel.component.mllp.receive-timeout | The SO\_TIMEOUT value (in milliseconds) used when waiting for the start of an MLLP frame | 15000 | Integer |
-| camel.component.mllp.require-end-of-data | Enable/Disable strict compliance to the MLLP standard. The MLLP standard specifies START\_OF\_BLOCKhl7 payloadEND\_OF\_BLOCKEND\_OF\_DATA, however, some systems do not send the final END\_OF\_DATA byte. This setting controls whether or not the final END\_OF\_DATA byte is required or optional. | true | Boolean |
+| camel.component.mllp.require-end-of-data | Enable/Disable strict compliance to the MLLP standard. The MLLP standard specifies \[START\_OF\_BLOCK\]hl7 payload\[END\_OF\_BLOCK\]\[END\_OF\_DATA\], however, some systems do not send the final END\_OF\_DATA byte. This setting controls whether or not the final END\_OF\_DATA byte is required or optional. | true | Boolean |
 | camel.component.mllp.reuse-address | Enable/disable the SO\_REUSEADDR socket option. | false | Boolean |
 | camel.component.mllp.send-buffer-size | Sets the SO\_SNDBUF option to the specified value (in bytes) | 8192 | Integer |
 | camel.component.mllp.ssl-context-parameters | Sets the SSLContextParameters for securing TCP connections. If set, the MLLP component will use SSL/TLS for securing both producer and consumer TCP connections. This allows the configuration of trust stores, key stores, protocols, and other SSL/TLS settings. If not set, the MLLP component will use plain TCP communication. The option is a org.apache.camel.support.jsse.SSLContextParameters type. |  | SSLContextParameters |

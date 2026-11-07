@@ -61,6 +61,7 @@ org
   └── camel
     └── catalog
       ├── beans (JSON schema)
+      ├── chaos-model.json (the model of the chaos rules)
       ├── components (JSON schema)
       ├── dataformats (JSON schema)
       ├── dev-consoles (JSON schema)
@@ -81,6 +82,8 @@ org
 Each directory contains files with the information. Every Camel component is included as JSON schema files in the components directory. For example, the Timer component is included in the file timer.json.
 
 The `dev-consoles` directory contains JSON schema files describing every [Dev Console](camel-console.md)'s query options and, since Camel 4.23, an authoritative response schema generated directly from the console’s typed Java `Response` record. The top-level `dev-consoles-openapi.json` file aggregates all of this into a single OpenAPI 3.0 specification covering every dev console endpoint, so the same contract used internally to serve the live `api` dev console is also available standalone for tooling. A `dev-consoles.properties` index file lists all available dev console names.
+
+The `chaos-model.json` file, since Camel 4.24, is the model of the rules of [camel-chaos](../components/next/others/chaos.md): the targets, the hooks of each target and the faults each one offers, the parameters of each fault, the options, the expectations, the limits, and recipes (known rules in plain words, as templates). It is for the tools that help to write rules, such as a form or an AI.
 
 The `docs` directory contains the AsciiDoc documentation pages for all components, EIPs, data formats, languages, and other artifacts. A `docs.properties` index file lists all available documentation names.
 
@@ -217,4 +220,7 @@ String summary = catalog.listDevConsolesAsJson();
 
 // the OpenAPI 3.0 specification aggregated across every dev console endpoint
 String openApiSpec = catalog.devConsolesOpenApiSpec();
+
+// the model of the chaos rules of camel-chaos
+String chaosModel = catalog.chaosModelJSon();
 ```

@@ -209,7 +209,7 @@ Enum values:
 | **chunkingUseMarkdownTables** (chunking) | Use markdown format for tables in chunk output. | false | Boolean |
 | **includeMetadataInHeaders** (metadata) | Include metadata in message headers when extracting metadata. | true | boolean |
 | **includeRawMetadata** (metadata) | Include raw metadata as returned by the parser. | false | boolean |
-| **allowFilePathSource** (security) | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte or explicit path collection bodies used by the batch operations. | false | boolean |
+| **allowFilePathSource** (security) | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte\[\] or explicit path collection bodies used by the batch operations. | false | boolean |
 | **allowUrlSource** (security) | Whether a String message body that starts with http:// or https:// is interpreted as a remote URL for Docling to fetch. When disabled, such a body is rejected instead of being fetched. This does not affect the CamelDoclingInputFilePath header, nor bodies of any other type. | false | boolean |
 | **apiKeyHeader** (security) | Header name for API key authentication. | X-API-Key | String |
 | **authenticationScheme** (security) | 
@@ -424,7 +424,7 @@ Enum values:
 
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
-| **allowFilePathSource** (security) | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte or explicit path collection bodies used by the batch operations. | false | boolean |
+| **allowFilePathSource** (security) | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte\[\] or explicit path collection bodies used by the batch operations. | false | boolean |
 | **allowUrlSource** (security) | Whether a String message body that starts with http:// or https:// is interpreted as a remote URL for Docling to fetch. When disabled, such a body is rejected instead of being fetched. This does not affect the CamelDoclingInputFilePath header, nor bodies of any other type. | false | boolean |
 | **apiKeyHeader** (security) | Header name for API key authentication. | X-API-Key | String |
 | **authenticationScheme** (security) | 

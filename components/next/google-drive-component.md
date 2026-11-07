@@ -815,7 +815,7 @@ The google-drive/export API method has the parameters listed in the table below:
 | Parameter | Description | Type |
 | --- | --- | --- |
 | **fileId** | The ID of the file | String |
-| **mimeType** | Required. The MIME type of the format requested for this export. For a list of supported MIME types, see Export MIME types for Google Workspace documents(/workspace/drive/api/guides/ref- export-formats). | String |
+| **mimeType** | Required. The MIME type of the format requested for this export. For a list of supported MIME types, see \[Export MIME types for Google Workspace documents\](/workspace/drive/api/guides/ref- export-formats). | String |
 
 #### Method generateIds
 

@@ -104,7 +104,7 @@ With the following _path_ and _query_ parameters:
 | **allowTemplateFromHeader** (producer) | Whether to allow to use resource template from header or not (default false). Enabling this allows to specify dynamic templates via message header. However this can be seen as a potential security vulnerability if the header is coming from a malicious user, so use this with care. | false | boolean |
 | **contentCache** (producer) | Sets whether to use resource content cache or not. | true | boolean |
 | **inputType** (producer) | 
-Specifies if the input is hydrated JSON or a JSON String. With Hydrated, a body that is JSON text (its first non-whitespace character is \\{ or ), bytes, a stream or a file is parsed as JSON, and any other body, such as a Map or a List, is used as it is. With JsonString, the body is always parsed as JSON.
+Specifies if the input is hydrated JSON or a JSON String. With Hydrated, a body that is JSON text (its first non-whitespace character is \\{ or \[), bytes, a stream or a file is parsed as JSON, and any other body, such as a Map or a List, is used as it is. With JsonString, the body is always parsed as JSON.
 
 Enum values:
 

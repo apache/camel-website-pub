@@ -14,7 +14,7 @@ camel cmd [options]
 | Subcommand | Description |
 | --- | --- |
 | [browse](camel-jbang-cmd-browse.md) | Browse pending messages on endpoints |
-| [chaos-add](camel-jbang-cmd-chaos-add.md) | Add a chaos rule to a running integration (camel-chaos, for development only) |
+| [chaos-add](camel-jbang-cmd-chaos-add.md) | Add chaos rules to a running integration (camel-chaos, for development only) |
 | [chaos-change](camel-jbang-cmd-chaos-change.md) | Change a chaos rule of a running integration (camel-chaos, for development only) |
 | [chaos-clear](camel-jbang-cmd-chaos-clear.md) | Remove all chaos rules of running integrations (camel-chaos, for development only) |
 | [chaos-remove](camel-jbang-cmd-chaos-remove.md) | Remove a chaos rule of a running integration (camel-chaos, for development only) |
