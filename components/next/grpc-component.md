@@ -207,12 +207,6 @@ Enum values:
     
 -   HMAC512
     
--   RSA256
-    
--   RSA384
-    
--   RSA512
-    
 
 
 

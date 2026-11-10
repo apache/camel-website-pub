@@ -126,7 +126,7 @@ Enum values:
 | **apiVersion** (advanced) | Facebook graph api version. |  | String |
 | **baseUri** (advanced) | Can be used to set an alternative base URI, e.g. when you want to test the component against a mock WhatsApp API. |  | String |
 | **httpClient** (advanced) | HttpClient implementation. |  | HttpClient |
-| **webhookPath** (advanced) | Webhook path. | webhook | String |
+| **webhookPath** (advanced) | Webhook path. | camel-whatsapp/webhook | String |
 | **whatsappService** (advanced) | WhatsApp service implementation. |  | WhatsAppService |
 | **authorizationToken** (security) | **Required** The authorization access token taken from whatsapp-business dashboard. |  | String |
 | **webhookSecret** (security) | The app secret used to verify the X-Hub-Signature-256 signature of inbound webhook event payloads (from the Meta/WhatsApp app dashboard). An event callback with a missing or invalid signature is rejected with HTTP 403. Required in webhook mode, unless webhookVerification is false. |  | String |

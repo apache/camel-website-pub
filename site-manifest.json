@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1794087579574,
+  "generated": 1794308801676,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -19574,6 +19574,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/vertx-mqtt.adoc",
+              "url": "/camel-spring-boot/next/starters/vertx-mqtt.html",
+              "title": "Vert.x MQTT"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/vertx-websocket.adoc",
               "url": "/camel-spring-boot/next/starters/vertx-websocket.html",
               "title": "Vert.x WebSocket"
@@ -24186,6 +24192,12 @@
             },
             {
               "module": "others",
+              "path": "sanitizer.adoc",
+              "url": "/components/next/others/sanitizer.html",
+              "title": "Sanitizer"
+            },
+            {
+              "module": "others",
               "path": "semantic-openai.adoc",
               "url": "/components/next/others/semantic-openai.html",
               "title": "Semantic OpenAI"
@@ -24339,6 +24351,12 @@
               "path": "ai-llm-integration-guide.adoc",
               "url": "/components/next/ai-llm-integration-guide.html",
               "title": "LLM Integration Guide"
+            },
+            {
+              "module": "ROOT",
+              "path": "ai-prompt-component.adoc",
+              "url": "/components/next/ai-prompt-component.html",
+              "title": "AI Prompt"
             },
             {
               "module": "ROOT",
@@ -26733,6 +26751,12 @@
               "path": "vertx-http-component.adoc",
               "url": "/components/next/vertx-http-component.html",
               "title": "Vert.x HTTP Client"
+            },
+            {
+              "module": "ROOT",
+              "path": "vertx-mqtt-component.adoc",
+              "url": "/components/next/vertx-mqtt-component.html",
+              "title": "Vert.x MQTT"
             },
             {
               "module": "ROOT",
@@ -36172,9 +36196,45 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-experiment.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-experiment.html",
+              "title": "camel cmd chaos-experiment"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-explore-finish.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-explore-finish.html",
+              "title": "camel cmd chaos-explore-finish"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-explore-start.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-explore-start.html",
+              "title": "camel cmd chaos-explore-start"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-explore.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-explore.html",
+              "title": "camel cmd chaos-explore"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-load.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-load.html",
+              "title": "camel cmd chaos-load"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-cmd-chaos-remove.adoc",
               "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-remove.html",
               "title": "camel cmd chaos-remove"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-cmd-chaos-suggest.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-cmd-chaos-suggest.html",
+              "title": "camel cmd chaos-suggest"
             },
             {
               "module": "ROOT",

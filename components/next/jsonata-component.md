@@ -157,9 +157,9 @@ JSON data: a Map, a List, a JsonNode or another object Jackson converts, or JSON
 
 
  |
-| **Producer output** | `pojo` (`com.fasterxml.jackson.databind.JsonNode`), as json | 
+| **Producer output** | `pojo` (`tools.jackson.databind.JsonNode`), as json | 
 
-The result as a Jackson JsonNode, or as JSON text with outputType=JsonString.
+The result as a Jackson 3 JsonNode, or as JSON text with outputType=JsonString.
 
 -   With `outputType=JsonString`: `text` (`java.lang.String`)
     
@@ -182,14 +182,14 @@ With the default `inputType`, `Jackson`, the body can be:
     
 -   bytes, an `InputStream` (including a stream cache) or a file (`java.io.File`, `java.nio.file.Path` or the file of the [File](file-component.md) component), which is parsed as JSON. The text is decoded in the charset of the exchange (`Exchange.CHARSET_NAME`) when one is set; otherwise Jackson detects the encoding;
     
--   any other object, such as a `Map`, a `List` or a Jackson `JsonNode`, which is converted by Jackson.
+-   any other object, such as a `Map`, a `List` or a Jackson `JsonNode` (Jackson 3 or Jackson 2), which is converted by Jackson.
     
 
 Text that does not start with `{` or `[` is a JSON string value, so for example the expression `$uppercase($)` turns the body `hello` into `"HELLO"`. Text that starts with `{` or `[` but is not valid JSON fails with the parse error.
 
 With `inputType=JsonString`, the body is always parsed as JSON.
 
-The output is a Jackson `JsonNode` by default; set `outputType=JsonString` to get a JSON `String`.
+The output is a Jackson 3 `JsonNode` (`tools.jackson.databind.JsonNode`) by default; set `outputType=JsonString` to get a JSON `String`.
 
 ### Remote expressions
 

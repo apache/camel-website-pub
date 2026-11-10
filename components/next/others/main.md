@@ -187,7 +187,7 @@ The camel.routecontroller supports 12 options, which are listed below.
 
 ### Camel Embedded HTTP Server (only for standalone; not Spring Boot or Quarkus) configurations
 
-The camel.server supports 36 options, which are listed below.
+The camel.server supports 37 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -208,9 +208,10 @@ The camel.server supports 36 options, which are listed below.
 | `camel.server.jwtKeystoreType` | Type of the keystore used for JWT tokens validation (jks, pkcs12, etc.). |  | String |
 | `camel.server.maxBodySize` | Maximum HTTP body size the embedded HTTP server can accept. |  | Long |
 | `camel.server.mcpAllowedOrigins` | Comma-separated list of origins allowed to call the MCP endpoint on the Vert.x streamable transport. Each entry is an exact origin (scheme, host and port), or ends with a colon and an asterisk to match any port. Scheme and host are compared ignoring case, and a default port (80 for http, 443 for https) may be left out. A wildcard for all origins is not supported: an entry that is not of the form scheme://host or scheme://host:port fails the startup. A request without an Origin header is always served; a request with an Origin header that is not allowed is rejected with HTTP 403. When not set, only loopback origins are allowed (localhost, 127.0.0.1 and ::1 on any port). |  | String |
-| `camel.server.mcpEnabled` | Whether to expose ai-tool routes as MCP tools and ai-resource routes as MCP resources. Requires camel-mcp-server on the classpath. Use setMcpTransport(String) to choose streamable HTTP (default) or stdio for IDE subprocess integration. By default, the MCP server is not enabled. | false | boolean |
+| `camel.server.mcpEnabled` | Whether to expose ai-tool routes as MCP tools, ai-resource routes as MCP resources and ai-prompt routes as MCP prompts. Requires camel-mcp-server on the classpath. Use setMcpTransport(String) to choose streamable HTTP (default) or stdio for IDE subprocess integration. By default, the MCP server is not enabled. | false | boolean |
 | `camel.server.mcpInstructions` | Top-level MCP instructions returned to clients on initialize. |  | String |
 | `camel.server.mcpPath` | HTTP path where the MCP endpoint is served. | /mcp | String |
+| `camel.server.mcpPromptTimeout` | Per-request MCP prompt execution timeout in milliseconds. A request exceeding the timeout returns an error to the MCP client; the underlying route may continue running until it completes. | 20000 | long |
 | `camel.server.mcpResourceTimeout` | Per-read MCP resource execution timeout in milliseconds. A read exceeding the timeout returns an error to the MCP client; the underlying route keeps running until it completes on its own. | 20000 | long |
 | `camel.server.mcpServerDescription` | MCP server description advertised to clients in serverInfo.description . |  | String |
 | `camel.server.mcpServerIcons` | JSON array of MCP server icons advertised to clients in serverInfo.icons . Each entry must include a src URL and may include mimeType , sizes and theme . |  | String |
@@ -219,9 +220,9 @@ The camel.server supports 36 options, which are listed below.
 | `camel.server.mcpServerWebsiteUrl` | MCP server website URL advertised to clients in serverInfo.websiteUrl . |  | String |
 | `camel.server.mcpSessionIdleTtl` | Idle TTL in milliseconds for MCP sessions on the Vert.x streamable transport. Sessions with no activity for longer than this interval are evicted. 0 disables idle eviction. | 300000 | long |
 | `camel.server.mcpSessionKeepAliveInterval` | Keep-alive ping interval in milliseconds for MCP sessions on the Vert.x streamable transport. Dead sessions are evicted after consecutive ping failures. 0 disables keep-alive pings. | 30000 | long |
-| `camel.server.mcpTags` | Comma-separated list of tag patterns selecting the ai-tool routes to expose as MCP tools and the ai-resource routes to expose as MCP resources. Matching is case-insensitive and supports exact match, wildcard prefix ( foo\* ), and \* to match all tags. Only routes registered under a matching tag are exposed; the untagged default pools are never exposed. When not set, nothing is exposed. |  | String |
+| `camel.server.mcpTags` | Comma-separated list of tag patterns selecting ai-tool routes as MCP tools, ai-resource routes as MCP resources and ai-prompt routes as MCP prompts. Matching is case-insensitive and supports exact match, wildcard prefix ( foo\* ), and \* to match all tags. Only routes registered under a matching tag are exposed; the untagged default pools are never exposed. When not set, nothing is exposed. |  | String |
 | `camel.server.mcpToolTimeout` | Per-call MCP tool execution timeout in milliseconds. A call exceeding the timeout returns an error result to the MCP client; the underlying route keeps running until it completes on its own. | 20000 | long |
-| `camel.server.mcpTransport` | MCP transport for ai-tool routes: http (streamable HTTP on the embedded server, default) or stdio (JSON-RPC on process stdin/stdout for local agent subprocesses). | http | String |
+| `camel.server.mcpTransport` | MCP transport selection: http (streamable HTTP on the embedded server, serving tools, resources and prompts) or stdio (JSON-RPC on process stdin/stdout for local agent subprocesses, serving tools and prompts only). | http | String |
 | `camel.server.path` | Context-path to use for embedded HTTP server | / | String |
 | `camel.server.port` | Port to use for binding embedded HTTP server. Use 0 to dynamic assign a free random port number. | 8080 | int |
 | `camel.server.staticContextPath` | The context-path to use for serving static content. By default, the root path is used. And if there is an index.html page then this is automatically loaded. | / | String |
@@ -750,16 +751,30 @@ The camel.aiObservability supports 1 options, which are listed below.
 
 ### Camel Chaos configurations
 
-The camel.chaos supports 5 options, which are listed below.
+The camel.chaos supports 7 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | `camel.chaos.enabled` | Whether to install the hooks of camel-chaos, which do nothing until a rule is added. The default is false, and true with profile dev. With profile prod chaos stays off, also when this is true. | false | Boolean |
 | `camel.chaos.maxDuration` | The longest time a rule runs: a rule without an until duration ends after it, and a longer until duration or delay is rejected when the rule is added. | 10m | String |
+| `camel.chaos.reportFile` | A file to write the chaos report to as JSON when the CamelContext stops, such as target/chaos-report.json. |  | String |
 | `camel.chaos.reportOnShutdown` | Whether to log the chaos report when the CamelContext stops, if any rule was added. | true | boolean |
 | `camel.chaos.rules` | Rules to add at startup, in the one-line text form of a rule, separated by semicolons. |  | String |
+| `camel.chaos.scenario` | A scenario to load at startup: a file with one rule per line, # comments and an optional seed= line (such as test/chaos/outage.chaos), or classpath:name. Its rules are added before the rules option, and its seed is used unless the seed option is set. |  | String |
 | `camel.chaos.seed` | The seed of the random draws of the rules. Without it a seed is picked at startup, and shown in the report. |  | Long |
+
+### Camel Sanitizer configurations
+
+The camel.sanitizer supports 4 options, which are listed below.
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| `camel.sanitizer.checks` | The checks to run, separated by commas: callback (rule R1, the callback of each call of the processor of a step is called exactly once, and process does not throw). | callback | String |
+| `camel.sanitizer.enabled` | Whether to install the exchange sanitizer. The default is false, and true with profile dev or in a test with the CamelSanitizer annotation. With profile prod the sanitizer stays off, also when this is true. | false | Boolean |
+| `camel.sanitizer.reportOnShutdown` | Whether to log the report of the sanitizer when the CamelContext stops, if it reported a violation. | true | boolean |
+| `camel.sanitizer.stackDepth` | How many frames of each stack a report keeps; 0 keeps only the name of the thread, which costs least. | 32 | int |
 
 ### Camel File Cluster Service configurations
 

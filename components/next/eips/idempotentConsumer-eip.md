@@ -4,7 +4,7 @@ The [Idempotent Consumer](http://www.enterpriseintegrationpatterns.com/Idempoten
 
 The Idempotent Consumer essentially acts like a [Message Filter](filter-eip.md) to filter out duplicates.
 
-Camel will add the message id eagerly to the repository to detect duplication also for [Exchange](../../../manual/exchange.md)'s' currently in progress. On completion Camel will remove the message id from the repository if the [Exchange](../../../manual/exchange.md) failed, otherwise it stays there.
+Camel will add the message id eagerly to the repository to detect duplication also for [Exchange](../../../manual/exchange.md)'s' currently in progress. On completion Camel will remove the message id from the repository if the [Exchange](../../../manual/exchange.md) failed, otherwise it stays there. An Exchange marked with `markRollbackOnly()` or `markRollbackOnlyLast()` counts as failed too, even without an exception. Set `removeOnFailure=false` to keep the message id of a failed Exchange.
 
 ## Options
 

@@ -52,6 +52,26 @@ mvn clean install -Pnative
 > **Tip**
 > To run a specific integration test, you can use the `-Dtest` property. For example: `mvn clean test -Dtest=MyTest`. To run tests in a specific module, use the `-pl` (project list) flag: `mvn clean test -pl integration-tests/my-module`.
 
+### FIPS
+
+A build on a FIPS-enabled machine:
+
+```shell
+mvn clean install -Dfips
+```
+
+With JDK 25+, remove the hybrid `X25519MLKEM768` group (not supported by the SunPKCS11 FIPS provider) from the TLS named groups of Maven itself:
+
+```shell
+export MAVEN_OPTS="$MAVEN_OPTS -Djdk.tls.namedGroups=secp256r1,secp384r1,secp521r1,ffdhe2048,ffdhe3072,ffdhe4096,ffdhe6144,ffdhe8192"
+```
+
+The WS-Security tests need `-Dfips.enabled=true`. Use it only for the CXF grouped module, other CXF modules fail to build with it:
+
+```shell
+mvn clean install -Dfips -Dfips.enabled=true -f integration-tests/cxf-soap-grouped
+```
+
 ## What’s next?
 
 -   [Create new extension](create-new-extension.md).

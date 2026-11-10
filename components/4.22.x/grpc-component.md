@@ -105,7 +105,7 @@ With the following _path_ and _query_ parameters:
 | **maxMessageSize** (common) | The maximum message size allowed to be received/sent (MiB). | 4194304 | int |
 | **autoDiscoverServerInterceptors** (consumer) | Setting the autoDiscoverServerInterceptors mechanism, if true, the component will look for a ServerInterceptor instance in the registry automatically otherwise it will skip that checking. | true | boolean |
 | **consumerStrategy** (consumer) | 
-This option specifies the top-level strategy for processing service requests and responses in streaming mode. If an aggregation strategy is selected, all requests will be accumulated in the list, then transferred to the flow, and the accumulated responses will be sent to the sender. If a propagation strategy is selected, request is sent to the stream, and the response will be immediately sent back to the sender. If a delegation strategy is selected, request is sent to the stream, but no response generated under the assumption that all necessary responses will be sent at another part of route. Delegation strategy always comes with routeControlledStreamObserver=true to be able to achieve the assumption.
+This option specifies the top-level strategy for processing service requests and responses in streaming mode. If an aggregation strategy is selected, all requests will be accumulated in the list, then transferred to the flow, and the accumulated responses will be sent to the sender. If a propagation strategy is selected, request is sent to the stream, and the response will be immediately sent back to the sender. If a delegation strategy is selected, request is sent to the stream, but no response generated under the assumption that all necessary responses will be sent at another part of route. Delegation strategy always comes with routeControlledStreamObserver=true to be able to achieve the assumption. With routeControlledStreamObserver=true, the propagation strategy does not send responses either: it sends the requests to the route one at a time, and the route sends the responses.
 
 Enum values:
 
@@ -286,6 +286,12 @@ To enable these features, the following component properties combinations must b
 |  |  | jwtIssuer |  | Optional |
 |  |  | jwtSubject |  | Optional |
 
+### gRPC consumer reply
+
+The message body at the end of the consumer route is the reply to the client: the response message of the called method, or a `List` of them for a streaming response. A message without a body sends an empty response message.
+
+With `routeControlledStreamObserver=true` the route sends the responses itself, with a producer endpoint with `toRouteControlledStreamObserver=true`. The producer sends the event named by the `CamelGrpcEventType` header (`onNext`, `onCompleted` or `onError`). The consumer sets this header for the events of client streaming and bidirectional streaming calls. The body of an `onNext` event is sent to the client as is. The body of an `onError` event must be a `Throwable`, which ends the call.
+
 ### gRPC producer resource type mapping
 
 The table below shows the types of objects in the message body, depending on the types (simple or stream) of incoming and outgoing parameters, as well as the invocation style (synchronous or asynchronous). Please note that invocation of the procedures with incoming stream parameter in asynchronous style is not allowed.
@@ -414,7 +420,7 @@ Both client streaming and bidirectional streaming gRPC methods expose `StreamObs
 
 But there is another thing: requests also come in streaming mode. So you need the following:
 
-1.  Set consumer strategy to DELEGATION - that differs from the default PROPAGATION option in the fact that consumer will not produce responses at all. If you set PROPAGATION, then you will receive more responses than you expected;
+1.  Choose the consumer strategy. With `routeControlledStreamObserver=true` the consumer sends no responses itself with either strategy: the default `PROPAGATION` routes the events of a call one at a time, in order, while `DELEGATION` does not wait for an event to be done before it routes the next one;
     
 2.  Forward `onError` and `onCompletion` on consumer;
     

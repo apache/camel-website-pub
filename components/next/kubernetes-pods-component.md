@@ -268,7 +268,7 @@ _Java-only: sets a Map header for label selection_
 ```java
 from("direct:listByLabels")
     .process(exchange -> {
-        exchange.getIn().setHeader("CamelKubernetesPodLabels",
+        exchange.getIn().setHeader("CamelKubernetesPodsLabels",
             Map.of("key1", "value1", "key2", "value2"));
     })
     .to("kubernetes-pods:///?kubernetesClient=#kubernetesClient&operation=listPodsByLabels")

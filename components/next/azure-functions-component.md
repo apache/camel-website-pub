@@ -340,7 +340,7 @@ The message body at each side of the Azure Functions component: _Consumer_ is th
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `value`, `bytes`, `stream`, `file` or `null` | 
-The request body of invokeFunction, the default: text, a number or a boolean is sent as text (UTF-8), and bytes, a stream or a file as their content. A Map or a POJO is not marshalled: marshal it to JSON first, as a body that does not convert to bytes fails. The Content-Type is application/json unless the CamelAzureFunctionsHttpHeaders header sets one. GET and DELETE send no body. The management operations do not use the body: they take their input from headers, such as the app settings and the tags.
+The request body of invokeFunction, the default: text, a number or a boolean is sent as text (UTF-8), and bytes, a stream or a file as their content. A Map or a POJO is not marshalled: marshal it to JSON first, as a body that does not convert to bytes fails. The Content-Type is the one the CamelAzureFunctionsHttpHeaders header sets, else the Content-Type header of the message, else application/json. GET and DELETE send no body. The management operations do not use the body: they take their input from headers, such as the app settings and the tags.
 
 -   With `operation=listFunctionApps`: `any`
     
@@ -570,7 +570,7 @@ from("direct:manage")
 
 The `invokeFunction` operation sends the message body to the function: text, a number or a boolean is sent as text (UTF-8), and bytes, a stream or a file (also the file of a file consumer) as their content. A `Map` or a POJO is not marshalled: marshal it to JSON first, for example with `marshal().json()`, as a body that does not convert to bytes fails the exchange. `GET` and `DELETE` send no body.
 
-A request with a body has the `Content-Type: application/json` header, unless the `CamelAzureFunctionsHttpHeaders` header, a `Map<String, String>` of HTTP headers to send, sets a `Content-Type`.
+A request with a body has the `Content-Type` that the `CamelAzureFunctionsHttpHeaders` header, a `Map<String, String>` of HTTP headers to send, sets. When that map sets none, the `Content-Type` header of the message is used, and when the message has none either, `Content-Type: application/json`. Text is always sent as UTF-8: the charset parameter of a `Content-Type` from the message, for example `text/plain; charset=ISO-8859-1`, is not used for the encoding.
 
 The response body of the function becomes the message body, as text, with the HTTP status in the `CamelAzureFunctionsStatusCode` header and the HTTP headers of the response in the `CamelAzureFunctionsResponseHeaders` header. A status of 400 or above fails the exchange with an `org.apache.camel.http.base.HttpOperationFailedException`, as the HTTP components do: it holds the status, the response body and the response headers. The message body is then still the request body, as in camel-http, with the status in the `CamelAzureFunctionsStatusCode` header. Set `throwExceptionOnFailure=false` to get the response of every status as the message body instead.
 

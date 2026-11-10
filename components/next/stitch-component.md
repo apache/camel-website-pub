@@ -206,9 +206,9 @@ from("direct:sendStitch")
 
 Currently, the component supports the following types for the body message on the producer side when producing a message to Stitch component:
 
--   `org.apache.camel.component.stitch.client.models.StitchRequestBody`: This represents this Stitch [JSON Message](https://www.stitchdata.com/docs/developers/import-api/api#batch-data—​arguments). However, `StitchRequestBody` includes a type safe builder that helps on building the request body. Please note that, `tableName`, `keyNames` and `schema` options are no longer required if you send the data with `StitchRequestBody`, if you still set these options, they override whatever being set in message body `StitchRequestBody`.
+-   `org.apache.camel.component.stitch.client.models.StitchRequestBody`: This represents this Stitch [JSON Message](https://www.stitchdata.com/docs/developers/import-api/api#batch-data—​arguments). However, `StitchRequestBody` includes a type safe builder that helps on building the request body. Please note that, `tableName`, `keyNames` and `stitchSchema` options are no longer required if you send the data with `StitchRequestBody`, if you still set these options, they override whatever being set in message body `StitchRequestBody`.
     
--   `org.apache.camel.component.stitch.client.models.StitchMessage`: This represents [this Stitch message structure](https://www.stitchdata.com/docs/developers/import-api/api#message-object). If you choose to send your message as `StitchMessage`, **you will need** to add `tableName`, `keyNames` and `schema` options to either the Exchange headers or through the endpoint options.
+-   `org.apache.camel.component.stitch.client.models.StitchMessage`: This represents [this Stitch message structure](https://www.stitchdata.com/docs/developers/import-api/api#message-object). If you choose to send your message as `StitchMessage`, **you will need** to add `tableName`, `keyNames` and `stitchSchema` options to either the Exchange headers or through the endpoint options.
     
 -   `Map`: You can also send the data as `Map`, the data structure must follow this [JSON Message](https://www.stitchdata.com/docs/developers/import-api/api#batch-data—​arguments) structure which is similar to `StitchRequestBody` but with drawback losing on all the type safety builder that is included with `StitchRequestBody`.
     

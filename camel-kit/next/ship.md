@@ -41,7 +41,7 @@ Context is optional: a bare `camel-kit ship` starts a short discovery conversati
 | `--status RUN_ID` |  | Read the latest durable state without starting the workflow runtime |
 | `--abort RUN_ID` |  | Abort a run that has not completed; aborted runs cannot be resumed |
 | `--start-from STAGE` |  | Start a new run at `discovery`, `design` or `plan` |
-| `--backend MODE` | `pi` | `pi`, `bob2-native`, `copilot-native`, `claude-native`, `antigravity-native`, `qwen-native` or, in the development snapshot, `codex-native`; a run keeps its mode for its lifetime |
+| `--backend MODE` | `pi` | `pi`, `bob2-native`, `copilot-native`, `claude-native`, `antigravity-native`, `qwen-native`, `opencode-native` or, in the development snapshot, `codex-native`; a run keeps its mode for its lifetime |
 | `--json` | off | Structured run state and any pending native task |
 | `--submit RUN_ID --result PATH` |  | Relay one native child result |
 | `--pi PATH`, `--node PATH` | found on `PATH` | Executables for the Pi backend; rejected for native runs |
@@ -91,13 +91,13 @@ Accepted changes reach the live project only after the configured approval and v
 
 ## Native subagents
 
-With the Pi backend, Ship runs an external Pi worker. Eligible IBM Bob 2, GitHub Copilot CLI, Claude Code and Google Antigravity and Qwen Code sessions can instead relay the controller’s stage tasks to their own read-only native subagents; OpenAI Codex CLI joins them in the development snapshot. The contract is the same for every host:
+With the Pi backend, Ship runs an external Pi worker. Eligible IBM Bob 2, GitHub Copilot CLI, Claude Code, Google Antigravity, Qwen Code and OpenCode sessions can instead relay the controller’s stage tasks to their own read-only native subagents; OpenAI Codex CLI joins them in the development snapshot. The contract is the same for every host:
 
 1.  The controller creates one pending task with its run, stage, attempt, input digest, deadline and a unique task ID, and returns to the parent session.
     
 2.  The parent dispatches a fresh `camel-ship-worker` child with the controller’s complete prompt, copied verbatim, and submits the observed result through `ship --submit RUN_ID --result PATH --json`.
     
-3.  The worker never edits project files, writes to the candidate or the state directory, calls MCP servers, delegates or publishes. On Bob 2, Copilot CLI, Claude Code, Antigravity and Qwen Code it has read and search tools only; on Codex CLI it may use the host’s file-reading means, shell commands included, for the named inputs and sources, under the host’s permissions. For execute it returns complete text proposals for the approved route and test paths, `pom.xml` and `.camel-kit/config.properties`; arbitrary extra resources, binary files and deletions are outside the contract.
+3.  The worker never edits project files, writes to the candidate or the state directory, calls MCP servers, delegates or publishes. On Bob 2, Copilot CLI, Claude Code, Antigravity, Qwen Code and OpenCode it has read and search tools only; on Codex CLI it may use the host’s file-reading means, shell commands included, for the named inputs and sources, under the host’s permissions. For execute it returns complete text proposals for the approved route and test paths, `pom.xml` and `.camel-kit/config.properties`; arbitrary extra resources, binary files and deletions are outside the contract.
     
 4.  The controller validates the proposals, writes its private candidate, computes the hashes and runs the mandatory checks. A returned child result is a transport result, not proof that validation passed. Only the controller advances a stage or pauses.
     
@@ -113,6 +113,7 @@ The skill selects the native backend for an eligible new run unless you choose o
 | OpenAI Codex CLI (development snapshot only) | `$camel-ship` in a trusted session with the `camel_ship_worker` custom agent, declared with `sandbox_mode = "read-only"` and no MCP servers. Where the host does not enforce the sandbox, the worker’s instructions are the operative restriction. If `--backend codex-native` is requested and dispatch is unavailable the skill stops without starting a run. |
 | Google Antigravity | `/camel-ship` from the generated skill in a session that exposes `invoke_subagent` and the `camel-ship-worker` custom agent, which declares `commandExecutionPolicy: "off"`, `inheritMcp: false` and only read and search tools. Unlike the general `camel-worker` and `camel-reviewer` agents, the Ship worker does not inherit MCP servers. The skill respects Antigravity’s permission prompts and sandbox settings. |
 | Qwen Code | `/camel-ship` from the generated skill in a session that exposes the `camel-ship-worker` named agent, which declares `approvalMode: default`, an explicit read-only `tools:` allowlist and `disallowedTools: [agent]`. The skill never uses `fork` or `fork_turns`; dispatch is through the named-agent mechanism. If `--backend qwen-native` is requested and dispatch is unavailable the skill stops without starting a run. Generated skill and worker assets verified on Qwen Code 0.25.3 (parser/command-loader probe); live child execution acceptance is pending. |
+| OpenCode | `/camel-ship` command stub in `.opencode/commands/` that invokes the native skill, which uses the `subagent` tool to dispatch a `camel-ship-worker` child with explicit tool denials (`edit`, `write`, `bash`, `notebook`, `subagent`, `mcp`) and per-server glob denials for every MCP server enumerated from the full effective configuration at init time (project layers, ancestor dirs, global XDG config, `OPENCODE_CONFIG`, `OPENCODE_CONFIG_CONTENT`, `OPENCODE_CONFIG_DIR`, and platform managed config — `/etc/opencode` on Linux, `/Library/Application Support/opencode` on macOS, `%ProgramData%\opencode` on Windows). The worker is not generated — and any existing one is removed — when any config source contains an unresolved `{env:…}` or `{file:…}` substitution, cannot be parsed (a project config that init rejects, for example for duplicate keys, also removes the worker and is left untouched), a server name collides with a built-in permission prefix, or macOS MDM managed preferences (`ai.opencode.managed.plist`) are present. The worker inherits read access from the parent. If `--backend opencode-native` is requested and dispatch is unavailable the skill stops without starting a run. Cleanup never follows a symlinked `.opencode/agents` directory. Native pipeline acceptance on OpenCode 2.2.5 was run on Linux; the Windows and macOS managed-config handling is covered by generator tests that simulate the OS selection, not by live Windows or macOS runs. |
 
 A fresh context is not an OS sandbox: read access follows the parent’s permitted paths. Do not broaden permissions, add directories or substitute another role when a task cannot reach its inputs.
 
@@ -130,7 +131,7 @@ Recovery is shared. After an interruption inspect `--status --json`, wait for a 
     
 -   **Qwen Code** exposes `/camel-ship` through its skills directory and relays eligible runs to its read-only worker via named-agent dispatch.
     
--   **OpenCode** generates a `/camel-ship` command stub that forwards the options once.
+-   **OpenCode** exposes `/camel-ship` through its command directory and relays eligible runs to its read-only `camel-ship-worker` child agent via the `subagent` tool.
     
 -   **Pi** exposes Ship only as `/skill:camel-ship`; there is deliberately no `/camel-ship` prompt, because Pi’s prompt expansion flattens quoted option values.
     

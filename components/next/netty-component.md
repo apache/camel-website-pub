@@ -593,9 +593,7 @@ With `sync=false` the producer continues routing as soon as the request is writt
 
 #### Using Multiple Codecs
 
-In certain cases, it may be necessary to add chains of encoders and decoders to the netty pipeline. To add multiple codecs to a Camel netty endpoint, the `encoders` and `decoders` uri parameters should be used. Like the `encoder` and `decoder` parameters they are used to supply references (lists of `ChannelUpstreamHandlers` and `ChannelDownstreamHandlers`) that should be added to the pipeline.
-
-Note that if encoders are specified, then the encoder param will be ignored, similarly for decoders and the decoder param.
+In certain cases, it may be necessary to add chains of encoders and decoders to the netty pipeline. To add multiple codecs to a Camel netty endpoint, the `encoders` and `decoders` uri parameters should be used. They are used to supply references (lists of `ChannelUpstreamHandlers` and `ChannelDownstreamHandlers`) that should be added to the pipeline.
 
 > **Note**
 > Read further about using [non-shareable encoders/decoders](#Netty-NonShareableEncodersOrDecoders).

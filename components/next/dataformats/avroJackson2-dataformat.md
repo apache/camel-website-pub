@@ -56,10 +56,10 @@ The Avro Jackson 2 dataformat supports the following options which are listed be
 | **allowJmsType** (advanced) | `false` | `Boolean` | Used for JMS users to allow the JMSType header from the JMS spec to specify a FQN classname to use to unmarshal to. |
 | **collectionType** (advanced) |  | `String` | Refers to a custom collection type to lookup in the registry to use. |
 | **useList** (common) | `false` | `Boolean` | To unmarshal to a List of Map or a List of Pojo. |
-| **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules com.fasterxml.jackson.databind.Module specified as a String with FQN class names. Multiple classes can be separated by comma. |
+| **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules specified as a String with FQN class names. Multiple classes can be separated by comma. |
 | **moduleRefs** (advanced) |  | `String` | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |
-| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. Multiple features can be separated by comma. |
-| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson com.fasterxml.jackson.databind.ObjectMapper. Multiple features can be separated by comma. |
+| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson ObjectMapper. Multiple features can be separated by comma. |
+| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson ObjectMapper. Multiple features can be separated by comma. |
 | **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson is allowed to attempt to use the CamelJacksonUnmarshalType header during the unmarshalling. |
 | **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
 | **autoDiscoverObjectMapper** (advanced) | `false` | `Boolean` | If set to true then Jackson will lookup for an objectMapper into the registry. |

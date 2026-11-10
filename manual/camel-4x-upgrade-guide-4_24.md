@@ -11,6 +11,23 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 The `camel-observability-services` component has been promoted from _Preview_ to _Stable_ support level.
 
+### KeyValueRepository and State Store - namespace partitioning on shared backends
+
+In Camel 4.23, `state-store` endpoints stored keys directly into the underlying `KeyValueRepository` without namespacing. When a single `KeyValueRepository` was shared between multiple state stores, the Cache EIP, or repository adapters (such as `KeyValueAggregationRepository` or `KeyValueIdempotentRepository`), operations on one store (such as `clear()`) or key collisions could affect entries of another component or pattern.
+
+Starting in 4.24:
+
+-   `StateStoreComponent` automatically namespaces keys on shared backend repositories (auto-discovered from the registry or referenced via `backend=#ref`) under `statestore:<storeName>:<key>`. Delimiter characters in store names are escaped to guarantee that store names sharing a prefix remain strictly isolated. Operations such as `clear()`, `keys()`, and `size()` are scoped to the store’s namespace.
+    
+-   Dedicated backends created by `StateStoreBackendFactory` or the default per-store in-memory fallback are not namespaced.
+    
+-   To maintain backward compatibility with un-namespaced entries written by Camel 4.23 on a shared backend without migrating keys, users can opt out of namespacing by configuring `namespaced=false` on the endpoint (`state-store:myStore?namespaced=false`) or on the component (`camel.component.state-store.namespaced=false`).
+    
+-   The Cache EIP stores keys directly without a namespace prefix, preserving documented cache invalidation recipes (`cache.delete(key)` and `cache.clear()`). Note that because cache keys are un-prefixed, calling `clear()` on a `KeyValueRepository` shared with the Cache EIP will clear all entries in that repository, including state-store entries. It is recommended to use a dedicated repository for the Cache EIP when co-located with state-store.
+    
+-   `KeyValueAggregationRepository` safely verifies entry types before unmarshalling, ignoring unexpected types gracefully instead of failing with a class cast exception.
+    
+
 ### camel-ehcache - shared CacheManager and changed defaults
 
 The following user-visible changes take effect in 4.24:
@@ -165,6 +182,16 @@ Removed:
 
 The `Redeliveries` statistics of the routes, processors and the `CamelContext` count an exchange that completed after a redelivery also when the route removed the `CamelRedelivered` header afterwards (such as `removeHeaders("Camel*")` before calling an endpoint). Before, such a recovery was not counted. `ExchangeHelper.isRedelivered` now also returns `true` when the error handler redelivered the exchange, without looking at the header only. An exchange whose failure is continued (`continued(true)`) no longer keeps its redelivery counter, as with a handled failure.
 
+### camel-management - the input and reply hits of the runtime endpoint registry count each message once
+
+The runtime endpoint registry (in extended statistics mode, as the `RuntimeEndpointRegistry` MBean, the endpoints dev console and the Camel CLI show it) now counts an input hit of a route when an exchange enters the route through its consumer, as the route counts its exchanges. Before, it counted every created exchange: the copy of a Circuit Breaker and the sub-exchanges of a Split, Multicast or Recipient List were counted as input hits of the route as well, and a route that consumes from `direct` (or got a message sent by a `ProducerTemplate` to its `direct` endpoint) had no input hits at all.
+
+Likewise, the reply of an InOut consumer is counted as an out hit of its endpoint when the exchange is done in the route, once per message. Before, the completed copy of a Circuit Breaker and the sub-exchanges of a Split, Multicast or Recipient List were counted as replies as well.
+
+### camel-core - a step after a redelivered step gets all its redeliveries
+
+When a step of a route was redelivered and then succeeded, a later failure (of another step of the route, or of a route that gets the exchange or a copy of it next, such as over `seda`) counted its redeliveries on from the `CamelRedeliveryCounter` header that the first step left on the message. With `maximumRedeliveries(2)`, a step after one that needed two redeliveries was not redelivered at all: the message went to the dead letter channel at its first failure. Now such a failure is redelivered as any other, from attempt 1, so such routes can redeliver more often than before. The `CamelRedelivered`, `CamelRedeliveryCounter` and `CamelRedeliveryMaxCounter` headers stay on the message after the redelivered step succeeded, as before.
+
 ### camel-core - a nested split no longer changes the processed items of the outer split
 
 With `errorThreshold` or `maxFailedRecords` on a split that contains another split, the inner split changed the number of processed items of the outer split. It counted its own items when it had no thresholds, and hid the items of the outer split when it had them. `SplitResult.getProcessedItems()` now reports the items of that split only. A nested split with `errorThreshold` can now stop earlier than before, as the ratio is computed from the correct number.
@@ -218,6 +245,10 @@ To not redeliver such a failure, add an `onException` for its exception type wit
 ### camel-core - Aggregate EIP no longer completes the groups when the route is suspended
 
 With `forceCompletionOnStop` or `completeAllOnStop`, suspending the route no longer completes the aggregated groups. They are kept and completed when the route or Camel is stopped. To send them out before a suspend, use `forceCompletionOfAllGroups` (`AggregateController` or JMX), or stop the route instead.
+
+### camel-core - Aggregate EIP does not confirm a group that was completed by its first exchange
+
+A group that is completed by the exchange that creates it, for example with `completionSize(1)`, is never added to the aggregation repository. With a `RecoverableAggregationRepository`, Camel no longer calls `confirmWithResult` for such a group. Before, `JdbcAggregationRepository` logged an ERROR for each one and kept its exchange id as unconfirmed until the route was removed. A custom `RecoverableAggregationRepository` should not expect `confirmWithResult` for these groups.
 
 ### camel-core - ThrottlingExceptionRoutePolicy counts the failures within the failure window
 
@@ -360,6 +391,12 @@ When the Split EIP stops because `maxFailedRecords` or `errorThreshold` is reach
 
 So a `doCatch` around the split, an `onException`, an `onCompletion`, a dead letter channel or the caller of the route now receive the input that was split, instead of that one split item. A route that needs to know which items failed can read the `CamelSplitResult` exchange property, set as before: `SplitResult.getFailures()` has the index and the exception of the failed items.
 
+### camel-core - Split EIP processes the items again when the watermark cannot be stored
+
+When the resume strategy of a split with watermark tracking fails to store the watermark, the split now fails with that exception, and the next split processes the same items again. Before, with `synchronous()`, the split also failed, but the watermark was kept in memory anyway, so the next split skipped those items although the watermark was never stored. Without `synchronous()`, the exchange never completed (fixed by the same change).
+
+A `watermarkExpression` that throws on an item now fails that item, so `stopOnException`, `maxFailedRecords` and `errorThreshold` apply as for any failed item.
+
 ### camel-core - shareUnitOfWork: a part sent to seda no longer takes the on completions of the parent exchange
 
 Since Camel 4.14 the parts of a Split, Multicast or Recipient List with `shareUnitOfWork` use the unit of work of the parent exchange. A part that sent to an asynchronous endpoint without waiting for a reply (such as `seda` with an `InOnly` exchange) handed over all the on completions of that unit of work to its copy, including the commit or rollback of the consumer of the parent exchange (such as moving the file, or deleting the SQS message). They then ran when that copy was done, with the outcome of that copy: a file was moved to its done folder although a later part failed the split, or a message was rolled back although the split succeeded.
@@ -379,6 +416,14 @@ A route that relies on a regular expression as token, such as `\s+` or `(\W+)\s*
 ```
 
 In the XML and YAML DSL, a token with the escapes `\n`, `\r` or `\t` (for example `\r\n`) is turned into the new line, carriage return and tab characters, so it works as before. Before, only a leading `\n` was turned into a new line.
+
+### camel-core - Idempotent Consumer: an exchange marked rollback only removes its message id
+
+The [Idempotent Consumer](../components/4.22.x/eips/idempotentConsumer-eip.md) now treats an exchange marked with `markRollbackOnly()` or `markRollbackOnlyLast()` (without an exception) as failed, as the SQL consumer already does: with `removeOnFailure=true` (the default) its message id is removed from the idempotent repository, so a redelivered message is processed instead of being dropped as a duplicate. Before, the message id was kept.
+
+With a consumer that does not redeliver a rollback only exchange, such as the file consumer, a later message with the same id is now processed instead of being dropped as a duplicate.
+
+To keep the message id, set `removeOnFailure=false`. Note that this also keeps the message id of an exchange that failed with an exception.
 
 ### camel-cyberark-vault - credentials are checked at endpoint start, and a rejected token is retried only once
 
@@ -1356,7 +1401,7 @@ Without an interactive terminal, such as in a script, a CI job (the `CI` environ
     
 -   `camel hawtio` does not open a web browser, and prints the URL of the web console instead. `--openUrl` is now named `--open-url` (the old name still works).
     
--   `camel debug`, `camel nano`, `camel shell`, `camel edit`, `camel tui` (except with `--record`), `camel ask` without a question, `camel run --prompt` and `camel get history --it` exit with `2` and `requires an interactive terminal` on stderr. `camel debug` used to wait at 100% CPU.
+-   `camel debug`, `camel nano`, `camel shell`, `camel edit`, `camel tui` (except with `--record`), `camel ask` without a question, `camel run --prompt` and `camel get history --it` exit with `2` and `requires an interactive terminal` on stderr. `camel debug` used to wait at 100% CPU. `camel debug --background` does not require an interactive terminal.
     
 
 `--follow` and `--open-url` without a value turn the option on. As boolean options that are on by default, they turned it off (use `--follow=false` to turn it off). In a terminal, the end of the input (Ctrl+D) stops a command that watches or follows, like Enter does.
@@ -1615,6 +1660,26 @@ The SQL, MyBatis and jOOQ consumers already left a message unconsumed when the r
 With `batch=true` the `CamelSqlUpdateCount` (sql) and `CamelSqlStoredUpdateCount` (sql-stored) headers no longer add the negative values a JDBC driver returns for an item whose update count it does not know (`Statement.SUCCESS_NO_INFO`, which HSQLDB returns for stored procedure calls). Such a batch reported a negative count before, for example `-4` for two items; it now reports the sum of the known counts, which can be `0`.
 
 A single `Map` body is now one batch item, and so is a single `Map` in the `CamelSqlParameters` header with `useMessageBodyForSql=true` (sql) or the `CamelSqlStoredParameters` header with `useMessageBodyForTemplate=true` (sql-stored). Before, its entries were used as the batch items and the call failed (sql: no value found for the named parameters, sql-stored: an `SQLException`).
+
+### camel-sql - JdbcKeyValueRepository: deleteIfExpiredString, and putIfAbsent after a duplicate key
+
+When `JdbcKeyValueRepository` reads an entry that has expired, it deletes the row with the new `deleteIfExpiredString` statement (`DELETE FROM CAMEL_KEYVALUE WHERE ITEM_KEY = ? AND EXPIRES_AT > 0 AND EXPIRES_AT ⇐ ?`) instead of `deleteString`, so that an entry another node stored for the key in the meantime is kept. If you set `selectString`, `insertString` and `deleteString` for a table with other column names, set `deleteIfExpiredString` as well; otherwise reading an expired entry fails with an SQL error. With `tableName` it is derived from the default statement, as the other statements are.
+
+When the INSERT of `putIfAbsent` fails with a duplicate key, the key is read again in a new transaction, which returns the value stored by the other caller (before, the key was read again in the failed transaction, which could return `null` although nothing was stored). `putIfAbsent` now throws the `DuplicateKeyException` when the INSERT fails three times, or at once when it runs in a transaction of the caller, as that transaction cannot be used to read the key again.
+
+### camel-sql - JdbcKeyValueRepository: replace and delete(key, expected) do not match an expired entry
+
+`JdbcKeyValueRepository.replace(key, expected, newValue, ttl)` and `delete(key, expected)` now match only an entry that has not expired. Before, they matched an entry whose TTL had passed and returned `true`, although `get` returns `null` for it, and `replace` gave that entry a new TTL. Now they return `false` and leave the row as it is.
+
+For this, the default `updateIfValueString` and `deleteIfValueString` statements end with `AND (EXPIRES_AT = 0 OR EXPIRES_AT > ?)`, the condition of `selectKeysString`, and the current time is passed as their last parameter:
+
+```sql
+UPDATE CAMEL_KEYVALUE SET ITEM_VALUE = ?, EXPIRES_AT = ?
+    WHERE ITEM_KEY = ? AND ITEM_VALUE = ? AND (EXPIRES_AT = 0 OR EXPIRES_AT > ?)
+DELETE FROM CAMEL_KEYVALUE WHERE ITEM_KEY = ? AND ITEM_VALUE = ? AND (EXPIRES_AT = 0 OR EXPIRES_AT > ?)
+```
+
+If you set `updateIfValueString` or `deleteIfValueString` yourself, for example for a table with other column names, add the same condition with a parameter for the current time at the end. Otherwise the repository passes one more parameter than the statement has placeholders: most JDBC drivers then fail with an SQL error, while some drivers may ignore the extra parameter, so the statement still matches an expired entry. With `tableName` the statements are derived from the default statements, as before.
 
 ### camel-jta - an exchange marked rollback only last rolls back its transaction
 
@@ -2095,7 +2160,7 @@ With `subscriptionType` `Shared`, `Failover` or `Key_Shared`, a consumer that co
 
 The `callFunction` operation of `google-functions` now fails the exchange with a `CamelExchangeException` when the `CallFunctionResponse` has an error, which Google Cloud Functions sets when the execution of the function was not successful. Before, the exchange went on as a success, with an empty body. The `CallFunctionResponse` is still in the `CamelGoogleCloudFunctionsResponseObject` header, so an error handler (`onException`, or `doTry` and `doCatch`) can read its error and execution id. A route that read the error from that header after the call must handle the exception instead.
 
-The body of `callFunction` is now marshalled to JSON when it is a `Map`, a `List` or another Java object, instead of being sent as its `toString()`. Text, bytes, a stream, a file, XML (a DOM `Node` or a `Source`), a `ByteBuffer`, an enum or a character are still converted to text, as before. The JSON comes from a plain Jackson `ObjectMapper`, so a POJO that needs custom JSON, such as one with `java.time` fields, must be marshalled in the route first. A message without a body fails with an `InvalidPayloadException` instead of a `NullPointerException`.
+The body of `callFunction` is now marshalled to JSON when it is a `Map`, a `List` or another Java object, instead of being sent as its `toString()`. Text, bytes, a stream, a file, XML (a DOM `Node` or a `Source`), a `ByteBuffer`, an enum or a character are still converted to text, as before. The JSON comes from a Jackson mapper with the Jackson 2 defaults (a `java.time` value is written as numbers), so a POJO that needs custom JSON must be marshalled in the route first. A message without a body fails with an `InvalidPayloadException` instead of a `NullPointerException`.
 
 ### camel-vertx-http - a header with several values is sent as several headers
 
@@ -3018,7 +3083,7 @@ With live reloading (such as `camel run --dev`), a change to application.propert
 
 ### camel-jbang - camel run keeps the log of the previous run
 
-When `camel run` ends, its log is no longer deleted. It is kept as `~/.camel/<name>-previous.log`, by the name of the integration, with `~/.camel/<name>-previous.json`, which says when and how the run ended. The next run of that name that ends replaces both, and at most the last 10 MB of a log are kept. `camel log <name> --previous` prints the log, like `kubectl logs --previous` in Kubernetes. The log of an integration that was killed is kept the same way, the next time a previous run is looked up. `camel dirty` does not count these files.
+When `camel run` ends, its log is no longer deleted. It is kept as `~/.camel/<name>-previous.log`, by the name of the integration, with `~/.camel/<name>-previous.json`, which says when and how the run ended. The next run of that name that ends replaces both, and at most the last 10 MB of a log are kept. `camel log <name> --previous` prints the log, like `kubectl logs --previous` in Kubernetes. The log of an integration that was killed is kept the same way, the next time a previous run is looked up. `camel dirty --clean` cleans these files too.
 
 ### camel-jbang - the AI tools wait for Camel to start, and read the log of the previous run
 
@@ -3994,6 +4059,10 @@ The bean applies to every JPA component and endpoint without a configured strate
 
 The return type of the protected method `JpaEndpoint.createTransactionStrategy()` is now `TransactionStrategy` instead of `DefaultTransactionStrategy`. A subclass that overrides it must be recompiled: compiled against the old return type, its method is no longer called.
 
+### camel-jpa - JpaKeyValueRepository: putIfAbsent after a constraint violation
+
+When the insert of `JpaKeyValueRepository.putIfAbsent` fails with a constraint violation because another caller stored the key, the key is read again in a new transaction, which returns the value stored by the other caller. Before, the key was read again in the failed transaction, which the constraint violation had marked for rollback, so `putIfAbsent` failed when that transaction was committed (with a `DataIntegrityViolationException` when the transaction strategy is Spring based). After a constraint violation, `putIfAbsent` now throws a `PersistenceException` only when the insert has failed three times. A constraint violation is also recognised by its SQL state (class `23`), as the PostgreSQL and SQL Server drivers report it. When `putIfAbsent` runs in a transaction of the caller, the failed insert marks that transaction for rollback, so the caller’s transaction fails, as before.
+
 ### camel-jbang - the export to Quarkus keeps camel-quarkus-microprofile-health
 
 `camel export --runtime=quarkus`, and `camel run --runtime=quarkus`, which exports the same way, now write `org.apache.camel.quarkus:camel-quarkus-microprofile-health` to the `pom.xml` when the project asks for it: `--dep=camel:microprofile-health`, `--dep=org.apache.camel:camel-microprofile-health`, `--dep=org.apache.camel.quarkus:camel-quarkus-microprofile-health`, or the same in `camel.jbang.dependencies`. Before, the export dropped it in every spelling, as if the Quarkus POM template contained it. Since Camel 4.14 the template contains neither the extension nor `camel-quarkus-observability-services`, which brings it along.
@@ -4026,3 +4095,222 @@ This is also the version of these dependencies in the `pom.xml` of an export to 
 The run settings (`.camel-jbang/camel-jbang-run.properties`) of these runs no longer have `camel.jbang.quarkusGroupId`, `camel.jbang.quarkusVersion` and `camel.jbang.quarkusExtensionRegistryBaseUri`, unless a Quarkus version is given (`--quarkus-version` or `camel.jbang.quarkusVersion`).
 
 The export to Quarkus now leaves the version of the `io.quarkus` dependencies that Camel CLI adds itself to the Quarkus Platform BOM, as for the Camel Quarkus extensions that the BOM manages. Before, the `pom.xml` had them with the version of the run, which can be another one than the platform of the export, for example when the export reuses the data of an earlier `camel run`. An `io.quarkus` dependency that is given with its version (`--dep` or `camel.jbang.dependencies`) keeps that version. Nothing else changes for the Quarkus runtime.
+
+### camel-netty-http - logWarnOnBadRequest warns by default
+
+The `logWarnOnBadRequest` option of a `netty-http` consumer is documented as enabled by default, but its field was left at `false`, so a request that Netty could not decode got its HTTP 400 returned without a log line. The option now defaults to `true`, as documented, so such a request logs `Netty request decoder failure due: <reason> returning HTTP Status 400 to client` at `WARN` level. Set `logWarnOnBadRequest=false` on the consumer to keep the previous silence.
+
+### camel-azure-functions - invokeFunction uses the Content-Type header of the message
+
+When the `CamelAzureFunctionsHttpHeaders` header does not set a `Content-Type`, `invokeFunction` now sends the `Content-Type` header of the message, if there is one, before falling back to `application/json`. Before, the request was always sent as `application/json` in that case.
+
+A route whose message still carries a `Content-Type` header from an earlier step, for example from an HTTP consumer, now sends that Content-Type. Remove the header, or set the Content-Type in `CamelAzureFunctionsHttpHeaders`, to keep the old behavior.
+
+### Jackson 3
+
+Camel 4.24 moves its own code to Jackson 3 (`tools.jackson`, version 3.2). The `camel-jackson`, `camel-jacksonxml`, `camel-jackson-avro` and `camel-jackson-protobuf` data formats stay on Jackson 2; `camel-jackson3`, `camel-jackson3xml`, `camel-jackson3-avro` and `camel-jackson3-protobuf` are the Jackson 3 line. The Jackson 3 sections below name the components that moved and what changes for each; this section has what applies to all of them.
+
+**One data format name, two artifacts.** Both `camel-jackson` and `camel-jackson3` register the `jackson` data format (`marshal().json()`, `library: Jackson`). When both are on the classpath, the Jackson 3 one is used; before 4.24 the one first on the classpath was used. Declare only one of them. An `ObjectMapper` in the registry is only found by the data format of the same Jackson version.
+
+**The Jackson 3 defaults apply.** The `camel-jackson3` data formats (JSON, XML, Avro and Protobuf) use the defaults of Jackson 3, which differ from Jackson 2. Most visibly:
+
+   
+| Feature | Jackson 2 | Jackson 3 | Effect of the Jackson 3 default |
+| --- | --- | --- | --- |
+| `FAIL_ON_UNKNOWN_PROPERTIES` | on | off | Unknown properties are ignored. See the warning below. |
+| `SORT_PROPERTIES_ALPHABETICALLY` | off | on | Properties are written in alphabetical order. |
+| `WRITE_DATES_AS_TIMESTAMPS` | on | off | Dates are written as ISO-8601 text, not as numbers. |
+| `WRITE_DURATIONS_AS_TIMESTAMPS` | on | off | Durations are written as ISO-8601 text. |
+| `FAIL_ON_TRAILING_TOKENS` | off | on | Content after the first JSON value fails the read. |
+| `FAIL_ON_NULL_FOR_PRIMITIVES` | off | on | A `null` for a primitive field fails the read. |
+| `FAIL_ON_EMPTY_BEANS` | on | off | A bean without properties is written as `{}`. |
+| `USE_GETTERS_AS_SETTERS` | on | off | Collection and Map getters are not used as setters. |
+| `READ_ENUMS_USING_TO_STRING`, `WRITE_ENUMS_USING_TO_STRING` | off | on | Enums use `toString()`, not `name()`. |
+
+Set a feature back with the `enableFeatures` and `disableFeatures` options of the data format, or with a custom `ObjectMapper`:
+
+```java
+restConfiguration().bindingMode(RestBindingMode.json)
+    .dataFormatProperty("json.in.enableFeatures", "FAIL_ON_UNKNOWN_PROPERTIES");
+```
+
+> **Warning**
+> With `FAIL_ON_UNKNOWN_PROPERTIES` off, a route using REST binding no longer rejects a JSON body that does not match its type. The body is accepted, the request gets no `400` response, and the route receives a POJO with empty fields. Enable the feature as shown above if your routes rely on that validation.
+
+**Limits.** Jackson 3 reads and writes with other limits: nesting up to 500 levels (it was 1000), for reading and writing, and strings up to 100 million characters (it was 20 million). They apply to every component on Jackson 3, including those whose internal mappers keep the Jackson 2 defaults. To change them for a data format, set its `objectMapper` option to a mapper with your own `StreamReadConstraints` (and `StreamWriteConstraints` for the nesting depth when writing):
+
+```java
+JsonMapper mapper = JsonMapper.builder(JsonFactory.builder()
+        .streamReadConstraints(StreamReadConstraints.builder()
+                .maxNestingDepth(1000)
+                .maxStringLength(20_000_000)
+                .build())
+        .build())
+        .build();
+```
+
+**Exceptions.** Jackson 3 exceptions extend the unchecked `tools.jackson.core.JacksonException`, and are no longer an `IOException`. `onException(IOException.class)` does not match them, and `JsonParseException` becomes `tools.jackson.core.exc.StreamReadException`.
+
+**Internal mappers.** A component that uses Jackson internally, to talk to an external API, parse a secret or write a file, keeps the Jackson 2 defaults on its mapper, so what it sends and stores does not change unless its section says so.
+
+**Jackson 2 dependency.** A component that moved to Jackson 3 no longer brings `com.fasterxml.jackson.core:jackson-databind` to your application, unless a library it uses still needs it; at most `jackson-annotations` is left. If your code uses Jackson 2, for example an `ObjectMapper` it got through `camel-salesforce`, declare `jackson-databind` yourself.
+
+**Components that stay on Jackson 2.** `camel-jackson`, `camel-jacksonxml`, `camel-jackson-avro`, `camel-jackson-protobuf`, `camel-azure-cosmosdb`, `camel-elasticsearch`, `camel-jq`, `camel-jslt`, `camel-json-validator`, `camel-mcp-server`, `camel-metrics`, `camel-opa`, `camel-openai`, `camel-openapi-java`, `camel-opensearch`, `camel-quickjs`, `camel-rest-openapi` and `camel-tahu` still use Jackson 2. Where they take or return Jackson nodes, these are `com.fasterxml.jackson.databind.JsonNode`, not the `tools.jackson.databind.JsonNode` that `camel-jackson3` produces. In a route that mixes the two, such as a `jq` expression after `unmarshal().json()` in Camel JBang, pass the body between them as JSON text.
+
+**Jackson 2 nodes.** A component on Jackson 3 accepts JSON text, bytes, streams, Maps, Lists and `tools.jackson.databind.JsonNode` bodies. A `com.fasterxml.jackson.databind.JsonNode` is an ordinary bean to its mapper: pass it as JSON text, or produce it with `camel-jackson3`. Where a component reads the whole body, a body that is a Jackson 2 node is read as its JSON text.
+
+### Jackson 3 - camel-jackson3 is the Jackson line of the catalog, Camel JBang and the Kamelets
+
+The `jackson`, `jacksonXml`, `avroJackson` and `protobufJackson` data formats, and the `application-json`, `application-x-java-object`, `application-x-struct`, `avro-` **and `protobuf-`** data type transformers, are registered by two artifacts each: the Jackson 2 line (`camel-jackson`, `camel-jacksonxml`, `camel-jackson-avro`, `camel-jackson-protobuf`) and the Jackson 3 line (`camel-jackson3`, `camel-jackson3xml`, `camel-jackson3-avro`, `camel-jackson3-protobuf`). Camel 4.24 makes the Jackson 3 line the one these names stand for:
+
+-   The Camel catalog names the Jackson 3 artifacts for these data formats and transformers. Everything that turns a data format name into an artifact follows it: `camel run` and `camel export` in Camel JBang, the dependency download of `camel-kamelet-main`, the `camel-jbang` catalog commands, and the hint of an error about a missing data format (`add camel-jackson3 to the classpath`). A Camel JBang application that uses `marshal().json()` or a `json` data format in YAML or XML now runs on `camel-jackson3`, and the Jackson 3 defaults apply to it; `camel export` to Spring Boot writes `camel-jackson3-starter`. `camel export` to Quarkus writes the `camel-quarkus-jackson` extension (and `camel-quarkus-jacksonxml`, `camel-quarkus-jackson-avro`, `camel-quarkus-jackson-protobuf`), which is on Jackson 2 until Camel Quarkus moves it to `camel-jackson3`: until then an exported Quarkus application runs the `json` data format with the Jackson 2 defaults, and Java code that imports `tools.jackson` needs that dependency added. Declaring `camel-jackson` as a dependency does not change that: the artifact the catalog names is downloaded as well, and the Jackson 3 one is used (see the next point). Use the `enableFeatures` and `disableFeatures` options of the data format to restore a Jackson 2 default.
+    
+-   When both lines are on the classpath, the Jackson 3 data format and transformers are used. Before 4.24 the one whose service file was found first on the classpath was used. An `ObjectMapper` in the registry is only used by the data format of the same Jackson version.
+    
+-   `camel-kamelet-main` depends on the Jackson 3 line instead of the Jackson 2 one. The `DelegatingSchemaResolver` of the Kamelet data type utilities (used by `resolve-pojo-schema-action`) delegates to the Jackson 3 `JsonSchemaResolver`, `AvroSchemaResolver` and `ProtobufSchemaResolver`, or to the Jackson 2 ones when the Jackson 3 artifact is not on the classpath.
+    
+-   A Kamelet that declares `camel:jackson`, `camel:jackson-avro` or `camel:jackson-protobuf` still gets that Jackson 2 artifact, since the dependency names the artifact, but in Camel JBang its data formats and transformers run on Jackson 3. Jackson 2 class names in a Kamelet therefore no longer work there: an `unmarshalType` of `com.fasterxml.jackson.databind.JsonNode` fails on each message, and a Jackson 2 module in `moduleClassNames` or a Jackson 2 `SchemaResolver` bean fails when the route starts.
+    
+
+**Kamelets.** Camel 4.24 in Camel JBang needs Kamelets 4.24 for the Kamelets that name Jackson 2 classes: `json-deserialize-action`, `avro-serialize-action`, `avro-deserialize-action`, `protobuf-serialize-action`, `protobuf-deserialize-action`, `resolve-pojo-schema-action` (for Avro and Protobuf), `azure-storage-blob-changefeed-source`, `jira-source` and `jira-oauth-source`, `aws-s3-event-based-source`, `ceph-event-based-source` and `azure-storage-blob-event-based-source` (with `getObject` or `getBlob` enabled), and the eight kafka field actions (see "Jackson 3 - camel-kafka"). The 4.24.0 launcher ships the 4.23 Kamelets: run it with `--kamelets-version=4.24.0`. Kamelets that only use the `json` data format by name keep working, with the Jackson 3 defaults: for example, `json-serialize-action` writes properties in alphabetical order and dates as text. Outside Camel JBang, an application on the Jackson 2 line runs the 4.23 Kamelets as before, except the kafka field actions.
+
+The `camel-jackson` artifacts are unchanged and stay on Jackson 2. An application that declares them, outside Camel JBang, keeps using Jackson 2 as long as it does not also have the Jackson 3 line on the classpath.
+
+To keep Jackson 2 for a data format in Camel JBang, add the `camel:jackson` dependency (`--dep=camel:jackson`, or `camel.jbang.dependencies=camel:jackson` in `application.properties`), define the Jackson 2 data format as a bean, and refer to it as a custom data format instead of by the `json` name:
+
+```yaml
+- beans:
+    - name: jackson2
+      type: org.apache.camel.component.jackson.JacksonDataFormat
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - marshal:
+            custom:
+              ref: jackson2
+```
+
+### Jackson 3 - camel generate schema
+
+`camel generate schema` now uses `jsonschema-generator` 5, which is based on Jackson 3. The annotations in `com.fasterxml.jackson.annotation` still apply, but `@JsonNaming` from `com.fasterxml.jackson.databind.annotation` is ignored: the schema of such a class has the Java field names. Use `@JsonNaming` from `tools.jackson.databind.annotation` to apply it.
+
+### Jackson 3 - components that no longer use camel-jackson
+
+`camel-aws-bedrock`, `camel-dhis2`, `camel-google-vertexai`, `camel-mongodb` and `camel-neo4j` now use Jackson 3 (`tools.jackson.core:jackson-databind`) directly, and `camel-mongodb-gridfs` no longer uses Jackson. None of them brings `camel-jackson` or `camel-jackson3` to your application any more. If a route uses the `jackson` data format (`marshal().json()`), or relies on its type converters, and got it through one of these components, declare `camel-jackson` or `camel-jackson3` yourself.
+
+`camel-aws2-ddb` and `camel-google-sheets` no longer use Jackson for their JSON data type transformers (`aws2-ddb:application-json` and `google-sheets:application-x-struct`), so they need neither `camel-jackson` nor `camel-jackson3`. A body that is a Jackson `JsonNode` of either line is read as its JSON text.
+
+The data these components send does not change: their internal mappers keep the Jackson 2 defaults.
+
+**camel-aws-bedrock.** A text result (the Anthropic Claude v2, Cohere and Llama models) is now a `String` body; it was a Jackson `TextNode` that `camel-jackson` converted to the text. The other results stay nodes, now of Jackson 3: the AI21 completions, the images, and the whole response of the Claude 3, Nova and Mistral models. The type converters of `camel-jackson` do not apply to them, so converting such a body to a pretty-printed `String`, `byte[]`, `InputStream` or `Map` needs `camel-jackson3`. Without it, `getBody(String.class)` gives the compact JSON and the other conversions give `null`.
+
+**camel-mongodb.** The conversion of a body to a `Document` or `DBObject` uses Jackson 3. A Jackson `JsonNode` of either line is read as its JSON text, but a POJO with Jackson 2 databind annotations such as `@JsonNaming` loses them, so the field names it is stored with can change.
+
+### Jackson 3 - components that use Jackson internally
+
+`camel-bonita`, `camel-clickup`, `camel-lumberjack`, `camel-ocsf`, `camel-pqc`, `camel-sap-netweaver`, `camel-servicenow`, `camel-splunk-hec`, `camel-stitch`, `camel-stripe`, `camel-telegram`, `camel-weather`, `camel-whatsapp`, `camel-wordpress` and `camel-zookeeper-master` now use Jackson 3 (`tools.jackson`). The JSON they send, store or return does not change: their internal mappers keep the Jackson 2 defaults. You only need to act if your code passes Jackson types to these components.
+
+**`camel-servicenow`.** The `mapper` option is now a `tools.jackson.databind.ObjectMapper`, and must be a `tools.jackson.databind.json.JsonMapper`, or the endpoint fails with an `IllegalArgumentException`. A custom mapper does not get the Jackson 2 defaults, nor the `dateFormat`, `timeFormat` and `dateTimeFormat` options. The payload of the metadata extension is a `tools.jackson.databind.JsonNode`. Request and response models that use `@JsonSerialize` or `@JsonDeserialize` must import them from `tools.jackson.databind.annotation`; Jackson 3 ignores the ones from `com.fasterxml.jackson.databind.annotation`.
+
+**`camel-ocsf`.** `setObjectMapper` and the constructor take a `tools.jackson.databind.ObjectMapper`, and only a mapper of that type is found in the registry. An unmarshal body of type `com.fasterxml.jackson.databind.JsonNode` is no longer recognized: pass JSON text or `tools.jackson.databind.JsonNode`. With `prettyPrint`, the data format uses a copy of your mapper, and no longer changes the mapper itself.
+
+**Model classes.** The `camel-telegram` and `camel-clickup` models write their timestamps with Jackson 3 annotations. A Jackson 2 mapper ignores those, so to marshal these models use `camel-jackson3`, not `camel-jackson`.
+
+**Exceptions.** `camel-clickup` webhooks, `camel-ocsf`, `camel-pqc`, `camel-sap-netweaver`, `camel-servicenow`, `camel-splunk-hec` and `camel-weather` let a JSON failure through as the unchecked `tools.jackson.core.JacksonException`, which is not an `IOException`, so `onException(IOException.class)` does not match it.
+
+### Jackson 3 - camel-cbor, camel-jsonata and camel-xj
+
+`camel-cbor`, `camel-jsonata` and `camel-xj` now use Jackson 3 (`tools.jackson`) instead of Jackson 2. Jackson 3 exceptions are unchecked and are not an `IOException`, so `onException(IOException.class)` does not match them.
+
+**camel-cbor.** A custom `ObjectMapper` must be a `tools.jackson.databind.ObjectMapper`, such as `tools.jackson.dataformat.cbor.CBORMapper`: a Jackson 2 mapper in the registry is no longer found. `prettyPrint`, `enableFeatures` and `disableFeatures` now apply to a copy of a mapper from the registry, not to that mapper.
+
+The data format uses the defaults of Jackson 3, listed in the section "Jackson 3": properties in alphabetical order, dates as text, enums with `toString()`, and content after the first value fails the read. `enableFeatures` and `disableFeatures` set them back, and now also accept the names of `DateTimeFeature`, `EnumFeature`, `JsonNodeFeature`, `StreamReadFeature` and `StreamWriteFeature`. In Java, `enableFeature(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)` no longer compiles, because that feature is now in `DateTimeFeature`: use `setEnableFeatures("WRITE_DATES_AS_TIMESTAMPS")`.
+
+The mapper that the data format creates keeps the CBOR encoding of Jackson 2, so data sent or stored by earlier versions decodes to the same values. A custom `new CBORMapper()` uses the encoding of Jackson 3: it follows RFC 8949 for a negative `BigInteger`, so a value written by Jackson 2 is read as a different number, and it reads CBOR simple values as `CBORSimpleValue` rather than as numbers. To keep the encoding of Jackson 2 on a custom mapper, disable `CBORWriteFeature.ENCODE_USING_STANDARD_NEGATIVE_BIGINT_ENCODING`, `CBORReadFeature.DECODE_USING_STANDARD_NEGATIVE_BIGINT_ENCODING`, `CBORReadFeature.READ_UNDEFINED_AS_EMBEDDED_OBJECT` and `CBORReadFeature.READ_SIMPLE_VALUE_AS_EMBEDDED_OBJECT` on its `CBORFactory`.
+
+A `com.fasterxml.jackson.databind.JsonNode` body is no longer treated as a tree: use `tools.jackson.databind.JsonNode`.
+
+**camel-jsonata.** With the default `outputType`, the result is now a `tools.jackson.databind.JsonNode` instead of a `com.fasterxml.jackson.databind.JsonNode`, so code that reads the body as the Jackson 2 type must change. Invalid JSON now fails with `tools.jackson.core.exc.StreamReadException`. The result of an expression does not change. A body that is a Jackson 2 `JsonNode` is read as its JSON text, but a Jackson 2 node inside a `Map` or `List` body is read as a bean: a component on Jackson 3 treats a `com.fasterxml.jackson.databind.JsonNode` as an ordinary bean, so pass JSON text or produce the node with `camel-jackson3`. A `java.time` value in a POJO body no longer fails: it is written as numbers.
+
+> **Warning**
+> A Jackson 2 mapper writes a Jackson 3 `JsonNode` as a bean, without any error. If a route marshals the result with `camel-jackson` (`marshal().json()`), the JSON it produces is wrong. Use `outputType=JsonString`, or use `camel-jackson3`.
+
+**camel-xj.** The output does not change. The cause of a failed transformation is now a Jackson 3 exception, such as `tools.jackson.core.exc.StreamReadException`. The public classes `XmlJsonStreamWriter`, `JsonXmlStreamReader`, `JsonSourceHandlerFactoryImpl` and the result handlers now take the Jackson 3 `JsonFactory`, `JsonGenerator` and `JsonParser`.
+
+### Jackson 3 - vault, cloud and AI components
+
+`camel-aws-secrets-manager`, `camel-google-secret-manager`, `camel-google-firestore`, `camel-ibm-secrets-manager`, `camel-cyberark-vault`, `camel-knative`, `camel-elasticsearch-rest-client`, `camel-keycloak`, `camel-telemetry-dev`, `camel-micrometer`, `camel-docling`, `camel-huggingface` and `camel-chatscript` now use Jackson 3 internally. What they read and write does not change: their mappers keep the Jackson 2 defaults, including that content after the first JSON value of a secret is ignored.
+
+They no longer bring `com.fasterxml.jackson.core:jackson-databind` to your application (`camel-keycloak` still does, through the Keycloak client). If your code uses it, declare it yourself.
+
+Changes to API types:
+
+-   `Knative.MAPPER` in `camel-knative-api` is a `tools.jackson.databind.ObjectMapper`.
+    
+-   `MicrometerModule` in `camel-micrometer` is a Jackson 3 module (`tools.jackson.databind.JacksonModule`).
+    
+
+Exceptions: a response that `camel-elasticsearch-rest-client` or a model output that `camel-huggingface` cannot parse, and a structured CloudEvent that `camel-knative` cannot parse, now fail with the unchecked `tools.jackson.core.JacksonException`, not an `IOException`. `onException(IOException.class)` does not match it. Loading a `KnativeEnvironment` still fails with an `IOException`.
+
+### Jackson 3 - camel-salesforce
+
+`camel-salesforce`, `camel-salesforce-codegen` and `camel-salesforce-maven-plugin` use Jackson 3 (`tools.jackson`). What the component sends to and reads from Salesforce does not change, and neither does the output of the `schema` goal.
+
+DTOs generated with an earlier version of `camel-salesforce-maven-plugin` must be generated again. They import `JsonTypeResolver`, `JsonSerialize` and `JsonDeserialize` from `com.fasterxml.jackson.databind.annotation`, and Jackson 3 ignores those annotations, so nested types and multi-select picklists are no longer handled. Generated source that still has these imports fails to compile, because the classes they name are now Jackson 3 classes. A JAR of DTOs compiled against an earlier version gives no such error. In hand-written DTOs, import these annotations from `tools.jackson.databind.annotation`. The annotations in `com.fasterxml.jackson.annotation` do not change.
+
+The following Java API changes:
+
+-   The `objectMapper` option and `SalesforceEndpointConfig.setObjectMapper` take a `tools.jackson.databind.ObjectMapper`. A custom mapper is used as it is, and Jackson 3 has other defaults than Jackson 2, so start from `JsonUtils.createObjectMapper().rebuild()` to keep the format that Salesforce expects.
+    
+-   `JsonUtils` returns and takes `tools.jackson.databind.ObjectMapper`, and its schema methods use `tools.jackson.module.jsonSchema.jakarta.JsonSchema`. They no longer declare `JsonProcessingException`.
+    
+-   `TimeModule`, `TypeReferences` and the serializers and deserializers in `org.apache.camel.component.salesforce.api` are Jackson 3 types.
+    
+-   `JsonUtils.withNullSerialization` no longer fails on a DTO with a date value set.
+    
+
+A response that cannot be parsed is still reported as a `SalesforceException`. Jackson errors in your own code are the unchecked `tools.jackson.core.JacksonException`, which is no longer an `IOException`.
+
+### Jackson 3 - camel-a2a
+
+`camel-a2a` now uses Jackson 3 internally. The JSON it sends does not change: its mapper keeps the Jackson 2 defaults. What it accepts follows the limits of Jackson 3: nesting up to 500 levels (it was 1000) and strings up to 100 million characters (it was 20 million).
+
+It no longer brings `com.fasterxml.jackson.core:jackson-databind` or `jackson-datatype-jsr310` to your application. If your code uses them, declare them yourself.
+
+Changes to API types:
+
+-   `A2AJsonMapper.instance()` returns a `tools.jackson.databind.ObjectMapper`. It is immutable, so this is a shared instance and not a copy. Use `rebuild()` to derive a customized mapper.
+    
+-   `PartDeserializer` is a Jackson 3 `ValueDeserializer`, and `Part` and `AgentCard` declare their deserialization with Jackson 3 annotations. A Jackson 2 `ObjectMapper`, such as the one in the `camel-jackson` data format, can no longer read these types or the types that contain them, such as `Message` and `Task`. Use `A2AJsonMapper.instance()` or the `camel-jackson3` data format.
+    
+-   Objects you put in a `DataPart` or in metadata are written with Jackson 3. It ignores `com.fasterxml.jackson.databind.annotation` annotations such as `@JsonSerialize`, and it writes a Jackson 2 `JsonNode` as a bean, with properties such as `nodeType`, instead of as its JSON. Use a Jackson 3 `JsonNode` or a `Map` instead.
+    
+
+### Jackson 3 - camel-jsonpath
+
+`camel-jsonpath` now uses Jackson 3 (`tools.jackson`) instead of Jackson 2, and no longer brings in Jackson 2. Code that got Jackson 2 through `camel-jsonpath` must declare it. The results of an expression do not change: POJO bodies are still read and written with the defaults of Jackson 2, so dates are numbers, properties stay in declared order and content after the first JSON value is ignored. Invalid JSON still fails with `com.jayway.jsonpath.InvalidJsonException`, but its cause is now a Jackson 3 exception, such as `tools.jackson.core.exc.StreamReadException`.
+
+A custom `ObjectMapper` in the registry must be a `tools.jackson.databind.ObjectMapper`: a Jackson 2 mapper is no longer found, without any error, and the default is used instead.
+
+A `JsonNode` body of either line works, and `writeAsString` writes a result that is a Jackson 2 node as its JSON. A Jackson 2 node inside a `Map`, `List` or POJO result is written as a bean: a component on Jackson 3 treats a `com.fasterxml.jackson.databind.JsonNode` as an ordinary bean, so pass JSON text or produce the node with `camel-jackson3`. The text of a node (`"t"`) is now read as the JSON string it is, where a Jackson 2 text node failed as invalid JSON.
+
+A `java.time` value in a POJO body no longer fails: it is written as numbers. JAXB annotations on a POJO are used when `tools.jackson.module:jackson-module-jakarta-xmlbind-annotations` is on the classpath; `jackson-module-jaxb-annotations` of Jackson 2 is no longer used.
+
+The limits on what is parsed are those of Jackson 3: nesting up to 500 levels (it was 1000) and strings up to 100 million characters (it was 20 million). To change them, register a mapper with your own `StreamReadConstraints`.
+
+### Jackson 3 - camel-kafka
+
+`camel-kafka` now uses Jackson 3 (`tools.jackson`) instead of Jackson 2, and no longer brings Jackson 2 to your application. The transforms in `org.apache.camel.component.kafka.transform` (`DropField`, `ExtractField`, `HoistField`, `InsertField`, `MaskField`, `MessageTimestampRouter`, `ReplaceField` and `ValueToKey`) keep their names and work on a `tools.jackson.databind.JsonNode`, JSON text or bytes, and need `camel-jackson3` on the classpath for their type converters. A `com.fasterxml.jackson.databind.JsonNode` body is an ordinary bean to them, and `HoistField` writes it as one without an error: produce the node with `camel-jackson3`, or pass JSON text.
+
+The Kamelets that use these transforms (`drop-field-action`, `extract-field-action`, `hoist-field-action`, `insert-field-action`, `mask-field-action`, `message-timestamp-router-action`, `replace-field-action` and `value-to-key-action`) do so from their 4.24 release, so Camel 4.24 needs Kamelets 4.24 for them, also outside Camel JBang. See "Kamelets" in the section "Jackson 3 - camel-jackson3 is the Jackson line of the catalog, Camel JBang and the Kamelets".
+
+The kafka producer still sends a Jackson 2 array node as one record per element, and any other Jackson 2 node as one record.
+
+### Jackson 3 - components with a mapper of their own
+
+`camel-hashicorp-vault`, `camel-google-functions`, `camel-azure-key-vault`, `camel-camunda`, `camel-langchain4j-agent`, `camel-huaweicloud-dms`, `camel-huaweicloud-functiongraph`, `camel-huaweicloud-iam`, `camel-huaweicloud-obs` and `camel-huaweicloud-smn`, and the `camel infra` and `camel semantic eval` commands of Camel JBang, now use Jackson 3 internally. What they read and write does not change: their mappers keep the Jackson 2 defaults. The SDK each component talks to (Spring Vault, Google Cloud, Azure, Camunda, LangChain4j, Huawei Cloud) is not involved: no Jackson type crosses its API, so these SDKs stay as they are, and most of them still bring `com.fasterxml.jackson.core:jackson-databind` to your application. `camel-hashicorp-vault` and `camel-google-functions` no longer bring it: if your code uses it, declare it yourself.
+
+A `java.time` value in a POJO body no longer fails: `callFunction` of `camel-google-functions` sends the POJO as JSON, and `camel-huaweicloud-smn` publishes it as JSON instead of as its `toString()`. The value is written as numbers.
+
+Exceptions: `camel-huaweicloud-dms` and `camel-huaweicloud-iam` let a failure to write a response as JSON through as the unchecked `tools.jackson.core.JacksonException`, which is not an `IOException`, so `onException(IOException.class)` does not match it.

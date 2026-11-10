@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 107 in 71 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 108 in 72 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -55,7 +55,7 @@ Number of Miscellaneous Components: 107 in 71 JAR artifacts (3 deprecated)
 | [LRA](lra.md) | camel-lra | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](mail-microsoft-oauth.md) | camel-mail-microsoft-oauth | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](main.md) | camel-main | Stable | 3.0 | Camel Main |
-| [MCP Server](mcp-server.md) | camel-mcp-server | Preview | 4.22 | Expose ai-tool routes as MCP tools and ai-resource routes as MCP resources over streamable HTTP |
+| [MCP Server](mcp-server.md) | camel-mcp-server | Preview | 4.22 | Expose ai-tool routes as MCP tools, ai-resource routes as MCP resources and ai-prompt routes as MCP prompts |
 | [MDC Logging](mdc.md) | camel-mdc | Preview | 4.15 | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer Observability](observation.md) | camel-observation | Stable-deprecated | 3.21 | Observability using Micrometer Observation |
 | [Micrometer Observability 2](micrometer-observability.md) | camel-micrometer-observability | Preview | 4.15 | Micrometer Observability implementation of Camel Telemetry |
@@ -93,6 +93,7 @@ Number of Miscellaneous Components: 107 in 71 JAR artifacts (3 deprecated)
 | [Salesforce - Reports API](salesforce-reports.md) |  |  |  |  |
 | [Salesforce - REST API](salesforce-rest-api.md) |  |  |  |  |
 | [Salesforce - Streaming and Pub/Sub](salesforce-streaming.md) |  |  |  |  |
+| [Sanitizer](sanitizer.md) | camel-sanitizer | Preview | 4.24 | Check during development and tests that the processors of the routes keep the contract of AsyncProcessor, and report where they break it |
 | [Semantic OpenAI](semantic-openai.md) | camel-semantic-openai | Preview | 4.24 | Assess text and images with typed OpenAI Decisions through Semantic experts |
 | [Semantic TypeSafe AI](semantic-typesafe-ai.md) | camel-semantic-typesafe-ai | Preview | 4.24 | Semantic expert using the TypeSafe AI decision API |
 | [Semantic Wolf Defender](semantic-wolf-defender.md) | camel-semantic-wolf-defender | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |

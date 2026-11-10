@@ -1297,7 +1297,7 @@ With value-based watermarking, the previous watermark value is exposed as the ex
 > The `watermarkExpression` option uses the Simple language for expression evaluation.
 
 > **Note**
-> The watermark is only updated when the split completes successfully. If the split is aborted (e.g., due to exceeding `maxFailedRecords`), the watermark is not updated, which allows the failed batch to be retried.
+> The watermark is only updated when the split completes successfully. If the split is aborted (e.g., due to exceeding `maxFailedRecords`), the watermark is not updated, which allows the failed batch to be retried. The same applies when the `watermarkExpression` fails, or when the resume strategy fails to store the watermark: the split fails with that exception, and the items are processed again.
 
 > **Important**
 > Watermark tracking assumes sequential route invocations (e.g., batch jobs triggered by a `timer` or `scheduler`). If multiple exchanges hit the same route concurrently, they will read the same watermark and may process duplicate items. Use a single-consumer pattern for watermark-based routes.

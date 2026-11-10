@@ -90,7 +90,7 @@ In a script, a CI job (the environment variable `CI` is set) or an AI agent, nob
 
 -   A command that watches (`--watch`) or follows (`camel log`, `camel trace`, `camel cmd receive` and `camel infra log`) shows its output once. With `--duration`, such as `--duration=30s`, it keeps watching or following for that long, and then exits with `0`. With `--follow`, it follows until it is stopped.
     
--   A command that only works in a terminal, such as `camel debug`, `camel shell` or `camel tui`, exits with `2`.
+-   A command that only works in a terminal, such as `camel debug` (except with `--background`), `camel shell` or `camel tui`, exits with `2`.
     
 
 ```bash

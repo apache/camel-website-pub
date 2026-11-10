@@ -78,6 +78,12 @@ Not known when `collectionType` or `useList` or `allowUnmarshallType` or `allowJ
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../../manual/body-types.md).
 
+### Jackson version and defaults
+
+The data format uses Jackson 3. A custom `ObjectMapper`, set on the data format or found in the registry, must be a `tools.jackson.databind.ObjectMapper` with a `CBORFactory`, such as `tools.jackson.dataformat.cbor.CBORMapper`.
+
+The defaults of data binding are those of Jackson 3. Use the `enableFeatures` and `disableFeatures` options to change them. The mapper that the data format creates keeps the CBOR encoding of Jackson 2, so data keeps decoding to the same values: negative `BigInteger` values use the encoding of Jackson 2, which is not the one of RFC 8949, and simple values are read as numbers. To use the encoding of Jackson 3, use a custom `CBORMapper`.
+
 ## Using CBOR in Spring DSL
 
 When using Data Format in Spring DSL, you need to declare the data formats first. This is done in the **DataFormats** XML tag.

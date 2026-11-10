@@ -13,5 +13,5 @@ camel dirty [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
-| `--clean` | Clean dirty files which are no longer in use | false | boolean |
+| `--clean` | Clean dirty files which are no longer in use, and the logs of the previous runs of the integrations (camel log --previous) | false | boolean |
 | `-h,--help` | Display the help and sub-commands |  | boolean |

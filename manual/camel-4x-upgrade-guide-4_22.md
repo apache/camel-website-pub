@@ -105,6 +105,14 @@ A new `muteException` consumer option, enabled by default, makes a consumer with
 
 With `transferExchange=true` the connection headers `CamelNettyRemoteAddress`, `CamelNettyLocalAddress`, `CamelNettyChannelHandlerContext`, `CamelNettySSLSession` and the `CamelNettySSLClientCert*` headers (and the `CamelNettyRemoteAddress` and `CamelNettyChannel` exchange properties) are now always the ones of the receiving side: the connection it accepted is the source of truth. Before, the headers of the transferred exchange replaced them. Such a header in the transferred exchange is no longer used, also when the receiving side has no value for it (for example the `CamelNettySSLClientCert*` headers on a connection without a client certificate). This also applies to the reply the producer receives. Send any such value of the sender under a header name of your own.
 
+### camel-netty - transferExchange requires explicit endpoint configuration
+
+`NettyPayloadHelper` now checks `transferExchange=true` on the endpoint configuration before reconstructing exchange data from a `DefaultExchangeHolder` payload.
+
+Before, a receiver with an object decoder silently reconstructed the exchange even when `transferExchange=false`. Now, when `transferExchange` is disabled (the default), the incoming `DefaultExchangeHolder` is left as an opaque body (both on the consumer side and for the producer’s reply via `setOut`).
+
+In addition, the legacy two-argument methods `NettyPayloadHelper.setIn(Exchange, Object)` and `setOut(Exchange, Object)` are deprecated and no longer unmarshal `DefaultExchangeHolder` payloads. Callers should migrate to the three-argument overloads passing the `NettyEndpoint`.
+
 ### camel-mina - the producer closes its session when a request times out
 
 A synchronous `mina` producer (`sync=true`) now always closes its session when a request times out while waiting for a reply. Because a synchronous producer is pooled and reused for later exchanges, a session kept open after a timeout could receive the late reply to the timed-out exchange and hand it to the next exchange that reused the same producer. The producer now discards that session, so the next exchange opens a fresh one.

@@ -25,8 +25,8 @@ Choosing the right backend is typically a matter of:
 | `HazelcastKeyValueRepository` | `camel-hazelcast` | Distributed, partitioned `IMap`; cluster-aware; near-cache optional | ✓ | ✓ (map TTL config) |
 | `RedisKeyValueRepository` | `camel-redis` | Redis `SET`/`GET`; atomic via `SET NX`; native TTL via `EXPIRE` | ✓ | ✓ (native `EXPIRE`) |
 | `InfinispanRemoteKeyValueRepository` | `camel-infinispan` | Hot Rod client to remote Infinispan/Data Grid cluster; distributed, transactional | ✓ | ✓ (per-entry lifespan) |
-| `JdbcKeyValueRepository` | `camel-sql` | Any JDBC DataSource; portable; optional auto-DDL; ACID via DataSource transactions | ✗ (non-atomic) | ✗ (client-side) |
-| `JpaKeyValueRepository` | `camel-jpa` | JPA entity-backed; works with any JPA 2 provider (Hibernate, EclipseLink…) | ✗ (non-atomic) | ✗ (client-side) |
+| `JdbcKeyValueRepository` | `camel-sql` | Any JDBC DataSource; portable; optional auto-DDL; ACID via DataSource transactions | ✓ (primary key) | ✗ (client-side) |
+| `JpaKeyValueRepository` | `camel-jpa` | JPA entity-backed; works with any JPA 2 provider (Hibernate, EclipseLink…) | ✓ (primary key) | ✗ (client-side) |
 | `CassandraKeyValueRepository` | `camel-cassandraql` | Cassandra wide-column store; configurable consistency levels; naturally distributed | ✗ (non-atomic) | ✓ (Cassandra TTL) |
 | `KafkaKeyValueRepository` | `camel-kafka` | Kafka topic as a compacted key-value log; state rebuilt on startup; eventually consistent | ✗ (non-atomic) | ✗ (topic retention) |
 > **Note**
@@ -95,7 +95,7 @@ public KeyValueRepository caffeineKvr() {
 ```yaml
 - beans:
     - name: caffeineKvr
-      type: org.apache.camel.component.caffeine.cache.CaffeineKeyValueRepository
+      type: org.apache.camel.component.caffeine.processor.CaffeineKeyValueRepository
       properties:
         maximumSize: 10000
 ```
@@ -161,7 +161,7 @@ public KeyValueRepository ehcacheKvr(CacheManager ehcacheManager) {
 ```yaml
 - beans:
     - name: ehcacheKvr
-      type: org.apache.camel.component.ehcache.EhcacheKeyValueRepository
+      type: org.apache.camel.component.ehcache.processor.EhcacheKeyValueRepository
       properties:
         cacheManager: "#bean:ehcacheManager"
         cacheName: products
@@ -222,7 +222,7 @@ public KeyValueRepository jcacheKvr(MutableConfiguration<String, Object> jcacheC
 ```yaml
 - beans:
     - name: jcacheKvr
-      type: org.apache.camel.component.jcache.JCacheKeyValueRepository
+      type: org.apache.camel.component.jcache.processor.JCacheKeyValueRepository
       properties:
         cacheName: products
         configuration: "#bean:jcacheConfig"
@@ -437,19 +437,23 @@ Required property:
 
 Optional properties:
 
--   `tableName` — the table used for storage (default: `"camel_kvr"`).
+-   `tableName` — the table used for storage (default: `CAMEL_KEYVALUE`).
     
 -   `createTableIfNotExists` — auto-create the table at startup if absent (default: `true`).
     
 
-The auto-created table schema:
+The auto-created table schema is shown below; with `tableName` set, the table has that name and the same columns. `ITEM_VALUE` holds the serialized value, and `EXPIRES_AT` the expiry time in epoch milliseconds (`0` for an entry without a TTL):
 
 ```sql
-CREATE TABLE camel_kvr (
-    kvr_key   VARCHAR(255) NOT NULL PRIMARY KEY,
-    kvr_value TEXT
+CREATE TABLE CAMEL_KEYVALUE (
+    ITEM_KEY   VARCHAR(512) NOT NULL,
+    ITEM_VALUE BLOB NOT NULL,
+    EXPIRES_AT BIGINT NOT NULL DEFAULT 0,
+    PRIMARY KEY (ITEM_KEY)
 );
 ```
+
+On a database that does not accept this statement, create the table yourself before the repository starts. PostgreSQL has no `BLOB` type (use `BYTEA`), and neither has SQL Server (use `VARBINARY(MAX)`). On MySQL and MariaDB a `BLOB` holds at most 64 KB per value, so use `LONGBLOB` for larger values. A custom `createString` is used only without `tableName`, as `tableName` derives all statements from the default ones. The PostgreSQL example below therefore needs the `product_cache` table created beforehand, with `BYTEA` for `ITEM_VALUE`.
 
 -   Java DSL
     
@@ -484,7 +488,7 @@ public KeyValueRepository jdbcKvr(DataSource myDataSource) {
 ```yaml
 - beans:
     - name: jdbcKvr
-      type: org.apache.camel.component.sql.JdbcKeyValueRepository
+      type: org.apache.camel.processor.keyvalue.jdbc.JdbcKeyValueRepository
       properties:
         dataSource: "#bean:myDataSource"
         tableName: product_cache
@@ -492,7 +496,11 @@ public KeyValueRepository jdbcKvr(DataSource myDataSource) {
 ```
 
 > **Note**
-> `JdbcKeyValueRepository` does not implement atomic `putIfAbsent` — concurrent inserts may produce duplicate-key exceptions that are caught and treated as a "key already exists" condition. This is safe for idempotency at low concurrency, but for high-throughput exactly-once semantics, prefer a backend with native CAS.
+> `JdbcKeyValueRepository.putIfAbsent` relies on the primary key of the table: when concurrent inserts of the same key fail with a duplicate key, the transaction is rolled back and the key is read again in a new transaction, which returns the value stored by the other caller. When `putIfAbsent` runs in a transaction of the caller, the `DuplicateKeyException` is thrown instead.
+
+An entry with a TTL expires lazily: the node that reads it compares its own clock with the `EXPIRES_AT` value written by the node that stored it, so all nodes need synchronised clocks. A node whose clock runs ahead treats the entry as expired, and deletes it, before its TTL has passed.
+
+`replace` and `delete(key, expected)` match only an entry that has not expired, with the same condition as `keys()`: on an entry whose TTL has passed they return `false` and leave the row as it is.
 
 ### JpaKeyValueRepository
 
@@ -542,14 +550,14 @@ public KeyValueRepository jpaKvr(EntityManagerFactory emf) {
 ```yaml
 - beans:
     - name: jpaKvr
-      type: org.apache.camel.component.jpa.JpaKeyValueRepository
+      type: org.apache.camel.processor.keyvalue.jpa.JpaKeyValueRepository
       properties:
         entityManagerFactory: "#bean:emf"
         joinTransaction: false
 ```
 
 > **Note**
-> Like `JdbcKeyValueRepository`, the JPA backend does not provide atomic `putIfAbsent`. Idempotency under concurrent load relies on unique-constraint violations being caught at the database level.
+> `JpaKeyValueRepository.putIfAbsent` relies on the primary key of the table: when concurrent inserts of the same key fail with a constraint violation, the transaction is rolled back and the key is read again in a new transaction, which returns the value stored by the other caller. After three failed inserts the `PersistenceException` is thrown. When `putIfAbsent` runs in a transaction of the caller, the failed insert marks that transaction for rollback, so the caller’s transaction fails.
 
 ### CassandraKeyValueRepository
 
@@ -567,7 +575,7 @@ Required property:
 
 Optional properties:
 
--   `table` — Cassandra table name (default: `"camel_kvr"`).
+-   `table` — Cassandra table name (default: `"camel_keyvalue"`). The repository does not create the table.
     
 -   `readConsistencyLevel` — `ConsistencyLevel` for reads (default: `LOCAL_ONE`).
     
@@ -608,7 +616,7 @@ public KeyValueRepository cassandraKvr(CqlSession cassandraSession) {
 ```yaml
 - beans:
     - name: cassandraKvr
-      type: org.apache.camel.component.cassandra.CassandraKeyValueRepository
+      type: org.apache.camel.processor.keyvalue.cassandra.CassandraKeyValueRepository
       properties:
         session: "#bean:cassandraSession"
         table: product_cache
@@ -669,7 +677,7 @@ public KeyValueRepository kafkaKvr() {
 ```yaml
 - beans:
     - name: kafkaKvr
-      type: org.apache.camel.component.kafka.KafkaKeyValueRepository
+      type: org.apache.camel.processor.keyvalue.kafka.KafkaKeyValueRepository
       properties:
         topic: camel-kvr-products
         bootstrapServers: "kafka1:9092,kafka2:9092"

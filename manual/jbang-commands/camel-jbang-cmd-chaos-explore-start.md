@@ -1,0 +1,19 @@
+# camel cmd chaos-explore-start
+
+Start a chaos exploration in a running integration: a time to try chaos rules in, that camel-chaos enforces
+
+## Usage
+
+```bash
+camel cmd chaos-explore-start [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--budget` | How long the exploration runs, between 10s and 2h | 10m | String |
+| `--focus` | What the exploration is about, such as a route |  | String |
+| `--timeout` | How long to wait for the integration to answer, in millis or as a duration such as 30s | 10000 | long |
+| `-h,--help` | Display the help and sub-commands |  | boolean |

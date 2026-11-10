@@ -53,10 +53,10 @@ The `value` in `dataFormatProperty` must be defined as a string value, so we use
         value: "false"
 ```
 
-To use binding you must include the necessary data formats on the classpath, such as `camel-jaxb` / `camel-jacksonxml` and/or `camel-jackson`. And then enable the binding mode. You can configure the binding mode globally on the rest configuration, and then override per rest service as well.
+To use binding you must include the necessary data formats on the classpath, such as `camel-jaxb` / `camel-jacksonxml` (or `camel-jackson3xml`) and/or `camel-jackson` (or `camel-jackson3`). And then enable the binding mode. You can configure the binding mode globally on the rest configuration, and then override per rest service as well.
 
 > **Note**
-> To use Jackson XML for XML binding, then you must configure `xmlDataformat=jacksonXml` and include `camel-jacksonxml` on the classpath.
+> To use Jackson XML for XML binding, then you must configure `xmlDataformat=jacksonXml` and include `camel-jacksonxml` or `camel-jackson3xml` on the classpath.
 
 To enable binding, you configure this in Java DSL as shown below:
 
@@ -450,7 +450,9 @@ restConfiguration().component("jetty").host("localhost").port(getPort()).binding
         value: "FAIL_ON_NUMBERS_FOR_ENUMS,USE_BIG_DECIMAL_FOR_FLOATS"
 ```
 
-The values that can be used for enabling and disabling features on Jackson are the names of the enums from the following three Jackson 2.x classes
+The values that can be used for enabling and disabling features on Jackson are the names of the enums from the following classes.
+
+With `camel-jackson` (Jackson 2):
 
 -   `com.fasterxml.jackson.databind.SerializationFeature`
     
@@ -458,6 +460,27 @@ The values that can be used for enabling and disabling features on Jackson are t
     
 -   `com.fasterxml.jackson.databind.MapperFeature`
     
+
+With `camel-jackson3` (Jackson 3):
+
+-   `tools.jackson.databind.SerializationFeature`
+    
+-   `tools.jackson.databind.DeserializationFeature`
+    
+-   `tools.jackson.databind.MapperFeature`
+    
+-   `tools.jackson.databind.cfg.DateTimeFeature`
+    
+-   `tools.jackson.databind.cfg.EnumFeature`
+    
+-   `tools.jackson.databind.cfg.JsonNodeFeature`
+    
+-   `tools.jackson.core.StreamReadFeature`
+    
+-   `tools.jackson.core.StreamWriteFeature`
+    
+
+Jackson 3 has other defaults than Jackson 2. For example, `FAIL_ON_UNKNOWN_PROPERTIES` is off by default in Jackson 3, so unknown properties are only rejected when you enable it with `json.in.enableFeatures`.
 
 ## Default CORS headers
 

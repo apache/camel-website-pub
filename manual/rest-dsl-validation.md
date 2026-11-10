@@ -100,7 +100,12 @@ In the `_UserErrorService_` bean, we build our custom error message, and set the
 
 ### Catching JsonParserException and returning a custom error message
 
-You can return a custom message as-is (see previous section). So we can leverage this with Camel error handler to catch `JsonParserException`, handle that exception and build our custom response message. For example, to return an HTTP error code 400 with a hardcoded message, we can do as shown below:
+You can return a custom message as-is (see previous section). So we can leverage this with Camel error handler to catch `JsonParseException`, handle that exception and build our custom response message.
+
+> **Note**
+> The examples below use the `com.fasterxml.jackson.core.JsonParseException` of `camel-jackson` (Jackson 2). With `camel-jackson3` (Jackson 3), catch `tools.jackson.core.exc.StreamReadException` instead.
+
+For example, to return an HTTP error code 400 with a hardcoded message, we can do as shown below:
 
 -   Java
     

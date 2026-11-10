@@ -84,6 +84,7 @@ The State Store component supports the following options which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **namespaced** (producer) | Whether to use a store-specific namespace prefix to isolate keys on a shared backend repository. | true | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **backendFactory** (advanced) | **Autowired** Factory that creates a dedicated backend for each store name. When set, it takes precedence over registry auto-discovery for endpoints without an explicit backend. |  | StateStoreBackendFactory |
 
@@ -107,6 +108,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **namespaced** (producer) | Whether to use a store-specific namespace prefix to isolate keys on a shared backend repository. | true | boolean |
 | **operation** (producer) | 
 The default operation to perform.
 
@@ -326,3 +328,20 @@ No additional dependency is needed beyond `camel-state-store`.
 Camel provides `KeyValueRepository` implementations for JDBC, JPA, Cassandra, Kafka, Caffeine, Ehcache, JCache, Hazelcast, Redis, and Infinispan. Any of these can be used as the backend for the State Store component, the Idempotent Consumer, the Aggregator, and the Cache EIP.
 
 See the KeyValueRepository section in the User Manual for the full list of available backends, configuration examples, and instructions for writing a custom backend.
+
+## Namespace Isolation
+
+When using a shared `KeyValueRepository` (such as a single bean auto-discovered from the registry or referenced via `backend=#shared`), `state-store` automatically isolates entries per store name under the prefix `statestore:<storeName>:`.
+
+This ensures that:
+
+-   Multiple state stores sharing the same backend do not collide on keys.
+    
+-   Calling `clear()`, `keys()`, or `size()` on one store is strictly scoped to that store’s entries.
+    
+-   State store operations cannot interfere with entries from other patterns sharing the repository.
+    
+
+To opt out of namespacing (for example, to read existing un-namespaced keys written in Camel 4.23 without key migration), set `namespaced=false` on the endpoint or component:
+
+state-store:orders?namespaced=false

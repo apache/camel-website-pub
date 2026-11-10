@@ -836,10 +836,11 @@ You have a few options to tune the `org.apache.camel.processor.idempotent.jdbc.J
 | `createTableIfNotExists` | `true` | Defines whether Camel should try to create the table if it doesn’t exist. |
 | `tableName` | `CAMEL_MESSAGEPROCESSED` | To use a custom table name instead of the default name: `CAMEL_MESSAGEPROCESSED`. |
 | `tableExistsString` | `SELECT 1 FROM CAMEL_MESSAGEPROCESSED WHERE 1 = 0` | This query is used to figure out whether the table already exists or not. It must throw an exception to indicate the table doesn’t exist. |
-| `createString` | `CREATE TABLE CAMEL_MESSAGEPROCESSED (processorName VARCHAR(255),messageId VARCHAR(100), createdAt TIMESTAMP)` | The statement which is used to create the table. |
+| `createString` | `CREATE TABLE CAMEL_MESSAGEPROCESSED (processorName VARCHAR(255), messageId VARCHAR(100), createdAt TIMESTAMP, PRIMARY KEY (processorName, messageId))` | The statement which is used to create the table. |
 | `queryString` | `SELECT COUNT(*) FROM CAMEL_MESSAGEPROCESSED WHERE processorName = ? AND messageId = ?` | The query which is used to figure out whether the message already exists in the repository (the result is not equals to '0'). It takes two parameters. This first one is the processor name (`String`) and the second one is the message id (`String`). |
 | `insertString` | `INSERT INTO CAMEL_MESSAGEPROCESSED (processorName, messageId, createdAt) VALUES (?, ?, ?)` | The statement which is used to add the entry into the table. It takes three parameters. The first one is the processor name (`String`), the second one is the message id (`String`) and the third one is the timestamp (`java.sql.Timestamp`) when this entry was added to the repository. |
 | `deleteString` | `DELETE FROM CAMEL_MESSAGEPROCESSED WHERE processorName = ? AND messageId = ?` | The statement which is used to delete the entry from the database. It takes two parameters. This first one is the processor name (`String`) and the second one is the message id (`String`). |
+| `clearString` | `DELETE FROM CAMEL_MESSAGEPROCESSED WHERE processorName = ?` | The statement which is used to delete all the entries of the processor name from the database. It takes one parameter, the processor name (`String`). |
 
 The option `tableName` can be used to use the default SQL queries but with a different table name. However, if you want to customize the SQL queries, then you can configure each of them individually.
 
@@ -849,9 +850,9 @@ One of the limitations of `org.apache.camel.processor.idempotent.jdbc.JdbcMessag
 
 -   lock entry does not exist then the lock is provided using the base implementation of `JdbcMessageIdRepository`.
     
--   lock already exists and the `createdAt` < `System.currentTimeMillis() - lockMaxAgeMillis`. In this case, it is assumed that an active instance has the lock and the lock is not provided to the new instance requesting the lock
+-   lock already exists and the `createdAt` >= `System.currentTimeMillis() - lockMaxAgeMillis`. In this case, it is assumed that an active instance has the lock and the lock is not provided to the new instance requesting the lock
     
--   lock already exists and the `createdAt` > = `System.currentTimeMillis() - lockMaxAgeMillis`. In this case, it is assumed that there is no active instance which has the lock and the lock is provided to the requesting instance. The reason behind is that if the original instance which had the lock, if it was still running, it would have updated the Timestamp on createdAt using its keepAlive mechanism
+-   lock already exists and the `createdAt` < `System.currentTimeMillis() - lockMaxAgeMillis`. In this case, it is assumed that there is no active instance which has the lock and the lock is provided to the requesting instance. The reason behind is that if the original instance which had the lock, if it was still running, it would have updated the Timestamp on createdAt using its keepAlive mechanism
     
 
 This repository has two additional configuration parameters
@@ -1048,7 +1049,7 @@ Propagation is specified by constants of `org.springframework.transaction.Transa
 
 You may use `ClusteredJdbcAggregationRepository` that provides a limited support for recovery in a clustered environment: recovery mechanism is dealt separately by members of the cluster, i.e., a member may only recover exchanges that it completed itself.
 
-To enable this behavior, property `recoverByInstance` must be set to true, and `instanceId` property must be defined using a unique identifier (a string) for each member of the cluster.
+To enable this behavior, property `recoveryByInstance` must be set to true, and `instanceId` property must be defined using a unique identifier (a string) for each member of the cluster.
 
 Besides, completed table must have a `instance_id VARCHAR(255)` column.
 

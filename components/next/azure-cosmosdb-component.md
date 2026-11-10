@@ -1187,10 +1187,16 @@ from("azure-cosmosdb://myDb/myContainer?leaseDatabaseName=myLeaseDb&createLeaseD
 
 ## Important Development Notes
 
-When developing on this component, you will need to obtain your Azure accessKey in order to run the integration tests. In addition to the mocked unit tests, you **will need to run the integration tests with every change you make or even client upgrade as the Azure client can break things even on minor versions upgrade.** To run the integration tests, on this component directory, run the following maven command:
+When developing on this component, in addition to the mocked unit tests, you **will need to run the integration tests with every change you make or even client upgrade as the Azure client can break things even on minor versions upgrade.** The integration tests run against a local [Floci AZ](https://github.com/floci-io/floci-az) container, which needs Docker. To run them, on this component directory, run the following maven command:
 
 ```bash
-mvn clean install -Dendpoint={{dbaddress}} -DaccessKey={{accessKey}}
+mvn verify
+```
+
+Floci AZ does not emulate the change feed, the throughput of the databases, and the queries of the databases and containers, so six tests run against an Azure Cosmos DB account only: `CosmosDbConsumerIT`, `CosmosDbContainerOperationsIT.testCaptureChangeFeed`, `CosmosDbProducerIT.testReplaceDatabaseThroughput`, `CosmosDbProducerIT.testQueryContainers`, `CosmosDbClientOperationsIT.testQueryAndReadAllDatabases` and `CosmosDbDatabaseOperationsIT.testQueryAndReadAllContainers`. To run all the integration tests against an account in Azure, run the following maven command instead:
+
+```bash
+mvn verify -Dendpoint={{dbaddress}} -DaccessKey={{accessKey}}
 ```
 
 Whereby `endpoint` is your Azure CosmosDB endpoint name and `accessKey` is the access key being generated from Azure CosmosDB portal.

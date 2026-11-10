@@ -415,7 +415,13 @@ from("direct:start")
 
 ## Important Development Notes
 
-When developing on this component, you will need to obtain your Azure accessKey to run the integration tests. In addition to the mocked unit tests, you **will need to run the integration tests with every change you make or even client upgrade as the Azure client can break things even on minor versions upgrade.** To run the integration tests, on this component directory, run the following maven command:
+When developing on this component, in addition to the mocked unit tests, you **will need to run the integration tests with every change you make or even client upgrade as the Azure client can break things even on minor versions upgrade.** The integration tests run against a local [Floci AZ](https://github.com/floci-io/floci-az) container, which needs Docker. To run them, on this component directory, run the following maven command:
+
+```bash
+mvn verify
+```
+
+To run the integration tests against an event hub in Azure, run the following maven command instead:
 
 ```bash
 mvn verify -DconnectionString=string -DblobAccountName=blob -DblobAccessKey=key

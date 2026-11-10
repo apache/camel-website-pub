@@ -1141,7 +1141,7 @@ The Camel MongoDB tailable cursor consumer takes care of all these tasks for you
 
 The consumer will remember the last value of this field, and whenever the cursor is to be regenerated, it will run the query with a filter like: `increasingField > lastValue`, so that only unread data is consumed.
 
-**Setting the increasing field:** Set the key of the increasing field on the endpoint URI `tailTrackingIncreasingField` option. In Camel 2.10, it must be a top-level field in your data, as nested navigation for this field is not yet supported. That is, the "timestamp" field is okay, but `nested.timestamp` will not work. Please open a ticket in the Camel JIRA if you do require support for nested increasing fields.
+**Setting the increasing field:** Set the key of the increasing field on the endpoint URI `tailTrackIncreasingField` option. In Camel 2.10, it must be a top-level field in your data, as nested navigation for this field is not yet supported. That is, the "timestamp" field is okay, but `nested.timestamp` will not work. Please open a ticket in the Camel JIRA if you do require support for nested increasing fields.
 
 **Cursor regeneration delay:** One thing to note is that if new data is not already available upon initialisation, MongoDB will kill the cursor instantly. Since we don’t want to overwhelm the server in this case, a `cursorRegenerationDelay` option has been introduced (with a default value of 1000ms.), which you can modify to suit your needs.
 

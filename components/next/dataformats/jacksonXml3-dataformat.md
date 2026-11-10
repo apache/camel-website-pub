@@ -63,10 +63,10 @@ The Jackson XML 3 dataformat supports the following options which are listed bel
 | **useList** (common) | `false` | `Boolean` | Whether to unmarshal to a List of Map or a List of Pojo. |
 | **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
 | **enableJaxbAnnotationModule** (advanced) | `false` | `Boolean` | Whether to enable the JAXB annotations module when using Jackson. When enabled then JAXB annotations can be used by Jackson. |
-| **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules tools.jackson.databind.JacksonModule specified as a String with FQN class names. Multiple classes can be separated by comma. |
+| **moduleClassNames** (advanced) |  | `String` | To use custom Jackson modules specified as a String with FQN class names. Multiple classes can be separated by comma. |
 | **moduleRefs** (advanced) |  | `String` | To use custom Jackson modules referred from the Camel registry. Multiple modules can be separated by comma. |
-| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson tools.jackson.databind.ObjectMapper. The features should be a name that matches a enum from tools.jackson.databind.SerializationFeature, tools.jackson.databind.DeserializationFeature, or tools.jackson.databind.MapperFeature Multiple features can be separated by comma. |
-| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson tools.jackson.databind.ObjectMapper. The features should be a name that matches a enum from tools.jackson.databind.SerializationFeature, tools.jackson.databind.DeserializationFeature, or tools.jackson.databind.MapperFeature Multiple features can be separated by comma. |
+| **enableFeatures** (common) |  | `String` | Set of features to enable on the Jackson ObjectMapper. The features should be a name that matches a enum from SerializationFeature, DeserializationFeature, MapperFeature, DateTimeFeature, EnumFeature, JsonNodeFeature, StreamReadFeature, StreamWriteFeature, XmlReadFeature or XmlWriteFeature. Multiple features can be separated by comma. A feature can be qualified with its enum class name (e.g. SerializationFeature.WRAP\_ROOT\_VALUE) to tell apart features with the same name. |
+| **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson ObjectMapper. The features should be a name that matches a enum from SerializationFeature, DeserializationFeature, MapperFeature, DateTimeFeature, EnumFeature, JsonNodeFeature, StreamReadFeature, StreamWriteFeature, XmlReadFeature or XmlWriteFeature. Multiple features can be separated by comma. A feature can be qualified with its enum class name (e.g. SerializationFeature.WRAP\_ROOT\_VALUE) to tell apart features with the same name. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **maxStringLength** (advanced) |  | `Integer` | Maximum allowed string length when deserializing (in chars or bytes, depending on input context). The default is 20,000,000. |
 
@@ -257,7 +257,7 @@ For JMS end users, there is the `JMSType` header from the JMS spec that indicate
 _Java-only: Java programmatic data format configuration_
 
 ```java
-JacksonDataFormat format = new JacksonDataFormat();
+JacksonXMLDataFormat format = new JacksonXMLDataFormat();
 format.setAllowJmsType(true);
 ```
 
@@ -354,17 +354,29 @@ You can disable multiple features by separating the values using comma. The valu
     
 -   `tools.jackson.databind.MapperFeature`
     
--   `tools.jackson.dataformat.xml.deser.FromXmlParser.Feature`
+-   `tools.jackson.databind.cfg.DateTimeFeature`
+    
+-   `tools.jackson.databind.cfg.EnumFeature`
+    
+-   `tools.jackson.databind.cfg.JsonNodeFeature`
+    
+-   `tools.jackson.core.StreamReadFeature`
+    
+-   `tools.jackson.core.StreamWriteFeature`
+    
+-   `tools.jackson.dataformat.xml.XmlReadFeature`
+    
+-   `tools.jackson.dataformat.xml.XmlWriteFeature`
     
 
 To enable a feature, use the enableFeatures options instead.
 
-From Java code, you can use the type safe methods from camel-jackson module:
+From Java code, you can use the type safe methods from camel-jackson3xml module:
 
 _Java-only: Java programmatic data format configuration_
 
 ```java
-JacksonDataFormat df = new JacksonDataFormat(MyPojo.class);
+JacksonXMLDataFormat df = new JacksonXMLDataFormat(MyPojo.class);
 df.disableFeature(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 df.disableFeature(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES);
 ```

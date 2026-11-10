@@ -504,6 +504,8 @@ When a message is redelivered, the Dead Letter Channel will append the following
 | `Exchange.REDELIVERY_COUNTER` | `Integer` | The current redelivery attempt |
 | `Exchange.REDELIVERY_MAX_COUNTER` | `Integer` | The maximum number of redeliveries configured (if any). This header is absent if you use `retryWhile` or have unlimited maximum redelivery configured. |
 
+When a redelivered step succeeds, the headers stay on the message, so the next steps can see that it was redelivered and how many times. A later failure, of another step of the route or of a route that gets the message next (such as over `seda`), is redelivered as any other: its redelivery attempts count from 1 again, and it gets all the redeliveries of its error handler. When the dead letter channel or an `onException` handles a failure, or a failure is continued, the headers are removed.
+
 ### Which endpoint failed?
 
 During routing messages, Camel will store an exchange property with the most recent endpoint in use (send to):

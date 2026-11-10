@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 421 spring boot starter json files.
+There are 422 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -815,6 +815,8 @@ velocity
 
 vertx-http
 
+vertx-mqtt
+
 vertx-websocket
 
 vertx
@@ -881,6 +883,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [A2A](../../components/next/a2a-component.md) | camel-a2a-starter | Preview | 4.21 | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ 5.x](../../components/next/activemq-component.md) | camel-activemq-starter | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](../../components/next/activemq6-component.md) | camel-activemq6-starter | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
+| [AI Prompt](../../components/next/ai-prompt-component.md) | camel-ai-prompt-starter | Preview | 4.24 | Consumer endpoint that registers a Camel route as an MCP prompt. |
 | [AI Resource](../../components/next/ai-resource-component.md) | camel-ai-resource-starter | Preview | 4.23 | Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry. |
 | [AI Tool](../../components/next/ai-tool-component.md) | camel-ai-tool-starter | Preview | 4.22 | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
 | [Alibaba EventBridge](../../components/next/alibaba-eventbridge-component.md) | camel-alibaba-eventbridge-starter | Preview | 4.23 | Publish events to Alibaba Cloud EventBridge. |
@@ -1267,6 +1270,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Velocity](../../components/next/velocity-component.md) | camel-velocity-starter | Stable | 1.2 | Transform messages using a Velocity template. |
 | [Vert.x](../../components/next/vertx-component.md) | camel-vertx-starter | Stable | 2.12 | Send and receive messages to/from Vert.x Event Bus. |
 | [Vert.x HTTP Client](../../components/next/vertx-http-component.md) | camel-vertx-http-starter | Stable | 3.5 | Send requests to external HTTP servers using Vert.x |
+| [Vert.x MQTT](../../components/next/vertx-mqtt-component.md) | camel-vertx-mqtt-starter | Preview | 4.24 | Send and receive messages to and from an MQTT broker, MQTT 3.1.1 and 5, with the Vert.x MQTT client. |
 | [Vert.x WebSocket](../../components/next/vertx-websocket-component.md) | camel-vertx-websocket-starter | Stable | 3.5 | Expose WebSocket endpoints and connect to remote WebSocket servers using Vert.x |
 | [Wasm](../../components/next/wasm-component.md) | camel-wasm-starter | Experimental | 4.4 | Run Wasm programs (WASI Preview 1 command modules) with the message body as standard input. |
 | [Weather](../../components/next/weather-component.md) | camel-weather-starter | Stable | 2.12 | Poll the weather information from Open Weather Map. |
@@ -1466,7 +1470,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](../../components/next/others/mail-microsoft-oauth.md) | camel-mail-microsoft-oauth-starter | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](../../components/next/others/main.md) | camel-main-starter | Stable | 3.0 | Camel Main |
-| [MCP Server](../../components/next/others/mcp-server.md) | camel-mcp-server-starter | Preview | 4.22 | Expose ai-tool routes as MCP tools and ai-resource routes as MCP resources over streamable HTTP |
+| [MCP Server](../../components/next/others/mcp-server.md) | camel-mcp-server-starter | Preview | 4.22 | Expose ai-tool routes as MCP tools, ai-resource routes as MCP resources and ai-prompt routes as MCP prompts |
 | [MDC Logging](../../components/next/others/mdc.md) | camel-mdc-starter | Preview | 4.15 | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer Observability](../../components/next/others/observation.md) | camel-observation-starter | Stable-deprecated | 3.21 | Observability using Micrometer Observation |
 | [Micrometer Observability 2](../../components/next/others/micrometer-observability.md) | camel-micrometer-observability-starter | Preview | 4.15 | Micrometer Observability implementation of Camel Telemetry |
@@ -1504,6 +1508,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Salesforce - Reports API](../../components/next/others/salesforce-reports.md) | undefined-starter |  |  |  |
 | [Salesforce - REST API](../../components/next/others/salesforce-rest-api.md) | undefined-starter |  |  |  |
 | [Salesforce - Streaming and Pub/Sub](../../components/next/others/salesforce-streaming.md) | undefined-starter |  |  |  |
+| [Sanitizer](../../components/next/others/sanitizer.md) | camel-sanitizer-starter | Preview | 4.24 | Check during development and tests that the processors of the routes keep the contract of AsyncProcessor, and report where they break it |
 | [Semantic OpenAI](../../components/next/others/semantic-openai.md) | camel-semantic-openai-starter | Preview | 4.24 | Assess text and images with typed OpenAI Decisions through Semantic experts |
 | [Semantic TypeSafe AI](../../components/next/others/semantic-typesafe-ai.md) | camel-semantic-typesafe-ai-starter | Preview | 4.24 | Semantic expert using the TypeSafe AI decision API |
 | [Semantic Wolf Defender](../../components/next/others/semantic-wolf-defender.md) | camel-semantic-wolf-defender-starter | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |

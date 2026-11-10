@@ -723,7 +723,85 @@ camel get chaos myapp --report
 camel cmd chaos-clear
 ```
 
-`chaos-add`, `chaos-change` and `chaos-remove` take the name or pid of the integration; without it they act on the only integration that runs, or the only one with chaos switched on, and otherwise fail with the list of the running integrations. `chaos-add` prints the rule in plain words too (`fail 30% of the sends to kafka:orders*, for 1 minute`), and with `--dry-run` it adds nothing, and prints what the rule would hit now: the sends, polls, routes or steps, with their route. `camel get chaos` lists the current rules with their id, version, state, matches and the faults that fired, and `--report` shows the report: the verdict, the seed, every version of every rule and the counts per route. Chaos is for development only: it stays off with profile `prod`, and the commands cannot switch it on.
+`chaos-add`, `chaos-change` and `chaos-remove` take the name or pid of the integration; without it they act on the only integration that runs, or the only one with chaos switched on, and otherwise fail with the list of the running integrations. `chaos-add` prints the rule in plain words too (`fail 30% of the sends to kafka:orders*, for 1 minute`), and with `--dry-run` it adds nothing, and prints what the rule would hit now: the sends, polls, routes or steps, with their route. `camel cmd chaos-suggest` suggests rules to try per route from what the routes do (an HTTP call without a circuit breaker, a dead letter channel, a hand-off over seda, an input from outside), the most worth trying first, each with why and the `chaos-add` command that adds it. `camel get chaos` lists the current rules with their id, version, state, matches and the faults that fired, and `--report` shows the report: the verdict, the seed, every version of every rule, the counts per route, and what has been tried per route (the kinds of fault, how it went, and what the suggestions offer that no rule tried yet). Chaos is for development only: it stays off with profile `prod`, and the commands cannot switch it on.
+
+### Chaos explorations
+
+An exploration is a time to try chaos rules in, which camel-chaos enforces: at its deadline the rules are removed, whatever happens. In it, `camel cmd chaos-experiment` runs one experiment in one call. It adds the rules (one with an expectation that decides the hypothesis), sends the messages of `--feed` as `camel cmd send` does, waits until the expectations are decided (at most `--wait`), ends the experiment and prints what came of it:
+
+```bash
+camel cmd chaos-explore-start --budget=10m --focus=refunds
+camel cmd chaos-experiment --hypothesis='a failed refund is read again' \
+    --rule='route=refunds error rate=every:5 expect=refunds:failed<=0 within=30s' \
+    --feed=refunds --body=file:test/chaos/refunds-fails/ --repeat=20 --interval=200ms
+camel cmd chaos-explore-finish
+```
+
+```text
+Experiment 1 FAIL  a failed refund is read again (r1, ended after 6s)
+  expect refunds:failed<=0: unmet, 4 failed
+  routes: refunds 16 completed, 4 failed
+  traffic: 20 messages sent to direct://refunds in 4s
+  waited 1s for the verdict; 9m51s left of the exploration
+```
+
+The verdict is `FAIL` when an expectation is unmet (exit code 1), `PASS` when all are met, and `INCONCLUSIVE` when the wait was up before an expectation was decided. `--feed` takes the endpoint, or the id of the route, as the `feed:` line of `chaos-suggest` has it. `camel get chaos --report` shows the exploration with its experiments.
+
+The messages of `--feed` are sent to the endpoint the route starts from, so they reach a route that starts from `direct`, `seda`, a stub (`camel run --stub=kafka`) or a broker. An experiment refuses a feed that cannot reach its route, with the reason: a route that starts from a timer, scheduler, cron or quartz makes its own messages (leave `--feed` out), and a route that starts from a component that only consumes cannot be fed this way.
+
+A route that serves HTTP over the server of Camel (`platform-http`, or the REST DSL) is fed with HTTP requests to that server, on localhost and its port, with the path and method of the route, `--body` as the request body and `--header` as HTTP headers. They are sent while the experiment waits for its verdict, and its traffic counts the status codes the clients got, so a hypothesis such as "a client gets a 503, not a 500" has its evidence:
+
+```bash
+camel cmd chaos-experiment --hypothesis='a client of payment gets an error, nothing is lost' \
+    --rule='route=payment error rate=every:4 until=30s expect=payment:failed<=0 within=20s' \
+    --feed=payment --body='{"orderId": "O-1", "amount": 10}' --repeat=12 --interval=100..300
+```
+
+```text
+  traffic: 5 messages sent to POST http://localhost:8080/payment in 1s, answered 200 x4, 500 x1 (of 12: the experiment ended first)
+```
+
+For a path with a parameter, `--feed` is the path to call, with an optional method: `--feed='PUT /orders/42'`. An HTTP server with its own address on this machine (netty-http, undertow, jetty) is fed at that address, called as localhost; one on another host is not fed.
+
+A route that starts from `file:<folder>` is fed with files: each message is written as a file into the folder the route polls, named so the route takes it: `chaos-<time>.json`, numbered as `chaos-<time>-<n>.json` when the messages are repeated, with the extension of its `include` or `antInclude` filter, else of the body. A `CamelFileName` in `--header` names the files instead.
+
+A feed to a remote system that is not stubbed, such as a Kafka broker, has a warning, as the messages go to that system: use a local one (`camel infra run kafka`), or stub it.
+
+`camel cmd chaos-explore` lets the AI of `camel ask` do it all: let there be chaos. It starts the exploration with the budget, and the AI reads the suggestions, runs one experiment per call, reads each verdict, and goes on while there is time. It asks nothing on the way, as starting the command is the consent, and it never changes the routes. When it is done the exploration is finished, and its report and the journal of the experiments are printed (exit code 1 when an experiment failed):
+
+```bash
+camel cmd chaos-explore --budget=10m
+camel cmd chaos-explore myApp --budget=1h --focus=refunds --api-type=anthropic
+```
+
+It saves what it found in the project: the report and the journal in `test/chaos/reports/explore-<time>.md` (and `.json`), and each experiment that failed as a scenario, `test/chaos/explore-<time>-<n>.chaos`, which `camel run * --chaos=<file>` or `camel cmd chaos-load` replays (`--no-save` leaves them out). Run the integration with `--stub=remote`, so the experiments do not reach real systems. A route fed over HTTP or from files cannot be fed by an experiment yet. MCP clients have the same playbook as the prompt `camel_chaos_explore`. See [An exploration](../components/next/others/chaos.html#_an_exploration) in the camel-chaos documentation.
+
+### Chaos scenarios
+
+A scenario keeps the rules of an experiment in a file of the project, such as `test/chaos/outage.chaos`: one rule per line, `#` comments, and an optional `seed=` line so it fails the same messages each time. The phases come from `from=` and `until=` of its rules.
+
+```none
+# the stock service is down for a minute, then slow
+seed=42
+endpoint=http:stock* error status=503 until=1m
+endpoint=http:stock* delay duration=2s from=1m until=1m
+endpoint=http:stock* error rate=0.01 expect=orders:50 within=3m
+```
+
+Start with it, or load it into an integration that runs (which removes the rules there are and starts a new report):
+
+```bash
+camel run * --chaos=test/chaos/outage.chaos
+camel cmd chaos-load test/chaos/outage.chaos
+```
+
+`camel run *` and `camel export` leave `.chaos` files out. A run with chaos ends with exit code 1 when the verdict is FAIL, so a scenario can gate a pipeline; `--chaos-report` writes the report as JSON when the run ends:
+
+```bash
+camel run * --chaos=test/chaos/outage.chaos --max-seconds=240 --chaos-report=target/chaos-report.json
+```
+
+Without an expectation (`expect=`) there is no verdict, and the run ends with exit code 0 and a line that says so. See [Scenarios](../components/next/others/chaos.html#_scenarios) and [Chaos in a pipeline](../components/next/others/chaos.html#_chaos_in_a_pipeline) in the camel-chaos documentation.
 
 ## Using Jolokia and Hawtio
 

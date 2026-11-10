@@ -118,7 +118,7 @@ Enum values:
 
 
 
- | Lax | CookieSameSite |
+ | LAX | CookieSameSite |
 | **cookieSecure** (consumer) | Sets whether the cookie is only sent to the server with an encrypted request over HTTPS. | false | boolean |
 | **handleWriteResponseError** (consumer) | When Camel is complete processing the message, and the HTTP server is writing response. This option controls whether Camel should catch any failure during writing response and store this on the Exchange, which allows onCompletion/UnitOfWork to regard the Exchange as failed and have access to the caused exception from the HTTP server. | false | boolean |
 | **httpMethodRestrict** (consumer) | A comma separated list of HTTP methods to serve, e.g. GET,POST . If no methods are specified, all methods will be served. |  | String |

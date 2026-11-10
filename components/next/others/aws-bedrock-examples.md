@@ -45,7 +45,7 @@ _Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:invoke", exchange -> {
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new JsonMapper();
             ObjectNode rootNode = mapper.createObjectNode();
             rootNode.put("inputText",
                     "User: Generate synthetic data for daily product sales in various categories - include row number, product name, category, date of sale and price. Produce output in JSON format. Count records and ensure there are no more than 5.");
@@ -54,10 +54,10 @@ _Java-only: uses `ProducerTemplate` test API with complex JSON construction_
             stopSequences.add("User:");
             ObjectNode childNode = mapper.createObjectNode();
             childNode.put("maxTokenCount", 1024);
-            childNode.put("stopSequences", stopSequences);
+            childNode.set("stopSequences", stopSequences);
             childNode.put("temperature", 0).put("topP", 1);
 
-            rootNode.put("textGenerationConfig", childNode);
+            rootNode.set("textGenerationConfig", childNode);
             exchange.getMessage().setBody(mapper.writer().writeValueAsString(rootNode));
             exchange.getMessage().setHeader("CamelAwsBedrockContentType", "application/json");
             exchange.getMessage().setHeader("CamelAwsBedrockAcceptContentType", "application/json");
@@ -86,16 +86,16 @@ _Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:send_titan_image", exchange -> {
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new JsonMapper();
             ObjectNode rootNode = mapper.createObjectNode();
             ObjectNode textParameter = mapper.createObjectNode();
             textParameter.putIfAbsent("text",
-                    new TextNode("A Sci-fi camel running in the desert"));
+                    new StringNode("A Sci-fi camel running in the desert"));
             rootNode.putIfAbsent("textToImageParams", textParameter);
-            rootNode.putIfAbsent("taskType", new TextNode("TEXT_IMAGE"));
+            rootNode.putIfAbsent("taskType", new StringNode("TEXT_IMAGE"));
             ObjectNode childNode = mapper.createObjectNode();
             childNode.putIfAbsent("numberOfImages", new IntNode(3));
-            childNode.putIfAbsent("quality", new TextNode("standard"));
+            childNode.putIfAbsent("quality", new StringNode("standard"));
             childNode.putIfAbsent("cfgScale", new IntNode(8));
             childNode.putIfAbsent("height", new IntNode(512));
             childNode.putIfAbsent("width", new IntNode(512));
@@ -157,10 +157,10 @@ _Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:send_titan_embeddings", exchange -> {
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new JsonMapper();
             ObjectNode rootNode = mapper.createObjectNode();
             rootNode.putIfAbsent("inputText",
-                    new TextNode("A Sci-fi camel running in the desert"));
+                    new StringNode("A Sci-fi camel running in the desert"));
 
             exchange.getMessage().setBody(mapper.writer().writeValueAsString(rootNode));
             exchange.getMessage().setHeader("CamelAwsBedrockContentType", "application/json");
@@ -217,7 +217,7 @@ _Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:stream_complete", exchange -> {
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new JsonMapper();
             ObjectNode rootNode = mapper.createObjectNode();
             rootNode.put("inputText", "Write a short poem about Apache Camel.");
 
@@ -225,10 +225,10 @@ _Java-only: uses `ProducerTemplate` test API with complex JSON construction_
             stopSequences.add("User:");
             ObjectNode childNode = mapper.createObjectNode();
             childNode.put("maxTokenCount", 512);
-            childNode.put("stopSequences", stopSequences);
+            childNode.set("stopSequences", stopSequences);
             childNode.put("temperature", 0).put("topP", 1);
 
-            rootNode.put("textGenerationConfig", childNode);
+            rootNode.set("textGenerationConfig", childNode);
             exchange.getMessage().setBody(mapper.writer().writeValueAsString(rootNode));
             exchange.getMessage().setHeader("CamelAwsBedrockContentType", "application/json");
             exchange.getMessage().setHeader("CamelAwsBedrockAcceptContentType", "application/json");
@@ -298,7 +298,7 @@ _Java-only: uses `ProducerTemplate` test API with complex JSON construction_
 
 ```java
         final Exchange result = template.send("direct:stream_chunks", exchange -> {
-            ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new JsonMapper();
             ObjectNode rootNode = mapper.createObjectNode();
 
             ArrayNode messages = mapper.createArrayNode();
@@ -311,10 +311,10 @@ _Java-only: uses `ProducerTemplate` test API with complex JSON construction_
             contentBlock.put("text", "Explain Apache Camel in one sentence.");
             content.add(contentBlock);
 
-            message.put("content", content);
+            message.set("content", content);
             messages.add(message);
 
-            rootNode.put("messages", messages);
+            rootNode.set("messages", messages);
             rootNode.put("max_tokens", 200);
             rootNode.put("anthropic_version", "bedrock-2023-05-31");
 

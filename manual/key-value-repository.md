@@ -71,10 +71,10 @@ Stores entries in a relational database table via plain JDBC.
 ```java
 JdbcKeyValueRepository repo = new JdbcKeyValueRepository();
 repo.setDataSource(myDataSource);
-repo.setTableName("camel_kvr");  // optional, defaults to "camel_kvr"
+repo.setTableName("MY_KEYVALUE");  // optional, defaults to "CAMEL_KEYVALUE"
 ```
 
-The table is auto-created on startup if it does not exist. TTL is stored as an `expires_at` epoch-millis column; expired entries are cleaned lazily on read.
+The table is auto-created on startup if it does not exist. TTL is stored as an `EXPIRES_AT` epoch-millis column; expired entries are cleaned lazily on read.
 
 ### JPA
 
@@ -85,7 +85,7 @@ JpaKeyValueRepository repo = new JpaKeyValueRepository();
 repo.setEntityManagerFactory(myEmf);
 ```
 
-Uses a `KeyValueEntry` entity mapped to a `camel_kvr` table. Add the entity to your `persistence.xml` persistence unit.
+Uses a `KeyValueEntry` entity mapped to a `CAMEL_KEYVALUE` table. Add the entity to your `persistence.xml` persistence unit.
 
 ### Cassandra
 
@@ -94,10 +94,10 @@ Stores entries in Apache Cassandra using the DataStax driver.
 ```java
 CassandraKeyValueRepository repo = new CassandraKeyValueRepository();
 repo.setSession(cassandraSession);
-repo.setTableName("camel_kvr");  // optional
+repo.setTable("camel_keyvalue");  // optional, defaults to "camel_keyvalue"
 ```
 
-TTL uses Cassandra’s native `USING TTL` (converted from `Duration` to seconds). The table is auto-created on startup.
+TTL uses Cassandra’s native `USING TTL` (converted from `Duration` to seconds). The table is not created by the repository; create it beforehand.
 
 ### Kafka
 

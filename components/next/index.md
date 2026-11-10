@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 393 in 320 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 395 in 322 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -56,6 +56,7 @@ Number of Non-Core Components: 393 in 320 JAR artifacts (4 deprecated)
 | [ActiveMQ 5.x](activemq-component.md) | camel-activemq | Stable | 1.0 | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](activemq6-component.md) | camel-activemq6 | Stable | 4.7 | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
 | [AI](ai-summary.md) |  |  |  |  |
+| [AI Prompt](ai-prompt-component.md) | camel-ai-prompt | Preview | 4.24 | Consumer endpoint that registers a Camel route as an MCP prompt. |
 | [AI Resource](ai-resource-component.md) | camel-ai-resource | Preview | 4.23 | Framework-agnostic consumer endpoint that registers a Camel route as a read-only AI resource in the shared AiResourceRegistry. |
 | [AI Tool](ai-tool-component.md) | camel-ai-tool | Preview | 4.22 | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
 | [Alibaba EventBridge](alibaba-eventbridge-component.md) | camel-alibaba-eventbridge | Preview | 4.23 | Publish events to Alibaba Cloud EventBridge. |
@@ -428,6 +429,7 @@ Number of Non-Core Components: 393 in 320 JAR artifacts (4 deprecated)
 | [Velocity](velocity-component.md) | camel-velocity | Stable | 1.2 | Transform messages using a Velocity template. |
 | [Vert.x](vertx-component.md) | camel-vertx | Stable | 2.12 | Send and receive messages to/from Vert.x Event Bus. |
 | [Vert.x HTTP Client](vertx-http-component.md) | camel-vertx-http | Stable | 3.5 | Send requests to external HTTP servers using Vert.x |
+| [Vert.x MQTT](vertx-mqtt-component.md) | camel-vertx-mqtt | Preview | 4.24 | Send and receive messages to and from an MQTT broker, MQTT 3.1.1 and 5, with the Vert.x MQTT client. |
 | [Vert.x WebSocket](vertx-websocket-component.md) | camel-vertx-websocket | Stable | 3.5 | Expose WebSocket endpoints and connect to remote WebSocket servers using Vert.x |
 | [Weather](weather-component.md) | camel-weather | Stable | 2.12 | Poll the weather information from Open Weather Map. |
 | [weaviate](weaviate-component.md) | camel-weaviate | Stable | 4.12 | Perform operations on the Weaviate Vector Database. |

@@ -9,11 +9,11 @@ The `camel-chaos` module lets a developer turn on faults in a running Camel appl
 
 ## Getting it
 
--   `camel run`: add the dependency with `--chaos` (or `--dep camel:chaos`), with the default runtime or `--runtime=main` (not with Spring Boot or Quarkus). `camel run` uses profile `dev` by default, which switches chaos on. Then add rules while it runs with `camel cmd chaos-add` (see [Control while it runs](#_control_while_it_runs)).
+-   `camel run`: add the dependency with `--chaos` (or `--dep camel:chaos`), with any runtime. `camel run` uses profile `dev` by default, which switches chaos on. A Spring Boot application has no Camel profile `dev`, and a Quarkus one only in dev mode, so with `--runtime=spring-boot` and `--runtime=quarkus` the run switches chaos on with `-Dcamel.chaos.enabled=true` on its command line (unless `--profile=prod`); the project that the run exports does not have it. A project of your own (`camel run pom.xml`) also gets chaos added for the run: plain `camel-chaos` for Spring Boot (there is no starter), and the `camel-quarkus-chaos` extension for Quarkus, which needs a Camel Quarkus release on Camel 4.24 ([https://github.com/apache/camel-quarkus/issues/9459](https://github.com/apache/camel-quarkus/issues/9459)). Then add rules while it runs with `camel cmd chaos-add` (see [Control while it runs](#_control_while_it_runs)), or start with the rules of a scenario file with `--chaos=test/chaos/outage.chaos` (see [Scenarios](#_scenarios)).
     
 -   A plain `Main` or a test: add the `camel-chaos` dependency and set `camel.chaos.enabled=true`, for example in a `CamelTestSupport` test with `camelContextConfiguration.withUseOverridePropertiesWithPropertiesComponent(props)`, where `props` has `camel.chaos.enabled=true` (and `camel.chaos.seed` for a fixed sequence).
     
--   Spring Boot and Quarkus: the plugin works with any `CamelContext`. It reads `camel.chaos.` **from the properties component, so `camel.chaos.enabled=true` in the application properties switches it on there too; but the `camel.chaos.`** options are camel-main options, and only camel-main checks `camel.chaos.rules` against the security policy (see below).
+-   Spring Boot and Quarkus: the plugin works with any `CamelContext`. It reads `camel.chaos.` **from the properties component, so `camel.chaos.enabled=true` in the application properties switches it on there too. The `camel.chaos.`** options are camel-main options; camel-main and Camel Spring Boot check `camel.chaos.rules` and `camel.chaos.scenario` against the security policy (see below).
     
 
 ## Switching it on
@@ -24,7 +24,7 @@ With camel-main, when `camel.chaos.*` options are set and chaos would be switche
 
 When chaos is switched on, it installs its hooks when the `CamelContext` initializes, before the routes are created, and logs a WARN that it is on. The hooks do nothing until a rule is added. When chaos is off, nothing of it is installed (only the lifecycle strategy that made this decision stays, and does nothing), and `camel.chaos.rules` is ignored.
 
-`camel.chaos.rules` is marked `insecure:dev`: with camel-main and profile `prod` (which sets `camel.security.policy=fail`) an application with rules configured refuses to start. Without camel-main this check does not run, and chaos stays off with profile `prod` anyway. Rules set from Java (`chaosConfig().withRules(…​)`) are not checked either, as for every `insecure:dev` option.
+`camel.chaos.rules` and `camel.chaos.scenario` are marked `insecure:dev`: with camel-main or Camel Spring Boot and profile `prod` (which sets `camel.security.policy=fail`) an application with rules or a scenario configured refuses to start. Without a profile they are allowed with a WARN (as with `camel run --runtime=spring-boot --chaos=<file>`). Where this check does not run, chaos stays off with profile `prod` anyway. Rules set from Java (`chaosConfig().withRules(…​)`) are not checked either, as for every `insecure:dev` option.
 
 ## Options
 
@@ -37,7 +37,9 @@ The options are read from the properties component, and are camel-main options (
 | `camel.chaos.seed` |  | The seed of the random draws of the rules. Without it a seed is picked at startup, and the report shows it. |
 | `camel.chaos.rules` |  | Rules to add at startup, separated by `;`. A rule that is not valid stops the application from starting. They are read once, when the context starts: changing them while the application runs (also in `camel run --dev`) does nothing until the application starts again; add, change and remove rules while it runs with `ChaosManager`. Their clock starts when the context has started, so their `until`, `within` and lifecycle times do not include the startup. |
 | `camel.chaos.maxDuration` | `10m` | The longest time a rule runs: a rule without an `until` duration ends after it, and a longer `until` duration, `delay`, or `duration` of `stall` and `lifecycle`, is rejected when the rule is added. |
+| `camel.chaos.scenario` |  | A scenario to load at startup: a file with one rule per line (see [Scenarios](#_scenarios)), such as `test/chaos/outage.chaos`, or `classpath:` and a name. Its rules are added before those of `camel.chaos.rules`, and its `seed=` is used unless `camel.chaos.seed` is set. A scenario that cannot be read, or has a line that is not valid, stops the application from starting. |
 | `camel.chaos.reportOnShutdown` | `true` | Log the report when the context stops, if any rule was added. |
+| `camel.chaos.reportFile` |  | Write the report as JSON to this file when the context stops, also without rules (see [Chaos in a pipeline](#_chaos_in_a_pipeline)). |
 
 For example, in `application.properties`:
 
@@ -60,6 +62,7 @@ List<String> warnings = chaos.checkRule(id);
 chaos.removeRule(id);
 List<String> ids = chaos.addRules("endpoint=seda:dlq error at=dlq; endpoint=https:inventory* error status=503");
 String text = chaos.report().toText();
+List<String> loaded = chaos.loadScenario("outage.chaos", Files.readString(Path.of("test/chaos/outage.chaos")));
 ```
 
 `addRules` adds rules separated by `;`, as in `camel.chaos.rules`, all of them or none when one is not valid, so they are in place at the same time. `checkRule` says what a rule matches nothing of in the context now, see below.
@@ -75,6 +78,8 @@ camel cmd chaos-change --id=r1 --rule='endpoint=kafka:orders* delay duration=5s 
 camel cmd chaos-remove myapp --id=r1
 camel cmd chaos-clear
 camel cmd chaos-clear myapp --reset
+camel cmd chaos-load test/chaos/outage.chaos
+camel cmd chaos-suggest
 camel get chaos
 camel get chaos myapp --report
 ```
@@ -82,6 +87,10 @@ camel get chaos myapp --report
 `chaos-add` prints the id of the new rule (`r1`, `r2`, …​) with the rule in plain words, to check that it does what was meant (`Added chaos rule r1: fail half of the sends to http:stock* with HTTP status 503, for 5 minutes`), and `chaos-change` the version of the rule that replaces it, also with the rule in plain words. `--rule` can be given more than once (or a rule can hold several separated by `;`): the rules are added together, all or none, which matters when one must be in place before the other fires, as each `chaos-add` takes a moment. The ids are per integration, so `chaos-add`, `chaos-change` and `chaos-remove` act on one integration: the one whose name or pid is given, and without one the only integration that runs, or else the only one of them that has chaos switched on. When that is not clear (no integration runs, or several do and not exactly one has chaos switched on), the command fails with the list of the running integrations, each with whether chaos is on (exit code 2), and the name or pid of one is needed; without a name these commands never act on all of them. `chaos-clear` without one acts on every running integration that has chaos switched on. The rules that `chaos-clear` removes stay in the report; with `--reset` the report starts again, for a new experiment: no rules, route counts or verdict, as for an application that just started (with the same seed, and the ids of new rules going on from the last one). An id that does not exist is "not found" (exit code 3). `camel get chaos` lists the current rules with their id, version, state, matches and faults, the observed rate (`RATE`), when the rule last fired (`LAST`) and the effect of its faults (`EFFECT`), and `--report` shows the report, with the recent faults (also as JSON with `--json`); see [The live state of the rules](#_the_live_state_of_the_rules). Their `NOTE` column says what a lifecycle rule does to its route (`route poller down, back in 12s`) and why a rule did nothing when it was skipped. Without a rule to show, `camel get chaos` says so on stderr (no rules, chaos off, or no integration with camel-chaos).
 
 A rule that matches nothing in the integration now is added with a warning, which `chaos-add` and `chaos-change` print, and which is logged: an `endpoint=` or `component=` pattern that matches no endpoint of the context, an `at=poll` for endpoints that no route consumes with a scheduled poll, a `route=` or `step=` pattern that matches no route or step id, and an expectation of a route that does not exist. Such a rule fires 0 times, and is often a typo; the warning names some of the endpoints, routes or steps there are. It is not an error, as the routes may still change (a `toD` creates its endpoints when it sends, and a route can be added later). The rules of `camel.chaos.rules` are checked when the context has started.
+
+A rule that expects failed exchanges in a route whose error handler is a dead letter channel (`expect=parked:failed⇐0`) has a warning too: the dead letter channel handles what fails there, so nothing fails, and the expectation is always met. `handled` counts what the dead letter channel handled (`expect=parked:handled⇐0`).
+
+So does a rule that expects no message lost between two routes (`expect=refunds→payment:lost⇐0`) when the first route does not hand messages off to the second (over `seda`, a broker or a `wireTap`): when it calls the second over `direct` and waits, a failure there fails the first route and nothing is lost between them; when it does not send to it at all (an HTTP call to a `platform-http` route), the failures of the first route are not in the loss. `failed` counts them (`expect=refunds:failed⇐0`). A route with a send that is known only when it sends (a `toD`, `wireTap` or `recipientList`) is not checked.
 
 To see what a rule would hit before it is added, `chaos-add --dry-run` checks it as `chaos-add` would, and adds nothing. It prints the rule in plain words, then each send, poll, route or step it matches now, with its route (and the step that sends), the sends known only when they send that may match (a `toD`), and the warnings:
 
@@ -99,9 +108,224 @@ The commands go through the `chaos` action of the CLI connector, which calls `Ch
 
 The `chaos` developer console (`/q/dev/chaos` with `camel run --console`) shows the same rules and report, as text or JSON. It only reads: a rule cannot be added, changed or removed over HTTP.
 
+### What to try
+
+Where to start with a route you did not write? `camel cmd chaos-suggest` asks the running integration, and it suggests rules per route from what the routes do, the most worth trying first. Each is a known rule (see [The model of the rules](#_the_model_of_the_rules)) with the endpoint or route filled in, why it is worth trying, the command that adds it, and how to feed the route with messages, so the rule has something to act on. Nothing is added.
+
+```none
+$ camel cmd chaos-suggest
+Chaos rules to try, the most worth trying first:
+
+1. route orders: Returns an error (HTTP status) (errors)
+   an HTTP call to http://stock/check without a circuit breaker: what does the route do when the service answers 503?
+   camel cmd chaos-add --rule='endpoint=http://stock/check error status=503 rate=0.25 until=10m'
+
+2. route orders: The route after a hand-off fails (lost)
+   route orders hands the message to route shipping over seda and does not wait: when shipping fails, is the message lost?
+   camel cmd chaos-add --rule='route=shipping error rate=0.2 until=2m expect=orders->shipping:lost<=0 within=3m'
+   feed: camel cmd send shop --endpoint=orders --body=<message> --repeat=20 --interval=200ms
+```
+
+How to feed a route comes from its input:
+
+ 
+| The input | How to feed it |
+| --- | --- |
+| `timer`, `scheduler`, `cron`, `quartz` | It feeds itself (no `feed:` line) |
+| `platform-http`, `rest` | `curl` with the method and path of the route, on the port of the HTTP server (`camel.server.port`, 8080 by default) |
+| `jetty`, `netty-http`, `undertow`, `servlet`, `vertx-http` | `curl` to the address in its URI |
+| `file` | Write a file into its folder |
+| Any other (`direct`, `seda`, a broker, a stub of a broker) | `camel cmd send` to the route, with `--repeat` and `--interval`: the route id as the endpoint sends to the input of the route, with all its options |
+
+When the input is a remote system that is not a stub (see [With stubs](#_with_stubs)), the messages go to that real system: the CLI says so, and `real` is `true` in the JSON. Run with `--stub=remote` to feed a stub instead.
+
+ 
+| What a route does | What is suggested |
+| --- | --- |
+| An HTTP call, without a circuit breaker | The service answers with an error (`status=503`), and does not answer in time (`timeout`) |
+| An HTTP call, in a route with a circuit breaker | The service is down for a while (`outage`): does the breaker open, and does the fallback answer? |
+| A call over another protocol | The connection is refused, and the call is slow |
+| An input that can deliver a message again (Kafka, JMS, AMQP, SQS and more, or a consumer that reads a failed message again, such as a file without `moveFailed`) | The call out is made twice (`duplicate`): is it safe to repeat? |
+| A dead letter channel | It fails too (`at=dlq`): is the message then lost? Add it with a rule that fails a route. A dead letter channel that the routes share (the error handler of a route builder) is suggested once, for all of them, and not for the route that consumes it. |
+| A hand-off to another route over `seda`, `vm` or `disruptor` | The next route fails, with an expectation that no message is lost between the two routes (see [Expectations on time and loss](#_expectations_on_time_and_loss)) |
+| An input from outside (not `direct` or `seda`) | The route fails at its entry (what does the sender see: a rollback, a retry, an error?), or the polls fail for a polling consumer; and the route stalls for a while |
+| A remote call and a dead letter channel | Two faults at once: the call is down for a minute while the dead letter channel fails too. Are messages lost? The report counts what the dead letter channel did not take as lost |
+| A remote call | Two faults at once: the call is slow and fails now and then. Do the redeliveries pile up, and how long does an exchange take? |
+
+Two faults at once (kind `combined`) come after the single faults, as most bugs that lose messages need two failures that meet. Their rules are added together:
+
+```none
+5. route orders: An outage while the dead letter channel fails (combined)
+   route orders sends what fails to the dead letter channel direct:parked: when http://payment/charge is down for a minute and the dead letter channel fails too, are messages lost? The report counts what the dead letter channel did not take as lost
+   camel cmd chaos-add --rule='endpoint=http://payment/charge error status=503 until=1m' --rule='endpoint=direct:parked error at=dlq until=1m'
+```
+
+Each of their rules counts as its own kind in what has been tried, so a pair is never "not tried yet".
+
+The rules leave the query of the endpoint out: its options do not tell which endpoint it is, and may hold a secret. `ChaosManager.suggest()` gives the same as JSON: `suggestions`, each with `route`, `kind`, `recipe`, `title`, `rule`, `why`, `tried`, `routes` for a dead letter channel that several routes share, `feed`, and `rules` for two faults at once. A `feed` has its `kind` (one of `self`, `http`, `file` and `send`), a `hint` and `real`. `rules` has all the rules to add together. The chaos screen of the Camel TUI lists the suggestions (key `w`), where Enter types the rule in to change or add (the rules of two faults at once separated by `;`).
+
+### What has been tried
+
+When is a route done? The report says per route which kinds of fault were tried, how it went, and which kinds the suggestions offer (see [What to try](#_what_to_try)) that no rule tried yet:
+
+```none
+$ camel get chaos --report
+...
+  tried, per route:
+  ROUTE     KIND                     RULES  FIRED  OUTCOME
+  orders    errors                   r1        24  21 recovered, 1 handled, 0 failed; expect orders:handled<=0 unmet
+  orders    slow, lost, duplicate                  not tried yet
+  shipping  dead letter channel                    not tried yet
+```
+
+-   The kinds are `errors` (a send or a step fails), `slow` (a delay), `lost` (a send is dropped), `corrupt`, `duplicate`, `consumer` (the polls, or the entry of the route), `lifecycle` (stall and lifecycle) and `dead letter channel` (`at=dlq`). A rule has one kind, from its fault and where it acts.
+    
+-   A kind is tried in a route when a rule of that kind fired in it: a rule counts its faults per route, so a rule that reaches several routes is tried in each. A rule that expects no message lost between two routes (`expect=orders→shipping:lost⇐0`) also tries `lost` for the first route, as the hand-off suggestion fails the next route. A dead letter channel that the routes share is tried by a rule of its kind in any of them. The rules removed or replaced count too, so the report says what the experiment tried, not only what runs now.
+    
+-   The outcome is how the exchanges the rules faulted came out (recovered by a redelivery, handled by the error handler, failed), counted per rule, and the outcomes of their expectations.
+    
+-   What is not tried yet comes from the suggestions for the route, read again at most every 10 seconds: when nothing is left, the route has been tried for what chaos can say about it.
+    
+
+In JSON the report has `tried`: per `route` its `kinds` (`kind`, `rules`, `fired`, `recovered`, `handled`, `failed`, `expectations`) and `notTried`. `ChaosManager.suggest()` marks a suggestion whose kind was tried in its route already (`tried`): `camel cmd chaos-suggest` ends its line with `- tried`, and the what to try list of the Camel TUI (key `w`) shows both.
+
+### With stubs
+
+`camel run --stub=remote` serves the remote components with the stub component, a queue in memory, so the integration runs without the systems behind it, and `camel cmd send` feeds a stubbed consumer:
+
+```bash
+camel run * --stub=remote --chaos
+camel cmd send --endpoint=kafka:refunds --body=file:samples/refund.json
+```
+
+The rules match a stub by its URI (`endpoint=kafka:orders`, `route=refunds`), and chaos counts a stub as the component it stands in for:
+
+-   What to try takes a stub as remote when the component is. It reads that from the JSON of the component, which `camel run` downloads with the component for a stub too.
+    
+-   A stubbed consumer keeps a failed message by the options of its URI, as the component would: `kafka:refunds?breakOnFirstError=true` keeps it. Options set on the component do not count, as a stub does not take them. The stub does not read the message again, though, so the report says per route that its consumer is a stub (`stubbedConsumer` in the JSON, `refunds (stub of kafka)` in `camel get chaos --report`, and `refunds (stub)` on the chaos screen of the Camel TUI): a kept message is then not lost, though nothing reads it again while the stub runs.
+    
+
 ### From an AI agent (MCP)
 
-The Camel MCP server (`camel mcp`, see [Camel MCP server](../../../manual/camel-jbang-mcp.md)) has the same operations as tools, for an AI agent that tries a route against failures: `camel_runtime_chaos_list`, `camel_runtime_chaos_report`, `camel_runtime_chaos_check` (the dry run), `camel_runtime_chaos_add`, `camel_runtime_chaos_change`, `camel_runtime_chaos_remove` and `camel_runtime_chaos_clear`. Without `nameOrPid` they pick the integration as the commands do: the only one that runs, or else the only one with chaos switched on, and otherwise they fail with the list of the running integrations. They take the same one-line rules: adding, changing, removing and clearing go through the same `chaos` action of the CLI connector, and the list and the report read the console from the status of the application. So chaos must be switched on, and a rule that is not valid is refused with the reason; `camel_runtime_chaos_clear` takes `reset=true` as `chaos-clear --reset` does. `camel_runtime_chaos_add` takes several rules separated by `;`, and the add and change tools return the warnings of a rule that matches nothing, so an agent can fix a typo with a change. Adding and changing a rule are marked destructive, so a client that honours `destructiveHint` asks before it runs them, and the `read-write` access level of the MCP security layer does not offer them; the list, the report and the check are read-only, so an agent can check a rule it made from a loose request (what it would hit, in plain words) and show it before it asks to add it. `camel ask` has the same tools, and asks before it adds or changes a rule. The development MCP tools that `camel run --mcp` (`camel.jbang.mcp=true`) serves over HTTP have only the list and the report (not the check either: the integration parses the rule, and `exception=` loads a class).
+The Camel MCP server (`camel mcp`, see [Camel MCP server](../../../manual/camel-jbang-mcp.md)) has the same operations as tools, for an AI agent that tries a route against failures: `camel_runtime_chaos_list`, `camel_runtime_chaos_report`, `camel_runtime_chaos_suggest` (what to try), `camel_runtime_chaos_check` (the dry run), `camel_runtime_chaos_add`, `camel_runtime_chaos_change`, `camel_runtime_chaos_remove`, `camel_runtime_chaos_clear` and `camel_runtime_chaos_load` (a scenario, given as the text of a `.chaos` file). Without `nameOrPid` they pick the integration as the commands do: the only one that runs, or else the only one with chaos switched on, and otherwise they fail with the list of the running integrations. They take the same one-line rules: adding, changing, removing and clearing go through the same `chaos` action of the CLI connector, and the list and the report read the console from the status of the application. So chaos must be switched on, and a rule that is not valid is refused with the reason; `camel_runtime_chaos_clear` takes `reset=true` as `chaos-clear --reset` does. `camel_runtime_chaos_add` takes several rules separated by `;`, and the add and change tools return the warnings of a rule that matches nothing, so an agent can fix a typo with a change. Adding and changing a rule, and loading a scenario, are marked destructive, so a client that honours `destructiveHint` asks before it runs them, and the `read-write` access level of the MCP security layer does not offer them; the list, the report, what to try and the check are read-only, so an agent can check a rule it made from a loose request (what it would hit, in plain words) and show it before it asks to add it. `camel ask` has the same tools, and asks before it adds or changes a rule, or loads a scenario. The development MCP tools that `camel run --mcp` (`camel.jbang.mcp=true`) serves over HTTP have only the list and the report (not the check either: the integration parses the rule, and `exception=` loads a class; nor what to try or a scenario).
+
+### An exploration
+
+An agent that tries chaos rules on the integration by itself, for a time it was given, runs an exploration. camel-chaos keeps its journal, so the report, the CLI and the TUI read it, and it survives the agent losing its context. And camel-chaos enforces the time, whatever the agent does:
+
+-   One exploration runs at a time, with a budget of 10 minutes by default, and at most 2 hours.
+    
+-   While it runs, a rule ends at the deadline at the latest, and a rule that would start after it (`from=`) is refused.
+    
+-   At the deadline the rules are removed and the exploration is finished. This is checked whenever chaos is used: a rule added, or the report read, which the status of the application does every second.
+    
+-   Chaos counts the exchanges from the start of the exploration, and its first rule takes the baseline: the counts per route of the run without faults before it, so the failures that were there already are not blamed on chaos.
+    
+
+The `chaos` action of the CLI connector starts it (`{"action": "chaos", "command": "explore-start", "budget": "10m", "focus": "orders"}`) and finishes it before the deadline (`explore-finish`), as `ChaosManager.startExploration(budget, focus)` and `finishExploration()` do in Java. The report has its journal as `exploration`: `running`, `startedAt`, `budget`, `deadline`, `timeLeft` while it runs, `focus`, the `rules` added while it ran, the `baseline` (per `route` its `completed`, `failed`, `failedKeptByConsumer`, `handled` and `redeliveries`) and `baselineAt`, and once finished `finishedAt`, `finishedBy` (`finished` or `deadline`) and the number of rules `removed`. It stays in the report after it finished, until the next one starts or the report is reset. A scenario loaded while it runs starts the counts again, and the baseline is zero then (`baselineReset`).
+
+```text
+$ camel get chaos --report
+...
+  exploration: running, 6m12s left of 10m0s, focus: orders
+    rules tried: r1, r2
+    baseline (before the first rule): orders 30 completed, 0 failed
+```
+
+#### Experiments
+
+The agent tries one thing at a time as an experiment: a hypothesis, such as "an order never fails when payment answers 503", and the rules that test it. At least one of the rules has an expectation (`expect=`), which decides the hypothesis. The rules of an experiment are added together, all or none, and the counts per route are read when it begins, so its end says what changed while it ran. One experiment is open at a time, and only while an exploration runs.
+
+When it ends, camel-chaos reads what came of it and then removes its rules: per route the difference of the counts, the faults of each rule, the state of each expectation, and a verdict:
+
+-   `FAIL`: an expectation is unmet, or a rule of the experiment failed or dropped the send of a dead letter channel. The dead letter channel then handles the message without delivering it, so no expectation of a route sees it: the experiment counts it as lost (`lostAtDeadLetterChannel`, and per rule `lostAtDeadLetterChannelPerRule`), as the report does.
+    
+-   `PASS`: all expectations are met, a fault fired, and the routes of the expectations had messages.
+    
+-   `PENDING`: it is still open, and an expectation is not decided yet or no fault has fired yet.
+    
+-   `INCONCLUSIVE`: it ended before an expectation was decided, so the messages may still have come; none of its faults fired, so its expectations say nothing about them; or an expectation was met on a route that had no messages while it ran (`refunds:failed⇐0` when the traffic went to another route), or is a time (`maxTime`, `meanTime`) of such a route; or a route of an expectation failed exchanges that no expectation of it counts (`refunds→payment:lost⇐0` while refunds failed: the loss counts what completed). The `reason` says which, and names the expectation that counts them.
+    
+
+The routes that failed while it ran, and whose failures no expectation of the experiment counts, are listed as `alsoFailed`, with how many failed. An experiment that expects `refunds:maxTime⇐30s` passes while 2 refunds failed, and `alsoFailed` says so.
+
+The experiment is ended with the exploration when that finishes, or when its time is up, with what came of it so far.
+
+The `chaos` action of the CLI connector begins one (`{"action": "chaos", "command": "experiment-begin", "hypothesis": "an order never fails", "rule": "endpoint=http:payment* error status=503 until=1m expect=orders:failed⇐0 within=70s"}`), with several rules separated by `;`, and ends it (`experiment-end`, with an optional `note` of what the agent makes of it). In Java, these are `ChaosManager.beginExperiment(hypothesis, rules)` and `endExperiment(note)`.
+
+The journal has them as `experiments`, each with:
+
+-   `number`, `hypothesis`, the `rules` (their ids) and `ruleTexts`
+    
+-   `open`, `startedAt` and `elapsed`
+    
+-   the `verdict` (and the `reason` of an `INCONCLUSIVE` one) and the `expectations`: per rule its `expect`, `state` (`met`, `unmet` or `pending`), the `actual` value, and the `value` in words
+    
+-   `alsoFailed`: the routes that failed outside the expectations, when there are such
+    
+-   the `faults` per rule
+    
+-   the `routes` that did something while it ran, with the same counts as the baseline
+    
+-   once ended, `endedAt`, `endedBy` (`ended`, `finished` or `deadline`) and the `note`
+    
+
+```text
+$ camel get chaos --report
+...
+    experiments:
+      1 FAIL  an order never fails (r1, r2, ended after 1m4s)
+        expect orders:failed<=0: unmet, 9 failed
+        routes: orders 41 completed, 9 failed
+        note: orders has no error handler
+```
+
+The Camel CLI runs an experiment in one call: `camel cmd chaos-experiment` begins it, sends its traffic (`--feed` with `--body`, `--repeat` and `--interval`, as `camel cmd send`), waits until its expectations are decided (at most `--wait`), and ends it. `camel cmd chaos-explore-start` and `chaos-explore-finish` start and finish the exploration. `camel cmd chaos-explore` hands a whole exploration to an AI: it runs the experiments by itself for the budget, and reports what held and what broke (the MCP prompt `camel_chaos_explore` is the same playbook). It saves the report in `test/chaos/reports`, and each experiment that failed as a scenario in `test/chaos`, to replay it.
+
+## Scenarios
+
+A scenario is the rules of an experiment in a file of the project, so it can be run again, shared and kept with the code, instead of rules typed once at the command line. By convention it is in the folder `test/chaos` of the project, with the extension `.chaos`. The Camel CLI leaves the `test` folder alone: `camel run` does not load it, a run in dev mode does not reload when a file there changes, and `camel export` copies only the Citrus tests from it. A scenario is a test too, next to the Citrus tests of the project:
+
+```none
+# test/chaos/outage.chaos: the stock service is down for a minute, then slow for a minute
+seed=42
+
+endpoint=http:stock* error status=503 until=1m
+endpoint=http:stock* delay duration=2s from=1m until=1m
+# no order may be lost: the orders route completes 50 exchanges within 3 minutes
+endpoint=http:stock* error rate=0.01 expect=orders:50 within=3m
+```
+
+-   One rule per line, in the one-line form of `camel.chaos.rules` (see [Rules](#_rules)). A rule does not go over several lines, and a line holds one rule.
+    
+-   A line that starts with is a comment, and empty lines are left out. A later in a line is part of the rule.
+    
+-   A line `seed=<number>` fixes the random draws of the rules of the scenario, so it fails the same messages each time it runs (with one thread and the same messages in the same order, see [Time and the seed](#_time_and_the_seed)). The draws of a rule depend on its place in the scenario, not on the ids the rules get, so the scenario draws the same when it is loaded into an application that had other rules before. Without `seed=` its rules draw from the seed of the application.
+    
+-   The phases of the experiment come from `from=` and `until=` of its rules: they start when the scenario is loaded (a scenario of `camel.chaos.scenario` when the context has started), so a rule with `from=1m until=1m` runs during the second minute. There is no other timing syntax.
+    
+
+To start an application with a scenario:
+
+```bash
+camel run * --chaos=test/chaos/outage.chaos
+```
+
+`--chaos=<file>` adds camel-chaos as `--chaos` does, and sets `camel.chaos.scenario` to the file (it must end with `.chaos`; `--chaos Shop.java` still runs `Shop.java`). A plain `Main` sets `camel.chaos.scenario` itself. `camel run *` and `camel export` leave `.chaos` files out: they are not routes, and they do not go into an exported project.
+
+To load a scenario into an application that runs:
+
+```bash
+$ camel cmd chaos-load test/chaos/outage.chaos
+Loaded chaos scenario outage.chaos: 3 rules (the rules there were are removed, and the report starts again)
+  r4: fail every send to http:stock* with HTTP status 503, for 1 minute
+  r5: delay every send and poll of http:stock* by 2 seconds, starting after 1 minute, for 1 minute
+  r6: fail 1% of the sends and polls of http:stock*; expects at least 50 exchanges completed in route orders within 3 minutes
+```
+
+A scenario is an experiment of its own: loading one removes the rules there are and starts a new report (as `chaos-clear --reset` does), then adds the rules of the scenario, all of them or none. A line that is not valid is refused with its line number (`Chaos scenario outage.chaos, line 4: Invalid chaos rule […​]`), and then the rules there are stay. The ids of the rules go on from the last one (`r4` above, after three rules). In the report, each rule of a scenario says which one it came from (`(scenario outage.chaos)` in the text, `scenario` in the JSON).
+
+The chaos screen of the Camel TUI saves the rules there are as a scenario (key `s`), with the seed: rules tried by hand become a file of the project, to run again. On its Errors tab, `!` makes a rule of a real error, which fails the same way again (the same exception and message at the same step, or the same HTTP status at the same endpoint, ten times): fix the bug, then prove the fix against the same failure, and keep the rule in a scenario. And `t` on a rule asks its AI panel to make a test of it: a JUnit test with `ChaosAssertions` for a Maven project, or a scenario with an expectation and the `camel run --chaos=<file> --max-seconds=<seconds>` command, whose exit code is the verdict, for a folder that runs with `camel run`. The test has the seed, and the rule with `draw=<its id>`, so it fails the same messages as the rule did (see [Time and the seed](#_time_and_the_seed)).
 
 ## Rules
 
@@ -123,7 +347,11 @@ until:   a number of matches (until=100) or a time (until=2m), counted from the 
 time:    a number with a unit (ms, s, m, h, d), also combined as 1m30s; a number alone is milliseconds
 expect:  expect=<route id>:<count> (at least that many completed exchanges), or
          expect=<route id>:<kind><op><count> with kind completed | handled | failed | redeliveries
-         and op >= | <= | = (such as expect=orders:handled<=0); with an optional within=<time>
+         and op >= | <= | = (such as expect=orders:handled<=0), or a time
+         expect=<route id>:meanTime|maxTime<op><time> (such as expect=orders:meanTime<=2s), or the
+         messages lost between two routes expect=<route id>-><route id>:lost<op><count> (such as
+         expect=orders->shipping:lost<=0); with an optional within=<time>
+draw:    draw=<rule id> draws the random choices as the rule with that id did (draw=r2), see Time and the seed
 ```
 
 The patterns of the targets are matched as text, with **for any characters; they are not regular expressions. The match is case-sensitive and a** can stand anywhere in the pattern, unlike the patterns of `interceptSendToEndpoint`, which ignore case and can be regular expressions: a rule, also one from a tool, cannot make matching slow. An `endpoint=` pattern is matched against the endpoint URI, with or without its query parameters, and the `//` after the scheme does not count (`kafka:orders*` matches `kafka://orders?brokers=b1`). A `component=` pattern is matched against the scheme of the URI only, so a pattern with a `:` (`component=http:localhost`) is rejected, with the `endpoint=` pattern to use instead. Some components give their endpoints the URI of their address: `undertow:http://inventory/stock` has the endpoint URI `[http://inventory/stock](http://inventory/stock)`. When the scheme of the endpoint URI is not a name of the component in the context, chaos puts the default name of the component in front, and matches `undertow:http://inventory/stock` (with `component=undertow`, not `component=http`). A camel-netty-http endpoint has the endpoint URI `netty-http://http://inventory/stock`, and a camel-netty-http component added under another name is matched with `netty-http` in front too. A `route=` pattern is matched against the route id, and a `step=` pattern against the id of the step (`to1`, or the id set with `id("enrich")`).
@@ -246,7 +474,9 @@ In JSON each action counts in `fired.lifecycle`, and the rule has a `lifecycle` 
 
 -   `completed` and `failed`: the exchanges that went through the route, each counted once, with how the route was done with it the last time. An exchange counts in every route it goes through: a route called with `direct` counts it too, the copy of a wire tap or of a seda queue counts in the route that consumes it, and the copies of a split or multicast count in the routes they are sent to. An exchange that goes through a route more than once (a `direct` route called in a loop, or called again by a redelivery of the calling route) is still one exchange of that route: a failed pass and then a completed one count as one completed exchange. A message that fails and is read again by its consumer is another exchange: one failed and one completed exchange. An exchange marked rollback only counts as failed (kept by the consumer only for the JMS consumers below, with `markRollbackOnly`). The `entry` faults of a route are asked once per exchange too.
     
--   `failedKeptByConsumer`: the failed exchanges whose message the consumer of the route keeps and reads again: `file`, `ftp`, `sftp`, `ftps` without `moveFailed`; `jms`, `activemq`, `activemq6`, `amqp` with `transacted=true`, or with `acknowledgementModeName=CLIENT_ACKNOWLEDGE` (the endpoint option; the number set with `setAcknowledgementMode` in Java is not seen) and `asyncConsumer=false`; `kafka` with `breakOnFirstError=true`. The options are read through the configurer of the endpoint, so options set on the component count too. The component is known by the scheme of the endpoint URI.
+-   `failedKeptByConsumer`: the failed exchanges whose message the consumer of the route keeps and reads again: `file`, `ftp`, `sftp`, `ftps` without `moveFailed`; `jms`, `activemq`, `activemq6`, `amqp` with `transacted=true`, or with `acknowledgementModeName=CLIENT_ACKNOWLEDGE` (the endpoint option; the number set with `setAcknowledgementMode` in Java is not seen) and `asyncConsumer=false`; `kafka` with `breakOnFirstError=true`. The options are read through the configurer of the endpoint, so options set on the component count too. The component is known by the scheme of the endpoint URI. A stub that stands in for one of them keeps it by the options of its URI (see [With stubs](#_with_stubs)).
+    
+-   `stubbedConsumer`: the component the consumer of the route is a stub of (`camel run --stub`), such as `kafka`; left out when it is not a stub. A stub does not read a kept message again.
     
 -   `handled`: the completed exchanges after the error handler handled a failure (the dead letter channel, or `onException` with `handled(true)`). A failure handled in a route called with `direct` counts as handled in the calling routes too.
     
@@ -280,6 +510,40 @@ camel.chaos.rules = endpoint=kafka:orders* error rate=0.1 until=2m expect=orders
 The verdict is FAIL as soon as one message goes to the dead letter channel, with the reason (`route orders: 1 exchange handled by the error handler within 2m0s, at most 0 expected (rule r1)`), and PASS when the 2 minutes are up without one. `expect=orders:handled>=5` checks that 5 messages reach the dead letter channel, also when it is an endpoint that no route consumes, and `expect=orders:redeliveries⇐30` that redelivery does not retry too much. Only an unmet expectation of completed exchanges (at least or exactly) counts the missing exchanges as lost; the others give their reason only.
 
 In JSON an expectation has its `kind`, `op`, `count` and the `value` counted so far (and `completed`, the same value, for an expectation of completed exchanges).
+
+### Expectations on time and loss
+
+The delay faults slow a route down, and the question is whether the route stays fast enough: an expectation on time checks it. The question people ask about a lost message is often "did every order reach shipping", and an expectation on two routes checks that.
+
+ 
+| Expectation | Is met when |
+| --- | --- |
+| `orders:meanTime⇐2s` | The mean time of the exchanges in route `orders` is at most 2 s when the time is up. |
+| `orders:maxTime⇐5s` | No exchange of route `orders` took longer than 5 s. One that does makes it unmet at once. |
+| `orders→shipping:lost⇐0` (or `lost=0`) | Every message that completed in route `orders` also completed in route `shipping`: the count of `shipping` is at most 0 behind the count of `orders` when the time is up. |
+
+-   The time of an exchange in a route is measured by chaos, from when the exchange enters the route until the route is done with it the first time (whether it completed, was handled by the error handler or failed), including the redeliveries in between. It is read through `TimeSource`, so in a deterministic simulation test it is virtual time. A time is any time of the rules, such as `500ms`, `2s` or `1m30s`; the op is `⇐` or `>=` (a `meanTime>=1s` checks that a delay rule slows the route as it should).
+    
+-   A time of no exchange says nothing, so an expectation on time whose route did no exchange in the time is unmet.
+    
+-   A loss counts the exchanges completed in both routes from when the rule is added until the time is up, and the difference is the messages lost (never below 0, as the second route may also get messages from elsewhere). Messages still on their way when the time is up count as lost too: let `within=` run past the `until=` of the faults, so the last ones can arrive. The messages it counts as lost are added to the lost of the report. The op is `⇐` or `=`.
+    
+-   A failed exchange of the first route is not counted either: it did not complete, so the loss does not see it. An experiment with such failures in the route of its expectation is `INCONCLUSIVE`, not `PASS`.
+    
+-   An exchange of the first route that its error handler handled, such as an order the dead letter channel parked, is not counted in the first route: it is not meant to reach the second one, so it is not lost. In the second route a handled exchange counts as completed, as it arrived.
+    
+
+For example, a stock service that is slow for a minute, and the orders that must still ship, fast enough:
+
+```properties
+camel.chaos.rules = \
+  endpoint=http:stock* delay duration=1s..3s rate=0.3 until=1m expect=orders:meanTime<=2s within=2m;\
+  endpoint=seda:shipping drop rate=0.01 until=1m expect=orders->shipping:lost<=0 within=2m
+```
+
+An unmet one gives its reason in the report, such as `route orders: mean 2s340ms of 118 exchanges within 2m0s, at most 2s expected (rule r1)` or `routes orders→shipping: 1 lost (118 completed in orders, 117 in shipping) within 2m0s, at most 0 expected (rule r2): 1 lost`. In JSON these expectations have their `spec` as the rule writes it, the `count` and the `value` in milliseconds for a time, the `toRoute` of a loss, and the `samples` (the exchanges of the time, or the ones completed in the first route).
+
+The route statistics of Camel have no percentiles, so there is no `p99` yet.
 
 ### A rule in plain words
 
@@ -327,6 +591,27 @@ An exchange that a rule faulted (or that was sent to the route of a lifecycle ru
 
 In JSON a rule has `rate` (the one of the rule: 1 without `rate=`, the share of each period in a burst for `rate=burst:`) and `observedRate` (once it matched), `nextFireIn` (the matches until a `rate=every:N` rule fires again), `burstEndsIn` or `nextBurstIn` (milliseconds, for an active `rate=burst:` rule), `startsIn` (milliseconds, for a rule that waits for its start), `lastFiredAgo` (milliseconds), `faultsLastMinute`, `faultsPerSecond` (60 counts, from the oldest second to the current one, when it fired in the last minute) and `effect` (`faulted`, `completed`, `recovered`, `handled`, `failed` and `inFlight`, once it faulted an exchange); a lifecycle rule has no rate. The report has `recentFaults`, each with `timestamp`, `ago`, `rule`, `version`, `fault` (such as `error status 503` or `delay 2s`), `hook` (none for a lifecycle rule), `route`, `endpoint` or `step`, and `exchangeId` (none at a poll). `ChaosManager.reset()` (`chaos-clear --reset`) clears the recent faults too.
 
+## Chaos in a pipeline
+
+A run with chaos ends with the verdict of the report as its exit code, so a scenario can gate a build:
+
+```bash
+camel run * --chaos=test/chaos/outage.chaos --max-seconds=240 --chaos-report=target/chaos-report.json
+```
+
+-   The verdict FAIL ends the run with exit code 1, and the reasons are printed (an unmet expectation, messages lost at the dead letter channel). A run that failed for another reason keeps its own exit code.
+    
+-   PASS ends with exit code 0, and a line that says how many expectations were met.
+    
+-   Without an expectation there is no verdict: chaos makes exchanges fail on purpose, so failed exchanges say nothing on their own. The run ends with exit code 0, and a line says that there is no verdict. A scenario for a pipeline needs at least one rule with `expect=`.
+    
+-   An expectation must be decided before the run ends: the run must last longer than its `within`. One that is still pending when the application stops is cancelled, and then there is no verdict either (a line says so). In the example the expectation is decided after 3 minutes, and the run stops after 4.
+    
+-   `--chaos-report=<file>` writes the report as JSON when the run ends (`camel.chaos.reportFile`), for the pipeline to keep or read; without it the CLI reads the report from a temporary file. The report is written also when no rule was added.
+    
+
+This is for runs in the foreground, with the default runtime or `--runtime=main`; a run in the background has no exit code to give.
+
 ## Time and the seed
 
 The `delay` fault (and an `error` with `after=`) waits through `TimeSource` of camel-util, and the start and the end of a rule, its bursts, the time of an expectation and the times of a lifecycle rule are read through it too; the action and the comeback of a lifecycle rule are tasks of a scheduled executor of the `ExecutorServiceManager`. So in a deterministic simulation test (`camel-test-dst`) they run in virtual time: a 10 minute stall takes milliseconds, and with `camel.chaos.seed` set to the seed of the run, the same seed gives the same report again, times included. Chaos does not depend on `camel-test-dst`.
@@ -334,6 +619,49 @@ The `delay` fault (and an `error` with `after=`) waits through `TimeSource` of c
 `ChaosLifecycleDstTest` in the tests of camel-chaos is such a test, and an example to copy: a route consumes a queue (a fake with a scheduled poll consumer) and calls a downstream system asynchronously (`DstCamel.asyncStep`, as a world needs for a route that is suspended or stopped while an exchange is in a downstream call). A `stall` or `lifecycle` rule, added while an exchange is in flight, takes the route down for up to 10 minutes while a `step=` rule fails the downstream call at a rate, and the test checks from the report that no message is lost (an expectation), that the redeliveries add up to the step faults, and that the route was down for exactly the duration.
 
 The seed fixes the sequence of random draws of each rule (`rate=<probability>`, the delays of a range such as `duration=100ms..2s`, the random header values), not which exchange gets which draw: with several threads (concurrent consumers, parallel processing) the threads decide that, so two runs with the same seed can give different reports. With one thread and the same exchanges in the same order, the same seed gives the same faults.
+
+Each rule draws by a key, with the seed: its id when it is added (`r2`), and its place in a scenario (the second rule draws as `r2`) or in `camel.chaos.rules`. So a rule added while the application runs, written alone in a scenario or a test, draws other choices there (it is the first rule, `r1`). `draw=<id>` names the key: `route=shipping error rate=0.2 draw=r2` with the same seed fails the same messages as rule `r2` did. The test that the Camel TUI makes of a rule (key `t`) writes it.
+
+## Chaos in a test
+
+A finding of a chaos session becomes a regression test: the same rules, the same seed, and assertions on the report. `ChaosAssertions` throws an `AssertionError` with the report when it fails, so it works with any test framework. Add `camel-chaos` as a test dependency, and switch chaos on in the test with `camel.chaos.enabled=true`:
+
+```java
+class OrdersChaosTest extends CamelTestSupport {
+
+    @Override
+    public void configureContext(CamelContextConfiguration config) {
+        super.configureContext(config);
+        Properties props = new Properties();
+        props.put("camel.chaos.enabled", "true");
+        props.put("camel.chaos.seed", "42");
+        // every second call to the stock service fails: the redelivery must recover it, and every order ships
+        props.put("camel.chaos.rules", "step=callStock error rate=every:2 expect=ship:4 within=10s");
+        config.withUseOverridePropertiesWithPropertiesComponent(props);
+    }
+
+    @Test
+    void theOrdersShipWhenTheStockServiceFails() {
+        for (int i = 0; i < 4; i++) {
+            template.sendBody("direct:orders", "order " + i);
+        }
+        ChaosAssertions.assertFired(context, "r1", 2);
+        ChaosAssertions.assertExpectationMet(context, "r1", Duration.ofSeconds(10));
+        ChaosAssertions.assertVerdict(context, ChaosReport.PASS, Duration.ofSeconds(10));
+    }
+}
+```
+
+-   `assertVerdict(context, verdict, timeout)` waits until the report is final (no expectation pending), and checks the verdict; `assertVerdict(context, verdict)` checks it now, and fails when the report is not final yet.
+    
+-   `assertExpectationMet(context, ruleId, timeout)` waits until the expectation of a rule is decided. An expectation of at least so many exchanges is decided as soon as they completed; one of at most so many (`expect=orders:handled⇐0`) only when its `within` time is up, so keep that time short in a test.
+    
+-   `assertFired(context, ruleId, atLeast)` checks that a rule fired at least so many faults: a rule that fires 0 times is often a typo in its target.
+    
+-   `awaitFinalReport(context, timeout)` returns the final report, for other checks (`getLost()`, `toJson()`).
+    
+
+The rules can also come from a scenario (`camel.chaos.scenario=classpath:chaos/outage.chaos`), or be added in the test with `ChaosManager.get(context).addRule(…​)`. With `camel-test-main-junit6`, set the same properties in the test configuration. In a deterministic simulation test (see [Time and the seed](#_time_and_the_seed)), the times of the rules run in virtual time, and the report is read with `ChaosManager.report()` when the simulation is done.
 
 ## The model of the rules
 

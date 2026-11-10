@@ -631,7 +631,7 @@ from("file://inbox")
 
 The exchange name, `dummy`, is just a placeholder. It must be provided as part of the RabbitMQ endpoint URL, but it will be ignored in this example.
 
-In the `computeDestination` bean, specify the real destination by setting the `CamelRabbitmqExchangeOverrideName` header as follows:
+In the `computeDestination` bean, specify the real destination by setting the `CamelSpringRabbitmqExchangeOverrideName` header as follows:
 
 _Java-only: Java handler method_
 

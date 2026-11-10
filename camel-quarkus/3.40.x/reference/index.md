@@ -17,10 +17,10 @@ since | Native
 since | Support  
 level | Description |
 | --- | --- | --- | --- | --- | --- |
-| [A2A](extensions/a2a.md) | camel-quarkus-a2a | 3.38.0 | 3.38.0 | Preview | A2A endpoint for agent-to-agent communication. |
+| [A2A](extensions/a2a.md) | camel-quarkus-a2a | 3.38.0 | 3.38.0 | Stable | A2A endpoint for agent-to-agent communication. |
 | [ActiveMQ](extensions/activemq.md) | camel-quarkus-activemq | 1.0.0 | 1.0.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 5.x. This component extends the Camel JMS component. |
 | [ActiveMQ 6.x](extensions/activemq6.md) | camel-quarkus-activemq6 | 3.30.0 | 3.30.0 | Stable | Send messages to (or consume from) Apache ActiveMQ 6.x. This component extends the Camel JMS component. |
-| [AI Tool](extensions/ai-tool.md) | camel-quarkus-ai-tool | 3.39.0 | 3.39.0 | Preview | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
+| [AI Tool](extensions/ai-tool.md) | camel-quarkus-ai-tool | 3.39.0 | 3.39.0 | Stable | Framework-agnostic consumer endpoint that registers a Camel route as an LLM tool in the shared AiToolRegistry. |
 | [AMQP](extensions/amqp.md) | camel-quarkus-amqp | 1.0.0 | 1.0.0 | Stable | Messaging with AMQP protocol using Apache Qpid Client. |
 | [ArangoDb](extensions/arangodb.md) | camel-quarkus-arangodb | 1.1.0 | 1.1.0 | Stable | Perform operations on ArangoDb when used as a Document Database, or as a Graph Database |
 | [AS2](extensions/as2.md) | camel-quarkus-as2 | 1.0.0 | 1.0.0 | Stable | Transfer data securely and reliably using the AS2 protocol (RFC4130). |
@@ -223,7 +223,7 @@ level | Description |
 | [Management](extensions/management.md) | camel-quarkus-management | 1.1.0 | 3.2.0 | Stable | Camel Management |
 | [MapStruct](extensions/mapstruct.md) | camel-quarkus-mapstruct | 3.2.0 | 3.2.0 | Stable | Type Conversion using MapStruct |
 | [Master](extensions/master.md) | camel-quarkus-master | 1.0.0 | 1.0.0 | Stable | Have only a single consumer in a cluster consuming from a given endpoint; with automatic failover if the JVM dies. |
-| [MCP Server](extensions/mcp-server.md) | camel-quarkus-mcp-server | 3.39.0 | 3.39.0 | Preview | Expose ai-tool routes as MCP tools over streamable HTTP |
+| [MCP Server](extensions/mcp-server.md) | camel-quarkus-mcp-server | 3.39.0 | 3.39.0 | Stable | Expose ai-tool routes as MCP tools over streamable HTTP |
 | [Mdc](extensions/mdc.md) | camel-quarkus-mdc | 3.29.0 | 3.29.0 | Stable | Logging MDC (Mapped Diagnostic Context) Service |
 | [Micrometer](extensions/micrometer.md) | camel-quarkus-micrometer | 1.5.0 | 1.5.0 | Stable | Collect various metrics directly from Camel routes using the Micrometer library. |
 | [Micrometer Observability 2](extensions/micrometer-observability.md) | camel-quarkus-micrometer-observability | 3.39.0 | 3.39.0 | Preview | Micrometer Observability implementation of Camel Telemetry |

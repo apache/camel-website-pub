@@ -17,7 +17,13 @@ camel cmd [options]
 | [chaos-add](camel-jbang-cmd-chaos-add.md) | Add chaos rules to a running integration (camel-chaos, for development only) |
 | [chaos-change](camel-jbang-cmd-chaos-change.md) | Change a chaos rule of a running integration (camel-chaos, for development only) |
 | [chaos-clear](camel-jbang-cmd-chaos-clear.md) | Remove all chaos rules of running integrations (camel-chaos, for development only) |
+| [chaos-experiment](camel-jbang-cmd-chaos-experiment.md) | Run one chaos experiment in the exploration of a running integration: add its rules, send its traffic, wait for the verdict, and end it |
+| [chaos-explore](camel-jbang-cmd-chaos-explore.md) | Let there be chaos: an AI explores by itself how a running integration copes with faults, for a time budget, and reports what held and what broke |
+| [chaos-explore-finish](camel-jbang-cmd-chaos-explore-finish.md) | Finish the chaos exploration of a running integration before its deadline |
+| [chaos-explore-start](camel-jbang-cmd-chaos-explore-start.md) | Start a chaos exploration in a running integration: a time to try chaos rules in, that camel-chaos enforces |
+| [chaos-load](camel-jbang-cmd-chaos-load.md) | Load a chaos scenario into a running integration (camel-chaos, for development only) |
 | [chaos-remove](camel-jbang-cmd-chaos-remove.md) | Remove a chaos rule of a running integration (camel-chaos, for development only) |
+| [chaos-suggest](camel-jbang-cmd-chaos-suggest.md) | Suggest chaos rules to try in a running integration, per route (camel-chaos, for development only) |
 | [disable-processor](camel-jbang-cmd-disable-processor.md) | Disable Camel processor |
 | [enable-processor](camel-jbang-cmd-enable-processor.md) | Enable Camel processor |
 | [gc](camel-jbang-cmd-gc.md) | Trigger Java Memory Garbage Collector |

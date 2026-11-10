@@ -458,5 +458,5 @@ _Java-only: ProducerTemplate with create mode header_
 
 ```java
 Object testPayload = ...
-template.sendBodyAndHeader("direct:create-and-write-to-persistent-znode", testPayload, "CamelZooKeeperCreateMode", "PERSISTENT");
+template.sendBodyAndHeader("direct:create-and-write-to-persistent-znode", testPayload, "CamelZookeeperCreateMode", "PERSISTENT");
 ```

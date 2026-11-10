@@ -178,7 +178,7 @@ When the timer is fired, it adds the following information as properties to the 
   
 | Name | Type | Description |
 | --- | --- | --- |
-| `Exchange.TIMER_NAME` | `String` | The value of the `name` option. |
+| `Exchange.TIMER_NAME` | `String` | The value of the `timerName` option. |
 | `Exchange.TIMER_TIME` | `Date` | The value of the `time` option. |
 | `Exchange.TIMER_PERIOD` | `long` | The value of the `period` option. |
 | `Exchange.TIMER_FIRED_TIME` | `Date` | The time when the consumer fired. |
