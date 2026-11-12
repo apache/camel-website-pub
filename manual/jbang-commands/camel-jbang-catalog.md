@@ -26,4 +26,4 @@ camel catalog [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

@@ -251,7 +251,7 @@ byte[] payload = "message".getBytes();
 producerTemplate.sendBody("paho-mqtt5:topic", payload);
 ```
 
-Of course, Camel build-in [type conversion API](../../manual/type-converter.md) can perform the automatic data type transformations for you. In the example below Camel automatically converts binary payload into `String` (and conversely):
+Of course, Camel built-in [type conversion API](../../manual/type-converter.md) can perform the automatic data type transformations for you. In the example below Camel automatically converts binary payload into `String` (and conversely):
 
 _Java-only: automatic type conversion of payloads_
 

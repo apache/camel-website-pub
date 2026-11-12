@@ -105,7 +105,7 @@ Enum values:
 | **configuration** (common) | Set the configuration. |  | KnativeConfiguration |
 | **consumerFactory** (common) | The protocol consumer factory. |  | KnativeConsumerFactory |
 | **environment** (common) | The environment. |  | KnativeEnvironment |
-| **environmentPath** (common) | The path ot the environment definition. |  | String |
+| **environmentPath** (common) | The path of the environment definition. |  | String |
 | **filters** (common) | Set the filters. |  | Map |
 | **producerFactory** (common) | The protocol producer factory. |  | KnativeProducerFactory |
 | **sinkBinding** (common) | The SinkBinding configuration. |  | KnativeSinkBinding |

@@ -2,7 +2,7 @@
 
 **Since Camel 2.0**
 
-The GZip Deflater Data Format is a message compression and decompression format. It uses the same deflating algorithm used in the Zip data format, although some additional headers are provided. This format is produced by popular `gzip`/`gunzip` tool. Messages marshalled using GZip compression can be unmarshalled using GZip decompression just prior to being consumed at the endpoint. The compression capability is quite useful when you deal with large XML and text-based payloads or when you read messages previously comressed using `gzip` tool.
+The GZip Deflater Data Format is a message compression and decompression format. It uses the same deflating algorithm used in the Zip data format, although some additional headers are provided. This format is produced by popular `gzip`/`gunzip` tool. Messages marshalled using GZip compression can be unmarshalled using GZip decompression just prior to being consumed at the endpoint. The compression capability is quite useful when you deal with large XML and text-based payloads or when you read messages previously compressed using `gzip` tool.
 
 > **Note**
 > Marshal writes the gzip format of a `.gz` file, and unmarshal reads it, so this data format builds and uncompresses gzip files. A `.tar.gz` file is a tar archive in gzip: unmarshal it with gzipDeflater, then with the [tarFile](tarFile-dataformat.md) data format. For zip files, use the [zipFile](zipFile-dataformat.md) data format.

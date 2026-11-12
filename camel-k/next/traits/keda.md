@@ -37,6 +37,8 @@ Automatic discovery currently supports the following Camel components:
 
 -   `kafka`: creates an Apache Kafka trigger from the topic, broker, and consumer-group values in the endpoint URI. See the [KEDA Apache Kafka scaler](https://keda.sh/docs/latest/scalers/apache-kafka/) documentation for the available trigger metadata.
     
+-   `aws2-sqs`: creates an AWS SQS Queue trigger. `queueURL` comes from the `queueUrl` endpoint parameter, or is built from a queue ARN, or from the queue name with the `region` and `queueOwnerAWSAccountId` parameters. Otherwise the plain queue name is used, which KEDA accepts when it is unambiguous. `awsRegion` comes from `region` or the ARN, and `awsEndpoint` from `uriEndpointOverride` when `overrideEndpoint=true`. Set other metadata, such as `queueLength`, with `keda.autoMetadata`, and credentials with a KEDA `TriggerAuthentication`. See the [KEDA AWS SQS Queue scaler](https://keda.sh/docs/latest/scalers/aws-sqs/) documentation for the available trigger metadata.
+    
 -   `pulsar`: creates an Apache Pulsar trigger from the topic in the endpoint URI and the `subscriptionName` option (Camel’s default `subs` when it is not set). When the service URL (`serviceUrl` option or `camel.component.pulsar.service-url` property) uses the `pulsar://` scheme, `adminURL` is set to `[http://<host>:8080](http://\<host\>:8080)`; for TLS or a custom admin port, set it with `keda.autoMetadata`. See the [KEDA Apache Pulsar scaler](https://keda.sh/docs/latest/scalers/pulsar/) documentation for the available trigger metadata.
     
 

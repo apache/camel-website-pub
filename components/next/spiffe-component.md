@@ -278,6 +278,8 @@ Peer authentication must be constrained explicitly: set `acceptedSpiffeIds` to a
 
 Because it extends `SSLContextParameters`, the inherited configuration is still honoured: set `serverParameters.clientAuthentication` (for a server that must require client certificates), `cipherSuites` and `secureSocketProtocols` as usual, and the base handshake protocol comes from `secureSocketProtocol` (default `TLSv1.3`). The underlying `X509Source` is created lazily (bounded by `initTimeout`, default 30s), closed on `CamelContext` shutdown, and the cached context is invalidated at the same time so a restarted context rebuilds a fresh source.
 
+`SpiffeSSLContextParameters` also implements `AutoCloseable` for standalone use. When neither the `createSSLContext` argument nor the parameters instance supplies a `CamelContext`, use try-with-resources or call `close()` explicitly to release the Workload API watcher. Closing invalidates the cached context and is idempotent; a subsequent `createSSLContext` call creates a new source. Stop using existing SSL contexts and TLS connections before closing their parameters.
+
 -   Java
     
 -   YAML

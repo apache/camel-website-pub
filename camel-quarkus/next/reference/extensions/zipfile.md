@@ -25,3 +25,16 @@ Or add the coordinates to your existing project:
 ```
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
+
+## Usage
+
+### Reading ZSTD compressed ZIP entries
+
+Reading ZIP entries compressed with the ZSTD method requires the optional `com.github.luben:zstd-jni` library. It is not added to the classpath by this extension, so you must add it to your application yourself.
+
+```xml
+<dependency>
+    <groupId>com.github.luben</groupId>
+    <artifactId>zstd-jni</artifactId>
+</dependency>
+```

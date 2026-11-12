@@ -35,6 +35,8 @@ This is the list of the groups we are using (please, notice that they can slight
     
 -   knative (`make test-knative`)
     
+-   camelmonitor (`make test-camel-monitor`)
+    
 -   native (`make test-quarkus-native`)
     
 -   telemetry (`make test-telemetry`)

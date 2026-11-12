@@ -107,7 +107,7 @@ The REST OpenApi component supports the following options which are listed below
 | **clientRequestValidation** (consumer) | Whether to enable validation of the client request to check if the incoming request is valid according to the OpenAPI specification. | false | boolean |
 | **clientResponseValidation** (consumer) | Whether to enable validation of the client request to check if the outgoing response from Camel is valid according to the OpenAPI specification. | false | boolean |
 | **missingOperation** (consumer) | 
-Whether the consumer should fail,ignore or return a mock response for OpenAPI operations that are not mapped to a corresponding route.
+Whether the consumer should fail, ignore or return a mock response for OpenAPI operations that are not mapped to a corresponding route.
 
 Enum values:
 
@@ -198,7 +198,7 @@ With the following _path_ and _query_ parameters:
 | **clientResponseValidation** (consumer) | Whether to enable validation of the client request to check if the outgoing response from Camel is valid according to the OpenAPI specification. | false | boolean |
 | **consumes** (consumer) | What payload type this component capable of consuming. Could be one type, like application/json or multiple types as application/json, application/xml; q=0.5 according to the RFC7231. This equates or multiple types as application/json, application/xml; q=0.5 according to the RFC7231. This equates to the value of Accept HTTP header. If set overrides any value found in the OpenApi specification and. in the component configuration. |  | String |
 | **missingOperation** (consumer) | 
-Whether the consumer should fail,ignore or return a mock response for OpenAPI operations that are not mapped to a corresponding route.
+Whether the consumer should fail, ignore or return a mock response for OpenAPI operations that are not mapped to a corresponding route.
 
 Enum values:
 

@@ -25,7 +25,7 @@ camel explain [options]
 | `--timeout` | Timeout in seconds for LLM response | 120 | int |
 | `--url` | LLM API endpoint URL. Auto-detected from 'camel infra' for Ollama if not specified. Also reads AZURE\_OPENAI\_ENDPOINT or WATSONX\_URL env vars |  | String |
 | `--verbose,-v` | Include detailed technical information |  | boolean |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |
 
 ## Examples
 

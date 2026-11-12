@@ -196,6 +196,7 @@ Enum values:
  | read\_uncommitted | String |
 | **kafkaManualCommitFactory** (consumer (advanced)) | **Autowired** Factory to use for creating KafkaManualCommit instances. This allows to plugin a custom factory to create custom KafkaManualCommit instances in case special logic is needed when doing manual commits that deviates from the default implementation that comes out of the box. |  | KafkaManualCommitFactory |
 | **pollExceptionStrategy** (consumer (advanced)) | **Autowired** To use a custom strategy with the consumer to control how to handle exceptions thrown from the Kafka broker while polling messages. |  | PollExceptionStrategy |
+| **pollExceptionStrategyFactory** (consumer (advanced)) | **Autowired** Factory to create a PollExceptionStrategy per Kafka consumer fetch thread. Unlike the pollExceptionStrategy option, which shares a single strategy across all consumer threads, the factory is invoked each time a fetch thread creates its Kafka consumer (on start and on every reconnect), so each thread gets its own strategy bound to its current consumer. This is required by strategies that drive the consumer (such as the built-in reconnect, stop, and bridge strategies), and it also works correctly when an endpoint uses multiple consumer threads. The factory may be called concurrently and must be thread-safe. |  | PollExceptionStrategyFactory |
 | **subscribeConsumerBackoffInterval** (consumer (advanced)) | **Deprecated** The delay in millis seconds to wait before trying again to subscribe to the kafka broker. | 5000 | long |
 | **subscribeConsumerBackoffMaxAttempts** (consumer (advanced)) | **Deprecated** Maximum number the kafka consumer will attempt to subscribe to the kafka broker, before eventually giving up and failing. Error during subscribing the consumer to the kafka topic could be temporary errors due to network issues, and could potentially be recoverable. Camel will by default retry forever, and therefore never give up. If you want to give up after many attempts, then set this option and Camel will then when giving up terminate the consumer. You can manually restart the consumer by stopping and starting the route, to try again. |  | int |
 | **subscribeConsumerTopicMustExists** (consumer (advanced)) | Whether when a Camel Kafka consumer is subscribing to a Kafka broker then check whether a topic already exist on the broker, and fail if it does not. Otherwise, the Camel Kafka consumer will keep attempt to consume from the topic, until it’s created on the Kafka broker; and until then the Camel Kafka consumer will fail and log a WARN about UNKNOWN\_TOPIC\_OR\_PARTITION. The option createConsumerBackoffMaxAttempts can be configured to give up trying to subscribe after a given number of attempts. | false | boolean |
@@ -705,6 +706,8 @@ The consumer may throw exception when invoking the Kafka `poll` API. For example
 The default is **ERROR\_HANDLER**, which will let Camel’s error handler (if any configured) process the caused exception. Afterwards continue to poll the next message. This behavior is similar to the _bridgeErrorHandler_ option that Camel components have.
 
 For advanced control a custom implementation of `org.apache.camel.component.kafka.PollExceptionStrategy` can be configured on the component level, which allows controlling which of the strategies to use for each exception.
+
+A single `PollExceptionStrategy` is shared by all consumer threads of an endpoint. If the strategy must be bound to its consumer thread, for example to drive a reconnect or to wrap one of the built-in strategies, configure a `org.apache.camel.component.kafka.PollExceptionStrategyFactory` with the `pollExceptionStrategyFactory` option instead. The factory is invoked each time a consumer thread creates its Kafka consumer, so each thread gets its own strategy. Use it when the endpoint runs more than one consumer thread (`consumersCount` > 1), or to decorate a built-in strategy by extending `org.apache.camel.component.kafka.consumer.errorhandler.DefaultPollExceptionStrategyFactory`.
 
 ### Consumer error handling (advanced)
 
@@ -1879,7 +1882,7 @@ from("direct:start")
 
 The reason for this is related to how the producer handles the two different cases:
 
--   with the `aggregrate` it should process the messages in a "batch-sized chunk" semi-asynchronously (that is, send all messages in the batch and then wait for their acknowledgements)
+-   with the `aggregate` it should process the messages in a "batch-sized chunk" semi-asynchronously (that is, send all messages in the batch and then wait for their acknowledgements)
     
 -   without that, it sends synchronously, eventually blocking on the record metadata fetch per exchange.
     

@@ -158,7 +158,6 @@ from("file:///data/documents?include=.*\\.pdf")
         "doclingServeUrl=http://localhost:5001&" +
         "authenticationScheme=API_KEY&" +
         "authenticationToken=your-api-key-here&" +
-        "apiKeyHeader=X-API-Key&" +
         "contentInBody=true")
     .to("file:///data/output");
 ```
@@ -177,52 +176,12 @@ from("file:///data/documents?include=.*\\.pdf")
               doclingServeUrl: "http://localhost:5001"
               authenticationScheme: "API_KEY"
               authenticationToken: "your-api-key-here"
-              apiKeyHeader: "X-API-Key"
               contentInBody: true
         - to:
             uri: file:///data/output
 ```
 
-### Using Custom API Key Header
-
-If your docling-serve instance uses a custom header name for API keys:
-
--   Java
-    
--   YAML
-    
-
-```java
-from("file:///data/documents?include=.*\\.pdf")
-    .to("docling:CONVERT_TO_MARKDOWN?" +
-        "useDoclingServe=true&" +
-        "doclingServeUrl=http://localhost:5001&" +
-        "authenticationScheme=API_KEY&" +
-        "authenticationToken=your-api-key-here&" +
-        "apiKeyHeader=X-Custom-API-Key&" +
-        "contentInBody=true")
-    .to("file:///data/output");
-```
-
-```yaml
-- route:
-    from:
-      uri: file:///data/documents
-      parameters:
-        include: ".*\\.pdf"
-      steps:
-        - to:
-            uri: docling:CONVERT_TO_MARKDOWN
-            parameters:
-              useDoclingServe: true
-              doclingServeUrl: "http://localhost:5001"
-              authenticationScheme: "API_KEY"
-              authenticationToken: "your-api-key-here"
-              apiKeyHeader: "X-Custom-API-Key"
-              contentInBody: true
-        - to:
-            uri: file:///data/output
-```
+The API key is always sent in the `X-Api-Key` header, which is the header the docling-serve client uses. The `apiKeyHeader` option therefore has no effect and is deprecated.
 
 ### Using Authentication Token from Properties
 

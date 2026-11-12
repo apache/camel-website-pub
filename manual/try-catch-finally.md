@@ -18,6 +18,8 @@ In Camel, we prefix the keywords with `do` to avoid having same keyword as Java.
 >
 > The reason is that `doTry …​ doCatch …​ doFinally` is in fact its own error handler and mimics how try/catch/finally works in Java.
 
+A route called from the `doTry` block, such as with `direct`, still uses its own error handler. The `doCatch` catches the exception that the called route fails with, once that error handler is done with it (for example, after its redeliveries). This is one way for a calling route to deal with the failure of a called route; see [Error handling across routes](error-handler.html#_error_handling_across_routes).
+
 ## Using doTry …​ doCatch …​ doFinally
 
 In the route below we have all of them in action:

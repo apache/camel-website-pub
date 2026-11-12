@@ -13,4 +13,5 @@ camel plugin delete [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `--plugin-config` | Path to a custom plugin configuration file or directory. Only applies to the plugin subcommands; for plugin commands themselves (e.g. 'camel kubernetes'), set CAMEL\_CLI\_PLUGIN\_CONFIG instead. |  | String |
+| `-h,--help` | Display this help and exit |  | boolean |

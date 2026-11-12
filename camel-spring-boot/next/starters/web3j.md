@@ -50,7 +50,7 @@ The starter supports 39 options, which are listed below.
 | camel.component.web3j.mix-digest | The mix digest (256 bits) used for submitting a proof-of-work solution. |  | String |
 | camel.component.web3j.nonce | The nonce found (64 bits) used for submitting a proof-of-work solution. |  | String |
 | camel.component.web3j.operation | Operation to use. The producer needs an operation, set with this option or the CamelWeb3jOperation header. The consumer needs one of the observable operations: ETH\_LOG\_OBSERVABLE, ETH\_BLOCK\_HASH\_OBSERVABLE, ETH\_PENDING\_TRANSACTION\_HASH\_OBSERVABLE, TRANSACTION\_OBSERVABLE, PENDING\_TRANSACTION\_OBSERVABLE, BLOCK\_OBSERVABLE, REPLAY\_BLOCKS\_OBSERVABLE or REPLAY\_TRANSACTIONS\_OBSERVABLE. | transaction | String |
-| camel.component.web3j.position | The transaction index position withing a block. The option is a java.math.BigInteger type. |  | BigInteger |
+| camel.component.web3j.position | The transaction index position within a block. The option is a java.math.BigInteger type. |  | BigInteger |
 | camel.component.web3j.priority | The priority of a whisper message. The option is a java.math.BigInteger type. |  | BigInteger |
 | camel.component.web3j.private-for | A comma separated transaction privateFor nodes with public keys in a Quorum network |  | String |
 | camel.component.web3j.quorum-a-p-i | If true, this will support Quorum API. | false | Boolean |

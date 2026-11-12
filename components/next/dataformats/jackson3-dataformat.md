@@ -63,7 +63,7 @@ The JSON Jackson 3 dataformat supports the following options which are listed be
 | **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
 | **schemaResolver** (advanced) |  | `Object` | Optional schema resolver used to lookup schemas for the data in transit. |
 | **autoDiscoverSchemaResolver** (advanced) | `true` | `Boolean` | When not disabled, the SchemaResolver will be looked up into the registry. |
-| **namingStrategy** (common) |  | `String` | If set then Jackson will use the the defined Property Naming Strategy.Possible values are: LOWER\_CAMEL\_CASE, LOWER\_DOT\_CASE, LOWER\_CASE, KEBAB\_CASE, SNAKE\_CASE and UPPER\_CAMEL\_CASE. |
+| **namingStrategy** (common) |  | `String` | If set then Jackson will use the defined Property Naming Strategy. Possible values are: LOWER\_CAMEL\_CASE, LOWER\_DOT\_CASE, LOWER\_CASE, KEBAB\_CASE, SNAKE\_CASE and UPPER\_CAMEL\_CASE. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **maxStringLength** (advanced) |  | `Integer` | Sets the maximum string length (in chars or bytes, depending on input context). The default is 20,000,000. |
 

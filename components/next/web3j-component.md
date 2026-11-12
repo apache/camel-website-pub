@@ -111,7 +111,7 @@ The Web3j Ethereum Blockchain component supports the following options which are
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **mixDigest** (producer) | The mix digest (256 bits) used for submitting a proof-of-work solution. |  | String |
 | **nonce** (producer) | The nonce found (64 bits) used for submitting a proof-of-work solution. |  | String |
-| **position** (producer) | The transaction index position withing a block. |  | BigInteger |
+| **position** (producer) | The transaction index position within a block. |  | BigInteger |
 | **priority** (producer) | The priority of a whisper message. |  | BigInteger |
 | **sha3HashOfDataToSign** (producer) | Message to sign by calculating an Ethereum specific signature. |  | String |
 | **signedTransactionData** (producer) | The signed transaction data for a new message call transaction or a contract creation for signed transactions. |  | String |
@@ -184,7 +184,7 @@ Enum values:
 | **keyName** (producer) | The key name in the database. |  | String |
 | **mixDigest** (producer) | The mix digest (256 bits) used for submitting a proof-of-work solution. |  | String |
 | **nonce** (producer) | The nonce found (64 bits) used for submitting a proof-of-work solution. |  | String |
-| **position** (producer) | The transaction index position withing a block. |  | BigInteger |
+| **position** (producer) | The transaction index position within a block. |  | BigInteger |
 | **priority** (producer) | The priority of a whisper message. |  | BigInteger |
 | **sha3HashOfDataToSign** (producer) | Message to sign by calculating an Ethereum specific signature. |  | String |
 | **signedTransactionData** (producer) | The signed transaction data for a new message call transaction or a contract creation for signed transactions. |  | String |
@@ -209,7 +209,7 @@ The Web3j Ethereum Blockchain component supports the following message header(s)
 | **CamelWeb3jAddresses** (producer) Constant: [`ADDRESSES`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#ADDRESSES) | Contract address or a list of addresses. |  | List |
 | **CamelWeb3jFromAddress** (producer) Constant: [`FROM_ADDRESS`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#FROM_ADDRESS) | The address the transaction is send from. |  | String |
 | **CamelWeb3jToAddress** (producer) Constant: [`TO_ADDRESS`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#TO_ADDRESS) | The address the transaction is directed to. |  | String |
-| **CamelWeb3jPosition** (producer) Constant: [`POSITION`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#POSITION) | The transaction index position withing a block. |  | String |
+| **CamelWeb3jPosition** (producer) Constant: [`POSITION`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#POSITION) | The transaction index position within a block. |  | String |
 | **CamelWeb3jBlockHash** (producer) Constant: [`BLOCK_HASH`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#BLOCK_HASH) | Hash of the block where this transaction was in. |  | String |
 | **CamelWeb3jTransactionHash** (producer) Constant: [`TRANSACTION_HASH`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#TRANSACTION_HASH) | The information about a transaction requested by transaction hash. |  | String |
 | **CamelWeb3jSha3HashOfDataToSign** (producer) Constant: [`SHA3_HASH_OF_DATA_TO_SIGN`](https://javadoc.io/doc/org.apache.camel/camel-web3j/latest/org/apache/camel/component/web3j/Web3jConstants.html#SHA3_HASH_OF_DATA_TO_SIGN) | Message to sign by calculating an Ethereum specific signature. |  | String |

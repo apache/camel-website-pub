@@ -21,7 +21,7 @@ The camel.main supports 132 options, which are listed below.
 | `camel.main.allowUseOriginalMessage` | Sets whether to allow access to the original message from Camel’s error handler, or from org.apache.camel.spi.UnitOfWork.getOriginalInMessage(). Turning this off can optimize performance, as defensive copy of the original message is not needed. Default is false. | false | boolean |
 | `camel.main.autoConfigurationEnabled` | Whether auto configuration of components, dataformats, languages is enabled or not. When enabled the configuration parameters are loaded from the properties component. You can prefix the parameters in the properties file with: - camel.component.name.option1=value1 - camel.component.name.option2=value2 - camel.dataformat.name.option1=value1 - camel.dataformat.name.option2=value2 - camel.language.name.option1=value1 - camel.language.name.option2=value2 Where name is the name of the component, dataformat or language such as seda,direct,jaxb. The auto configuration also works for any options on components that is a complex type (not standard Java type) and there has been an explicit single bean instance registered to the Camel registry via the org.apache.camel.spi.Registry#bind(String,Object) method or by using the org.apache.camel.BindToRegistry annotation style. This option is default enabled. | true | boolean |
 | `camel.main.autoConfigurationEnvironmentVariablesEnabled` | Whether auto configuration should include OS environment variables as well. When enabled this allows to overrule any configuration using an OS environment variable. For example to set a shutdown timeout of 5 seconds: CAMEL\_MAIN\_SHUTDOWNTIMEOUT=5. This option is default enabled. | true | boolean |
-| `camel.main.autoConfigurationFailFast` | Whether auto configuration should fail fast when configuring one ore more properties fails for whatever reason such as a invalid property name, etc. This option is default enabled. | true | boolean |
+| `camel.main.autoConfigurationFailFast` | Whether auto configuration should fail fast when configuring one or more properties fails for whatever reason such as a invalid property name, etc. This option is default enabled. | true | boolean |
 | `camel.main.autoConfigurationLogSummary` | Whether auto configuration should log a summary with the configured properties. This option is default enabled. | true | boolean |
 | `camel.main.autoConfigurationSystemPropertiesEnabled` | Whether auto configuration should include JVM system properties as well. When enabled this allows to overrule any configuration using a JVM system property. For example to set a shutdown timeout of 5 seconds: -D camel.main.shutdown-timeout=5. Note that JVM system properties take precedence over OS environment variables. This option is default enabled. | true | boolean |
 | `camel.main.autoStartup` | Sets whether the object should automatically start when Camel starts. Important: Currently only routes can be disabled, as CamelContext’s are always started. Note: When setting auto startup false on CamelContext then that takes precedence and no routes are started. You would need to start CamelContext explicit using the org.apache.camel.CamelContext.start() method, to start the context, and then you would need to start the routes manually using CamelContext.getRouteController().startRoute(String). Default is true to always start up. | true | boolean |
@@ -144,7 +144,7 @@ The camel.main supports 132 options, which are listed below.
 | `camel.main.tracingTemplates` | Whether tracing should trace inner details from route templates (or kamelets). Turning this on increases the verbosity of tracing by including events from internal routes in the templates or kamelets. Default is false. | false | boolean |
 | `camel.main.typeConverterStatisticsEnabled` | Sets whether type converter statistics is enabled. By default the type converter utilization statistics is disabled. Notice: If enabled then there is a slight performance impact under very heavy load. | false | boolean |
 | `camel.main.useBreadcrumb` | Set whether breadcrumb is enabled. The default value is false. | false | boolean |
-| `camel.main.useDataType` | Whether to enable using data type on Camel messages. Data type are automatic turned on if one ore more routes has been explicit configured with input and output types. Otherwise data type is default off. | false | boolean |
+| `camel.main.useDataType` | Whether to enable using data type on Camel messages. Data type are automatic turned on if one or more routes has been explicit configured with input and output types. Otherwise data type is default off. | false | boolean |
 | `camel.main.useMdcLogging` | To turn on MDC logging (deprecated, use camel-mdc component instead) | false | boolean |
 | `camel.main.uuidGenerator` | UUID generator to use. default (32 bytes), short (16 bytes), classic (32 bytes or longer), simple (long incrementing counter), off (turned off for exchanges - only intended for performance profiling) | default | String |
 | `camel.main.virtualThreadsEnabled` | Whether to enable virtual threads when creating thread pools. When enabled, Camel will use virtual threads instead of platform threads for its thread pools. This can also be enabled via the JVM system property camel.threads.virtual.enabled=true . This option must be read early during bootstrap, so it is set as a system property before thread pools are created. | false | boolean |
@@ -187,7 +187,7 @@ The camel.routecontroller supports 12 options, which are listed below.
 
 ### Camel Embedded HTTP Server (only for standalone; not Spring Boot or Quarkus) configurations
 
-The camel.server supports 37 options, which are listed below.
+The camel.server supports 40 options, which are listed below.
 
    
 | Name | Description | Default | Type |
@@ -210,9 +210,12 @@ The camel.server supports 37 options, which are listed below.
 | `camel.server.mcpAllowedOrigins` | Comma-separated list of origins allowed to call the MCP endpoint on the Vert.x streamable transport. Each entry is an exact origin (scheme, host and port), or ends with a colon and an asterisk to match any port. Scheme and host are compared ignoring case, and a default port (80 for http, 443 for https) may be left out. A wildcard for all origins is not supported: an entry that is not of the form scheme://host or scheme://host:port fails the startup. A request without an Origin header is always served; a request with an Origin header that is not allowed is rejected with HTTP 403. When not set, only loopback origins are allowed (localhost, 127.0.0.1 and ::1 on any port). |  | String |
 | `camel.server.mcpEnabled` | Whether to expose ai-tool routes as MCP tools, ai-resource routes as MCP resources and ai-prompt routes as MCP prompts. Requires camel-mcp-server on the classpath. Use setMcpTransport(String) to choose streamable HTTP (default) or stdio for IDE subprocess integration. By default, the MCP server is not enabled. | false | boolean |
 | `camel.server.mcpInstructions` | Top-level MCP instructions returned to clients on initialize. |  | String |
+| `camel.server.mcpOauthProfile` | Name of the camel-oauth profile used to authenticate OAuth bearer tokens on the MCP HTTP endpoint. |  | String |
 | `camel.server.mcpPath` | HTTP path where the MCP endpoint is served. | /mcp | String |
 | `camel.server.mcpPromptTimeout` | Per-request MCP prompt execution timeout in milliseconds. A request exceeding the timeout returns an error to the MCP client; the underlying route may continue running until it completes. | 20000 | long |
+| `camel.server.mcpRequiredScopes` | Comma-separated OAuth scopes required to access the MCP HTTP endpoint. Requires camel.server.mcp-oauth-profile to be configured. |  | String |
 | `camel.server.mcpResourceTimeout` | Per-read MCP resource execution timeout in milliseconds. A read exceeding the timeout returns an error to the MCP client; the underlying route keeps running until it completes on its own. | 20000 | long |
+| `camel.server.mcpResourceUri` | Canonical public HTTPS resource identifier for the MCP endpoint, used by RFC 9728 metadata. Requires camel.server.mcp-oauth-profile to be configured. It is never inferred from HTTP request headers. |  | String |
 | `camel.server.mcpServerDescription` | MCP server description advertised to clients in serverInfo.description . |  | String |
 | `camel.server.mcpServerIcons` | JSON array of MCP server icons advertised to clients in serverInfo.icons . Each entry must include a src URL and may include mimeType , sizes and theme . |  | String |
 | `camel.server.mcpServerName` | MCP server name advertised to clients. Defaults to the CamelContext name. |  | String |
@@ -515,17 +518,19 @@ The camel.vault.kubernetescm supports 2 options, which are listed below.
 
 ### Camel Hashicorp Vault configurations
 
-The camel.vault.hashicorp supports 16 options, which are listed below.
+The camel.vault.hashicorp supports 20 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| `camel.vault.hashicorp.authentication` | How to log in to hashicorp vault: token (a fixed token), approle (a role ID and a secret ID), kubernetes (the service account token of the pod) or jwt (a JWT, such as a workload identity token). Camel renews the token before it expires, and logs in again when the token can no longer be renewed. | token | String |
+| `camel.vault.hashicorp.authentication` | How to log in to hashicorp vault: token (a fixed token), approle (a role ID and a secret ID), kubernetes (the service account token of the pod), jwt (a JWT, such as a workload identity token) or cert (the TLS client certificate of the keyStore). Camel renews the token before it expires, and logs in again when the token can no longer be renewed. | token | String |
 | `camel.vault.hashicorp.authMountPath` | The path the login method is mounted at in hashicorp vault (without auth/), when it is not the default path of the login method: approle, kubernetes or jwt |  | String |
 | `camel.vault.hashicorp.cloud` | Determine if the Hashicorp Vault is deployed on Hashicorp Cloud or not | false | boolean |
 | `camel.vault.hashicorp.host` | Host to access hashicorp vault |  | String |
 | `camel.vault.hashicorp.jwt` | The JWT to log in with, for the jwt and kubernetes logins. For a JWT that is replaced over time, such as a projected service account token, use jwtFile instead. |  | String |
 | `camel.vault.hashicorp.jwtFile` | The file to read the JWT from at every login, for the jwt and kubernetes logins. The kubernetes login reads /var/run/secrets/kubernetes.io/serviceaccount/token when neither jwt nor jwtFile is set. |  | String |
+| `camel.vault.hashicorp.keyStore` | The file with the TLS client certificate and its private key, which Camel presents to hashicorp vault: for the cert login, or for a Vault that requires client certificates. A PKCS12 or JKS key store, or PEM with the certificate and the PKCS#8 private key. |  | String |
+| `camel.vault.hashicorp.keyStorePassword` | The password of the key store and of its private key, when it is a PKCS12 or JKS key store |  | String |
 | `camel.vault.hashicorp.namespace` | If the Hashicorp Vault instance is deployed on Hashicorp Cloud, this field will determine the namespace |  | String |
 | `camel.vault.hashicorp.port` | Port to access hashicorp vault |  | String |
 | `camel.vault.hashicorp.refreshEnabled` | Whether to automatically reload Camel upon secrets being updated in Hashicorp Vault. | false | boolean |
@@ -536,6 +541,8 @@ The camel.vault.hashicorp supports 16 options, which are listed below.
 | `camel.vault.hashicorp.secretId` | The secret ID of the AppRole, for the approle login |  | String |
 | `camel.vault.hashicorp.secrets` | Specify the secret names (or pattern) to check for updates. Multiple secrets can be separated by comma. |  | String |
 | `camel.vault.hashicorp.token` | Token to access hashicorp vault, for the token login |  | String |
+| `camel.vault.hashicorp.trustStore` | The file with the certificates to trust for the TLS connection to hashicorp vault, such as the CA certificate of a private CA: a PKCS12 or JKS trust store, or PEM certificates. When not set, the JVM trusts the certificate as for any other TLS connection. |  | String |
+| `camel.vault.hashicorp.trustStorePassword` | The password of the trust store, when it is a PKCS12 or JKS trust store |  | String |
 
 ### Camel IBM Secrets Manager Vault configurations
 
@@ -766,14 +773,15 @@ The camel.chaos supports 7 options, which are listed below.
 
 ### Camel Sanitizer configurations
 
-The camel.sanitizer supports 4 options, which are listed below.
+The camel.sanitizer supports 5 options, which are listed below.
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | `camel.sanitizer.checks` | The checks to run, separated by commas: callback (rule R1, the callback of each call of the processor of a step is called exactly once, and process does not throw). | callback | String |
 | `camel.sanitizer.enabled` | Whether to install the exchange sanitizer. The default is false, and true with profile dev or in a test with the CamelSanitizer annotation. With profile prod the sanitizer stays off, also when this is true. | false | Boolean |
-| `camel.sanitizer.reportOnShutdown` | Whether to log the report of the sanitizer when the CamelContext stops, if it reported a violation. | true | boolean |
+| `camel.sanitizer.pendingTimeout` | How long an exchange waits, with nothing happening in it, before the call of a step whose callback has not come is reported as still pending (a warning of rule R1, which never fails a test), such as 60s or 500 (milliseconds). Only the innermost pending call of an exchange is reported. 0 turns the warning off. The parts of a split, multicast or recipient list with parallel processing share one lock of the table of pending calls, which orders their threads: use 0 when hunting races between such parts. | 60s | String |
+| `camel.sanitizer.reportOnShutdown` | Whether to log the report of the sanitizer when the CamelContext stops, if it reported a violation or a still pending warning, and the calls of steps still pending then. | true | boolean |
 | `camel.sanitizer.stackDepth` | How many frames of each stack a report keeps; 0 keeps only the name of the thread, which costs least. | 32 | int |
 
 ### Camel File Cluster Service configurations

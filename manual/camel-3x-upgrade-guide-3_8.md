@@ -37,7 +37,7 @@ The `onCompletion` EIP has been fixed. It could trigger multiple completions for
 
 ### Transactions and Multicast, Splitter, or Recipient List EIPs
 
-When using `transacted` in Camel routes with Multicast, Splitter, or Recipient List EIPs, the exection strackframe could grown deep and this could cause a stack overflow exception. This has been fixed by refactoring the EIP into a special transacted mode and the existing reactive mode.
+When using `transacted` in Camel routes with Multicast, Splitter, or Recipient List EIPs, the execution stackframe could grown deep and this could cause a stack overflow exception. This has been fixed by refactoring the EIP into a special transacted mode and the existing reactive mode.
 
 We do not anticipate any issues but if you are using transactions and these EIPs then we would like to have feedback if you encounter any problems with upgrading.
 
@@ -118,7 +118,7 @@ There are now two components for Infinispan:
 
 As consequence of the refactor:
 
-The remote and embedded endpoints provide support the same capabilities, as example queries were only possible on a remote cache and now they are supported on both remote and local/embedded caches. The configuration options for the endpoint are now specific to the context which remove the possibility to mix unrelated properties. Some classes have been relocated (such as indempotent and aggregation repositories) have been moved from `org.apache.camel.component.infinispan.processor.*` to `org.apache.camel.component.infinispan.embedded` or `org.apache.camel.component.infinispan.remote`: - `org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedAggregationRepository` - `org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedIdempotentRepository` - `org.apache.camel.component.infinispan.remote.InfinispanRemoteAggregationRepository` - `org.apache.camel.component.infinispan.remote.InfinispanRemoteIdempotentRepository`
+The remote and embedded endpoints provide support the same capabilities, as example queries were only possible on a remote cache and now they are supported on both remote and local/embedded caches. The configuration options for the endpoint are now specific to the context which remove the possibility to mix unrelated properties. Some classes have been relocated (such as idempotent and aggregation repositories) have been moved from `org.apache.camel.component.infinispan.processor.*` to `org.apache.camel.component.infinispan.embedded` or `org.apache.camel.component.infinispan.remote`: - `org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedAggregationRepository` - `org.apache.camel.component.infinispan.embedded.InfinispanEmbeddedIdempotentRepository` - `org.apache.camel.component.infinispan.remote.InfinispanRemoteAggregationRepository` - `org.apache.camel.component.infinispan.remote.InfinispanRemoteIdempotentRepository`
 
 ### camel-aws
 

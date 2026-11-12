@@ -37,6 +37,8 @@ The topology shows all routes as boxes, connected by arrows:
     
 -   **Downstream routes** appear below, connected by directed arrows
     
+-   The head of an arrow says whether the route waits for the answer of the route it sends to: `⇅` it does (a call to a `direct` route, or a request-reply over a broker such as `exchangePattern=InOut` on a JMS queue), `▼` it hands the message off (a queue, a topic, a `wireTap`). An integration before Camel 4.24 does not say it, and all its arrows end in `▼`
+    
 -   Route boxes show the route ID, the `from` endpoint, and metrics when enabled
     
 

@@ -2,7 +2,7 @@
 
 This guide covers how to create and announce a Camel release. Instructions on updating the website to include the new documentation version are [here](release-guide-website.md).
 
-## Prequisites
+## Prerequisites
 
 To prepare or perform a release, you **must be** at least an Apache Camel committer.
 
@@ -52,7 +52,7 @@ Check that all the keys are listed. Just check that the latest entry you’ve ad
 
 ### Sync GPG keys
 
-Everytime there is a change in the source GPG keys on the main project you need to synchronize with the dist Camel project, in order to correctly provide the KEYS file to the expected location. You need to use `svn` tool and authenticate with your Apache credentials. Once it’s done you can proceed like the following:
+Every time there is a change in the source GPG keys on the main project you need to synchronize with the dist Camel project, in order to correctly provide the KEYS file to the expected location. You need to use `svn` tool and authenticate with your Apache credentials. Once it’s done you can proceed like the following:
 
 ```bash
 svn checkout https://dist.apache.org/repos/dist/release/camel camel-dist

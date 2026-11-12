@@ -284,7 +284,7 @@ There are 17 API names as listed in the table below:
 
  |
 | [**report**](#_api_report) | Producer | Provides methods to interact with reports |
-| [**settlementBatchSummary**](#_api_settlementBatchSummary) | Producer | Provides methods to interact wit settlement summaries |
+| [**settlementBatchSummary**](#_api_settlementBatchSummary) | Producer | Provides methods to interact with settlement summaries |
 | [**subscription**](#_api_subscription) | Producer | Provides methods to interact with Subscriptions |
 | [**transaction**](#_api_transaction) | Producer | Provides methods to interact with Transactions |
 | [**usBankAccount**](#_api_usBankAccount) | Producer | 

@@ -158,6 +158,8 @@ When a route is specified as `<transacted/>`, then under the hood Camel looks up
 
 The convention over configuration applies only when you have a single Spring/JTA transaction manager configured. In more complex scenarios, where you either use multiple transaction managers or transaction propagation policies, you have to do additional configuration.
 
+When there is no transaction manager at all, as with Camel Main and the Camel CLI (`camel run`), and the application has exactly one `DataSource`, Camel creates a local `JdbcTransactionManager` for that `DataSource` and binds it as `transactionManager`. This needs `camel-spring` and `spring-jdbc` on the classpath. The [SQL](../sql-component.md) and [Spring JDBC](../spring-jdbc-component.md) components take part in the transaction, as they get their connections through Spring. The [JDBC](../jdbc-component.md) component takes its connections from the `DataSource` directly, so it does not.
+
 ### Using different transaction propagations
 
 In some rare situations, you may need to use multiple transactions with the same exchange.

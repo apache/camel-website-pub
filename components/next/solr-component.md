@@ -113,7 +113,7 @@ With the following _path_ and _query_ parameters:
 | **autoCommit** (producer) | If true, each producer insert/delete operation will be automatically performing a commit. | false | boolean |
 | **collection** (producer) | The name of the collection to act against. |  | String |
 | **connectionTimeout** (producer) | The time in ms to wait before connection will time out. |  | Long |
-| **deleteByQuery** (producer) | For the delete instruction, interprete body as query/queries instead of id/ids. | false | boolean |
+| **deleteByQuery** (producer) | For the delete instruction, interpret body as query/queries instead of id/ids. | false | boolean |
 | **from** (producer) | Starting index of the response. |  | Integer |
 | **operation** (producer) | 
 What operation to perform.

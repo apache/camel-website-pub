@@ -24,4 +24,4 @@ camel overview [options]
 | `--temperature` | Temperature for response generation (0.0-2.0) | 0.3 | double |
 | `--timeout` | Timeout in seconds for LLM response | 300 | int |
 | `--url` | LLM API endpoint URL. Auto-detected from 'camel infra' for Ollama if not specified. Also reads AZURE\_OPENAI\_ENDPOINT or WATSONX\_URL env vars |  | String |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

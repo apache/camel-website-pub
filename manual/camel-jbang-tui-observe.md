@@ -29,7 +29,7 @@ The Overview tab (key **1**) has two views, switched with **v**: **About** an in
 
 -   The header has the Camel version, runtime, files, routes and uptime, and the purpose: the comment at the top of a route file (a YAML `#` comment, a Javadoc or `//` comment in Java, an XML comment), else the first paragraph of the README, else the descriptions of the routes, else the overview an AI wrote in `camel-summary.md`. **r** opens the README, and **s** the summary of the project.
     
--   **In**, **Routes** and **Out** say what starts it (a timer or a cron with the period or schedule of its properties, its profile applied), its routes (a route called with `direct` sits under its caller with `↳`, one handed off with `seda` or a `wireTap` with `⇢`) and what it talks to, with the exchanges since it started and a sparkline of the last 5 minutes. **Up** and **Down** select a line, and **Enter** opens a route drilled down on the Diagram, or an endpoint with its details on the Endpoint tab.
+-   **In**, **Routes** and **Out** say what starts it (a timer or a cron with the period or schedule of its properties, its profile applied; the operations of an OpenAPI contract the REST DSL serves, from the contract), its routes (a route called with `direct` sits under its caller with `↳`, one handed off with `seda` or a `wireTap` with `⇢`; for a running integration as its route topology has it, so a queue or topic of a broker between its own routes is `↳` for a request-reply, `⇢` for a hand-off and `on failure` for a dead letter queue, and no In or Out unless messages came from outside too) and what it talks to, with the exchanges since it started and a sparkline of the last 5 minutes. **Up** and **Down** select a line, and **Enter** opens a route drilled down on the Diagram, or an endpoint with its details on the Endpoint tab.
     
 -   **Last 5m** has the exchanges and how they ended, with the cause that happened most, and **What happened** a strip per route over the last 5 minutes, coloured as on the Timeline, with when the worst happened. The strips are as wide as the screen allows, and on a tall screen up to two rows high, with room around the panels. **+** and **\-** zoom between 5, 2 and 1 minutes (zooming in centres on the last trouble, so you see what the other routes did then), and **Left** and **Right** move a zoomed window. **4** opens the Timeline for each second.
     
@@ -44,7 +44,7 @@ The Timeline tab (key **4**) shows the last minute of the selected integration o
 
 ![The Timeline tab in an outage of the supplier: the errors per second on top](_images/jbang/camel-tui-timeline.png)
 
--   **Errors/s** stacks the errors per second by the kind of exception, with the HTTP status when there is one. With camel-chaos, the faults of each chaos rule are a layer of their own, marked 🎲, so an injected fault and a real one stay apart. When no exchange failed, the WARN and ERROR lines of the log are the cause instead (`log ERROR`, `log WARN`), read from the log file of the integration: something that went wrong outside an exchange, such as a consumer that cannot connect. When nothing went wrong the band is one line.
+-   **Errors/s** stacks the errors per second by the kind of exception, with the HTTP status when there is one. With camel-chaos, the faults of each chaos rule are a layer of their own, marked 🎲, so an injected fault and a real one stay apart. When no exchange failed, the WARN and ERROR lines of the log are the cause instead (`log ERROR`, `log WARN`), read from the log file of the integration: something that went wrong outside an exchange, such as a consumer that cannot connect. The WARN camel-chaos logs when it is switched on is not counted. When nothing went wrong the band is one line.
     
 -   **Routes** has a line per route (on a tall screen two rows high, with room around the panels and taller charts). The height is the exchanges done that second, and the colour the worst that happened to them: completed, recovered by redelivery, handled by the error handler (such as the dead letter channel), or failed. A second a chaos rule had the route down is shaded, and a mark says what happened to the route then: `▶` started, `■` stopped, `↻` reloaded, `✕` removed. A `▒` is a second a circuit breaker of the route was open (the Circuit Breaker EIP with camel-resilience4j or camel-microprofile-fault-tolerance, or the throttling exception route policy), and the route says `⚡ open 10s`: why it went quiet, or ran its fallback, without failing.
     
@@ -141,7 +141,7 @@ Use **s** to cycle sort order (time, route, elapsed, exchange) and **S** to reve
 
 ## Troubleshooting Errors
 
-The Errors tab collects failures with full stack traces and exchange context. When errors occur, a red badge appears on the tab with the number of errors that happened. The tab keeps only the newest few of each kind of error (the same route, step and exception), and its **COUNT** column says how many times that kind happened.
+The Errors tab collects failures with full stack traces and exchange context. When errors occur, a red badge appears on the tab with the number of errors that happened. The tab has a row per kind of error (the same route, step and exception), and its **COUNT** column says how many times that kind happened. Camel keeps the newest few exchanges of each kind: the detail shows the newest, and **\[** and **\]** step to the older ones, to compare their bodies and headers.
 
 For deeper troubleshooting, press **d** on an error to see its Diagram view: the path the failed exchange took through the routes, replayed from its message history (the same replay as in the Inspect tab):
 
@@ -265,7 +265,7 @@ Beyond the core tabs described above, the TUI includes several specialized scree
 
 ### Chaos
 
-With [camel-chaos](../components/next/others/chaos.md) (`camel run --chaos`), the Chaos tab (under More > Observability) shows the faults that the chaos rules inject into the running integration, and what they do:
+With [camel-chaos](../components/next/others/chaos.md) (`camel run --chaos`, or **Chaos testing** in the run options form of the TUI), the Chaos tab (under More > Observability) shows the faults that the chaos rules inject into the running integration, and what they do:
 
 -   The verdict of the report (PASS or FAIL with the reason), the messages lost, the expectations (met, unmet, pending) and the faults of all rules in the last minute.
     
@@ -312,6 +312,12 @@ Each asks to confirm with **y**, with the rule shown. A rule that is not valid c
 ![Adding a chaos rule on the Chaos tab: the rule is shown before it is added](_images/jbang/camel-tui-chaos-add.png)
 
 Let there be chaos: an AI can try faults on the integration by itself, for a budget of time, one experiment at a time, with `camel cmd chaos-explore` or an agent with the Camel MCP tools (see [Chaos explorations](camel-jbang-managing.html#_chaos_explorations)). Press **l** on the Chaos tab to watch it: the budget as a strip of time with the experiments on it in the colour of their verdict, the experiments with their hypothesis and the evidence in a few words, and the selected one in detail: its rules, its expectations, what the routes did, the messages lost at a dead letter channel, and why it could not decide when it could not (such as faults that never fired, or a route that had no messages). **l** or Esc shows the rules again.
+
+Press **L** to start an exploration by hand, on the integration you look at: pick the rules to try from what the integration suggests, the most worth trying first, each with what should hold despite its faults, and a budget of 2 to 30 minutes. Picked are a few faults not tried yet, each kind once before it is tried again in another route, and then two faults at once, such as an outage while the dead letter channel fails; only of the routes that get messages by themselves (a timer, or a route they are called from), or that take files and took some already: while the rule runs, the files the route moved to `.camel` are put back into its folder as it takes them, the same files each time (a route with `noop=true` never takes a file of the same name again, so it is not one of them). A route whose messages come from outside is marked, as its rule says nothing without messages. **Space** picks a rule, **Left** and **Right** change the budget, and **Enter** starts. The picked rules are tried one at a time, each for its share of the budget, and each ends with PASS, FAIL or INCONCLUSIVE, while the line above the experiments says which rule is tried. **x** stops it, which removes the rules at once. Every rule is removed when the budget ends, also when the TUI is closed. For a longer exploration, where an AI picks what to try next, use `camel cmd chaos-explore`.
+
+![Let there be chaos: the rules to pick](_images/jbang/camel-tui-chaos-let-there-be.png)
+
+![A rule tried for two minutes: the same three files taken again and again](_images/jbang/camel-tui-chaos-let-there-be-done.png)
 
 ![The exploration of the chaos example on the Chaos tab: six experiments in five minutes on a strip of time](_images/jbang/camel-tui-chaos-explore.png)
 

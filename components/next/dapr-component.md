@@ -471,7 +471,7 @@ Enum values:
 | **CamelDaprTraceState** (consumer) Constant: [`TRACE_STATE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#TRACE_STATE) | Gets additional vendor-specific trace context. |  | String |
 | **CamelDaprBindingName** (producer) Constant: [`BINDING_NAME`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#BINDING_NAME) | The name of the Dapr binding to invoke. |  | String |
 | **CamelDaprBindingOperation** (producer) Constant: [`BINDING_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#BINDING_OPERATION) | The operation to perform on the binding. |  | String |
-| **CamelDaprConfigKeys** (producer) Constant: [`CONFIG_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#CONFIG_KEYS) | List of keys for configuration operation. |  | String |
+| **CamelDaprConfigKeys** (producer) Constant: [`CONFIG_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#CONFIG_KEYS) | Keys for configuration operation, as a comma-separated String or a Collection of keys. |  | String |
 | **CamelDaprSubscriptionId** (consumer) Constant: [`SUBSCRIPTION_ID`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#SUBSCRIPTION_ID) | The id for configuration change subscription. |  | String |
 | **CamelDaprRawConfigResponse** (common) Constant: [`RAW_CONFIG_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#RAW_CONFIG_RESPONSE) | The raw configuration update response. |  | ConfigurationItem |
 | **CamelDaprLockOperation** (producer) Constant: [`LOCK_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#LOCK_OPERATION) | The lock operation to perform on the store. Required for DaprOperation.lock operation. | tryLock | LockOperation |
@@ -1035,16 +1035,50 @@ from("direct:start")
 -   `configuration` -
     
 
-_Java-only: uses `List.of()` to set configuration key list_
+The `CamelDaprConfigKeys` header takes the place of the `configKeys` option. It is a comma-separated String or a `Collection` of keys.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 from("direct:start")
-    .process(exchange -> {
-        exchange.getIn().setHeader("CamelDaprConfigKeys", List.of("k1", "k2"));
-    })
-    .to("dapr:configuration?configStore=myStore")
-    .log("Received config updates from Dapr: ${body}")
-    .to("mock:result");
+  .setHeader("CamelDaprConfigKeys", constant("k1,k2"))
+  .to("dapr:configuration?configStore=myStore")
+  .log("Received config updates from Dapr: ${body}")
+  .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <setHeader name="CamelDaprConfigKeys">
+    <constant>k1,k2</constant>
+  </setHeader>
+  <to uri="dapr:configuration?configStore=myStore"/>
+  <log message="Received config updates from Dapr: ${body}"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - setHeader:
+            name: CamelDaprConfigKeys
+            constant: "k1,k2"
+        - to:
+            uri: dapr:configuration
+            parameters:
+              configStore: myStore
+        - log: "Received config updates from Dapr: ${body}"
+        - to:
+            uri: mock:result
 ```
 
 -   `lock: tryLock` -

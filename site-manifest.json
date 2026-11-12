@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1794308801676,
+  "generated": 1794467713597,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -36991,54 +36991,6 @@
               "path": "jbang-commands/camel-jbang-stop.adoc",
               "url": "/manual/jbang-commands/camel-jbang-stop.html",
               "title": "camel stop"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-test-agent-run.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-test-agent-run.html",
-              "title": "camel test agent run"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-test-agent-start.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-test-agent-start.html",
-              "title": "camel test agent start"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-test-agent-stop.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-test-agent-stop.html",
-              "title": "camel test agent stop"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-test-agent.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-test-agent.html",
-              "title": "camel test agent"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-test-init.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-test-init.html",
-              "title": "camel test init"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-test-inspect.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-test-inspect.html",
-              "title": "camel test inspect"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-test-ps.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-test-ps.html",
-              "title": "camel test ps"
-            },
-            {
-              "module": "ROOT",
-              "path": "jbang-commands/camel-jbang-test-run.adoc",
-              "url": "/manual/jbang-commands/camel-jbang-test-run.html",
-              "title": "camel test run"
             },
             {
               "module": "ROOT",

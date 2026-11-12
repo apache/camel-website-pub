@@ -90,7 +90,7 @@ The Robot Framework component supports the following options which are listed be
 | **log** (common) | Sets the path to the generated log String. |  | String |
 | **logLevel** (common) | Sets the threshold level for logging. |  | String |
 | **logTitle** (common) | Sets a title for the generated tests log. |  | String |
-| **metadata** (common) | Sets free metadata for the top level tests suites. comma seperated list of string resulting as List. |  | String |
+| **metadata** (common) | Sets free metadata for the top level tests suites. comma separated list of string resulting as List. |  | String |
 | **monitorColors** (common) | Using ANSI colors in console. Normally colors work in unixes but not in Windows. Default is 'on'. 'on' - use colors in unixes but not in Windows 'off' - never use colors 'force' - always use colors (also in Windows). |  | String |
 | **monitorWidth** (common) | Width of the monitor output. Default is 78. | 78 | String |
 | **name** (common) | Sets the name of the top-level tests suites. |  | String |
@@ -162,7 +162,7 @@ With the following _path_ and _query_ parameters:
 | **log** (common) | Sets the path to the generated log String. |  | String |
 | **logLevel** (common) | Sets the threshold level for logging. |  | String |
 | **logTitle** (common) | Sets a title for the generated tests log. |  | String |
-| **metadata** (common) | Sets free metadata for the top level tests suites. comma seperated list of string resulting as List. |  | String |
+| **metadata** (common) | Sets free metadata for the top level tests suites. comma separated list of string resulting as List. |  | String |
 | **monitorColors** (common) | Using ANSI colors in console. Normally colors work in unixes but not in Windows. Default is 'on'. 'on' - use colors in unixes but not in Windows 'off' - never use colors 'force' - always use colors (also in Windows). |  | String |
 | **monitorWidth** (common) | Width of the monitor output. Default is 78. | 78 | String |
 | **name** (common) | Sets the name of the top-level tests suites. |  | String |

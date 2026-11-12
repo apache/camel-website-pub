@@ -385,7 +385,7 @@ The olingo4/read API method has the parameters listed in the table below:
   
 | Parameter | Description | Type |
 | --- | --- | --- |
-| **edm** | Service Edm, read from calling read(null, $metdata, null, responseHandler) | Edm |
+| **edm** | Service Edm, read from calling read(null, $metadata, null, responseHandler) | Edm |
 | **endpointHttpHeaders** | HTTP Headers to add/override the component versions | Map |
 | **queryParams** | OData query params [http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#\_Toc453752288](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc453752288) | Map |
 | **resourcePath** | OData Resource path | String |
@@ -421,7 +421,7 @@ The olingo4/uread API method has the parameters listed in the table below:
   
 | Parameter | Description | Type |
 | --- | --- | --- |
-| **edm** | Service Edm, read from calling read(null, $metdata, null, responseHandler) | Edm |
+| **edm** | Service Edm, read from calling read(null, $metadata, null, responseHandler) | Edm |
 | **endpointHttpHeaders** | HTTP Headers to add/override the component versions | Map |
 | **queryParams** | OData query params [http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#\_Toc453752288](http://docs.oasis-open.org/odata/odata/v4.0/odata-v4.0-part1-protocol.html#_Toc453752288) | Map |
 | **resourcePath** | OData Resource path | String |

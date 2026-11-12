@@ -105,7 +105,7 @@ With the following _path_ and _query_ parameters:
 | **autoCreateOrg** (producer) | Define if we want to auto create the organization if it’s not present. | true | boolean |
 | **bucket** (producer) | **Required** The name of the bucket where the time series will be stored. |  | String |
 | **operation** (producer) | 
-Define if this operation is an insert of ping.
+Define if this operation is an insert or a ping.
 
 Enum values:
 

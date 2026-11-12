@@ -204,7 +204,7 @@ These API access keys need to be guarded tightly, especially so when they also a
 Your API access keys can be stored in an exchange specific properties file in your SSH directory. For Binance, for example, this would be: `~/.ssh/binance-secret.keys`
 
 ##
-# This file MUST NEVER be commited to source control.
+# This file MUST NEVER be committed to source control.
 # It is therefore added to .gitignore.
 #
 apiKey = GuRW0\*\*\*\*\*\*\*\*\*

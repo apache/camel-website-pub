@@ -22,7 +22,7 @@ The `bean(class)` EIP will now lookup in the registry first whether there is a s
 
 Load-balancing policy has changed. There are no existing load balancing policies (see [upgrade guide](https://docs.datastax.com/en/developer/java-driver/4.3/upgrade_guide/#load-balancing-policy)). To customize load balancing policy, please use the parameter `loadBalancingPolicyClass` and provide own implementation of load balancing policy.
 
-Session impelentation class has changed from `com.datastax.driver.core.Session` to `com.datastax.oss.driver.api.core.CqlSession` (see [upgrade guide](https://docs.datastax.com/en/developer/java-driver/4.3/upgrade_guide/#session)). This could have direct impact on the type of parameter `beanRef` if you are using `Provided Session reference`.
+Session implementation class has changed from `com.datastax.driver.core.Session` to `com.datastax.oss.driver.api.core.CqlSession` (see [upgrade guide](https://docs.datastax.com/en/developer/java-driver/4.3/upgrade_guide/#session)). This could have direct impact on the type of parameter `beanRef` if you are using `Provided Session reference`.
 
 There is a new parameter `datacenter` (with default value `datacenter1`). Data center has to be defined for the proper behavior of the default load balancing policy.
 

@@ -12,7 +12,7 @@
 </dependency>
 ```
 
-The module does not need `camel-jbang-core` or picocli.
+The module does not need `camel-jbang-core` or aesh, the command line parser of the Camel CLI.
 
 > **Note**
 > The API is a preview in Camel 4.24, and may still change in the next releases.

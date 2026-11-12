@@ -142,6 +142,8 @@ Where the **global** are the simplest and most easy to understand. In the advanc
 
 Global scope for Java DSL is per **`RouteBuilder`** instance, so if you want to share among multiple **`RouteBuilder`** classes, then create a base abstract **`RouteBuilder`** class and put the error handling logic in its **`configure`** method. And then extend this class, and make sure to class **`super.configure()`**. We are just using the Java inheritance technique.
 
+When a route calls another route, such as with `direct`, a failure in the called route is dealt with by the error handler of the called route, also when it is the default error handler, and the exception clauses of the calling route do not run for it. See [Error handling across routes](error-handler.html#_error_handling_across_routes) for what the calling route sees, and how to deal with the failure there instead.
+
 ## How Does Camel Select Which Clause Should Handle a Given Thrown Exception?
 
 Camel uses **`DefaultExceptionPolicyStrategy`** to determine a strategy how an exception being thrown should be handled by which **`onException`** clause. The strategy is:

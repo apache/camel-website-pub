@@ -193,7 +193,7 @@ See [Updating the website after a release](release-guide-website.md).
 For a general explanation of Antora xref syntax see [the Antora documentation](https://docs.antora.org/antora/3.0/page/xref/). Due to the logical structure of the Camel documentation, xrefs will have a very limited choice of structure.
 
 > **Important**
-> A bit of confusion is possible here between Antora components and Camel components. Generally an Antora component corresponds more or less to a Camel subproject, and never to a camel commponent. All the camel components are documented in an Antora component named `components`. In this section the word `component` means an Antora component.
+> A bit of confusion is possible here between Antora components and Camel components. Generally an Antora component corresponds more or less to a Camel subproject, and never to a camel component. All the camel components are documented in an Antora component named `components`. In this section the word `component` means an Antora component.
 
 > **Important**
 > Antora components may be `distributed` which means that the content comes from more than one place, possibly from different repositories. For instance, the `components` component has content from the main camel repository under the start\_paths `docs/components` and `core/camel-core-engine/src/main/docs` and from the `camel-spring-boot` repository under `components-starter` and `docs/components`. Furthermore, the content may not appear in the normal Antora structure but may be collected from a more maven-project-friendly arrangement with an Antora extension.

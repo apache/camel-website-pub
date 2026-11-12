@@ -8,7 +8,7 @@ byte[] payload = (byte[]) consumerTemplate.receiveBody("paho:topic");
 
 // Send payload
 byte[] payload = "message".getBytes();
-producerTemplate.sendBody("paho:topic", payload);</code></pre> </div> </div> <div class="paragraph"> <p>Of course, Camel build-in <a href="../../manual/type-converter.html" class="xref page">type conversion API</a> can perform the automatic data type transformations for you. In the example below Camel automatically converts binary payload into <code>String</code> (and conversely):</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: automatic type conversion of payloads</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Receive payload
+producerTemplate.sendBody("paho:topic", payload);</code></pre> </div> </div> <div class="paragraph"> <p>Of course, Camel built-in <a href="../../manual/type-converter.html" class="xref page">type conversion API</a> can perform the automatic data type transformations for you. In the example below Camel automatically converts binary payload into <code>String</code> (and conversely):</p> </div> <div class="listingblock"> <div class="title"><em>Java-only: automatic type conversion of payloads</em></div> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">// Receive payload
 String payload = consumerTemplate.receiveBody("paho:topic", String.class);
 
 // Send payload

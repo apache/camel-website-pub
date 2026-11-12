@@ -126,7 +126,7 @@ The `PlatformHttpEngine` class has changed the `createConsumer` method to return
 
 ### camel-platform-http-vertx
 
-The id used for multipart file upload attachments on `AttachmentMessage` has changed from being the name of the uploaded file, to the value specifed on the `name` field of the `Content-Disposition` header sent in the request body.
+The id used for multipart file upload attachments on `AttachmentMessage` has changed from being the name of the uploaded file, to the value specified on the `name` field of the `Content-Disposition` header sent in the request body.
 
 ### camel-google-sheets
 

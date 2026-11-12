@@ -79,3 +79,12 @@ The interface-consumer expansion and the bidirectional traversal follow the dete
 -   `/camel-validate` consumes `project-norms` and includes the `dead-code` report.
     
 -   `/camel-start` and `/camel-knowledge` do not use it.
+    
+
+## Input safety and limits
+
+Graph analysis reads sources without running the project. It skips symbolic-link files and directories below the selected root, rejects outside-root inputs, and accepts an explicitly selected root alias. Each source is limited to 16 MiB; recognized source files together are limited to 256 MiB, and discovery stops after 100,000 filesystem entries. Large unrelated binary artifacts do not count toward the source-byte limit. Discovery prunes directories named `.git`, `.svn`, `.hg`, `target`, `build`, and `node_modules` below the selected root before reading their contents. This avoids parsing copied resources in build outputs. The selected root itself is always scanned, even when it has one of these names.
+
+If a source or discovery limit is exceeded, graph generation reports the limit and fails; `init --here` reports a warning and continues initialization. Select a smaller project/module when a source tree exceeds these bounds.
+
+Each parser, including POM parsing, has a 60-second timeout. A timed-out parser contributes no partial result and produces a diagnostic. Cancellation is cooperative; these are input and waiting-time limits, not an operating-system memory or CPU sandbox.

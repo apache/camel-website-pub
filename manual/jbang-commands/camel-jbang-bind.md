@@ -22,4 +22,4 @@ camel bind [options]
 | `--sink` | Sink (to) such as a Kamelet or Camel endpoint uri |  | String |
 | `--source` | Source (from) such as a Kamelet or Camel endpoint uri |  | String |
 | `--step` | Optional steps such as a Kamelet or Camel endpoint uri |  | String\[\] |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

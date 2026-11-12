@@ -108,7 +108,7 @@ This component comes with preregistered patterns, which are based on Logstash pa
 
 ### Custom patterns
 
-Camel Grok DataFormat supports plugable patterns, which are auto loaded from Camel Registry. You can register patterns with Java DSL and Spring DSL:
+Camel Grok DataFormat supports pluggable patterns, which are auto loaded from Camel Registry. You can register patterns with Java DSL and Spring DSL:
 
 _Java-only: registering a custom Grok pattern_
 

@@ -14,7 +14,7 @@ The Disruptor is implemented with the intention of mimicking the behavior and op
 
 -   The buffer used is always bounded in size (default 1024 exchanges).
     
--   As the buffer is always bouded, the default behaviour for the Disruptor is to block while the buffer is full instead of throwing an exception. This default behavior may be configured on the component (see options).
+-   As the buffer is always bounded, the default behaviour for the Disruptor is to block while the buffer is full instead of throwing an exception. This default behavior may be configured on the component (see options).
     
 -   The Disruptor endpoints don’t implement the `BrowsableEndpoint` interface. As such, the exchanges currently in the Disruptor can’t be retrieved, only the number of exchanges.
     

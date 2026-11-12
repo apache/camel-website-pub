@@ -193,7 +193,7 @@ Enum values:
 | **onErrorDelay** (seda) | Milliseconds before consumer continues polling after an error has occurred. | 1000 | int |
 | **pollTimeout** (seda) | The timeout used when consuming from the SEDA queue. When a timeout occurs, the consumer can check whether it is allowed to continue running. Setting a lower value allows the consumer to react more quickly upon shutdown. | 1000 | int |
 | **transacted** (seda) | If set to true then the consumer runs in transaction mode, where the messages in the seda queue will only be removed if the transaction commits, which happens when the processing is complete. | false | boolean |
-| **transferExchange** (seda) | If set to true the whole Exchange will be transfered. If header or body contains not serializable objects, they will be skipped. | false | boolean |
+| **transferExchange** (seda) | If set to true the whole Exchange will be transfered. If header or body contains not serializable objects, they will be skipped. Set it on both the producer and the consumer: the producer puts the whole Exchange on the queue, and the consumer restores its headers and exchange properties. A consumer without it takes only the body. | false | boolean |
 
 ## SEDA producer – to(“hazelcast-seda:foo”)
 
@@ -235,6 +235,29 @@ from("hazelcast-seda:foo")
   <from uri="hazelcast-seda:foo" />
   <to uri="mock:result" />
 </route>
+```
+
+## Transferring the whole exchange
+
+By default only the message body goes on the queue. With `transferExchange=true` the producer puts the whole exchange on the queue: the body, and the headers and exchange properties whose values are text, numbers, booleans or dates. A consumer with `transferExchange=true` restores them. A consumer without the option takes only the body of such an exchange: set `transferExchange=true` on both endpoints to keep the headers and exchange properties.
+
+```yaml
+- route:
+    from:
+      uri: direct:foo
+      steps:
+        - to:
+            uri: hazelcast-seda:foo
+            parameters:
+              transferExchange: true
+- route:
+    from:
+      uri: hazelcast-seda:foo
+      parameters:
+        transferExchange: true
+      steps:
+        - to:
+            uri: mock:result
 ```
 
 ## Spring Boot Auto-Configuration

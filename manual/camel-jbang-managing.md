@@ -723,7 +723,7 @@ camel get chaos myapp --report
 camel cmd chaos-clear
 ```
 
-`chaos-add`, `chaos-change` and `chaos-remove` take the name or pid of the integration; without it they act on the only integration that runs, or the only one with chaos switched on, and otherwise fail with the list of the running integrations. `chaos-add` prints the rule in plain words too (`fail 30% of the sends to kafka:orders*, for 1 minute`), and with `--dry-run` it adds nothing, and prints what the rule would hit now: the sends, polls, routes or steps, with their route. `camel cmd chaos-suggest` suggests rules to try per route from what the routes do (an HTTP call without a circuit breaker, a dead letter channel, a hand-off over seda, an input from outside), the most worth trying first, each with why and the `chaos-add` command that adds it. `camel get chaos` lists the current rules with their id, version, state, matches and the faults that fired, and `--report` shows the report: the verdict, the seed, every version of every rule, the counts per route, and what has been tried per route (the kinds of fault, how it went, and what the suggestions offer that no rule tried yet). Chaos is for development only: it stays off with profile `prod`, and the commands cannot switch it on.
+`chaos-add`, `chaos-change` and `chaos-remove` take the name or pid of the integration; without it they act on the only integration that runs, or the only one with chaos switched on, and otherwise fail with the list of the running integrations. `chaos-add` prints the rule in plain words too (`fail 30% of the sends to kafka:orders*, for 1 minute`), and with `--dry-run` it adds nothing, and prints what the rule would hit now: the sends, polls, routes or steps, with their route. `camel cmd chaos-suggest` suggests rules to try per route from what the routes do (an HTTP call without a circuit breaker, a dead letter channel, a hand-off over seda, an input from outside), the most worth trying first, each with why and the `chaos-add` command that adds it, with an expectation of what should hold despite the faults. `camel get chaos` lists the current rules with their id, version, state, matches and the faults that fired, and `--report` shows the report: the verdict, the seed, every version of every rule, the counts per route, and what has been tried per route (the kinds of fault, how it went, and what the suggestions offer that no rule tried yet). Chaos is for development only: it stays off with profile `prod`, and the commands cannot switch it on.
 
 ### Chaos explorations
 
@@ -747,7 +747,12 @@ Experiment 1 FAIL  a failed refund is read again (r1, ended after 6s)
 
 The verdict is `FAIL` when an expectation is unmet (exit code 1), `PASS` when all are met, and `INCONCLUSIVE` when the wait was up before an expectation was decided. `--feed` takes the endpoint, or the id of the route, as the `feed:` line of `chaos-suggest` has it. `camel get chaos --report` shows the exploration with its experiments.
 
-The messages of `--feed` are sent to the endpoint the route starts from, so they reach a route that starts from `direct`, `seda`, a stub (`camel run --stub=kafka`) or a broker. An experiment refuses a feed that cannot reach its route, with the reason: a route that starts from a timer, scheduler, cron or quartz makes its own messages (leave `--feed` out), and a route that starts from a component that only consumes cannot be fed this way.
+The messages of `--feed` are sent to the endpoint the route starts from, so they reach a route that starts from `direct`, `seda`, a stub (`camel run --stub=kafka`) or a broker. An experiment refuses a feed that cannot reach its route, with the reason: a route that starts from a timer, scheduler, cron or quartz makes its own messages (leave `--feed` out), and a route that starts from a component that only consumes cannot be fed this way. It also refuses a feed whose route does not lead to a route of its expectations, as the experiment would say nothing: the route the feed reaches, and the routes it sends to (over `direct`, `seda`, a broker, or HTTP to the integration’s own server), must include one, unless a route that makes its own messages, such as a timer, sends to it. For example `--feed=parked` for `expect=refunds:failed⇐0`:
+
+```text
+ERROR: The feed goes to route parked, but not to route refunds of the expectations, so the experiment would say
+nothing: feed refunds instead (its id as the feed)
+```
 
 A route that serves HTTP over the server of Camel (`platform-http`, or the REST DSL) is fed with HTTP requests to that server, on localhost and its port, with the path and method of the route, `--body` as the request body and `--header` as HTTP headers. They are sent while the experiment waits for its verdict, and its traffic counts the status codes the clients got, so a hypothesis such as "a client gets a 503, not a 500" has its evidence:
 
@@ -763,9 +768,15 @@ camel cmd chaos-experiment --hypothesis='a client of payment gets an error, noth
 
 For a path with a parameter, `--feed` is the path to call, with an optional method: `--feed='PUT /orders/42'`. An HTTP server with its own address on this machine (netty-http, undertow, jetty) is fed at that address, called as localhost; one on another host is not fed.
 
-A route that starts from `file:<folder>` is fed with files: each message is written as a file into the folder the route polls, named so the route takes it: `chaos-<time>.json`, numbered as `chaos-<time>-<n>.json` when the messages are repeated, with the extension of its `include` or `antInclude` filter, else of the body. A `CamelFileName` in `--header` names the files instead.
+A route that starts from `file:<folder>` is fed with files: each message is written as a file into the folder the route polls, named so the route takes it: `chaos-<time>.json`, numbered as `chaos-<time>-<n>.json` when the messages are repeated, with the extension of its `include` or `antInclude` filter, else of the body. A `CamelFileName` in `--header` names the files instead. With `--body=replay:` nothing is sent: the files the route took, which it moved to `.camel` (or the folder of its `move` option), are put back into its folder under their own names, and again while the experiment runs, as the route takes them, so a rule with a rate meets enough messages. The route moves them over the ones there, so an experiment that is run again has the same messages. A route with `noop=true` never takes a file of the same name again, so it cannot be replayed.
 
-A feed to a remote system that is not stubbed, such as a Kafka broker, has a warning, as the messages go to that system: use a local one (`camel infra run kafka`), or stub it.
+A feed to a remote system that is not stubbed, such as a Kafka broker, has a warning, as the messages go to that system: use a local one (`camel infra run kafka`), or stub it. A broker that `camel infra run` started on this machine is such a local one: when the input of the route is on it (its address, as the integration reports it, is on a port of a service that `camel infra ps` lists), there is no warning, and the traffic says so:
+
+```text
+  traffic: 6 messages sent to kafka://refunds?brokers=localhost:9092&groupId=shop (the local kafka from camel infra) in 199ms
+```
+
+A real broker tests what a stub cannot, such as a consumer that reads a failed message again or goes on without it.
 
 `camel cmd chaos-explore` lets the AI of `camel ask` do it all: let there be chaos. It starts the exploration with the budget, and the AI reads the suggestions, runs one experiment per call, reads each verdict, and goes on while there is time. It asks nothing on the way, as starting the command is the consent, and it never changes the routes. When it is done the exploration is finished, and its report and the journal of the experiments are printed (exit code 1 when an experiment failed):
 

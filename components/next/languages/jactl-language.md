@@ -197,7 +197,7 @@ Jactl and Groovy have many similarities in terms of syntax and simple scripts wr
 
 For example, here are some of the things that are the same:
 
--   `//` and `/* */` style commends.
+-   `//` and `/* */` style comments.
     
 -   Semicolons are optional unless there are multiple statements on the same line.
     

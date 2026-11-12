@@ -2,7 +2,7 @@
 
 **Since Camel 2.3**
 
-The Crypto Data Format integrates the Java Cryptographic Extension into Camel, allowing simple and flexible encryption and decryption of messages using Camel’s familiar marshall and unmarshal formatting mechanism. It assumes marshaling to mean encryption to cyphertext and unmarshalling to mean decryption back to the original plaintext. This data format implements only symmetric (shared-key) encryption and decyption.
+The Crypto Data Format integrates the Java Cryptographic Extension into Camel, allowing simple and flexible encryption and decryption of messages using Camel’s familiar marshall and unmarshal formatting mechanism. It assumes marshaling to mean encryption to ciphertext and unmarshalling to mean decryption back to the original plaintext. This data format implements only symmetric (shared-key) encryption and decryption.
 
 ## CryptoDataFormat Options
 
@@ -141,7 +141,7 @@ from("direct:init-vector")
     .to("mock:unencrypted");
 ```
 
-or with spring, suppling a reference to a byte\[\]
+or with spring, supplying a reference to a byte\[\]
 
 ```xml
 <crypto id="initvector" algorithm="DES/CBC/PKCS5Padding" key="desKey" initVector="initializationVector" />

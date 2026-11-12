@@ -865,6 +865,8 @@ Some SQL implementations are not fast on a per-query basis. The `JdbcMessageIdRe
 
 As with all cache implementations, there are considerations that should be made with regard to stale data and your specific usage.
 
+In a transaction, a key is added to the cache only once the transaction that inserted its row commits, so a rolled-back add is never cached. A second add of the same key on the same node, made while the first is still uncommitted, therefore does not hit the cache: it reaches the primary key, gets a duplicate key error, and its transaction is marked rollback-only, so that exchange is rolled back once before its redelivery is filtered as a duplicate. The `JdbcMessageIdRepository`, and several nodes sharing the table, behave the same way.
+
 ### Using the JDBC based aggregation repository
 
 `JdbcAggregationRepository` is an `AggregationRepository` which on the fly persists the aggregated messages. This ensures that you will not lose messages, as the default aggregator will use an in-memory only `AggregationRepository`. The `JdbcAggregationRepository` allows together with Camel to provide persistent support for the Aggregator.

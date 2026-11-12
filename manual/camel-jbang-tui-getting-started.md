@@ -39,7 +39,11 @@ camel tui
 
 ![The Quick start group of the example browser](_images/jbang/camel-tui-example-browser.png)
 
-Before launching, a run options form lets you choose the **runtime**: Camel Main (standalone), Spring Boot, Quarkus, or JBang. This makes it easy to try any example on all three runtimes without changing a single line of code. The first three run the example in a separate JVM that only contains the dependencies of the example (like a production deployment), while JBang runs it in-process in the Camel CLI JVM, which starts faster but has the CLI on the classpath as well. You can also set the integration name, toggle dev mode, and add extra dependencies. When the port the app will listen on (the one you set, else 8080) is taken already, the form says by whom, so a second app with an HTTP server does not fail to start.
+Before launching, a run options form lets you choose the **runtime**: Camel Main (standalone), Spring Boot, Quarkus, or JBang. This makes it easy to try any example on all three runtimes without changing a single line of code. The first three run the example in a separate JVM that only contains the dependencies of the example (like a production deployment), while JBang runs it in-process in the Camel CLI JVM, which starts faster but has the CLI on the classpath as well. You can also set the integration name, toggle dev mode, turn on chaos testing (`--chaos`, to inject faults with camel-chaos; not with profile prod), and add extra dependencies. When the port the app will listen on (the one you set, else 8080) is taken already, the form says by whom, so a second app with an HTTP server does not fail to start.
+
+When the example or folder has chaos scenarios (`test/chaos/*.chaos`), ←→ on the chaos testing row picks one, which is run with `--chaos=test/chaos/<name>.chaos`, so its rules are added at startup. Without one (`none, add rules yourself`, the default), chaos is on with no rules, and you add them while it runs.
+
+![The run options form of the chaos example](_images/jbang/camel-tui-run-chaos-scenario.png)
 
 The example starts running in the background. The TUI auto-selects it as soon as it appears. From there you can explore tabs, watch messages flow, inspect the route diagram, and experiment.
 

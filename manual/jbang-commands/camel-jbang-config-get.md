@@ -15,4 +15,4 @@ camel config get [options]
 | --- | --- | --- | --- |
 | `--global` | Use global or local configuration |  | boolean |
 | `--json` | Output in JSON Format |  | boolean |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

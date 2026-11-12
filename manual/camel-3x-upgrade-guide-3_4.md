@@ -84,7 +84,7 @@ The `/actuator/camelroutes` HTTP endpoint has been removed from provided Spring 
 
 `HttpRegistry` and `DefaultHttpRegistry` classes from camel-servlet are moved from camel-servlet into camel-http-common. `HttpRegistryProvider` is added and used in `DefaultHttpRegistry` instead of `CamelServlet`.
 
-These changes had effects on camel-atmosphere-websocket and camel-servlet and also camel-resteasy. Users of these components where they would have custom implemetations on `DefaultHttpRegistry` and using `CamelServlet` class should take this change into account.
+These changes had effects on camel-atmosphere-websocket and camel-servlet and also camel-resteasy. Users of these components where they would have custom implementations on `DefaultHttpRegistry` and using `CamelServlet` class should take this change into account.
 
 ### camel-sql
 

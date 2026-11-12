@@ -107,6 +107,10 @@ On Camel Main and Camel JBang, the streamable HTTP MCP endpoint now checks the `
 
 By default only loopback origins are allowed (`localhost`, `127.0.0.1` and `[::1]`, on any port). A browser-based client served from another origin must now be listed in the new `camel.server.mcp-allowed-origins` option, for example `camel.server.mcp-allowed-origins = https://app.example.com, http://localhost:*`. The list replaces the loopback default. Scheme and host are compared ignoring case and a default port may be left out; `*` and other entries that are not of the form `scheme://host[:port]` fail the startup. Stdio mode is not affected, and neither are the Spring Boot and Quarkus engines.
 
+### camel-oauth - the scp claim is included in scope checks
+
+JWT validation and token introspection now read scopes from both the standard `scope` claim and the `scp` claim used by some identity providers. String values are split on whitespace; array values are read as individual scopes. When both claims are present their values are combined and duplicate scopes are removed. Consequently, a token that has a required scope only in `scp` can now pass an `OAuthTokenValidationResult.hasScope(…​)` check where it did not pass before. Review authorization rules that intentionally relied on ignoring `scp`.
+
 ### camel-mina-sftp - checking whether a file exists takes one lstat request
 
 The `mina-sftp` component now checks whether a remote file exists (`fileExist=Ignore|Fail|Move`, `tempFileName`, `tempPrefix`, a producer `doneFileName`) with an `lstat` request instead of `stat`. `readLock=changed` reads the size and modification time of the file with the same request, instead of a listing of the directory. Each check is one request, whatever the number of files in the directory, and `fastExistsCheck` no longer makes a difference for `readLock=changed`: with `fastExistsCheck=true`, the read lock is now acquired, where before the file was never consumed. The answer can differ from before in two cases:
@@ -121,6 +125,10 @@ The `mina-sftp` component now checks whether a remote file exists (`fileExist=Ig
 ### camel-mina-sftp - TCP\_NODELAY is set on the connections
 
 The `mina-sftp` component now sets `TCP_NODELAY` on its connections, as the JSch-based `sftp` component does. Apache MINA SSHD leaves it off by default, so a small request, such as one that reads the next part of a directory listing, could wait for the server to acknowledge the previous reply. The `org.apache.sshd.config.tcp-nodelay` system property no longer applies to the connections of `mina-sftp`.
+
+### camel-master - the consumer keeps the leadership until its delegated consumer has stopped
+
+When a `master:` consumer stops (its route stops, or the CamelContext shuts down), it now stops the delegated consumer first, then the processor of the route, and only then releases the cluster view, so the leadership moves to another node once this node no longer consumes. Before, it released the view first, so another node could start consuming while this one was still stopping its consumer (a consumer may wait in its stop for the messages it is processing, as JMS does, and these messages now reach a started route). The hand-over on a graceful stop can therefore come later, by up to the time the delegated consumer takes to stop (a stop that blocks holds back the failover until it returns). Exchanges in flight that the delegated consumer does not wait for in its stop may still be in flight when the leadership moves, as before.
 
 ### camel-ftp - sftp checks whether a file exists with one lstat request
 
@@ -152,6 +160,12 @@ The `Route.clearRouteModel()` method is deprecated and is now a no-op. It will b
 This method dropped the references a runtime route held to its model (the route definition, the error handler factory and the error handlers) once the route was created at startup. The `CamelContext` already keeps the route definitions in its model, so clearing them on the route saved little memory at the cost of making `Route.getRoute()` and `Route.getErrorHandlerFactory()` return `null` for routes created at startup (but not for routes added after startup).
 
 Applications that called `Route.clearRouteModel()` directly can remove the call. Implementations of the `Route` interface that override `clearRouteModel()` can remove the override.
+
+### camel-core - the route topology says whether a route waits for the answer, and has the edges of a wire tap
+
+Each edge of the route topology (the `route-topology` developer console, the topology JSON of the dump routes strategy and `RouteTopologyDumper`) now says whether the route waits for the answer of the route it sends to: `reply` is `true` for a send to `direct`, and for a send that is InOut, as a request-reply over a JMS queue is (`exchangePattern=InOut`). The JSON of the console and the topology JSON write `reply` on every edge, and the text output of the console marks a request-reply with `request-reply`. The `RouteTopologyDumper.TopologyEdge` record has the new `reply` component; its seven-argument constructor is kept and creates an edge without it.
+
+A `wireTap` or a `toD` to an endpoint the route names, rather than one it computes with an expression, is now an edge too (a wire tap never waits for the answer), and an external endpoint when no route consumes from it.
 
 ### camel-management - LastExchangeCompletedExchangeId is updated at most once per millisecond
 
@@ -300,7 +314,7 @@ When a type converter fails during the conversion of a message, the `TypeConvers
 
 The conversion of a collection or array to an array whose component type does not fit an element, such as a list of strings to `int[]` or `byte[]`, now gives no conversion (`null`, or `NoTypeConversionAvailableException` for a mandatory conversion), and other type converters can try. Before, it failed with a `TypeConversionException` due to `IllegalArgumentException: argument type mismatch` or an `ArrayStoreException`.
 
-### camel-core - a route called from a doCatch handles its failure after the doTry called a route that failed
+### camel-core - after the doTry called a route that failed, a doCatch clears the failure marks of the exchange
 
 When the `doTry` block calls a route (such as with `direct`) that fails without handling the failure (no `onException` handles it, and no dead letter channel), the error handler of a route called from the `doCatch` block now runs as it does anywhere else, as when the `doTry` failed in the same route: it redelivers, runs its `onException` (also one that does not handle the failure) and its dead letter channel, and logs the exhausted failure. Before, it gave the failure straight back, and the exchange failed with that route’s exception after one attempt. When that route handles its failure, the rest of the `doCatch` block and the steps after the `doTry` do not run, as for any failure that a called route handles; when it continues its failure, they run. When the `doCatch` block does not call a failing route, the route continues after the `doTry` as before.
 
@@ -318,6 +332,21 @@ The exchange no longer keeps the marks of the caught failure, which also changes
     
 
 To keep the exchange failing after one attempt as before, give the route called from the `doCatch` no error handler (`noErrorHandler()`); this applies to every caller of that route.
+
+After the `doCatch` block, the exchange is no longer marked as failure handled either (CAMEL-26447), as when the `doTry` failed in the same route. So the error handlers that come later handle a new failure as usual (they redeliver, run their `onException` and dead letter channel, and log an exhausted failure): an `onException` of the calling route for a failure after the `doTry`, the error handler of a route called later (with a plain `to`, or from the `doFinally`), and the dead letter channel of a calling route when the `doCatch` block throws. Before, they treated the exchange as done, and the new failure went back to the caller unhandled. When such an error handler now handles the new failure, the exchange completes, so its consumer commits or acknowledges the message, as for any handled failure.
+
+The readers of the mark at the end of the exchange now see a message that was processed, as for a `doTry` that failed in the same route:
+
+-   the Idempotent Consumer confirms the message id instead of removing it, so the message is not processed again;
+    
+-   a resumable consumer records the offset of the message;
+    
+-   the `failuresHandled` counters (JMX, and the Micrometer and OpenTelemetry route policies) no longer count it;
+    
+-   with `exactlyOnce` on a Kafka consumer, the output transaction is committed together with the offsets (as the Kafka component documents for sends in a `doCatch` block) instead of being aborted, unless the caught failure was a Kafka send failure.
+    
+
+There is no option for the old end-of-exchange outcome. For the Idempotent Consumer, throw an exception from the `doCatch` block (for example with `throwException`): the exchange then fails (or an error handler of the route handles the new failure), and with `removeOnFailure` (the default) the message id is removed, so the message is processed again when it comes again.
 
 ### camel-core - Simple: more predicates inside ${ } are read as predicates
 
@@ -354,6 +383,22 @@ To turn off the error handler per output of such an EIP again (no redelivery of 
 A step that has no error handler of its own (the steps of `doTry`, `doCatch`, `doFinally` and `onException`, also when nested in another EIP inside them, the outputs of a multicast, the recipients of a recipient list inside a `doTry`, the steps of a circuit breaker, and a step with `inheritErrorHandler(false)`) now handles a processor that throws from `process(exchange, callback)` instead of setting the exception on the exchange as if it had set it: the exchange fails with that exception, so the `doCatch` catches it, and the output of a multicast is redelivered by the error handler of the route as for any other failure. Before, the exchange hung.
 
 When such a processor handed its callback to another thread and then throws, the exchange now fails with the thrown exception unless that thread calls the callback first, and a later call is ignored and logged at WARN; before, the exception was dropped and that callback continued the exchange as a success. A second call of the callback is ignored and logged at WARN; before, the exchange was continued a second time. There is no option for the old behaviour; fix the processor to set the exception on the exchange and call the callback, as an `AsyncProcessor` must.
+
+### camel-core - an Error thrown by a Processor fails the exchange
+
+When a plain `Processor` (in `process(…​)`, in `bean(…​)` for a bean that is a `Processor`, or as a producer that is not an `AsyncProcessor`) throws an `Error` that is not a `VirtualMachineError`, such as an `AssertionError`, the exchange now fails with it, as for an exception. Before, only a `LinkageError` thrown in `process(…​)` and an `AssertionError` thrown by a bean that is a `Processor` did so (as a bean method that throws any `Error` already does). Any other `Error` was thrown on after the processor’s callback had been called: depending on the error handler, it was only logged and the next steps ran as if the processor had succeeded, or it reached the caller and the exchange stayed inflight until the context stopped (which then waited for its shutdown timeout).
+
+ 
+| Thrown by the processor | What happens |
+| --- | --- |
+| An `Error` that is not a `VirtualMachineError`, such as `AssertionError`, `LinkageError` (`NoClassDefFoundError`, `ExceptionInInitializerError`) or a custom `Error` | The exchange fails with it (wrapped in a `CamelExecutionException`), and the error handler handles it as any other failure: redelivery, `onException`, `doCatch` and a dead letter channel get it. `onException(Exception.class)` and `doCatch(Exception.class)` also match it; to treat it differently, match it on its class, such as `onException(AssertionError.class)` |
+| A `VirtualMachineError`, such as `OutOfMemoryError`, `StackOverflowError` or `InternalError` | Not changed by this entry: Camel’s error handling does not get it (the JVM may no longer be in a consistent state, so the application should not handle it). It is not set on the exchange, but thrown on after the processor’s callback was called. Depending on the error handler, the `Error` reaches the caller (and the exchange may stay inflight), or it is only logged and the route continues as if the processor had succeeded |
+
+An application with strict reliability needs should not rely on Camel to react to a `VirtualMachineError`. For an `OutOfMemoryError` that the JVM raises, it can let the JVM stop with `-XX:+ExitOnOutOfMemoryError` or `-XX:+CrashOnOutOfMemoryError` (these options do not cover a `StackOverflowError`, or an `OutOfMemoryError` that code throws itself).
+
+`template.send(…​)`, `template.request(…​)` and `template.asyncSend(…​)` return the exchange (or its future) with the exception and do not throw it. `sendBody(…​)` and `requestBody(…​)` throw a `CamelExecutionException` that holds the `Error`, unless the failure was handled (such as by a dead letter channel, `onException(…​).handled(true)` or `doCatch`). A test that sends with `template.send(…​)` and asserts only inside a processor must now check the exception of the returned exchange (`exchange.getException()`), or send with `sendBody(…​)` or `requestBody(…​)`.
+
+There is no option for the old behaviour. See also [An Error thrown by a processor](error-handler.html#_an_error_thrown_by_a_processor).
 
 ### camel-core - variableReceive into a route or group variable stores the header variables in that route or group
 
@@ -561,6 +606,23 @@ Camel is upgraded to MariaDB Connector/J 4.0 (`org.mariadb.jdbc:mariadb-java-cli
 
 See the [MariaDB Connector/J changelog](https://github.com/mariadb-corporation/mariadb-connector-j/blob/main/CHANGELOG.md) for the other changes.
 
+### camel-jbang - the Camel CLI uses aesh instead of picocli
+
+The Camel CLI parses its command lines, prints its help and completes its commands with [aesh](https://github.com/aeshell/aesh) instead of picocli. The commands and their options are the same. The help looks a little different: the default value of an option is on a line of its own (`Default: …​`).
+
+An argument `@file` is no longer replaced by the arguments in that file (picocli did that, such as `camel run @args.txt`). Give the arguments on the command line instead, for example `camel run $(cat args.txt)` in a shell script.
+
+A plugin of the Camel CLI (an implementation of `org.apache.camel.dsl.jbang.core.common.Plugin`) must be changed and built for Camel 4.24:
+
+-   `Plugin.customize` takes a `CommandTree` instead of a picocli `CommandLine`. A command is added with `commandLine.addSubcommand("mycommand", new CommandTree(new MyCommand(main)))`.
+    
+-   The command classes use the aesh annotations: `@CommandDefinition` instead of `@Command` (the `footer` of the help is an attribute of it), `@Option(name = "my-option")` instead of `@Option(names = "--my-option")` (with `hasValue = false` for a flag), `@OptionList` for an option with several values, `@Argument` or `@Arguments` instead of `@Parameters`, and the aesh `@Mixin`.
+    
+-   A class with the completion candidates of an option extends `org.apache.camel.dsl.jbang.core.common.CompletionCandidates`, and is set as the `completer` of the option.
+    
+-   A test sets the options of a command with `CommandLineTestHelper.parse(command, args…​)` (in the test jar of `camel-jbang-core`) instead of `CommandLine.populateCommand`.
+    
+
 ### camel-resilience4j, camel-microprofile-fault-tolerance - a circuit breaker in a doTry
 
 A circuit breaker in the steps of a `doTry` no longer ends that `doTry` for the steps after it. Before, when the circuit breaker was done, a later routing slip, dynamic router, multicast or recipient list of the same `doTry` used the error handler of the route (redelivery and the dead letter channel) instead of the `doCatch`. And after the fallback of the circuit breaker had recovered from a failure, no `doCatch` of that `doTry` caught a later failure: the failure was thrown from the `doTry`. Now such failures go to the `doCatch`, as for the other steps of the `doTry`. A failure of the fallback itself is now also caught by the `doCatch` (before, it was thrown from the `doTry`).
@@ -676,6 +738,10 @@ The metadata of the endpoint is set with the new `metadata.` options, such as `m
 A `secret` endpoint without a `key`, which took the key from the `CamelDaprKey` header, now fails with an error that names the option, instead of reading all the secrets of the store. A `secret` endpoint without a `secretStore`, which took it from the `CamelDaprSecretStore` header, now fails because the secret store is missing.
 
 The other operations do not change: the `state` operations still take the key from the `CamelDaprKey` header, the other operations still take the metadata from the `CamelDaprMetadata` header, and the other `CamelDapr*` headers still take the place of the options of the endpoint, as before.
+
+### camel-dapr - the CamelDaprConfigKeys header takes the place of the configKeys option
+
+The `configuration` operation of the `dapr` producer ignored the `CamelDaprConfigKeys` header and always sent the keys of the `configKeys` option of the endpoint. It now sends the keys of the header when it is set: a comma-separated String or a `Collection` of keys. A route that set this header, but relied on the keys of the endpoint, must remove the header.
 
 ### camel-consul - no Optional in the body, and the CamelConsulResult header of every action
 
@@ -1066,9 +1132,9 @@ The HKDF info bytes of the hybrid KEM are also now encoded explicitly as UTF-8, 
 
 XMSS, XMSSMT, LMS and HSS are one-time-signature schemes: signing twice from the same index breaks the key. The index lives inside the private key, so two processes that load the same key from a shared store - two pods on one volume, two replicas reading one vault secret - each advance their own copy and hand out the same index.
 
-Before it first signs with a stateful key, the `pqc` producer now claims it from the configured `KeyLifecycleManager`, through the new `KeyLifecycleManager.claimStatefulKey(String)` and `releaseStatefulKey(String)` methods. Both have a default implementation, so a custom manager still compiles; the default grants no claim.
+Before it first signs with a stateful key, the `pqc` producer now claims it from the configured `KeyLifecycleManager`, through the new `KeyLifecycleManager.claimStatefulKey(String, PublicKey)` and `releaseStatefulKey(String, PublicKey)` methods. Both have a default implementation, so a custom manager still compiles; the default grants no claim. The claim is on the key material, identified by the public key (see the new `KeyLifecycleManager.fingerprint(PublicKey)`), not on the name the `CamelPQCKeyId` header gives the key: the same key under two names, or under none, is one claim, so an exchange that carries no header is claimed too.
 
--   `FileBasedKeyLifecycleManager` takes an exclusive `FileLock` on a `<keyId>.lock` file in the key directory, so a second process reading that directory is refused.
+-   `FileBasedKeyLifecycleManager` takes an exclusive `FileLock` on a lock file in the key directory named from the SHA-256 fingerprint of the public key, so a second process reading that directory is refused.
     
 -   `InMemoryKeyLifecycleManager` grants the claim - its keys never leave the process.
     
@@ -1651,6 +1717,10 @@ A Hazelcast transaction can only be committed or rolled back by the thread that 
 
 A `hazelcast-topic` consumer with `reliable=true` that fell behind the ringbuffer of the reliable topic (messages overwritten, or expired by its time to live, before the consumer read them) stopped receiving messages for good, while the route stayed started: Hazelcast removed its listener. The consumer now skips the lost messages, logs a WARN with their number, and goes on with the oldest message still in the ringbuffer. When Hazelcast cancels the listener for another reason, such as a destroyed topic, the consumer reports it to its exception handler (logged at WARN by default); restart the route to receive messages again. A listener cancelled because the Hazelcast instance or the CamelContext is shutting down is only logged at DEBUG.
 
+### camel-hazelcast - HazelcastRoutePolicy gives up the leadership when its route is removed
+
+A `HazelcastRoutePolicy` kept the Hazelcast lock until the CamelContext stopped, also after its route was removed (with `removeRoute`, or by a route reload), so no other node could become the leader and the route ran nowhere in the cluster. The policy now releases the lock when the last route that uses it is removed, so another node takes over, and it competes for the lock again when a route that uses it is added again (with the same or a new policy instance). So a route reloaded on the leader can now move to another node.
+
 ### camel-sql, camel-mybatis, camel-jooq - an exchange marked rollback only last is not consumed either
 
 The SQL, MyBatis and jOOQ consumers already left a message unconsumed when the route marked the exchange rollback only with `markRollbackOnly()`. They now leave it unconsumed when the route marks it rollback only last with `markRollbackOnlyLast()` too, as the JPA and Hazelcast SEDA consumers do: the SQL consumer runs its `onConsumeFailed` statement instead of `onConsume` (and no statement when `onConsumeFailed` is not set), the MyBatis consumer does not run its `onConsume` statement, and the jOOQ consumer does not delete the entity, so the next poll reads the row again. With `transacted=true` the SQL and MyBatis consumers break out of the batch and roll back. `markRollbackOnlyLast()` reaches the consumer only when no `transacted()` EIP has consumed the flag, so the consumer’s own transaction is the last one.
@@ -1831,6 +1901,14 @@ A route that needs the request body must keep `mapHttpMessageBody=true` (the def
 ### camel-aws2-ddb - aws2-ddbstream reads every shard to its end
 
 The `aws2-ddbstream` consumer now reads a closed shard to its end before it reads its child shards, and uses `streamIteratorType` only for its start position. Before, records left in a closed shard could be skipped, and after a shard rotation the consumer started again from `streamIteratorType`: with `FROM_START` it routed records of the stream again, and with `FROM_LATEST` it skipped records already written to the new shards.
+
+### camel-bean - a VirtualMachineError thrown by a bean method is no longer given to the error handler
+
+A bean method that throws a `VirtualMachineError` (such as `OutOfMemoryError`, `StackOverflowError` or `InternalError`) is now handled as a bean that is a `Processor`: Camel’s error handling does not get it (the JVM may no longer be in a consistent state, so the application should not handle it). It is not set on the exchange, but thrown on after the callback of the bean was called. Depending on the error handler, the `Error` reaches the caller (and the exchange may stay inflight), or it is only logged and the route continues as if the bean method had succeeded.
+
+Before, the bean component set any `Error` of a bean method on the exchange, so `onException`, `doCatch`, redelivery and a dead letter channel also handled an `OutOfMemoryError` or a `StackOverflowError`. Any other `Error` of a bean method, such as an `AssertionError`, still fails the exchange and goes to the error handler, as before.
+
+An application with strict reliability needs should not rely on Camel to react to a `VirtualMachineError`. For an `OutOfMemoryError` that the JVM raises, it can let the JVM stop with `-XX:+ExitOnOutOfMemoryError` or `-XX:+CrashOnOutOfMemoryError`.
 
 ### camel-beanio - BeanIOSplitter decodes files and streams with the charset of the exchange or its encoding
 
@@ -3682,6 +3760,10 @@ With `useIterator=true` (the default), the producer now splits a Jackson JSON no
 
 With `breakOnFirstError=true`, a failed record now creates a new Kafka consumer also when the consumer is paused in the same poll, for example by a `ThrottlingExceptionRoutePolicy` that suspends the route on the failed exchange. The new consumer stays paused until the route is resumed, and then polls each partition from its committed offset, or from `autoOffsetReset` when it has none, as on a break without a pause. Before, a partition without a committed offset resumed after the failed record. The new consumer leaves and rejoins the consumer group, so each such break is now a rebalance of the group, also when the partition has a committed offset. There is no option to keep the previous behaviour.
 
+### camel-kafka - the Kafka idempotent and key-value repositories use the acks of the Kafka client
+
+`KafkaIdempotentRepository` and `KafkaKeyValueRepository` no longer set `acks=1` on their producer, so the default of the Kafka client applies: `acks=all` with idempotence. Every change of a repository is now acknowledged once the in-sync replicas have it, so it is not lost when the leader of the partition fails over. Each change waits for the replicas; with fewer in-sync replicas than `min.insync.replicas` it waits up to `delivery.timeout.ms` (2 minutes by default) and then fails, where it succeeded with `acks=1`. A broker before Kafka 2.8 that uses ACLs needs the `IdempotentWrite` permission for the repository’s producer. A `producerConfig` that sets only `enable.idempotence=true` no longer fails at start. To keep the previous behaviour, set `acks=1` in the `producerConfig` of the repository (with `bootstrap.servers`, as a `producerConfig` replaces the `bootstrapServers` of the repository for the producer).
+
 ### camel-dns - dig without a type, and the wikipedia type
 
 `dns:dig` without the `CamelDnsType` header now asks for type A, and without the `CamelDnsName` header fails with an `IllegalArgumentException` that names the header; both failed with a `NullPointerException` before. The `wikipedia` type and the `CamelDnsTerm` header are deprecated, as the service behind them is gone.
@@ -3970,6 +4052,10 @@ The log keeps 524,288 entries; after that it rolls over and holds the newest ent
 
 A new SPI `org.apache.camel.spi.StepHook`, added with `ExtendedCamelContext.addStepHook`, can fail or delay each step of a route. `ErrorHandlerRedeliveryCustomizer` has a new default method `useStepHook(String)`, so existing implementations need no change. A custom error handler that wants a failure from the hook handled like a failure of the step’s processor (with `onException` and redelivery) can override it.
 
+### camel-cluster - ClusteredRouteController stops the cluster service once the routes have stopped
+
+When the CamelContext stops, the `ClusteredRouteController` no longer stops the cluster service when the route controller is stopped (which the CamelContext does before it stops the routes), but once the routes have stopped. A node being stopped can keep (or still take) the leadership of its namespaces until its routes have finished their in-flight exchanges, so another node no longer starts the clustered routes at the same time. A graceful stop can therefore hand over the leadership later than before, by up to the shutdown timeout of the CamelContext (45 seconds by default). To hand over sooner, lower the shutdown timeout (`camel.main.shutdownTimeout`, or `CamelContext.getShutdownStrategy().setTimeout`).
+
 ### camel-quartz - a route that keeps its trigger fires again when it is added again or after a restart
 
 With `deleteJob=false` (as with `pauseJob=true`), a route pauses its trigger when it stops, and only the same endpoint resumed it. A route that was removed and added again (a reload, a route template removed and added), and a route that started after a restart with a persistent job store that is not clustered, therefore never fired again. The route now marks the trigger it pauses, with the key `CamelQuartzTriggerPausedByCamel` in the `JobDataMap` of its job, and a route resumes a paused trigger with this mark when it starts. A trigger that was paused outside Camel (with the Quartz API or JMX) has no mark and stays paused; this now also holds when the same route is stopped and started again, which resumed such a trigger before. A trigger that Camel paused before this version has no mark either: resume it once with the Quartz API. A clustered job store is not changed, as Camel does not pause triggers there.
@@ -4106,6 +4192,10 @@ When the `CamelAzureFunctionsHttpHeaders` header does not set a `Content-Type`, 
 
 A route whose message still carries a `Content-Type` header from an earlier step, for example from an HTTP consumer, now sends that Content-Type. Remove the header, or set the Content-Type in `CamelAzureFunctionsHttpHeaders`, to keep the old behavior.
 
+### camel-catalog - an empty deprecationNote is no longer written
+
+The option metadata in the catalog (component, endpoint and header options, and the functions and operators of the simple language) no longer has `"deprecationNote": ""`. The key is now present only when there is a note, as was already the case for options without `@Metadata`. Tools that read the catalog JSON get no key (null with `camel-tooling-model`) instead of an empty string.
+
 ### Jackson 3
 
 Camel 4.24 moves its own code to Jackson 3 (`tools.jackson`, version 3.2). The `camel-jackson`, `camel-jacksonxml`, `camel-jackson-avro` and `camel-jackson-protobuf` data formats stay on Jackson 2; `camel-jackson3`, `camel-jackson3xml`, `camel-jackson3-avro` and `camel-jackson3-protobuf` are the Jackson 3 line. The Jackson 3 sections below name the components that moved and what changes for each; this section has what applies to all of them.
@@ -4117,7 +4207,7 @@ Camel 4.24 moves its own code to Jackson 3 (`tools.jackson`, version 3.2). The `
    
 | Feature | Jackson 2 | Jackson 3 | Effect of the Jackson 3 default |
 | --- | --- | --- | --- |
-| `FAIL_ON_UNKNOWN_PROPERTIES` | on | off | Unknown properties are ignored. See the warning below. |
+| `FAIL_ON_UNKNOWN_PROPERTIES` | on | off | Unknown properties are ignored, except by REST binding (see below). |
 | `SORT_PROPERTIES_ALPHABETICALLY` | off | on | Properties are written in alphabetical order. |
 | `WRITE_DATES_AS_TIMESTAMPS` | on | off | Dates are written as ISO-8601 text, not as numbers. |
 | `WRITE_DURATIONS_AS_TIMESTAMPS` | on | off | Durations are written as ISO-8601 text. |
@@ -4131,11 +4221,11 @@ Set a feature back with the `enableFeatures` and `disableFeatures` options of th
 
 ```java
 restConfiguration().bindingMode(RestBindingMode.json)
-    .dataFormatProperty("json.in.enableFeatures", "FAIL_ON_UNKNOWN_PROPERTIES");
+    .dataFormatProperty("json.out.enableFeatures", "WRITE_DATES_AS_TIMESTAMPS");
 ```
 
-> **Warning**
-> With `FAIL_ON_UNKNOWN_PROPERTIES` off, a route using REST binding no longer rejects a JSON body that does not match its type. The body is accepted, the request gets no `400` response, and the route receives a POJO with empty fields. Enable the feature as shown above if your routes rely on that validation.
+> **Note**
+> The REST DSL binding of a service enables `FAIL_ON_UNKNOWN_PROPERTIES` on its Jackson 3 data formats (`json`, and `jacksonXml` from `camel-jackson3xml`), so a request body with properties that its type does not have is still rejected, as with Jackson 2. To accept such bodies, set `json.in.disableFeatures` (or `xml.in.disableFeatures`) to `FAIL_ON_UNKNOWN_PROPERTIES`. A feature you enable with `enableFeatures` is added to it. A data format with a mapper of your own keeps the settings of that mapper: the `objectMapper` option or a mapper found with `autoDiscoverObjectMapper` for JSON, the `xmlMapper` option for XML. The REST producer, which reads the responses of the services it calls, uses the Jackson 3 default.
 
 **Limits.** Jackson 3 reads and writes with other limits: nesting up to 500 levels (it was 1000), for reading and writing, and strings up to 100 million characters (it was 20 million). They apply to every component on Jackson 3, including those whose internal mappers keep the Jackson 2 defaults. To change them for a data format, set its `objectMapper` option to a mapper with your own `StreamReadConstraints` (and `StreamWriteConstraints` for the nesting depth when writing):
 
@@ -4314,3 +4404,7 @@ The kafka producer still sends a Jackson 2 array node as one record per element,
 A `java.time` value in a POJO body no longer fails: `callFunction` of `camel-google-functions` sends the POJO as JSON, and `camel-huaweicloud-smn` publishes it as JSON instead of as its `toString()`. The value is written as numbers.
 
 Exceptions: `camel-huaweicloud-dms` and `camel-huaweicloud-iam` let a failure to write a response as JSON through as the unchecked `tools.jackson.core.JacksonException`, which is not an `IOException`, so `onException(IOException.class)` does not match it.
+
+### camel-docling - the apiKeyHeader option is deprecated
+
+The `apiKeyHeader` option never had any effect: the name of the header that carries the API key is fixed in the docling-serve client, which always sends it as `X-Api-Key`, and the producer never read the option. It is now deprecated, with a `deprecationNote` that says so. Remove `apiKeyHeader` from the endpoint URI or the configuration: with `authenticationScheme=API_KEY` and `authenticationToken` set, the key is still sent, as `X-Api-Key`.

@@ -128,7 +128,7 @@ The CsvRecord annotation is used to identify the root class of the model. It rep
 | Parameter name | Type | Required | Default value | Info |
 | --- | --- | --- | --- | --- |
 | separator | String | ✓ |  | Separator used to split a record in tokens (mandatory) - can be ',' or ';' or 'anything'. The only whitespace character supported is tab (\\t). No other whitespace characters (spaces) are not supported. This value is interpreted as a regular expression. If you want to use a sign which has a special meaning in regular expressions, e.g., the '|' sign, then you have to mask it, like '|' |
-| allowEmptyStream | boolean |  | false | The allowEmptyStream parameter will allow to prcoess the unavaiable stream for CSV file. |
+| allowEmptyStream | boolean |  | false | The allowEmptyStream parameter will allow to process the unavailable stream for CSV file. |
 | autospanLine | boolean |  | false | Last record spans rest of line (optional) - if enabled then the last column is auto spanned to end of line, for example if it is a comment, etc this allows the line to contain all characters, also the delimiter char. |
 | continueParseOnFailure | boolean |  | false | If true, a parse failure on any field in this record is replaced with the field’s defaultValue (or the type-appropriate default if no defaultValue is set), instead of aborting the unmarshal. Individual fields can opt out per-field via @DataField.continueParseOnFailure. Default false preserves the existing fail-fast behavior. |
 | crlf | String |  | WINDOWS | Character to be used to add a carriage return after each record (optional) - allow defining the carriage return character to use. If you specify a value other than the three listed before, the value you enter (custom) will be used as the CRLF character(s). Three values can be used : WINDOWS, UNIX, MAC, or custom. |
@@ -1071,7 +1071,7 @@ The ASCII character like tab, …​ cannot be displayed in WIKI page. So, have 
 
 ### 6\. KeyValuePairField
 
-The KeyValuePairField annotation defines the property of a key value pair field. Each KeyValuePairField is identified by a tag (= key) and its value associated, a type (string, int, date, …​), optionaly a pattern and if the field is required.
+The KeyValuePairField annotation defines the property of a key value pair field. Each KeyValuePairField is identified by a tag (= key) and its value associated, a type (string, int, date, …​), optionally a pattern and if the field is required.
 
   
 | Annotation name | Record type | Level |
@@ -1086,7 +1086,7 @@ TRUE forces tolerance — a parse error is replaced with the type-appropriate de
  |
 | impliedDecimalSeparator | boolean |  | false | <b>Camel 2.11:</b> Indicates if there is a decimal point implied at a specified location |
 | name | String |  |  | name of the field (optional) |
-| pattern | String |  |  | pattern that the formater will use to transform the data (optional) |
+| pattern | String |  |  | pattern that the formatter will use to transform the data (optional) |
 | position | int |  | 0 | Position of the field in the message generated - must be used when the position of the key/tag in the FIX message must be different |
 | precision | int |  | \-1 | precision of the BigDecimal number to be created. Use -1 (default) to preserve the original scale from the input. |
 | required | boolean |  | false | Indicates if the field is mandatory |

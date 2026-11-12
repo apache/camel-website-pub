@@ -81,7 +81,7 @@ The Bean Validator component supports the following options which are listed bel
 | **constraintValidatorFactory** (advanced) | To use a custom ConstraintValidatorFactory. |  | ConstraintValidatorFactory |
 | **messageInterpolator** (advanced) | To use a custom MessageInterpolator. |  | MessageInterpolator |
 | **traversableResolver** (advanced) | To use a custom TraversableResolver. |  | TraversableResolver |
-| **validationProviderResolver** (advanced) | To use a a custom ValidationProviderResolver. |  | ValidationProviderResolver |
+| **validationProviderResolver** (advanced) | To use a custom ValidationProviderResolver. |  | ValidationProviderResolver |
 | **validatorFactory** (advanced) | **Autowired** To use a custom ValidatorFactory. |  | ValidatorFactory |
 
 ## Endpoint Options
@@ -110,7 +110,7 @@ With the following _path_ and _query_ parameters:
 | **constraintValidatorFactory** (advanced) | To use a custom ConstraintValidatorFactory. |  | ConstraintValidatorFactory |
 | **messageInterpolator** (advanced) | To use a custom MessageInterpolator. |  | MessageInterpolator |
 | **traversableResolver** (advanced) | To use a custom TraversableResolver. |  | TraversableResolver |
-| **validationProviderResolver** (advanced) | To use a a custom ValidationProviderResolver. |  | ValidationProviderResolver |
+| **validationProviderResolver** (advanced) | To use a custom ValidationProviderResolver. |  | ValidationProviderResolver |
 | **validatorFactory** (advanced) | To use a custom ValidatorFactory. |  | ValidatorFactory |
 
 ## Message Body

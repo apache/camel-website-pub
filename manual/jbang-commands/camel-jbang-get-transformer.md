@@ -15,4 +15,4 @@ camel get transformer [options]
 | --- | --- | --- | --- |
 | `--json` | Output in JSON Format |  | boolean |
 | `--sort` | Sort by pid, name or age | pid | String |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

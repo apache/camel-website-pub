@@ -101,3 +101,13 @@ camel-kit doctor
 ```
 
 Before reinitializing, `.agents/mcp_config.json` must be valid JSON without duplicate keys (`doctor` reports duplicates as failures), and `AGENTS.md`, `GEMINI.md` and everything under `.agents/` must be real files or directories, so replace symbolic links first; these checks run before any project file is changed. `--force` replaces the generated `AGENTS.md`, skills and configuration, so preserve custom additions to those files first; custom project rules can live in `GEMINI.md`, which Antigravity also reads. Antigravity reinitialization removes the four old Camel Kit `@.gemini/…​` imports from `GEMINI.md` and keeps custom text, imports and other `.gemini/` files. Move custom MCP servers from `.gemini/settings.json` to `.agents/mcp_config.json` using Google’s MCP schema, and custom skills from `.gemini/skills/<name>/` to `.agents/skills/<name>/`. Bob 2 reinitialization replaces the generated gate skills and modes with the shared pipeline and native subagents, removing only the known obsolete Bob v1 mode-rule files.
+
+## Claude MCP approvals
+
+Fresh and regenerated Claude workspaces pre-approve only the explicit MCP tools listed in the workflow manifest. Other server tools remain visible and require Claude Code permission. Regenerate older workspaces to replace server-wide wildcard grants; review user-level settings separately. The generated Read and Maven command grants retain their existing behavior.
+
+## Generated path checks
+
+Initialization checks generated paths before writing. Checks cover generated leaves and their ancestors, plus Camel-owned skill, shared-guide and template subtrees. Unrelated worktrees (including `.claude/worktrees`), custom skills, and existing data links are left alone. Fresh generated files use normal umask permissions; replacing an existing file preserves its POSIX mode. Replace symbolic links inside the managed paths with real files or directories before running init; this includes links at generated file destinations. The explicitly selected project directory may itself be an alias. Existing unrelated project directories are not treated as generated outputs.
+
+Catalog, Citrus and Forage cache versions must be single safe path components. Citrus and Forage refuse linked cache ancestors and output paths, so an existing workspace cannot redirect extraction or generated quick references outside the chosen destination.

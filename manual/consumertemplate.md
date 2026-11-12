@@ -9,7 +9,7 @@ The `receiveBody()` method allows you to receive any object to an endpoint easil
 ```java
 ConsumerTemplate template = exchange.getContext().createConsumerTemplate();
 
-// recieve from default endpoint
+// receive from default endpoint
 Object body = template.receiveBody();
 
 // receive from a specific queue

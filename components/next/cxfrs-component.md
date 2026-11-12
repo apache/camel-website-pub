@@ -112,7 +112,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **features** (common) | Set the feature list to the CxfRs endpoint. |  | List |
 | **modelRef** (common) | This option is used to specify the model file which is useful for the resource class without annotation. When using this option, then the service class can be omitted, to emulate document-only endpoints. |  | String |
-| **providers** (common) | Set custom JAX-RS provider(s) list to the CxfRs endpoint. You can specify a string with a list of providers to lookup in the registy separated by comma. |  | String |
+| **providers** (common) | Set custom JAX-RS provider(s) list to the CxfRs endpoint. You can specify a string with a list of providers to lookup in the registry separated by comma. |  | String |
 | **resourceClasses** (common) | The resource classes which you want to export as REST service. Multiple classes can be separated by comma. |  | List |
 | **schemaLocations** (common) | Sets the locations of the schema(s) which can be used to validate the incoming XML or JAXB-driven JSON. |  | List |
 | **skipFaultLogging** (common) | This option controls whether the PhaseInterceptorChain skips logging the Fault that it catches. | false | boolean |

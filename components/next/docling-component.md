@@ -211,7 +211,7 @@ Enum values:
 | **includeRawMetadata** (metadata) | Include raw metadata as returned by the parser. | false | boolean |
 | **allowFilePathSource** (security) | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte\[\] or explicit path collection bodies used by the batch operations. | false | boolean |
 | **allowUrlSource** (security) | Whether a String message body that starts with http:// or https:// is interpreted as a remote URL for Docling to fetch. When disabled, such a body is rejected instead of being fetched. This does not affect the CamelDoclingInputFilePath header, nor bodies of any other type. | false | boolean |
-| **apiKeyHeader** (security) | Header name for API key authentication. | X-API-Key | String |
+| **apiKeyHeader** (security) | **Deprecated** Header name for API key authentication. Deprecation note: Not used: the docling-serve client always sends the API key in the X-Api-Key header. | X-Api-Key | String |
 | **authenticationScheme** (security) | 
 
 Authentication scheme (BEARER, API\_KEY, NONE).
@@ -426,7 +426,7 @@ Enum values:
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 | **allowFilePathSource** (security) | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte\[\] or explicit path collection bodies used by the batch operations. | false | boolean |
 | **allowUrlSource** (security) | Whether a String message body that starts with http:// or https:// is interpreted as a remote URL for Docling to fetch. When disabled, such a body is rejected instead of being fetched. This does not affect the CamelDoclingInputFilePath header, nor bodies of any other type. | false | boolean |
-| **apiKeyHeader** (security) | Header name for API key authentication. | X-API-Key | String |
+| **apiKeyHeader** (security) | **Deprecated** Header name for API key authentication. Deprecation note: Not used: the docling-serve client always sends the API key in the X-Api-Key header. | X-Api-Key | String |
 | **authenticationScheme** (security) | 
 
 Authentication scheme (BEARER, API\_KEY, NONE).
@@ -490,6 +490,10 @@ The Docling component supports the following message header(s), which is/are lis
 | **CamelDoclingChunkingTokenizer** (common) Constant: [`CHUNKING_TOKENIZER`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#CHUNKING_TOKENIZER) | Tokenizer for hybrid chunking (e.g. sentence-transformers/all-MiniLM-L6-v2). |  | String |
 | **CamelDoclingChunkingMaxTokens** (common) Constant: [`CHUNKING_MAX_TOKENS`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#CHUNKING_MAX_TOKENS) | Maximum tokens per chunk for hybrid chunking. |  | Integer |
 | **CamelDoclingChunkingMergePeers** (common) Constant: [`CHUNKING_MERGE_PEERS`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#CHUNKING_MERGE_PEERS) | Whether to merge peer chunks in hybrid chunking. |  | Boolean |
+| **CamelDoclingTaskStatus** (common) Constant: [`TASK_STATUS`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#TASK_STATUS) | Status of the async conversion task checked by CHECK\_CONVERSION\_STATUS: PENDING, IN\_PROGRESS, COMPLETED, FAILED or UNKNOWN. |  | String |
+| **CamelDoclingTaskProgress** (common) Constant: [`TASK_PROGRESS`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#TASK_PROGRESS) | Progress of the async conversion task, when the server reports one. |  | Integer |
+| **CamelDoclingResult** (common) Constant: [`TASK_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#TASK_RESULT) | The converted document of a completed async conversion task. |  | String |
+| **CamelDoclingErrorMessage** (common) Constant: [`TASK_ERROR_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#TASK_ERROR_MESSAGE) | The error message of a failed async conversion task. |  | String |
 
 ## Message Body
 

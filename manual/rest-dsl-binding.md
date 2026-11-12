@@ -314,7 +314,7 @@ The Rest DSL supports the following options:
 | **useXForwardHeaders** | true | boolean | Whether to use X-Forward headers to set host etc. for Swagger. This option is default true. |
 | **xmlDataFormat** |  | String | Sets a custom XML data format to be used. Important: This option is only for setting a custom name of the data format, not to refer to an existing data format instance. |
 
-For example, to configure the requst buffer on the jetty component on port 9091, then we can do as follows:
+For example, to configure the request buffer on the jetty component on port 9091, then we can do as follows:
 
 -   Java
     

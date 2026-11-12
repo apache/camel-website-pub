@@ -31,4 +31,4 @@ camel get route [options]
 | `--source` | Prefer to display source filename/code instead of IDs |  | boolean |
 | `--watch` | Execute periodically and showing output fullscreen |  | boolean |
 | `--wide-uri` | List endpoint URI in full details |  | boolean |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

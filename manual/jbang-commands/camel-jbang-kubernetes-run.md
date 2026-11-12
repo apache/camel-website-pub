@@ -75,4 +75,4 @@ camel kubernetes run [options]
 | `--verbose` | Verbose output of build/deploy progress |  | boolean |
 | `--volume` | Mount a volume into the integration container, for instance "-v pvcname:/container/path". |  | String\[\] |
 | `--wait` | Wait for the deployment to become ready. |  | boolean |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

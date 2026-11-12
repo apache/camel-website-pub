@@ -19,4 +19,4 @@ camel ps [options]
 | `--remote` | Break down counters into remote/total pairs |  | boolean |
 | `--sort` | Sort by pid, name or age | pid | String |
 | `--watch` | Execute periodically and showing output fullscreen |  | boolean |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

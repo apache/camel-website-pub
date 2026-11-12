@@ -483,7 +483,7 @@ Table 1. Put Operations
     
     -   `CamelInfinispanLifespanTime`
         
-    -   `CamelInfinispanLifespanTimeUnit`
+    -   `CamelInfinispanTimeUnit`
         
     -   `CamelInfinispanMaxIdleTime`
         
@@ -511,7 +511,7 @@ Table 2. Put All Operations
     
     -   `CamelInfinispanLifespanTime`
         
-    -   `CamelInfinispanLifespanTimeUnit`
+    -   `CamelInfinispanTimeUnit`
         
     -   `CamelInfinispanMaxIdleTime`
         
@@ -599,7 +599,7 @@ Table 7. Replace Operations
     
     -   `CamelInfinispanLifespanTime`
         
-    -   `CamelInfinispanLifespanTimeUnit`
+    -   `CamelInfinispanTimeUnit`
         
     -   `CamelInfinispanMaxIdleTime`
         

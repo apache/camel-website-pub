@@ -28,4 +28,4 @@ camel catalog transformer [options]
 | `--since-after` | Filter by version more recent (inclusive) |  | String |
 | `--since-before` | Filter by version older (inclusive) |  | String |
 | `--sort` | Sort by name, support-level, or description | name | String |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

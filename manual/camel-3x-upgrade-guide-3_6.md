@@ -63,7 +63,7 @@ The components affected are:
 
 ### Languages
 
-All the out of the box supported languages (simple, bean, groovy, jsonpath, xpath etc.) have been optmized to be _singleton_ which improves performance for concurrent processing that uses those languages that would be resolved on each use. Now the languages are resolved once during startup or first usage.
+All the out of the box supported languages (simple, bean, groovy, jsonpath, xpath etc.) have been optimized to be _singleton_ which improves performance for concurrent processing that uses those languages that would be resolved on each use. Now the languages are resolved once during startup or first usage.
 
 ### Expressions
 

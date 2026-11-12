@@ -212,7 +212,7 @@ In an XML route the panel also follows the cursor: on an attribute name or in it
 
 ## Navigation
 
--   **Jump links** — a line that sends to another route, such as `to("seda:shipping")`, shows `↵ shipping`. Press **Enter** on the line to go to that route, also when it is in another file or another DSL. A `from` shows which route calls it; when more than one does, it shows `↵ 2 callers`, and **Enter** opens a list of them to choose from.
+-   **Jump links** — a line that sends to another route, such as `to("seda:shipping")`, shows `↵ shipping`. Press **Enter** on the line to go to that route, also when it is in another file or another DSL. A `from` shows which route calls it; when more than one does, it shows `↵ 2 callers`, and **Enter** opens a list of them to choose from. Before the route, `↳` says that the route waits for the answer (`↵ ↳ audit` for a `direct` route, a request-reply with `exchangePattern=InOut`, an `enrich`) and `⇢` that it hands the message off (`↵ ⇢ shipping` for a queue, a topic or a `wireTap`), as in the About view. While the integration runs, and its Diagram, Routes or About view has been open, the running routes decide: a route that consumes a request, from `platform-http`, also waits on a send to a queue.
     
 -   **Go to route** — **g** lists all the routes of the project; type to filter, and **Enter** opens the route.
     

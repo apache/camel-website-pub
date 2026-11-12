@@ -15,4 +15,4 @@ camel config list [options]
 | --- | --- | --- | --- |
 | `--global` | Use global or local configuration |  | boolean |
 | `--json` | Output in JSON Format: one entry per key, with its scope (local or global) |  | boolean |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

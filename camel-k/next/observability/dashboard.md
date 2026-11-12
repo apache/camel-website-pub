@@ -100,3 +100,7 @@ items:
 > Camel K won’t require the availability of Camel Monitor operator to work, neither Camel Monitor operator would require Camel K. They are independent projects which can cooperate to provide a Build and Monitoring tool respectively.
 
 Learn more by reading the official [Camel Dashboard documentation](https://camel-tooling.github.io/camel-dashboard/).
+
+## Discover monitoring from an Integration
+
+The `CamelMonitorAvailable` condition and `Camel Monitor` column indicate when a `CamelMonitor` with the Integration’s name is found in its namespace.

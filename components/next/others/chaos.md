@@ -118,7 +118,7 @@ Chaos rules to try, the most worth trying first:
 
 1. route orders: Returns an error (HTTP status) (errors)
    an HTTP call to http://stock/check without a circuit breaker: what does the route do when the service answers 503?
-   camel cmd chaos-add --rule='endpoint=http://stock/check error status=503 rate=0.25 until=10m'
+   camel cmd chaos-add --rule='endpoint=http://stock/check error status=503 rate=0.25 until=10m expect=orders:failed<=0'
 
 2. route orders: The route after a hand-off fails (lost)
    route orders hands the message to route shipping over seda and does not wait: when shipping fails, is the message lost?
@@ -144,6 +144,8 @@ When the input is a remote system that is not a stub (see [With stubs](#_with_st
 | --- | --- |
 | An HTTP call, without a circuit breaker | The service answers with an error (`status=503`), and does not answer in time (`timeout`) |
 | An HTTP call, in a route with a circuit breaker | The service is down for a while (`outage`): does the breaker open, and does the fallback answer? |
+| An HTTP call that is known only when it sends (`toD`) | By its address up to the first expression (`endpoint=http://stock/items/*` for `http://stock/items/${variable.sku}`): the service answers 503 (or is down for a while, with a circuit breaker), and the resource is not there (`status=404`). An address that starts with an expression says nothing of where it goes, and is left out |
+| A call to another route (`direct`), in a route with a circuit breaker | That route stands for the service: it is down for a while (`outage`), and half of the calls fail (`rate=0.5`), past the failure rate of the breaker. Does the breaker open, and does the fallback answer? |
 | A call over another protocol | The connection is refused, and the call is slow |
 | An input that can deliver a message again (Kafka, JMS, AMQP, SQS and more, or a consumer that reads a failed message again, such as a file without `moveFailed`) | The call out is made twice (`duplicate`): is it safe to repeat? |
 | A dead letter channel | It fails too (`at=dlq`): is the message then lost? Add it with a rule that fails a route. A dead letter channel that the routes share (the error handler of a route builder) is suggested once, for all of them, and not for the route that consumes it. |
@@ -152,17 +154,19 @@ When the input is a remote system that is not a stub (see [With stubs](#_with_st
 | A remote call and a dead letter channel | Two faults at once: the call is down for a minute while the dead letter channel fails too. Are messages lost? The report counts what the dead letter channel did not take as lost |
 | A remote call | Two faults at once: the call is slow and fails now and then. Do the redeliveries pile up, and how long does an exchange take? |
 
+Every suggestion says what should hold despite its faults, as an expectation (see [Expectations on the error handler](#_expectations_on_the_error_handler)), so it can be run as an experiment of an exploration as it is, and a rule added from it has a verdict that tells something. A hand-off expects that no message is lost between the two routes, and a duplicate that the route receiving the call does no work twice. Every other suggestion expects that no exchange fails in its route (`expect=orders:failed⇐0`): whatever the fault does, each exchange it hits is recovered by redelivery or handled by the error handler. A route without error handling for the fault then fails the verdict, which is the finding, and a route with a dead letter channel, redelivery or a circuit breaker with a fallback passes. A fault that fails or stalls a route that another route of the integration calls (over `direct`, `seda` or HTTP to the integration’s own server) expects of that caller instead (`expect=orders:failed⇐0` for a stalled `payment` that `orders` calls): the route fails where the fault is, and what should hold is that its caller copes. Change the expectation when the route is meant to fail, such as a sender that should see the error.
+
 Two faults at once (kind `combined`) come after the single faults, as most bugs that lose messages need two failures that meet. Their rules are added together:
 
 ```none
 5. route orders: An outage while the dead letter channel fails (combined)
    route orders sends what fails to the dead letter channel direct:parked: when http://payment/charge is down for a minute and the dead letter channel fails too, are messages lost? The report counts what the dead letter channel did not take as lost
-   camel cmd chaos-add --rule='endpoint=http://payment/charge error status=503 until=1m' --rule='endpoint=direct:parked error at=dlq until=1m'
+   camel cmd chaos-add --rule='endpoint=http://payment/charge error status=503 until=1m expect=orders:failed<=0' --rule='endpoint=direct:parked error at=dlq until=1m'
 ```
 
-Each of their rules counts as its own kind in what has been tried, so a pair is never "not tried yet".
+Each of their rules counts as its own kind in what has been tried, so a pair is never "not tried yet". The expectation is on the first rule, and the messages the dead letter channel did not take fail the verdict too.
 
-The rules leave the query of the endpoint out: its options do not tell which endpoint it is, and may hold a secret. `ChaosManager.suggest()` gives the same as JSON: `suggestions`, each with `route`, `kind`, `recipe`, `title`, `rule`, `why`, `tried`, `routes` for a dead letter channel that several routes share, `feed`, and `rules` for two faults at once. A `feed` has its `kind` (one of `self`, `http`, `file` and `send`), a `hint` and `real`. `rules` has all the rules to add together. The chaos screen of the Camel TUI lists the suggestions (key `w`), where Enter types the rule in to change or add (the rules of two faults at once separated by `;`).
+The rules leave the query of the endpoint out: its options do not tell which endpoint it is, and may hold a secret. `ChaosManager.suggest()` gives the same as JSON: `suggestions`, each with `route`, `kind`, `recipe`, `title`, `rule`, `why`, `tried`, `routes` for a dead letter channel that several routes share, `feed`, and `rules` for two faults at once. A `feed` has its `kind` (one of `self`, `http`, `file` and `send`), a `hint`, `real`, and `fed` when the route gets messages without a feed: it makes its own (a timer), or a route that does sends to it, also with an HTTP call to the server of the integration. Such a suggestion can run as an experiment without sending anything. A route that starts from `file:<folder>` and moved the files it took (to `.camel`, or the folder of its `move` option) has `replay`, that folder, and `files`, how many there are: `ChaosManager.replayFiles(route)` (the chaos command `replay`) puts them back into its folder under their own names, so the route takes the same files again. The route moves them over the files there, so a replay is the same each time, as an experiment that is run again needs. A route with `noop=true` never takes a file of the same name again, and one with `delete=true` keeps none: they have no `replay`. A route that such a file route sends to has them too, with `replayRoute`, the file route to replay for it. `rules` has all the rules to add together. The chaos screen of the Camel TUI lists the suggestions (key `w`), where Enter types the rule in to change or add (the rules of two faults at once separated by `;`).
 
 ### What has been tried
 
@@ -178,7 +182,7 @@ $ camel get chaos --report
   shipping  dead letter channel                    not tried yet
 ```
 
--   The kinds are `errors` (a send or a step fails), `slow` (a delay), `lost` (a send is dropped), `corrupt`, `duplicate`, `consumer` (the polls, or the entry of the route), `lifecycle` (stall and lifecycle) and `dead letter channel` (`at=dlq`). A rule has one kind, from its fault and where it acts.
+-   The kinds are `errors` (a send or a step fails), `slow` (a delay, or an error that waits first: a timeout), `lost` (a send is dropped), `corrupt`, `duplicate`, `consumer` (the polls, or the entry of the route), `lifecycle` (stall and lifecycle) and `dead letter channel` (`at=dlq`). A rule has one kind, from its fault and where it acts.
     
 -   A kind is tried in a route when a rule of that kind fired in it: a rule counts its faults per route, so a rule that reaches several routes is tried in each. A rule that expects no message lost between two routes (`expect=orders→shipping:lost⇐0`) also tries `lost` for the first route, as the hand-off suggestion fails the next route. A dead letter channel that the routes share is tried by a rule of its kind in any of them. The rules removed or replaced count too, so the report says what the experiment tried, not only what runs now.
     
@@ -252,6 +256,8 @@ The routes that failed while it ran, and whose failures no expectation of the ex
 The experiment is ended with the exploration when that finishes, or when its time is up, with what came of it so far.
 
 The `chaos` action of the CLI connector begins one (`{"action": "chaos", "command": "experiment-begin", "hypothesis": "an order never fails", "rule": "endpoint=http:payment* error status=503 until=1m expect=orders:failed⇐0 within=70s"}`), with several rules separated by `;`, and ends it (`experiment-end`, with an optional `note` of what the agent makes of it). In Java, these are `ChaosManager.beginExperiment(hypothesis, rules)` and `endExperiment(note)`.
+
+An experiment whose messages are fed to a route gives that route too (`"feedRoute": "refunds"`, or `beginExperiment(hypothesis, rules, feedRoute)`, as `camel cmd chaos-experiment --feed` does). It is refused when the routes the feed reaches do not include a route of its expectations, and no route that makes its own messages (a timer, a scheduler) reaches one either: the experiment would say nothing (CAMEL-26803). The routes reached are those the static sends lead to, over `direct`, `seda`, a broker, or an HTTP call to an HTTP server route of the integration; a route with a send known only when it sends (`toD`, `wireTap`, `recipientList`) is not checked.
 
 The journal has them as `experiments`, each with:
 
@@ -521,6 +527,7 @@ The delay faults slow a route down, and the question is whether the route stays 
 | `orders:meanTime⇐2s` | The mean time of the exchanges in route `orders` is at most 2 s when the time is up. |
 | `orders:maxTime⇐5s` | No exchange of route `orders` took longer than 5 s. One that does makes it unmet at once. |
 | `orders→shipping:lost⇐0` (or `lost=0`) | Every message that completed in route `orders` also completed in route `shipping`: the count of `shipping` is at most 0 behind the count of `orders` when the time is up. |
+| `payment:duplicates⇐0` (or `duplicates=0`) | Route `payment` did no message twice: none completed in it a second time without an idempotent consumer recognising it as a duplicate. One more than the count makes it unmet at once. |
 
 -   The time of an exchange in a route is measured by chaos, from when the exchange enters the route until the route is done with it the first time (whether it completed, was handled by the error handler or failed), including the redeliveries in between. It is read through `TimeSource`, so in a deterministic simulation test it is virtual time. A time is any time of the rules, such as `500ms`, `2s` or `1m30s`; the op is `⇐` or `>=` (a `meanTime>=1s` checks that a delay rule slows the route as it should).
     
@@ -542,6 +549,25 @@ camel.chaos.rules = \
 ```
 
 An unmet one gives its reason in the report, such as `route orders: mean 2s340ms of 118 exchanges within 2m0s, at most 2s expected (rule r1)` or `routes orders→shipping: 1 lost (118 completed in orders, 117 in shipping) within 2m0s, at most 0 expected (rule r2): 1 lost`. In JSON these expectations have their `spec` as the rule writes it, the `count` and the `value` in milliseconds for a time, the `toRoute` of a loss, and the `samples` (the exchanges of the time, or the ones completed in the first route).
+
+#### Duplicates
+
+A rule with the `duplicate` fault sends a message twice, as a sender or a broker that delivers it again. Whether that did harm is a question for the route that receives it: did it do the work twice, such as a payment taken twice? An expectation of duplicates answers it (CAMEL-26791):
+
+```text
+endpoint=http://localhost:8080/payment duplicate rate=0.1 until=1m expect=payment:duplicates<=0 within=90s
+```
+
+-   Chaos notes the key of each message as it enters the route: its body as text, or the value of `key=` in the simple language when the body does not tell the messages apart (`key=${header.orderId}`, also for a request without a body). A message whose key it cannot read (no body, an empty one, or a stream when stream caching is off) is not counted.
+    
+-   A message that completes in the route with a key that completed there before is a duplicate processed, unless an idempotent consumer of the route recognised it: it sets the exchange property `CamelDuplicateMessage`, with or without `skipDuplicate`. A route that recognises duplicates in another way can set that property too.
+    
+-   Each pass through the route counts: the second send of a duplicate to a `direct` route is the same exchange again, and so is a redelivery that calls the route again after it completed, which did the work twice as well.
+    
+-   The route must be a route of the integration, such as the `platform-http` route of an HTTP call to the integration’s own server, a `direct` or `seda` route, or the route of a stubbed input. What another system does with a duplicate is not seen. The suggestions of `chaos-suggest` add this expectation to a duplicate fault when a route of the integration receives the send.
+    
+-   The op is `⇐` or `=`. The value is the duplicates processed, and its `samples` the messages that completed with a key, such as `2 duplicates processed (41 completed in payment)`.
+    
 
 The route statistics of Camel have no percentiles, so there is no `p99` yet.
 

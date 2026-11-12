@@ -20,4 +20,4 @@ camel script [options]
 | `--max-seconds` | Max seconds to run before stopping | 0 | int |
 | `--prop,--property` | Additional properties (override existing) |  | String\[\] |
 | `--properties` | Load properties file for route placeholders (ex. /path/to/file.properties |  | String |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

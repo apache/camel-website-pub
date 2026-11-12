@@ -17,4 +17,4 @@ camel validate properties [options]
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
 | `--json` | Output in JSON Format: valid, file and errors of each file, as the MCP tool camel\_validate\_source answers |  | boolean |
-| `-h,--help` | Display the help and sub-commands |  | boolean |
+| `-h,--help` | Display this help and exit |  | boolean |

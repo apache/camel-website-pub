@@ -275,7 +275,7 @@ The header `CamelAwsS3BucketName` for setting a bucket to write to, on the produ
 
 ### camel-file
 
-The `camel-file` consumer has been optimized when filtering file names using name matching only, to avoid creating an `GenericFile` object that represent the file. This is unnessasary if the file is to be excluded due the filtering.
+The `camel-file` consumer has been optimized when filtering file names using name matching only, to avoid creating an `GenericFile` object that represent the file. This is unnecessary if the file is to be excluded due the filtering.
 
 This optimization has changed APIs in the `camel-file` component to let methods that accept `GenericFile` as parameter, has been changed to use a `Supplier<GenericFile>` to lazy create the wrapper.
 

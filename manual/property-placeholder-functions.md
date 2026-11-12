@@ -571,7 +571,7 @@ from("direct:rome")
 
 ### Using configmap or secrets in local-mode
 
-During development, you may want to run in _local mode_ where you do not need acces to a Kubernetes cluster, to lookup the configmap. In the local mode, then Camel will lookup the configmap _keys_ from local properties, eg:
+During development, you may want to run in _local mode_ where you do not need access to a Kubernetes cluster, to lookup the configmap. In the local mode, then Camel will lookup the configmap _keys_ from local properties, eg:
 
 For example the example above with the Postgres kamelet, that was configured using a secret:
 

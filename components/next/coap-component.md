@@ -633,7 +633,7 @@ DTLS.RETRANSMISSION_TIMEOUT_SCALE=2.0
 DTLS.ROLE=BOTH
 # Use minimal version of RFC5746 to indicate secure renegotiation on
 # initial handshake.
-# Renegotation handshakes are always rejected by Californium.
+# Renegotiation handshakes are always rejected by Californium.
 # [NONE, WANTED, NEEDED].
 # Default: WANTED
 DTLS.SECURE_RENEGOTIATION_MODE=WANTED
@@ -736,7 +736,7 @@ TCP.WORKER_THREADS=0
 # Maximum number of pending outgoing messages.
 # Default: 2147483647
 UDP.CONNECTOR_OUT_CAPACITY=2147483647
-# Maxium size of UDP datagram.
+# Maximum size of UDP datagram.
 # Default: 2048
 UDP.DATAGRAM_SIZE=2048
 # Number of UDP receiver threads.

@@ -183,7 +183,7 @@ Enum values:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **action** (producer) | 
-To denote an action that can be either: start, stop, or status. To either start or stop a route, or to get the status of the route as output in the message body. You can use suspend and resume to either suspend or resume a route. You can use stats to get performance statics returned in XML format; the routeId option can be used to define which route to get the performance stats for, if routeId is not defined, then you get statistics for the entire CamelContext. The restart action will restart the route. And the fail action will stop and mark the route as failed (stopped due to an exception).
+To denote an action that can be either: start, stop, or status. To either start or stop a route, or to get the status of the route as output in the message body. You can use suspend and resume to either suspend or resume a route. You can use stats to get performance statistics returned in XML format; the routeId option can be used to define which route to get the performance stats for, if routeId is not defined, then you get statistics for the entire CamelContext. The restart action will restart the route. And the fail action will stop and mark the route as failed (stopped due to an exception).
 
 Enum values:
 
@@ -344,7 +344,7 @@ In a route, the status is the message body after the call, such as `Started` or 
 
 ### Getting performance statistics
 
-This requires JMX to be enabled (it is enabled by default) then you can get the performance statics per route, or for the CamelContext. For example, to get the statics for a route named foo, we can use:
+This requires JMX to be enabled (it is enabled by default) then you can get the performance statistics per route, or for the CamelContext. For example, to get the statistics for a route named foo, we can use:
 
 _Java-only: Java test API (ProducerTemplate)_
 
@@ -352,7 +352,7 @@ _Java-only: Java test API (ProducerTemplate)_
 String xml = template.requestBody("controlbus:route?routeId=foo&action=stats", null, String.class);
 ```
 
-The returned statics is in XML format. It is the same data you can get from JMX with the `dumpRouteStatsAsXml` operation on the `ManagedRouteMBean`. In a route, the XML is the message body. This route writes the statistics of the route `foo` to a file every minute:
+The returned statistics is in XML format. It is the same data you can get from JMX with the `dumpRouteStatsAsXml` operation on the `ManagedRouteMBean`. In a route, the XML is the message body. This route writes the statistics of the route `foo` to a file every minute:
 
 ```yaml
 - route:
@@ -372,7 +372,7 @@ The returned statics is in XML format. It is the same data you can get from JMX 
               fileName: "foo-${date:now:yyyyMMddHHmm}.xml"
 ```
 
-To get statics for the entire `CamelContext` you just omit the routeId parameter as shown below:
+To get statistics for the entire `CamelContext` you just omit the routeId parameter as shown below:
 
 _Java-only: Java test API (ProducerTemplate)_
 

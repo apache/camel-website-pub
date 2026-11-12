@@ -128,7 +128,7 @@ Enum values:
 | **idempotentRepository** (filter) | A pluggable repository org.apache.camel.spi.IdempotentRepository which by default use MemoryIdempotentRepository if none is specified and idempotent is true. |  | IdempotentRepository |
 | **idempotentStrategy** (filter (advanced)) | 
 
-A pluggable strategy org.apache.camel.component.FeedIdempotentStrategy to use when checking idempotency. Camel provides two implementations out of the box: default and repository. The updated strategy is used as default if idempotent = true. The default strategy checks the Atom entrys updated or published date is newer than the previously read entry. You can provide your own implementation of the org.apache.camel.component.FeedIdempotentStrategy and refer to it using the # notation.
+A pluggable strategy org.apache.camel.component.FeedIdempotentStrategy to use when checking idempotency. Camel provides two implementations out of the box: default and repository. The updated strategy is used as default if idempotent = true. The default strategy checks the Atom entry’s updated or published date is newer than the previously read entry. You can provide your own implementation of the org.apache.camel.component.FeedIdempotentStrategy and refer to it using the # notation.
 
 Enum values:
 
