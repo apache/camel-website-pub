@@ -266,6 +266,7 @@ Enum values:
  | RoundRobinPartition | MessageRoutingMode |
 | **producerName** (producer) | Name of the producer. If unset, lets Pulsar select a unique identifier. |  | String |
 | **sendTimeoutMs** (producer) | Send timeout in milliseconds. | 30000 | int |
+| **allowJavaSerializedObject** (producer (advanced)) | **Deprecated** Whether the producer sends a body that does not convert to a byte array (such as a Map, a List, a number or a POJO) with Java serialization, as Camel did before 4.24. Such a message can only be read by a Java client that deserializes it. By default the producer fails such a body: marshal it first, for example to JSON. Deprecation note: Java serialization of the body is kept only for compatibility, and will be removed: marshal the body before sending it. | false | boolean |
 | **autoConfiguration** (advanced) | The pulsar auto configuration. |  | AutoConfiguration |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **pulsarClient** (advanced) | **Autowired** The pulsar client. |  | PulsarClient |
@@ -516,6 +517,7 @@ Enum values:
  | RoundRobinPartition | MessageRoutingMode |
 | **producerName** (producer) | Name of the producer. If unset, lets Pulsar select a unique identifier. |  | String |
 | **sendTimeoutMs** (producer) | Send timeout in milliseconds. | 30000 | int |
+| **allowJavaSerializedObject** (producer (advanced)) | **Deprecated** Whether the producer sends a body that does not convert to a byte array (such as a Map, a List, a number or a POJO) with Java serialization, as Camel did before 4.24. Such a message can only be read by a Java client that deserializes it. By default the producer fails such a body: marshal it first, for example to JSON. Deprecation note: Java serialization of the body is kept only for compatibility, and will be removed: marshal the body before sending it. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
 ## Message Headers
@@ -551,10 +553,72 @@ The message body at each side of the Pulsar component: _Consumer_ is the body of
 | Side | Body | Description |
 | --- | --- | --- |
 | **Consumer** | `bytes` or `null` (`byte[]`) | The payload of the Pulsar message as a byte array, null for a message with a null value (a tombstone), with the key and the properties in headers: convert or unmarshal it. |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload. Any other body is sent with Java serialization, a Map, a List, a number and no body too, and an object that is not Serializable fails: marshal it first. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | What converts to a byte array: text, bytes, a stream or a file, sent as the payload. Any other body, such as a Map, a List, a number or a POJO, fails, and so does no body: marshal it first.
+Not known when `allowJavaSerializedObject` is set.
+
+ |
 | **Producer output** | `unchanged` | Unchanged, also when the exchange expects a reply, with the id of the published message in a header. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
+
+## Deterministic simulation tests
+
+The consumer of the Pulsar component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `PulsarWorld`
+Fake: FakePulsar: a broker and client for one topic and one durable subscription
+
+Tests: `PulsarConsumerDstTest`
+
+ | 
+
+**Covers:**
+
+-   subscription types Exclusive, Shared, Failover and Key\_Shared with one to three consumers
+    
+-   the message listener (messageListener=true, one consumer thread)
+    
+-   the ack timeout and the redelivery of a failed exchange after a negative acknowledgement
+    
+-   route start, restart, suspend and resume
+    
+-   an asynchronous downstream step
+    
+
+**Faults:**
+
+-   subscribe fails (the broker cannot be reached before the operation timeout)
+    
+-   the broker restarts
+    
+-   the downstream step answers slowly
+    
+-   the downstream step fails
+    
+
+**Invariants:**
+
+-   no unexpected client call or consumer count
+    
+-   the route is started
+    
+-   a started route holds the configured number of Pulsar consumers
+    
+-   every offered message is routed at least once
+    
+-   the subscription is drained once the faults cleared
+    
+
+
+
+
+
+ | [CAMEL-25869](https://issues.apache.org/jira/browse/CAMEL-25869) |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
 
 ## Usage
 
@@ -588,6 +652,12 @@ The following routes send a message to the `orders` topic every five seconds, an
         - log:
             message: "Received ${body}"
 ```
+
+### Message body
+
+The producer sends the body as a byte array: text, bytes, a stream or a file are sent as their content. A body that does not convert to a byte array, such as a `Map`, a `List`, a number or a POJO, fails, and so does no body: marshal it first, for example to JSON with `marshal().json()`. The consumer gives the payload as a byte array, so convert or unmarshal it in the route.
+
+Before Camel 4.24 such a body was sent with Java serialization, which only a Java client that deserializes it can read. The deprecated `allowJavaSerializedObject` option turns this back on for compatibility, and will be removed.
 
 ### Producer sequence ids and deduplication
 

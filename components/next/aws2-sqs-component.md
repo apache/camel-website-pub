@@ -704,6 +704,73 @@ Unchanged for a send, with the id of the message in a header; the response of th
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the AWS Simple Queue Service (SQS) component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `SqsWorld`
+Fake: FakeSqs: a standard SQS queue (ReceiveMessage, DeleteMessage, ChangeMessageVisibilityBatch) bound as amazonSQSClient
+
+Tests: `SqsRedeliveryDstTest`, `SqsVisibilityDstTest`
+
+ | 
+
+**Covers:**
+
+-   the visibility timeout extender (extendMessageVisibility=true)
+    
+-   short polling with one to three concurrent consumers and up to 10 messages per poll
+    
+-   processing that takes longer than the visibility timeout
+    
+-   synchronous redelivery by the error handler after a delay longer than the visibility timeout
+    
+
+**Faults:**
+
+-   ReceiveMessage fails
+    
+-   ReceiveMessage answers slowly
+    
+-   DeleteMessage is lost
+    
+-   ChangeMessageVisibilityBatch fails
+    
+-   processing is slower than the visibility timeout
+    
+-   processing fails
+    
+
+**Invariants:**
+
+-   no message is delivered again while the consumer holds it
+    
+-   every offered message is routed at least once
+    
+-   the queue is drained once the faults cleared
+    
+-   a redelivery waits at least the redelivery delay
+    
+
+
+
+
+
+ | [CAMEL-25700](https://issues.apache.org/jira/browse/CAMEL-25700)
+
+[CAMEL-25737](https://issues.apache.org/jira/browse/CAMEL-25737)
+
+[CAMEL-25738](https://issues.apache.org/jira/browse/CAMEL-25738)
+
+[CAMEL-25911](https://issues.apache.org/jira/browse/CAMEL-25911)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 Required SQS component options
 
 You have to provide the amazonSQSClient in the Registry or your accessKey and secretKey to access the [Amazon’s SQS](https://aws.amazon.com/sqs).

@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 108 in 72 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 109 in 73 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -52,7 +52,7 @@ Number of Miscellaneous Components: 108 in 72 JAR artifacts (3 deprecated)
 | [LangChain4j Agent - MCP Tools Integration](langchain4j-agent-mcp.md) |  |  |  |  |
 | [LangChain4j Agent - Multimodal Content Support](langchain4j-agent-multimodal.md) |  |  |  |  |
 | [LangChain4j Tokenizer](langchain4j-tokenizer.md) | camel-langchain4j-tokenizer | Preview | 4.8 | LangChain4j Tokenizer |
-| [LRA](lra.md) | camel-lra | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
+| [LRA](lra.md) | camel-lra | Stable | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](mail-microsoft-oauth.md) | camel-mail-microsoft-oauth | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](main.md) | camel-main | Stable | 3.0 | Camel Main |
 | [MCP Server](mcp-server.md) | camel-mcp-server | Preview | 4.22 | Expose ai-tool routes as MCP tools, ai-resource routes as MCP resources and ai-prompt routes as MCP prompts |
@@ -93,7 +93,8 @@ Number of Miscellaneous Components: 108 in 72 JAR artifacts (3 deprecated)
 | [Salesforce - Reports API](salesforce-reports.md) |  |  |  |  |
 | [Salesforce - REST API](salesforce-rest-api.md) |  |  |  |  |
 | [Salesforce - Streaming and Pub/Sub](salesforce-streaming.md) |  |  |  |  |
-| [Sanitizer](sanitizer.md) | camel-sanitizer | Preview | 4.24 | Check during development and tests that the processors of the routes keep the contract of AsyncProcessor, and report where they break it |
+| [Sanitizer](sanitizer.md) | camel-sanitizer | Preview | 4.24 | Check during development and tests that the processors of the routes keep the contract of AsyncProcessor and that the commits of the consumers run exactly once, and report where they break it |
+| [Semantic Micrometer](semantic-micrometer.md) | camel-semantic-micrometer | Preview | 4.24 | Export semantic assessments and expert measurements with Micrometer |
 | [Semantic OpenAI](semantic-openai.md) | camel-semantic-openai | Preview | 4.24 | Assess text and images with typed OpenAI Decisions through Semantic experts |
 | [Semantic TypeSafe AI](semantic-typesafe-ai.md) | camel-semantic-typesafe-ai | Preview | 4.24 | Semantic expert using the TypeSafe AI decision API |
 | [Semantic Wolf Defender](semantic-wolf-defender.md) | camel-semantic-wolf-defender | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |

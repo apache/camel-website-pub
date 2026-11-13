@@ -47,6 +47,8 @@ An AI agent connected over MCP can present too: it shows captions (`tui_show_cap
 
 Use the **F2** actions menu and select **Start Tape Recording** to start recording your session as a `.tape` file. Select **Stop Tape Recording** to stop. The tape captures your keystrokes with timing, producing a script that can be played back with `--record` (see below), edited, or converted to an animated GIF.
 
+The mouse is recorded too, as the [mouse commands](#_mouse_commands): a click is a `Click` (or `RightClick`, `MiddleClick`), a press that moves before its release is a `Drag`, such as dragging the border of a panel, and the wheel is a `ScrollUp` or `ScrollDown` with a count. Moving the mouse without a button held only hovers, and is not recorded. A click on a key hint in the footer, such as **F2**, is recorded as the key, which plays the same at any screen size. The positions of the other clicks are cells of the screen, so a comment at the top of the tape says the size of the terminal they were recorded in: play the tape with that `--record-size`.
+
 An AI agent connected over MCP records a tape of what it does with `tui_tape_start` and `tui_tape_stop`.
 
 While a tape records, and while `--record` plays one, actions that ask first go ahead at once: quitting, stopping an integration, a file an AI writes, a tool an ACP agent runs, deleting or converting a file. The model or the tape does everything itself, and the keys a tape plays, like those an MCP client sends, never answer a dialog that asks the user to confirm. Leaving the editor with unsaved changes still asks, so save before leaving it.
@@ -94,8 +96,24 @@ A tape has one command per line. Lines starting with `#` are comments. Durations
 | `Integration "name"` | Selects the integration by its name or PID. |
 | `Action "name"` | Runs an entry of the **F2** actions menu by its name, such as `show-keystrokes`, `reset-stats` or `next-theme`, or by its menu label. |
 | `Theme "name"` | Switches the theme, such as `Theme "dracula"`. |
+| `Click <x> <y>`, `Drag <x1> <y1> <x2> <y2>`, `ScrollDown`, …​ | Clicks, drags and scrolls the mouse at a cell of the screen. See [Mouse commands](#_mouse_commands). |
 
 The `Set`, `Output` and `Require` commands of VHS are skipped: the recording takes its size and file from the `--record` options. `Hide` and `Show` are not supported, as everything the TUI shows is recorded.
+
+### Mouse commands
+
+The mouse commands are those of the tape player of [TamboUI](https://github.com/tamboui/tamboui), the terminal UI library of the TUI, so they mean the same in a tape for TamboUI. They are not in VHS, which only scrolls. The positions are cells of the screen, counted from 0 at the top left: `<x>` is the column and `<y>` the row, as the `tui_locate` tool of an AI agent reports them.
+
+ 
+| Command | Description |
+| --- | --- |
+| `Click <x> <y>` | Presses and releases the left button at the cell. `RightClick` and `MiddleClick` click the other buttons. |
+| `MouseDown <x> <y>`, `MouseUp <x> <y>` | Presses or releases the left button at the cell, for full control. |
+| `MouseMove <x> <y>` | Moves the mouse to the cell with no button held, which hovers. |
+| `Drag <x1> <y1> <x2> <y2>` | Presses the left button at the first cell, moves it one cell at a time to the second, 30ms apart, and releases it there. `Drag@100ms` moves slower. |
+| `ScrollUp`, `ScrollDown`, `ScrollLeft`, `ScrollRight` | Scrolls the wheel once at the centre of the screen. A count scrolls more (`ScrollDown 3`), and a cell scrolls there (`ScrollDown 40 12`, or `ScrollDown 3 40 12` with a count). |
+
+A position depends on the size of the screen, so play a tape with clicks at the size it was written for with `--record-size`: the default size, 200x50, is seldom the size of your terminal. Where a key does the same, prefer the key: it plays the same at any size.
 
 ### Writing a tape
 

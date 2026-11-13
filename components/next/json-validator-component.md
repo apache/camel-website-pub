@@ -77,9 +77,9 @@ The JSON Schema Validator component supports the following options which are lis
 | --- | --- | --- | --- |
 | **contentCache** (producer) | Sets whether to use resource content cache or not. | true | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **useDefaultObjectMapper** (producer) | Whether to lookup and use default Jackson ObjectMapper from the registry. | true | boolean |
+| **useDefaultObjectMapper** (producer) | Whether to lookup and use the default Jackson 3 (tools.jackson) ObjectMapper from the registry. | true | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
-| **objectMapper** (advanced) | Lookup and use the existing ObjectMapper with the given id. |  | String |
+| **objectMapper** (advanced) | Lookup and use the existing Jackson 3 (tools.jackson) ObjectMapper with the given id. |  | String |
 
 ## Endpoint Options
 
@@ -110,7 +110,7 @@ With the following _path_ and _query_ parameters:
 | **disabledDeserializationFeatures** (advanced) | Comma-separated list of Jackson DeserializationFeature enum values which will be disabled for parsing exchange body. |  | String |
 | **enabledDeserializationFeatures** (advanced) | Comma-separated list of Jackson DeserializationFeature enum values which will be enabled for parsing exchange body. |  | String |
 | **errorHandler** (advanced) | To use a custom ValidatorErrorHandler. The default error handler captures the errors and throws an exception. |  | JsonValidatorErrorHandler |
-| **objectMapper** (advanced) | The used Jackson object mapper. |  | ObjectMapper |
+| **objectMapper** (advanced) | The Jackson 3 (tools.jackson) object mapper used to parse the JSON. |  | ObjectMapper |
 | **uriSchemaLoader** (advanced) | To use a custom schema loader allowing for adding custom format validation. The default implementation will create a schema loader that tries to determine the schema version from the $schema property of the specified schema. |  | JsonUriSchemaLoader |
 
 ## Message Body

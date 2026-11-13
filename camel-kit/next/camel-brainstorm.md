@@ -1,8 +1,14 @@
 # camel-brainstorm
 
-`/camel-brainstorm` is the design stage for new integrations. It extracts what it can from the material you supply, asks one question at a time for what is still unresolved, verifies every component in the Camel catalog, and produces the design specification that you approve before anything is planned or generated. Migrations use [`/camel-migrate`](migration.md) instead, which has its own discovery and design contract.
+`/camel-brainstorm` is the design stage for new integrations and [adding capabilities to existing Camel 4 applications](existing-project.md). It extracts what it can from the material you supply, asks one question at a time for what is still unresolved, verifies every component in the Camel catalog, and produces the design specification that you approve before anything is planned or generated. Migrations use [`/camel-migrate`](migration.md) instead, which has its own discovery and design contract.
 
 Do not use it for quick property changes, version bumps or a single well-known component addition (edit the file), for Camel questions (`/camel-knowledge`), or when a design already exists (`/camel-plan`). Every other new integration goes through it, however small: short designs are fine, skipped designs are not.
+
+## Existing Camel 4 applications
+
+When `.camel-kit/config.properties` has `project.type=existing`, the skill runs discovery first and designs against the runtime, Camel version, platform BOM and DSL that `camel-kit init` read from your pom. It does not re-ask for what discovery already answered, never takes a version from Camel Kit’s own version tables, and never upgrades dependencies or converts the DSL. The design records the new capability, integration points, affected files, compatibility constraints and the existing behavior to preserve.
+
+The skill stops instead of designing when `project.unsupportedVersion` or `project.unsupportedCombination` is set, or when `project.runtime` or `project.camelVersion` is missing because the pom showed conflicting evidence. It inspects the source for every item in `project.discoveryGaps` before asking you about it. See [Adding Capabilities to Existing Camel Applications](existing-project.md) for the detected keys and supported combinations.
 
 ## Invocation modes
 

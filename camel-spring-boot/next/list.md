@@ -143,6 +143,8 @@ azure-files
 
 azure-functions
 
+azure-iothub
+
 azure-key-vault
 
 azure-servicebus
@@ -587,8 +589,6 @@ ocsf
 
 odata
 
-ognl
-
 olingo2
 
 olingo4
@@ -945,6 +945,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Azure Event Hubs](../../components/next/azure-eventhubs-component.md) | camel-azure-eventhubs-starter | Stable | 3.5 | Send and receive events to/from Azure Event Hubs using AMQP protocol. |
 | [Azure Files](../../components/next/azure-files-component.md) | camel-azure-files-starter | Preview | 3.22 | Send and receive files to Azure storage file share |
 | [Azure Functions](../../components/next/azure-functions-component.md) | camel-azure-functions-starter | Stable | 4.19 | Invoke and manage Azure Functions. |
+| [Azure IoT Hub](../../components/next/azure-iothub-component.md) | camel-azure-iothub-starter | Preview | 4.24 | Send device telemetry and device-twin updates to Azure IoT Hub. |
 | [Azure Key Vault](../../components/next/azure-key-vault-component.md) | camel-azure-key-vault-starter | Stable | 3.17 | Manage secrets and keys in Azure Key Vault Service |
 | [Azure ServiceBus](../../components/next/azure-servicebus-component.md) | camel-azure-servicebus-starter | Stable | 3.12 | Send and receive messages to/from Azure Service Bus. |
 | [Azure Storage Blob Service](../../components/next/azure-storage-blob-component.md) | camel-azure-storage-blob-starter | Stable | 3.3 | Store and retrieve blobs from Azure Storage Blob Service. |
@@ -960,6 +961,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Caffeine LoadCache](../../components/next/caffeine-loadcache-component.md) | camel-caffeine-starter | Stable | 2.20 | Perform caching operations using Caffeine Cache with an attached CacheLoader. |
 | [Camunda](../../components/next/camunda-component.md) | camel-camunda-starter | Preview | 4.19 | Interact with Camunda 8 Orchestration Clusters using the Camunda Java Client. |
 | [Cassandra CQL](../../components/next/cql-component.md) | camel-cassandraql-starter | Stable | 2.15 | Integrate with Cassandra 2.0+ using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
+| [Cedar](../../components/next/cedar-component.md) | camel-cedar-starter | Preview | 4.24 | Embedded Cedar authorization policies |
 | [ChatScript](../../components/next/chatscript-component.md) | camel-chatscript-starter | Stable | 3.0 | Chat with a ChatScript Server. |
 | [Chunk](../../components/next/chunk-component.md) | camel-chunk-starter | Stable | 2.15 | Transform messages using Chunk templating engine. |
 | [Citrus](../../components/next/citrus-component.md) | camel-test-citrus-starter | Preview | 4.24 | Citrus message validation component for testing |
@@ -975,8 +977,8 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [CouchDB](../../components/next/couchdb-component.md) | camel-couchdb-starter | Stable | 2.11 | Consume changesets for inserts, updates and deletes in a CouchDB database, as well as get, save, update and delete documents from a CouchDB database. |
 | [Cron](../../components/next/cron-component.md) | camel-cron-starter | Stable | 3.1 | A generic interface for triggering events at times specified through the Unix cron syntax. |
 | [Crypto (JCE)](../../components/next/crypto-component.md) | camel-crypto-starter | Stable | 2.3 | Sign and verify exchanges using the Signature Service of the Java Cryptographic Extension (JCE). |
-| [CXF](../../components/next/cxf-component.md) | camel-cxf-soap-starter | Stable | 1.0 | Expose SOAP WebServices using Apache CXF or connect to external WebServices using CXF WS client. |
-| [CXF-RS](../../components/next/cxfrs-component.md) | camel-cxf-rest-starter | Stable | 2.0 | Expose JAX-RS REST services using Apache CXF or connect to external REST services using CXF REST client. |
+| [CXF](../../components/next/cxf-component.md) | camel-cxf-soap-starter | Stable | 1.0 | Expose SOAP services, or invoke operations of SOAP services, using Apache CXF. |
+| [CXF-RS](../../components/next/cxfrs-component.md) | camel-cxf-rest-starter | Stable | 2.0 | Expose REST services described by JAX-RS resource classes, or send requests to REST services, using Apache CXF. |
 | [CyberArk Vault](../../components/next/cyberark-vault-component.md) | camel-cyberark-vault-starter | Stable | 4.17 | Retrieve secrets from CyberArk Conjur Vault. |
 | [Dapr](../../components/next/dapr-component.md) | camel-dapr-starter | Stable | 4.12 | Dapr component which interfaces with Dapr Building Blocks. |
 | [Data Format](../../components/next/dataformat-component.md) | camel-dataformat-starter | Stable | 2.12 | Use a Camel Data Format as a regular Camel Component. |
@@ -1391,7 +1393,6 @@ Number of Camel languages: 0 in 0 JAR artifacts (0 deprecated)
 | [JQ](../../components/next/languages/jq-language.md) | camel-jq-starter | Stable | 3.18 | Evaluates a JQ expression against a JSON message body |
 | [JSONPath](../../components/next/languages/jsonpath-language.md) | camel-jsonpath-starter | Stable | 2.13 | Evaluates a JSONPath expression against a JSON message body |
 | [MVEL](../../components/next/languages/mvel-language.md) | camel-mvel-starter | Stable | 2.0 | Evaluates a MVEL template |
-| [OGNL](../../components/next/languages/ognl-language.md) | camel-ognl-starter | Stable-deprecated | 1.1 | Evaluates an OGNL expression (Apache Commons OGNL) |
 | [OpenFeature](../../components/next/languages/openfeature-language.md) | camel-openfeature-starter | Preview | 4.23 | Evaluate a feature flag as a boolean predicate |
 | [Python](../../components/next/languages/python-language.md) | camel-python-starter | Experimental | 3.19 | Evaluates a Python expression |
 | [Python 3](../../components/next/languages/python3-language.md) | camel-python3-starter | Preview | 4.23 | Evaluates a Python 3 expression |
@@ -1467,7 +1468,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [LangChain4j Agent - MCP Tools Integration](../../components/next/others/langchain4j-agent-mcp.md) | undefined-starter |  |  |  |
 | [LangChain4j Agent - Multimodal Content Support](../../components/next/others/langchain4j-agent-multimodal.md) | undefined-starter |  |  |  |
 | [LangChain4j Tokenizer](../../components/next/others/langchain4j-tokenizer.md) | camel-langchain4j-tokenizer-starter | Preview | 4.8 | LangChain4j Tokenizer |
-| [LRA](../../components/next/others/lra.md) | camel-lra-starter | Preview | 2.21 | Camel saga binding for Long-Running-Action framework |
+| [LRA](../../components/next/others/lra.md) | camel-lra-starter | Stable | 2.21 | Camel saga binding for Long-Running-Action framework |
 | [Mail Microsoft Oauth](../../components/next/others/mail-microsoft-oauth.md) | camel-mail-microsoft-oauth-starter | Stable | 3.18.4 | Camel Mail OAuth2 Authenticator for Microsoft Exchange Online |
 | [Main](../../components/next/others/main.md) | camel-main-starter | Stable | 3.0 | Camel Main |
 | [MCP Server](../../components/next/others/mcp-server.md) | camel-mcp-server-starter | Preview | 4.22 | Expose ai-tool routes as MCP tools, ai-resource routes as MCP resources and ai-prompt routes as MCP prompts |
@@ -1508,7 +1509,8 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Salesforce - Reports API](../../components/next/others/salesforce-reports.md) | undefined-starter |  |  |  |
 | [Salesforce - REST API](../../components/next/others/salesforce-rest-api.md) | undefined-starter |  |  |  |
 | [Salesforce - Streaming and Pub/Sub](../../components/next/others/salesforce-streaming.md) | undefined-starter |  |  |  |
-| [Sanitizer](../../components/next/others/sanitizer.md) | camel-sanitizer-starter | Preview | 4.24 | Check during development and tests that the processors of the routes keep the contract of AsyncProcessor, and report where they break it |
+| [Sanitizer](../../components/next/others/sanitizer.md) | camel-sanitizer-starter | Preview | 4.24 | Check during development and tests that the processors of the routes keep the contract of AsyncProcessor and that the commits of the consumers run exactly once, and report where they break it |
+| [Semantic Micrometer](../../components/next/others/semantic-micrometer.md) | camel-semantic-micrometer-starter | Preview | 4.24 | Export semantic assessments and expert measurements with Micrometer |
 | [Semantic OpenAI](../../components/next/others/semantic-openai.md) | camel-semantic-openai-starter | Preview | 4.24 | Assess text and images with typed OpenAI Decisions through Semantic experts |
 | [Semantic TypeSafe AI](../../components/next/others/semantic-typesafe-ai.md) | camel-semantic-typesafe-ai-starter | Preview | 4.24 | Semantic expert using the TypeSafe AI decision API |
 | [Semantic Wolf Defender](../../components/next/others/semantic-wolf-defender.md) | camel-semantic-wolf-defender-starter | Preview | 4.23 | Detect prompt injection in text using local Wolf-Defender inference |

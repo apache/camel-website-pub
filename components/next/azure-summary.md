@@ -26,6 +26,10 @@ Send and receive files to Azure storage file share
 
 Invoke and manage Azure Functions.
 
+[Azure IoT Hub](azure-iothub-component.md)
+
+Send device telemetry and device-twin updates to Azure IoT Hub.
+
 [Azure Key Vault](azure-key-vault-component.md)
 
 Manage secrets and keys in Azure Key Vault Service

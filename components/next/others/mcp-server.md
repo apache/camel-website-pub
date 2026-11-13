@@ -2,7 +2,7 @@
 
 **Since Camel 4.22**
 
-The camel-mcp-server module exposes Camel routes registered via the [ai-tool](../ai-tool-component.md) and [ai-resource](../ai-resource-component.md) components as tools and resources of a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server, served over MCP streamable HTTP or stdio (stdin/stdout JSON-RPC). No route is needed for the server itself: add the dependency, configure which tags to expose, and every matching `ai-tool` route becomes an MCP tool and every matching `ai-resource` route an MCP resource, discoverable by any MCP client (another Camel application, an IDE, a coding agent).
+The camel-mcp-server module exposes Camel routes registered via the [ai-tool](../ai-tool-component.md) and [ai-resource](../ai-resource-component.md) components as tools and resources of a [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server, served over MCP streamable HTTP or stdio (stdin/stdout JSON-RPC). No route is needed for the server itself: add the dependency, configure which tags to expose, and every matching `ai-tool` route becomes an MCP tool and every matching `ai-resource` route an MCP resource or resource template, depending on whether it uses `resourceUri` or `uriTemplate`, discoverable by any MCP client (another Camel application, an IDE, a coding agent).
 
 > **Note**
 > This component serves the routes of your own integration. To give your AI assistant Camel knowledge while you write routes (catalog, validation, inspecting running integrations), use the [Camel CLI MCP Server](../../../manual/camel-jbang-mcp.md) (`camel mcp`) instead.
@@ -29,7 +29,7 @@ The module is split in two artifacts:
 
 Engine resolution mirrors the platform-http engine: a bean of type `McpServerEngine` in the Camel registry wins; otherwise the engine is discovered on the classpath. Other runtimes plug native engines through the same SPI: on Quarkus the `camel-quarkus-mcp-server` extension serves through the Quarkiverse `quarkus-mcp-server` (configured via `quarkus.mcp.server.*`), and on Spring Boot the starter serves through the Spring AI MCP server (configured via `spring.ai.mcp.server.*`). Bridge behavior — tag selection, timeout, sanitization — is identical on every runtime and verified by a shared conformance test kit.
 
-Resource support is opt-in on the SPI: `resourceAdded` and `resourceRemoved` default to no-ops and an engine declares `supportsResources()` when it serves them. An engine that serves tools only keeps working unchanged, and the bridge logs a WARN when `ai-resource` routes match the tags but the engine cannot serve them. The conformance kit follows the same split: resource assertions live in a separate `McpServerResourceConformanceTestSupport` class that an engine extends once it supports resources.
+Resource support is opt-in on the SPI: `resourceAdded` and `resourceRemoved` default to no-ops and an engine declares `supportsResources()` when it serves fixed resources. Resource-template support is independently opt-in through `resourceTemplateAdded`, `resourceTemplateRemoved` and `supportsResourceTemplates()`. Engines that do not implement either capability remain source-compatible because the SPI methods have defaults; the bridge logs a WARN when a matching route cannot be served by the selected engine. Resource and template behaviour is covered by the MCP resource conformance tests.
 
 An engine refuses a tool, resource or prompt it cannot serve, for example a name its runtime already serves, by throwing `McpServerRefusedException` from `toolAdded`, `resourceAdded` or `promptAdded`. The bridge logs an ERROR, as for its own name clashes, and does not track the refused item as published.
 
@@ -91,6 +91,20 @@ from("ai-resource:app_config"
 An MCP client then sees the resource in `resources/list` and fetches it with `resources/read`. A read carries no arguments: the route is invoked with an empty exchange and its body is the content. The `mimeType` decides the wire format — textual types are sent as text, everything else as a base64 blob — see [ai-resource](../ai-resource-component.md) for the details.
 
 Unlike `tools/call`, `resources/read` has no in-band error flag, so a failed read is returned as a JSON-RPC error with the same sanitized message the client would get from a failing tool.
+
+Resource templates are declared with `uriTemplate` instead of `resourceUri`; each variable occupies one complete path segment. For example:
+
+```java
+from("ai-resource:customer?uriTemplate=crm://customers/{id}&tags=crm")
+    .process(exchange -> {
+        String id = exchange.getMessage().getHeader(
+            "CamelAiResourceTemplateVariable.id", String.class);
+        String uri = exchange.getMessage().getHeader("CamelAiResourceUri", String.class);
+        // Validate this untrusted client input before using it.
+    });
+```
+
+The bridge exposes these as MCP resource templates and resolves a concrete URI on `resources/read`. Captured values remain raw (percent-encoding is retained), are not property-resolved or evaluated, and must be validated by the route before use.
 
 ### Prompts
 
@@ -181,7 +195,7 @@ The options, configurable as `camel.server.mcp-*` properties on Camel Main / JBa
 | Option | Description | Default | Owner |
 | --- | --- | --- | --- |
 | `camel.server.mcp-enabled` | Whether to expose ai-tool routes as MCP tools, ai-resource routes as MCP resources and ai-prompt routes as MCP prompts. | `false` | bridge |
-| `camel.server.mcp-transport` | MCP transport: `http` (streamable HTTP on the embedded server, default) or `stdio` (JSON-RPC on process stdin/stdout for local agent subprocesses). Stdio exposes tools and prompts. | `http` | engine |
+| `camel.server.mcp-transport` | MCP transport: `http` (streamable HTTP on the embedded server, default) or `stdio` (JSON-RPC on process stdin/stdout for local agent subprocesses). Stdio exposes tools, resources (including templates) and prompts. | `http` | engine |
 | `camel.server.mcp-tags` | Comma-separated list of tag patterns selecting the ai-tool, ai-resource and ai-prompt routes to expose. Patterns support exact match, wildcard prefix (`foo*`), and `*` to match all tags. Only routes registered under a matching tag are published; the untagged default pools are never exposed. When not set, nothing is published. |  | bridge |
 | `camel.server.mcp-tool-timeout` | Per-call tool execution timeout in milliseconds. A call exceeding the timeout returns an error result to the MCP client; the underlying route keeps running until it completes on its own. | `20000` | bridge |
 | `camel.server.mcp-resource-timeout` | Per-read resource execution timeout in milliseconds. A read exceeding the timeout returns an error to the MCP client; the underlying route keeps running until it completes on its own. | `20000` | bridge |
@@ -314,9 +328,17 @@ camel.server.mcp-allowed-origins = https://app.example.com, http://localhost:*
 
 Entries are compared in the form a browser sends the `Origin` header: the scheme and host ignoring case, and without the default port, so `https://App.Example.com:443/` and `https://app.example.com` are the same origin. An entry that can never match an `Origin` header fails the startup with a message saying why: `*` (the check cannot be turned off; clients that are not browsers send no `Origin` header and are always served), an entry with a path such as `https://app.example.com/mcp`, an entry without a scheme such as `app.example.com`, or a wildcard in the host such as `https://*.example.com`.
 
-A refused request is logged at `DEBUG` level by the `org.apache.camel.component.mcp.server.vertx.VertxMcpStreamableServerTransportProvider` logger, with the `Origin` it carried.
+A refused request is logged at `DEBUG` level by the `org.apache.camel.component.mcp.server.vertx.VertxMcpStreamableServerTransportProvider` logger, with the `Origin` (or the `Host`) it carried.
 
 The check is independent of the platform-http CORS configuration: CORS only adds response headers for the browser, while the origin check refuses the request on the server.
+
+The `Host` header can be checked as well, with `camel.server.mcp-allowed-hosts`. It is not set by default, and then the `Host` header is not checked. When set, a request whose `Host` header is missing or not in the list gets HTTP 421 (Misdirected Request) with a JSON-RPC error, before its body is read and before any session is created. This protects a server on a private address against DNS rebinding: a hostile web page whose own host name resolves to the address of the server sends its own host name in the `Host` header, not one from the list.
+
+```properties
+camel.server.mcp-allowed-hosts = mcp.example.com, localhost:*, 127.0.0.1:*
+```
+
+Each entry is a host, or a host and a port, without a scheme. A port of `*` matches any port, and also a `Host` header without a port (the default port of the scheme), so `localhost:*` allows `localhost`, `localhost:8080` and `localhost:9876`. An entry without a port matches only a `Host` header without a port: `mcp.example.com` is the host name a client uses on the default port, behind a reverse proxy for example. The host is compared ignoring case. Write an IPv6 address in brackets, such as `[::1]:*`. An entry with a scheme or a path, and `*`, fail the startup with a message saying why.
 
 The main HTTP server listens on all network interfaces by default (`camel.server.host = 0.0.0.0`). When the MCP server is only meant for clients on the same machine, bind it to the loopback interface:
 

@@ -854,10 +854,18 @@ One of the limitations of `org.apache.camel.processor.idempotent.jdbc.JdbcMessag
     
 -   lock already exists and the `createdAt` < `System.currentTimeMillis() - lockMaxAgeMillis`. In this case, it is assumed that there is no active instance which has the lock and the lock is provided to the requesting instance. The reason behind is that if the original instance which had the lock, if it was still running, it would have updated the Timestamp on createdAt using its keepAlive mechanism
     
+-   lock already exists and its `createdAt` is null: the key was confirmed, so it is a duplicate, as in `JdbcMessageIdRepository`.
+    
 
-This repository has two additional configuration parameters
+A key that is confirmed (the message was processed, for example by the Idempotent Consumer, by the file consumer with `idempotent=true` and the default `idempotentEager=true`, or by the file consumer with `readLock=idempotent` (also `idempotent-changed` and `idempotent-rename`) and the default `readLockRemoveOnCommit=false`) is no longer a lock: its `createdAt` is set to null and it is no longer kept alive, so another instance does not take it over when the instance that added it stops. With these read locks, the name of every processed file then stays in the table for good; when the key only needs to lock the file while it is read, set `readLockRemoveOnCommit=true`, together with `readLockIdempotentReleaseDelay` as described in the File component, so that the key is removed once the file is processed.
 
-<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Parameter</td><td class="tableblock halign-left valign-top">Description</td></tr><tr><td class="tableblock halign-left valign-top"><code>lockMaxAgeMillis</code></td><td class="tableblock halign-left valign-top">This refers to the duration after which the lock is considered orphaned, i.e., if the <code>currentTimestamp - createdAt &gt;= lockMaxAgeMillis</code> then lock is orphaned.</td></tr><tr><td class="tableblock halign-left valign-top"><code>lockKeepAliveIntervalMillis</code></td><td class="tableblock halign-left valign-top">The frequency at which keep-alive updates are done to createdAt Timestamp column.</td></tr></tbody></table>
+A confirmed key has no age, so a purge by `createdAt` does not delete it. To purge confirmed keys by age, add a column of your own to the table, for example `insertedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP` (the repository does not write it), or set `confirmQuery` to a statement that also stores the time of the confirm in such a column, and purge by that column.
+
+The `createdAt` column must store null. The repository checks this once when it starts, in a transaction that it rolls back: it inserts a row, confirms it with `confirmQuery`, and checks that its `createdAt` is null. When the check fails (a `NOT NULL` column, a MySQL or MariaDB `TIMESTAMP` column with `explicit_defaults_for_timestamp=OFF`, or an error of the database), it logs a WARN and does not confirm keys until the repository is started again: they stay locks, as before, and a confirm sends no statement, so it cannot fail inside the transaction of a transacted route. A confirm that fails later (for example the connection is lost) logs a WARN, and the key stays a lock; when the repository joins the transaction of a transacted route (same `DataSource`), it marks that transaction as rollback only, as a failed add or remove does.
+
+This repository has these additional configuration parameters
+
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Parameter</td><td class="tableblock halign-left valign-top">Description</td></tr><tr><td class="tableblock halign-left valign-top"><code>lockMaxAgeMillis</code></td><td class="tableblock halign-left valign-top">This refers to the duration after which the lock is considered orphaned, i.e., if the <code>currentTimestamp - createdAt &gt;= lockMaxAgeMillis</code> then lock is orphaned.</td></tr><tr><td class="tableblock halign-left valign-top"><code>lockKeepAliveIntervalMillis</code></td><td class="tableblock halign-left valign-top">The frequency at which keep-alive updates are done to createdAt Timestamp column.</td></tr><tr><td class="tableblock halign-left valign-top"><code>confirmQuery</code></td><td class="tableblock halign-left valign-top">The query that confirms a key by setting its <code>createdAt</code> to null; it may set other columns of the table too. It follows <code>tableName</code>; set it when the table is set through custom queries instead. Set it to null or empty to keep confirmed keys as locks. It is checked when the repository starts; a query set later is used after the next start.</td></tr></tbody></table>
 
 #### Caching Jdbc IdempotentRepository
 
@@ -866,6 +874,8 @@ Some SQL implementations are not fast on a per-query basis. The `JdbcMessageIdRe
 As with all cache implementations, there are considerations that should be made with regard to stale data and your specific usage.
 
 In a transaction, a key is added to the cache only once the transaction that inserted its row commits, so a rolled-back add is never cached. A second add of the same key on the same node, made while the first is still uncommitted, therefore does not hit the cache: it reaches the primary key, gets a duplicate key error, and its transaction is marked rollback-only, so that exchange is rolled back once before its redelivery is filtered as a duplicate. The `JdbcMessageIdRepository`, and several nodes sharing the table, behave the same way.
+
+A `remove` or `clear` in a transaction takes the key (or the keys) out of the cache again when that transaction commits, and an add that read the row before it was deleted does not keep the key in the cache.
 
 ### Using the JDBC based aggregation repository
 

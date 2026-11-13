@@ -28,7 +28,6 @@ The starter supports 59 options, which are listed below.
 | camel.component.docling.abort-on-error | Abort processing on error | false | Boolean |
 | camel.component.docling.allow-file-path-source | Whether a String message body that starts with / or contains \\ is interpreted as a local filesystem path to read. When disabled, such a body is rejected instead of being read. This does not affect the CamelDoclingInputFilePath header, nor File, byte\[\] or explicit path collection bodies used by the batch operations. | false | Boolean |
 | camel.component.docling.allow-url-source | Whether a String message body that starts with http:// or https:// is interpreted as a remote URL for Docling to fetch. When disabled, such a body is rejected instead of being fetched. This does not affect the CamelDoclingInputFilePath header, nor bodies of any other type. | false | Boolean |
-| camel.component.docling.api-key-header | Header name for API key authentication | X-API-Key | String |
 | camel.component.docling.async-poll-interval | Polling interval for async conversion status in milliseconds | 2000 | Long |
 | camel.component.docling.async-task-ttl | Time-to-live for pending async conversion tasks in milliseconds. Tasks older than this will be evicted from memory to prevent leaks. | 86400000 | Long |
 | camel.component.docling.async-timeout | Maximum time to wait for async conversion completion in milliseconds | 300000 | Long |
@@ -74,7 +73,7 @@ The starter supports 59 options, which are listed below.
 | camel.component.docling.ocr-language | Language code for OCR processing | en | String |
 | camel.component.docling.operation | The operation to perform | convert-to-markdown | DoclingOperations |
 | camel.component.docling.output-base-directory | When set, the output directory passed to the docling CLI must resolve inside this directory once normalized. Applies to the CamelDoclingOutputFilePath header. The check is lexical and does not resolve symbolic links, matching inputBaseDirectory. When empty, no directory restriction is applied and the header value is only normalized. |  | String |
-| camel.component.docling.output-format | Output format for document conversion | markdown | String |
+| camel.component.docling.output-format | Output format of the SUBMIT\_ASYNC\_CONVERSION operation; the other operations always use their own format. The html\_split\_page value is rejected, as docling-serve does not return the split pages; use html instead | markdown | String |
 | camel.component.docling.pdf-backend | PDF parsing backend |  | String |
 | camel.component.docling.pipeline | Processing pipeline to use |  | String |
 | camel.component.docling.process-timeout | Timeout for Docling process execution in milliseconds | 30000 | Long |
@@ -84,3 +83,4 @@ The starter supports 59 options, which are listed below.
 | camel.component.docling.use-async-mode | Use asynchronous conversion mode (docling-serve API only) | false | Boolean |
 | camel.component.docling.use-docling-serve | Use docling-serve API instead of CLI command | false | Boolean |
 | camel.component.docling.working-directory | Working directory for Docling execution |  | String |
+| camel.component.docling.api-key-header | Header name for API key authentication. Deprecation note: Not used: the docling-serve client always sends the API key in the X-Api-Key header | X-Api-Key | String |

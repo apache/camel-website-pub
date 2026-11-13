@@ -100,6 +100,7 @@ Enum values:
 
 
  | fetchX509Svid | SpiffeOperation |
+| **preserveBody** (producer) | Whether validateJwtSvid leaves the application body untouched and publishes the verified identity through the CamelSpiffeJwtIdentity exchange property. In this mode the token must be in CamelSpiffeToken or an Authorization Bearer header: the body is never read as a token. The default returns the JwtSvid in the body as before. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **workloadApiClient** (advanced) | **Autowired** An existing WorkloadApiClient to use. When set, the component does not create or close its own client and spiffeSocketPath is ignored. |  | WorkloadApiClient |
 | **allowOperationHeader** (security) | Whether the CamelSpiffeOperation header may override the configured operation. Disabled by default: the operation decides whether this endpoint validates a token or mints one, so a message that can set it can turn a validator into an endpoint that hands out this workload’s own JWT-SVID. Enable it only on routes whose input is trusted. | false | boolean |
@@ -161,6 +162,7 @@ Enum values:
 
 
  | fetchX509Svid | SpiffeOperation |
+| **preserveBody** (producer) | Whether validateJwtSvid leaves the application body untouched and publishes the verified identity through the CamelSpiffeJwtIdentity exchange property. In this mode the token must be in CamelSpiffeToken or an Authorization Bearer header: the body is never read as a token. The default returns the JwtSvid in the body as before. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **workloadApiClient** (advanced) | **Autowired** An existing WorkloadApiClient to use. When set, the component does not create or close its own client and spiffeSocketPath is ignored. |  | WorkloadApiClient |
 | **allowOperationHeader** (security) | Whether the CamelSpiffeOperation header may override the configured operation. Disabled by default: the operation decides whether this endpoint validates a token or mints one, so a message that can set it can turn a validator into an endpoint that hands out this workload’s own JWT-SVID. Enable it only on routes whose input is trusted. | false | boolean |
@@ -195,7 +197,7 @@ The SPIFFE component supports the following message header(s), which is/are list
 | **CamelSpiffeAudience** (producer) Constant: [`AUDIENCE`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#AUDIENCE) | The comma-separated audience(s) for the fetchJwtSvid operation. Ignored by validateJwtSvid, which always validates against the configured audience: there the audience is the check that binds the token to this workload, not a parameter. |  | String |
 | **CamelSpiffeToken** (producer) Constant: [`TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#TOKEN) | The JWT-SVID token to validate, for the validateJwtSvid operation. |  | String |
 | **CamelSpiffeSpiffeId** (producer) Constant: [`SPIFFE_ID`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#SPIFFE_ID) | The SPIFFE ID of the returned SVID. |  | String |
-| **CamelSpiffeExpiry** (producer) Constant: [`EXPIRY`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#EXPIRY) | The expiry of the returned SVID: the token expiry for fetchJwtSvid, or the leaf certificate’s notAfter for fetchX509Svid. |  | Date |
+| **CamelSpiffeExpiry** (producer) Constant: [`EXPIRY`](https://javadoc.io/doc/org.apache.camel/camel-spiffe/latest/org/apache/camel/component/spiffe/SpiffeConstants.html#EXPIRY) | The expiry of the returned SVID: the token expiry for fetchJwtSvid or validateJwtSvid, or the leaf certificate’s notAfter for fetchX509Svid. |  | Date |
 
 ## Message Body
 
@@ -269,6 +271,114 @@ Validate an incoming bearer token on a `platform-http` route, without a bean to 
 ```
 
 A missing token fails with `IllegalArgumentException`; a rejected one (invalid, expired, or a wrong audience) fails with `io.spiffe.exception.JwtSvidException`. Catch both — `onException(io.spiffe.exception.JwtSvidException.class, IllegalArgumentException.class)` — to answer `401`.
+
+## Preserve an application body during JWT validation
+
+Set `preserveBody=true` on `validateJwtSvid` to validate a request without replacing or reading its body. In this mode supply the token through `CamelSpiffeToken` or `Authorization: Bearer`; there is no body-token fallback, including when the header is missing. The default remains `preserveBody=false`, which returns the SDK `JwtSvid` in the body.
+
+After validation the `CamelSpiffeJwtIdentity` exchange property contains a `SpiffeJwtIdentity` with getters for `spiffeId`, `expiry` (`Instant`), `audience` and `claims`. It contains no bearer token. Claims are copied into unmodifiable maps/lists and omitted from `toString`, but can still contain sensitive application data: select only the fields a downstream authorization policy needs. The identity property and identity/expiry output headers are cleared before each validation, including one that fails.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("platform-http:/orders")
+    .to("spiffe:auth?operation=validateJwtSvid&audience=spiffe://example.org/orders&preserveBody=true")
+    .removeHeaders("Authorization")
+    .setProperty("subject", simple("${exchangeProperty.CamelSpiffeJwtIdentity.spiffeId}"))
+    .to("direct:handleOrder");
+```
+
+```xml
+<route>
+  <from uri="platform-http:/orders"/>
+  <to uri="spiffe:auth?operation=validateJwtSvid&amp;audience=spiffe://example.org/orders&amp;preserveBody=true"/>
+  <removeHeaders pattern="Authorization"/>
+  <setProperty name="subject"><simple>${exchangeProperty.CamelSpiffeJwtIdentity.spiffeId}</simple></setProperty>
+  <to uri="direct:handleOrder"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - to:
+            uri: "spiffe:auth?operation=validateJwtSvid&audience=spiffe://example.org/orders&preserveBody=true"
+        - removeHeaders:
+            pattern: Authorization
+        - setProperty:
+            name: subject
+            simple: "${exchangeProperty.CamelSpiffeJwtIdentity.spiffeId}"
+        - to:
+            uri: direct:handleOrder
+```
+
+## Protect a route segment with a JWT-SVID policy
+
+`SpiffeJwtSecurityPolicy` combines audience validation with an explicit identity rule, preserves the application body, and throws `CamelAuthorizationException` before the guarded processor runs for missing, rejected or unauthorized tokens. Set `audience` and exactly one of `acceptedSpiffeIds` or `acceptAnySpiffeId=true`. Audience and identity rules come from policy configuration; message headers cannot override them. The policy reads tokens from the same two headers as body-preserving producer validation and never from the body.
+
+Each guarded processor owns an endpoint-managed Workload API client, released when its route stops and recreated on restart. The policy starts from the configuration of the `spiffe` component, so the `camel.component.spiffe.*` settings and a client autowired on the component apply to it; its own `workloadApiClient` and `spiffeSocketPath` options take precedence, and `SPIFFE_ENDPOINT_SOCKET` is used when neither names a client or a socket. An injected `workloadApiClient` remains owned by its supplier and is never closed by the policy.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+SpiffeJwtSecurityPolicy jwtPolicy = new SpiffeJwtSecurityPolicy();
+jwtPolicy.setAudience("spiffe://example.org/orders");
+jwtPolicy.setAcceptedSpiffeIds("spiffe://example.org/frontend");
+getContext().getRegistry().bind("jwtPolicy", jwtPolicy);
+
+from("platform-http:/orders")
+    .policy(jwtPolicy)
+    .removeHeaders("Authorization")
+    .to("direct:handleOrder");
+```
+
+```xml
+<bean id="jwtPolicy" class="org.apache.camel.component.spiffe.SpiffeJwtSecurityPolicy">
+  <property name="audience" value="spiffe://example.org/orders"/>
+  <property name="acceptedSpiffeIds" value="spiffe://example.org/frontend"/>
+</bean>
+<route>
+  <from uri="platform-http:/orders"/>
+  <policy ref="jwtPolicy">
+    <removeHeaders pattern="Authorization"/>
+    <to uri="direct:handleOrder"/>
+  </policy>
+</route>
+```
+
+```yaml
+- beans:
+    - name: jwtPolicy
+      type: org.apache.camel.component.spiffe.SpiffeJwtSecurityPolicy
+      properties:
+        audience: spiffe://example.org/orders
+        acceptedSpiffeIds: spiffe://example.org/frontend
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - policy:
+            ref: jwtPolicy
+            steps:
+              - removeHeaders:
+                  pattern: Authorization
+              - to:
+                  uri: direct:handleOrder
+```
+
+The successful policy publishes the same token-free `CamelSpiffeJwtIdentity` property, and nothing else: unlike the producer, it sets no `CamelSpiffeSpiffeId` or `CamelSpiffeExpiry` header, so the identity is a value the route established, which a sender cannot put on the message, and it does not travel to outbound producers. Check the property, not a header, further down the route. Extract verified fields into exchange properties to compose with OPA or OpenFGA; for example, copy its `spiffeId` into `subject`, use `includeProperties=subject` with OPA, or a configured OpenFGA `user` expression based on that property. Choosing `acceptAnySpiffeId` asserts that audience validation is sufficient at this step and leaves finer authorization to the downstream policy. Always remove credential headers before forwarding requests to an unrelated destination.
 
 ## Mutual TLS with SPIFFE (SSLContextParameters)
 

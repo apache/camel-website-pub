@@ -417,7 +417,6 @@ The languages supported you can specify as `scriptLanguage` are:
 | **groovy** | Using a groovy script to create the bean. |
 | **java** | Java code which is runtime compiled (using jOOR library) to create the bean. |
 | **mvel** | To use a MVEL template script to create the bean. |
-| **ognl** | To use OGNL template script to create the bean. |
 | **_name_** | To use a third-party language by the given `_name_` to create the bean. |
 
 Camel will bind `RouteTemplateContext` as the root object with name `rtc` when evaluating the script. This means you can get access to all the information from `RouteTemplateContext` and `CamelContext` via `rtc`.

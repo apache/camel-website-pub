@@ -329,6 +329,10 @@ Enum values:
     
 -   DELETE\_USERS
     
+-   DOWNLOAD\_ATTACHMENT
+    
+-   DOWNLOAD\_ATTACHMENT\_1
+    
 -   EXECUTE\_VIEW
     
 -   GET\_ACTIVE\_TRIGGERS
@@ -990,7 +994,7 @@ The DEFAULT API is defined in the syntax as follows:
 zendesk:DEFAULT/methodName?[parameters]
 ```
 
-The 287 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
+The 288 method(s) is(are) listed in the table below, followed by detailed syntax for each method. (API methods can have a shorthand _alias_ name which can be used in the syntax instead of the name)
 
   
 | Method | Alias | Description |
@@ -1231,6 +1235,7 @@ The 287 method(s) is(are) listed in the table below, followed by detailed syntax
 | [**deleteUsers**](#_api_DEFAULT_method_deleteUsers) |  | 
 
  |
+| [**downloadAttachment**](#_api_DEFAULT_method_downloadAttachment) |  | Downloads an attachment using freshly retrieved metadata |
 | [**executeView**](#_api_DEFAULT_method_executeView) |  | 
 
  |
@@ -3294,6 +3299,24 @@ The zendesk/deleteUsers API method has the parameters listed in the table below:
 | --- | --- | --- |
 | **ids** | 
  | long\[\] |
+
+#### Method downloadAttachment
+
+Signatures:
+
+-   java.nio.file.Path downloadAttachment(long attachmentId, java.nio.file.Path destination);
+    
+-   java.nio.file.Path downloadAttachment(org.zendesk.client.v2.model.Attachment attachment, java.nio.file.Path destination);
+    
+
+The zendesk/downloadAttachment API method has the parameters listed in the table below:
+
+  
+| Parameter | Description | Type |
+| --- | --- | --- |
+| **attachment** | Attachment with a positive id; its cached content URL is not used | Attachment |
+| **attachmentId** | Positive attachment id | Long |
+| **destination** | Destination file, not null | Path |
 
 #### Method executeView
 

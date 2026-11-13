@@ -238,7 +238,6 @@ In case you have performed the above step during some release in the past, you n
 ```shell
 cd camel-releases-dist
 svn update .
-cd "camel-quarkus/$VERSION"
 ```
 
 Then, ensure that only the latest release from each maintained branches is present (including active LTS versions). Typically, when releasing e.g. 3.12.0, you may need to delete e.g. 3.11.0:

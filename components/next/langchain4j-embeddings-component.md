@@ -176,7 +176,7 @@ The LangChain4j Embeddings component supports the following message header(s), w
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelLangChain4jEmbeddingsFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-embeddings/latest/org/apache/camel/component/langchain4j/embeddings/LangChain4jEmbeddingsHeaders.html#FINISH_REASON) | 
-The Finish Reason.
+**Deprecated** The Finish Reason. Deprecation note: The producer no longer sets this header, as the EmbeddingResponse of LangChain4j has no finish reason.
 
 Enum values:
 

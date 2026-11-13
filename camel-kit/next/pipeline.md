@@ -1,6 +1,6 @@
 # Stages, approval gate and Iron Laws
 
-The Camel Kit pipeline turns integration requirements into generated routes, tests and review evidence in four stages: design, plan, execute and validate. Every stage is a skill that the coding agent runs; the stages share their artifacts through files under `docs/camel-kit/<pipeline-id>/`, so a pipeline survives the end of a session.
+The Camel Kit pipeline turns integration requirements into generated routes, tests and review evidence in four stages: design, plan, execute and validate. Every stage is a skill that the coding agent runs; the stages share their artifacts through files under `docs/camel-kit/<pipeline-id>/`, so a pipeline survives the end of a session. The pipeline supports three paths: [greenfield projects](greenfield.md), [enhancing existing Camel 4 applications](existing-project.md), and [migrating from other platforms](migration.md).
 
 There are two ways to run it:
 
@@ -10,6 +10,21 @@ There are two ways to run it:
     
 
 The manual pipeline is agent-run and enforces the Iron Laws at every stage; Ship’s stages, state and gates are owned by the controller.
+
+## The existing-project path
+
+For an existing Camel 4 application the same four stages apply, with the context from `camel-kit init` carried through:
+
+-   **Design** reads the detected runtime, versions, DSL, contracts and baseline, and records them in the design specification.
+    
+-   **Plan** lists the new capability, integration points, affected files and the behavior to preserve. Files outside that list are not touched.
+    
+-   **Execute** captures the per-test baseline before its first edit (unless `init --record-baseline` already did) and stays within the approved scope: no dependency upgrades, no DSL conversion, and the existing `pom.xml` is edited in place, never replaced.
+    
+-   **Validate** compares each baseline test with its current outcome, checks the new capability and the affected existing behavior, and reports every check that could not run, including a missing pre-edit baseline, under Unavailable Evidence instead of counting it as passed.
+    
+
+Details and supported combinations are in [Adding Capabilities to Existing Camel Applications](existing-project.md).
 
 ## The four stages
 

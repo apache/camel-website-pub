@@ -91,6 +91,7 @@ The Control Bus component supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **allowedLanguages** (security) | The names of the languages the language command may use, separated by comma, such as simple. The language command evaluates the message body as an expression, so it is off until the language is in this list: a controlbus:language endpoint whose language is not listed fails when it is created. The route actions are not affected. An endpoint can set its own list. |  | String |
 
 ## Endpoint Options
 
@@ -151,8 +152,6 @@ Enum values:
 -   jsonpath
     
 -   mvel
-    
--   ognl
     
 -   python
     
@@ -237,6 +236,7 @@ Enum values:
 | **restartDelay** (producer) | The delay in millis to use when restarting a route. | 1000 | int |
 | **routeId** (producer) | To specify a route by its id. The special keyword current indicates the current route. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **allowedLanguages** (security) | The names of the languages the language command may use, separated by comma, such as simple. The language command evaluates the message body as an expression, so it is off until the language is in this list: a controlbus:language endpoint whose language is not listed fails when it is created. The route actions are not affected. When not set, the list of the component is used. |  | String |
 
 ## Message Body
 
@@ -382,7 +382,26 @@ String xml = template.requestBody("controlbus:route?action=stats", null, String.
 
 ### Using Simple language
 
-You can use the [Simple](languages/simple-language.md) language with the control bus. For example, to stop a specific route, you can send a message to the `"controlbus:language:simple"` endpoint containing the following message:
+You can use the [Simple](languages/simple-language.md) language with the control bus.
+
+The `language` command evaluates the message body as an expression, so it is off by default. To turn it on, list the languages it may use in the `allowedLanguages` option, separated by comma. Set it on the component to apply to every endpoint:
+
+```properties
+camel.component.controlbus.allowed-languages = simple
+```
+
+Or set it on the endpoint itself, which takes precedence over the list of the component:
+
+```text
+controlbus:language:simple?allowedLanguages=simple
+```
+
+A `controlbus:language` endpoint whose language is not listed fails when it is created, with an error that names the `allowedLanguages` option. The `route` command does not need this option.
+
+> **Important**
+> The body is evaluated as an expression with the full power of the language: only send it text that comes from the route, never the content of a message from an untrusted sender.
+
+With `simple` allowed on the component, to stop a specific route, you can send a message to the `"controlbus:language:simple"` endpoint containing the following message:
 
 _Java-only: Java test API (ProducerTemplate)_
 
@@ -411,4 +430,4 @@ template.sendBody("controlbus:language:simple?async=true", "${camelContext.stop(
 We use `async=true` to stop Camel asynchronously as otherwise we would be trying to stop Camel while it was in-flight processing the message we sent to the control bus component.
 
 > **Tip**
-> You can also use other languages such as [Groovy](languages/groovy-language.md), etc.
+> You can also use other languages such as [Groovy](languages/groovy-language.md), etc., when they are listed in the `allowedLanguages` option.

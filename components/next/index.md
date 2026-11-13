@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 395 in 322 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 397 in 324 JAR artifacts (4 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -120,6 +120,7 @@ Number of Non-Core Components: 395 in 322 JAR artifacts (4 deprecated)
 | [Azure Event Hubs](azure-eventhubs-component.md) | camel-azure-eventhubs | Stable | 3.5 | Send and receive events to/from Azure Event Hubs using AMQP protocol. |
 | [Azure Files](azure-files-component.md) | camel-azure-files | Preview | 3.22 | Send and receive files to Azure storage file share |
 | [Azure Functions](azure-functions-component.md) | camel-azure-functions | Stable | 4.19 | Invoke and manage Azure Functions. |
+| [Azure IoT Hub](azure-iothub-component.md) | camel-azure-iothub | Preview | 4.24 | Send device telemetry and device-twin updates to Azure IoT Hub. |
 | [Azure Key Vault](azure-key-vault-component.md) | camel-azure-key-vault | Stable | 3.17 | Manage secrets and keys in Azure Key Vault Service |
 | [Azure ServiceBus](azure-servicebus-component.md) | camel-azure-servicebus | Stable | 3.12 | Send and receive messages to/from Azure Service Bus. |
 | [Azure Storage Blob Service](azure-storage-blob-component.md) | camel-azure-storage-blob | Stable | 3.3 | Store and retrieve blobs from Azure Storage Blob Service. |
@@ -133,6 +134,7 @@ Number of Non-Core Components: 395 in 322 JAR artifacts (4 deprecated)
 | [Caffeine LoadCache](caffeine-loadcache-component.md) | camel-caffeine | Stable | 2.20 | Perform caching operations using Caffeine Cache with an attached CacheLoader. |
 | [Camunda](camunda-component.md) | camel-camunda | Preview | 4.19 | Interact with Camunda 8 Orchestration Clusters using the Camunda Java Client. |
 | [Cassandra CQL](cql-component.md) | camel-cassandraql | Stable | 2.15 | Integrate with Cassandra 2.0+ using the CQL3 API (not the Thrift API). Based on Cassandra Java Driver provided by DataStax. |
+| [Cedar](cedar-component.md) | camel-cedar | Preview | 4.24 | Embedded Cedar authorization policies |
 | [ChatScript](chatscript-component.md) | camel-chatscript | Stable | 3.0 | Chat with a ChatScript Server. |
 | [Chunk](chunk-component.md) | camel-chunk | Stable | 2.15 | Transform messages using Chunk templating engine. |
 | [Citrus](citrus-component.md) | camel-test-citrus | Preview | 4.24 | Citrus message validation component for testing |
@@ -146,8 +148,8 @@ Number of Non-Core Components: 395 in 322 JAR artifacts (4 deprecated)
 | [CouchDB](couchdb-component.md) | camel-couchdb | Stable | 2.11 | Consume changesets for inserts, updates and deletes in a CouchDB database, as well as get, save, update and delete documents from a CouchDB database. |
 | [Cron](cron-component.md) | camel-cron | Stable | 3.1 | A generic interface for triggering events at times specified through the Unix cron syntax. |
 | [Crypto (JCE)](crypto-component.md) | camel-crypto | Stable | 2.3 | Sign and verify exchanges using the Signature Service of the Java Cryptographic Extension (JCE). |
-| [CXF](cxf-component.md) | camel-cxf-soap | Stable | 1.0 | Expose SOAP WebServices using Apache CXF or connect to external WebServices using CXF WS client. |
-| [CXF-RS](cxfrs-component.md) | camel-cxf-rest | Stable | 2.0 | Expose JAX-RS REST services using Apache CXF or connect to external REST services using CXF REST client. |
+| [CXF](cxf-component.md) | camel-cxf-soap | Stable | 1.0 | Expose SOAP services, or invoke operations of SOAP services, using Apache CXF. |
+| [CXF-RS](cxfrs-component.md) | camel-cxf-rest | Stable | 2.0 | Expose REST services described by JAX-RS resource classes, or send requests to REST services, using Apache CXF. |
 | [CyberArk Vault](cyberark-vault-component.md) | camel-cyberark-vault | Stable | 4.17 | Retrieve secrets from CyberArk Conjur Vault. |
 | [Dapr](dapr-component.md) | camel-dapr | Stable | 4.12 | Dapr component which interfaces with Dapr Building Blocks. |
 | [Debezium](debezium-summary.md) |  |  |  |  |

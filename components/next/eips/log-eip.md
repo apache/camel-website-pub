@@ -50,7 +50,7 @@ Enum values:
 | **logName** | The logger name to use. By default the route id is used. |  | String |
 | **marker** | An optional SLF4J marker to use with the log statement. |  | String |
 | **logger** | Reference to a custom SLF4J logger instance to use. |  | Logger |
-| **logLanguage** | The language to use for evaluating the log message, such as simple, groovy, or ognl. |  | String |
+| **logLanguage** | The language to use for evaluating the log message, such as simple or groovy. |  | String |
 
 ## Message Body
 

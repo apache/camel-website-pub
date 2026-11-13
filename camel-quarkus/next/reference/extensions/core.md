@@ -271,6 +271,11 @@ Note that this configuration item only has any effect when observers configured 
 The interval at which data is updated in Camel Quarkus Dev UI pages.
 
  | [`Duration`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.md)[](#duration-note-anchor-core) | `5S` |
+| `[quarkus.camel.bootstrap.enabled](#quarkus-camel-bootstrap-enabled)`
+
+When set to true, the {@link CamelRuntime} will be started automatically.
+
+ | `boolean` | `true` |
 | `[quarkus.camel.main.shutdown.timeout](#quarkus-camel-main-shutdown-timeout)`
 
 A timeout (with millisecond precision) to wait for `CamelMain#stop()` to finish
@@ -281,11 +286,6 @@ A timeout (with millisecond precision) to wait for `CamelMain#stop()` to finish
 The action to take when `CamelMain` encounters an unknown argument. fail - Prints the `CamelMain` usage statement and throws a `RuntimeException` ignore - Suppresses any warnings and the application startup proceeds as normal warn - Prints the `CamelMain` usage statement but allows the application startup to proceed as normal
 
  | `fail`, `warn`, `ignore` | `warn` |
-| `[quarkus.camel.bootstrap.enabled](#quarkus-camel-bootstrap-enabled)`
-
-When set to true, the {@link CamelRuntime} will be started automatically.
-
- | `boolean` | `true` |
 
 Configuration property fixed at build time. All other configuration properties are overridable at runtime.
 

@@ -120,7 +120,7 @@ Enum values:
 
  | INSERT | Operation |
 | **org** (producer) | **Required** The name of the organization where the time series will be stored. |  | String |
-| **retentionPolicy** (producer) | Define the retention policy to the data created by the endpoint. | default | String |
+| **retentionPolicy** (producer) | **Deprecated** Define the retention policy to the data created by the endpoint. Deprecation note: Never read by the component: the InfluxDB 2.x write API has no retention policy, retention is a property of the bucket. | default | String |
 | **writePrecision** (producer) | 
 
 The format or precision of time series timestamps.
@@ -151,7 +151,7 @@ The InfluxDB2 component supports the following message header(s), which is/are l
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelInfluxDB2MeasurementName** (producer) Constant: [`MEASUREMENT`](https://javadoc.io/doc/org.apache.camel/camel-influxdb2/latest/org/apache/camel/component/influxdb2/InfluxDb2Constants.html#MEASUREMENT) | The name of measurement. |  | String |
-| **camelInfluxDB.RetentionPolicy** (producer) Constant: [`RETENTION_POLICY`](https://javadoc.io/doc/org.apache.camel/camel-influxdb2/latest/org/apache/camel/component/influxdb2/InfluxDb2Constants.html#RETENTION_POLICY) | The string that defines the retention policy to the data created by the endpoint. |  | String |
+| **camelInfluxDB.RetentionPolicy** (producer) Constant: [`RETENTION_POLICY`](https://javadoc.io/doc/org.apache.camel/camel-influxdb2/latest/org/apache/camel/component/influxdb2/InfluxDb2Constants.html#RETENTION_POLICY) | **Deprecated** The string that defines the retention policy to the data created by the endpoint. Deprecation note: Never read by the component: the InfluxDB 2.x write API has no retention policy, retention is a property of the bucket. |  | String |
 | **CamelInfluxDB2WritePrecision** (producer) Constant: [`WRITE_PRECISION`](https://javadoc.io/doc/org.apache.camel/camel-influxdb2/latest/org/apache/camel/component/influxdb2/InfluxDb2Constants.html#WRITE_PRECISION) | 
 InfluxDb Write precision.
 

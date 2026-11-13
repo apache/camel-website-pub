@@ -33,6 +33,10 @@ The `CamelAzureEventHubsCheckpointUpdatedBy` header can now be `timeout`. With `
 
 Checkpoint failures from the timer are now logged at `WARN` level with the full stack trace instead of at `DEBUG` level with the message only. Checkpoint failures triggered by batch size are still logged at `WARN`.
 
+### camel-clickup - the webhook signature check no longer logs signatures
+
+The webhook consumer still logs the body it validates at `DEBUG`, but no longer the signature from the `X-Signature` header, nor the signature it calculates. The `InvalidMessageSignatureException` of a failed check no longer carries the calculated signature: `getCalculatedSignature()` returns `null` and is deprecated, as is the constructor that takes it.
+
 ### camel-hazelcast - the hazelcast-seda consumer restores a transferred exchange only with transferExchange=true
 
 A `hazelcast-seda` consumer now restores the headers and exchange properties of an exchange that a producer with `transferExchange=true` put on the queue only when the consumer has `transferExchange=true` as well. A consumer without the option, the default, now takes only the body of such an exchange, as it does for any other item of the queue, and logs a warning the first time. Before, the consumer restored the headers and exchange properties whatever its `transferExchange` option said.
@@ -93,6 +97,12 @@ The `user` and `password` are now offered only to the nodes the client talks to:
 ### camel-elasticsearch-rest-client - the credentials are only sent to the nodes of the cluster
 
 The `user` and `password` are now offered only to the nodes the client talks to: the hosts of `hostAddressesList` and, when `enableSniffer` is set, the nodes the sniffer finds, matching the scheme, host and port. Previously they were registered for any host. A request to another host, including the host of a node with another scheme or port, is now sent without them. A client set with the `restClient` option is not changed.
+
+### camel-elasticsearch-rest-client - the document id and the index name are each sent as one path segment
+
+The producer now percent-encodes the document id and the index name, so each is sent as one path segment of the request and Elasticsearch takes it literally. Before, they were placed into the path as given: a `/`, `?` or `#` in the value changed the path of the request, and a space or a `%` made the request fail. A route that put extra path segments or request parameters into the document id or the index name must change.
+
+A document id of `.` or `..` is now rejected, as is an index name that is empty, `.` or `..`, or that contains `\`, `/`, `?`, `"`, `<`, `>`, `|`, `#` or a space. A comma separated list of index names and patterns, such as `logs-*,my_index`, still works. A `GET_BY_ID` response without the source of the document now gives a `null` body instead of failing with a `NullPointerException`.
 
 ### camel-opensearch - the credentials are only sent to the nodes of the cluster
 
@@ -397,6 +407,10 @@ scp sends each name on a protocol line that ends with a line feed. Before, a lin
 ### camel-azure-storage-blob - copyBlob validates the source account and container name
 
 `copyBlob` now rejects invalid source account or container names (headers `CamelAzureStorageBlobSourceBlobAccountName` and `CamelAzureStorageBlobSourceBlobContainerName`) with an `IllegalArgumentException`.
+
+### camel-netty-http - endpoint options are no longer sent to the server as query parameters
+
+The `netty-http` producer no longer sends some of its endpoint options, such as `cookieHandler`, `httpMethodRestrict`, `traceEnabled` and `exchangePattern`, to the HTTP server as query parameters. For example, `netty-http:http://localhost:8080/foo?bar=1&cookieHandler=#myCookieHandler` now calls `[http://localhost:8080/foo?bar=1](http://localhost:8080/foo?bar=1)`. Before, the server also received the `cookieHandler` parameter. Only the query parameters that are not endpoint options are sent, as the documentation describes. To send a query parameter that has the same name as an endpoint option, set the query in the `CamelHttpQuery` header.
 
 ## Upgrading from 4.18.4 to 4.18.5
 

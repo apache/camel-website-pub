@@ -349,7 +349,7 @@ To know the body a step leaves, or the bodies it needs, read its side with the o
     
 3.  **A side with `from`:** when the step sets an option of `dependsOn`, not known. Otherwise, read the side `from` names on the model the step uses (the language of its expression, its data format, its endpoint, or the data type transformer of its `toType`), with the options of that model. `steps` is the body the steps of the EIP end with.
     
-4.  **An option the side names whose value is not known before the route runs** (a `{{placeholder}}` or a `${expression}`), or an option the step does not set but that can be set elsewhere, such as on the component: not known.
+4.  **An option the side names whose value is not known before the route runs** (a `{{placeholder}}` or a `${expression}`), or an option the step does not set but that can be set elsewhere, such as on the component: not known. An insecure opt-in (its `security` is `insecure:ssl`, `insecure:serialization` or `insecure:dev`, such as `allowJavaSerializedObject`) is not such an option: it keeps its default when the step does not set it, as one turned on for the whole component is reported by the [security policy](security-policy.md) at startup.
     
 5.  **An option of `dependsOn` the step sets:** the `byOption` entry for that value says the body. When it has a `javaTypeOption` the step sets, the body is an object of that class. Without such an entry: not known.
     

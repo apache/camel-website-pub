@@ -512,6 +512,79 @@ Not known when `valueDeserializer` is set.
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the Kafka Share component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `KafkaShareWorld`
+Fake: FakeShareGroup: a share group (KIP-932) of one topic with one partition, behind ShareConsumer
+
+Tests: `KafkaShareConsumerDstTest`
+
+ | 
+
+**Covers:**
+
+-   explicit acknowledgement with onFailure RELEASE or REJECT
+    
+-   commitMode SYNC and ASYNC
+    
+-   pollOnError ERROR\_HANDLER, RECONNECT, RETRY and DISCARD
+    
+-   acquisition locks and the delivery limit
+    
+-   the backoff when the share consumer cannot be created
+    
+-   route start, restart, suspend and resume
+    
+-   suspend and resume of the CamelContext
+    
+
+**Faults:**
+
+-   the share consumer cannot be created
+    
+-   poll fails
+    
+-   commit fails
+    
+-   the acquisition lock expires under slow processing
+    
+-   processing fails
+    
+-   a wakeup arrives while a poll fetches
+    
+
+**Invariants:**
+
+-   the consumer uses the share consumer as documented
+    
+-   the route is started once the faults cleared
+    
+-   a started route holds one share consumer
+    
+-   every published record completes at least once, or the group archived it as it should
+    
+-   the share group is drained once the faults cleared
+    
+-   no share consumer is left open after the route stopped
+    
+
+
+
+
+
+ | [CAMEL-25872](https://issues.apache.org/jira/browse/CAMEL-25872)
+
+[CAMEL-25910](https://issues.apache.org/jira/browse/CAMEL-25910)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 ## Usage
 
 ### Broker requirements

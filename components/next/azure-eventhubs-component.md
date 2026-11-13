@@ -259,6 +259,59 @@ The message body at each side of the Azure Event Hubs component: _Consumer_ is t
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the Azure Event Hubs component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `EventHubsWorld`
+Fake: a mocked EventHubsClientFactory that delivers the events per partition, and a fake CheckpointStore
+
+Tests: `EventHubsCheckpointDstTest`
+
+ | 
+
+**Covers:**
+
+-   checkpointing by checkpointBatchSize and checkpointBatchTimeout
+    
+-   one or two partitions with bursts and quiet periods of events
+    
+-   an asynchronous downstream step
+    
+
+**Faults:**
+
+-   the downstream step answers slowly
+    
+-   the downstream step fails
+    
+-   the checkpoint store answers slowly
+    
+-   the checkpoint store fails
+    
+
+**Invariants:**
+
+-   every completed message is acknowledged when the partition goes quiet
+    
+
+
+
+
+
+ | [CAMEL-25683](https://issues.apache.org/jira/browse/CAMEL-25683)
+
+[CAMEL-25738](https://issues.apache.org/jira/browse/CAMEL-25738)
+
+[CAMEL-25781](https://issues.apache.org/jira/browse/CAMEL-25781)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 ## Usage
 
 ### Authentication Information

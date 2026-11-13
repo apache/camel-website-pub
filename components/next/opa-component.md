@@ -105,6 +105,7 @@ Enum values:
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **borrowTimeout** (advanced) | How long an exchange waits for a free WebAssembly policy instance in wasm mode before the evaluation fails. An exchange that cannot get an instance is not denied by a policy, so it is reported as an evaluation failure and handled like any other: failing closed, or proceeding if failOpen is set. Raise it, or poolSize, for a route whose concurrency exceeds the pool. | 30000 | long |
 | **connectionTimeout** (advanced) | How long to wait for the connection to the OPA server to be established, in rest mode. The SDK’s own transport applies no timeout at all, so a server that never answers would otherwise park the calling thread indefinitely rather than letting the component fail closed. | 10000 | long |
+| **healthCheckBundles** (advanced) | Whether the server readiness check also requires activation of OPA’s configured bundles. Sends /health?bundles=true. Does not enable health checks, change policy evaluation or guarantee a particular policy revision. Not used in wasm mode or with an injected client. | false | boolean |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
@@ -161,6 +162,7 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **borrowTimeout** (advanced) | How long an exchange waits for a free WebAssembly policy instance in wasm mode before the evaluation fails. An exchange that cannot get an instance is not denied by a policy, so it is reported as an evaluation failure and handled like any other: failing closed, or proceeding if failOpen is set. Raise it, or poolSize, for a route whose concurrency exceeds the pool. | 30000 | long |
 | **connectionTimeout** (advanced) | How long to wait for the connection to the OPA server to be established, in rest mode. The SDK’s own transport applies no timeout at all, so a server that never answers would otherwise park the calling thread indefinitely rather than letting the component fail closed. | 10000 | long |
+| **healthCheckBundles** (advanced) | Whether the server readiness check also requires activation of OPA’s configured bundles. Sends /health?bundles=true. Does not enable health checks, change policy evaluation or guarantee a particular policy revision. Not used in wasm mode or with an injected client. | false | boolean |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
@@ -178,8 +180,9 @@ The OPA component supports the following message header(s), which is/are listed 
 | **CamelOpaDecisionAllow** (producer) Constant: [`DECISION_ALLOW`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION_ALLOW) | The allow/deny verdict of the policy evaluation. Always overwritten by the component, so a value set by an inbound message never survives into the route. |  | Boolean |
 | **CamelOpaDecision** (producer) Constant: [`DECISION`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION) | The raw decision document returned by OPA. Useful for policies that return more than a boolean, such as obligations, row filters or deny reasons. |  | Object |
 | **CamelOpaPolicyPath** (producer) Constant: [`POLICY_PATH`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#POLICY_PATH) | The policy path that was evaluated. Set by the component for observability; it is not read as an input and cannot be used to select a different policy. |  | String |
-| **CamelOpaDecisionFailedOpen** (producer) Constant: [`DECISION_FAILED_OPEN`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION_FAILED_OPEN) | Set to true only when the exchange proceeded because failOpen is enabled and the policy could not be evaluated - nothing authorized it. Absent on every decision an actual policy made, so a route or an audit trail can tell the two apart rather than seeing the same CamelOpaDecisionAllow=true for both. |  | Boolean |
+| **CamelOpaDecisionFailedOpen** (producer) Constant: [`DECISION_FAILED_OPEN`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#DECISION_FAILED_OPEN) | Set to true only when the exchange proceeded because failOpen is enabled and the policy could not be evaluated - nothing authorized it. Absent on every decision an actual policy made, so a route or an audit trail can tell the two apart rather than seeing the same CamelOpaDecisionAllow=true for both. For a batch, set when any element proceeded because failOpen was enabled; CamelOpaBatchOutcomes identifies the elements. |  | Boolean |
 | **CamelOpaBatchDecision** (producer) Constant: [`BATCH_DECISION`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#BATCH_DECISION) | The per-element allow/deny verdicts of a batch evaluation (batch=true), as a List of Boolean parallel to the List body. Always overwritten by the component. An element whose evaluation could not be reached is denied, unless failOpen is set. |  | List |
+| **CamelOpaBatchOutcomes** (producer) Constant: [`BATCH_OUTCOMES`](https://javadoc.io/doc/org.apache.camel/camel-opa/latest/org/apache/camel/component/opa/OpaConstants.html#BATCH_OUTCOMES) | Immutable per-element outcomes of a batch evaluation, parallel to the List body. Each outcome exposes the effective allowed verdict, nullable Boolean policy decision, failure category and failedOpen flag. Contains no exception or failure message. |  | List |
 
 ## Message Body
 
@@ -406,6 +409,18 @@ The per-element verdicts arrive in `CamelOpaBatchDecision`, a `List<Boolean>` pa
 
 Fail-closed applies **per element**: an element whose evaluation failed is denied (`false`) while every other element decides normally; `failOpen` allows it only when its decision point was unavailable (see [Failure handling](#failure-handling)). The batch is never denied as a whole because one element failed, nor allowed because most of it succeeded. A call that fails entirely - the server could not be reached at all - fails the exchange rather than denying each element: it carries no verdict at all, not a list of `false`. Under `failOpen` a call that could not reach the server allows every element instead.
 
+`CamelOpaBatchOutcomes` provides an immutable `List<OpaBatchOutcome>` in the same order, while `CamelOpaBatchDecision` keeps its existing Boolean-list contract. Each outcome has:
+
+ 
+| Property | Meaning |
+| --- | --- |
+| `allowed` | Whether the element may proceed, including an explicit fail-open result. |
+| `decision` | The normalized Boolean policy verdict, or `null` when no decision was obtained. This is not the raw policy document. |
+| `failureCategory` | `NONE`, `UNAVAILABLE`, `EVALUATION_ERROR`, `MISSING_RESULT` or `INTERRUPTED`. |
+| `failedOpen` | `true` only when the element proceeded because its decision point was unavailable and `failOpen` was enabled. |
+
+These outcomes contain no exception objects or failure messages. A genuine policy denial has `decision=false`, `failureCategory=NONE` and `failedOpen=false`. An unavailable element allowed under `failOpen` has `allowed=true`, `decision=null`, `failureCategory=UNAVAILABLE` and `failedOpen=true`. `CamelOpaDecisionFailedOpen=true` marks a batch whenever **any** element failed open; inspect the outcomes to identify which ones. A call that could not reach the server at all is reported like an element whose own decision point was unavailable: under `failOpen` every element is `UNAVAILABLE` and `failedOpen=true`, and the outcomes do not say which of the two happened, since the route proceeds the same way in both cases. Empty batches return empty verdict and outcome lists. A whole-batch failure that fails closed carries neither list. The outcome header and aggregate marker are cleared before every evaluation, including a subsequent single-element evaluation.
+
 `batch` requires `evaluationMode=rest`: it saves the per-element HTTP round-trip, which has no meaning for in-process `wasm` evaluation, and the endpoint rejects the combination at startup.
 
 ## Authorizing an identity
@@ -535,8 +550,10 @@ In `rest` mode the component talks to OPA over HTTP, and both waits are bounded:
 
 -   `connectionTimeout` (default 10s) — establishing the connection.
     
--   `requestTimeout` (default 30s) — waiting for the decision once connected.
+-   `requestTimeout` (default 30s) — receiving the complete response for each HTTP request, including its body.
     
+
+Receiving response headers does not end the request deadline: a server that sends headers and then stalls while writing the decision still times out. SDK retries, when applicable, make separate HTTP requests with the same limit.
 
 Neither is optional in practice. A refused connection fails immediately, but a server that **accepts** and then stops answering — wedged, mid-restart, or behind a load balancer holding the socket — would otherwise park the routing thread indefinitely. For a component that fails closed that is worse than a denial: it never reaches the point of deciding. A timeout is treated as a failure to reach a verdict, so it denies, or proceeds if `failOpen` is set, like any other such failure.
 
@@ -663,9 +680,33 @@ Note that OPA reports an **undefined** decision — no rule matched and the poli
 
 ## Health check
 
+Each check owns its HTTP client and releases it when the check stops. The five-second health deadline includes the complete response body; a stalled body reports DOWN and the outstanding request is cancelled.
+
 Because the component fails closed, an OPA server that cannot be reached fails **every** exchange through the route. The producer registers a readiness check that probes the server’s `/health` endpoint, so an unavailable policy decision point shows up in the health registry rather than only in the error logs once traffic starts failing.
 
 Camel disables producer health checks by default; turn them on with `camel.health.producersEnabled=true`, or per component with `healthCheckProducerEnabled`. The check reports DOWN with the underlying reason — an unreachable server and a server answering its health endpoint with an error are reported differently, so a deny is never confused with an outage.
+
+Set `healthCheckBundles=true` on the endpoint or `OpaSecurityPolicy` bean to request `/health?bundles=true`. OPA then includes activation/readiness of its configured bundles and discovery in the server’s health result. This is useful when a server starts downloading bundles after startup: a reachable server can otherwise report healthy before it has activated its policy bundle. The default remains the basic `/health` check. This option does not itself enable producer health checks or change policy evaluation.
+
+For example, with producer checks enabled:
+
+```java
+.to("opa:authz/orders/allow?healthCheckBundles=true")
+```
+
+For a policy bean:
+
+```yaml
+- beans:
+    - name: opaPolicy
+      type: org.apache.camel.component.opa.security.OpaSecurityPolicy
+      properties:
+        serverUrl: http://localhost:8181
+        policyPath: authz/orders/allow
+        healthCheckBundles: true
+```
+
+Bundle-aware readiness follows OPA’s health semantics. It does not verify a particular bundle revision, guarantee policy freshness, or validate business permissions for a message. It is unused in `wasm` mode, with an injected `opaClient`, or when the corresponding health check is disabled.
 
 `OpaSecurityPolicy` registers an equivalent check, under an id starting `security-policy:opa-`. It is arguably the more important of the two: a denied producer merely records a verdict the route can inspect, while the policy throws `CamelAuthorizationException` and stops the exchange, so an unreachable server there fails every message outright. That is why the policy’s check is on by default rather than opt-in like the producer’s. Set `healthCheckEnabled=false` on the policy for a route that should stay ready regardless — one running `failOpen`, say — in preference to hiding the check with `camel.health.exclude-pattern`. A policy running `failOpen` marks the exchanges it let through with `CamelOpaDecisionFailedOpen`, exactly as the producer does; the evaluator is shared, so everything in [Failure handling](#failure-handling) about that header applies to `.policy(…​)` too.
 

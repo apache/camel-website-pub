@@ -524,6 +524,8 @@ from("direct:createDocument")
 
 For several tuples at once, leave `user`/`relation`/`object` unset and put them in the body instead — a collection of ``Map`s with `user``, `relation` and `object` entries, or of `ClientTupleKey` objects. `deleteTuples` accepts the same shapes and revokes instead.
 
+A `writeTuples` body may also set a relationship condition on a tuple: a `ClientTupleKey` built with `.condition(..)`, or a `Map` whose `condition` entry is itself a map of a `name` and an optional `context`. The condition is written through as given, so a conditioned grant stays conditioned; a tuple with no condition is written unconditioned. Because a condition can ride only on the body, a tuple configured on the endpoint is always written without one; set the condition on the body when you need a conditioned tuple. A `deleteTuples` body may carry a condition too, but it is ignored, because OpenFGA deletes by identity.
+
 > **Important**
 > The endpoint wins over the body
 >
@@ -591,6 +593,8 @@ For a server started with `--authn-method preshared`, set `apiToken`. For one be
 `connectTimeout` and `readTimeout` bound the call, and `maxRetries` bounds how often a retryable failure is re-attempted. The component supplies the SDK’s HTTP client itself so that `connectTimeout` actually takes effect; the SDK’s own `connectTimeout` setting is accepted and then never read, and the client it builds by default sets none, leaving the connect phase bounded only by the operating system.
 
 ## Health checks
+
+Each check owns its HTTP client and releases it when the check stops. The five-second health deadline includes the complete response body; a stalled body reports DOWN and the outstanding request is cancelled.
 
 Both the producer and `OpenFgaSecurityPolicy` register a readiness check that probes OpenFGA’s `/healthz` endpoint. Because the component fails closed, a route that is up but cannot reach OpenFGA fails every message, so it is not ready — and this makes that visible before traffic arrives rather than only in the error logs afterwards.
 
@@ -724,7 +728,7 @@ Contextual tuples supplied by the **message** are deliberately not supported. If
 
 ### Reading the graph
 
-`readTuples` answers "what access exists", as opposed to ``check’s "may this subject do this". Here `user``, `relation` and `object` are a **filter** rather than a subject, and the body comes back as a list of maps keyed `user`, `relation`, `object` and `timestamp` — deliberately the keys `writeTuples` and `deleteTuples` accept, so a route can revoke what it just read without reshaping anything:
+`readTuples` answers "what access exists", as opposed to ``check’s "may this subject do this". Here `user``, `relation` and `object` are a **filter** rather than a subject, and the body comes back as a list of maps keyed `user`, `relation`, `object` and `timestamp`, plus a `condition` map of `name` and `context` when the stored tuple has one — deliberately the keys `writeTuples` and `deleteTuples` accept, so a route can revoke what it just read, or re-grant it with its condition intact, without reshaping anything:
 
 -   Java
     
@@ -772,7 +776,7 @@ from("direct:revokeEverythingBobHas")
 >
 > What "optional" does **not** mean is that a part may go missing at runtime. Only an option the endpoint never set counts as "do not filter on this"; an option that **is** set and evaluates to nothing — `user=${header.who}` on a message with no `who` header — is refused. Dropping it would make the read wider than the route asked for, and with the `readTuples` → `deleteTuples` route above that turns "revoke Bob’s access" into "revoke everyone’s". A filter that silently widens when a value goes missing is the read-side form of failing open.
 
-`readChanges` reads the change log, which is the building block for keeping a cache or a projection in step with the graph. Each entry adds an `operation` of `WRITE` or `DELETE`.
+`readChanges` reads the change log, which is the building block for keeping a cache or a projection in step with the graph. Each entry adds an `operation` of `WRITE` or `DELETE`, and carries the same `condition` map as `readTuples` when the changed tuple has one.
 
 Both are paged. `pageSize` bounds one request, and the token the page returns arrives on `CamelOpenFgaContinuationToken`; feed it back through `continuationToken` to read on.
 

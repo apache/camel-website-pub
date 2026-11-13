@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1794467713597,
+  "generated": 1794598933235,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8425,6 +8425,12 @@
               "path": "eitl.adoc",
               "url": "/camel-kit/next/eitl.html",
               "title": "Environment-in-the-loop"
+            },
+            {
+              "module": "ROOT",
+              "path": "existing-project.adoc",
+              "url": "/camel-kit/next/existing-project.html",
+              "title": "Adding Capabilities to Existing Camel Applications"
             },
             {
               "module": "ROOT",
@@ -17474,6 +17480,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/azure-iothub.adoc",
+              "url": "/camel-spring-boot/next/starters/azure-iothub.html",
+              "title": "Azure IoT Hub"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/azure-key-vault.adoc",
               "url": "/camel-spring-boot/next/starters/azure-key-vault.html",
               "title": "Azure Key Vault"
@@ -18869,12 +18881,6 @@
               "path": "starters/odata.adoc",
               "url": "/camel-spring-boot/next/starters/odata.html",
               "title": "OData"
-            },
-            {
-              "module": "ROOT",
-              "path": "starters/ognl.adoc",
-              "url": "/camel-spring-boot/next/starters/ognl.html",
-              "title": "OGNL"
             },
             {
               "module": "ROOT",
@@ -23562,12 +23568,6 @@
             },
             {
               "module": "languages",
-              "path": "ognl-language.adoc",
-              "url": "/components/next/languages/ognl-language.html",
-              "title": "OGNL"
-            },
-            {
-              "module": "languages",
               "path": "openfeature-language.adoc",
               "url": "/components/next/languages/openfeature-language.html",
               "title": "OpenFeature"
@@ -24198,6 +24198,12 @@
             },
             {
               "module": "others",
+              "path": "semantic-micrometer.adoc",
+              "url": "/components/next/others/semantic-micrometer.html",
+              "title": "Semantic Micrometer"
+            },
+            {
+              "module": "others",
               "path": "semantic-openai.adoc",
               "url": "/components/next/others/semantic-openai.html",
               "title": "Semantic OpenAI"
@@ -24738,6 +24744,12 @@
             },
             {
               "module": "ROOT",
+              "path": "azure-iothub-component.adoc",
+              "url": "/components/next/azure-iothub-component.html",
+              "title": "Azure IoT Hub"
+            },
+            {
+              "module": "ROOT",
               "path": "azure-key-vault-component.adoc",
               "url": "/components/next/azure-key-vault-component.html",
               "title": "Azure Key Vault"
@@ -24825,6 +24837,12 @@
               "path": "camunda-component.adoc",
               "url": "/components/next/camunda-component.html",
               "title": "Camunda"
+            },
+            {
+              "module": "ROOT",
+              "path": "cedar-component.adoc",
+              "url": "/components/next/cedar-component.html",
+              "title": "Cedar"
             },
             {
               "module": "ROOT",

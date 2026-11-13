@@ -66,7 +66,7 @@ The File Watch component supports the following options which are listed below.
 | **concurrentConsumers** (advanced) | The number of concurrent consumers. Increase this value, if your route is slow to prevent buffering in queue. | 1 | int |
 | **fileHasher** (advanced) | Reference to io.methvin.watcher.hashing.FileHasher. This prevents emitting duplicate events on some platforms. For working with large files and if you dont need detect multiple modifications per second per file, use #lastModifiedTimeFileHasher. You can also provide custom implementation in registry. | #murmur3FFileHasher | FileHasher |
 | **pollThreads** (advanced) | The number of threads polling WatchService. Increase this value, if you see OVERFLOW messages in log. | 1 | int |
-| **queueSize** (advanced) | Maximum size of queue between WatchService and consumer. Unbounded by default. | 2147483647 | int |
+| **queueSize** (advanced) | Maximum size of queue between WatchService and consumer. Unbounded by default. When the queue is full, file events are dropped. | 2147483647 | int |
 
 ## Endpoint Options
 
@@ -113,7 +113,7 @@ Enum values:
 | **concurrentConsumers** (advanced) | The number of concurrent consumers. Increase this value, if your route is slow to prevent buffering in queue. | 1 | int |
 | **fileHasher** (advanced) | Reference to io.methvin.watcher.hashing.FileHasher. This prevents emitting duplicate events on some platforms. For working with large files and if you dont need detect multiple modifications per second per file, use #lastModifiedTimeFileHasher. You can also provide custom implementation in registry. | #murmur3FFileHasher | FileHasher |
 | **pollThreads** (advanced) | The number of threads polling WatchService. Increase this value, if you see OVERFLOW messages in log. | 1 | int |
-| **queueSize** (advanced) | Maximum size of queue between WatchService and consumer. Unbounded by default. | 2147483647 | int |
+| **queueSize** (advanced) | Maximum size of queue between WatchService and consumer. Unbounded by default. When the queue is full, file events are dropped. | 2147483647 | int |
 
 ## Message Headers
 

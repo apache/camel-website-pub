@@ -23,7 +23,9 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 ai-resource:resourceName?resourceUri=uri\[&options\]
 
-Where **resourceName** is the human-readable label shown in resource listings, and **resourceUri** is the address clients use to read the resource. The uri must be unique within the CamelContext.
+Where **resourceName** is the human-readable label shown in resource listings, and **resourceUri** is the address clients use to read the resource. The uri must be unique within the CamelContext. For a family of resources, use `uriTemplate` instead of `resourceUri`; the two options are mutually exclusive.
+
+A `uriTemplate` follows RFC 6570 level 1: each variable must occupy an entire path segment, for example `crm://customers/{id}`. Variables do not match across `/` separators. A concrete variable must use RFC 3986 `pchar` characters (including well-formed percent-encoded octets); raw query/fragment characters, controls, malformed percent escapes, and `.` or `..` dot segments do not match. Fixed resources take precedence over a matching template when the same concrete URI is read. Tagged templates in one CamelContext must not overlap, even when they belong to different tags; a conflicting route fails startup rather than depending on registration order. A fixed `resourceUri` must not contain raw `{` or `}`; use `uriTemplate` for variable paths.
 
 ## Configuring Options
 
@@ -81,9 +83,10 @@ The AI Resource component supports the following options which are listed below.
 | **configuration** (consumer) | The component configuration. |  | AiResourceConfiguration |
 | **description** (consumer) | Human-readable description of what this resource contains. Passed verbatim to the client. When omitted, defaults to the resource name. |  | String |
 | **mimeType** (consumer) | MIME type of the content the route produces. Types denoting text, such as any text subtype, application/json, and any subtype ending in json, xml or yaml, are read as a string. Every other type is read as raw bytes and delivered to clients as a binary blob. | text/plain | String |
-| **resourceUri** (consumer) | **Required** The resource uri clients use to read this resource, for example camel:///config/app.json or s3://reports/latest.pdf. It must be unique within the CamelContext and is what an MCP client sends in a resources/read request. |  | String |
+| **resourceUri** (consumer) | The fixed resource uri clients use to read this resource. Configure this or uriTemplate, but not both. The uri must be unique within the CamelContext. |  | String |
 | **tags** (consumer) | Comma-separated list of tags used to group resources. Adapters filter the registry by these tags to select which resources to expose. When omitted, the resource goes into a default pool which camel-mcp-server never exposes. |  | String |
 | **title** (consumer) | Optional display title for resource listings. Advisory hint for clients only. |  | String |
+| **uriTemplate** (consumer) | RFC 6570 level 1 URI template. Each variable must occupy a whole path segment, for example crm://customers/{id}. Configure this or resourceUri, but not both. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 
 ## Endpoint Options
@@ -108,9 +111,10 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **description** (consumer) | Human-readable description of what this resource contains. Passed verbatim to the client. When omitted, defaults to the resource name. |  | String |
 | **mimeType** (consumer) | MIME type of the content the route produces. Types denoting text, such as any text subtype, application/json, and any subtype ending in json, xml or yaml, are read as a string. Every other type is read as raw bytes and delivered to clients as a binary blob. | text/plain | String |
-| **resourceUri** (consumer) | **Required** The resource uri clients use to read this resource, for example camel:///config/app.json or s3://reports/latest.pdf. It must be unique within the CamelContext and is what an MCP client sends in a resources/read request. |  | String |
+| **resourceUri** (consumer) | The fixed resource uri clients use to read this resource. Configure this or uriTemplate, but not both. The uri must be unique within the CamelContext. |  | String |
 | **tags** (consumer) | Comma-separated list of tags used to group resources. Adapters filter the registry by these tags to select which resources to expose. When omitted, the resource goes into a default pool which camel-mcp-server never exposes. |  | String |
 | **title** (consumer) | Optional display title for resource listings. Advisory hint for clients only. |  | String |
+| **uriTemplate** (consumer) | RFC 6570 level 1 URI template. Each variable must occupy a whole path segment, for example crm://customers/{id}. Configure this or resourceUri, but not both. |  | String |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
@@ -129,6 +133,16 @@ Enum values:
 
  |  | ExchangePattern |
 
+## Message Headers
+
+The AI Resource component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelAiResourceUri** (consumer) Constant: [`RESOURCE_URI_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-ai-resource/latest/org/apache/camel/component/ai/resource/AiResource.html#RESOURCE_URI_HEADER) | Header containing the concrete URI requested for a resource-template read. |  | String |
+| **CamelAiResourceTemplateVariable.** (consumer) Constant: [`TEMPLATE_VARIABLE_HEADER_PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-ai-resource/latest/org/apache/camel/component/ai/resource/AiResource.html#TEMPLATE_VARIABLE_HEADER_PREFIX) | Prefix for headers carrying raw, client-supplied template variables. |  | String |
+
 ## Message Body
 
 The message body at each side of the AI Resource component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.
@@ -136,7 +150,7 @@ The message body at each side of the AI Resource component: _Consumer_ is the bo
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `null` | No body and no headers: a resource read carries no arguments. The route fetches the content itself, for example with pollEnrich or a producer with a read operation. |
+| **Consumer** | `null` | No request body is supplied. A template read carries the concrete requested URI and raw path-segment variables in the CamelAiResourceUri and CamelAiResourceTemplateVariable.\* headers. These values are untrusted client input and must be validated before use. |
 | **Consumer reply** | `text`, `bytes`, `stream` or `file` | The content the route ends with: converted to a String when the mimeType is textual (the default text/plain, json, xml, yaml), else to a byte\[\] sent as a blob. A Map, a List or another object is sent as its toString as text and fails as a blob: marshal it first. No body is an error. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -190,6 +204,23 @@ from("ai-resource:app_config"
               constant:
                 expression: "file:config?fileName=app.json&noop=true&idempotent=false"
 ```
+
+### Templated resource
+
+Use `uriTemplate` when one route serves a family of client-addressable resources. The example below exposes `crm://customers/{id}` and makes the concrete URI and captured variable available to the route:
+
+```java
+from("ai-resource:customer?uriTemplate=crm://customers/{id}&tags=crm")
+    .process(exchange -> {
+        String customerId = exchange.getMessage().getHeader(
+            "CamelAiResourceTemplateVariable.id", String.class);
+        String requestedUri = exchange.getMessage().getHeader("CamelAiResourceUri", String.class);
+        // Validate customerId against the application's identifier rules before using it.
+        exchange.getMessage().setBody("Customer " + customerId + " requested as " + requestedUri);
+    });
+```
+
+For each template read, Camel sets `CamelAiResourceUri` to the concrete URI sent by the client and sets one header per variable using the prefix `CamelAiResourceTemplateVariable.` followed by the variable name. Variable values are passed as raw strings; percent-encoding is retained. These values are untrusted client input. Validate them against an allowlist or strict format before using them to build file paths, database queries or downstream URIs. Do not treat them as Camel property placeholders or evaluate them as expressions.
 
 ### Binary resource
 

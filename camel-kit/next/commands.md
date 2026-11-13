@@ -16,7 +16,11 @@ camel-kit init --here \[options\]
 | --- | --- | --- |
 | `--ai`, `-a` | `bob2` | Coding agent to configure: `bob2`, `antigravity`, `claude`, `codex`, `copilot`, `pi`, `qwen` or `opencode` |
 | `--here` | `false` | Initialize in the current directory |
-| `--force` | `false` | Overwrite an existing project (one with `AGENTS.md` or `.camel-kit/`) without prompting |
+| `--force` | `false` | Reinitialize a project that already has `.camel-kit/`. Your content in shared files is kept; see [Existing projects](getting-started.html#existing-project) |
+| `--replace <path>` | none | Replace one existing shared file in full, such as `AGENTS.md` or `mvnw`, instead of merging or preserving it. Repeatable; a path that is not a shared file written by `init` is rejected before anything is written |
+| `--dry-run` | `false` | Show what `init` would do to each shared file (create, replace, merge or preserve) without writing anything |
+| `--replace-wrapper` | `false` | Replace the complete Maven wrapper; use `--replace <path>` to replace only one shared file |
+| `--record-baseline` | `false` | Run the existing project’s build and tests once to record baseline results; never runs during `--dry-run` |
 | `--source-platform` | `auto` | Source platform of a migration: `mulesoft`, `biztalk`, `camel` or `auto` |
 | `--citrus-version` | the configured `citrus.version` (5.0.1) | Citrus version for the test schemas and the generated test dependencies |
 | `--with-citrus-mcp` | `false` | _(development snapshot only)_ Include the Citrus MCP server in agent configuration. When omitted, no Citrus server is generated; use this flag if your project needs Citrus test integration. Released versions (0.4.1 and earlier) include Citrus by default. |

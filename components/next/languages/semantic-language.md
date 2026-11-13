@@ -584,7 +584,7 @@ The Semantic Evaluation language supports the following options which are listed
 | --- | --- | --- | --- |
 | **language** (common) |  | `String` | **Required** The name of the language to use. |
 | **trim** (advanced) | `true` | `Boolean` | Whether to trim the source code to remove leading and trailing whitespaces and line breaks. |
-| **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:file:order.json or resource:classpath:templates/order.json (a name without a scheme is a classpath resource). Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
+| **resolveResource** (advanced) | `false` | `Boolean` | Whether a result of the expression that is a String starting with resource: is loaded as a resource and its content becomes the result, e.g. a script that returns resource:templates/order.json. The name has no scheme and is loaded from the classpath: camel run puts the files given on the command line on the classpath and export puts them in src/main/resources, so the same name works in both. A name with a scheme (file:, http: …​) or with .. fails. Let the route choose the name, such as a fixed folder with a name picked by the route, and do not take it straight from the message. Off by default; the resource: prefix on the expression text itself is always resolved. Applies to the expression used as a value, not as a predicate. |
 
 ### Configuring the language
 
@@ -887,6 +887,10 @@ camel semantic monitoring my-app --json
 camel semantic monitoring my-app --source=departmentMetrics
 ```
 
-The Semantic **Monitoring** sibling, `tui_get_monitoring`, `semantic-monitoring` console and CLI read this same current-value cache. The TUI offers expert/definition grouping, filters and an inspector for counts, durations, distributions, meaning, observation times and collection health. It has no historical-period, reference or comparison controls. Pausing affects the display only. A shared Micrometer exporter for Camel Main, Spring Boot and Quarkus is tracked separately by CAMEL-25648; it is not implemented by this local viewer.
+The Semantic **Monitoring** sibling, `tui_get_monitoring`, `semantic-monitoring` console and CLI read this same current-value cache. The TUI offers expert/definition grouping, filters and an inspector for counts, durations, distributions, meaning, observation times and collection health. It has no historical-period, reference or comparison controls. Pausing affects the display only. The optional Micrometer integration exports measurements independently of this viewer. Runtime-specific automatic registration and scrape endpoint integration are separate from the shared listener.
 
 When JMX is enabled, the context registers one read-only aggregate facade and one per registered metric source under `type=semantic`, with logical names `all` and `Source(<registry-name>)`. The object-name pattern is `<domain>:context="<management-name>",type=semantic,name="<name>"`. Each exposes only a JSON `Snapshot` attribute backed by the same cache. There are no per-event MBeans, inference/backend reads, reset, reference-update or detector controls in JMX. Facades are removed at context shutdown. Monitoring also works with JMX disabled and without a connected TUI.
+
+### Optional Micrometer instrumentation
+
+Add [Semantic Micrometer](../others/semantic-micrometer.md) (`camel-semantic-micrometer`) to export assessment counts, durations, typed result distributions and supported expert measurements to the application’s Micrometer registry. The integration brings `camel-semantic` and `camel-micrometer` transitively and documents registration, metric names, cardinality limits, lifecycle and PromQL queries. `camel-semantic` itself has no Micrometer dependency.

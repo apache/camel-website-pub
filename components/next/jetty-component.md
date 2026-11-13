@@ -389,7 +389,7 @@ If you actually want to expose routes by HTTP and already have a Servlet, you sh
 
 ### HTTP Request Parameters
 
-So if a client sends the HTTP request, `http://serverUri?one=hello`, the Jetty component will copy the HTTP request parameter, `one` to the exchange’s `in.header`. We can then use the `simple` language to route exchanges that contain this header to a specific endpoint and all others to another. If we used a language more powerful than [Simple](languages/simple-language.md) (such as [OGNL](languages/ognl-language.md)), we could also test for the parameter value and do routing based on the header value as well.
+So if a client sends the HTTP request, `http://serverUri?one=hello`, the Jetty component will copy the HTTP request parameter, `one` to the exchange’s `in.header`. We can then use the `simple` language to route exchanges that contain this header to a specific endpoint and all others to another. If we used a language more powerful than [Simple](languages/simple-language.md), we could also test for the parameter value and do routing based on the header value as well.
 
 ### Session Support
 

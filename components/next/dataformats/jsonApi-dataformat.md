@@ -17,11 +17,11 @@ The message body at each side of the JSonApi data format: _Marshal input_ and _U
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Marshal input** | `pojo` | One resource object of a class dataFormatTypes names, annotated with @Type and @Id of JSONAPI-Converter. A Map or a List fails. |
+| **Marshal input** | `pojo` or `list` | One resource object of a class dataFormatTypes names, annotated with @Type and @Id of JSONAPI-Converter, or a Collection or an array of them, written as a collection document whose data is an array. A Map fails. |
 | **Marshal output** | `stream`, as json | The JSON:API document in the stream cache, or a byte array when stream caching is off. |
 | **Unmarshal input** | `text`, `bytes`, `stream` or `file`, as json | 
  |
-| **Unmarshal output** | `pojo` or `null` | The primary data as an object of the class mainFormatType names, or no body when the data is null. A document whose data is an array fails.
+| **Unmarshal output** | `pojo`, `list` or `null` | The primary data as an object of the class mainFormatType names, or no body when the data is null. A collection document, whose data is an array, gives a List of them.
 
 With `mainFormatType` set: an object of the class it names, or null.
 
@@ -54,6 +54,15 @@ The `dataFormatTypes` are the resource classes, separated by commas. They are an
         - to:
             uri: mock:unmarshal
 ```
+
+### Collection documents
+
+A JSON:API document whose primary data is an array, such as the answer to `GET /books`, is a collection document.
+
+-   On unmarshal, a document whose `data` is an array gives a `java.util.List` of `mainFormatType` objects (an empty list for `"data": []`). A document whose `data` is one resource object gives that object, as before.
+    
+-   On marshal, a `java.util.Collection` or an array of resource objects is written as a collection document, whose `data` is an array. Any other body is written as one resource object.
+    
 
 ## Dependencies
 

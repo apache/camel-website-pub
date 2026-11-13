@@ -12,7 +12,7 @@ The exit codes and streams on this page apply from Camel 4.24 onwards.
 | `0` | Success | The command did what it was asked to do. |
 | `1` | Failed | The command ran, but the outcome is negative: validation found errors, a check failed, or the integration rejected the action. |
 | `2` | Usage error | An unknown option, an invalid or missing argument, options that cannot be used together, or a command that needs an interactive terminal. |
-| `3` | Not found | An integration, route, component, service or other name given on the command line is not running or does not exist, or a name matches more than one running integration. |
+| `3` | Not found | An integration, route, component, service or other name given on the command line is not running or does not exist, or a name matches more than one running integration. Also when the integration stops before it answers the command, such as a `camel cmd send` that waits for the reply. |
 | `66` | File not found | A file or directory given on the command line does not exist, or holds none of the files the command needs. |
 | `70` | Internal error | An unexpected exception, which is most often a bug in Camel. The error is printed with its stack trace. |
 | `124` | Timed out | The integration did not reply in time, is still starting, or did not stop in time. |

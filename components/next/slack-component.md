@@ -231,6 +231,61 @@ The message body at each side of the Slack component: _Consumer_ is the body of 
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the Slack component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `SlackWorld`
+Fake: a fake Slack Web API (conversations.history) returned by a mocked Slack.getInstance
+
+Tests: `SlackSuspendDstTest`
+
+ | 
+
+**Covers:**
+
+-   the polling consumer with maxResults and naturalOrder
+    
+-   the pages of conversations.history (oldest and cursor)
+    
+-   route suspend and resume while a batch is routed
+    
+
+**Faults:**
+
+-   the first page of conversations.history answers ratelimited
+    
+-   conversations.history answers slowly
+    
+-   the route is suspended while an exchange is in a downstream call
+    
+
+**Invariants:**
+
+-   every offered message is routed at least once
+    
+-   no message is routed twice
+    
+-   route slack is started
+    
+-   consumer polls after the faults cleared
+    
+
+
+
+
+
+ | [CAMEL-25684](https://issues.apache.org/jira/browse/CAMEL-25684)
+
+[CAMEL-25738](https://issues.apache.org/jira/browse/CAMEL-25738)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 ## Usage
 
 To send a message contained in the message body, a pre-established [Slack incoming webhook](https://api.slack.com/incoming-webhooks) must be configured in Slack, or the producer uses a token of a Slack app.

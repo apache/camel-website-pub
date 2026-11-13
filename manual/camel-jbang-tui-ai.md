@@ -26,7 +26,7 @@ Press **F8** to open the built-in AI prompt panel. The panel detects the provide
 
 Press **Ctrl+P** inside the AI panel to switch provider or model at any time.
 
-A question can span several lines: **Ctrl+N** starts a new line (terminals deliver **Shift+Enter** and **Alt+Enter** as a plain **Enter**, so they cannot be used), pasted text keeps its line breaks, and **Up** and **Down** move between the lines of the question before they recall earlier prompts. **Enter** sends it.
+A question can span several lines: **Shift+Enter** (or **Alt+Enter**) starts a new line, pasted text keeps its line breaks, and **Up** and **Down** move between the lines of the question before they recall earlier prompts. **Enter** sends it. A terminal without the Kitty keyboard protocol (see [Text Fields](camel-jbang-tui.html#_text_fields)), such as macOS Terminal, sends **Shift+Enter** as a plain **Enter**; use **Ctrl+N** there.
 
 The same guidance, together with the provider that is currently detected, is available inside the TUI via **F2** → _AI & MCP_ → _Setup AI_. Use **F2** → _Settings_ to pin a provider, model or base URL (`camel.tui.ai.provider`, `camel.tui.ai.model`, `camel.tui.ai.url`) regardless of the environment. `camel.tui.ai.acp.command` sets the command line of the custom ACP agent (`acp:custom`).
 

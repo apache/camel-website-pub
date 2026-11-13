@@ -194,6 +194,8 @@ Set an endpoint URI option or exchange header with a name of `operation` and a v
 | `DELETE_INDEX` |  | Deletes the specified `indexName` and returns a `boolean` value as the message exchange body, indicating whether the operation was successful. You can set the name of the target index to create from the `indexName` URI parameter option, or by providing a message header with the key `CamelElasticsearchIndexName`. |
 | `SEARCH` | `Map` (optional) | Search for content with either a `Map` of `String` keys & values of query criteria. Or a JSON string representation of the query. Matching documents are returned as a JSON string set on the message exchange body. You can set the JSON query String by providing a message header with the key `CamelElasticsearchSearchQuery`. You can set the message exchange body to a `Map` of `String` keys & values for the query criteria. |
 
+The document id and the index name are each sent as one path segment of the request, with reserved characters such as `/`, `?`, , `%` and spaces percent-encoded, so Elasticsearch takes them literally. A document id of `.` or `..` is rejected, as is an index name that contains a character Elasticsearch does not allow in an index name (`\`, `/`, `?`, `"`, `<`, `>`, `|`, or a space). A comma separated list of index names and patterns, such as `logs-*,my_index`, can be used to search several indexes.
+
 ## Examples
 
 ### Index Content Example

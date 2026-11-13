@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 03 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 13 Nov 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Camel Quarkus 3.33.4 Released</title>
+      <link>https://camel.apache.org/blog/2026/11/camel-quarkus-3.33.4/</link>
+      <pubDate>Fri, 13 Nov 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/11/camel-quarkus-3.33.4/</guid>
+      <description>Camel Quarkus 3.33.4 release</description>
+    </item>
     <item>
       <title>Document Ingestion for RAG in Camel 4.23: From Folder to Vector Store</title>
       <link>https://camel.apache.org/blog/2026/11/camel-document-ingestion-rag/</link>

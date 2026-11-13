@@ -6,10 +6,8 @@ Evaluates an OGNL expression (Apache Commons OGNL)
 
 ## What’s inside
 
--   [OGNL language](../../../../components/next/languages/ognl-language.md)
+-   OGNL
     
-
-Please refer to the above link for usage and configuration details.
 
 ## Maven coordinates
 

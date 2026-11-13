@@ -15,6 +15,12 @@ String values in list-valued message headers are now JSON-escaped when mapped to
 
 Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
 
+### camel-ai-tool-starter - MCP hints that are not configured are no longer published
+
+With `camel-ai-tool-starter`, a tool whose route sets none of the MCP hints `readOnlyHint`, `destructiveHint`, `idempotentHint` and `openWorldHint` was published with each of them set to `false`, because the starter copied the documented default `false` onto the component. These hints, and `returnDirect`, are now left unset unless they are configured, so the MCP `tools/list` response omits them, as it does without Spring Boot.
+
+Under the MCP specification an omitted `destructiveHint` or `openWorldHint` means `true`, so an MCP client may now treat such a tool as destructive and open-world. To keep advertising a tool as read-only or non-destructive, configure the hint on the endpoint, for example `ai-tool:myTool?destructiveHint=false`, or for all tools with `camel.component.ai-tool.destructive-hint=false`.
+
 ### camel-as2 - server/listen - signature and MIC over the message as received
 
 The signature of a `multipart/signed` message is now verified over the signed part exactly as it was received, its MIME headers and its body in the transfer encoding the sender used (RFC 1847, section 2.1), and the `Received-Content-MIC` of the MDN is computed over the same bytes (RFC 4130, section 7.1). Previously both were computed over a re-serialisation of the parsed part, which matches the sender’s bytes only when the part is `binary`, `7bit` or `8bit` and its headers are formatted the way camel-as2 writes them: a `base64` or `quoted-printable` part from another AS2 implementation, encoded with a different line length or escaping, or a part with folded headers or no space after the colon, was refused with `authentication-failed` although correctly signed, and the MDN carried a MIC the sender could not match. Messages from camel-as2’s own client are not affected. `MultipartSignedEntity.getSignedDataRaw()` returns the part as received, `getSignedDataContent()` the bytes a signature is verified against.
@@ -32,6 +38,14 @@ A deployment that lists a bare host and receives asynchronous MDNs on a non-defa
 With `checkpointBatchTimeout`, the consumer now starts a new checkpoint window when the timer of the current window has run, and no longer when the wall clock passes the time the timer was scheduled for. Before, an event that completed in the millisecond in which the timer ran (or while the timer was taking the count) was counted in the window whose count had already been taken: it was checkpointed only with the next event, and when the partition stayed quiet it was delivered again after a restart.
 
 The `CamelAzureEventHubsCheckpointUpdatedBy` header can now be `timeout`. An event that completes after the scheduled time of its window, but before the (late) timer has run, joins that window and gets `timeout`; its offset is checkpointed by that timer. Before, such an event always started a new window, so `timeout` was practically never set. Routes that read this header can now see `timeout` as well as `size`.
+
+### camel-azure-functions - invokeFunction checks the function app and the function name
+
+The `invokeFunction` operation now checks the function app and the function name, from the endpoint or from the `CamelAzureFunctionsFunctionApp` and `CamelAzureFunctionsFunctionName` headers, before it calls the function, and builds the URL with the function name encoded as a path. The exchange fails with an `IllegalArgumentException` when the function app is missing or is not an app name (letters, digits and hyphens, not starting or ending with a hyphen, at most 60 characters), or when the function name has a `?`, `#`, `\` or `%`, an empty segment, or a `.` or `..` segment. A function name of several segments, such as `products/42` for a function with a custom route, is still accepted. The `x-functions-key` header is only added to an `https` URL on an `azurewebsites.net` host. Valid configurations are not affected.
+
+### camel-clickup - the webhook signature check no longer logs signatures
+
+The webhook consumer still logs the body it validates at `DEBUG`, but no longer the signature from the `X-Signature` header, nor the signature it calculates. The `InvalidMessageSignatureException` of a failed check no longer carries the calculated signature: `getCalculatedSignature()` returns `null` and is deprecated, as is the constructor that takes it.
 
 ### camel-hazelcast - the hazelcast-seda consumer restores a transferred exchange only with transferExchange=true
 
@@ -122,6 +136,12 @@ The default behaviour is unchanged: `disconnectOnNoReply` defaults to `true`, wh
 ### camel-elasticsearch-rest-client - the credentials are only sent to the nodes of the cluster
 
 The `user` and `password` are now offered only to the nodes the client talks to: the hosts of `hostAddressesList` and, when `enableSniffer` is set, the nodes the sniffer finds, matching the scheme, host and port. Previously they were registered for any host. A request to another host, including the host of a node with another scheme or port, is now sent without them. A client set with the `restClient` option is not changed.
+
+### camel-elasticsearch-rest-client - the document id and the index name are each sent as one path segment
+
+The producer now percent-encodes the document id and the index name, so each is sent as one path segment of the request and Elasticsearch takes it literally. Before, they were placed into the path as given: a `/`, `?` or `#` in the value changed the path of the request, and a space or a `%` made the request fail. A route that put extra path segments or request parameters into the document id or the index name must change.
+
+A document id of `.` or `..` is now rejected, as is an index name that is empty, `.` or `..`, or that contains `\`, `/`, `?`, `"`, `<`, `>`, `|`, `#` or a space. A comma separated list of index names and patterns, such as `logs-*,my_index`, still works. A `GET_BY_ID` response without the source of the document now gives a `null` body instead of failing with a `NullPointerException`.
 
 ### camel-smooks - allowExternalEntities applies to Smooks Source bodies and to a reader declared without a class
 
@@ -329,6 +349,10 @@ scp sends each name on a protocol line that ends with a line feed. Before, a lin
 ### camel-azure-storage-blob - copyBlob validates the source account and container name
 
 `copyBlob` now rejects invalid source account or container names (headers `CamelAzureStorageBlobSourceBlobAccountName` and `CamelAzureStorageBlobSourceBlobContainerName`) with an `IllegalArgumentException`.
+
+### camel-netty-http - endpoint options are no longer sent to the server as query parameters
+
+The `netty-http` producer no longer sends some of its endpoint options, such as `cookieHandler`, `httpMethodRestrict`, `traceEnabled` and `exchangePattern`, to the HTTP server as query parameters. For example, `netty-http:http://localhost:8080/foo?bar=1&cookieHandler=#myCookieHandler` now calls `[http://localhost:8080/foo?bar=1](http://localhost:8080/foo?bar=1)`. Before, the server also received the `cookieHandler` parameter. Only the query parameters that are not endpoint options are sent, as the documentation describes. To send a query parameter that has the same name as an endpoint option, set the query in the `CamelHttpQuery` header.
 
 ## Upgrading from 4.22.1 to 4.22.2
 

@@ -121,6 +121,21 @@ Two panels can be opened on top of any tab: **F6** opens an [embedded shell](cam
 | **Ctrl+C** / **Q** / **F2** → Quit | Quit |
 | **Esc** | Close popup / go back / return to Overview |
 
+### Text Fields
+
+The text fields (filters, forms, the AI prompt, the source editor) share the same editing keys:
+
+ 
+| Key | Action |
+| --- | --- |
+| **Left/Right**, **Home/End** | Move the cursor |
+| **Backspace** / **Delete** | Delete a character |
+| **Ctrl+Left/Right** | Move a word (**Alt+Left/Right** on macOS) |
+| **Ctrl+Backspace** / **Ctrl+W** | Delete the word before the cursor (**Alt+Backspace** on macOS) |
+| **Ctrl+Delete** | Delete the word after the cursor (**Alt+Delete** on macOS) |
+
+The TUI asks the terminal for the [Kitty keyboard protocol](https://sw.kovidgoyal.net/kitty/keyboard-protocol/), which Kitty, Ghostty, WezTerm, foot and iTerm2 support. It lets the terminal report keys together with their modifiers, such as **Shift+Enter** and **Ctrl+Backspace**, which a terminal without it sends as a plain **Enter** or **Backspace**. A terminal without the protocol ignores the request, and the keys that need it have an alternative (**Ctrl+W** for **Ctrl+Backspace**, **Ctrl+N** for **Shift+Enter** in the AI prompt).
+
 ### Source Tab
 
 See the [keyboard shortcuts](camel-jbang-tui-source-editor.html#_keyboard_shortcuts) of the Source Editor.

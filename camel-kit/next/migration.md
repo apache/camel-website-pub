@@ -14,7 +14,7 @@ The platform pages describe the artifact formats, the mappings and the known lim
 
 ## Initialize the project for migration
 
-Run `init` inside the existing project with `--here`. The application sources and `pom.xml` are left alone, but `init` writes or replaces `mvnw`, `mvnw.cmd` and `.mvn/wrapper/maven-wrapper.properties` even without `--force`, so commit or back up a customized Maven wrapper first.
+Run `init` inside the existing project with `--here`. The application sources, `pom.xml`, an existing Maven wrapper and the content of an existing `AGENTS.md` are kept; see [Existing projects](getting-started.html#existing-project) for how preserved files are reported.
 
 ```bash
 cd my-existing-project

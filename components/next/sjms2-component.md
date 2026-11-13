@@ -325,12 +325,12 @@ The message body at each side of the Simple JMS2 component: _Consumer_ is the bo
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `text`, `bytes`, `map`, `pojo` or `null` | 
-By the JMS message received: a String for a TextMessage, a byte array for a BytesMessage, a Map for a MapMessage, the jakarta.jms.StreamMessage itself for a StreamMessage, and null for a plain Message. An ObjectMessage fails unless objectMessageEnabled.
+| **Consumer** | `text`, `bytes`, `map`, `stream` or `null` | 
+By the JMS message received: a String for a TextMessage, a byte array for a BytesMessage, a Map for a MapMessage, an InputStream for a StreamMessage, and null for a plain Message. An ObjectMessage fails unless objectMessageEnabled.
 
 -   With `mapJmsMessage=false`: `pojo` (`jakarta.jms.Message`)
     
--   With `objectMessageEnabled=true`: `text`, `bytes`, `map`, `value`, `list`, `pojo` or `null`
+-   With `objectMessageEnabled=true`: `text`, `bytes`, `map`, `stream`, `value`, `list`, `pojo` or `null`
     
 
 
@@ -564,12 +564,13 @@ The body is mapped to and from a JMS message as follows (unless the option `jmsM
 | `String`, other text (a `CharSequence` such as a `StringBuilder`) or XML `Node` | `TextMessage` | `String` |
 | `byte[]`, `InputStream`, `Reader`, `ByteBuffer`, `File`, `Path` or `StreamCache` | `BytesMessage` | `byte[]` |
 | `Map` (of simple values) | `MapMessage` | `Map` |
+| Any body that converts to an `InputStream`, with `jmsMessageType=Stream` | `StreamMessage` | `InputStream` |
 | `null` | `Message` | `null` |
 | Other `Serializable` object (such as a number or a `List`) | `ObjectMessage` (only with `objectMessageEnabled=true`, fails otherwise) | the object |
 | Any other object that converts to an `InputStream` (or `File`) | `BytesMessage` | `byte[]` |
 | Any other object | none: sending fails with a `MessageFormatException` that names the class of the body | \- |
 
-With `jmsMessageType=Stream` the body is converted to an `InputStream`, and its bytes are written to a `StreamMessage`. A received `StreamMessage` is not mapped: the body is the `jakarta.jms.StreamMessage` itself. With `mapJmsMessage=false` the body is always the received `jakarta.jms.Message`.
+With `jmsMessageType=Stream` the body is converted to an `InputStream`, and its bytes are written to a `StreamMessage`. A received `StreamMessage` is mapped to an `InputStream` over its bytes, as in the JMS component. With `mapJmsMessage=false` the body is always the received `jakarta.jms.Message`.
 
 ### Clustering
 
