@@ -317,7 +317,27 @@ The Ehcache component supports the following message header(s), which is/are lis
 | **CamelEhcacheKeys** (common) Constant: [`KEYS`](https://javadoc.io/doc/org.apache.camel/camel-ehcache/latest/org/apache/camel/component/ehcache/EhcacheConstants.html#KEYS) | A list of keys, used in PUT\_ALL GET\_ALL REMOVE\_ALL. |  | Set |
 | **CamelEhcacheValue** (common) Constant: [`VALUE`](https://javadoc.io/doc/org.apache.camel/camel-ehcache/latest/org/apache/camel/component/ehcache/EhcacheConstants.html#VALUE) | The value to put in the cache or the result of an operation. |  | Object |
 | **CamelEhcacheOldValue** (common) Constant: [`OLD_VALUE`](https://javadoc.io/doc/org.apache.camel/camel-ehcache/latest/org/apache/camel/component/ehcache/EhcacheConstants.html#OLD_VALUE) | The old value associated to a key for actions like PUT\_IF\_ABSENT or the Object used for comparison for actions like REPLACE. |  | Object |
-| **CamelEhcacheEventType** (common) Constant: [`EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-ehcache/latest/org/apache/camel/component/ehcache/EhcacheConstants.html#EVENT_TYPE) | The type of event received. |  | EventType |
+| **CamelEhcacheEventType** (common) Constant: [`EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-ehcache/latest/org/apache/camel/component/ehcache/EhcacheConstants.html#EVENT_TYPE) | 
+The type of event received.
+
+Enum values:
+
+-   EVICTED
+    
+-   EXPIRED
+    
+-   REMOVED
+    
+-   CREATED
+    
+-   UPDATED
+    
+
+
+
+
+
+ |  | EventType |
 
 ## Message Body
 

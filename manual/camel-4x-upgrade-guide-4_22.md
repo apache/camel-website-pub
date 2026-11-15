@@ -47,6 +47,10 @@ The `invokeFunction` operation now checks the function app and the function name
 
 The webhook consumer still logs the body it validates at `DEBUG`, but no longer the signature from the `X-Signature` header, nor the signature it calculates. The `InvalidMessageSignatureException` of a failed check no longer carries the calculated signature: `getCalculatedSignature()` returns `null` and is deprecated, as is the constructor that takes it.
 
+### camel-file - idempotent consumer with an idempotent read lock
+
+With `idempotent=true` (or `noop=true`) and `readLock=idempotent`, `idempotent-changed` or `idempotent-rename`, the file consumer no longer adds the key to the idempotent repository eagerly, and `idempotentEager` does not apply: the read lock adds it when it acquires the lock. Since Camel 4.7 the read lock was refused, and such a consumer never consumed a file.
+
 ### camel-ftp - sftp uses remote file and directory names as given
 
 The `sftp` component now uses a remote file or directory name exactly as given, also when it contains **or `?`. Before, the JSch library read** and `?` in the name as wildcards, so storing, retrieving, deleting, renaming, listing or changing to a directory could resolve the name to another file or directory whose name matched. If you relied on a wildcard to select a file, use the real name of the file in the producer, and the `include` or `antInclude` option of a consumer that lists the directory instead of a wildcard in `fileName` with `useList=false`. See the [SFTP component](../components/4.22.x/sftp-component.md).
@@ -60,6 +64,10 @@ The file producer now refuses to delete or rename onto a file through such a lin
 The expressions of `preMove`, `move` and `moveFailed` are evaluated before the file is processed, so each of them is evaluated one extra time per file: for a file processed without error, `move` is now evaluated twice and `moveFailed` once, where before `move` was evaluated once and `moveFailed` not at all. This matters for an expression with side effects, such as a bean that hands out a sequence number. The default `.camel` folder has no expression to evaluate.
 
 Targets configured outside the starting directory (such as `move=../archive`) and links resolving inside it work as before. A deployment that links one of these folders to another directory on purpose, such as `.camel` on another volume, should point the option at the folder the link resolves to, such as `move=/mnt/volume2/${file:name}`, as a target configured outside the starting directory is not checked. Setting `jailStartingDirectory=false` also keeps following those links, but then the consumer also reads a file in the starting directory that is a link to a file outside of it, and the producer writes through such links.
+
+### camel-wordpress - each endpoint uses its own site URL and credentials
+
+Each WordPress endpoint now has a client of its own, set up from the `url`, `apiVersion`, `user` and `password` options of that endpoint, and the producers and consumers of the endpoint use that client. The endpoints no longer initialise the `WordpressServiceProvider.getInstance()` singleton; the singleton and its `init` methods are still there, unchanged, for code that sets it up itself. Code that read services from `WordpressServiceProvider.getInstance()` after Camel created a WordPress endpoint must now use `WordpressEndpoint.getServiceProvider()`, or create a provider with `WordpressServiceProvider.create(WordpressAPIConfiguration)`.
 
 ### camel-hazelcast - the hazelcast-seda consumer restores a transferred exchange only with transferExchange=true
 
@@ -313,6 +321,12 @@ In addition, both the strategy and the `xslt-saxon` endpoint now parse a message
 
 On the `xslt-saxon` endpoint, `secureProcessing` now controls both: setting `secureProcessing=false` (for example so a Saxon PE/EE stylesheet can call Java extension functions) also restores the previous, unrestricted parsing of a `Source` body. The option is marked as a security knob (`security=insecure:dev`, `insecureValue=false`), so `camel.main.profile=prod` reports it when it is turned off. `XsltSaxonAggregationStrategy` has no switch for the `Source` parsing: `setTransformerFactory(…​)` replaces the factory, but the strategy’s `XsltSaxonBuilder` keeps `secureProcessing=true`, so the body is still parsed with the restricted reader.
 
+### camel-xslt, camel-xslt-saxon - transformerFactoryConfigurationStrategy and secureProcessing are applied in all configurations
+
+The `xslt` component now calls the `transformerFactoryConfigurationStrategy` of the endpoint or the component also when no `transformerFactory`, `transformerFactoryClass` or `xpathTotalOpLimit` is set. Before, the default `TransformerFactory` was used without calling the strategy. The `xslt-saxon` component now also uses the `transformerFactoryConfigurationStrategy` and `transformerFactoryClass` set on the component, which it ignored before; the endpoint options still take precedence.
+
+With a `saxonConfiguration` bean, the `xslt-saxon` component now applies `secureProcessing` (default `true`) to that configuration. Before (since 4.22.0), the bean replaced the configuration secure processing had been applied to, so a stylesheet could call extension functions or use `xsl:result-document`. If such a stylesheet now fails to compile, set `secureProcessing=false`, or set the Saxon feature in `saxonConfigurationProperties`, which is applied last. Saxon uses the bean by reference, so `secureProcessing` is set on the bean itself: endpoints that share a `saxonConfiguration` (for example all the endpoints, when it is set on the component) must use the same `secureProcessing` value, otherwise the endpoint created last sets it for all of them.
+
 ### camel-openstack - the remaining Swift header constants follow the Camel naming convention
 
 The four remaining Exchange header constants of `SwiftConstants` have been renamed to follow the Camel naming convention used by the rest of the component, completing the rename done in 4.21. The Java field names are unchanged; only the header string values have changed.
@@ -407,6 +421,10 @@ This is a bug fix (CAMEL-24747). Routes that relied on `toD` passing the encoded
 ### camel-core - ThrottlingExceptionRoutePolicy opens the circuit at once with keepOpen
 
 `ThrottlingExceptionRoutePolicy.setKeepOpen(true)` now opens the circuit immediately and synchronously (the consumer is suspended before the setter returns) rather than waiting for the next `onExchangeDone()` callback. This is the intended behaviour and makes the `keepOpen` toggle deterministic, but callers that previously relied on the setter being inert until an exchange arrived must be aware of the change. Setting `keepOpen` back to `false` remains deferred: the half-open timer attempts to close the circuit on its next tick (after `halfOpenAfter` milliseconds, default 30 s).
+
+### camel-kafka - the asynchronous manual commit is done by the consumer thread
+
+With the `DefaultKafkaManualAsyncCommitFactory`, `KafkaManualCommit.commit()` records the offset, and the consumer thread commits it before its next poll, as in Camel 4.21. In Camel 4.22.0 to 4.22.2, the commit ran at once on the calling thread. That failed with a `ConcurrentModificationException` when the calling thread was not the consumer thread (for example, after an aggregator). A commit called after the partition was revoked from the consumer is not made. It would move back the offset that the new owner of the partition committed.
 
 ## Upgrading from 4.22.1 to 4.22.2
 

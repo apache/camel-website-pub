@@ -183,7 +183,7 @@ The CXF-RS component supports the following message header(s), which is/are list
 | **CamelCxfOperationName** (common) Constant: [`OPERATION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#OPERATION_NAME) | The name of the operation. |  | String |
 | **CamelDestinationOverrideUrl** (common) Constant: [`DESTINATION_OVERRIDE_URL`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#DESTINATION_OVERRIDE_URL) | The address that the producer sends the request to, in place of the service address. With the cxf component, the HTTP transport of CXF uses it, and the Camel transport does not. |  | String |
 | **CamelAuthentication** (common) Constant: [`AUTHENTICATION`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#AUTHENTICATION) | The authenticated user of the request, as a Subject. The consumer sets it from the SecurityContext of the CXF request message: the Subject of a LoginSecurityContext, or else a new Subject with the user Principal. |  | Subject |
-| **CamelHttpMethod** (common) Constant: [`HTTP_METHOD`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#HTTP_METHOD) | The HTTP method of the request, for example GET. The consumer sets it to the method of the request. With the WebClient API, the producer sends its request with this method, and without an entity for GET. |  | String |
+| **CamelHttpMethod** (common) Constant: [`HTTP_METHOD`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#HTTP_METHOD) | The HTTP method of the request, for example GET. The consumer sets it to the method of the request. With the WebClient API, the producer sends its request with this method, and without an entity for GET. Without this header, the WebClient API sends a POST, even when the message has no body. |  | String |
 | **CamelHttpPath** (common) Constant: [`HTTP_PATH`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#HTTP_PATH) | The path of the request below the service address, for example /customers/123. The consumer sets it to the path of the request below the service address. With the WebClient API, the producer appends it to the service address or to the address in the CamelDestinationOverrideUrl header, and fills template variables such as {id} in this path with the values of the CamelCxfRsVarValues header. |  | String |
 | **Content-Type** (common) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#CONTENT_TYPE) | The Content-Type of the message body. The consumer sets it to the Content-Type of the request, and uses it as the Content-Type of the response when the message body of the reply is not a jakarta.ws.rs.core.Response. The consumer does not use this header for the response when synchronous is true or when it gets no continuation from the transport. The producer sends it as the Content-Type of its request. When synchronous is false, or when the producer reads the response as a Response, it copies the response headers to the reply, and a Content-Type of the response replaces this header. |  | String |
 | **CamelHttpQuery** (common) Constant: [`HTTP_QUERY`](https://javadoc.io/doc/org.apache.camel/camel-cxf-rest/latest/org/apache/camel/component/cxf/common/message/CxfConstants.html#HTTP_QUERY) | The query string of the request, without the question mark, for example id=1&name=a%20b. The consumer sets it when the request has a query string. With the WebClient API, the producer sends the parameters of this query string in place of the query parameters of the endpoint URI that are not options, unless the CamelCxfRsQueryMap header is set. |  | String |
@@ -285,7 +285,7 @@ _Java-only: inline exchange header manipulation_
 
 ```java
  // set up the service address from the message header to override the setting of CXF endpoint
- exchange.getIn().setHeader(Exchange.DESTINATION_OVERRIDE_URL, constant(getServiceAddress()));
+ exchange.getIn().setHeader(Exchange.DESTINATION_OVERRIDE_URL, getServiceAddress());
 ```
 
 ### Consuming a REST Request - Simple Binding Style
@@ -518,34 +518,16 @@ public interface CustomerServiceResource {
 
 ### How to invoke the REST service through camel-cxfrs producer
 
-The [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md) implements [a proxy-based client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-Proxy-basedAPI), with this API you can invoke the remote REST service through a proxy. The `camel-cxfrs` producer is based on this [proxy API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-Proxy-basedAPI). You need to specify the operation name in the message header and prepare the parameter in the message body, the camel-cxfrs producer will generate the right REST request for you.
+The `camel-cxfrs` producer calls the REST service with one of the two client APIs of the [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md):
 
-Here is an example:
+-   the [HTTP centric client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-CXFWebClientAPI) (WebClient), which is the default (`httpClientAPI=true`);
+    
+-   the [proxy-based client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-Proxy-basedAPI), with `httpClientAPI=false` or the message header `CamelCxfRsUsingHttpAPI` set to `false`.
+    
 
-_Java-only: Java test API (ProducerTemplate with inline Processor)_
+#### HTTP centric client API
 
-```java
-Exchange exchange = template.send("direct://proxy", ex -> {
-    ex.setPattern(ExchangePattern.InOut);
-    Message inMessage = ex.getIn();
-    inMessage.setHeader("CamelCxfOperationName", "getCustomer");
-    inMessage.setHeader("CamelCxfRsUsingHttpAPI", Boolean.FALSE);
-    inMessage.setHeader("key", "value");
-    inMessage.setHeader("Accept", "application/json");
-    inMessage.setBody("123");
-});
-
-// get the response message
-Customer response = (Customer) exchange.getMessage().getBody();
-
-assertNotNull(response, "The response should not be null");
-assertEquals(123, response.getId(), "Get a wrong customer id");
-assertEquals("John", response.getName(), "Get a wrong customer name");
-assertEquals(200, exchange.getMessage().getHeader(Exchange.HTTP_RESPONSE_CODE), "Get a wrong response code");
-assertEquals("value", exchange.getMessage().getHeader("key"), "Get a wrong header value");
-```
-
-The [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md) also provides [an HTTP centric client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-CXFWebClientAPI). You can also invoke this API from `camel-cxfrs` producer. You need to specify the [HTTP\_PATH](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_PATH) and the [HTTP\_METHOD](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_METHOD) and let the producer use the http centric client API by using the URI option **httpClientAPI** or by setting the message header `CamelCxfRsUsingHttpAPI`. You can turn the response object to the type class specified with the message header `CamelCxfRsResponseClass`. The message body is the request entity (a GET sends none): a `List` or an array of primitives (such as `byte[]` or `int[]`) is sent as a whole, and of a `MessageContentsList` (such as the body from a `cxfrs` consumer with the `Default` binding style) or an `Object[]` only the first element is sent, as they carry the parameters of a method call.
+You need to specify the [HTTP\_PATH](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_PATH) and the [HTTP\_METHOD](https://www.javadoc.io/doc/org.apache.camel/camel-api/current/org/apache/camel/Exchange.html#HTTP_METHOD) headers. Without the `CamelHttpMethod` header, CXF sends a `POST`, even when the message has no body. You can turn the response object to the type class specified with the message header `CamelCxfRsResponseClass`. The message body is the request entity (a GET sends none): a `List` or an array of primitives (such as `byte[]` or `int[]`) is sent as a whole, and of a `MessageContentsList` (such as the body from a `cxfrs` consumer with the `Default` binding style) or an `Object[]` only the first element is sent, as they carry the parameters of a method call.
 
 _Java-only: Java test API (ProducerTemplate with inline Processor)_
 
@@ -579,4 +561,33 @@ Map<String, String> queryMap = new LinkedHashMap<>();
 queryMap.put("q1", "new");
 queryMap.put("q2", "world");
 inMessage.setHeader("CamelCxfRsQueryMap", queryMap);
+```
+
+#### Proxy-based client API
+
+With the proxy-based API, you need to specify the operation name, the name of the method of the resource class, in the `CamelCxfOperationName` header and prepare the parameters in the message body. The camel-cxfrs producer calls that method on a proxy of the resource class, which generates the right REST request.
+
+Here is an example:
+
+_Java-only: Java test API (ProducerTemplate with inline Processor)_
+
+```java
+Exchange exchange = template.send("direct://proxy", ex -> {
+    ex.setPattern(ExchangePattern.InOut);
+    Message inMessage = ex.getIn();
+    inMessage.setHeader("CamelCxfOperationName", "getCustomer");
+    inMessage.setHeader("CamelCxfRsUsingHttpAPI", Boolean.FALSE);
+    inMessage.setHeader("key", "value");
+    inMessage.setHeader("Accept", "application/json");
+    inMessage.setBody("123");
+});
+
+// get the response message
+Customer response = (Customer) exchange.getMessage().getBody();
+
+assertNotNull(response, "The response should not be null");
+assertEquals(123, response.getId(), "Get a wrong customer id");
+assertEquals("John", response.getName(), "Get a wrong customer name");
+assertEquals(200, exchange.getMessage().getHeader(Exchange.HTTP_RESPONSE_CODE), "Get a wrong response code");
+assertEquals("value", exchange.getMessage().getHeader("key"), "Get a wrong header value");
 ```

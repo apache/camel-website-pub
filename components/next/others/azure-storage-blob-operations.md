@@ -42,7 +42,9 @@ from("direct:start")
             uri: mock:result
 ```
 
-You can override the container name or blob name at runtime using the `CamelAzureStorageBlobBlobContainerName` and `CamelAzureStorageBlobBlobName` headers respectively.
+You can override the container name or blob name at runtime using the `CamelAzureStorageBlobBlobContainerName` and `CamelAzureStorageBlobBlobName` headers respectively. The consumer sets `CamelAzureStorageBlobBlobName` to the name of the blob it consumed, so a producer later in the same route uses that name instead of its own `blobName`. Remove the header before the producer to use its `blobName`.
+
+When `operation` is not set, the producer runs `listBlobContainers`: set `operation=uploadBlockBlob`, for example, to upload the message body.
 
 ## Operations Reference
 
@@ -51,7 +53,7 @@ The following table lists all available producer operations. Operations marked *
   
 | Operation | Description | Notes |
 | --- | --- | --- |
-| `listBlobContainers` | List all blob containers in the storage account. | Java-only (requires `ListBlobContainersOptions`) |
+| `listBlobContainers` | List all blob containers in the storage account. The default operation. | Optional `ListBlobContainersOptions` in the `CamelAzureStorageBlobListBlobContainersOptions` header (Java-only) |
 | `createBlobContainer` | Create a new blob container. |  |
 | `deleteBlobContainer` | Delete a blob container. |  |
 | `listBlobs` | List blobs in a container. |  |
@@ -440,7 +442,7 @@ _Java-only: programmatic SAS token generation_
 
 ```java
 BlobContainerClient blobClient = new BlobContainerClientBuilder()
-        .endpoint(String.format("https://%s.blob.core.windows.net/%s", accountName, accessKey))
+        .endpoint(String.format("https://%s.blob.core.windows.net/%s", accountName, containerName))
         .containerName(containerName)
         .credential(new StorageSharedKeyCredential(accountName, accessKey))
         .buildClient();

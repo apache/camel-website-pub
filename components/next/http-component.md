@@ -167,7 +167,7 @@ Enum values:
 
 
  | CLIENT | HostnameVerificationPolicy |
-| **sslContextParameters** (security) | To configure security using SSLContextParameters. Important: Only one instance of org.apache.camel.support.jsse.SSLContextParameters is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. |  | SSLContextParameters |
+| **sslContextParameters** (security) | To configure security using SSLContextParameters. An endpoint can use another instance with its own sslContextParameters option. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
 | **x509HostnameVerifier** (security) | To use a custom X509HostnameVerifier such as DefaultHostnameVerifier or NoopHostnameVerifier. |  | HostnameVerifier |
 | **connectionRequestTimeout** (timeout) | Returns the connection lease request timeout (in millis) used when requesting a connection from the connection manager. A timeout value of zero is interpreted as a disabled timeout. | 180000 | long |
@@ -370,7 +370,7 @@ Enum values:
 | **oauth2ResourceIndicator** (security) | OAuth2 Token endpoint. |  | String |
 | **oauth2Scope** (security) | OAuth2 scope. |  | String |
 | **oauth2TokenEndpoint** (security) | OAuth2 Resource Indicator. |  | String |
-| **sslContextParameters** (security) | To configure security using SSLContextParameters. Important: Only one instance of org.apache.camel.util.jsse.SSLContextParameters is supported per HttpComponent. If you need to use 2 or more different instances, you need to define a new HttpComponent per instance you need. |  | SSLContextParameters |
+| **sslContextParameters** (security) | To configure security using SSLContextParameters. This takes precedence over the sslContextParameters of the component, so endpoints of the same component can use different instances. |  | SSLContextParameters |
 | **x509HostnameVerifier** (security) | To use a custom X509HostnameVerifier such as DefaultHostnameVerifier or NoopHostnameVerifier. |  | HostnameVerifier |
 | **oauth2CachedTokensKeyResolver** (security (advanced)) | To use a custom strategy to compute the key of cached OAuth2 tokens when oauth2CacheTokens is enabled. When set, oauth2CachedTokensKey is not used. |  | OAuth2CachedTokensKeyResolver |
 
@@ -546,7 +546,7 @@ Camel will store the HTTP response from the external server on the _OUT_ body. A
 
 ### Using System Properties
 
-When setting useSystemProperties to true, the HTTP Client will look for the following System Properties, and it will use it:
+When setting `useSystemProperties` to `true`, the HTTP Client will look for the following System Properties, and it will use it:
 
 -   `ssl.TrustManagerFactory.algorithm`
     
@@ -574,12 +574,20 @@ When setting useSystemProperties to true, the HTTP Client will look for the foll
     
 -   `http.proxyPort`
     
+-   `https.proxyHost`
+    
+-   `https.proxyPort`
+    
 -   `http.nonProxyHosts`
     
 -   `http.keepAlive`
     
--   `http.maxConnections`
-    
+
+The `http.proxyHost` and `http.proxyPort` properties apply to `http` targets only. For `https` targets, set `https.proxyHost` and `https.proxyPort`.
+
+Without `useSystemProperties`, the HTTP Client does not read these properties, with one exception: it uses the default trust store of the JVM, so the `javax.net.ssl.trustStore` properties apply unless `sslContextParameters` is set.
+
+You can set `useSystemProperties` on the endpoint, or on the component for all its endpoints, such as with `camel.component.http.use-system-properties=true`. The `https` component is configured on its own, such as with `camel.component.https.use-system-properties=true`.
 
 ### Response code
 
@@ -817,9 +825,37 @@ from("direct:start")
             uri: mock:results
 ```
 
-### Using client timeout - SO\_TIMEOUT
+### Timeouts and dead or silent servers
 
-See the [HttpSOTimeoutTest](https://github.com/apache/camel/blob/main/components/camel-http/src/test/java/org/apache/camel/component/http/HttpSOTimeoutTest.java) unit test.
+The component passes to Apache HttpClient only the timeouts that you set to another value than their default, so the defaults below are those of HttpClient 5. They describe how the client library behaves, approximately, not guarantees of Camel. All values are in milliseconds, and can be set on the component or on the endpoint (the endpoint wins).
+
+  
+| Option | Default | What it bounds |
+| --- | --- | --- |
+| `connectTimeout` | 3 minutes | Opening a new connection, including the TLS handshake. |
+| `soTimeout` | 3 minutes | Each read on a connection of the endpoint’s connection pool: a server that stops sending fails the request after this time. |
+| `responseTimeout` | not set | When set, it replaces `soTimeout` as the read timeout while the request runs. |
+| `connectionRequestTimeout` | 3 minutes | Waiting for a free connection of the pool (`maxTotalConnections`, `connectionsPerRoute`). |
+
+A server that stops answering without closing the connection (the host is gone, or a firewall or NAT drops the packets) blocks the request for the read timeout: with the defaults the exchange fails after about 3 minutes with a `SocketTimeoutException`. HttpClient does not retry a request that timed out, whatever its method; a redelivery of the Camel error handler sends it again. Set the timeouts to what your service needs:
+
+```text
+https://api.example.com/orders?connectTimeout=5000&soTimeout=30000&connectionRequestTimeout=5000
+```
+
+> **Note**
+> `soTimeout` and `connectionTimeToLive` are settings of the connection pool that the component creates for the endpoint: they do not apply when you set your own `clientConnectionManager` on the component.
+
+#### Pooled connections closed by the server or by a NAT
+
+The endpoint keeps connections open for reuse. Before reusing a connection that has been idle for more than 2 seconds, HttpClient checks that the server has not closed it (its `validateAfterInactivity`, which the component does not expose). A request sent sooner on a connection that the server closed fails with `NoHttpResponseException`. HttpClient retries it once only when the method is idempotent (`GET`, `HEAD`, `PUT`, `DELETE`, `OPTIONS`, `TRACE`), so a `POST` or a `PATCH` fails and needs a redelivery of the Camel error handler.
+
+A NAT or firewall that drops an idle connection silently does not close it, so the pool cannot see it: the next request on it waits for the read timeout and fails, without a retry by HttpClient. To keep the pool from reusing such a connection:
+
+-   `httpClient.connectionKeepAlive` (milliseconds): how long an idle connection is kept for reuse when the response of the server has no `Keep-Alive` header with a timeout; 3 minutes by default. Set it below the idle timeout of the NAT or firewall.
+    
+-   `connectionTimeToLive` (component option, milliseconds): the maximum age of a connection, counted from its creation, whether it was busy or idle. Below the idle timeout of the NAT or firewall it works too, at the cost of reconnecting busy connections as well.
+    
 
 ### Configuring a Proxy
 
@@ -885,7 +921,7 @@ _XML-only: Spring XML global options configuration (deprecated)_
 </camelContext>
 ```
 
-Camel will first set the settings from Java System or CamelContext Properties and then the endpoint proxy options if provided. So you can override the system properties with the endpoint options.
+Camel uses these global options only when `useSystemProperties` is `false`, the default. The JVM system properties, such as `http.proxyHost`, are only used with `useSystemProperties=true`, see [Using System Properties](#_using_system_properties). The proxy options of the endpoint or the component, such as `proxyAuthHost` and `proxyAuthPort`, take precedence over both.
 
 There is also a `http.proxyScheme` property you can set to explicitly configure the scheme to use.
 
@@ -1218,19 +1254,7 @@ Configuring Apache HTTP Client Directly
 Basically, a camel-http component is built on the top of [Apache HttpClient](https://hc.apache.org/httpcomponents-client-5.1.x/). Please refer to [SSL/TLS customization](https://hc.apache.org/httpcomponents-client-4.5.x/current/tutorial/html/connmgmt.md) (even if the link is referring to an article about version 4, it is still more or less relevant moreover there is no equivalent for version 5) for details or have a look into the `org.apache.camel.component.http.HttpsServerTestSupport` unit test base class.  
 You can also implement a custom `org.apache.camel.component.http.HttpClientConfigurer` to do some configuration on the http client if you need full control of it.
 
-However, if you _just_ want to specify the keystore and truststore, you can do this with Apache HTTP `HttpClientConfigurer`, for example:
-
-_Java-only: programmatic `KeyStore` and `SchemeRegistry` setup_
-
-```java
-KeyStore keystore = ...;
-KeyStore truststore = ...;
-
-SchemeRegistry registry = new SchemeRegistry();
-registry.register(new Scheme("https", 443, new SSLSocketFactory(keystore, "mypassword", truststore)));
-```
-
-And then you need to create a class that implements `HttpClientConfigurer`, and registers https protocol providing a keystore or truststore per the example above. Then, from your camel route builder class, you can hook it up like so:
+However, if you _just_ want to specify the keystore and truststore, use `sslContextParameters` as shown above. If you implement an `HttpClientConfigurer`, you can hook it up from your camel route builder class like so:
 
 _Java-only: programmatic `HttpClientConfigurer` setup_
 
@@ -1250,8 +1274,6 @@ _XML-only: Spring bean and endpoint reference for \`HttpClientConfigurer\`_
 
 <to uri="https://myhostname.com:443/myURL?httpClientConfigurer=#myHttpClientConfigurer"/>
 ```
-
-As long as you implement the `HttpClientConfigurer` and configure your keystore and truststore as described above, it will work fine.
 
 Using HTTPS to authenticate gotchas
 
@@ -1312,21 +1334,39 @@ _XML-only: endpoint URI referencing the `HttpContext` bean_
 
 Using different SSLContextParameters
 
-The [HTTP](#) component only supports one instance of `org.apache.camel.support.jsse.SSLContextParameters` per component. If you need to use two or more different instances, then you need to set up multiple [HTTP](#) components as shown below. Where we have two components, each using their own instance of `sslContextParameters` property.
+The `sslContextParameters` option of an endpoint takes precedence over the one of the component. So endpoints of the same component can use different `SSLContextParameters` instances, and you do not need a component per instance. A dynamic endpoint can refer to one as well:
 
-_XML-only: Spring bean declarations for multiple HTTP components with different SSL contexts_
+-   Java
+    
+-   YAML
+    
 
-```xml
-<bean id="http-foo" class="org.apache.camel.component.http.HttpComponent">
-   <property name="sslContextParameters" ref="sslContextParams1"/>
-   <property name="x509HostnameVerifier" ref="hostnameVerifier"/>
-</bean>
-
-<bean id="http-bar" class="org.apache.camel.component.http.HttpComponent">
-   <property name="sslContextParameters" ref="sslContextParams2"/>
-   <property name="x509HostnameVerifier" ref="hostnameVerifier"/>
-</bean>
+```java
+from("direct:start")
+  .toD("https://${header.host}/orders?sslContextParameters=#mySSL");
 ```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - toD:
+            uri: "https://${header.host}/orders?sslContextParameters=#mySSL"
+```
+
+To define `mySSL` in XML or YAML, see [JSSE Utility](../../manual/camel-configuration-utilities.html#_configuring_sslcontextparameters_in_xml_and_yaml_dsl).
+
+With Camel Main, the `camel.ssl.*` properties set up global `SSLContextParameters` instead. An `https` endpoint uses them when the `https` component has `useGlobalSslContextParameters=true`, and neither the endpoint nor the component sets `sslContextParameters`:
+
+```properties
+camel.ssl.enabled=true
+camel.ssl.trust-store=truststore.p12
+camel.ssl.trust-store-password=changeit
+camel.component.https.use-global-ssl-context-parameters=true
+```
+
+When the component or the endpoint has a `clientConnectionManager`, Camel uses that connection manager as it is, and `sslContextParameters` is not applied.
 
 ## Removing http protocol headers in the Camel Message
 

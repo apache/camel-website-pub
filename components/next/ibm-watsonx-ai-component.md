@@ -334,7 +334,83 @@ The IBM watsonx.ai component supports the following message header(s), which is/
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelIBMWatsonxAiOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-ai/latest/org/apache/camel/component/ibm/watsonx/ai/WatsonxAiConstants.html#OPERATION) | The operation to perform. |  | WatsonxAiOperations |
+| **CamelIBMWatsonxAiOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-ai/latest/org/apache/camel/component/ibm/watsonx/ai/WatsonxAiConstants.html#OPERATION) | 
+The operation to perform.
+
+Enum values:
+
+-   textGeneration
+    
+-   textGenerationStreaming
+    
+-   chat
+    
+-   chatStreaming
+    
+-   embedding
+    
+-   rerank
+    
+-   tokenize
+    
+-   textExtraction
+    
+-   textExtractionFetch
+    
+-   textExtractionUpload
+    
+-   textExtractionUploadAndFetch
+    
+-   textExtractionUploadFile
+    
+-   textExtractionReadFile
+    
+-   textExtractionDeleteFile
+    
+-   textExtractionDeleteRequest
+    
+-   textClassification
+    
+-   textClassificationFetch
+    
+-   textClassificationUpload
+    
+-   textClassificationUploadAndFetch
+    
+-   textClassificationUploadFile
+    
+-   textClassificationDeleteFile
+    
+-   textClassificationDeleteRequest
+    
+-   detect
+    
+-   forecast
+    
+-   listModels
+    
+-   listTasks
+    
+-   deploymentInfo
+    
+-   deploymentGenerate
+    
+-   deploymentChat
+    
+-   deploymentForecast
+    
+-   runTool
+    
+-   listTools
+    
+-   processToolCalls
+    
+
+
+
+
+
+ |  | WatsonxAiOperations |
 | **CamelIBMWatsonxAiInput** (producer) Constant: [`INPUT`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-ai/latest/org/apache/camel/component/ibm/watsonx/ai/WatsonxAiConstants.html#INPUT) | The input text/prompt for generation. |  | String |
 | **CamelIBMWatsonxAiInputs** (producer) Constant: [`INPUTS`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-ai/latest/org/apache/camel/component/ibm/watsonx/ai/WatsonxAiConstants.html#INPUTS) | The list of inputs for batch operations. |  | List |
 | **CamelIBMWatsonxAiGeneratedText** (producer) Constant: [`GENERATED_TEXT`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-ai/latest/org/apache/camel/component/ibm/watsonx/ai/WatsonxAiConstants.html#GENERATED_TEXT) | The generated text output. |  | String |

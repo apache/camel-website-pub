@@ -164,7 +164,7 @@ RouteBuilder builder = new RouteBuilder() {
 
 ## Error handling across routes
 
-When a route calls another route, such as with [Direct](../components/4.22.x/direct-component.md), a failure in the called route is dealt with by the error handler of the called route, the route where it happened: its redeliveries, its `onException` clauses and its dead letter channel. Once that error handler is done with the failure, the error handlers of the calling routes do not deal with it again: they do not redeliver, and their `onException` clauses do not run for it. This also applies when the called route has only the default error handler, without any `onException`.
+When a route calls another route, such as with [Direct](../components/4.22.x/direct-component.md), a failure in the called route is dealt with by the error handler of the called route, the route where it happened: its redeliveries, its `onException` clauses and its dead letter channel. Once that error handler is done with the failure, the error handlers of the calling routes do not deal with it again: they do not redeliver, and their `onException` clauses do not run for it. This also applies when the called route has only the default error handler, without any `onException`. An exception that escapes a `doTry` block of the called route is the one case that differs, as described below.
 
 An `onException` defined for all the routes of a `RouteBuilder`, or in a [route configuration](route-configuration.md), is part of the error handler of each route it applies to. When it applies to the called route, it runs there, once, and not again in the calling route. When the called route is in another `RouteBuilder`, the `onException` of the calling route’s `RouteBuilder` does not run for its failure.
 
@@ -177,7 +177,11 @@ What the calling route sees depends on what the error handler of the called rout
 -   continued (an `onException` with `continued(true)`): the calling route continues with its next steps.
     
 
+An exception that escapes a [doTry …​ doCatch …​ doFinally](try-catch-finally.md) block of the called route (an exception that no `doCatch` catches, or that a `doCatch` or `doFinally` block throws) is different. The error handler of a route is not in use for the steps of such a block, so the error handler of the called route does not deal with this exception: no redelivery, no `onException` and no dead letter channel of the called route. The error handler of the calling route deals with it instead, as if it failed in the calling route: the `onException` clauses of the calling route run (also one defined for all the routes of its `RouteBuilder`), and a redelivery of the calling route calls the whole called route again.
+
 The same applies with [SEDA](../components/4.22.x/seda-component.md) when the calling route waits for the called route to complete (`InOut`).
+
+With the [inline routes](rest-dsl.html#_inline_rest_dsl_as_a_single_route) of the Rest DSL (the default), a `direct` route that a REST service calls and that is inlined is part of the REST route, not a called route. An exception that escapes a `doTry` block of that `direct` route then fails the exchange, and no `onException` runs for it, as in any single route. Without inline routes, the error handler of the REST route deals with it, as described above.
 
 To deal with the failure in the calling route instead, either:
 

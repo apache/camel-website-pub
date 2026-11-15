@@ -165,7 +165,31 @@ The IBM Watson Discovery component supports the following message header(s), whi
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelIBMWatsonDiscoveryOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-discovery/latest/org/apache/camel/component/ibm/watson/discovery/WatsonDiscoveryConstants.html#OPERATION) | The operation to perform. |  | WatsonDiscoveryOperations |
+| **CamelIBMWatsonDiscoveryOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-discovery/latest/org/apache/camel/component/ibm/watson/discovery/WatsonDiscoveryConstants.html#OPERATION) | 
+The operation to perform.
+
+Enum values:
+
+-   query
+    
+-   listCollections
+    
+-   createCollection
+    
+-   deleteCollection
+    
+-   addDocument
+    
+-   updateDocument
+    
+-   deleteDocument
+    
+
+
+
+
+
+ |  | WatsonDiscoveryOperations |
 | **CamelIBMWatsonDiscoveryQuery** (producer) Constant: [`QUERY`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-discovery/latest/org/apache/camel/component/ibm/watson/discovery/WatsonDiscoveryConstants.html#QUERY) | The natural language query to execute. |  | String |
 | **CamelIBMWatsonDiscoveryCount** (producer) Constant: [`COUNT`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-discovery/latest/org/apache/camel/component/ibm/watson/discovery/WatsonDiscoveryConstants.html#COUNT) | The number of results to return. |  | Integer |
 | **CamelIBMWatsonDiscoveryFilter** (producer) Constant: [`FILTER`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watson-discovery/latest/org/apache/camel/component/ibm/watson/discovery/WatsonDiscoveryConstants.html#FILTER) | The filter to apply to the query. |  | String |

@@ -474,6 +474,7 @@ Enum values:
 | **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
 | **delay** (scheduler) | Milliseconds before the next poll. | 500 | long |
 | **greedy** (scheduler) | If greedy is enabled, then the ScheduledPollConsumer will run immediately again, if the previous run polled 1 or more messages. | false | boolean |
+| **healthCheckMaxPollDuration** (scheduler) | How long a poll may run before the health check of the consumer reports DOWN. The health check is otherwise based on the polls that are done, so it stays UP while a poll hangs, for example on a read without timeout from a connection that went silent. A poll includes routing the messages it polled, so set this above the longest poll you expect. The poll is not interrupted. The value is in millis (not affected by timeUnit). The default 0 turns this off. | 0 | long |
 | **initialDelay** (scheduler) | Milliseconds before the first poll starts. | 1000 | long |
 | **repeatCount** (scheduler) | Specifies a maximum limit of number of fires. So if you set it to 1, the scheduler will only fire once. If you set it to 5, it will only fire five times. A value of zero or negative means fire forever. | 0 | long |
 | **runLoggingLevel** (scheduler) | 
@@ -929,7 +930,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 To use this component, you have multiple options to provide the required Azure authentication information:
 
--   By providing your own [BlobServiceClient](https://azuresdkdocs.blob.core.windows.net/$web/java/azure-storage-blob/12.0.0/com/azure/storage/blob/BlobServiceClient.md) instance which can be injected into `blobServiceClient`. Note: You don’t need to create a specific client, e.g.: BlockBlobClient, the BlobServiceClient represents the upper level which can be used to retrieve lower level clients.
+-   By providing your own [BlobServiceClient](https://azuresdkdocs.blob.core.windows.net/$web/java/azure-storage-blob/12.0.0/com/azure/storage/blob/BlobServiceClient.md) instance which can be injected into `serviceClient`. Note: You don’t need to create a specific client, e.g.: BlockBlobClient, the BlobServiceClient represents the upper level which can be used to retrieve lower level clients.
     
 -   Via Azure Identity, when specifying `credentialType=AZURE_IDENTITY` and providing required [environment variables](https://github.com/Azure/azure-sdk-for-java/tree/main/sdk/identity/azure-identity#environment-variables). This enables service principal (e.g. app registration) authentication with secret/certificate as well as username password. Note that this is the default authentication strategy.
     
@@ -1042,7 +1043,7 @@ For these operations, `accountName` is **required**.
  
 | Operation | Description |
 | --- | --- |
-| `listBlobContainers` | Get the content of the blob. You can restrict the output of this operation to a blob range. |
+| `listBlobContainers` | List the blob containers of the storage account, as a `List<BlobContainerItem>`. This is the default operation when `operation` is not set, so a producer without `operation` lists the containers and uploads nothing: set `operation=uploadBlockBlob` to upload the message body. |
 | `getChangeFeed` | Returns transaction logs of all the changes that occur to the blobs and the blob metadata in your storage account. The change feed provides ordered, guaranteed, durable, immutable, read-only log of these changes. |
 | `findBlobsByTags` | Returns a list of blobs across the storage account whose index tags match the SQL-like filter expression provided via the `CamelAzureStorageBlobTagFilter` header or the message body. Optionally honours `CamelAzureStorageBlobMaxResultsPerPage` and `CamelAzureStorageBlobTimeout`. The result body is a `List<TaggedBlobItem>`. |
 

@@ -316,7 +316,21 @@ The Spring RabbitMQ component supports the following message header(s), which is
 | **CamelSpringRabbitmqDeliveryTag** (consumer) Constant: [`DELIVERY_TAG`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#DELIVERY_TAG) | Delivery tag for manual acknowledge mode. |  | long |
 | **CamelSpringRabbitmqExchangeName** (consumer) Constant: [`EXCHANGE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#EXCHANGE_NAME) | The exchange name that was used when publishing the message. |  | String |
 | **CamelSpringRabbitmqRoutingKey** (consumer) Constant: [`ROUTING_KEY`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#ROUTING_KEY) | The routing key that was used when publishing the message. |  | String |
-| **CamelSpringRabbitmqDeliveryMode** (common) Constant: [`DELIVERY_MODE`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#DELIVERY_MODE) | The message delivery mode. |  | MessageDeliveryMode |
+| **CamelSpringRabbitmqDeliveryMode** (common) Constant: [`DELIVERY_MODE`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#DELIVERY_MODE) | 
+The message delivery mode.
+
+Enum values:
+
+-   NON\_PERSISTENT
+    
+-   PERSISTENT
+    
+
+
+
+
+
+ |  | MessageDeliveryMode |
 | **CamelSpringRabbitmqType** (common) Constant: [`TYPE`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#TYPE) | Application-specific message type. |  | String |
 | **CamelSpringRabbitmqContentType** (common) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#CONTENT_TYPE) | The message content type. |  | String |
 | **CamelSpringRabbitmqContentLength** (common) Constant: [`CONTENT_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-spring-rabbitmq/latest/org/apache/camel/component/springrabbit/SpringRabbitMQConstants.html#CONTENT_LENGTH) | The message content length. |  | long |
@@ -458,9 +472,9 @@ to("spring-rabbitmq:default?routingKey=foo")
 
 Before you can send or receive messages from RabbitMQ, then exchanges, queues and bindings must be setup first.
 
-In development mode, it may be desirable to let Camel automatic do this. You can enable this by setting `autoDeclare=true` on the `SpringRabbitMQComponent`.
+Since Camel 4.5, a consumer declares them when it starts, as `autoDeclare` is `true` by default: the exchange, of the `exchangeType` (`direct` by default), the queues, and the binding between the exchange, the queues and the routing key. A producer declares them only with `autoDeclareProducer=true`.
 
-Then Spring RabbitMQ will automatically declare the necessary elements and set up the binding between the exchange, queue and routing keys.
+If the broker already has one of these elements with other settings, such as an exchange of another type or a queue with other arguments, the broker refuses the declaration with `PRECONDITION_FAILED` and the consumer fails to start. Configure the endpoint with the settings of the existing elements, or turn the declaration off with `autoDeclare=false` (on the endpoint or the component), or for some elements with `skipDeclareExchange`, `skipDeclareQueue` or `skipBindQueue`.
 
 The elements can be configured using the multivalued `args` option.
 

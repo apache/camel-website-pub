@@ -529,6 +529,7 @@ Every release of every Camel project, newest first. Supported releases are on th
 
 | Version | Release date | Description |
 | --- | --- | --- |
+| [4.23.0](../releases/upgrade-recipes-4.23.0/) | 2026-11-10 |  |
 | [4.22.0](../releases/upgrade-recipes-4.22.0/) | 2026-08-31 |  |
 | [4.21.0](../releases/upgrade-recipes-4.21.0/) | 2026-07-17 |  |
 | [4.20.0](../releases/upgrade-recipes-4.20.0/) | 2026-05-04 |  |

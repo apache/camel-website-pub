@@ -241,7 +241,7 @@ Enum values:
  | LINE | TextLineDelimiter |
 | **encoders** (codec) | A list of encoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the Registry. Just remember to prefix the value with # so Camel knows it should lookup. |  | String |
 | **encoding** (codec) | The encoding (a charset name) to use for the textline codec. If not provided, Camel will use the JVM default Charset. |  | String |
-| **textline** (codec) | Only used for TCP. If no codec is specified, you can use this flag to indicate a text line based codec; if not specified or the value is false, then Object Serialization is assumed over TCP - however only Strings are allowed to be serialized by default. | false | boolean |
+| **textline** (codec) | Only used for TCP. If no codec is specified, you can use this flag to indicate a text line based codec, where each message ends with the delimiter. If not specified or the value is false, the default codec is a String codec without framing, so each read from the socket becomes one message. | false | boolean |
 | **enabledProtocols** (security) | Which protocols to enable when using SSL. | TLSv1.2,TLSv1.3 | String |
 | **hostnameVerification** (security) | To enable/disable hostname verification on SSLEngine. | false | boolean |
 | **keyStoreFormat** (security) | Keystore format to be used for payload encryption. Defaults to JKS if not set. |  | String |

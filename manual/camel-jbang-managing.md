@@ -41,10 +41,10 @@ Log: ~/.camel/63010.log
 
 `camel restart` waits until the integration has stopped, and until the new one has started, and prints the log file of the new integration (its output, the warnings and errors and what it prints otherwise, is in `~/.camel/<pid>-run.log`). When the new integration stops right away, it prints the end of the log and exits with code `1`; when it is still starting after `--timeout`, it exits with code `124` and leaves it running.
 
-Stop all integrations (omit the name):
+Without a name, `camel stop` stops the integration that runs. When several run, it stops none and lists them (exit code `2`): give the name or PID of the one to stop, or stop them all with `--all`:
 
 ```bash
-camel stop
+camel stop --all
 Shutting down Camel integration (PID: 61818)
 Shutting down Camel integration (PID: 62506)
 ```

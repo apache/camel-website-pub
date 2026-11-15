@@ -244,6 +244,7 @@ Enum values:
 | **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
 | **delay** (scheduler) | Milliseconds before the next poll. | 60000 | long |
 | **greedy** (scheduler) | If greedy is enabled, then the ScheduledPollConsumer will run immediately again, if the previous run polled 1 or more messages. | false | boolean |
+| **healthCheckMaxPollDuration** (scheduler) | How long a poll may run before the health check of the consumer reports DOWN. The health check is otherwise based on the polls that are done, so it stays UP while a poll hangs, for example on a read without timeout from a connection that went silent. A poll includes routing the messages it polled, so set this above the longest poll you expect. The poll is not interrupted. The value is in millis (not affected by timeUnit). The default 0 turns this off. | 0 | long |
 | **initialDelay** (scheduler) | Milliseconds before the first poll starts. | 1000 | long |
 | **repeatCount** (scheduler) | Specifies a maximum limit of number of fires. So if you set it to 1, the scheduler will only fire once. If you set it to 5, it will only fire five times. A value of zero or negative means fire forever. | 0 | long |
 | **runLoggingLevel** (scheduler) | 
@@ -326,6 +327,7 @@ The Mail component supports the following message header(s), which is/are listed
 | **CamelMailDelete** (consumer) Constant: [`MAIL_DELETE`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_DELETE) | Deletes the messages after they have been processed. |  | boolean |
 | **CamelMailAlternativeBody** (producer) Constant: [`MAIL_ALTERNATIVE_BODY`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_ALTERNATIVE_BODY) | The alternative body of the mail, as plain text. When set, the mail is sent as multipart/alternative with this text and the body (typically HTML) as its two parts, so mail clients that cannot show HTML show the text. The alternativeBodyHeader option can change the name of this header. |  | String |
 | **CamelMailMessageId** (common) Constant: [`MAIL_MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_MESSAGE_ID) | The message ID. |  | String |
+| **CamelSplitAttachmentId** (consumer) Constant: [`MAIL_SPLIT_ATTACHMENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-mail/latest/org/apache/camel/component/mail/MailConstants.html#MAIL_SPLIT_ATTACHMENT_ID) | The name of the attachment, on each message produced by SplitAttachmentsExpression. |  | String |
 
 ## Message Body
 

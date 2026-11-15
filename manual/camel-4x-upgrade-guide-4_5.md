@@ -251,6 +251,10 @@ The class `org.apache.camel.component.opensearch.aggregation.BulkRequestAggregat
 
 The class `org.apache.camel.component.redis.processor.idempotent.RedisIdempotentRepository` has been renamed to `org.apache.camel.component.redis.processor.idempotent.SpringRedisIdempotentRepository` The class `org.apache.camel.component.redis.processor.idempotent.RedisStringIdempotentRepository` has been renamed to `org.apache.camel.component.redis.processor.idempotent.SpringRedisStringIdempotentRepository`
 
+### camel-spring-rabbitmq
+
+The `autoDeclare` option of the component is now `true` by default, so a consumer declares its exchange, queues and binding on the broker when it starts. If the broker already has them with other settings, such as an exchange of another type, the consumer fails to start with `PRECONDITION_FAILED`. Set `autoDeclare=false` on the component to keep the previous behaviour.
+
 ## Camel Spring Boot
 
 The autoconfiguration with `camel.springboot.xxx` properties has been harmonized to use same naming for all the Camel runtimes (`camel-main`, `camel-quarkus`, and `camel-spring-boot`). These options have been marked as deprecated, and you can migrate to use `camel.main.xxx` naming instead.

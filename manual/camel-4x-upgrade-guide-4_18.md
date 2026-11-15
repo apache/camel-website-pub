@@ -37,6 +37,10 @@ Checkpoint failures from the timer are now logged at `WARN` level with the full 
 
 The webhook consumer still logs the body it validates at `DEBUG`, but no longer the signature from the `X-Signature` header, nor the signature it calculates. The `InvalidMessageSignatureException` of a failed check no longer carries the calculated signature: `getCalculatedSignature()` returns `null` and is deprecated, as is the constructor that takes it.
 
+### camel-file - idempotent consumer with an idempotent read lock
+
+With `idempotent=true` (or `noop=true`) and `readLock=idempotent`, `idempotent-changed` or `idempotent-rename`, the file consumer no longer adds the key to the idempotent repository eagerly, and `idempotentEager` does not apply: the read lock adds it when it acquires the lock. Since Camel 4.7 the read lock was refused, and such a consumer never consumed a file.
+
 ### camel-ftp - sftp uses remote file and directory names as given
 
 The `sftp` component now uses a remote file or directory name exactly as given, also when it contains **or `?`. Before, the JSch library read** and `?` in the name as wildcards, so storing, retrieving, deleting, renaming, listing or changing to a directory could resolve the name to another file or directory whose name matched. If you relied on a wildcard to select a file, use the real name of the file in the producer, and the `include` or `antInclude` option of a consumer that lists the directory instead of a wildcard in `fileName` with `useList=false`. See the [SFTP component](../components/4.22.x/sftp-component.md).
@@ -50,6 +54,10 @@ The file producer now refuses to delete or rename onto a file through such a lin
 The expressions of `preMove`, `move` and `moveFailed` are evaluated before the file is processed, so each of them is evaluated one extra time per file: for a file processed without error, `move` is now evaluated twice and `moveFailed` once, where before `move` was evaluated once and `moveFailed` not at all. This matters for an expression with side effects, such as a bean that hands out a sequence number. The default `.camel` folder has no expression to evaluate.
 
 Targets configured outside the starting directory (such as `move=../archive`) and links resolving inside it work as before. A deployment that links one of these folders to another directory on purpose, such as `.camel` on another volume, should point the option at the folder the link resolves to, such as `move=/mnt/volume2/${file:name}`, as a target configured outside the starting directory is not checked. Setting `jailStartingDirectory=false` also keeps following those links, but then the consumer also reads a file in the starting directory that is a link to a file outside of it, and the producer writes through such links.
+
+### camel-wordpress - each endpoint uses its own site URL and credentials
+
+Each WordPress endpoint now has a client of its own, set up from the `url`, `apiVersion`, `user` and `password` options of that endpoint, and the producers and consumers of the endpoint use that client. The endpoints no longer initialise the `WordpressServiceProvider.getInstance()` singleton; the singleton and its `init` methods are still there, unchanged, for code that sets it up itself. Code that read services from `WordpressServiceProvider.getInstance()` after Camel created a WordPress endpoint must now use `WordpressEndpoint.getServiceProvider()`, or create a provider with `WordpressServiceProvider.create(WordpressAPIConfiguration)`.
 
 ### camel-hazelcast - the hazelcast-seda consumer restores a transferred exchange only with transferExchange=true
 

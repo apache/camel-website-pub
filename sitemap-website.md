@@ -1,4 +1,4 @@
-urls[947]{loc,lastmod}:
+urls[948]{loc,lastmod}:
   https://camel.apache.org/blog/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/blog/2026/11/camel-quarkus-3.33.4/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/releases/q-3.33.4/,2026-11-13T00:00:00+00:00
@@ -6,6 +6,7 @@ urls[947]{loc,lastmod}:
   https://camel.apache.org/categories/Releases/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/releases/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.22.2/,2026-11-10T00:00:00+00:00
+  https://camel.apache.org/releases/upgrade-recipes-4.23.0/,2026-11-10T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-11-03T00:00:00+00:00
   https://camel.apache.org/categories/Camel/,2026-11-03T00:00:00+00:00
   https://camel.apache.org/blog/2026/11/camel-document-ingestion-rag/,2026-11-03T00:00:00+00:00

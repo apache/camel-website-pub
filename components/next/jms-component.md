@@ -990,7 +990,7 @@ The JMS component supports the following message header(s), which is/are listed 
 | **JMSPriority** (common) Constant: [`JMS_HEADER_PRIORITY`](https://javadoc.io/doc/org.apache.camel/camel-jms/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_HEADER_PRIORITY) | The JMS priority (with 0 as the lowest priority and 9 as the highest). |  | int |
 | **JMSRedelivered** (common) Constant: [`JMS_HEADER_REDELIVERED`](https://javadoc.io/doc/org.apache.camel/camel-jms/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_HEADER_REDELIVERED) | Is the JMS message redelivered. |  | boolean |
 | **JMSTimestamp** (common) Constant: [`JMS_HEADER_TIMESTAMP`](https://javadoc.io/doc/org.apache.camel/camel-jms/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_HEADER_TIMESTAMP) | The JMS timestamp. |  | long |
-| **JMSReplyTo** (common) Constant: [`JMS_HEADER_REPLY_TO`](https://javadoc.io/doc/org.apache.camel/camel-jms/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_HEADER_REPLY_TO) | The JMS reply-to destination. |  | Destination |
+| **JMSReplyTo** (common) Constant: [`JMS_HEADER_REPLY_TO`](https://javadoc.io/doc/org.apache.camel/camel-jms/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_HEADER_REPLY_TO) | The JMS reply-to destination. On an incoming message this is the jakarta.jms.Destination of the JMS message. When set on an outgoing message it may also be a String holding the destination name, which is normalized and converted to a jakarta.jms.Destination. |  | Destination or String |
 | **JMSType** (common) Constant: [`JMS_HEADER_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-jms/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_HEADER_TYPE) | The JMS type. |  | String |
 | **JMSXUserID** (common) Constant: [`JMS_HEADER_XUSER_ID`](https://javadoc.io/doc/org.apache.camel/camel-jms/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_HEADER_XUSER_ID) | The XUser id. |  | String |
 | **CamelJmsMessageType** (common) Constant: [`JMS_MESSAGE_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-jms/latest/org/apache/camel/component/jms/JmsConstants.html#JMS_MESSAGE_TYPE) | 
@@ -1463,7 +1463,11 @@ The exchange sent over the JMS wire must conform to the [JMS Message spec](http:
 
 For the `exchange.in.header` the following rules apply for the header **keys**:
 
--   Keys starting with `JMS` or `JMSX` are reserved.
+-   Keys starting with `JMSX` are sent as properties, except those that the JMS provider sets, such as `JMSXDeliveryCount` or `JMSXUserID`.
+    
+-   Keys starting with `JMS_` and a vendor name, such as `JMS_IBM_Character_Set`, are sent as vendor-specific properties. See [Vendor-specific properties](#_vendor_specific_properties).
+    
+-   Other keys starting with `JMS` and a letter, such as `JMSType` or `JMSCorrelationID`, are reserved for the standard JMS headers: Camel sets the ones it supports on the message and drops the others.
     
 -   `exchange.in.headers` keys must be literals and all be valid Java identifiers (do not use dots in the key name).
     
@@ -1483,6 +1487,14 @@ Camel will log with category `org.apache.camel.component.jms.JmsBinding` at **DE
 
 2008-07-09 06:43:04,046 \[main           \] DEBUG JmsBinding
   - Ignoring non primitive header: order of class: org.apache.camel.component.jms.issues.DummyOrder with value: DummyOrder{orderId=333, itemId=4444, quantity=2}
+
+#### Vendor-specific properties
+
+The JMS specification keeps the `JMS_<vendor>_` prefix for the properties of a JMS provider, such as `JMS_IBM_Character_Set` of IBM MQ. Set them as message headers: Camel sends such a header as a property of the JMS message, while it does not send exchange properties.
+
+Since Camel 4.22, when the JMS provider refuses a vendor-specific property, for example because it is read-only, Camel logs a WARN and sends the message without it.
+
+A JMS property holds only primitives and strings, so Camel drops a header whose value is a `byte[]`, such as the IBM MQ message descriptor field `JMS_IBM_MQMD_MsgId`, unless the `allowAdditionalHeaders` option names it, for example `allowAdditionalHeaders=JMS_IBM_MQMD_*`. IBM MQ also writes the `JMS_IBM_MQMD_*` fields only to a destination with its `WMQ_MQMD_WRITE_ENABLED` property set to `true`, see [Setting JMS provider options on the destination](#_setting_jms_provider_options_on_the_destination).
 
 ### Message format when receiving
 

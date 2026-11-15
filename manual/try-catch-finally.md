@@ -17,6 +17,8 @@ In Camel, we prefix the keywords with `do` to avoid having same keyword as Java.
 > When using `doTry …​ doCatch …​ doFinally` then the regular Camel [Error Handler](error-handler.md) is not in use; meaning any `onException` or the likes does not trigger.
 >
 > The reason is that `doTry …​ doCatch …​ doFinally` is in fact its own error handler and mimics how try/catch/finally works in Java.
+>
+> An exception that no `doCatch` catches, or that a `doCatch` or `doFinally` block throws, is not handled by the error handler of the route either: the exchange fails with it. When the route was called from another route, the error handler of the calling route deals with it; see [Error handling across routes](error-handler.html#_error_handling_across_routes).
 
 A route called from the `doTry` block, such as with `direct`, still uses its own error handler. The `doCatch` catches the exception that the called route fails with, once that error handler is done with it (for example, after its redeliveries). This is one way for a calling route to deal with the failure of a called route; see [Error handling across routes](error-handler.html#_error_handling_across_routes).
 

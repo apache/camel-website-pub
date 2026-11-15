@@ -416,13 +416,36 @@ The Dapr component supports the following message header(s), which is/are listed
 | **CamelDaprQueryParameters** (producer) Constant: [`QUERY_PARAMETERS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#QUERY_PARAMETERS) | The query parameters for HTTP requests. |  | Map |
 | **CamelDaprHttpHeaders** (producer) Constant: [`HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#HTTP_HEADERS) | The headers for HTTP requests. |  | Map |
 | **CamelDaprHttpExtension** (producer) Constant: [`HTTP_EXTENSION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#HTTP_EXTENSION) | The HttpExtension object for service invocation. Takes precedence over verb. |  | HttpExtension |
-| **CamelDaprStateOperation** (producer) Constant: [`STATE_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#STATE_OPERATION) | The state operation to perform on the state store. Required for DaprOperation.state operation. | get | StateOperation |
+| **CamelDaprStateOperation** (producer) Constant: [`STATE_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#STATE_OPERATION) | 
+The state operation to perform on the state store. Required for DaprOperation.state operation.
+
+Enum values:
+
+-   save
+    
+-   saveBulk
+    
+-   get
+    
+-   getBulk
+    
+-   delete
+    
+-   executeTransaction
+    
+
+
+
+
+
+ | get | StateOperation |
 | **CamelDaprStateStore** (producer) Constant: [`STATE_STORE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#STATE_STORE) | The name of the Dapr state store to interact with, defined in statestore.yaml config. |  | String |
 | **CamelDaprSecretStore** (producer) Constant: [`SECRET_STORE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#SECRET_STORE) | The name of the Dapr secret store to interact with, defined in local-secret-store.yaml config. For the secret operation, this header is ignored unless the endpoint enables allowSecretStoreAndKeyFromHeaders=true (disabled by default). |  | String |
 | **CamelDaprConfigStore** (producer) Constant: [`CONFIG_STORE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#CONFIG_STORE) | The name of the Dapr config store to interact with, defined in statestore.yaml config. |  | String |
 | **CamelDaprKey** (producer) Constant: [`KEY`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#KEY) | The key used to identify the state/secret object within the specified state/secret store. For the secret operation, this header is ignored unless the endpoint enables allowSecretStoreAndKeyFromHeaders=true (disabled by default). |  | String |
 | **CamelDaprETag** (producer) Constant: [`E_TAG`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#E_TAG) | The eTag for optimistic concurrency during state save or delete operations. |  | String |
 | **CamelDaprConcurrency** (producer) Constant: [`CONCURRENCY`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#CONCURRENCY) | 
+
 Concurrency mode to use with state operations.
 
 Enum values:
@@ -474,12 +497,56 @@ Enum values:
 | **CamelDaprConfigKeys** (producer) Constant: [`CONFIG_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#CONFIG_KEYS) | Keys for configuration operation, as a comma-separated String or a Collection of keys. |  | String |
 | **CamelDaprSubscriptionId** (consumer) Constant: [`SUBSCRIPTION_ID`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#SUBSCRIPTION_ID) | The id for configuration change subscription. |  | String |
 | **CamelDaprRawConfigResponse** (common) Constant: [`RAW_CONFIG_RESPONSE`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#RAW_CONFIG_RESPONSE) | The raw configuration update response. |  | ConfigurationItem |
-| **CamelDaprLockOperation** (producer) Constant: [`LOCK_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#LOCK_OPERATION) | The lock operation to perform on the store. Required for DaprOperation.lock operation. | tryLock | LockOperation |
+| **CamelDaprLockOperation** (producer) Constant: [`LOCK_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#LOCK_OPERATION) | 
+
+The lock operation to perform on the store. Required for DaprOperation.lock operation.
+
+Enum values:
+
+-   tryLock
+    
+-   unlock
+    
+
+
+
+
+
+ | tryLock | LockOperation |
 | **CamelDaprStoreName** (producer) Constant: [`STORE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#STORE_NAME) | The lock store name. |  | String |
 | **CamelDaprResourceId** (producer) Constant: [`RESOURCE_ID`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#RESOURCE_ID) | The resource Id for the lock. |  | String |
 | **CamelDaprLockOwner** (producer) Constant: [`LOCK_OWNER`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#LOCK_OWNER) | The lock owner identifier for the lock. |  | String |
 | **CamelDaprExpiryInSeconds** (producer) Constant: [`EXPIRY_IN_SECONDS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#EXPIRY_IN_SECONDS) | The expiry time in seconds for the lock. |  | Integer |
-| **CamelDaprWorkflowOperation** (producer) Constant: [`WORKFLOW_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#WORKFLOW_OPERATION) | The workflow operation to perform.Required for DaprOperation.workflow operation. | scheduleNew | WorkflowOperation |
+| **CamelDaprWorkflowOperation** (producer) Constant: [`WORKFLOW_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#WORKFLOW_OPERATION) | 
+
+The workflow operation to perform.Required for DaprOperation.workflow operation.
+
+Enum values:
+
+-   scheduleNew
+    
+-   terminate
+    
+-   purge
+    
+-   suspend
+    
+-   resume
+    
+-   state
+    
+-   waitForInstanceStart
+    
+-   waitForInstanceCompletion
+    
+-   raiseEvent
+    
+
+
+
+
+
+ | scheduleNew | WorkflowOperation |
 | **CamelDaprWorkflowClass** (producer) Constant: [`WORKFLOW_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#WORKFLOW_CLASS) | The FQCN of the class which implements io.dapr.workflows.Workflow. |  | String |
 | **CamelDaprWorkflowVersion** (producer) Constant: [`WORKFLOW_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#WORKFLOW_VERSION) | The version of the workflow to start. |  | String |
 | **CamelDaprWorkflowInstanceId** (producer) Constant: [`WORKFLOW_INSTANCE_ID`](https://javadoc.io/doc/org.apache.camel/camel-dapr/latest/org/apache/camel/component/dapr/DaprConstants.html#WORKFLOW_INSTANCE_ID) | The instance ID of the workflow. |  | String |

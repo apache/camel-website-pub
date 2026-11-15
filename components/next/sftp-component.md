@@ -354,7 +354,7 @@ Enum values:
 | **filterDirectory** (filter) | Filters the directory based on Simple language. For example to filter on current date, you can use a simple date pattern such as $\\{date:now:yyyMMdd}. |  | String |
 | **filterFile** (filter) | Filters the file based on Simple language. For example to filter on file size, you can use $\\{file:size} 5000. |  | String |
 | **idempotent** (filter) | Option to use the Idempotent Consumer EIP pattern to let Camel skip already processed files. Will by default use a memory based LRUCache that holds 1000 entries. If noop=true then idempotent will be enabled as well to avoid consuming the same files over and over again. | false | Boolean |
-| **idempotentEager** (filter) | Sets whether to eagerly add the filename to the idempotent repository or wait until the exchange is complete. | true | Boolean |
+| **idempotentEager** (filter) | Sets whether to eagerly add the filename to the idempotent repository or wait until the exchange is complete. Does not apply with an idempotent read lock (readLock=idempotent, idempotent-changed or idempotent-rename), which adds the filename when it acquires the lock. | true | Boolean |
 | **idempotentKey** (filter) | To use a custom idempotent key. By default the absolute path of the file is used. You can use the File Language, for example to use the file name and file size, you can do: idempotentKey=$\\{file:name}-$\\{file:size}. |  | String |
 | **idempotentRepository** (filter) | A pluggable repository org.apache.camel.spi.IdempotentRepository which by default use MemoryIdempotentRepository if none is specified and idempotent is true. |  | IdempotentRepository |
 | **include** (filter) | Is used to include files, if filename matches the regex pattern (matching is case in-sensitive). Notice if you use symbols such as plus sign and others you would need to configure this using the RAW() syntax if configuring this as an endpoint uri. See more details at configuring endpoint uris. |  | String |
@@ -416,6 +416,7 @@ Enum values:
 | **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
 | **delay** (scheduler) | Milliseconds before the next poll. | 500 | long |
 | **greedy** (scheduler) | If greedy is enabled, then the ScheduledPollConsumer will run immediately again, if the previous run polled 1 or more messages. | false | boolean |
+| **healthCheckMaxPollDuration** (scheduler) | How long a poll may run before the health check of the consumer reports DOWN. The health check is otherwise based on the polls that are done, so it stays UP while a poll hangs, for example on a read without timeout from a connection that went silent. A poll includes routing the messages it polled, so set this above the longest poll you expect. The poll is not interrupted. The value is in millis (not affected by timeUnit). The default 0 turns this off. | 0 | long |
 | **initialDelay** (scheduler) | Milliseconds before the first poll starts. | 1000 | long |
 | **repeatCount** (scheduler) | Specifies a maximum limit of number of fires. So if you set it to 1, the scheduler will only fire once. If you set it to 5, it will only fire five times. A value of zero or negative means fire forever. | 0 | long |
 | **runLoggingLevel** (scheduler) | 
@@ -575,6 +576,23 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ## Usage
 
+### URI format and paths
+
+sftp://\[username@\]hostname\[:port\]/directoryname\[?options\]
+
+The `directoryname` is relative to the directory the user logs in to, usually its home directory. For example, `sftp://admin@host/inbox` uses the `inbox` directory in the home directory of `admin`.
+
+Absolute paths are not supported. The component removes the leading slashes, also from `sftp://host//data/inbox`, and logs a WARN: that endpoint uses `data/inbox` under the login directory, not `/data/inbox`. As both the consumer and the producer create a missing directory (`autoCreate=true`, the default), a wrong path does not fail: the files are read from, or written to, a new directory under the login directory.
+
+To use a directory outside the login directory, either:
+
+-   create a symbolic link to it in the login directory, and use the link as `directoryname`, or
+    
+-   go up with leading `../` segments, such as `sftp://host/../shared/inbox`, and set `jailStartingDirectory=false`. With the default `jailStartingDirectory=true`, the consumer skips every file of such a directory, and the producer refuses to write to it.
+    
+
+For the producer, `directoryname` is the directory to write to, and the file name comes from the `CamelFileName` header or the `fileName` option. A file name that leaves the directory with `../` is refused unless `jailStartingDirectory=false`.
+
 ### Security Best Practices: Host Key Verification
 
 > **Warning**
@@ -720,6 +738,22 @@ from("sftp://host:22/path?username=myuser&privateKeyFile=/path/to/id_rsa&strictH
 > **Note**
 > When `strictHostKeyChecking=yes` is enabled, Camel’s security policy enforcement framework will not flag this as a security violation. The default `strictHostKeyChecking=no` may trigger warnings or failures depending on your configured security policy.
 
+### Providing the private key
+
+For public key authentication, set the private key with one of these options:
+
+ 
+| Option | Value |
+| --- | --- |
+| `privateKeyFile` | A path on the file system, such as `/home/camel/.ssh/id_rsa`. |
+| `privateKeyUri` | A resource, loaded from the classpath by default, or from the file system with the `file:` prefix. |
+| `privateKey` | The key as a `byte[]`, usually a bean reference such as `privateKey=#myKey`. |
+| `keyPair` | A `java.security.KeyPair` bean, such as `keyPair=#myKeyPair`. |
+
+Set `privateKeyPassphrase` when the key is encrypted. It applies to `privateKeyFile`, `privateKeyUri` and `privateKey`.
+
+The key must keep its line breaks. A key whose line breaks were replaced, for example with spaces when it was copied into a one-line property or environment variable, fails with `invalid privatekey`. Load such a key from a file instead, or from a bean that holds the original bytes.
+
 ### OpenSSH Certificate Authentication
 
 Camel supports OpenSSH certificate-based authentication for SFTP connections, where a user’s public key is signed by a Certificate Authority (CA) rather than being individually authorized on the server. This is common in enterprise environments using tools like HashiCorp Vault or custom CA infrastructure.
@@ -813,9 +847,25 @@ The same applies to the `ssh` component through its `kex` option. The `scp` comp
 
 ### Restoring Deprecated Key Types and Algorithms
 
-As of Camel 3.17.0, key types and algorithms that use SHA1 have been deprecated. These can be restored, if necessary, by setting JSch configuration directly. E.g.:
+As of Camel 3.17.0, key types and algorithms that use SHA1 are disabled by default: JSch no longer proposes the `ssh-rsa` and `ssh-dss` host keys, `ssh-rsa` signatures for public key authentication, or SHA1 key exchanges such as `diffie-hellman-group14-sha1`. If your server needs them, set them on the endpoint with these options:
 
-_Java-only: restoring deprecated JSch key types and algorithms_
+ 
+| Option | Algorithms (JSch configuration key) |
+| --- | --- |
+| `serverHostKeys` | Host keys (`server_host_key`) |
+| `publicKeyAcceptedAlgorithms` | Signatures for public key authentication (`PubkeyAcceptedAlgorithms`) |
+| `keyExchangeProtocols` | Key exchange (`kex`) |
+| `ciphers` | Ciphers (`cipher.c2s` and `cipher.s2c`) |
+
+Each option replaces the default list of JSch for that endpoint, so list every algorithm the endpoint may use, the preferred one first. For example, for a server that has an RSA host key and only accepts `ssh-rsa` signatures:
+
+```text
+sftp://host/inbox?username=admin&privateKeyFile=/path/to/id_rsa&serverHostKeys=rsa-sha2-512,rsa-sha2-256,ssh-rsa&publicKeyAcceptedAlgorithms=rsa-sha2-512,rsa-sha2-256,ssh-rsa
+```
+
+The options apply to that endpoint only. Setting the JSch configuration directly changes the defaults of the whole JVM, so of every SFTP endpoint without these options:
+
+_Java-only: restoring deprecated JSch key types and algorithms for the whole JVM_
 
 ```java
 JSch.setConfig("server_host_key",  JSch.getConfig("server_host_key") + ",ssh-rsa");
@@ -827,7 +877,18 @@ Note that the key types and algorithms your server supports may differ than the 
 
 ssh -vvv <server\_address>
 
-As of Camel 3.18.1, these values can also be set on SFTP endpoints by setting the corresponding URI parameters.
+### Connection errors
+
+When the connection fails, the exception is a `GenericFileOperationFailedException` with the message `Cannot connect to sftp://user@host:port`. The message of its cause, from JSch, tells what failed:
+
+ 
+| Message of the cause | What to check |
+| --- | --- |
+| `reject HostKey: <host>` | With `strictHostKeyChecking=yes`, the known hosts have no key for the server. Set `knownHostsFile`, `knownHostsUri` or `knownHosts` with an entry for the host and port, for example from `ssh-keyscan -p <port> <host>`. For a port other than 22, the entry starts with `[host]:port`. |
+| `Algorithm negotiation fail: algorithmName="…​" jschProposal="…​" serverProposal="…​"` | JSch and the server have no algorithm in common. Add one that the server proposes with `serverHostKeys` for `server_host_key`, `keyExchangeProtocols` for `kex`, or `ciphers` for `cipher.c2s` and `cipher.s2c`. See [Restoring Deprecated Key Types and Algorithms](#_restoring_deprecated_key_types_and_algorithms). |
+| `Auth fail for methods '…​'` | The server refused the credentials: check the username, password or key. With an RSA key and a server that only accepts `ssh-rsa` signatures, add `ssh-rsa` to `publicKeyAcceptedAlgorithms`. |
+| `invalid privatekey` | JSch cannot read the key, for example because its line breaks were lost. See [Providing the private key](#_providing_the_private_key). |
+| `Incorrect passphrase provided.` | `privateKeyPassphrase` does not decrypt the key. In a URI, set a passphrase with characters such as `+` or `&` as `RAW(…​)`, see [raw values](../../manual/endpoint.html#_configuring_parameter_values_using_raw_values_such_as_passwords). |
 
 ### Symbolic links and the starting directory
 

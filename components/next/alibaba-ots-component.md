@@ -135,7 +135,7 @@ The Alibaba Tablestore (OTS) component supports the following message header(s),
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaOtsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-ots/latest/org/apache/camel/component/alibaba/ots/constants/AlibabaOtsHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option. |  | String |
+| **CamelAlibabaOtsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-ots/latest/org/apache/camel/component/alibaba/ots/constants/AlibabaOtsHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option. |  | String |
 | **CamelAlibabaOtsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-ots/latest/org/apache/camel/component/alibaba/ots/constants/AlibabaOtsHeaders.html#REQUEST_ID) | The request ID that Tablestore returns in the response to the operation. The producer sets it when the operation succeeds. |  | String |
 
 ## Message Body

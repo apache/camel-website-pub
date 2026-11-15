@@ -214,7 +214,7 @@ The `Exchange.EXCEPTION_CAUGHT` exchange property contains the thrown exception 
 
 ### Exceptions that are not caught
 
-An exception that is not caught by any `doCatch` (or an exception that is thrown in a `doCatch` or `doFinally` block) is not handled by the route error handler: `onException`, redelivery and the dead letter channel are not in use for the steps of a `doTry …​ doCatch …​ doFinally` block. The exception is thrown from the `doTry`, and the exchange fails.
+An exception that is not caught by any `doCatch` (or an exception that is thrown in a `doCatch` or `doFinally` block) is not handled by the route error handler: `onException`, redelivery and the dead letter channel are not in use for the steps of a `doTry …​ doCatch …​ doFinally` block. The exception is thrown from the `doTry`, and the exchange fails. When the route was called from another route, such as with `direct`, the error handler of the calling route deals with the exception, as if it failed in the calling route; see [Error handling across routes](../../../manual/error-handler.html#_error_handling_across_routes).
 
 If an exception is thrown in the `doFinally` block while an exception from the `doTry` (or `doCatch`) block is still not handled, then the original exception is kept and the exception from the `doFinally` block is added as a suppressed exception.
 

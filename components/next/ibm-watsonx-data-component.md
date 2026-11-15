@@ -218,7 +218,53 @@ The IBM watsonx.data component supports the following message header(s), which i
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelIBMWatsonxDataOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-data/latest/org/apache/camel/component/ibm/watsonx/data/WatsonxDataConstants.html#OPERATION) | The operation to perform. |  | WatsonxDataOperations |
+| **CamelIBMWatsonxDataOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-data/latest/org/apache/camel/component/ibm/watsonx/data/WatsonxDataConstants.html#OPERATION) | 
+The operation to perform.
+
+Enum values:
+
+-   listCatalogs
+    
+-   getCatalog
+    
+-   deleteCatalog
+    
+-   listSchemas
+    
+-   createSchema
+    
+-   deleteSchema
+    
+-   listTables
+    
+-   getTable
+    
+-   deleteTable
+    
+-   updateTable
+    
+-   registerTable
+    
+-   getAllColumns
+    
+-   listPrestoEngines
+    
+-   getPrestoEngine
+    
+-   listPrestissimoEngines
+    
+-   getPrestissimoEngine
+    
+-   listStorageRegistrations
+    
+-   createStorageRegistration
+    
+
+
+
+
+
+ |  | WatsonxDataOperations |
 | **CamelIBMWatsonxDataCatalogName** (producer) Constant: [`CATALOG_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-data/latest/org/apache/camel/component/ibm/watsonx/data/WatsonxDataConstants.html#CATALOG_NAME) | The catalog name. |  | String |
 | **CamelIBMWatsonxDataSchemaName** (producer) Constant: [`SCHEMA_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-data/latest/org/apache/camel/component/ibm/watsonx/data/WatsonxDataConstants.html#SCHEMA_NAME) | The schema name. |  | String |
 | **CamelIBMWatsonxDataCustomPath** (producer) Constant: [`CUSTOM_PATH`](https://javadoc.io/doc/org.apache.camel/camel-ibm-watsonx-data/latest/org/apache/camel/component/ibm/watsonx/data/WatsonxDataConstants.html#CUSTOM_PATH) | The custom path for schema creation. |  | String |

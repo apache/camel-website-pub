@@ -226,7 +226,7 @@ The LangChain4j Chat component supports the following message header(s), which i
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelLangChain4jChatPromptTemplate** (producer) Constant: [`PROMPT_TEMPLATE`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#PROMPT_TEMPLATE) | The prompt Template. |  | String |
-| **CamelLangChain4jChatAugmentedData** (producer) Constant: [`AUGMENTED_DATA`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#AUGMENTED_DATA) | Augmented Data for RAG. |  | String |
+| **CamelLangChain4jChatAugmentedData** (producer) Constant: [`AUGMENTED_DATA`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#AUGMENTED_DATA) | Augmented Data for RAG: the contents to inject into the chat message. Set by LangChain4jRagAggregatorStrategy, which turns the retrieved Strings into Content. |  | List |
 | **CamelLangChain4jChatFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-langchain4j-chat/latest/org/apache/camel/component/langchain4j/chat/LangChain4jChatHeaders.html#FINISH_REASON) | 
 The Finish Reason.
 

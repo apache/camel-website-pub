@@ -45,6 +45,8 @@ A tool writes an action to `~/.camel/<pid>-action-<requestId>.json`, and the con
 
 The connector looks for action files about every 20 millis, and writes the status to `~/.camel/<pid>-status.json` every second. In between, it only lists the directory when its modification time has changed, which it does when a file is added to it, and with every status it lists it anyway. It also writes the status as soon as Camel changes phase, such as when it has started, and after it answers actions (at most every 200 millis), so the status shows what an action did.
 
+While tracing is on, the connector appends the new traces to `~/.camel/<pid>-trace.json`, one JSON object per line. When the file would grow past 10 MB, it starts a new file: a tool that follows the file sees it become smaller, and reads the new file from its start.
+
 Write the action file atomically (write a temporary file, then move it), so the connector never reads half an action. An action file that cannot be read yet is retried for two seconds. Deleting the action file before the answer is written cancels the action.
 
 The shared `~/.camel/<pid>-action.json` and `~/.camel/<pid>-output.json` are still read and written for older Camel CLI versions: an action there only gets its result, or the error when it throws an exception.

@@ -90,6 +90,12 @@ Starting in 4.24, parameter values provided via the `CamelJpaParameters` header 
 
 Routes that previously relied on evaluating Simple expressions within the `CamelJpaParameters` header should evaluate those expressions in the route before setting the header value.
 
+### camel-jpa - the producer closes its EntityManager when it fails
+
+When the JPA producer fails, it now closes the `EntityManager` that it created for the exchange, so that a redelivery gets a new one. Before, the exchange kept that `EntityManager` until it completed: with Hibernate, after the database connection broke during a send, the `EntityManager` kept the broken connection, and every redelivery failed with `JDBC begin transaction failed` even once the database was back. An `EntityManager` passed in the `CamelEntityManager` header (`usePassedInEntityManager=true`) and the shared `EntityManager` (`sharedEntityManager=true`) are not closed. On a transacted route, an `EntityManager` that joined the transaction is closed when the transaction completes.
+
+The entities that an earlier JPA step of the exchange read or saved with that `EntityManager` are detached after such a failure, as the JPA specification leaves them after a rollback. A route that handles the failure (for example with `onException` and `handled(true)`, or `doCatch`) and goes on using them can no longer load their lazy associations, and the next JPA step of the exchange uses a new `EntityManager`.
+
 ### camel-openfga - writeTuples and the read operations carry a relationship condition
 
 `writeTuples` now honours a relationship condition set on a tuple in the message body: a `ClientTupleKey` built with `.condition(..)`, or a `Map` whose `condition` entry is a map of a `name` and an optional `context`. Before, only the `user`, `relation` and `object` of a tuple were written and any condition was dropped, so a conditioned grant was stored unconditioned. A tuple with no condition is still written unconditioned, and `deleteTuples` still deletes by identity and ignores a condition.
@@ -160,6 +166,10 @@ Additionally: - A `ShiroSecurityPolicy` created with the no-arg constructor must
 
 Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
 
+### camel-wordpress - each endpoint uses its own site URL and credentials
+
+Each WordPress endpoint now has a client of its own, set up from the `url`, `apiVersion`, `user` and `password` options of that endpoint, and the producers and consumers of the endpoint use that client. The endpoints no longer initialise the `WordpressServiceProvider.getInstance()` singleton, which is deprecated together with its `init` methods. Code that read services from `WordpressServiceProvider.getInstance()` after Camel created a WordPress endpoint must now use `WordpressEndpoint.getServiceProvider()`, or create a provider with `WordpressServiceProvider.create(WordpressAPIConfiguration)`.
+
 ### camel-azure-functions - invokeFunction checks the function app and the function name
 
 The `invokeFunction` operation now checks the function app and the function name, from the endpoint or from the `CamelAzureFunctionsFunctionApp` and `CamelAzureFunctionsFunctionName` headers, before it calls the function, and builds the URL with the function name encoded as a path. The exchange fails with an `IllegalArgumentException` when the function app is missing or is not an app name (letters, digits and hyphens, not starting or ending with a hyphen, at most 60 characters), or when the function name has a `?`, `#`, `\` or `%`, an empty segment, or a `.` or `..` segment. A function name of several segments, such as `products/42` for a function with a custom route, is still accepted. The `x-functions-key` header is only added to an `https` URL on an `azurewebsites.net` host. Valid configurations are not affected.
@@ -219,9 +229,17 @@ If you relied on a wildcard to select a file or a directory:
 
 See the [SFTP component](../components/4.22.x/sftp-component.md).
 
+### camel-ftp - a directory listing the server refuses fails the poll
+
+The `ftp` and `ftps` consumers now fail the poll when the server refuses the listing of a directory, for example the `PORT` command of active mode (the default) when the server or a firewall only allows passive mode. The `GenericFileOperationFailedException` holds the reply code and text of the server, and is logged like any failed poll. Before, the refused listing was taken as an empty directory: the polls found no files and logged nothing. The replies 450 and 550 (a directory that is missing or empty) still give an empty listing. If such a consumer now fails, set `passiveMode=true`. See the [FTP component](../components/4.22.x/ftp-component.md).
+
 ### camel-kafka - exactlyOnce: a rejected send that a doCatch catches skips the record
 
 With `exactlyOnce`, a Kafka send through the source producer after an earlier send failed in the same transaction is rejected and marks the exchange rollback-only (a redelivery of the failed send, or another send such as in a `loop`). When a `doCatch` catches that rejected send in the route of the send, the failure now counts as handled, as when an error handler handles it: the output transaction is aborted and the source offsets are committed alone, so the record is skipped. Before, the source transaction was rolled back and the record replayed. A `doCatch` of a route that called the route of the send (for example with `direct`) behaves the same way, as it did in 4.23. To replay the record, throw the exception again in the `doCatch` block, or end it with `rollback()`.
+
+### camel-kafka - the asynchronous manual commit is done by the consumer thread
+
+With the `DefaultKafkaManualAsyncCommitFactory`, `KafkaManualCommit.commit()` records the offset, and the consumer thread commits it before its next poll, as in Camel 4.21. In Camel 4.23 (and 4.22 before 4.22.3), the commit ran at once on the calling thread. That failed with a `ConcurrentModificationException` when the calling thread was not the consumer thread (for example, after an aggregator). A commit called after the partition was revoked from the consumer is not made. It would move back the offset that the new owner of the partition committed.
 
 ### camel-jms, camel-sjms, camel-sjms2 - an exception sent back with transferException is not rolled back
 
@@ -230,6 +248,10 @@ With `transferException=true`, a consumer that sends the exception of a failed e
 ### camel-sjms, camel-sjms2 - a received StreamMessage is an InputStream
 
 The camel-sjms and camel-sjms2 consumers now map a received `jakarta.jms.StreamMessage` to an `InputStream` over its bytes, as the camel-jms consumer does, so a body sent with `jmsMessageType=Stream` arrives as the bytes that were sent. Before, the body was the `jakarta.jms.StreamMessage` itself. To get the JMS message, use `mapJmsMessage=false`.
+
+### camel-jms, camel-sjms, camel-sjms2 - a poison message goes to the error handler without redeliveries
+
+With `eagerLoadingOfProperties=true`, a poison message (one whose payload or properties cannot be read) now goes to the error handler (such as the dead letter channel or `onException`) without redeliveries, with its `eagerPoisonBody` body. Before, when the error handler had redeliveries, the first step of the route was redelivered with that body and, when it succeeded, the message went on through the route and never reached the error handler.
 
 ### camel-keycloak - Keycloak 26.8.2 requires the kc-admin-api client scope
 
@@ -242,6 +264,12 @@ With `camel.vault.kubernetes.refreshEnabled=true` or `camel.vault.kubernetescm.r
 ### camel-file - idempotent consumer with an idempotent read lock
 
 With `idempotent=true` (or `noop=true`) and `readLock=idempotent`, `idempotent-changed` or `idempotent-rename`, the file consumer no longer adds the key to the idempotent repository eagerly, and `idempotentEager` does not apply: the read lock adds it when it acquires the lock. Since Camel 4.7 the read lock was refused, and such a consumer never consumed a file.
+
+### camel-xslt, camel-xslt-saxon - transformerFactoryConfigurationStrategy and secureProcessing are applied in all configurations
+
+The `xslt` component now calls the `transformerFactoryConfigurationStrategy` of the endpoint or the component also when no `transformerFactory`, `transformerFactoryClass` or `xpathTotalOpLimit` is set. Before, the default `TransformerFactory` was used without calling the strategy. The `xslt-saxon` component now also uses the `transformerFactoryConfigurationStrategy` and `transformerFactoryClass` set on the component, which it ignored before; the endpoint options still take precedence.
+
+With a `saxonConfiguration` bean, the `xslt-saxon` component now applies `secureProcessing` (default `true`) to that configuration. Before (since 4.22), the bean replaced the configuration secure processing had been applied to, so a stylesheet could call extension functions or use `xsl:result-document`. If such a stylesheet now fails to compile, set `secureProcessing=false`, or set the Saxon feature in `saxonConfigurationProperties`, which is applied last. Saxon uses the bean by reference, so `secureProcessing` is set on the bean itself: endpoints that share a `saxonConfiguration` (for example all the endpoints, when it is set on the component) must use the same `secureProcessing` value, otherwise the endpoint created last sets it for all of them.
 
 ### Java
 
@@ -1093,6 +1121,10 @@ With `useHeadersAsParameters=true` and a query with only plain `?` placeholders 
 
 Named parameters take their values from the `CamelJdbcParameters` header when it is a `Map`, or else from the message headers, as before. A `CamelJdbcParameters` header that is not a `Map` (such as the `List` left by an earlier query with plain `?` placeholders in the same route) is now ignored for named parameters, where before it made the exchange fail with `Cannot find key`.
 
+### camel-jdbc, camel-spring-jdbc, camel-sql - outputType=StreamList: a result that failed to read keeps failing
+
+With `outputType=StreamList`, once reading a row has failed (for example, the connection was lost), the iterator of the body no longer looks finished: `hasNext()` and `next()` now throw a `RuntimeCamelException` with the first `SQLException` as cause, also after the iterator is closed. Before, `hasNext()` returned `false`, so a split that was redelivered over the same iterator (an error handler with redeliveries) found no more rows and the exchange succeeded with only the rows read before the failure. It now fails once the redeliveries are exhausted.
+
 ### camel-jgroups-raft - a body that does not convert to a byte array fails the exchange
 
 The `jgroups-raft` producer skipped a message body that has no conversion to `byte[]`, such as a `Map`, a POJO or a number, without an error, so nothing was set in the replicated log and the exchange succeeded. It now fails the exchange with an `InvalidPayloadException`. Marshal such a body first (for example to JSON) or convert it to a `String`. A message without a body is still skipped.
@@ -1846,6 +1878,17 @@ Without an interactive terminal, such as in a script, a CI job (the `CI` environ
 
 The XML, YAML and Java route dumps (`camel transform route`, `camel validate normalize`, `camel.main.dumpRoutes`, the developer console) now write these options whenever they are set, also with their documented default value: the binding options of the rest configuration, a rest and its verbs (such as `bindingMode="off"`), the options of a redelivery policy, of a `resilience4jConfiguration` and of a `faultToleranceConfiguration`, `shutdownRoute` / `shutdownRunningTask` of a route, and `apiDocs` of a rest verb. Left out, such an option took the value of the parent level when the dump was loaded (the rest configuration or the rest, the error handler, the global circuit breaker configuration, the CamelContext), so the route behaved differently, or, for `apiDocs`, a verb with `apiDocs="true"` under a rest with `apiDocs="false"` was left out of the OpenAPI document.
 
+### Camel K Pipe and Integration resources are removed (camel bind)
+
+Camel works with routes as its abstraction. The support for the Camel K resources, deprecated in Camel 4.19 (`camel bind`) and 4.23 (Pipe in the YAML DSL), is removed:
+
+-   The YAML DSL no longer loads `kind: Pipe` (or `KameletBinding`) resources with `apiVersion: camel.apache.org/v1`, and `.pipe.yaml` is no longer a file extension of the YAML DSL.
+    
+-   The `camel bind` command is removed, and so are `camel init --pipe` and the Integration CR template of `camel init` (`.integration.yaml`). `camel run` no longer takes a file with a Pipe.
+    
+
+Write a Camel route instead: the source of the Pipe is the `from` of the route, its steps are the steps, and its sink is a `to`. The [Camel 4.23 upgrade guide](camel-4x-upgrade-guide-4_23.html#_camel_yaml_dsl_pipe_kind_pipe_support_is_deprecated) shows a Pipe and the route that does the same. Kamelets are not affected: routes use them as `kamelet:` endpoints.
+
 ### camel-yaml-dsl - a value under parameters: with an & is kept whole
 
 In the YAML DSL, a value under `parameters:` that has an `&` is now kept whole in the endpoint uri. Before, the value was cut at the `&`, and the rest was read as another option. For example, with `filterFile: "${file:name} contains 'R&D'"` the route failed to start. A lenient component, such as a Kamelet, got only the text before the `&`, without an error.
@@ -1928,6 +1971,17 @@ The commands that sort their rows by `--sort`, such as `camel ps`, `camel get ro
 ### camel-jbang - camel generate rest --dto
 
 The DTOs of `camel generate rest --dto` use Jakarta EE (`jakarta.validation`, `jakarta.annotation`) instead of `javax`, and no longer use `JsonNullable` of `jackson-databind-nullable` or the Swagger annotations (`io.swagger.v3.oas.annotations`), so they compile in a Camel 4 project. With `--runtime=main` they no longer use Spring (`@DateTimeFormat`). The OpenAPI Generator no longer prints its banner on stdout after the REST DSL, and `--input` takes an `http://` or `https://` URL.
+
+### camel-jbang - camel stop without a name
+
+`camel stop` without a name stops the integration that runs, as before, but when two or more run it stops none: it lists them and exits with `2`. Use `camel stop --all` (or `camel stop '*'`) to stop them all, as `camel stop` did. A bare `camel stop`, such as of an AI agent, stopped the integrations of the user and of other agents too.
+
+### camel-jbang - the options of camel update and catalog --filter
+
+-   The options of `camel update run` are named in kebab-case, as the options of the other commands: `--dry-run`, `--open-rewrite-version`, `--camel-artifact`, `--camel-spring-boot-artifact`, `--quarkus-maven-plugin-version`, `--quarkus-maven-plugin-group-id` and `--upgrade-timeout`. The camelCase names (`--dryRun` and so on) still work.
+    
+-   `--filter` of the `camel catalog` commands matches a part of the name, as it does for the description: `--filter=aws2` lists the `aws2-*` components (it listed nothing, as only a whole name matched).
+    
 
 ### camel-jbang - camel version list
 
@@ -4890,3 +4944,19 @@ If your offsets can go stale, note that by default (without `moveFailed`) the fa
 Neither option has had any effect since Camel 2.18, when the docker-java 3.x upgrade removed the `withLoggingFilter` and `withFollowRedirectsFilter` calls they fed. `DockerClientFactory` now builds the whole `DockerClientProfile` that the client is created from, and it sets neither of them - `DockerClientProfile` has no field for either - so `isLoggingFilter()` and `isFollowRedirectFilter()` are called only by the generated configurers. The two matching headers, `CamelDockerLoggingFilter` and `CamelDockerFollowRedirectFilter`, are read nowhere either.
 
 Both options and both header constants are now deprecated. Remove `loggingFilter` and `followRedirectFilter` from the endpoint URI or the component configuration; setting them has changed nothing since 2.18. To see the traffic with the Docker daemon, raise the log level of the `com.github.dockerjava` loggers.
+
+### camel-thymeleaf - the CamelThymeleafServletContext header is deprecated
+
+The `CamelThymeleafServletContext` header is never read by the component. The web application template resolver is built from a `JakartaServletWebApplication`, not from a `ServletContext`, and that object comes from the endpoint:
+
+```java
+WebApplicationTemplateResolver resolver = new WebApplicationTemplateResolver(jakartaServletWebApplication);
+```
+
+A route that sets the header gets no error and no resolver. It is now deprecated, with a `deprecationNote` that says so. `jakartaServletWebApplication` is not a URI option; set it on the endpoint:
+
+```java
+ThymeleafEndpoint endpoint = context.getEndpoint("thymeleaf:greeting.html?resolver=WEB_APP", ThymeleafEndpoint.class);
+endpoint.setJakartaServletWebApplication(
+        JakartaServletWebApplication.buildApplication(servletContext));
+```

@@ -180,6 +180,8 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 By default, the result of a select is returned in the OUT body as an `ArrayList<LinkedHashMap<String, Object>>`. The `List` object contains the list of rows and the `Map` objects contain each row with the `String` key as the column name. You can use the option `outputType` to control the result: `SelectOne` gives the `Map` of the one row, the value of its column when it has one column, or `null` when there is no row, and `StreamList` gives an `Iterator` of the rows, which can be read once. A statement that is not a select leaves the body as it is, with the count in the `CamelJdbcUpdateCount` header.
 
+When reading a row of a `StreamList` fails (for example, the connection is lost), the iterator keeps failing instead of ending, so a split that is redelivered over it fails too, rather than succeeding with the rows read before the failure.
+
 **Note:** This component fetches `ResultSetMetaData` to be able to return the column name as the key in the `Map`.
 
 With `outputType=SelectList` the header `CamelJdbcRowCount` holds the number of rows of the result.

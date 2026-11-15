@@ -44,6 +44,8 @@ The `BatchConsumer` supports the following options:
 
 Very often a `BatchConsumer` is scheduled and is based of the `ScheduledBatchPollingConsumer` that has many options for configuring the scheduling. These options are listed with _(scheduler)_ as label in the endpoint options' in the [Components](../components/4.22.x/index.md) documentation.
 
+A poll routes the whole batch it polled before it is done, and the health check of the consumer reports on the polls that are done. To have the health check report DOWN while a poll hangs (for example on a connection that went silent), set the `healthCheckMaxPollDuration` option: see [Health Checks](health-check.html#_detecting_a_poll_that_hangs).
+
 ## Exchange Properties
 
 The following properties are set on the Exchange for each Exchange polled in the same batch.

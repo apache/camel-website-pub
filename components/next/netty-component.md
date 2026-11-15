@@ -232,7 +232,7 @@ Enum values:
  | LINE | TextLineDelimiter |
 | **encoders** (codec) | A list of encoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the Registry. Just remember to prefix the value with # so Camel knows it should lookup. |  | String |
 | **encoding** (codec) | The encoding (a charset name) to use for the textline codec. If not provided, Camel will use the JVM default Charset. |  | String |
-| **textline** (codec) | Only used for TCP. If no codec is specified, you can use this flag to indicate a text line based codec; if not specified or the value is false, then Object Serialization is assumed over TCP - however only Strings are allowed to be serialized by default. | false | boolean |
+| **textline** (codec) | Only used for TCP. If no codec is specified, you can use this flag to indicate a text line based codec, where each message ends with the delimiter. If not specified or the value is false, the default codec is a String codec without framing, so each read from the socket becomes one message. | false | boolean |
 | **enabledProtocols** (security) | Which protocols to enable when using SSL. | TLSv1.2,TLSv1.3 | String |
 | **hostnameVerification** (security) | To enable/disable hostname verification on SSLEngine. | false | boolean |
 | **keyStoreFormat** (security) | Keystore format to be used for payload encryption. Defaults to JKS if not set. |  | String |
@@ -443,7 +443,7 @@ Enum values:
  | LINE | TextLineDelimiter |
 | **encoders** (codec) | A list of encoders to be used. You can use a String which have values separated by comma, and have the values be looked up in the Registry. Just remember to prefix the value with # so Camel knows it should lookup. |  | String |
 | **encoding** (codec) | The encoding (a charset name) to use for the textline codec. If not provided, Camel will use the JVM default Charset. |  | String |
-| **textline** (codec) | Only used for TCP. If no codec is specified, you can use this flag to indicate a text line based codec; if not specified or the value is false, then Object Serialization is assumed over TCP - however only Strings are allowed to be serialized by default. | false | boolean |
+| **textline** (codec) | Only used for TCP. If no codec is specified, you can use this flag to indicate a text line based codec, where each message ends with the delimiter. If not specified or the value is false, the default codec is a String codec without framing, so each read from the socket becomes one message. | false | boolean |
 | **enabledProtocols** (security) | Which protocols to enable when using SSL. | TLSv1.2,TLSv1.3 | String |
 | **hostnameVerification** (security) | To enable/disable hostname verification on SSLEngine. | false | boolean |
 | **keyStoreFormat** (security) | Keystore format to be used for payload encryption. Defaults to JKS if not set. |  | String |
@@ -590,6 +590,15 @@ The default codec (no `textline`, no custom `encoders` or `decoders`) only write
 With `useByteBuf=true` a body that cannot be converted to a `ByteBuf` fails the exchange instead of sending nothing.
 
 With `sync=false` the producer continues routing as soon as the request is written, and ignores any message the remote server sends back. The message of the exchange stays as it was, also for an `InOut` exchange.
+
+#### Message framing
+
+TCP is a stream of bytes and does not keep the boundaries of the messages that the client writes. The default codec has no frame decoder, so each read from the socket becomes one exchange: a message can arrive split over several exchanges, and several messages can arrive as one. To get one exchange per message, use a codec that frames the messages:
+
+-   `textline=true`: each message ends with the `delimiter`, a line break (`LINE`, the default) or a null byte (`NULL`), and is at most `decoderMaxLineLength` bytes long (1024 by default).
+    
+-   A frame decoder in `decoders`, such as `ChannelHandlerFactories.newLengthFieldBasedFrameDecoder(…​)` or `ChannelHandlerFactories.newDelimiterBasedFrameDecoder(…​)`, followed by a decoder of the payload, as in [Using Multiple Codecs](#_using_multiple_codecs).
+    
 
 #### Using Multiple Codecs
 

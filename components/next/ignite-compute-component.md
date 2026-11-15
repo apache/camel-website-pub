@@ -153,7 +153,7 @@ Enum values:
 
 
  |  | IgniteComputeExecutionType |
-| **CamelIgniteComputeParameters** (producer) Constant: [`IGNITE_COMPUTE_PARAMS`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_COMPUTE_PARAMS) | Parameters for APPLY, BROADCAST and EXECUTE operations. |  | Any object or Collection of objects |
+| **CamelIgniteComputeParameters** (producer) Constant: [`IGNITE_COMPUTE_PARAMS`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_COMPUTE_PARAMS) | Parameters for APPLY, BROADCAST and EXECUTE operations. |  | Collection |
 | **CamelIgniteComputeReducer** (producer) Constant: [`IGNITE_COMPUTE_REDUCER`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_COMPUTE_REDUCER) | Reducer for the APPLY and CALL operations. |  | IgniteReducer |
 | **CamelIgniteComputeAffinityCacheName** (producer) Constant: [`IGNITE_COMPUTE_AFFINITY_CACHE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_COMPUTE_AFFINITY_CACHE_NAME) | Affinity cache name for the AFFINITY\_CALL and AFFINITY\_RUN operations. |  | String |
 | **CamelIgniteComputeAffinityKey** (producer) Constant: [`IGNITE_COMPUTE_AFFINITY_KEY`](https://javadoc.io/doc/org.apache.camel/camel-ignite/latest/org/apache/camel/component/ignite/IgniteConstants.html#IGNITE_COMPUTE_AFFINITY_KEY) | Affinity key for the AFFINITY\_CALL and AFFINITY\_RUN operations. |  | Object |

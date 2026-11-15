@@ -25,7 +25,7 @@ ftp://\[username@\]hostname\[:port\]/directoryname\[?options\]
 sftp://\[username@\]hostname\[:port\]/directoryname\[?options\]
 ftps://\[username@\]hostname\[:port\]/directoryname\[?options\]
 
-Where `directoryname` represents the underlying directory. The directory name is a relative path. Absolute path is **not** supported. The relative path can contain nested folders, such as /inbox/us.
+Where `directoryname` represents the underlying directory. The directory name is a path relative to the directory the user logs in to, usually its home directory. Absolute path is **not** supported. The relative path can contain nested folders, such as /inbox/us.
 
 > **Note**
 > Camel translates the absolute path to relative by trimming all leading slashes from `directoryname`. There’ll be a warning (`WARN` level) message printed in the logs.
@@ -336,7 +336,7 @@ Enum values:
 | **filterDirectory** (filter) | Filters the directory based on Simple language. For example to filter on current date, you can use a simple date pattern such as $\\{date:now:yyyMMdd}. |  | String |
 | **filterFile** (filter) | Filters the file based on Simple language. For example to filter on file size, you can use $\\{file:size} 5000. |  | String |
 | **idempotent** (filter) | Option to use the Idempotent Consumer EIP pattern to let Camel skip already processed files. Will by default use a memory based LRUCache that holds 1000 entries. If noop=true then idempotent will be enabled as well to avoid consuming the same files over and over again. | false | Boolean |
-| **idempotentEager** (filter) | Sets whether to eagerly add the filename to the idempotent repository or wait until the exchange is complete. | true | Boolean |
+| **idempotentEager** (filter) | Sets whether to eagerly add the filename to the idempotent repository or wait until the exchange is complete. Does not apply with an idempotent read lock (readLock=idempotent, idempotent-changed or idempotent-rename), which adds the filename when it acquires the lock. | true | Boolean |
 | **idempotentKey** (filter) | To use a custom idempotent key. By default the absolute path of the file is used. You can use the File Language, for example to use the file name and file size, you can do: idempotentKey=$\\{file:name}-$\\{file:size}. |  | String |
 | **idempotentRepository** (filter) | A pluggable repository org.apache.camel.spi.IdempotentRepository which by default use MemoryIdempotentRepository if none is specified and idempotent is true. |  | IdempotentRepository |
 | **include** (filter) | Is used to include files, if filename matches the regex pattern (matching is case in-sensitive). Notice if you use symbols such as plus sign and others you would need to configure this using the RAW() syntax if configuring this as an endpoint uri. See more details at configuring endpoint uris. |  | String |
@@ -398,6 +398,7 @@ Enum values:
 | **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
 | **delay** (scheduler) | Milliseconds before the next poll. | 500 | long |
 | **greedy** (scheduler) | If greedy is enabled, then the ScheduledPollConsumer will run immediately again, if the previous run polled 1 or more messages. | false | boolean |
+| **healthCheckMaxPollDuration** (scheduler) | How long a poll may run before the health check of the consumer reports DOWN. The health check is otherwise based on the polls that are done, so it stays UP while a poll hangs, for example on a read without timeout from a connection that went silent. A poll includes routing the messages it polled, so set this above the longest poll you expect. The poll is not interrupted. The value is in millis (not affected by timeUnit). The default 0 turns this off. | 0 | long |
 | **initialDelay** (scheduler) | Milliseconds before the first poll starts. | 1000 | long |
 | **repeatCount** (scheduler) | Specifies a maximum limit of number of fires. So if you set it to 1, the scheduler will only fire once. If you set it to 5, it will only fire five times. A value of zero or negative means fire forever. | 0 | long |
 | **runLoggingLevel** (scheduler) | 
@@ -1114,7 +1115,7 @@ This component has log level **TRACE** that can be helpful if you have problems.
 
 ### Why does FTP component not download any files?
 
-The [FTP](../4.22.x/ftp-component.md) component has many options. So make sure you have configured it properly. Also, a common issue is that you have to use either active or passive mode. So you may have to set `passiveMode=true` on the endpoint configuration.
+The [FTP](../4.22.x/ftp-component.md) component has many options. So make sure you have configured it properly. Also, a common issue is that you have to use either active or passive mode. So you may have to set `passiveMode=true` on the endpoint configuration. When the server refuses the listing of the directory, for example the `PORT` command of active mode, the poll fails and the consumer logs the reply of the server.
 
 ## Examples
 
