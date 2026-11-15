@@ -101,7 +101,7 @@ With the following _path_ and _query_ parameters:
 | **clientKeyPassphrase** (security) | The Client Key Passphrase. |  | String |
 | **oauthToken** (security) | The Auth Token. |  | String |
 | **password** (security) | Password to connect to Kubernetes. |  | String |
-| **trustCerts** (security) | Define if the certs we used are trusted anyway or not. | false | Boolean |
+| **trustCerts** (security) | Define if the certs we used are trusted anyway or not. |  | Boolean |
 | **username** (security) | Username to connect to Kubernetes. |  | String |
 
 ## Message Headers
@@ -409,3 +409,5 @@ camel.main.context-reload-enabled = true
 where `camel.vault.kubernetes.refreshEnabled` will enable the automatic context reload and `camel.vault.kubernetes.secrets` is a regex representing or a comma separated lists of the secrets we want to track for updates.
 
 Whenever a secrets listed in the property, will be updated in the same namespace of the running application, the Camel context will be reloaded, refreshing the secret value.
+
+Camel lists the Secrets of that namespace and then watches them (with a Kubernetes informer), so when RBAC is enabled the ServiceAccount needs the `list` and `watch` permissions on `secrets`. When the API server closes the watch (for example with 410 Gone because the watch is too old), Camel lists the Secrets again, so an update made in the meantime still reloads the context.

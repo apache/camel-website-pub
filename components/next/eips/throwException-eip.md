@@ -111,6 +111,17 @@ In YML you specify the FQN class name via `exceptionType` and the `message` is t
             uri: mock:result
 ```
 
+### Exception instance or exception type
+
+An exception instance, such as `throwException(new IllegalArgumentException("Not allowed"))` in Java, or a bean referred to with `ref`, is one object that every message fails with. So that it does not keep the exceptions of all the messages, the error handler and the EIPs do not add other exceptions to it as suppressed: the previous exception of the message (such as the one an `onException` translates) is not added, and an exception from a predicate of `onException` (such as `handled`), a `doFinally`, an `onCompletion`, a saga compensation, or the completion of the aggregation strategy of a Multicast, Recipient List or Split is logged instead.
+
+To get a new exception for each message, give the exception type and the message instead, as `exceptionType` and `message` do in XML and YAML. The message supports the [Simple](../languages/simple-language.md) language, and the new exception has the previous exception of the message as suppressed:
+
+```java
+onException(IOException.class)
+    .throwException(IllegalStateException.class, "Cannot process order ${header.orderId}");
+```
+
 ## See Also
 
 See also the related [Stop](stop-eip.md) EIP.

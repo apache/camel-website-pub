@@ -18,7 +18,7 @@ camel-kit init --here \[options\]
 | `--here` | `false` | Initialize in the current directory |
 | `--force` | `false` | Reinitialize a project that already has `.camel-kit/`. Your content in shared files is kept; see [Existing projects](getting-started.html#existing-project) |
 | `--replace <path>` | none | Replace one existing shared file in full, such as `AGENTS.md` or `mvnw`, instead of merging or preserving it. Repeatable; a path that is not a shared file written by `init` is rejected before anything is written |
-| `--dry-run` | `false` | Show what `init` would do to each shared file (create, replace, merge or preserve) without writing anything |
+| `--dry-run` | `false` | Show what `init` would do to each shared file (create, replace, merge or preserve) without writing anything. Runs the same validation as `init`, so an existing MCP configuration that cannot be merged is rejected here too |
 | `--replace-wrapper` | `false` | Replace the complete Maven wrapper; use `--replace <path>` to replace only one shared file |
 | `--record-baseline` | `false` | Run the existing project’s build and tests once to record baseline results; never runs during `--dry-run` |
 | `--source-platform` | `auto` | Source platform of a migration: `mulesoft`, `biztalk`, `camel` or `auto` |

@@ -28,7 +28,7 @@ Shutting down Camel integration (PID: 62506)
 `camel stop` waits until the integration has stopped, up to `--timeout` (60 seconds by default). When it has not stopped in time, it exits with code `124`, and `--kill` stops it at once. Use `--no-wait` to return without waiting.
 
 > **Note**
-> The name is matched as a prefix — `camel stop d` stops all integrations starting with _d_. To stop exactly one when names overlap (e.g., `dude` and `dude2`), use the PID or append `!`: `camel stop dude!`. A PID must be a running Camel integration, and a name or PID that matches nothing exits with code `3` (see [Exit Codes and Output](camel-jbang-exit-codes.md)).
+> The name is matched as a prefix — `camel stop d` stops all integrations starting with _d_ — unless an integration has exactly that name: with `dude` and `dude2` running, `camel stop dude` stops only `dude`, and `camel stop dude*` stops both. Append `!` to match only that name (`camel stop dude!`), or give the PID. A PID must be a running Camel integration, and a name or PID that matches nothing exits with code `3` (see [Exit Codes and Output](camel-jbang-exit-codes.md)).
 
 Restart an integration (stop + re-launch):
 
@@ -36,10 +36,10 @@ Restart an integration (stop + re-launch):
 camel restart dude
 Stopping Camel integration: dude (PID: 62506)
 Restarted Camel integration: dude (PID: 63010)
-Log: ~/.camel/restart-62506-1234.log
+Log: ~/.camel/63010.log
 ```
 
-`camel restart` waits until the integration has stopped, and until the new one has started, and keeps the output of the new integration in the log file it prints. When the new integration stops right away, it prints the end of the log and exits with code `1`; when it is still starting after `--timeout`, it exits with code `124` and leaves it running.
+`camel restart` waits until the integration has stopped, and until the new one has started, and prints the log file of the new integration (its output, the warnings and errors and what it prints otherwise, is in `~/.camel/<pid>-run.log`). When the new integration stops right away, it prints the end of the log and exits with code `1`; when it is still starting after `--timeout`, it exits with code `124` and leaves it running.
 
 Stop all integrations (omit the name):
 
@@ -89,15 +89,15 @@ Use `--background` to run an integration as a background process (Camel Main onl
 ```bash
 $ camel run chuck.yaml --background
 Running Camel Main: chuck in background with PID: 80093 (waiting to startup)
-Log: /home/user/.camel/80093-run.log
 Camel Main: chuck (state: Running)
+Log: /home/user/.camel/80093.log
 ```
 
 Use `camel ps` to list, `camel log` to tail output, and `camel stop` to shut down.
 
 The command waits up to 60 seconds for the integration to start, and reports any errors before returning. Set how long with `--background-wait`, such as `--background-wait=2m`, or do not wait with `--background-wait=false`. An integration that fails to start prints its log and exits with `1`. One that is still starting after the wait exits with `124`, and is left running.
 
-The output of the integration goes to `~/.camel/<pid>-run.log`, which `camel stop` removes.
+The logging of the integration goes to `~/.camel/<pid>.log`, which `camel log` reads. Its output goes to `~/.camel/<pid>-run.log`, which `camel stop` removes: the warnings and errors of the logging, and what the integration prints otherwise, such as why it cannot start.
 
 ## Getting status
 
@@ -113,6 +113,41 @@ The _Since Last_ column shows three time-since values: started/completed/failed.
 
 > **Tip**
 > Use `camel get --watch` for continuous updates.
+
+### The state of one integration in one call
+
+`camel status` shows one integration, with what `camel get route`, `camel get health`, `camel get error` and `camel log` show, in one command. That is what an AI agent wants after it has run or changed an integration.
+
+It starts with what is wrong, in a few words each: a route that is not started or has failed exchanges, a health check that is down, a failed reload, or a heap that is nearly full (`Problems: none` when all is well). Then it shows:
+
+-   the state and uptime, the folder the integration was started from, and its files (the files of its routes, and the properties files it loaded)
+    
+-   the exchanges, and the oldest inflight one with where it is now (when the inflight exchanges are listed, as in dev mode)
+    
+-   each route with its counters, its file and line, and its last error
+    
+-   the health checks that are down
+    
+-   the HTTP server with its endpoints and management endpoints
+    
+-   the last errors
+    
+-   the reloads of dev mode, with the outcome of the last one
+    
+-   the Java version, heap, threads and garbage collections of its JVM
+    
+-   the end of its log
+    
+
+For example, as one JSON document:
+
+```bash
+camel status cheese --json
+```
+
+With `--json` it prints one document: `problems` is an empty list when all is well, the routes have the fields of `camel get route --json`, `uptime` is in millis, and the log records are newest first.
+
+Without a name it shows the only integration that runs. `--log-lines` and `--errors` set how many log records and errors to show (20 and 5 by default).
 
 ## Route status
 
@@ -813,6 +848,19 @@ camel run * --chaos=test/chaos/outage.chaos --max-seconds=240 --chaos-report=tar
 ```
 
 Without an expectation (`expect=`) there is no verdict, and the run ends with exit code 0 and a line that says so. See [Scenarios](../components/next/others/chaos.html#_scenarios) and [Chaos in a pipeline](../components/next/others/chaos.html#_chaos_in_a_pipeline) in the camel-chaos documentation.
+
+## Exchange sanitizer
+
+With [camel-sanitizer](../components/next/others/sanitizer.md) (`camel run --sanitizer`), a running integration reports where the processors of its routes break the contract of `AsyncProcessor`, such as a callback called twice or a processor that throws instead of calling its callback (rule R1), and warns about a step whose callback has not come (still pending). With `camel.sanitizer.checks=callback,commit` it also reports where the commit of a consumer runs twice, never, or with the outcome of another exchange (rule R2, which is on by default only in tests, as it costs more per message):
+
+```bash
+camel run * --sanitizer
+camel run * --sanitizer --prop camel.sanitizer.checks=callback,commit
+camel get sanitizer
+camel get sanitizer myapp --report
+```
+
+`camel get sanitizer` lists the violations with their rule, kind, route, step, processor and exchange; `--report` shows the counts per rule and per kind, the commits followed (with R2), each violation with its threads and stacks, and the still pending warnings. The sanitizer is on with profile `dev`, the default of `camel run`, and never with profile `prod`. The report holds ids, names, threads, stacks and the class and message of an exception, never bodies or headers (an exception message can still carry message data).
 
 ## Using Jolokia and Hawtio
 

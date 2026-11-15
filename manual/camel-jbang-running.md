@@ -22,6 +22,13 @@ camel run foo.yaml --dev --prop=camel.main.routesReloadInterval=500
 
 A shorter interval reloads a change sooner. A longer one groups more of one save together, such as several files an editor saves one after the other.
 
+To reload a change at once, rather than at the next scan, and hear how it went, use `camel cmd reload --wait`, as an AI agent does after it edits a file. It reloads the files changed since the last scan, and prints them, or why the reload failed (exit code 1). With `--json` the outcome is one JSON document, with the status `reloaded`, `unchanged` or `failed`:
+
+```bash
+$ camel cmd reload foo --wait --json
+{"pid":35136,"name":"foo","status":"reloaded","files":["foo.yaml"]}
+```
+
 `camel dev` is a shortcut for `camel run --dev`, and without files it runs the current folder (as `--source-dir=.`):
 
 ```bash
@@ -76,6 +83,8 @@ Dev mode then does not watch these folders, nor the folders in them. When the ro
 
 The `test` folder of the source directory holds the Citrus tests of the project (such as `test/orders.citrus.it.yaml`, run with `camel test run`) and their data, which are not routes either: dev mode does not watch it, so editing a test does not reload the routes. Keep the routes out of `test`.
 
+Neither does dev mode watch the files that a run and the tools write in the source directory: log files (`*.log`, such as the output of `camel dev > run.log`), the build output in `target`, `.git`, and the `.camel-jbang` and `.camel` folders of the Camel CLI and the file consumer.
+
 ### Live reload of resource files
 
 In dev mode, Camel disables `contentCache` on resource-based components (such as `xslt`) so that edits to resource files are picked up on the next message without restarting.
@@ -111,6 +120,8 @@ camel run foo.yaml --properties=/var/my-app/config.properties
 > Use the `=` sign directly after `--property` (no space).
 
 If both are used, the properties are merged into a single `application.properties` file.
+
+The options of `camel run` can also be set in `application.properties`, such as `camel.main.tracing=true` for `--trace` or `camel.jbang.console=true` for `--console`. An option given on the command line wins over the file, which is the default for the options that are not given: with `camel.main.tracing=false` in the file, `camel run --trace` traces.
 
 ## Using profiles
 
@@ -291,6 +302,14 @@ To disable automatic downloading:
 camel run foo.java --download=false
 ```
 
+The dependencies given with `--dep` or `camel.jbang.dependencies` are resolved together, as one dependency graph, and Camel CLI resolves with the breadth-first collector of Maven Resolver, which downloads the POMs in parallel (10 threads). Set the `aether.dependencyCollector.impl=df` system property to use the depth-first collector of Maven instead.
+
+A repository that cannot be connected to (the host does not resolve, refuses the connection, or does not answer within the connect timeout of 10 seconds) is logged once with a WARN and not used for the rest of the run, so each download does not wait for it again. A repository that stops sending data fails the download after 60 seconds. Set the `aether.connector.connectTimeout` and `aether.connector.requestTimeout` system properties (in millis) to change the timeouts:
+
+```bash
+export JAVA_TOOL_OPTIONS="-Daether.connector.requestTimeout=180000"
+```
+
 ### Advanced: how a class becomes a dependency
 
 When a route, a bean declaration, a `#class:` value in `application.properties`, or an `import` in a Java file next to the route names a class that is not on the classpath, Camel CLI looks the class up in three mapping files shipped in `camel-kamelet-main` and downloads the dependency it maps to. The files are read into one table, in this order (a later file wins for an identical key):
@@ -348,6 +367,8 @@ Limitations compared to the `jbang` runtime:
 -   Options that only work in-process are not supported: `--background`, `--code`, `--open-api`, `--empty` and `--mcp-stdio`.
     
 -   `--chaos` (and `--chaos=<scenario file>`, `--chaos-report`) adds `camel-chaos`; with Spring Boot and Quarkus it is switched on with `-Dcamel.chaos.enabled=true` unless the profile is `prod`. With Quarkus it needs a Camel Quarkus release on Camel 4.24 or newer.
+    
+-   `--sanitizer` adds `camel-sanitizer`; with Spring Boot it is switched on with `-Dcamel.sanitizer.enabled=true` unless the profile is `prod`. It is not supported with Quarkus yet.
     
 -   Dev mode reloads YAML and XML route files from the original source directory; Java sources cannot be live-reloaded (Spring Boot uses dev-tools and Quarkus its dev mode instead).
     

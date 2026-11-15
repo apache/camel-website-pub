@@ -152,9 +152,29 @@ The Azure Key Vault component supports the following message header(s), which is
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAzureKeyVaultProducerOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-azure-key-vault/latest/org/apache/camel/component/azure/key/vault/KeyVaultConstants.html#OPERATION) | Overrides the desired operation to be used in the producer. |  | KeyVaultOperationDefinition |
+| **CamelAzureKeyVaultProducerOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-azure-key-vault/latest/org/apache/camel/component/azure/key/vault/KeyVaultConstants.html#OPERATION) | 
+Overrides the desired operation to be used in the producer.
+
+Enum values:
+
+-   createSecret
+    
+-   getSecret
+    
+-   updateSecretProperties
+    
+-   deleteSecret
+    
+-   purgeDeletedSecret
+    
+
+
+
+
+
+ |  | KeyVaultOperation |
 | **CamelAzureKeyVaultSecretName** (producer) Constant: [`SECRET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-azure-key-vault/latest/org/apache/camel/component/azure/key/vault/KeyVaultConstants.html#SECRET_NAME) | The secret name to be used in Key Vault. |  | String |
-| **CamelAzureKeyVaultSecretProperties** (producer) Constant: [`SECRET_PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-azure-key-vault/latest/org/apache/camel/component/azure/key/vault/KeyVaultConstants.html#SECRET_PROPERTIES) | The secret properties to be used in Key Vault for updating a secret. |  | String |
+| **CamelAzureKeyVaultSecretProperties** (producer) Constant: [`SECRET_PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-azure-key-vault/latest/org/apache/camel/component/azure/key/vault/KeyVaultConstants.html#SECRET_PROPERTIES) | The secret properties to be used in Key Vault for updating a secret. |  | SecretProperties |
 
 ## Message Body
 

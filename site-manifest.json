@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1794598933235,
+  "generated": 1794763479742,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -36730,6 +36730,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-get-sanitizer.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-sanitizer.html",
+              "title": "camel get sanitizer"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-get-service.adoc",
               "url": "/manual/jbang-commands/camel-jbang-get-service.html",
               "title": "camel get service"
@@ -37003,6 +37009,12 @@
               "path": "jbang-commands/camel-jbang-shell.adoc",
               "url": "/manual/jbang-commands/camel-jbang-shell.html",
               "title": "camel shell"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-status.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-status.html",
+              "title": "camel status"
             },
             {
               "module": "ROOT",

@@ -111,14 +111,14 @@ Enum values:
 
  | false | String |
 | **excludeReferenceLink** (producer) | True to exclude Table API links for reference fields (default: false). | false | Boolean |
-| **favorites** (producer) | Set this parameter to true to return only scorecards that are favorites of the querying user. | false | Boolean |
+| **favorites** (producer) | Set this parameter to true to return only scorecards that are favorites of the querying user. |  | Boolean |
 | **includeAggregates** (producer) | Set this parameter to true to always return all available aggregates for an indicator, including when an aggregate has already been applied. If a value is not specified, this parameter defaults to false and returns no aggregates. | false | Boolean |
 | **includeAvailableAggregates** (producer) | Set this parameter to true to return all available aggregates for an indicator when no aggregate has been applied. If a value is not specified, this parameter defaults to false and returns no aggregates. | false | Boolean |
 | **includeAvailableBreakdowns** (producer) | Set this parameter to true to return all available breakdowns for an indicator. If a value is not specified, this parameter defaults to false and returns no breakdowns. | false | Boolean |
 | **includeScoreNotes** (producer) | Set this parameter to true to return all notes associated with the score. The note element contains the note text as well as the author and timestamp when the note was added. | false | Boolean |
 | **includeScores** (producer) | Set this parameter to true to return all scores for a scorecard. If a value is not specified, this parameter defaults to false and returns only the most recent score value. | false | Boolean |
 | **inputDisplayValue** (producer) | True to set raw value of input fields (default: false). | false | Boolean |
-| **key** (producer) | Set this parameter to true to return only scorecards for key indicators. | false | Boolean |
+| **key** (producer) | Set this parameter to true to return only scorecards for key indicators. |  | Boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **models** (producer) | Defines both request and response models. This is a multi-value option with prefix: model. |  | Map |
 | **perPage** (producer) | Enter the maximum number of scorecards each query can return. By default this value is 10, and the maximum is 100. | 10 | Integer |
@@ -208,8 +208,8 @@ Enum values:
 | **suppressAutoSysField** (producer) | True to suppress auto generation of system fields (default: false). | false | Boolean |
 | **suppressPaginationHeader** (producer) | Set this value to true to remove the Link header from the response. The Link header allows you to request additional pages of data when the number of records matching your query exceeds the query limit. | false | Boolean |
 | **table** (producer) | The default table, can be overridden by header CamelServiceNowTable. |  | String |
-| **target** (producer) | Set this parameter to true to return only scorecards that have a target. | false | Boolean |
-| **topLevelOnly** (producer) | Gets only those categories whose parent is a catalog. | false | Boolean |
+| **target** (producer) | Set this parameter to true to return only scorecards that have a target. |  | Boolean |
+| **topLevelOnly** (producer) | Gets only those categories whose parent is a catalog. |  | Boolean |
 | **apiVersion** (advanced) | The ServiceNow REST API version, default latest. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **dateFormat** (advanced) | The date format used for Json serialization/deserialization. | yyyy-MM-dd | String |
@@ -289,14 +289,14 @@ Enum values:
 
  | false | String |
 | **excludeReferenceLink** (producer) | True to exclude Table API links for reference fields (default: false). | false | Boolean |
-| **favorites** (producer) | Set this parameter to true to return only scorecards that are favorites of the querying user. | false | Boolean |
+| **favorites** (producer) | Set this parameter to true to return only scorecards that are favorites of the querying user. |  | Boolean |
 | **includeAggregates** (producer) | Set this parameter to true to always return all available aggregates for an indicator, including when an aggregate has already been applied. If a value is not specified, this parameter defaults to false and returns no aggregates. | false | Boolean |
 | **includeAvailableAggregates** (producer) | Set this parameter to true to return all available aggregates for an indicator when no aggregate has been applied. If a value is not specified, this parameter defaults to false and returns no aggregates. | false | Boolean |
 | **includeAvailableBreakdowns** (producer) | Set this parameter to true to return all available breakdowns for an indicator. If a value is not specified, this parameter defaults to false and returns no breakdowns. | false | Boolean |
 | **includeScoreNotes** (producer) | Set this parameter to true to return all notes associated with the score. The note element contains the note text as well as the author and timestamp when the note was added. | false | Boolean |
 | **includeScores** (producer) | Set this parameter to true to return all scores for a scorecard. If a value is not specified, this parameter defaults to false and returns only the most recent score value. | false | Boolean |
 | **inputDisplayValue** (producer) | True to set raw value of input fields (default: false). | false | Boolean |
-| **key** (producer) | Set this parameter to true to return only scorecards for key indicators. | false | Boolean |
+| **key** (producer) | Set this parameter to true to return only scorecards for key indicators. |  | Boolean |
 | **models** (producer) | Defines both request and response models. This is a multi-value option with prefix: model. |  | Map |
 | **perPage** (producer) | Enter the maximum number of scorecards each query can return. By default this value is 10, and the maximum is 100. | 10 | Integer |
 | **release** (producer) | 
@@ -385,8 +385,8 @@ Enum values:
 | **suppressAutoSysField** (producer) | True to suppress auto generation of system fields (default: false). | false | Boolean |
 | **suppressPaginationHeader** (producer) | Set this value to true to remove the Link header from the response. The Link header allows you to request additional pages of data when the number of records matching your query exceeds the query limit. | false | Boolean |
 | **table** (producer) | The default table, can be overridden by header CamelServiceNowTable. |  | String |
-| **target** (producer) | Set this parameter to true to return only scorecards that have a target. | false | Boolean |
-| **topLevelOnly** (producer) | Gets only those categories whose parent is a catalog. | false | Boolean |
+| **target** (producer) | Set this parameter to true to return only scorecards that have a target. |  | Boolean |
+| **topLevelOnly** (producer) | Gets only those categories whose parent is a catalog. |  | Boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **apiVersion** (advanced) | The ServiceNow REST API version, default latest. |  | String |
 | **dateFormat** (advanced) | The date format used for Json serialization/deserialization. | yyyy-MM-dd | String |

@@ -48,3 +48,7 @@ The following environment variables can be configured on the operator Deployment
 | `CAMEL_MONITOR_OPERATOR_LABEL` | `camel.apache.org/monitor` | If it exists, the operator add this label beside regular Camel K labels in order to let the Camel Monitor operator discover and monitor the application. |
 | `LOG_LEVEL` | `info` | The log level for the operator. Valid values: `debug`, `info`, `warn`, `error`. |
 | `KAMELET_CATALOG_DIR` | `/tmp/kamelets/` | Directory where Kamelet catalog files are extracted during installation. |
+| `INTEGRATION_MAX_CONCURRENT_RECONCILES` | `1` | The maximum number of concurrent reconciliations executed by the Integration controller. |
+| `PIPE_MAX_CONCURRENT_RECONCILES` | `1` | The maximum number of concurrent reconciliations executed by the Pipe controller. |
+| `CLIENT_QPS` | `20` | Maximum Queries Per Second (QPS) used by the operator REST client for client-side rate limiting. |
+| `CLIENT_BURST` | `200` | Maximum burst rate used by the operator REST client for client-side rate limiting. |

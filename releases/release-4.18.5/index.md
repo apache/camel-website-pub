@@ -91,7 +91,7 @@ git checkout camel-4.18.5
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (75)
+### Bug (74)
 
 [CAMEL-25437](https://issues.apache.org/jira/browse/CAMEL-25437)
 
@@ -120,10 +120,6 @@ camel-util - IOHelper.copy counts copied bytes in an int, so zipFile/tarFile max
 [CAMEL-24973](https://issues.apache.org/jira/browse/CAMEL-24973)
 
 camel-util - URISupport.sanitizeUri does not follow the endpoint URI parser for RAW values, userinfo, dash-case option names and additional keywords
-
-[CAMEL-24935](https://issues.apache.org/jira/browse/CAMEL-24935)
-
-camel-pulsar - the producer replaces the message body with the MessageId
 
 [CAMEL-24932](https://issues.apache.org/jira/browse/CAMEL-24932)
 

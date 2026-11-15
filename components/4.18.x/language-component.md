@@ -175,7 +175,7 @@ The Language component supports 1 message header(s), which is/are listed below:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelLanguageScript** (producer) Constant: [`LANGUAGE_SCRIPT`](https://javadoc.io/doc/org.apache.camel/camel-language/latest/org/apache/camel/component/language/LanguageConstants.html#LANGUAGE_SCRIPT) | The script to execute provided in the header. Takes precedence over script configured on the endpoint. |  | String or Expression |
+| **CamelLanguageScript** (producer) Constant: [`LANGUAGE_SCRIPT`](https://javadoc.io/doc/org.apache.camel/camel-language/latest/org/apache/camel/component/language/LanguageConstants.html#LANGUAGE_SCRIPT) | The script to execute provided in the header. Takes precedence over script configured on the endpoint. The script is used for this message only, it is never cached as the script of the endpoint (also with cacheScript=true), and the header is removed after use. |  | String or Expression |
 
 ## Examples
 
@@ -206,6 +206,8 @@ You can also provide the script as a header as shown below. Here we use [XPath](
 Object out = producer.requestBodyAndHeader("language:xpath", "<foo>Hello World</foo>", Exchange.LANGUAGE_SCRIPT, "/foo/text()");
 assertEquals("Hello World", out);
 ```
+
+A script from the header is used for that message only: it is never cached as the script of the endpoint, also with `cacheScript=true`, and the header is removed after use, so a later language endpoint runs its own script.
 
 ## Loading scripts from resources
 

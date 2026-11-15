@@ -486,7 +486,7 @@ Enum values:
 
 ## Message Headers
 
-The Pulsar component supports 16 message header(s), which is/are listed below:
+The Pulsar component supports 17 message header(s), which is/are listed below:
 
    
 | Name | Description | Default | Type |
@@ -507,6 +507,7 @@ The Pulsar component supports 16 message header(s), which is/are listed below:
 | **CamelPulsarProducerMessageDeliverAt** (producer) Constant: [`DELIVER_AT_OUT`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#DELIVER_AT_OUT) | Deliver the message only at or after the specified absolute timestamp. The timestamp is milliseconds and based on UTC (eg: System.currentTimeMillis) Note: messages are only delivered with delay when a consumer is consuming through a Shared subscription. With other subscription types, the messages will still be delivered immediately. |  | Long |
 | **CamelPulsarRedeliveryCount** (consumer) Constant: [`PULSAR_REDELIVERY_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#PULSAR_REDELIVERY_COUNT) | The message redelivery count, redelivery count maintain in pulsar broker. |  | int |
 | **CamelPulsarProducerMessageDeliverAfter** (producer) Constant: [`DELIVER_AFTER`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#DELIVER_AFTER) | Deliver the message after a given delayed time (millis). |  | Long |
+| **CamelPulsarProducerMessageId** (producer) Constant: [`PRODUCER_MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-pulsar/latest/org/apache/camel/component/pulsar/utils/message/PulsarMessageHeaders.html#PRODUCER_MESSAGE_ID) | The message id the broker assigned to the published message. |  | MessageId |
 
 ## Spring Boot Auto-Configuration
 

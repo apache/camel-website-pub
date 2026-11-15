@@ -76,7 +76,7 @@ Use `--background` to start the debug-enabled integration without an interactive
 camel debug hello.yaml --background
 ```
 
-This is useful in CI or non-interactive sessions where no TTY is available. Unlike the interactive mode, `camel debug --background` does not require a terminal: it launches the Camel integration with the route debugger enabled, writes its output to `~/.camel/<pid>-run.log`, and waits up to `--background-wait` (60 seconds by default) for the integration to start. It exits with `0` once the integration is running, with the integration’s exit code when it fails to start, and with `124` when it is still starting at the end of the wait.
+This is useful in CI or non-interactive sessions where no TTY is available. Unlike the interactive mode, `camel debug --background` does not require a terminal: it launches the Camel integration with the route debugger enabled, writes its logging to `~/.camel/<pid>.log` (and the warnings, errors and other output to `~/.camel/<pid>-run.log`), and waits up to `--background-wait` (60 seconds by default) for the integration to start. It exits with `0` once the integration is running, with the integration’s exit code when it fails to start, and with `124` when it is still starting at the end of the wait.
 
 > **Note**
 > `--background` is not supported for Spring Boot or Quarkus projects. `--background` and `--remote-attach` are mutually exclusive.
@@ -114,6 +114,8 @@ Listening for transport dt_socket at address: 4004
 ```
 
 Attach from [IntelliJ](https://www.jetbrains.com/help/idea/attaching-to-local-process.html#create-rc), [VS Code](https://code.visualstudio.com/docs/java/java-debugging#_attach), or [Eclipse](https://www.vogella.com/tutorials/EclipseDebugging/article.html#remote-debugging). Port configuration is described in the [JBang Debugging](https://www.jbang.dev/documentation/guide/latest/debugging.md) guide.
+
+The integration runs in a new JVM that waits until a debugger attaches, and `--jvm-args` gives that JVM more options. With the Camel launcher (the Camel CLI installed without JBang), it is a JVM of the launcher, listening on `localhost`. With JBang, `jbang --debug` starts it. `--open-telemetry-agent` needs the Camel CLI installed via JBang.
 
 ### JBang-level debugging
 

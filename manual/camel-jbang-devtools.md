@@ -77,7 +77,7 @@ The integration reads the files, as it reads the file of a single body, and send
 
 **Available since Camel 4.12**
 
-Omit the integration name to start a temporary Camel instance and send directly. All configuration must be provided on the command line:
+To send to a system outside the integrations, such as a broker, omit the integration name: the CLI starts a temporary Camel instance and sends directly. All configuration must be provided on the command line:
 
 ```bash
 $ camel cmd send --body=file:payload.json --uri='paho-mqtt5:temperature?brokerUrl=tcp://mybroker:1883'
@@ -88,6 +88,8 @@ For complex components (Kafka, AWS, etc.), a Kamelet is often simpler:
 ```bash
 $ camel cmd send --body=file:payload.json --uri='kamelet:mqtt-sink?brokerUrl=tcp://mybroker:1883&topic=temperature'
 ```
+
+Without a name, a message for an integration goes to the integration that runs: with no `--endpoint` (the first route), or an endpoint that only an integration has (`direct:`, `seda:`, `stub:`, a route id or pattern), such as after `camel run --stub=jms`. When several integrations run, give the name or pid of the one to send to.
 
 ### Sending to infrastructure services
 

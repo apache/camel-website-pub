@@ -91,7 +91,7 @@ git checkout camel-4.22.2
 
 Here is a list of all the issues that have been resolved for this release
 
-### Bug (49)
+### Bug (48)
 
 [CAMEL-25715](https://issues.apache.org/jira/browse/CAMEL-25715)
 
@@ -224,10 +224,6 @@ camel-util - URISupport.sanitizeUri does not follow the endpoint URI parser for 
 [CAMEL-24940](https://issues.apache.org/jira/browse/CAMEL-24940)
 
 camel-jbang/cli - autodetection of Kubernetes property placeholder functions (configmap:, secret:) stopped working in 4.22.1
-
-[CAMEL-24935](https://issues.apache.org/jira/browse/CAMEL-24935)
-
-camel-pulsar - the producer replaces the message body with the MessageId
 
 [CAMEL-24932](https://issues.apache.org/jira/browse/CAMEL-24932)
 

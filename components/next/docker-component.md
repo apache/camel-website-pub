@@ -75,8 +75,8 @@ The Docker component supports the following options which are listed below.
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **cmdExecFactory** (advanced) | The fully qualified class name of the DockerCmdExecFactory implementation to use. | com.github.dockerjava.netty.NettyDockerCmdExecFactory | String |
-| **followRedirectFilter** (advanced) | Whether to follow redirect filter. | false | boolean |
-| **loggingFilter** (advanced) | Whether to use logging filter. | false | boolean |
+| **followRedirectFilter** (advanced) | **Deprecated** Whether to follow redirect filter. Deprecation note: Not used: nothing reads this option when the Docker client is built. | false | boolean |
+| **loggingFilter** (advanced) | **Deprecated** Whether to use logging filter. Deprecation note: Not used: nothing reads this option when the Docker client is built. | false | boolean |
 | **maxPerRouteConnections** (advanced) | Maximum route connections. | 100 | Integer |
 | **maxTotalConnections** (advanced) | Maximum total connections. | 100 | Integer |
 | **parameters** (advanced) | Additional configuration parameters as key/value pairs. |  | Map |
@@ -216,8 +216,8 @@ Enum values:
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **cmdExecFactory** (advanced) | The fully qualified class name of the DockerCmdExecFactory implementation to use. | com.github.dockerjava.netty.NettyDockerCmdExecFactory | String |
-| **followRedirectFilter** (advanced) | Whether to follow redirect filter. | false | boolean |
-| **loggingFilter** (advanced) | Whether to use logging filter. | false | boolean |
+| **followRedirectFilter** (advanced) | **Deprecated** Whether to follow redirect filter. Deprecation note: Not used: nothing reads this option when the Docker client is built. | false | boolean |
+| **loggingFilter** (advanced) | **Deprecated** Whether to use logging filter. Deprecation note: Not used: nothing reads this option when the Docker client is built. | false | boolean |
 | **maxPerRouteConnections** (advanced) | Maximum route connections. | 100 | Integer |
 | **maxTotalConnections** (advanced) | Maximum total connections. | 100 | Integer |
 | **parameters** (advanced) | Additional configuration parameters as key/value pairs. |  | Map |

@@ -100,8 +100,15 @@ The Mina component supports the following options which are listed below.
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **clientMode** (consumer) | If the clientMode is true, mina consumer will connect the address as a TCP client. | false | boolean |
 | **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side the response written back to the remote peer won’t contain the exception’s class, message or stack trace. | true | boolean |
-| **noReplyLogLevel** (consumer (advanced)) | 
-If sync is enabled this option dictates MinaConsumer which logging level to use when logging a there is no reply to send back.
+| **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **cachedAddress** (producer (advanced)) | Whether to create the InetAddress once and reuse. Setting this to false allows to pickup DNS changes in the network. | true | boolean |
+| **lazySessionCreation** (producer (advanced)) | Sessions can be lazily created to avoid exceptions, if the remote server is not up and running when the Camel producer is started. | true | boolean |
+| **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **configuration** (advanced) | To use the shared mina configuration. |  | MinaConfiguration |
+| **disconnectOnNoReply** (advanced) | This option has no effect. A synchronous consumer always closes its session when it has no reply to send back, and the producer always closes its session on a reply timeout. | true | boolean |
+| **maximumPoolSize** (advanced) | Number of worker threads in the worker pool for TCP and UDP. | 16 | int |
+| **noReplyLogLevel** (advanced) | 
+The logging level to use when there is nothing to send: on the consumer (if sync is enabled) when there is no reply to send back, and on the producer when the message has no body.
 
 Enum values:
 
@@ -123,13 +130,6 @@ Enum values:
 
 
  | WARN | LoggingLevel |
-| **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **cachedAddress** (producer (advanced)) | Whether to create the InetAddress once and reuse. Setting this to false allows to pickup DNS changes in the network. | true | boolean |
-| **lazySessionCreation** (producer (advanced)) | Sessions can be lazily created to avoid exceptions, if the remote server is not up and running when the Camel producer is started. | true | boolean |
-| **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
-| **configuration** (advanced) | To use the shared mina configuration. |  | MinaConfiguration |
-| **disconnectOnNoReply** (advanced) | This option has no effect. A synchronous consumer always closes its session when it has no reply to send back, and the producer always closes its session on a reply timeout. | true | boolean |
-| **maximumPoolSize** (advanced) | Number of worker threads in the worker pool for TCP and UDP. | 16 | int |
 | **orderedThreadPoolExecutor** (advanced) | Whether to use ordered thread pool, to ensure events are processed orderly on the same channel. | true | boolean |
 | **transferExchange** (advanced) | **Deprecated** Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. Also make sure to configure objectCodecPattern to \* (star) to allow transferring java objects. | false | boolean |
 | **allowDefaultCodec** (codec) | The mina component installs a default codec if both, codec is null and textline is false. Setting allowDefaultCodec to false prevents the mina component from installing a default codec as the first element in the filter chain. This is useful in scenarios where another filter must be the first in the filter chain, like the SSL filter. | true | boolean |
@@ -212,9 +212,14 @@ Enum values:
 
 
  |  | ExchangePattern |
-| **noReplyLogLevel** (consumer (advanced)) | 
+| **cachedAddress** (producer (advanced)) | Whether to create the InetAddress once and reuse. Setting this to false allows to pickup DNS changes in the network. | true | boolean |
+| **lazySessionCreation** (producer (advanced)) | Sessions can be lazily created to avoid exceptions, if the remote server is not up and running when the Camel producer is started. | true | boolean |
+| **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **disconnectOnNoReply** (advanced) | This option has no effect. A synchronous consumer always closes its session when it has no reply to send back, and the producer always closes its session on a reply timeout. | true | boolean |
+| **maximumPoolSize** (advanced) | Number of worker threads in the worker pool for TCP and UDP. | 16 | int |
+| **noReplyLogLevel** (advanced) | 
 
-If sync is enabled this option dictates MinaConsumer which logging level to use when logging a there is no reply to send back.
+The logging level to use when there is nothing to send: on the consumer (if sync is enabled) when there is no reply to send back, and on the producer when the message has no body.
 
 Enum values:
 
@@ -236,11 +241,6 @@ Enum values:
 
 
  | WARN | LoggingLevel |
-| **cachedAddress** (producer (advanced)) | Whether to create the InetAddress once and reuse. Setting this to false allows to pickup DNS changes in the network. | true | boolean |
-| **lazySessionCreation** (producer (advanced)) | Sessions can be lazily created to avoid exceptions, if the remote server is not up and running when the Camel producer is started. | true | boolean |
-| **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **disconnectOnNoReply** (advanced) | This option has no effect. A synchronous consumer always closes its session when it has no reply to send back, and the producer always closes its session on a reply timeout. | true | boolean |
-| **maximumPoolSize** (advanced) | Number of worker threads in the worker pool for TCP and UDP. | 16 | int |
 | **orderedThreadPoolExecutor** (advanced) | Whether to use ordered thread pool, to ensure events are processed orderly on the same channel. | true | boolean |
 | **transferExchange** (advanced) | **Deprecated** Only used for TCP. You can transfer the exchange over the wire instead of just the body. The following fields are transferred: In body, Out body, fault body, In headers, Out headers, fault headers, exchange properties, exchange exception. This requires that the objects are serializable. Camel will exclude any non-serializable objects and log it at WARN level. Also make sure to configure objectCodecPattern to \* (star) to allow transferring java objects. | false | boolean |
 | **allowDefaultCodec** (codec) | The mina component installs a default codec if both, codec is null and textline is false. Setting allowDefaultCodec to false prevents the mina component from installing a default codec as the first element in the filter chain. This is useful in scenarios where another filter must be the first in the filter chain, like the SSL filter. | true | boolean |

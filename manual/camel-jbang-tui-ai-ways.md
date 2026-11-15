@@ -12,7 +12,7 @@ See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
 |  | You type in | The model | Camel tools via | Start with |
 | --- | --- | --- | --- | --- |
 | **1\. Built-in AI panel** | The AI panel (**F8**) in the TUI | An LLM provider the TUI calls: Anthropic, OpenAI, Gemini, or a local model through Ollama or an OpenAI-compatible server | The panel itself, in-process (no MCP) | `camel tui`, then **F8** |
-| **2\. Coding agent in the panel** | The AI panel (**F8**) in the TUI | An agent the TUI starts over ACP (Claude Code, Codex, opencode, Qwen, …​), with its own model and login | The TUI’s MCP server, started for the agent on a random localhost port | `camel tui`, then **F8**, **Ctrl+P** and an `acp:` provider |
+| **2\. Coding agent in the panel** | The AI panel (**F8**) in the TUI | An agent the TUI starts over ACP (Claude Code, Codex, opencode, IBM Bob, Qwen, …​), with its own model and login | The TUI’s MCP server, started for the agent on a random localhost port | `camel tui`, then **F8**, **Ctrl+P** and an `acp:` provider |
 | **3\. Your agent drives the TUI** | Your agent, in its own terminal or IDE | Your agent’s own model | The TUI’s MCP server on `localhost:8123` | `camel tui --mcp`, and the server added to the agent’s MCP configuration |
 | **4\. Camel CLI MCP server, no TUI** | Your agent, in its own terminal or IDE | Your agent’s own model | The `camel mcp` server, which the agent starts | `camel mcp`, registered in the agent’s MCP configuration |
 
@@ -35,7 +35,7 @@ Pick this when you want answers inside the TUI with no other tool installed, or 
 
 ## 2\. A coding agent in the panel (ACP)
 
-The same panel can hand the conversation to a coding agent instead of a model. Press **Ctrl+P** in the panel and pick an `acp:` provider (`acp:claude`, `acp:codex`, `acp:opencode`, …​). The TUI starts the agent as a subprocess and talks to it over the [Agent Client Protocol](https://agentclientprotocol.com) (ACP). The agent brings its own model, login, settings and skills; the TUI shows its answers, tool calls and permission questions in the panel.
+The same panel can hand the conversation to a coding agent instead of a model. Press **Ctrl+P** in the panel and pick an `acp:` provider (`acp:claude`, `acp:codex`, `acp:opencode`, `acp:bob`, …​). The TUI starts the agent as a subprocess and talks to it over the [Agent Client Protocol](https://agentclientprotocol.com) (ACP). The agent brings its own model, login, settings and skills; the TUI shows its answers, tool calls and permission questions in the panel.
 
 To reach Camel the agent needs the TUI’s tools, so the TUI starts its MCP server for it on a random port on `127.0.0.1` and hands the address to the agent. You do not need `--mcp` for this.
 
@@ -96,7 +96,7 @@ An integration can call an LLM itself, for example with the `openai` or `langcha
 
 -   New to the TUI, or want to try a local model: **1**.
     
--   Already pay for a coding agent such as Claude Code or Codex and want it in the TUI: **2**.
+-   Already pay for a coding agent such as Claude Code, Codex or IBM Bob and want it in the TUI: **2**.
     
 -   Already work in an agent and want it to see and drive your running integrations: **3**.
     

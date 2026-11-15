@@ -51,7 +51,7 @@ Camel Kit `init` is **safe to run over existing projects** with these protection
 | What’s Protected | How |
 | --- | --- |
 | `pom.xml` | Never modified during init |
-| Maven wrapper (`mvnw`, `.mvn/`) | Skipped if exists (use `--replace-wrapper` to force replacement) |
+| Maven wrapper (`mvnw`, `.mvn/`) | Skipped if exists and reported under _Existing files preserved_, with no proposed copy under `.camel-kit/conflicts/` (use `--replace-wrapper` to force replacement) |
 | `AGENTS.md` and `CLAUDE.md` | Use managed blocks - customizations preserved on reinit |
 | Skill files | Files Camel Kit ships are refreshed on reinit so they match the installed version. Edit a copy, or add your own file next to them: files Camel Kit does not ship are never touched |
 | Existing routes | Never modified unless explicitly listed in design spec |
@@ -64,7 +64,7 @@ Preview changes before writing files:
 camel-kit init --here --ai claude --dry-run
 ```
 
-The preview lists shared files with a `create`, `replace`, `merge` or `preserve` action, using the same ownership and replacement rules as initialization. It does not write files or run baseline tests, even when `--record-baseline` is also supplied. See [Existing projects](getting-started.html#existing-project) for file ownership and `--replace <path>` behavior.
+The preview lists shared files with a `create`, `replace`, `merge` or `preserve` action, using the same ownership and replacement rules as initialization. It does not write files or run baseline tests, even when `--record-baseline` is also supplied. It also runs the validation of initialization: an existing MCP configuration that cannot be merged, such as a `.codex/config.toml` that is not valid TOML, is rejected by the preview with the message `init` would give. See [Existing projects](getting-started.html#existing-project) for file ownership and `--replace <path>` behavior.
 
 ## Getting Started
 

@@ -30,7 +30,7 @@ Send and receive messages from Redis.
 
 [Spring WebService](spring-ws-component.md)
 
-Access external web services as a client or expose your own web services.
+Expose SOAP services, or send requests to SOAP services, using Spring Web Services.
 
 Apache Camel is designed to work nicely with the Spring Framework in a number of ways.
 

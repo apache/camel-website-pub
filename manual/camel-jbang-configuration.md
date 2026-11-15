@@ -82,6 +82,8 @@ Camel CLI uses two configuration files:
 -   Local: `./camel-cli.properties` (takes precedence)
     
 
+The local file is laid over the global one: a key of the local file wins, and the other keys of the global file still apply. With `repos` in the global file and `runtime` in the local one, a command in that directory uses both.
+
 Commands target global by default. Use `--global=false` for local configuration.
 
 > **Note**

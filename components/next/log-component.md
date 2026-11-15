@@ -139,7 +139,7 @@ Enum values:
 
 
  | INFO | String |
-| **logMask** (producer) | If true, mask sensitive information like password or passphrase in the log. | false | Boolean |
+| **logMask** (producer) | If true, mask sensitive information like password or passphrase in the log. |  | Boolean |
 | **marker** (producer) | An optional Marker name to use. |  | String |
 | **plain** (producer) | If enabled only the body will be printed out. | false | boolean |
 | **sourceLocationLoggerName** (producer) | If enabled then the source location of where the log endpoint is used in Camel routes, would be used as logger name, instead of the given name. However, if the source location is disabled or not possible to resolve then the existing logger name will be used. | false | boolean |

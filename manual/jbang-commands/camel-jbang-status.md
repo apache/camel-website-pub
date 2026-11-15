@@ -1,0 +1,19 @@
+# camel status
+
+The state of a running Camel integration in one call: where it runs and its files, its routes, health, last errors and last reload, its JVM, and the end of its log
+
+## Usage
+
+```bash
+camel status [options]
+```
+
+## Options
+
+   
+| Option | Description | Default | Type |
+| --- | --- | --- | --- |
+| `--errors` | How many of the last errors to show | 5 | int |
+| `--json` | Output in JSON Format: one document, with the routes as camel get route has them, and the log records newest first |  | boolean |
+| `--log-lines` | How many of the last log records to show | 20 | int |
+| `-h,--help` | Display this help and exit |  | boolean |

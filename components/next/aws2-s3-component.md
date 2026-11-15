@@ -180,6 +180,7 @@ Enum values:
 | **customerAlgorithm** (common (advanced)) | Define the customer algorithm to use in case CustomerKey is enabled. |  | String |
 | **customerKeyId** (common (advanced)) | Define the id of the Customer key to use in case CustomerKey is enabled. |  | String |
 | **customerKeyMD5** (common (advanced)) | Define the MD5 of Customer key to use in case CustomerKey is enabled. |  | String |
+| **useCustomerKey** (common (advanced)) | Define if Customer Key must be used or not. | false | boolean |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **deleteAfterRead** (consumer) | Delete objects from S3 after they have been retrieved. The deleting is only performed if the Exchange is committed. If a rollback occurs, the object is not deleted. If this option is false, then the same objects will be retrieved over and over again in the polls. Therefore, you need to use the Idempotent Consumer EIP in the route to filter out duplicates. You can filter using the AWS2S3Constants#BUCKET\_NAME and AWS2S3Constants#KEY headers, or only the AWS2S3Constants#KEY header. | true | boolean |
 | **destinationBucket** (consumer) | Define the destination bucket where an object must be moved when moveAfterRead is set to true. |  | String |
@@ -309,7 +310,6 @@ Enum values:
 | **awsKMSKeyId** (producer (advanced)) | Define the id of KMS key to use in case KMS is enabled. |  | String |
 | **conditionalWritesEnabled** (producer (advanced)) | Uploads the object only if the object key name does not already exist in the bucket specified. | false | boolean |
 | **useAwsKMS** (producer (advanced)) | Define if KMS must be used or not. | false | boolean |
-| **useCustomerKey** (producer (advanced)) | Define if Customer Key must be used or not. | false | boolean |
 | **useSSES3** (producer (advanced)) | Define if SSE S3 must be used or not. | false | boolean |
 | **amazonS3Client** (advanced) | **Autowired** Reference to a com.amazonaws.services.s3.AmazonS3 in the registry. |  | S3Client |
 | **amazonS3Presigner** (advanced) | **Autowired** An S3 Presigner for Request, used mainly in createDownloadLink operation. |  | S3Presigner |
@@ -470,6 +470,7 @@ Enum values:
 | **customerAlgorithm** (common (advanced)) | Define the customer algorithm to use in case CustomerKey is enabled. |  | String |
 | **customerKeyId** (common (advanced)) | Define the id of the Customer key to use in case CustomerKey is enabled. |  | String |
 | **customerKeyMD5** (common (advanced)) | Define the MD5 of Customer key to use in case CustomerKey is enabled. |  | String |
+| **useCustomerKey** (common (advanced)) | Define if Customer Key must be used or not. | false | boolean |
 | **deleteAfterRead** (consumer) | Delete objects from S3 after they have been retrieved. The deleting is only performed if the Exchange is committed. If a rollback occurs, the object is not deleted. If this option is false, then the same objects will be retrieved over and over again in the polls. Therefore, you need to use the Idempotent Consumer EIP in the route to filter out duplicates. You can filter using the AWS2S3Constants#BUCKET\_NAME and AWS2S3Constants#KEY headers, or only the AWS2S3Constants#KEY header. | true | boolean |
 | **destinationBucket** (consumer) | Define the destination bucket where an object must be moved when moveAfterRead is set to true. |  | String |
 | **destinationBucketPrefix** (consumer) | Define the destination bucket prefix to use when an object must be moved, and moveAfterRead is set to true. |  | String |
@@ -621,7 +622,6 @@ Enum values:
 | **conditionalWritesEnabled** (producer (advanced)) | Uploads the object only if the object key name does not already exist in the bucket specified. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **useAwsKMS** (producer (advanced)) | Define if KMS must be used or not. | false | boolean |
-| **useCustomerKey** (producer (advanced)) | Define if Customer Key must be used or not. | false | boolean |
 | **useSSES3** (producer (advanced)) | Define if SSE S3 must be used or not. | false | boolean |
 | **amazonS3Client** (advanced) | **Autowired** Reference to a com.amazonaws.services.s3.AmazonS3 in the registry. |  | S3Client |
 | **amazonS3Presigner** (advanced) | **Autowired** An S3 Presigner for Request, used mainly in createDownloadLink operation. |  | S3Presigner |

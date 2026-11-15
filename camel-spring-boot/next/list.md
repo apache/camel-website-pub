@@ -1243,7 +1243,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Spring LDAP](../../components/next/spring-ldap-component.md) | camel-spring-ldap-starter | Stable | 2.11 | Perform searches in LDAP servers using filters as the message payload. |
 | [Spring RabbitMQ](../../components/next/spring-rabbitmq-component.md) | camel-spring-rabbitmq-starter | Stable | 3.8 | Send and receive messages from RabbitMQ using the Spring RabbitMQ client. |
 | [Spring Redis](../../components/next/spring-redis-component.md) | camel-spring-redis-starter | Stable | 2.11 | Send and receive messages from Redis. |
-| [Spring WebService](../../components/next/spring-ws-component.md) | camel-spring-ws-starter | Stable | 2.6 | Access external web services as a client or expose your own web services. |
+| [Spring WebService](../../components/next/spring-ws-component.md) | camel-spring-ws-starter | Stable | 2.6 | Expose SOAP services, or send requests to SOAP services, using Spring Web Services. |
 | [SQL](../../components/next/sql-component.md) | camel-sql-starter | Stable | 1.4 | Perform SQL queries using Spring JDBC. |
 | [SQL Stored Procedure](../../components/next/sql-stored-component.md) | camel-sql-starter | Stable | 2.17 | Perform SQL queries as a JDBC Stored Procedures using Spring JDBC. |
 | [SSH](../../components/next/ssh-component.md) | camel-ssh-starter | Stable | 2.10 | Execute commands on remote hosts using SSH. |

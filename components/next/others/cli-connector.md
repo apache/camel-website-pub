@@ -43,7 +43,7 @@ A tool writes an action to `~/.camel/<pid>-action-<requestId>.json`, and the con
 
 `reason` is `not-found` when what the action was asked to work on does not exist, such as a route id that matches no route. When the action wrote a result before it failed, the answer has it under `result`. Several problems, such as two routes that fail to stop, are joined with `;` in `error`. A result can also report a failure of its own, such as a message sent to a route that throws an exception: it is written as it is.
 
-The connector looks for action files about every 100 millis, and writes the status to `~/.camel/<pid>-status.json` every second.
+The connector looks for action files about every 20 millis, and writes the status to `~/.camel/<pid>-status.json` every second. In between, it only lists the directory when its modification time has changed, which it does when a file is added to it, and with every status it lists it anyway. It also writes the status as soon as Camel changes phase, such as when it has started, and after it answers actions (at most every 200 millis), so the status shows what an action did.
 
 Write the action file atomically (write a temporary file, then move it), so the connector never reads half an action. An action file that cannot be read yet is retried for two seconds. Deleting the action file before the answer is written cancels the action.
 

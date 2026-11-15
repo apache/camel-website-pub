@@ -285,6 +285,67 @@ Unchanged for a message that expects no reply (InOnly). A message that expects o
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the Nats component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `NatsWorld`
+Fake: FakeJetStream: a server with one JetStream stream and its pull consumers (AckWait, MaxDeliver, Nak), behind a jnats Connection given with the connection option
+
+Tests: `NatsConsumerDstTest`
+
+ | 
+
+**Covers:**
+
+-   the JetStream pull consumer with explicit acks and naks, ephemeral or durable
+    
+-   AckWait and MaxDeliver
+    
+-   route stop and start, also while the consumer waits in a fetch
+    
+-   a server restart that deletes the ephemeral consumer, and the subscription made again
+    
+
+**Faults:**
+
+-   a fetch ends empty while the connection is down
+    
+-   the flush of the stop times out
+    
+-   an ack is lost
+    
+-   the server restarts (409 Server Shutdown) or the consumer is deleted (409 Consumer Deleted)
+    
+-   processing fails
+    
+-   processing is slower than AckWait
+    
+
+**Invariants:**
+
+-   the consumer uses the connection as documented
+    
+-   a message is acknowledged only after its exchange completed
+    
+-   a message is nak’d only after its exchange failed
+    
+-   a stopped consumer leaves no subscription active
+    
+-   every message is acknowledged once the faults cleared, or given up after MaxDeliver (or skipped by a consumer made again after its ack was lost)
+    
+
+
+
+
+
+ | [CAMEL-26884](https://issues.apache.org/jira/browse/CAMEL-26884) |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 ## Usage
 
 ### Configuring servers

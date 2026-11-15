@@ -405,7 +405,7 @@ Number of Non-Core Components: 397 in 324 JAR artifacts (4 deprecated)
 | [Spring LDAP](spring-ldap-component.md) | camel-spring-ldap | Stable | 2.11 | Perform searches in LDAP servers using filters as the message payload. |
 | [Spring RabbitMQ](spring-rabbitmq-component.md) | camel-spring-rabbitmq | Stable | 3.8 | Send and receive messages from RabbitMQ using the Spring RabbitMQ client. |
 | [Spring Redis](spring-redis-component.md) | camel-spring-redis | Stable | 2.11 | Send and receive messages from Redis. |
-| [Spring WebService](spring-ws-component.md) | camel-spring-ws | Stable | 2.6 | Access external web services as a client or expose your own web services. |
+| [Spring WebService](spring-ws-component.md) | camel-spring-ws | Stable | 2.6 | Expose SOAP services, or send requests to SOAP services, using Spring Web Services. |
 | [SQL](sql-component.md) | camel-sql | Stable | 1.4 | Perform SQL queries using Spring JDBC. |
 | [SQL Stored Procedure](sql-stored-component.md) | camel-sql | Stable | 2.17 | Perform SQL queries as a JDBC Stored Procedures using Spring JDBC. |
 | [SSH](ssh-component.md) | camel-ssh | Stable | 2.10 | Execute commands on remote hosts using SSH. |

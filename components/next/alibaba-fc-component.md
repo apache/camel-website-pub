@@ -94,7 +94,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** Operation to perform.
+**Required** The operation that the producer performs. The CamelAlibabaFcOperation header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option.
 
 Enum values:
 
@@ -114,16 +114,16 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **endpoint** (producer) | FC endpoint URL. Carries higher precedence than region based client initialization. |  | String |
-| **functionName** (producer) | FC function name. |  | String |
-| **qualifier** (producer) | Function version or alias qualifier. |  | String |
-| **region** (producer) | **Required** Alibaba Cloud region. |  | String |
-| **serviceName** (producer) | FC service name. |  | String |
+| **endpoint** (producer) | The endpoint of Function Compute, which is a host name without http:// or https://. The producer sends requests to it over HTTPS. If not set, the region option determines the endpoint, and one of the two is required. Not used when the fcClient option is set or autowired. |  | String |
+| **functionName** (producer) | The name of the function. The CamelAlibabaFcFunctionName header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required. |  | String |
+| **qualifier** (producer) | The version or alias of the service. The CamelAlibabaFcQualifier header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no version or alias to the request. |  | String |
+| **region** (producer) | **Required** The region ID of Function Compute, for example cn-hangzhou. Only used when the endpoint option is not set, to build the endpoint of Function Compute. Not used when the fcClient option is set or autowired. |  | String |
+| **serviceName** (producer) | The name of the service that contains the function. The CamelAlibabaFcServiceName header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **fcClient** (advanced) | **Autowired** Autowire an existing FC client instance. |  | Client |
-| **accessKey** (security) | Access key for the cloud user. |  | String |
-| **secretKey** (security) | Secret key for the cloud user. |  | String |
-| **serviceKeys** (security) | Configuration object for cloud service authentication. |  | ServiceKeys |
+| **fcClient** (advanced) | **Autowired** To use a custom com.aliyun.fc\_open20210406.Client. The producer sends its requests with this client, and the region, endpoint, accessKey, secretKey and serviceKeys options are not used. If no client is set or autowired, the Camel endpoint creates a client from these options. It creates this client when the producer processes its first message. |  | Client |
+| **accessKey** (security) | The AccessKey ID of the AccessKey pair for the requests that the producer sends to Function Compute. If not set, the accessKey of the serviceKeys option is used, and one of the two is required. Not used when the fcClient option is set or autowired. |  | String |
+| **secretKey** (security) | The AccessKey secret of the AccessKey pair for the requests that the producer sends to Function Compute. If not set, the secretKey of the serviceKeys option is used, and one of the two is required. Not used when the fcClient option is set or autowired. |  | String |
+| **serviceKeys** (security) | The AccessKey pair as an org.apache.camel.component.alibaba.common.models.ServiceKeys. Its accessKey is the AccessKey ID and its secretKey is the AccessKey secret. Each of the two is used when the option of the same name is not set. Not used when the fcClient option is set or autowired. |  | ServiceKeys |
 
 ## Message Headers
 
@@ -132,11 +132,11 @@ The Alibaba Function Compute (FC) component supports the following message heade
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaFcServiceName** (producer) Constant: [`SERVICE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#SERVICE_NAME) | FC service name override. |  | String |
-| **CamelAlibabaFcFunctionName** (producer) Constant: [`FUNCTION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#FUNCTION_NAME) | FC function name override. |  | String |
-| **CamelAlibabaFcQualifier** (producer) Constant: [`QUALIFIER`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#QUALIFIER) | Function qualifier override. |  | String |
-| **CamelAlibabaFcRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#REQUEST_ID) | Alibaba Cloud request id. |  | String |
-| **CamelAlibabaFcStatusCode** (producer) Constant: [`STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#STATUS_CODE) | HTTP status code from FC invoke response. |  | Integer |
+| **CamelAlibabaFcServiceName** (producer) Constant: [`SERVICE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#SERVICE_NAME) | The name of the service that contains the function. This header replaces the serviceName option. If this header is not set, an exchange property of the same name replaces the serviceName option. |  | String |
+| **CamelAlibabaFcFunctionName** (producer) Constant: [`FUNCTION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#FUNCTION_NAME) | The name of the function. This header replaces the functionName option. If this header is not set, an exchange property of the same name replaces the functionName option. |  | String |
+| **CamelAlibabaFcQualifier** (producer) Constant: [`QUALIFIER`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#QUALIFIER) | The version or alias of the service. This header replaces the qualifier option. If this header is not set, an exchange property of the same name replaces the qualifier option. |  | String |
+| **CamelAlibabaFcRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#REQUEST_ID) | The request ID that Function Compute returns in the response to invokeFunction. The producer sets it for invokeFunction, unless the exchange fails. |  | String |
+| **CamelAlibabaFcStatusCode** (producer) Constant: [`STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#STATUS_CODE) | The HTTP status code of the response to the operation. The producer sets it, unless the exchange fails. |  | Integer |
 
 ## Message Body
 

@@ -70,6 +70,20 @@ Ollama pulls `granite4:3b` by default, 2.1 GB; `qwen2.5:0.5b` is around 400 MB, 
 
 `camel infra restart` takes the options again, the way it takes `--port`, so a restart keeps the model it was started with.
 
+Artemis maps the core acceptor (61616) and the web console (8161) on the host. MQTT (1883) and AMQP (5672) are the ports of mosquitto and RabbitMQ, so Artemis maps them only when you ask:
+
+```bash
+camel infra run artemis --property artemis.ports=mqtt,amqp
+```
+
+`all` maps both. When a port a service maps is taken, it does not start, and says which port and which service has it:
+
+```bash
+$ camel infra run artemis --property artemis.ports=mqtt
+Starting service artemis (PID: 45390)
+ERROR: Cannot start artemis: port 1883 is in use by mosquitto (PID 45211), stop it first with: camel infra stop mosquitto
+```
+
 ## Stopping a service
 
 ```bash

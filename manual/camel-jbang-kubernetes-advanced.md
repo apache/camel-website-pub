@@ -191,7 +191,7 @@ Use [Knative serving](https://knative.dev/docs/serving/) for serverless workload
 | Property | Type | Description |
 | --- | --- | --- |
 | `knative-service.enabled` | `bool` | Can be used to enable or disable a trait. All traits share this common property. |
-| `knative-service.annotations` | `map[string]string` | The annotations added to route. This can be used to set knative service-specific annotations CLI usage example: -t "knative-service.annotations.'haproxy.router.openshift.io/balance'=true" |
+| `knative-service.annotations` | `map[string]string` | The annotations added to route. This can be used to set knative service-specific annotations CLI usage example: --trait "knative-service.annotations.'haproxy.router.openshift.io/balance'=true" |
 | `knative-service.class` | `string` | Configures the Knative autoscaling class property (e.g., to set `hpa.autoscaling.knative.dev` or `kpa.autoscaling.knative.dev` autoscaling).
 Refer to the Knative documentation for more information.
 

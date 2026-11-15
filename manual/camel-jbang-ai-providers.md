@@ -8,7 +8,7 @@ The provider is detected from the environment. The first match wins:
 
 1.  `ANTHROPIC_API_KEY` → Anthropic API
     
-2.  `CLOUD_ML_REGION` + `ANTHROPIC_VERTEX_PROJECT_ID` → Anthropic models on Google Vertex AI
+2.  `CLOUD_ML_REGION` + `ANTHROPIC_VERTEX_PROJECT_ID` → Claude on Google Cloud, in the Gemini Enterprise Agent Platform (formerly Vertex AI)
     
 3.  `AZURE_OPENAI_API_KEY` + `AZURE_OPENAI_ENDPOINT` → Azure OpenAI (uses the `api-key` header; optional `AZURE_OPENAI_DEPLOYMENT_NAME` and `AZURE_OPENAI_API_VERSION`)
     
@@ -29,9 +29,9 @@ Override the detection with explicit options:
 
 ```bash
 camel ask "check health" --api-type=anthropic --api-key=sk-...
-camel ask "check health" --api-type=openai --model=gpt-4
-camel ask "check health" --api-type=gemini --model=gemini-2.0-flash
-camel ask "check health" --api-type=ollama --model=llama3.1
+camel ask "check health" --api-type=openai --model=gpt-6-luna
+camel ask "check health" --api-type=gemini --model=gemini-3.8-flash
+camel ask "check health" --api-type=ollama --model=qwen3.6:35b-a3b
 ```
 
 With `--url`, the CLI uses that endpoint and no other: when it does not answer, the command fails instead of going on to another provider, so the prompts never reach a provider you did not choose. The same holds for the URL set in the settings of the Camel TUI.
@@ -63,20 +63,18 @@ Ollama at `localhost:11434` is auto-detected — no environment variable needed.
 
 #### Model requirements
 
-`camel ask` and the TUI F8 panel rely on tool calling to inspect your running Camel process. Models smaller than ~14B do not reliably invoke tools and answer from training knowledge instead. Use at least a 14B model. Prefer a mixture-of-experts model such as `qwen3.6:35b-a3b`: with only 3B parameters active per token it processes the tool-heavy prompt many times faster than a dense 27B/32B model, so answers start in seconds instead of a minute.
+`camel ask` and the TUI F8 panel rely on tool calling to inspect your running Camel process. Small models do not call the tools reliably and answer from training knowledge instead. The table lists the models that were measured on Camel tasks: building, running and fixing routes with the tools of the CLI. Prefer the mixture-of-experts model `qwen3.6:35b-a3b`: with only 3B parameters active per token it processes the tool-heavy prompt many times faster than a dense model, so answers start in seconds instead of a minute.
 
   
-| Model | RAM (Q4) | Notes |
+| Model | RAM | Notes |
 | --- | --- | --- |
-| `qwen3.6:35b-a3b` | ~23 GB | Recommended: fastest prompt processing, needs 32 GB+ |
+| `qwen3.6:35b-a3b` | ~23 GB | Recommended: the fastest prompt processing, needs 32 GB or more |
 | `qwen3.6:35b-mlx` | ~24 GB | The same model as an MLX build: recommended on Apple Silicon with Ollama 0.40 or later |
-| `qwen2.5:14b` | ~9 GB | Minimum for 16 GB machines |
-| `qwen3.6:27b` | ~18 GB | Strong dense model, several times slower prompt processing |
-| `qwen2.5:32b` | ~20 GB | Good quality, slow prompt processing |
-| `hermes3:70b` | ~43 GB | Excellent tool calling, needs 64 GB+ |
-| `llama3.3:70b` | ~43 GB | Best open model, needs 64 GB+ |
+| `qwen3.8:27b-mlx` | ~23 GB | A dense model: it reads the prompt about 7 times slower than `qwen3.6:35b-mlx`, and passed fewer of the Camel tasks |
 
-On Apple Silicon, all RAM is unified — a 64 GB M-series Mac can run `llama3.3:70b` comfortably alongside the OS and other dev tools. On a Mac with Apple Silicon, use the MLX build `qwen3.6:35b-mlx` with Ollama 0.40 or later. It is the same 35B-A3B model, in the format of Apple’s MLX engine, which Ollama 0.40 uses on Apple Silicon and which reuses the cached prompt between the questions of a conversation. Measured on an M4 Pro with Ollama 0.40.3 and an 11K-token prompt, against the default (GGUF) tag: it reads the prompt about 25% faster (about 780 against 620 tokens per second), writes about 10% faster (about 68 against 60 tokens per second), and a follow-up question took 2.2 instead of 2.8 seconds. With an older Ollama keep the default (GGUF) tag: there the MLX engine could not reuse the cached prompt for Qwen 3.x models, so every question re-processed the whole prompt.
+With less than 32 GB of memory, use a coding agent over ACP or a hosted provider instead of a local model.
+
+On a Mac with Apple Silicon, use the MLX build `qwen3.6:35b-mlx` with Ollama 0.40 or later. It is the same 35B-A3B model, in the format of Apple’s MLX engine, which Ollama 0.40 uses on Apple Silicon and which reuses the cached prompt between the questions of a conversation. Measured on an M4 Pro with Ollama 0.40.3 and an 11K-token prompt, against the default (GGUF) tag: it reads the prompt about 25% faster (about 780 against 620 tokens per second), writes about 10% faster (about 68 against 60 tokens per second), and a follow-up question took 2.2 instead of 2.8 seconds. With an older Ollama keep the default (GGUF) tag: there the MLX engine could not reuse the cached prompt for Qwen 3.x models, so every question re-processed the whole prompt.
 
 The CLI auto-selects the first installed `qwen3.6` model in the order Ollama lists them (the latest pulled first), so with both builds installed pick one: `--model qwen3.6:35b-mlx` for `camel ask`, or `/model qwen3.6:35b-mlx` in the TUI.
 

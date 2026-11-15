@@ -117,7 +117,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **count** (producer) | The OData $count query parameter. | false | Boolean |
+| **count** (producer) | The OData $count query parameter. |  | Boolean |
 | **expand** (producer) | The OData $expand query parameter. |  | String |
 | **filter** (producer) | The OData $filter query parameter. |  | String |
 | **operation** (producer) | 

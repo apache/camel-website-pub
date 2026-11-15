@@ -85,7 +85,7 @@ The Azure Storage Data Lake Service component supports the following options whi
 | --- | --- | --- | --- |
 | **clientId** (common) | client id for azure account. |  | String |
 | **close** (common) | Whether or not a file changed event raised indicates completion (true) or modification (false). | false | Boolean |
-| **closeStreamAfterRead** (common) | check for closing stream after read. | false | Boolean |
+| **closeStreamAfterRead** (common) | check for closing stream after read. | true | Boolean |
 | **configuration** (common) | configuration object for data lake. |  | DataLakeConfiguration |
 | **credentialType** (common) | 
 Determines the credential strategy to adopt.
@@ -206,7 +206,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **clientId** (common) | client id for azure account. |  | String |
 | **close** (common) | Whether or not a file changed event raised indicates completion (true) or modification (false). | false | Boolean |
-| **closeStreamAfterRead** (common) | check for closing stream after read. | false | Boolean |
+| **closeStreamAfterRead** (common) | check for closing stream after read. | true | Boolean |
 | **credentialType** (common) | 
 Determines the credential strategy to adopt.
 
@@ -434,7 +434,7 @@ Enum values:
  |  | DataLakeOperationsDefinition |
 | **CamelAzureStorageDataLakeFileSystemName** (producer) Constant: [`FILESYSTEM_NAME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#FILESYSTEM_NAME) | Name of the file system in azure data lake on which operation is to be performed. Please make sure that filesystem name is all lowercase. |  | String |
 | **CamelAzureStorageDataLakeDirectoryName** (producer) Constant: [`DIRECTORY_NAME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#DIRECTORY_NAME) | Name of the directory in azure data lake on which operation is to be performed. |  | String |
-| **CamelAzureStorageDataLakeFileName** (producer) Constant: [`FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#FILE_NAME) | Name of the file in azure data lake on which operation is to be performed. |  | String |
+| **CamelAzureStorageDataLakeFileName** (common) Constant: [`FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#FILE_NAME) | (producer) Name of the file in azure data lake on which operation is to be performed. (consumer) Name of the file that was consumed. |  | String |
 | **CamelAzureStorageDataLakeMetadata** (from both) Constant: [`METADATA`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#METADATA) | The metadata to associate with the file. |  | Map |
 | **CamelAzureStorageDataLakePublicAccessType** (producer) Constant: [`PUBLIC_ACCESS_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#PUBLIC_ACCESS_TYPE) | Defines options available to configure the behavior of a call to listFileSystemsSegment on a DataLakeServiceAsyncClient object. |  | PublicAccessType |
 | **CamelAzureStorageDataLakeRawHttpHeaders** (consumer) Constant: [`RAW_HTTP_HEADERS`](https://javadoc.io/doc/org.apache.camel/camel-azure-storage-datalake/latest/org/apache/camel/component/azure/storage/datalake/DataLakeConstants.html#RAW_HTTP_HEADERS) | Non parsed http headers that can be used by the user. |  | HttpHeaders |

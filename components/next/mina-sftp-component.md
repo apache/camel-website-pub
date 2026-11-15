@@ -263,7 +263,7 @@ Enum values:
 | **bulkRequests** (advanced) | Specifies how many requests may be outstanding at any one time. Increasing this value may slightly improve file transfer speed but will increase memory usage. |  | Integer |
 | **compression** (advanced) | To use compression. Specify a level from 1 to 10. |  | int |
 | **connectTimeout** (advanced) | Sets the connect timeout for waiting for a connection to be established Used by both FTPClient and JSCH. | 10000 | int |
-| **existDirCheckUsingLs** (advanced) | **Deprecated** Deprecated: JSch-specific parameter, ignored by mina-sftp. MINA SSHD uses stat() for directory existence checks. | false | Boolean |
+| **existDirCheckUsingLs** (advanced) | **Deprecated** Deprecated: JSch-specific parameter, ignored by mina-sftp. MINA SSHD uses stat() for directory existence checks. |  | Boolean |
 | **filenameEncoding** (advanced) | Encoding to use for FTP client when parsing filenames. By default, UTF-8 is used. |  | String |
 | **jschLoggingLevel** (advanced) | **Deprecated** Deprecated: JSch-specific parameter, ignored by mina-sftp. Configure logging via your logging framework instead. |  | String |
 | **maximumReconnectAttempts** (advanced) | Specifies the maximum reconnect attempts Camel performs when it tries to connect to the remote FTP server. Use 0 to disable this behavior. |  | int |

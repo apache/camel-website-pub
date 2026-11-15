@@ -106,7 +106,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **groupId** (producer) | **Required** ID of the group. |  | String |
 | **edgeNode** (producer) | **Required** ID of the edge node. |  | String |
-| **deviceId** (producer (device only)) | ID of this edge node device. |  | String |
+| **deviceId** (producer) | ID of this edge node device. Applies to the device endpoint only. |  | String |
 
 ### Query Parameters
 
@@ -118,14 +118,14 @@ With the following _path_ and _query_ parameters:
 | **keepAliveTimeout** (common) | MQTT connection keep alive timeout, in seconds. | 30 | int |
 | **rebirthDebounceDelay** (common) | Delay before recurring node rebirth messages will be sent. | 5000 | long |
 | **servers** (common) | **Required** MQTT server definitions, given with the following syntax in a comma-separated list: MqttServerName:(MqttClientId:)(tcp/ssl)://hostname(:port),…​ |  | String |
+| **deviceIds** (producer) | ID of each device connected to this edge node, as a comma-separated list. Applies to the edge node endpoint only. |  | String |
 | **metricDataTypePayloadMap** (producer) | **Required** Tahu SparkplugBPayloadMap to configure metric data types for this edge node or device. Note that this payload is used exclusively as a Sparkplug B spec-compliant configuration for all possible edge node or device metric names, aliases, and data types. This configuration is required to publish proper Sparkplug B NBIRTH and DBIRTH payloads. |  | SparkplugBPayloadMap |
+| **primaryHostId** (producer) | Host ID of the primary host application for this edge node. Applies to the edge node endpoint only. |  | String |
+| **bdSeqManager** (producer (advanced)) | To use a specific org.eclipse.tahu.message.BdSeqManager implementation to manage edge node birth-death sequence numbers. Applies to the edge node endpoint only. | org.apache.camel.component.tahu.CamelBdSeqManager | BdSeqManager |
+| **bdSeqNumPath** (producer (advanced)) | Path for Sparkplug B NBIRTH/NDEATH sequence number persistence files. This path will contain files named as -bdSeqNum and must be writable by the executing process' user. Applies to the edge node endpoint only. | ${sys:java.io.tmpdir}/CamelTahuTemp | String |
 | **headerFilterStrategy** (producer (advanced)) | To use a custom HeaderFilterStrategy to filter headers used as Sparkplug metrics. Default value notice: Defaults to sending all Camel Message headers with name prefixes of CamelTahuMetric., including those with null values. |  | HeaderFilterStrategy |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **bdSeqManager** (advanced) | To use a specific org.eclipse.tahu.message.BdSeqManager implementation to manage edge node birth-death sequence numbers. | org.apache.camel.component.tahu.CamelBdSeqManager | BdSeqManager |
-| **bdSeqNumPath** (advanced) | Path for Sparkplug B NBIRTH/NDEATH sequence number persistence files. This path will contain files named as -bdSeqNum and must be writable by the executing process' user. | ${sys:java.io.tmpdir}/CamelTahuTemp | String |
-| **useAliases** (advanced) | Flag enabling support for metric aliases. | false | boolean |
-| **deviceIds** (producer (edge node only)) | ID of each device connected to this edge node, as a comma-separated list. |  | String |
-| **primaryHostId** (producer (edge node only)) | Host ID of the primary host application for this edge node. |  | String |
+| **useAliases** (producer (advanced)) | Flag enabling support for metric aliases. Applies to the edge node endpoint only. | false | boolean |
 | **password** (security) | Password for MQTT server authentication. |  | String |
 | **sslContextParameters** (security) | SSL configuration for MQTT server connections. |  | SSLContextParameters |
 | **username** (security) | Username for MQTT server authentication. |  | String |

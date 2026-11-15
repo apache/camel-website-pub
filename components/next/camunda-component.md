@@ -171,7 +171,7 @@ The Camunda component supports the following message header(s), which is/are lis
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelCamundaJobKey** (producer) Constant: [`JOB_KEY`](https://javadoc.io/doc/org.apache.camel/camel-camunda/latest/org/apache/camel/component/camunda/CamundaConstants.html#JOB_KEY) | Job key for the worker job. |  | long |
+| **CamelCamundaJobKey** (common) Constant: [`JOB_KEY`](https://javadoc.io/doc/org.apache.camel/camel-camunda/latest/org/apache/camel/component/camunda/CamundaConstants.html#JOB_KEY) | (consumer) Job key of the worker job that was activated. (producer) Job key of the job to act on, when the body does not carry one. |  | long |
 | **CamelCamundaResourceName** (producer) Constant: [`RESOURCE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-camunda/latest/org/apache/camel/component/camunda/CamundaConstants.html#RESOURCE_NAME) | Resource name for deploy operation. |  | String |
 | **CamelCamundaIsSuccess** (producer) Constant: [`IS_SUCCESS`](https://javadoc.io/doc/org.apache.camel/camel-camunda/latest/org/apache/camel/component/camunda/CamundaConstants.html#IS_SUCCESS) | Indicates if the operation was successful. |  | boolean |
 | **CamelCamundaErrorMessage** (producer) Constant: [`ERROR_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-camunda/latest/org/apache/camel/component/camunda/CamundaConstants.html#ERROR_MESSAGE) | Error message if operation failed. |  | String |

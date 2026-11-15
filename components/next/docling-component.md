@@ -171,29 +171,29 @@ Enum values:
 | **useDoclingServe** (common) | Use docling-serve API instead of CLI command. | false | boolean |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **abortOnError** (advanced) | Abort processing on error. | false | Boolean |
+| **abortOnError** (advanced) | Abort processing on error. |  | Boolean |
 | **asyncPollInterval** (advanced) | Polling interval for async conversion status in milliseconds. | 2000 | long |
 | **asyncTaskTtl** (advanced) | Time-to-live for pending async conversion tasks in milliseconds. Tasks older than this will be evicted from memory to prevent leaks. | 86400000 | long |
 | **asyncTimeout** (advanced) | Maximum time to wait for async conversion completion in milliseconds. | 300000 | long |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **doclingCommand** (advanced) | Path to Docling Python executable or command. |  | String |
-| **doCodeEnrichment** (advanced) | Enable code enrichment in document processing. | false | Boolean |
+| **doCodeEnrichment** (advanced) | Enable code enrichment in document processing. |  | Boolean |
 | **documentTimeout** (advanced) | Document processing timeout in seconds. |  | Long |
-| **doFormulaEnrichment** (advanced) | Enable formula enrichment in document processing. | false | Boolean |
-| **doOcr** (advanced) | Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set enableOCR to false to explicitly disable OCR. | false | Boolean |
-| **doPictureClassification** (advanced) | Enable picture classification in document processing. | false | Boolean |
-| **doPictureDescription** (advanced) | Enable picture description generation in document processing. | false | Boolean |
-| **doTableStructure** (advanced) | Enable table structure recognition. | false | Boolean |
-| **forceOcr** (advanced) | Force OCR processing even for digital documents. | false | Boolean |
+| **doFormulaEnrichment** (advanced) | Enable formula enrichment in document processing. |  | Boolean |
+| **doOcr** (advanced) | Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set enableOCR to false to explicitly disable OCR. |  | Boolean |
+| **doPictureClassification** (advanced) | Enable picture classification in document processing. |  | Boolean |
+| **doPictureDescription** (advanced) | Enable picture description generation in document processing. |  | Boolean |
+| **doTableStructure** (advanced) | Enable table structure recognition. |  | Boolean |
+| **forceOcr** (advanced) | Force OCR processing even for digital documents. |  | Boolean |
 | **imageExportMode** (advanced) | Image export mode for referenced images. |  | String |
 | **imagesScale** (advanced) | Scale factor for exported images. |  | Double |
-| **includeImages** (advanced) | Include images in the conversion output. | false | Boolean |
+| **includeImages** (advanced) | Include images in the conversion output. |  | Boolean |
 | **mdPageBreakPlaceholder** (advanced) | Placeholder string for page breaks in markdown output. |  | String |
 | **ocrEngine** (advanced) | OCR engine to use. |  | String |
 | **pdfBackend** (advanced) | PDF parsing backend. |  | String |
 | **pipeline** (advanced) | Processing pipeline to use. |  | String |
 | **processTimeout** (advanced) | Timeout for Docling process execution in milliseconds. | 30000 | long |
-| **tableCellMatching** (advanced) | Enable table cell matching post-processing. | false | Boolean |
+| **tableCellMatching** (advanced) | Enable table cell matching post-processing. |  | Boolean |
 | **tableMode** (advanced) | Table structure recognition mode. |  | String |
 | **useAsyncMode** (advanced) | Use asynchronous conversion mode (docling-serve API only). | false | boolean |
 | **workingDirectory** (advanced) | Working directory for Docling execution. |  | String |
@@ -325,28 +325,28 @@ Enum values:
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **abortOnError** (advanced) | Abort processing on error. | false | Boolean |
+| **abortOnError** (advanced) | Abort processing on error. |  | Boolean |
 | **asyncPollInterval** (advanced) | Polling interval for async conversion status in milliseconds. | 2000 | long |
 | **asyncTaskTtl** (advanced) | Time-to-live for pending async conversion tasks in milliseconds. Tasks older than this will be evicted from memory to prevent leaks. | 86400000 | long |
 | **asyncTimeout** (advanced) | Maximum time to wait for async conversion completion in milliseconds. | 300000 | long |
 | **doclingCommand** (advanced) | Path to Docling Python executable or command. |  | String |
-| **doCodeEnrichment** (advanced) | Enable code enrichment in document processing. | false | Boolean |
+| **doCodeEnrichment** (advanced) | Enable code enrichment in document processing. |  | Boolean |
 | **documentTimeout** (advanced) | Document processing timeout in seconds. |  | Long |
-| **doFormulaEnrichment** (advanced) | Enable formula enrichment in document processing. | false | Boolean |
-| **doOcr** (advanced) | Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set enableOCR to false to explicitly disable OCR. | false | Boolean |
-| **doPictureClassification** (advanced) | Enable picture classification in document processing. | false | Boolean |
-| **doPictureDescription** (advanced) | Enable picture description generation in document processing. | false | Boolean |
-| **doTableStructure** (advanced) | Enable table structure recognition. | false | Boolean |
-| **forceOcr** (advanced) | Force OCR processing even for digital documents. | false | Boolean |
+| **doFormulaEnrichment** (advanced) | Enable formula enrichment in document processing. |  | Boolean |
+| **doOcr** (advanced) | Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set enableOCR to false to explicitly disable OCR. |  | Boolean |
+| **doPictureClassification** (advanced) | Enable picture classification in document processing. |  | Boolean |
+| **doPictureDescription** (advanced) | Enable picture description generation in document processing. |  | Boolean |
+| **doTableStructure** (advanced) | Enable table structure recognition. |  | Boolean |
+| **forceOcr** (advanced) | Force OCR processing even for digital documents. |  | Boolean |
 | **imageExportMode** (advanced) | Image export mode for referenced images. |  | String |
 | **imagesScale** (advanced) | Scale factor for exported images. |  | Double |
-| **includeImages** (advanced) | Include images in the conversion output. | false | Boolean |
+| **includeImages** (advanced) | Include images in the conversion output. |  | Boolean |
 | **mdPageBreakPlaceholder** (advanced) | Placeholder string for page breaks in markdown output. |  | String |
 | **ocrEngine** (advanced) | OCR engine to use. |  | String |
 | **pdfBackend** (advanced) | PDF parsing backend. |  | String |
 | **pipeline** (advanced) | Processing pipeline to use. |  | String |
 | **processTimeout** (advanced) | Timeout for Docling process execution in milliseconds. | 30000 | long |
-| **tableCellMatching** (advanced) | Enable table cell matching post-processing. | false | Boolean |
+| **tableCellMatching** (advanced) | Enable table cell matching post-processing. |  | Boolean |
 | **tableMode** (advanced) | Table structure recognition mode. |  | String |
 | **useAsyncMode** (advanced) | Use asynchronous conversion mode (docling-serve API only). | false | boolean |
 | **workingDirectory** (advanced) | Working directory for Docling execution. |  | String |

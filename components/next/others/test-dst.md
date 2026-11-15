@@ -6,7 +6,7 @@ The `camel-test-dst` module runs the real code of a Camel consumer under a deter
 
 -   Every thread pool created through the `ExecutorServiceManager` is backed by one event loop on the test thread (`DstThreadPoolFactory`). Tasks run one at a time; when several can run, the seed picks one.
     
--   Time is virtual: it jumps to the next due task. The time reads, sleeps and blocking waits of the code under test are rewritten at test time (`@DstInstrument`), and the Camel core code that waits, times tasks or throttles reads the virtual clock through its internal time source, so "wait 30 seconds" costs nothing.
+-   Time is virtual: it jumps to the next due task. The time reads, sleeps and blocking waits of the code under test are rewritten at test time (`@DstInstrument`), and the Camel core code that waits, times tasks or throttles reads the virtual clock through its internal time source, so "wait 30 seconds" costs nothing. A world can move the wall clock forward or backward apart from the monotonic clock (see [Wall clock jumps](#_wall_clock_jumps)).
     
 -   A fake of the external system (a queue, a checkpoint store, a web API) injects faults chosen by the same seed.
     
@@ -39,7 +39,25 @@ These worlds are in the Camel code base and are the examples to copy. Each world
     
 | Component | World (tests) | Fake | What it covers | Issues |
 | --- | --- | --- | --- | --- |
+| camel-aws2-kinesis | `KinesisWorld` (`KinesisConsumerDstTest`) | FakeKinesis: a data stream with shards that can be split and merged (GetShardIterator, GetRecords, ListShards) bound as amazonKinesisClient | 
+-   the iterator types TRIM\_HORIZON and LATEST, with one or two shards at the start and more after resharding
+    
+-   shard iterators that expire between two polls, while the route is suspended or an exchange is slow
+    
+-   a closed shard and its child shards after a split or a merge (shardClosed ignore and silent)
+    
+-   checkpoints with the resumable EIP and KinesisResumeStrategy, and the resume after a route restart
+    
+-   route restart and route suspend and resume between two polls
+    
+
+
+
+
+
+ | CAMEL-25569, CAMEL-25942, CAMEL-26968 |
 | camel-aws2-sqs | `SqsWorld` (`SqsRedeliveryDstTest`, `SqsVisibilityDstTest`) | FakeSqs: a standard SQS queue (ReceiveMessage, DeleteMessage, ChangeMessageVisibilityBatch) bound as amazonSQSClient | 
+
 -   the visibility timeout extender (extendMessageVisibility=true)
     
 -   short polling with one to three concurrent consumers and up to 10 messages per poll
@@ -68,6 +86,24 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 
  | CAMEL-25683, CAMEL-25738, CAMEL-25781 |
+| camel-google-pubsub | `PubsubWorld` (`PubsubConsumerDstTest`) | FakePubsub: a subscription (Pull, Acknowledge, ModifyAckDeadline, ack deadlines, dead letter policy) behind the SubscriberStub of synchronousPull | 
+
+-   synchronousPull with ackMode AUTO, and ackMode NONE with grouped messages acked or nacked together
+    
+-   ack deadlines that expire while a message is processed
+    
+-   the max delivery attempts of a subscription with a dead letter policy
+    
+-   route stop and start while the consumer pulls
+    
+-   a stop and start of the same consumer in one step, as a throttling route policy does
+    
+
+
+
+
+
+ | CAMEL-25712, CAMEL-25790, CAMEL-26647 |
 | camel-kafka-share | `KafkaShareWorld` (`KafkaShareConsumerDstTest`) | FakeShareGroup: a share group (KIP-932) of one topic with one partition, behind ShareConsumer | 
 
 -   explicit acknowledgement with onFailure RELEASE or REJECT
@@ -90,6 +126,22 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 
  | CAMEL-25872, CAMEL-25910 |
+| camel-nats | `NatsWorld` (`NatsConsumerDstTest`) | FakeJetStream: a server with one JetStream stream and its pull consumers (AckWait, MaxDeliver, Nak), behind a jnats Connection given with the connection option | 
+
+-   the JetStream pull consumer with explicit acks and naks, ephemeral or durable
+    
+-   AckWait and MaxDeliver
+    
+-   route stop and start, also while the consumer waits in a fetch
+    
+-   a server restart that deletes the ephemeral consumer, and the subscription made again
+    
+
+
+
+
+
+ | CAMEL-26884 |
 | camel-pulsar | `PulsarWorld` (`PulsarConsumerDstTest`) | FakePulsar: a broker and client for one topic and one durable subscription | 
 
 -   subscription types Exclusive, Shared, Failover and Key\_Shared with one to three consumers
@@ -125,9 +177,39 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 ## What the harness controls
 
-<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Thread pools</td><td class="tableblock halign-left valign-top">Every pool and scheduled executor created by Camel or the component through the <code>ExecutorServiceManager</code>. A single-thread executor keeps its FIFO order; an executor with n threads offers its first n runnable tasks to the seed.</td></tr><tr><td class="tableblock halign-left valign-top">Time reads</td><td class="tableblock halign-left valign-top"><code>System.currentTimeMillis()</code>, <code>System.nanoTime()</code>, <code>new Date()</code>, <code>Instant.now()</code>, <code>Clock.systemUTC()</code>, <code>Clock.systemDefaultZone()</code>, <code>Clock.system(ZoneId)</code> and <code>now()</code> / <code>now(ZoneId)</code> of <code>LocalDateTime</code>, <code>ZonedDateTime</code>, <code>OffsetDateTime</code>, <code>LocalDate</code>, <code>LocalTime</code> and <code>OffsetTime</code>, in the packages of <code>@DstInstrument</code>.</td></tr><tr><td class="tableblock halign-left valign-top">Sleeps</td><td class="tableblock halign-left valign-top"><code>Thread.sleep</code> and <code>TimeUnit.sleep</code>: on the loop thread a sleep is a virtual wait. The sleeping task keeps its thread and the other tasks run meanwhile.</td></tr><tr><td class="tableblock halign-left valign-top">Blocking waits</td><td class="tableblock halign-left valign-top"><code>CompletableFuture.get/join</code>, <code>Future.get</code>, <code>CountDownLatch.await</code>, <code>Semaphore.acquire/tryAcquire</code>, <code>DelayQueue</code> and <code>BlockingQueue</code> <code>take/poll</code>: the loop runs until the wait can end, and a timed wait gives up in virtual time. A wait that no task of the run can end fails the seed at once and names the call site.</td></tr><tr><td class="tableblock halign-left valign-top">Timed waits on tasks</td><td class="tableblock halign-left valign-top"><code>Future.get(timeout)</code> on a task of the run and <code>awaitTermination</code> time out in virtual time.</td></tr><tr><td class="tableblock halign-left valign-top">Parallel streams</td><td class="tableblock halign-left valign-top"><code>parallelStream()</code> of a <code>java.util</code> collection is rewritten to <code>stream()</code>: the elements are handled in order by the calling task, not on the common fork-join pool.</td></tr><tr><td class="tableblock halign-left valign-top">Camel core</td><td class="tableblock halign-left valign-top">The code of Camel core that waits, times tasks or throttles reads the clock and sleeps through <code>org.apache.camel.util.TimeSource</code>, an internal class of camel-util. A run installs its virtual clock there (<code>Dst</code> does it when the run is created) and puts the previous provider back when the run is closed, so no rewriting is needed: the synchronous redelivery (<code>RedeliveryPolicy</code>, <code>RedeliveryErrorHandler</code>), <code>ForegroundTask</code>, <code>BackgroundTask.schedule</code>, the budgets of both tasks, the wait loop of <code>DefaultShutdownStrategy</code>, the synchronous delayer, <code>MulticastProcessor</code>, <code>OptimisticLockRetryPolicy</code>, <code>DefaultStartupConditionStrategy</code>, <code>StopWatch</code>, <code>MonotonicClock</code>, <code>BackOffTimerTask</code>, <code>DefaultTimeoutMap</code>, the clocks of the throttlers and the counters of <code>ThrottlingExceptionRoutePolicy</code>. A sleep there is a virtual wait on the loop thread, traced with its call site. A test of camel-core (<code>TimeSourceDirectClockCallsTest</code>) fails when one of these classes reads the system clock or sleeps directly: <code>System.nanoTime()</code>, <code>System.currentTimeMillis()</code>, <code>Thread.sleep</code>, a <code>sleep</code> of a <code>TimeUnit</code> constant, <code>Instant.now()</code> and the <code>now()</code> of the other <code>java.time</code> types, <code>new Date()</code>, <code>Calendar.getInstance()</code>, <code>new GregorianCalendar()</code> and the system <code>Clock`s. It also fails when a class of a core module uses `TimeSource</code> and is not in its list. Two waits of these classes are not virtual (see below): the permit queue of <code>TotalRequestsThrottler</code> and the <code>Semaphore</code> of <code>ConcurrentRequestsThrottler</code>. The sleep of the route <code>delayer</code> option is not virtual either (see below). The half-open check of <code>ThrottlingExceptionRoutePolicy</code> runs on a scheduler of the <code>ExecutorServiceManager</code>, so the circuit is half opened after <code>halfOpenAfter</code> of virtual time.</td></tr></tbody></table>
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top">Thread pools</td><td class="tableblock halign-left valign-top">Every pool and scheduled executor created by Camel or the component through the <code>ExecutorServiceManager</code>. A single-thread executor keeps its FIFO order; an executor with n threads offers its first n runnable tasks to the seed.</td></tr><tr><td class="tableblock halign-left valign-top">Time reads</td><td class="tableblock halign-left valign-top"><code>System.currentTimeMillis()</code>, <code>System.nanoTime()</code>, <code>new Date()</code>, <code>Instant.now()</code>, <code>Clock.systemUTC()</code>, <code>Clock.systemDefaultZone()</code>, <code>Clock.system(ZoneId)</code> and <code>now()</code> / <code>now(ZoneId)</code> of <code>LocalDateTime</code>, <code>ZonedDateTime</code>, <code>OffsetDateTime</code>, <code>LocalDate</code>, <code>LocalTime</code> and <code>OffsetTime</code>, in the packages of <code>@DstInstrument</code>. The wall clock is <code>Dst.EPOCH_MILLIS</code> plus the virtual time, moved by the wall clock jumps of the run; <code>System.nanoTime()</code> is the monotonic clock and never jumps.</td></tr><tr><td class="tableblock halign-left valign-top">Sleeps</td><td class="tableblock halign-left valign-top"><code>Thread.sleep</code> and <code>TimeUnit.sleep</code>: on the loop thread a sleep is a virtual wait. The sleeping task keeps its thread and the other tasks run meanwhile.</td></tr><tr><td class="tableblock halign-left valign-top">Blocking waits</td><td class="tableblock halign-left valign-top"><code>CompletableFuture.get/join</code>, <code>Future.get</code>, <code>CountDownLatch.await</code>, <code>Semaphore.acquire/tryAcquire</code>, <code>DelayQueue</code> and <code>BlockingQueue</code> <code>take/poll</code>: the loop runs until the wait can end, and a timed wait gives up in virtual time. A wait that no task of the run can end fails the seed at once and names the call site.</td></tr><tr><td class="tableblock halign-left valign-top">Timed waits on tasks</td><td class="tableblock halign-left valign-top"><code>Future.get(timeout)</code> on a task of the run and <code>awaitTermination</code> time out in virtual time.</td></tr><tr><td class="tableblock halign-left valign-top">Parallel streams</td><td class="tableblock halign-left valign-top"><code>parallelStream()</code> of a <code>java.util</code> collection is rewritten to <code>stream()</code>: the elements are handled in order by the calling task, not on the common fork-join pool.</td></tr><tr><td class="tableblock halign-left valign-top">Camel core</td><td class="tableblock halign-left valign-top">The code of Camel core that waits, times tasks or throttles reads the clock and sleeps through <code>org.apache.camel.util.TimeSource</code>, an internal class of camel-util. A run installs its virtual clock there (<code>Dst</code> does it when the run is created) and puts the previous provider back when the run is closed, so no rewriting is needed: the synchronous redelivery (<code>RedeliveryPolicy</code>, <code>RedeliveryErrorHandler</code>), <code>ForegroundTask</code>, <code>BackgroundTask.schedule</code>, the budgets of both tasks, the wait loop of <code>DefaultShutdownStrategy</code>, the synchronous delayer, <code>MulticastProcessor</code>, <code>OptimisticLockRetryPolicy</code>, <code>DefaultStartupConditionStrategy</code>, <code>StopWatch</code>, <code>MonotonicClock</code>, <code>BackOffTimerTask</code>, <code>DefaultTimeoutMap</code>, the elapsed time of <code>MessageHistory</code>, the clocks of the throttlers and the counters of <code>ThrottlingExceptionRoutePolicy</code>. A sleep there is a virtual wait on the loop thread, traced with its call site. A test of camel-core (<code>TimeSourceDirectClockCallsTest</code>) fails when one of these classes reads the system clock or sleeps directly: <code>System.nanoTime()</code>, <code>System.currentTimeMillis()</code>, <code>Thread.sleep</code>, a <code>sleep</code> of a <code>TimeUnit</code> constant, <code>Instant.now()</code> and the <code>now()</code> of the other <code>java.time</code> types, <code>new Date()</code>, <code>Calendar.getInstance()</code>, <code>new GregorianCalendar()</code> and the system <code>Clock`s. It also fails when a class of a core module uses `TimeSource</code> and is not in its list. Two waits of these classes are not virtual (see below): the permit queue of <code>TotalRequestsThrottler</code> and the <code>Semaphore</code> of <code>ConcurrentRequestsThrottler</code>. The sleep of the route <code>delayer</code> option is not virtual either (see below). The half-open check of <code>ThrottlingExceptionRoutePolicy</code> runs on a scheduler of the <code>ExecutorServiceManager</code>, so the circuit is half opened after <code>halfOpenAfter</code> of virtual time.</td></tr></tbody></table>
 
 Event timestamps, the clock of an exchange and the direct clock reads of the debugger, the tracer, management and the developer consoles stay on `System`. The durations they measure with `StopWatch` or `MonotonicClock` follow `TimeSource` (with the default provider this is the same `System.nanoTime()`), and so does the created time of `MonotonicClock`: the message history times (`MessageHistory.getTime()`) are virtual in a DST run. `@DstInstrument(alsoRewrite = …​)` applies the rewriting of the code under test to classes outside it, for example `org.apache.camel.support.ResetableClock` (the clock of an exchange) or a library the component calls. It is not needed for the core classes listed above, except for the permit queue of `TotalRequestsThrottler` (see below).
+
+### Wall clock jumps
+
+Without a jump the wall clock moves only forward, together with the monotonic clock. A world can move the wall clock forward or backward, as an NTP step or an operator who sets the system time does, to test code that keeps times of the wall clock: expiring entries, caches, deadlines and schedules.
+
+-   `dst.jumpWallClock(deltaMillis)` moves it at once (back when the value is negative). Call it on the loop thread: in the test body, or in a task of the run.
+    
+-   `dst.jumpWallClockBetween(fromMillis, toMillis, minDeltaMillis, maxDeltaMillis)` lets the seed choose: it draws when the jump happens (between `fromMillis` and `toMillis` of virtual time from now) and how big it is, and schedules it. The same seed makes the same jump at the same time, so a failing seed replays exactly. The trace says when the jump is scheduled (its time and size) and when it happens, and the returned task has the delta as its result once the jump has happened. The jump is a pending task of the run, so `dst.dropPending()` drops it.
+    
+-   A jump moves the wall clock at most 100 years (`Dst.MAX_WALL_CLOCK_JUMP_MILLIS`) away from the monotonic clock.
+    
+
+After a jump, the wall clock reads see it: the rewritten reads of the code under test (`System.currentTimeMillis()`, `new Date()`, `Instant.now()`, the `java.time` reads) and, in Camel core, `TimeSource.currentTimeMillis()` and `TimeSource.instant()` (for example the expiry of `DefaultTimeoutMap` and the failure window and open state of `ThrottlingExceptionRoutePolicy`, and the created time of a `MonotonicClock`). The monotonic clock (`System.nanoTime()`, `TimeSource.nanoTime()`, `StopWatch`, `MonotonicClock.elapsed()`), `dst.now()`, the sleeps and waits, and the due times of the tasks do not: a task scheduled 10 seconds ahead still runs 10 seconds later. `dst.wallClockOffset()` is how far the jumps have moved the wall clock. Each run starts without a jump.
+
+`dst.currentTimeMillis()` follows the jumps; `Dst.EPOCH_MILLIS + dst.now()` does not. Give the fake the one that matches the external system: a server keeps its own clock, so a jump of the clock of the Camel host leaves the timestamps of the server as they were.
+
+An example: an entry with a timeout of 30 seconds in a `DefaultTimeoutMap` (the expiring map behind request-reply timeouts), under a backward jump of an hour 10 seconds after it was put:
+
+```java
+DefaultTimeoutMap<String, String> map = new DefaultTimeoutMap<>(dst.executor("purge", 1), 1_000);
+map.start();
+map.put("order-1", "pending", 30_000);
+dst.runFor(10_000);
+dst.jumpWallClock(-3_600_000);
+dst.runFor(60_000);
+// 70 s after the put the entry is still there: its expiry is a wall clock time, so it now expires an hour late
+assertEquals(1, map.size());
+```
+
+The example asks `size()` and not `get()`, because `get()` refreshes the expiry of the entry, from the wall clock as it is after the jump. After a forward jump of an hour instead, the entry is evicted by the next purge after the jump (here 1 second later). In a world, let the seed choose the jump (`dst.jumpWallClockBetween(0, 60_000, -3_600_000, 3_600_000)`, which writes it to the trace), and decide from the contract of the component what a jump may change: an entry that expires late or early by the size of the jump can be what the component documents, while an exchange that is lost or completed twice is not. As for any fault, record which jump excuses which violation.
 
 ### Escapes and strict mode
 
@@ -341,7 +423,7 @@ final class SqsWorld {
 
 Agents wrote nine worlds with this guide (not all of them are in the code base). These mistakes came up:
 
--   **Timestamps at 0.** Give the times of the fake virtual wall clock time (`Dst.EPOCH_MILLIS + dst.now()`, or `dst.currentTimeMillis()`), not 0. A Service Bus fake with lock times in 1970 made the lock renewer renew on every run, so the world could not fail. The self-check (fail on the code before the fix) caught it.
+-   **Timestamps at 0.** Give the times of the fake virtual wall clock time (`Dst.EPOCH_MILLIS + dst.now()`, or `dst.currentTimeMillis()`, which follows the wall clock jumps of the run), not 0. A Service Bus fake with lock times in 1970 made the lock renewer renew on every run, so the world could not fail. The self-check (fail on the code before the fix) caught it.
     
 -   **No end to the run.** A consumer that loops forever needs an unwind at the end of the run, or the run never ends: cancel its task through the task registry, or stop the route at the end of the drain phase. A consumer task that never returns (a pull loop) sits above the test thread on the one stack, so a `dst.runFor` or `dst.runUntil` in the test body does not return while it loops, and the seed fails on the step budget. Make the phases of the run (clear the faults, drain, end) scheduled tasks, and end the run by having the fake end the loop (close the subscription), then `dst.runUntil(() → closed, "subscription closed")`.
     
@@ -405,6 +487,7 @@ The worlds are tests of their components, in a `dst` package. Build the harness 
 ```bash
 DST=components/camel-test/camel-test-dst
 SQS=components/camel-aws/camel-aws2-sqs
+KINESIS=components/camel-aws/camel-aws2-kinesis
 EH=components/camel-azure/camel-azure-eventhubs
 SLACK=components/camel-slack
 SHARE=components/camel-kafka-share
@@ -415,8 +498,8 @@ MVN="./mvnw -B -Papache-snapshots test -Dsurefire.failIfNoSpecifiedTests=false -
 $MVN -pl $DST -Dtest='Dst*Test'
 
 # the worlds, 1000 seeds each, then 5000 seeds without stopping at the first failing one
-$MVN -pl $DST,$SQS,$EH,$SLACK,$SHARE,$PULSAR -Dtest='*DstTest'
-$MVN -pl $DST,$SQS,$EH,$SLACK,$SHARE,$PULSAR -Dtest='*DstTest' -Ddst.seeds=5000 -Ddst.maxFailures=100000
+$MVN -pl $DST,$SQS,$KINESIS,$EH,$SLACK,$SHARE,$PULSAR -Dtest='*DstTest'
+$MVN -pl $DST,$SQS,$KINESIS,$EH,$SLACK,$SHARE,$PULSAR -Dtest='*DstTest' -Ddst.seeds=5000 -Ddst.maxFailures=100000
 
 # the self-check: revert the main code of a past fix locally (do not commit), run the world, restore
 git show d09593b4a584 -- $SQS/src/main | git apply -R          # CAMEL-25700
@@ -430,7 +513,7 @@ $MVN -pl $DST,$SQS -Dtest=SqsVisibilityDstTest -Ddst.seed=8
 diff /tmp/seed-8.first $SQS/target/dst/SqsVisibilityDstTest.*/seed-8.trace && echo identical
 ```
 
-The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 68329f0919bc (CAMEL-25684, Slack), the main code of b62e90ddb2d9 (CAMEL-25869, Pulsar) and the main code of 20c94435789e (CAMEL-25872, Kafka share, whose world was also checked with planted faults). Some system properties belong to a world rather than to the harness: `dst.sqs.visibilityTimeouts` (the visibility timeouts the SQS world picks from, default `2,3,5,10`; `1` shows CAMEL-25737), `dst.replayCheckSeed` (the seed of the in-JVM replay test of the Event Hubs world, default 1), `dst.share.pollOnError` (the pollOnError strategies the Kafka share world picks from) and `dst.pulsar.subscribeFailRates` (the subscribe failure rates of the Pulsar world, `0` runs without subscribe failures).
+The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 68329f0919bc (CAMEL-25684, Slack), the main code of b62e90ddb2d9 (CAMEL-25869, Pulsar), the main code of 20c94435789e (CAMEL-25872, Kafka share, whose world was also checked with planted faults), and the main code of 043ac9ec84ab (CAMEL-25569) and of 847ee9affb4c (CAMEL-25942) for Kinesis (`KinesisConsumerDstTest`). Some system properties belong to a world rather than to the harness: `dst.sqs.visibilityTimeouts` (the visibility timeouts the SQS world picks from, default `2,3,5,10`; `1` shows CAMEL-25737), `dst.replayCheckSeed` (the seed of the in-JVM replay test of the Event Hubs world, default 1), `dst.share.pollOnError` (the pollOnError strategies the Kafka share world picks from), `dst.pulsar.subscribeFailRates` (the subscribe failure rates of the Pulsar world, `0` runs without subscribe failures) and `dst.kinesis.strictLatest` (`true` counts the records that a LATEST iterator asked for again after an expiry skips, CAMEL-26968, as missing).
 
 ## Limits
 
@@ -451,7 +534,7 @@ The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 6
 
 ## The classes
 
-<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><code>Dst</code></td><td class="tableblock halign-left valign-top">the event loop: virtual clock, seeded random source, step trace with its SHA-256, timed and untimed waits, strict mode</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstThreadPoolFactory</code>, <code>DstExecutor</code>, <code>DstTask</code></td><td class="tableblock halign-left valign-top">Camel’s pools and schedulers backed by the loop</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstInstrumentation</code>, <code>DstClock</code>, <code>DstWaits</code></td><td class="tableblock halign-left valign-top">the byte code rewrite of the code under test: time reads, sleeps and blocking waits go to the loop; <code>DstClock</code> is also the <code>TimeSource</code> provider of Camel core during a run</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstEscapes</code>, <code>DstWatchdog</code></td><td class="tableblock halign-left valign-top">the escape scan, runtime escapes (strict mode), and the watchdog for waits in code that is not rewritten</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstLedger</code>, <code>Invariant</code>, <code>Invariants</code></td><td class="tableblock halign-left valign-top">what happened to each message, and reusable invariants</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstTest</code>, <code>DstSeed</code>, <code>DstInstrument</code>, <code>DstExtension</code></td><td class="tableblock halign-left valign-top">the JUnit integration</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstWorld</code></td><td class="tableblock halign-left valign-top">the description of a world, which the build lists in the catalog</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstCamel</code></td><td class="tableblock halign-left valign-top">a <code>CamelContext</code> on the loop, and an asynchronous route step with a seeded latency</td></tr></tbody></table>
+<table class="tableblock frame-all grid-all stretch"><colgroup><col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><code>Dst</code></td><td class="tableblock halign-left valign-top">the event loop: virtual clock, wall clock jumps, seeded random source, step trace with its SHA-256, timed and untimed waits, strict mode</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstThreadPoolFactory</code>, <code>DstExecutor</code>, <code>DstTask</code></td><td class="tableblock halign-left valign-top">Camel’s pools and schedulers backed by the loop</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstInstrumentation</code>, <code>DstClock</code>, <code>DstWaits</code></td><td class="tableblock halign-left valign-top">the byte code rewrite of the code under test: time reads, sleeps and blocking waits go to the loop; <code>DstClock</code> is also the <code>TimeSource</code> provider of Camel core during a run</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstEscapes</code>, <code>DstWatchdog</code></td><td class="tableblock halign-left valign-top">the escape scan, runtime escapes (strict mode), and the watchdog for waits in code that is not rewritten</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstLedger</code>, <code>Invariant</code>, <code>Invariants</code></td><td class="tableblock halign-left valign-top">what happened to each message, and reusable invariants</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstTest</code>, <code>DstSeed</code>, <code>DstInstrument</code>, <code>DstExtension</code></td><td class="tableblock halign-left valign-top">the JUnit integration</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstWorld</code></td><td class="tableblock halign-left valign-top">the description of a world, which the build lists in the catalog</td></tr><tr><td class="tableblock halign-left valign-top"><code>DstCamel</code></td><td class="tableblock halign-left valign-top">a <code>CamelContext</code> on the loop, and an asynchronous route step with a seeded latency</td></tr></tbody></table>
 
 ## Options
 

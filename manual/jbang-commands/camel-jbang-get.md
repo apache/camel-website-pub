@@ -40,6 +40,7 @@ camel get [options]
 | [rest](camel-jbang-get-rest.md) | Get REST services of Camel integrations |
 | [route](camel-jbang-get-route.md) | Get status of Camel routes |
 | [route-controller](camel-jbang-get-route-controller.md) | List status of route controller |
+| [sanitizer](camel-jbang-get-sanitizer.md) | Get the violations the exchange sanitizer reported in running integrations (camel-sanitizer) |
 | [service](camel-jbang-get-service.md) | Get services of Camel integrations |
 | [source](camel-jbang-get-source.md) | Display Camel route source code |
 | [sql-trace](camel-jbang-get-sql-trace.md) | Get SQL query trace data |

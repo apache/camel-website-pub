@@ -92,9 +92,9 @@ The IBM watsonx.ai component supports the following options which are listed bel
 | **wxUrl** (common) | The watsonx.ai WX platform URL for tool operations (e.g., [https://api.dataplatform.cloud.ibm.com/wx](https://api.dataplatform.cloud.ibm.com/wx)). |  | String |
 | **cosUrl** (producer) | Cloud Object Storage URL. |  | String |
 | **deploymentId** (producer) | Deployed model ID (for deployment operations). |  | String |
-| **detectHap** (producer) | Whether to detect HAP (Harmful, Abusive, Profane content). | false | Boolean |
+| **detectHap** (producer) | Whether to detect HAP (Harmful, Abusive, Profane content). |  | Boolean |
 | **detectionThreshold** (producer) | Detection threshold (0.0 to 1.0). |  | Double |
-| **detectPii** (producer) | Whether to detect PII (Personal Identifiable Information). | false | Boolean |
+| **detectPii** (producer) | Whether to detect PII (Personal Identifiable Information). |  | Boolean |
 | **documentBucket** (producer) | COS bucket for document storage. |  | String |
 | **documentConnectionId** (producer) | COS connection ID for document storage. |  | String |
 | **frequencyPenalty** (producer) | Frequency penalty for chat. |  | Double |
@@ -184,7 +184,7 @@ Enum values:
 | **rerankTopN** (producer) | Number of top results to return for reranking. |  | Integer |
 | **resultBucket** (producer) | COS bucket for result storage. |  | String |
 | **resultConnectionId** (producer) | COS connection ID for result storage. |  | String |
-| **returnDocuments** (producer) | Whether to return documents in rerank response. | false | Boolean |
+| **returnDocuments** (producer) | Whether to return documents in rerank response. |  | Boolean |
 | **temperature** (producer) | Temperature for randomness (0.0 to 2.0). |  | Double |
 | **topK** (producer) | Top K (top-k sampling). |  | Integer |
 | **topP** (producer) | Top P (nucleus sampling). |  | Double |
@@ -223,9 +223,9 @@ With the following _path_ and _query_ parameters:
 | **wxUrl** (common) | The watsonx.ai WX platform URL for tool operations (e.g., [https://api.dataplatform.cloud.ibm.com/wx](https://api.dataplatform.cloud.ibm.com/wx)). |  | String |
 | **cosUrl** (producer) | Cloud Object Storage URL. |  | String |
 | **deploymentId** (producer) | Deployed model ID (for deployment operations). |  | String |
-| **detectHap** (producer) | Whether to detect HAP (Harmful, Abusive, Profane content). | false | Boolean |
+| **detectHap** (producer) | Whether to detect HAP (Harmful, Abusive, Profane content). |  | Boolean |
 | **detectionThreshold** (producer) | Detection threshold (0.0 to 1.0). |  | Double |
-| **detectPii** (producer) | Whether to detect PII (Personal Identifiable Information). | false | Boolean |
+| **detectPii** (producer) | Whether to detect PII (Personal Identifiable Information). |  | Boolean |
 | **documentBucket** (producer) | COS bucket for document storage. |  | String |
 | **documentConnectionId** (producer) | COS connection ID for document storage. |  | String |
 | **frequencyPenalty** (producer) | Frequency penalty for chat. |  | Double |
@@ -314,7 +314,7 @@ Enum values:
 | **rerankTopN** (producer) | Number of top results to return for reranking. |  | Integer |
 | **resultBucket** (producer) | COS bucket for result storage. |  | String |
 | **resultConnectionId** (producer) | COS connection ID for result storage. |  | String |
-| **returnDocuments** (producer) | Whether to return documents in rerank response. | false | Boolean |
+| **returnDocuments** (producer) | Whether to return documents in rerank response. |  | Boolean |
 | **temperature** (producer) | Temperature for randomness (0.0 to 2.0). |  | Double |
 | **topK** (producer) | Top K (top-k sampling). |  | Integer |
 | **topP** (producer) | Top P (nucleus sampling). |  | Double |

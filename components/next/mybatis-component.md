@@ -108,6 +108,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **outputHeader** (common) | Store the query result in a header instead of the message body. By default, outputHeader == null and the query result is stored in the message body, any existing content in the message body is discarded. If outputHeader is set, the value is used as the name of the header to store the query result and the original message body is preserved. Setting outputHeader will also omit populating the default CamelMyBatisResult header since it would be the same as outputHeader all the time. On a polling consumer, each polled row is stored in this header instead of the message body. |  | String |
 | **maxMessagesPerPoll** (consumer) | This option is intended to split results returned by the database pool into the batches and deliver them in multiple exchanges. This integer defines the maximum messages to deliver in single exchange. By default, no maximum is set. Can be used to set a limit of e.g. 1000 to avoid when starting up the server that there are thousands of files. Set a value of 0 or negative to disable it. | 0 | int |
 | **onConsume** (consumer) | Statement to run after data has been processed in the route. |  | String |
 | **routeEmptyResultSet** (consumer) | Whether allow empty resultset to be routed to the next hop. | false | boolean |
@@ -152,7 +153,6 @@ Enum values:
 
  | SIMPLE | ExecutorType |
 | **inputHeader** (producer) | User the header value for input parameters instead of the message body. By default, inputHeader == null and the input parameters are taken from the message body. If outputHeader is set, the value is used and query parameters will be taken from the header instead of the body. |  | String |
-| **outputHeader** (producer) | Store the query result in a header instead of the message body. By default, outputHeader == null and the query result is stored in the message body, any existing content in the message body is discarded. If outputHeader is set, the value is used as the name of the header to store the query result and the original message body is preserved. Setting outputHeader will also omit populating the default CamelMyBatisResult header since it would be the same as outputHeader all the time. |  | String |
 | **statementType** (producer) | 
 
 Mandatory to specify for the producer to control which kind of operation to invoke.

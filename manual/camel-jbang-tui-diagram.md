@@ -20,6 +20,8 @@ See [Camel TUI](camel-jbang-tui.md) for getting started and the other pages.
     
 -   [**Metrics and source**](#_metrics_and_source_code) — throughput and timing on the boxes, and the source a box comes from
     
+-   [**Live flow**](#_live_flow) — dots move along the arrows where the messages go, in a route, between the routes and between the groups of the architecture, and a stuck step is marked
+    
 -   [**Body types**](#_body_types) — the types of the bodies each step has been reached with, on the arrows into the steps
     
 
@@ -156,6 +158,29 @@ Press **e** to cycle through three modes for external endpoints:
 -   Press **b** (or **n**) to switch between the business view (labels) and the technical view (route ids and endpoints)
     
 
+### Live Flow
+
+With the metrics on, a route diagram and the topology show where the messages go while the integration runs, so the busy part stands out at a glance, not only as counts that go up. The architecture shows it between its groups. Press **w** to turn it off and on; the choice is kept for the next start.
+
+-   **Dots on the arrows** move along an arrow while messages reach the step below it: the more messages a second, the faster and closer together they are. They are red when most of the messages fail there.
+    
+-   At the compact level the head of an arrow lights up as a dot comes in. At the bare and overview levels the lines light up instead, as a dot would look like the mark of a step there. The overview has hardly any lines between its steps, so there the light passes over the steps themselves. The steps keep the colours of their kind at every level.
+    
+-   **In the topology** the dots go along the edges into the routes that get messages, at the pace of the route they go into. An edge from a route that gets no messages has none, even when the route it goes into gets them from another one.
+    
+-   **In the architecture** the dots go along a link between two groups at the pace of the messages into the routes of the group it goes to, from the routes of the group it comes from. With **x** on, red dots go into the Error handling box at the pace the routes of a group fail, handled or not, so where the failures go shows at a glance. With **e** on, the dots come in from an external system at the pace of the route that consumes from it, and go out to one at the pace of the messages the integration counts for that endpoint (else of the route that sends to it). The architecture is read from the source files, so this needs the integration running: a source route counts when it is matched to a running route, by its id or, without one, by the endpoint it consumes from.
+    
+-   **A stuck step** of a route diagram, where exchanges wait and none has finished for a few seconds, has a spinner in its top border, with how many wait and how long ago the step last finished one (`⠹ 3 inflight · 12s`), or `none done` when it never did, such as a call to a system that does not answer.
+    
+
+The rates come from the counts the diagram loads about once a second, so the flow costs the integration nothing more. The dots move in between, about 12 frames a second, and only while something moves: an idle integration draws no frames.
+
+![The orders route with the live flow: dots go along the arrows and split at the choice](_images/jbang/camel-tui-diagram-live-flow.gif)
+
+![The topology with the live flow: dots from orders to vip and ship](_images/jbang/camel-tui-diagram-topology-flow.gif)
+
+![The architecture with the live flow and its external systems: dots in from the file inbox through intake to fulfilment and on to reporting](_images/jbang/camel-tui-diagram-architecture-flow.gif)
+
 ### Body Types
 
 When the integration runs with the message history on, such as with `camel run --dev`, Camel keeps the body types each step has been reached with, across the messages (see [Body types](camel-jbang-diagnostics.html#_body_types) for the same in the Camel CLI). In a route, press **y** to show them beside the arrow into each step, so the arrows show how the body changes along the route:
@@ -202,6 +227,7 @@ An integration of a Camel version before 4.24, or without camel-xml-io, has neit
 | **Esc** | Go back (previous route or topology) |
 | **t** | Jump to topology view |
 | **m** | Toggle metrics overlay |
+| **w** | The live flow on or off: dots on the arrows the messages go along, in a route, the topology and the architecture, and the stuck steps of a route marked |
 | **y** | In a route: show the body types each step has been reached with, beside the arrows into the steps |
 | **+** / **\-** | In a route, the topology and the architecture: zoom in or out (detailed, compact, bare, and in a route overview) |
 | **z** | In a route, the topology and the architecture: fit, the most detail in which it fits the screen |

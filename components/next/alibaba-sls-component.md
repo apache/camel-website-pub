@@ -126,7 +126,7 @@ Enum values:
 | **line** (getLogs) | Maximum number of log lines to return for getLogs. |  | Long |
 | **offset** (getLogs) | Log query offset for getLogs. |  | Long |
 | **query** (getLogs) | Log query string for getLogs. |  | String |
-| **reverse** (getLogs) | Whether to return logs in reverse order for getLogs. | false | Boolean |
+| **reverse** (getLogs) | Whether to return logs in reverse order for getLogs. |  | Boolean |
 | **to** (getLogs) | Query end time for getLogs (Unix timestamp in seconds). |  | Integer |
 | **topic** (getLogs) | Log topic filter for getLogs. |  | String |
 | **accessKey** (security) | Access key for the cloud user. |  | String |

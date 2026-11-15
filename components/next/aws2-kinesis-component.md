@@ -585,6 +585,79 @@ The data of the record as a byte array, one message per record, with its partiti
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the AWS Kinesis component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `KinesisWorld`
+Fake: FakeKinesis: a data stream with shards that can be split and merged (GetShardIterator, GetRecords, ListShards) bound as amazonKinesisClient
+
+Tests: `KinesisConsumerDstTest`
+
+ | 
+
+**Covers:**
+
+-   the iterator types TRIM\_HORIZON and LATEST, with one or two shards at the start and more after resharding
+    
+-   shard iterators that expire between two polls, while the route is suspended or an exchange is slow
+    
+-   a closed shard and its child shards after a split or a merge (shardClosed ignore and silent)
+    
+-   checkpoints with the resumable EIP and KinesisResumeStrategy, and the resume after a route restart
+    
+-   route restart and route suspend and resume between two polls
+    
+
+**Faults:**
+
+-   GetRecords fails
+    
+-   GetShardIterator fails
+    
+-   ListShards fails
+    
+-   calls answer slowly
+    
+-   GetRecords returns fewer records than it could
+    
+-   processing fails
+    
+-   processing is slow
+    
+-   the stream is resharded
+    
+
+**Invariants:**
+
+-   the consumer uses the Kinesis API as documented
+    
+-   a consumer routes a record at most once, apart from a record after its checkpoint
+    
+-   a restarted route resumes after its checkpoint
+    
+-   every record is routed once the faults cleared, apart from records skipped by a LATEST iterator
+    
+-   the checkpoint reaches the last record of each open shard once the faults cleared
+    
+
+
+
+
+
+ | [CAMEL-25569](https://issues.apache.org/jira/browse/CAMEL-25569)
+
+[CAMEL-25942](https://issues.apache.org/jira/browse/CAMEL-25942)
+
+[CAMEL-26968](https://issues.apache.org/jira/browse/CAMEL-26968)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 Required Kinesis component options
 
 You have to provide the KinesisClient in the Registry with proxies and relevant credentials configured.

@@ -148,7 +148,7 @@ Enum values:
 | **httpMaxContentLength** (common) | Max content length of an HTTP response. |  | Integer |
 | **httpRequestBufferSize** (common) | HTTP request buffer size. May need to be increased for large SOQL queries. | 8192 | Integer |
 | **httpRequestTimeout** (common) | Timeout value for HTTP requests. | 60000 | long |
-| **includeDetails** (common) | Include details in Salesforce1 Analytics report, defaults to false. | false | Boolean |
+| **includeDetails** (common) | Include details in Salesforce1 Analytics report, defaults to false. |  | Boolean |
 | **initialReplayIdMap** (common) | Replay IDs to start from per channel name. |  | Map |
 | **instanceId** (common) | Salesforce1 Analytics report execution instance ID. |  | String |
 | **jobId** (common) | Identifies the Bulk API job to act on, for Bulk API v1 operations such as getJob, closeJob, abortJob, createBatch and getResults, and for the bulk2 operations that target an existing job. Operations that accept a JobInfo or BatchInfo message body can take the id from there instead. |  | String |
@@ -192,8 +192,8 @@ Enum values:
 
 
  |  | NotifyForFieldsEnum |
-| **notifyForOperationCreate** (common) | Notify for create operation, defaults to false (API version >= 29.0). | false | Boolean |
-| **notifyForOperationDelete** (common) | Notify for delete operation, defaults to false (API version >= 29.0). | false | Boolean |
+| **notifyForOperationCreate** (common) | Notify for create operation, defaults to false (API version >= 29.0). |  | Boolean |
+| **notifyForOperationDelete** (common) | Notify for delete operation, defaults to false (API version >= 29.0). |  | Boolean |
 | **notifyForOperations** (common) | 
 
 Notify for operations, options are ALL, CREATE, EXTENDED, UPDATE (API version < 29.0).
@@ -214,8 +214,8 @@ Enum values:
 
 
  |  | NotifyForOperationsEnum |
-| **notifyForOperationUndelete** (common) | Notify for un-delete operation, defaults to false (API version >= 29.0). | false | Boolean |
-| **notifyForOperationUpdate** (common) | Notify for update operation, defaults to false (API version >= 29.0). | false | Boolean |
+| **notifyForOperationUndelete** (common) | Notify for un-delete operation, defaults to false (API version >= 29.0). |  | Boolean |
+| **notifyForOperationUpdate** (common) | Notify for update operation, defaults to false (API version >= 29.0). |  | Boolean |
 | **objectMapper** (common) | Custom Jackson ObjectMapper to use when serializing/deserializing Salesforce objects. |  | ObjectMapper |
 | **packages** (common) | In what packages are the generated DTO classes. Typically the classes would be generated using camel-salesforce-maven-plugin. Set it if using the generated DTOs to gain the benefit of using short SObject names in parameters/header values. Multiple packages can be separated by comma. |  | String |
 | **pkChunking** (common) | Use PK Chunking. Only for use in original Bulk API. Bulk 2.0 API performs PK chunking automatically, if necessary. | false | Boolean |
@@ -584,7 +584,7 @@ Enum values:
 
  |  | PayloadFormat |
 | **httpClient** (common) | Custom Jetty Http Client to use to connect to Salesforce. |  | SalesforceHttpClient |
-| **includeDetails** (common) | Include details in Salesforce1 Analytics report, defaults to false. | false | Boolean |
+| **includeDetails** (common) | Include details in Salesforce1 Analytics report, defaults to false. |  | Boolean |
 | **initialReplayIdMap** (common) | Replay IDs to start from per channel name. |  | Map |
 | **instanceId** (common) | Salesforce1 Analytics report execution instance ID. |  | String |
 | **jobId** (common) | Identifies the Bulk API job to act on, for Bulk API v1 operations such as getJob, closeJob, abortJob, createBatch and getResults, and for the bulk2 operations that target an existing job. Operations that accept a JobInfo or BatchInfo message body can take the id from there instead. |  | String |
@@ -628,8 +628,8 @@ Enum values:
 
 
  |  | NotifyForFieldsEnum |
-| **notifyForOperationCreate** (common) | Notify for create operation, defaults to false (API version >= 29.0). | false | Boolean |
-| **notifyForOperationDelete** (common) | Notify for delete operation, defaults to false (API version >= 29.0). | false | Boolean |
+| **notifyForOperationCreate** (common) | Notify for create operation, defaults to false (API version >= 29.0). |  | Boolean |
+| **notifyForOperationDelete** (common) | Notify for delete operation, defaults to false (API version >= 29.0). |  | Boolean |
 | **notifyForOperations** (common) | 
 
 Notify for operations, options are ALL, CREATE, EXTENDED, UPDATE (API version < 29.0).
@@ -650,8 +650,8 @@ Enum values:
 
 
  |  | NotifyForOperationsEnum |
-| **notifyForOperationUndelete** (common) | Notify for un-delete operation, defaults to false (API version >= 29.0). | false | Boolean |
-| **notifyForOperationUpdate** (common) | Notify for update operation, defaults to false (API version >= 29.0). | false | Boolean |
+| **notifyForOperationUndelete** (common) | Notify for un-delete operation, defaults to false (API version >= 29.0). |  | Boolean |
+| **notifyForOperationUpdate** (common) | Notify for update operation, defaults to false (API version >= 29.0). |  | Boolean |
 | **objectMapper** (common) | Custom Jackson ObjectMapper to use when serializing/deserializing Salesforce objects. |  | ObjectMapper |
 | **pkChunking** (common) | Use PK Chunking. Only for use in original Bulk API. Bulk 2.0 API performs PK chunking automatically, if necessary. | false | Boolean |
 | **pkChunkingChunkSize** (common) | Chunk size for use with PK Chunking. If unspecified, salesforce default is 100,000. Maximum size is 250,000. |  | Integer |

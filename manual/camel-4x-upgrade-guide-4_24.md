@@ -50,6 +50,10 @@ Starting in 4.24:
 -   `KeyValueAggregationRepository` safely verifies entry types before unmarshalling, ignoring unexpected types gracefully instead of failing with a class cast exception.
     
 
+### camel-core - throwException with an exception instance gets no suppressed exceptions
+
+A `throwException` step given an exception instance (`throwException(new MyException("…​"))` in Java, or a bean with `ref`) sets that one object on every message. The error handler no longer adds the previous exception of the message (such as the one an `onException` translates) to it as suppressed: the instance used to keep the exceptions of all the messages, and grew with each one. An exception from a predicate of `onException` (such as `handled`), a `doFinally`, an `onCompletion`, a saga compensation, or the completion of the aggregation strategy of a Multicast, Recipient List or Split is no longer added to it either, and is logged instead. Use `throwException(MyException.class, "…​")`, or `exceptionType` and `message`, to get a new exception for each message, with the previous exception as suppressed.
+
 ### camel-core-model - doTry keeps doCatch and doFinally in its outputs
 
 `doCatch` and `doFinally` written as properties of `doTry` in the YAML DSL are now kept in the outputs of the `TryDefinition`, as the clauses of the Java and XML DSLs always were, after the steps whatever the order of the YAML keys. Code that walks `getOutputs()` (route dumps, tooling) now sees them, and `getCatchClauses()`, `getFinallyClause()` and `getOutputsWithoutCatches()` are derived from the outputs on each call: a clause removed from the outputs, for example with advice-with, is no longer used, and changing the list returned by `getCatchClauses()` no longer changes the doTry. Use `setCatchClauses` and `setFinallyClause`, or the outputs, instead.
@@ -200,6 +204,21 @@ The `sftp` component now checks whether a remote file exists (`fileExist=Ignore|
 
 When the server answers `lstat` with another status than "no such file", for example because it does not permit or support it on the path, the component lists the directory as before. `readLock=changed` keeps comparing the size and modification time of a symbolic link itself, as the directory listing reported them. See the [SFTP component](../components/4.22.x/sftp-component.md).
 
+### camel-ftp - sftp uses remote file and directory names as given
+
+The `sftp` component now uses a remote file or directory name exactly as given, also when it contains **or `?`. Before, the name was passed on to the JSch library, which reads** and `?` as wildcards, so storing, retrieving, deleting, renaming, listing or changing to a directory could resolve the name to another file or directory whose name matched, or fail when more than one name matched. With the default `separator=UNIX`, a `\` in a name is a path separator, as before.
+
+If you relied on a wildcard to select a file or a directory:
+
+-   A consumer with `useList=false` and a wildcard in `fileName`: list the directory instead, and select the files with the `include` or `antInclude` option.
+    
+-   A producer with a wildcard in the `CamelFileName` header or the `fileName` option: use the real name of the file.
+    
+-   A wildcard in the directory of the endpoint: use the real name of the directory.
+    
+
+See the [SFTP component](../components/4.22.x/sftp-component.md).
+
 ### camel-kafka - exactlyOnce: a rejected send that a doCatch catches skips the record
 
 With `exactlyOnce`, a Kafka send through the source producer after an earlier send failed in the same transaction is rejected and marks the exchange rollback-only (a redelivery of the failed send, or another send such as in a `loop`). When a `doCatch` catches that rejected send in the route of the send, the failure now counts as handled, as when an error handler handles it: the output transaction is aborted and the source offsets are committed alone, so the record is skipped. Before, the source transaction was rolled back and the record replayed. A `doCatch` of a route that called the route of the send (for example with `direct`) behaves the same way, as it did in 4.23. To replay the record, throw the exception again in the `doCatch` block, or end it with `rollback()`.
@@ -216,6 +235,14 @@ The camel-sjms and camel-sjms2 consumers now map a received `jakarta.jms.StreamM
 
 This is a change in Keycloak, not in Camel: from Keycloak 26.8.2 the Admin REST API accepts only access tokens that carry the built-in `kc-admin-api` client scope, and rejects other tokens with `401 Unauthorized`. The Keycloak upgrade assigns the scope to `admin-cli` and `security-admin-console` only. When the `keycloak` producer authenticates with `clientId` and `clientSecret` of your own client, assign `kc-admin-api` to that client as a default client scope; a pre-obtained `accessToken` must be issued with that scope too. Username and password authentication uses `admin-cli` and keeps working. The integration tests of camel-keycloak now run against Keycloak 26.8.2.
 
+### camel-kubernetes - the context reload on a secret or config map update lists the resources
+
+With `camel.vault.kubernetes.refreshEnabled=true` or `camel.vault.kubernetescm.refreshEnabled=true`, the task that reloads the CamelContext now uses a Kubernetes informer: it lists the Secrets (or ConfigMaps) of the namespace and then watches them, and lists them again when the API server closes the watch (for example with 410 Gone), so an update made while the watch was closed still reloads the context. Before, it only watched them, and such an update was missed. When RBAC is enabled, the ServiceAccount now needs the `list` permission on `secrets` (or `configmaps`) in addition to `watch`. The `list` permission does not widen what the ServiceAccount can read: the watch the task used before had no resource version, so the API server already sent it every existing Secret (or ConfigMap) of the namespace as an ADDED event. Without `list` the informer cannot start: the Kubernetes client logs an ERROR, the task a WARN, and it tries again with a delay that doubles up to 30 seconds. Creating or deleting a secret or config map still does not reload the context.
+
+### camel-file - idempotent consumer with an idempotent read lock
+
+With `idempotent=true` (or `noop=true`) and `readLock=idempotent`, `idempotent-changed` or `idempotent-rename`, the file consumer no longer adds the key to the idempotent repository eagerly, and `idempotentEager` does not apply: the read lock adds it when it acquires the lock. Since Camel 4.7 the read lock was refused, and such a consumer never consumed a file.
+
 ### Java
 
 **Breaking change:** Camel 4.24 requires **Java 21** as the minimum runtime version. Java 17 is no longer supported. Upgrade your JDK to 21 or later before upgrading to Camel 4.24.
@@ -223,6 +250,10 @@ This is a change in Keycloak, not in Camel: from Keycloak 26.8.2 the Admin REST 
 ### camel-core - Package scanning of JARs no longer includes sibling packages
 
 When scanning classes in a package (for example `camel.main.base-package-scan=com.acme.routes`, or `PackageScanClassResolver.findImplementations`), classes found in a JAR were also included when they belonged to a sibling package whose name merely started with the scanned package name, such as `com.acme.routesupport` or `com.acme.routes2`. Scanning a directory on the classpath never did this. Both now only include the scanned package and its sub packages, so a `RoutesBuilder` or `@Configuration` class in such a sibling package is no longer discovered when running from a JAR; list that package explicitly if it should be scanned.
+
+### camel-core - addTypeConverters uses the given instance
+
+`TypeConverterRegistry.addTypeConverters(Object)`, also used for the `TypeConverters` beans found in the registry, now invokes the non-static `@Converter` methods on the given object, and sets the `CamelContext` on it when it is `CamelContextAware`. Before, they ran on a new instance created by the injector: the state of the given object was ignored, and a class without a no-arg constructor failed at conversion time. The given object is used as is: unlike the instance created by the injector, it is not bean post-processed (`@PropertyInject`, `@BeanInject`, …​), so set its fields before adding it. Passing a `Class` still creates the instance with the injector.
 
 ### camel-core - Model has a new getModelLock method
 
@@ -494,11 +525,19 @@ When the called route handles failures (a dead letter channel, or an `onExceptio
 
 To turn off the error handler per output of such an EIP again (no redelivery of its outputs, and the failure goes to the caller), put the EIP in a `doTry` with only a `doFinally` in the called route, or turn off the error handler of the called route with `errorHandler(noErrorHandler())`, which turns it off for the other steps of that route too. Neither option brings back the redelivery of a whole routing slip or dynamic router.
 
+### camel-core - an Error of an advice of a route, a route policy or the result processor of a send
+
+An `Error` that is not a `VirtualMachineError` (such as a `NoClassDefFoundError` of a data format), thrown by an advice of a route or of a step (such as the binding of the Rest DSL, `variableReceive`, or the debugger, for example an assertion in `debugBefore` or `debugAfter` of camel-test), by the result processor of a `ProducerTemplate` send, or by the producer of a transacted `ProducerTemplate` send, now fails the exchange (wrapped in a `CamelExecutionException`), and the advices that already ran end as for an exception (such as the end of the unit of work). As for an exception of an advice, the error handler of that route does not get it. An `Error` of a `RoutePolicy` (`onExchangeBegin`, `onExchangeDone`) is logged at WARN and ignored, as an exception already was, so an assertion inside a `RoutePolicy` no longer fails the caller. Before, the `Error` was thrown on to the code that ran the route or the send (such as the consumer, or the caller of a `ProducerTemplate`), and the exchange could stay inflight (an asynchronous send with a result processor could never complete when the endpoint answered on another thread). A `VirtualMachineError` is left as before.
+
 ### camel-core - an AsyncProcessor that throws in a step without an error handler fails the exchange
 
 A step that has no error handler of its own (the steps of `doTry`, `doCatch`, `doFinally` and `onException`, also when nested in another EIP inside them, the outputs of a multicast, the recipients of a recipient list inside a `doTry`, the steps of a circuit breaker, and a step with `inheritErrorHandler(false)`) now handles a processor that throws from `process(exchange, callback)` instead of setting the exception on the exchange as if it had set it: the exchange fails with that exception, so the `doCatch` catches it, and the output of a multicast is redelivered by the error handler of the route as for any other failure. Before, the exchange hung.
 
 When such a processor handed its callback to another thread and then throws, the exchange now fails with the thrown exception unless that thread calls the callback first, and a later call is ignored and logged at WARN; before, the exception was dropped and that callback continued the exchange as a success. A second call of the callback is ignored and logged at WARN; before, the exchange was continued a second time. There is no option for the old behaviour; fix the processor to set the exception on the exchange and call the callback, as an `AsyncProcessor` must.
+
+### camel-core - an Error of an on completion is logged, and the other on completions run
+
+An `Error` that is not a `VirtualMachineError` (such as an `AssertionError` or a `NoClassDefFoundError`), thrown by an on completion (`Synchronization`) of an exchange or by its `onBeforeRoute` / `onAfterRoute` callback, is now logged at WARN and ignored, as an exception already was. The other on completions still run (such as the commit or rollback of the consumer) and the exchange is no longer left inflight. Before, the `Error` was thrown on to the code that ran the on completions (such as the consumer, or the caller of a `ProducerTemplate`). An assertion inside an on completion no longer fails the caller: check its outcome in the route or the test instead.
 
 ### camel-core - an Error of a contract transformer or validator, or in a transacted step, fails the exchange
 
@@ -618,6 +657,14 @@ A `receive()` without a timeout on a seda endpoint, such as `consumerTemplate.re
 ### camel-main - a failure to start is logged
 
 A Camel Main application that fails to start now logs why, at ERROR: `Error starting Camel: …​` with the stack trace, as `camel run` already did. Before, the failure left `main()` and only the JVM printed it, on stderr (`Exception in thread "main" …​`), so the log file of the application did not say why it stopped. The JVM no longer prints that same failure a second time. When the application logs nothing at ERROR (such as without a logging implementation), the JVM prints it as before.
+
+### camel-main - the camel.dataformat options apply to the Rest DSL binding
+
+With Camel Main and Camel JBang, the `camel.dataformat.<name>.*` options (such as `camel.dataformat.jackson.include`) now also apply to the data formats that the Rest DSL binding creates for `json` and `xml` binding, as they already did to the data formats of the routes. The request and response bodies of a REST service can therefore change, for instance null fields are left out. The `camel.rest.dataFormatProperties` (`json.in.`, `json.out.`, `xml.in.` and `xml.out.`) still take precedence. The `objectMapper`, `xmlMapper`, `allowUnmarshallType`, `allowJmsType`, `unmarshalType`, `useList`, `collectionType` and `partClass` options are not taken over: the body type comes from the `type` and `outType` of the verb, and the other options can be set with `camel.rest.dataFormatProperties` when the binding needs them.
+
+### camel-support - API components use one thread pool per CamelContext
+
+The producers of the API components (AS2, Box, Braintree, DHIS2, FHIR, Google Calendar, Google Drive, Google Mail, Google Sheets, Twilio and Zendesk) now use one thread pool per component in each CamelContext, instead of one pool shared by all the CamelContexts of the JVM. An application with several CamelContexts can therefore have more threads, and each pool uses the thread pool profile (such as `CamelGoogleDrive`) of its own CamelContext.
 
 ### camel-report-maven-plugin:validate / configuration-validate
 
@@ -756,6 +803,10 @@ A plugin of the Camel CLI (an implementation of `org.apache.camel.dsl.jbang.core
 -   A test sets the options of a command with `CommandLineTestHelper.parse(command, args…​)` (in the test jar of `camel-jbang-core`) instead of `CommandLine.populateCommand`.
     
 
+### camel-jbang - camel validate exits with 66 for a missing file or nothing to validate
+
+`camel validate yaml` of a file that does not exist now exits with code `66` (file not found), as `validate source` and `validate properties` do; before, it reported a validation error with code `1`. `camel validate source` and `camel validate normalize` given no file they can handle (such as `notes.txt`) now exit with code `66`; before, they reported success with code `0`.
+
 ### camel-jbang - plugins declare which commands they contribute to
 
 A CLI plugin can now declare which built-in commands it participates in beyond its own command, using the `appliesTo` attribute on `@CamelJBangPlugin`. For example, a plugin that provides a `PluginExporter` should declare `@CamelJBangPlugin(name = "…​", firstVersion = "…​", appliesTo = {"export"})` so it is loaded during `camel export` but not during `camel run`.
@@ -767,11 +818,41 @@ When adding a plugin via `camel plugin add`, the `appliesTo` value from the list
 > **Note**
 > The annotation default (`appliesTo = {}`) is not equivalent to `appliesTo: []` in the config file. An unset annotation value means no filtering (backward compatible — the plugin is loaded for `run` and `export`), whereas an explicit empty list in the config restricts the plugin to its own command only.
 
+### camel-jbang - camel run of a folder without routes exits with 1
+
+`camel run .` and `camel run --source-dir=dir`, without dev mode, now end with exit code `1` and `No routes found in: <dir>` when the folder has no routes, as a run of files without routes does. Before, the integration reported Running, did nothing, and exited with `0`. In dev mode (`--dev`, `camel dev`) the run still waits for files to be added. The message names the `.yml` files of the folder, as the YAML DSL reads `.yaml` files only.
+
+### camel-jbang - camel config set checks the value, and camel config unset of a key that is not set exits with 3
+
+`camel config set` checks the value against the options the key is the default of, and refuses a value one of them does not take, such as `runtime=springboot` or `max-seconds=abc`, with exit code `2`. Before, it stored the value, and then every command with that option failed with "DefaultValueProvider failed for option runtime". Such a value in the configuration file now fails a command with a message that names the file, the key and the value. A key that no command of the CLI has is still stored, with a warning. `camel config unset` of a key that is not set now exits with code `3` (not found) and says so, as `camel config get` does; it exited with `0`.
+
+### camel-jbang-mcp - the runtime tools act on the integration a call names
+
+A runtime tool of the MCP server (`camel_runtime_*`) picks its integration by `nameOrPid`. A call that gave the integration as `name` (as `camel_run`, `camel_get_log` and `camel_control` take it) had that argument ignored, and the tool acted on the only integration that runs, which could be another one. Now `name`, `pid` and `integration` are taken for `nameOrPid` (and `nameOrPid` for the `name` of `camel_get_log`, `camel_get_errors`, `camel_control` and `camel_eval_expression`), and a call that names the integration with another argument the tool does not take, such as `process` or `app`, is refused.
+
+The argument of `camel_runtime_heap_dump` for the file name of the dump is renamed from `name` to `file`: `name` now names the integration, like on the other runtime tools.
+
+### camel-jbang - camel run exits with 1 when the integration fails to start
+
+When `camel run` cannot start the integration, such as for a route that cannot be created or started, it now exits with code `1` (fix the route) instead of `70` (internal error), and prints the error as one `ERROR:` line on stderr. The stack trace is in the log of the integration, and is no longer printed a second time on stderr (add `--verbose` for it). Scripts that checked for `70` after a failed start should check for `1`.
+
+### camel-jbang - a Camel version that does not exist exits with 3
+
+A `--camel-version` that was never released, in `camel catalog`, `camel doc` and `camel validate`, now says `Camel version X not found in <repositories>` and exits with code `3` (not found) instead of `1` with "Cannot resolve dependencies". A Maven repository that cannot be reached still exits with `1`. `camel version set` checks that the version exists before it stores it: a version that does not exist exits with `3` and is not stored, and when the repositories cannot be reached the version is stored with a warning. `camel version set` without a version, `--runtime`, `--repo` or `--reset` is now a usage error (exit code `2`) instead of doing nothing.
+
+### camel-jbang - a name of a running integration matches only that integration
+
+A name given to `camel stop`, `camel get`, `camel cmd`, `camel trace` and the other commands for running integrations is still a prefix, but when an integration has exactly that name, the name now matches only that integration. With `orders` and `orders-v2` running, `camel stop orders` stops only `orders` (before, it stopped both), and `camel cmd send orders` sends to `orders` (before, it failed because the name matched two integrations). The same applies to the CamelContext name, and to the `nameOrPid` argument of the runtime tools of the MCP server. To act on all integrations whose names start with `orders`, use `orders*`.
+
 ### camel-resilience4j, camel-microprofile-fault-tolerance - a circuit breaker in a doTry
 
 A circuit breaker in the steps of a `doTry` no longer ends that `doTry` for the steps after it. Before, when the circuit breaker was done, a later routing slip, dynamic router, multicast or recipient list of the same `doTry` used the error handler of the route (redelivery and the dead letter channel) instead of the `doCatch`. And after the fallback of the circuit breaker had recovered from a failure, no `doCatch` of that `doTry` caught a later failure: the failure was thrown from the `doTry`. Now such failures go to the `doCatch`, as for the other steps of the `doTry`. A failure of the fallback itself is now also caught by the `doCatch` (before, it was thrown from the `doTry`).
 
 To have those steps use the error handler of the route, move them out of the `doTry` block.
+
+### camel-jbang - camel cmd send without a name sends to the integration that runs
+
+`camel cmd send` without an integration name started a Camel of its own, without routes, and sent from there. That is still so for an endpoint of a system outside the integrations (such as `kafka:topic`). Without `--endpoint`, the message went nowhere and was reported as sent. An endpoint that only an integration has (`direct:`, `seda:`, `stub:`, a route id) waited for the timeout. Now both go to the integration that runs. With none running, or several, the command exits with `3` and says what to give. A send without an endpoint to an integration without routes is now an error, rather than reported as sent.
 
 ### camel-aws2-kinesis - each endpoint uses its own client
 
@@ -839,11 +920,19 @@ The `CamelOaimphOnlyFirst` header now applies only to the message that has it. B
 
 The producer no longer reads the `CamelOaimphIgnoreSSLWarnings` header, and the `OAIPMHConstants.IGNORE_SSL_WARNINGS` constant is removed. Use the `ignoreSSLWarnings` option of the endpoint instead; when only some repositories need it, send to them through an endpoint URI that sets the option.
 
+### camel-jbang - camel run options win over application.properties
+
+An option given to `camel run` on the command line now wins over the same setting in `application.properties`. Before, the file won for most options: with `camel.main.tracing=false` in the file, `--trace` printed nothing, and with `camel.jbang.console=false`, `--console` had no effect. This applies to `--trace`, `--backlog-trace`, `--console`, `--health`, `--metrics`, `--mcp`, `--openapi-ui`, `--stub`, `--modeline`, `--ignore-loading-error`, `--lazy-bean`, `--prompt`, `--gav`, `--open-api`, `--verbose`, `--jfr`, `--source-dir`, `--data-dir`, `--exclude`, `--camel-version`, `--kamelets-version`, `--java-version`, `--background`, `--background-wait`, `--jvm-debug`, the Maven settings options and the logging options. An option that is not given still takes its value from the file.
+
 ### camel-clickhouse - a query in a binary format returns a byte\[\] body
 
 A `query` with a binary `format` (such as `RowBinary`, `Native`, `Parquet`, `Arrow` or `Avro`) now returns the result as a `byte[]` body. Before, the bytes were decoded as UTF-8 text into a `String`, which replaced the bytes that are not valid UTF-8, so the result could not be read. A query with a text format (such as `JSONEachRow`, `CSV` or `TSV`) still returns a `String`.
 
 Inserting a `List` of `Map` now fails with a `ClickHouseException` that says why, and so does a `List` of objects when no class is registered on the `Client` for the table. Before, both failed with a `NullPointerException` from the ClickHouse client.
+
+### camel-jbang - a local camel-cli.properties no longer hides the global one
+
+When the current directory has a `camel-cli.properties`, the Camel CLI used it instead of the global `~/.camel-cli.properties`, so a project file with one key dropped all the global settings, such as `repos`, `camel-version` or `runtime`. The local file is now laid over the global one: its keys win, and the other global keys still apply.
 
 ### camel-clickup - an event of another kind than taskTimeTrackedUpdated reaches the route
 
@@ -1146,6 +1235,10 @@ This includes exporting to the directory of the exported files themselves from a
 
 So `camel validate` can report an endpoint it did not report before.
 
+### camel-jbang - camel validate properties reports a key of a group Camel does not have
+
+`camel validate properties`, `camel validate source` and the AI file tools now report a `camel.*` key of a group Camel does not have when a Camel key is near it, such as `camel.tracing.enabled` (for `camel.trace.enabled`), `camel.profile` (for `camel.main.profile`) and `camel.kafka.brokers` (for `camel.component.kafka.brokers`), and `camel.logging.level` (for `logging.level.root`). Camel ignores such a key without a warning, so the line had no effect. A file with one, which passed before, now fails the check.
+
 ### camel-jbang - the AI file tools stay inside the project directory, also through a symbolic link
 
 The file tools of `camel mcp`, `camel ask` and the TUI AI agents (`camel_validate_source`, `camel_get_files`, `camel_edit_file`, `camel_write_file`) now resolve symbolic links before they check that a file is inside the project directory. A file reached through a link in the project that leads out of it, or through a link to nothing, is refused for reading and for writing, where it used to be read or written. Name the files of such a folder through its real directory instead. An absolute `file` inside the project directory is now accepted, as the same file named relative to it.
@@ -1244,6 +1337,16 @@ With `checksumFileAlgorithm`, the file producer calculated the checksum from the
 ### camel-file - path separator normalization for getFile/directory consistency
 
 On Linux and macOS, a backslash in the `file:` URI path (e.g. `file:target\subdir`) is now normalized to a forward slash, so that `getFile().getPath()` and `getConfiguration().getDirectory()` return the same value. Previously, `getFile()` preserved the backslash while `getDirectory()` replaced it with `/`, which could cause the producer to create a spurious directory with a backslash in its name and the consumer to miss files in a backslash-named directory. On Windows, where `java.io.File` already normalizes both separators to `\`, this change has no effect.
+
+### camel-file - the consumer skips a file it would move through a symbolic link resolving outside the starting directory
+
+With `jailStartingDirectory` enabled (the default), the file consumer now resolves symbolic links on the targets of `preMove`, `move` and `moveFailed`, including the default `.camel` folder. It checks these targets before the file is processed. When a target is inside the starting directory but resolves outside of it through a link, the consumer skips the file. It logs a WARN the first time. The file is not processed and not moved, and it stays in the folder. Before, the existing target was deleted and the file was moved wherever the link pointed. A target that depends on what the route sets can only be checked when the file is moved. Such a move fails, and the file is consumed again on the next poll.
+
+The file producer now refuses to delete or rename onto a file through such a link. This covers `fileExist=Move` with `moveExisting`, and the rename of a file written with `tempFileName`. The write fails.
+
+The expressions of `preMove`, `move` and `moveFailed` are evaluated before the file is processed, so each of them is evaluated one extra time per file: for a file processed without error, `move` is now evaluated twice and `moveFailed` once, where before `move` was evaluated once and `moveFailed` not at all. This matters for an expression with side effects, such as a bean that hands out a sequence number. The default `.camel` folder has no expression to evaluate.
+
+Targets configured outside the starting directory (such as `move=../archive`) and links resolving inside it work as before. A deployment that links one of these folders to another directory on purpose, such as `.camel` on another volume, should point the option at the folder the link resolves to, such as `move=/mnt/volume2/${file:name}`, as a target configured outside the starting directory is not checked. Setting `jailStartingDirectory=false` also keeps following those links, but then the consumer also reads a file in the starting directory that is a link to a file outside of it, and the producer writes through such links.
 
 ### camel-flatpack - with splitRows each message has its own row, and a failing row fails the producer
 
@@ -1434,6 +1537,14 @@ All commands find running integrations the same way:
 -   The `--timeout` of `camel cmd send`, `camel cmd receive`, `camel eval expression`, `camel transform message` and the `camel semantic` commands also takes a duration such as `30s` (a number is still millis).
     
 
+### camel-jbang - a Maven repository that does not answer fails the download after 60 seconds
+
+The Camel CLI (`camel run`, `camel export`, the CLI plugins, and other tools that download with `camel-tooling-maven`) now waits 60 seconds for data from a Maven repository, instead of the 30 minutes of Maven Resolver, so a repository that stops sending no longer hangs the download for that long. Set the `aether.connector.requestTimeout` system property (in millis) for a longer timeout. A repository that cannot be connected to is now logged with a WARN and not used for the rest of the run.
+
+### camel-jbang - dependencies are resolved with the breadth-first collector of Maven Resolver
+
+The Camel CLI (and other tools that download with `camel-tooling-maven`) now resolves dependencies with the breadth-first collector of Maven Resolver (`aether.dependencyCollector.impl=bf`), which downloads the POMs in parallel, instead of the depth-first one Maven uses by default. It resolves the same dependencies; a cold `camel run` with five components downloads them about a third faster. Set the `aether.dependencyCollector.impl=df` system property to go back. The dependencies given with `--dep` or `camel.jbang.dependencies` are now resolved together, as one dependency graph.
+
 ### camel-pqc - KeyLifecycleManager behaviour aligned across the implementations
 
 Four differences between the `KeyLifecycleManager` implementations are resolved. All four are corrections, but each is observable.
@@ -1465,13 +1576,19 @@ The Camel CLI has a documented set of exit codes (see [Exit Codes and Output](ca
     
 -   `camel transform dataweave` exits with `2` without `--input` or `--expression`, and with `66` when the input path does not exist or holds no `.dwl` files, instead of `1`.
     
+-   `camel cmd send --timeout` bounds the send in the integration: a send that does not complete in time is `Timeout` with exit `124`, and the exchange goes on in the integration. Before, it only bounded how long the CLI waited, and a timeout below 5 seconds was raised to 5 seconds. A send to a `direct` endpoint that no route consumes fails at once with "No consumers available" and exit `1`, instead of waiting 30 seconds for a consumer.
+    
 -   `camel cmd sql` exits with `124` instead of `1` when the query does not answer in time.
     
 -   A source file of `camel cmd route-diagram`, `camel cmd route-structure` and `camel cmd route-topology` that does not exist exits with `66` instead of `1`. The parts of a Java route the parser could not read are printed as a warning on stderr (also with `--json`, which lists them in `unread` as before).
     
--   A file or directory that does not exist exits with `66` instead of `1`: a source file or `--source-dir` of `camel run`, the route file of `camel explain` and `camel harden` (checked before the LLM is contacted), and the `pom.xml` of `camel dependency runtime`.
+-   `camel cmd route-structure --json` has the routes of `--filter`, in the order of `--sort`, with the code of `--brief` or `--description`, as the text output: these options were ignored with `--json`. A filter that matches no route exits with `3` instead of `0` with all the routes.
+    
+-   A file or directory that does not exist exits with `66` instead of `1`: a source file or `--source-dir` of `camel run`, the route file of `camel explain` and `camel harden` (checked before the LLM is contacted), the `pom.xml` of `camel dependency runtime`, a file of `camel export`, `camel kubernetes run` and `camel dependency list`, `copy` and `sbom` (whose "Path does not exist" is now on stderr), and a file of `camel transform route`, which now names it.
     
 -   A name that does not exist exits with `3` instead of `1`: the Kamelet of `camel init --from-kamelet`, the service of `camel infra run`, the key of `camel config get`, the name given to `camel doc`, and the plugin of `camel plugin delete`.
+    
+-   `camel cmd receive --action=start --endpoint=<pattern>` exits with `3`, "No endpoint matching", when the pattern matches no endpoint of the integration, instead of `0`. With `--output=json`, the line "Starting to receive messages …​" is printed on stderr, so stdout has only the JSON, and `--action=status --output=json` prints JSON instead of the table.
     
 -   `camel cmd memory-leak` and `camel restart` exit with `3` when no running integration, or more than one, matches the name. `camel cmd memory-leak` exits with `124` when the integration does not reply in time.
     
@@ -1639,7 +1756,9 @@ Without an interactive terminal, such as in a script, a CI job (the `CI` environ
 
 -   `camel run --background` waits up to 60 seconds for the integration to start (it was 20 seconds), and `--background-wait` takes how long, such as `--background-wait=2m` (`true` and `false` still work). An integration that is still starting after the wait exits with `124` and is left running; before, the command exited with `0`.
     
--   The output of an integration in the background goes to `~/.camel/<pid>-run.log`, whose path is printed. The log is kept while the integration runs (it was removed once the integration had started), and `camel stop` removes it. With `--background-wait=false` the output goes to the log as well, instead of a pipe that nobody read.
+-   The output of an integration in the background goes to `~/.camel/<pid>-run.log`. The log is kept while the integration runs (it was removed once the integration had started), and `camel stop` removes it. With `--background-wait=false` the output goes to the log as well, instead of a pipe that nobody read.
+    
+-   The output only gets the warnings and errors of the logging, and what the integration prints otherwise (such as why it cannot start): all of the logging is in `~/.camel/<pid>.log`, which `camel log` reads. Before, each line was written to both files. The `Log:` line is printed once the integration has started, with the path of `~/.camel/<pid>.log`.
     
 -   An integration that loads no routes exits with `1` and `No routes found in: <files>`, instead of running without doing anything, except with `--source-dir`, `--empty` or in dev mode, where files can be added later.
     
@@ -1790,10 +1909,25 @@ The commands that sort their rows by `--sort`, such as `camel ps`, `camel get ro
 
 -   `camel dependency copy` deletes the JAR files an earlier copy left in `--output-directory`, and keeps its other files: it deleted the whole directory (with `--output-directory=.` the project). It exits with `1` when a dependency cannot be resolved or copied (it printed the error and exited with `0`), and with `2` when `--output-directory` is a file.
     
+-   `camel dependency copy` resolves the dependencies together, as one dependency graph, so `--output-directory` gets one version of each library. It resolved each dependency on its own, and could copy two versions of a library (such as `httpclient5` 5.6.4 and 5.6.5, or `slf4j-api` 1.7.36 and 2.0.20).
+    
 -   `camel update run --runtime=quarkus --download=false` without `--quarkusMavenPluginVersion` exits with `2`, and a version without upgrade recipes exits with `1`: both failed with an internal error (`70`).
     
 -   `camel get error --last` shows the newest error of all the integrations (it showed the newest error of the integration with the lowest pid). An `--ago` that is not a duration, and a `--handled` that is not `true` or `false`, exit with `2`: the first showed every error, the second none. The errors of `--diagram` are printed on stderr, and a graphical `--theme` in a terminal without graphics exits with `2`.
     
+
+### camel-jbang - camel kubernetes volumes, --property and trait values
+
+-   The volumes of `--config`, `--resource` and `--volume` have different names in the pod: a second volume of the same name gets `-2`, a third `-3` and so on (`--config configmap:db --config secret:db` gives the volumes `db` and `db-2`). Such manifests had two volumes of the same name, which the API server refuses.
+    
+-   `camel kubernetes run --property` takes a `key=value` whose value is a path, such as `camel.server.path=/api`, as a property: it was taken for a properties file, and left out. A properties file that does not exist exits with `66`; it was ignored.
+    
+-   A quoted trait value, and the value of `cronjob.schedule`, is one value also with a comma in it (`cronjob.schedule=0 1,13 * * *`): it was split into a list, which failed with exit code `70`.
+    
+
+### camel-jbang - camel generate rest --dto
+
+The DTOs of `camel generate rest --dto` use Jakarta EE (`jakarta.validation`, `jakarta.annotation`) instead of `javax`, and no longer use `JsonNullable` of `jackson-databind-nullable` or the Swagger annotations (`io.swagger.v3.oas.annotations`), so they compile in a Camel 4 project. With `--runtime=main` they no longer use Spring (`@DateTimeFormat`). The OpenAPI Generator no longer prints its banner on stdout after the REST DSL, and `--input` takes an `http://` or `https://` URL.
 
 ### camel-jbang - camel version list
 
@@ -1840,7 +1974,22 @@ The `camel_migration_compatibility` tool no longer takes the `camelComponents` a
 
 `camel_migration_recipes` returns commands that run: the Spring Boot command activates `org.apache.camel.upgrade.CamelSpringBootMigrationRecipe`, the recipes artifact is the `<major>.<minor>.0` release of the target version, the OpenRewrite plugin is no longer pinned to a version, and the Quarkus command runs the `quarkus-maven-plugin` at the Quarkus platform version of the new optional `quarkusPlatformVersion` argument (or the latest one), with `-Drewrite=true` for a full run.
 
-In `camel_dependency_check` and `camel_dependency_security_audit` the dependencies are the declared ones: a component only in `dependencyManagement` or in the dependencies of a plugin no longer counts, and Spring Boot starters and Camel Quarkus extensions count as the component they provide. The version status of `camel_dependency_check` compares the project with the latest Camel release, added as `latestVersion`, instead of the catalog version of the server. The security audit no longer audits the server’s catalog version when the `pom.xml` sets no Camel version: it audits the `camelVersion` argument, else lists every advisory of the declared components, and says so in `warnings`. Its `reachable` is null when no routes are given, advisories without components are returned as `uncheckedAdvisories`, and `clean` is true only when none of them apply.
+In `camel_dependency_check` the dependencies are the declared ones: a component only in `dependencyManagement` or in the dependencies of a plugin no longer counts, and Spring Boot starters and Camel Quarkus extensions count as the component they provide. Its version status compares the project with the latest Camel release, added as `latestVersion`, instead of the catalog version of the server.
+
+### camel-jbang-mcp - the security audit is part of camel\_dependency\_check, and four tools are removed
+
+The `camel_dependency_security_audit` MCP tool is removed. `camel_dependency_check` takes the same arguments and returns the audit in its new `security` section: the published CVE advisories of each declared artifact at the project’s Camel version, `reachable` when routes are given, the advisories that name no component as `uncheckedAdvisories`, and `clean`. When the `pom.xml` sets no Camel version, the check uses the `camelVersion` argument, else lists every advisory of the declared components, and says so in `security.warnings`. The summary counts the vulnerable artifacts in `vulnerableArtifactCount` and in `totalIssueCount` when the Camel version is known, so a project with a known CVE is no longer reported `healthy`.
+
+These MCP tools are removed, with no replacement tool:
+
+-   `camel_error_diagnose`, from both MCP servers (`camel mcp` and `camel tui --mcp`), as it was one of the authoring tools they share: it matched an error against a fixed list of exceptions. `camel_get_errors` returns the failed exchanges of an integration with their stack traces, and `camel_get_log` its log. The exception reference data stays available as the `camel://error/exception-catalog` and `camel://error/exception/{name}` resources of `camel mcp`.
+    
+-   `camel_ai_pipeline_scaffold`: the route it returned referred to beans it did not define. Build such a route with `camel_catalog_doc` and the documentation of the AI components.
+    
+-   `camel_route_cost_estimate`: its prices were written into the code and did not follow the provider prices.
+    
+-   `camel_route_test_scaffold`: it wrote a JUnit 5 test class. The Camel CLI runs Citrus tests: `camel test init` creates one, and `camel test run` runs it.
+    
 
 ### camel-jbang-mcp - camel\_openapi\_mock\_guidance is removed
 
@@ -4263,6 +4412,12 @@ The producer used to hand the `MqttProperties` object of the `CamelPahoMqtt5MsgP
 
 The log keeps 524,288 entries; after that it rolls over and holds the newest entries before the older ones, and the file does not say which are newer. So a log that holds that many entries is not replayed, as before: a WARN names the number of unconfirmed entries, which are discarded with the log. Replaying the wrong offset of a key would make the consumer resume from an older offset. A log that rolled over and was cut short because the system stopped while the log rewrote itself after the roll-over holds fewer entries and is replayed: the last entry of a key in it can then be an older offset, so the consumer can process again the messages after that offset.
 
+### camel-core - a producer that calls the callback and then throws
+
+When the producer of an endpoint calls the callback of a send and then throws (an `AsyncProducer` that breaks the async contract), the exception is now logged at WARN and no longer set on the exchange, which has already continued, and the send is completed once. This now also applies to `to` when the send needs a callback of its own (when event notification applies, when `to` sets an exchange pattern that differs from the one of the exchange, or with `variableReceive`), to the synchronous sends of the `ProducerTemplate`, and to a send with a send hook (as installed by camel-chaos), as it already did for `toD` and the asynchronous sends. When such a `to` throws before it calls the callback, the exchange pattern is now restored and the sent event is fired, as when the producer sets the exception on the exchange. A plain `to` that does not need a callback of its own (no event notifier, such as camel-micrometer or a tracer, and no change of exchange pattern or `variableReceive`) keeps the old behaviour for such a producer.
+
+The asynchronous sends of the `ProducerTemplate` now fire one `ExchangeSendingEvent` and one `ExchangeSentEvent` per send; before, each event was fired twice. Tracing (camel-tracing, camel-telemetry), which builds its spans from these events, now sees one sending/sent pair per asynchronous send of the `ProducerTemplate` instead of two.
+
 ### camel-core - a hook before each step of a route
 
 A new SPI `org.apache.camel.spi.StepHook`, added with `ExtendedCamelContext.addStepHook`, can fail or delay each step of a route. `ErrorHandlerRedeliveryCustomizer` has a new default method `useStepHook(String)`, so existing implementations need no change. A custom error handler that wants a failure from the hook handled like a failure of the step’s processor (with `onException` and redelivery) can override it.
@@ -4422,6 +4577,14 @@ A route whose message still carries a `Content-Type` header from an earlier step
 ### camel-catalog - an empty deprecationNote is no longer written
 
 The option metadata in the catalog (component, endpoint and header options, and the functions and operators of the simple language) no longer has `"deprecationNote": ""`. The key is now present only when there is a note, as was already the case for options without `@Metadata`. Tools that read the catalog JSON get no key (null with `camel-tooling-model`) instead of an empty string.
+
+### camel-catalog - no default value for java.lang.Boolean options that declare none
+
+A component or endpoint option of type `java.lang.Boolean` that declares no default value no longer has `"defaultValue": false` in the catalog, and the javadoc of its Endpoint DSL and Component DSL methods no longer says `Default: false`. The same holds for the `java.lang.Boolean` parameters of the API-based components. Such an option is often not `false` when it is not set: another option, a library or the remote service then decides. Routes behave as before.
+
+The `closeStreamAfterRead` option of `azure-storage-datalake` now has the default value `true` in the catalog, the value it has when it is not set.
+
+Tools that read the default value from the catalog get none for these options (null with `camel-tooling-model`).
 
 ### camel-langchain4j-embeddings - the producer uses the EmbeddingRequest API of LangChain4j
 
@@ -4680,6 +4843,18 @@ Both are now deprecated with a note that says so. Remove `retentionPolicy` from 
 
 With `allowTemplateFromHeader=true`, a script from the `CamelLanguageScript` header is now used for that message only. Before, with `cacheScript=true` it could replace the cached script of the endpoint, so later messages without the header ran it too. The header is now removed after use, so a later language endpoint in the route runs its own script instead of the header’s. Set the header again before each language endpoint that should use it.
 
+### camel-jbang - camel infra run artemis maps MQTT and AMQP only on request
+
+`camel infra run artemis` maps the core acceptor (61616) and the web console (8161) on the host, and no longer the MQTT (1883) and AMQP (5672) ports, which are the ports of mosquitto and RabbitMQ: Artemis failed to start next to `camel infra run mosquitto`. Map them with `--property artemis.ports=mqtt,amqp` (or `all`). The `withFixedPort()` container of `camel-test-infra-artemis` maps the same ports, and reads the same property.
+
+A service that does not start because a port it maps on the host is taken now fails with one line that names the port, and the infra service that has it, instead of the stack trace of the container runtime.
+
+### camel-jbang - camel run loads one version of each library
+
+`camel run` downloads the JARs of each component when it is first used. It now keeps one version of each library: when a component used later depends on another version of a library that is already loaded, it gets the loaded version, as with the `dependencyManagement` of a Maven project.
+
+Before, the other version was added as well. The classpath could then hold, for example, three versions of Netty, and a class came from whichever JAR was first. Use `--verbose` to see the JARs added for each dependency.
+
 ### camel-vertx - the component fails to start when the clustered Vert.x is not created
 
 When the component builds its own clustered Vert.x (the component `host` or `port` option is set and no `vertxOptions` is given), it waits for the EventBus to be ready before it reports itself started. That wait used to be ineffective: the result of the bounded wait was discarded and a failed build only logged a warning, so the component started with no Vert.x instance and the first endpoint, producer or consumer to use it failed with a `NullPointerException`.
@@ -4688,6 +4863,30 @@ The component now fails to start, with the cause attached, when the clustered Ve
 
 `timeout` must now be a positive number of seconds on that path: `timeout=0` used to mean "do not wait", which left the component without a Vert.x, and is rejected with a clear message instead.
 
+### camel-jbang - camel run stops when a dependency it was given cannot be downloaded
+
+`camel run` now stops with exit code 1 when a dependency given with `--dep`, `camel.jbang.dependencies`, a `//DEPS` line or the dependencies of a Kamelet cannot be downloaded, and prints why on one line, such as `ERROR: Cannot download dependency: com.acme:foo:1.0 due to: …​ Could not find artifact com.acme:foo:jar:1.0 in central (…​)`. Before, it logged the error with the stack trace, started the routes without the dependency, and exited with 0. In dev mode (`--dev`), a reload with a `//DEPS` line that cannot be downloaded fails, and the routes keep running as they were. Other commands of the Camel CLI that fail to download a dependency also exit with 1 and print one line, instead of exiting with 70 and printing the stack trace (use `--verbose` for the stack trace). `camel export` still writes the dependency to the exported project.
+
 ### camel-docling - html\_split\_page is rejected by docling-serve
 
 `outputFormat=html_split_page` produced an empty body on the docling-serve path: the request asked docling-serve for the split pages, whose content it does not return in the response, so every content field of the reply was empty. It now fails with an `IllegalArgumentException` that names the reason and the way out, `outputFormat=html` to get the HTML of the whole document.
+
+### camel-aws2-transcribe - the protocol option is deprecated
+
+The `protocol` option never had any effect. Nothing reads it: the Transcribe client is built by the shared `AwsClientBuilderUtil`, which takes the region, the endpoint override and the proxy settings, and `getProtocol()` is called only by the generated configurer. Its description was also the one belonging to `proxyProtocol`, so it read as if it configured the proxy.
+
+It is now deprecated, with a `deprecationNote` that says so, and its description no longer claims to configure a proxy. Remove `protocol` from the endpoint URI or the configuration. To send the client’s traffic through a proxy, use `proxyProtocol` together with `proxyHost` and `proxyPort`, which the shared client builder does apply.
+
+### camel-file - a resume offset past the end of the file now fails the exchange
+
+The file resume support positions the body at the offset recorded for the file. It did that with a single unchecked `skip(offset)`, and both `InputStream.skip` and `Reader.skip` are specified to skip **up to** the requested amount, so the return value is the only thing that says where the stream actually is. It was discarded.
+
+The reachable case is an offset that no longer fits the file, which is what a recorded offset becomes once the file is truncated or replaced: the stream ran to the end and the exchange carried an empty body as if that were the file’s content. The offset is now honoured in full, and an `EOFException` is thrown when the file ends first.
+
+If your offsets can go stale, note that by default (without `moveFailed`) the failing exchange leaves the file in place, so the next poll reads the same offset from the resume store and fails again. Clear or reset the recorded offset for that file - or delete the resume store entry - to let it be consumed from the start again.
+
+### camel-docker - the loggingFilter and followRedirectFilter options are deprecated
+
+Neither option has had any effect since Camel 2.18, when the docker-java 3.x upgrade removed the `withLoggingFilter` and `withFollowRedirectsFilter` calls they fed. `DockerClientFactory` now builds the whole `DockerClientProfile` that the client is created from, and it sets neither of them - `DockerClientProfile` has no field for either - so `isLoggingFilter()` and `isFollowRedirectFilter()` are called only by the generated configurers. The two matching headers, `CamelDockerLoggingFilter` and `CamelDockerFollowRedirectFilter`, are read nowhere either.
+
+Both options and both header constants are now deprecated. Remove `loggingFilter` and `followRedirectFilter` from the endpoint URI or the component configuration; setting them has changed nothing since 2.18. To see the traffic with the Docker daemon, raise the log level of the `com.github.dockerjava` loggers.

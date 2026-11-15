@@ -100,6 +100,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **clientTimeout** (common) | Socket timeout (SO\_TIMEOUT) in milliseconds. On a consumer it applies to the connections accepted from clients. On a producer it is only used when negotiationType is SSL. |  | int |
 | **compressionType** (common) | 
 Protocol compression mechanism type.
 
@@ -135,7 +136,6 @@ Enum values:
 
 
  | BINARY | ThriftExchangeProtocol |
-| **clientTimeout** (consumer) | Client timeout for consumers. |  | int |
 | **maxPoolSize** (consumer) | The Thrift server consumer max thread pool size. | 10 | int |
 | **muteException** (consumer) | If enabled and an Exchange failed processing on the consumer side, the Thrift client receives a generic error that does not contain the exception’s message. An exception that the Thrift method declares in the IDL is still sent as it is. | true | boolean |
 | **poolSize** (consumer) | The Thrift server consumer initial thread pool size. | 1 | int |

@@ -101,7 +101,7 @@ With the following _path_ and _query_ parameters:
 | **clientKeyPassphrase** (security) | The Client Key Passphrase. |  | String |
 | **oauthToken** (security) | The Auth Token. |  | String |
 | **password** (security) | Password to connect to Kubernetes. |  | String |
-| **trustCerts** (security) | Define if the certs we used are trusted anyway or not. | false | Boolean |
+| **trustCerts** (security) | Define if the certs we used are trusted anyway or not. |  | Boolean |
 | **username** (security) | Username to connect to Kubernetes. |  | String |
 
 ## Message Headers

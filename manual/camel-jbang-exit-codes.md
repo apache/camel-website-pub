@@ -10,7 +10,7 @@ The exit codes and streams on this page apply from Camel 4.24 onwards.
 | Code | Meaning | When |
 | --- | --- | --- |
 | `0` | Success | The command did what it was asked to do. |
-| `1` | Failed | The command ran, but the outcome is negative: validation found errors, a check failed, or the integration rejected the action. |
+| `1` | Failed | The command ran, but the outcome is negative: validation found errors, a check failed, the integration rejected the action, or `camel run` could not start the integration (such as a route that cannot be created): the log of the integration has the stack trace. |
 | `2` | Usage error | An unknown option, an invalid or missing argument, options that cannot be used together, or a command that needs an interactive terminal. |
 | `3` | Not found | An integration, route, component, service or other name given on the command line is not running or does not exist, or a name matches more than one running integration. Also when the integration stops before it answers the command, such as a `camel cmd send` that waits for the reply. |
 | `66` | File not found | A file or directory given on the command line does not exist, or holds none of the files the command needs. |
@@ -68,6 +68,10 @@ CAMEL_CLI_DEBUG=true camel run hello.yaml
 The commands that print data have a `--json` option (`camel overview` has `--format=json`). With it, stdout is exactly one JSON document, also when the command fails:
 
 -   A list is a JSON array, and `[]` when there is nothing to list, such as `camel ps --json` when no integration is running.
+    
+-   A list is a list also for one integration, such as `camel get about --json`.
+    
+-   A row of a listing of running integrations says which integration it is of: `pid`, a number, and `name`.
     
 -   An error is a JSON object, with the exit code of the command in `code`:
     

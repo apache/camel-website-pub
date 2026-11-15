@@ -13,5 +13,7 @@ camel cmd reload [options]
    
 | Option | Description | Default | Type |
 | --- | --- | --- | --- |
+| `--json` | The outcome of --wait as JSON |  | boolean |
 | `--timeout` | How long to wait for the integration to answer, in millis or as a duration such as 30s | 10000 | long |
+| `--wait` | Reload the files changed since the last scan of dev mode now, and wait for the outcome: the files reloaded, or why the reload failed |  | boolean |
 | `-h,--help` | Display this help and exit |  | boolean |

@@ -108,31 +108,7 @@ The Netty component supports the following options which are listed below.
 | **executorService** (consumer (advanced)) | To use the given custom EventExecutorGroup. |  | EventExecutorGroup |
 | **maximumPoolSize** (consumer (advanced)) | Sets a maximum thread pool size for the netty consumer ordered thread pool. The default size is 2 x cpu\_core plus 1. Setting this value to eg 10 will then use 10 threads unless 2 x cpu\_core plus 1 is a higher value, which then will override and be used. For example if there are 8 cores, then the consumer thread pool will be 17. This thread pool is used to route messages received from Netty by Camel. We use a separate thread pool to ensure ordering of messages and also in case some messages will block, then netty’s worker threads (event loop) won’t be affected. |  | int |
 | **nettyServerBootstrapFactory** (consumer (advanced)) | To use a custom NettyServerBootstrapFactory. |  | NettyServerBootstrapFactory |
-| **noReplyLogLevel** (consumer (advanced)) | 
-If sync is enabled this option dictates NettyConsumer which logging level to use when logging a there is no reply to send back.
-
-Enum values:
-
--   TRACE
-    
--   DEBUG
-    
--   INFO
-    
--   WARN
-    
--   ERROR
-    
--   OFF
-    
-
-
-
-
-
- | WARN | LoggingLevel |
 | **serverClosedChannelExceptionCaughtLogLevel** (consumer (advanced)) | 
-
 If the server (NettyConsumer) catches an java.nio.channels.ClosedChannelException then its logged using this logging level. This is used to avoid logging the closed channel exceptions, as clients can disconnect abruptly and then cause a flood of closed exceptions in the Netty server.
 
 Enum values:
@@ -200,6 +176,30 @@ Enum values:
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **channelGroup** (advanced) | To use an explicit ChannelGroup. |  | ChannelGroup |
 | **nativeTransport** (advanced) | Whether to use native transport instead of NIO. Native transport takes advantage of the host operating system and is only supported on some platforms. You need to add the netty JAR for the host operating system you are using. See more details at: [http://netty.io/wiki/native-transports.html](http://netty.io/wiki/native-transports.md). | false | boolean |
+| **noReplyLogLevel** (advanced) | 
+
+The logging level to use when there is nothing to send: on the consumer (if sync is enabled) when there is no reply to send back, and on the producer when the message has no body.
+
+Enum values:
+
+-   TRACE
+    
+-   DEBUG
+    
+-   INFO
+    
+-   WARN
+    
+-   ERROR
+    
+-   OFF
+    
+
+
+
+
+
+ | WARN | LoggingLevel |
 | **options** (advanced) | Allows to configure additional netty options using option. as prefix. For example option.child.keepAlive=false. See the Netty documentation for possible options that can be used. This is a multi-value option with prefix: option. |  | Map |
 | **receiveBufferSize** (advanced) | The TCP/UDP buffer sizes to be used during inbound communication. Size is bytes. | 65536 | int |
 | **receiveBufferSizePredictor** (advanced) | Configures the buffer size predictor. See details at Jetty documentation and this mail thread. |  | int |
@@ -318,30 +318,6 @@ Enum values:
 
  |  | ExchangePattern |
 | **nettyServerBootstrapFactory** (consumer (advanced)) | To use a custom NettyServerBootstrapFactory. |  | NettyServerBootstrapFactory |
-| **noReplyLogLevel** (consumer (advanced)) | 
-
-If sync is enabled this option dictates NettyConsumer which logging level to use when logging a there is no reply to send back.
-
-Enum values:
-
--   TRACE
-    
--   DEBUG
-    
--   INFO
-    
--   WARN
-    
--   ERROR
-    
--   OFF
-    
-
-
-
-
-
- | WARN | LoggingLevel |
 | **serverClosedChannelExceptionCaughtLogLevel** (consumer (advanced)) | 
 
 If the server (NettyConsumer) catches an java.nio.channels.ClosedChannelException then its logged using this logging level. This is used to avoid logging the closed channel exceptions, as clients can disconnect abruptly and then cause a flood of closed exceptions in the Netty server.
@@ -410,6 +386,30 @@ Enum values:
 | **allowSerializedHeaders** (advanced) | Only used for TCP when transferExchange is true. When set to true, serializable objects in headers and properties will be added to the exchange. Otherwise Camel will exclude any non-serializable objects and log it at WARN level. | false | boolean |
 | **channelGroup** (advanced) | To use an explicit ChannelGroup. |  | ChannelGroup |
 | **nativeTransport** (advanced) | Whether to use native transport instead of NIO. Native transport takes advantage of the host operating system and is only supported on some platforms. You need to add the netty JAR for the host operating system you are using. See more details at: [http://netty.io/wiki/native-transports.html](http://netty.io/wiki/native-transports.md). | false | boolean |
+| **noReplyLogLevel** (advanced) | 
+
+The logging level to use when there is nothing to send: on the consumer (if sync is enabled) when there is no reply to send back, and on the producer when the message has no body.
+
+Enum values:
+
+-   TRACE
+    
+-   DEBUG
+    
+-   INFO
+    
+-   WARN
+    
+-   ERROR
+    
+-   OFF
+    
+
+
+
+
+
+ | WARN | LoggingLevel |
 | **options** (advanced) | Allows to configure additional netty options using option. as prefix. For example option.child.keepAlive=false. See the Netty documentation for possible options that can be used. This is a multi-value option with prefix: option. |  | Map |
 | **receiveBufferSize** (advanced) | The TCP/UDP buffer sizes to be used during inbound communication. Size is bytes. | 65536 | int |
 | **receiveBufferSizePredictor** (advanced) | Configures the buffer size predictor. See details at Jetty documentation and this mail thread. |  | int |

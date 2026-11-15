@@ -145,7 +145,7 @@ Other shared files are written only while they are Camel Kit’s
 
 `docs/constitution.md`, `.claude/settings.json`, `.qwenignore`, `.bob/custom_modes.yaml` and the Maven wrapper (`mvnw`, `mvnw.cmd`, `.mvn/wrapper/maven-wrapper.properties`) are written when missing or still identical to what Camel Kit last wrote. A project without a wrapper gets the complete one. Once any wrapper file is the project’s own, Camel Kit adds no further wrapper file and writes only the ones named with `--replace`.
 
-A shared file that was not written by Camel Kit, or was changed afterwards, is left untouched and listed under _Existing files preserved_ at the end of the run. The version Camel Kit would have written is saved under `.camel-kit/conflicts/` at the same relative path, so you can merge it by hand. To let Camel Kit replace a file in full, name it explicitly:
+A shared file that was not written by Camel Kit, or was changed afterwards, is left untouched and listed under _Existing files preserved_ at the end of the run. The version Camel Kit would have written is saved under `.camel-kit/conflicts/` at the same relative path, so you can merge it by hand. The Maven wrapper is the exception: a preserved wrapper file is listed without a saved version, because a wrapper is not meant to be merged by hand. To replace the whole wrapper, use `--replace-wrapper`; `--replace mvnw` still replaces that one file. To let Camel Kit replace a file in full, name it explicitly:
 
 ```bash
 camel-kit init --here --ai claude --force --replace docs/constitution.md
@@ -157,7 +157,7 @@ To see what a run would do to these files without writing anything, add `--dry-r
 camel-kit init --here --ai claude --dry-run
 ```
 
-An existing JSON MCP configuration is merged: Camel Kit adds or updates its own servers and keeps other servers and settings. A file that is not valid JSON stops `init` before any project file is changed. On reinitialization, properties you added to `.camel-kit/config.properties` are kept.
+An existing MCP configuration is merged: Camel Kit adds or updates its own servers and keeps other servers and settings. This applies to the JSON files and to `.codex/config.toml`, where Camel Kit keeps its servers between `# BEGIN CAMEL-KIT MANAGED MCP SERVERS` and `# END CAMEL-KIT MANAGED MCP SERVERS`. A file that cannot be merged stops `init` before any project file is changed, and `--dry-run` rejects it with the same message: invalid JSON or TOML, and for Codex also damaged markers, a `camel`, `camel-knowledge` or `citrus` server table defined outside the managed block, an `mcp_servers` value that cannot take further tables, or a `.codex/config.toml` that is not a regular file. On reinitialization, properties you added to `.camel-kit/config.properties` are kept.
 
 Camel Kit records the hash of each tracked file it wrote in `.camel-kit/managed-files.properties`; commit it with the project. Known limits:
 

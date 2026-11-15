@@ -77,7 +77,7 @@ The Doctor checks your development environment and reports issues:
     
 -   Docker/Podman availability
     
--   Ollama: whether it runs, and the models it has (the AI panel needs one of 14B or more)
+-   Ollama: whether it runs, and the models it has (the AI panel needs one of 24B or more)
     
 -   AI and MCP: the AI provider and model set up, and the MCP server of the session
     

@@ -37,7 +37,7 @@ The distribution has the scripts in `bin/` and the JARs in `lib/`. The scripts r
 
 ### Class data sharing
 
-The scripts turn on class data sharing of the JVM: the classes that a command loads are kept in an archive, one per command and Camel version, so the command starts faster the next time. The first run of a command creates its archive, and takes longer, and the JVM creates it again when the JDK changes. The archives are in `${XDG_CACHE_HOME:-~/.cache}/camel-cli/cds` (`%LOCALAPPDATA%\camel-cli\cds` on Windows), and can be removed at any time.
+The scripts turn on class data sharing of the JVM: the classes that a command loads are kept in an archive, one per command, Camel version and install directory, so the command starts faster the next time. The first run of a command creates its archive, and takes longer, and the JVM creates it again when the JDK changes. The archives are in `${XDG_CACHE_HOME:-~/.cache}/camel-cli/cds` (`%LOCALAPPDATA%\camel-cli\cds` on Windows), and can be removed at any time.
 
 To turn it off, set `CAMEL_CDS=false`:
 

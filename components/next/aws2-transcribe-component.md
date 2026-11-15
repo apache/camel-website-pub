@@ -148,7 +148,7 @@ Enum values:
 | **profileCredentialsName** (producer) | If using a profile credentials provider this parameter will set the profile name. |  | String |
 | **protocol** (producer) | 
 
-To define a proxy protocol when instantiating the Transcribe client.
+**Deprecated** The protocol to use when instantiating the Transcribe client. Deprecation note: Not used: nothing reads this option when the Transcribe client is built.
 
 Enum values:
 
@@ -290,7 +290,7 @@ Enum values:
 | **profileCredentialsName** (producer) | If using a profile credentials provider this parameter will set the profile name. |  | String |
 | **protocol** (producer) | 
 
-To define a proxy protocol when instantiating the Transcribe client.
+**Deprecated** The protocol to use when instantiating the Transcribe client. Deprecation note: Not used: nothing reads this option when the Transcribe client is built.
 
 Enum values:
 

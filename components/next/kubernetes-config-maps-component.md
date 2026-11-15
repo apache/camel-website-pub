@@ -128,7 +128,7 @@ Enum values:
 | **clientKeyPassphrase** (security) | The Client Key Passphrase. |  | String |
 | **oauthToken** (security) | The Auth Token. |  | String |
 | **password** (security) | Password to connect to Kubernetes. |  | String |
-| **trustCerts** (security) | Define if the certs we used are trusted anyway or not. | false | Boolean |
+| **trustCerts** (security) | Define if the certs we used are trusted anyway or not. |  | Boolean |
 | **username** (security) | Username to connect to Kubernetes. |  | String |
 
 ## Message Headers
@@ -439,3 +439,5 @@ camel.main.context-reload-enabled = true
 where `camel.vault.kubernetescm.refreshEnabled` will enable the automatic context reload and `camel.vault.kubernetescm.configmaps` is a regex representing or a comma separated lists of the configmaps we want to track for updates.
 
 Whenever a configmap listed in the property, will be updated in the same namespace of the running application, the Camel context will be reloaded, refreshing the configmap value.
+
+Camel lists the ConfigMaps of that namespace and then watches them (with a Kubernetes informer), so when RBAC is enabled the ServiceAccount needs the `list` and `watch` permissions on `configmaps`. When the API server closes the watch (for example with 410 Gone because the watch is too old), Camel lists the ConfigMaps again, so an update made in the meantime still reloads the context.

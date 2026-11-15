@@ -119,7 +119,7 @@ Enum values:
 
 
  | CONTENT | LangChain4jWebSearchResultType |
-| **safeSearch** (producer) | The safeSearch is the safe search flag, indicating whether to enable or disable safe search. | false | Boolean |
+| **safeSearch** (producer) | The safeSearch is the safe search flag, indicating whether to enable or disable safe search. |  | Boolean |
 | **startIndex** (producer) | The startIndex is the start index for search results, which may vary depending on the search engine. |  | Integer |
 | **startPage** (producer) | The startPage is the start page number for search results. |  | Integer |
 | **webSearchEngine** (producer) | **Autowired** **Required** The WebSearchEngine engine to use. This is mandatory. Use one of the implementations from Langchain4j web search engines. |  | WebSearchEngine |

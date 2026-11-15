@@ -190,6 +190,83 @@ Not known when `serializer` is set.
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the Google Pubsub component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `PubsubWorld`
+Fake: FakePubsub: a subscription (Pull, Acknowledge, ModifyAckDeadline, ack deadlines, dead letter policy) behind the SubscriberStub of synchronousPull
+
+Tests: `PubsubConsumerDstTest`
+
+ | 
+
+**Covers:**
+
+-   synchronousPull with ackMode AUTO, and ackMode NONE with grouped messages acked or nacked together
+    
+-   ack deadlines that expire while a message is processed
+    
+-   the max delivery attempts of a subscription with a dead letter policy
+    
+-   route stop and start while the consumer pulls
+    
+-   a stop and start of the same consumer in one step, as a throttling route policy does
+    
+
+**Faults:**
+
+-   Pull fails
+    
+-   Acknowledge fails
+    
+-   ModifyAckDeadline (nack) fails
+    
+-   calls answer slowly
+    
+-   Pull returns fewer messages than it could
+    
+-   processing fails
+    
+-   processing is slower than the ack deadline
+    
+
+**Invariants:**
+
+-   the consumer uses the subscription as documented
+    
+-   a delivery is acknowledged only after its exchange completed
+    
+-   a delivery is nacked only after its exchange failed or at the max delivery attempts
+    
+-   a manual ack of a group acknowledges every message of the group
+    
+-   a stopped consumer issues no pull, and the consumer has one pull at a time
+    
+-   a delivery at the max delivery attempts is nacked without routing it
+    
+-   every message is acknowledged or dead lettered once the faults cleared
+    
+-   a message published once the faults cleared is routed and acknowledged
+    
+
+
+
+
+
+ | [CAMEL-25712](https://issues.apache.org/jira/browse/CAMEL-25712)
+
+[CAMEL-25790](https://issues.apache.org/jira/browse/CAMEL-25790)
+
+[CAMEL-26647](https://issues.apache.org/jira/browse/CAMEL-26647)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 ## Usage
 
 ### Producer Endpoints

@@ -42,6 +42,7 @@ This page provides a reference for all Camel CLI commands.
 | [camel script](camel-jbang-script.md) | Run Camel integration as shell script for terminal scripting |
 | [camel semantic](camel-jbang-semantic.md) | List semantic definitions and expert contracts |
 | [camel shell](camel-jbang-shell.md) | Interactive Camel CLI shell. |
+| [camel status](camel-jbang-status.md) | The state of a running Camel integration in one call: where it runs and its files, its routes, health, last errors and last reload, its JVM, and the end of its log |
 | [camel stop](camel-jbang-stop.md) | Shuts down running Camel integrations |
 | [camel top](camel-jbang-top.md) | Top status of Camel integrations |
 | [camel trace](camel-jbang-trace.md) | Tail message traces from running Camel integrations |
