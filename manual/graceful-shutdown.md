@@ -131,6 +131,9 @@ It is possible to stop (will do a gracefully shut down) an individual route usin
 camelContext.getRouteController().stopRoute(routeId);
 ```
 
+> **Note**
+> A graceful stop waits for the inflight messages of the route. When a message stops its own route by calling `stopRoute` on the thread that routes it, the stop waits for that message until the shutdown timeout. Stop the route from another thread instead, or use the [Control Bus](../components/4.22.x/controlbus-component.md) (`controlbus:route?routeId=current&action=stop`), which does so for the route of the message.
+
 > **Tip**
 > Routes can also be stopped via JMX or external tools such as [Hawtio](https://hawt.io/).
 

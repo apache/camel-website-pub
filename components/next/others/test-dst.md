@@ -104,6 +104,28 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 
  | CAMEL-25712, CAMEL-25790, CAMEL-26647 |
+| camel-kafka | `KafkaWorld` (`KafkaConsumerDstTest`) | FakeKafka: a topic with one or two partitions and a consumer group (classic protocol, eager rebalance), behind the Consumer interface of KafkaClientFactory | 
+
+-   commits by Kafka’s auto-commit, by manual synchronous or asynchronous commits in the route, and per batch with batching=true
+    
+-   breakOnFirstError
+    
+-   pollOnError ERROR\_HANDLER, DISCARD, RETRY and RECONNECT
+    
+-   a poll that fails while a batch is incomplete
+    
+-   route restart, also while the consumer polls
+    
+-   route suspend and resume, with a second request while the consumer handles the first
+    
+-   partitions revoked and assigned again by a rebalance while records are processed
+    
+
+
+
+
+
+ | CAMEL-25313, CAMEL-25756 |
 | camel-kafka-share | `KafkaShareWorld` (`KafkaShareConsumerDstTest`) | FakeShareGroup: a share group (KIP-932) of one topic with one partition, behind ShareConsumer | 
 
 -   explicit acknowledgement with onFailure RELEASE or REJECT
@@ -513,7 +535,7 @@ $MVN -pl $DST,$SQS -Dtest=SqsVisibilityDstTest -Ddst.seed=8
 diff /tmp/seed-8.first $SQS/target/dst/SqsVisibilityDstTest.*/seed-8.trace && echo identical
 ```
 
-The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 68329f0919bc (CAMEL-25684, Slack), the main code of b62e90ddb2d9 (CAMEL-25869, Pulsar), the main code of 20c94435789e (CAMEL-25872, Kafka share, whose world was also checked with planted faults), and the main code of 043ac9ec84ab (CAMEL-25569) and of 847ee9affb4c (CAMEL-25942) for Kinesis (`KinesisConsumerDstTest`). Some system properties belong to a world rather than to the harness: `dst.sqs.visibilityTimeouts` (the visibility timeouts the SQS world picks from, default `2,3,5,10`; `1` shows CAMEL-25737), `dst.replayCheckSeed` (the seed of the in-JVM replay test of the Event Hubs world, default 1), `dst.share.pollOnError` (the pollOnError strategies the Kafka share world picks from), `dst.pulsar.subscribeFailRates` (the subscribe failure rates of the Pulsar world, `0` runs without subscribe failures) and `dst.kinesis.strictLatest` (`true` counts the records that a LATEST iterator asked for again after an expiry skips, CAMEL-26968, as missing).
+The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 68329f0919bc (CAMEL-25684, Slack), the main code of b62e90ddb2d9 (CAMEL-25869, Pulsar), the main code of 20c94435789e (CAMEL-25872, Kafka share, whose world was also checked with planted faults), and the main code of 043ac9ec84ab (CAMEL-25569) and of 847ee9affb4c (CAMEL-25942) for Kinesis (`KinesisConsumerDstTest`). Some system properties belong to a world rather than to the harness: `dst.sqs.visibilityTimeouts` (the visibility timeouts the SQS world picks from, default `2,3,5,10`; `1` shows CAMEL-25737), `dst.replayCheckSeed` (the seed of the in-JVM replay test of the Event Hubs world, default 1), `dst.share.pollOnError` (the pollOnError strategies the Kafka share world picks from) and `dst.pulsar.subscribeFailRates` (the subscribe failure rates of the Pulsar world, `0` runs without subscribe failures).
 
 ## Limits
 
@@ -523,7 +545,7 @@ The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 6
     
 -   Code on its own threads or on a third-party scheduler is outside the harness; strict mode makes reaching it fail the seed.
     
--   One run per JVM at a time: the active run, and so the virtual clock, is a static field, and every rewritten clock read in the JVM sees it, as does Camel core through `TimeSource` while the run is open. A world must therefore not go into a module that runs its tests in parallel (`camel.surefire.parallel=true`, as camel-jms and camel-sql do): the other tests in that surefire fork would read the virtual clock while a run is active. For the same reason, a `CamelContext` left running in the same fork by an earlier non-DST test would read the virtual time too and could fail a strict seed; stop it in that test. The harness enforces this: a second run while one is open fails, and a DST test refuses to start when JUnit runs tests in parallel. A local world in such a module (camel-sjms, for example) can still be run alone, with `-Dtest=<the world> -Dcamel.surefire.parallel=false`, but it cannot be committed there: the module’s own build would fail it.
+-   One run per JVM at a time: the active run, and so the virtual clock, is a static field, and every rewritten clock read in the JVM sees it, as does Camel core through `TimeSource` while the run is open. A world must therefore not run concurrently with other tests in a module with `camel.surefire.parallel=true`: the other tests in that surefire fork would read the virtual clock while a run is active. To host a DST test in a parallel module, tag the test with `@Tag("not-parallel")` and configure Surefire with two executions — a parallel pass excluding `not-parallel` and a serial pass (`<groups>not-parallel</groups>`) with `junit.jupiter.execution.parallel.enabled = false` in its `<configurationParameters>`. For the same reason, a `CamelContext` left running in the same fork by an earlier non-DST test would read the virtual time too and could fail a strict seed; stop it in that test. The harness enforces this: a second run while one is open fails, and a DST test refuses to start when JUnit runs tests in parallel.
     
 -   Locks do not exclude: every task runs on the test thread, so a `ReentrantLock` or `synchronized` block held by a blocked task is entered again by the tasks nested above it. A critical section is atomic only because the fake does not block inside it, and races between two code paths that each hold a lock cannot be explored.
     

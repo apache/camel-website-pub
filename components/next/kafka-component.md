@@ -102,12 +102,12 @@ The Kafka component supports the following options which are listed below.
 | **checkCrcs** (consumer) | Automatically check the CRC32 of the records consumed. This ensures no on-the-wire or on-disk corruption to the messages occurred. This check adds some overhead, so it may be disabled in cases seeking extreme performance. | true | Boolean |
 | **commitTimeoutMs** (consumer) | The maximum time, in milliseconds, that the code will wait for a synchronous commit to complete. | 5000 | Long |
 | **consumerRequestTimeoutMs** (consumer) | The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapsed, the client will resend the request if necessary or fail the request if retries are exhausted. | 30000 | Integer |
-| **consumersCount** (consumer) | The number of consumers that connect to kafka server. Each consumer is run on a separate thread that retrieves and process the incoming data. | 1 | int |
+| **consumersCount** (consumer) | The number of consumers that connect to kafka server. Each consumer is run on a separate thread that retrieves and process the incoming data. Each consumer is a member of the consumer group, so the consumers beyond the number of partitions of the topic (counting the consumers of all the application instances) get no records. With groupInstanceId, each consumer gets its own group instance id. | 1 | int |
 | **fetchMaxBytes** (consumer) | The maximum amount of data the server should return for a fetch request. This is not an absolute maximum, if the first message in the first non-empty partition of the fetch is larger than this value, the message will still be returned to ensure that the consumer can make progress. The maximum message size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). Note that the consumer performs multiple fetches in parallel. | 52428800 | Integer |
 | **fetchMinBytes** (consumer) | The minimum amount of data the server should return for a fetch request. If insufficient data is available, the request will wait for that much data to accumulate before answering the request. | 1 | Integer |
 | **fetchWaitMaxMs** (consumer) | The maximum amount of time the server will block before answering the fetch request if there isn’t enough data to immediately satisfy fetch.min.bytes. | 500 | Integer |
 | **groupId** (consumer) | A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id, multiple processes can indicate that they are all part of the same consumer group. This option is required for consumers. |  | String |
-| **groupInstanceId** (consumer) | A unique identifier of the consumer instance provided by the end user. Only non-empty strings are permitted. If set, the consumer is treated as a static member, which means that only one instance with this ID is allowed in the consumer group at any time. This can be used in combination with a larger session timeout to avoid group rebalances caused by transient unavailability (e.g., process restarts). If not set, the consumer will join the group as a dynamic member, which is the traditional behavior. |  | String |
+| **groupInstanceId** (consumer) | A unique identifier of the consumer instance provided by the end user. Only non-empty strings are permitted. If set, the consumer is treated as a static member, which means that only one instance with this ID is allowed in the consumer group at any time. This can be used in combination with a larger session timeout to avoid group rebalances caused by transient unavailability (e.g., process restarts). If not set, the consumer will join the group as a dynamic member, which is the traditional behavior. When consumersCount is greater than 1, each consumer is a static member of its own, with this ID followed by a dash and the index of the consumer (myId-0, myId-1, …​). |  | String |
 | **groupProtocol** (consumer) | 
 The consumer group protocol to use. The classic protocol uses the traditional partition assignment and rebalancing mechanism. The consumer protocol enables the new KIP-848 consumer rebalance protocol which provides faster and more efficient rebalancing. When set to consumer, classic-only properties (heartbeatIntervalMs, sessionTimeoutMs, partitionAssignor) are automatically excluded from the consumer configuration.
 
@@ -384,12 +384,12 @@ With the following _path_ and _query_ parameters:
 | **checkCrcs** (consumer) | Automatically check the CRC32 of the records consumed. This ensures no on-the-wire or on-disk corruption to the messages occurred. This check adds some overhead, so it may be disabled in cases seeking extreme performance. | true | Boolean |
 | **commitTimeoutMs** (consumer) | The maximum time, in milliseconds, that the code will wait for a synchronous commit to complete. | 5000 | Long |
 | **consumerRequestTimeoutMs** (consumer) | The configuration controls the maximum amount of time the client will wait for the response of a request. If the response is not received before the timeout elapsed, the client will resend the request if necessary or fail the request if retries are exhausted. | 30000 | Integer |
-| **consumersCount** (consumer) | The number of consumers that connect to kafka server. Each consumer is run on a separate thread that retrieves and process the incoming data. | 1 | int |
+| **consumersCount** (consumer) | The number of consumers that connect to kafka server. Each consumer is run on a separate thread that retrieves and process the incoming data. Each consumer is a member of the consumer group, so the consumers beyond the number of partitions of the topic (counting the consumers of all the application instances) get no records. With groupInstanceId, each consumer gets its own group instance id. | 1 | int |
 | **fetchMaxBytes** (consumer) | The maximum amount of data the server should return for a fetch request. This is not an absolute maximum, if the first message in the first non-empty partition of the fetch is larger than this value, the message will still be returned to ensure that the consumer can make progress. The maximum message size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). Note that the consumer performs multiple fetches in parallel. | 52428800 | Integer |
 | **fetchMinBytes** (consumer) | The minimum amount of data the server should return for a fetch request. If insufficient data is available, the request will wait for that much data to accumulate before answering the request. | 1 | Integer |
 | **fetchWaitMaxMs** (consumer) | The maximum amount of time the server will block before answering the fetch request if there isn’t enough data to immediately satisfy fetch.min.bytes. | 500 | Integer |
 | **groupId** (consumer) | A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id, multiple processes can indicate that they are all part of the same consumer group. This option is required for consumers. |  | String |
-| **groupInstanceId** (consumer) | A unique identifier of the consumer instance provided by the end user. Only non-empty strings are permitted. If set, the consumer is treated as a static member, which means that only one instance with this ID is allowed in the consumer group at any time. This can be used in combination with a larger session timeout to avoid group rebalances caused by transient unavailability (e.g., process restarts). If not set, the consumer will join the group as a dynamic member, which is the traditional behavior. |  | String |
+| **groupInstanceId** (consumer) | A unique identifier of the consumer instance provided by the end user. Only non-empty strings are permitted. If set, the consumer is treated as a static member, which means that only one instance with this ID is allowed in the consumer group at any time. This can be used in combination with a larger session timeout to avoid group rebalances caused by transient unavailability (e.g., process restarts). If not set, the consumer will join the group as a dynamic member, which is the traditional behavior. When consumersCount is greater than 1, each consumer is a static member of its own, with this ID followed by a dash and the index of the consumer (myId-0, myId-1, …​). |  | String |
 | **groupProtocol** (consumer) | 
 The consumer group protocol to use. The classic protocol uses the traditional partition assignment and rebalancing mechanism. The consumer protocol enables the new KIP-848 consumer rebalance protocol which provides faster and more efficient rebalancing. When set to consumer, classic-only properties (heartbeatIntervalMs, sessionTimeoutMs, partitionAssignor) are automatically excluded from the consumer configuration.
 
@@ -673,6 +673,89 @@ Not known when `valueSerializer` is set.
  |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
+
+## Deterministic simulation tests
+
+The consumer of the Kafka component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `KafkaWorld`
+Fake: FakeKafka: a topic with one or two partitions and a consumer group (classic protocol, eager rebalance), behind the Consumer interface of KafkaClientFactory
+
+Tests: `KafkaConsumerDstTest`
+
+ | 
+
+**Covers:**
+
+-   commits by Kafka’s auto-commit, by manual synchronous or asynchronous commits in the route, and per batch with batching=true
+    
+-   breakOnFirstError
+    
+-   pollOnError ERROR\_HANDLER, DISCARD, RETRY and RECONNECT
+    
+-   a poll that fails while a batch is incomplete
+    
+-   route restart, also while the consumer polls
+    
+-   route suspend and resume, with a second request while the consumer handles the first
+    
+-   partitions revoked and assigned again by a rebalance while records are processed
+    
+
+**Faults:**
+
+-   the Kafka consumer cannot be created
+    
+-   poll fails
+    
+-   commitSync times out
+    
+-   commitAsync fails
+    
+-   auto-commit fails
+    
+-   commits are slow
+    
+-   committed answers slowly
+    
+-   processing fails
+    
+-   processing is slow
+    
+-   a member joins and leaves the group
+    
+
+**Invariants:**
+
+-   the consumer uses the Kafka consumer as documented
+    
+-   a committed offset never passes a record the route has not finished with
+    
+-   a suspended route stops fetching
+    
+-   every record is finished once the faults cleared
+    
+-   the committed offsets reach the end once the faults cleared
+    
+-   the route holds one Kafka consumer once the faults cleared
+    
+-   no Kafka consumer is left open after the route stopped
+    
+
+
+
+
+
+ | [CAMEL-25313](https://issues.apache.org/jira/browse/CAMEL-25313)
+
+[CAMEL-25756](https://issues.apache.org/jira/browse/CAMEL-25756)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
 
 For more information about Producer/Consumer configuration:
 

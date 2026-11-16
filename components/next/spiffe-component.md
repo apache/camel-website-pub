@@ -484,9 +484,21 @@ from("netty-http:https://0.0.0.0:8443?sslContextParameters=#spiffeSsl")
 > -   **The handshake allow-list gates every policy.** `SpiffeSSLContextParameters.acceptedSpiffeIds` decides who may connect at all, so a peer it rejects never reaches any route’s policy. When several routes with different `SpiffeSecurityPolicy` allow-lists share one server, this TLS-level list must contain every ID those policies accept (or use `acceptAnySpiffeId` and let each policy narrow it), otherwise the handshake turns a peer away before its route could have authorized it.
 >     
 >
-> Only camel-netty and camel-netty-http put the `SSLSession` on the message today, as the `CamelNettySSLSession` header. Behind platform-http, jetty, undertow or servlet there is no session on the exchange, so the policy has no verified peer certificate to read and denies everything.
+> The consumer must expose the peer authenticated by its own TLS connection. Supported sources are:
+>
+>  
+> | Consumer | Authenticated peer source |
+> | --- | --- |
+> | `netty-http` | The channel’s `SslHandler` session. |
+> | `servlet`, `jetty` | The secure servlet request’s container-authenticated `jakarta.servlet.request.X509Certificate` attribute. |
+> | `undertow` | The real TLS session supplied by the connection’s `SSLSessionInfo`. Forwarded SSL information without a TLS session is rejected. |
+> | `platform-http` with the Vert.x engine | The server request’s actual `sslSession()`. |
+> | `netty` | The existing `CamelNettySSLSession` message header remains supported. |
+> | Other engines and TLS-terminating reverse proxies | No automatic peer authentication support. The proxy’s connection identity does not prove the original client’s identity. |
+>
+> These adapters publish a `org.apache.camel.spi.TlsPeerCertificateProvider` in the `CamelTlsPeerCertificates` exchange property. This typed contract is for trusted consumers integrating actual authenticated server TLS state. It is never populated from HTTP identity or certificate headers. A TLS connection without a client certificate is recorded as an unverified peer, which fails closed; a plain connection leaves the property absent, and the policy then falls back to the session header. Custom consumers must uphold the same provenance contract.
 
-The peer SPIFFE ID is taken from the **verified** TLS peer certificate the consumer put on the exchange - the `CamelNettySSLSession` header for camel-netty-http - and never from a message header a sender could set (see the Security notes below). A peer that is not on the `acceptedSpiffeIds` allow-list, or that presents no verified SVID at all, is denied with a `CamelAuthorizationException`, so the route stops and the regular `onException` machinery applies.
+The peer SPIFFE ID is taken from the **verified** TLS peer certificate the consumer put on the exchange through the typed TLS peer property (or the legacy Netty session header). Sender-supplied identity and certificate headers are never used (see the Security notes below). A peer that is not on the `acceptedSpiffeIds` allow-list, or that presents no verified SVID at all, is denied with a `CamelAuthorizationException`, so the route stops and the regular `onException` machinery applies.
 
 Set exactly one of:
 
@@ -535,7 +547,19 @@ from("netty-http:https://0.0.0.0:8443?sslContextParameters=#spiffeSsl")
                         uri: direct:handleOrder
 ```
 
-For a TLS consumer that exposes the `SSLSession` under a different header name, set `sslSessionHeader` accordingly. The identity is always read from the verified `SSLSession`, never from a certificate object placed on a message header - nothing would prove the TLS layer had verified such a certificate.
+For a TLS consumer that exposes the `SSLSession` under a different header name, set `sslSessionHeader` accordingly. The legacy session header is used only when the typed TLS peer property is absent. A present but unverified or invalid typed property fails closed; a different session header cannot override it. Certificate objects and identity strings in message headers are never a substitute for authenticated TLS state.
+
+For OpenFGA composition, bind the user expression to the same verified exchange property. The OpenFGA model must define the corresponding `workload` type and tuples for those SPIFFE IDs:
+
+```java
+openFgaPolicy.setUser("workload:${exchangeProperty.CamelSpiffePeerId}");
+from("platform-http:/documents") // Vert.x engine with mutual TLS configured on its server
+    .policy(spiffePolicy)
+    .policy(openFgaPolicy)
+    .to("direct:documents");
+```
+
+`X-Forwarded-Client-Cert`, `X-SPIFFE-ID`, and similar proxy headers are not accepted. Terminate mutually authenticated TLS at the Camel consumer to authorize its direct peer. Authenticate an original client through an independent validated credential when TLS terminates at a reverse proxy; the proxy’s own SVID identifies the proxy.
 
 ## Security notes
 
@@ -549,4 +573,4 @@ For a TLS consumer that exposes the `SSLSession` under a different header name, 
     
 -   **Constrain the peer.** `SpiffeSSLContextParameters` requires either an `acceptedSpiffeIds` allow-list or `acceptAnySpiffeId=true`; it fails closed when neither is given. Prefer the allow-list - `acceptAnySpiffeId` accepts any SVID that chains to the trust bundle, which authenticates the trust domain but not the peer.
     
--   **The authorization decision is made on the certificate, not a header.** `SpiffeSecurityPolicy` reads the peer SPIFFE ID from the verified TLS peer certificate (the `CamelNettySSLSession` header for camel-netty-http), so a sender cannot assert an identity by setting a header - and it requires mutual TLS, failing closed when the peer presented no verified certificate. The verified id it publishes is the `CamelSpiffePeerId` exchange **property**, never a header, so it likewise cannot be injected by an inbound message.
+-   **The authorization decision is made on the certificate, not a header.** `SpiffeSecurityPolicy` reads the peer SPIFFE ID from the verified TLS peer certificate in trusted consumer state (with the legacy Netty session fallback), so a sender cannot assert an identity by setting a header - and it requires mutual TLS, failing closed when the peer presented no verified certificate. The verified id it publishes is the `CamelSpiffePeerId` exchange **property**, never a header, so it likewise cannot be injected by an inbound message.

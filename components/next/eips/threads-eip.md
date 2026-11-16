@@ -47,7 +47,7 @@ Enum values:
 
 
  |  | TimeUnit |
-| **maxQueueSize** | Sets the maximum number of tasks in the work queue. Use -1 or Integer.MAX\_VALUE for an unbounded queue. |  | Integer |
+| **maxQueueSize** | Sets the maximum number of tasks in the work queue. Use 0 or -1 for no work queue: each task goes directly to a thread, up to maxPoolSize threads, and then the rejected policy applies. Use Integer.MAX\_VALUE for an unbounded queue. |  | Integer |
 | **allowCoreThreadTimeOut** | Whether idle core threads are allowed to timeout and therefore can shrink the pool size below the core pool size. | false | Boolean |
 | **threadName** | Sets the thread name pattern to use for naming threads created by this thread pool. | Threads | String |
 | **rejectedPolicy** | 
@@ -193,7 +193,7 @@ from("seda:a")
 
 ### About rejected tasks
 
-The Threads EIP uses a thread pool which has a worker queue for tasks. When the worker queue gets full, the task is rejected.
+The Threads EIP uses a thread pool which has a worker queue for tasks. When the worker queue is full, the pool starts more threads, up to `maxPoolSize`. When the queue is full and the pool has `maxPoolSize` threads, the task is rejected.
 
 You can customize how to react upon this using the `rejectedPolicy` and `callerRunsWhenRejected` options. The latter is used to easily switch between the two most common and recommended settings. Either let the current caller thread execute the task (i.e. it will become synchronous), but also give time for the thread pool to process its current tasks, without adding more tasks (self throttling). This is the default behavior.
 
@@ -212,9 +212,9 @@ The Threads EIP uses the default values from the default [Thread Pool Profile](.
 | **poolSize** | `10` | Sets the default core pool size (minimum number of threads to keep in pool) |
 | **keepAliveTime** | `60` | Sets the default keep-alive time (in seconds) for inactive threads |
 | **maxPoolSize** | `20` | Sets the default maximum pool size |
-| **maxQueueSize** | `1000` | Sets the default maximum number of tasks in the work queue. Use -1 for an unbounded queue. |
+| **maxQueueSize** | `1000` | Sets the default maximum number of tasks in the work queue. Use `0` or `-1` for no work queue, or `Integer.MAX_VALUE` for an unbounded queue. |
 | **allowCoreThreadTimeOut** | `true` | Sets default whether to allow core threads to timeout |
-| **rejectedPolicy** | `CallerRuns` | Sets the default handler for tasks which cannot be executed by the thread pool. Has four options: `Abort, CallerRuns, Discard, DiscardOldest` which corresponds to the same four options provided out of the box in the JDK. |
+| **rejectedPolicy** | `CallerRuns` | Sets the default handler for tasks which cannot be executed by the thread pool. Has three options: `Abort`, `CallerRuns`, `Block`. |
 
 ### See Also
 

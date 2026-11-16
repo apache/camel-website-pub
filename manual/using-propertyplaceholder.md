@@ -499,56 +499,14 @@ Apache Camel started decade(s) ago when Spring Framework was heavily used with S
 
 ### Using property placeholders for any kind of attribute in Spring XML files
 
-Previously it was only the `xs:string` type attributes in the XML DSL that support placeholders. For example often a timeout attribute would be a `xs:int` type, and thus you cannot set a string value as the placeholder key. This is now possible using a special placeholder namespace.
+Every attribute of the XML DSL is a string, so you can use a `{{key}}` placeholder in any attribute, also for an option that is a boolean or a number.
 
-In the example below we use the `prop` prefix for the namespace `http://camel.apache.org/schema/placeholder`. Now we can use `prop:` as prefix to configure any kind of XML attributes in Spring XML files.
-
-In the example below we want to use a placeholder for the `stopOnException` option in the [Multicast](../components/4.22.x/eips/multicast-eip.md) EIP. The `stopOnException` is a `xs:boolean` type, so we cannot configure this as:
+In the example below we use a placeholder for the `stopOnException` option of the [Multicast](../components/4.22.x/eips/multicast-eip.md) EIP:
 
 ```xml
 <multicast stopOnException="{{stop}}">
-   ...
-</multicast>
-```
-
-Instead, we must use the `prop:` namespace, so we must add this namespace in the top of the XML file in the `<beans>` tag.
-
-To configure the option we must then use the `prop:optionName` as shown below:
-
-```xml
-<multicast prop:stopOnException="stop">
   ...
 </multicast>
-```
-
-The complete example is below:
-
-Spring XML
-
-```xml
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:prop="http://camel.apache.org/schema/placeholder"
-       xsi:schemaLocation="
-           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
-
-    <bean id="damn" class="java.lang.IllegalArgumentException">
-        <constructor-arg index="0" value="Damn"/>
-    </bean>
-
-    <camelContext xmlns="http://camel.apache.org/schema/spring">
-        <propertyPlaceholder id="properties" location="classpath:myprop.properties"/>
-        <route>
-            <from uri="direct:start"/>
-            <!-- use prop namespace, to define a property placeholder, which maps to option stopOnException={{stop}} -->
-            <multicast prop:stopOnException="stop">
-                <to uri="mock:a"/>
-                <throwException ref="damn"/>
-                <to uri="mock:b"/>
-            </multicast>
-        </route>
-    </camelContext>
-</beans>
 ```
 
 In our properties file we have the value defined as:
@@ -556,6 +514,9 @@ In our properties file we have the value defined as:
 ```properties
 stop = true
 ```
+
+> **Note**
+> The `prop:` placeholder namespace (`http://camel.apache.org/schema/placeholder`) was removed in Camel 3.1 (see [Property Placeholders](camel-3x-upgrade-guide-3_1.html#_property_placeholders)). An attribute such as `prop:stopOnException="stop"` fails the XML schema validation. Use `stopOnException="{{stop}}"` instead.
 
 ### Bridging Camel property placeholders with Spring XML files
 

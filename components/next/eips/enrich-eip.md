@@ -152,17 +152,17 @@ Here’s an example for implementing an `AggregationStrategy`, which merges the 
 ```java
 public class ExampleAggregationStrategy implements AggregationStrategy {
 
-    public Exchange aggregate(Exchange newExchange, Exchange oldExchange) {
+    public Exchange aggregate(Exchange original, Exchange resource) {
         // this is just an example, for real-world use-cases the
         // aggregation strategy would be specific to the use-case
 
-        if (newExchange == null) {
-            return oldExchange;
+        if (resource == null) {
+            return original;
         }
-        Object oldBody = oldExchange.getIn().getBody();
-        Object newBody = newExchange.getIn().getBody();
-        oldExchange.getIn().setBody(oldBody + ":" + newBody);
-        return oldExchange;
+        Object oldBody = original.getIn().getBody();
+        Object newBody = resource.getIn().getBody();
+        original.getIn().setBody(oldBody + ":" + newBody);
+        return original;
     }
 
 }
@@ -333,13 +333,23 @@ from("direct:start")
 
 The `org.apache.camel.builder.AggregationStrategies` is a builder that can be used for creating commonly used aggregation strategies without having to create a class.
 
-For example, the `ExampleAggregationStrategy` from previously can be built as follows:
+For example, the `ExampleAggregationStrategy` from previously can be built from a method of a POJO, which gets the body of the original exchange and the body of the resource exchange:
 
 ```java
-AggregationStrategy agg = AggregationStrategies.string(":");
+public class MyMerger {
+
+    public String merge(String original, String resource) {
+        return original + ":" + resource;
+    }
+}
+
+AggregationStrategy agg = AggregationStrategies.bean(MyMerger.class, "merge");
 ```
 
-There are many other possibilities with the `AggregationStrategies` builder, and for more details see the [AggregationStrategies javadoc](https://www.javadoc.io/static/org.apache.camel/camel-core-model/3.12.0/org/apache/camel/builder/AggregationStrategies.md).
+> **Note**
+> Enrich calls only the `aggregate` method of the strategy, not `onCompletion`. A strategy that sets the message body in `onCompletion`, such as `AggregationStrategies.string(":")`, therefore leaves the body unchanged.
+
+There are many other possibilities with the `AggregationStrategies` builder, and for more details see the [AggregationStrategies javadoc](https://www.javadoc.io/doc/org.apache.camel/camel-core-model/latest/org/apache/camel/builder/AggregationStrategies.md).
 
 ## See More
 

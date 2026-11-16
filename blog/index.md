@@ -2,7 +2,8 @@
 
 Blog posts about Apache Camel and related topics.
 
-posts[265]{title,link,pubDate,description}:
+posts[266]{title,link,pubDate,description}:
+  Scaling the Apache Camel Core CI: From a Few Green Builds a Year to Reliable Faster Feedback|https://camel.apache.org/blog/2026/11/camel-core-ci-improvements/index.md|Mon, 16 Nov 2026 00:00:00 +0000|A stable and fast CI is not a goal in itself: it is what allows the project to support a higher throughput of new features and CVE fixes. The faster and the more reliable the feedback, the more change
   Camel Quarkus 3.33.4 Released|https://camel.apache.org/blog/2026/11/camel-quarkus-3.33.4/index.md|Fri, 13 Nov 2026 00:00:00 +0000|Camel Quarkus 3.33.4 release
   Document Ingestion for RAG in Camel 4.23: From Folder to Vector Store|https://camel.apache.org/blog/2026/11/camel-document-ingestion-rag/index.md|Tue, 03 Nov 2026 00:00:00 +0000|Camel 4.23 can turn a folder of documents into a knowledge base for retrieval-augmented generation (RAG). The new camel-langchain4j-ingest component splits a message body, embeds the segments and writ
   Building an Agentic RAG Application with Apache Camel and LangChain4j|https://camel.apache.org/blog/2026/10/agentic-rag-apache-camel/index.md|Fri, 23 Oct 2026 00:00:00 +0000|Introduction Large language models (LLMs) can reason about a question, but they do not know your organization&rsquo;s past production incidents, and they cannot look up what changed in the world last 

@@ -45,8 +45,8 @@ The JSON Jackson 2 dataformat supports the following options which are listed be
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **objectMapper** (common) |  | `String` | Lookup and use the existing ObjectMapper with the given id when using Jackson. |
-| **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson ObjectMapper from the registry. |
-| **autoDiscoverObjectMapper** (common) | `false` | `Boolean` | If set to true then Jackson will look for an objectMapper to use from the registry. |
+| **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson ObjectMapper from the registry. The registry is only searched when autoDiscoverObjectMapper is true as well. |
+| **autoDiscoverObjectMapper** (common) | `false` | `Boolean` | If set to true (and useDefaultObjectMapper is true) then Camel will look for a Jackson ObjectMapper in the registry, and use it when there is exactly one. The options of this data format that configure the mapper, such as include, prettyPrint, enableFeatures and disableFeatures, are not applied to that ObjectMapper. |
 | **prettyPrint** (common) | `false` | `Boolean` | To enable pretty printing output nicely formatted. Is by default false. |
 | **combineUnicodeSurrogates** (common) | `false` | `Boolean` | Force generator that outputs JSON content to combine surrogate pairs (if any) into 4-byte characters. This should be preferred when using 4-byte characters such as Japanese. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
@@ -105,13 +105,19 @@ A body that already is the JSON text is written as it is, not serialized as a Ja
 
 You can configure `JacksonDataFormat` to use a custom `ObjectMapper` in case you need more control of the mapping configuration.
 
-If you set up a single `ObjectMapper` in the registry, then Camel will automatic lookup and use this `ObjectMapper`. For example, if you use Spring Boot, then Spring Boot can provide a default `ObjectMapper` for you if you have Spring MVC enabled. And this would allow Camel to detect that there is one bean of `ObjectMapper` class type in the Spring Boot bean registry and then use it. When this happens you should set a `INFO` logging from Camel.
+Refer to your `ObjectMapper` with the `objectMapper` option, such as `objectMapper=#myMapper`.
+
+By default, the data format does not look up an `ObjectMapper` in the registry. To look one up, set `autoDiscoverObjectMapper=true` (and leave `useDefaultObjectMapper` at its default, `true`). The data format then uses the `ObjectMapper` only when there is exactly one `com.fasterxml.jackson.databind.ObjectMapper` in the registry, and otherwise creates its own. Subclasses such as `XmlMapper` count too: for example, Spring Boot can provide an `ObjectMapper` bean, and an `XmlMapper` bean next to it makes two, so neither is used. Camel logs the `ObjectMapper` it found at `DEBUG` level.
+
+Camel uses an `ObjectMapper` from the registry as it is: the options of the data format that configure the mapper, such as `include`, `prettyPrint`, `enableFeatures`, `disableFeatures`, `moduleClassNames`, `timezone` and `namingStrategy`, are not applied to it.
 
 ### Using Jackson for automatic type conversion
 
 The `camel-jackson` module allows integrating Jackson as a [Type Converter](../../../manual/type-converter.md).
 
 This gives a set of out-of-the-box converters to/from the Jackson type `JSonNode`, such as converting from `JSonNode` to `String` or vice versa.
+
+The type converter does not use the options of the data format. Its `JsonNode` converters, and the POJO conversion below, use the `ObjectMapper` in the registry when there is exactly one (subclasses such as `XmlMapper` count too), without `autoDiscoverObjectMapper`. Otherwise, the type converter creates its own `ObjectMapper`.
 
 #### Enabling more type converters and support for POJOs
 

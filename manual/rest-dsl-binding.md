@@ -482,7 +482,46 @@ With `camel-jackson3` (Jackson 3):
 -   `tools.jackson.core.StreamWriteFeature`
     
 
-Jackson 3 has other defaults than Jackson 2. For example, `FAIL_ON_UNKNOWN_PROPERTIES` is off by default in Jackson 3, so unknown properties are only rejected when you enable it with `json.in.enableFeatures`.
+Jackson 3 has other defaults than Jackson 2. For example, `FAIL_ON_UNKNOWN_PROPERTIES` is off by default in Jackson 3, but the binding turns it on for request bodies, so unknown properties are rejected as with Jackson 2. To accept them, disable it with `json.in.disableFeatures` as shown above, or use your own `ObjectMapper`.
+
+## Using your own Jackson ObjectMapper
+
+The binding does not use the `objectMapper` of a Jackson data format that you configure elsewhere, such as in a route or with `camel.dataformat.jackson.objectMapper`. To use an `ObjectMapper` of your own, refer to it with `json.in.objectMapper` (request) and `json.out.objectMapper` (response):
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+restConfiguration().component("jetty").host("localhost").port(getPort()).bindingMode(RestBindingMode.json)
+   .dataFormatProperty("json.in.objectMapper", "#myMapper")
+   .dataFormatProperty("json.out.objectMapper", "#myMapper");
+```
+
+```xml
+<restConfiguration component="jetty" host="localhost" port="9090" bindingMode="json">
+  <dataFormatProperty key="json.in.objectMapper" value="#myMapper"/>
+  <dataFormatProperty key="json.out.objectMapper" value="#myMapper"/>
+</restConfiguration>
+```
+
+```yaml
+- restConfiguration:
+    component: "jetty"
+    host: "localhost"
+    port: "9090"
+    bindingMode: "json"
+    dataFormatProperty:
+      - key: "json.in.objectMapper"
+        value: "#myMapper"
+      - key: "json.out.objectMapper"
+        value: "#myMapper"
+```
+
+The binding does not turn on `FAIL_ON_UNKNOWN_PROPERTIES` for your mapper: unknown properties are handled as the mapper is configured. To use the single `ObjectMapper` in the registry instead, set `json.in.autoDiscoverObjectMapper` and `json.out.autoDiscoverObjectMapper` to `true`, see [Using custom ObjectMapper](../components/4.22.x/dataformats/jackson3-dataformat.html#_using_custom_objectmapper).
 
 ## Default CORS headers
 

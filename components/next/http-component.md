@@ -303,7 +303,7 @@ Enum values:
 | **proxyPort** (proxy) | Proxy server port. |  | int |
 | **authBearerToken** (security) | Authentication bearer token. |  | String |
 | **authDomain** (security) | **Deprecated** Authentication domain to use with NTLM. |  | String |
-| **authenticationPreemptive** (security) | If this option is true, camel-http sends preemptive basic authentication to the server. | false | boolean |
+| **authenticationPreemptive** (security) | If this option is true, camel-http sends the Basic credentials or the Bearer token with the first request, without waiting for the server to ask for them with a 401 response. | false | boolean |
 | **authHost** (security) | **Deprecated** Authentication host to use with NTLM. |  | String |
 | **authMethod** (security) | 
 
@@ -1060,9 +1060,56 @@ Most of the option are available here: [Apache HttpClient Request Config Builder
 
 To disable cookies in the CookieStore, you can set the HTTP Client to ignore cookies by adding this URI option: `httpClient.cookieSpec=ignore`. This doesn’t affect cookies manually set in the `Cookie` header
 
-### Basic auth with the streaming message body
+### Authentication
 
-To avoid the `NonRepeatableRequestException`, you need to do the Preemptive Basic Authentication by adding the option: `authenticationPreemptive=true`
+The HTTP producer authenticates with the options of the endpoint. To use the same settings for all the endpoints of a component, set them in an `HttpConfiguration` given to the `httpConfiguration` option of the component.
+
+ 
+| Method | Options |
+| --- | --- |
+| Basic | `authUsername` and `authPassword`. `authMethod=Basic` is optional. |
+| Bearer | `authMethod=Bearer` and `authBearerToken`. |
+| NTLM (deprecated) | `authMethod=NTLM`, `authUsername`, `authPassword`, and `authDomain` if the account is in a domain. |
+
+By default, the credentials are sent only when the server answers with `401 Unauthorized` and a `WWW-Authenticate` header that asks for them. With `authenticationPreemptive=true`, the Basic credentials or the Bearer token are sent with the first request. Use it when the server does not send a challenge, or when the message body is a stream that can be sent only once: otherwise the request fails with `NonRepeatableRequestException` when the server asks for the credentials.
+
+When `followRedirects=true`, a redirect to another host does not receive the credentials.
+
+The following example sends a bearer token, read from a property, with each request:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:start")
+  .to("https://api.example.com/orders?authMethod=Bearer&authBearerToken={{orders.token}}&authenticationPreemptive=true");
+```
+
+```xml
+<route>
+  <from uri="direct:start"/>
+  <to uri="https://api.example.com/orders?authMethod=Bearer&amp;authBearerToken={{orders.token}}&amp;authenticationPreemptive=true"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - to:
+            uri: "https://api.example.com/orders"
+            parameters:
+              authMethod: Bearer
+              authBearerToken: "{{orders.token}}"
+              authenticationPreemptive: true
+```
+
+To get the token from an authorization server, use the OAuth2 options described in the next section.
 
 ### OAuth2 Support
 

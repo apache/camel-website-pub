@@ -147,6 +147,9 @@ Enum values:
  | LIST\_MAP | DuckDbResultFormat |
 | **table** (producer) | Target table for insert and copy operations. Can be overridden per message with the CamelDuckDbTable header. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **allowGlobCopySource** (security) | Whether the copy operation accepts a source with glob pattern characters (asterisk, question mark, square bracket or curly brace), which DuckDB expands to all the matching files. Disabled by default, so copy loads a single file. | false | boolean |
+| **allowUrlCopySource** (security) | Whether the copy operation accepts a source that starts with a URL scheme (such as https:// or s3://), which DuckDB reads as a remote file. Disabled by default, so copy loads a local file only; enable it only when the source of the message body is trusted. | false | boolean |
+| **copyBaseDirectory** (security) | A directory that the local source of the copy operation must be inside, after resolving symbolic links. A relative source is resolved against this directory. For a glob pattern, the directory before the first glob character must be inside it. Not set by default, so copy loads a file from any directory. |  | String |
 
 ## Message Headers
 
@@ -173,12 +176,49 @@ The producer supports:
     
 -   `insert` — insert a `List` of `Map` rows into `table`
     
--   `copy` — bulk load from a `File` or path `String` using DuckDB `read_csv` / `read_parquet` / `read_json`
+-   `copy` — bulk load one local file, from a `File` or a path `String`, using DuckDB `read_csv` / `read_parquet` / `read_json`
     
 -   `ping` — `SELECT 1` connectivity check; sets `CamelDuckDbPingOk`
     
 
 The endpoint reuses one JDBC connection for its configured `databasePath` / `jdbcUrl` and serializes access for thread safety. Prefer a shared `DataSource` when you need concurrent producers. Set the `CamelDuckDbDatabasePath` header to open a short-lived connection to a different database file for a single message.
+
+## Copy sources
+
+The `copy` operation gives the path from the message body to the DuckDB `read_csv`, `read_parquet` or `read_json` function. DuckDB reads a value that starts with a URL scheme (such as `https://` or `s3://`) as a remote file, and expands a value with glob pattern characters (`*`, `?`, `[` or `{`) to all the matching files. So by default `copy` loads a single local file, and fails with an `IllegalArgumentException` that names the option to set otherwise:
+
+-   `allowUrlCopySource=true` passes a source with a URL scheme to DuckDB as it is.
+    
+-   `allowGlobCopySource=true` loads all the files that a glob pattern matches. This also applies to a `File` body whose name has one of these characters.
+    
+-   `copyBaseDirectory` sets the directory that a local source must be inside, after resolving symbolic links. A relative source is resolved against this directory, and for a glob pattern the directory before the first glob character must be inside it.
+    
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:load")
+    .to("duckdb:warehouse.db?operation=copy&table=staging&allowGlobCopySource=true&copyBaseDirectory=/data/incoming");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:load
+      steps:
+        - to:
+            uri: duckdb:warehouse.db
+            parameters:
+              operation: copy
+              table: staging
+              allowGlobCopySource: true
+              copyBaseDirectory: /data/incoming
+```
+
+These options apply to `copy` only. The SQL of `execute` and `query` can call the read functions itself; to have DuckDB restrict file and network access for every statement, configure the DuckDB settings `enable_external_access`, `allowed_directories` and `autoinstall_known_extensions` (see the DuckDB documentation).
 
 ## Example
 

@@ -14,9 +14,9 @@ The following modules are supported:
 | `[camel-test-junit5](../components/4.22.x/others/test-junit5.md)` | **JUnit 5**: Used for testing Camel in standalone mode (or without Spring) |
 | `[camel-test-main-junit5](../components/4.22.x/others/test-main-junit5.md)` | **JUnit 5**: Used for testing Camel in Camel Main mode |
 | `[camel-test-spring-junit5](../components/4.22.x/others/test-spring-junit5.md)` | **JUnit 5**: Used for testing Camel with Spring / Spring Boot |
-| `[camel-test-junit5](../components/4.22.x/others/test-junit6.md)` | **JUnit 6**: Used for testing Camel in standalone mode (or without Spring) |
-| `[camel-test-main-junit5](../components/4.22.x/others/test-main-junit6.md)` | **JUnit 6**: Used for testing Camel in Camel Main mode |
-| `[camel-test-spring-junit5](../components/4.22.x/others/test-spring-junit6.md)` | **JUnit 6**: Used for testing Camel with Spring / Spring Boot |
+| `[camel-test-junit6](../components/4.22.x/others/test-junit6.md)` | **JUnit 6**: Used for testing Camel in standalone mode (or without Spring) |
+| `[camel-test-main-junit6](../components/4.22.x/others/test-main-junit6.md)` | **JUnit 6**: Used for testing Camel in Camel Main mode |
+| `[camel-test-spring-junit6](../components/4.22.x/others/test-spring-junit6.md)` | **JUnit 6**: Used for testing Camel with Spring / Spring Boot |
 | `[camel-test-infra](test-infra.md)` | **Camel Test Infra**: Camel Test Infra is a set of modules that leverage modern JUnit 5 features to abstract the provisioning and execution of test infrastructure. Among other things, it provides abstraction of the infrastructure (based on Test Containers - being the de-facto successor of the camel-testcontainers components) as well as JUnit 5 extensions for the Camel Context itself. |
 | `[camel-jbang-test](camel-jbang-test.md)` | **Camel CLI Test Plugin**: A Camel CLI plugin to help writing automated tests during prototyping with JBang. The tests are able to start the Camel integration and verify its logic from the very beginning. The test plugin does not require any project setup so you can just start writing and executing automated tests. |
 > **Note**

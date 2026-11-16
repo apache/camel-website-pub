@@ -49,8 +49,8 @@ The Protobuf Jackson 3 dataformat supports the following options which are liste
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **objectMapper** (advanced) |  | `String` | Lookup and use the existing ObjectMapper with the given id when using Jackson. |
-| **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson ObjectMapper from the registry. |
-| **autoDiscoverObjectMapper** (common) | `false` | `Boolean` | If set to true then Jackson will lookup for an objectMapper into the registry. |
+| **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson ObjectMapper from the registry. The registry is only searched when autoDiscoverObjectMapper is true as well. |
+| **autoDiscoverObjectMapper** (common) | `false` | `Boolean` | If set to true (and useDefaultObjectMapper is true) then Camel will look for a Jackson ProtobufMapper in the registry, and use it when there is exactly one. The options of this data format that configure the mapper, such as include, enableFeatures and disableFeatures, are not applied to that ProtobufMapper. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
 | **jsonView** (common) |  | `String` | When marshalling a POJO to JSON you might want to exclude certain fields from the JSON output. With Jackson you can use JSON views to accomplish this. This option is to refer to the class which has JsonView annotations. |
 | **include** (common) |  | `String` | If you want to marshal a pojo to JSON, and the pojo has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |
@@ -98,7 +98,9 @@ You can add a single SchemaResolver to the registry, and it will be looked up au
 
 You can configure `JacksonProtobufDataFormat` to use a custom `ProtobufMapper` in case you need more control of the mapping configuration.
 
-If you set up a single `ProtobufMapper` in the registry, then Camel will automatic lookup and use this `ProtobufMapper`.
+Refer to your `ProtobufMapper` with the `objectMapper` option, such as `objectMapper=#myMapper`.
+
+By default, Camel does not look up a `ProtobufMapper` in the registry. To look one up, set `autoDiscoverObjectMapper=true` (and leave `useDefaultObjectMapper` at its default, `true`). Camel then uses the `ProtobufMapper` only when there is exactly one in the registry, and otherwise creates its own. The options of the data format that configure the mapper, such as `include`, `enableFeatures`, `disableFeatures` and `timezone`, are not applied to a `ProtobufMapper` from the registry.
 
 ## Dependencies
 

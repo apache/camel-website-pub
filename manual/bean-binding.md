@@ -150,7 +150,7 @@ public class Bar {
 }
 ```
 
-Or the Exchange example. Notice that the return type must be **void** when there is only a single parameter of the type `org.apache.camel.Exchange`:
+Or the Exchange example:
 
 _Java-only: bean class with Exchange parameter_
 
@@ -198,6 +198,12 @@ Camel uses the following rules to determine if it’s a parameter value in the m
 -   The value ends with `.class` then it’s a type declaration instead - see the next section about specifying types for overloaded methods.
     
 
+Any other value is also evaluated with the [Simple](../components/4.22.x/languages/simple-language.md) language, so a word without quotes is passed as that text: `echo(World)` passes the String `World`. It is not a Java variable. To pass a value known when you build the route, concatenate it into the method option, or use a property placeholder such as `echo({{greeting}})`.
+
+Do not put quotes around a Simple expression when the parameter is not a String. For example, `'${header.order}'` passes the header as text, and the call fails when that text cannot be converted to the parameter type. Write `${header.order}` to pass the header object itself.
+
+When a method is overloaded, such as `refresh()` and `refresh(Writer)`, the name alone (`refresh`) selects the overload with a parameter and binds the message body to it. Write `refresh()` to call the overload without parameters.
+
 When invoking a [Bean](../components/4.22.x/eips/bean-eip.md) you can instruct Camel to invoke a specific method by providing the method name:
 
 _Java-only: specifying method name on bean call_
@@ -226,10 +232,28 @@ _Java-only: bean binding with wildcard and fixed parameter_
 
 In the example above, we defined the first parameter using the wild card symbol `*`, which tells Camel to bind this parameter to any type, and let Camel figure this out. The second parameter has a fixed value of `true`. Instead of the wildcard symbol, we can instruct Camel to use the message body as shown:
 
-_Java-only: bean binding with Simple expression parameter_
+-   Java
+    
+-   XML
+    
+-   YAML
+    
 
 ```java
 .bean(OrderService.class, "doSomething(${body}, true)")
+```
+
+```xml
+<bean beanType="com.foo.OrderService" method="doSomething(${body}, true)"/>
+```
+
+```yaml
+- from:
+    uri: direct:start
+    steps:
+      - bean:
+          beanType: com.foo.OrderService
+          method: "doSomething(${body}, true)"
 ```
 
 The syntax of the parameters is using the [Simple](../components/4.22.x/languages/simple-language.md) language so we have to use `${ }` placeholders in the body to refer to the message body.

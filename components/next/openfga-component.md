@@ -83,9 +83,25 @@ The OpenFGA component supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **apiUrl** (producer) | The base URL of the OpenFGA HTTP API, without a trailing path. The default assumes OpenFGA running as a sidecar on its standard HTTP port. | [http://localhost:8080](http://localhost:8080) | String |
 | **authorizationModelId** (producer) | The identifier of the authorization model revision to evaluate against. Leave it empty to use whichever model the store considers latest. Pin it in production. A store keeps every model it was ever given and latest moves the moment somebody writes a new one, so an unpinned endpoint can start answering a different question than the one it was reviewed with - without any change to the route. Pinning also makes a model rollout a deliberate, reviewable configuration change. |  | String |
+| **batchCheckMode** (producer) | 
+Whether batchCheck fans out individual checks (client, the compatible default) or uses the native server BatchCheck API (server, requires OpenFGA 1.8.0 or later). Server mode chunks checks by maxBatchSize and correlates responses back to the original objects. Failures never fall back to an unfiltered result or another mode.
+
+Enum values:
+
+-   client
+    
+-   server
+    
+
+
+
+
+
+ | client | OpenFgaBatchCheckMode |
 | **conditionContext** (producer) | Context passed to the CEL expressions of any conditioned relation the check touches, as a map resolved from the registry - conditionContext=#myContext. A map rather than an expression on purpose: OpenFGA types every condition parameter in the authorization model (int, bool, timestamp, ipaddress), and a map lets the route author supply values of the right Java type instead of strings that the server would then reject. A mistyped value is refused with an HTTP 400, which this component treats as a denial rather than as an unavailable decision point, so the failure direction is safe either way. Like contextualTuples this is endpoint-only. A condition can decide a relation, so letting a message choose the values it is evaluated with would hand the caller the decision. |  | Map |
 | **configuration** (producer) | The component configuration. |  | OpenFgaConfiguration |
 | **consistency** (producer) | 
+
 The consistency the query is answered with. OpenFGA’s default, MINIMIZE\_LATENCY, may answer from a replica that has not caught up yet, which right after a revoke means a tuple that was deleted can still grant access for a moment. Set HIGHER\_CONSISTENCY on the paths where that window matters, at the cost of latency. Left unset, OpenFGA’s own default applies.
 
 Enum values:
@@ -116,7 +132,8 @@ Enum values:
 | **userFilters** (producer) | Comma-separated list of user filters for the listUsers operation, naming which kinds of subject to return. An entry is either a type, user, or a type and a relation, team#member, to return the usersets holding the relation rather than the individual subjects. Defaults to user. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **connectTimeout** (advanced) | How long to wait for the connection to OpenFGA to be established. The component applies this itself rather than through the SDK’s own connectTimeout setting, which as of openfga-sdk 0.10.1 is accepted and then never read, leaving the connect phase bounded only by the operating system. | 10000 | long |
-| **maxParallelRequests** (advanced) | How many of a batchCheck’s checks may be in flight at once. The batch is issued as one request per object, so this bounds the load one exchange puts on the server. | 10 | int |
+| **maxBatchSize** (advanced) | Maximum number of checks per native server BatchCheck request, from 1 to 50. Applies only when batchCheckMode=server; the SDK splits larger input lists into requests of at most this size. 50 is the default per-request limit of an OpenFGA server (max-checks-per-batch-check). | 50 | int |
+| **maxParallelRequests** (advanced) | How many HTTP requests a batchCheck may have in flight at once. In client mode each request checks one object; in server mode each request checks up to maxBatchSize objects. | 10 | int |
 | **maxRetries** (advanced) | How many times the SDK retries a request that failed in a way worth retrying, such as a rate limit or a 5xx. Set it to 0 to disable retries; the overall wait a routing thread can spend on one exchange grows with it. | 3 | int |
 | **openFgaClient** (advanced) | **Autowired** An existing OpenFgaClient to use. When set, every option describing how to reach the server - apiUrl, storeId, the credentials, the timeouts and sslContextParameters - is ignored, because they are baked into the client that was handed over. |  | OpenFgaClient |
 | **readTimeout** (advanced) | How long to wait for one request to OpenFGA to complete once connected. A request that times out is a failure to obtain a verdict rather than a deny, so it fails closed - or proceeds when failOpen is set. | 10000 | long |
@@ -184,8 +201,24 @@ Enum values:
 | --- | --- | --- | --- |
 | **apiUrl** (producer) | The base URL of the OpenFGA HTTP API, without a trailing path. The default assumes OpenFGA running as a sidecar on its standard HTTP port. | [http://localhost:8080](http://localhost:8080) | String |
 | **authorizationModelId** (producer) | The identifier of the authorization model revision to evaluate against. Leave it empty to use whichever model the store considers latest. Pin it in production. A store keeps every model it was ever given and latest moves the moment somebody writes a new one, so an unpinned endpoint can start answering a different question than the one it was reviewed with - without any change to the route. Pinning also makes a model rollout a deliberate, reviewable configuration change. |  | String |
+| **batchCheckMode** (producer) | 
+Whether batchCheck fans out individual checks (client, the compatible default) or uses the native server BatchCheck API (server, requires OpenFGA 1.8.0 or later). Server mode chunks checks by maxBatchSize and correlates responses back to the original objects. Failures never fall back to an unfiltered result or another mode.
+
+Enum values:
+
+-   client
+    
+-   server
+    
+
+
+
+
+
+ | client | OpenFgaBatchCheckMode |
 | **conditionContext** (producer) | Context passed to the CEL expressions of any conditioned relation the check touches, as a map resolved from the registry - conditionContext=#myContext. A map rather than an expression on purpose: OpenFGA types every condition parameter in the authorization model (int, bool, timestamp, ipaddress), and a map lets the route author supply values of the right Java type instead of strings that the server would then reject. A mistyped value is refused with an HTTP 400, which this component treats as a denial rather than as an unavailable decision point, so the failure direction is safe either way. Like contextualTuples this is endpoint-only. A condition can decide a relation, so letting a message choose the values it is evaluated with would hand the caller the decision. |  | Map |
 | **consistency** (producer) | 
+
 The consistency the query is answered with. OpenFGA’s default, MINIMIZE\_LATENCY, may answer from a replica that has not caught up yet, which right after a revoke means a tuple that was deleted can still grant access for a moment. Set HIGHER\_CONSISTENCY on the paths where that window matters, at the cost of latency. Left unset, OpenFGA’s own default applies.
 
 Enum values:
@@ -215,7 +248,8 @@ Enum values:
 | **userFilters** (producer) | Comma-separated list of user filters for the listUsers operation, naming which kinds of subject to return. An entry is either a type, user, or a type and a relation, team#member, to return the usersets holding the relation rather than the individual subjects. Defaults to user. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **connectTimeout** (advanced) | How long to wait for the connection to OpenFGA to be established. The component applies this itself rather than through the SDK’s own connectTimeout setting, which as of openfga-sdk 0.10.1 is accepted and then never read, leaving the connect phase bounded only by the operating system. | 10000 | long |
-| **maxParallelRequests** (advanced) | How many of a batchCheck’s checks may be in flight at once. The batch is issued as one request per object, so this bounds the load one exchange puts on the server. | 10 | int |
+| **maxBatchSize** (advanced) | Maximum number of checks per native server BatchCheck request, from 1 to 50. Applies only when batchCheckMode=server; the SDK splits larger input lists into requests of at most this size. 50 is the default per-request limit of an OpenFGA server (max-checks-per-batch-check). | 50 | int |
+| **maxParallelRequests** (advanced) | How many HTTP requests a batchCheck may have in flight at once. In client mode each request checks one object; in server mode each request checks up to maxBatchSize objects. | 10 | int |
 | **maxRetries** (advanced) | How many times the SDK retries a request that failed in a way worth retrying, such as a rate limit or a 5xx. Set it to 0 to disable retries; the overall wait a routing thread can spend on one exchange grows with it. | 3 | int |
 | **openFgaClient** (advanced) | **Autowired** An existing OpenFgaClient to use. When set, every option describing how to reach the server - apiUrl, storeId, the credentials, the timeouts and sslContextParameters - is ignored, because they are baked into the client that was handed over. |  | OpenFgaClient |
 | **readTimeout** (advanced) | How long to wait for one request to OpenFGA to complete once connected. A request that times out is a failure to obtain a verdict rather than a deny, so it fails closed - or proceeds when failOpen is set. | 10000 | long |
@@ -459,6 +493,17 @@ from("direct:listDocuments")
 
 The body comes back holding only the identifiers the check allowed, in the order it was given them.
 
+By default, `batchCheckMode=client` sends one Check request per object, with at most `maxParallelRequests` (default 10) in flight. This is compatible with older OpenFGA servers.
+
+For OpenFGA 1.8.0 or later, set `batchCheckMode=server` to use the native BatchCheck API. The SDK groups checks into HTTP requests containing at most `maxBatchSize` checks (default 50, configurable from 1 to 50; 50 is the default per-request limit of an OpenFGA server, `max-checks-per-batch-check`, and the component does not go above it even when a server is configured to accept more), and sends at most `maxParallelRequests` of those requests concurrently. Results are correlated back to their input positions, preserving order and duplicate identifiers even when the server returns answers out of order. For example:
+
+```java
+.to("openfga:batchCheck?storeId={{fga.store}}&relation=reader&user=user:anne"
+    + "&batchCheckMode=server&maxBatchSize=50&maxParallelRequests=2")
+```
+
+The bounded wait accounts for the number of HTTP-request waves in the selected mode. An item error, an incomplete response, or a failed request fails the entire filter, including when `failOpen=true`; server mode does not silently fall back to client mode. SDK request retries remain governed by `maxRetries`.
+
 `listObjects` answers the same question from the other end — ask OpenFGA which objects the subject can reach, rather than filtering a list you already have:
 
 -   Java
@@ -637,7 +682,7 @@ to("openfga:check?storeId={{fga.store}}&relation=reader"
               contextualTuples: "user:${exchangeProperty.CamelKeycloakTokenSubject},member,team:${exchangeProperty.tokenTeam}"
 ```
 
-It applies to `check`, `batchCheck`, `listObjects`, `listRelations` and `listUsers`. On `batchCheck` the batch fans out into one check per object and the context goes on **every** item, so each object is judged against the same facts.
+It applies to `check`, `batchCheck`, `listObjects`, `listRelations` and `listUsers`. On `batchCheck` the context goes on **every** item in either client or server mode, so each object is judged against the same facts.
 
 `OpenFgaSecurityPolicy` takes both options as well, through `setContextualTuples` and `setConditionContext`. They are no more dangerous on the policy than on an endpoint and no less: either way the value comes from whoever configured the route, never from the message.
 

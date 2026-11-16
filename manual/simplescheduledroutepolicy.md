@@ -33,7 +33,7 @@ In order to perform a route operation at a given time the following information 
 | routeStopRepeatCount | int |  | no of times to repeat the job |
 | routeStopRepeatInterval | long |  | the time interval in milliseconds to trigger the next attempt to stop the route |
 | routeStopGracePeriod | int | 10 seconds | the time period to wait before initiating graceful route stop |
-| routeStopTimeUnit | long | TimeUnit.MILLISECONDS | the time unit for the grace period expressed as java.util.concurrent.TimeUnit |
+| timeUnit | java.util.concurrent.TimeUnit | MILLISECONDS | the time unit for the grace period |
 
 -   Suspending a route
     
@@ -75,14 +75,16 @@ policy.setRouteStartDate(new Date(startTime));
 policy.setRouteStartRepeatCount(1);
 policy.setRouteStartRepeatInterval(3000);
 
-from("direct:start")
+from("file:inbox")
    .routeId("test")
    .routePolicy(policy)
-   .to("mock:success");
+   .noAutoStartup()
+   .to("log:inbox");
 ```
 
 ```xml
-<bean id="date" class="org.apache.camel.routepolicy.quartz.SimpleDate"/>
+<!-- the date and time when the bean is created -->
+<bean id="date" class="java.util.Date"/>
 
 <bean id="startPolicy" class="org.apache.camel.routepolicy.quartz.SimpleScheduledRoutePolicy">
     <property name="routeStartDate" ref="date"/>
@@ -91,23 +93,38 @@ from("direct:start")
 </bean>
 
 <camelContext xmlns="http://camel.apache.org/schema/spring">
-    <route id="myroute" routePolicyRef="startPolicy">
-        <from uri="direct:start"/>
-        <to uri="mock:success"/>
+    <route id="myroute" routePolicyRef="startPolicy" autoStartup="false">
+        <from uri="file:inbox"/>
+        <to uri="log:inbox"/>
     </route>
 </camelContext>
 ```
 
 ```yaml
+- beans:
+  - name: startPolicy
+    type: org.apache.camel.routepolicy.quartz.SimpleScheduledRoutePolicy
+    properties:
+      # the date and time when the bean is created
+      routeStartDate: "#class:java.util.Date"
+      routeStartRepeatCount: 1
+      routeStartRepeatInterval: 3000
 - route:
     id: myroute
+    autoStartup: "false"
     routePolicyRef: startPolicy
     from:
-      uri: direct:start
+      uri: file:inbox
       steps:
         - to:
-            uri: mock:success
+            uri: log:inbox
 ```
+
+> **Important**
+> The route to be scheduled **MUST** be configured to not [auto-startup](configuring-route-startup-ordering-and-autostartup.md), to let the route scheduler take control of starting and stopping the route accordingly.
+
+> **Note**
+> A route policy only starts, stops, suspends or resumes the route. It never creates or sends a message: while the route is started, its consumer (such as JMS or file) takes the messages. To run a task at a given time, use the [Quartz](../components/4.22.x/quartz-component.md), [Timer](../components/4.22.x/timer-component.md) or [Scheduler](../components/4.22.x/scheduler-component.md) component instead.
 
 ## Dependency
 

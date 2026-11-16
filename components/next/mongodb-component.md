@@ -1125,6 +1125,8 @@ There are several types of consumers:
 2.  Change Streams Consumer
     
 
+Both run in a thread of their own. When a consumer stops, it closes its cursor and waits for that thread to end. Closing the cursor does not end a read from MongoDB in progress on the thread, and a read from a connection that stopped answering does not return: the consumer waits for such a read up to the `shutdownAwaitTermination` of the `ExecutorServiceManager` (10 seconds by default), then logs a WARN, interrupts the thread and leaves it behind. A thread that routes an exchange is waited for, and not interrupted, as the graceful shutdown bounds that wait with its own timeout.
+
 #### Tailable Cursor Consumer
 
 MongoDB offers a mechanism to instantaneously consume ongoing data from a collection, by keeping the cursor open just like the `tail -f` command of \*nix systems. This mechanism is significantly more efficient than a scheduled poll, due to the fact that the server pushes new data to the client as it becomes available, rather than making the client ping back at scheduled intervals to fetch new data. It also reduces otherwise redundant network traffic.

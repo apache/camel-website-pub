@@ -1,8 +1,10 @@
-urls[948]{loc,lastmod}:
-  https://camel.apache.org/blog/,2026-11-13T00:00:00+00:00
+urls[949]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-11-16T00:00:00+00:00
+  https://camel.apache.org/categories/Community/,2026-11-16T00:00:00+00:00
+  https://camel.apache.org/,2026-11-16T00:00:00+00:00
+  https://camel.apache.org/blog/2026/11/camel-core-ci-improvements/,2026-11-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/11/camel-quarkus-3.33.4/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/releases/q-3.33.4/,2026-11-13T00:00:00+00:00
-  https://camel.apache.org/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/categories/Releases/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/releases/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/releases/kamelets-4.22.2/,2026-11-10T00:00:00+00:00
@@ -73,7 +75,6 @@ urls[948]{loc,lastmod}:
   https://camel.apache.org/releases/release-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.23.0/,2026-10-15T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-yaml-dsl-testing/,2026-10-14T00:00:00+00:00
-  https://camel.apache.org/categories/Community/,2026-10-12T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/camel-mcp-talk-to-your-crm/,2026-10-12T00:00:00+00:00
   https://camel.apache.org/releases/release-4.18.5/,2026-10-11T00:00:00+00:00
   https://camel.apache.org/blog/2026/10/RELEASE-4.18.5/,2026-10-11T00:00:00+00:00

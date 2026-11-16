@@ -234,7 +234,7 @@ The `size` functions is used to determine the number of elements, when using `Co
 > **Tip**
 > Use the `length` function to return the payload length in bytes.
 
-The `skip` function is used for skipping the first number of elements. For example suppose you have a CSV file that contains a header line, and you want to skip this line, then you can use `${skip(1)}` that then returns an `Iterator` that starts at the 2nd line.
+The `skip` function is used for skipping the first number of elements. For example if the message body is a `List` with the values `a,b,c` then `${skip(1)}` returns an `Iterator` over `b,c`. It works on a `List`, an array or an `Iterator`. A `String` body is split on commas, not on lines: to skip the header line of a CSV text, use the [Tokenize](tokenize-language.md) language with `skipFirst`, or the [CSV](../dataformats/csv-dataformat.md) data format.
 
 The `split` function is as the name implies used for splitting the message body or the value (using a separator) into an array of sub elements. For example if the message body a CSV payload then using `${split(\\n)}` (you need to escape the new-line character) will split this into a `String[]` separated by new-line. If the body is `a:b:c` then `${split(:)}` returns a list `[a, b, c]`. You can also split a header or variable value: `${split($\{header.csv},-)}` splits the header value using `-` as separator.
 

@@ -106,7 +106,7 @@ With the following _path_ and _query_ parameters:
 | **disableStreamCache** (common) | Determines whether or not the raw input stream is cached or not. The Camel consumer (camel-servlet, camel-jetty etc.) will by default cache the input stream to support reading it multiple times to ensure it Camel can retrieve all data from the stream. However you can set this option to true when you for example need to access the raw stream, such as streaming it directly to a file or other persistent store. DefaultHttpBinding will copy the request input stream into a stream cache and put it into message body if this option is false to support reading the stream multiple times. If you use Servlet to bridge/proxy an endpoint then consider enabling this option to improve performance, in case you do not need to read the message payload multiple times. The producer (camel-http) will by default cache the response body stream. If setting this option to true, then the producers will not cache the response body stream but use the response stream as-is (the stream can only be read once) as the message body. | false | boolean |
 | **sendToAll** (common) | Whether to send to all (broadcast) or send to a single receiver. | false | boolean |
 | **transferException** (common) | If enabled and an Exchange failed processing on the consumer side, and if the caused Exception was send back serialized in the response as a application/x-java-serialized-object content type. On the producer side the exception will be deserialized and thrown as is, instead of the HttpOperationFailedException. The caused exception is required to be serialized. This is by default turned off. If you enable this then be aware that Java will deserialize the incoming data from the request to Java and that can be a potential security risk. | false | boolean |
-| **useStreaming** (common) | To enable streaming to send data as multiple text fragments. | false | boolean |
+| **useStreaming** (common) | Whether the consumer receives messages as a stream: a text message as a java.io.Reader and a binary message as a java.io.InputStream, instead of a String or a byte array. The producer does not use this option. | false | boolean |
 | **headerFilterStrategy** (common (advanced)) | To use a custom HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **httpBinding** (common (advanced)) | To use a custom HttpBinding to control the mapping between Camel message and HttpClient. |  | HttpBinding |
 | **async** (consumer) | Configure the consumer to work in async mode. | false | boolean |
@@ -159,6 +159,12 @@ The Atmosphere Websocket component supports 4 message header(s), which is/are li
 ## Reading and Writing Data over Websocket
 
 An atmopshere-websocket endpoint can either write data to the socket or read from the socket, depending on whether the endpoint is configured as the producer or the consumer, respectively.
+
+## Connection Events
+
+When the init-param `events` of the `CamelWebSocketServlet` is set to `true`, the consumer also routes an exchange, without a body, when a websocket connection opens, closes or fails. The `CamelAtmosphereWebsocketEventType` header holds the type of the event (`1` open, `0` close, `-1` error), and the `CamelAtmosphereWebsocketConnectionKey` header holds the key of the connection.
+
+The query parameters of the request that opened the connection are set as headers on the events of that connection, with their names and values URL-decoded. The header filter strategy of the endpoint applies, so for example a parameter whose name starts with `Camel` is not set as a header.
 
 ## Examples
 

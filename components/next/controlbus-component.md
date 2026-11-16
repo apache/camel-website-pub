@@ -208,7 +208,7 @@ Enum values:
 
 
  |  | String |
-| **async** (producer) | Whether to execute the control bus task asynchronously. Important: If this option is enabled, then any result from the task is not set on the Exchange. This is only possible if executing tasks synchronously. | false | boolean |
+| **async** (producer) | Whether to execute the control bus task asynchronously. Important: If this option is enabled, then any result from the task is not set on the Exchange. This is only possible if executing tasks synchronously. A stop, suspend, restart or fail of a route that routes the exchange (the current route, or a route that called it, such as with direct), or of the route the exchange came from, is always executed asynchronously, as the route waits for the exchange to complete before it stops. | false | boolean |
 | **loggingLevel** (producer) | 
 
 Logging level used for logging when task is done, or if any exceptions occurred during processing the task.
@@ -341,6 +341,24 @@ In a route, the status is the message body after the call, such as `Started` or 
                     routeId: foo
                     action: start
 ```
+
+The `current` route id refers to the route that routes the message, so a route can stop itself:
+
+```yaml
+- route:
+    from:
+      uri: kafka:orders
+      steps:
+        - to:
+            uri: log:orders
+        - to:
+            uri: controlbus:route
+            parameters:
+              routeId: current
+              action: stop
+```
+
+A graceful stop waits for the inflight messages of the route, including the one that asks for the stop. So a `stop`, `suspend`, `restart` or `fail` always runs asynchronously, even without `async=true`, when it targets the current route, a route that called it (such as with `direct`), or the route the message came from. The message continues, and the route stops once it is done. A copy of the message made by an EIP such as Split or Multicast does not know the routes that called the route of that EIP. From such a copy, a stop of one of those routes needs `async=true`, unless it is the route the message came from.
 
 ### Getting performance statistics
 

@@ -48,7 +48,9 @@ cd my-export
 
 ## Dependency management
 
-Basic Citrus dependencies are included out of the box. For additional modules (Kafka, Testcontainers, etc.), add them in a `jbang.properties` file next to the test source:
+Basic Citrus dependencies are included out of the box. Additional Citrus modules (e.g. `citrus-sql`, `citrus-kafka`) and Camel test infrastructure dependencies (e.g. `camel-test-infra-kafka`) are auto-detected from YAML, XML and Groovy test sources during project export.
+
+For Java test sources or dependencies that cannot be auto-detected, add them in a `jbang.properties` file next to the test source:
 
 jbang.properties
 
@@ -63,7 +65,7 @@ run.D=citrus.camel.jbang.dump.integration.output=true
 ```
 
 > **Tip**
-> These dependencies are automatically added as test-scoped dependencies during project export.
+> Dependencies from `jbang.properties` and auto-detected dependencies are both added as test-scoped dependencies during project export.
 
 ## Writing tests with Citrus
 

@@ -879,16 +879,18 @@ ssh -vvv <server\_address>
 
 ### Connection errors
 
-When the connection fails, the exception is a `GenericFileOperationFailedException` with the message `Cannot connect to sftp://user@host:port`. The message of its cause, from JSch, tells what failed:
+When the connection fails, the exception is a `GenericFileOperationFailedException` with the message `Cannot connect to sftp://user@host:port`. The message of its cause, from JSch, tells what failed, and the consumer logs it in its WARN `Cannot connect/login to: sftp://user@host:port due to: …​`:
 
  
 | Message of the cause | What to check |
 | --- | --- |
 | `reject HostKey: <host>` | With `strictHostKeyChecking=yes`, the known hosts have no key for the server. Set `knownHostsFile`, `knownHostsUri` or `knownHosts` with an entry for the host and port, for example from `ssh-keyscan -p <port> <host>`. For a port other than 22, the entry starts with `[host]:port`. |
 | `Algorithm negotiation fail: algorithmName="…​" jschProposal="…​" serverProposal="…​"` | JSch and the server have no algorithm in common. Add one that the server proposes with `serverHostKeys` for `server_host_key`, `keyExchangeProtocols` for `kex`, or `ciphers` for `cipher.c2s` and `cipher.s2c`. See [Restoring Deprecated Key Types and Algorithms](#_restoring_deprecated_key_types_and_algorithms). |
-| `Auth fail for methods '…​'` | The server refused the credentials: check the username, password or key. With an RSA key and a server that only accepts `ssh-rsa` signatures, add `ssh-rsa` to `publicKeyAcceptedAlgorithms`. |
+| `Auth fail for methods '…​'`, `Auth fail for user '…​': the server did not accept the password` | The server refused the credentials: check the username, password or key. With an RSA key and a server that only accepts `ssh-rsa` signatures, add `ssh-rsa` to `publicKeyAcceptedAlgorithms`. |
 | `invalid privatekey` | JSch cannot read the key, for example because its line breaks were lost. See [Providing the private key](#_providing_the_private_key). |
 | `Incorrect passphrase provided.` | `privateKeyPassphrase` does not decrypt the key. In a URI, set a passphrase with characters such as `+` or `&` as `RAW(…​)`, see [raw values](../../manual/endpoint.html#_configuring_parameter_values_using_raw_values_such_as_passwords). |
+
+A login that the server rejects is not retried, as each rejected login counts towards the lockout policy of a server, such as one that locks the account after a few failures. Camel gives the password once per connection, with the `password` or the `keyboard-interactive` method: when the server asks for it again, the connection ends with `Auth fail for user '…​': the server did not accept the password`. So a server that asks for the password twice in one login, such as one that requires both the `password` and the `keyboard-interactive` methods (`AuthenticationMethods password,keyboard-interactive` in OpenSSH), rejects the login, with the same message, even when the password is right. A rejected login (`Auth fail …​` or `Auth cancel …​`) does not connect again for `maximumReconnectAttempts`, which applies to the other connection failures. The consumer tries again on its next poll, so a wrong password is sent once per poll (and once more when the consumer starts with `autoCreate=true`), and the producer tries again on its next message.
 
 ### Symbolic links and the starting directory
 
@@ -899,6 +901,20 @@ The link is resolved on the server one path segment at a time, with the `lstat` 
 ### Read locks
 
 The sftp consumer supports the read locks `none`, `rename` and `changed`. `readLock=false` and `readLock=off` mean `none`. Any other `readLock` value, such as the `markerFile`, `fileLock`, `idempotent`, `idempotent-changed` and `idempotent-rename` read locks of the [File](file-component.md) component, fails when the consumer is created, also with `poll` and `pollEnrich`, with `IllegalArgumentException: ReadLock invalid`. The `readLock` option is not checked when a custom `exclusiveReadLockStrategy` or `processStrategy` is set, as it does not apply then.
+
+### Timeouts and dead connections
+
+The SFTP endpoint opens the connection with `connectTimeout` (10 seconds) and uses `soTimeout` (5 minutes) as the read timeout of the JSch session. When nothing arrives from the server for `soTimeout`, JSch sends a keep-alive message and waits once more; it drops the session after `serverAliveCountMax` (1 by default) keep-alive messages without an answer. A connection that went silent (the host is gone, or a firewall or NAT drops the packets) is therefore noticed after about twice `soTimeout`: about 10 minutes with the defaults, during which the consumer or producer using it waits. These durations are how JSch behaves, approximately, not guarantees of Camel.
+
+Lower `soTimeout` to notice it sooner; `soTimeout=15000` notices it after about 30 seconds. As a server that is alive answers the keep-alive message, a command that takes longer than `soTimeout` does not drop the session.
+
+```text
+sftp://scott@sftp.example.com/inbox?password=RAW(tiger)&connectTimeout=5000&soTimeout=15000&throwExceptionOnConnectFailed=true
+```
+
+When `serverAliveInterval` is set, it replaces `soTimeout` as the read timeout of the session: the session is then dropped after about `serverAliveInterval` × (`serverAliveCountMax` + 1) without data from the server.
+
+As with FTP, set `throwExceptionOnConnectFailed=true` so that a consumer that cannot connect fails its poll and its health check reports it DOWN, and upload under a temporary name (`tempPrefix` or `tempFileName`) so that a broken upload does not leave a truncated file under its final name. See [Noticing a dead or silent server](ftp-component.html#_noticing_a_dead_or_silent_server) and [Uploads interrupted by a broken connection](ftp-component.html#_uploads_interrupted_by_a_broken_connection).
 
 ### Checking whether a file exists
 

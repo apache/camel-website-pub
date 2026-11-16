@@ -134,7 +134,7 @@ This allows you to test various things like:
     
 
 > **Note**
-> There is also the [Test endpoint](others/test-junit5.md), which is a Mock endpoint, but which uses a second endpoint to provide the list of expected message bodies and automatically sets up the Mock endpoint assertions. In other words, it’s a Mock endpoint that automatically sets up its assertions from some sample messages in a File or [database](jpa-component.md), for example.
+> There is also the [DataSet Test](dataset-test-component.md) endpoint, which is a Mock endpoint, but which uses a second endpoint to provide the list of expected message bodies and automatically sets up the Mock endpoint assertions. In other words, it’s a Mock endpoint that automatically sets up its assertions from some sample messages in a File or [database](jpa-component.md), for example.
 
 > **Caution**
 > **Mock endpoints keep received Exchanges in memory indefinitely.**
@@ -533,7 +533,7 @@ Suppose we have the route in the `camel-route.xml` file:
     </camelContext>
 ```
 
-Then we create a new XML file as follows, where we include the `camel-route.xml` file and define a spring bean with the class `org.apache.camel.impl.InterceptSendToMockEndpointStrategy` which tells Camel to mock all endpoints:
+Then we create a new XML file as follows, where we include the `camel-route.xml` file and define a spring bean with the class `org.apache.camel.component.mock.InterceptSendToMockEndpointStrategy` which tells Camel to mock all endpoints:
 
 **test-camel-route.xml**
 
@@ -550,7 +550,7 @@ Then in your unit test you load the new XML file (`test-camel-route.xml`) instea
 To only mock all [Log](log-component.md) endpoints, you can define the pattern in the constructor for the bean:
 
 ```xml
-<bean id="mockAllEndpoints" class="org.apache.camel.impl.InterceptSendToMockEndpointStrategy">
+<bean id="mockAllEndpoints" class="org.apache.camel.component.mock.InterceptSendToMockEndpointStrategy">
     <constructor-arg index="0" value="log*"/>
 </bean>
 ```

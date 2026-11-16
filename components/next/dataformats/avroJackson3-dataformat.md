@@ -49,7 +49,7 @@ The Avro Jackson 3 dataformat supports the following options which are listed be
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **objectMapper** (advanced) |  | `String` | Lookup and use the existing ObjectMapper with the given id when using Jackson. |
-| **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson ObjectMapper from the registry. |
+| **useDefaultObjectMapper** (common) | `true` | `Boolean` | Whether to lookup and use default Jackson ObjectMapper from the registry. The registry is only searched when autoDiscoverObjectMapper is true as well. |
 | **unmarshalType** (common) |  | `String` | Class name of the java type to use when unmarshalling. |
 | **jsonView** (advanced) |  | `String` | When marshalling a POJO to JSON you might want to exclude certain fields from the JSON output. With Jackson you can use JSON views to accomplish this. This option is to refer to the class which has JsonView annotations. |
 | **include** (common) |  | `String` | If you want to marshal a pojo to JSON, and the pojo has some fields with null values. And you want to skip these null values, you can set this option to NON\_NULL. |
@@ -62,7 +62,7 @@ The Avro Jackson 3 dataformat supports the following options which are listed be
 | **disableFeatures** (common) |  | `String` | Set of features to disable on the Jackson ObjectMapper. Multiple features can be separated by comma. |
 | **allowUnmarshallType** (common) | `false` | `Boolean` | If enabled then Jackson is allowed to attempt to use the CamelJacksonUnmarshalType header during the unmarshalling. |
 | **timezone** (advanced) |  | `String` | If set then Jackson will use the Timezone when marshalling/unmarshalling. |
-| **autoDiscoverObjectMapper** (advanced) | `false` | `Boolean` | If set to true then Jackson will lookup for an objectMapper into the registry. |
+| **autoDiscoverObjectMapper** (advanced) | `false` | `Boolean` | If set to true (and useDefaultObjectMapper is true) then Camel will look for a Jackson AvroMapper in the registry, and use it when there is exactly one. The options of this data format that configure the mapper, such as include, enableFeatures and disableFeatures, are not applied to that AvroMapper. |
 | **contentTypeHeader** (common) | `true` | `Boolean` | Whether the data format should set the Content-Type header with the type from the data format. For example application/xml for data formats marshalling to XML, or application/json for data formats marshalling to JSON. |
 | **schemaResolver** (advanced) |  | `String` | Optional schema resolver used to lookup schemas for the data in transit. |
 | **autoDiscoverSchemaResolver** (advanced) | `true` | `Boolean` | When not disabled, the SchemaResolver will be looked up into the registry. |
@@ -101,7 +101,9 @@ You can add a single SchemaResolver to the registry, and it will be looked up au
 
 You can configure `JacksonAvroDataFormat` to use a custom `AvroMapper` in case you need more control of the mapping configuration.
 
-If you set up a single `AvroMapper` in the registry, then Camel will automatic lookup and use this `AvroMapper`.
+Refer to your `AvroMapper` with the `objectMapper` option, such as `objectMapper=#myMapper`.
+
+By default, Camel does not look up an `AvroMapper` in the registry. To look one up, set `autoDiscoverObjectMapper=true` (and leave `useDefaultObjectMapper` at its default, `true`). Camel then uses the `AvroMapper` only when there is exactly one in the registry, and otherwise creates its own. The options of the data format that configure the mapper, such as `include`, `enableFeatures`, `disableFeatures` and `timezone`, are not applied to an `AvroMapper` from the registry.
 
 ## Dependencies
 

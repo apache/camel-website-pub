@@ -22,7 +22,6 @@ The following list all requires at most one bean defined. If there is more than 
 | `Delayer` | 0..1 | To use a third-party [Delayer](../components/4.22.x/eips/delay-eip.md). |
 | `EventFactory` | 0..1 | To use a third-party event factory. |
 | `ExecutorServiceManager` | 0..1 | To use a third-party executor service manager. More details at [Threading Model](threading-model.md). |
-| `ExecutorServiceStrategy` | 0..1 | To use a third-party executor service strategy. More details at [Threading Model](threading-model.md). |
 | `FactoryFinderResolver` | 0..1 | To use a third-party factory finder. |
 | `HeadersMapFactory` | 0..1 | To use a third-party HeadersMapFactory implementation. |
 | `HealthCheckRegistry` | 0..1 | To use a third-party [HealthCheckRegistry](health-check.md) implementation. |

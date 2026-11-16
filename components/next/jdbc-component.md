@@ -124,7 +124,7 @@ Enum values:
  | SelectList | JdbcOutputType |
 | **parameters** (producer) | Optional parameters to the java.sql.Statement. For example to set maxRows, fetchSize etc. This is a multi-value option with prefix: statement. |  | Map |
 | **readSize** (producer) | The default maximum number of rows that can be read by a polling query. The default value is 0. |  | int |
-| **resetAutoCommit** (producer) | Camel will set the autoCommit on the JDBC connection to be false, commit the change after executed the statement and reset the autoCommit flag of the connection at the end, if the resetAutoCommit is true. If the JDBC connection doesn’t support to reset the autoCommit flag, you can set the resetAutoCommit flag to be false, and Camel will not try to reset the autoCommit flag. When used with XA transactions you most likely need to set it to false so that the transaction manager is in charge of committing this tx. | true | boolean |
+| **resetAutoCommit** (producer) | Camel will set the autoCommit on the JDBC connection to be false, commit the change after executed the statement and reset the autoCommit flag of the connection at the end, if the resetAutoCommit is true. With outputType=StreamList, the route reads the rows after the statement is executed, so the commit (or the rollback, when the exchange fails) happens when the exchange is done. If the JDBC connection doesn’t support to reset the autoCommit flag, you can set the resetAutoCommit flag to be false, and Camel will not try to reset the autoCommit flag. When used with XA transactions you most likely need to set it to false so that the transaction manager is in charge of committing this tx. | true | boolean |
 | **transacted** (producer) | **Deprecated** Whether transactions are in use. Deprecation note: Not used: the producer does not read this option. | false | boolean |
 | **useGetBytesForBlob** (producer) | To read BLOB columns as bytes (a byte\[\]) instead of a java.sql.Blob, which cannot be read after the producer has closed the connection. This may be needed for certain databases such as Oracle where you must read BLOB columns as bytes. | false | boolean |
 | **useHeadersAsParameters** (producer) | Set this option to true to use the prepareStatementStrategy with named parameters. This allows to define queries with named placeholders, and use headers with the dynamic values for the query placeholders. A query with only positional placeholders (no named parameters) takes their values, in order, only from the CamelJdbcParameters header (a List). | false | boolean |
@@ -180,7 +180,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 By default, the result of a select is returned in the OUT body as an `ArrayList<LinkedHashMap<String, Object>>`. The `List` object contains the list of rows and the `Map` objects contain each row with the `String` key as the column name. You can use the option `outputType` to control the result: `SelectOne` gives the `Map` of the one row, the value of its column when it has one column, or `null` when there is no row, and `StreamList` gives an `Iterator` of the rows, which can be read once. A statement that is not a select leaves the body as it is, with the count in the `CamelJdbcUpdateCount` header.
 
-When reading a row of a `StreamList` fails (for example, the connection is lost), the iterator keeps failing instead of ending, so a split that is redelivered over it fails too, rather than succeeding with the rows read before the failure.
+When reading a row of a `StreamList` fails (for example, the connection is lost), the iterator keeps failing instead of ending, so a split that is redelivered over it fails too, rather than succeeding with the rows read before the failure. The same applies when a row cannot be mapped to the `outputClass` (for example, a value that does not convert to the type of its property): the iterator keeps failing instead of going on with the next row, so a redelivered split does not skip that row.
 
 **Note:** This component fetches `ResultSetMetaData` to be able to return the column name as the key in the `Map`.
 
@@ -267,6 +267,25 @@ from("direct:projects")
     .setBody(constant("select * from projects where license = ? and id > ? order by id"))
     .to("jdbc:myDataSource?useHeadersAsParameters=true");
 ```
+
+### Noticing a dead or silent database
+
+The JDBC component has no network timeout of its own: how long the producer waits for a database that stopped answering depends on the JDBC driver and the connection pool of the `DataSource`. The durations below describe how those libraries behave by default; they are approximate, not guarantees of Camel.
+
+The common JDBC drivers have no read timeout by default. A statement on a connection that went silent (the database host is gone, or a firewall or NAT dropped the connection without a reset) waits in a socket read, with no error and nothing logged, until the operating system gives up on the connection: on Linux about 15 minutes when the request was not acknowledged, and never when it was and TCP keep-alive is off. Set the driver’s socket timeout, longer than your slowest statement, so the producer fails and the error handler can redeliver:
+
+   
+| Driver | Property | Unit | Default |
+| --- | --- | --- | --- |
+| PostgreSQL (pgjdbc) | `socketTimeout` | seconds | 0 (no timeout) |
+| MySQL Connector/J | `socketTimeout` | milliseconds | 0 (no timeout) |
+| MariaDB Connector/J | `socketTimeout` | milliseconds | 0 (no timeout) |
+| Microsoft SQL Server (mssql-jdbc) | `socketTimeout` | milliseconds | 0 (no timeout) |
+| Oracle (thin driver) | `oracle.jdbc.ReadTimeout` | milliseconds | not set (no timeout) |
+
+For example `jdbc:postgresql://db:5432/orders?socketTimeout=30` in the JDBC URL, or the same property as a driver property of the pool.
+
+After a socket timeout or a reset the connection is broken, and the pool must not hand it out again. HikariCP and the Agroal pool that Quarkus configures drop it by default; Agroal used directly needs a connection validator and an exception sorter. See [Noticing a dead or silent database](sql-component.html#_noticing_a_dead_or_silent_database) in the SQL component for the pool settings, Spring Boot and Quarkus properties, and starting while the database is down.
 
 ## Examples
 
@@ -374,6 +393,10 @@ from("direct:hello")
               - to:
                   uri: mock:result
 ```
+
+The result set and the connection stay open until the exchange is done. With `resetAutoCommit=true` (the default), the transaction of the statement ends then too: it is committed when the exchange completes, or rolled back when it fails. A commit that fails at that time is logged at WARN and does not fail the exchange, which is already complete. For a statement with side effects that returns rows (such as an `INSERT` or `DELETE` with `RETURNING`), the route then reports success (and a consumer such as JMS acknowledges its message) although the change is not committed: use another output type, such as `SelectList`, when a failed commit must fail the exchange.
+
+Whether the rows are loaded as needed depends on the JDBC driver. For example, the PostgreSQL driver fetches `statement.fetchSize` rows at a time only when auto-commit is off (as `resetAutoCommit=true` sets it); otherwise it loads all the rows when the statement is executed.
 
 ### Polling the database every minute
 

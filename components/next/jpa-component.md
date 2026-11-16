@@ -146,6 +146,7 @@ Enum values:
 
 
  | PESSIMISTIC\_WRITE | LockModeType |
+| **lockTimeout** (consumer) | How long the consumer waits for the lock of an entity (see consumeLockEntity) that another transaction holds. It is given to the JPA provider as the jakarta.persistence.lock.timeout hint, which the provider applies if the database supports it: for example Hibernate on PostgreSQL sets lock\_timeout for the lock. The default 0 sets no timeout: the lock waits as long as the database lets it, which on PostgreSQL is until the other transaction ends. A lock that times out is handled like one that skipLockedEntity could not get. On PostgreSQL it rolls back the poll: the entities that the poll routed before the locked one are routed again by each poll, for as long as the other transaction holds the lock, so the route must be idempotent. Not used with skipLockedEntity, which does not wait at all. The value is in millis, and must not be negative. | 0 | long |
 | **maxMessagesPerPoll** (consumer) | An integer value to define the maximum number of messages to gather per poll. By default, no maximum is set. It can be used to avoid polling many thousands of messages when starting up the server. Set a value of 0 or negative to disable. |  | int |
 | **preDeleteHandler** (consumer) | To use a custom Pre-DeleteHandler to delete the row after the consumer has read the entity. |  | DeleteHandler |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
@@ -320,6 +321,23 @@ You can use `@PreConsumed` (org.apache.camel.component.jpa.PreConsumed) which wi
 A query that selects values instead of entities, such as a column (`select x.address from Customer x`), or a native query without `resultClass`, gives one message per row (a NULL column gives a message with a null body). Such a value is not locked, and it cannot be deleted or marked with `@Consumed`, so each poll delivers the same rows again: set `consumeDelete=false` and make the query exclude the rows already handled, or select the entity instead.
 
 If you are consuming a lot of rows (100K+) and experience `OutOfMemory` problems, you should set the `maximumResults` to a sensible value.
+
+### Locking the consumed entities
+
+With `consumeLockEntity=true` (the default), the consumer locks each entity before it routes it, with the `lockModeType` (by default `PESSIMISTIC_WRITE`, a `SELECT …​ FOR UPDATE` on most databases), and holds the lock until the poll commits. This keeps two consumers from consuming the same entity.
+
+When another transaction holds the lock of an entity, the poll waits for it, as long as the database lets it. PostgreSQL, for one, has no lock timeout by default (`lock_timeout` is 0): the poll waits until the other transaction ends. A transaction that does not end then stops the consumer. This happens when a client, possibly another consumer, loses its connection without the database noticing, after a network failure or a NAT timeout: PostgreSQL keeps its session `idle in transaction`, with its locks, until TCP keepalive gives up on the client, about two hours with the defaults of Linux. A socket timeout of the JDBC driver ends the poll, but not its wait on the database: each poll leaves one more session waiting for the lock.
+
+The consumer waits for at most `lockTimeout`, or not at all with `skipLockedEntity=true`. The JPA provider applies `lockTimeout` if it can with the database: Hibernate 7.4, for one, sets `lock_timeout` for the lock on PostgreSQL, so the database itself cancels the wait.
+
+What happens to a lock that the consumer does not get depends on the database:
+
+-   When the transaction can go on, the JPA provider reports a `LockTimeoutException`: the consumer skips the entity and routes the next one.
+    
+-   On PostgreSQL, the failed lock aborts the transaction, and the JPA provider reports a `PessimisticLockException`: the consumer routes no more entities in this poll, and the poll is rolled back. The entities that the poll routed before the locked one are not consumed, so the next poll routes them again. This repeats on every poll for as long as the other transaction holds the lock: instead of waiting for the lock, the consumer routes the entities ahead of the locked one again and again. The route must handle these entities being routed again (be idempotent), or the transaction holding the lock must be ended (see `idle_in_transaction_session_timeout` below).
+    
+
+Either way, a later poll consumes the locked entity once its lock is released. To release the locks of a transaction that does not end, set a timeout on the database, such as `idle_in_transaction_session_timeout` on PostgreSQL, which ends such a session. Set it above the time a poll takes to route its entities: while the route runs, the session of the poll is idle in transaction too.
 
 ### Configuring EntityManagerFactory
 

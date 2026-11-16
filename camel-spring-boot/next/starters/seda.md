@@ -1,6 +1,6 @@
 # SEDA
 
-Asynchronously call another endpoint from any Camel Context in the same JVM.
+Asynchronously call another endpoint from the same Camel Context.
 
 ## What’s inside
 

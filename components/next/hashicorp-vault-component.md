@@ -889,3 +889,7 @@ This will enable the feature so you’ll be able to resolved properties, in your
 ```bash
 foo = hashicorp:secret:database/password#string
 ```
+
+The early resolution logs in as the properties function does, with the same settings: the `CAMEL_HASHICORP_VAULT_*` environment variables when one of them is set, else the `camel.vault.hashicorp` options. So it supports any login of [Logging in to HashiCorp Vault](#_logging_in_to_hashicorp_vault), the trust store and key store of [TLS](#_tls), and the namespace on HashiCorp Cloud. It logs in once: when the login fails, the properties that are left fail with the same error, without logging in again for each of them, since failed AppRole logins count towards the user lockout of Vault. Once the properties are resolved, it revokes the token of its login (a token given for the token login is not revoked).
+
+The properties function of the CamelContext, and the secret refresh task when it is enabled, log in again with the same settings when they first read a secret. So an AppRole secret ID that can be used only once (`secret_id_num_uses=1`) is used up by the early resolution, and that later login fails.

@@ -1218,7 +1218,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Scheduler](../../components/next/scheduler-component.md) | camel-scheduler-starter | Stable | 2.15 | Generate messages in specified intervals using java.util.concurrent.ScheduledExecutorService. |
 | [Schematron](../../components/next/schematron-component.md) | camel-schematron-starter | Stable | 2.15 | Validate XML payload using the Schematron Library. |
 | [SCP](../../components/next/scp-component.md) | camel-jsch-starter | Stable | 2.10 | Copy files to/from remote hosts using the secure copy protocol (SCP). |
-| [SEDA](../../components/next/seda-component.md) | camel-seda-starter | Stable | 1.1 | Asynchronously call another endpoint from any Camel Context in the same JVM. |
+| [SEDA](../../components/next/seda-component.md) | camel-seda-starter | Stable | 1.1 | Asynchronously call another endpoint from the same Camel Context. |
 | [ServiceNow](../../components/next/servicenow-component.md) | camel-servicenow-starter | Stable | 2.18 | Interact with ServiceNow via its REST API. |
 | [Servlet](../../components/next/servlet-component.md) | camel-servlet-starter | Stable | 2.0 | Serve HTTP requests by a Servlet. |
 | [SFTP](../../components/next/sftp-component.md) | camel-ftp-starter | Stable | 1.1 | Upload and download files to/from SFTP servers. |

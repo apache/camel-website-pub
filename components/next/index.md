@@ -34,7 +34,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 | [REST](rest-component.md) | camel-rest | Stable | 2.14 | Expose REST services or call external REST services. |
 | [REST API](rest-api-component.md) | camel-rest | Stable | 2.16 | Expose OpenAPI Specification of the REST services defined using Camel REST DSL. |
 | [Scheduler](scheduler-component.md) | camel-scheduler | Stable | 2.15 | Generate messages in specified intervals using java.util.concurrent.ScheduledExecutorService. |
-| [SEDA](seda-component.md) | camel-seda | Stable | 1.1 | Asynchronously call another endpoint from any Camel Context in the same JVM. |
+| [SEDA](seda-component.md) | camel-seda | Stable | 1.1 | Asynchronously call another endpoint from the same Camel Context. |
 | [Stream](stream-component.md) | camel-stream | Stable | 1.3 | Read from system-in and write to system-out and system-err streams. |
 | [Stub](stub-component.md) | camel-stub | Stable | 2.10 | Stub out any physical endpoints while in development or testing. |
 | [Timer](timer-component.md) | camel-timer | Stable | 1.0 | Generate messages in specified intervals using java.util.Timer. |
