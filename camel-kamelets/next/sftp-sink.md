@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send data to an SFTP Server.
+Uploads each message as a file to a directory on an SFTP server, which transfers files over an encrypted SSH connection.
+
+Use it to deliver exports, reports or data files to a server you reach with SSH, such as the SFTP drop box of a partner. For an FTP server use `ftp-sink` or `ftps-sink`.
+
+Input: the body is the content of the file, as text, bytes or a stream. The name of the file comes from the `file` header, or from `ce-file` when `file` is not set; any directory in it is dropped, so `reports/data.csv` is written as `data.csv`. Without these headers, `CamelFileName` is used as it is, subdirectories included, and without any of them a unique name is generated.
+
+Output: the message is unchanged. The `CamelFileNameProduced` header is set to the path of the file on the server.
+
+Good to know: a file with the same name is replaced, unless `fileExist` says otherwise. Log in with `username` and either `password` or a private key. The key of the server must be in a known\_hosts file, `knownHostsUri` or else `~/.ssh/known_hosts` of the user that runs the integration, or the connection fails. A file name that points outside `directoryName` fails the message.
 
 ## Configuration Options
 
@@ -13,21 +21,21 @@ The following table summarizes the configuration options available for the `sftp
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **connectionHost** | Connection Host | **Required** The hostname of the FTP server. | string |  |  |
-| **connectionPort** | Connection Port | **Required** The port of the FTP server. | string | 22 |  |
-| **directoryName** | Directory Name | **Required** The starting directory. | string |  |  |
-| **autoCreate** | Autocreate Missing Directories | Automatically create the directory the files should be written to. | boolean | true |  |
-| **binary** | Binary | Specifies the file transfer mode, BINARY or ASCII. Default is ASCII (false). | boolean | false |  |
-| **fileExist** | File Existence | How to behave in case of file already existent. Enum values: \* Override \* Append \* Fail \* Ignore | string | Override |  |
-| **knownHostsUri** | Known Hosts URI | The known\_hosts file used to verify the server host key, loaded from the classpath by default. Needed when the process has no $HOME/.ssh/known\_hosts to fall back on. | string |  |  |
-| **passiveMode** | Passive Mode | Specifies to use passive mode connection. | boolean | false |  |
-| **password** | Password | The password to access the FTP server. | string |  |  |
-| **privateKeyFile** | Private Key File | Set the private key file so that the SFTP endpoint can do private key verification. | string |  |  |
-| **privateKeyPassphrase** | Private Key Passphrase | Set the private key file passphrase so that the SFTP endpoint can do private key verification. | string |  |  |
-| **privateKeyUri** | Private Key URI | Set the private key file (loaded from classpath by default) so that the SFTP endpoint can do private key verification. | string |  |  |
-| **strictHostKeyChecking** | Strict Host Checking | Sets whether to use strict host key checking. One of yes, no or ask. With no, the server host key is accepted without being checked against a known\_hosts entry. Enum values: \* yes \* no \* ask | string | yes |  |
-| **useUserKnownHostsFile** | Use User Known Hosts File | If knownHostFile has not been explicit configured then use the host file from System.getProperty(user.home)/.ssh/known\_hosts. | boolean | true |  |
-| **username** | Username | The username to access the FTP server. | string |  |  |
+| **connectionHost** | Connection Host | **Required** The host name or IP address of the SFTP server, without `sftp://` and without a port. | string |  | sftp.example.com |
+| **connectionPort** | Connection Port | **Required** The port of the SFTP server, which is its SSH port, usually 22. | string | 22 |  |
+| **directoryName** | Directory Name | **Required** The directory on the server to write the files to. A path without a leading `/` is relative to the home directory of the user. It is created when it does not exist, unless `autoCreate` is false. | string |  | upload/orders |
+| **autoCreate** | Autocreate Missing Directories | If true, `directoryName`, and any subdirectory in the `CamelFileName` header, is created on the server when it does not exist. | boolean | true |  |
+| **binary** | Binary Mode | A setting of FTP that has no effect on SFTP, which always transfers files byte for byte. Leave it unset. | boolean | false |  |
+| **fileExist** | If File Exists | What to do when a file with the same name is already in the directory. `Override` replaces it, `Append` adds the new content at its end, `Fail` fails the message, and `Ignore` keeps the old file and drops the new content without an error. Enum values: \* Override \* Append \* Fail \* Ignore | string | Override |  |
+| **knownHostsUri** | Known Hosts URI | The known\_hosts file that holds the key of the server, starting with `file://`, `classpath://`, `http://` or `https://`. Its lines can be made with `ssh-keyscan`. When it is not set, `~/.ssh/known_hosts` of the user that runs the integration is used, unless `useUserKnownHostsFile` is false; set it when that file does not exist, for example in a container. | string |  | file:///etc/sftp/known\_hosts |
+| **passiveMode** | Passive Mode | A setting of FTP that has no effect on SFTP. Leave it unset. | boolean | false |  |
+| **password** | Password | The password of `username`. Leave it empty to log in with a private key instead, set in `privateKeyFile` or `privateKeyUri`. | string |  |  |
+| **privateKeyFile** | Private Key File | The path of a private key file on the machine that runs the integration, to log in with instead of a password. The matching public key must be in the `authorized_keys` of `username` on the server. | string |  | /etc/sftp/keys/id\_rsa |
+| **privateKeyPassphrase** | Private Key Passphrase | The passphrase of the private key, when the key is protected with one. | string |  |  |
+| **privateKeyUri** | Private Key URI | Where to load the private key from, instead of `privateKeyFile`. It starts with `file://` for a file, `classpath://` for a resource in the application, or `http://` or `https://`. | string |  | file:///etc/sftp/keys/id\_rsa |
+| **strictHostKeyChecking** | Strict Host Checking | Whether the key of the server must be found in a known\_hosts file. With `yes`, a server that is not in it is refused. With `no`, any server is accepted without checking its key, so someone in between could read the files and the password. `ask` is meant for interactive use. Enum values: \* yes \* no \* ask | string | yes |  |
+| **useUserKnownHostsFile** | Use User Known Hosts File | If true and `knownHostsUri` is not set, the key of the server is looked up in `~/.ssh/known_hosts` of the user that runs the integration. | boolean | true |  |
+| **username** | Username | The user to log in to the SFTP server as. | string |  |  |
 
 ## Dependencies
 
@@ -81,35 +89,20 @@ This Kamelet provides secure file transfer capabilities using SFTP (SSH File Tra
 
 Built on top of SSH protocol, SFTP provides strong authentication and encryption for all file transfer operations, ensuring data confidentiality and integrity.
 
-### File Management Operations
+### File Operations
 
-Supports comprehensive file operations including:
-
--   File uploads and downloads
-    
--   Directory creation and navigation
-    
--   File and directory listing
-    
--   Permission and attribute management
-    
+The sink uploads each message as a file into `directoryName`, and creates missing directories when `autoCreate` is true. What happens when the file already exists is set by `fileExist` (`Override`, `Append`, `Fail` or `Ignore`). To read files from an SFTP server, use the SFTP Source Kamelet.
 
 ### Authentication Methods
 
-Supports multiple authentication mechanisms:
+Supports these authentication mechanisms:
 
 -   Username and password authentication
     
--   Public key authentication
+-   Private key authentication (`privateKeyFile` or `privateKeyUri`, with `privateKeyPassphrase` for a protected key)
     
--   Interactive keyboard authentication
+-   Host key verification against a known\_hosts file (`knownHostsUri`, or `~/.ssh/known_hosts` of the user that runs the integration); with the default `strictHostKeyChecking` of `yes`, a server that is not in it is refused
     
--   Host key verification
-    
-
-### Resume and Recovery
-
-SFTP supports file transfer resume capabilities, allowing interrupted transfers to continue from where they left off, improving reliability for large file transfers.
 
 ### Cross-Platform Compatibility
 

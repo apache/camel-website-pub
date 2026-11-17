@@ -394,7 +394,7 @@ TRUE forces tolerance for this field — a parse error is replaced with the fiel
 | required | boolean |  | false | Indicates if the field is mandatory |
 | rounding | String |  | CEILING | Round mode to be used to round/scale a BigDecimal Values : UP, DOWN, CEILING, FLOOR, HALF\_UP, HALF\_DOWN,HALF\_EVEN, UNNECESSARY e.g : Number = 123456.789, Precision = 2, Rounding = CEILING Result : 123456.79 |
 | timezone | String |  |  | Timezone to be used. |
-| trim | boolean |  | false | Indicates if the value should be trimmed |
+| trim | boolean |  | false | Indicates if the value should be trimmed. In a fixed-length record, unmarshal removes the padding char (on the left with align R, on the right with L, on both sides with B); a number padded with '0' that is only made of '0' is read as 0. |
 
 **case 1: pos**
 
@@ -778,7 +778,7 @@ public static class Order {
 
 **case 3: Field padding**
 
-Sometimes, the default padding defined for record cannot be applied to the field as we have a number format where we would like to pad with '0' instead of `' '`. In this case, you can use in the model the attribute `paddingChar` on `@DataField` to set this value.
+Sometimes, the default padding defined for record cannot be applied to the field as we have a number format where we would like to pad with '0' instead of `' '`. In this case, you can use in the model the attribute `paddingChar` on `@DataField` to set this value. With `trim = true`, unmarshal removes this padding, and a number made only of '0' (for example `000`) is read as 0.
 
 10A9 PaulineM ISINXD12345678BUYShare000002500.45USD01-08-2009
 

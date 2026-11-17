@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Upload data to an IBM Cloud Object Storage Bucket.
+Uploads each message as a file (object) to a bucket in IBM Cloud Object Storage.
+
+Use it to store data for later use or for other systems, such as exported reports, archived events or files received from another system. To read the files of a bucket, use `ibm-cos-source`.
+
+Input: the body is the content of the file, as text, bytes, a stream or a file. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The name of the file (its key) is `keyName` when it is set; otherwise the optional `file` header (or `ce-file`), with its folders, such as `reports/2024-06-01.csv`; otherwise a generated unique name.
+
+Output: the message is unchanged, with the ETag of the uploaded file in the `CamelIBMCOSETag` header.
+
+Good to know: a file with the same name is overwritten. The bucket must exist, unless `autoCreateBucket` is true. It logs in with an IBM Cloud API key.
 
 ## Configuration Options
 
@@ -13,16 +21,16 @@ The following table summarizes the configuration options available for the `ibm-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **apiKey** | API Key | **Required** IBM Cloud API Key for authentication. | string |  |  |
-| **bucketName** | Bucket Name | **Required** The IBM COS Bucket name. | string |  |  |
-| **endpointUrl** | Endpoint URL | **Required** IBM COS Endpoint URL (e.g., [https://s3.us-south.cloud-object-storage.appdomain.cloud](https://s3.us-south.cloud-object-storage.appdomain.cloud)). | string |  | https://s3.us-south.cloud-object-storage.appdomain.cloud |
-| **serviceInstanceId** | Service Instance ID | **Required** IBM COS Service Instance ID (CRN). | string |  |  |
-| **autoCreateBucket** | Autocreate Bucket | Specifies to automatically create the IBM COS bucket. | boolean | false |  |
-| **keyName** | Key Name | The key name for saving an element in the bucket. | string |  |  |
-| **location** | Location | IBM COS Location/Region (e.g., us-south, eu-gb). | string |  | us-south |
-| **multiPartUpload** | Multi-Part Upload | Use multi-part upload for large files. | boolean | false |  |
-| **partSize** | Part Size | Part size for multi-part uploads (default 25MB). | integer | 26214400 |  |
-| **storageClass** | Storage Class | The storage class to use when storing objects (e.g., STANDARD, VAULT, COLD, FLEX). | string |  |  |
+| **apiKey** | API Key | **Required** An IBM Cloud API key that may write to the bucket. Create it in the IBM Cloud console under Manage > Access (IAM) > API keys, or use the `apikey` of a service credential of the Cloud Object Storage instance. | string |  |  |
+| **bucketName** | Bucket Name | **Required** The name of the bucket to upload the files to. | string |  | my-bucket |
+| **endpointUrl** | Endpoint URL | **Required** The address of Cloud Object Storage for the region of the bucket, starting with `https://`, as listed under Endpoints in the Cloud Object Storage instance. | string |  | https://s3.us-south.cloud-object-storage.appdomain.cloud |
+| **serviceInstanceId** | Service Instance ID | **Required** The CRN (Cloud Resource Name) of the Cloud Object Storage instance, shown in the details of the instance in the IBM Cloud console. It starts with `crn:v1:bluemix:public:cloud-object-storage:`. | string |  |  |
+| **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist yet. | boolean | false |  |
+| **keyName** | Key Name | The name of the file in the bucket, the same for every message, so each message overwrites the previous file. When it is not set, the name comes from the `file` or `ce-file` header, or is generated. A `CamelIBMCOSKey` header on the message, as `ibm-cos-source` sets, is used instead of it. | string |  | reports/latest.csv |
+| **location** | Location | The region of the bucket, such as `us-south` or `eu-gb`. It is information only; the region used is the one of `endpointUrl`. | string |  | us-south |
+| **multiPartUpload** | Multi-Part Upload | If true, a file larger than `partSize` is uploaded in several parts, which suits large files. | boolean | false |  |
+| **partSize** | Part Size | The size of each part of a multi-part upload, in bytes. For example, 26214400 is 25 MB. Only used when `multiPartUpload` is true. | integer | 26214400 |  |
+| **storageClass** | Storage Class | The storage class to store the files with, such as `STANDARD`, `VAULT`, `COLD` or `FLEX`. | string |  | STANDARD |
 
 ## Dependencies
 

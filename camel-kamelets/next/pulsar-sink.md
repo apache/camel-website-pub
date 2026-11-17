@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send documents to Pulsar.
+Sends each message to a topic in Apache Pulsar, named by its tenant, namespace and topic name.
+
+Use it to publish events or data for other applications to read from Pulsar, such as orders or sensor readings. Use `pulsar-source` to read them.
+
+Input: the body is the payload, as text or bytes. A Map fails: turn it into JSON text first, for example with `json-serialize-action`. The headers of the message are not sent as Pulsar properties; to set properties, put a Map in the `CamelPulsarProducerMessageProperties` header. The optional `CamelPulsarProducerMessageKey` header becomes the key of the message.
+
+Output: the message is unchanged.
+
+Good to know: it connects with no TLS and no login, unless `serviceUrl` starts with `pulsar+ssl://` and `authenticationClass` is set. It connects when the integration starts, and the integration fails to start when Pulsar cannot be reached, unless `lazyStartProducer` is true.
 
 ## Configuration Options
 
@@ -13,24 +21,24 @@ The following table summarizes the configuration options available for the `puls
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **namespaceName** | Pulsar Namespace Name | **Required** The Pulsar Namespace Name. | string |  |  |
-| **serviceUrl** | Service URL | **Required** The Pulsar Service URL to point while creating the client from URI. | string |  |  |
-| **tenant** | Tenant Name | **Required** The Tenant Name. | string |  |  |
-| **topic** | Topic Name | **Required** The topic name or regexp. | string |  |  |
-| **topicType** | Topic Type | **Required** The topic type. Enum values: \* persistent \* non-persistent | string |  |  |
-| **authenticationClass** | Authentication Class | The Authentication FQCN to be used while creating the client from URI. | string |  |  |
-| **authenticationParams** | Authentication Params | The Authentication Parameters to be used while creating the client from URI. | string |  |  |
-| **batchingEnabled** | Enable Batching | Control whether automatic batching of messages is enabled for the producer. | boolean | true |  |
-| **batchingMaxMessages** | Batching Maximum Messages | The maximum size to batch messages. | integer | 1000 |  |
-| **batchingMaxPublishDelayMicros** | Batching Maximum Publish Delay in Microsecond | Used if `batchingEnabled` is `true`. Sets the maximum time period within which the messages sent are batched. | integer | 1000 |  |
-| **blockIfQueueFull** | Block If Queue Full | Whether to block the producing thread if pending messages queue is full or to throw a ProducerQueueIsFullError. | boolean | false |  |
-| **compressionType** | Compression Type | Compression type to use. Enum values: \* NONE \* LZ4 \* ZLIB \* ZSTD \* SNAPPY | string | NONE |  |
-| **initialSequenceId** | Initial SequenceId | The first message published will have a sequence Id of initialSequenceId 1. | integer | \-1 |  |
-| **lazyStartProducer** | Number Of Consumer Threads | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | boolean | false |  |
-| **maxPendingMessages** | Maximum Pending Messages | Size of the pending massages queue. When the queue is full, by default, any further sends will fail unless blockIfQueueFull=true. | integer | 1000 |  |
-| **messageRoutingMode** | Message Routing Mode | Message Routing Mode to use. Enum values: \* SinglePartition \* RoundRobinPartition \* CustomPartition | string | RoundRobinPartition |  |
-| **producerName** | Producer Name | Name of the producer. If unset, lets Pulsar select a unique identifier. | string |  |  |
-| **sendTimeoutMs** | Send Timeout in Milliseconds | Send timeout in milliseconds. | integer | 30000 |  |
+| **namespaceName** | Namespace Name | **Required** The namespace within the tenant that holds the topic. A new Pulsar has the namespace `default` in the tenant `public`. | string |  | default |
+| **serviceUrl** | Service URL | **Required** The address of the Pulsar broker, as `pulsar://host:port` (the usual port is 6650), or `pulsar+ssl://host:port` for TLS (usually 6651). | string |  | pulsar://localhost:6650 |
+| **tenant** | Tenant Name | **Required** The Pulsar tenant that the namespace belongs to. A new Pulsar has the tenant `public`. | string |  | public |
+| **topic** | Topic Name | **Required** The name of the topic within the namespace to send the messages to. | string |  | orders |
+| **topicType** | Topic Type | **Required** Whether the topic is `persistent`, which stores the messages until they are read, or `non-persistent`, which stores nothing and drops the messages that no one is subscribed to. Enum values: \* persistent \* non-persistent | string |  |  |
+| **authenticationClass** | Authentication Class | The Java class of the Pulsar authentication plugin to log in with, such as `org.apache.pulsar.client.impl.auth.AuthenticationToken` for a token. Leave it empty for a Pulsar without login. | string |  | org.apache.pulsar.client.impl.auth.AuthenticationToken |
+| **authenticationParams** | Authentication Params | The settings of the plugin in `authenticationClass`, in the form that plugin expects: for `AuthenticationToken`, `token:` followed by the token. | string |  |  |
+| **batchingEnabled** | Enable Batching | If true, messages sent close together are grouped and sent to Pulsar in one batch. | boolean | true |  |
+| **batchingMaxMessages** | Batching Maximum Messages | The most messages in one batch. Only used when `batchingEnabled` is true. | integer | 1000 |  |
+| **batchingMaxPublishDelayMicros** | Batch Publish Delay | How long to wait for more messages to fill a batch before sending it, in microseconds. For example, 1000 is one millisecond. Only used when `batchingEnabled` is true. | integer | 1000 |  |
+| **blockIfQueueFull** | Block If Queue Full | What happens when `maxPendingMessages` messages are already waiting for Pulsar to confirm them: if true, sending waits until there is room; if false, the message fails. | boolean | false |  |
+| **compressionType** | Compression Type | How to compress the messages on the way to Pulsar. The readers decompress them by themselves. Enum values: \* NONE \* LZ4 \* ZLIB \* ZSTD \* SNAPPY | string | NONE |  |
+| **initialSequenceId** | Initial Sequence ID | The sequence ID to count from: the first message gets this number plus one. With the default, -1, the first message gets 0. Pulsar uses sequence IDs to drop duplicates when deduplication is on. | integer | \-1 |  |
+| **lazyStartProducer** | Lazy Start | If true, the connection to Pulsar is made when the first message is sent, not when the integration starts. The integration then starts even when Pulsar cannot be reached, and the first message takes longer. | boolean | false |  |
+| **maxPendingMessages** | Maximum Pending Messages | The most messages that can wait at the same time for Pulsar to confirm them. See `blockIfQueueFull` for what happens to more. | integer | 1000 |  |
+| **messageRoutingMode** | Message Routing Mode | How messages are spread over the partitions of a partitioned topic: `RoundRobinPartition` spreads them in turn, `SinglePartition` sends them all to one partition, and in both a message with a key always goes to the partition of its key. `CustomPartition` needs a custom router, which this Kamelet cannot set. Enum values: \* SinglePartition \* RoundRobinPartition \* CustomPartition | string | RoundRobinPartition |  |
+| **producerName** | Producer Name | The name of this sender in Pulsar, shown in the topic statistics and set on each message. When it is not set, Pulsar picks a unique name. | string |  |  |
+| **sendTimeoutMs** | Send Timeout | How long Pulsar may take to confirm a message before the message fails, in milliseconds. For example, 30000 is 30 seconds. | integer | 30000 |  |
 
 ## Dependencies
 
@@ -94,7 +102,7 @@ Supports both persistent messaging (with data durability) and non-persistent mes
 
 ### Schema Registry Integration
 
-Pulsar includes built-in schema registry support for schema evolution and validation, ensuring data compatibility across producers and consumers.
+Pulsar includes built-in schema registry support for schema evolution and validation. This Kamelet does not use it: it sends the body as bytes, so turn structured data into JSON text first.
 
 ### Cloud-Native Architecture
 

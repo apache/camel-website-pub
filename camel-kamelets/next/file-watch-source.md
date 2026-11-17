@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive events related to a file or folder. It may require a volume mounting on Kubernetes.
+Sends a message each time a file in a local directory is created, changed or deleted, with the kind of change and the path of the file.
+
+Use it to react to files that another program writes into a directory on the same machine, for example to start processing when a new export appears, or to keep track of the changes in a folder. To read files from a remote server instead, use `ftp-source`, `sftp-source` or `aws-s3-source`.
+
+Output: the body is the file that changed, which the next step can read as text or bytes; a deleted file or a directory has no content to read. The `CamelFileEventType` header is `CREATE`, `MODIFY` or `DELETE`, `CamelFileName` is the path of the file relative to the watched directory, and `CamelFileAbsolutePath` is its full path.
+
+Good to know: it watches the subdirectories too, new ones included. It never changes or deletes the files. Only changes made while it runs are sent, not the files that are already there when it starts. The path must be a directory, not a single file; it is created when it does not exist. On Kubernetes, mount the directory into the pod as a volume.
 
 ## Configuration Options
 
@@ -13,8 +19,8 @@ The following table summarizes the configuration options available for the `file
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **events** | Events | **Required** The type of events to consume. | string | CREATE,MODIFY,DELETE |  |
-| **filePath** | Path to Watch | **Required** Path of file or folder to watch. | string |  |  |
+| **events** | Events | **Required** The kinds of change to send, as a comma-separated list of `CREATE`, `MODIFY` and `DELETE`. For example, `CREATE` sends only the new files. | string | CREATE,MODIFY,DELETE | CREATE |
+| **filePath** | Directory to Watch | **Required** The full path of the local directory to watch. It must be a directory, not a single file: to follow one file, watch its directory. Changes in its subdirectories are sent too. | string |  | /data/incoming |
 
 ## Dependencies
 
@@ -65,7 +71,7 @@ camel run route.yaml
 
 The File Watch Source Kamelet monitors files or directories for changes and emits events when specific filesystem events occur. It requires the following configuration:
 
--   **File Path**: The path to the file or directory to monitor (required)
+-   **File Path**: The path of the directory to monitor (required). It must be a directory, not a single file; it is created when it does not exist
     
 -   **Events**: The types of filesystem events to watch for (default: "CREATE,MODIFY,DELETE")
     
@@ -85,7 +91,7 @@ You can specify multiple events by separating them with commas.
 
 ### Output Format
 
-The kamelet outputs filesystem event information including details about the type of event and the affected file or directory path.
+The body of each message is the file that changed. The `CamelFileEventType` header holds the kind of event (`CREATE`, `MODIFY` or `DELETE`), `CamelFileName` the path relative to the watched directory, and `CamelFileAbsolutePath` the full path. Subdirectories are watched too. A deleted file, or a directory, has no content to read.
 
 ### Volume Mounting
 
@@ -112,14 +118,14 @@ When deployed on Kubernetes, this kamelet may require volume mounting to access 
     from:
       uri: "kamelet:file-watch-source"
       parameters:
-        filePath: "/var/log/application.log"
+        filePath: "/var/log/myapp"
         events: "MODIFY"
       steps:
         - to:
             uri: "kamelet:log-sink"
 ```
 
-This example only monitors for modifications to a specific log file.
+This example only monitors for modifications of the files in the `/var/log/myapp` directory. To follow a single file, watch its directory and filter on `CamelFileName`.
 
 ### Monitor Multiple Event Types
 

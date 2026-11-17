@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Remove headers from the message in transit based on a pattern.
+Removes from each message all the headers whose names match a pattern, such as `Camel*`.
+
+Use it to remove the internal `Camel*` headers that came with a message from outside before it reaches a sink, or to clear many headers at once before a message goes to another system. To remove a single header by its name, `drop-header-action` is enough.
+
+Input: any message.
+
+Output: the same body, without the headers that match `pattern`. The headers that match `excludePattern` are kept.
+
+Good to know: a pattern is compared with each header name first as an exact name, then as a wildcard when it ends with **(`x-`** matches every name that starts with `x-`), and then as a Java regular expression, such as `x-(one|two)`. None of these comparisons is case-sensitive.
 
 ## Configuration Options
 
@@ -13,8 +21,8 @@ The following table summarizes the configuration options available for the `drop
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **pattern** | Pattern | **Required** Name or pattern of headers to remove. The pattern is matched in the following order, 1 = exact match 2 = wildcard (pattern ends with a and the name starts with the pattern) 3 = regular expression (all of above is case in-sensitive). | string |  | Camel\* |
-| **excludePattern** | Exclusion Pattern | Name or pattern of headers to not remove. The pattern is matched in the following order, 1 = exact match 2 = wildcard (pattern ends with a and the name starts with the pattern) 3 = regular expression (all of above is case in-sensitive). | string |  | Camel\* |
+| **pattern** | Header Pattern | **Required** The headers to remove: an exact header name, a text that ends with `*` to match every name that starts with the text before it, or a regular expression. Upper and lower case do not matter. | string |  | Camel\* |
+| **excludePattern** | Exclusion Pattern | The headers to keep even when they match `pattern`, written in the same way. When it is not set, every header that matches `pattern` is removed. | string |  | CamelKafkaKey |
 
 ## Dependencies
 

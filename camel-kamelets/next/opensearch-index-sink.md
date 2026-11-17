@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Stores JSON-formatted data into Opensearch.
+Stores each message, a JSON object, as a document in an index of OpenSearch, so that it can be searched.
+
+Use it to make records searchable, such as orders, log entries or products, or to feed dashboards in OpenSearch Dashboards. To run a search on a schedule, use `opensearch-search-source`; for Elasticsearch, use `elasticsearch-index-sink`.
+
+Input: the body is the document, as JSON text, such as `{"order": 42, "status": "shipped"}`. The optional `indexId` header (or `ce-indexid`) is the id of the document: a document with the same id is replaced. Without it, OpenSearch makes up a new id, so each message adds a new document. The optional `indexName` header (or `ce-indexname`) is the index to write to, instead of the `indexName` option.
+
+Output: when it is used inside a route, the body afterwards is the id of the document, as text.
+
+Good to know: a body that is not JSON fails the message, and so does a message with no index, from the option or the header. It connects with TLS by default (`enableSSL`); for a server with a self-signed certificate, give its certificate in `certificate`.
 
 ## Configuration Options
 
@@ -13,14 +21,14 @@ The following table summarizes the configuration options available for the `open
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **clusterName** | OpenSearch Cluster Name | **Required** The name of the OpenSearch cluster. | string |  | quickstart |
-| **hostAddresses** | Host Addresses | **Required** A comma-separated list of remote transport addresses in `ip:port format`. | string |  | quickstart-es-http:9200 |
-| **certificate** | Certificate | The Certificate for accessing the OpenSearch cluster. You must encode this value in base64. | string |  |  |
-| **enableSSL** | Enable SSL | Specifies to connect by using SSL. | boolean | true |  |
-| **indexName** | Index in OpenSearch | The name of the OpenSearch index. | string |  | data |
-| **password** | Password | The password to connect to OpenSearch. | string |  |  |
-| **sslContextParameters** | SSL Context Parameters | Reference to a registry bean of type org.apache.camel.support.jsse.SSLContextParameters, written as "#bean:myBeanName". Use this for anything the certificate property cannot express - mutual TLS with a client keystore, a custom trust store, a specific TLS protocol version, or cipher suite selection. When set it takes precedence over certificate, so configure one or the other rather than both. | string |  |  |
-| **user** | Username | The username to connect to OpenSearch. | string |  |  |
+| **clusterName** | OpenSearch Cluster Name | **Required** The name of the OpenSearch cluster. Required, but not checked against the cluster. | string |  | quickstart |
+| **hostAddresses** | Host Addresses | **Required** The address of the OpenSearch HTTP API, as `host:port`, or several nodes separated by commas. The port is 9200 by default. | string |  | quickstart-es-http:9200 |
+| **certificate** | Certificate | The certificate of the certificate authority (CA) that signed the certificate of the cluster, as PEM text encoded in base64. Needed when the cluster uses a self-signed certificate. | string |  |  |
+| **enableSSL** | Enable SSL | If true, it connects with HTTPS. Set it to false for a cluster that is reached with plain HTTP. | boolean | true |  |
+| **indexName** | Index in OpenSearch | The name of the index to store the documents in. OpenSearch creates it when it does not exist. The `indexName` header of a message takes precedence. | string |  | orders |
+| **password** | Password | The password of the OpenSearch user in `user`. | string |  |  |
+| **sslContextParameters** | SSL Context Parameters | For TLS settings that `certificate` cannot give, such as a client certificate (mutual TLS), a trust store, or a TLS version, an `SSLContextParameters` object defined in the application, as `#bean:` followed by its name. It takes precedence over `certificate`; set one or the other. | string |  | #bean:mySslContext |
+| **user** | Username | The OpenSearch user to log in as, such as `admin`. Leave it out for a cluster without security. | string |  |  |
 
 ## Dependencies
 

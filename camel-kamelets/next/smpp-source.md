@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Receive SMS messages and delivery receipts from a SMSC (Short Message Service Center) using the SMPP protocol.
+Receives each SMS sent to your numbers, and the delivery receipts of the SMS you sent, from an SMS center (SMSC) that speaks the SMPP protocol.
+
+Use it to process SMS replies from customers, such as a STOP or a YES, or to follow whether the SMS sent with `smpp-sink` reached the phone.
+
+Output: the body is the text of the SMS. The `CamelSmppSourceAddr` header is the phone number of the sender, `CamelSmppDestAddr` the number it was sent to, and `CamelSmppMessageType` is `DeliverSm` for an SMS and `DeliveryReceipt` for a delivery receipt, whose body is the text of the receipt and whose fields are in other `CamelSmpp` headers.
+
+Good to know: it logs in to the SMSC as a receiver when the integration starts, and the integration fails to start when the SMSC cannot be reached. The SMSC decides which messages it gets, from `systemId` and `addressRange`. It connects with no TLS unless `usingSSL` is true.
 
 ## Configuration Options
 
@@ -13,14 +19,14 @@ The following table summarizes the configuration options available for the `smpp
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **host** | Host | **Required** The hostname of the SMSC server to connect to. | string |  | smsc.example.com |
-| **addressRange** | Address Range | The address range the consumer binds with, as defined in section 5.2.7 of the SMPP 3.4 specification. The SMSC uses it to route messages to this ESME. | string |  |  |
-| **encoding** | Encoding | The encoding scheme of the short message user data. | string | ISO-8859-1 |  |
-| **password** | Password | The password for connecting to the SMSC server. | string |  |  |
-| **port** | Port | The port of the SMSC server to connect to. | integer | 2775 |  |
-| **systemId** | System ID | The system id (username) for connecting to the SMSC server. | string | smppclient |  |
-| **systemType** | System Type | The type of ESME (External Short Message Entity) binding to the SMSC (max. 13 characters). | string |  | cp |
-| **usingSSL** | Using SSL | Whether to secure the connection to the SMSC server with TLS (the smpps protocol). | boolean | false |  |
+| **host** | Host | **Required** The host name or IP address of the SMSC (the SMS center of your SMS provider or operator). | string |  | smsc.example.com |
+| **addressRange** | Address Range | The phone numbers this receiver wants the SMSC to send it messages for, as a regular expression, as defined in section 5.2.7 of the SMPP 3.4 specification. Most SMSCs decide this from `systemId` alone: leave it empty unless your SMS provider asks for it. | string |  | ^4512.\* |
+| **encoding** | Encoding | The character set of the text of the SMS, such as `ISO-8859-1` or `UTF-8`. | string | ISO-8859-1 |  |
+| **password** | Password | The password to log in to the SMSC with. Your SMS provider gives it. | string |  |  |
+| **port** | Port | The port of the SMSC. 2775 is the usual SMPP port. | integer | 2775 |  |
+| **systemId** | System ID | The user name, called system ID in SMPP, to log in to the SMSC with. Your SMS provider gives it. | string | smppclient |  |
+| **systemType** | System Type | A short label of at most 13 characters that some SMSCs ask for when logging in. Leave it empty unless your SMS provider gives one. | string |  | cp |
+| **usingSSL** | Use TLS | Whether to secure the connection to the SMSC with TLS (the smpps protocol). The SMSC must support it, usually on another port. | boolean | false |  |
 
 ## Dependencies
 

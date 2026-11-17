@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-A Kamelet that can read events from an IBM MQ message queue using JMS.
+Receives each message from a queue or a topic of an IBM MQ queue manager, through JMS.
+
+Use it to process work or events that other applications put on IBM MQ, such as an existing enterprise or mainframe system. Use `jms-ibm-mq-sink` to send to IBM MQ.
+
+Output: the body is text for a JMS text message, and bytes for a bytes message. The JMS properties of the message become headers, along with the JMS headers such as `JMSMessageID` and `JMSTimestamp`, and IBM MQ details such as `JMSXUserID`, `JMS_IBM_PutDate` and `JMS_IBM_Format`.
+
+Good to know: the IBM MQ client library is not included, as its licence is not the Apache one: add `mvn:com.ibm.mq:com.ibm.mq.jakarta.client` with a version to the dependencies of the integration (Camel JBang adds it by itself). From a queue, each message is removed when it is received, even when the rest of the flow then fails, and several copies of this source share the messages. From a topic (`destinationType` set to `topic`), it receives only the messages sent while it is connected, as the subscription is not durable. It connects with no TLS unless `sslCipherSuite` is set. When the queue manager cannot be reached, it starts anyway and tries again every 5 seconds.
 
 ## Configuration Options
 
@@ -13,16 +19,16 @@ The following table summarizes the configuration options available for the `jms-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **channel** | IBM MQ Channel | **Required** Name of the IBM MQ Channel. | string |  |  |
-| **destinationName** | Destination Name | **Required** The destination name. | string |  |  |
-| **password** | Password | **Required** Password to authenticate to IBM MQ server. | string |  |  |
-| **queueManager** | IBM MQ Queue Manager | **Required** Name of the IBM MQ Queue Manager. | string |  |  |
-| **serverName** | IBM MQ Server name | **Required** IBM MQ Server name or address. | string |  |  |
-| **serverPort** | IBM MQ Server Port | **Required** IBM MQ Server port. | integer | 1414 |  |
-| **username** | Username | **Required** Username to authenticate to IBM MQ server. | string |  |  |
-| **clientId** | IBM MQ Client ID | Name of the IBM MQ Client ID. | string |  |  |
-| **destinationType** | Destination Type | The JMS destination type (queue or topic). | string | queue |  |
-| **sslCipherSuite** | CipherSuite | CipherSuite to use for enabling TLS. | string |  |  |
+| **channel** | Channel | **Required** The name of the server-connection channel of the queue manager to connect through. | string |  | DEV.APP.SVRCONN |
+| **destinationName** | Queue or Topic Name | **Required** The name of the queue or topic to receive the messages from, as defined in the queue manager. | string |  | DEV.QUEUE.1 |
+| **password** | Password | **Required** The password to log in to the queue manager with, for the user `username`. | string |  |  |
+| **queueManager** | Queue Manager | **Required** The name of the queue manager to connect to. | string |  | QM1 |
+| **serverName** | Server Host | **Required** The host name or IP address of the IBM MQ server that runs the queue manager. | string |  | mq.example.com |
+| **serverPort** | Server Port | **Required** The port of the listener of the queue manager on the server. The IBM MQ default is 1414. | integer | 1414 |  |
+| **username** | Username | **Required** The user name to log in to the queue manager with. | string |  |  |
+| **clientId** | Client ID | An optional JMS client ID for the connection, which names this application to the queue manager. Leave it empty unless your IBM MQ administrator asks for one. | string |  |  |
+| **destinationType** | Queue or Topic | Whether `destinationName` is a queue (`queue`) or a topic (`topic`). A queue keeps each message until one receiver takes it; a topic hands each message to every receiver subscribed at that moment. | string | queue |  |
+| **sslCipherSuite** | TLS Cipher Suite | The TLS cipher suite to connect with, which must match the cipher spec of the channel on the queue manager. When it is set, the connection uses TLS; when it is not set, it does not. | string |  | TLS\_RSA\_WITH\_AES\_128\_CBC\_SHA256 |
 
 ## Dependencies
 
@@ -71,55 +77,55 @@ camel run route.yaml
 
 ### Authentication methods
 
-This Kamelet supports IBM MQ authentication including:
+This Kamelet connects to IBM MQ as a client, with:
 
 -   Channel and queue manager configuration
     
 -   Username and password authentication
     
--   IBM MQ specific connection settings
+-   TLS, when `sslCipherSuite` is set to a cipher suite that matches the channel
     
+
+### IBM MQ client library
+
+The IBM MQ client library is not included in the Kamelet. Add it to the dependencies of the integration, for example `mvn:com.ibm.mq:com.ibm.mq.jakarta.client:<version>`. Camel JBang adds it by itself.
 
 ### Output format
 
-The Kamelet consumes messages from IBM MQ queues and produces the message data in the configured format.
+The body is text for a JMS text message and bytes for a bytes message. The JMS properties of the message become headers, along with IBM MQ details such as `JMS_IBM_PutDate`.
 
 ### Configuration
 
 The Kamelet requires IBM MQ specific connection parameters:
 
--   `destinationName`: The destination queue name
+-   `serverName` and `serverPort`: the host and the port of the queue manager listener (1414 by default)
     
 -   `queueManager`: IBM MQ queue manager name
     
 -   `channel`: IBM MQ channel name
     
--   `connName`: IBM MQ connection name (host:port)
+-   `username` and `password`: the login
+    
+-   `destinationName`: The destination queue name
     
 
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: jms-ibm-mq-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: jms-ibm-mq-source
-    properties:
-      destinationName: "MY.QUEUE"
-      queueManager: "QM1"
-      channel: "DEV.APP.SVRCONN"
-      connName: "localhost(1414)"
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:jms-ibm-mq-source"
+      parameters:
+        serverName: "mq.example.com"
+        serverPort: 1414
+        queueManager: "QM1"
+        channel: "DEV.APP.SVRCONN"
+        username: "app"
+        password: "passw0rd"
+        destinationName: "DEV.QUEUE.1"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

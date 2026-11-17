@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive unread emails from an IMAP Microsoft Exchange mail server, marking them as read once they are received.
+Reads the unread emails in the inbox of a Microsoft 365 (Exchange Online) mailbox over IMAP, logging in with OAuth 2.0, and marks each email as read.
+
+Use it to process the email that arrives in a Microsoft 365 mailbox where login with a password is turned off, for example orders, invoices or support requests sent to a shared address. For other mail servers, use `mail-imap-source`.
+
+Output: the body is the text of the email. For an email with several parts, such as text and HTML or attachments, it is the content of the parts, which the next step reads as the text of the first part. The headers of the email, such as `Subject`, `From`, `To` and `Date`, are copied to the message.
+
+Good to know: it logs in as an application, not as a person: register an application in Microsoft Entra ID (formerly Azure Active Directory) with a client secret, and allow it to read the mailbox over IMAP. It gets a token when it starts, so with wrong credentials, such as an unknown tenant ID, the integration does not start. Emails stay in the mailbox, marked as read, and emails that are already read are skipped. It reads only the `INBOX` folder, over TLS, and checks for new email once a minute by default (`delay`).
 
 ## Configuration Options
 
@@ -13,14 +19,14 @@ The following table summarizes the configuration options available for the `ms-e
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **clientId** | Client ID | **Required** Azure Active Directory Application Client ID. | string |  |  |
-| **clientSecret** | Client Secret | **Required** The Azure Active Directory Application Client Secret. | string |  |  |
-| **tenantId** | Tenant ID | **Required** Azure Active Directory Tenant ID. | string |  |  |
-| **username** | Username | **Required** The username to access the mail box. | string |  | arthur@mycompany.com// |
-| **connectionHost** | Connection Host | The IMAP server host. | string | outlook.office365.com |  |
-| **connectionPort** | Connection Port | The IMAP server port. | string | 993 |  |
-| **delay** | Delay | The delay between fetches in milliseconds. | integer | 60000 |  |
-| **fetchSize** | Fetch Size | The number of messages fetched for each poll (-1 for no limits). | integer | 10 |  |
+| **clientId** | Client ID | **Required** The Application (client) ID of the app registration, a GUID shown on its overview page in the Azure portal. | string |  |  |
+| **clientSecret** | Client Secret | **Required** A client secret of the app registration, made under Certificates and secrets in the Azure portal. Use the value of the secret, not its ID. | string |  |  |
+| **tenantId** | Tenant ID | **Required** The ID of your Microsoft Entra ID tenant (directory), a GUID shown as Directory (tenant) ID on the overview page of the app registration in the Azure portal. | string |  | 11111111-2222-3333-4444-555555555555 |
+| **username** | Username | **Required** The email address of the mailbox to read. | string |  | orders@example.com// |
+| **connectionHost** | Connection Host | The host name of the IMAP server. The default is the IMAP server of Microsoft 365. | string | outlook.office365.com |  |
+| **connectionPort** | Connection Port | The port of the IMAP server for TLS connections (IMAPS). | string | 993 |  |
+| **delay** | Delay | How long to wait between two checks of the mailbox, in milliseconds. The default, 60000, is one minute. | integer | 60000 |  |
+| **fetchSize** | Fetch Size | The most emails to read at each check of the mailbox. Use -1 for no limit. | integer | 10 |  |
 
 ## Dependencies
 
@@ -67,54 +73,37 @@ You can now run it directly through the following command
 camel run route.yaml
 ```
 
-## Ms Exchange Online Imap Oauth Source Kamelet Description
+## Microsoft Exchange IMAP OAuth2 Source Kamelet Description
 
-### Authentication methods
+### Authentication
 
-This Kamelet connects to Ms Exchange Online Imap Oauth using appropriate authentication mechanisms:
+This Kamelet logs in to a Microsoft 365 (Exchange Online) mailbox over IMAP with OAuth 2.0, as an application and not as a person (the client credentials flow). It needs:
 
--   Service-specific authentication methods
+-   An app registration in Microsoft Entra ID (formerly Azure Active Directory), with a client secret.
     
--   API keys, tokens, or credential-based authentication
+-   The app allowed to read the mailbox over IMAP. In Microsoft’s documentation on OAuth for IMAP, this is the `IMAP.AccessAsApp` application permission of Office 365 Exchange Online, with admin consent, and the service principal of the app given access to the mailbox in Exchange Online.
     
--   Connection configuration
-    
+
+From the app registration, use the Directory (tenant) ID as `tenantId`, the Application (client) ID as `clientId`, and the value of the client secret as `clientSecret`. Set `username` to the email address of the mailbox.
 
 ### Output format
 
-The Kamelet consumes data from Ms Exchange Online Imap Oauth and produces the data in JSON format.
-
-### Configuration
-
-The Kamelet requires connection parameters specific to Ms Exchange Online Imap Oauth:
-
--   Service connection details
-    
--   Authentication credentials
-    
--   Query or consumption parameters
-    
+The Kamelet reads the unread emails of the `INBOX` folder, one message per email, and marks each email as read. Emails stay in the mailbox. The body is the text of the email; for an email with several parts (text and HTML, attachments), it is the multipart content, which reads as the text of the first part. The headers of the email, such as `Subject`, `From`, `To` and `Date`, are copied to the message.
 
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: ms-exchange-online-imap-oauth-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: ms-exchange-online-imap-oauth-source
-    properties:
-      # Add service-specific properties here
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:ms-exchange-online-imap-oauth-source"
+      parameters:
+        tenantId: "11111111-2222-3333-4444-555555555555"
+        clientId: "{{exchange.clientId}}"
+        clientSecret: "{{exchange.clientSecret}}"
+        username: "orders@example.com"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Allows sending messages to any endpoint that supports the MQTT v5 protocol, such as a message broker.
+Publishes each message to a topic on an MQTT broker, such as Eclipse Mosquitto or HiveMQ, with MQTT 5.
+
+Use it to send commands or data to IoT devices, or to publish readings and events, when the broker or the clients use MQTT 5. For a broker that only speaks MQTT 3.1.1, use `mqtt-sink`.
+
+Input: the body is the payload, as text or bytes, and is sent as it is. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The headers of the message are not sent, not even as MQTT 5 user properties.
+
+Output: the message is unchanged.
+
+Good to know: messages are published with quality of service 2 (exactly once) and are not retained by the broker. It connects with no TLS unless `brokerUrl` starts with `ssl://`. It connects when the integration starts, and the integration fails to start when the broker cannot be reached.
 
 ## Configuration Options
 
@@ -13,10 +21,10 @@ The following table summarizes the configuration options available for the `mqtt
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **brokerUrl** | Broker URL | **Required** The URL of the broker where to establish the connection. | string |  | tcp://mosquitto:1883 |
-| **topic** | Topic | **Required** The topic to send messages to. | string |  | mytopic |
-| **password** | Password | Password to use when connecting to the MQTT v5 compliant broker. | string |  |  |
-| **username** | Username | Username to use when connecting to the MQTT v5 compliant broker. | string |  |  |
+| **brokerUrl** | Broker URL | **Required** The address of the MQTT broker, as `tcp://host:port` (usually port 1883), or `ssl://host:port` for TLS (usually port 8883). | string |  | tcp://mosquitto:1883 |
+| **topic** | Topic | **Required** The topic to publish each message to, such as `sensors/temperature`. Wildcards (`+` and `#`) cannot be used here. | string |  | sensors/temperature |
+| **password** | Password | The password to log in to the broker with, for the user `username`. | string |  |  |
+| **username** | Username | The user name to log in to the broker with. Leave it empty for a broker that accepts clients without a login. | string |  |  |
 
 ## Dependencies
 

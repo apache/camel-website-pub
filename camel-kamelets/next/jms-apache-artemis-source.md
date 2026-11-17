@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive data from an Apache Artemis message broker by using JMS.
+Receives each message from a queue or a topic in an Apache ActiveMQ Artemis broker, through JMS.
+
+Use it to process work that other applications put on a queue, such as orders or jobs, or to react to events published on a topic. `jms-pooled-apache-artemis-source` does the same with a pool of connections and has `username` and `password` options. For another broker that speaks AMQP 1.0, use `jms-amqp-10-source`.
+
+Output: the body is text for a JMS text message, bytes for a bytes message, and a Map for a map message. The JMS properties of the message become headers, along with the JMS headers such as `JMSMessageID`, `JMSDestination`, `JMSTimestamp`, `JMSPriority` and `JMSRedelivered`.
+
+Good to know: From a queue, each message is removed when it is received, even when the rest of the flow then fails, and several copies of this source share the messages. From a topic (`destinationType` set to `topic`), it receives only the messages sent while it is connected, as the subscription is not durable. It connects with no TLS and no login, unless `brokerURL` asks for them. When the broker cannot be reached, it starts anyway and tries again every 5 seconds.
 
 ## Configuration Options
 
@@ -13,9 +19,9 @@ The following table summarizes the configuration options available for the `jms-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **brokerURL** | Broker URL | **Required** The JMS URL. | string |  | tcp://my-host:61616 |
-| **destinationName** | Destination Name | **Required** The JMS destination name. | string |  |  |
-| **destinationType** | Destination Type | The JMS destination type (queue or topic). | string | queue |  |
+| **brokerURL** | Broker URL | **Required** The address of the Artemis broker, as `tcp://host:port`; the usual port is 61616. Add `?sslEnabled=true` for TLS. A broker that needs a login takes it in the URL too, as `tcp://host:61616?user=app&password=secret`. | string |  | tcp://localhost:61616 |
+| **destinationName** | Queue or Topic Name | **Required** The name of the queue or topic to receive the messages from. | string |  | orders |
+| **destinationType** | Queue or Topic | Whether `destinationName` is a queue (`queue`) or a topic (`topic`). A queue keeps each message until one receiver takes it; a topic hands each message to every receiver subscribed at that moment. | string | queue |  |
 
 ## Dependencies
 
@@ -66,7 +72,7 @@ camel run route.yaml
 
 ### Authentication
 
-This Kamelet supports username and password authentication to connect to Apache Artemis JMS broker. Connection can be configured with or without authentication based on broker setup.
+This Kamelet has no `username` and `password` options. A broker that needs a login takes it in `brokerURL`, as `tcp://artemis.example.com:61616?user=artemisuser&password=artemispass`. To keep the password in an option of its own, use `jms-pooled-apache-artemis-source`, which has `username` and `password`.
 
 ### Configuration
 
@@ -78,20 +84,12 @@ The JMS Apache Artemis Source Kamelet supports the following configurations:
     
 -   **Destination Type**: Type of destination - queue or topic (default: queue)
     
--   **Username**: Username for broker authentication (optional)
-    
--   **Password**: Password for broker authentication (optional)
-    
--   **Client ID**: JMS client ID for durable subscriptions
-    
--   **Durable Subscription Name**: Name for durable topic subscription
-    
--   **Message Selector**: JMS message selector for filtering
-    
+
+The subscription to a topic is not durable, and the Kamelet has no option for a message selector.
 
 ### Output Format
 
-The Kamelet outputs JMS messages including message body, headers, and JMS properties. Message format depends on the original message type (text, bytes, object, etc.).
+The Kamelet outputs JMS messages including message body, headers, and JMS properties. The body is text for a text message, bytes for a bytes message, and a Map for a map message.
 
 ### Usage Example
 
@@ -103,8 +101,6 @@ The Kamelet outputs JMS messages including message body, headers, and JMS proper
         brokerURL: "tcp://artemis.example.com:61616"
         destinationName: "orders.queue"
         destinationType: "queue"
-        username: "artemisuser"
-        password: "artemispass"
       steps:
         - to:
             uri: "kamelet:log-sink"
@@ -112,36 +108,16 @@ The Kamelet outputs JMS messages including message body, headers, and JMS proper
 
 ### Example with Topic Subscription
 
+The source receives only the messages published to the topic while it is connected.
+
 ```yaml
 - route:
     from:
       uri: "kamelet:jms-apache-artemis-source"
       parameters:
-        brokerURL: "tcp://artemis.example.com:61616"
+        brokerURL: "tcp://artemis.example.com:61616?user=artemisuser&password=artemispass"
         destinationName: "events.topic"
         destinationType: "topic"
-        username: "artemisuser"
-        password: "artemispass"
-        clientId: "my-consumer"
-        durableSubscriptionName: "my-subscription"
-      steps:
-        - to:
-            uri: "kamelet:log-sink"
-```
-
-### Example with Message Selector
-
-```yaml
-- route:
-    from:
-      uri: "kamelet:jms-apache-artemis-source"
-      parameters:
-        brokerURL: "tcp://artemis.example.com:61616"
-        destinationName: "notifications.queue"
-        destinationType: "queue"
-        username: "artemisuser"
-        password: "artemispass"
-        messageSelector: "priority > 5"
       steps:
         - to:
             uri: "kamelet:log-sink"
@@ -149,7 +125,7 @@ The Kamelet outputs JMS messages including message body, headers, and JMS proper
 
 ### Connection Management
 
-The kamelet manages connections to Apache Artemis automatically, including connection pooling and reconnection on failures. It supports both embedded and standalone Artemis deployments.
+When the broker cannot be reached, the Kamelet starts anyway and tries to connect again every 5 seconds. It does not pool connections; `jms-pooled-apache-artemis-source` does.
 
 ## Kamelet source file
 

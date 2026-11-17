@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Serialize payload to JSON.
+Turns a body of parsed data, such as a Map, a List or parsed JSON, into JSON text.
+
+Use it to send parsed data to a sink that needs JSON text, for example after `jsonata-action` or `json-deserialize-action`, whose output is parsed JSON. To do the opposite, use `json-deserialize-action`.
+
+Input: parsed data: a Map, a List, or parsed JSON (a Jackson `JsonNode`).
+
+Output: the body is JSON text, as a stream of bytes. The `Content-Type` header is set to `application/json`.
+
+Good to know: a body that is already text becomes one JSON string, in quotes: `hello` becomes `"hello"`, and JSON text is quoted the same way. Do not use it on a body that is already JSON text.
 
 ## Configuration Options
 

@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive Events From a GitHub Repository.
+Receives the activity of a GitHub repository, such as pushes, issues, pull requests and stars, one message per event, by asking the GitHub API for new events.
+
+Use it to follow everything that happens in a repository in one flow, for example to log it or to count it. To receive only commits, pull requests, comments on pull requests or tags, use `github-commit-source`, `github-pullrequest-source`, `github-pullrequest-comment-source` or `github-tag-source`.
+
+Output: the body is the type of the event as JSON text, that is a quoted JSON string such as `"PUSH"`, `"PULL_REQUEST"` or `"ISSUES"`. The details of the event are only in the `CamelGitHubEventPayload` header, as a Java object.
+
+Good to know: when it starts, it first sends the recent events that GitHub still lists for the repository, not only the new ones. It works with github.com, not with GitHub Enterprise Server. It asks GitHub for new events once a minute by default (`delay`), and every request counts against the API rate limit of the token.
 
 ## Configuration Options
 
@@ -13,9 +19,10 @@ The following table summarizes the configuration options available for the `gith
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **oauthToken** | OAuth Token | **Required** OAuth token. | string |  |  |
-| **repoName** | Repository Name | **Required** The GitHub Repository name. | string |  |  |
-| **repoOwner** | Repository Owner | **Required** The repository owner. | string |  |  |
+| **oauthToken** | OAuth Token | **Required** A GitHub personal access token, created on GitHub under Settings, Developer settings, Personal access tokens. It needs read access to the repository. | string |  |  |
+| **repoName** | Repository Name | **Required** The name of the repository, such as `camel` in `[https://github.com/apache/camel](https://github.com/apache/camel)`. | string |  | camel |
+| **repoOwner** | Repository Owner | **Required** The user or organization that owns the repository, such as `apache` in `[https://github.com/apache/camel](https://github.com/apache/camel)`. | string |  | apache |
+| **delay** | Delay | How long to wait between two polls of GitHub, in milliseconds. For example, 60000 is one minute. | integer | 60000 |  |
 
 ## Dependencies
 
@@ -75,7 +82,7 @@ This Kamelet uses OAuth token-based authentication to connect to GitHub. You nee
 
 ### Output format
 
-The Kamelet produces event data in JSON format containing various GitHub repository events such as pushes, issues, pull requests, and other repository activities.
+The Kamelet produces one message per repository event, such as a push, an issue or a pull request. The body is the type of the event as JSON text, that is a quoted JSON string such as `"PUSH"`; the details of the event are in the `CamelGitHubEventPayload` header, as a Java object.
 
 ### Configuration
 

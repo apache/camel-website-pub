@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Query data from an AWS Redshift Database.
+Runs an SQL query on an Amazon Redshift database at regular intervals, and sends each row of the result as a message.
+
+Use it to pick up records from a Redshift data warehouse, such as new orders or daily figures, and pass them on to another system. To write to Redshift, use `aws-redshift-sink`.
+
+Output: one message per row. The body is the row as a JSON object, in JSON text, with the column names as field names, such as `{"id":1,"username":"alice","city":"Rome"}`. The `Content-Type` header is `application/json`.
+
+Good to know: the query runs again every `delay` milliseconds, and returns the same rows each time unless they change; set `consumedQuery` to mark or delete each row once it has been sent. It logs in with a database user and password, not with AWS keys, and connects with the Amazon Redshift JDBC driver, which uses TLS by default.
 
 ## Configuration Options
 
@@ -13,14 +19,14 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **databaseName** | Database Name | **Required** The name of the AWS Redshift Database. | string |  |  |
-| **password** | Password | **Required** The password to access a secured AWS Redshift Database. | string |  |  |
-| **query** | Query | **Required** The query to execute against the AWS Redshift Database. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
-| **serverName** | Server Name | **Required** The server name for the data source. | string |  | localhost |
-| **username** | Username | **Required** The username to access a secured AWS Redshift Database. | string |  |  |
-| **consumedQuery** | Consumed Query | A query to run on a tuple consumed. | string |  | DELETE FROM accounts where user\_id = :#user\_id |
-| **delay** | Delay | The number of milliseconds before the next poll from the AWS Redshift database. | integer | 500 |  |
-| **serverPort** | Server Port | The server port for the data source. | string | 5439 |  |
+| **databaseName** | Database Name | **Required** The name of the database in the cluster, such as `dev`, the database a new cluster has. | string |  | dev |
+| **password** | Password | **Required** The password of `username`, set when the cluster or the user was created. | string |  |  |
+| **query** | Query | **Required** The SQL query to run at each poll. Each row of the result becomes a message. | string |  | SELECT \* FROM orders WHERE exported = false |
+| **serverName** | Server Name | **Required** The host name of the Redshift cluster: its endpoint, as shown in the Redshift console, without the port and the database name. | string |  | my-cluster.abc123xyz789.eu-west-1.redshift.amazonaws.com |
+| **username** | Username | **Required** The database user to log in as, such as the admin user of the cluster. This is a user of the database, not an AWS access key. | string |  |  |
+| **consumedQuery** | Consumed Query | An SQL statement to run after each row has been sent, to mark it as done or delete it, so that it is not read again. Write `:#name` where the value of the column `name` of the row goes. | string |  | UPDATE orders SET exported = true WHERE id = :#id |
+| **delay** | Delay | How long to wait between two runs of the query, in milliseconds. | integer | 500 |  |
+| **serverPort** | Server Port | The port of the cluster. Redshift uses 5439 unless it was changed when the cluster was created. | string | 5439 |  |
 
 ## Dependencies
 
@@ -73,30 +79,9 @@ camel run route.yaml
 
 ## AWS Redshift Source Kamelet Description
 
-### Authentication methods
+### Authentication
 
-In this Kamelet you can avoid using explicit static credentials by specifying the `useDefaultCredentialsProvider` option and set it to `true`.
-
-The order of evaluation for Default Credentials Provider is the following:
-
--   Java system properties - `aws.accessKeyId` and `aws.secretKey`.
-    
--   Environment variables - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`.
-    
--   Web Identity Token from AWS STS.
-    
--   The shared credentials and config files.
-    
--   Amazon ECS container credentials - loaded from the Amazon ECS if the environment variable `AWS_CONTAINER_CREDENTIALS_RELATIVE_URI` is set.
-    
--   Amazon EC2 Instance profile credentials.
-    
-
-You can also use the Profile Credentials Provider, by setting the `useProfileCredentialsProvider` option to `true` and `profileCredentialsName` to the profile name.
-
-Only one of access key/secret key or default credentials provider could be used
-
-For more information, see the [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+This Kamelet logs in to the Redshift database with a database user and password (`username` and `password`), not with AWS access keys. It connects with the Amazon Redshift JDBC driver, which uses TLS by default.
 
 ## Kamelet source file
 

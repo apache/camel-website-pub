@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Allows to get tweets from the timeline of a specific user from Twitter.
+Reads the new tweets that one Twitter (X) account posts, by asking Twitter at a regular interval, one message per tweet.
+
+Use it to follow an account, such as a news feed, a status page or a partner, and pass on what it posts, for example to a chat or a database. To follow a word or a hashtag across all accounts, use `twitter-search-source`.
+
+Output: the body is the tweet as JSON text, with its `text`, its `id`, the time it was created and the `user` who wrote it. The `CamelTwitterEventType` header is `STATUS`.
+
+Good to know: it checks every 30 seconds. The first check sends the 5 most recent tweets of the account, and each later check sends at most 5 tweets newer than the last one it saw. It does not remember what it read: after a restart, it starts again with the most recent tweets. It uses version 1.1 of the Twitter API.
 
 ## Configuration Options
 
@@ -13,11 +19,11 @@ The following table summarizes the configuration options available for the `twit
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **accessToken** | Access Token | **Required** The Access Token from the Twitter application in the developer portal. | string |  |  |
-| **accessTokenSecret** | Access Token Secret | **Required** The Access Token Secret from the Twitter application in the developer portal. | string |  |  |
-| **apiKey** | API Key | **Required** The API Key from the Twitter application in the developer portal. | string |  |  |
-| **apiKeySecret** | API Key Secret | **Required** The API Key Secret from the Twitter application in the developer portal. | string |  |  |
-| **user** | User | **Required** The user we want to read the timeline. | string |  | ApacheCamel |
+| **accessToken** | Access Token | **Required** The access token of the account to read with, generated on the Keys and Tokens page of the app in the developer portal. The Kamelet acts as that account. Used together with `accessTokenSecret`. | string |  |  |
+| **accessTokenSecret** | Access Token Secret | **Required** The access token secret, shown with the access token on the Keys and Tokens page of the app in the developer portal. | string |  |  |
+| **apiKey** | API Key | **Required** The API key (consumer key) of your app, from the Keys and Tokens page of the app in the Twitter (X) developer portal at developer.x.com. Used together with `apiKeySecret`. | string |  |  |
+| **apiKeySecret** | API Key Secret | **Required** The API key secret (consumer secret) of your app, shown with the API key on the Keys and Tokens page of the app in the developer portal. | string |  |  |
+| **user** | User | **Required** The user name (handle) of the account whose tweets to read, without the `@`. | string |  | ApacheCamel |
 
 ## Dependencies
 
@@ -68,50 +74,40 @@ camel run route.yaml
 
 ### Authentication methods
 
-This Kamelet connects to Twitter Timeline using appropriate authentication mechanisms:
+This Kamelet connects to version 1.1 of the Twitter (X) API with the four keys of an app of the Twitter developer portal (OAuth 1.0a):
 
--   Service-specific authentication methods
+-   `apiKey` and `apiKeySecret`: the API key and secret of the app.
     
--   API keys, tokens, or credential-based authentication
+-   `accessToken` and `accessTokenSecret`: the access token and secret of the account the Kamelet reads with.
     
--   Connection configuration
-    
+
+All four are on the **Keys and Tokens** page of the app in the developer portal.
 
 ### Output format
 
-The Kamelet consumes data from Twitter Timeline and produces the data in JSON format.
+Each tweet of the account becomes one message. The body is the tweet as JSON text, with its `text`, its `id`, the time it was created and the `user` who wrote it. The `CamelTwitterEventType` header is `STATUS`.
 
 ### Configuration
 
-The Kamelet requires connection parameters specific to Twitter Timeline:
+The `user` option is the user name (handle) of the account to follow, without the `@`.
 
--   Service connection details
-    
--   Authentication credentials
-    
--   Query or consumption parameters
-    
+The Kamelet checks every 30 seconds. The first check sends the 5 most recent tweets of the account; each later check sends at most 5 tweets newer than the last one it saw.
 
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: twitter-timeline-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: twitter-timeline-source
-    properties:
-      # Add service-specific properties here
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:twitter-timeline-source"
+      parameters:
+        user: "ApacheCamel"
+        apiKey: "{{twitter.apiKey}}"
+        apiKeySecret: "{{twitter.apiKeySecret}}"
+        accessToken: "{{twitter.accessToken}}"
+        accessTokenSecret: "{{twitter.accessTokenSecret}}"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive commit From GitHub.
+Receives each new commit on a branch of a GitHub repository, one message per commit, oldest first, by asking the GitHub API for new commits.
+
+Use it to start a flow when code is pushed, for example to post the commit message to a chat channel or to trigger a build or a deployment.
+
+Output: the body is the commit message as JSON text, that is a quoted JSON string such as `"Fix the login page"`. The `CamelGitHubCommitSha` header gives the SHA of the commit, `CamelGitHubCommitUrl` its web address, and `CamelGitHubCommitAuthor` and `CamelGitHubCommitCommitter` the names of its author and committer.
+
+Good to know: with the default `startingSha` of `last`, only the commits made after the start are sent. It works with github.com, not with GitHub Enterprise Server. It asks GitHub for new commits once a minute by default (`delay`), and every request counts against the API rate limit of the token.
 
 ## Configuration Options
 
@@ -13,11 +19,12 @@ The following table summarizes the configuration options available for the `gith
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **branch** | Branch | **Required** The branch we want to consume commit from. | string |  |  |
-| **oauthToken** | OAuth Token | **Required** OAuth token. | string |  |  |
-| **repoName** | Repository Name | **Required** The GitHub Repository name. | string |  |  |
-| **repoOwner** | Repository Owner | **Required** The repository owner. | string |  |  |
-| **startingSha** | Starting SHA | **Required** The SHA from which we want to consume, possible values beginning, last or a specific SHA. | string | last |  |
+| **branch** | Branch | **Required** The name of the branch to watch for new commits. | string |  | main |
+| **oauthToken** | OAuth Token | **Required** A GitHub personal access token, created on GitHub under Settings, Developer settings, Personal access tokens. It needs read access to the repository. | string |  |  |
+| **repoName** | Repository Name | **Required** The name of the repository, such as `camel` in `[https://github.com/apache/camel](https://github.com/apache/camel)`. | string |  | camel |
+| **repoOwner** | Repository Owner | **Required** The user or organization that owns the repository, such as `apache` in `[https://github.com/apache/camel](https://github.com/apache/camel)`. | string |  | apache |
+| **startingSha** | Starting SHA | **Required** Where to start. `last` sends only the commits made after the start, `beginning` also sends the commits already on the branch, and the SHA of a commit sends the commits made after that one. | string | last | 8aed4eb7f8fa1877d215a331a2a682edc4e26932 |
+| **delay** | Delay | How long to wait between two polls of GitHub, in milliseconds. For example, 60000 is one minute. | integer | 60000 |  |
 
 ## Dependencies
 
@@ -77,7 +84,7 @@ This Kamelet uses OAuth token-based authentication to connect to GitHub. You nee
 
 ### Output format
 
-The Kamelet produces commit data in JSON format containing commit information from the specified GitHub repository and branch.
+The Kamelet produces one message per new commit on the branch. The body is the commit message as JSON text, that is a quoted JSON string, and the headers `CamelGitHubCommitSha`, `CamelGitHubCommitUrl`, `CamelGitHubCommitAuthor` and `CamelGitHubCommitCommitter` give the details of the commit.
 
 ### Configuration
 

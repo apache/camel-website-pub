@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Generates sequential number events starting from a configurable value, incrementing by a specified step. Useful for testing, scheduled tasks, or creating ordered event sequences.
+Sends a message with a number that counts up by one, such as 1, 2, 3, at a regular interval.
+
+Use it to try out a sink or an action with messages that are each different and easy to follow, or to make ordered test data. For the same fixed message every time use `timer-source`, and for a calendar schedule such as "every weekday at 9:00" use `cron-source`.
+
+Output: the body is the number, as an Integer (a whole number, not text). The `Content-Type` header is `text/plain`.
+
+Good to know: it keeps sending until the integration is stopped, unless `numbers` is set. The count starts again from `start` when the integration restarts.
 
 ## Configuration Options
 
@@ -13,9 +19,9 @@ The following table summarizes the configuration options available for the `coun
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **numbers** | Numbers | How many numbers to generate. | integer |  |  |
-| **period** | Period | The time interval between two numbers. | integer | 1000 |  |
-| **start** | Starting Number | The starting number. | integer | 1 |  |
+| **numbers** | Number of Messages | How many messages to send in total. When it is not set, a message is sent every `period` until the integration is stopped. | integer |  | 10 |
+| **period** | Period | How long to wait between two messages, in milliseconds. For example, 60000 is one minute. | integer | 1000 | 60000 |
+| **start** | Start | The number in the first message. Each next message has a number one higher. | integer | 1 | 100 |
 
 ## Dependencies
 
@@ -66,7 +72,7 @@ This Kamelet provides a simple counting source that generates sequential numbers
 
 ### Output format
 
-The Kamelet outputs each number as a plain text integer. Each message contains a single number that increments from the starting value.
+The Kamelet outputs each number as an `Integer` body (a whole number, not text), even though the `Content-Type` header is `text/plain`. Each message contains a single number that increments by one from the starting value.
 
 ### Special headers
 

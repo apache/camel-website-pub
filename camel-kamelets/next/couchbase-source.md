@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Poll a Couchbase bucket and emit the results.
+Runs a SQL++ (N1QL) query on a Couchbase bucket again and again, and sends each document or row it finds as a message, as JSON text.
+
+Use it to pass the documents of a Couchbase bucket on to another system, for example to copy them to a search index or a data warehouse. To store documents, use `couchbase-sink`.
+
+Output: the body is one result row as JSON text. Without `statement`, the query reads all the documents of the default collection, and a row is `{"<bucket>":<the document>,"__id":"<document ID>"}`. The `CamelCouchbaseId` header holds the ID of the document.
+
+Good to know: the query runs again every `delay` milliseconds and nothing marks a document as read, so the same documents are sent on every run. A `statement` must name the document ID `_id_` _(`SELECT META().id AS`_ `id, …​`), or its rows are skipped. With `fullDocument` set to true, the body is an object of the Couchbase SDK instead of JSON text. The connection is not encrypted, also with `protocol` set to `https`.
 
 ## Configuration Options
 
@@ -13,22 +19,22 @@ The following table summarizes the configuration options available for the `couc
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **bucket** | Bucket | **Required** The bucket to use. | string |  |  |
-| **couchbaseHostname** | Hostname | **Required** The hostname to use. | string |  |  |
-| **protocol** | Protocol | **Required** The protocol to use. | string |  |  |
-| **connectionString** | Connection String | The full Couchbase SDK connection string (e.g. couchbase://host:port). When set, it takes precedence over hostname extraction for the KV service port. | string |  |  |
-| **couchbasePort** | Port | The port to use. | integer | 8091 |  |
-| **delay** | Delay | The number of milliseconds between each poll. | integer | 500 |  |
-| **descending** | Descending | Return the results in descending order. | boolean | false |  |
-| **designDocumentName** | Design Document Name | The design document to query. Only used when useView is true. | string | beer |  |
-| **fullDocument** | Full Document | Emit the whole document rather than only the fields the query or view returns. | boolean | false |  |
-| **limit** | Limit | The maximum number of documents to return per poll. A negative value means no limit. | integer | \-1 |  |
-| **password** | Password | Password to connect to Couchbase. | string |  |  |
-| **skip** | Skip | How many documents to skip before returning results. A negative value means none. | integer | \-1 |  |
-| **statement** | N1QL Statement | The N1QL query to run against the bucket on each poll. Used unless useView is true. The query runs in the bucket scope, so the keyspace is the collection - use \_default for the default collection rather than the bucket name. It must also alias the document id as \_\_id, because rows without that field are skipped. | string |  | SELECT META().id AS \_\_id, \* FROM \_default |
-| **useView** | Use View | Poll a MapReduce view instead of running the N1QL statement. | boolean | false |  |
-| **username** | Username | Username to connect to Couchbase. | string |  |  |
-| **viewName** | View Name | The view to query. Only used when useView is true. | string | brewery\_beers |  |
+| **bucket** | Bucket | **Required** The name of the bucket to read the documents from. | string |  | orders |
+| **couchbaseHostname** | Hostname | **Required** The host name or IP address of a node of the Couchbase cluster. The Kamelet connects to its data service, on port 11210. | string |  | couchbase.example.com |
+| **protocol** | Protocol | **Required** The protocol part of the address of the server, `http` or `https`. It is required, but it does not choose how the Kamelet connects, and `https` does not turn on TLS. | string |  | http |
+| **connectionString** | Connection String | The address of the cluster for the Couchbase SDK, which starts with `couchbase://`. When it is set, it is used instead of `couchbaseHostname` to connect, for example to reach the data service on another port than 11210. | string |  | couchbase://couchbase.example.com:11210 |
+| **couchbasePort** | Port | The port of the web console and REST interface of Couchbase, 8091 by default. The Kamelet does not connect to this port; to reach the data service on a port other than 11210, set `connectionString`. | integer | 8091 |  |
+| **delay** | Delay | How long to wait after one poll before the next, in milliseconds. | integer | 500 |  |
+| **descending** | Descending | If true, the results come in descending order. | boolean | false |  |
+| **designDocumentName** | Design Document Name | The design document that holds the view to read. Only used when `useView` is true. The default, `beer`, is the one of the beer-sample bucket. | string | beer |  |
+| **fullDocument** | Full Document | If true, the Kamelet reads each document found by its ID and sends it as an object of the Couchbase SDK, not as JSON text. If false, it sends the row of the query as JSON text. | boolean | false |  |
+| **limit** | Limit | The most documents to send on each poll. A negative value means no limit. | integer | \-1 |  |
+| **password** | Password | The password of the Couchbase user `username`. | string |  |  |
+| **skip** | Skip | How many documents to skip on each poll before sending the others. A negative value skips none. | integer | \-1 |  |
+| **statement** | SQL++ Statement | The SQL++ (N1QL) query to run on each poll, instead of reading all documents. It runs in the scope of the bucket, so name the collection, such as `_default`, not the bucket. It must return the document ID as `__id`, or its rows are skipped. Not used when `useView` is true. | string |  | SELECT META().id AS \_\_id, \* FROM \_default |
+| **useView** | Use View | If true, the Kamelet reads a MapReduce view, chosen with `designDocumentName` and `viewName`, instead of running a SQL++ query. | boolean | false |  |
+| **username** | Username | The Couchbase user to log in as. It needs the rights to read the documents of `bucket` and to run queries on it. | string |  |  |
+| **viewName** | View Name | The view to read. Only used when `useView` is true. The default, `brewery_beers`, is a view of the beer-sample bucket. | string | brewery\_beers |  |
 
 ## Dependencies
 

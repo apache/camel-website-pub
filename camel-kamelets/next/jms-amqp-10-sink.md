@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send data to any AMQP 1.0 compliant message broker by using the Apache Qpid JMS client. For SSL/TLS connections, use the amqps:// scheme in the remoteURI and configure SSL transport options as query parameters (e.g. transport.trustStoreLocation, transport.trustStorePassword, transport.keyStoreLocation, transport.keyStorePassword, transport.verifyHost, transport.trustAll).
+Sends each message to a queue or a topic in a message broker that speaks AMQP 1.0, such as Apache ActiveMQ Artemis, through JMS and the Apache Qpid client.
+
+Use it to hand work to another application through a queue, or to publish events on a topic, on any broker that supports the AMQP 1.0 protocol. For an Artemis broker, `jms-apache-artemis-sink` and `jms-pooled-apache-artemis-sink` work too.
+
+Input: text is sent as a JMS text message, bytes as a JMS bytes message, and a Map as a JMS map message. The headers of the message, except the Camel ones, are sent along as JMS properties of the message.
+
+Output: the message is unchanged.
+
+Good to know: Messages go to a queue unless `destinationType` is `topic`, and a message sent to a topic reaches only the receivers subscribed at that moment. The login and the TLS settings go in `remoteURI`: there are no separate options for them. It opens a new connection to the broker for each message. It does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does.
 
 ## Configuration Options
 
@@ -13,9 +21,9 @@ The following table summarizes the configuration options available for the `jms-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **destinationName** | Destination Name | **Required** The JMS destination name. | string |  |  |
-| **remoteURI** | Broker URL | **Required** The JMS URL. Use the amqps:// scheme for SSL/TLS connections. | string |  | amqp://my-host:31616 |
-| **destinationType** | Destination Type | The JMS destination type (queue or topic). | string | queue |  |
+| **destinationName** | Queue or Topic Name | **Required** The name of the queue or topic to send the messages to. | string |  | orders |
+| **remoteURI** | Broker URL | **Required** The address of the broker, as `amqp://host:port` (the AMQP port is usually 5672), or `amqps://host:port` for TLS. Settings of the Qpid JMS client go after `?`: `jms.username` and `jms.password` for a login, as `amqp://host:5672?jms.username=app&jms.password=secret`, and `transport.trustStoreLocation`, `transport.trustStorePassword`, `transport.keyStoreLocation` and `transport.keyStorePassword` for TLS. | string |  | amqp://localhost:5672 |
+| **destinationType** | Queue or Topic | Whether `destinationName` is a queue (`queue`) or a topic (`topic`). A queue keeps each message until one receiver takes it; a topic hands each message to every receiver subscribed at that moment. | string | queue |  |
 
 ## Dependencies
 

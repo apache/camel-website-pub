@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Update the topic field as a function of the original topic name and the record’s timestamp field.
+Changes the topic that `kafka-sink` writes a record to, to a name made of the original topic name and a date read from a field of the JSON body.
+
+Use it to spread the records over one topic per day or per month by a date in the data, such as the date of an order, in a flow from `kafka-source` to `kafka-sink`. To use the time the record was written to Kafka instead use `timestamp-router-action`.
+
+Input: a JSON object as JSON text, with the `Content-Type` header set to `application/json`. The name of the topic is read from the `CamelKafkaTopic` header, which `kafka-source` sets.
+
+Output: the same JSON object, as JSON text in a stream, with `Content-Type` set to `application/json`. When one of the `timestampKeys` fields is found, the `CamelKafkaOverrideTopic` header is set to the new name, and `kafka-sink` writes the record to that topic instead of its own `topic`.
+
+Good to know: a field value that cannot be read as a date with `timestampKeyFormat` makes the message fail. The default `topicFormat` of `topic-$[timestamp]` gives names such as `topic-20240703`, without the original name: set it to `$[topic]-$[timestamp]` to keep it. The date is in UTC.
 
 ## Configuration Options
 
@@ -13,10 +21,10 @@ The following table summarizes the configuration options available for the `mess
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **timestampKeys** | Timestamp Keys | **Required** Comma separated list of Timestamp keys. The timestamp is taken from the first found field. | string |  |  |
-| **timestampFormat** | Timestamp Format | Format string for the timestamp that is compatible with java.text.SimpleDateFormat. | string | yyyyMMdd |  |
-| **timestampKeyFormat** | Timestamp Keys Format | Format of the timestamp keys. Possible values are `timestamp`, or any format string for the timestamp that is compatible with `java.text.SimpleDateFormat`. In case of `timestamp` the field is evaluated as milliseconds since 1970 (as a UNIX Timestamp). | string | timestamp |  |
-| **topicFormat** | Topic Format | Format string which can contain '$\[topic\]' and '$\[timestamp\]' as placeholders for the topic and timestamp, respectively. | string | topic-$\[timestamp\] |  |
+| **timestampKeys** | Timestamp Keys | **Required** The names of the top-level fields of the JSON body that may hold the date, separated by commas. The first one present is used; when none is, the topic is not changed. | string |  | orderDate,createdAt |
+| **timestampFormat** | Timestamp Format | How to write the time in the topic name, as a Java `SimpleDateFormat` pattern, in UTC: `yyyyMMdd` gives `20240703`, and `yyyy-MM` gives `2024-07`. | string | yyyyMMdd | yyyy-MM-dd |
+| **timestampKeyFormat** | Timestamp Keys Format | How the date is written in the field: `timestamp` for a number of milliseconds since 1970, or a Java `SimpleDateFormat` pattern, read in UTC. | string | timestamp | yyyy-MM-dd |
+| **topicFormat** | Topic Format | The name of the new topic. `$[topic]` is replaced by the name of the original topic, and `$[timestamp]` by the time, written with `timestampFormat`. The default writes to topics named `topic-` and the date, without the original name. | string | topic-$\[timestamp\] | $\[topic\]-$\[timestamp\] |
 
 ## Dependencies
 

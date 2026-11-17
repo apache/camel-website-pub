@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Find locations on Earth by name and address.
+Looks up a place name or a postal address, such as `Eiffel Tower, Paris`, in a Nominatim server of OpenStreetMap, and gives the best match with its coordinates as JSON.
+
+Use it to turn the addresses in orders, customer records or events into latitude and longitude, for example to show them on a map or to find the nearest store.
+
+Input: the place name or address to look up, as text.
+
+Output: the body is JSON text: an array with the best match, with its coordinates, its full address and its kind of place, or an empty array when nothing matches. The headers give the same answer in short: `CamelGeoCoderLat` and `CamelGeoCoderLng` (the coordinates), `CamelGeoCoderAddress` (the full address found), `CamelGeoCoderCity`, `CamelGeoCoderCountryLong`, `CamelGeoCoderPostalCode` and `CamelGeoCoderStatus`, which is `OK` when a place was found and `ZERO_RESULTS` when none was.
+
+Good to know: a place that is not found does not fail the message; check `CamelGeoCoderStatus`. The public server `[https://nominatim.openstreetmap.org](https://nominatim.openstreetmap.org)` limits how often it may be called; for many lookups, run your own Nominatim server.
 
 ## Configuration Options
 
@@ -13,7 +21,7 @@ The following table summarizes the configuration options available for the `nomi
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **serverUrl** | Server URL | **Required** Url of the Nominatim server. | string |  | https://nominatim.openstreetmap.org |
+| **serverUrl** | Server URL | **Required** The address of the Nominatim server, starting with `https://`, without a path. Use the public OpenStreetMap server for a few lookups, or your own server. | string |  | https://nominatim.openstreetmap.org |
 
 ## Dependencies
 

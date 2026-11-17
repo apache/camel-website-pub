@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send data to Kafka topics on an insecure broker with Apicurio Registry secured with Keycloak.
+Sends each message as an Avro record to a topic in Apache Kafka, with the schema kept in an Apicurio Registry secured with Keycloak.
+
+Use it to publish records that other applications read with the schema of the registry, when the registry needs a Keycloak login and Kafka needs none. When the registry needs no login use `kafka-apicurio-registry-not-secured-sink`; for records without a schema use `kafka-sink`.
+
+Input: the body must be an Avro object, such as an Avro `GenericRecord` or an object of a class generated from the schema; it is written as Avro binary. A body of text is written as an Avro string, and so fails unless the schema is a string. The optional `key` header (or `ce-key`) becomes the key of the record, and the optional `partition-key` header (or `ce-partitionkey`) is the number of the partition to write to. The other headers of the message, except the Camel ones, are sent as record headers.
+
+Output: the message is unchanged.
+
+Good to know: The schema must already be in the registry, as the artifact `<topic>-value` (such as `orders-value`) in the default group: the Kamelet does not register it, and a message whose schema is not found fails with `ArtifactNotFoundException`. Kafka is not secured: it connects to the brokers with no login and no TLS.
 
 ## Configuration Options
 
@@ -13,17 +21,17 @@ The following table summarizes the configuration options available for the `kafk
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **apicurioAuthClientId** | Apicurio Registry Auth Client ID | **Required** The Client ID in Keycloak instance securing the Apicurio Registry. | string |  |  |
-| **apicurioAuthClientSecret** | Apicurio Registry Auth Client Secret | **Required** The Client Secret in Keycloak instance securing the Apicurio Registry. | string |  |  |
-| **apicurioAuthPassword** | Apicurio Registry Auth Password | **Required** The Password in Keycloak instance securing the Apicurio Registry. | string |  |  |
-| **apicurioAuthRealm** | Apicurio Registry Auth Realm | **Required** The Realm in Keycloak instance securing the Apicurio Registry. | string |  |  |
-| **apicurioAuthServiceUrl** | Apicurio Registry Auth Service URL | **Required** The URL for Keycloak instance securing the Apicurio Registry. | string |  | http://my-keycloak.com:8080/ |
-| **apicurioAuthUsername** | Apicurio Registry Auth Username | **Required** The Username in Keycloak instance securing the Apicurio Registry. | string |  |  |
-| **apicurioRegistryUrl** | Apicurio Registry URL | **Required** The Apicurio Schema Registry URL. | string |  |  |
-| **bootstrapServers** | Bootstrap Servers | **Required** Comma separated list of Kafka Broker URLs. | string |  |  |
-| **topic** | Topic Names | **Required** Comma separated list of Kafka topic names. | string |  |  |
-| **avroDatumProvider** | Avro Datum Provider | How to write data with Avro. Defaults to Apicurio’s own DefaultAvroDatumProvider, which handles GenericRecord and generated SpecificRecord classes. Set io.apicurio.registry.serde.avro.ReflectAvroDatumProvider to map arbitrary POJOs onto Avro by reflection instead. | string | io.apicurio.registry.serde.avro.DefaultAvroDatumProvider |  |
-| **valueSerializer** | Value Serializer | Serliazer class for value that implements the Serializer interface. | string | io.apicurio.registry.serde.avro.AvroKafkaSerializer |  |
+| **apicurioAuthClientId** | Keycloak Client ID | **Required** The ID of the Keycloak client that has access to the registry. | string |  |  |
+| **apicurioAuthClientSecret** | Keycloak Client Secret | **Required** The secret of the Keycloak client `apicurioAuthClientId`, from the Credentials tab of the client in the Keycloak admin console. | string |  |  |
+| **apicurioAuthPassword** | Registry Password | **Required** The password of `apicurioAuthUsername`. | string |  |  |
+| **apicurioAuthRealm** | Keycloak Realm | **Required** The Keycloak realm in which the client and the user of the registry are defined. | string |  | registry |
+| **apicurioAuthServiceUrl** | Keycloak URL | **Required** The URL of the Keycloak server that secures the registry. | string |  | https://keycloak.example.com |
+| **apicurioAuthUsername** | Registry Username | **Required** The user name to log in to the registry with, through Keycloak. | string |  |  |
+| **apicurioRegistryUrl** | Apicurio Registry URL | **Required** The URL of the API of the Apicurio Registry that holds the schemas, such as `[http://registry:8080/apis/registry/v2](http://registry:8080/apis/registry/v2)`. | string |  | http://registry.example.com:8080/apis/registry/v2 |
+| **bootstrapServers** | Bootstrap Servers | **Required** The address of one or more Kafka brokers to connect to first, as `host:port`, separated by commas. The other brokers of the cluster are found from them. | string |  | broker1:9092,broker2:9092 |
+| **topic** | Topic Name | **Required** The name of the topic to write the records to. | string |  | orders |
+| **avroDatumProvider** | Avro Datum Provider | How the body is turned into Avro. The default `io.apicurio.registry.serde.avro.DefaultAvroDatumProvider` takes an Avro `GenericRecord` or an object of a class generated from the schema; `io.apicurio.registry.serde.avro.ReflectAvroDatumProvider` maps any Java object to Avro by reflection. | string | io.apicurio.registry.serde.avro.DefaultAvroDatumProvider |  |
+| **valueSerializer** | Value Serializer | The Java class that turns the body into the value of the record. The default writes Avro with the schema from the registry. Change it only to use another serializer of the Apicurio Registry library. | string | io.apicurio.registry.serde.avro.AvroKafkaSerializer |  |
 
 ## Dependencies
 

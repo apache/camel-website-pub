@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Manage the data source ingestion jobs of an AWS Bedrock knowledge base.
+Starts, lists or looks up the ingestion jobs of an Amazon Bedrock knowledge base, which load the documents of a data source, such as an S3 bucket, into the knowledge base.
+
+Use it to refresh a knowledge base after its documents changed, for example to start an ingestion job when new files arrive in the bucket of the data source, or every night from `timer-source`, and to check how the job went. To ask questions of the knowledge base, use `aws-bedrock-agent-runtime-sink`.
+
+Input: the body is not used. For `getIngestionJob`, the `CamelAwsBedrockAgentIngestionJobId` header is the ID of the job to look up, and is required.
+
+Output: when it is used inside a route, the body afterwards depends on the operation: for `startIngestionJob` the ID of the new job, as text; for `listIngestionJobs` a List of job summaries; for `getIngestionJob` the job, an object of the AWS SDK for Java, with its status, such as `IN_PROGRESS`, `COMPLETE` or `FAILED`, also in the `CamelAwsBedrockAgentIngestionJobStatus` header.
+
+Good to know: an ingestion job runs in the background, and `startIngestionJob` returns at once; to follow it, copy the ID from the body into the `CamelAwsBedrockAgentIngestionJobId` header and use `getIngestionJob`. The operation, the knowledge base and the data source come only from the options; headers cannot change them.
 
 ## Configuration Options
 
@@ -13,19 +21,19 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **dataSourceId** | Data Source Id | **Required** The data source to ingest. Required by the startIngestionJob operation. | string |  |  |
-| **knowledgeBaseId** | Knowledge Base Id | **Required** The Knowledge Base the ingestion job belongs to. | string |  |  |
-| **region** | AWS Region | **Required** The AWS region to access. Enum values: \* us-east-1 \* us-east-2 \* us-west-2 \* us-gov-west-1 \* ap-northeast-1 \* ap-northeast-2 \* ap-south-1 \* ap-southeast-1 \* ap-southeast-2 \* ca-central-1 \* eu-central-1 \* eu-central-2 \* eu-west-1 \* eu-west-2 \* eu-west-3 \* sa-east-1 | string |  |  |
-| **accessKey** | Access Key | The access key obtained from AWS. | string |  |  |
-| **operation** | Operation | The ingestion job operation to perform. Enum values: \* startIngestionJob \* listIngestionJobs \* getIngestionJob | string | startIngestionJob |  |
-| **overrideEndpoint** | Endpoint Overwrite | Select this option to override the endpoint URI. To use this option, you must also provide a URI for the `uriEndpointOverride` option. | boolean | false |  |
-| **profileCredentialsName** | Profile Credentials Name | If using a profile credentials provider, this parameter states the profile name. | string |  |  |
-| **secretKey** | Secret Key | The secret key obtained from AWS. | string |  |  |
-| **sessionToken** | Session Token | Amazon AWS Session Token used when the user needs to assume an IAM role. | string |  |  |
-| **uriEndpointOverride** | Overwrite Endpoint URI | The overriding endpoint URI. To use this option, you must also select the `overrideEndpoint` option. | string |  |  |
-| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the SDK looks for credentials through the default provider chain rather than the accessKey and secretKey properties. | boolean | false |  |
-| **useProfileCredentialsProvider** | Profile Credentials Provider | Set whether the Bedrock client should expect to load credentials through a profile credentials provider. | boolean | false |  |
-| **useSessionCredentials** | Session Credentials | Set whether the Bedrock client should expect to use session credentials. This is useful in a session token scenario. | boolean | false |  |
+| **dataSourceId** | Data Source ID | **Required** The ID of the data source of the knowledge base whose documents are loaded, a code of 10 letters and digits shown in the Bedrock console. Needed by all three operations. | string |  | GH56IJ78KL |
+| **knowledgeBaseId** | Knowledge Base ID | **Required** The ID of the knowledge base, a code of 10 letters and digits shown in the Bedrock console. | string |  | AB12CD34EF |
+| **region** | AWS Region | **Required** The AWS region of the knowledge base, such as `eu-west-1`. Enum values: \* us-east-1 \* us-east-2 \* us-west-2 \* us-gov-west-1 \* ap-northeast-1 \* ap-northeast-2 \* ap-south-1 \* ap-southeast-1 \* ap-southeast-2 \* ca-central-1 \* eu-central-1 \* eu-central-2 \* eu-west-1 \* eu-west-2 \* eu-west-3 \* sa-east-1 | string |  | eu-west-1 |
+| **accessKey** | Access Key | The access key ID of an IAM user, which AWS gives when you create an access key for the user (in the AWS console: IAM, Users, Security credentials). Use it together with `secretKey`, or leave both empty and set `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` instead. | string |  |  |
+| **operation** | Operation | What to do: `startIngestionJob` starts loading the documents of the data source into the knowledge base; `listIngestionJobs` lists the ingestion jobs of the data source; `getIngestionJob` looks up the job whose ID is in the `CamelAwsBedrockAgentIngestionJobId` header. Enum values: \* startIngestionJob \* listIngestionJobs \* getIngestionJob | string | startIngestionJob |  |
+| **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
+| **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
+| **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
+| **uriEndpointOverride** | Overwrite Endpoint URI | The address to send the requests to instead of the usual AWS address, such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
+| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found the way the AWS SDK finds them: from the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the shared credentials file, or the IAM role of the machine, container or pod it runs on. Then `accessKey` and `secretKey` are not needed. | boolean | false |  |
+| **useProfileCredentialsProvider** | Profile Credentials Provider | If true, the credentials are read from a profile of the AWS credentials file (`~/.aws/credentials`), the one named in `profileCredentialsName`. | boolean | false |  |
+| **useSessionCredentials** | Session Credentials | If true, it logs in with temporary credentials, such as those of an assumed IAM role: `accessKey`, `secretKey` and `sessionToken` together. | boolean | false |  |
 
 ## Dependencies
 

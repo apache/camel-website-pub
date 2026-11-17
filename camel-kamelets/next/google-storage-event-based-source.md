@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Receive data from Google Pubsub reporting events related to a Google Storage bucket.
+Receives the change notifications of a Google Cloud Storage bucket from a Pub/Sub subscription, one message per change, and can download each new file.
+
+Use it to react as soon as a file is uploaded to, changed in or deleted from a bucket, without reading the whole bucket over and over. It needs a Pub/Sub notification on the bucket, created for example with `gcloud storage buckets notifications create gs://my-bucket --topic=my-topic`, and a subscription on that topic. To read and delete the files of a bucket instead, use `google-storage-source`.
+
+Output: by default, the body is the notification as JSON text (bytes): the metadata of the file, such as its name, size and content type. The `eventType` header says what happened (`OBJECT_FINALIZE` for a new or replaced file, `OBJECT_DELETE` for a deleted one), and the `objectId` and `bucketId` headers give the name of the file and of its bucket. With `getObject` set to true, the body of a new file in `bucketNameOrArn` is the content of the file, as bytes, with the `CamelGoogleCloudStorage…​` headers of the file.
+
+Good to know: every notification of the subscription comes out, also for other events and other buckets; `bucketNameOrArn` is only used to choose which new files to download. Downloading does not delete the file. A notification whose processing fails is not acknowledged, so Pub/Sub delivers it again.
 
 ## Configuration Options
 
@@ -13,14 +19,14 @@ The following table summarizes the configuration options available for the `goog
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **bucketNameOrArn** | Bucket Name Or ARN | **Required** The Google Cloud Storage bucket name or Bucket Amazon Resource Name (ARN). | string |  |  |
-| **projectId** | Project Id | **Required** The Google Cloud Pub/Sub Project ID. | string |  |  |
-| **serviceAccountKey** | Service Account Key | **Required** The service account key to use as credentials for the Pub/Sub publisher/subscriber. You must encode this value in base64. | binary |  |  |
-| **subscriptionName** | Subscription Name | **Required** The subscription name. | string |  |  |
-| **concurrentConsumers** | Concurrent Consumers | The number of parallel streams to consume from the subscription. | integer | 1 |  |
-| **getObject** | Get Object in Bucket | If `getObject` is enabled, then the file created in the Bucket is retreived and returned as body, if not only the event is returned as body. | boolean | false |  |
-| **maxMessagesPerPoll** | Max Messages Per Poll | The maximum number of messages to receive from the server in a single API call. | integer | 1 |  |
-| **synchronousPull** | Synchronous Pull | Specifies to synchronously pull batches of messages. | boolean | false |  |
+| **bucketNameOrArn** | Bucket Name | **Required** The name of the bucket whose new files are downloaded when `getObject` is true, without `gs://`. Notifications of other buckets come out unchanged. | string |  | my-bucket |
+| **projectId** | Project ID | **Required** The ID of the Google Cloud project that holds the subscription, as shown in the Google Cloud console. It is the project ID, not the project name or number. | string |  | my-project-123 |
+| **serviceAccountKey** | Service Account Key | **Required** The JSON key of a service account that may read the subscription (and, with `getObject`, the files of the bucket), encoded in Base64: create the key in the Google Cloud console under IAM & Admin > Service Accounts > Keys, then encode the downloaded file, for example with `base64 -w0 key.json`. | binary |  |  |
+| **subscriptionName** | Subscription Name | **Required** The name of the Pub/Sub subscription that receives the notifications of the bucket, without the `projects/…​/subscriptions/` part. | string |  | bucket-events-sub |
+| **concurrentConsumers** | Concurrent Consumers | How many notifications to receive and process in parallel, each in its own stream from the subscription. | integer | 1 |  |
+| **getObject** | Get Object in Bucket | If true, the body of a notification for a new or replaced file (`OBJECT_FINALIZE`) in `bucketNameOrArn` is replaced by the content of the file. If false, the body is the notification itself. | boolean | false |  |
+| **maxMessagesPerPoll** | Max Messages Per Poll | The most notifications to ask Pub/Sub for at once. Only used when `synchronousPull` is true. | integer | 1 |  |
+| **synchronousPull** | Synchronous Pull | If true, it asks Pub/Sub for notifications in batches of up to `maxMessagesPerPoll`, instead of keeping a stream open that Pub/Sub pushes them through. | boolean | false |  |
 
 ## Dependencies
 

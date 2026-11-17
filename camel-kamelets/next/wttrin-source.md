@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Get weather forecasts from the wttr.in weather forecast service
+Fetches the current weather or the forecast for a place from the public wttr.in service at a regular interval, and sends it as JSON.
+
+Use it to feed weather data into a dashboard, a chat message or a decision, such as a frost alert, or as real, changing JSON data for a demo. No account is needed.
+
+Output: the body is JSON text. With `output` set to `current`, the default, it is an object with the current conditions, such as `temp_C`, `humidity` and `weatherDesc`. With `weather`, it is a list with the forecast for each day, starting today. With `full`, it is the whole answer of wttr.in, which has both. The `Content-Type` header is `application/json`, and the other headers of the HTTP answer are kept.
+
+Good to know: it calls `[https://wttr.in](https://wttr.in)` over the internet. When `wttrLocation` is not set, wttr.in guesses the place from the IP address of the machine.
 
 ## Configuration Options
 
@@ -13,10 +19,10 @@ The following table summarizes the configuration options available for the `wttr
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **output** | Output Type | The type of output. | string | current | current, weather, full |
-| **period** | Period | The interval between fetches to the wttr.in service in milliseconds. | integer | 60000 |  |
-| **wttrLanguage** | Language | The language to use for displaying weather forecasts. | string |  | am ar af be bn ca da de el et fr fa hi hu ia id it lt mg nb nl oc pl pt-br ro ru ta tr th uk vi zh-cn zh-tw |
-| **wttrLocation** | Location | The location to get weather forecasts. | string |  | "paris", "~Eiffel+tower", "Москва", "muc", "@stackoverflow.com", "94107", "-78.46,106.79" |
+| **output** | Output | What to send: `current` for the current conditions, `weather` for the forecast of each day, or `full` for the whole answer of wttr.in. Any other value works like `full`. | string | current | weather |
+| **period** | Period | How long to wait between two fetches, in milliseconds. For example, 3600000 is one hour. | integer | 60000 | 3600000 |
+| **wttrLanguage** | Language | The language of the weather descriptions, as a language code such as `fr` or `de`. The descriptions in that language are added to the JSON in a field such as `lang_fr`; the other fields stay in English. When it is not set, the descriptions are in English only. | string |  | fr |
+| **wttrLocation** | Location | The place to get the weather for: a city name such as `Paris` or `New York`, an airport code such as `muc`, a landmark after `~` such as `~Eiffel+tower`, a postal code, or a latitude and longitude such as `48.85,2.35`. When it is not set, wttr.in guesses the place from the IP address of the machine. | string |  | Paris |
 
 ## Dependencies
 
@@ -69,30 +75,25 @@ camel run route.yaml
 
 ## Wttrin Source Kamelet Description
 
-### Authentication methods
+### Authentication
 
-This Kamelet connects to Wttrin using appropriate authentication mechanisms:
-
--   Service-specific authentication methods
-    
--   API keys, tokens, or credential-based authentication
-    
--   Connection configuration
-    
+The Kamelet calls the public `[https://wttr.in](https://wttr.in)` service, which needs no account, API key or credentials.
 
 ### Output format
 
-The Kamelet consumes data from Wttrin and produces the data in JSON format.
+The Kamelet fetches data from wttr.in and produces the data in JSON format.
 
 ### Configuration
 
-The Kamelet requires connection parameters specific to Wttrin:
+No option is required:
 
--   Service connection details
+-   `wttrLocation`: the place to get the weather for; when it is not set, wttr.in guesses the place from the IP address of the machine
     
--   Authentication credentials
+-   `wttrLanguage`: the language of the weather descriptions
     
--   Query or consumption parameters
+-   `output`: `current`, `weather` or `full`
+    
+-   `period`: how long to wait between two fetches, in milliseconds
     
 
 ### Usage example
@@ -109,7 +110,7 @@ spec:
       apiVersion: camel.apache.org/v1alpha1
       name: wttrin-source
     properties:
-      # Add service-specific properties here
+      wttrLocation: Paris
   sink:
     ref:
       kind: Service

@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send message to an AWS SNS FIFO Topic.
+Publishes each message to an Amazon SNS FIFO topic, which delivers the messages of a group in order, and without duplicates, to the SQS FIFO queues subscribed to it.
+
+Use it to fan out ordered updates, such as the changes of one order or one account, to several FIFO queues at once. For a standard topic use `aws-sns-sink`.
+
+Input: the body becomes the text of the notification, as text. The optional `group` header (or `ce-group`) is the message group ID, such as a customer ID: the messages of one group are delivered in order. Without it, each message is a group of its own. The optional `subject` header (or `ce-subject`) is the subject. The other headers of the message, except the Camel ones, are sent as SNS message attributes.
+
+Output: the message is unchanged. The `CamelAwsSnsMessageId` header gives the ID of the published message.
+
+Good to know: the name of the topic ends in `.fifo`. With `contentBasedDeduplication` false, the default, each message gets a unique deduplication ID, so SNS drops only a message sent twice by a retry; set it to true to drop messages with the same body, which the topic must allow.
 
 ## Configuration Options
 
@@ -13,19 +21,19 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **region** | AWS Region | **Required** The AWS region to access. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  |  |
-| **topicNameOrArn** | Topic Name | **Required** The SNS Topic name or ARN. | string |  |  |
-| **accessKey** | Access Key | The access key obtained from AWS. | string |  |  |
-| **autoCreateTopic** | Autocreate Topic | Setting the autocreation of the SNS topic. | boolean | false |  |
-| **contentBasedDeduplication** | Content-Based Deduplication | Use content-based deduplication (should be enabled in the SQS FIFO queue first). | boolean | false |  |
-| **overrideEndpoint** | Endpoint Overwrite | Select this option to override the endpoint URI. To use this option, you must also provide a URI for the `uriEndpointOverride` option. | boolean | false |  |
-| **profileCredentialsName** | Profile Credentials Name | If using a profile credentials provider this parameter sets the profile name. | string |  |  |
-| **secretKey** | Secret Key | The secret key obtained from AWS. | string |  |  |
-| **sessionToken** | Session Token | Amazon AWS Session Token used when the user needs to assume a IAM role. | string |  |  |
-| **uriEndpointOverride** | Overwrite Endpoint URI | The overriding endpoint URI. To use this option, you must also select the `overrideEndpoint` option. | string |  |  |
-| **useDefaultCredentialsProvider** | Default Credentials Provider | Set whether the SNS client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | boolean | false |  |
-| **useProfileCredentialsProvider** | Profile Credentials Provider | Set whether the SNS client should expect to load credentials through a profile credentials provider. | boolean | false |  |
-| **useSessionCredentials** | Session Credentials | Set whether the SNS client should expect to use Session Credentials. This is useful in situation in which the user needs to assume a IAM role for doing operations in SNS. | boolean | false |  |
+| **region** | AWS Region | **Required** The AWS region of the topic, as a region code such as `eu-west-1` or `us-east-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
+| **topicNameOrArn** | Topic Name | **Required** The name of the FIFO topic, which ends in `.fifo`, such as `order-events.fifo`, or its ARN (Amazon Resource Name). | string |  | order-events.fifo |
+| **accessKey** | Access Key | The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. Leave both out when `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` is true. | string |  |  |
+| **autoCreateTopic** | Autocreate Topic | If true, the topic is created when it does not exist. The credentials need the permission to create topics. | boolean | false |  |
+| **contentBasedDeduplication** | Content-Based Deduplication | If true, SNS finds duplicates by the content of the body: a message with the same body as one published in the last 5 minutes is dropped. The topic must have content-based deduplication turned on. If false, each message gets a unique deduplication ID, so only a message that is sent again by a retry is dropped. | boolean | false |  |
+| **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
+| **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
+| **secretKey** | Secret Key | The secret access key that belongs to `accessKey`. The AWS console shows it only once, when the access key is created. | string |  |  |
+| **sessionToken** | Session Token | The session token of temporary credentials, which comes with their access key and secret key, for example from AWS STS when you assume an IAM role. Only used when `useSessionCredentials` is true. | string |  |  |
+| **uriEndpointOverride** | Overwrite Endpoint URI | The address to connect to instead of AWS, as a URL such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
+| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found in the environment instead of in `accessKey` and `secretKey`: the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the `~/.aws/credentials` file, or the IAM role of the EC2 instance, ECS task or Kubernetes pod the integration runs on. | boolean | false |  |
+| **useProfileCredentialsProvider** | Profile Credentials Provider | If true, the credentials are read from a named profile in the AWS credentials file (`~/.aws/credentials`), as the AWS CLI does. Name the profile in `profileCredentialsName`. | boolean | false |  |
+| **useSessionCredentials** | Session Credentials | If true, it logs in with temporary credentials: `accessKey`, `secretKey` and `sessionToken`, such as the ones AWS STS gives when you assume an IAM role. | boolean | false |  |
 
 ## Dependencies
 
@@ -101,6 +109,8 @@ For more information, see the [AWS credentials documentation](https://docs.aws.a
 In the Kamelet you can optionally set the following header:
 
 -   `subject` / `ce-subject`: the subject of the message
+    
+-   `group` / `ce-group`: the message group ID. If you do not set it, each message gets a group of its own.
     
 
 ## Kamelet source file

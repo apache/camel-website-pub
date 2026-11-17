@@ -170,6 +170,8 @@ YAML
 
 In this case, you must use an EIP (Enterprise Integration Pattern) that is capable of computing a dynamic URI using an [Expression](../../../manual/expression.md), such as the [toD](../../4.22.x/eips/toD-eip.md) or [Recipient List](../../4.22.x/eips/recipientList-eip.md) EIP pattern.
 
+The route still starts: the `to` sends every message to one endpoint, named by the text of the expression. Camel logs a WARN for such a `to` when it creates the route, and the WARN says to use `toD`. Only the endpoint path is checked, not the options after the `?`. Left alone are the [Language](../language-component.md) component, whose path is a script, the `:#${…​}` parameters of the [SQL](../sql-component.md) component, and the components that evaluate their path for each message: they mark their path option with `@Metadata(supportSimpleExpression = true)`, as [SQL Stored Procedure](../sql-stored-component.md), [AWS S3](../aws2-s3-component.md) and [Micrometer](../micrometer-component.md) do.
+
 > **Tip**
 > **This is valid code**
 >

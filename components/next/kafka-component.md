@@ -106,7 +106,7 @@ The Kafka component supports the following options which are listed below.
 | **fetchMaxBytes** (consumer) | The maximum amount of data the server should return for a fetch request. This is not an absolute maximum, if the first message in the first non-empty partition of the fetch is larger than this value, the message will still be returned to ensure that the consumer can make progress. The maximum message size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). Note that the consumer performs multiple fetches in parallel. | 52428800 | Integer |
 | **fetchMinBytes** (consumer) | The minimum amount of data the server should return for a fetch request. If insufficient data is available, the request will wait for that much data to accumulate before answering the request. | 1 | Integer |
 | **fetchWaitMaxMs** (consumer) | The maximum amount of time the server will block before answering the fetch request if there isn’t enough data to immediately satisfy fetch.min.bytes. | 500 | Integer |
-| **groupId** (consumer) | A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id, multiple processes can indicate that they are all part of the same consumer group. This option is required for consumers. |  | String |
+| **groupId** (consumer) | A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id, multiple processes can indicate that they are all part of the same consumer group. It takes precedence over a group.id set in additionalProperties. If neither is set, the consumer uses a generated group id, a new one at each start, and logs a WARN: it does not resume from the offsets committed before a restart, and each instance of the application receives every record. Set it on a consumer that must resume after a restart or share the records with other instances. |  | String |
 | **groupInstanceId** (consumer) | A unique identifier of the consumer instance provided by the end user. Only non-empty strings are permitted. If set, the consumer is treated as a static member, which means that only one instance with this ID is allowed in the consumer group at any time. This can be used in combination with a larger session timeout to avoid group rebalances caused by transient unavailability (e.g., process restarts). If not set, the consumer will join the group as a dynamic member, which is the traditional behavior. When consumersCount is greater than 1, each consumer is a static member of its own, with this ID followed by a dash and the index of the consumer (myId-0, myId-1, …​). |  | String |
 | **groupProtocol** (consumer) | 
 The consumer group protocol to use. The classic protocol uses the traditional partition assignment and rebalancing mechanism. The consumer protocol enables the new KIP-848 consumer rebalance protocol which provides faster and more efficient rebalancing. When set to consumer, classic-only properties (heartbeatIntervalMs, sessionTimeoutMs, partitionAssignor) are automatically excluded from the consumer configuration.
@@ -388,7 +388,7 @@ With the following _path_ and _query_ parameters:
 | **fetchMaxBytes** (consumer) | The maximum amount of data the server should return for a fetch request. This is not an absolute maximum, if the first message in the first non-empty partition of the fetch is larger than this value, the message will still be returned to ensure that the consumer can make progress. The maximum message size accepted by the broker is defined via message.max.bytes (broker config) or max.message.bytes (topic config). Note that the consumer performs multiple fetches in parallel. | 52428800 | Integer |
 | **fetchMinBytes** (consumer) | The minimum amount of data the server should return for a fetch request. If insufficient data is available, the request will wait for that much data to accumulate before answering the request. | 1 | Integer |
 | **fetchWaitMaxMs** (consumer) | The maximum amount of time the server will block before answering the fetch request if there isn’t enough data to immediately satisfy fetch.min.bytes. | 500 | Integer |
-| **groupId** (consumer) | A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id, multiple processes can indicate that they are all part of the same consumer group. This option is required for consumers. |  | String |
+| **groupId** (consumer) | A string that uniquely identifies the group of consumer processes to which this consumer belongs. By setting the same group id, multiple processes can indicate that they are all part of the same consumer group. It takes precedence over a group.id set in additionalProperties. If neither is set, the consumer uses a generated group id, a new one at each start, and logs a WARN: it does not resume from the offsets committed before a restart, and each instance of the application receives every record. Set it on a consumer that must resume after a restart or share the records with other instances. |  | String |
 | **groupInstanceId** (consumer) | A unique identifier of the consumer instance provided by the end user. Only non-empty strings are permitted. If set, the consumer is treated as a static member, which means that only one instance with this ID is allowed in the consumer group at any time. This can be used in combination with a larger session timeout to avoid group rebalances caused by transient unavailability (e.g., process restarts). If not set, the consumer will join the group as a dynamic member, which is the traditional behavior. When consumersCount is greater than 1, each consumer is a static member of its own, with this ID followed by a dash and the index of the consumer (myId-0, myId-1, …​). |  | String |
 | **groupProtocol** (consumer) | 
 The consumer group protocol to use. The classic protocol uses the traditional partition assignment and rebalancing mechanism. The consumer protocol enables the new KIP-848 consumer rebalance protocol which provides faster and more efficient rebalancing. When set to consumer, classic-only properties (heartbeatIntervalMs, sessionTimeoutMs, partitionAssignor) are automatically excluded from the consumer configuration.
@@ -951,7 +951,7 @@ Lastly, it is also possible to do so in a processor:
 _Java-only: processor for header type conversion_
 
 ```java
-from("kafka:my-topic")
+from("kafka:my-topic?groupId=my-group")
     .process(exchange -> {
         byte[] id = exchange.getIn().getHeader("id", byte[].class);
         BigInteger bi = new BigInteger(id);
@@ -1034,6 +1034,21 @@ When the `CommitManager` is changed to either the synchronous or asynchronous ma
 > **Note**
 > A synchronous commit must be called by the consumer thread. Certain EIPs, async or concurrent operations in the DSL continue on another thread: for example, the Aggregate EIP completes its groups on its own `Aggregator` thread. A synchronous commit on such a thread makes the Kafka client throw a `java.util.ConcurrentModificationException` with the message `KafkaConsumer is not safe for multi-threaded access`. Use the asynchronous commit there instead.
 
+### Consumer groups
+
+The `groupId` option sets the Kafka consumer group of the consumer. The consumers of a group share the partitions of the topic, so each record is processed by one of them. The group keeps the committed offsets: after a restart, a consumer resumes where the group stopped.
+
+The group can also be set with the `group.id` Kafka property in `additionalProperties` (`additionalProperties.group.id=my-group` on the endpoint, or `camel.component.kafka.additional-properties[group.id]` on the component). When both `groupId` and the `group.id` property are set, `groupId` is used. A `group.id` set on the component applies to every consumer endpoint without `groupId`, so routes that consume the same topic share its records.
+
+Without either, the consumer uses a generated group id, a new one at each start, and logs a WARN when it starts:
+
+-   After a restart the consumer does not resume from the offsets committed before. It starts where `autoOffsetReset` says: with the default `latest`, the records sent while the application was stopped are not consumed.
+    
+-   Each instance of the application (for example each replica of a deployment) is a group of its own, and receives every record.
+    
+
+This only suits a consumer that must receive every record in each instance, from the time it starts. Set `groupId` on the other consumers.
+
 ### Where a new consumer group starts reading
 
 The `autoOffsetReset` option controls where a Kafka consumer group begins reading when it has **no previously committed offset** for the topic partition, or when the committed offset is no longer available on the broker (e.g. it has been deleted by retention).
@@ -1093,7 +1108,7 @@ The Kafka component supports pausable consumers. This type of consumer can pause
 _Java-only: pausable consumer with lambda_
 
 ```java
-from("kafka:topic")
+from("kafka:topic?groupId=my-group")
     .pausable(new KafkaConsumerListener(), () -> canContinue())
     .routeId("pausable-route")
     .process(this::process)
@@ -1978,7 +1993,7 @@ The reason for this is related to how the producer handles the two different cas
 
 ### Consuming messages from Kafka
 
-Here is the minimal route you need to read messages from Kafka.
+Here is the minimal route you need to read messages from Kafka. Set `groupId` so that the consumer resumes from its committed offsets after a restart (see [Consumer groups](#_consumer_groups)).
 
 -   Java
     
@@ -1988,7 +2003,7 @@ Here is the minimal route you need to read messages from Kafka.
     
 
 ```java
-from("kafka:test?brokers=localhost:9092")
+from("kafka:test?brokers=localhost:9092&groupId=my-group")
     .log("Message received from Kafka : ${body}")
     .log("    on the topic ${headers[CamelKafkaTopic]}")
     .log("    on the partition ${headers[CamelKafkaPartition]}")
@@ -1998,7 +2013,7 @@ from("kafka:test?brokers=localhost:9092")
 
 ```xml
 <route>
-  <from uri="kafka:test?brokers=localhost:9092"/>
+  <from uri="kafka:test?brokers=localhost:9092&amp;groupId=my-group"/>
   <log message="Message received from Kafka : ${body}"/>
   <log message="    on the topic ${headers[CamelKafkaTopic]}"/>
   <log message="    on the partition ${headers[CamelKafkaPartition]}"/>
@@ -2013,6 +2028,7 @@ from("kafka:test?brokers=localhost:9092")
       uri: kafka:test
       parameters:
         brokers: "localhost:9092"
+        groupId: my-group
       steps:
         - log: "Message received from Kafka : ${body}"
         - log: "    on the topic ${headers[CamelKafkaTopic]}"
@@ -2031,7 +2047,7 @@ If you need to consume messages from multiple topics, you can use a comma separa
     
 
 ```java
-from("kafka:test,test1,test2?brokers=localhost:9092")
+from("kafka:test,test1,test2?brokers=localhost:9092&groupId=my-group")
     .log("Message received from Kafka : ${body}")
     .log("    on the topic ${headers[CamelKafkaTopic]}")
     .log("    on the partition ${headers[CamelKafkaPartition]}")
@@ -2041,7 +2057,7 @@ from("kafka:test,test1,test2?brokers=localhost:9092")
 
 ```xml
 <route>
-  <from uri="kafka:test,test1,test2?brokers=localhost:9092"/>
+  <from uri="kafka:test,test1,test2?brokers=localhost:9092&amp;groupId=my-group"/>
   <log message="Message received from Kafka : ${body}"/>
   <log message="    on the topic ${headers[CamelKafkaTopic]}"/>
   <log message="    on the partition ${headers[CamelKafkaPartition]}"/>
@@ -2056,6 +2072,7 @@ from("kafka:test,test1,test2?brokers=localhost:9092")
       uri: "kafka:test,test1,test2"
       parameters:
         brokers: "localhost:9092"
+        groupId: my-group
       steps:
         - log: "Message received from Kafka : ${body}"
         - log: "    on the topic ${headers[CamelKafkaTopic]}"
@@ -2074,7 +2091,7 @@ It’s also possible to subscribe to multiple topics giving a pattern as the top
     
 
 ```java
-from("kafka:test.*?brokers=localhost:9092&topicIsPattern=true")
+from("kafka:test.*?brokers=localhost:9092&groupId=my-group&topicIsPattern=true")
     .log("Message received from Kafka : ${body}")
     .log("    on the topic ${headers[CamelKafkaTopic]}")
     .log("    on the partition ${headers[CamelKafkaPartition]}")
@@ -2084,7 +2101,7 @@ from("kafka:test.*?brokers=localhost:9092&topicIsPattern=true")
 
 ```xml
 <route>
-  <from uri="kafka:test.*?brokers=localhost:9092&amp;topicIsPattern=true"/>
+  <from uri="kafka:test.*?brokers=localhost:9092&amp;groupId=my-group&amp;topicIsPattern=true"/>
   <log message="Message received from Kafka : ${body}"/>
   <log message="    on the topic ${headers[CamelKafkaTopic]}"/>
   <log message="    on the partition ${headers[CamelKafkaPartition]}"/>
@@ -2099,6 +2116,7 @@ from("kafka:test.*?brokers=localhost:9092&topicIsPattern=true")
       uri: "kafka:test.*"
       parameters:
         brokers: "localhost:9092"
+        groupId: my-group
         topicIsPattern: true
       steps:
         - log: "Message received from Kafka : ${body}"

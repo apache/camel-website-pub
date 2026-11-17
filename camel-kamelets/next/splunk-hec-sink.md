@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-The Splunk HEC sink allows to send data to Splunk using the [HTTP Event Collector](https://docs.splunk.com/Documentation/Splunk/latest/Data/UsetheHTTPEventCollector).
+Sends each message as an event to Splunk through its HTTP Event Collector (HEC), for searching, dashboards and alerts in Splunk.
+
+Use it to send application logs, audit records, metrics or business events from any flow into a Splunk index.
+
+Input: the body is the event, as text or as structured data such as a Map, which is sent as a JSON object. By default the event sent to Splunk is a JSON object with the headers of the message under `headers` and the body under `body`; `bodyOnly` sends the body alone, and `headersOnly` the headers alone.
+
+Output: the message is unchanged.
+
+Good to know: when `index`, `source` and `sourceType` are not set, the events go to the index `camel` with the source and source type `camel`, so set them for your Splunk. The `host` field of the event is the IP address of the machine that runs the integration, unless `hostPayload` is set. It connects with HTTPS and checks the certificate of the server, unless `https` or `skipTlsVerify` say otherwise.
 
 ## Configuration Options
 
@@ -13,17 +21,17 @@ The following table summarizes the configuration options available for the `splu
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **splunkUrl** | Splunk URL | **Required** The URL of your Splunk server. No need to set the protocol prefix. | string |  | my\_server.splunkcloud.com:8088 |
-| **token** | Token | **Required** The Token of the HEC. Note it is not the user’s authentication token. | string |  |  |
-| **bodyOnly** | Body Only | Send to Splunk only data contained in the body. | boolean | false |  |
-| **headersOnly** | Headers Only | Send to Splunk only data contained in the headers. | boolean | false |  |
-| **hostPayload** | Host of the Event | The host field set in the data sent to Splunk, it is not related to the Splunk URL or the connection to Splunk server. | string |  |  |
-| **https** | Secure | Use a secure HTTPS connection. | boolean | true |  |
-| **index** | Index | Splunk index to write to. | string |  |  |
-| **skipTlsVerify** | Skip TLS Verification | Skip TLS verification. | boolean | false |  |
-| **source** | Source | The source named field of the data. | string |  |  |
-| **sourceType** | Source Type | The source named field of the data. | string |  |  |
-| **time** | Time | Time this event occurred. By default, the time is when this event hits the Splunk server. | string |  |  |
+| **splunkUrl** | Splunk URL | **Required** The host and port of the HTTP Event Collector of your Splunk, as `host:port`, without `https://`. The port of HEC is 8088 unless your Splunk administrator changed it. | string |  | my\_server.splunkcloud.com:8088 |
+| **token** | Token | **Required** The token of an HTTP Event Collector input, from Settings, Data Inputs, HTTP Event Collector in Splunk. It is a GUID such as `12345678-1234-1234-1234-123456789012`, not the token of a user; a value in another form makes the integration fail to start. | string |  |  |
+| **bodyOnly** | Body Only | If true, the event is the body alone, without the headers of the message. | boolean | false |  |
+| **headersOnly** | Headers Only | If true, the event is the headers of the message alone, as a JSON object, without the body. | boolean | false |  |
+| **hostPayload** | Host of the Event | The value of the `host` field of every event, such as the name of the machine or application that the events are about. It is not the address of Splunk. When it is not set, the IP address of the machine that runs the integration is used. | string |  | web-1 |
+| **https** | Secure | If true, it connects with HTTPS. Set it to false only for an HTTP Event Collector without TLS. | boolean | true |  |
+| **index** | Index | The Splunk index to write the events to. The token must be allowed to write to it. When it is not set, the index `camel` is used. | string |  | main |
+| **skipTlsVerify** | Skip TLS Verification | If true, the certificate of the Splunk server is not checked. Use it only for tests with a self-signed certificate. | boolean | false |  |
+| **source** | Source | The value of the `source` field of every event, which tells where the events come from. When it is not set, `camel` is used. | string |  | shop-orders |
+| **sourceType** | Source Type | The value of the `sourcetype` field of every event, which tells Splunk how to read the events, such as `_json`. When it is not set, `camel` is used. | string |  | \_json |
+| **time** | Time | The time of every event, as the number of seconds since 1 January 1970 (UTC). When it is not set, Splunk uses the time the event arrives. | string |  | 1700000000 |
 
 ## Dependencies
 

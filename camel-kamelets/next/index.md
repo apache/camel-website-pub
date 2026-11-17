@@ -10,7 +10,7 @@ Kamelets were originally born for Kubernetes and they have eventually moved to b
 
 ## Development guide
 
-Kamelets are extensible components. Look at the guide and learn [how to develop a new Kamelet](development.md).
+Kamelets are extensible components. Look at the guide and learn [how to develop a new Kamelet](development.md), and [how to document it](documenting.md) for people and AI assistants that do not know Camel.
 
 ## Compatibility Matrix
 
@@ -30,6 +30,8 @@ Consult the Kamelets User Guide for information about how to use these.
 [Camel Kamelets API](apis/spec.md)
 
 [Camel Kamelets API](apis/spec.md)
+
+[Documenting a Kamelet](documenting.md)
 
  [![avro deserialize action](_images/kamelets/avro-deserialize-action.svg) Avro Deserialize Action](avro-deserialize-action.html)
 

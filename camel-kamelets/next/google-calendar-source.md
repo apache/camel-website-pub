@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive event data from Google Calendar.
+Receives the events of a Google Calendar, such as meetings and appointments, one message per event, by asking the calendar for events at a regular interval.
+
+Use it to act on calendar entries, for example to send a reminder before a meeting, copy new appointments into another system, or notify a team when a booking is made.
+
+Output: the body is the event as JSON text, with the fields of the Google Calendar API such as `id`, `summary`, `start` and `attendees`. The `CamelGoogleCalendarEventId` header gives the ID of the event.
+
+Good to know: by default it only receives the events that have not ended yet at the time of the poll (`consumeFromNow`). With `syncFlow` set to true, each poll after the first asks only for the events that are new or changed since the previous one. It logs in to Google with OAuth: an OAuth client of a Google Cloud project, and an access token and a refresh token of a Google account that may read the calendar.
 
 ## Configuration Options
 
@@ -13,16 +19,16 @@ The following table summarizes the configuration options available for the `goog
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **accessToken** | Access Token | **Required** The OAuth 2 access token for the Google Calendar application. This token typically expires after an hour. For long term usage, set the `refreshToken` property. | string |  |  |
-| **applicationName** | Application name | **Required** The Google Calendar application name. | string |  |  |
-| **calendarId** | Calendar ID | **Required** The calendar ID to use as the source of event data. | string |  |  |
-| **clientId** | Client Id | **Required** The Client ID of the Google Calendar application. | string |  |  |
-| **clientSecret** | Client Secret | **Required** The Client secret of the Google Calendar application. | string |  |  |
-| **index** | Index | **Required** An index for the Google Calendar endpoint. | string |  |  |
-| **refreshToken** | Refresh Token | **Required** The OAuth 2 refresh token for the Google Calendar application. The Google Calendar component can obtain a new `accessToken` whenever the current one expires. Set this value for long term usage. | string |  |  |
-| **consumeFromNow** | Consume from now | Specfies to consume events in the calendar from now on. | boolean | true |  |
-| **delay** | Delay | The number of milliseconds before the next poll. | integer | 500 |  |
-| **syncFlow** | Sync Flow | Specifies to sync events for incremental synchronization. | boolean | false |  |
+| **accessToken** | Access Token | **Required** An OAuth 2 access token of the Google account, with access to Google Calendar. It expires after about an hour; the Kamelet then gets a new one with `refreshToken`. | string |  |  |
+| **applicationName** | Application Name | **Required** A name for your application, sent to Google with each call, such as `my-company-calendar/1.0`. | string |  | my-company-calendar/1.0 |
+| **calendarId** | Calendar ID | **Required** The ID of the calendar to read, `primary` for the main calendar of the Google account, or the ID shown in the settings of the calendar under Integrate calendar, which looks like an email address. | string |  | primary |
+| **clientId** | Client ID | **Required** The client ID of an OAuth client, created in the Google Cloud console under APIs & Services > Credentials, in a project where the Google Calendar API is enabled. | string |  |  |
+| **clientSecret** | Client Secret | **Required** The client secret of the OAuth client of `clientId`. | string |  |  |
+| **index** | Index | **Required** Any name for this reader of the calendar, such as `events`. It is not sent to Google. | string |  | events |
+| **refreshToken** | Refresh Token | **Required** An OAuth 2 refresh token of the Google account, which the Kamelet uses to get a new access token when the current one expires. You get it together with the access token, for example from the Google OAuth 2.0 Playground. | string |  |  |
+| **consumeFromNow** | Consume from Now | If true, only the events that have not ended yet at the time of each poll are read. If false, past events are read too. | boolean | true |  |
+| **delay** | Delay | How long to wait between two polls of the calendar, in milliseconds. For example, 60000 is one minute. | integer | 500 | 60000 |
+| **syncFlow** | Sync Flow | If true, each poll after the first asks Google only for the events that were created, changed or cancelled since the previous poll. | boolean | false |  |
 
 ## Dependencies
 
@@ -81,7 +87,7 @@ This Kamelet uses OAuth 2.0 authentication to connect to Google Calendar. You ne
     
 -   Refresh Token for long-term usage (allows automatic token renewal)
     
--   Application Name registered in Google Cloud Console
+-   An application name of your choice, sent to Google with each call
     
 
 ### Output format

@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send data to an Apache Artemis message broker by using JMS Pooled.
+Sends each message to a queue or a topic in an Apache ActiveMQ Artemis broker, through JMS, reusing a pool of connections to the broker.
+
+Use it to hand work to another application through a queue, or to publish events on a topic, when messages flow steadily: it reuses its connections, where `jms-apache-artemis-sink` connects anew for each message. Use it also for a broker that needs a login, which goes in `username` and `password`.
+
+Input: text is sent as a JMS text message, bytes as a JMS bytes message, and a Map as a JMS map message. The headers of the message, except the Camel ones, are sent along as JMS properties of the message.
+
+Output: the message is unchanged.
+
+Good to know: Messages go to a queue unless `destinationType` is `topic`, and a message sent to a topic reaches only the receivers subscribed at that moment. It connects with no TLS unless `brokerURL` asks for it. It does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does.
 
 ## Configuration Options
 
@@ -13,14 +21,14 @@ The following table summarizes the configuration options available for the `jms-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **brokerURL** | Broker URL | **Required** The JMS URL. | string |  | tcp://my-host:61616 |
-| **destinationName** | Destination Name | **Required** The JMS destination name. | string |  | person |
-| **connectionIdleTimeout** | Connection Idle Timeout | The maximum time a pooled Connection can sit unused before it is eligible for removal (in milliseconds). | integer | 30000 |  |
-| **destinationType** | Destination Type | The JMS destination type (queue or topic). | string | queue |  |
-| **maxIdleSessionsPerConnection** | Max Idle Sessions Per Connection | The number of idle sessions allowed per connection before they are closed. | integer | 500 |  |
-| **maxSessionsPerConnection** | Max Sessions Per Connection | The maximum number of pooled sessions per connection in the pool. | integer | 500 |  |
-| **password** | Broker Password | The JMS Broker Password. | string |  |  |
-| **username** | Broker Username | The JMS Broker Username. | string |  |  |
+| **brokerURL** | Broker URL | **Required** The address of the Artemis broker, as `tcp://host:port`; the usual port is 61616. Add `?sslEnabled=true` for TLS. | string |  | tcp://localhost:61616 |
+| **destinationName** | Queue or Topic Name | **Required** The name of the queue or topic to send the messages to. | string |  | orders |
+| **connectionIdleTimeout** | Connection Idle Timeout | How long a connection of the pool can stay unused before it is closed, in milliseconds. For example, 30000 is 30 seconds. | integer | 30000 |  |
+| **destinationType** | Queue or Topic | Whether `destinationName` is a queue (`queue`) or a topic (`topic`). A queue keeps each message until one receiver takes it; a topic hands each message to every receiver subscribed at that moment. | string | queue |  |
+| **maxIdleSessionsPerConnection** | Max Idle Sessions Per Connection | How many unused sessions each connection of the pool keeps open for reuse. Unused sessions beyond this number are closed. | integer | 500 |  |
+| **maxSessionsPerConnection** | Max Sessions Per Connection | The most sessions that can be open at the same time on each connection of the pool. Each message being sent or received uses one session. | integer | 500 |  |
+| **password** | Broker Password | The password to log in to the broker with, for the user `username`. | string |  |  |
+| **username** | Broker Username | The user name to log in to the broker with. Leave it empty for a broker that accepts clients without a login. | string |  |  |
 
 ## Dependencies
 

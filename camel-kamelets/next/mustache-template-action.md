@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Apply a Mustache Template.
+Builds a new message body from a Mustache template, filling in values from the incoming message.
+
+Use it to turn data into text for people or for another system, such as the text of an email or a chat message, or a small JSON or XML document, without writing code. To reshape JSON into other JSON, `jsonata-action` or `jslt-action` is often simpler.
+
+Input: any body. The template sees the body as `{{body}}` and a header as `{{headers.name}}`.
+
+Output: the body is the text the template produced. The headers are kept.
+
+Good to know: the template is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message.
 
 ## Configuration Options
 
@@ -13,7 +21,7 @@ The following table summarizes the configuration options available for the `must
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **template** | Template | **Required** The inline template. | string |  | file:////template.mustache |
+| **template** | Template | **Required** Where to load the Mustache template from, not the Mustache template itself: `file://` followed by the path of a file, `classpath://` followed by a resource in the application, or an `http://` or `https://` URL. | string |  | file:////template.mustache |
 
 ## Dependencies
 

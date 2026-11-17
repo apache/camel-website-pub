@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Upload data to MinIO.
+Uploads each message as a file (object) to a bucket in MinIO, the S3-compatible object storage.
+
+Use it to store data in MinIO, such as reports, exports, images or received messages to keep as an archive. For Amazon S3 use `aws-s3-sink`, and for the S3 gateway of Ceph use `ceph-sink`.
+
+Input: the body is the content of the file, as text, bytes or a stream. When `keyName` is set, every message is stored under that name. Otherwise the name of the file comes from the optional `file` header, or the `ce-file` header, and is a generated unique name when neither is set.
+
+Output: the body is unchanged. The `CamelMinioObjectName` header holds the name the file was stored under, unless `keyName` is set.
+
+Good to know: a file with the same name is overwritten, so with `keyName` set each message replaces the previous one. When `keyName` is set, the `file` and `ce-file` headers are ignored.
 
 ## Configuration Options
 
@@ -13,12 +21,12 @@ The following table summarizes the configuration options available for the `mini
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **accessKey** | Access Key | **Required** The access key obtained from MinIO. | string |  |  |
-| **bucketName** | Bucket Name | **Required** The Minio Bucket name. | string |  |  |
-| **endpoint** | Endpoint | **Required** The MinIO Endpoint. You can specify an URL, domain name, IPv4 address, or IPv6 address. | string |  | http://localhost:9000 |
-| **secretKey** | Secret Key | **Required** The secret key obtained from MinIO. | string |  |  |
-| **autoCreateBucket** | Autocreate Bucket | Specify to automatically create the MinIO bucket. | boolean | false |  |
-| **keyName** | Key Name | The key name for saving an element in the bucket. | string |  |  |
+| **accessKey** | Access Key | **Required** The access key to log in to MinIO with, such as the access key of a key pair created in the MinIO Console, or the name of a MinIO user. | string |  |  |
+| **bucketName** | Bucket Name | **Required** The name of the bucket to store the files in. | string |  | my-bucket |
+| **endpoint** | Endpoint | **Required** The address of the MinIO server, as a URL with the port, such as `[http://localhost:9000](http://localhost:9000)`. Use `https://` when the server has TLS. | string |  | http://localhost:9000 |
+| **secretKey** | Secret Key | **Required** The secret key that goes with `accessKey`, or the password of the MinIO user. | string |  |  |
+| **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist yet. If false, the bucket must already exist. | boolean | false |  |
+| **keyName** | Key Name | The name to store every file under, with its folder if any. When it is not set, the name comes from the `file` or `ce-file` header of each message, or is generated. | string |  | reports/latest.csv |
 
 ## Dependencies
 
@@ -82,7 +90,7 @@ The Kamelet can optionally auto-create buckets if they don’t exist, providing 
 
 ### Object Naming
 
-Object names can be specified through configuration or derived from message headers (`file` or `ce-file`). If no name is provided, the exchange ID is used as the object name.
+When the `keyName` option is set, every message is stored under that name, and the `file` and `ce-file` headers are ignored. Otherwise the object name comes from the `file` header, or the `ce-file` header, and is a generated unique name when neither is set.
 
 ### Deployment Flexibility
 

@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Receive data from Kafka topics on Azure Eventhubs combined with Azure Schema Registry.
+Receives each Avro record from event hubs in Azure Event Hubs, through its Kafka interface, with the schema kept in Azure Schema Registry.
+
+Use it to read Avro records that other applications write to Azure Event Hubs with the schema of the registry. For many records in one message use `kafka-batch-azure-schema-registry-source`; for event hubs without a schema use `azure-eventhubs-source`.
+
+Output: the body is the value of the record as an object of the `specificAvroValueType` class. The `kafka-topic`, `kafka-key`, `kafka-partition`, `kafka-offset` and `kafka-timestamp` (in milliseconds since 1970) headers say where the record came from. They are also set as `ce-kafkatopic`, `ce-kafkakey` and so on, and as the `CamelKafka*` headers that the Kafka actions read. The record headers become message headers, as text unless `deserializeHeaders` is false.
+
+Good to know: it logs in to Event Hubs with the connection string in `password`, and to the schema registry with the Azure credentials of the environment the integration runs in, such as the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` environment variables of a service principal, or a managed identity. The schemas must be in a schema group named `avro`. A new consumer group starts at the newest records, unless `autoOffsetReset` is `earliest`. Without `consumerGroup`, every start uses a new group, so the records sent while the integration was stopped are skipped.
 
 ## Configuration Options
 
@@ -13,21 +19,21 @@ The following table summarizes the configuration options available for the `kafk
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **azureRegistryUrl** | Azure Schema Registry URL | **Required** The Apicurio Schema Registry URL. | string |  |  |
-| **bootstrapServers** | Bootstrap Servers | **Required** Comma separated list of Kafka Broker URLs. | string |  |  |
-| **password** | Password | **Required** Password to authenticate to kafka. | string |  |  |
-| **topic** | Topic Names | **Required** Comma separated list of Kafka topic names. | string |  |  |
-| **allowManualCommit** | Allow Manual Commit | Whether to allow doing manual commits. | boolean | false |  |
-| **autoCommitEnable** | Auto Commit Enable | If true, periodically commit to ZooKeeper the offset of messages already fetched by the consumer. | boolean | true |  |
-| **autoOffsetReset** | Auto Offset Reset | What to do when there is no initial offset. There are 3 enums and the value can be one of latest, earliest, none. | string | latest |  |
-| **consumerGroup** | Consumer Group | A string that uniquely identifies the group of consumers to which this source belongs. | string |  | my-group-id |
-| **deserializeHeaders** | Automatically Deserialize Headers | When enabled the Kamelet source will deserialize all message headers to String representation. | boolean | true |  |
-| **pollOnError** | Poll On Error Behavior | What to do if kafka threw an exception while polling for new messages. There are 5 enums and the value can be one of `DISCARD`, `ERROR_HANDLER`, `RECONNECT`, `RETRY`, `STOP`. | string | ERROR\_HANDLER |  |
-| **saslMechanism** | SASL Mechanism | The Simple Authentication and Security Layer (SASL) Mechanism used. | string | PLAIN |  |
-| **securityProtocol** | Security Protocol | Protocol used to communicate with brokers. SASL\_PLAINTEXT, PLAINTEXT, SASL\_SSL and SSL are supported. | string | SASL\_SSL |  |
-| **specificAvroValueType** | Specific Avro Value Type | The Specific Type Avro will have to deal with. | string |  | com.example.Order |
-| **topicIsPattern** | Topic Is Pattern | Whether the topic is a pattern (regular expression). This can be used to subscribe to dynamic number of topics matching the pattern. | boolean | false |  |
-| **valueDeserializer** | Value Deserializer | Deserializer class for value that implements the Deserializer interface. | string | com.microsoft.azure.schemaregistry.kafka.avro.KafkaAvroDeserializer |  |
+| **azureRegistryUrl** | Azure Schema Registry URL | **Required** The URL of the Azure Schema Registry, which is the address of the Event Hubs namespace that holds it, as `[https://<namespace>.servicebus.windows.net](https://\<namespace\>.servicebus.windows.net)`. | string |  | https://my-namespace.servicebus.windows.net |
+| **bootstrapServers** | Bootstrap Servers | **Required** The Kafka address of the Event Hubs namespace, as `<namespace>.servicebus.windows.net:9093`. | string |  | my-namespace.servicebus.windows.net:9093 |
+| **password** | Connection String | **Required** The connection string of the Event Hubs namespace, which starts with `Endpoint=sb://`. Find it in the Azure portal, under Shared access policies of the namespace. | string |  |  |
+| **topic** | Event Hub Names | **Required** The event hubs to read from, which Kafka calls topics, separated by commas. When `topicIsPattern` is true, a regular expression that their names must match instead. | string |  | orders |
+| **allowManualCommit** | Allow Manual Commit | If true, each message carries what `kafka-manual-commit-action` needs to save the position of its record in Kafka. Set `autoCommitEnable` to false too, or the position is also saved automatically. | boolean | false |  |
+| **autoCommitEnable** | Auto Commit | If true, the position reached in each partition (the offset) is saved in Kafka automatically every 5 seconds, so that a restarted integration goes on from there. Set it to false together with `allowManualCommit` true to save the position yourself with `kafka-manual-commit-action`. | boolean | true |  |
+| **autoOffsetReset** | Auto Offset Reset | Where to start when the consumer group has no saved position yet: `latest` reads only the records sent from now on, `earliest` reads all the records still in the topic, and `none` fails. | string | latest | earliest |
+| **consumerGroup** | Consumer Group | The name of the consumer group. Integrations with the same group share the records of the topics between them, and the group remembers the position reached, so that a restarted integration goes on where it stopped. When it is not set, a new random group is used on every start. | string |  | my-group-id |
+| **deserializeHeaders** | Automatically Deserialize Headers | If true, the values of the record headers are turned into text. If false, they stay bytes. | boolean | true |  |
+| **pollOnError** | Poll On Error Behavior | What to do when reading from Kafka fails: `ERROR_HANDLER` logs the error and goes on with the next records, `DISCARD` skips the records that failed, `RECONNECT` connects again and retries, `RETRY` reads the same records again, and `STOP` stops reading until the integration is restarted. Enum values: \* DISCARD \* ERROR\_HANDLER \* RECONNECT \* RETRY \* STOP | string | ERROR\_HANDLER |  |
+| **saslMechanism** | SASL Mechanism | The login method. Keep the default `PLAIN`, which the login with the connection string in `password` needs. | string | PLAIN |  |
+| **securityProtocol** | Security Protocol | How to connect to Event Hubs. Keep the default `SASL_SSL`, a login over TLS, which Event Hubs requires. The other values are `SASL_PLAINTEXT`, `PLAINTEXT` and `SSL`. | string | SASL\_SSL |  |
+| **specificAvroValueType** | Specific Avro Value Type | The full name of the Java class generated from the Avro schema of the records, into which each record is read. The class must be part of the integration. The Kamelet does not start without this option, although it is not marked as required. | string |  | com.example.Order |
+| **topicIsPattern** | Topic Is Pattern | If true, `topic` is a regular expression, such as `orders-.*`, and the Kamelet reads from every topic whose name matches it. | boolean | false |  |
+| **valueDeserializer** | Value Deserializer | The Java class that turns the value of the record into the body. The default reads Avro with the schema from Azure Schema Registry. | string | com.microsoft.azure.schemaregistry.kafka.avro.KafkaAvroDeserializer |  |
 
 ## Dependencies
 
@@ -140,8 +146,10 @@ spec:
       name: kafka-azure-schema-registry-source
     properties:
       topic: "my-topic"
-      bootstrapServers: "kafka-broker1:9092,kafka-broker2:9092"
+      bootstrapServers: "my-registry.servicebus.windows.net:9093"
       azureRegistryUrl: "https://my-registry.servicebus.windows.net"
+      password: "Endpoint=sb://my-registry.servicebus.windows.net/;SharedAccessKeyName=...;SharedAccessKey=..."
+      specificAvroValueType: "com.example.Order"
   sink:
     ref:
       kind: Service

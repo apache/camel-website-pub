@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive pull request From GitHub.
+Receives each new pull request opened in a GitHub repository, one message per pull request, by asking the GitHub API for new open pull requests.
+
+Use it to react when someone proposes a change, for example to announce the pull request in a chat channel, open a review ticket or start a check. To receive the comments on pull requests, use `github-pullrequest-comment-source`.
+
+Output: the body is the pull request as JSON text. The `CamelGitHubPullRequest` header gives its number, and `CamelGitHubPullRequestHeadCommitSha` the SHA of its latest commit.
+
+Good to know: only the pull requests opened after the start are sent, once each; updates, merges and closes are not. It works with github.com, not with GitHub Enterprise Server. It asks GitHub for new pull requests once a minute by default (`delay`), and every request counts against the API rate limit of the token.
 
 ## Configuration Options
 
@@ -13,9 +19,10 @@ The following table summarizes the configuration options available for the `gith
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **oauthToken** | OAuth Token | **Required** OAuth token. | string |  |  |
-| **repoName** | Repository Name | **Required** The GitHub Repository name. | string |  |  |
-| **repoOwner** | Repository Owner | **Required** The repository owner. | string |  |  |
+| **oauthToken** | OAuth Token | **Required** A GitHub personal access token, created on GitHub under Settings, Developer settings, Personal access tokens. It needs read access to the repository and its pull requests. | string |  |  |
+| **repoName** | Repository Name | **Required** The name of the repository, such as `camel` in `[https://github.com/apache/camel](https://github.com/apache/camel)`. | string |  | camel |
+| **repoOwner** | Repository Owner | **Required** The user or organization that owns the repository, such as `apache` in `[https://github.com/apache/camel](https://github.com/apache/camel)`. | string |  | apache |
+| **delay** | Delay | How long to wait between two polls of GitHub, in milliseconds. For example, 60000 is one minute. | integer | 60000 |  |
 
 ## Dependencies
 

@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Consume data from MongoDB.
+Reads the documents of a capped collection in a MongoDB database, first those already there and then each new one as it is added, one message per document, as JSON text.
+
+Use it to pass on records that an application appends to a capped collection, such as log entries or events, as they arrive. For a normal collection, or to also see updates and deletes, use `mongodb-changes-stream-source`. To write documents, use `mongodb-sink`.
+
+Output: the body is one document as JSON text. An `_id` that is an ObjectId comes out as an object with only its time (`timestamp` and `date`), not as the ID text, and the format of dates depends on the Camel version. The `CamelMongoDbDatabase` and `CamelMongoDbCollection` headers name where the document comes from.
+
+Good to know: the collection must be capped (created with a fixed size), or the Kamelet fails to start. Each time the integration starts, it reads the whole collection again from the start, unless `persistentTailTracking` is true. It connects with TLS by default; set `ssl` to false for a MongoDB without TLS, such as a local one.
 
 ## Configuration Options
 
@@ -13,15 +19,15 @@ The following table summarizes the configuration options available for the `mong
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **collection** | MongoDB Collection | **Required** The name of the MongoDB collection to bind to this endpoint. | string |  |  |
-| **database** | MongoDB Database | **Required** The name of the MongoDB database. | string |  |  |
-| **hosts** | MongoDB Hosts | **Required** A comma-separated list of MongoDB host addresses in `host:port` format. | string |  |  |
-| **password** | MongoDB Password | The user password for accessing MongoDB. | string |  |  |
-| **persistentTailTracking** | MongoDB Persistent Tail Tracking | Specifies to enable persistent tail tracking, which is a mechanism to keep track of the last consumed data across system restarts. The next time the system is up, the endpoint recovers the cursor from the point where it last stopped consuimg data. This option will only work on capped collections. | boolean | false |  |
-| **ssl** | Enable Ssl for Mongodb Connection | whether to enable ssl connection to mongodb. | boolean | true |  |
-| **sslValidationEnabled** | Enables Ssl Certificates Validation and Host name checks. | IMPORTANT this should be disabled only in test environment since can pose security issues. | boolean | true |  |
-| **tailTrackIncreasingField** | MongoDB Tail Track Increasing Field | The correlation field in the incoming data which is of increasing nature and is used to position the tailing cursor every time it is generated. | string |  |  |
-| **username** | MongoDB Username | The username for accessing MongoDB. The username must be present in the MongoDB’s authentication database (`authenticationDatabase`). By default, the MongoDB `authenticationDatabase` is 'admin'. | string |  |  |
+| **collection** | MongoDB Collection | **Required** The name of the capped collection to read. | string |  | events |
+| **database** | MongoDB Database | **Required** The name of the database that holds the collection. | string |  | shop |
+| **hosts** | MongoDB Hosts | **Required** The address of one or more MongoDB servers, as `host:port`, separated by commas. MongoDB uses port 27017 unless it was set up otherwise. For a replica set, list its members. | string |  | mongo1.example.com:27017,mongo2.example.com:27017 |
+| **password** | MongoDB Password | The password of the MongoDB user `username`. | string |  |  |
+| **persistentTailTracking** | Remember Last Document | If true, the Kamelet stores the `tailTrackIncreasingField` value of the last document it read in the `camelTailTracking` collection of the same database, and after a restart goes on from there instead of reading the whole collection again. Needs `tailTrackIncreasingField`. | boolean | false |  |
+| **ssl** | Use TLS | Whether to connect with TLS (SSL). Set it to false for a MongoDB that does not offer TLS. | boolean | true |  |
+| **sslValidationEnabled** | Check TLS Certificate | Whether to check the certificate and the host name of the server when `ssl` is true. Set it to false only for tests, as the connection can then be intercepted. | boolean | true |  |
+| **tailTrackIncreasingField** | Increasing Field | The name of a field whose value grows with each new document, such as a sequence number or a time, used to find the place to go on reading from. Required when `persistentTailTracking` is true. | string |  | seq |
+| **username** | MongoDB Username | The MongoDB user to log in as, defined in the `admin` database. Leave it empty for a MongoDB that does not ask for a login. | string |  |  |
 
 ## Dependencies
 
@@ -80,7 +86,7 @@ The MongoDB Source Kamelet supports the following configurations:
 
 -   **Hosts**: MongoDB server hosts and ports (required)
     
--   **Collection**: MongoDB collection name to query (required)
+-   **Collection**: MongoDB collection name to read; it must be a capped collection (required)
     
 -   **Database**: MongoDB database name (required)
     
@@ -88,36 +94,18 @@ The MongoDB Source Kamelet supports the following configurations:
     
 -   **Password**: Password for authentication (optional)
     
--   **Query**: MongoDB query filter in JSON format
+-   **SSL**: Whether to connect with TLS (default: true); set it to false for a MongoDB without TLS
     
--   **Tail**: Enable tailable cursor for real-time changes
+-   **Tail Track Increasing Field**: A field whose value grows with each new document
     
--   **Create Collection**: Auto-create collection if it doesn’t exist
+-   **Persistent Tail Tracking**: Remember the last document read across restarts (needs the increasing field)
     
 
 ### Output Format
 
-The Kamelet outputs MongoDB documents as JSON objects, preserving the original document structure including ObjectId fields.
+The Kamelet reads the documents of a capped collection with a tailable cursor: first the documents already there, then each new one as it is added. Each document is sent as one message, as JSON text.
 
 ### Usage Example
-
-```yaml
-- route:
-    from:
-      uri: "kamelet:mongodb-source"
-      parameters:
-        hosts: "mongodb.example.com:27017"
-        database: "analytics"
-        collection: "events"
-        username: "mongouser"
-        password: "mongopass"
-        query: '{"status": "active"}'
-      steps:
-        - to:
-            uri: "kamelet:log-sink"
-```
-
-### Example with Tailable Cursor
 
 ```yaml
 - route:
@@ -129,13 +117,14 @@ The Kamelet outputs MongoDB documents as JSON objects, preserving the original d
         collection: "app_logs"
         username: "mongouser"
         password: "mongopass"
-        tail: true
       steps:
         - to:
             uri: "kamelet:log-sink"
 ```
 
-### Replica Set Example
+### Example with Persistent Tail Tracking
+
+The Kamelet stores the `seq` value of the last document read in the `camelTailTracking` collection of the same database, and after a restart goes on from there.
 
 ```yaml
 - route:
@@ -144,18 +133,23 @@ The Kamelet outputs MongoDB documents as JSON objects, preserving the original d
       parameters:
         hosts: "mongo1.example.com:27017,mongo2.example.com:27017,mongo3.example.com:27017"
         database: "production"
-        collection: "orders"
+        collection: "events"
         username: "mongouser"
         password: "mongopass"
-        query: '{"created_at": {"$gte": {"$date": "2023-01-01T00:00:00Z"}}}'
+        tailTrackIncreasingField: "seq"
+        persistentTailTracking: true
       steps:
         - to:
             uri: "kamelet:log-sink"
 ```
 
-### Query Format
+### Capped Collections
 
-MongoDB queries should be provided in standard MongoDB JSON query format. The kamelet supports complex queries including operators like $gte, $lte, $in, etc.
+The collection must be capped, or the Kamelet fails to start. A capped collection is created with a fixed size, for example in `mongosh`:
+
+```javascript
+db.createCollection("events", { capped: true, size: 100000 })
+```
 
 ## Kamelet source file
 

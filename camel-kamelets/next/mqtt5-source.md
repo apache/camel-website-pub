@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Allows receiving messages from any endpoint that supports the MQTT v5 protocol, such as a message broker.
+Receives each message published to a topic on an MQTT broker, such as Eclipse Mosquitto or HiveMQ, with MQTT 5.
+
+Use it to collect readings and events from IoT devices and other MQTT clients, when the broker or the clients use MQTT 5. A topic with wildcards, such as `sensors/#`, receives from many topics at once. For a broker that only speaks MQTT 3.1.1, use `mqtt-source`.
+
+Output: the body is the payload, as bytes. The `CamelMqttTopic` header is the topic the message was published to, `CamelMqttQoS` its quality of service, and `CamelPahoMqtt5MsgProperties` holds the MQTT 5 properties of the message, such as its user properties.
+
+Good to know: it receives only the messages published while it is connected. Each running copy needs its own `clientId`: two clients with the same ID keep pushing each other off the broker and lose messages. When it is not set, a unique one is generated. It connects with no TLS unless `brokerUrl` starts with `ssl://`, and the integration fails to start when the broker cannot be reached.
 
 ## Configuration Options
 
@@ -13,11 +19,11 @@ The following table summarizes the configuration options available for the `mqtt
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **brokerUrl** | Broker URL | **Required** The URL of the broker where to establish the connection. | string |  | tcp://mosquitto:1883 |
-| **topic** | Topic | **Required** The topic to subscribe to. | string |  | mytopic |
-| **clientId** | Client ID | The client ID to use when connecting to the resource. | string | mqtt-source |  |
-| **password** | Password | Password to use when connecting to the MQTT v5 compliant broker. | string |  |  |
-| **username** | Username | Username to use when connecting to the MQTT v5 compliant broker. | string |  |  |
+| **brokerUrl** | Broker URL | **Required** The address of the MQTT broker, as `tcp://host:port` (usually port 1883), or `ssl://host:port` for TLS (usually port 8883). | string |  | tcp://mosquitto:1883 |
+| **topic** | Topic | **Required** The topic to subscribe to. `` ` matches one level of the topic and `#` all the levels below, as in `sensors//temperature `` or `sensors/#`. | string |  | sensors/# |
+| **clientId** | Client ID | The client ID that names this connection to the broker. It must be unique on the broker: a second client with the same ID pushes the first one off. When it is not set, a unique ID is generated. | string |  | sensor-reader-1 |
+| **password** | Password | The password to log in to the broker with, for the user `username`. | string |  |  |
+| **username** | Username | The user name to log in to the broker with. Leave it empty for a broker that accepts clients without a login. | string |  |  |
 
 ## Dependencies
 
@@ -62,54 +68,40 @@ You can now run it directly through the following command
 camel run route.yaml
 ```
 
-## Mqtt5 Source Kamelet Description
+## MQTT 5 Source Kamelet Description
 
-### Authentication methods
+### Authentication
 
-This Kamelet connects to Mqtt5 using appropriate authentication mechanisms:
-
--   Service-specific authentication methods
-    
--   API keys, tokens, or credential-based authentication
-    
--   Connection configuration
-    
+The Kamelet logs in to the broker with `username` and `password`, or without a login when they are not set. For TLS, use an `ssl://` address in `brokerUrl`.
 
 ### Output format
 
-The Kamelet consumes data from Mqtt5 and produces the data in JSON format.
+The body is the MQTT payload, as bytes; it is not turned into JSON. The `CamelMqttTopic` header is the topic of the message, `CamelMqttQoS` its quality of service, and `CamelPahoMqtt5MsgProperties` its MQTT 5 properties.
 
 ### Configuration
 
-The Kamelet requires connection parameters specific to Mqtt5:
-
--   Service connection details
+-   `topic`: the topic to subscribe to, with the `+` and `#` wildcards
     
--   Authentication credentials
+-   `brokerUrl`: the address of the broker, such as `tcp://mosquitto:1883`
     
--   Query or consumption parameters
+-   `clientId`: the client ID; a unique one is generated when it is not set
+    
+-   `username` and `password`: the login, when the broker needs one
     
 
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: mqtt5-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: mqtt5-source
-    properties:
-      # Add service-specific properties here
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:mqtt5-source"
+      parameters:
+        topic: "sensors/#"
+        brokerUrl: "tcp://mosquitto:1883"
+        clientId: "sensor-reader-1"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

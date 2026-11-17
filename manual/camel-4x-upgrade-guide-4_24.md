@@ -7,6 +7,12 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.23 to 4.24
 
+### Undertow servlet implementation
+
+`camel-undertow` now uses the Jakarta Servlet 6.1 implementation from Undertow EE, `io.undertow.ee:undertow-servlet`, instead of `io.undertow:undertow-servlet`. Undertow core continues to use `io.undertow:undertow-core` and has its own version. The Camel parent property for the servlet implementation changes from `undertow-servlet-version` to `undertow-ee-version`.
+
+Applications that declare or override the Undertow servlet dependency must migrate to the new coordinates. Remove or exclude the old servlet artifact from other dependencies: the two artifacts contain the same `io.undertow.servlet` packages and must not be included together. This also applies when combining `camel-undertow` with a Spring Boot Undertow server integration that uses Undertow EE.
+
 ### camel-opa - batch fail-open marker
 
 Batch evaluation now sets `CamelOpaDecisionFailedOpen=true` when any element proceeds because its decision point was unavailable and `failOpen=true`. Previously this marker was set only for single-element evaluation. Routes that inspect the marker after a batch should account for it applying to any element; the per-element outcome list identifies the affected elements. The existing `CamelOpaBatchDecision` Boolean list is unchanged.
@@ -78,6 +84,10 @@ Starting in 4.24:
 ### camel-core - throwException with an exception instance gets no suppressed exceptions
 
 A `throwException` step given an exception instance (`throwException(new MyException("…​"))` in Java, or a bean with `ref`) sets that one object on every message. The error handler no longer adds the previous exception of the message (such as the one an `onException` translates) to it as suppressed: the instance used to keep the exceptions of all the messages, and grew with each one. An exception from a predicate of `onException` (such as `handled`), a `doFinally`, an `onCompletion`, a saga compensation, or the completion of the aggregation strategy of a Multicast, Recipient List or Split is no longer added to it either, and is logged instead. Use `throwException(MyException.class, "…​")`, or `exceptionType` and `message`, to get a new exception for each message, with the previous exception as suppressed.
+
+### camel-core - a to with an expression in its endpoint uri logs a WARN
+
+A `to` resolves its endpoint once, when the route starts, so `to("jms:queue:${header.queue}")` sends every message to one queue named by the text of the expression. Camel now logs a WARN for such a `to` when it creates the route, and the WARN says to use `toD`. The route works as before. Only the endpoint path is checked, not the options after the `?`. The components that evaluate their path for each message are left alone: `language`, the `:#${…​}` parameters of `sql`, and the components whose path option is marked `supportSimpleExpression` in their metadata, which now includes the template of `sql-stored` and the bucket name of `aws2-s3`.
 
 ### camel-core-model - doTry keeps doCatch and doFinally in its outputs
 
@@ -309,6 +319,12 @@ The `sftp` component now gives the password to the server once per connection, a
 
 The WARN that a consumer of the `ftp`, `ftps`, `sftp` and `mina-sftp` components logs when it cannot connect, `Cannot connect/login to: …​ Will skip this poll.`, now gives the reason before `Will skip this poll.`, such as `due to: Auth fail for methods 'publickey,password'`, on one line. When the consumer connects but cannot create its starting directory (`autoCreate=true`), it now logs `Cannot auto-create starting directory <directory> at: …​ due to: …​ Will skip this poll.` instead. See the [SFTP component](../components/4.22.x/sftp-component.md).
 
+### camel-smb - a starting directory that cannot be created
+
+When the server refuses to create the starting directory of the `smb` consumer as the route starts (`autoCreate=true`), such as `STATUS_ACCESS_DENIED` on a read-only share, the route now starts and the consumer tries again on each poll, as the [Camel 4.13 upgrade guide](camel-4x-upgrade-guide-4_13.html#_camel_file_camel_ftp_camel_smb_camel_azure_files) describes. Before, the route failed to start. `SmbOperations.buildDirectory` now throws a `GenericFileOperationFailedException` with the smbj exception as its cause, as the ftp and sftp operations do. The producer and the moves that create a directory get this exception type too, and still fail as before when the server refuses to create it. An `onException` or `doCatch` for the smbj exception still matches it, as the cause.
+
+When the `smb` consumer connects but cannot create its starting directory (`autoCreate=true`), it now logs `Cannot auto-create starting directory <directory> at: …​ due to: …​ Will skip this poll.`, once. Before, it logged `Cannot connect/login to: …​ Will skip this poll.`, or nothing when an earlier poll had already logged that it could not connect. The `Cannot connect/login to: …​ Will skip this poll.` WARN now gives the reason before `Will skip this poll.`, such as `due to: Connection refused`, on one line.
+
 ### camel-kafka - exactlyOnce: a rejected send that a doCatch catches skips the record
 
 With `exactlyOnce`, a Kafka send through the source producer after an earlier send failed in the same transaction is rejected and marks the exchange rollback-only (a redelivery of the failed send, or another send such as in a `loop`). When a `doCatch` catches that rejected send in the route of the send, the failure now counts as handled, as when an error handler handles it: the output transaction is aborted and the source offsets are committed alone, so the record is skipped. Before, the source transaction was rolled back and the record replayed. A `doCatch` of a route that called the route of the send (for example with `direct`) behaves the same way, as it did in 4.23. To replay the record, throw the exception again in the `doCatch` block, or end it with `rollback()`.
@@ -320,6 +336,14 @@ With the `DefaultKafkaManualAsyncCommitFactory`, `KafkaManualCommit.commit()` re
 ### camel-kafka - each consumer of consumersCount gets its own group instance id
 
 With `groupInstanceId` (or `additionalProperties.group.instance.id`) and `consumersCount` greater than 1, the consumer with index n now joins the group with the id `<groupInstanceId>-n`, for example `pod-1-0`, `pod-1-1` and `pod-1-2`. Before, all the consumers used the same id and fenced each other in a loop (`FencedInstanceIdException`). With `consumersCount=1` the id is used as given. After the upgrade, the static member with the old id stays in the group until its session timeout (`sessionTimeoutMs`) expires.
+
+### camel-kafka - a consumer without groupId logs a WARN
+
+A Kafka consumer without `groupId` now logs a WARN when it starts. It still uses a generated consumer group id, a new one at each start: it does not resume from the offsets committed before a restart, and each instance of the application receives every record. Set `groupId` to use a stable consumer group. See the [Kafka component](../components/4.22.x/kafka-component.md).
+
+### camel-kafka - a consumer uses the group.id set in additionalProperties
+
+A Kafka consumer without `groupId` now uses the `group.id` set in `additionalProperties` (`additionalProperties.group.id` on the endpoint, or `camel.component.kafka.additional-properties[group.id]`). Before, the consumer replaced it with a generated group id, a new one at each start. Such a consumer now joins that group: it starts from the offsets committed by the group (or where `autoOffsetReset` says when the group has none), and the instances of the application that use the same group share the records. With `group.id` in the `additionalProperties` of the component, every consumer endpoint without `groupId` now joins that one group, where before each had a generated group of its own: routes that consume the same topic now share its records. Set `groupId` on each route that must receive every record. When both `groupId` and the `group.id` property are set, `groupId` is still used.
 
 ### camel-jms, camel-sjms, camel-sjms2 - an exception sent back with transferException is not rolled back
 
@@ -386,6 +410,18 @@ The endpoint options `authMethod=Bearer` and `authBearerToken` now send the toke
 ### camel-mdc - camel.routeId is the route being run
 
 The `camel.routeId` MDC value is now the id of the route that runs the step, as with the deprecated `camel.main.useMdcLogging`. Before, it was the id of the route that created the exchange, so the log lines of a route called with `direct:` (or another route-to-route endpoint) showed the id of the calling route.
+
+### camel-bindy - fixed-length trim keeps the value 0 of a number padded with '0'
+
+In a fixed-length record, a numeric `@DataField` with `paddingChar = '0'` and `trim = true` that only holds `0` characters (for example `000`) is now read as 0. Before, trimming removed every `0` and the field was read as empty: `null` for an object type such as `Integer` or `BigDecimal`, `MIN_VALUE` for a primitive such as `int`, the `defaultValue` of the field when it has one, and an error for a `required` field. Text fields, and numeric fields padded with another char, are not changed.
+
+### camel-cxf, camel-cxfrs - the former operationName and operationNamespace headers are not sent
+
+The `CamelCxfOperationName` and `CamelCxfOperationNamespace` headers replaced the `operationName` and `operationNamespace` headers (see the [4.21 upgrade guide](camel-4x-upgrade-guide-4_21.html#_camel_cxf)). The `cxf` producer does not read the former names. It now logs a WARN once when one of them is set without its replacement. The default `CxfHeaderFilterStrategy` filters `operationName` and `operationNamespace` again, as it did before the rename, so the service no longer receives them as HTTP headers. A route that maps a header named `operationName` to `CamelCxfOperationName` keeps working.
+
+The `cxf` producer also logs a WARN once when neither the `CamelCxfOperationName` header nor the `defaultOperationName` option selects the operation of a service with more than one operation. It then invokes the first operation that CXF returns, which is not the first one of the WSDL.
+
+The `cxfrs` producer does not read the former `operationName` header either. With the proxy-based client API (`httpClientAPI=false`) it still fails when `CamelCxfOperationName` is not set. The `NoSuchMethodException` now names that header, and says when `operationName` is set, in place of `Cannot find method with name: null`. The default `CxfRsHeaderFilterStrategy` filters a header named `operationName` again, as it did before the rename. The producer no longer sends it as an HTTP header, with either client API. The `SimpleConsumer` binding no longer returns it as a response header.
 
 ### Java
 
@@ -712,7 +748,7 @@ An application with strict reliability needs should not rely on Camel to react t
 
 `template.send(…​)`, `template.request(…​)` and `template.asyncSend(…​)` return the exchange (or its future) with the exception and do not throw it. `sendBody(…​)` and `requestBody(…​)` throw a `CamelExecutionException` that holds the `Error`, unless the failure was handled (such as by a dead letter channel, `onException(…​).handled(true)` or `doCatch`). A test that sends with `template.send(…​)` and asserts only inside a processor must now check the exception of the returned exchange (`exchange.getException()`), or send with `sendBody(…​)` or `requestBody(…​)`.
 
-The same now applies to an `Error` that is not a `VirtualMachineError` thrown by the expression of a `recipientList`, by the expression of a `split` with `synchronous=true` (or while a `multicast` or `recipientList` with `synchronous=true` prepares its parts), by the `AggregationStrategy` of a `split`, `multicast` or `recipientList` (also when its `timeout` is called), by the iterator of a `split` with `streaming()`, by a data type transformer (`transform` to a data type), and by the producer of a component built on the API component framework when it is not thrown by an API method called by reflection (for example when the producer creates its client, or calls a client method directly); an `Error` of an API method called by reflection already failed the exchange. Before, depending on the error handler, the route continued as if the step had succeeded, or the `Error` reached the caller. An `Error` of the `AggregationStrategy` or of the iterator of a streaming `split` (unless the EIP was `synchronous=true` or the exchange transacted, in both cases without `parallelProcessing`) reached the caller without the error handler, and the exchange stayed inflight until the CamelContext stopped; with `parallelProcessing` (or when the timeout was called) it was lost on a thread of the pool, and the caller got no answer. For the producer of an API component, the `Error` was lost on its thread. An `Error` of the `onPrepare` processor of a `split`, `multicast` or `recipientList` fails only the part it prepares, as an exception does, and the other parts are still sent. Before, no part was sent (for a streaming `split`, no part after it). The same applies to an `Error` that a part of a transacted `split`, `multicast` or `recipientList` (without `parallelProcessing`) throws to the EIP: before, the parts after it were not sent.
+The same now applies to an `Error` that is not a `VirtualMachineError` thrown by the expression of a `recipientList`, by the expression of a `split` with `synchronous=true` (or while a `multicast` or `recipientList` with `synchronous=true` prepares its parts), by the `AggregationStrategy` of a `split`, `multicast` or `recipientList` (also when its `timeout` is called), by the iterator of a `split` with `streaming()`, by a data type transformer (`transform` to a data type), and by the producer of a component built on the API component framework when it is not thrown by an API method called by reflection (for example when the producer creates its client, or calls a client method directly); an `Error` of an API method called by reflection already failed the exchange. Before, depending on the error handler, the route continued as if the step had succeeded, or the `Error` reached the caller. An `Error` of the `AggregationStrategy` or of the iterator of a streaming `split` (unless the EIP was `synchronous=true` or the exchange transacted, in both cases without `parallelProcessing`) reached the caller without the error handler, and the exchange stayed inflight until the CamelContext stopped; with `parallelProcessing` (or when the timeout was called) it was lost on a thread of the pool, and the caller got no answer. For the producer of an API component, the `Error` was lost on its thread. The same applies to an `Error` that is not a `VirtualMachineError` thrown by a producer injected with `@EndpointInject` or `@Produce` (or by the producer of a `@Produce` proxy) before it completes the exchange: the exchange fails with it, wrapped in a `CamelExecutionException`, and `process(exchange)` no longer throws it. Before, the `Error` reached the caller of `process(exchange)`, and the exchange stayed inflight. An `Error` of the `onPrepare` processor of a `split`, `multicast` or `recipientList` fails only the part it prepares, as an exception does, and the other parts are still sent. Before, no part was sent (for a streaming `split`, no part after it). The same applies to an `Error` that a part of a transacted `split`, `multicast` or `recipientList` (without `parallelProcessing`) throws to the EIP: before, the parts after it were not sent.
 
 There is no option for the old behaviour. See also [An Error thrown by a processor](error-handler.html#_an_error_thrown_by_a_processor).
 
@@ -2266,6 +2302,14 @@ If you set `updateIfValueString` or `deleteIfValueString` yourself, for example 
 
 The `createdAt` column must allow null. The repository checks this when it starts (in a transaction that it rolls back); with a `NOT NULL` column, or a MySQL/MariaDB `TIMESTAMP` with `explicit_defaults_for_timestamp=OFF`, it logs a WARN and keys stay locks as before, and a confirm sends no statement. Confirmed keys have no age, so housekeeping by `createdAt` does not delete them: to purge them by age, add a column of your own (such as `insertedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP`) or set a `confirmQuery` that also stores the time of the confirm, and purge by that column. With the `idempotent` read locks of the file consumer and the default `readLockRemoveOnCommit=false`, the name of every processed file stays in the table; when the key is only a read lock, set `readLockRemoveOnCommit=true` with `readLockIdempotentReleaseDelay`. With a custom table set by custom queries instead of `tableName`, set `confirmQuery` too; set it to null or empty to keep the old behaviour. All instances sharing the table must run this version: older ones see a confirmed key as absent (before 4.14.6 and 4.18.2 they take it over).
 
+### camel-sql - JdbcOrphanLockAwareIdempotentRepository does not take over the keys it holds
+
+`JdbcOrphanLockAwareIdempotentRepository` now treats a key that the instance itself holds (it added the key and has not confirmed or removed it yet) as a duplicate, whatever the age of its `createdAt`: on that instance `contains` returns true and `add` returns false. Before, when the keep-alive could not refresh the key for longer than `lockMaxAgeMillis` (the database could not be reached), the instance took its own key over, and a copy of a message that it was still processing was processed a second time.
+
+Another instance still takes such a key over, as it cannot tell the first instance from one that crashed: choose a `lockMaxAgeMillis` longer than the longest database outage the application must survive without processing a message twice. When an instance holds keys and its keep-alive has not refreshed them for longer than `lockMaxAgeMillis`, it now logs a WARN, and an INFO when it refreshes them again.
+
+Code that sets the `createdAt` of a key older than `lockMaxAgeMillis` and expects the repository that added the key to see it as absent, such as a test of the keep-alive, has to check the key with another repository instance.
+
 ### camel-jta - an exchange marked rollback only last rolls back its transaction
 
 In a `transacted()` route that uses a JTA transaction manager, `markRollbackOnlyLast()` now rolls back the transaction of that `transacted()` block, as it already did with the camel-spring transaction error handler. Before, the transaction was committed, and the marker was then cleared, so nothing showed that the rollback was skipped. The marker is still cleared afterwards, so an outer `transacted()` block does not see it.
@@ -3291,6 +3335,10 @@ When the consumer lists the bucket, a failure to get one of the listed objects (
 The `invokeFunction` operation of `alibaba-fc` now sends a stream or a file body (an `InputStream`, a `java.io.File`, or a `GenericFile` from a file consumer) as its bytes, as they are. Before, it read such a body as text and sent that text in UTF-8, which changed binary data. A `String` is still sent in UTF-8, a `byte[]` as it is, and no body as an empty payload.
 
 A body that does not convert to bytes, such as a `Map` or a POJO, is no longer sent as its `toString()`: it now fails with an `InvalidPayloadException`. Marshal such a body first, for example to JSON with `marshal().json()`.
+
+### camel-alibaba-fc - region is no longer marked as required
+
+The `region` option of `alibaba-fc` is no longer marked as required. To create the client, the Camel endpoint needs the `region` or the `endpoint` option. It needs neither when the `fcClient` option is set or autowired. So the endpoint validation of the catalog no longer reports a URI without `region` as missing a required option. The behavior of the component at runtime does not change. A URI with neither option still fails at the first message with `Region or endpoint is required`, unless the `fcClient` option is set or autowired.
 
 ### camel-dropbox - search and get read every page of the result
 
@@ -4644,6 +4692,10 @@ Other application events of the `ApplicationContext`, such as `ContextRefreshedE
 
 The producer used to hand the `MqttProperties` object of the `CamelPahoMqtt5MsgProperties` header to the client as it was. The client writes the outgoing topic alias into that object, and the parts of a split, multicast, recipient list, loop or wire tap of a received message share it, so once the broker’s Topic Alias Maximum was used up, later messages were delivered on the wrong topic. The producer now publishes a new `MqttProperties` with the payload format indicator, message expiry interval, content type, response topic, correlation data and user properties of the header object, which a publish no longer modifies. A topic alias or subscription identifiers set in the header object are not sent: the client assigns topic aliases for its connection, and subscription identifiers are sent by the server only.
 
+### camel-paho-mqtt5 - a subscription the broker refuses fails the consumer
+
+The consumer now checks the reason code of the SUBACK. When the broker refuses the subscription (a reason code of 0x80 or higher, such as 0x87 Not authorized), the subscribe fails with an `MqttException` that has that reason code, and the route does not start. When the subscription is refused after a reconnect (an automatic reconnect of the client, or the reconnect after a failed message with `manualAcksEnabled`), the route is restarted, and its start fails while the broker refuses the subscription; with a client given in the `client` option, an error is logged. Before, Paho returned normally from such a subscribe, so the route started and received no message of its topic.
+
 ### camel-wal - the unconfirmed offsets of the previous run are replayed after a restart
 
 `WriteAheadResumeStrategy` now does what it is documented to do after a restart: when the consumer starts and loads the resume cache (`loadCache()`), the strategy replays the offsets of the previous run that the wrapped resume strategy did not confirm, by calling `updateLastOffset` on the wrapped strategy. Before, `start()` truncated the log file before `loadCache()` read it, so nothing was replayed. Only the last offset of each key in the log counts: it is replayed when its entry is in state `NEW` or `FAILED`, and an earlier offset of the same key is not replayed. These entries stay in the log until the wrapped strategy confirms them through its callback; a wrapped strategy that never calls back gets the last offset of each such key again at every start. The Kafka consumer does not call `loadCache()`, so with it the entries are kept in the log but not replayed. A replay that fails, or an entry that the resume adapter cannot deserialize, is logged with a WARN and does not stop the start of the route. If the last record of the log is incomplete (the JVM stopped while writing it) or invalid, the entries before it are replayed and a WARN is logged; the route still starts. A file that is not a log of this format is replaced by a new log, as before, with a WARN.
@@ -4673,6 +4725,10 @@ When a `ClusteredRouteController` is stopped or shut down while the CamelContext
 ### camel-quartz - a route that keeps its trigger fires again when it is added again or after a restart
 
 With `deleteJob=false` (as with `pauseJob=true`), a route pauses its trigger when it stops, and only the same endpoint resumed it. A route that was removed and added again (a reload, a route template removed and added), and a route that started after a restart with a persistent job store that is not clustered, therefore never fired again. The route now marks the trigger it pauses, with the key `CamelQuartzTriggerPausedByCamel` in the `JobDataMap` of its job, and a route resumes a paused trigger with this mark when it starts. A trigger that was paused outside Camel (with the Quartz API or JMX) has no mark and stays paused; this now also holds when the same route is stopped and started again, which resumed such a trigger before. A trigger that Camel paused before this version has no mark either: resume it once with the Quartz API. A clustered job store is not changed, as Camel does not pause triggers there.
+
+### camel-quartz - a scheduler from the registry gets the CamelContext when the component starts
+
+With a Quartz `Scheduler` set on the quartz component or autowired from the registry, such as the scheduler of `spring-boot-starter-quartz`, the component now stores the CamelContext in the scheduler context when it starts, before the routes add their jobs. Before, it did so only once the CamelContext was fully started, so a trigger that fired in between on a scheduler that was already running failed with `No CamelContext could be found with name`. Such a job now runs its route if the route has started. The component now logs a WARN when this scheduler is already running when it starts, as a trigger that fires before its route has started is still lost (with Spring Boot, set `spring.quartz.auto-startup=false` to let Camel start it), and when the options `properties`, `propertiesRef` or `propertiesFile` are set, as they are not used with such a scheduler.
 
 ### camel-langchain4j-ingest - a media document whose type cannot be told is filtered
 
@@ -5175,6 +5231,40 @@ Eleven of the headers the component documents are never read by it. A route that
 | `CamelKeycloakBatchSize` | the bulk operations send every element of the list one by one, with no batching |
 
 Each is now deprecated, with a `deprecationNote` carrying the same information.
+
+### camel-hazelcast - the CamelHazelcastCacheType header is deprecated
+
+The `CamelHazelcastCacheType` header is neither set nor read by the component. It was documented for `hazelcast-multimap` only, and the multimap listener sets the cache name, the listener type, the listener action and the listener time, never the cache type:
+
+```java
+public static void setListenerHeaders(Exchange ex, String listenerType, String listenerAction, String cacheName) {
+    ex.getIn().setHeader(HazelcastConstants.CACHE_NAME, cacheName);
+    HazelcastComponentHelper.setListenerHeaders(ex, listenerType, listenerAction);
+}
+
+public static void setListenerHeaders(Exchange ex, String listenerType, String listenerAction) {
+    ex.getIn().setHeader(HazelcastConstants.LISTENER_ACTION, listenerAction);
+    ex.getIn().setHeader(HazelcastConstants.LISTENER_TYPE, listenerType);
+    ex.getIn().setHeader(HazelcastConstants.LISTENER_TIME, new Date().getTime());
+}
+```
+
+A route reading it gets `null`. It is now deprecated, with a `deprecationNote` that says so, and the rows for it were dropped from the consumer header tables of the `hazelcast-map` and `hazelcast-replicatedmap` pages, which also claimed their consumer sets it. Nothing replaces it: the cache the event came from is named by `CamelHazelcastCacheName`, and a route that needs to know which kind of cache that is can take it from the endpoint it consumes from.
+
+### camel-pdf - the CamelPdfDecryptionMaterial header is deprecated
+
+The `CamelPdfDecryptionMaterial` header has had no effect since Camel 2.21. PDFBox 2 decrypts a document when it is loaded, from the password argument of `Loader.loadPDF`, so the producer was changed to stop calling the removed `PDDocument.openProtection(DecryptionMaterial)` and has not read the header since. A route that sets it gets no error and no decryption.
+
+It is now deprecated, with a `deprecationNote` that says so. Remove the header and load the document with its password before it reaches the endpoint, in a `Processor`:
+
+```java
+from("direct:start")
+    .process(e -> e.getMessage().setBody(
+            Loader.loadPDF(e.getMessage().getBody(byte[].class), "secret")))
+    .to("pdf:extractText");
+```
+
+The `byte[]` type converter of the component loads without a password, so an encrypted PDF sent as bytes still has to be loaded this way.
 
 ### camel-whatsapp - both documented headers are deprecated
 

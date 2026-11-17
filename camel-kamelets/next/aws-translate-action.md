@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Translate a text in a specific language.
+Translates the text of each message from one language into another with Amazon Translate.
+
+Use it to translate customer messages, support tickets or product descriptions, for example from Italian into English before they are analyzed or stored.
+
+Input: the body is the text to translate.
+
+Output: the body is the translated text.
+
+Good to know: both languages are fixed by the options. Only the listed language codes can be chosen, although Amazon Translate knows more languages.
 
 ## Configuration Options
 
@@ -13,16 +21,16 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **region** | AWS Region | **Required** The AWS region to access. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  |  |
-| **sourceLanguage** | Source Language | **Required** The source language of the translating text. Enum values: \* ar \* zh \* zh-TW \* cs \* da \* nl \* en \* fi \* fr \* de \* he \* hi \* id \* it \* ja \* ko \* ms \* no \* fa \* pl \* pt \* ru \* es \* sv \* tr | string |  | it |
-| **targetLanguage** | Target Language | **Required** The target language of the translating text. Enum values: \* ar \* zh \* zh-TW \* cs \* da \* nl \* en \* fi \* fr \* de \* he \* hi \* id \* it \* ja \* ko \* ms \* no \* fa \* pl \* pt \* ru \* es \* sv \* tr | string |  | it |
-| **accessKey** | Access Key | The access key obtained from AWS. | string |  |  |
-| **profileCredentialsName** | Profile Credentials Name | If using a profile credentials provider this parameter sets the profile name. | string |  |  |
-| **secretKey** | Secret Key | The secret key obtained from AWS. | string |  |  |
-| **sessionToken** | Session Token | Amazon AWS Session Token used when the user needs to assume a IAM role. | string |  |  |
-| **useDefaultCredentialsProvider** | Default Credentials Provider | Set whether the Translate client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | boolean | false |  |
-| **useProfileCredentialsProvider** | Profile Credentials Provider | Set whether the Translate client should expect to load credentials through a profile credentials provider. | boolean | false |  |
-| **useSessionCredentials** | Session Credentials | Set whether the Translate client should expect to use Session Credentials. This is useful in situation in which the user needs to assume a IAM role for doing operations in Translate. | boolean | false |  |
+| **region** | AWS Region | **Required** The AWS region of Amazon Translate to use, such as `eu-west-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
+| **sourceLanguage** | Source Language | **Required** The language of the text, as a language code, such as `it` for Italian or `en` for English. Enum values: \* ar \* zh \* zh-TW \* cs \* da \* nl \* en \* fi \* fr \* de \* he \* hi \* id \* it \* ja \* ko \* ms \* no \* fa \* pl \* pt \* ru \* es \* sv \* tr | string |  | it |
+| **targetLanguage** | Target Language | **Required** The language to translate the text into, as a language code, such as `en` for English or `de` for German. Enum values: \* ar \* zh \* zh-TW \* cs \* da \* nl \* en \* fi \* fr \* de \* he \* hi \* id \* it \* ja \* ko \* ms \* no \* fa \* pl \* pt \* ru \* es \* sv \* tr | string |  | en |
+| **accessKey** | Access Key | The access key ID of an IAM user, which AWS gives when you create an access key for the user (in the AWS console: IAM, Users, Security credentials). Use it together with `secretKey`, or leave both empty and set `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` instead. | string |  |  |
+| **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
+| **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
+| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found the way the AWS SDK finds them: from the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the shared credentials file, or the IAM role of the machine, container or pod it runs on. Then `accessKey` and `secretKey` are not needed. | boolean | false |  |
+| **useProfileCredentialsProvider** | Profile Credentials Provider | If true, the credentials are read from a profile of the AWS credentials file (`~/.aws/credentials`), the one named in `profileCredentialsName`. | boolean | false |  |
+| **useSessionCredentials** | Session Credentials | If true, it logs in with temporary credentials, such as those of an assumed IAM role: `accessKey`, `secretKey` and `sessionToken` together. | boolean | false |  |
 
 ## Dependencies
 

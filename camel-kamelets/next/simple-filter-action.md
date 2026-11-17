@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Filter based on simple expression.
+Drops the messages for which a condition, written in the Camel Simple language, is true, and passes on all others.
+
+Use it to leave out the messages you do not want, for example the test events, with the condition `${header.type} == 'test'`. To keep only the messages that match a condition instead, use `predicate-filter-action` (a condition on a JSON body), `has-header-filter-action` or `header-matches-filter-action`.
+
+Input: any message.
+
+Output: the same message, unchanged, when the condition is false. When it is true, the message is dropped and nothing is sent on.
+
+Good to know: this is the opposite of the other filter actions of the catalog, which keep the messages that match. A condition on a header the message does not have is false, so such a message is passed on.
 
 ## Configuration Options
 
@@ -13,7 +21,7 @@ The following table summarizes the configuration options available for the `simp
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **expression** | Simple Expression | **Required** A simple expression to apply on the exchange to filter out some exchange. | string |  |  |
+| **expression** | Condition | **Required** The condition, in the Camel Simple language, that makes a message be dropped. `$\{body}` is the body and `$\{header.name}` the value of a header. For example, `$\{header.type} == 'test'` drops the messages whose `type` header is `test`, and `$\{header.amount} > 100` those whose `amount` header is more than 100. | string |  | ${header.type} == 'test' |
 
 ## Dependencies
 

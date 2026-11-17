@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Apply a Json Schema Template to validate the payload against.
+Checks that each JSON message matches a JSON Schema, and fails the messages that do not.
+
+Use it to stop bad data early, for example to reject the orders that miss a required field before they reach a database or another system. To keep or drop messages by a condition instead of failing them, use `predicate-filter-action`.
+
+Input: JSON text, as text, bytes or a stream, or parsed JSON from `json-deserialize-action`. A Map fails.
+
+Output: the same message, unchanged, when it matches the schema.
+
+Good to know: a message that does not match the schema, or that is not JSON, fails with an error that lists what is wrong; it is not dropped silently, so the error handling of the integration decides what happens to it. The schema is loaded from the `template` location; it cannot come from the message.
 
 ## Configuration Options
 
@@ -13,7 +21,7 @@ The following table summarizes the configuration options available for the `json
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **template** | Template | **Required** The inline template. | string |  | file:////template.json |
+| **template** | Schema Location | **Required** Where to load the JSON Schema from, not the JSON Schema itself: `file://` followed by the path of a file, `classpath://` followed by a resource in the application, or an `http://` or `https://` URL. | string |  | file:///etc/camel/order-schema.json |
 
 ## Dependencies
 

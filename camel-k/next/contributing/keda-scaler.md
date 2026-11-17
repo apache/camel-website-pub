@@ -130,7 +130,7 @@ The mapper only translates values needed by the scaler. It should not add unrela
     
 3.  Return the Camel component name from `Component`.
     
-4.  In `Map`, translate only relevant Camel URI path and parameter values to the metadata expected by the existing KEDA scaler, and return its scaler type.
+4.  In `Map`, translate only relevant Camel URI path and parameter values to the metadata expected by the existing KEDA scaler, and return its scaler type. Return an empty scaler type when the endpoint has nothing the scaler can measure; no trigger is then created for it.
     
 5.  Register the mapper with `keda.Register` in an `init` function.
     

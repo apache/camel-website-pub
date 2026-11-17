@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Returns the items of the collection provided of an OGC API Features server.
+Fetches the features of one collection, such as the lakes or the buildings of an area, from a server that implements the OGC API Features standard, and gives them as GeoJSON.
+
+Use it to bring map data from a geographic data service into a flow, for example to load the features of an area into a database or to check them against a list of places.
+
+Input: the body, when it is not empty, is added to the query of the request, as text such as `name=Lake Baikal`, so each message can ask for other features. An empty body asks only with the options.
+
+Output: the body is a GeoJSON feature collection, as JSON text, with at most `limit` features. The headers of the HTTP response, such as `Content-Type`, are set as headers.
+
+Good to know: `split` does not change what the next step receives: it still gets the whole collection, once per message. An HTTP error from the server, such as an unknown collection, fails the message.
 
 ## Configuration Options
 
@@ -13,12 +21,12 @@ The following table summarizes the configuration options available for the `ogca
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **collection** | Collection | **Required** Name of the collection we want to extract items from. | string |  |  |
-| **url** | URL | **Required** The URL to fetch for data. | string |  | https://emotional.byteroad.net |
-| **bbox** | Bounding Box | Bounding Box of the items we want to retrieve. | string | \-180,-90,180,90 | 160.6,-55.95,-170,-25.89 |
-| **limit** | Limit | Maximum number of items to retrieve. Must be a number between 1 and 10 000. | integer | 10 |  |
-| **query** | Query | Separated list by `&` of properties we want to query. | string |  | property1=1&property2=dos |
-| **split** | Split by Feature | When true, instead of returning the full geojson, split the message into each feature. | boolean | false |  |
+| **collection** | Collection | **Required** The id of the collection to read the features from, as listed by the service at `<url>/collections`. | string |  | lakes |
+| **url** | URL | **Required** The address of the OGC API Features service, the part before `/collections`. It must start with `http://` or `https://`. | string |  | https://demo.pygeoapi.io/master |
+| **bbox** | Bounding Box | The area to read the features from, as four numbers separated by commas: the west longitude, the south latitude, the east longitude and the north latitude, in degrees. The default is the whole world. | string | \-180,-90,180,90 | 160.6,-55.95,-170,-25.89 |
+| **limit** | Limit | The largest number of features to read for each message, between 1 and 10000. | integer | 10 |  |
+| **query** | Query | More query parameters for every request, in the form `name=value`, separated by `&`, such as filters on the properties of the features that the service supports. | string |  | property1=1&property2=dos |
+| **split** | Split by Feature | Meant to give each feature as a message of its own. In a route or a Pipe it does not change what the next step receives: the whole feature collection. | boolean | false |  |
 
 ## Dependencies
 

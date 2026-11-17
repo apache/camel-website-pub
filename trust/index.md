@@ -48,6 +48,12 @@ When we counted in June 2026, the community had fixed [7,070 out of 7,081 report
 
 [See the data](../blog/2026/06/camel-bug-fix-track-record/index.md)
 
+## Every change tested, on every supported branch
+
+Every pull request and every commit to `main` and the LTS branches is built and tested on GitHub Actions and the ASF Jenkins, across multiple JDK versions and on x86\_64, ppc64le, and s390x. The load keeps growing: through October 2026 alone, more than 6,000 pull requests were merged on `main` and 820 fixes were backported to the LTS lines, five times the year before. So we [invested in the CI](../blog/2026/11/camel-core-ci-improvements/index.md). A year ago, the full Jenkins test matrix came up green only one to four times a year. Today it is green several times a day, and a full build of `main` takes **1h24 instead of 5h45**. Flaky tests are tracked in Develocity and fixed rather than tolerated, and a small pull request gets its feedback in 20 minutes instead of 35. Fast, reliable feedback is what lets a security fix be reviewed, merged, and backported to every LTS line within days.
+
+[How we did it](../blog/2026/11/camel-core-ci-improvements/index.md)
+
 ## 500+ dependencies kept current
 
 Camel manages over 500 third-party dependencies. Across 20 minor releases, the community made [**2,449 dependency version updates**](../blog/2026/06/camel-dependency-updates/index.md) — an average of 122 per release. This quiet, invisible work keeps the framework secure and compatible, so you are not stuck waiting for a critical library upgrade.

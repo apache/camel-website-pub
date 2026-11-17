@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Execute system commands
+Runs a program or command on the machine where the integration runs, once for each message, with the body as its standard input.
+
+Use it to hand each message to an existing script or command-line tool, for example a script that imports a file or a tool that converts data, and to use what the program prints in the next step.
+
+Input: the body is written to the standard input of the program, when it is text, bytes, a stream or a file. Another body, or no body, runs the program without input.
+
+Output: when it is used inside a route, the body afterwards is what the program printed on its standard output, as a stream, or no body when it printed nothing. The `CamelExecExitValue` header is the exit code of the program, and `CamelExecStderr` what it printed on its standard error.
+
+Good to know: this Kamelet runs programs by design, with the rights of the integration, so never place it after a source of untrusted messages. `executable` is only the name or path of the program: arguments cannot be given, so to run a command with arguments, put it in a script. A program that ends with an error exit code does not fail the message; check `CamelExecExitValue`. A program that is not found fails the message.
 
 ## Configuration Options
 
@@ -13,7 +21,7 @@ The following table summarizes the configuration options available for the `exec
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **executable** | Executable Command | **Required** The command to execute. | string |  |  |
+| **executable** | Executable Command | **Required** The name of the program to run, found on the `PATH` of the machine, or its full path, without arguments. A value with a space, such as `ls -l`, fails, because no program has that name. | string |  | /opt/scripts/import-order.sh |
 
 ## Dependencies
 

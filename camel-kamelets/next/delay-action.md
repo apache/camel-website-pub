@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Delay the processing using a specific amount of time
+Holds each message for a fixed time, such as one second, before passing it on.
+
+Use it to slow down a flow, for example to give another system time to finish its work before the next step, or to space out the calls of a test. To limit how many messages pass per second or per minute, rather than holding each one, use `throttle-action`.
+
+Input: any message.
+
+Output: the same message, unchanged, after the wait.
 
 ## Configuration Options
 
@@ -13,7 +19,7 @@ The following table summarizes the configuration options available for the `dela
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **milliseconds** | Milliseconds | **Required** The number of milliseconds of delay. | integer |  | 1000 |
+| **milliseconds** | Delay in Milliseconds | **Required** How long to hold each message, in milliseconds. For example, 1000 is one second. | integer |  | 1000 |
 
 ## Dependencies
 

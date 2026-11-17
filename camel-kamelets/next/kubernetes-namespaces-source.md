@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Consume Events from Kubernetes Namespaces
+Watches the namespaces of a Kubernetes cluster and sends a message each time a namespace is created, changed or deleted.
+
+Use it to react when teams or applications are added to or removed from a cluster, for example to set up monitoring, quotas or access for each new namespace. For pods or nodes, use `kubernetes-pods-source` or `kubernetes-nodes-source`.
+
+Output: the body is the namespace as JSON text, in the same shape as `kubectl get namespace <name> -o json`. The `CamelKubernetesEventAction` header says what happened: `ADDED`, `MODIFIED` or `DELETED`.
+
+Good to know: when it starts, it first sends an `ADDED` message for every namespace that already exists. The token must be allowed to list and watch namespaces, which is a cluster-wide permission.
 
 ## Configuration Options
 
@@ -13,8 +19,8 @@ The following table summarizes the configuration options available for the `kube
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **masterUrl** | Kubernetes Master URL | **Required** The Kubernetes Cluster Master URL. | string |  |  |
-| **token** | Oauth Token | **Required** The Auth Token to connect to Kubernetes Cluster. | string |  |  |
+| **masterUrl** | Kubernetes Master URL | **Required** The address of the Kubernetes API server, as a URL that starts with `https://`, such as the `server` of the cluster in your kubeconfig file. | string |  | https://my-cluster.example.com:6443 |
+| **token** | Token | **Required** A bearer token to log in to the Kubernetes API with, such as the token of a service account created with `kubectl create token <service-account>`. | string |  |  |
 
 ## Dependencies
 
@@ -65,27 +71,15 @@ camel run route.yaml
 
 ### Authentication methods
 
-This Kamelet connects to Kubernetes using:
-
--   Service account authentication (recommended in cluster)
-    
--   Kubeconfig file authentication
-    
--   Token-based authentication
-    
+This Kamelet connects to the Kubernetes API server given by `masterUrl` with a bearer token, the `token` option, such as the token of a service account created with `kubectl create token <service-account>`. The token must be allowed to list and watch namespaces.
 
 ### Output format
 
-The Kamelet watches Kubernetes namespaces resources and produces event data in JSON format when resources are created, updated, or deleted.
+The Kamelet watches Kubernetes namespaces resources and produces a message when one is created, updated, or deleted. The body is the resource as JSON text, and the `CamelKubernetesEventAction` header says what happened (`ADDED`, `MODIFIED` or `DELETED`).
 
 ### Configuration
 
-The Kamelet supports various Kubernetes connection parameters:
-
--   `namespace`: The Kubernetes namespace to watch (optional)
-    
--   Authentication and connection configuration
-    
+The Kamelet requires `masterUrl` and `token`, and watches all the namespaces of the cluster.
 
 ### Usage example
 
@@ -101,7 +95,8 @@ spec:
       apiVersion: camel.apache.org/v1alpha1
       name: kubernetes-namespaces-source
     properties:
-      namespace: "default"
+      masterUrl: "https://my-cluster.example.com:6443"
+      token: "{{kubernetes-token}}"
   sink:
     ref:
       kind: Service

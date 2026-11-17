@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Manually commit Kafka Batch Offset.
+Saves in Kafka the position (offset) reached by a batch of records from `kafka-batch-source`, so that the batch is not received again after a restart.
+
+Use it to count the records of a batch as read only once the whole batch was handled, for example once it was written to a database: put it at the end of a flow that starts with `kafka-batch-source`. For single records from `kafka-source` use `kafka-manual-commit-action`.
+
+Input: a batch from `kafka-batch-source`, or from one of the `kafka-batch-**-registry-**` sources, with `allowManualCommit` set to true and `autoCommitEnable` set to false. It uses the `CamelKafkaManualCommit` header of the message, or else that of the last entry of the list.
+
+Output: the message is unchanged.
+
+Good to know: without the `CamelKafkaManualCommit` header, for example when `allowManualCommit` is false, it does nothing and does not fail.
 
 ## Configuration Options
 

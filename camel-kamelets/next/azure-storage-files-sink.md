@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Upload data to Azure Storage Files Share.
+Uploads each message as a file to a directory of a file share in Azure Files, named after the `file` header.
+
+Use it to drop files where applications or people that mount the share can read them, such as reports or exports. For blob containers, use `azure-storage-blob-sink`.
+
+Input: the body is the content of the file: text, bytes or a stream. A Map fails: turn it into JSON text first, for example with `json-serialize-action`. The optional `file` header (or `ce-file`) is the name of the file; only its last part is used, so `reports/2026/data.csv` is written as `data.csv` in `directoryName`. Without it, the file gets a generated unique name.
+
+Output: the message is unchanged.
+
+Good to know: a file with the same name is replaced. Missing directories are created.
 
 ## Configuration Options
 
@@ -13,11 +21,11 @@ The following table summarizes the configuration options available for the `azur
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **accountName** | Account Name | **Required** The Azure Storage Blob account name. | string |  |  |
-| **shareName** | Share Name | **Required** The Azure Storage File Share share name. | string |  |  |
-| **credentialType** | Credential Type | Determines the credential strategy to adopt. Enum values: \* SHARED\_ACCOUNT\_KEY \* AZURE\_IDENTITY \* SHARED\_KEY\_CREDENTIAL \* AZURE\_SAS | string | SHARED\_ACCOUNT\_KEY |  |
-| **directoryName** | Directory Name | The directory from where the producer will upload the file. | string | . |  |
-| **sharedKey** | Shared Access Key | The Azure Storage Blob access key. | string |  |  |
+| **accountName** | Account Name | **Required** The name of the storage account, as shown in the Azure portal under Storage accounts. It is the first part of the address of the account, `[https://<accountName>.file.core.windows.net](https://\<accountName\>.file.core.windows.net)`. | string |  | mystorageaccount |
+| **shareName** | Share Name | **Required** The name of the file share in the storage account to write the files to. | string |  | documents |
+| **credentialType** | Credential Type | How to log in to the storage account. `SHARED_ACCOUNT_KEY`, the default, uses `sharedKey`. `AZURE_IDENTITY` uses the Azure identity of the environment, such as the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` environment variables, a managed identity or the Azure CLI login. The other values need settings that this Kamelet does not offer. Enum values: \* SHARED\_ACCOUNT\_KEY \* AZURE\_IDENTITY \* SHARED\_KEY\_CREDENTIAL \* AZURE\_SAS | string | SHARED\_ACCOUNT\_KEY |  |
+| **directoryName** | Directory Name | The directory of the share to write the files to, such as `inbox/orders`. `.`, the default, is the top of the share. | string | . | inbox/orders |
+| **sharedKey** | Shared Access Key | An access key of the storage account, from the Azure portal: the storage account, then Security + networking, then Access keys. Used when `credentialType` is `SHARED_ACCOUNT_KEY`, the default. | string |  |  |
 
 ## Dependencies
 
@@ -97,7 +105,7 @@ For more information, see the [Azure Identity documentation](https://learn.micro
 
 ### Optional Headers
 
-In the headers, you can set the `file` / `ce-file` property to specify the filename to upload. If you do set property in the header, the Kamelet uses the exchange ID as filename.
+In the headers, you can set the `file` / `ce-file` property to specify the filename to upload. If you do not set it, the file gets a generated unique name.
 
 The value is reduced to a single file name before use: any directory component is dropped, so `reports/2026/data.csv` is stored as `data.csv`. The file is always written inside the configured directory.
 

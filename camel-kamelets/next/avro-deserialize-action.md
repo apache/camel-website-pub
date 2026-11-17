@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Deserialize payload to Avro.
+Turns each message of Avro binary data back into a JSON object, using the Avro schema the data was written with.
+
+Use it to read records that arrive in Avro, a compact binary format described by a schema, for example from a Kafka topic, and work on them as JSON. To turn JSON into Avro, use `avro-serialize-action`; for Protobuf, use `protobuf-deserialize-action`.
+
+Input: Avro binary data, as bytes, without the schema in it, such as `avro-serialize-action` writes.
+
+Output: the body is parsed JSON (a Jackson `JsonNode`) with one field for each field of the schema. The `Content-Type` header is removed. Put `json-serialize-action` after this action to get JSON text.
+
+Good to know: Avro data does not say which schema it was written with, so the schema must be the one the writer used. When `schema` is not set, the schema found by an earlier `resolve-pojo-schema-action` is used.
 
 ## Configuration Options
 
@@ -13,8 +21,8 @@ The following table summarizes the configuration options available for the `avro
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **schema** | Schema | The Avro schema to use during serialization (as single-line, using JSON format). | string |  | {"type": "record", "namespace": "com.example", "name": "FullName", "fields": \[{"name": "first", "type": "string"},{"name": "last", "type": "string"}\]} |
-| **validate** | Validate | Indicates if the content must be validated against the schema. | boolean | true |  |
+| **schema** | Schema | The Avro schema the data was written with, as JSON text: a record with a name and a list of fields, each with a name and a type. When it is not set, the schema found by an earlier `resolve-pojo-schema-action` is used. | string |  | {"type": "record", "namespace": "com.example", "name": "FullName", "fields": \[{"name": "first", "type": "string"},{"name": "last", "type": "string"}\]} |
+| **validate** | Validate | Meant to turn the check of the content against the schema on or off. It has no effect. | boolean | true |  |
 
 ## Dependencies
 

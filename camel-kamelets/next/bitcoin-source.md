@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Provides a feed of the value of the Bitcoin compared to USDT using the Binance service.
+Reads the current price of Bitcoin in USDT (Tether) from the public market data of the Binance trading platform at a regular interval, one message per reading.
+
+Use it to follow the Bitcoin price, for example to store it over time, to send an alert when it crosses a threshold, or as a live data feed for a demo. It reads market prices from Binance; it does not connect to a Bitcoin node or wallet.
+
+Output: the body is JSON text with the ticker of the BTC/USDT pair: among others the last price (`last`), the best bid and ask (`bid`, `ask`), the high and low (`high`, `low`) and the volume (`volume`) of the last 24 hours. The `Content-Type` header is `application/json`.
+
+Good to know: it needs access to the internet and no account or key. The first reading comes about one second after start, then one every `period`.
 
 ## Configuration Options
 
@@ -13,7 +19,7 @@ The following table summarizes the configuration options available for the `bitc
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **period** | Period between Updates | The interval between updates in milliseconds. | integer | 10000 |  |
+| **period** | Period between Updates | How long to wait between two readings, in milliseconds. For example, 60000 is one minute. | integer | 10000 | 60000 |
 
 ## Dependencies
 

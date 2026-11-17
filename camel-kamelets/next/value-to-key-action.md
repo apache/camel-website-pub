@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Replace the Kafka record key with a new key formed from a fields subset coming from the message body.
+Sets the key of the Kafka record to some fields of the JSON body, so that records with the same values in those fields get the same key.
+
+Use it to take the key of the record from the data, before `kafka-sink`, for example the customer of an order, so that all the records of one customer go to the same partition and stay in order. To take the key from a header instead use `set-kafka-key-action`.
+
+Input: a JSON object as JSON text, with the `Content-Type` header set to `application/json`.
+
+Output: the same JSON object, as JSON text in a stream, with `Content-Type` set to `application/json`. The `CamelKafkaKey` header, which `kafka-sink` uses as the key of the record, is set to a Map of the fields named in `fields` and their values.
+
+Good to know: `kafka-sink` writes the key as text such as `{id=7, customer=acme}`, not as JSON, and not necessarily with the fields in the order of `fields`. A field that is not in the body is left out of the key.
 
 ## Configuration Options
 
@@ -13,7 +21,7 @@ The following table summarizes the configuration options available for the `valu
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **fields** | Fields | **Required** Comma separated list of fields to be used to form the new key. | string |  |  |
+| **fields** | Fields | **Required** The names of the top-level fields of the JSON body that make up the key, separated by commas. | string |  | id,customer |
 
 ## Dependencies
 

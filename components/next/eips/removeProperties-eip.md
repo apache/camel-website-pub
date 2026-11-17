@@ -13,7 +13,7 @@ The Remove Properties eip supports the following options which are listed below.
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **pattern** | **Required** Name or pattern of properties to remove. Supports exact match, wildcard (ending with \*), and regular expression (all case-insensitive). |  | String |
-| **excludePattern** | Name or pattern of properties to not remove. You can use comma to separate multiple patterns. |  | String |
+| **excludePattern** | Name or pattern of properties to not remove. Supports exact match, wildcard (ending with \*), and regular expression (all case-insensitive). To keep several properties, use a regular expression such as prop1|prop3. |  | String |
 
 ## Message Body
 
@@ -112,6 +112,45 @@ from("seda:b")
       steps:
         - removeProperties:
             pattern: "Foo*"
+        - to:
+            uri: mock:result
+```
+
+## Keeping some properties
+
+The `excludePattern` option keeps the exchange properties it matches, with the same rules as `pattern`. It is a single pattern: to keep several properties, use a regular expression with `|` (a comma does not separate patterns). In Java, you can also give several exclude patterns as arguments.
+
+The following removes the exchange properties that start with `Foo`, except `FooKeep` and `FooToo`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("seda:b")
+  .removeProperties("Foo*", "FooKeep", "FooToo")
+  .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="seda:b"/>
+  <removeProperties pattern="Foo*" excludePattern="FooKeep|FooToo"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - removeProperties:
+            pattern: "Foo*"
+            excludePattern: "FooKeep|FooToo"
         - to:
             uri: mock:result
 ```

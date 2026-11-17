@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Manually commit Kafka Offset.
+Saves in Kafka the position (offset) of the record that `kafka-source` received, so that the record is not received again after a restart.
+
+Use it to count a record as read only once it was handled, for example once it was written to a database: put it at the end of a flow that starts with `kafka-source`. The records after the last saved position are read again after a restart. For `kafka-batch-source` use `kafka-batch-manual-commit-action`.
+
+Input: any message from `kafka-source` with `allowManualCommit` set to true and `autoCommitEnable` set to false. It uses the `CamelKafkaManualCommit` header that the source then sets.
+
+Output: the message is unchanged.
+
+Good to know: without the `CamelKafkaManualCommit` header, for example when `allowManualCommit` is false, it does nothing and does not fail. Saving the position of a record also counts the earlier records of its partition as read.
 
 ## Configuration Options
 

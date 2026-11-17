@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Receive data from a RabbitMQ Broker.
+Receives each message from a queue in a RabbitMQ broker, and can create that queue and bind it to an exchange with a routing key.
+
+Use it to process work or events that other applications publish to RabbitMQ. Use `spring-rabbitmq-sink` to publish them.
+
+Output: the body is text when the content type of the message starts with `text`, and bytes otherwise. The headers of the RabbitMQ message become headers, along with `CamelSpringRabbitmqExchangeName`, `CamelSpringRabbitmqRoutingKey` and `CamelSpringRabbitmqContentType`.
+
+Good to know: with `autoDeclare` false, the default, the queue must exist already, bound to the exchange; until it does, the source keeps trying again. With `autoDeclare` true, it creates the exchange as a `direct` exchange, the queue in `queues` and the binding with `routingKey`. Without `queues`, it reads from a new queue with a generated name. A message whose processing fails is tried 5 times, one second apart, and then dropped, or sent to the dead letter exchange of the queue when RabbitMQ has one. It connects with no TLS unless `protocol` is `amqps`.
 
 ## Configuration Options
 
@@ -13,16 +19,16 @@ The following table summarizes the configuration options available for the `spri
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **exchangeName** | Exchange name | **Required** The exchange name determines the exchange the queue is bound to. | string |  |  |
-| **host** | Server Address | **Required** RabbitMQ broker address. | string |  | localhost |
-| **port** | Server Port | **Required** RabbitMQ broker port. | integer |  | 5672 |
-| **autoDeclare** | Auto Declare | The routing key to use when binding a consumer queue to the exchange. | boolean | false |  |
-| **password** | Password | The password to access the RabbitMQ server. | string |  |  |
-| **protocol** | Protocol | The AMQP protocol to use. Enum values: \* amqp \* amqps | string | amqp |  |
-| **queues** | Queue name | The queue to receive messages from. | string |  |  |
-| **routingKey** | Routing Key | The routing key to use when binding a consumer queue to the exchange. | string |  |  |
-| **username** | Username | The username to access the RabbitMQ server. | string |  |  |
-| **vhost** | Virtual Host | The virtual host. | string | / |  |
+| **exchangeName** | Exchange Name | **Required** The name of the exchange that the queue is bound to. | string |  | orders |
+| **host** | Server Address | **Required** The host name or IP address of the RabbitMQ broker. | string |  | localhost |
+| **port** | Server Port | **Required** The port of the RabbitMQ broker: usually 5672, or 5671 for `amqps`. | integer |  | 5672 |
+| **autoDeclare** | Create Exchange and Queue | If true, the source creates the exchange (as a `direct` exchange) and the queue in `queues`, and binds them with `routingKey`, when it starts. If false, they must exist already. | boolean | false |  |
+| **password** | Password | The password to log in to RabbitMQ with, for the user `username`. | string |  |  |
+| **protocol** | Protocol | `amqp` for a plain connection, or `amqps` for a connection encrypted with TLS. Enum values: \* amqp \* amqps | string | amqp |  |
+| **queues** | Queue Name | The queue to receive the messages from. When it is not set, a new queue with a generated name is used, which only makes sense with `autoDeclare` true. | string |  | orders |
+| **routingKey** | Routing Key | The routing key that binds the queue to the exchange, when `autoDeclare` is true. A `direct` exchange then routes to the queue the messages sent with this key. | string |  | new-order |
+| **username** | Username | The user name to log in to RabbitMQ with. When it is not set, `guest` is used. | string |  |  |
+| **vhost** | Virtual Host | The virtual host of the broker to connect to, which holds the exchanges and queues. RabbitMQ has the virtual host `/` from the start. | string | / |  |
 
 ## Dependencies
 
@@ -67,54 +73,38 @@ You can now run it directly through the following command
 camel run route.yaml
 ```
 
-## Spring Rabbitmq Source Kamelet Description
+## Spring RabbitMQ Source Kamelet Description
 
 ### Authentication methods
 
-This Kamelet connects to Spring Rabbitmq using appropriate authentication mechanisms:
-
--   Service-specific authentication methods
-    
--   API keys, tokens, or credential-based authentication
-    
--   Connection configuration
-    
+The Kamelet logs in to RabbitMQ with `username` and `password`; when they are not set, it uses `guest`. Set `protocol` to `amqps` for a connection with TLS.
 
 ### Output format
 
-The Kamelet consumes data from Spring Rabbitmq and produces the data in JSON format.
+The body is text when the content type of the message starts with `text`, and bytes otherwise; it is not turned into JSON. The headers of the RabbitMQ message become headers.
 
-### Configuration
+### Queues, exchanges and bindings
 
-The Kamelet requires connection parameters specific to Spring Rabbitmq:
-
--   Service connection details
-    
--   Authentication credentials
-    
--   Query or consumption parameters
-    
+With `autoDeclare` set to false (the default), the queue in `queues` must already exist and be bound to the exchange. With `autoDeclare` set to true, the Kamelet creates a `direct` exchange named `exchangeName`, the queue, and the binding with `routingKey` when it starts.
 
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: spring-rabbitmq-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: spring-rabbitmq-source
-    properties:
-      # Add service-specific properties here
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:spring-rabbitmq-source"
+      parameters:
+        host: "localhost"
+        port: 5672
+        username: "guest"
+        password: "guest"
+        exchangeName: "orders"
+        queues: "orders"
+        routingKey: "new-order"
+        autoDeclare: true
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

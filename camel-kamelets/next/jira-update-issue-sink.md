@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Update fields of an existing issue in Jira.
+Changes the fields of an existing Jira issue, such as its summary, description, assignee or priority, for each message.
+
+Use it to keep a ticket in step with another system, for example to assign an issue to the person on call or to raise its priority when an alert repeats. To change the status use `jira-transition-issue-sink`, and to create issues `jira-add-issue-sink`.
+
+Input: the body becomes the new description of the issue, as text, and replaces the old one. When the body is empty, the `ce-issueDescription` header gives the description instead. The `ce-issueKey` header (the key of the issue, such as `SHOP-42`) is required. The other fields come from optional headers, and a field without a header is left as it is: `ce-issueSummary` (the title), `ce-issueTypeName` (such as `Bug`), `ce-issueAssignee`, `ce-issuePriorityName` (such as `High`) and `ce-issueComponents` (a comma-separated list, which replaces the components).
+
+Output: the message is unchanged.
+
+Good to know: a message with a body always replaces the description, even when it also has the `ce-issueDescription` header. An issue type or a priority whose name Jira does not know is ignored. A message without `ce-issueKey` fails. Log in either with `username` and `password`, or with `personal-token`.
 
 ## Configuration Options
 
@@ -13,10 +21,10 @@ The following table summarizes the configuration options available for the `jira
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **jiraUrl** | Jira URL | **Required** The URL of your instance of Jira. | string |  | http://my\_jira.com:8081 |
-| **password** | Password | The password to access Jira. | string |  |  |
-| **personal-token** | Personal Token | Personal Token. | string |  |  |
-| **username** | Username | The username to access Jira. | string |  |  |
+| **jiraUrl** | Jira URL | **Required** The address of your Jira, as you open it in a browser, without a path. | string |  | https://mycompany.atlassian.net |
+| **password** | Password | The password of `username`. For Jira Cloud, use an API token of the account here, not its password; create one at id.atlassian.com, under Security, API tokens. | string |  |  |
+| **personal-token** | Personal Token | A personal access token, for Jira Server and Jira Data Center; create one in Jira under your profile, Personal Access Tokens. Use it instead of `username` and `password`. | string |  |  |
+| **username** | Username | The user to log in as, together with `password`. For Jira Cloud, this is the email address of the account. When it is set, `personal-token` is not used. | string |  |  |
 
 ## Dependencies
 
@@ -72,24 +80,59 @@ This Kamelet updates fields of existing JIRA issues.
 
 ### Input Format
 
-Expects JSON-formatted data containing the updated issue information.
-
-### Authentication
-
-Supports multiple authentication methods: - **Username and Password**: Basic authentication - **Personal Token**: API token authentication
-
-### Required Configuration
-
--   **JIRA URL**: The URL of your JIRA instance
-    
+The body becomes the new description of the issue, as text. It replaces the description on every message.
 
 ### Issue Update Headers
 
-The Kamelet supports various headers to update issue fields: - `ce-issueKey`: The JIRA issue key to update - `ce-issueTypeName`: Update issue type - `ce-issueSummary`: Update issue summary/title - `ce-issueAssignee`: Update assignee - `ce-issuePriorityName`: Update priority level - `ce-issueComponents`: Update issue components - `ce-issueDescription`: Update detailed description
+The Kamelet reads these headers. Only `ce-issueKey` is required; a field without a header is left as it is.
 
-### Usage
+-   `ce-issueKey`: the key of the issue to update, such as `SHOP-42` (required)
+    
+-   `ce-issueTypeName`: the name of the new issue type, such as `Bug`
+    
+-   `ce-issueSummary`: the new summary (title)
+    
+-   `ce-issueAssignee`: the user name of the new assignee
+    
+-   `ce-issuePriorityName`: the name of the new priority, such as `High`
+    
+-   `ce-issueComponents`: a comma-separated list of component names, which replaces the components of the issue
+    
 
-The Kamelet modifies existing JIRA issues with new field values, enabling automated issue updates based on external data or processing results.
+An issue type or a priority whose name Jira does not know is ignored. The description comes from the body; the `ce-issueDescription` header gives it only when the body is empty.
+
+### Authentication
+
+Use one of the two ways to log in:
+
+-   **Jira Cloud**: set `username` to the email address of the account, and `password` to an API token of that account.
+    
+-   **Jira Server and Jira Data Center**: set `personal-token` to a personal access token, and leave `username` and `password` empty.
+    
+
+### Usage example
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:timer-source"
+      parameters:
+        message: "The checkout page fails for orders above 1000 EUR. Seen again today."
+        repeatCount: 1
+      steps:
+        - setHeader:
+            name: ce-issueKey
+            constant: SHOP-42
+        - setHeader:
+            name: ce-issuePriorityName
+            constant: High
+        - to:
+            uri: "kamelet:jira-update-issue-sink"
+            parameters:
+              jiraUrl: "https://mycompany.atlassian.net"
+              username: "me@mycompany.com"
+              password: "{{jira.apiToken}}"
+```
 
 ## Kamelet source file
 

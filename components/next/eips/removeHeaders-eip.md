@@ -13,7 +13,7 @@ The Remove Headers eip supports the following options which are listed below.
 | **description** | The description for this node. |  | String |
 | **disabled** | Whether to disable this EIP from the route during build time. Once an EIP has been disabled then it cannot be enabled later at runtime. | false | Boolean |
 | **pattern** | **Required** Name or pattern of headers to remove. The pattern supports exact match, wildcard (pattern ends with \*), and regular expression (all case-insensitive). |  | String |
-| **excludePattern** | Name or pattern of headers to not remove. You can use comma to separate multiple patterns. |  | String |
+| **excludePattern** | Name or pattern of headers to not remove. The pattern supports exact match, wildcard (pattern ends with \*), and regular expression (all case-insensitive). To keep several headers, use a regular expression such as header1|header3. |  | String |
 
 ## Message Body
 
@@ -111,6 +111,48 @@ from("seda:b")
         - to:
             uri: mock:result
 ```
+
+## Keeping some headers
+
+The `excludePattern` option keeps the headers it matches, with the same rules as `pattern`. It is a single pattern: to keep several headers, use a regular expression with `|` (a comma does not separate patterns). In Java, you can also give several exclude patterns as arguments.
+
+The following removes all headers, except `header1`, `header3` and the headers that start with `Camel`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("seda:b")
+  .removeHeaders("*", "header1", "header3", "Camel*")
+  .to("mock:result");
+```
+
+```xml
+<route>
+  <from uri="seda:b"/>
+  <removeHeaders pattern="*" excludePattern="header1|header3|Camel.*"/>
+  <to uri="mock:result"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: seda:b
+      steps:
+        - removeHeaders:
+            pattern: "*"
+            excludePattern: "header1|header3|Camel.*"
+        - to:
+            uri: mock:result
+```
+
+> **Note**
+> Inside a regular expression, `Camel*` means `Came` followed by any number of `l`: use `Camel.*` to match the headers that start with `Camel`.
 
 ## Leaking Camel headers when sending to an endpoint
 

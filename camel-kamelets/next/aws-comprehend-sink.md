@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Send data to AWS Comprehend for natural language processing.
+Analyzes the text of each message with Amazon Comprehend, for example to detect its language, its sentiment, or the people, places and personal data it mentions.
+
+Use it to sort customer feedback by sentiment, route support tickets by language, or find personal data in text before it is stored.
+
+Input: the body is the text to analyze.
+
+Output: when it is used inside a route, the body afterwards is what was found, as objects of the AWS SDK for Java (not JSON text): a List for most operations, such as the languages with their scores for `detectDominantLanguage` or the entities for `detectEntities`, and the sentiment with its scores for `detectSentiment`. Headers give the main result: `CamelAwsComprehendDetectedLanguage` with its score, or `CamelAwsComprehendDetectedSentiment` with its scores.
+
+Good to know: every operation except `detectDominantLanguage` needs `languageCode`, and a message fails without it. `classifyDocument` needs `endpointArn`.
 
 ## Configuration Options
 
@@ -13,19 +21,19 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **region** | AWS Region | **Required** The AWS region to access. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  |  |
-| **accessKey** | Access Key | The access key obtained from AWS. | string |  |  |
-| **endpointArn** | Endpoint ARN | The Amazon Resource Name (ARN) of the endpoint to use for document classification. Required for classifyDocument operation. | string |  |  |
-| **languageCode** | Language Code | The language code of the input text. Required for all operations except detectDominantLanguage. Use a 2-letter ISO 639-1 code (e.g., 'en' for English, 'es' for Spanish). | string |  |  |
-| **operation** | Operation | The operation to perform on the input text. Enum values: \* detectDominantLanguage \* detectEntities \* detectKeyPhrases \* detectSentiment \* detectSyntax \* detectPiiEntities \* detectToxicContent \* classifyDocument \* containsPiiEntities | string | detectDominantLanguage |  |
-| **overrideEndpoint** | Endpoint Overwrite | Select this option to override the endpoint URI. To use this option, you must also provide a URI for the `uriEndpointOverride` option. | boolean | false |  |
-| **profileCredentialsName** | Profile Credentials Name | If using a profile credentials provider this parameter sets the profile name. | string |  |  |
-| **secretKey** | Secret Key | The secret key obtained from AWS. | string |  |  |
-| **sessionToken** | Session Token | Amazon AWS Session Token used when the user needs to assume an IAM role. | string |  |  |
-| **uriEndpointOverride** | Overwrite Endpoint URI | The overriding endpoint URI. To use this option, you must also select the `overrideEndpoint` option. | string |  |  |
-| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the Comprehend client loads credentials through a default credentials provider. If false, it uses the basic authentication method (access key and secret key). | boolean | false |  |
-| **useProfileCredentialsProvider** | Profile Credentials Provider | Set whether the Comprehend client should expect to load credentials through a profile credentials provider. | boolean | false |  |
-| **useSessionCredentials** | Session Credentials | Set whether the Comprehend client should expect to use Session Credentials. This is useful in a situation in which the user needs to assume an IAM role for doing operations in Comprehend. | boolean | false |  |
+| **region** | AWS Region | **Required** The AWS region of Amazon Comprehend to use, such as `eu-west-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
+| **accessKey** | Access Key | The access key ID of an IAM user, which AWS gives when you create an access key for the user (in the AWS console: IAM, Users, Security credentials). Use it together with `secretKey`, or leave both empty and set `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` instead. | string |  |  |
+| **endpointArn** | Endpoint ARN | The ARN of the endpoint of a custom document classifier that you trained in Comprehend. Only used, and required, by `classifyDocument`. | string |  | arn:aws:comprehend:eu-west-1:123456789012:document-classifier-endpoint/my-classifier |
+| **languageCode** | Language Code | The language of the text, as a two-letter code, such as `en` for English or `es` for Spanish. Required for every operation except `detectDominantLanguage`. | string |  | en |
+| **operation** | Operation | What to find in the text: `detectDominantLanguage` (its language), `detectSentiment` (positive, negative, neutral or mixed), `detectEntities` (people, places, organizations, dates, …​), `detectKeyPhrases`, `detectSyntax` (the part of speech of each word), `detectPiiEntities` and `containsPiiEntities` (personal data, such as names and addresses), `detectToxicContent`, or `classifyDocument` (the classes of a custom classifier). Enum values: \* detectDominantLanguage \* detectEntities \* detectKeyPhrases \* detectSentiment \* detectSyntax \* detectPiiEntities \* detectToxicContent \* classifyDocument \* containsPiiEntities | string | detectDominantLanguage |  |
+| **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
+| **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
+| **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
+| **uriEndpointOverride** | Overwrite Endpoint URI | The address to send the requests to instead of the usual AWS address, such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
+| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found the way the AWS SDK finds them: from the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the shared credentials file, or the IAM role of the machine, container or pod it runs on. Then `accessKey` and `secretKey` are not needed. | boolean | false |  |
+| **useProfileCredentialsProvider** | Profile Credentials Provider | If true, the credentials are read from a profile of the AWS credentials file (`~/.aws/credentials`), the one named in `profileCredentialsName`. | boolean | false |  |
+| **useSessionCredentials** | Session Credentials | If true, it logs in with temporary credentials, such as those of an assumed IAM role: `accessKey`, `secretKey` and `sessionToken` together. | boolean | false |  |
 
 ## Dependencies
 

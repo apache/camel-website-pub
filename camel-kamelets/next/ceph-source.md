@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive data from an Ceph Bucket, managed by a Object Storage Gateway.
+Reads the files (objects) in a bucket of a Ceph Object Gateway, one message per file, and by default deletes each file once it has been read.
+
+Use it to process files that another system drops into a Ceph bucket, such as uploaded documents, exported reports or log files. To react to the bucket notifications of Ceph instead of reading the bucket over and over, use `ceph-event-based-source`.
+
+Output: the body is the content of the file, as bytes. The headers give the bucket name, the key (the path of the file in the bucket, `CamelAwsS3Key`), the content type and the ETag of the file.
+
+Good to know: files are deleted from the bucket after they are read, unless `deleteAfterRead` is set to false; then the same files are read again on every poll. Files in folders are read too. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address, so the gateway must accept that style of address.
 
 ## Configuration Options
 
@@ -13,17 +19,17 @@ The following table summarizes the configuration options available for the `ceph
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **accessKey** | Access Key | **Required** The access key. | string |  |  |
-| **bucketName** | Bucket Name | **Required** The Ceph Bucket name. | string |  |  |
-| **cephUrl** | Ceph Url Address | **Required** Set the Ceph Object Storage Address Url. | string |  | http://ceph-storage-address.com |
-| **secretKey** | Secret Key | **Required** The secret key. | string |  |  |
-| **zoneGroup** | Bucket Zone Group | **Required** The bucket zone group. | string |  |  |
-| **autoCreateBucket** | Autocreate Bucket | Specifies to automatically create the bucket. | boolean | false |  |
-| **delay** | Delay | The number of milliseconds before the next poll of the selected bucket. | integer | 500 |  |
-| **deleteAfterRead** | Auto-delete Objects | Specifies to delete objects after consuming them. | boolean | true |  |
-| **ignoreBody** | Ignore Body | If true, the Object body is ignored. Setting this to true overrides any behavior defined by the `includeBody` option. If false, the object is put in the body. | boolean | false |  |
-| **includeBody** | Include Body | If true, the exchange is consumed and put into the body and closed. If false, the Object stream is put raw into the body and the headers are set with the object metadata. | boolean | true |  |
-| **prefix** | Prefix | The bucket prefix to consider while searching. | string |  | folder/ |
+| **accessKey** | Access Key | **Required** The S3 access key of a Ceph Object Gateway user, as shown by `radosgw-admin user info`. | string |  |  |
+| **bucketName** | Bucket Name | **Required** The name of the bucket to read the files from. | string |  | my-bucket |
+| **cephUrl** | Ceph Url Address | **Required** The address of the Ceph Object Gateway (RGW), as a URL with the scheme and the port. | string |  | http://ceph-rgw.example.com:7480 |
+| **secretKey** | Secret Key | **Required** The S3 secret key that goes with `accessKey`. | string |  |  |
+| **zoneGroup** | Bucket Zone Group | **Required** The name of the zone group of the Ceph Object Gateway, used as the region of the requests. A Ceph cluster that was not set up with several zone groups uses `default`. | string |  | default |
+| **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist yet. If false, every poll fails while the bucket does not exist. | boolean | false |  |
+| **delay** | Delay | How long to wait between two polls of the bucket, in milliseconds. | integer | 500 |  |
+| **deleteAfterRead** | Auto-delete Objects | If true, each file is deleted from the bucket after it has been read. Set it to false to keep the files; they are then read again on every poll. | boolean | true |  |
+| **ignoreBody** | Ignore Body | If true, the content of the file is not read, and the body is empty; only the headers describe the file. It takes precedence over `includeBody`. | boolean | false |  |
+| **includeBody** | Include Body | If true, the body is the content of the file, as bytes. If false, the body is a stream of the content, which suits large files. | boolean | true |  |
+| **prefix** | Prefix | Read only the files whose key starts with this text, such as a folder name followed by `/`. When it is not set, all the files of the bucket are read. | string |  | folder/ |
 
 ## Dependencies
 

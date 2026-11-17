@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Periodically fetches an HTTP resource and provides the content as output.
+Fetches a web address with an HTTP GET request at a regular interval, and sends each response as a message.
+
+Use it to poll a REST API, a feed or a status page for its current data, for example fetch the state of the orders every minute. If the address needs a login, use `http-secured-source`. To receive the requests that other systems send instead, use `webhook-source`.
+
+Output: the body is the body of the response, as bytes. The headers of the response, such as `Content-Type`, are copied to the message, and `CamelHttpResponseCode` holds the status code.
+
+Good to know: it fetches the address every `period` and sends a message for each response, even when the data has not changed. A response with a status code of 300 or higher sends no message: the error is logged, and the address is fetched again at the next period.
 
 ## Configuration Options
 
@@ -13,9 +19,9 @@ The following table summarizes the configuration options available for the `http
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **url** | URL | **Required** The URL to fetch for data. | string |  | https://gist.githubusercontent.com/nicolaferraro/e3c72ace3c751f9f88273896611ce5fe/raw/3b6f54060bacb56b6719b7386a4645cb59ad6cc1/quote.json |
-| **contentType** | Content Type | The content type accepted for the resource. | string | application/json |  |
-| **period** | Period between Updates | The interval between fetches in milliseconds. | integer | 10000 |  |
+| **url** | URL | **Required** The address to fetch, with the path and any query parameters. It must start with `http://` or `https://`. | string |  | https://api.example.com/v1/orders/status |
+| **contentType** | Content Type | The value of the `Accept` header of the request, which tells the service the kind of response you want, such as `application/json` or `text/csv`. | string | application/json | text/csv |
+| **period** | Period between Updates | How long to wait between two requests, in milliseconds. The default, 10000, is ten seconds. | integer | 10000 | 60000 |
 
 ## Dependencies
 

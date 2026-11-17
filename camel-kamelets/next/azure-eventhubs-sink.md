@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send events to Azure Event Hubs.
+Sends each message as an event to an event hub in Azure Event Hubs, the Azure service for event streams.
+
+Use it to publish events, such as clicks, sensor readings or changes, for stream processing or for other applications to read. To receive them, use `azure-eventhubs-source`.
+
+Input: the body becomes the body of the event: text, bytes or a stream. A Map fails: turn it into JSON text first, for example with `json-serialize-action`. A List is sent as one event per element. The optional `partition-id` header (or `ce-partition-id`) is the partition to send to, such as `0`; without it, Event Hubs chooses one.
+
+Output: the message is unchanged.
+
+Good to know: the shared access policy needs the Send right.
 
 ## Configuration Options
 
@@ -13,11 +21,11 @@ The following table summarizes the configuration options available for the `azur
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **eventhubName** | Eventhubs Name | **Required** The Event Hub name. | string |  |  |
-| **namespaceName** | Eventhubs Namespace | **Required** The Event Hubs namespace. | string |  |  |
-| **credentialType** | Credential Type | Determines the credential strategy to adopt. Enum values: \* CONNECTION\_STRING \* AZURE\_IDENTITY | string | CONNECTION\_STRING |  |
-| **sharedAccessKey** | Share Access Key | The key for the Event Hubs SAS key name. | string |  |  |
-| **sharedAccessName** | Share Access Name | The Event Hubs SAS key name. | string |  |  |
+| **eventhubName** | Event Hub Name | **Required** The name of the event hub in the namespace to send the events to. | string |  | orders |
+| **namespaceName** | Event Hubs Namespace | **Required** The name of the Event Hubs namespace, the first part of its address `<namespaceName>.servicebus.windows.net`. | string |  | my-namespace |
+| **credentialType** | Credential Type | How to log in to Event Hubs. `CONNECTION_STRING`, the default, uses `sharedAccessName` and `sharedAccessKey`. `AZURE_IDENTITY` uses the Azure identity of the environment, such as the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` environment variables, a managed identity or the Azure CLI login. Enum values: \* CONNECTION\_STRING \* AZURE\_IDENTITY | string | CONNECTION\_STRING |  |
+| **sharedAccessKey** | Shared Access Key | The primary or secondary key of the shared access policy named in `sharedAccessName`. | string |  |  |
+| **sharedAccessName** | Shared Access Name | The name of a shared access policy of the namespace or of the event hub, such as `RootManageSharedAccessKey`, from the Azure portal: the namespace or the event hub, then Settings, Shared access policies. Used when `credentialType` is `CONNECTION_STRING`, the default. | string |  | RootManageSharedAccessKey |
 
 ## Dependencies
 

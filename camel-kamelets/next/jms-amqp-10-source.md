@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Consume data from any AMQP 1.0 compliant message broker by using the Apache Qpid JMS client. For SSL/TLS connections, use the amqps:// scheme in the remoteURI and configure SSL transport options as query parameters (e.g. transport.trustStoreLocation, transport.trustStorePassword, transport.keyStoreLocation, transport.keyStorePassword, transport.verifyHost, transport.trustAll).
+Receives each message from a queue or a topic in a message broker that speaks AMQP 1.0, such as Apache ActiveMQ Artemis, through JMS and the Apache Qpid client.
+
+Use it to process work that other applications put on a queue, or to react to events published on a topic, on any broker that supports the AMQP 1.0 protocol. For an Artemis broker, `jms-apache-artemis-source` and `jms-pooled-apache-artemis-source` work too.
+
+Output: the body is text for a JMS text message, bytes for a bytes message, and a Map for a map message. The JMS properties of the message become headers, along with the JMS headers such as `JMSMessageID`, `JMSDestination`, `JMSTimestamp`, `JMSPriority` and `JMSRedelivered`.
+
+Good to know: From a queue, each message is removed when it is received, even when the rest of the flow then fails, and several copies of this source share the messages. From a topic (`destinationType` set to `topic`), it receives only the messages sent while it is connected, as the subscription is not durable. The login and the TLS settings go in `remoteURI`: there are no separate options for them. When the broker cannot be reached, it starts anyway and tries again every 5 seconds.
 
 ## Configuration Options
 
@@ -13,9 +19,9 @@ The following table summarizes the configuration options available for the `jms-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **destinationName** | Destination Name | **Required** The JMS destination name. | string |  |  |
-| **remoteURI** | Broker URL | **Required** The JMS URL. Use the amqps:// scheme for SSL/TLS connections. | string |  | amqp://my-host:31616 |
-| **destinationType** | Destination Type | The JMS destination type (queue or topic). | string | queue |  |
+| **destinationName** | Queue or Topic Name | **Required** The name of the queue or topic to receive the messages from. | string |  | orders |
+| **remoteURI** | Broker URL | **Required** The address of the broker, as `amqp://host:port` (the AMQP port is usually 5672), or `amqps://host:port` for TLS. Settings of the Qpid JMS client go after `?`: `jms.username` and `jms.password` for a login, as `amqp://host:5672?jms.username=app&jms.password=secret`, and `transport.trustStoreLocation`, `transport.trustStorePassword`, `transport.keyStoreLocation` and `transport.keyStorePassword` for TLS. | string |  | amqp://localhost:5672 |
+| **destinationType** | Queue or Topic | Whether `destinationName` is a queue (`queue`) or a topic (`topic`). A queue keeps each message until one receiver takes it; a topic hands each message to every receiver subscribed at that moment. | string | queue |  |
 
 ## Dependencies
 
@@ -64,55 +70,42 @@ camel run route.yaml
 
 ## JMS AMQP 1.0 Source Kamelet Description
 
-### Authentication methods
+### Login and TLS
 
-This Kamelet supports AMQP 1.0 authentication mechanisms including:
+The Kamelet has no separate options for the login or TLS: they go in `remoteURI`, as settings of the Apache Qpid JMS client after `?`.
 
--   SASL authentication with username and password
+-   A login: `amqp://broker.example.com:5672?jms.username=app&jms.password=secret`
     
--   Connection to AMQP 1.0 brokers
+-   TLS: the `amqps://` scheme, with `transport.trustStoreLocation` and `transport.trustStorePassword` when the broker certificate is not trusted by the Java runtime.
     
 
 ### Output format
 
-The Kamelet consumes messages from JMS AMQP 1.0 queues and produces the message data in the configured format.
+The body is text for a JMS text message, bytes for a bytes message, and a Map for a map message. The JMS properties of the message become headers.
 
 ### Configuration
 
 The Kamelet requires connection parameters for the AMQP 1.0 broker:
 
--   `remoteURI`: The AMQP broker URI
+-   `remoteURI`: the address of the broker, with the login when the broker needs one
     
--   `username`: Username for authentication
+-   `destinationName`: the name of the queue or topic
     
--   `password`: Password for authentication
-    
--   `destinationName`: The destination queue or topic name
+-   `destinationType`: `queue` (the default) or `topic`
     
 
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: jms-amqp-10-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: jms-amqp-10-source
-    properties:
-      remoteURI: "amqp://broker.example.com:5672"
-      username: "{{username}}"
-      password: "{{password}}"
-      destinationName: "my-queue"
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:jms-amqp-10-source"
+      parameters:
+        remoteURI: "amqp://broker.example.com:5672?jms.username=app&jms.password=secret"
+        destinationName: "my-queue"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

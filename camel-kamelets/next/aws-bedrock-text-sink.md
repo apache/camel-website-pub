@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send data for invoking a text model of Amazon Bedrock.
+Sends a prompt to a text model in Amazon Bedrock, such as Amazon Titan or Anthropic Claude, for each message, and gives the answer of the model.
+
+Use it to summarize, classify, translate or write text with a large language model, for example to summarize support tickets or draft replies. To answer questions from your own documents in a Bedrock knowledge base, use `aws-bedrock-agent-runtime-sink`.
+
+Input: the body is the request of the model, as JSON text in the format of the chosen model, not the bare prompt. For Amazon Titan, for example `{"inputText":"Summarize: …​","textGenerationConfig":{"maxTokenCount":500}}`. For Claude 3, the Messages format, for example `{"anthropic_version":"bedrock-2023-05-31","max_tokens":500,"messages":[{"role":"user","content":"Summarize: …​"}]}`.
+
+Output: when it is used inside a route, the body afterwards is the answer, in a form that depends on the model: for Titan the response as JSON text, with the generated text in `results`; for Claude 3 the response as parsed JSON, with the generated text in `content`; for the older Claude models only the generated text, as text.
+
+Good to know: the request and response formats are those of the model provider, described for each model in the Amazon Bedrock documentation; a body in another format fails. Each message is one call of the model.
 
 ## Configuration Options
 
@@ -13,17 +21,17 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **modelId** | Model Id | **Required** The model Id to be used. Enum values: \* amazon.titan-text-express-v1 \* amazon.titan-text-lite-v1 \* ai21.j2-ultra-v1 \* ai21.j2-mid-v1 \* anthropic.claude-instant-v1 \* anthropic.claude-v2 \* anthropic.claude-v2:1 \* anthropic.claude-3-sonnet-20240229-v1:0 | string |  |  |
-| **region** | AWS Region | **Required** The AWS region to access. Enum values: \* us-east-1 \* us-west-1 \* ap-southeast-1 \* ap-northeast-1 \* eu-central-1 | string |  |  |
-| **accessKey** | Access Key | The access key obtained from AWS. | string |  |  |
-| **overrideEndpoint** | Endpoint Overwrite | Select this option to override the endpoint URI. To use this option, you must also provide a URI for the `uriEndpointOverride` option. | boolean | false |  |
-| **profileCredentialsName** | Profile Credentials Name | If using a profile credentials provider this parameter sets the profile name. | string |  |  |
-| **secretKey** | Secret Key | The secret key obtained from AWS. | string |  |  |
-| **sessionToken** | Session Token | Amazon AWS Session Token used when the user needs to assume a IAM role. | string |  |  |
-| **uriEndpointOverride** | Overwrite Endpoint URI | The overriding endpoint URI. To use this option, you must also select the `overrideEndpoint` option. | string |  |  |
-| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the Bedrock client loads credentials through a default credentials provider. If false, it uses the basic authentication method (access key and secret key). | boolean | false |  |
-| **useProfileCredentialsProvider** | Profile Credentials Provider | Set whether the Bedrock client should expect to load credentials through a profile credentials provider. | boolean | false |  |
-| **useSessionCredentials** | Session Credentials | Set whether the Bedrock client should expect to use Session Credentials. This is useful in situation in which the user needs to assume a IAM role for doing operations in Bedrock. | boolean | false |  |
+| **modelId** | Model ID | **Required** The ID of the Bedrock text model to call. The body must be a request in the format of this model: Amazon Titan (`amazon.titan-text-`**), AI21 Labs Jurassic (`ai21.j2-`**) or Anthropic Claude (`anthropic.claude-*`). Enum values: \* amazon.titan-text-express-v1 \* amazon.titan-text-lite-v1 \* ai21.j2-ultra-v1 \* ai21.j2-mid-v1 \* anthropic.claude-instant-v1 \* anthropic.claude-v2 \* anthropic.claude-v2:1 \* anthropic.claude-3-sonnet-20240229-v1:0 | string |  |  |
+| **region** | AWS Region | **Required** The AWS region of Amazon Bedrock to use, such as `us-east-1`. The model must be available in it. Enum values: \* us-east-1 \* us-west-1 \* ap-southeast-1 \* ap-northeast-1 \* eu-central-1 | string |  | us-east-1 |
+| **accessKey** | Access Key | The access key ID of an IAM user, which AWS gives when you create an access key for the user (in the AWS console: IAM, Users, Security credentials). Use it together with `secretKey`, or leave both empty and set `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` instead. | string |  |  |
+| **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
+| **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
+| **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
+| **uriEndpointOverride** | Overwrite Endpoint URI | The address to send the requests to instead of the usual AWS address, such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
+| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found the way the AWS SDK finds them: from the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the shared credentials file, or the IAM role of the machine, container or pod it runs on. Then `accessKey` and `secretKey` are not needed. | boolean | false |  |
+| **useProfileCredentialsProvider** | Profile Credentials Provider | If true, the credentials are read from a profile of the AWS credentials file (`~/.aws/credentials`), the one named in `profileCredentialsName`. | boolean | false |  |
+| **useSessionCredentials** | Session Credentials | If true, it logs in with temporary credentials, such as those of an assumed IAM role: `accessKey`, `secretKey` and `sessionToken` together. | boolean | false |  |
 
 ## Dependencies
 

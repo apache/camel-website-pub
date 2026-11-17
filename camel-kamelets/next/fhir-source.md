@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive data from FHIR server.
+Runs the same search on a FHIR server of healthcare data over and over, by default for all the Patient resources, and sends each search result, a FHIR Bundle, as one message.
+
+Use it to copy healthcare records, such as patients or observations, from a FHIR server into another system, or to check a FHIR server on a schedule. To create or update resources on a FHIR server, use `fhir-sink`.
+
+Output: the body is a FHIR Bundle of type `searchset`, as JSON text, with the number of resources found (`total`) and the resources themselves under `entry`. The `Content-Type` header is `application/fhir+json`.
+
+Good to know: a new search starts about every half second, and every search returns all the matching resources again, not only the new ones; add a filter such as `_lastUpdated` to `url` to narrow it. `username` and `password` are required, even for a server without login.
 
 ## Configuration Options
 
@@ -13,13 +19,13 @@ The following table summarizes the configuration options available for the `fhir
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **password** | Password | **Required** The password to access the FHIR server. | string |  |  |
-| **serverUrl** | Server URL | **Required** The FHIR server url. | string |  |  |
-| **username** | Username | **Required** The username to access the FHIR server. | string |  |  |
-| **encoding** | Encoding | Encoding to use for all request. Enum values: \* JSON \* XML | string | JSON |  |
-| **fhirVersion** | FHIR Version | The FHIR Version to use. Enum values: \* DSTU2 \* DSTU2\_HL7ORG \* DSTU2\_1 \* DSTU3 \* R4 \* R5 | string | R4 |  |
-| **prettyPrint** | Json Pretty Print | Define if the Json must be pretty print or not. | boolean | true |  |
-| **url** | URL | The FHIR resource type url. | string | /Patient |  |
+| **password** | Password | **Required** The password of `username`, for Basic authentication. | string |  |  |
+| **serverUrl** | Server URL | **Required** The base address of the FHIR API of the server, the part before the resource type, starting with `http://` or `https://`. | string |  | https://fhir.example.com/fhir |
+| **username** | Username | **Required** The user to log in to the server as, with Basic authentication. | string |  |  |
+| **encoding** | Encoding | How the server is asked to answer, `JSON` or `XML`. The body that comes out is JSON in both cases. Enum values: \* JSON \* XML | string | JSON |  |
+| **fhirVersion** | FHIR Version | The version of the FHIR standard that the server uses. Most servers today use `R4`. Enum values: \* DSTU2 \* DSTU2\_HL7ORG \* DSTU2\_1 \* DSTU3 \* R4 \* R5 | string | R4 |  |
+| **prettyPrint** | Json Pretty Print | If true, the JSON in the body is indented over several lines; if false, it is on one line. | boolean | true |  |
+| **url** | URL | The search to run, as the part of a FHIR search URL after `serverUrl`, starting with the resource type, and optionally followed by search parameters. | string | /Patient | /Observation?subject=Patient/123 |
 
 ## Dependencies
 

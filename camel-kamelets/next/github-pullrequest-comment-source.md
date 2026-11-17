@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive pull request Comments From GitHub.
+Receives each new comment written on the open pull requests of a GitHub repository, one message per comment, by asking the GitHub API for new comments.
+
+Use it to react to the discussion on pull requests, for example to answer a command written in a comment, such as `/retest`, or to forward the comments to a chat channel. To receive the pull requests themselves, use `github-pullrequest-source`.
+
+Output: the body is the comment as JSON text. The `CamelGitHubPullRequest` header gives the number of the pull request it was written on.
+
+Good to know: only the comments written after the start are sent, and only on pull requests that are still open. These are the comments of the conversation of a pull request, not the review comments on lines of code. It works with github.com, not with GitHub Enterprise Server. Once a minute by default (`delay`), it asks GitHub for the open pull requests and for the comments of each of them, and every request counts against the API rate limit of the token.
 
 ## Configuration Options
 
@@ -13,9 +19,10 @@ The following table summarizes the configuration options available for the `gith
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **oauthToken** | OAuth Token | **Required** OAuth token. | string |  |  |
-| **repoName** | Repository Name | **Required** The GitHub Repository name. | string |  |  |
-| **repoOwner** | Repository Owner | **Required** The repository owner. | string |  |  |
+| **oauthToken** | OAuth Token | **Required** A GitHub personal access token, created on GitHub under Settings, Developer settings, Personal access tokens. It needs read access to the repository and its pull requests. | string |  |  |
+| **repoName** | Repository Name | **Required** The name of the repository, such as `camel` in `[https://github.com/apache/camel](https://github.com/apache/camel)`. | string |  | camel |
+| **repoOwner** | Repository Owner | **Required** The user or organization that owns the repository, such as `apache` in `[https://github.com/apache/camel](https://github.com/apache/camel)`. | string |  | apache |
+| **delay** | Delay | How long to wait between two polls of GitHub, in milliseconds. For example, 60000 is one minute. | integer | 60000 |  |
 
 ## Dependencies
 

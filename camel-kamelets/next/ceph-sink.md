@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Upload data to an Ceph Bucket managed by a Object Storage Gateway.
+Uploads each message as a file (object) to a bucket of a Ceph Object Gateway, the S3-compatible storage of Ceph.
+
+Use it to store data in Ceph, such as reports, exports, images or received messages to keep as an archive. For MinIO use `minio-sink`, and for Amazon S3 use `aws-s3-sink`.
+
+Input: the body is the content of the file, as text, bytes or a stream. The key (the name of the file in the bucket) comes from the optional `file` header, or the `ce-file` header; when neither is set it is `keyName`, or a generated unique name when `keyName` is not set either.
+
+Output: the body is unchanged.
+
+Good to know: a file with the same key is overwritten, so with `keyName` set and no `file` header each message replaces the previous one. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address, so the gateway must accept that style of address.
 
 ## Configuration Options
 
@@ -13,13 +21,13 @@ The following table summarizes the configuration options available for the `ceph
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **accessKey** | Access Key | **Required** The access key. | string |  |  |
-| **bucketName** | Bucket Name | **Required** The Ceph Bucket name. | string |  |  |
-| **cephUrl** | Ceph Url Address | **Required** Set the Ceph Object Storage Address Url. | string |  | http://ceph-storage-address.com |
-| **secretKey** | Secret Key | **Required** The secret key. | string |  |  |
-| **zoneGroup** | Bucket Zone Group | **Required** The bucket zone group. | string |  |  |
-| **autoCreateBucket** | Autocreate Bucket | Specifies to automatically create the bucket. | boolean | false |  |
-| **keyName** | Key Name | The key name for saving an element in the bucket. | string |  |  |
+| **accessKey** | Access Key | **Required** The S3 access key of a Ceph Object Gateway user, as shown by `radosgw-admin user info`. | string |  |  |
+| **bucketName** | Bucket Name | **Required** The name of the bucket to store the files in. | string |  | my-bucket |
+| **cephUrl** | Ceph Url Address | **Required** The address of the Ceph Object Gateway (RGW), as a URL with the scheme and the port. | string |  | http://ceph-rgw.example.com:7480 |
+| **secretKey** | Secret Key | **Required** The S3 secret key that goes with `accessKey`. | string |  |  |
+| **zoneGroup** | Bucket Zone Group | **Required** The name of the zone group of the Ceph Object Gateway, used as the region of the requests. A Ceph cluster that was not set up with several zone groups uses `default`. | string |  | default |
+| **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist yet. If false, the bucket must already exist. | boolean | false |  |
+| **keyName** | Key Name | The key to store the files under, with its folder if any, used when a message has no `file` or `ce-file` header. When it is not set either, each file gets a generated unique name. | string |  | reports/latest.csv |
 
 ## Dependencies
 
@@ -73,7 +81,7 @@ In this Kamelet you need to use static credentials
 
 In the header, you can optionally set the `file` / `ce-file` property to specify the name of the file to upload.
 
-If you do not set the property in the header, the Kamelet uses the exchange ID for the file name.
+If you do not set the property in the header, the Kamelet uses the `keyName` option for the file name, or a generated unique name when `keyName` is not set.
 
 ## Kamelet source file
 

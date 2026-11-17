@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Apply a Jolt Transformation.
+Reshapes each JSON message into other JSON, as a Jolt specification describes: moves, renames, removes fields or adds defaults.
+
+Use it to map the JSON of one system to the JSON another system expects, for example to rename fields or move them into a nested object, when you already have Jolt specifications. `jslt-action` does the same with a query language, and is often easier to write.
+
+Input: parsed JSON, a Map (or a List). Since Camel 4.24, JSON text, bytes and a stream work too. With older versions they do not fail but give an empty body, and so does the parsed JSON of `json-deserialize-action`.
+
+Output: the body is the result as parsed JSON, a Map (or a List), not JSON text. Add `json-serialize-action` after it to get JSON text. The headers are kept.
+
+Good to know: the specification cannot read headers, only the body. It is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message.
 
 ## Configuration Options
 
@@ -13,8 +21,8 @@ The following table summarizes the configuration options available for the `jolt
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **template** | Template | **Required** The inline template. | string |  | file:////template.json |
-| **transform** | Transform DSL | Specifies the Transform DSL of the endpoint resource. If none is specified, Chainr is used. Enum values: \* Chainr \* Shiftr \* Defaultr \* Removr \* Sortr | string | Chainr |  |
+| **template** | Template | **Required** Where to load the Jolt specification from, not the Jolt specification itself: `file://` followed by the path of a file, `classpath://` followed by a resource in the application, or an `http://` or `https://` URL. With the default `transform`, the file holds a JSON array of steps, such as `[\{"operation": "shift", "spec": \{"name": "customer.fullName"}}]`. | string |  | file:///opt/templates/order-spec.json |
+| **transform** | Transform DSL | The kind of Jolt specification in the `template` file. `Chainr`, the default, is a list of steps, each with an `operation` (such as `shift`, `default` or `remove`) and a `spec`. The others take the spec of one operation alone: `Shiftr` moves and renames fields, `Defaultr` adds default values, `Removr` removes fields, and `Sortr` sorts the fields by name. Enum values: \* Chainr \* Shiftr \* Defaultr \* Removr \* Sortr | string | Chainr |  |
 
 ## Dependencies
 

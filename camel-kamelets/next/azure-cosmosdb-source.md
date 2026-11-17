@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Consume Changes from a CosmosDB instance.
+Receives the items created or changed in a container of Azure Cosmos DB, through its change feed, as a JSON array per batch.
+
+Use it to react to new or updated documents, for example to copy them to a search index, a cache or Kafka. To create items, use `azure-cosmosdb-sink`.
+
+Output: the body is a JSON array of the items of one batch, as bytes, each item with the fields that Cosmos DB adds, such as `_etag`.
+
+Good to know: it reads only the changes made after it first starts, and it does not see deleted items. It keeps its position in a lease container, `camel-lease` in the database `databaseName` unless set otherwise, which must exist unless `createLeaseContainerIfNotExists` is true.
 
 ## Configuration Options
 
@@ -13,15 +19,15 @@ The following table summarizes the configuration options available for the `azur
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **containerName** | Container Name | **Required** The Azure Cosmos container name. | string |  |  |
-| **databaseEndpoint** | Database Endpoint | **Required** Sets the Azure Cosmos database endpoint the component will connect to. | string |  |  |
-| **databaseName** | Database Name | **Required** The Azure Cosmos database name. | string |  |  |
-| **accountKey** | Account Key | The Azure Cosmos account Key. | string |  |  |
-| **createLeaseContainerIfNotExists** | Autocreate Lease Container | Sets if the component should create Cosmos lease container for the consumer automatically in case it doesn’t exist in Cosmos database. | boolean | false |  |
-| **createLeaseDatabaseIfNotExists** | Autocreate Lease Database | Sets if the component should create Cosmos lease database for the consumer automatically in case it doesn’t exist in Cosmos account. | boolean | false |  |
-| **credentialType** | Credential Type | Determines the credential strategy to adopt. Enum values: \* SHARED\_ACCOUNT\_KEY \* AZURE\_IDENTITY | string | SHARED\_ACCOUNT\_KEY |  |
-| **leaseContainerName** | Lease Container Name | Sets the lease database where the `leaseContainerName` is stored. | string |  |  |
-| **leaseDatabaseName** | Lease Database Name | Sets the lease container which acts as a state storage and coordinates processing the change feed across multiple workers. | string |  |  |
+| **containerName** | Container Name | **Required** The name of the container in the database to receive the changes of. | string |  | orders |
+| **databaseEndpoint** | Database Endpoint | **Required** The address of the Azure Cosmos DB account, shown as URI on the Overview page of the account in the Azure portal. | string |  | https://my-account.documents.azure.com:443/ |
+| **databaseName** | Database Name | **Required** The name of the database in the Azure Cosmos DB account. | string |  | shop |
+| **accountKey** | Account Key | The primary or secondary key of the Azure Cosmos DB account, from the Azure portal: the account, then Settings, Keys. Used when `credentialType` is `SHARED_ACCOUNT_KEY`, the default. | string |  |  |
+| **createLeaseContainerIfNotExists** | Autocreate Lease Container | If true, the lease container is created when it does not exist. If false, a missing lease container stops the source from starting. | boolean | false |  |
+| **createLeaseDatabaseIfNotExists** | Autocreate Lease Database | If true, the lease database is created when it does not exist. If false, a missing lease database stops the source from starting. | boolean | false |  |
+| **credentialType** | Credential Type | How to log in to Azure Cosmos DB. `SHARED_ACCOUNT_KEY`, the default, uses `accountKey`. `AZURE_IDENTITY` uses the Azure identity of the environment, such as the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` environment variables, a managed identity or the Azure CLI login. Enum values: \* SHARED\_ACCOUNT\_KEY \* AZURE\_IDENTITY | string | SHARED\_ACCOUNT\_KEY |  |
+| **leaseContainerName** | Lease Container Name | The name of the container where the source keeps its leases, which record how far it has read the change feed. When it is not set, `camel-lease`. | string |  | camel-lease |
+| **leaseDatabaseName** | Lease Database Name | The name of the database of the lease container. When it is not set, the lease container is in `databaseName`. | string |  | shop |
 
 ## Dependencies
 

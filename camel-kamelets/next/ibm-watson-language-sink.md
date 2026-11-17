@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Analyze text using IBM Watson Natural Language Understanding to extract sentiment, entities, keywords, concepts, categories, and emotions.
+Analyzes the text of each message with IBM Watson Natural Language Understanding and replaces the body with the results, such as the sentiment, the entities and the keywords.
+
+Use it to find out what people write about and how they feel, for example to flag angry customer emails, tag support tickets with the products they mention, or measure the tone of reviews.
+
+Input: the body is the text to analyze, as text. With `operation` set to `analyzeUrl`, the body is instead the address of a web page for Watson to fetch and analyze. The optional `CamelIBMWatsonLanguageText` or `CamelIBMWatsonLanguageUrl` header gives the text or the address instead of the body. An empty body fails.
+
+Output: when it is used inside a route, the body afterwards is the results as JSON text (bytes), with the `Content-Type` header set to `application/json`. The `CamelIBMWatsonLanguageSentimentLabel` and `CamelIBMWatsonLanguageSentimentScore` headers give the sentiment of the whole text, and `CamelIBMWatsonLanguageLanguage` its language.
+
+Good to know: it logs in with the API key of a Natural Language Understanding instance in IBM Cloud; set `serviceUrl` when the instance is not in the US South region.
 
 ## Configuration Options
 
@@ -13,15 +21,15 @@ The following table summarizes the configuration options available for the `ibm-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **apiKey** | API Key | **Required** The IBM Cloud API key for Watson Natural Language Understanding. | string |  |  |
-| **analyzeCategories** | Analyze Categories | Enable category classification to classify content into a hierarchy of categories. | boolean | false |  |
-| **analyzeConcepts** | Analyze Concepts | Enable concept extraction to identify high-level concepts that aren’t necessarily mentioned in the text. | boolean | false |  |
-| **analyzeEmotion** | Analyze Emotion | Enable emotion analysis to detect emotions like joy, anger, sadness, fear, and disgust. | boolean | false |  |
-| **analyzeEntities** | Analyze Entities | Enable entity extraction to identify people, companies, organizations, cities, and more. | boolean | true |  |
-| **analyzeKeywords** | Analyze Keywords | Enable keyword extraction to identify important keywords and phrases. | boolean | true |  |
-| **analyzeSentiment** | Analyze Sentiment | Enable sentiment analysis to detect positive, negative, or neutral sentiment. | boolean | true |  |
-| **operation** | Operation | The operation to perform. Enum values: \* analyzeText \* analyzeUrl | string | analyzeText |  |
-| **serviceUrl** | Service URL | The Watson Natural Language Understanding service endpoint URL. If not specified, the default URL will be used. | string |  | https://api.us-south.natural-language-understanding.watson.cloud.ibm.com |
+| **apiKey** | API Key | **Required** The API key of the Natural Language Understanding instance, the `apikey` value of its service credentials in the IBM Cloud console. | string |  |  |
+| **analyzeCategories** | Analyze Categories | If true, the results place the text in a hierarchy of topics, such as `/technology and computing/software`. | boolean | false |  |
+| **analyzeConcepts** | Analyze Concepts | If true, the results list general concepts that the text is about, even when it does not name them. | boolean | false |  |
+| **analyzeEmotion** | Analyze Emotion | If true, the results give the emotions of the text, such as joy, anger, sadness, fear and disgust. | boolean | false |  |
+| **analyzeEntities** | Analyze Entities | If true, the results list the people, companies, organizations, places and other named things in the text. | boolean | true |  |
+| **analyzeKeywords** | Analyze Keywords | If true, the results list the important words and phrases of the text. | boolean | true |  |
+| **analyzeSentiment** | Analyze Sentiment | If true, the results say whether the text is positive, negative or neutral, with a score from -1 to 1. | boolean | true |  |
+| **operation** | Operation | `analyzeText` analyzes the text of the body; `analyzeUrl` takes the body as the address of a web page that Watson fetches and analyzes. Enum values: \* analyzeText \* analyzeUrl | string | analyzeText |  |
+| **serviceUrl** | Service URL | The address of the Natural Language Understanding instance, the `url` value of its service credentials, which depends on the region of the instance. When it is not set, the address of the US South region is used. | string |  | https://api.us-south.natural-language-understanding.watson.cloud.ibm.com |
 
 ## Dependencies
 

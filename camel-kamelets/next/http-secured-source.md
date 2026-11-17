@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Periodically fetches a secured HTTP resource and provides the content as output. Supports Oauth and Basic authentication.
+Fetches a web address with an HTTP GET request at a regular interval, logging in with a user and password or with an OAuth 2.0 token, and sends each response as a message.
+
+Use it to poll a protected REST API or feed for its current data, for example fetch the state of the orders every minute. If the address needs no login, use `http-source`. To receive the requests that other systems send instead, use `webhook-source`.
+
+Output: the body is the body of the response, as bytes. The headers of the response, such as `Content-Type`, are copied to the message, and `CamelHttpResponseCode` holds the status code.
+
+Good to know: it fetches the address every `period` and sends a message for each response, even when the data has not changed. A response with a status code of 300 or higher sends no message: the error is logged, and the address is fetched again at the next period. Log in either with `authUsername` and `authPassword`, or with `oauth2ClientId`, `oauth2ClientSecret` and `oauth2TokenEndpoint`: the Kamelet then gets a token from that URL and sends it as a Bearer token.
 
 ## Configuration Options
 
@@ -13,17 +19,17 @@ The following table summarizes the configuration options available for the `http
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **url** | URL | **Required** The URL to fetch for data. | string |  | https://gist.githubusercontent.com/nicolaferraro/e3c72ace3c751f9f88273896611ce5fe/raw/3b6f54060bacb56b6719b7386a4645cb59ad6cc1/quote.json |
-| **authMethod** | Authentication Method | Authentication methods allowed to use as a comma separated list of values Basic, Digest or NTLM. | string |  |  |
-| **authPassword** | Authentication Password | Authentication password. | string |  |  |
-| **authUsername** | Authentication Username | Authentication username. | string |  |  |
-| **authenticationPreemptive** | Authentication Preemptive | If this option is true, camel-http sends preemptive basic authentication to the server. | boolean | false |  |
-| **contentType** | Content Type | The content type accepted for the resource. | string | application/json |  |
-| **oauth2ClientId** | Oauth2 Client Id | Oauth2 Client Id. | string |  |  |
-| **oauth2ClientSecret** | Oauth2 Client Secret | Oauth2 Client Secret. | string |  |  |
-| **oauth2Scope** | Oauth2 Scope | Oauth2 Scope. | string |  |  |
-| **oauth2TokenEndpoint** | Oauth2 Token Endpoint | Oauth2 Token Endpoint. | string |  |  |
-| **period** | Period between Updates | The interval between fetches in milliseconds. | integer | 10000 |  |
+| **url** | URL | **Required** The address to fetch, with the path and any query parameters. It must start with `http://` or `https://`. | string |  | https://api.example.com/v1/orders/status |
+| **authMethod** | Authentication Method | The login methods to allow when the service asks for a login, as a comma-separated list of `Basic`, `Digest` and `NTLM`. Basic login with `authUsername` and `authPassword` works without it. | string |  | Basic |
+| **authPassword** | Authentication Password | The password of `authUsername`. | string |  |  |
+| **authUsername** | Authentication Username | The user to log in as, together with `authPassword`. | string |  |  |
+| **authenticationPreemptive** | Authentication Preemptive | If true, `authUsername` and `authPassword` are sent with Basic login on the first request. If false, they are sent only after the service answers 401 and asks for them, which takes a second request. | boolean | false |  |
+| **contentType** | Content Type | The value of the `Accept` header of the request, which tells the service the kind of response you want, such as `application/json` or `text/csv`. | string | application/json | text/csv |
+| **oauth2ClientId** | OAuth2 Client ID | The client ID of the application, as registered with the OAuth 2.0 provider. With `oauth2ClientSecret`, it is used to get a token from `oauth2TokenEndpoint` (client credentials grant). | string |  |  |
+| **oauth2ClientSecret** | OAuth2 Client Secret | The client secret of the application, as given by the OAuth 2.0 provider. | string |  |  |
+| **oauth2Scope** | OAuth2 Scope | The scope to ask for in the token request, when the OAuth 2.0 provider needs one. | string |  | orders.write |
+| **oauth2TokenEndpoint** | OAuth2 Token URL | The URL to get the tokens from, as given by the OAuth 2.0 provider. The Kamelet logs in to it with `oauth2ClientId` and `oauth2ClientSecret`. | string |  | https://login.example.com/oauth2/token |
+| **period** | Period between Updates | How long to wait between two requests, in milliseconds. The default, 10000, is ten seconds. | integer | 10000 | 60000 |
 
 ## Dependencies
 
@@ -76,16 +82,16 @@ camel run route.yaml
 
 This Kamelet supports multiple authentication methods:
 
--   OAuth authentication
+-   OAuth 2.0 client credentials (`oauth2ClientId`, `oauth2ClientSecret`, `oauth2TokenEndpoint`, `oauth2Scope`)
     
--   Basic authentication using username and password
+-   Basic, Digest or NTLM authentication using username and password (`authUsername`, `authPassword`, `authMethod`)
     
 -   No authentication (if not specified)
     
 
 ### Output format
 
-The Kamelet periodically fetches a secured HTTP resource and provides the content as output. The content type is configurable and defaults to application/json.
+The Kamelet periodically fetches a secured HTTP resource with a GET request and provides the body of the response, as bytes, as output. The `contentType` option sets the `Accept` header of the request (default: application/json). The headers of the response are copied to the message, with the status code in `CamelHttpResponseCode`. A response with a status code of 300 or higher sends no message; the error is logged.
 
 ### Configuration
 
@@ -94,7 +100,7 @@ The Kamelet requires the following parameters:
 -   `url`: The URL to fetch for data
     
 
-Optional parameters: - `period`: The interval between fetches in milliseconds (default: 10000) - `contentType`: The content type accepted for the resource (default: "application/json") - Authentication parameters (oauth or basic auth credentials)
+Optional parameters: - `period`: The interval between fetches in milliseconds (default: 10000) - `contentType`: The value of the `Accept` header of the request (default: "application/json") - Authentication parameters (oauth or basic auth credentials)
 
 ### Usage example
 

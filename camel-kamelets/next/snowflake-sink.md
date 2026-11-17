@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Send data to a Snowflake Database. This Kamelet expects a JSON-formatted body. Use key:value pairs to map the JSON fields and parameters.
+Runs an SQL statement, such as an INSERT, in a Snowflake database for each message, with values taken from the fields of the JSON object in the body.
+
+Use it to store records from another system as rows of a table, such as each order that arrives on a Kafka topic, or to update or delete rows. To read rows, use `snowflake-source`.
+
+Input: the body is one JSON object, as text, such as `{"username":"oscerd","city":"Rome"}`. In `query`, write `:#username` where the value of the field `username` goes. When the object has no field of that name, the header of that name is used instead. Fields that `query` does not name are ignored.
+
+Output: the body afterwards is the JSON object as a Map, and the `CamelSqlUpdateCount` header holds the number of rows the statement changed. When `query` is a SELECT, the body is instead a List of the rows found, each a Map, and the `CamelSqlRowCount` header holds their number.
+
+Good to know: a message fails when its body is not a JSON object (a JSON array or plain text, for example), or when it has no value for a parameter of `query`. The values are sent to the database apart from the SQL text, so the content of a message cannot change the statement. Do not write `?` in `query`, not even in a quoted string: the Kamelet then fails to start.
 
 ## Configuration Options
 
@@ -13,11 +21,11 @@ The following table summarizes the configuration options available for the `snow
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **instanceUrl** | Instance URL | **Required** The Instance url. | string |  | instance.snowflakecomputing.com |
-| **password** | Password | **Required** The password to access a secured Snowflake Database. | string |  |  |
-| **query** | Query | **Required** The query to execute against the Snowflake Database. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
-| **username** | Username | **Required** The username to access a secured Snowflake Database. | string |  |  |
-| **databaseName** | Database Name | The name of the Snowflake Database. | string |  |  |
+| **instanceUrl** | Account Host Name | **Required** The host name of your Snowflake account, without `https://`: your account identifier followed by `.snowflakecomputing.com`, as in the address you open Snowflake at. | string |  | myorg-myaccount.snowflakecomputing.com |
+| **password** | Password | **Required** The password of the Snowflake user `username`. | string |  |  |
+| **query** | Query | **Required** The SQL statement to run for each message, such as an INSERT, UPDATE or DELETE. Write `:#name` where the value of the field `name` of the JSON body goes. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
+| **username** | Username | **Required** The Snowflake user to log in as. It needs the rights to run the queries of this Kamelet on their tables. | string |  |  |
+| **databaseName** | Database Name | The Snowflake database that holds the tables `query` names. | string |  | SHOP |
 
 ## Dependencies
 

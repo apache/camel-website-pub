@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Receive data from AWS SQS subscribed to Eventbridge Bus reporting events related to an S3 bucket or multiple buckets.
+Receives the events of an Amazon S3 bucket, such as a new or a deleted file, from the Amazon SQS queue that Amazon EventBridge sends them to, one message per event.
+
+Use it to react to new files in a bucket as soon as they arrive, without listing the bucket again and again, for example to process uploaded documents or imported data files. To read the files of a bucket by polling it, use `aws-s3-source`.
+
+Output: the body is the EventBridge event, as JSON text: `detail-type` says what happened (such as `Object Created` or `Object Deleted`), `detail.bucket.name` is the bucket and `detail.object.key` the key of the file. With `getObject` set to true, the event of a file uploaded with a simple upload (PutObject) carries the content of the file instead, as a stream, with the `CamelAwsS3ProducedBucketName` and `CamelAwsS3ProducedKey` headers; the other events then come as parsed JSON (a Jackson `JsonNode`).
+
+Good to know: it needs a setup in AWS. In the properties of the bucket, turn on sending events to Amazon EventBridge; then create an EventBridge rule for the events of source `aws.s3` and that bucket, with the queue as its target. Each event is deleted from the queue once it has been processed, unless `deleteAfterRead` is false. The files stay in the bucket. `getObject` skips files created by a multipart upload or a copy, and never connects through `uriEndpointOverride`.
 
 ## Configuration Options
 
@@ -13,20 +19,20 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **accessKey** | Access Key | **Required** The access key obtained from AWS. | string |  |  |
-| **queueNameOrArn** | Queue Name | **Required** The SQS Queue Name or ARN. | string |  |  |
-| **region** | AWS Region | **Required** The AWS region to access. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  |  |
-| **secretKey** | Secret Key | **Required** The secret key obtained from AWS. | string |  |  |
-| **amazonAWSHost** | AWS Host | The hostname of the Amazon AWS cloud. | string | amazonaws.com |  |
-| **autoCreateQueue** | Autocreate Queue | Setting the autocreation of the SQS queue. | boolean | false |  |
-| **delay** | Delay | The number of milliseconds before the next poll of the selected stream. | integer | 500 |  |
-| **deleteAfterRead** | Auto-delete Messages | Delete messages after consuming them. | boolean | true |  |
-| **getObject** | Greedy Object in Bucket | If `getObject` is enabled, then the file created in the bucket is retrieved and returned as body. If not, only the event will returned as body. | boolean | false |  |
-| **greedy** | Greedy Scheduler | If greedy is enabled, then the polling will happen immediately again, if the previous run polled 1 or more messages. | boolean | false |  |
-| **overrideEndpoint** | Endpoint Overwrite | Select this option to override the endpoint URI. To use this option, you must also provide a URI for the `uriEndpointOverride` option. | boolean | false |  |
-| **protocol** | Protocol | The underlying protocol used to communicate with SQS. | string | https | http or https |
-| **queueURL** | Queue URL | The full SQS Queue URL. When set, it is used verbatim and every other property that would otherwise determine the queue URL is ignored. Intended for connecting to a mock SQS implementation. | string |  |  |
-| **uriEndpointOverride** | Overwrite Endpoint URI | The overriding endpoint URI. To use this option, you must also select the `overrideEndpoint` option. | string |  |  |
+| **accessKey** | Access Key | **Required** The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. | string |  |  |
+| **queueNameOrArn** | Queue Name | **Required** The name of the SQS queue that the EventBridge rule sends the S3 events to, such as `s3-events`, or its ARN (Amazon Resource Name). | string |  | s3-events |
+| **region** | AWS Region | **Required** The AWS region of the queue and the bucket, as a region code such as `eu-west-1` or `us-east-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
+| **secretKey** | Secret Key | **Required** The secret access key that belongs to `accessKey`. The AWS console shows it only once, when the access key is created. | string |  |  |
+| **amazonAWSHost** | AWS Host | The host name of AWS. Leave it as `amazonaws.com` for AWS. Any other value is the address to connect to instead, as `host:port`, together with `protocol`; `uriEndpointOverride` does the same. | string | amazonaws.com |  |
+| **autoCreateQueue** | Autocreate Queue | If true, the queue is created when it does not exist. A name that ends in `.fifo` creates a FIFO queue. The credentials need the permission to create queues. | boolean | false |  |
+| **delay** | Delay | How long to wait between two polls of the queue, in milliseconds. | integer | 500 |  |
+| **deleteAfterRead** | Auto-delete Messages | If true, each event is deleted from the queue once it has been processed. Set it to false to keep the events; they are then received again each time the visibility timeout of the queue ends. | boolean | true |  |
+| **getObject** | Get Object | If true, for an event of a file uploaded with a simple upload (PutObject), it fetches the file and sends its content instead of the event. It connects to S3 with `accessKey`, `secretKey` and `region` only, not with `uriEndpointOverride`. | boolean | false |  |
+| **greedy** | Greedy Scheduler | If true, it polls again right away when the last poll received messages, instead of waiting for `delay`. | boolean | false |  |
+| **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to SQS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
+| **protocol** | Protocol | `https` or `http`. Only used when `amazonAWSHost` is not `amazonaws.com`. | string | https | http |
+| **queueURL** | Queue URL | The full address of the queue, as the SQS console shows it. When it is set, it is used as it is, and the queue is not looked up by name. | string |  | https://sqs.eu-west-1.amazonaws.com/123456789012/s3-events |
+| **uriEndpointOverride** | Overwrite Endpoint URI | The address to connect to instead of AWS, as a URL such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
 
 ## Dependencies
 

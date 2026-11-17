@@ -858,6 +858,9 @@ The only difference between the YAML route embedded in the Kamelet and the one i
 
 The Kamelet above is incomplete, we need to define the two parameters we’ve identified in the template and also give a description to the Kamelet itself. The way to express all this information is via a [JSON Schema](https://json-schema.org/) specification in the Kamelet YAML.
 
+> **Tip**
+> The descriptions are what people and AI assistants read to choose and configure the Kamelet. See [Documenting a Kamelet](documenting.md) for who we write them for and the shape they take.
+
 earthquake-source.kamelet.yaml
 
 ```yaml

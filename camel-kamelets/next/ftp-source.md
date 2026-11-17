@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive data from an FTP server.
+Reads the files in a directory on an FTP server, one message per file, and by default leaves them on the server.
+
+Use it to collect the files that a partner or a legacy system drops on an FTP server, such as orders, invoices or exports. For an encrypted connection use `ftps-source`, and for a server you reach with SSH use `sftp-source`.
+
+Output: the body is the content of the file, as a stream. The `file` and `ce-file` headers hold the name of the file, with its path below `directoryName` when `recursive` is true, such as `2026/orders.csv`. `CamelFileName` holds the same name, and `CamelFileLength` the size of the file in bytes.
+
+Good to know: files are not deleted or moved after they are read, unless `delete` is true. A file is read only once while the integration runs (`idempotent`), but the files left on the server are all read again after a restart; set `delete` to true to read each file only once. The connection and the login are not encrypted. Files are transferred in ASCII (text) mode unless `binary` is true.
 
 ## Configuration Options
 
@@ -13,17 +19,17 @@ The following table summarizes the configuration options available for the `ftp-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **connectionHost** | Connection Host | **Required** The hostname of the FTP server. | string |  |  |
-| **connectionPort** | Connection Port | **Required** The port of the FTP server. | string | 21 |  |
-| **directoryName** | Directory Name | **Required** The starting directory. | string |  |  |
-| **password** | Password | **Required** The password to access the FTP server. | string |  |  |
-| **username** | Username | **Required** The username to access the FTP server. | string |  |  |
-| **autoCreate** | Autocreate Missing Directories | Automatically create starting directory. | boolean | true |  |
-| **binary** | Binary | Specifies the file transfer mode, BINARY or ASCII. Default is ASCII (false). | boolean | false |  |
-| **delete** | Delete | If true, the file is deleted after it is processed successfully. | boolean | false |  |
-| **idempotent** | Idempotency | Skip already-processed files. | boolean | true |  |
-| **passiveMode** | Passive Mode | Specifes to use passive mode connection. | boolean | false |  |
-| **recursive** | Recursive | If a directory, look for files in all the sub-directories as well. | boolean | false |  |
+| **connectionHost** | Connection Host | **Required** The host name or IP address of the FTP server, without `ftp://` and without a port. | string |  | ftp.example.com |
+| **connectionPort** | Connection Port | **Required** The port of the FTP server. FTP servers usually listen on port 21. | string | 21 |  |
+| **directoryName** | Directory Name | **Required** The directory on the server to read the files from. A path without a leading `/` is relative to the home directory of the user. | string |  | outgoing/orders |
+| **password** | Password | **Required** The password of `username` on the FTP server. | string |  |  |
+| **username** | Username | **Required** The user to log in to the FTP server as. | string |  |  |
+| **autoCreate** | Autocreate Missing Directories | If true, `directoryName` is created on the server when it does not exist. | boolean | true |  |
+| **binary** | Binary Mode | If true, files are transferred in binary mode, byte for byte. When false, they are transferred in ASCII mode, which is meant for text. Set it to true for files that are not text, such as images, archives or PDF files. | boolean | false |  |
+| **delete** | Delete | If true, each file is deleted from the server once it has been read and handed on successfully. Use it to read each file only once, also across restarts. | boolean | false |  |
+| **idempotent** | Skip Files Already Read | If true, a file is read only once while the integration runs, even when it stays on the server. The list of the files read is kept in memory, so after a restart the files still on the server are read again. If false, and `delete` is false, the same files are read again on every poll. | boolean | true |  |
+| **passiveMode** | Passive Mode | If true, the transfers use passive mode, in which the integration opens all the connections to the server. Set it to true when the integration or the server is behind a firewall or NAT, where the default active mode often fails. | boolean | false |  |
+| **recursive** | Recursive | If true, the files in the subdirectories of `directoryName` are read too. | boolean | false |  |
 
 ## Dependencies
 
@@ -98,7 +104,7 @@ The FTP Source Kamelet supports the following configurations:
     
 -   **Auto Create**: Automatically create the starting directory if it doesn’t exist (default: true)
     
--   **Delete**: Delete files after successful processing (default: false)
+-   **Delete**: Delete files after successful processing (default: false). When false, files are left on the server; with **Idempotent**, they are skipped while the integration runs but read again after a restart
     
 
 ### Output Format

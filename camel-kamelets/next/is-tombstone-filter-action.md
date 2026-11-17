@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Filter based on the presence of body or not.
+Drops the Kafka records that have no value, called tombstones, and passes on all other messages unchanged.
+
+Use it to skip tombstones, which mark a key as deleted in a compacted topic, after `kafka-source` when the next step cannot handle a message without a body.
+
+Input: any message.
+
+Output: the same message, unchanged, when it has a body. A message with no body, or with empty text as its body, is dropped and nothing is sent on.
 
 ## Configuration Options
 

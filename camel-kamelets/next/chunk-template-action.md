@@ -13,7 +13,7 @@ The following table summarizes the configuration options available for the `chun
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **template** | Template | **Required** The inline template. | binary |  |  |
+| **template** | Template | **Required** The Chunk template itself, encoded in Base64. | binary |  |  |
 
 ## Dependencies
 

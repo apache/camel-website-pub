@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Resolves schema from given mime type and payload. Sets the resolved schema, the schema type and its content class as properties for later reference.
+Attaches an Avro, Protobuf or JSON schema to each message, for the later steps that need one, and leaves the body unchanged.
+
+Use it to give the schema once, before `data-type-action` with a format such as `avro-binary` or `protobuf-binary`, which takes its schema only from here. `avro-serialize-action`, `avro-deserialize-action`, `protobuf-serialize-action` and `protobuf-deserialize-action` use it too when their own `schema` is not set.
+
+Input: any body. The schema comes from `schema`, or else from the Java class named by `contentClass`.
+
+Output: the body and the headers are unchanged. The schema is kept with the message in the properties `X-Content-Schema` and `X-Content-Schema-Type` (`avsc`, `proto` or `json`), which are not headers and are not sent to other systems.
+
+Good to know: with the default `mimeType`, `application/json`, and no `schema` or `contentClass`, it does nothing. A `mimeType` it does not know makes every message fail with "Unsupported type".
 
 ## Configuration Options
 
@@ -13,10 +21,10 @@ The following table summarizes the configuration options available for the `reso
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **contentClass** | Content Class | Type information of the content object. Fully qualified class name. | string |  | org.apache.camel.content.Foo |
-| **mimeType** | Mime Type | The mime type to determine the schema resolver implementation that should perform the operation. | string | application/json | application/json |
-| **schema** | Schema | Optional schema content (as single-line, using JSON format). | string |  |  |
-| **targetMimeType** | Target Mime Type | Additional mime type information used to determine the schema resolver. Usually only used in combination with mime type "application/x-java-object". | string |  | application/json |
+| **contentClass** | Content Class | The full name of a Java class in the application whose fields define the schema. Only used when `schema` is not set. | string |  | com.example.Order |
+| **mimeType** | MIME Type | Which kind of schema `schema` holds and later steps need: `avro/binary`, `application/avro` or `avro/x-struct` for Avro; `protobuf/binary`, `application/protobuf` or `protobuf/x-struct` for Protobuf; `application/json` or `application/x-struct` for JSON Schema. With `application/x-java-object`, the kind is taken from `targetMimeType`. | string | application/json | avro/binary |
+| **schema** | Schema | The schema itself: for Avro, JSON text such as the example; for Protobuf, a `message` in the `.proto` language; for JSON, a JSON Schema as JSON text. When it is not set, the schema is made from `contentClass`. | string |  | {"type": "record", "namespace": "com.example", "name": "FullName", "fields": \[{"name": "first", "type": "string"},{"name": "last", "type": "string"}\]} |
+| **targetMimeType** | Target MIME Type | The kind of schema to find, as in `mimeType`, such as `avro/binary`. Only used when `mimeType` is `application/x-java-object`. | string |  | avro/binary |
 
 ## Dependencies
 

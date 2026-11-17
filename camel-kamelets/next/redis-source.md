@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Get Events from a Redis cache.
+Receives the messages published on one or more Redis channels, one message per publication, as a subscriber of Redis publish and subscribe.
+
+Use it to react to events that other applications publish on Redis, such as notifications, cache invalidations or status changes. To publish on a channel, use `redis-sink` with the `PUBLISH` command.
+
+Output: the body is the published message, as text. The `CamelRedis.Channel` header is the channel it was published on.
+
+Good to know: only the messages published while the integration runs are received; Redis does not keep them for later. It connects with no password and no TLS.
 
 ## Configuration Options
 
@@ -13,11 +19,11 @@ The following table summarizes the configuration options available for the `redi
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **channels** | Channels | **Required** Redis Channels. | string | one |  |
-| **redisHost** | Redis Host | **Required** The host where Redis server is running. | string |  |  |
-| **redisPort** | Redis Port | **Required** The port where Redis server is running. | integer |  |  |
-| **command** | Command | Redis Command. | string | SUBSCRIBE |  |
-| **serializer** | Serializer | RedisSerializer fully qualified name implementation. | string | org.springframework.data.redis.serializer.StringRedisSerializer |  |
+| **channels** | Channels | **Required** The channels to listen to, separated by commas, or the channel patterns with `command` set to `PSUBSCRIBE`. | string | one | orders,alerts |
+| **redisHost** | Redis Host | **Required** The host name or IP address of the Redis server. | string |  | redis.example.com |
+| **redisPort** | Redis Port | **Required** The port of the Redis server, usually 6379. | integer |  | 6379 |
+| **command** | Command | How to subscribe. `SUBSCRIBE` listens to the channels named in `channels`; `PSUBSCRIBE` treats them as patterns, such as `orders.*`, and listens to every channel that matches. | string | SUBSCRIBE | PSUBSCRIBE |
+| **serializer** | Serializer | The full Java class name of the Spring Data Redis serializer that turns the bytes of each message into the body. The default gives text. | string | org.springframework.data.redis.serializer.StringRedisSerializer |  |
 
 ## Dependencies
 
@@ -66,7 +72,7 @@ camel run route.yaml
 
 ### Authentication
 
-This Kamelet supports Redis authentication using password-based authentication. The connection can be configured with or without authentication depending on your Redis setup.
+This Kamelet connects to Redis without a password and without TLS. It has no option for authentication, so the Redis server must accept connections without a password.
 
 ### Configuration
 
@@ -74,20 +80,16 @@ The Redis Source Kamelet supports the following configurations:
 
 -   **Redis Host**: The hostname or IP address of the Redis server (required)
     
--   **Redis Port**: The port number of the Redis server (default: 6379)
+-   **Redis Port**: The port number of the Redis server, usually 6379 (required)
     
--   **Password**: Password for Redis authentication (optional)
+-   **Channels**: Redis channels to subscribe to, separated by commas (required)
     
--   **Channels**: Redis channels to subscribe to (required)
-    
--   **Connection Timeout**: Connection timeout in milliseconds
-    
--   **Database**: Redis database number to connect to
+-   **Command**: `SUBSCRIBE` (the default) for channel names, or `PSUBSCRIBE` for channel patterns
     
 
 ### Output Format
 
-The Kamelet outputs Redis messages received from subscribed channels. Messages include both the channel name and message content.
+The Kamelet outputs the messages received from the subscribed channels. The body is the message content, as text, and the `CamelRedis.Channel` header is the name of the channel.
 
 ### Usage Example
 
@@ -98,8 +100,7 @@ The Kamelet outputs Redis messages received from subscribed channels. Messages i
       parameters:
         redisHost: "redis.example.com"
         redisPort: "6379"
-        password: "redispass"
-        channels: "notifications,alerts"
+        channels: "notifications"
       steps:
         - to:
             uri: "kamelet:log-sink"
@@ -120,7 +121,7 @@ The Kamelet outputs Redis messages received from subscribed channels. Messages i
             uri: "kamelet:log-sink"
 ```
 
-### Example with Database Selection
+### Example with a Channel Pattern
 
 ```yaml
 - route:
@@ -129,9 +130,8 @@ The Kamelet outputs Redis messages received from subscribed channels. Messages i
       parameters:
         redisHost: "redis.example.com"
         redisPort: "6379"
-        password: "redispass"
-        database: "1"
-        channels: "cache-invalidation"
+        command: "PSUBSCRIBE"
+        channels: "events.*"
       steps:
         - to:
             uri: "kamelet:log-sink"
@@ -139,7 +139,7 @@ The Kamelet outputs Redis messages received from subscribed channels. Messages i
 
 ### Pub/Sub Pattern
 
-This kamelet implements the Redis publish/subscribe pattern, allowing real-time message consumption from Redis channels. Multiple channels can be subscribed to simultaneously by providing a comma-separated list.
+This kamelet implements the Redis publish/subscribe pattern, allowing real-time message consumption from Redis channels. Multiple channels can be subscribed to simultaneously by providing a comma-separated list. Only the messages published while the integration runs are received.
 
 ## Kamelet source file
 

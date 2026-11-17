@@ -4,9 +4,15 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Convert PDF, office and similar documents to structure-preserving markdown with Docling, OCR included.
+Turns each document, such as a PDF, an office document or an HTML page, into Markdown text with Docling, keeping its headings, lists and tables.
 
-Before the conversion, the value of the `documentIdHeader` header is captured into the `CamelLangChain4jIngestDocumentId` exchange property, so a converted document cannot forge its own identity in steps that read it later (the langchain4j-ingest sink does); the body is pinned to bytes and the `CamelDocling*` control headers are swept, because none of them may be decided by a consumer-delivered payload. By default the `docling` component executes a local docling CLI; set `doclingServeUrl` to use a Docling Serve instance instead - the natural fit for self-contained Pipes. With `maxDocumentSize` set, a payload larger than that many bytes fails the exchange before the conversion.
+Use it to get well-structured text out of documents before an AI step, for example in front of `langchain4j-ingest-sink` to load them into a vector store. For plain text without a Docling server, use `tika-extract-text-action`.
+
+Input: the document, as bytes, a stream, a file or text. The header named in `documentIdHeader` (by default `CamelLangChain4jIngestDocumentId`) is the id of the document, if any; it is kept for `langchain4j-ingest-sink` further on.
+
+Output: the body is the document as Markdown, as text. The headers of the message are kept.
+
+Good to know: to use a Docling Serve server, which is the usual setup, set both `useDoclingServe` to true and `doclingServeUrl`; otherwise it runs the `docling` command-line program, which must be installed on the machine of the integration. With `maxDocumentSize`, a larger document fails the message without being sent.
 
 ## Configuration Options
 
@@ -15,10 +21,10 @@ The following table summarizes the configuration options available for the `docl
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **doclingServeUrl** | Docling Serve URL | Address of a Docling Serve instance to convert through, such as [http://docling-serve:5001](http://docling-serve:5001); when unset, the docling component’s own configuration applies (a local docling CLI by default). | string |  |  |
-| **documentIdHeader** | Document Id Header | Name of the header carrying the stable document id, captured into the CamelLangChain4jIngestDocumentId exchange property before the conversion. | string | CamelLangChain4jIngestDocumentId |  |
-| **maxDocumentSize** | Max Document Size | Maximum size of the payload in bytes, checked before the conversion; a larger document fails the exchange without being converted. 0, the default, means no limit. | integer | 0 |  |
-| **useDoclingServe** | Use Docling Serve | Whether to convert through a Docling Serve instance instead of a local docling CLI; set together with doclingServeUrl. | boolean |  |  |
+| **doclingServeUrl** | Docling Serve URL | The address of a Docling Serve server, starting with `http://` or `https://`. Only used when `useDoclingServe` is true. | string |  | http://docling-serve:5001 |
+| **documentIdHeader** | Document ID Header | The name of the header that holds the id of the document, such as its file name. The id is kept for `langchain4j-ingest-sink`, which writes it on every piece of the document in the store, and takes precedence over the headers it reads. Change it when the id comes in another header. | string | CamelLangChain4jIngestDocumentId | CamelFileName |
+| **maxDocumentSize** | Max Document Size | The largest document to convert, in bytes. A larger document fails the message without being converted. 0, the default, means no limit. | integer | 0 | 10485760 |
+| **useDoclingServe** | Use Docling Serve | If true, the documents are converted by the Docling Serve server at `doclingServeUrl`. When it is not set, the `docling` command-line program is run on the machine of the integration. | boolean |  |  |
 
 ## Dependencies
 

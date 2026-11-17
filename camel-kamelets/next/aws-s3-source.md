@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive data from an Amazon S3 Bucket.
+Reads the files (objects) in an Amazon S3 bucket, one message per file, and by default deletes each file once it has been read.
+
+Use it to process files that another system drops into a bucket, such as uploaded documents, exported reports or log files. To react to new files through S3 event notifications instead of reading the bucket over and over, use `aws-s3-event-based-source`.
+
+Output: the body is the content of the file, as bytes. The headers give the bucket name, the key (the path of the file in the bucket), the content type and the ETag of the file.
+
+Good to know: files are deleted from the bucket after they are read, unless `deleteAfterRead` is set to false; then the same files are read again on every poll. `moveAfterRead` moves them to another bucket instead. It also works with S3-compatible storage, such as MinIO, through `overrideEndpoint` and `uriEndpointOverride`.
 
 ## Configuration Options
 
@@ -18,13 +24,13 @@ The following table summarizes the configuration options available for the `aws-
 | **accessKey** | Access Key | The access key obtained from AWS. | string |  |  |
 | **autoCreateBucket** | Autocreate Bucket | Specifies to automatically create the S3 bucket. | boolean | false |  |
 | **delay** | Delay | The number of milliseconds before the next poll of the selected bucket. | integer | 500 |  |
-| **deleteAfterRead** | Auto-delete Objects | Specifies to delete objects after consuming them. | boolean | true |  |
+| **deleteAfterRead** | Auto-delete Objects | If true, each file is deleted from the bucket after it has been read. Set it to false to keep the files; they are then read again on every poll. | boolean | true |  |
 | **destinationBucket** | Destination Bucket | Define the destination bucket where an object must be moved when moveAfterRead is set to true. | string |  |  |
 | **destinationBucketPrefix** | Destination Bucket Prefix | Define the destination bucket prefix to use when an object must be moved, and moveAfterRead is set to true. | string |  |  |
 | **destinationBucketSuffix** | Destination Bucket Suffix | Define the destination bucket suffix to use when an object must be moved, and moveAfterRead is set to true. | string |  |  |
 | **forcePathStyle** | Force Path Style | Forces path style when accessing AWS S3 buckets. | boolean | false |  |
 | **ignoreBody** | Ignore Body | If true, the S3 Object body is ignored. Setting this to true overrides any behavior defined by the `includeBody` option. If false, the S3 object is put in the body. | boolean | false |  |
-| **maxMessagesPerPoll** | Max Messages Per Poll | Gets the maximum number of messages as a limit to poll at each polling. Gets the maximum number of messages as a limit to poll at each polling. The default value is 10. Use 0 or a negative number to set it as unlimited. | integer | 10 |  |
+| **maxMessagesPerPoll** | Max Messages Per Poll | The most files to read at each poll. Use 0 or a negative number for no limit. | integer | 10 |  |
 | **moveAfterRead** | Move Objects After Delete | Move objects from S3 bucket to a different bucket after they have been retrieved. | boolean | false |  |
 | **overrideEndpoint** | Endpoint Overwrite | Select this option to override the endpoint URI. To use this option, you must also provide a URI for the `uriEndpointOverride` option. | boolean | false |  |
 | **prefix** | Prefix | The AWS S3 bucket prefix to consider while searching. | string |  | folder/ |

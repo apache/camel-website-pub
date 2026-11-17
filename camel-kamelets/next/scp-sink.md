@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send file to an FTP Server through Secure Copy Protocol
+Copies each message as a file to the home directory of a user on a remote server, with SCP (secure copy) over an SSH connection.
+
+Use it to copy files to a server you reach with SSH that does not offer SFTP, for example to drop a configuration or a report on a host. To choose the directory on the server, or to append to or keep existing files, use `sftp-sink` instead.
+
+Input: the body is the content of the file, as text, bytes or a stream. The name of the file comes from the `CamelFileName` header, which may hold subdirectories, such as `reports/data.csv`; without it, a unique name is generated.
+
+Output: the message is unchanged.
+
+Good to know: files are written in the home directory of `username`, with the rights of that user, and a file with the same name is replaced. A file name that points outside the home directory fails the message. The key of the server is checked against the file in `knownHostsUri`, or else `~/.ssh/known_hosts` of the user that runs the integration, unless `strictHostKeyChecking` is `no`. Do not place it after messages from an untrusted source.
 
 ## Configuration Options
 
@@ -13,15 +21,15 @@ The following table summarizes the configuration options available for the `scp-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **serverName** | Hostname | **Required** The hostname of the FTP server. | string |  |  |
-| **serverPort** | Port | **Required** The port of the FTP server. | string |  |  |
-| **knownHostsUri** | Known Hosts URI | The known\_hosts file used to verify the server host key, loaded from the classpath by default. Needed when the process has no $HOME/.ssh/known\_hosts to fall back on. | string |  |  |
-| **password** | Password | Password for accessing FTP Server. | string |  |  |
-| **privateKeyFile** | Private Key File | Set the private key file so that the SCP endpoint can do private key verification. | string |  |  |
-| **privateKeyPassphrase** | Private Key Passphrase | Set the private key file passphrase so that the SCP endpoint can do private key verification. | string |  |  |
-| **strictHostKeyChecking** | Strict Host Checking | Sets whether to use strict host key checking. One of yes, no or ask. With no, the server host key is accepted without being checked against a known\_hosts entry. Enum values: \* yes \* no \* ask | string | yes |  |
-| **useUserKnownHostsFile** | Use User Known Hosts File | If knownHostFile has not been explicit configured then use the host file from System.getProperty(user.home)/.ssh/known\_hosts. | boolean | true |  |
-| **username** | Username | Username for accessing FTP Server. | string |  |  |
+| **serverName** | Hostname | **Required** The host name or IP address of the server to copy the files to. | string |  | files.example.com |
+| **serverPort** | Port | **Required** The SSH port of the server, usually 22. | string |  | 22 |
+| **knownHostsUri** | Known Hosts URI | A known\_hosts file that holds the key of the server, such as one made with `ssh-keyscan`. A path is read as a file; `classpath:` followed by a name reads a resource of the application. Use it when the user that runs the integration has no `~/.ssh/known_hosts` with the server in it. | string |  |  |
+| **password** | Password | The password of `username`. Leave it empty to log in with a private key, set in `privateKeyFile`. | string |  |  |
+| **privateKeyFile** | Private Key File | The path of a private key file on the machine that runs the integration, to log in with instead of a password. The matching public key must be in the `authorized_keys` of `username` on the server. | string |  | /etc/scp/keys/id\_rsa |
+| **privateKeyPassphrase** | Private Key Passphrase | The passphrase of the private key in `privateKeyFile`, when the key is protected by one. | string |  |  |
+| **strictHostKeyChecking** | Strict Host Checking | Whether the key of the server must be found in `~/.ssh/known_hosts` of the user that runs the integration. With `yes`, a server that is not in it is refused. With `no`, any server is accepted without checking its key, so someone in between could read the files and the password. `ask` is meant for interactive use. Enum values: \* yes \* no \* ask | string | yes |  |
+| **useUserKnownHostsFile** | Use User Known Hosts File | If true, the key of the server is looked up in `~/.ssh/known_hosts` of the user that runs the integration. | boolean | true |  |
+| **username** | Username | The user to log in as. The files are written in the home directory of this user. | string |  |  |
 
 ## Dependencies
 
@@ -77,7 +85,7 @@ Uses SSH protocol for authentication and encryption, providing strong security f
 
 ### Remote File Placement
 
-Transfers files to remote servers and places them in specified directories with configurable file names and permissions.
+Transfers files to the home directory of `username` on the remote server. The file name comes from the `CamelFileName` header, which may include subdirectories; without it, a unique name is generated. A file with the same name is replaced. To choose another directory on the server, use the SFTP Sink Kamelet.
 
 ### Network Efficiency
 
@@ -98,9 +106,9 @@ Supports multiple authentication methods:
 
 -   Username and password authentication
     
--   Public key authentication
+-   Private key authentication (`privateKeyFile`), with `privateKeyPassphrase` for a key protected by one
     
--   Host key verification for security
+-   Host key verification against the file in `knownHostsUri`, or else `~/.ssh/known_hosts` of the user that runs the integration
     
 
 ### Cross-Platform Support

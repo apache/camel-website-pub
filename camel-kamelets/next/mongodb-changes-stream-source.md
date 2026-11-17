@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Consume Changes from MongoDB Collection in streaming mode.
+Sends a message for each change to a collection of a MongoDB database, such as a document inserted, updated or deleted, as it happens.
+
+Use it to react to changes in MongoDB, for example to copy new orders to another system or to keep a cache or a search index up to date. To read the documents of a capped collection from the start, use `mongodb-source`. To write documents, use `mongodb-sink`.
+
+Output: the body is JSON text. For an insert or a replace, it is the whole new document; for an update, the text `null`; for a delete, an object with only the `_id` of the deleted document. The `CamelMongoDbStreamOperationType` header says what happened (`insert`, `update`, `replace` or `delete`), and the `_id` header holds the `_id` of the document.
+
+Good to know: only changes made after the Kamelet starts are sent. MongoDB offers change streams only on a replica set or a sharded cluster, not on a single standalone server. It connects with TLS by default; set `ssl` to false for a MongoDB without TLS, such as a local one.
 
 ## Configuration Options
 
@@ -13,14 +19,14 @@ The following table summarizes the configuration options available for the `mong
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **collection** | MongoDB Collection | **Required** Sets the name of the MongoDB collection to bind to this endpoint. | string |  |  |
-| **database** | MongoDB Database | **Required** Sets the name of the MongoDB database to target. | string |  |  |
-| **hosts** | MongoDB Hosts | **Required** Comma separated list of MongoDB Host Addresses in host:port format. | string |  |  |
-| **password** | MongoDB Password | User password for accessing MongoDB. | string |  |  |
-| **ssl** | Enable Ssl for Mongodb Connection | whether to enable ssl connection to mongodb. | boolean | true |  |
-| **sslValidationEnabled** | Enables Ssl Certificates Validation and Host name checks. | IMPORTANT this should be disabled only in test environment since can pose security issues. | boolean | true |  |
-| **streamFilter** | Stream Filter | Filter condition for change streams consumer. | string |  | { '$match':{'$or':\[{'fullDocument.stringValue': 'specificValue'}\]} } |
-| **username** | MongoDB Username | Username for accessing MongoDB. The username must be present in the MongoDB’s authentication database (authenticationDatabase). By default, the MongoDB authenticationDatabase is 'admin'. | string |  |  |
+| **collection** | MongoDB Collection | **Required** The name of the collection to watch for changes. | string |  | orders |
+| **database** | MongoDB Database | **Required** The name of the database that holds the collection. | string |  | shop |
+| **hosts** | MongoDB Hosts | **Required** The address of one or more members of the MongoDB replica set or sharded cluster, as `host:port`, separated by commas. MongoDB uses port 27017 unless it was set up otherwise. | string |  | mongo1.example.com:27017,mongo2.example.com:27017 |
+| **password** | MongoDB Password | The password of the MongoDB user `username`. | string |  |  |
+| **ssl** | Use TLS | Whether to connect with TLS (SSL). Set it to false for a MongoDB that does not offer TLS. | boolean | true |  |
+| **sslValidationEnabled** | Check TLS Certificate | Whether to check the certificate and the host name of the server when `ssl` is true. Set it to false only for tests, as the connection can then be intercepted. | boolean | true |  |
+| **streamFilter** | Stream Filter | A `$match` stage of a MongoDB aggregation, as JSON text, that chooses which changes to send. Match on `operationType` (such as `insert`) or on fields of the new document under `fullDocument`. When it is not set, all changes are sent. | string |  | { '$match':{'$or':\[{'fullDocument.stringValue': 'specificValue'}\]} } |
+| **username** | MongoDB Username | The MongoDB user to log in as, defined in the `admin` database. Leave it empty for a MongoDB that does not ask for a login. | string |  |  |
 
 ## Dependencies
 
@@ -71,53 +77,48 @@ camel run route.yaml
 
 ### Authentication methods
 
-This Kamelet connects to Mongodb Changes Stream using:
+This Kamelet connects to MongoDB with:
 
--   Database-specific connection credentials
+-   Username and password authentication (optional), for a user defined in the `admin` database
     
--   Username and password authentication
-    
--   Connection URL/string configuration
+-   TLS, on by default (`ssl`); set `ssl` to false for a MongoDB without TLS
     
 
 ### Output format
 
-The Kamelet monitors Mongodb Changes Stream for changes and produces the data in JSON format.
+The Kamelet watches a collection with a MongoDB change stream, and sends one message for each change made after it starts, as JSON text: the new document for an insert or a replace, `null` for an update, and an object with the `_id` for a delete. The `CamelMongoDbStreamOperationType` header says which kind of change it is.
+
+Change streams need a replica set or a sharded cluster.
 
 ### Configuration
 
 The Kamelet requires database connection parameters:
 
--   Database connection URL/server information
+-   `hosts`: the members of the replica set, as `host:port`
     
--   Username and password for authentication
+-   `database` and `collection`: the collection to watch
     
--   Query or monitoring configuration
+-   `streamFilter` (optional): a `$match` stage that chooses the changes to send
     
 
 ### Usage example
 
+The route below logs each document inserted into the `orders` collection.
+
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: mongodb-changes-stream-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: mongodb-changes-stream-source
-    properties:
-      serverName: "database-server"
-      username: "{{username}}"
-      password: "{{password}}"
-      databaseName: "mydb"
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:mongodb-changes-stream-source"
+      parameters:
+        hosts: "mongo1.example.com:27017,mongo2.example.com:27017"
+        database: "shop"
+        collection: "orders"
+        username: "mongouser"
+        password: "mongopass"
+        streamFilter: "{ '$match': { 'operationType': 'insert' } }"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

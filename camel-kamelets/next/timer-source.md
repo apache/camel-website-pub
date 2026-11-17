@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Produces periodic messages with a custom payload.
+Sends the same fixed message again and again at a regular interval, such as once every second.
+
+Use it to try out a sink or an action without a real system behind it, to trigger a flow on a schedule (for example, call an HTTP service every minute), or to send a heartbeat. For a calendar schedule such as "every weekday at 9:00" use `cron-source` instead, and for a message that counts up use `counter-source`.
+
+Output: the body is the `message` option as text, the same on every message. The `Content-Type` header is set to the `contentType` option.
+
+Good to know: it keeps sending until the integration is stopped, unless `repeatCount` is set.
 
 ## Configuration Options
 
@@ -13,10 +19,10 @@ The following table summarizes the configuration options available for the `time
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **message** | Message | **Required** The message to generate. | string |  | hello world |
-| **contentType** | Content Type | The content type of the generated message. | string | text/plain |  |
-| **period** | Period | The interval (in milliseconds) to wait between producing the next message. | integer | 1000 |  |
-| **repeatCount** | Repeat Count | Specifies a maximum limit of number of fires. | integer |  |  |
+| **message** | Message | **Required** The body of every message, sent as text exactly as written. To send JSON, write the JSON here and set `contentType` to `application/json`. | string |  | hello world |
+| **contentType** | Content Type | The value of the `Content-Type` header on every message, which tells the next step what kind of text the body is. | string | text/plain | application/json |
+| **period** | Period | How long to wait between two messages, in milliseconds. For example, 60000 is one minute. | integer | 1000 | 60000 |
+| **repeatCount** | Repeat Count | How many messages to send in total. When it is not set, a message is sent every `period` until the integration is stopped. | integer |  | 10 |
 
 ## Dependencies
 

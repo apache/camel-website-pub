@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Load an OpenAPI specification from a URI and call an operation on a HTTP service. The request that is generated respects the rules given in the OpenAPI specification (for example, path parameters and Content-Type).
+Calls one operation of a REST API for each message, building the request (method, path, parameters and content type) from the OpenAPI specification of the API.
+
+Use it to call an API that publishes an OpenAPI (Swagger) document without writing its URLs by hand, for example to create a customer or look up an order in a service of your company. For a call to a fixed URL, use `http-sink`, or `http-secured-sink` when the service needs a login.
+
+Input: the body is the request body, such as JSON text, and is sent with the content type the specification gives for the operation. The path and query parameters of the operation come from headers of the same name: for `/pets/{petId}`, set the `petId` header. The other headers of the message, except the Camel ones, are sent as HTTP headers.
+
+Output: when it is used inside a route, the body afterwards is the response of the API, as bytes, with the headers of the response and its status code in `CamelHttpResponseCode`.
+
+Good to know: a missing path parameter is not an error; the request is sent with `{petId}` in the path, unless `clientRequestValidation` is true. The address of the API is taken from the `servers` of the specification, unless `host` or `basePath` is set. The Kamelet has no login options. The Kamelet does not start when the specification has no operation with the ID in `operation`.
 
 ## Configuration Options
 
@@ -13,11 +21,11 @@ The following table summarizes the configuration options available for the `rest
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **operation** | Operation ID | **Required** The operation to call. | string |  |  |
-| **specification** | Specification URI | **Required** The URI to the OpenApi specification file. | string |  | https://api.example.com/openapi.json |
-| **basePath** | Base Path | The API base path. Overrides the value present in the OpenAPI specification. | string |  | /v3 |
-| **clientRequestValidation** | Client Request Validation | Whether to enable validation of the client request to check if the incoming request is valid according to the OpenAPI specification. | boolean | false |  |
-| **host** | Host | The host to use for calling the REST service. Overrides the value found in the OpenAPI specification. The format is [https://hostname:port](https://hostname:port). | string |  | https://api.example.com:443 |
+| **operation** | Operation ID | **Required** The `operationId` of the operation to call, exactly as it is written in the specification. | string |  | getOrderById |
+| **specification** | Specification URI | **Required** Where to load the OpenAPI document of the API from. It starts with `https://` or `http://` for a URL, `file://` for a file, or `classpath://` for a resource in the application. | string |  | https://api.example.com/openapi.json |
+| **basePath** | Base Path | The path that comes before the paths of the operations, in place of the one in the specification. | string |  | /v3 |
+| **clientRequestValidation** | Client Request Validation | If true, each request is checked against the specification before it is sent. A request that does not match it, such as one without a required parameter, fails the message and is not sent. | boolean | false |  |
+| **host** | Host | The scheme, host and port of the API, in place of the address in the `servers` of the specification. Use it when the specification points to another server, such as a test server or `localhost`. | string |  | https://api.example.com:443 |
 
 ## Dependencies
 
@@ -71,7 +79,7 @@ This Kamelet provides integration with RESTful APIs that are documented using Op
 
 ### OpenAPI Specification
 
-Uses OpenAPI specifications to understand API endpoints, request/response formats, and authentication requirements, ensuring consistent and documented API interactions.
+Uses the OpenAPI specification to find the method, the path, the parameters and the content type of the operation given in `operation`. The path and query parameters come from headers with the same names as the parameters: for `/pets/{petId}`, set the `petId` header. A missing path parameter is not an error: the request is sent with `{petId}` in the path. The Kamelet has no authentication options.
 
 ### HTTP Operations
 
@@ -83,7 +91,7 @@ The host and base path for the REST service can be configured to override the de
 
 ### Schema Validation
 
-OpenAPI specifications include schema definitions that can be used for request and response validation, ensuring data integrity and API compliance. Client request validation can be enabled to check if outgoing requests conform to the OpenAPI specification before they are sent.
+OpenAPI specifications include schema definitions that can be used for request and response validation. With `clientRequestValidation` set to true, a request that does not conform to the specification fails the message and is not sent.
 
 ### Documentation-Driven Development
 

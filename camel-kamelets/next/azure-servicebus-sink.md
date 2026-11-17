@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send Messages to Azure Servicebus.
+Sends each message to a queue or a topic in Azure Service Bus, the Azure message broker.
+
+Use it to hand work or events to other applications through Service Bus, such as orders to process, or notifications for all the subscribers of a topic. For simple storage queues, use `azure-storage-queue-sink`.
+
+Input: the body is sent as text: text, bytes or a stream are read as text. A Map is sent as its text form, so turn it into JSON text first, for example with `json-serialize-action`. A List is sent as one message per element. The optional `CamelAzureServiceBusApplicationProperties` header, a Map, sets the custom properties of the message.
+
+Output: the message is unchanged.
+
+Good to know: the shared access policy of the connection string needs the Send right.
 
 ## Configuration Options
 
@@ -13,10 +21,10 @@ The following table summarizes the configuration options available for the `azur
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **connectionString** | Connection String | **Required** Connection String for Azure Servicebus instance. | string |  |  |
-| **topicOrQueueName** | Topic Or Queue Name | **Required** Topic Or Queue Name for the Azure Servicebus instance. | string |  |  |
-| **credentialType** | Credential Type | Determines the credential strategy to adopt. Enum values: \* AZURE\_IDENTITY \* CONNECTION\_STRING \* TOKEN\_CREDENTIAL | string | CONNECTION\_STRING |  |
-| **serviceBusType** | Servicebus Type | The service bus type of connection to execute. Queue is for typical queue option and topic for subscription based model. Enum values: \* queue \* topic | string | queue |  |
+| **connectionString** | Connection String | **Required** The connection string of the Service Bus namespace, from the Azure portal: the namespace, then Settings, Shared access policies, a policy, Primary Connection String. It starts with `Endpoint=sb://`. | string |  |  |
+| **topicOrQueueName** | Topic or Queue Name | **Required** The name of the queue, or of the topic, to send the messages to. For a topic, set `serviceBusType` to `topic`. | string |  | orders |
+| **credentialType** | Credential Type | How to log in to Service Bus. Keep `CONNECTION_STRING`, the default, which uses `connectionString`. `AZURE_IDENTITY` and `TOKEN_CREDENTIAL` also need the `fullyQualifiedNamespace` of the Camel component, which this Kamelet does not set. Enum values: \* AZURE\_IDENTITY \* CONNECTION\_STRING \* TOKEN\_CREDENTIAL | string | CONNECTION\_STRING |  |
+| **serviceBusType** | Service Bus Type | Whether `topicOrQueueName` is a `queue` or a `topic`. Enum values: \* queue \* topic | string | queue |  |
 
 ## Dependencies
 
@@ -93,6 +101,8 @@ The order of evaluation for `AZURE_IDENTITY` is the following:
 For more information, see the [Azure Identity documentation](https://learn.microsoft.com/en-us/java/api/overview/azure/identity-readme)
 
 For `TOKEN_CREDENTIAL` type, you’ll need to add `com.azure.core.credential.TokenCredential` instance in the Camel registry.
+
+`AZURE_IDENTITY` and `TOKEN_CREDENTIAL` also need the fully qualified namespace of Service Bus, which this Kamelet does not set: configure the `fullyQualifiedNamespace` option of the Camel `azure-servicebus` component, or use `CONNECTION_STRING`.
 
 ## Kamelet source file
 

@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send data to MongoDB.
+Inserts each message as a new document into a collection of a MongoDB database.
+
+Use it to store events, orders or other records as documents in MongoDB, for example each message that arrives on a Kafka topic. To read documents, use `mongodb-source` or `mongodb-changes-stream-source`.
+
+Input: the body is one document, as a JSON object in text, such as `{"item":"book","qty":2}`. When it has no `_id` field, MongoDB gives the document a new ObjectId. A JSON array, or text that is not JSON, fails.
+
+Output: the body afterwards is the document that was stored, as a Map with its `_id`, and the `CamelMongoOid` header holds that `_id`.
+
+Good to know: a document whose `_id` is already in the collection fails: the Kamelet only inserts, and the `db-upsert` and `ce-dbupsert` headers do not change that. With `createCollection` false, the default, the Kamelet fails to start when the collection does not exist yet. It connects with TLS by default; set `ssl` to false for a MongoDB without TLS, such as a local one.
 
 ## Configuration Options
 
@@ -13,15 +21,15 @@ The following table summarizes the configuration options available for the `mong
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **collection** | MongoDB Collection | **Required** The name of the MongoDB collection to bind to this endpoint. | string |  |  |
-| **database** | MongoDB Database | **Required** The name of the MongoDB database. | string |  |  |
-| **hosts** | MongoDB Hosts | **Required** A comma-separated list of MongoDB host addresses in `host:port` format. | string |  |  |
-| **createCollection** | Collection | Create a collection during initialization if it doesn’t exist. | boolean | false |  |
-| **password** | MongoDB Password | A user password for accessing MongoDB. | string |  |  |
-| **ssl** | Enable Ssl for Mongodb Connection | whether to enable ssl connection to mongodb. | boolean | true |  |
-| **sslValidationEnabled** | Enables Ssl Certificates Validation and Host name checks. | IMPORTANT this should be disabled only in test environment since can pose security issues. | boolean | true |  |
-| **username** | MongoDB Username | A username for accessing MongoDB. | string |  |  |
-| **writeConcern** | Write Concern | The level of acknowledgment requested from MongoDB for write operations. Enum values: \* ACKNOWLEDGED \* W1 \* W2 \* W3 \* UNACKNOWLEDGED \* JOURNALED \* MAJORITY | string |  |  |
+| **collection** | MongoDB Collection | **Required** The name of the collection to insert the documents into. | string |  | orders |
+| **database** | MongoDB Database | **Required** The name of the database that holds the collection. | string |  | shop |
+| **hosts** | MongoDB Hosts | **Required** The address of one or more MongoDB servers, as `host:port`, separated by commas. MongoDB uses port 27017 unless it was set up otherwise. For a replica set, list its members. | string |  | mongo1.example.com:27017,mongo2.example.com:27017 |
+| **createCollection** | Create Collection | If true, the collection is created when the Kamelet starts, if it does not exist. If false, the Kamelet fails to start when the collection does not exist. | boolean | false |  |
+| **password** | MongoDB Password | The password of the MongoDB user `username`. | string |  |  |
+| **ssl** | Use TLS | Whether to connect with TLS (SSL). Set it to false for a MongoDB that does not offer TLS. | boolean | true |  |
+| **sslValidationEnabled** | Check TLS Certificate | Whether to check the certificate and the host name of the server when `ssl` is true. Set it to false only for tests, as the connection can then be intercepted. | boolean | true |  |
+| **username** | MongoDB Username | The MongoDB user to log in as, defined in the `admin` database. Leave it empty for a MongoDB that does not ask for a login. | string |  |  |
+| **writeConcern** | Write Concern | How many MongoDB servers must confirm an insert before it counts as done, such as `MAJORITY` for most members of a replica set. When it is not set, MongoDB acknowledges each insert (`ACKNOWLEDGED`). Enum values: \* ACKNOWLEDGED \* W1 \* W2 \* W3 \* UNACKNOWLEDGED \* JOURNALED \* MAJORITY | string |  |  |
 
 ## Dependencies
 
@@ -83,7 +91,7 @@ Optional username and password authentication is supported for secured MongoDB i
 
 ### Write Operations
 
-The Kamelet performs insert operations into the specified collection. It supports upsert operations through header configuration (`db-upsert` or `ce-dbupsert` headers).
+The Kamelet performs insert operations into the specified collection. A document whose `_id` is already in the collection fails; the `db-upsert` and `ce-dbupsert` headers do not change that.
 
 ### Write Concerns
 
@@ -91,7 +99,7 @@ Configurable write concern levels ensure data durability and consistency based o
 
 ### Collection Management
 
-The Kamelet can optionally create collections during initialization if they don’t exist, providing flexibility for dynamic database structures.
+The Kamelet can optionally create collections during initialization if they don’t exist (`createCollection`). When `createCollection` is false, the default, the Kamelet fails to start if the collection does not exist.
 
 ## Kamelet source file
 

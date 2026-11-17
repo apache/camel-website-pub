@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send data to an FTPS server.
+Uploads each message as a file to a directory on an FTPS server, which is FTP with TLS encryption.
+
+Use it to deliver exports, reports or data files to a partner or a legacy system that receives files over FTPS. For a server without TLS use `ftp-sink`, and for a server you reach with SSH use `sftp-sink`.
+
+Input: the body is the content of the file, as text, bytes or a stream. The name of the file comes from the `file` header, or from `ce-file` when `file` is not set; any directory in it is dropped, so `reports/data.csv` is written as `data.csv`. Without these headers, `CamelFileName` is used as it is, subdirectories included, and without any of them a unique name is generated.
+
+Output: the message is unchanged. The `CamelFileNameProduced` header is set to the path of the file on the server.
+
+Good to know: a file with the same name is replaced, unless `fileExist` says otherwise. It uses explicit TLS: it connects to the normal FTP port, usually 21, and then switches to TLS. A server that only accepts implicit TLS, usually on port 990, is not supported. A file name that points outside `directoryName` fails the message. Files are sent in ASCII (text) mode unless `binary` is true.
 
 ## Configuration Options
 
@@ -13,15 +21,15 @@ The following table summarizes the configuration options available for the `ftps
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **connectionHost** | Connection Host | **Required** The hostname of the FTP server. | string |  |  |
-| **connectionPort** | Connection Port | **Required** The port of the FTP server. | string | 21 |  |
-| **directoryName** | Directory Name | **Required** The starting directory. | string |  |  |
-| **password** | Password | **Required** The password to access the FTP server. | string |  |  |
-| **username** | Username | **Required** The username to access the FTP server. | string |  |  |
-| **autoCreate** | Autocreate Missing Directories | Automatically create the directory the files should be written to. | boolean | true |  |
-| **binary** | Binary | Specifies the file transfer mode, BINARY or ASCII. Default is ASCII (false). | boolean | false |  |
-| **fileExist** | File Existence | Specifies how the Kamelet behaves if the file already exists. Enum values: \* Override \* Append \* Fail \* Ignore | string | Override |  |
-| **passiveMode** | Passive Mode | Set the passive mode connection. | boolean | false |  |
+| **connectionHost** | Connection Host | **Required** The host name or IP address of the FTPS server, without `ftps://` and without a port. | string |  | ftps.example.com |
+| **connectionPort** | Connection Port | **Required** The port of the FTPS server, usually 21. The Kamelet connects with explicit TLS, so use the normal FTP port, not the implicit TLS port 990. | string | 21 |  |
+| **directoryName** | Directory Name | **Required** The directory on the server to write the files to. A path without a leading `/` is relative to the home directory of the user. It is created when it does not exist, unless `autoCreate` is false. | string |  | upload/orders |
+| **password** | Password | **Required** The password of `username` on the FTPS server. | string |  |  |
+| **username** | Username | **Required** The user to log in to the FTPS server as. | string |  |  |
+| **autoCreate** | Autocreate Missing Directories | If true, `directoryName`, and any subdirectory in the `CamelFileName` header, is created on the server when it does not exist. | boolean | true |  |
+| **binary** | Binary Mode | If true, files are transferred in binary mode, byte for byte. When false, they are transferred in ASCII mode, which is meant for text. Set it to true for files that are not text, such as images, archives or PDF files. | boolean | false |  |
+| **fileExist** | If File Exists | What to do when a file with the same name is already in the directory. `Override` replaces it, `Append` adds the new content at its end, `Fail` fails the message, and `Ignore` keeps the old file and drops the new content without an error. Enum values: \* Override \* Append \* Fail \* Ignore | string | Override |  |
+| **passiveMode** | Passive Mode | If true, the transfers use passive mode, in which the integration opens all the connections to the server. Set it to true when the integration or the server is behind a firewall or NAT, where the default active mode often fails. | boolean | false |  |
 
 ## Dependencies
 

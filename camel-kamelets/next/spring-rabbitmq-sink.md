@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Send data to a RabbitMQ Broker.
+Publishes each message to an exchange in a RabbitMQ broker, which routes it to queues by its routing key.
+
+Use it to hand work or events to applications that read from RabbitMQ queues. Use `spring-rabbitmq-source` to read from them.
+
+Input: the body is the payload, as text or bytes. Text is sent with the content type `text/plain`, and bytes with `application/octet-stream`. A Map fails, and so does an empty body: turn structured data into JSON text first, for example with `json-serialize-action`. The headers of the message, except the Camel ones, are sent as headers of the RabbitMQ message.
+
+Output: the message is unchanged.
+
+Good to know: it does not create the exchange, unless `autoDeclareProducer` is true. A message sent to an exchange that does not exist is lost without an error, unless publisher confirms are on (`publisherConfirmType` and `confirm`), and RabbitMQ drops a message that no queue is bound to take. It connects with no TLS unless `protocol` is `amqps`. It does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does.
 
 ## Configuration Options
 
@@ -13,19 +21,19 @@ The following table summarizes the configuration options available for the `spri
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **exchangeName** | Exchange name | **Required** The exchange name determines the exchange the queue is bound to. | string |  |  |
-| **host** | Server Address | **Required** RabbitMQ broker address. | string |  | localhost |
-| **port** | Server Port | **Required** RabbitMQ broker port. | integer |  | 5672 |
-| **autoDeclareProducer** | Auto Declare Producer | Specifies whether the producer should auto declare binding between exchange, queue and routing key when starting. | boolean | false |  |
-| **confirm** | Confirm | Controls whether to wait for publisher confirms. auto lets Camel detect whether the connection factory is configured for confirms, enabled always waits, disabled never waits. Requires publisherConfirmType to be SIMPLE or CORRELATED. Enum values: \* auto \* enabled \* disabled | string | auto |  |
-| **confirmTimeout** | Confirm Timeout | How long in milliseconds to wait for a sent message to be confirmed by RabbitMQ when doing send-only (InOnly) messaging. A negative value waits indefinitely. | string | 5000 |  |
-| **password** | Password | The password to access the RabbitMQ server. | string |  |  |
-| **protocol** | Protocol | The AMQP protocol to use. Enum values: \* amqp \* amqps | string | amqp |  |
-| **publisherConfirmType** | Publisher Confirm Type | The publisher confirm mode of the underlying connection factory. Must be SIMPLE or CORRELATED for the confirm option below to have anything to wait on. NONE, the default, leaves publisher confirms switched off. Enum values: \* NONE \* SIMPLE \* CORRELATED | string | NONE |  |
-| **queues** | Queue name | The queue to receive messages from. | string |  |  |
-| **routingKey** | Routing Key | The routing key to use when binding a consumer queue to the exchange. | string |  |  |
-| **username** | Username | The username to access the RabbitMQ server. | string |  |  |
-| **vhost** | Virtual Host | The virtual host. | string | / |  |
+| **exchangeName** | Exchange Name | **Required** The name of the exchange to publish the messages to. | string |  | orders |
+| **host** | Server Address | **Required** The host name or IP address of the RabbitMQ broker. | string |  | localhost |
+| **port** | Server Port | **Required** The port of the RabbitMQ broker: usually 5672, or 5671 for `amqps`. | integer |  | 5672 |
+| **autoDeclareProducer** | Create Exchange and Queue | If true, the sink creates the exchange (as a `direct` exchange) and the queue in `queues`, and binds them with `routingKey`, before it sends the first message. | boolean | false |  |
+| **confirm** | Confirm | Whether the sink waits for RabbitMQ to confirm each message: `enabled` always waits, `disabled` never waits, and `auto` waits when `publisherConfirmType` turns confirms on. A message that is not confirmed fails, such as one sent to an exchange that does not exist. Enum values: \* auto \* enabled \* disabled | string | auto |  |
+| **confirmTimeout** | Confirm Timeout | How long to wait for RabbitMQ to confirm a message, in milliseconds. A negative value waits forever. | string | 5000 |  |
+| **password** | Password | The password to log in to RabbitMQ with, for the user `username`. | string |  |  |
+| **protocol** | Protocol | `amqp` for a plain connection, or `amqps` for a connection encrypted with TLS. Enum values: \* amqp \* amqps | string | amqp |  |
+| **publisherConfirmType** | Publisher Confirm Type | Whether RabbitMQ confirms each message it takes: `NONE` turns confirms off, `SIMPLE` or `CORRELATED` turns them on. Use it with `confirm`. Enum values: \* NONE \* SIMPLE \* CORRELATED | string | NONE |  |
+| **queues** | Queue Name | The queue to create and bind to the exchange with `routingKey` when `autoDeclareProducer` is true. Not used otherwise. | string |  | orders |
+| **routingKey** | Routing Key | The routing key of each message, which the exchange uses to choose the queues that get it. With a `direct` exchange, a queue gets the message when it is bound with the same key. | string |  | new-order |
+| **username** | Username | The user name to log in to RabbitMQ with. When it is not set, `guest` is used. | string |  |  |
+| **vhost** | Virtual Host | The virtual host of the broker to connect to, which holds the exchanges and queues. RabbitMQ has the virtual host `/` from the start. | string | / |  |
 
 ## Dependencies
 
@@ -129,7 +137,7 @@ RabbitMQ provides enterprise-grade features:
 
 ### Message Patterns
 
-Supports various messaging patterns including publish-subscribe, request-reply, and message queuing for different application architectures.
+Supports publish-subscribe and message queuing. It sends each message and does not wait for a reply.
 
 ## Kamelet source file
 

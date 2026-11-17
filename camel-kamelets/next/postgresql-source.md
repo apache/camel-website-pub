@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Query data from a PostgreSQL Database.
+Runs an SQL query in a PostgreSQL database again and again, and sends each row it returns as a message, as a JSON object.
+
+Use it to pick up the rows that another application adds to a table, such as new orders or events, and pass them on to another system. To write rows, use `postgresql-sink`.
+
+Output: the body is one row as JSON text, an object with the column names as keys, such as `{"id":1,"username":"oscerd","city":"Rome"}`. The `Content-Type` header is `application/json`.
+
+Good to know: the query runs again `delay` milliseconds after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again. A query that finds no rows sends nothing. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version.
 
 ## Configuration Options
 
@@ -13,14 +19,14 @@ The following table summarizes the configuration options available for the `post
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **databaseName** | Database Name | **Required** The name of the PostgreSQL Database. | string |  |  |
-| **password** | Password | **Required** The password to access a secured PostgreSQL Database. | string |  |  |
-| **query** | Query | **Required** The query to execute against the PostgreSQL Database. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
-| **serverName** | Server Name | **Required** The server name for the data source. | string |  | localhost |
-| **username** | Username | **Required** The username to access a secured PostgreSQL Database. | string |  |  |
-| **consumedQuery** | Consumed Query | A query to run on a tuple consumed. | string |  | DELETE FROM accounts where user\_id = :#user\_id |
-| **delay** | Delay | The number of milliseconds before the next poll. | integer | 500 |  |
-| **serverPort** | Server Port | The server port for the data source. | string | 5432 |  |
+| **databaseName** | Database Name | **Required** The name of the database to connect to on the PostgreSQL server. | string |  | shop |
+| **password** | Password | **Required** The password of the database user `username`. | string |  |  |
+| **query** | Query | **Required** The SQL query to run on each poll, usually a SELECT. Each row it returns becomes a message. | string |  | SELECT \* FROM accounts WHERE processed = false |
+| **serverName** | Server Name | **Required** The host name or IP address of the PostgreSQL server, without the port. | string |  | db.example.com |
+| **username** | Username | **Required** The database user to log in as. It needs the rights to run the queries of this Kamelet on their tables. | string |  |  |
+| **consumedQuery** | Consumed Query | An SQL statement to run after each row has been sent on, to mark the row as read or to delete it, so that `query` does not return it again. Write `:#column` where the value of a column of that row goes, such as `:#id`. When it is not set, nothing is changed, and the same rows are read on every poll. | string |  | UPDATE accounts SET processed = true WHERE id = :#id |
+| **delay** | Delay | How long to wait after one run of `query` before the next, in milliseconds. | integer | 500 |  |
+| **serverPort** | Server Port | The port the PostgreSQL server listens on. PostgreSQL uses 5432 unless it was set up otherwise. | string | 5432 |  |
 
 ## Dependencies
 
@@ -93,14 +99,14 @@ The PostgreSQL Source Kamelet supports the following configurations:
     
 -   **Server Port**: Port number for the PostgreSQL server (default: 5432)
     
--   **Period**: Interval between query executions in milliseconds
+-   **Delay**: How long to wait after one run of the query before the next, in milliseconds (default: 500)
     
--   **Connection Properties**: Additional JDBC connection properties
+-   **Consumed Query**: An SQL statement run for each row once it is sent, to mark the row as read or delete it, so that it is not read again
     
 
 ### Output Format
 
-The Kamelet outputs query results as JSON objects. Each row from the result set is converted to a JSON object with column names as keys.
+The Kamelet sends one message per row of the query result. Each row is a JSON object with the column names as keys. Without `consumedQuery`, the same rows are read again on every run of the query.
 
 ### Usage Example
 
@@ -114,7 +120,7 @@ The Kamelet outputs query results as JSON objects. Each row from the result set 
         password: "dbpass"
         databaseName: "analytics"
         query: "SELECT * FROM events WHERE created_at > NOW() - INTERVAL '1 hour'"
-        period: 30000
+        delay: 30000
       steps:
         - to:
             uri: "kamelet:log-sink"
@@ -132,7 +138,7 @@ The Kamelet outputs query results as JSON objects. Each row from the result set 
         password: "dbpass"
         databaseName: "ecommerce"
         query: "SELECT o.id, o.total, u.email FROM orders o JOIN users u ON o.user_id = u.id WHERE o.status = 'PENDING'"
-        period: 60000
+        delay: 60000
       steps:
         - to:
             uri: "kamelet:log-sink"

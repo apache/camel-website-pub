@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Gets periodically Chuck Norris jokes
+Fetches a random Chuck Norris joke from the public api.chucknorris.io service at a regular interval, and sends it as a message.
+
+Use it to get short, changing text messages to try out a sink, an action or a demo, with no account and no setup. For the same fixed message every time, use `timer-source`.
+
+Output: the body is the text of one joke. The message has no headers.
+
+Good to know: it calls `[https://api.chucknorris.io](https://api.chucknorris.io)` over the internet for every message, so it needs internet access.
 
 ## Configuration Options
 
@@ -13,7 +19,7 @@ The following table summarizes the configuration options available for the `chuc
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **period** | Period | The interval (msec) to wait before getting the next joke. | integer | 10000 |  |
+| **period** | Period | How long to wait between two jokes, in milliseconds. For example, 60000 is one minute. | integer | 10000 | 60000 |
 
 ## Dependencies
 

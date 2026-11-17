@@ -587,7 +587,6 @@ Header Variables inside the response message:
 | `CamelHazelcastListenerAction` | `String` | type of event (**added**, **updated**, **removed**, **evicted** and **expired**). |
 | `CamelHazelcastObjectId` | `String` | the oid of the object |
 | `CamelHazelcastCacheName` | `String` | the name of the cache (e.g., "foo") |
-| `CamelHazelcastCacheType` | `String` | the type of the cache (e.g., map) |
 
 The object value will be stored within **added** and **updated** events inside the message body.
 

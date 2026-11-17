@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Decrypt the payload using the Java Cryptographic Extension (JCE) and a fixed key.
+Decrypts the body of each message that `crypto-encrypt-action` encrypted, with the same algorithm and secret key.
+
+Use it to get back the original data that was encrypted with `crypto-encrypt-action`, for example after reading it from storage or receiving it from another system.
+
+Input: the encrypted data exactly as `crypto-encrypt-action` produced it, as bytes or a stream. If it was encoded on the way, for example in Base64, decode it first.
+
+Output: the body is the original data, as bytes (a stream). The headers are kept.
+
+Good to know: data that was changed, or a different `algorithm` or `key` than when encrypting, fails the message with "Message authentication failed". The key is a secret; keep it in a vault or a secret, not in plain configuration.
 
 ## Configuration Options
 
@@ -13,8 +21,8 @@ The following table summarizes the configuration options available for the `cryp
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **algorithm** | Algorithm | **Required** The JCE algorithm name indicating the cryptographic algorithm that will be used. | string |  | AES |
-| **key** | Secret Key | **Required** The secret key to use to decrypt the payload. The length must match the requirements of the selected algorithm (for example 16, 24 or 32 bytes for AES). | string |  |  |
+| **algorithm** | Algorithm | **Required** The name of the encryption algorithm the data was encrypted with, such as `AES`, or `DESede` for Triple DES. Give the name alone: a full form such as `AES/CBC/PKCS5Padding` fails each message. | string |  | AES |
+| **key** | Secret Key | **Required** The secret key the data was encrypted with, as text. Its length must fit the algorithm: for `AES`, 16, 24 or 32 characters (plain ASCII characters count as one byte each), and for `DESede`, 24. | string |  |  |
 
 ## Dependencies
 

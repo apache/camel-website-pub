@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Search data on OpenSearch.
+Runs the same search on an index of OpenSearch at a regular interval, and sends the result of each search as one message.
+
+Use it to watch an index on a schedule, for example to send the error log entries or the orders that match a query to another system. To store documents in OpenSearch, use `opensearch-index-sink`; for Elasticsearch, use `elasticsearch-search-source`.
+
+Output: the body is JSON text with the total number of matches (`total`) and a `hits` list, with the index, the id and the score of each document found. The fields of each document are under `source`, but in an unusual nested form, in which each value is wrapped in a `_value` object under `_children`. The `Content-Type` header is `application/json`.
+
+Good to know: every search returns all the matching documents again, not only the new ones; to get only new documents, filter on a date in the query. By default a search runs every second. A search on an index that does not exist fails, and is tried again at the next interval. It connects with TLS by default (`enableSSL`).
 
 ## Configuration Options
 
@@ -13,16 +19,16 @@ The following table summarizes the configuration options available for the `open
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **clusterName** | OpenSearch Cluster Name | **Required** The name of the cluster. | string |  |  |
-| **hostAddresses** | Host Addresses | **Required** Comma separated list with ip:port formatted remote transport addresses to use. | string |  |  |
-| **indexName** | Index in OpenSearch | **Required** The name of the index to act against. | string |  |  |
-| **query** | Query | **Required** The query we want to use to search on OpenSearch. | string |  |  |
-| **certificate** | Certificate | The Certificate for accessing the Opensearch cluster. You must encode this value in base64. | string |  |  |
-| **enableSSL** | Enable SSL | Do we want to connect using SSL?. | boolean | true |  |
-| **password** | Password | Password to connect to OpenSearch. | string |  |  |
-| **period** | Period | The time interval between two searches. | integer | 1000 |  |
-| **sslContextParameters** | SSL Context Parameters | Reference to a registry bean of type org.apache.camel.support.jsse.SSLContextParameters, written as "#bean:myBeanName". Use this for anything the certificate property cannot express - mutual TLS with a client keystore, a custom trust store, a specific TLS protocol version, or cipher suite selection. When set it takes precedence over certificate, so configure one or the other rather than both. | string |  |  |
-| **user** | Username | Username to connect to OpenSearch. | string |  |  |
+| **clusterName** | OpenSearch Cluster Name | **Required** The name of the OpenSearch cluster. Required, but not checked against the cluster. | string |  | quickstart |
+| **hostAddresses** | Host Addresses | **Required** The address of the OpenSearch HTTP API, as `host:port`, or several nodes separated by commas. The port is 9200 by default. | string |  | quickstart-es-http:9200 |
+| **indexName** | Index in OpenSearch | **Required** The name of the index to search. | string |  | orders |
+| **query** | Query | **Required** The search to run, as a JSON search request of OpenSearch, the same as the body of a `_search` request. It can also set `size`, the number of documents returned, which is 10 when not set. | string |  | {"query": {"match": {"status": "shipped"}}} |
+| **certificate** | Certificate | The certificate of the certificate authority (CA) that signed the certificate of the cluster, as PEM text encoded in base64. Needed when the cluster uses a self-signed certificate. | string |  |  |
+| **enableSSL** | Enable SSL | If true, it connects with HTTPS. Set it to false for a cluster that is reached with plain HTTP. | boolean | true |  |
+| **password** | Password | The password of the OpenSearch user in `user`. | string |  |  |
+| **period** | Period | How long to wait between two searches, in milliseconds. For example, 60000 is one minute. | integer | 1000 | 60000 |
+| **sslContextParameters** | SSL Context Parameters | For TLS settings that `certificate` cannot give, such as a client certificate (mutual TLS), a trust store, or a TLS version, an `SSLContextParameters` object defined in the application, as `#bean:` followed by its name. It takes precedence over `certificate`; set one or the other. | string |  | #bean:mySslContext |
+| **user** | Username | The OpenSearch user to log in as, such as `admin`. Leave it out for a cluster without security. | string |  |  |
 
 ## Dependencies
 
@@ -75,50 +81,47 @@ camel run route.yaml
 
 ### Authentication methods
 
-This Kamelet connects to Opensearch Search using appropriate authentication mechanisms:
+This Kamelet connects to OpenSearch with:
 
--   Service-specific authentication methods
+-   Basic authentication, with the `user` and `password` properties, or no login for a cluster without security
     
--   API keys, tokens, or credential-based authentication
-    
--   Connection configuration
+-   TLS, on by default (`enableSSL`), with the base64-encoded certificate of the certificate authority of the cluster in `certificate`, or an `SSLContextParameters` bean in `sslContextParameters` for other TLS settings
     
 
 ### Output format
 
-The Kamelet consumes data from Opensearch Search and produces the data in JSON format.
+The Kamelet runs the configured search at every `period`, and produces one message per search, with the result as JSON text: the total number of matches and the list of hits. Every search returns all the matching documents again, not only the new ones.
 
 ### Configuration
 
-The Kamelet requires connection parameters specific to Opensearch Search:
+The Kamelet requires the following properties:
 
--   Service connection details
+-   `hostAddresses`: the OpenSearch HTTP API, as `host:port`
     
--   Authentication credentials
+-   `clusterName`: the name of the cluster
     
--   Query or consumption parameters
+-   `indexName`: the index to search
+    
+-   `query`: the search, as a JSON search request
     
 
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: opensearch-search-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: opensearch-search-source
-    properties:
-      # Add service-specific properties here
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:opensearch-search-source"
+      parameters:
+        hostAddresses: "opensearch.example.com:9200"
+        clusterName: "my-cluster"
+        indexName: "orders"
+        query: '{"query": {"match": {"status": "shipped"}}}'
+        user: "admin"
+        password: "my-password"
+        period: 60000
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

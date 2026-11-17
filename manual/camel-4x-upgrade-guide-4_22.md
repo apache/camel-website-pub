@@ -7,6 +7,12 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading from 4.22.2 to 4.22.3
 
+### Undertow servlet implementation
+
+`camel-undertow` now uses the Jakarta Servlet 6.1 implementation from Undertow EE, `io.undertow.ee:undertow-servlet:2.0.3.Final`, instead of `io.undertow:undertow-servlet`. Undertow core is upgraded from `2.4.2.Final` to `2.4.4.Final` to match this Undertow EE release. The Camel parent property for the servlet implementation changes from `undertow-servlet-version` to `undertow-ee-version`.
+
+Applications that declare or override the Undertow servlet dependency must migrate to the new coordinates. Remove or exclude the old servlet artifact from other dependencies: the two artifacts contain the same `io.undertow.servlet` packages and must not be included together. This also applies when combining `camel-undertow` with a Spring Boot Undertow server integration that uses Undertow EE.
+
 ### camel-aws2-sns - string array message attributes
 
 String values in list-valued message headers are now JSON-escaped when mapped to SNS `String.Array` message attributes. Quotes, backslashes and control characters are preserved as string data. Routes should supply the original strings rather than pre-escaping them. Other member types, such as enums, characters, UUIDs and dates, are serialized as JSON strings. Non-finite floating-point values (`NaN` and infinities) are also serialized as strings; finite numbers, booleans and null remain JSON primitives. The JSON utility also escapes forward slashes and some Unicode characters, so raw `String.Array` attribute text may differ even when its decoded string values are unchanged.

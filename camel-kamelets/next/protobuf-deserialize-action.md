@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Deserialize payload to Protobuf.
+Turns each message of Protobuf binary data back into a JSON object, using the Protobuf schema the data was written with.
+
+Use it to read records that arrive in Protocol Buffers (Protobuf), a compact binary format described by a schema, and work on them as JSON. To turn JSON into Protobuf, use `protobuf-serialize-action`; for Avro, use `avro-deserialize-action`.
+
+Input: Protobuf binary data, as bytes, such as `protobuf-serialize-action` writes.
+
+Output: the body is parsed JSON (a Jackson `JsonNode`) with the fields found in the data. The `Content-Type` header is removed. Put `json-serialize-action` after this action to get JSON text.
+
+Good to know: a body that is not Protobuf data, such as JSON text, fails. When `schema` is not set, the schema found by an earlier `resolve-pojo-schema-action` is used.
 
 ## Configuration Options
 
@@ -13,7 +21,7 @@ The following table summarizes the configuration options available for the `prot
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **schema** | Schema | The Protobuf schema to use during serialization (as single-line). | string |  | message Person { required string first = 1; required string last = 2; } |
+| **schema** | Schema | The Protobuf schema the data was written with, in the `.proto` language: a `message` with its fields, each with a type, a name and a number. When it is not set, the schema found by an earlier `resolve-pojo-schema-action` is used. | string |  | message Person { required string first = 1; required string last = 2; } |
 
 ## Dependencies
 

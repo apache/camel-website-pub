@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Get data about current earthquake events happening in the world using the USGS API
+Sends a message for each earthquake reported by the USGS (United States Geological Survey), checking for new reports at a regular interval.
+
+Use it to follow the earthquakes around the world, for example to alert on the strong ones, or as a stream of real, changing JSON data for a demo. No account is needed.
+
+Output: one message per earthquake. The body is a GeoJSON feature, as JSON text: `properties` has the magnitude (`mag`), the place, the time and a link to the USGS page, and `geometry` has the longitude, the latitude and the depth. The `Content-Type` header is `application/json`.
+
+Good to know: the first check sends the earthquakes whose report was updated in the last `lookAhead` minutes, and each later check those updated since the check before. An earthquake is sent again when USGS updates its report. The time of the last check is kept in memory only, so a restart begins again with the last `lookAhead` minutes. It calls `[https://earthquake.usgs.gov](https://earthquake.usgs.gov)` over the internet.
 
 ## Configuration Options
 
@@ -13,8 +19,8 @@ The following table summarizes the configuration options available for the `eart
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **lookAhead** | Look-ahead Minutes | The amount of minutes to look ahead when starting the integration afresh. | integer | 120 |  |
-| **period** | Period between Polls | The interval between fetches to the earthquake API in milliseconds. | integer | 60000 |  |
+| **lookAhead** | Minutes to Look Back | When the integration starts, how many minutes back to look for earthquake reports. For example, 1440 first sends the reports of the last day. | integer | 120 | 1440 |
+| **period** | Period | How long to wait between two checks for new reports, in milliseconds. For example, 300000 is five minutes. | integer | 60000 | 300000 |
 
 ## Dependencies
 
@@ -103,7 +109,7 @@ The Kamelet maintains state to avoid duplicate earthquake reports by:
 
 1.  Caching the timestamp of the last update
     
-2.  Only fetching earthquakes that occurred after the last known update
+2.  Only fetching earthquakes whose report was updated after the last known update, so an earthquake is sent again when USGS updates its report
     
 3.  Using the USGS API’s `updatedafter` parameter for efficient filtering
     

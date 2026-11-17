@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Deserialize payload to JSON.
+Turns a body of JSON text into parsed JSON, a Jackson `JsonNode`, so that the next steps can work with its fields.
+
+Use it to prepare a message for a step that needs parsed JSON rather than text, such as `jsonata-action`, or to make sure that a body is well-formed JSON. To turn parsed data back into JSON text, use `json-serialize-action`, and to check JSON against a schema, use `json-schema-validator-action`.
+
+Input: JSON text, as text or bytes: a JSON object or a JSON array.
+
+Output: the body is parsed JSON, a Jackson `JsonNode`: an object node for a JSON object, an array node for a JSON array. The `Content-Type` header is removed.
+
+Good to know: a body that is not valid JSON fails the message.
 
 ## Configuration Options
 

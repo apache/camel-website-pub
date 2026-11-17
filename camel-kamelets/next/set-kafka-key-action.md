@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Set Kafka Key based on a specific incoming header value from the message body.
+Sets the key of the Kafka record to the value of a header of the message.
+
+Use it before `kafka-sink` when the records need a key, for example so that all the records of one customer go to the same partition and stay in order.
+
+Input: any message with the header named by `headerName`.
+
+Output: the same body. The `CamelKafkaKey` header, which `kafka-sink` uses as the record key, is set to the value of that header.
+
+Good to know: to build the key from fields of the body instead, use `value-to-key-action`.
 
 ## Configuration Options
 
@@ -13,8 +21,8 @@ The following table summarizes the configuration options available for the `set-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **headerName** | Field | **Required** The name of the header to set as Kafka Key. | string |  |  |
-| **forceHeaderDeletion** | Force Header Deletion | If true, it will remove the header with name headerName from the Exchange after setting it as Kafka Key. | boolean | false |  |
+| **headerName** | Header Name | **Required** The name of the header whose value becomes the key of the Kafka record. | string |  | customerId |
+| **forceHeaderDeletion** | Force Header Deletion | If true, the header named by `headerName` is removed from the message after its value is copied to the key. | boolean | false |  |
 
 ## Dependencies
 

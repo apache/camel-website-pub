@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Wrap data in a single field.
+Wraps the body of each message in a new JSON object, as the value of the one field you name.
+
+Use it to nest the whole message under one name, for example to turn `{"id":1}` into `{"order":{"id":1}}` for a system that expects that shape. To do the opposite, and take the value out of a field, use `extract-field-action`.
+
+Input: any body. JSON is nested as a JSON object or array when it is parsed JSON (a Map or a Jackson `JsonNode`), or JSON text with the `Content-Type` header `application/json`. Any other text, including JSON text with another `Content-Type`, becomes a text value: `hello` gives `{"order":"hello"}`.
+
+Output: the body is the new JSON object, as JSON text, and the `Content-Type` header is set to `application/json`.
 
 ## Configuration Options
 
@@ -13,7 +19,7 @@ The following table summarizes the configuration options available for the `hois
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **field** | Field | **Required** The name of the field that will contain the event. | string |  |  |
+| **field** | Field | **Required** The name of the field that holds the body in the new JSON object. | string |  | order |
 
 ## Dependencies
 

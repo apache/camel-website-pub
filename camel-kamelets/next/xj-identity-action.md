@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Apply the XJ Identity Transformation to transform JSON to XML and XML to JSON.
+Converts each message from XML to JSON, or from JSON to XML, with a fixed mapping and no template to write.
+
+Use it to pass XML to a system that expects JSON, or the other way round, when the default mapping is good enough. To control the result, such as the names of the elements or which fields to keep, use `xj-template-action` with an XSLT stylesheet.
+
+Input: XML or JSON as text, bytes or a stream, as `direction` says. Parsed JSON, such as a Map, fails the message.
+
+Output: the body is JSON text or XML text. From XML, the root element is dropped, its attributes and child elements become fields, repeated elements become an array, and all values are text: `<order id="7"><qty>2</qty></order>` gives `{"id":"7","qty":"2"}`. To XML, each JSON value becomes an `object` element that keeps its name and type in `xj:name` and `xj:type` attributes, such as `<object xj:name="qty" xj:type="int">2</object>`. The headers are kept.
 
 ## Configuration Options
 
@@ -13,7 +19,7 @@ The following table summarizes the configuration options available for the `xj-i
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **direction** | Direction | **Required** The transform direction. Enum values: \* XML2JSON \* JSON2XML | string |  |  |
+| **direction** | Direction | **Required** Which way to convert: `XML2JSON` turns XML into JSON, and `JSON2XML` turns JSON into XML. Enum values: \* XML2JSON \* JSON2XML | string |  |  |
 
 ## Dependencies
 

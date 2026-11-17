@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Send events at specific time.
+Sends the same fixed message on a calendar schedule, written as a cron expression, such as every weekday at 9:00.
+
+Use it to start a flow at set times, such as a report every morning or a clean-up every night. For a message every few seconds or minutes, `timer-source` is simpler, and for a message that counts up use `counter-source`.
+
+Output: the body is the `message` option as text, the same on every message. Headers about the schedule are set too, such as `fireTime` (the time of this message) and `nextFireTime`.
+
+Good to know: the times are in the time zone of the machine it runs on. It keeps sending until the integration is stopped.
 
 ## Configuration Options
 
@@ -13,8 +19,8 @@ The following table summarizes the configuration options available for the `cron
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **message** | Message | **Required** The message to generate. | string |  | hello world |
-| **schedule** | Cron Schedule | **Required** A cron expression that is used to trigger events generation. | string |  | 0/3 10 \* \* \* ? |
+| **message** | Message | **Required** The body of every message, sent as text exactly as written. | string |  | hello world |
+| **schedule** | Cron Schedule | **Required** When to send a message, as a Quartz cron expression of six or seven fields: seconds, minutes, hours, day of month, month, day of week, and an optional year. For example, `0 0 9 ? * MON-FRI` is 9:00 every weekday, and `0 */5 * * * ?` is every five minutes. A Unix cron expression of five fields, without the seconds, works too. | string |  | 0 0 9 ? \* MON-FRI |
 
 ## Dependencies
 
@@ -80,7 +86,7 @@ This Kamelet requires the following mandatory properties:
 
 ### Cron expression format
 
-The cron expression follows the standard format:
+The cron expression follows the Quartz format, with the seconds first (a Unix cron expression of five fields, without the seconds, works too):
 
 ```none
 <seconds> <minutes> <hours> <day-of-month> <month> <day-of-week> [year]
@@ -88,7 +94,7 @@ The cron expression follows the standard format:
 
 ### Usage examples
 
-Send a message every 3 seconds during the 10th hour:
+Send a message every 3 seconds during minute 10 of every hour:
 
 ```yaml
 - route:

@@ -575,6 +575,8 @@ The Camel SMB component requires the authenticated user to have appropriate perm
     
 -   **Deleting files** (e.g., when using `delete=true` on a consumer): requires `Delete` permission on the file.
     
+-   **Creating the starting directory** of a consumer that does not exist (`autoCreate`, enabled by default): requires `Create Folders` on the parent directory. When the directory cannot be created, the route still starts: the consumer logs a WARN and tries again on each poll.
+    
 
 ### STATUS\_ACCESS\_DENIED (0xc0000022) when deleting files
 

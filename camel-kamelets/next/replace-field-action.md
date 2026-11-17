@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Replace field with a different key in the message in transit.
+Renames fields of each message that is a JSON object, and can also keep only some fields or remove others.
+
+Use it to match the field names another system expects, such as `name` to `fullName`, and to leave out the fields it should not get. To remove a single field, `drop-field-action` is simpler; to hide a value but keep the field, use `mask-field-action`.
+
+Input: a JSON object, as JSON text or as parsed JSON (a Map or a Jackson `JsonNode`). Only the fields at the top level of the object are renamed, kept or removed; nested objects are left as they are. A JSON array, or a body that is not JSON, fails.
+
+Output: the object with the renamed fields, without the removed ones; the order of its fields can change. When the `Content-Type` header is `application/json`, the body is JSON text again; otherwise it is parsed JSON (a Jackson `JsonNode`), which `json-serialize-action` turns into JSON text.
+
+Good to know: `renames` is required, even when you only want to keep or remove fields. A rename of a field the object does not have is ignored. When `enabled` and `disabled` together would remove every field, the object is passed on unchanged.
 
 ## Configuration Options
 
@@ -13,9 +21,9 @@ The following table summarizes the configuration options available for the `repl
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **renames** | Renames | **Required** Comma separated list of field with new value to be renamed. Only top level fields are renamed; naming a field nested inside an object has no effect. | string |  | foo:bar,c1:c2 |
-| **disabled** | Disabled | Comma separated list of top level fields to be disabled. | string | none |  |
-| **enabled** | Enabled | Comma separated list of top level fields to be enabled. | string | all |  |
+| **renames** | Renames | **Required** The fields to rename, as `old:new` pairs separated by commas. Only top-level fields are renamed; naming a field nested inside an object has no effect. A pair without `:` makes every message fail. | string |  | name:fullName,zip:postalCode |
+| **disabled** | Disabled | The names of the top-level fields to remove, separated by commas. The default, `none`, removes nothing. | string | none | card,password |
+| **enabled** | Enabled | The names of the top-level fields to keep, separated by commas; all the other fields are removed. The default, `all`, keeps every field. | string | all | id,name |
 
 ## Dependencies
 

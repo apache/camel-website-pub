@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Consume messages from Google Cloud Pub/Sub.
+Receives the messages of a Google Cloud Pub/Sub subscription, one message per Pub/Sub message, and acknowledges each one once it has been processed.
+
+Use it to react to events that other applications publish to a Pub/Sub topic, such as orders, uploads or alerts. To publish messages, use `google-pubsub-sink`. To react to new files in a Cloud Storage bucket through Pub/Sub notifications, use `google-storage-event-based-source`.
+
+Output: the body is the data of the Pub/Sub message, as bytes. The `CamelGooglePubsubMessageId` and `CamelGooglePubsubPublishTime` headers give the ID and the publish time of the message, `CamelGooglePubsubAttributes` gives its attributes as a Map, and each attribute is also set as a header of its own.
+
+Good to know: the subscription must already exist; for one that does not, it logs an error and receives nothing. A message whose processing fails is not acknowledged, so Pub/Sub delivers it again. Without `serviceAccountKey`, it logs in with the Application Default Credentials of the environment where it runs.
 
 ## Configuration Options
 
@@ -13,12 +19,12 @@ The following table summarizes the configuration options available for the `goog
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **projectId** | Project Id | **Required** The Google Cloud Pub/Sub Project ID. | string |  |  |
-| **subscriptionName** | Subscription Name | **Required** The subscription name. | string |  |  |
-| **concurrentConsumers** | Concurrent Consumers | The number of parallel streams to consume from the subscription. | integer | 1 |  |
-| **maxMessagesPerPoll** | Max Messages Per Poll | The maximum number of messages to receive from the server in a single API call. | integer | 1 |  |
-| **serviceAccountKey** | Service Account Key | The service account key to use as credentials for the Pub/Sub publisher/subscriber. You must encode this value in base64. | binary |  |  |
-| **synchronousPull** | Synchronous Pull | Specifies to synchronously pull batches of messages. | boolean | false |  |
+| **projectId** | Project ID | **Required** The ID of the Google Cloud project that holds the subscription, as shown in the Google Cloud console. It is the project ID, not the project name or number. | string |  | my-project-123 |
+| **subscriptionName** | Subscription Name | **Required** The name of the subscription to read from, without the `projects/…​/subscriptions/` part. Create it on the topic first, in the Google Cloud console or with `gcloud pubsub subscriptions create`. | string |  | orders-sub |
+| **concurrentConsumers** | Concurrent Consumers | How many messages to receive and process in parallel, each in its own stream from the subscription. | integer | 1 |  |
+| **maxMessagesPerPoll** | Max Messages Per Poll | The most messages to ask Pub/Sub for at once. Only used when `synchronousPull` is true. | integer | 1 |  |
+| **serviceAccountKey** | Service Account Key | The JSON key of a service account that may read the subscription, encoded in Base64: create the key in the Google Cloud console under IAM & Admin > Service Accounts > Keys, then encode the downloaded file, for example with `base64 -w0 key.json`. When it is not set, the Application Default Credentials are used: the key file named in the `GOOGLE_APPLICATION_CREDENTIALS` environment variable, or the service account of the Google Cloud machine it runs on. | binary |  |  |
+| **synchronousPull** | Synchronous Pull | If true, it asks Pub/Sub for messages in batches of up to `maxMessagesPerPoll`, instead of keeping a stream open that Pub/Sub pushes the messages through. | boolean | false |  |
 
 ## Dependencies
 
@@ -80,7 +86,7 @@ This Kamelet uses Service Account Key authentication to connect to Google Cloud 
 
 ### Output format
 
-The Kamelet consumes messages from Google Cloud Pub/Sub and produces the message data in JSON format.
+The Kamelet consumes messages from Google Cloud Pub/Sub. The body is the data of each message, as bytes, and the attributes of the message are set as headers.
 
 ### Configuration
 

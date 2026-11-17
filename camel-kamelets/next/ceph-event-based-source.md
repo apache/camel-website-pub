@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Receive Ceph RGW bucket notifications from a Kafka topic, and optionally fetch the object each notification refers to.
+Receives the bucket notifications that a Ceph Object Gateway sends to a Kafka topic, one message per event, such as a file added to or deleted from a bucket.
+
+Use it to react as soon as a file is uploaded to or removed from a Ceph bucket, without reading the bucket over and over. Set `getObject` to true to receive the content of each new file. To read and remove the files of a bucket instead, use `ceph-source`.
+
+Output: the body is the notification as JSON text, unchanged: a `Records` array that gives the event name (such as `ObjectCreated:Put`), the bucket name and the key of the file. The headers `ceph-event-id`, `ceph-opaque-data`, `ceph-object-metadata` and `ceph-object-tags` give the fields Ceph adds to the event; metadata and tags are a List of entries with a `key` and a `val`. Each header is also set with a `ce-` name, such as `ce-cepheventid`. With `getObject` true, the body of an `ObjectCreated` event is the content of the file instead, as a stream, with its content type in `CamelAwsS3ContentType`, and the other events come out as parsed JSON (a Jackson `JsonNode`), not as text.
+
+Good to know: the notification and its Kafka topic are set up on the Ceph side; this Kamelet only reads the topic. A record that is not a Ceph notification (without a `Records` array) fails. It connects to Kafka with no login and no TLS unless `saslAuthType` says otherwise. Without `consumerGroup`, each start uses a new group, so with the default `autoOffsetReset` of `latest` the events sent while it was stopped are not read.
 
 ## Configuration Options
 
@@ -13,18 +19,18 @@ The following table summarizes the configuration options available for the `ceph
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **bootstrapServers** | Bootstrap Servers | **Required** A comma separated list of Kafka brokers to connect to. | string |  |  |
-| **topic** | Topic Name | **Required** The Kafka topic Ceph pushes the bucket notifications to. | string |  | ceph-bucket-notifications |
-| **accessKey** | Access Key | The access key to read objects from Ceph. Required when getObject is true. | string |  |  |
-| **autoOffsetReset** | Auto Offset Reset | What to do when there is no initial offset. There are 3 enums and the value can be latest, earliest or none. Enum values: \* latest \* earliest \* none | string | latest |  |
-| **cephUrl** | Ceph URL | The URL of the Ceph RGW endpoint to fetch objects from. Required when getObject is true. | string |  | http://ceph-rgw:8080 |
-| **consumerGroup** | Consumer Group | A string that uniquely identifies the group of consumers this source belongs to. | string |  | my-group-id |
-| **getObject** | Get Object | Fetch the object body from Ceph for ObjectCreated events, instead of emitting only the notification. | boolean | false |  |
-| **saslAuthType** | Authentication Type | Authentication type to use. Use NONE for no authentication, PLAIN or SCRAM\_SHA\_256/SCRAM\_SHA\_512 for username/password, SSL for certificate-based, OAUTH for OAuth 2.0, AWS\_MSK\_IAM for MSK, or KERBEROS for Kerberos. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string | NONE |  |
-| **saslPassword** | Password | Password for SASL authentication. Required when saslAuthType is PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. | string |  |  |
-| **saslUsername** | Username | Username for SASL authentication. Required when saslAuthType is PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. | string |  |  |
-| **secretKey** | Secret Key | The secret key to read objects from Ceph. Required when getObject is true. | string |  |  |
-| **zoneGroup** | Ceph Zone Group | The zone group the bucket belongs to, passed to the S3 client as its region. | string |  | zonegroup1 |
+| **bootstrapServers** | Bootstrap Servers | **Required** The address of one or more Kafka brokers to connect to first, as `host:port`, separated by commas. | string |  | broker1:9092,broker2:9092 |
+| **topic** | Topic Name | **Required** The Kafka topic that the Ceph Object Gateway sends the bucket notifications to, as set in the push endpoint of the Ceph topic. | string |  | ceph-bucket-notifications |
+| **accessKey** | Access Key | The S3 access key of a Ceph Object Gateway user that can read the bucket. Required when `getObject` is true. | string |  |  |
+| **autoOffsetReset** | Auto Offset Reset | Where to start when the consumer group has not read the topic before. `latest` reads only the events sent from now on, `earliest` reads the topic from its start, and `none` fails. Enum values: \* latest \* earliest \* none | string | latest |  |
+| **cephUrl** | Ceph URL | The address of the Ceph Object Gateway (RGW) to read the files from, as a URL with the scheme and the port. Required when `getObject` is true. | string |  | http://ceph-rgw:8080 |
+| **consumerGroup** | Consumer Group | The name of the Kafka consumer group. Kafka remembers how far the group has read, so a restart continues where it stopped. When it is not set, a new group is used at each start. | string |  | my-group-id |
+| **getObject** | Get Object | If true, for each `ObjectCreated` event the file is read from Ceph and becomes the body, instead of the notification. It needs `cephUrl`, `accessKey`, `secretKey` and `zoneGroup`. | boolean | false |  |
+| **saslAuthType** | Authentication Type | How to log in to Kafka. `NONE` connects with no login and no TLS, as a local Kafka expects; `PLAIN`, `SCRAM_SHA_256` and `SCRAM_SHA_512` log in with `saslUsername` and `saslPassword`. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string | NONE |  |
+| **saslPassword** | Password | The password of `saslUsername`. Required when `saslAuthType` is `PLAIN`, `SCRAM_SHA_256` or `SCRAM_SHA_512`. | string |  |  |
+| **saslUsername** | Username | The user to log in to Kafka as. Required when `saslAuthType` is `PLAIN`, `SCRAM_SHA_256` or `SCRAM_SHA_512`. | string |  |  |
+| **secretKey** | Secret Key | The S3 secret key that goes with `accessKey`. Required when `getObject` is true. | string |  |  |
+| **zoneGroup** | Ceph Zone Group | The name of the zone group of the Ceph Object Gateway, used as the region of the requests. Required when `getObject` is true. | string |  | zonegroup1 |
 
 ## Dependencies
 
@@ -85,7 +91,7 @@ Configuring the notification and the topic on the Ceph side is done out of band,
 
 ### Fetching the Object
 
-Set `getObject` to true to fetch the object body from Ceph for `ObjectCreated` events, using the same S3 compatible path that `ceph-source` and `ceph-sink` use. The notification JSON is emitted unchanged otherwise.
+Set `getObject` to true to fetch the object body from Ceph for `ObjectCreated` events, using the same S3 compatible path that `ceph-source` and `ceph-sink` use. With `getObject` left false, the notification JSON is emitted unchanged, as text. With `getObject` true, the other events are emitted as parsed JSON (a Jackson `JsonNode`) rather than as text.
 
 When `getObject` is enabled, `cephUrl`, `accessKey`, `secretKey` and `zoneGroup` are required so the object can be read back from the RGW endpoint.
 

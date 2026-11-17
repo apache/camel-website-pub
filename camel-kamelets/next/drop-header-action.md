@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Remove an header from the message in transit.
+Removes one header, given by its name, from each message.
+
+Use it to remove a header that the next step must not see, for example an `Authorization` header with a secret, or a header that would change what a sink does. To remove several headers at once by a pattern, such as all the headers whose names start with `Camel`, use `drop-headers-action`.
+
+Input: any message.
+
+Output: the same body, and the same headers without the one named by `name`. A message without that header passes on unchanged.
+
+Good to know: the name is not case-sensitive: `FOO` also removes the header `foo`.
 
 ## Configuration Options
 
@@ -13,7 +21,7 @@ The following table summarizes the configuration options available for the `drop
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **name** | Name | **Required** The name of the header to be removed. | string |  | headername |
+| **name** | Header Name | **Required** The name of the header to remove, such as `Authorization`. Upper and lower case do not matter. | string |  | Authorization |
 
 ## Dependencies
 

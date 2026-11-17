@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Forward data to a FHIR endpoint.
+Sends each message, a FHIR resource such as a Patient or an Observation, to a FHIR server of healthcare data, to create, update, delete or validate it there.
+
+Use it to write healthcare records into a FHIR server, for example to create a Patient for each new admission, or to update an Observation that a device measured. To read resources from a FHIR server, use `fhir-source`.
+
+Input: the body is the FHIR resource, as JSON text, or as XML text with `encoding` set to `XML`, such as `{"resourceType": "Patient", "name": [{"family": "Doe"}]}`. It is sent with the operation set by `apiName` and `methodName`, which must be one that takes a resource: `CREATE` with `resource`, `UPDATE` with `resource`, `DELETE` with `resource`, or `VALIDATE` with `resource`.
+
+Output: when it is used inside a route, the body afterwards is the outcome of the operation, as a Java object of the HAPI FHIR library, with the id of the resource; it is not JSON.
+
+Good to know: a body that is not a valid FHIR resource of the chosen `fhirVersion` fails the message. Operations that do not take a resource, such as `READ` or `SEARCH`, fail.
 
 ## Configuration Options
 
@@ -13,21 +21,21 @@ The following table summarizes the configuration options available for the `fhir
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **apiName** | API Name | **Required** What kind of operation to perform. Enum values: \* CAPABILITIES \* CREATE \* DELETE \* HISTORY \* LOAD\_PAGE \* META \* OPERATION \* PATCH \* READ \* SEARCH \* TRANSACTION \* UPDATE \* VALIDATE | string |  |  |
-| **methodName** | Method Name | **Required** What sub operation to use for the selected operation. | string |  |  |
-| **serverUrl** | Server URL | **Required** The FHIR server base URL. | string |  |  |
-| **accessToken** | Access Token | OAuth access token. | string |  |  |
-| **encoding** | Encoding | Encoding to use for all request. One of: \[JSON\] \[XML\]. | string | JSON |  |
-| **fhirVersion** | FHIR Version | The FHIR Version to use. Enum values: \* DSTU2 \* DSTU2\_HL7ORG \* DSTU2\_1 \* DSTU3 \* R4 \* R5 | string | R4 |  |
-| **lazyStartProducer** | Lazy Start Producer | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | boolean | false |  |
-| **log** | Log | Will log every requests and responses. | boolean | false |  |
-| **password** | Password | Password to use for basic authentication. | string |  |  |
-| **prettyPrint** | Pretty Print | Pretty print all request. | boolean | false |  |
-| **proxyHost** | Proxy Host | The proxy host. | string |  |  |
-| **proxyPassword** | Proxy Password | The proxy password. | string |  |  |
-| **proxyPort** | Proxy Port | The proxy port. | integer |  |  |
-| **proxyUser** | Proxy User | The proxy username. | string |  |  |
-| **username** | Username | Username to use for basic authentication. | string |  |  |
+| **apiName** | API Name | **Required** The kind of operation, such as `CREATE` to add a new resource or `UPDATE` to change an existing one. Use one that takes a resource as input: `CREATE`, `UPDATE`, `DELETE` or `VALIDATE`. Enum values: \* CAPABILITIES \* CREATE \* DELETE \* HISTORY \* LOAD\_PAGE \* META \* OPERATION \* PATCH \* READ \* SEARCH \* TRANSACTION \* UPDATE \* VALIDATE | string |  |  |
+| **methodName** | Method Name | **Required** The variant of the operation in `apiName`. Use `resource`, which takes the resource in the body. | string |  | resource |
+| **serverUrl** | Server URL | **Required** The base address of the FHIR API of the server, the part before the resource type, starting with `http://` or `https://`. | string |  | https://fhir.example.com/fhir |
+| **accessToken** | Access Token | An OAuth access token, sent as a Bearer token, for a server that uses OAuth, such as SMART on FHIR. Use it instead of `username` and `password`. | string |  |  |
+| **encoding** | Encoding | How the resources are written: `JSON` or `XML`. The body must be in this format. | string | JSON | XML |
+| **fhirVersion** | FHIR Version | The version of the FHIR standard that the server and the resources use. Most servers today use `R4`. Enum values: \* DSTU2 \* DSTU2\_HL7ORG \* DSTU2\_1 \* DSTU3 \* R4 \* R5 | string | R4 |  |
+| **lazyStartProducer** | Lazy Start Producer | If true, the connection to the server is set up at the first message instead of when the integration starts, so that the integration can start while the server is not reachable. The first message then takes a little longer. | boolean | false |  |
+| **log** | Log | If true, every request to the server and every response is written to the log, for troubleshooting. | boolean | false |  |
+| **password** | Password | The password of `username`, for Basic authentication. | string |  |  |
+| **prettyPrint** | Pretty Print | If true, the resources sent to the server are indented, which is easier to read in logs. | boolean | false |  |
+| **proxyHost** | Proxy Host | The host name of an HTTP proxy to reach the server through. Use it with `proxyPort`. | string |  | proxy.example.com |
+| **proxyPassword** | Proxy Password | The password of `proxyUser` for the HTTP proxy. | string |  |  |
+| **proxyPort** | Proxy Port | The port of the HTTP proxy in `proxyHost`. | integer |  | 3128 |
+| **proxyUser** | Proxy User | The user to log in to the HTTP proxy as, when the proxy needs a login. | string |  |  |
+| **username** | Username | The user to log in to the server as, with Basic authentication. Leave it out for a server without login. | string |  |  |
 
 ## Dependencies
 
@@ -75,7 +83,7 @@ camel run route.yaml
 
 ### FHIR Operations
 
-This Kamelet supports various FHIR operations including CREATE, READ, UPDATE, DELETE, SEARCH, and others. You must specify both the API name and method name for the operation.
+This Kamelet sends the FHIR resource in the message body to the server. You must specify both the API name and the method name of the operation, and the operation must take the resource as input: `CREATE`, `UPDATE`, `DELETE` or `VALIDATE`, each with the method name `resource`. Operations that do not take a resource, such as READ or SEARCH, fail.
 
 ### FHIR Versions
 

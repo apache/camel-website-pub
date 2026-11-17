@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Stores JSON-formatted data into ElasticSearch.
+Stores each message, a JSON object, as a document in an index of Elasticsearch, so that it can be searched.
+
+Use it to make records searchable, such as orders, log entries or products, or to feed dashboards in Kibana. To run a search on a schedule, use `elasticsearch-search-source`; for OpenSearch, use `opensearch-index-sink`.
+
+Input: the body is the document, as JSON text, such as `{"order": 42, "status": "shipped"}`. The optional `indexId` header (or `ce-indexid`) is the id of the document: a document with the same id is replaced. Without it, Elasticsearch makes up a new id, so each message adds a new document. The optional `indexName` header (or `ce-indexname`) is the index to write to, instead of the `indexName` option.
+
+Output: when it is used inside a route, the body afterwards is the id of the document, as text.
+
+Good to know: a body that is not JSON fails the message, and so does a message with no index, from the option or the header. It connects with TLS by default (`enableSSL`); for a server with a self-signed certificate, give its certificate in `certificate`.
 
 ## Configuration Options
 
@@ -13,13 +21,13 @@ The following table summarizes the configuration options available for the `elas
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **clusterName** | ElasticSearch Cluster Name | **Required** The name of the ElasticSearch cluster. | string |  | quickstart |
-| **hostAddresses** | Host Addresses | **Required** A comma-separated list of remote transport addresses in `ip:port format`. | string |  | quickstart-es-http:9200 |
-| **certificate** | Certificate | The Certificate for accessing the Elasticsearch cluster. You must encode this value in base64. | string |  |  |
-| **enableSSL** | Enable SSL | Specifies to connect by using SSL. | boolean | true |  |
-| **indexName** | Index in ElasticSearch | The name of the ElasticSearch index. | string |  | data |
-| **password** | Password | The password to connect to ElasticSearch. | string |  |  |
-| **user** | Username | The username to connect to ElasticSearch. | string |  |  |
+| **clusterName** | ElasticSearch Cluster Name | **Required** The name of the Elasticsearch cluster. Required, but not checked against the cluster. | string |  | quickstart |
+| **hostAddresses** | Host Addresses | **Required** The address of the Elasticsearch HTTP API, as `host:port`, or several nodes separated by commas. The port is 9200 by default. | string |  | quickstart-es-http:9200 |
+| **certificate** | Certificate | The certificate of the certificate authority (CA) that signed the certificate of the cluster, such as the `http_ca.crt` file of Elasticsearch, as PEM text encoded in base64. Needed when the cluster uses a self-signed certificate. | string |  |  |
+| **enableSSL** | Enable SSL | If true, it connects with HTTPS. Set it to false for a cluster that is reached with plain HTTP. | boolean | true |  |
+| **indexName** | Index in ElasticSearch | The name of the index to store the documents in. Elasticsearch creates it when it does not exist. The `indexName` header of a message takes precedence. | string |  | orders |
+| **password** | Password | The password of the Elasticsearch user in `user`. | string |  |  |
+| **user** | Username | The Elasticsearch user to log in as, such as `elastic`. Leave it out for a cluster without security. | string |  |  |
 
 ## Dependencies
 

@@ -417,4 +417,3 @@ Header Variables inside the response message:
 | `CamelHazelcastListenerAction` | `String` | type of event - here **added** and **removed** (and soon **envicted**) |
 | `CamelHazelcastObjectId` | `String` | the oid of the object |
 | `CamelHazelcastCacheName` | `String` | the name of the cache (e.g., "foo") |
-| `CamelHazelcastCacheType` | `String` | the type of the cache (e.g., replicatedmap) |

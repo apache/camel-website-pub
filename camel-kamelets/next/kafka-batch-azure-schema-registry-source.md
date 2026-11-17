@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Preview"**
 
-Receive data from Kafka topics in batch on Azure Eventhubs combined with Azure Schema Registry and commit them manually through KafkaManualCommit or auto commit.
+Receives Avro records from event hubs in Azure Event Hubs in batches, through its Kafka interface, with the schema kept in Azure Schema Registry.
+
+Use it to read many Avro records at once from Azure Event Hubs, for example to write them to a database in one go. For one record at a time use `kafka-azure-schema-registry-source`.
+
+Output: the body is a List with one entry per record, up to `batchSize`. Each entry is a message of its own, with the value of the record as its body (an object of the `specificAvroValueType` class), and the key, offset and timestamp of the record in its `CamelKafkaKey`, `CamelKafkaOffset` and `CamelKafkaTimestamp` headers. The record headers are in the entries too, as bytes. The message itself has the `CamelKafkaTopic` and `CamelKafkaPartition` headers. The `kafka-topic`, `kafka-key` and other headers of `kafka-source` are not set.
+
+Good to know: it logs in to Event Hubs with the connection string in `password`, and to the schema registry with the Azure credentials of the environment the integration runs in, such as the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` environment variables of a service principal, or a managed identity. The schemas must be in a schema group named `avro`. To save the position in Kafka only once a batch was handled, set `allowManualCommit` to true and `autoCommitEnable` to false, and end the flow with `kafka-batch-manual-commit-action`.
 
 ## Configuration Options
 
@@ -13,25 +19,25 @@ The following table summarizes the configuration options available for the `kafk
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **azureRegistryUrl** | Azure Schema Registry URL | **Required** The Apicurio Schema Registry URL. | string |  |  |
-| **bootstrapServers** | Bootstrap Servers | **Required** Comma separated list of Kafka Broker URLs. | string |  |  |
-| **password** | Password | **Required** Password to authenticate to kafka. | string |  |  |
-| **topic** | Topic Names | **Required** Comma separated list of Kafka topic names. | string |  |  |
-| **allowManualCommit** | Allow Manual Commit | Whether to allow doing manual commits. | boolean | false |  |
-| **autoCommitEnable** | Auto Commit Enable | If true, periodically commit to ZooKeeper the offset of messages already fetched by the consumer. | boolean | true |  |
-| **autoOffsetReset** | Auto Offset Reset | What to do when there is no initial offset. There are 3 enums and the value can be one of latest, earliest, none. | string | latest |  |
-| **batchSize** | Batch Dimension | The maximum number of records returned in a single call to poll(). | integer | 500 |  |
-| **batchingIntervalMs** | Batching Interval | In consumer batching mode, then this option is specifying a time in millis, to trigger batch completion eager when the current batch size has not reached the maximum size defined by maxPollRecords. Notice the trigger is not exact at the given interval, as this can only happen between kafka polls (see pollTimeoutMs option). | integer |  |  |
-| **consumerGroup** | Consumer Group | A string that uniquely identifies the group of consumers to which this source belongs. | string |  | my-group-id |
-| **deserializeHeaders** | Automatically Deserialize Headers | When enabled the Kamelet source will deserialize all message headers to String representation. | boolean | true |  |
-| **maxPollIntervalMs** | Max Poll Interval | The maximum delay between invocations of poll() when using consumer group management. | integer |  |  |
-| **pollOnError** | Poll On Error Behavior | What to do if kafka threw an exception while polling for new messages. There are 5 enums and the value can be one of `DISCARD`, `ERROR_HANDLER`, `RECONNECT`, `RETRY`, `STOP`. | string | ERROR\_HANDLER |  |
-| **pollTimeout** | Poll Timeout Interval | The timeout used when polling the KafkaConsumer. | integer | 5000 |  |
-| **saslMechanism** | SASL Mechanism | The Simple Authentication and Security Layer (SASL) Mechanism used. | string | PLAIN |  |
-| **securityProtocol** | Security Protocol | Protocol used to communicate with brokers. SASL\_PLAINTEXT, PLAINTEXT, SASL\_SSL and SSL are supported. | string | SASL\_SSL |  |
-| **specificAvroValueType** | Specific Avro Value Type | The Specific Type Avro will have to deal with. | string |  | com.example.Order |
-| **topicIsPattern** | Topic Is Pattern | Whether the topic is a pattern (regular expression). This can be used to subscribe to dynamic number of topics matching the pattern. | boolean | false |  |
-| **valueDeserializer** | Value Deserializer | Deserializer class for value that implements the Deserializer interface. | string | com.microsoft.azure.schemaregistry.kafka.avro.KafkaAvroDeserializer |  |
+| **azureRegistryUrl** | Azure Schema Registry URL | **Required** The URL of the Azure Schema Registry, which is the address of the Event Hubs namespace that holds it, as `[https://<namespace>.servicebus.windows.net](https://\<namespace\>.servicebus.windows.net)`. | string |  | https://my-namespace.servicebus.windows.net |
+| **bootstrapServers** | Bootstrap Servers | **Required** The Kafka address of the Event Hubs namespace, as `<namespace>.servicebus.windows.net:9093`. | string |  | my-namespace.servicebus.windows.net:9093 |
+| **password** | Connection String | **Required** The connection string of the Event Hubs namespace, which starts with `Endpoint=sb://`. Find it in the Azure portal, under Shared access policies of the namespace. | string |  |  |
+| **topic** | Event Hub Names | **Required** The event hubs to read from, which Kafka calls topics, separated by commas. When `topicIsPattern` is true, a regular expression that their names must match instead. | string |  | orders |
+| **allowManualCommit** | Allow Manual Commit | If true, each message carries what `kafka-batch-manual-commit-action` needs to save the position of its records in Kafka. Set `autoCommitEnable` to false too, or the position is also saved automatically. | boolean | false |  |
+| **autoCommitEnable** | Auto Commit | If true, the position reached in each partition (the offset) is saved in Kafka automatically every 5 seconds, so that a restarted integration goes on from there. Set it to false together with `allowManualCommit` true to save the position yourself with `kafka-batch-manual-commit-action`. | boolean | true |  |
+| **autoOffsetReset** | Auto Offset Reset | Where to start when the consumer group has no saved position yet: `latest` reads only the records sent from now on, `earliest` reads all the records still in the topic, and `none` fails. | string | latest | earliest |
+| **batchSize** | Batch Size | The largest number of records in one message. A message holds fewer when fewer records are waiting. | integer | 500 |  |
+| **batchingIntervalMs** | Batching Interval | When set, a batch that has not reached `batchSize` is sent on after about this many milliseconds. It is checked only between two reads, so it can take up to `pollTimeout` longer. | integer |  | 10000 |
+| **consumerGroup** | Consumer Group | The name of the consumer group. Integrations with the same group share the records of the topics between them, and the group remembers the position reached, so that a restarted integration goes on where it stopped. When it is not set, a new random group is used on every start. | string |  | my-group-id |
+| **deserializeHeaders** | Automatically Deserialize Headers | Meant to turn the values of the record headers into text. In a batch it has no effect: the record headers of the entries of the list stay bytes. | boolean | true |  |
+| **maxPollIntervalMs** | Max Poll Interval | The longest time, in milliseconds, that the integration may take to handle one batch. When it takes longer, Kafka considers it failed and gives its partitions to another member of the consumer group. When it is not set, the Kafka default of 300000 (5 minutes) applies. | integer |  | 600000 |
+| **pollOnError** | Poll On Error Behavior | What to do when reading from Kafka fails: `ERROR_HANDLER` logs the error and goes on with the next records, `DISCARD` skips the records that failed, `RECONNECT` connects again and retries, `RETRY` reads the same records again, and `STOP` stops reading until the integration is restarted. Enum values: \* DISCARD \* ERROR\_HANDLER \* RECONNECT \* RETRY \* STOP | string | ERROR\_HANDLER |  |
+| **pollTimeout** | Poll Timeout | How long one read from Kafka waits for new records, in milliseconds. | integer | 5000 |  |
+| **saslMechanism** | SASL Mechanism | The login method. Keep the default `PLAIN`, which the login with the connection string in `password` needs. | string | PLAIN |  |
+| **securityProtocol** | Security Protocol | How to connect to Event Hubs. Keep the default `SASL_SSL`, a login over TLS, which Event Hubs requires. The other values are `SASL_PLAINTEXT`, `PLAINTEXT` and `SSL`. | string | SASL\_SSL |  |
+| **specificAvroValueType** | Specific Avro Value Type | The full name of the Java class generated from the Avro schema of the records, into which each record is read. The class must be part of the integration. The Kamelet does not start without this option, although it is not marked as required. | string |  | com.example.Order |
+| **topicIsPattern** | Topic Is Pattern | If true, `topic` is a regular expression, such as `orders-.*`, and the Kamelet reads from every topic whose name matches it. | boolean | false |  |
+| **valueDeserializer** | Value Deserializer | The Java class that turns the value of the record into the body. The default reads Avro with the schema from Azure Schema Registry. | string | com.microsoft.azure.schemaregistry.kafka.avro.KafkaAvroDeserializer |  |
 
 ## Dependencies
 
@@ -129,8 +135,10 @@ spec:
       name: kafka-batch-azure-schema-registry-source
     properties:
       topic: "my-topic"
-      bootstrapServers: "kafka-broker1:9092,kafka-broker2:9092"
+      bootstrapServers: "my-registry.servicebus.windows.net:9093"
       azureRegistryUrl: "https://my-registry.servicebus.windows.net"
+      password: "Endpoint=sb://my-registry.servicebus.windows.net/;SharedAccessKeyName=...;SharedAccessKey=..."
+      specificAvroValueType: "com.example.Order"
   sink:
     ref:
       kind: Service

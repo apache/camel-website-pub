@@ -108,6 +108,7 @@ Enum values:
 | **healthCheckBundles** (advanced) | Whether the server readiness check also requires activation of OPA’s configured bundles. Sends /health?bundles=true. Does not enable health checks, change policy evaluation or guarantee a particular policy revision. Not used in wasm mode or with an injected client. | false | boolean |
 | **inputExpression** (advanced) | An expression producing the complete policy input as a Map, object JSON node or POJO. Replaces the default input envelope; includeHeaders, includeProperties and includeBody then do not apply. In batch mode it sees each element as the body on an exchange copy. Null, scalar and streaming results fail closed. Reference a configured expression bean. |  | Expression |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
+| **policyReloadInterval** (advanced) | How often, in milliseconds, to check the configured WASM resource for changed policy or data. Zero disables automatic reload. Replacements are validated before publication; failed reloads retain the active revision. This option applies only to wasm mode. | 0 | long |
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
@@ -166,6 +167,7 @@ Enum values:
 | **healthCheckBundles** (advanced) | Whether the server readiness check also requires activation of OPA’s configured bundles. Sends /health?bundles=true. Does not enable health checks, change policy evaluation or guarantee a particular policy revision. Not used in wasm mode or with an injected client. | false | boolean |
 | **inputExpression** (advanced) | An expression producing the complete policy input as a Map, object JSON node or POJO. Replaces the default input envelope; includeHeaders, includeProperties and includeBody then do not apply. In batch mode it sees each element as the body on an exchange copy. Null, scalar and streaming results fail closed. Reference a configured expression bean. |  | Expression |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
+| **policyReloadInterval** (advanced) | How often, in milliseconds, to check the configured WASM resource for changed policy or data. Zero disables automatic reload. Replacements are validated before publication; failed reloads retain the active revision. This option applies only to wasm mode. | 0 | long |
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
 | **bearerToken** (security) | Bearer token sent to the OPA server in the Authorization header, for an OPA instance that has its API authentication enabled. |  | String |
@@ -675,6 +677,20 @@ None of this applies in `wasm` mode, where there is no server to reach.
 ### Static data in pooled WASM instances
 
 Each WASM pool instance prepares its fixed entrypoint and bundled data once when created. New inputs reuse that instance’s static data while the SDK resets transient input allocations for each evaluation. Instances are never shared concurrently. An evaluation failure discards the instance, and its replacement loads the same configured entrypoint and data before use. Large static data therefore adds initialization work per instance, rather than being parsed again for every exchange.
+
+### Reloading a WASM policy
+
+A WASM endpoint or security policy keeps the policy module and its bundled data together as one immutable snapshot. By default it loads the configured resource at startup only. Set `policyReloadInterval` to a positive duration in milliseconds to poll that resource using a Camel-managed scheduler, for example:
+
+```java
+.to("opa:authz/allow?evaluationMode=wasm&policyBundle=file:/etc/policies/bundle.tar.gz&policyReloadInterval=5000")
+```
+
+The same `policyReloadInterval` property is available on `OpaSecurityPolicy`. A shared security policy polls while at least one guarded route is running and stops polling when the last guarded route stops. Reload reads only the operator-configured resource; it does not read or download policy on each exchange. Publish resource updates atomically, such as by renaming a completed file over the configured file.
+
+For explicit reload, call `reloadPolicy()` on the started `OpaEndpoint` or `OpaSecurityPolicy`. It returns `true` after publishing changed content, `false` for unchanged content, and throws if loading or validation fails. The replacement is loaded, initialized with its configured entrypoint and data, and warmed before it becomes visible. Exchanges already using the previous snapshot finish with that snapshot, which closes after they drain. New exchanges use the replacement without waiting for those exchanges to finish. Stopping cancels the watcher and prevents an in-flight reload from publishing.
+
+`getPolicyReloadStatus()` exposes the active SHA-256 revision of the module and data, the time of the last successful check (the initial load, a published reload, or a poll that found the content unchanged), and the time and exception class name of the last failed reload, which stay visible after later successful checks. Failure diagnostics exclude exception messages and resource contents. A failed reload retains the last validated snapshot. Content that loads but fails validation or compilation is not built again by a poll until it changes, so one broken file logs one warning, while a resource that cannot be read at all is retried on every poll; an explicit `reloadPolicy()` always tries. Operators should monitor failures because retained policy can become stale. Reload and this option apply only to WASM evaluation; REST policy deployment remains managed by the OPA server.
 
 ## Failure handling
 

@@ -4,7 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Receive data from an Apache Artemis message broker by using JMS Pooled Connection.
+Receives each message from a queue or a topic in an Apache ActiveMQ Artemis broker, through JMS, with connections taken from a pool.
+
+Use it to process work that other applications put on a queue, or to react to events published on a topic, on a broker that needs a login: it is `jms-apache-artemis-source` with `username` and `password` options and a pool of connections.
+
+Output: the body is text for a JMS text message, bytes for a bytes message, and a Map for a map message. The JMS properties of the message become headers, along with the JMS headers such as `JMSMessageID`, `JMSDestination`, `JMSTimestamp`, `JMSPriority` and `JMSRedelivered`.
+
+Good to know: From a queue, each message is removed when it is received, even when the rest of the flow then fails, and several copies of this source share the messages. From a topic (`destinationType` set to `topic`), it receives only the messages sent while it is connected, as the subscription is not durable. It connects with no TLS unless `brokerURL` asks for it. When the broker cannot be reached, it starts anyway and tries again every 5 seconds.
 
 ## Configuration Options
 
@@ -13,14 +19,14 @@ The following table summarizes the configuration options available for the `jms-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **brokerURL** | Broker URL | **Required** The JMS URL. | string |  | tcp://my-host:61616 |
-| **destinationName** | Destination Name | **Required** The JMS destination name. | string |  |  |
-| **connectionIdleTimeout** | Connection Idle Timeout | The maximum time a pooled Connection can sit unused before it is eligible for removal (in milliseconds). | integer | 30000 |  |
-| **destinationType** | Destination Type | The JMS destination type (queue or topic). | string | queue |  |
-| **maxIdleSessionsPerConnection** | Max Idle Sessions Per Connection | The number of idle sessions allowed per connection before they are closed. | integer | 500 |  |
-| **maxSessionsPerConnection** | Max Session Per Connection | The maximum number of pooled sessions per connection in the pool. | integer | 500 |  |
-| **password** | Broker Password | The JMS Broker Password. | string |  |  |
-| **username** | Broker Username | The JMS Broker Username. | string |  |  |
+| **brokerURL** | Broker URL | **Required** The address of the Artemis broker, as `tcp://host:port`; the usual port is 61616. Add `?sslEnabled=true` for TLS. | string |  | tcp://localhost:61616 |
+| **destinationName** | Queue or Topic Name | **Required** The name of the queue or topic to receive the messages from. | string |  | orders |
+| **connectionIdleTimeout** | Connection Idle Timeout | How long a connection of the pool can stay unused before it is closed, in milliseconds. For example, 30000 is 30 seconds. | integer | 30000 |  |
+| **destinationType** | Queue or Topic | Whether `destinationName` is a queue (`queue`) or a topic (`topic`). A queue keeps each message until one receiver takes it; a topic hands each message to every receiver subscribed at that moment. | string | queue |  |
+| **maxIdleSessionsPerConnection** | Max Idle Sessions Per Connection | How many unused sessions each connection of the pool keeps open for reuse. Unused sessions beyond this number are closed. | integer | 500 |  |
+| **maxSessionsPerConnection** | Max Sessions Per Connection | The most sessions that can be open at the same time on each connection of the pool. Each message being sent or received uses one session. | integer | 500 |  |
+| **password** | Broker Password | The password to log in to the broker with, for the user `username`. | string |  |  |
+| **username** | Broker Username | The user name to log in to the broker with. Leave it empty for a broker that accepts clients without a login. | string |  |  |
 
 ## Dependencies
 
@@ -84,7 +90,7 @@ This Kamelet connects to Apache Artemis JMS broker using:
 
 ### Output format
 
-The Kamelet consumes messages from Apache Artemis JMS queues and produces the message data in the configured format.
+The Kamelet consumes messages from Apache Artemis queues or topics. The body is text for a JMS text message, bytes for a bytes message, and a Map for a map message; the JMS properties of the message become headers.
 
 ### Configuration
 
@@ -94,34 +100,25 @@ The Kamelet requires Apache Artemis connection parameters:
     
 -   `destinationName`: The destination queue or topic name
     
--   `username`: Username for authentication
+-   `username`: Username for authentication, when the broker needs a login
     
--   `password`: Password for authentication
+-   `password`: Password for authentication, when the broker needs a login
     
 
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: jms-pooled-apache-artemis-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: jms-pooled-apache-artemis-source
-    properties:
-      brokerURL: "tcp://artemis-broker:61616"
-      destinationName: "my-queue"
-      username: "{{username}}"
-      password: "{{password}}"
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:jms-pooled-apache-artemis-source"
+      parameters:
+        brokerURL: "tcp://artemis-broker:61616"
+        destinationName: "my-queue"
+        username: "artemisuser"
+        password: "artemispass"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

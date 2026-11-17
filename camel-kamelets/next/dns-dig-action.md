@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Query a DNS through Dig.
+Asks the DNS for the records of one kind, such as A or MX, of a name, and gives the answer as text, in the format of the `dig` tool.
+
+Use it to see the records of a domain, such as its mail (MX) records, for example to check a DNS change. To get only the IP address of a name, use `dns-ip-action`, and to get its address records as JSON, use `dns-lookup-action`.
+
+Input: the name to look up, taken from the `domain-name` header, else from the `ce-domainname` header, else from the body as text. The kind of record comes from the `dns-type` header, else from the `ce-dnstype` header, else it is `A` (the IPv4 addresses).
+
+Output: the body is the whole answer as text, as the `dig` command shows it: the question, the records found, and the status, such as `NOERROR`.
+
+Good to know: a name the DNS does not know does not fail the message: the answer has the status `NXDOMAIN` and no records. The Kamelet has no options; it asks the DNS servers of the machine it runs on.
 
 ## Configuration Options
 

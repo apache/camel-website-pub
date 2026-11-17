@@ -4,7 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Create a secret in AWS Secrets Manager.
+Creates a new secret in AWS Secrets Manager for each message, with the body as the value of the secret.
+
+Use it to store passwords, API keys or certificates that another system generates, so that your applications can read them from Secrets Manager.
+
+Input: the body is the value of the secret, as text, for example a password, or several values as a JSON object in JSON text. The name of the secret comes from the `secret-name` header, else from the `ce-secret-name` header; without either, the ID of the message is used as the name.
+
+Output: when it is used inside a route, the body afterwards is the answer of AWS, a `CreateSecretResponse` object of the AWS SDK for Java with the ARN, the name and the version ID of the new secret.
+
+Good to know: it only creates secrets. A message for a name that already exists fails, so it cannot change the value of an existing secret. A message without a name header creates a secret with a generated name, such as `4D678616B8AFAA1-0000000000000002`.
 
 ## Configuration Options
 
@@ -13,14 +21,14 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **region** | AWS Region | **Required** The AWS region to access. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  |  |
-| **accessKey** | Access Key | The access key obtained from AWS. | string |  |  |
-| **profileCredentialsName** | Profile Credentials Name | If using a profile credentials provider this parameter sets the profile name. | string |  |  |
-| **secretKey** | Secret Key | The secret key obtained from AWS. | string |  |  |
-| **sessionToken** | Session Token | Amazon AWS Session Token used when the user needs to assume a IAM role. | string |  |  |
-| **useDefaultCredentialsProvider** | Default Credentials Provider | Set whether the Secrets Manager client should expect to load credentials through a default credentials provider or to expect static credentials to be passed in. | boolean | false |  |
-| **useProfileCredentialsProvider** | Profile Credentials Provider | Set whether the Secrets Manager client should expect to load credentials through a profile credentials provider. | boolean | false |  |
-| **useSessionCredentials** | Session Credentials | Set whether the Secrets Manager client should expect to use Session Credentials. This is useful in situation in which the user needs to assume a IAM role for doing operations in Secrets Manager. | boolean | false |  |
+| **region** | AWS Region | **Required** The AWS region to create the secrets in, such as `eu-west-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
+| **accessKey** | Access Key | The access key ID of an IAM user, which AWS gives when you create an access key for the user (in the AWS console: IAM, Users, Security credentials). Use it together with `secretKey`, or leave both empty and set `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` instead. | string |  |  |
+| **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
+| **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
+| **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found the way the AWS SDK finds them: from the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the shared credentials file, or the IAM role of the machine, container or pod it runs on. Then `accessKey` and `secretKey` are not needed. | boolean | false |  |
+| **useProfileCredentialsProvider** | Profile Credentials Provider | If true, the credentials are read from a profile of the AWS credentials file (`~/.aws/credentials`), the one named in `profileCredentialsName`. | boolean | false |  |
+| **useSessionCredentials** | Session Credentials | If true, it logs in with temporary credentials, such as those of an assumed IAM role: `accessKey`, `secretKey` and `sessionToken` together. | boolean | false |  |
 
 ## Dependencies
 
@@ -91,14 +99,14 @@ Only one of access key/secret key or default credentials provider could be used
 
 For more information, see the [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
 
-### Required Headers
+### Headers
 
-The Kamelet expects the following headers to be set:
+The Kamelet reads the following header:
 
 -   `secret-name` / `ce-secret-name`: as the secret name to create.
     
 
-If the header is not set, the exchange ID is used as secret name.
+If the header is not set, the ID of the message is used as secret name.
 
 ## Kamelet source file
 
