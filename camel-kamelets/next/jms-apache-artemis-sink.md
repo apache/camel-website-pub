@@ -6,13 +6,13 @@
 
 Sends each message to a queue or a topic in an Apache ActiveMQ Artemis broker, through JMS.
 
-Use it to hand work to another application through a queue, such as orders to process, or to publish events on a topic for every application that listens. For a steady flow of messages, use `jms-pooled-apache-artemis-sink`, which reuses its connections to the broker and has `username` and `password` options. For another broker that speaks AMQP 1.0, use `jms-amqp-10-sink`.
+Use it to hand work to another application through a queue, such as orders to process, or to publish events on a topic for every application that listens. For another broker that speaks AMQP 1.0, use `jms-amqp-10-sink`.
 
 Input: text is sent as a JMS text message, bytes as a JMS bytes message, and a Map as a JMS map message. The headers of the message, except the Camel ones, are sent along as JMS properties of the message.
 
 Output: the message is unchanged.
 
-Good to know: Messages go to a queue unless `destinationType` is `topic`, and a message sent to a topic reaches only the receivers subscribed at that moment. It connects with no TLS and no login, unless `brokerURL` asks for them. It does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does.
+Good to know: Messages go to a queue unless `destinationType` is `topic`, and a message sent to a topic reaches only the receivers subscribed at that moment. It connects with no TLS unless `brokerURL` asks for it, and logs in with `username` and `password` when they are set. It keeps its connections to the broker in a pool and reuses them for the next messages. It does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does.
 
 ## Configuration Options
 
@@ -23,7 +23,12 @@ The following table summarizes the configuration options available for the `jms-
 | --- | --- | --- | --- | --- | --- |
 | **brokerURL** | Broker URL | **Required** The address of the Artemis broker, as `tcp://host:port`; the usual port is 61616. Add `?sslEnabled=true` for TLS. A broker that needs a login takes it in the URL too, as `tcp://host:61616?user=app&password=secret`. | string |  | tcp://localhost:61616 |
 | **destinationName** | Queue or Topic Name | **Required** The name of the queue or topic to send the messages to. | string |  | orders |
+| **connectionIdleTimeout** | Connection Idle Timeout | How long a connection of the pool can stay unused before it is closed, in milliseconds. For example, 30000 is 30 seconds. | integer | 30000 |  |
 | **destinationType** | Queue or Topic | Whether `destinationName` is a queue (`queue`) or a topic (`topic`). A queue keeps each message until one receiver takes it; a topic hands each message to every receiver subscribed at that moment. | string | queue |  |
+| **maxIdleSessionsPerConnection** | Max Idle Sessions Per Connection | How many unused sessions each connection of the pool keeps open for reuse. Unused sessions beyond this number are closed. | integer | 500 |  |
+| **maxSessionsPerConnection** | Max Sessions Per Connection | The most sessions that can be open at the same time on each connection of the pool. Each message being sent or received uses one session. | integer | 500 |  |
+| **password** | Broker Password | The password to log in to the broker with, for the user `username`. | string |  |  |
+| **username** | Broker Username | The user name to log in to the broker with. Leave it empty for a broker that accepts clients without a login. | string |  |  |
 
 ## Dependencies
 
@@ -34,6 +39,8 @@ At runtime, the `jms-apache-artemis-sink` Kamelet relies upon the presence of th
 -   camel:kamelet
     
 -   mvn:org.apache.activemq:artemis-jakarta-client-all:2.57.0
+    
+-   mvn:org.messaginghub:pooled-jms:3.2.6
     
 
 ## Camel JBang usage
@@ -82,6 +89,21 @@ The Kamelet supports both queue and topic destinations. The destination type can
 ### Apache Artemis Client
 
 This sink uses the Apache Artemis Jakarta JMS client library to establish connections and send messages to the broker.
+
+### Authentication
+
+A broker that needs a login takes it in the `username` and `password` options. Without them, the Kamelet connects with no login.
+
+### Connection Pooling
+
+The Kamelet keeps its connections to the broker in a pool and reuses them for the next messages, instead of opening a new connection for each message. The pool is set with these options:
+
+-   `maxSessionsPerConnection`: the most sessions open at the same time on each connection (default: 500)
+    
+-   `maxIdleSessionsPerConnection`: how many unused sessions each connection keeps for reuse (default: 500)
+    
+-   `connectionIdleTimeout`: how long an unused connection stays open, in milliseconds (default: 30000)
+    
 
 ## Kamelet source file
 

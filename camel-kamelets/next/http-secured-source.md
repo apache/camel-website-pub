@@ -2,11 +2,11 @@
 
 **Provided by: "Apache Software Foundation"**
 
-**Support Level for this Kamelet is: "Stable"**
+**Support Level for this Kamelet is: "Deprecated"**
 
-Fetches a web address with an HTTP GET request at a regular interval, logging in with a user and password or with an OAuth 2.0 token, and sends each response as a message.
+Deprecated, use `http-source` instead, which has the same login options: fetches a web address at a regular interval with a login, one message per response.
 
-Use it to poll a protected REST API or feed for its current data, for example fetch the state of the orders every minute. If the address needs no login, use `http-source`. To receive the requests that other systems send instead, use `webhook-source`.
+Use it to poll a protected REST API or feed for its current data, for example fetch the state of the orders every minute. This Kamelet will be removed in a later release: `http-source` now takes the same options, so change only the name of the Kamelet. To receive the requests that other systems send instead, use `webhook-source`.
 
 Output: the body is the body of the response, as bytes. The headers of the response, such as `Content-Type`, are copied to the message, and `CamelHttpResponseCode` holds the status code.
 

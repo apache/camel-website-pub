@@ -901,7 +901,7 @@ spec:
 
 We should complete the Kamelet with all mandatory (also optional) options that are described in [the guidelines for contributing Kamelets](https://github.com/apache/camel-kamelets).
 
-The final result should look like:
+The final result should look like this. The complete Kamelet is in `examples/kamelets/earthquake-source.kamelet.yaml` in the repository: it is a demo, so it is not part of the catalog.
 
 earthquake-source.kamelet.yaml
 

@@ -2,11 +2,11 @@
 
 **Provided by: "Apache Software Foundation"**
 
-**Support Level for this Kamelet is: "Stable"**
+**Support Level for this Kamelet is: "Deprecated"**
 
-Receives each message from a queue or a topic in an Apache ActiveMQ Artemis broker, through JMS, with connections taken from a pool.
+Deprecated, use `jms-apache-artemis-source` instead, which now has the same login options: receives each message from a queue or a topic in an Apache ActiveMQ Artemis broker.
 
-Use it to process work that other applications put on a queue, or to react to events published on a topic, on a broker that needs a login: it is `jms-apache-artemis-source` with `username` and `password` options and a pool of connections.
+Use it to process work that other applications put on a queue, or to react to events published on a topic, on a broker that needs a login. This Kamelet will be removed in a later release: `jms-apache-artemis-source` now takes `username` and `password`, so change the name of the Kamelet and drop the pool options, which a source does not need because it keeps its connection open.
 
 Output: the body is text for a JMS text message, bytes for a bytes message, and a Map for a map message. The JMS properties of the message become headers, along with the JMS headers such as `JMSMessageID`, `JMSDestination`, `JMSTimestamp`, `JMSPriority` and `JMSRedelivered`.
 
@@ -76,6 +76,9 @@ camel run route.yaml
 ```
 
 ## JMS Pooled Apache Artemis Source Kamelet Description
+
+> **Note**
+> This Kamelet is deprecated and will be removed in a later release. Use [![jms apache artemis source](_images/kamelets/jms-apache-artemis-source.svg) JMS - Apache Artemis Source](jms-apache-artemis-source.html), which has the same `username` and `password` options. It needs no pool options: a source keeps its connection open.
 
 ### Authentication methods
 

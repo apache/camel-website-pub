@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1794924829568,
+  "generated": 1794928650945,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -3876,12 +3876,6 @@
             },
             {
               "module": "ROOT",
-              "path": "aws-sts-assume-role-action.adoc",
-              "url": "/camel-kamelets/next/aws-sts-assume-role-action.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/aws-sts-assume-role-action.svg\" alt=\"aws sts assume role action\"></span> AWS STS Assume Role Action"
-            },
-            {
-              "module": "ROOT",
               "path": "aws-timestream-query-sink.adoc",
               "url": "/camel-kamelets/next/aws-timestream-query-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/aws-timestream-query-sink.svg\" alt=\"aws timestream query sink\"></span> AWS Timestream Query Sink"
@@ -3942,12 +3936,6 @@
             },
             {
               "module": "ROOT",
-              "path": "azure-storage-blob-changefeed-source.adoc",
-              "url": "/camel-kamelets/next/azure-storage-blob-changefeed-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/azure-storage-blob-changefeed-source.svg\" alt=\"azure storage blob changefeed source\"></span> Azure Storage Blob Changefeed Source"
-            },
-            {
-              "module": "ROOT",
               "path": "azure-storage-blob-event-based-source.adoc",
               "url": "/camel-kamelets/next/azure-storage-blob-event-based-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/azure-storage-blob-event-based-source.svg\" alt=\"azure storage blob event based source\"></span> Azure Storage Blob Event-based Source"
@@ -4002,27 +3990,9 @@
             },
             {
               "module": "ROOT",
-              "path": "bitcoin-source.adoc",
-              "url": "/camel-kamelets/next/bitcoin-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/bitcoin-source.svg\" alt=\"bitcoin source\"></span> Bitcoin Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "caffeine-action.adoc",
-              "url": "/camel-kamelets/next/caffeine-action.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/caffeine-action.svg\" alt=\"caffeine action\"></span> Caffeine Action"
-            },
-            {
-              "module": "ROOT",
               "path": "cassandra-sink.adoc",
               "url": "/camel-kamelets/next/cassandra-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/cassandra-sink.svg\" alt=\"cassandra sink\"></span> Cassandra Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "cassandra-source.adoc",
-              "url": "/camel-kamelets/next/cassandra-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/cassandra-source.svg\" alt=\"cassandra source\"></span> Cassandra Source"
             },
             {
               "module": "ROOT",
@@ -4041,18 +4011,6 @@
               "path": "ceph-source.adoc",
               "url": "/camel-kamelets/next/ceph-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/ceph-source.svg\" alt=\"ceph source\"></span> Ceph Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "chuck-norris-source.adoc",
-              "url": "/camel-kamelets/next/chuck-norris-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/chuck-norris-source.svg\" alt=\"chuck norris source\"></span> Chuck Norris Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "chunk-template-action.adoc",
-              "url": "/camel-kamelets/next/chunk-template-action.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/chunk-template-action.svg\" alt=\"chunk template action\"></span> Chunk Template Action"
             },
             {
               "module": "ROOT",
@@ -4122,12 +4080,6 @@
             },
             {
               "module": "ROOT",
-              "path": "djl-image-to-text-action.adoc",
-              "url": "/camel-kamelets/next/djl-image-to-text-action.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/djl-image-to-text-action.svg\" alt=\"djl image to text action\"></span> Image-to-Text Action"
-            },
-            {
-              "module": "ROOT",
               "path": "dns-dig-action.adoc",
               "url": "/camel-kamelets/next/dns-dig-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/dns-dig-action.svg\" alt=\"dns dig action\"></span> DNS DIG Action"
@@ -4176,33 +4128,9 @@
             },
             {
               "module": "ROOT",
-              "path": "dropbox-sink.adoc",
-              "url": "/camel-kamelets/next/dropbox-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/dropbox-sink.svg\" alt=\"dropbox sink\"></span> Dropbox Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "dropbox-source.adoc",
-              "url": "/camel-kamelets/next/dropbox-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/dropbox-source.svg\" alt=\"dropbox source\"></span> Dropbox Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "earthquake-source.adoc",
-              "url": "/camel-kamelets/next/earthquake-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/earthquake-source.svg\" alt=\"earthquake source\"></span> Earthquake Source"
-            },
-            {
-              "module": "ROOT",
               "path": "elasticsearch-index-sink.adoc",
               "url": "/camel-kamelets/next/elasticsearch-index-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/elasticsearch-index-sink.svg\" alt=\"elasticsearch index sink\"></span> ElasticSearch Index Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "elasticsearch-search-source.adoc",
-              "url": "/camel-kamelets/next/elasticsearch-search-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/elasticsearch-search-source.svg\" alt=\"elasticsearch search source\"></span> ElasticSearch Search Source"
             },
             {
               "module": "ROOT",
@@ -4305,12 +4233,6 @@
               "path": "google-calendar-source.adoc",
               "url": "/camel-kamelets/next/google-calendar-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/google-calendar-source.svg\" alt=\"google calendar source\"></span> Google Calendar Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "google-functions-sink.adoc",
-              "url": "/camel-kamelets/next/google-functions-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/google-functions-sink.svg\" alt=\"google functions sink\"></span> Google Functions Sink"
             },
             {
               "module": "ROOT",
@@ -4602,18 +4524,6 @@
             },
             {
               "module": "ROOT",
-              "path": "kafka-azure-schema-registry-sink.adoc",
-              "url": "/camel-kamelets/next/kafka-azure-schema-registry-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-azure-schema-registry-sink.svg\" alt=\"kafka azure schema registry sink\"></span> Azure Kafka through Eventhubs with Azure Schema Registry Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "kafka-azure-schema-registry-source.adoc",
-              "url": "/camel-kamelets/next/kafka-azure-schema-registry-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-azure-schema-registry-source.svg\" alt=\"kafka azure schema registry source\"></span> Azure Kafka through Eventhubs with Azure Schema Registry Source"
-            },
-            {
-              "module": "ROOT",
               "path": "kafka-batch-apicurio-registry-not-secured-source.adoc",
               "url": "/camel-kamelets/next/kafka-batch-apicurio-registry-not-secured-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-batch-apicurio-registry-not-secured-source.svg\" alt=\"kafka batch apicurio registry not secured source\"></span> Kafka Batch Not Secured with Apicurio Registry Source"
@@ -4623,12 +4533,6 @@
               "path": "kafka-batch-apicurio-registry-source.adoc",
               "url": "/camel-kamelets/next/kafka-batch-apicurio-registry-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-batch-apicurio-registry-source.svg\" alt=\"kafka batch apicurio registry source\"></span> Kafka Batch with Apicurio Registry secured with Keycloak Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "kafka-batch-azure-schema-registry-source.adoc",
-              "url": "/camel-kamelets/next/kafka-batch-azure-schema-registry-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-batch-azure-schema-registry-source.svg\" alt=\"kafka batch azure schema registry source\"></span> Azure Kafka Batch through Eventhubs with Azure Schema Registry Source"
             },
             {
               "module": "ROOT",
@@ -4677,24 +4581,6 @@
               "path": "kafka-source.adoc",
               "url": "/camel-kamelets/next/kafka-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-source.svg\" alt=\"kafka source\"></span> Kafka Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "kubernetes-namespaces-source.adoc",
-              "url": "/camel-kamelets/next/kubernetes-namespaces-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kubernetes-namespaces-source.svg\" alt=\"kubernetes namespaces source\"></span> Kubernetes Namespaces Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "kubernetes-nodes-source.adoc",
-              "url": "/camel-kamelets/next/kubernetes-nodes-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kubernetes-nodes-source.svg\" alt=\"kubernetes nodes source\"></span> Kubernetes Nodes Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "kubernetes-pods-source.adoc",
-              "url": "/camel-kamelets/next/kubernetes-pods-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kubernetes-pods-source.svg\" alt=\"kubernetes pods source\"></span> Kubernetes Pods Source"
             },
             {
               "module": "ROOT",
@@ -4872,12 +4758,6 @@
             },
             {
               "module": "ROOT",
-              "path": "opensearch-search-source.adoc",
-              "url": "/camel-kamelets/next/opensearch-search-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/opensearch-search-source.svg\" alt=\"opensearch search source\"></span> OpenSearch Search Source"
-            },
-            {
-              "module": "ROOT",
               "path": "oracle-database-sink.adoc",
               "url": "/camel-kamelets/next/oracle-database-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/oracle-database-sink.svg\" alt=\"oracle database sink\"></span> Oracle Database Sink"
@@ -5019,12 +4899,6 @@
               "path": "salesforce-update-sink.adoc",
               "url": "/camel-kamelets/next/salesforce-update-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/salesforce-update-sink.svg\" alt=\"salesforce update sink\"></span> Salesforce Update Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "sap-netweaver-sink.adoc",
-              "url": "/camel-kamelets/next/sap-netweaver-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/sap-netweaver-sink.svg\" alt=\"sap netweaver sink\"></span> SAP NetWeaver Sink"
             },
             {
               "module": "ROOT",
@@ -5214,24 +5088,6 @@
             },
             {
               "module": "ROOT",
-              "path": "twitter-directmessage-source.adoc",
-              "url": "/camel-kamelets/next/twitter-directmessage-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/twitter-directmessage-source.svg\" alt=\"twitter directmessage source\"></span> Twitter Direct Message Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "twitter-search-source.adoc",
-              "url": "/camel-kamelets/next/twitter-search-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/twitter-search-source.svg\" alt=\"twitter search source\"></span> Twitter Search Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "twitter-timeline-source.adoc",
-              "url": "/camel-kamelets/next/twitter-timeline-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/twitter-timeline-source.svg\" alt=\"twitter timeline source\"></span> Twitter Timeline Source"
-            },
-            {
-              "module": "ROOT",
               "path": "value-to-key-action.adoc",
               "url": "/camel-kamelets/next/value-to-key-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/value-to-key-action.svg\" alt=\"value to key action\"></span> Value to Key Action"
@@ -5247,12 +5103,6 @@
               "path": "webhook-source.adoc",
               "url": "/camel-kamelets/next/webhook-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/webhook-source.svg\" alt=\"webhook source\"></span> Webhook Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "wttrin-source.adoc",
-              "url": "/camel-kamelets/next/wttrin-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/wttrin-source.svg\" alt=\"wttrin source\"></span> wttr.in Source"
             },
             {
               "module": "ROOT",

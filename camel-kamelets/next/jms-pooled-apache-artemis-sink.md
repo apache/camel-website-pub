@@ -2,11 +2,11 @@
 
 **Provided by: "Apache Software Foundation"**
 
-**Support Level for this Kamelet is: "Stable"**
+**Support Level for this Kamelet is: "Deprecated"**
 
-Sends each message to a queue or a topic in an Apache ActiveMQ Artemis broker, through JMS, reusing a pool of connections to the broker.
+Deprecated, use `jms-apache-artemis-sink` instead, which now has the same options: sends each message to a queue or a topic in an Apache ActiveMQ Artemis broker.
 
-Use it to hand work to another application through a queue, or to publish events on a topic, when messages flow steadily: it reuses its connections, where `jms-apache-artemis-sink` connects anew for each message. Use it also for a broker that needs a login, which goes in `username` and `password`.
+Use it to hand work to another application through a queue, or to publish events on a topic, when messages flow steadily: it reuses its connections, where `jms-apache-artemis-sink` connects anew for each message. This Kamelet will be removed in a later release: `jms-apache-artemis-sink` now takes the same options and reuses its connections too, so change only the name of the Kamelet.
 
 Input: text is sent as a JMS text message, bytes as a JMS bytes message, and a Map as a JMS map message. The headers of the message, except the Camel ones, are sent along as JMS properties of the message.
 
@@ -77,6 +77,9 @@ camel run route.yaml
 ```
 
 ## JMS Pooled - Apache Artemis Sink Kamelet Description
+
+> **Note**
+> This Kamelet is deprecated and will be removed in a later release. Use [![jms apache artemis sink](_images/kamelets/jms-apache-artemis-sink.svg) JMS - Apache Artemis Sink](jms-apache-artemis-sink.html), which has the same options, including the pool, so only the name of the Kamelet changes.
 
 ### Connection Configuration
 

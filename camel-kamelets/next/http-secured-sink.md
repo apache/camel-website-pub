@@ -2,11 +2,11 @@
 
 **Provided by: "Apache Software Foundation"**
 
-**Support Level for this Kamelet is: "Stable"**
+**Support Level for this Kamelet is: "Deprecated"**
 
-Sends each message to a web service or REST API as an HTTP or HTTPS request, logging in with a user and password or with an OAuth 2.0 token.
+Deprecated, use `http-sink` instead, which has the same login options: sends each message to a web service or REST API over HTTP or HTTPS, with a login.
 
-Use it to push data to a service that needs a login, such as a protected webhook, an internal REST API, or an API that gives out OAuth 2.0 tokens to applications. If the service needs no login, use `http-sink` instead.
+Use it to push data to a service that needs a login, such as a protected webhook, an internal REST API, or an API that gives out OAuth 2.0 tokens to applications. This Kamelet will be removed in a later release: `http-sink` now takes the same options, so change only the name of the Kamelet.
 
 Input: the body is sent as the request body, as text, bytes or a stream. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The `Content-Type` header is sent as the content type of the request, and the other headers of the message, except the Camel ones, are sent as HTTP headers.
 

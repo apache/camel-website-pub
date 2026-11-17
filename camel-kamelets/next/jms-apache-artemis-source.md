@@ -6,11 +6,11 @@
 
 Receives each message from a queue or a topic in an Apache ActiveMQ Artemis broker, through JMS.
 
-Use it to process work that other applications put on a queue, such as orders or jobs, or to react to events published on a topic. `jms-pooled-apache-artemis-source` does the same with a pool of connections and has `username` and `password` options. For another broker that speaks AMQP 1.0, use `jms-amqp-10-source`.
+Use it to process work that other applications put on a queue, such as orders or jobs, or to react to events published on a topic. For another broker that speaks AMQP 1.0, use `jms-amqp-10-source`.
 
 Output: the body is text for a JMS text message, bytes for a bytes message, and a Map for a map message. The JMS properties of the message become headers, along with the JMS headers such as `JMSMessageID`, `JMSDestination`, `JMSTimestamp`, `JMSPriority` and `JMSRedelivered`.
 
-Good to know: From a queue, each message is removed when it is received, even when the rest of the flow then fails, and several copies of this source share the messages. From a topic (`destinationType` set to `topic`), it receives only the messages sent while it is connected, as the subscription is not durable. It connects with no TLS and no login, unless `brokerURL` asks for them. When the broker cannot be reached, it starts anyway and tries again every 5 seconds.
+Good to know: From a queue, each message is removed when it is received, even when the rest of the flow then fails, and several copies of this source share the messages. From a topic (`destinationType` set to `topic`), it receives only the messages sent while it is connected, as the subscription is not durable. It connects with no TLS unless `brokerURL` asks for it, and logs in with `username` and `password` when they are set. When the broker cannot be reached, it starts anyway and tries again every 5 seconds.
 
 ## Configuration Options
 
@@ -22,6 +22,8 @@ The following table summarizes the configuration options available for the `jms-
 | **brokerURL** | Broker URL | **Required** The address of the Artemis broker, as `tcp://host:port`; the usual port is 61616. Add `?sslEnabled=true` for TLS. A broker that needs a login takes it in the URL too, as `tcp://host:61616?user=app&password=secret`. | string |  | tcp://localhost:61616 |
 | **destinationName** | Queue or Topic Name | **Required** The name of the queue or topic to receive the messages from. | string |  | orders |
 | **destinationType** | Queue or Topic | Whether `destinationName` is a queue (`queue`) or a topic (`topic`). A queue keeps each message until one receiver takes it; a topic hands each message to every receiver subscribed at that moment. | string | queue |  |
+| **password** | Broker Password | The password to log in to the broker with, for the user `username`. | string |  |  |
+| **username** | Broker Username | The user name to log in to the broker with. Leave it empty for a broker that accepts clients without a login. | string |  |  |
 
 ## Dependencies
 
@@ -72,7 +74,7 @@ camel run route.yaml
 
 ### Authentication
 
-This Kamelet has no `username` and `password` options. A broker that needs a login takes it in `brokerURL`, as `tcp://artemis.example.com:61616?user=artemisuser&password=artemispass`. To keep the password in an option of its own, use `jms-pooled-apache-artemis-source`, which has `username` and `password`.
+A broker that needs a login takes it in the `username` and `password` options. Without them, the Kamelet connects with no login.
 
 ### Configuration
 
@@ -83,6 +85,8 @@ The JMS Apache Artemis Source Kamelet supports the following configurations:
 -   **Destination Name**: JMS destination (queue or topic) name (required)
     
 -   **Destination Type**: Type of destination - queue or topic (default: queue)
+    
+-   **Username** and **Password**: the login to the broker, when it needs one
     
 
 The subscription to a topic is not durable, and the Kamelet has no option for a message selector.
@@ -115,7 +119,9 @@ The source receives only the messages published to the topic while it is connect
     from:
       uri: "kamelet:jms-apache-artemis-source"
       parameters:
-        brokerURL: "tcp://artemis.example.com:61616?user=artemisuser&password=artemispass"
+        brokerURL: "tcp://artemis.example.com:61616"
+        username: "artemisuser"
+        password: "artemispass"
         destinationName: "events.topic"
         destinationType: "topic"
       steps:
@@ -125,7 +131,7 @@ The source receives only the messages published to the topic while it is connect
 
 ### Connection Management
 
-When the broker cannot be reached, the Kamelet starts anyway and tries to connect again every 5 seconds. It does not pool connections; `jms-pooled-apache-artemis-source` does.
+When the broker cannot be reached, the Kamelet starts anyway and tries to connect again every 5 seconds. It does not pool connections, and does not need to: it keeps its connection open while it receives.
 
 ## Kamelet source file
 

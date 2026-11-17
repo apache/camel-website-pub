@@ -95,8 +95,6 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![aws sqs source](_images/kamelets/aws-sqs-source.svg) AWS SQS Source](aws-sqs-source.html)
 
- [![aws sts assume role action](_images/kamelets/aws-sts-assume-role-action.svg) AWS STS Assume Role Action](aws-sts-assume-role-action.html)
-
  [![aws timestream query sink](_images/kamelets/aws-timestream-query-sink.svg) AWS Timestream Query Sink](aws-timestream-query-sink.html)
 
  [![aws translate action](_images/kamelets/aws-translate-action.svg) AWS Translate Action](aws-translate-action.html)
@@ -117,8 +115,6 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![azure storage blob append sink](_images/kamelets/azure-storage-blob-append-sink.svg) Azure Storage Blob Append Sink](azure-storage-blob-append-sink.html)
 
- [![azure storage blob changefeed source](_images/kamelets/azure-storage-blob-changefeed-source.svg) Azure Storage Blob Changefeed Source](azure-storage-blob-changefeed-source.html)
-
  [![azure storage blob event based source](_images/kamelets/azure-storage-blob-event-based-source.svg) Azure Storage Blob Event-based Source](azure-storage-blob-event-based-source.html)
 
  [![azure storage blob sink](_images/kamelets/azure-storage-blob-sink.svg) Azure Storage Blob Sink](azure-storage-blob-sink.html)
@@ -137,23 +133,13 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![azure storage queue source](_images/kamelets/azure-storage-queue-source.svg) Azure Storage Queue Source](azure-storage-queue-source.html)
 
- [![bitcoin source](_images/kamelets/bitcoin-source.svg) Bitcoin Source](bitcoin-source.html)
-
- [![caffeine action](_images/kamelets/caffeine-action.svg) Caffeine Action](caffeine-action.html)
-
  [![cassandra sink](_images/kamelets/cassandra-sink.svg) Cassandra Sink](cassandra-sink.html)
-
- [![cassandra source](_images/kamelets/cassandra-source.svg) Cassandra Source](cassandra-source.html)
 
  [![ceph event based source](_images/kamelets/ceph-event-based-source.svg) Ceph Event Based Source](ceph-event-based-source.html)
 
  [![ceph sink](_images/kamelets/ceph-sink.svg) Ceph Sink](ceph-sink.html)
 
  [![ceph source](_images/kamelets/ceph-source.svg) Ceph Source](ceph-source.html)
-
- [![chuck norris source](_images/kamelets/chuck-norris-source.svg) Chuck Norris Source](chuck-norris-source.html)
-
- [![chunk template action](_images/kamelets/chunk-template-action.svg) Chunk Template Action](chunk-template-action.html)
 
  [![couchbase sink](_images/kamelets/couchbase-sink.svg) Couchbase Sink](couchbase-sink.html)
 
@@ -175,8 +161,6 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![delay action](_images/kamelets/delay-action.svg) Delay Action](delay-action.html)
 
- [![djl image to text action](_images/kamelets/djl-image-to-text-action.svg) Image-to-Text Action](djl-image-to-text-action.html)
-
  [![dns dig action](_images/kamelets/dns-dig-action.svg) DNS DIG Action](dns-dig-action.html)
 
  [![dns ip action](_images/kamelets/dns-ip-action.svg) DNS IP Action](dns-ip-action.html)
@@ -191,15 +175,7 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![drop headers action](_images/kamelets/drop-headers-action.svg) Drop Headers Action](drop-headers-action.html)
 
- [![dropbox sink](_images/kamelets/dropbox-sink.svg) Dropbox Sink](dropbox-sink.html)
-
- [![dropbox source](_images/kamelets/dropbox-source.svg) Dropbox Source](dropbox-source.html)
-
- [![earthquake source](_images/kamelets/earthquake-source.svg) Earthquake Source](earthquake-source.html)
-
  [![elasticsearch index sink](_images/kamelets/elasticsearch-index-sink.svg) ElasticSearch Index Sink](elasticsearch-index-sink.html)
-
- [![elasticsearch search source](_images/kamelets/elasticsearch-search-source.svg) ElasticSearch Search Source](elasticsearch-search-source.html)
 
  [![exec sink](_images/kamelets/exec-sink.svg) Exec Sink](exec-sink.html)
 
@@ -234,8 +210,6 @@ Consult the Kamelets User Guide for information about how to use these.
  [![google bigquery sink](_images/kamelets/google-bigquery-sink.svg) Google Big Query Sink](google-bigquery-sink.html)
 
  [![google calendar source](_images/kamelets/google-calendar-source.svg) Google Calendar Source](google-calendar-source.html)
-
- [![google functions sink](_images/kamelets/google-functions-sink.svg) Google Functions Sink](google-functions-sink.html)
 
  [![google mail source](_images/kamelets/google-mail-source.svg) Google Mail Source](google-mail-source.html)
 
@@ -331,15 +305,9 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![kafka apicurio registry not secured source](_images/kamelets/kafka-apicurio-registry-not-secured-source.svg) Kafka Not Secured with Apicurio Registry Source](kafka-apicurio-registry-not-secured-source.html)
 
- [![kafka azure schema registry sink](_images/kamelets/kafka-azure-schema-registry-sink.svg) Azure Kafka through Eventhubs with Azure Schema Registry Sink](kafka-azure-schema-registry-sink.html)
-
- [![kafka azure schema registry source](_images/kamelets/kafka-azure-schema-registry-source.svg) Azure Kafka through Eventhubs with Azure Schema Registry Source](kafka-azure-schema-registry-source.html)
-
  [![kafka batch apicurio registry not secured source](_images/kamelets/kafka-batch-apicurio-registry-not-secured-source.svg) Kafka Batch Not Secured with Apicurio Registry Source](kafka-batch-apicurio-registry-not-secured-source.html)
 
  [![kafka batch apicurio registry source](_images/kamelets/kafka-batch-apicurio-registry-source.svg) Kafka Batch with Apicurio Registry secured with Keycloak Source](kafka-batch-apicurio-registry-source.html)
-
- [![kafka batch azure schema registry source](_images/kamelets/kafka-batch-azure-schema-registry-source.svg) Azure Kafka Batch through Eventhubs with Azure Schema Registry Source](kafka-batch-azure-schema-registry-source.html)
 
  [![kafka batch manual commit action](_images/kamelets/kafka-batch-manual-commit-action.svg) Kafka Batch Manual Commit Action](kafka-batch-manual-commit-action.html)
 
@@ -356,12 +324,6 @@ Consult the Kamelets User Guide for information about how to use these.
  [![kafka sink](_images/kamelets/kafka-sink.svg) Kafka Sink](kafka-sink.html)
 
  [![kafka source](_images/kamelets/kafka-source.svg) Kafka Source](kafka-source.html)
-
- [![kubernetes namespaces source](_images/kamelets/kubernetes-namespaces-source.svg) Kubernetes Namespaces Source](kubernetes-namespaces-source.html)
-
- [![kubernetes nodes source](_images/kamelets/kubernetes-nodes-source.svg) Kubernetes Nodes Source](kubernetes-nodes-source.html)
-
- [![kubernetes pods source](_images/kamelets/kubernetes-pods-source.svg) Kubernetes Pods Source](kubernetes-pods-source.html)
 
  [![langchain4j ingest file source](_images/kamelets/langchain4j-ingest-file-source.svg) LangChain4j Ingest File Source](langchain4j-ingest-file-source.html)
 
@@ -421,8 +383,6 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![opensearch index sink](_images/kamelets/opensearch-index-sink.svg) OpenSearch Index Sink](opensearch-index-sink.html)
 
- [![opensearch search source](_images/kamelets/opensearch-search-source.svg) OpenSearch Search Source](opensearch-search-source.html)
-
  [![oracle database sink](_images/kamelets/oracle-database-sink.svg) Oracle Database Sink](oracle-database-sink.html)
 
  [![oracle database source](_images/kamelets/oracle-database-source.svg) Oracle Database Source](oracle-database-source.html)
@@ -470,8 +430,6 @@ Consult the Kamelets User Guide for information about how to use these.
  [![salesforce source](_images/kamelets/salesforce-source.svg) Salesforce Source](salesforce-source.html)
 
  [![salesforce update sink](_images/kamelets/salesforce-update-sink.svg) Salesforce Update Sink](salesforce-update-sink.html)
-
- [![sap netweaver sink](_images/kamelets/sap-netweaver-sink.svg) SAP NetWeaver Sink](sap-netweaver-sink.html)
 
  [![scp sink](_images/kamelets/scp-sink.svg) SCP Sink](scp-sink.html)
 
@@ -533,19 +491,11 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![topic name matches filter action](_images/kamelets/topic-name-matches-filter-action.svg) Kafka Topic Name Matches Filter Action](topic-name-matches-filter-action.html)
 
- [![twitter directmessage source](_images/kamelets/twitter-directmessage-source.svg) Twitter Direct Message Source](twitter-directmessage-source.html)
-
- [![twitter search source](_images/kamelets/twitter-search-source.svg) Twitter Search Source](twitter-search-source.html)
-
- [![twitter timeline source](_images/kamelets/twitter-timeline-source.svg) Twitter Timeline Source](twitter-timeline-source.html)
-
  [![value to key action](_images/kamelets/value-to-key-action.svg) Value to Key Action](value-to-key-action.html)
 
  [![velocity template action](_images/kamelets/velocity-template-action.svg) Velocity Template Action](velocity-template-action.html)
 
  [![webhook source](_images/kamelets/webhook-source.svg) Webhook Source](webhook-source.html)
-
- [![wttrin source](_images/kamelets/wttrin-source.svg) wttr.in Source](wttrin-source.html)
 
  [![xj identity action](_images/kamelets/xj-identity-action.svg) XJ Identity Action](xj-identity-action.html)
 
