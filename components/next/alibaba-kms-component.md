@@ -94,7 +94,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** Operation to perform.
+**Required** The operation that the producer performs. The CamelAlibabaKmsOperation header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option.
 
 Enum values:
 
@@ -116,18 +116,18 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **endpoint** (producer) | KMS endpoint URL. Carries higher precedence than region based client initialization. |  | String |
-| **keyId** (producer) | KMS key id. |  | String |
-| **keySpec** (producer) | Key spec for generateDataKey. |  | String |
-| **numberOfBytes** (producer) | Number of bytes for generateDataKey. |  | Integer |
-| **region** (producer) | **Required** Alibaba Cloud region. |  | String |
+| **endpoint** (producer) | The endpoint of KMS, which is a host name without http:// or https://. The producer sends requests to it over HTTPS. If not set, the region option determines the endpoint, and one of the two is required. Not used when the kmsClient option is set or autowired. |  | String |
+| **keyId** (producer) | The ID, alias or ARN of the KMS key for encrypt and generateDataKey. The CamelAlibabaKmsKeyId header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required for encrypt and generateDataKey. |  | String |
+| **keySpec** (producer) | The key spec of the data key for generateDataKey. The value must be AES\_256 or AES\_128. KMS does not use it when the number of bytes is set as well. The CamelAlibabaKmsKeySpec header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no key spec to the request. |  | String |
+| **numberOfBytes** (producer) | The number of bytes of the data key for generateDataKey. The value must be from 1 to 1024. The CamelAlibabaKmsNumberOfBytes header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no number of bytes to the request. |  | Integer |
+| **region** (producer) | The region ID of KMS, for example cn-hangzhou. Only used when the endpoint option is not set, to build the endpoint of KMS. One of the two is required, unless the kmsClient option is set or autowired, which uses neither. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **kmsClient** (advanced) | **Autowired** Autowire an existing KMS client instance. |  | Client |
-| **accessKey** (security) | Access key for the cloud user. |  | String |
-| **ciphertextBlob** (security) | Ciphertext blob to decrypt. |  | String |
-| **plaintext** (security) | Plaintext to encrypt. |  | String |
-| **secretKey** (security) | Secret key for the cloud user. |  | String |
-| **serviceKeys** (security) | Configuration object for cloud service authentication. |  | ServiceKeys |
+| **kmsClient** (advanced) | **Autowired** To use a custom com.aliyun.kms20160120.Client. The producer sends its requests with this client, and the region, endpoint, accessKey, secretKey and serviceKeys options are not used. If no client is set or autowired, the Camel endpoint creates a client from these options. It creates this client when the producer processes its first message. |  | Client |
+| **accessKey** (security) | The AccessKey ID of the AccessKey pair for the requests that the producer sends to KMS. If not set, the accessKey of the serviceKeys option is used, and one of the two is required. Not used when the kmsClient option is set or autowired. |  | String |
+| **ciphertextBlob** (security) | The ciphertext blob for decrypt, for example from the response to encrypt or generateDataKey. The CamelAlibabaKmsCiphertextBlob header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer takes the ciphertext blob from the message body as text. |  | String |
+| **plaintext** (security) | The plaintext for encrypt. The producer encodes it in UTF-8 and sends it to KMS in Base64. The CamelAlibabaKmsPlaintext header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer takes the plaintext from the message body. |  | String |
+| **secretKey** (security) | The AccessKey secret of the AccessKey pair for the requests that the producer sends to KMS. If not set, the secretKey of the serviceKeys option is used, and one of the two is required. Not used when the kmsClient option is set or autowired. |  | String |
+| **serviceKeys** (security) | The AccessKey pair as an org.apache.camel.component.alibaba.common.models.ServiceKeys. Its accessKey is the AccessKey ID and its secretKey is the AccessKey secret. Each of the two is used when the option of the same name is not set. Not used when the kmsClient option is set or autowired. |  | ServiceKeys |
 
 ## Message Headers
 
@@ -136,12 +136,13 @@ The Alibaba Key Management Service (KMS) component supports the following messag
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaKmsKeyId** (producer) Constant: [`KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#KEY_ID) | KMS key id override. |  | String |
-| **CamelAlibabaKmsPlaintext** (producer) Constant: [`PLAINTEXT`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#PLAINTEXT) | Plaintext to encrypt. |  | String |
-| **CamelAlibabaKmsCiphertextBlob** (producer) Constant: [`CIPHERTEXT_BLOB`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#CIPHERTEXT_BLOB) | Ciphertext blob to decrypt. |  | String |
-| **CamelAlibabaKmsKeySpec** (producer) Constant: [`KEY_SPEC`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#KEY_SPEC) | Key spec for generateDataKey. |  | String |
-| **CamelAlibabaKmsNumberOfBytes** (producer) Constant: [`NUMBER_OF_BYTES`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#NUMBER_OF_BYTES) | Number of bytes for generateDataKey. |  | Integer |
-| **CamelAlibabaKmsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#REQUEST_ID) | Alibaba Cloud request id. |  | String |
+| **CamelAlibabaKmsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#OPERATION) | The operation that the producer performs, which replaces the operation of the endpoint. If this header is not set, an exchange property of the same name replaces it. |  | String |
+| **CamelAlibabaKmsKeyId** (producer) Constant: [`KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#KEY_ID) | The ID, alias or ARN of the KMS key for encrypt and generateDataKey. This header replaces the keyId option. If this header is not set, an exchange property of the same name replaces the keyId option. |  | String |
+| **CamelAlibabaKmsPlaintext** (producer) Constant: [`PLAINTEXT`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#PLAINTEXT) | The plaintext for encrypt. The producer encodes it in UTF-8 and sends it to KMS in Base64. This header replaces the plaintext option. If this header is not set, an exchange property of the same name replaces the plaintext option. A Map or a POJO fails, as it does in the message body, since Camel reads it only as its toString(). |  | String |
+| **CamelAlibabaKmsCiphertextBlob** (producer) Constant: [`CIPHERTEXT_BLOB`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#CIPHERTEXT_BLOB) | The ciphertext blob for decrypt, for example from the response to encrypt or generateDataKey. This header replaces the ciphertextBlob option. If this header is not set, an exchange property of the same name replaces the ciphertextBlob option. |  | String |
+| **CamelAlibabaKmsKeySpec** (producer) Constant: [`KEY_SPEC`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#KEY_SPEC) | The key spec of the data key for generateDataKey. The value must be AES\_256 or AES\_128. KMS does not use it when the number of bytes is set as well. This header replaces the keySpec option. If this header is not set, an exchange property of the same name replaces the keySpec option. |  | String |
+| **CamelAlibabaKmsNumberOfBytes** (producer) Constant: [`NUMBER_OF_BYTES`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#NUMBER_OF_BYTES) | The number of bytes of the data key for generateDataKey. The value must be from 1 to 1024. This header replaces the numberOfBytes option. If this header is not set, an exchange property of the same name replaces the numberOfBytes option. Only generateDataKey reads it, and a value that is not a number fails that operation alone. |  | Integer |
+| **CamelAlibabaKmsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#REQUEST_ID) | The request ID that KMS returns in the response to the operation. The producer sets it, unless the exchange fails. |  | String |
 
 ## Message Body
 
@@ -182,7 +183,7 @@ The component supports the following operations:
 
 ### Plaintext of encrypt
 
-`encrypt` encrypts the `plaintext` option or the `CamelAlibabaKmsPlaintext` header when one is set, else the message body. A `String` is encrypted in UTF-8, and a `byte[]`, an `InputStream` or a file as its bytes, so binary data is kept. The component sends these bytes to KMS in Base64, so the `plaintext` that `decrypt` returns for them is Base64: decode it to get the original bytes back. A `Map` or a POJO does not convert to bytes and fails with an `InvalidPayloadException`, so marshal it first. A message without a body fails with an `IllegalArgumentException`.
+`encrypt` encrypts the `plaintext` option or the `CamelAlibabaKmsPlaintext` header when one is set, else the message body. A `String` is encrypted in UTF-8, and a `byte[]`, an `InputStream` or a file as its bytes, so binary data is kept. The component sends these bytes to KMS in Base64, so the `plaintext` that `decrypt` returns for them is Base64: decode it to get the original bytes back. A `Map` or a POJO fails instead of being encrypted as its `toString()`: in the body with an `InvalidPayloadException`, and in the header or in the exchange property of the same name with an `IllegalArgumentException`. Marshal such a value first, for example with `marshal().json()`. A value whose text is its `toString()`, such as a `UUID`, a `URI` or a `java.time` value, is encrypted as that text. A message without a body fails with an `IllegalArgumentException`.
 
 ### Producer example
 

@@ -234,6 +234,77 @@ The message body at each side of the Paho MQTT 5 component: _Consumer_ is the bo
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the Paho MQTT 5 component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `PahoMqtt5World`
+Fake: FakeMqtt: an MQTT 5 broker with the session of the client id (Clean Start, Session Expiry, Receive Maximum, resend on reconnect) and a Paho MqttClient subclass on it, given to the consumer by a test component
+
+Tests: `PahoMqtt5ConsumerDstTest`
+
+ | 
+
+**Covers:**
+
+-   QoS 0, 1 and 2 with automatic or manual acknowledgements (manualAcksEnabled)
+    
+-   a session that the broker keeps (cleanStart=false, sessionExpiryInterval) or not
+    
+-   the automatic reconnect of Paho and the subscription made again
+    
+-   the reconnect of the consumer after a failed message, and Receive Maximum
+    
+-   route stop and start, with messages queued for a kept session
+    
+
+**Faults:**
+
+-   the broker closes the connection
+    
+-   the broker cannot be reached
+    
+-   the connection is lost during a subscribe
+    
+-   the broker answers slowly
+    
+-   processing fails
+    
+-   processing is slow
+    
+
+**Invariants:**
+
+-   the consumer uses the client as Paho allows
+    
+-   a message is acknowledged only after its exchange completed, or failed for good
+    
+-   the client drops no message
+    
+-   every message is routed once the faults cleared
+    
+-   the stopped consumer disconnects and closes its client
+    
+
+
+
+
+
+ | [CAMEL-25793](https://issues.apache.org/jira/browse/CAMEL-25793)
+
+[CAMEL-25944](https://issues.apache.org/jira/browse/CAMEL-25944)
+
+[CAMEL-27041](https://issues.apache.org/jira/browse/CAMEL-27041)
+
+[CAMEL-27043](https://issues.apache.org/jira/browse/CAMEL-27043)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 ## Usage
 
 ### Default payload type

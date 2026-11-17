@@ -113,12 +113,12 @@ Enum values:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **allowedEventSources** (producer) | The event sources and event types that the producer allows on each event bus. Written as JSON or as bus blocks in the form bus1\[source1 = type1,type2\] | bus2\[source2 = type3\]. Semicolons separate the event sources of one event bus. A value in the form source1 = type1,type2 applies to the event bus that eventBusName sets for the exchange. If eventBusName is not set, it applies to every event bus. The CamelAlibabaEventBridgeAllowedEventSources header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer allows every event bus, event source and event type. |  | String |
-| **endpoint** (producer) | The endpoint of EventBridge, which is a host name without http:// or https://. The region option does not determine the endpoint, so this option is required. Not used when the eventBridgeClient option is set or autowired. |  | String |
+| **endpoint** (producer) | **Required** The endpoint of EventBridge, which is a host name without http:// or https://. The region option does not determine the endpoint, so this option is required. Not used when the eventBridgeClient option is set or autowired. |  | String |
 | **eventBusName** (producer) | The name of the event bus for a JSON text or Map body. The CamelAlibabaEventBridgeEventBusName header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. The key eventBusName of a Map body replaces the three. One of the three is required for a JSON text body, or a Map body without that key. |  | String |
 | **eventSource** (producer) | The event source for a JSON text or Map body. The value must be a URI. The CamelAlibabaEventBridgeEventSource header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. The key eventSource or source of a Map body replaces the three. One of the three is required for a JSON text body, or a Map body without that key. |  | String |
 | **eventSubject** (producer) | The event subject for a JSON text or Map body. The CamelAlibabaEventBridgeEventSubject header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. The key eventSubject or subject of a Map body replaces the three. If neither the three nor that key is set, the producer adds no event subject to the event. |  | String |
 | **eventType** (producer) | The event type for a JSON text or Map body. The CamelAlibabaEventBridgeEventType header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. The key eventType or type of a Map body replaces the three. One of the three is required for a JSON text body, or a Map body without that key. |  | String |
-| **region** (producer) | **Required** The region ID of EventBridge, for example cn-hangzhou. The producer sends it in the HTTP header x-eventbridge-regionId of each request. Not used when the eventBridgeClient option is set or autowired. |  | String |
+| **region** (producer) | The region ID of EventBridge, for example cn-hangzhou. The producer sends it in the HTTP header x-eventbridge-regionId of each request. Not used when the eventBridgeClient option is set or autowired. |  | String |
 | **validateEventSource** (producer) | Whether to check that the event bus exists and has a rule that matches the event source. The producer calls listEventBuses and listRules to check this. The producer also checks that each event source that allowedEventSources lists for the event bus matches a rule. The CamelAlibabaEventBridgeValidateEventSource header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. | false | boolean |
 | **validateEventSpec** (producer) | Whether to check the keys specversion and id of a Map body. The value of specversion must be 1.0, and the value of id must not be blank. The CamelAlibabaEventBridgeValidateEventSpec header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. | true | boolean |
 | **validateEventType** (producer) | Whether to check that the event bus exists and has a rule that matches the event source and event type. The producer calls listEventBuses and listRules to check this. The producer also checks that each event type that allowedEventSources lists for the event bus matches a rule. The CamelAlibabaEventBridgeValidateEventType header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. | false | boolean |
@@ -136,6 +136,7 @@ The Alibaba EventBridge component supports the following message header(s), whic
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **CamelAlibabaEventBridgeOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option. |  | String |
 | **CamelAlibabaEventBridgeEventBusName** (producer) Constant: [`EVENT_BUS_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#EVENT_BUS_NAME) | The name of the event bus for a JSON text or Map body. This header replaces the eventBusName option. If this header is not set, an exchange property of the same name replaces the eventBusName option. The key eventBusName of a Map body replaces this header. |  | String |
 | **CamelAlibabaEventBridgeEventSource** (producer) Constant: [`EVENT_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#EVENT_SOURCE) | The event source for a JSON text or Map body. The value must be a URI. This header replaces the eventSource option. If this header is not set, an exchange property of the same name replaces the eventSource option. The key eventSource or source of a Map body replaces this header. |  | String |
 | **CamelAlibabaEventBridgeEventType** (producer) Constant: [`EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#EVENT_TYPE) | The event type for a JSON text or Map body. This header replaces the eventType option. If this header is not set, an exchange property of the same name replaces the eventType option. The key eventType or type of a Map body replaces this header. |  | String |
@@ -167,7 +168,7 @@ The component defines constants in package `org.apache.camel.component.alibaba.e
 
 -   `AlibabaEventBridgeHeaders` defines all message header constants evaluated or set by the EventBridge producer.
     
--   `AlibabaEventBridgeProperties` extends `AlibabaEventBridgeHeaders` and provides constants for Exchange properties (such as `OPERATION`), while inheriting all header constants.
+-   `AlibabaEventBridgeProperties` extends `AlibabaEventBridgeHeaders` and inherits all its constants, for use as Exchange property names (such as `OPERATION`).
     
 
 #### Message headers evaluated by the EventBridge producer
@@ -175,6 +176,7 @@ The component defines constants in package `org.apache.camel.component.alibaba.e
    
 | Constant (`AlibabaEventBridgeHeaders`) | Header String | Type | Description |
 | --- | --- | --- | --- |
+| `OPERATION` | `CamelAlibabaEventBridgeOperation` | `String` | Name of operation to invoke, such as `putEvents` (overrides the endpoint option). |
 | `EVENT_BUS_NAME` | `CamelAlibabaEventBridgeEventBusName` | `String` | Event bus name to publish events to (overrides the endpoint option). |
 | `EVENT_SOURCE` | `CamelAlibabaEventBridgeEventSource` | `String` | Event source URI (overrides the endpoint option). |
 | `EVENT_TYPE` | `CamelAlibabaEventBridgeEventType` | `String` | Event type (overrides the endpoint option). |
@@ -185,7 +187,7 @@ The component defines constants in package `org.apache.camel.component.alibaba.e
 | `ALLOWED_EVENT_SOURCES` | `CamelAlibabaEventBridgeAllowedEventSources` | `Object` | Allowed event sources and source-scoped event types per bus (DSL string, JSON string, Map, or List). |
 | `EVENT_SOURCE_CACHE_TTL` | `CamelAlibabaEventBridgeEventSourceCacheTtl` | `long` | Cache time-to-live in milliseconds for verified Alibaba Cloud event bus and type metadata (defaults to `300000` / 5 minutes). |
 
-If any of the above headers are set, they will override their corresponding exchange property or query parameter value.
+If any of the above headers are set, they will override their corresponding exchange property or endpoint option.
 
 #### Message headers set by the EventBridge producer
 
@@ -218,6 +220,8 @@ When the message body is a `Map` (or `List<Map>` for publishing batch events), t
 | \- | `specversion` | `String` | CloudEvents specification version. Must be `1.0` if specified. |
 | \- | `datacontenttype` | `String` | Media type of event data (e.g. `application/json`). |
 | \- | `dataschema` | `String` / `URI` | URI identifying the schema that data adheres to. |
+
+For a JSON text body, the producer also generates the `id` as a random UUID. The producer generates a new `id` each time it sends the event, so a redelivery sends the event with a different `id`. To send the same `id` on a redelivery, use a `Map` body with the `id` key.
 
 ### Event Validation and Caching
 
@@ -260,7 +264,7 @@ The component supports a 3-level hierarchical validation model: `EventBus (N) â†
 > ```java
 > from("platform-http:/ingress")
 >     .removeHeaders("CamelAlibabaEventBridge*")
->     .to("alibaba-eventbridge:putEvents?eventBusName=orders-bus&eventSource=app.orders&eventType=order:created:v1&allowedEventSources=RAW(app.orders -> order:created:v1)&region=cn-hangzhou")
+>     .to("alibaba-eventbridge:putEvents?eventBusName=orders-bus&eventSource=app.orders&eventType=order:created:v1&allowedEventSources=RAW(app.orders -> order:created:v1)&region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com")
 >     .marshal().json();
 > ```
 >
@@ -279,6 +283,7 @@ The component supports a 3-level hierarchical validation model: `EventBus (N) â†
 >               eventType: order:created:v1
 >               allowedEventSources: "RAW(app.orders -> order:created:v1)"
 >               region: cn-hangzhou
+>               endpoint: 12345.eventbridge.cn-hangzhou.aliyuncs.com
 >         - marshal:
 >             json: {}
 > ```
@@ -349,7 +354,7 @@ acs:oss:cn-hangzhou:12345:my-bucket -> oss:ObjectCreated:PutObject, oss:ObjectCr
 In the endpoint URI (using `RAW(â€¦â€‹)` to preserve special characters):
 
 ```text
-alibaba-eventbridge:putEvents?eventBusName=my-bus&allowedEventSources=RAW(acs:oss:cn-hangzhou:12345:my-bucket -> oss:ObjectCreated:PutObject, oss:ObjectCreated:PostObject; app.orders -> order:created:v1)&region=cn-hangzhou&accessKey=RAW(ak)&secretKey=RAW(sk)
+alibaba-eventbridge:putEvents?eventBusName=my-bus&allowedEventSources=RAW(acs:oss:cn-hangzhou:12345:my-bucket -> oss:ObjectCreated:PutObject, oss:ObjectCreated:PostObject; app.orders -> order:created:v1)&region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com&accessKey=RAW(ak)&secretKey=RAW(sk)
 ```
 
 #### Multi-Bus Configuration
@@ -380,7 +385,7 @@ orders-bus[acs:oss:cn-hangzhou:12345:orders -> oss:ObjectCreated:PutObject; app.
 **In the endpoint URI:**
 
 ```text
-alibaba-eventbridge:putEvents?allowedEventSources=RAW(orders-bus[acs:oss:cn-hangzhou:12345:orders -> oss:ObjectCreated:PutObject] | payments-bus[app.payments -> payment:captured:v1])&region=cn-hangzhou&accessKey=RAW(ak)&secretKey=RAW(sk)
+alibaba-eventbridge:putEvents?allowedEventSources=RAW(orders-bus[acs:oss:cn-hangzhou:12345:orders -> oss:ObjectCreated:PutObject] | payments-bus[app.payments -> payment:captured:v1])&region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com&accessKey=RAW(ak)&secretKey=RAW(sk)
 ```
 
 If a message targeted for `orders-bus` attempts to use an event source configured only under `payments-bus`, validation fails with an `IllegalArgumentException`.
@@ -467,7 +472,7 @@ The body is the JSON text of the data of the event, and the event source, type a
 ```java
 from("direct:start")
     .setBody(constant("{\"orderId\":\"123\"}"))
-    .to("alibaba-eventbridge:putEvents?eventBusName=my-bus&eventSource=camel.test&eventType=OrderCreated&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+    .to("alibaba-eventbridge:putEvents?eventBusName=my-bus&eventSource=camel.test&eventType=OrderCreated&region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
 ```yaml
@@ -486,6 +491,7 @@ from("direct:start")
               eventSource: camel.test
               eventType: OrderCreated
               region: cn-hangzhou
+              endpoint: 12345.eventbridge.cn-hangzhou.aliyuncs.com
               accessKey: "{{alibaba.access-key}}"
               secretKey: "{{alibaba.secret-key}}"
 ```
@@ -502,7 +508,7 @@ event.put("eventData", Map.of("orderId", "123"));
 
 from("direct:start")
     .setBody(constant(event))
-    .to("alibaba-eventbridge:putEvents?region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+    .to("alibaba-eventbridge:putEvents?region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
 ### Single-Bus Allowed Event Sources Validation
@@ -519,7 +525,7 @@ from("direct:start")
         + "?eventBusName=orders-bus"
         + "&allowedEventSources=RAW(acs:oss:cn-hangzhou:12345:my-bucket -> oss:ObjectCreated:PutObject, oss:ObjectCreated:PostObject; app.orders -> order:created:v1)"
         + "&validateEventSource=true&validateEventType=true"
-        + "&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+        + "&region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
 ### Multi-Bus Allowed Event Sources Validation (Batch Publishing)
@@ -533,7 +539,7 @@ from("direct:start")
     .to("alibaba-eventbridge:putEvents"
         + "?allowedEventSources=RAW(orders-bus[acs:oss:cn-hangzhou:12345:orders -> oss:ObjectCreated:PutObject] | payments-bus[app.payments -> payment:captured:v1])"
         + "&validateEventSource=true&validateEventType=true"
-        + "&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+        + "&region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
 ### JSON Configuration for Allowed Event Sources
@@ -559,7 +565,7 @@ from("direct:start")
         "type", "order:created:v1",
         "data", Map.of("orderId", "ORD-12345")
     )))
-    .to("alibaba-eventbridge:putEvents?region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+    .to("alibaba-eventbridge:putEvents?region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
 ### Dynamic Header and Property Overrides
@@ -576,7 +582,7 @@ from("direct:start")
     .setHeader(AlibabaEventBridgeHeaders.VALIDATE_EVENT_TYPE, constant(true))
     .setHeader(AlibabaEventBridgeHeaders.ALLOWED_EVENT_SOURCES, constant("acs:oss:cn-hangzhou:12345:bucket -> oss:ObjectCreated:PutObject; app.orders -> order:created:v1"))
     .setBody(constant("{\"orderId\":\"123\"}"))
-    .to("alibaba-eventbridge:putEvents?eventSource=app.orders&eventType=order:created:v1&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+    .to("alibaba-eventbridge:putEvents?eventSource=app.orders&eventType=order:created:v1&region=cn-hangzhou&endpoint=12345.eventbridge.cn-hangzhou.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
 ```yaml
@@ -614,6 +620,7 @@ from("direct:start")
               eventSource: app.orders
               eventType: order:created:v1
               region: cn-hangzhou
+              endpoint: 12345.eventbridge.cn-hangzhou.aliyuncs.com
               accessKey: "{{alibaba.access-key}}"
               secretKey: "{{alibaba.secret-key}}"
 ```

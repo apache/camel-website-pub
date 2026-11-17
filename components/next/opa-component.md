@@ -106,6 +106,7 @@ Enum values:
 | **borrowTimeout** (advanced) | How long an exchange waits for a free WebAssembly policy instance in wasm mode before the evaluation fails. An exchange that cannot get an instance is not denied by a policy, so it is reported as an evaluation failure and handled like any other: failing closed, or proceeding if failOpen is set. Raise it, or poolSize, for a route whose concurrency exceeds the pool. | 30000 | long |
 | **connectionTimeout** (advanced) | How long to wait for the connection to the OPA server to be established, in rest mode. The SDK’s own transport applies no timeout at all, so a server that never answers would otherwise park the calling thread indefinitely rather than letting the component fail closed. | 10000 | long |
 | **healthCheckBundles** (advanced) | Whether the server readiness check also requires activation of OPA’s configured bundles. Sends /health?bundles=true. Does not enable health checks, change policy evaluation or guarantee a particular policy revision. Not used in wasm mode or with an injected client. | false | boolean |
+| **inputExpression** (advanced) | An expression producing the complete policy input as a Map, object JSON node or POJO. Replaces the default input envelope; includeHeaders, includeProperties and includeBody then do not apply. In batch mode it sees each element as the body on an exchange copy. Null, scalar and streaming results fail closed. Reference a configured expression bean. |  | Expression |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
@@ -163,6 +164,7 @@ Enum values:
 | **borrowTimeout** (advanced) | How long an exchange waits for a free WebAssembly policy instance in wasm mode before the evaluation fails. An exchange that cannot get an instance is not denied by a policy, so it is reported as an evaluation failure and handled like any other: failing closed, or proceeding if failOpen is set. Raise it, or poolSize, for a route whose concurrency exceeds the pool. | 30000 | long |
 | **connectionTimeout** (advanced) | How long to wait for the connection to the OPA server to be established, in rest mode. The SDK’s own transport applies no timeout at all, so a server that never answers would otherwise park the calling thread indefinitely rather than letting the component fail closed. | 10000 | long |
 | **healthCheckBundles** (advanced) | Whether the server readiness check also requires activation of OPA’s configured bundles. Sends /health?bundles=true. Does not enable health checks, change policy evaluation or guarantee a particular policy revision. Not used in wasm mode or with an injected client. | false | boolean |
+| **inputExpression** (advanced) | An expression producing the complete policy input as a Map, object JSON node or POJO. Replaces the default input envelope; includeHeaders, includeProperties and includeBody then do not apply. In batch mode it sees each element as the body on an exchange copy. Null, scalar and streaming results fail closed. Reference a configured expression bean. |  | Expression |
 | **opaClient** (advanced) | **Autowired** An existing OPAClient to use. When set, serverUrl and bearerToken are ignored. |  | OPAClient |
 | **poolSize** (advanced) | How many WebAssembly policy instances to pool in wasm mode. An instance carries mutable state and is not thread-safe, so each exchange borrows one; this bounds how many exchanges evaluate at once. | 8 | int |
 | **requestTimeout** (advanced) | How long to wait for the decision once connected, in rest mode. A request that times out is an evaluation failure rather than a deny, so it fails closed - or proceeds when failOpen is set - like any other failure to reach a verdict. | 30000 | long |
@@ -359,6 +361,66 @@ Prefer `includeProperties` for identity: a token that an earlier step has alread
 Header and body values that are not JSON-native are converted to their string form. That conversion is shallow: a `Map` or `List` value is passed through as-is, so anything non-JSON-native nested inside it is left for the OPA SDK’s serializer to render. A policy that reads nested structures should not assume the same string conversion applies at depth.
 
 The component’s own `CamelOpa*` decision headers are never sent back to OPA, so a policy cannot be shown a verdict that an inbound message claimed for itself.
+
+### Custom input expressions
+
+Set `inputExpression=#domainInput` to evaluate a configured Camel `Expression` bean that produces the complete policy input. This replaces the default envelope in both REST and WASM modes, and also applies to `OpaSecurityPolicy`. The expression result may be a `Map`, an object JSON node, or a POJO supported by the component’s Jackson JSON mapping. Nested maps, lists and POJOs are normalized to JSON-native values; a top-level JSON string is not parsed implicitly. Null, scalar, array and streaming results fail closed before the policy engine is called, even when `failOpen=true`.
+
+For example, take the verified identity from an exchange property the route set after authentication, and only the domain payload from the body:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+context.getRegistry().bind("domainInput", new ExpressionAdapter() {
+    @Override
+    public Object evaluate(Exchange exchange) {
+        return Map.of("subject", exchange.getProperty("verifiedSubject"),
+                      "order", exchange.getMessage().getBody());
+    }
+});
+
+from("direct:orders")
+    .to("opa:authz/orders/allow?inputExpression=#domainInput");
+```
+
+```xml
+<!-- a small Expression class of the application, with the evaluate(Exchange) method of the Java tab -->
+<bean id="domainInput" class="com.example.orders.DomainInputExpression"/>
+
+<camelContext xmlns="http://camel.apache.org/schema/spring">
+    <route>
+        <from uri="direct:orders"/>
+        <to uri="opa:authz/orders/allow?inputExpression=#domainInput"/>
+    </route>
+</camelContext>
+```
+
+```yaml
+- beans:
+    # a small Expression class of the application, with the evaluate(Exchange) method of the Java tab
+    - name: domainInput
+      type: com.example.orders.DomainInputExpression
+- route:
+    from:
+      uri: direct:orders
+      steps:
+        - to:
+            uri: opa:authz/orders/allow
+            parameters:
+              inputExpression: "#domainInput"
+```
+
+> **Warning**
+> The body comes from the sender. Do not make it the whole input, and never let it supply the identity or role fields the policy reads: a sender who posts `{"subject": "admin"}` would write straight into them. Take the identity from an exchange property the route verified, as [Authorizing an identity](#authorizing-an-identity) describes, and put the sender’s data under a key of its own.
+
+The `includeHeaders`, `includeProperties` and `includeBody` options configure only the default envelope; they do not add or filter fields in a custom input. The expression decides what to include, so select verified identity and application data deliberately. The default envelope withholds the headers that carry a credential verbatim (`Authorization`, `Proxy-Authorization`, `Cookie` and `Set-Cookie`); a custom expression gets none of that protection, so copy headers selectively and leave those out. Decision headers are still cleared before mapping. Custom expression beans must support concurrent evaluation. For a single exchange the expression runs on the live exchange, so a header or property it sets stays on the exchange; in batch mode it runs on a copy, as described below.
+
+In batch mode, the expression is evaluated once per element against an exchange copy whose body is that element. Headers and properties remain available to the expression, while the route’s original List body is preserved. The expression must produce one JSON object per element; a mapping failure stops the batch before calling OPA. The component does not consume streams automatically. If an expression explicitly reads a stream, configure stream caching or handle its lifetime in the route.
 
 ## Reading the verdict
 
@@ -609,6 +671,10 @@ context.getRegistry().bind("opaTls", spiffe);
 `SpiffeSSLContextParameters` must be told which peers to accept: it refuses to build a context with neither `acceptedSpiffeIds` nor `acceptAnySpiffeId`, so a route referencing it would not start. Prefer naming the OPA server’s ID, as above, over `acceptAnySpiffeId`, which accepts any server the trust bundle vouches for. The Workload API is found through `spiffeSocketPath`, or the `SPIFFE_ENDPOINT_SOCKET` environment variable when that is not set; the [SPIFFE](spiffe-component.md) component page describes the rest of its options.
 
 None of this applies in `wasm` mode, where there is no server to reach.
+
+### Static data in pooled WASM instances
+
+Each WASM pool instance prepares its fixed entrypoint and bundled data once when created. New inputs reuse that instance’s static data while the SDK resets transient input allocations for each evaluation. Instances are never shared concurrently. An evaluation failure discards the instance, and its replacement loads the same configured entrypoint and data before use. Large static data therefore adds initialization work per instance, rather than being parsed again for every exchange.
 
 ## Failure handling
 

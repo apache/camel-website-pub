@@ -13,10 +13,10 @@ The following table summarizes the configuration options available for the `aws-
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
+| **dataSourceId** | Data Source Id | **Required** The data source to ingest. Required by the startIngestionJob operation. | string |  |  |
 | **knowledgeBaseId** | Knowledge Base Id | **Required** The Knowledge Base the ingestion job belongs to. | string |  |  |
 | **region** | AWS Region | **Required** The AWS region to access. Enum values: \* us-east-1 \* us-east-2 \* us-west-2 \* us-gov-west-1 \* ap-northeast-1 \* ap-northeast-2 \* ap-south-1 \* ap-southeast-1 \* ap-southeast-2 \* ca-central-1 \* eu-central-1 \* eu-central-2 \* eu-west-1 \* eu-west-2 \* eu-west-3 \* sa-east-1 | string |  |  |
 | **accessKey** | Access Key | The access key obtained from AWS. | string |  |  |
-| **dataSourceId** | Data Source Id | The data source to ingest. Required by the startIngestionJob operation. | string |  |  |
 | **operation** | Operation | The ingestion job operation to perform. Enum values: \* startIngestionJob \* listIngestionJobs \* getIngestionJob | string | startIngestionJob |  |
 | **overrideEndpoint** | Endpoint Overwrite | Select this option to override the endpoint URI. To use this option, you must also provide a URI for the `uriEndpointOverride` option. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | If using a profile credentials provider, this parameter states the profile name. | string |  |  |

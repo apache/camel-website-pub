@@ -80,6 +80,12 @@ With `idempotent=true` (or `noop=true`) and `readLock=idempotent`, `idempotent-c
 
 The `sftp` component now uses a remote file or directory name exactly as given, also when it contains **or `?`. Before, the JSch library read** and `?` in the name as wildcards, so storing, retrieving, deleting, renaming, listing or changing to a directory could resolve the name to another file or directory whose name matched. If you relied on a wildcard to select a file, use the real name of the file in the producer, and the `include` or `antInclude` option of a consumer that lists the directory instead of a wildcard in `fileName` with `useList=false`. See the [SFTP component](../components/4.22.x/sftp-component.md).
 
+### camel-ftp - ftp and ftps refuse a file or directory name with a carriage return or a line feed
+
+The `ftp` and `ftps` components now refuse a remote file or directory name with a carriage return or a line feed, with a `GenericFileOperationFailedException`, before they send any command to the server for it. This applies to the name the producer writes (the `CamelFileName` header, `tempFileName`, `doneFileName` and `moveExisting`), to the directories it creates or changes to, and to the names the consumer retrieves, deletes, renames or lists.
+
+The FTP control connection sends one command per line, so such a name cannot be sent as one command. Before, the server got the name cut at the line break: the operation failed or acted on another file, and the replies of the later commands on that connection could get out of step. Remove or replace these characters in the name before the producer. The `sftp` component is not affected. See the [FTP component](../components/4.22.x/ftp-component.md).
+
 ### camel-file - the consumer skips a file it would move through a symbolic link resolving outside the starting directory
 
 With `jailStartingDirectory` enabled (the default), the file consumer now resolves symbolic links on the targets of `preMove`, `move` and `moveFailed`, including the default `.camel` folder. It checks these targets before the file is processed. When a target is inside the starting directory but resolves outside of it through a link, the consumer skips the file. It logs a WARN the first time. The file is not processed and not moved, and it stays in the folder. Before, the existing target was deleted and the file was moved wherever the link pointed. A target that depends on what the route sets can only be checked when the file is moved. Such a move fails, and the file is consumed again on the next poll.
@@ -460,6 +466,12 @@ A Quarkus BOM must identify both `org.apache.camel:camel-catalog` and `org.apach
 Spring Boot retains its existing fallback: if downloading `org.apache.camel:camel-catalog` for the requested version fails, it tries the running CLI’s Camel version. The catalog reports the core version actually resolved.
 
 For Spring Boot, `camel export` and `camel run` without an explicit `--camel-version` now use the resolved core catalog version for Camel core dependencies in the generated project. For example, `--camel-spring-boot-version=4.8.0` uses Camel 4.8.0 instead of the running CLI’s version when that catalog is available. Set `--camel-version` explicitly to retain a different core dependency version.
+
+### camel-main - the server and vault options flagged secret are sensitive keys
+
+The options `camel.server.jwtKeystorePassword`, `camel.management.jwtKeystorePassword`, `camel.vault.azure.eventhubConnectionString`, `camel.vault.azure.tenantId`, `camel.vault.gcp.serviceAccountKey`, `camel.vault.ibm.eventStreamUsername` and `camel.vault.ibm.eventStreamPassword` are flagged secret, and are now also sensitive keys, like the other secret options. The Camel Main auto-configuration summary shows their value as `xxxxxx`. These options are matched by their whole key. Component and endpoint options with the same name, such as `tenantId` or `serviceAccountKey`, are not affected.
+
+The `camel.security.secretPolicy` check now also reports these options when they are configured as plain text, including a value set through an environment variable. By default this logs a warning, and with `camel.main.profile=prod` the startup fails. Configure them with a property placeholder or a vault reference instead. A file location in `camel.vault.gcp.serviceAccountKey`, such as `file:/etc/gcp/sa.json`, is also reported. It can go behind a property placeholder too.
 
 ## Upgrading from 4.22.1 to 4.22.2
 

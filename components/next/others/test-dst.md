@@ -86,6 +86,24 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 
  | CAMEL-25683, CAMEL-25738, CAMEL-25781 |
+| camel-azure-servicebus | `ServiceBusWorld` (`ServiceBusConsumerDstTest`) | FakeServiceBus: a queue in peek-lock mode (lock duration, delivery count, dead-letter queue) behind the processor and receiver clients of ServiceBusClientFactory | 
+
+-   the lock renewer of the consumer (PEEK\_LOCK, maxAutoLockRenewDuration) with an asynchronous route
+    
+-   processing that takes longer than the lock duration
+    
+-   complete, abandon and dead-letter, also after the lock was lost
+    
+-   maxConcurrentCalls of one to three (with the asynchronous route it bounds the processMessage calls)
+    
+-   route stop and start while messages are processed
+    
+
+
+
+
+
+ | CAMEL-25701, CAMEL-26956, CAMEL-26969, CAMEL-26970, CAMEL-27066 |
 | camel-google-pubsub | `PubsubWorld` (`PubsubConsumerDstTest`) | FakePubsub: a subscription (Pull, Acknowledge, ModifyAckDeadline, ack deadlines, dead letter policy) behind the SubscriberStub of synchronousPull | 
 
 -   synchronousPull with ackMode AUTO, and ackMode NONE with grouped messages acked or nacked together
@@ -164,6 +182,24 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 
  | CAMEL-26884 |
+| camel-paho-mqtt5 | `PahoMqtt5World` (`PahoMqtt5ConsumerDstTest`) | FakeMqtt: an MQTT 5 broker with the session of the client id (Clean Start, Session Expiry, Receive Maximum, resend on reconnect) and a Paho MqttClient subclass on it, given to the consumer by a test component | 
+
+-   QoS 0, 1 and 2 with automatic or manual acknowledgements (manualAcksEnabled)
+    
+-   a session that the broker keeps (cleanStart=false, sessionExpiryInterval) or not
+    
+-   the automatic reconnect of Paho and the subscription made again
+    
+-   the reconnect of the consumer after a failed message, and Receive Maximum
+    
+-   route stop and start, with messages queued for a kept session
+    
+
+
+
+
+
+ | CAMEL-25793, CAMEL-25944, CAMEL-27041, CAMEL-27043 |
 | camel-pulsar | `PulsarWorld` (`PulsarConsumerDstTest`) | FakePulsar: a broker and client for one topic and one durable subscription | 
 
 -   subscription types Exclusive, Shared, Failover and Key\_Shared with one to three consumers
@@ -196,6 +232,24 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 
  | CAMEL-25684, CAMEL-25738 |
+| camel-zookeeper-master | `ZooKeeperMasterWorld` (`ZooKeeperMasterDstTest`) | FakeZooKeeper: a ZooKeeper ensemble (sessions, ephemeral sequential znodes, one-time watches) with the other nodes of the group as sessions, behind a CuratorFramework shared as the curator bean | 
+
+-   the master consumer (zookeeper-master endpoint) and the MasterRoutePolicy, on the real ZooKeeperGroup
+    
+-   connection losses shorter and longer than the session timeout (SUSPENDED, RECONNECTED, LOST)
+    
+-   other nodes that join, leave and die
+    
+-   a start of the consumer that fails and its retry; with the master consumer, a start that takes long
+    
+-   route stop and start, and a route of the policy removed and added again
+    
+
+
+
+
+
+ | CAMEL-25315, CAMEL-26540, CAMEL-26802, CAMEL-26870, CAMEL-26887, CAMEL-27037, CAMEL-27044 |
 
 ## What the harness controls
 
@@ -536,6 +590,10 @@ diff /tmp/seed-8.first $SQS/target/dst/SqsVisibilityDstTest.*/seed-8.trace && ec
 ```
 
 The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 68329f0919bc (CAMEL-25684, Slack), the main code of b62e90ddb2d9 (CAMEL-25869, Pulsar), the main code of 20c94435789e (CAMEL-25872, Kafka share, whose world was also checked with planted faults), and the main code of 043ac9ec84ab (CAMEL-25569) and of 847ee9affb4c (CAMEL-25942) for Kinesis (`KinesisConsumerDstTest`). Some system properties belong to a world rather than to the harness: `dst.sqs.visibilityTimeouts` (the visibility timeouts the SQS world picks from, default `2,3,5,10`; `1` shows CAMEL-25737), `dst.replayCheckSeed` (the seed of the in-JVM replay test of the Event Hubs world, default 1), `dst.share.pollOnError` (the pollOnError strategies the Kafka share world picks from) and `dst.pulsar.subscribeFailRates` (the subscribe failure rates of the Pulsar world, `0` runs without subscribe failures).
+
+For camel-paho-mqtt5 (`components/camel-paho-mqtt5`, `PahoMqtt5ConsumerDstTest`) the past fixes are the main code of 6044f38166f9 (CAMEL-25944) and the change of b7594f06e0b7 (CAMEL-25793), taken out by hand. Its world has two properties, each adding back a case that the default set leaves out: `dst.paho.strictCallbackThread` (`true` checks a client whose connect hangs while the callback thread is still in messageArrived, CAMEL-27043) and `dst.paho.stopWhileConnecting` (`true` lets the operator stop the route while the client connects, CAMEL-27041).
+
+For camel-zookeeper-master (`-pl components/camel-zookeeper-master`, `ZooKeeperMasterDstTest`) the past fixes are `MasterConsumer` of e670025a49a4^ (CAMEL-25315), `MasterRoutePolicy` of 706beec6d5ab^ (CAMEL-26540), 136ffd929263 (CAMEL-26802) and 28f3170dcc6a (CAMEL-26887) reverted, and the `unregisterAsListener()` of 5ecab86a58ba (CAMEL-26870) taken out by hand. Its world has three properties, each adding back a case that the default set leaves out: `dst.zookeeper.stopWhileSuspended` (a route stopped while the client is disconnected, CAMEL-27037), `dst.zookeeper.stopDuringCreate` (a route stopped while the group waits for the answer of a create, or a create made after the close interrupted the thread of the group, CAMEL-27037) and `dst.zookeeper.startStartedRoute` (a started route of the policy started again, CAMEL-27044).
 
 ## Limits
 

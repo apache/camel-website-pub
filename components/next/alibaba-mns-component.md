@@ -379,6 +379,8 @@ from("alibaba-mns:myQueue?region=cn-hangzhou&accountEndpoint=https://123456.mns.
             uri: bean:processMessage
 ```
 
+With `deleteAfterRead` (the default), the consumer deletes the message once its exchange completes, with the receipt handle it received the message with, whatever the route does with the `CamelAlibabaMnsReceiptHandle` header. If the exchange fails, the message is not deleted, and it is received again once it is visible again.
+
 ### Exchange properties evaluated by the producer
 
   

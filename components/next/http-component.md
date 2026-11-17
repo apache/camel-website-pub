@@ -92,6 +92,7 @@ The HTTP component supports the following options which are listed below.
 | **automaticRetriesDisabled** (advanced) | Disables automatic request recovery and re-execution. This is useful when a server responds with HTTP 429 (Too Many Requests) and includes a long Retry-After header, which would otherwise cause the client to wait (and appear to hang) before retrying. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **clientConnectionManager** (advanced) | To use a custom and shared HttpClientConnectionManager to manage connections. If this has been configured then this is always used for all endpoints created by this component. |  | HttpClientConnectionManager |
+| **connectionIdleTimeout** (advanced) | The maximum time (in millis) a pooled connection can stay idle and still be reused. A connection idle for longer is closed when it would be reused, and the request opens a new one, whatever Keep-Alive timeout the server announced. Set it below the idle timeout of a NAT, firewall or load balancer that drops idle connections silently: the next request on such a connection would otherwise wait for the read timeout and fail. Zero (the default) or a negative value means no limit. |  | long |
 | **connectionsPerRoute** (advanced) | The maximum number of connections per route. | 20 | int |
 | **connectionStateDisabled** (advanced) | Disables connection state tracking. | false | boolean |
 | **connectionTimeToLive** (advanced) | The time for connection to live, the time unit is millisecond, the default value is always keepAlive. |  | long |
@@ -105,6 +106,7 @@ The HTTP component supports the following options which are listed below.
 | **maxTotalConnections** (advanced) | The maximum number of connections. | 200 | int |
 | **redirectHandlingDisabled** (advanced) | Disables automatic redirect handling. | false | boolean |
 | **useSystemProperties** (advanced) | To use System Properties as fallback for configuration for configuring HTTP Client. | false | boolean |
+| **validateAfterInactivity** (advanced) | The time (in millis) a pooled connection must have been idle before it is checked, prior to its reuse, for having been closed by the server. A request sent on a connection that the server closed fails with NoHttpResponseException, and HttpClient retries it only for idempotent methods. Zero checks the connection before each reuse, at the cost of a read of up to 1 millisecond per request; a negative value disables the check. The check cannot see a connection that a NAT or firewall dropped silently: use connectionIdleTimeout for that. | 2000 | long |
 | **headerFilterStrategy** (filter) | To use a custom org.apache.camel.spi.HeaderFilterStrategy to filter header to and from Camel message. |  | HeaderFilterStrategy |
 | **nonProxyHosts** (proxy) | Comma-separated list of hosts that should bypass the proxy. Supports wildcards, e.g., localhost,**.example.com,192.168.**. |  | String |
 | **proxyAuthDomain** (proxy) | Proxy authentication domain to use with NTLM. |  | String |
@@ -844,18 +846,26 @@ https://api.example.com/orders?connectTimeout=5000&soTimeout=30000&connectionReq
 ```
 
 > **Note**
-> `soTimeout` and `connectionTimeToLive` are settings of the connection pool that the component creates for the endpoint: they do not apply when you set your own `clientConnectionManager` on the component.
+> `soTimeout`, `connectionTimeToLive`, `connectionIdleTimeout` and `validateAfterInactivity` are settings of the connection pool that the component creates for the endpoint: they do not apply when you set your own `clientConnectionManager` on the component.
 
 #### Pooled connections closed by the server or by a NAT
 
-The endpoint keeps connections open for reuse. Before reusing a connection that has been idle for more than 2 seconds, HttpClient checks that the server has not closed it (its `validateAfterInactivity`, which the component does not expose). A request sent sooner on a connection that the server closed fails with `NoHttpResponseException`. HttpClient retries it once only when the method is idempotent (`GET`, `HEAD`, `PUT`, `DELETE`, `OPTIONS`, `TRACE`), so a `POST` or a `PATCH` fails and needs a redelivery of the Camel error handler.
+The endpoint keeps connections open for reuse. Before reusing a connection that has been idle for more than `validateAfterInactivity` (component option, milliseconds, 2 seconds by default), HttpClient checks that the server has not closed it. A request sent sooner on a connection that the server closed fails with `NoHttpResponseException`. HttpClient retries it once only when the method is idempotent (`GET`, `HEAD`, `PUT`, `DELETE`, `OPTIONS`, `TRACE`), so a `POST` or a `PATCH` fails and needs a redelivery of the Camel error handler. With `validateAfterInactivity=0`, HttpClient checks the connection before each reuse, which costs a read of up to 1 millisecond per request; a negative value turns the check off.
 
-A NAT or firewall that drops an idle connection silently does not close it, so the pool cannot see it: the next request on it waits for the read timeout and fails, without a retry by HttpClient. To keep the pool from reusing such a connection:
+A NAT, firewall or load balancer that drops an idle connection silently does not close it, so neither the pool nor the check above can see it: the next request on it waits for the read timeout and fails, without a retry by HttpClient. To keep the pool from reusing such a connection:
 
--   `httpClient.connectionKeepAlive` (milliseconds): how long an idle connection is kept for reuse when the response of the server has no `Keep-Alive` header with a timeout; 3 minutes by default. Set it below the idle timeout of the NAT or firewall.
+-   `connectionIdleTimeout` (component option, milliseconds): the maximum time a connection can stay idle in the pool and still be reused; a connection idle for longer is closed when it would be reused, and the request opens a new one. It applies whatever `Keep-Alive` timeout the server announces. Not set by default. Set it below the idle timeout of the NAT, firewall or load balancer.
+    
+-   `httpClient.connectionKeepAlive` (milliseconds): how long an idle connection is kept for reuse when the response of the server has no `Keep-Alive` header with a timeout; 3 minutes by default. Set it below the idle timeout of the NAT or firewall: it does not help when the server announces a longer timeout.
     
 -   `connectionTimeToLive` (component option, milliseconds): the maximum age of a connection, counted from its creation, whether it was busy or idle. Below the idle timeout of the NAT or firewall it works too, at the cost of reconnecting busy connections as well.
     
+
+For example, in `application.properties`, for a NAT that drops connections idle for 5 minutes:
+
+```properties
+camel.component.https.connection-idle-timeout=240000
+```
 
 ### Configuring a Proxy
 

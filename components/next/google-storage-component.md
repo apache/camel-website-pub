@@ -935,3 +935,5 @@ from("google-storage://myCamelBucket?serviceAccountKey=/home/user/Downloads/my-k
 ```
 
 In this case, the objects consumed will be moved to myCamelProcessedBucket bucket and deleted from the original one (because of deleteAfterRead).
+
+The consumer deletes or moves the object it consumed, whatever the route does with the `CamelGoogleCloudStorageObjectName` and `CamelGoogleCloudStorageBucketName` headers. A route can set the object name header to write a copy of the object under another name.

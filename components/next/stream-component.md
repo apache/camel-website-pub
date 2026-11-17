@@ -136,7 +136,7 @@ Enum values:
 | **initialPromptDelay** (consumer) | Initial delay in milliseconds before showing the message prompt. This delay occurs only once. Can be used during system startup to avoid message prompts being written while other logging is done to the system out. | 2000 | long |
 | **promptDelay** (consumer) | Optional delay in milliseconds before showing the message prompt. |  | long |
 | **promptMessage** (consumer) | Message prompt to use when reading from stream:in; for example, you could set this to Enter a command:. |  | String |
-| **readLine** (consumer) | Whether to read the input stream in line mode (terminate by line breaks). Setting this to false, will instead read the entire stream until EOL. | true | boolean |
+| **readLine** (consumer) | Whether to read the input stream in line mode (terminate by line breaks). Setting this to false, will instead read until the end of the stream. With scanStream, each exchange holds the bytes read in one scan. | true | boolean |
 | **retry** (consumer) | Will retry opening the stream if it’s overwritten, somewhat like tail --retry If reading from files then you should also enable the fileWatcher option, to make it work reliable. | false | boolean |
 | **scanStream** (consumer) | To be used for continuously reading a stream such as the unix tail command. | false | boolean |
 | **scanStreamDelay** (consumer) | Delay in milliseconds between read attempts when using scanStream. |  | long |
@@ -181,7 +181,7 @@ The message body at each side of the Stream component: _Consumer_ is the body of
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Consumer** | `text` (`java.lang.String`) | Each line of the stream as text. With groupLines, a List of the lines; with readLine=false, all the bytes of the stream.
+| **Consumer** | `text` (`java.lang.String`) | Each line of the stream as text. With groupLines, a List of the lines; with readLine=false, all the bytes of the stream (with scanStream, the bytes read in one scan).
 -   With `readLine=false`: `bytes` (`byte[]`)
     
 

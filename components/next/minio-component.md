@@ -1048,6 +1048,8 @@ from("minio://mycamelbucket?minioClient=#minioClient&moveAfterRead=true&destinat
 
 In this case, the objects consumed will be moved to `myothercamelbucket` bucket and deleted from the original one (because of `deleteAfterRead` set to true as default).
 
+The consumer deletes or moves the object it consumed, whatever the route does with the `CamelMinioObjectName` and `CamelMinioBucketName` headers. A route can set the object name header to write a copy of the object under another name.
+
 ### Using a POJO as body
 
 Sometimes build a Minio Request can be complex because of multiple options. We introduce the possibility to use a POJO as the body. In Minio, there are multiple operations you can submit, as an example for List brokers request, you can do something like:

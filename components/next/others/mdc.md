@@ -29,7 +29,7 @@ _Java-only: setting an MDC value as a Camel Exchange header_
     .setHeader("myCustomMDCKey", simple("myCustomKeyValue"))
 ```
 
-include the MDC service and additionally instruct the Camel application to treat that header as a MDC trace (via `camel.mdc.customHeaders=myCustomMDCKey` or `*` to include all headers). You won’t need any longer to worry about context propagation as the propagation will be done via Camel Exchange instead.
+include the MDC service and additionally instruct the Camel application to treat that header as a MDC trace (via `camel.mdc.customExchangeHeaders=myCustomMDCKey` or `*` to include all headers). You won’t need any longer to worry about context propagation as the propagation will be done via Camel Exchange instead.
 
 > **Note**
 > you won’t also need any longer to hack the code using Java DSL, as you can put headers in any Camel DSL.
@@ -54,14 +54,14 @@ This is the list of default MDC values included in each execution:
     
 -   camel.correlationId
     
--   camel.routeId
+-   camel.routeId (the route being run; when a route calls another route, the id of the called route)
     
 -   camel.contextId
     
 -   camel.threadId
     
 
-If they exist in the Exchange, then, they will be included in the MDC. You can use `camel.mdc.customHeaders` and `camel.mdc.customProperties` to include any further header and property you need to trace.
+If they exist in the Exchange, then, they will be included in the MDC. You can use `camel.mdc.customExchangeHeaders` and `camel.mdc.customExchangeProperties` to include any further header and property you need to trace.
 
 ## Configuration
 
@@ -73,3 +73,5 @@ The configuration properties for the MDC component are:
 | `camel.mdc.enabled` | false | Enable the MDC logging. |
 | `camel.mdc.customExchangeHeaders` |  | Provide the exchange headers you would like to trace in MDC. Use `*` value as a wildcard to include more exchange headers at once, for example `CAMEL_HTTP_*` or only the `*` to include all available exchange headers. |
 | `camel.mdc.customExchangeProperties` |  | Provide the exchange properties you would like to trace in MDC. Use `*` value as a wildcard to include more exchange properties at once, for example `property_*` or only the `*` to include all available exchange properties. |
+
+On Camel Main and Camel JBang, the older names `camel.mdc.customHeaders` and `camel.mdc.customProperties` also work.

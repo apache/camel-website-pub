@@ -242,7 +242,7 @@ The plugins of the Apache Camel project:
 | `mcp` | `camel mcp`: the [Camel CLI MCP Server](camel-jbang-mcp.md) |
 | `edit` | `camel edit`: edit a Camel file in the terminal with suggestions and diagnostics |
 
-Plugins bundled with the CLI, such as `tui`, are installed on first use.
+The plugins of the Apache Camel project are installed on first use: the first `camel tui` installs the tui plugin. The Camel CLI launcher, as installed by the install script or a package manager such as Homebrew, has kubernetes, test, validate, tui and mcp in it, and downloads generate and edit from Maven Central the first time they are used.
 
 Add, list installed, and remove plugins:
 

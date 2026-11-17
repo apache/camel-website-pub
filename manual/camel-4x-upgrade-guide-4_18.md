@@ -64,6 +64,12 @@ With `idempotent=true` (or `noop=true`) and `readLock=idempotent`, `idempotent-c
 
 The `sftp` component now uses a remote file or directory name exactly as given, also when it contains **or `?`. Before, the JSch library read** and `?` in the name as wildcards, so storing, retrieving, deleting, renaming, listing or changing to a directory could resolve the name to another file or directory whose name matched. If you relied on a wildcard to select a file, use the real name of the file in the producer, and the `include` or `antInclude` option of a consumer that lists the directory instead of a wildcard in `fileName` with `useList=false`. See the [SFTP component](../components/4.22.x/sftp-component.md).
 
+### camel-ftp - ftp and ftps refuse a file or directory name with a carriage return or a line feed
+
+The `ftp` and `ftps` components now refuse a remote file or directory name with a carriage return or a line feed, with a `GenericFileOperationFailedException`, before they send any command to the server for it. This applies to the name the producer writes (the `CamelFileName` header, `tempFileName`, `doneFileName` and `moveExisting`), to the directories it creates or changes to, and to the names the consumer retrieves, deletes, renames or lists.
+
+The FTP control connection sends one command per line, so such a name cannot be sent as one command. Before, the server got the name cut at the line break: the operation failed or acted on another file, and the replies of the later commands on that connection could get out of step. Remove or replace these characters in the name before the producer. The `sftp` component is not affected. See the [FTP component](../components/4.22.x/ftp-component.md).
+
 ### camel-file - jailStartingDirectory resolves symbolic links
 
 With `jailStartingDirectory` enabled (the default), the file consumer and producer now resolve symbolic links when checking that a file stays within the starting directory. The consumer skips a file or (with `recursive=true`) a directory that is a link resolving outside of it, and the producer fails to write through such a link or a dangling link. Links resolving inside the starting directory work as before. Set `jailStartingDirectory=false` to keep following links to other directories (this also turns off the check of `../` in producer file names). A skipped file is logged at WARN the first time and at DEBUG on later polls; this log-level change also applies to the remote file consumers, which keep their existing lexical check.
@@ -496,6 +502,10 @@ A Quarkus BOM must identify both `org.apache.camel:camel-catalog` and `org.apach
 Spring Boot retains its existing fallback: if downloading `org.apache.camel:camel-catalog` for the requested version fails, it tries the running CLI’s Camel version. The catalog reports the core version actually resolved.
 
 For Spring Boot, `camel export` and `camel run` without an explicit `--camel-version` now use the resolved core catalog version for Camel core dependencies in the generated project. For example, `--camel-spring-boot-version=4.8.0` uses Camel 4.8.0 instead of the running CLI’s version when that catalog is available. Set `--camel-version` explicitly to retain a different core dependency version.
+
+### camel-main - the server and vault options flagged secret are sensitive keys
+
+The options `camel.server.jwtKeystorePassword`, `camel.management.jwtKeystorePassword`, `camel.vault.azure.eventhubConnectionString`, `camel.vault.azure.tenantId` and `camel.vault.gcp.serviceAccountKey` are flagged secret, and are now also sensitive keys, like the other secret options. The options `camel.vault.ibm.eventStreamUsername` and `camel.vault.ibm.eventStreamPassword` are now flagged secret as well. The Camel Main auto-configuration summary shows the value of these options as `xxxxxx`. These options are matched by their whole key. Component and endpoint options with the same name, such as `tenantId` or `serviceAccountKey`, are not affected.
 
 ## Upgrading from 4.18.4 to 4.18.5
 

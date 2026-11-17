@@ -13,8 +13,8 @@ The following table summarizes the configuration options available for the `head
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
+| **headerName** | Header Name | **Required** The header name to get the value to compare. | string |  | headerName |
 | **regex** | Regex | **Required** The Regex to Evaluate against the Kafka topic name. | string |  |  |
-| **headerName** | Header Name | The header name to get the value to compare. | string |  | headerName |
 
 ## Dependencies
 

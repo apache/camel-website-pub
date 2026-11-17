@@ -159,6 +159,87 @@ The message body at each side of the ZooKeeper Master component: _Consumer_ is t
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the ZooKeeper Master component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `ZooKeeperMasterWorld`
+Fake: FakeZooKeeper: a ZooKeeper ensemble (sessions, ephemeral sequential znodes, one-time watches) with the other nodes of the group as sessions, behind a CuratorFramework shared as the curator bean
+
+Tests: `ZooKeeperMasterDstTest`
+
+ | 
+
+**Covers:**
+
+-   the master consumer (zookeeper-master endpoint) and the MasterRoutePolicy, on the real ZooKeeperGroup
+    
+-   connection losses shorter and longer than the session timeout (SUSPENDED, RECONNECTED, LOST)
+    
+-   other nodes that join, leave and die
+    
+-   a start of the consumer that fails and its retry; with the master consumer, a start that takes long
+    
+-   route stop and start, and a route of the policy removed and added again
+    
+
+**Faults:**
+
+-   the connection to ZooKeeper is lost
+    
+-   the session expires
+    
+-   an operation answers slowly
+    
+-   the connection is lost before the answer of a write
+    
+-   the start of the consumer fails
+    
+-   the start of the consumer takes long
+    
+
+**Invariants:**
+
+-   the client is used as ZooKeeper and Curator allow
+    
+-   this node runs its consumer only while it is the master
+    
+-   once the faults cleared, the master runs its consumer
+    
+-   a stopped consumer leaves no listener on the shared CuratorFramework
+    
+-   no znode of this node is left in the group after the final stop
+    
+-   the shared CuratorFramework and group factory are not closed
+    
+-   the world itself ran as planned
+    
+
+
+
+
+
+ | [CAMEL-25315](https://issues.apache.org/jira/browse/CAMEL-25315)
+
+[CAMEL-26540](https://issues.apache.org/jira/browse/CAMEL-26540)
+
+[CAMEL-26802](https://issues.apache.org/jira/browse/CAMEL-26802)
+
+[CAMEL-26870](https://issues.apache.org/jira/browse/CAMEL-26870)
+
+[CAMEL-26887](https://issues.apache.org/jira/browse/CAMEL-26887)
+
+[CAMEL-27037](https://issues.apache.org/jira/browse/CAMEL-27037)
+
+[CAMEL-27044](https://issues.apache.org/jira/browse/CAMEL-27044)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 ## Examples
 
 You can protect a clustered Camel application to only consume files from one active node.

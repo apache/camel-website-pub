@@ -104,6 +104,7 @@ Enum values:
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **workloadApiClient** (advanced) | **Autowired** An existing WorkloadApiClient to use. When set, the component does not create or close its own client and spiffeSocketPath is ignored. |  | WorkloadApiClient |
 | **allowOperationHeader** (security) | Whether the CamelSpiffeOperation header may override the configured operation. Disabled by default: the operation decides whether this endpoint validates a token or mints one, so a message that can set it can turn a validator into an endpoint that hands out this workload’s own JWT-SVID. Enable it only on routes whose input is trusted. | false | boolean |
+| **localSpiffeId** (security) | The exact local SPIFFE ID to use when the Workload API supplies several identities: fetchX509Svid selects that X.509-SVID instead of the SDK’s default one, and fetchJwtSvid mints the JWT-SVID with it as the subject. A configured identity that is absent, or that the workload is not entitled to, fails without selecting a different identity. This option comes only from endpoint configuration, never from a message header; validateJwtSvid has no local identity to choose and ignores it. |  | String |
 | **spiffeSocketPath** (security) | The address of the SPIFFE Workload API endpoint (for example unix:///tmp/agent.sock or tcp://127.0.0.1:8082). When not set, the SPIFFE\_ENDPOINT\_SOCKET environment variable is used. |  | String |
 | **x509Response** (security) | 
 
@@ -166,6 +167,7 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **workloadApiClient** (advanced) | **Autowired** An existing WorkloadApiClient to use. When set, the component does not create or close its own client and spiffeSocketPath is ignored. |  | WorkloadApiClient |
 | **allowOperationHeader** (security) | Whether the CamelSpiffeOperation header may override the configured operation. Disabled by default: the operation decides whether this endpoint validates a token or mints one, so a message that can set it can turn a validator into an endpoint that hands out this workload’s own JWT-SVID. Enable it only on routes whose input is trusted. | false | boolean |
+| **localSpiffeId** (security) | The exact local SPIFFE ID to use when the Workload API supplies several identities: fetchX509Svid selects that X.509-SVID instead of the SDK’s default one, and fetchJwtSvid mints the JWT-SVID with it as the subject. A configured identity that is absent, or that the workload is not entitled to, fails without selecting a different identity. This option comes only from endpoint configuration, never from a message header; validateJwtSvid has no local identity to choose and ignores it. |  | String |
 | **spiffeSocketPath** (security) | The address of the SPIFFE Workload API endpoint (for example unix:///tmp/agent.sock or tcp://127.0.0.1:8082). When not set, the SPIFFE\_ENDPOINT\_SOCKET environment variable is used. |  | String |
 | **x509Response** (security) | 
 
@@ -421,6 +423,89 @@ from("direct:start")
             parameters:
               sslContextParameters: "#spiffeSsl"
 ```
+
+## Select a local X.509 identity
+
+A workload can receive several X.509-SVIDs from the Workload API. Set `localSpiffeId` to choose an exact local identity instead of the default SVID. The producer’s `fetchX509Svid` and `fetchJwtSvid` operations and `SpiffeSSLContextParameters` all support this option. It is distinct from `acceptedSpiffeIds`, which restricts **remote peers**: selecting a local identity does not broaden the TLS peer allow-list.
+
+The selector is route/bean configuration, never a message header or a per-message expression. An invalid SPIFFE ID fails before opening the source. An identity that is missing does not fall back to the default or another identity. `fetchJwtSvid` mints the JWT-SVID with `localSpiffeId` as its subject, and the Workload API refuses a subject the workload is not entitled to, so the option fails closed there too. `validateJwtSvid` has no local identity to choose and ignores it.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:identity")
+    .to("spiffe:identity?operation=fetchX509Svid&localSpiffeId=spiffe://example.org/billing&x509Response=id");
+```
+
+```xml
+<route>
+  <from uri="direct:identity"/>
+  <to uri="spiffe:identity?operation=fetchX509Svid&amp;localSpiffeId=spiffe://example.org/billing&amp;x509Response=id"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:identity
+      steps:
+        - to:
+            uri: "spiffe:identity?operation=fetchX509Svid&localSpiffeId=spiffe://example.org/billing&x509Response=id"
+```
+
+The selected identity’s normal `x509Response` behavior and identity/expiry headers still apply. A fetch selects from the current Workload API context, so a rotated certificate for that same identity is picked up on the next fetch. If the identity disappears, the fetch fails and clears its identity/expiry outputs.
+
+For TLS, configure the same option on the SSL parameters bean:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+SpiffeSSLContextParameters ssl = new SpiffeSSLContextParameters();
+ssl.setLocalSpiffeId("spiffe://example.org/billing");
+ssl.setAcceptedSpiffeIds("spiffe://example.org/backend");
+getContext().getRegistry().bind("billingSsl", ssl);
+
+from("direct:callBackend")
+    .to("https://backend.example.org/api?sslContextParameters=#billingSsl");
+```
+
+```xml
+<bean id="billingSsl" class="org.apache.camel.component.spiffe.SpiffeSSLContextParameters">
+  <property name="localSpiffeId" value="spiffe://example.org/billing"/>
+  <property name="acceptedSpiffeIds" value="spiffe://example.org/backend"/>
+</bean>
+<route>
+  <from uri="direct:callBackend"/>
+  <to uri="https://backend.example.org/api?sslContextParameters=#billingSsl"/>
+</route>
+```
+
+```yaml
+- beans:
+    - name: billingSsl
+      type: org.apache.camel.component.spiffe.SpiffeSSLContextParameters
+      properties:
+        localSpiffeId: spiffe://example.org/billing
+        acceptedSpiffeIds: spiffe://example.org/backend
+- route:
+    from:
+      uri: direct:callBackend
+      steps:
+        - to:
+            uri: "https://backend.example.org/api?sslContextParameters=#billingSsl"
+```
+
+The TLS source reselects on every Workload API update and retains only the configured identity. It refuses to start if that identity is initially absent. If a later update removes it, reads of the local TLS identity fail clearly; the source does not retain the old selected credential or silently choose another. A subsequent update restoring the configured identity makes its new credential available again. Existing established TLS sessions are not terminated by changing the source; this selection applies when JSSE asks for the local identity. Configure `localSpiffeId` before creating the SSL context; changing the bean afterwards does not replace its cached context. Leaving the option unset preserves the SDK’s default selection.
 
 ## Authorizing a route on the peer SPIFFE ID (SpiffeSecurityPolicy)
 

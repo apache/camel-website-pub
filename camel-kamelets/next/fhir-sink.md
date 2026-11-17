@@ -13,10 +13,10 @@ The following table summarizes the configuration options available for the `fhir
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
+| **apiName** | API Name | **Required** What kind of operation to perform. Enum values: \* CAPABILITIES \* CREATE \* DELETE \* HISTORY \* LOAD\_PAGE \* META \* OPERATION \* PATCH \* READ \* SEARCH \* TRANSACTION \* UPDATE \* VALIDATE | string |  |  |
 | **methodName** | Method Name | **Required** What sub operation to use for the selected operation. | string |  |  |
 | **serverUrl** | Server URL | **Required** The FHIR server base URL. | string |  |  |
 | **accessToken** | Access Token | OAuth access token. | string |  |  |
-| **apiName** | API Name | What kind of operation to perform. Enum values: \* CAPABILITIES \* CREATE \* DELETE \* HISTORY \* LOAD\_PAGE \* META \* OPERATION \* PATCH \* READ \* SEARCH \* TRANSACTION \* UPDATE \* VALIDATE | string |  |  |
 | **encoding** | Encoding | Encoding to use for all request. One of: \[JSON\] \[XML\]. | string | JSON |  |
 | **fhirVersion** | FHIR Version | The FHIR Version to use. Enum values: \* DSTU2 \* DSTU2\_HL7ORG \* DSTU2\_1 \* DSTU3 \* R4 \* R5 | string | R4 |  |
 | **lazyStartProducer** | Lazy Start Producer | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | boolean | false |  |

@@ -316,8 +316,8 @@ Enum values:
 
 
  | CACHE\_AUTO | String |
-| **concurrentConsumers** (consumer) | Specifies the default number of concurrent consumers when consuming from JMS (not for request/reply over JMS). See also the maxMessagesPerTask option to control dynamic scaling up/down of threads. When doing request/reply over JMS then the option replyToConcurrentConsumers is used to control number of concurrent consumers on the reply message listener. | 1 | int |
-| **maxConcurrentConsumers** (consumer) | Specifies the maximum number of concurrent consumers when consuming from JMS (not for request/reply over JMS). See also the maxMessagesPerTask option to control dynamic scaling up/down of threads. When doing request/reply over JMS then the option replyToMaxConcurrentConsumers is used to control number of concurrent consumers on the reply message listener. |  | int |
+| **concurrentConsumers** (consumer) | Specifies the default number of concurrent consumers when consuming from JMS (not for request/reply over JMS). See also the maxMessagesPerTask option to control dynamic scaling up/down of threads. When doing request/reply over JMS then the option replyToConcurrentConsumers is used to control number of concurrent consumers on the reply message listener. On a topic, each consumer has its own subscription and receives every message, unless subscriptionShared is enabled. | 1 | int |
+| **maxConcurrentConsumers** (consumer) | Specifies the maximum number of concurrent consumers when consuming from JMS (not for request/reply over JMS). See also the maxMessagesPerTask option to control dynamic scaling up/down of threads. When doing request/reply over JMS then the option replyToMaxConcurrentConsumers is used to control number of concurrent consumers on the reply message listener. On a topic, each consumer has its own subscription and receives every message, unless subscriptionShared is enabled. |  | int |
 | **replyToDeliveryPersistent** (consumer) | Specifies whether to use persistent delivery by default for replies. | true | boolean |
 | **selector** (consumer) | Sets the JMS selector to use. |  | String |
 | **subscriptionDurable** (consumer) | Set whether to make the subscription durable. The durable subscription name to be used can be specified through the subscriptionName property. Default is false. Set this to true to register a durable subscription, typically in combination with a subscriptionName value (unless your message listener class name is good enough as subscription name). Only makes sense when listening to a topic (pub-sub domain), therefore this method switches the pubSubDomain flag as well. | false | boolean |
@@ -694,8 +694,8 @@ Enum values:
 
 
  | CACHE\_AUTO | String |
-| **concurrentConsumers** (consumer) | Specifies the default number of concurrent consumers when consuming from JMS (not for request/reply over JMS). See also the maxMessagesPerTask option to control dynamic scaling up/down of threads. When doing request/reply over JMS then the option replyToConcurrentConsumers is used to control number of concurrent consumers on the reply message listener. | 1 | int |
-| **maxConcurrentConsumers** (consumer) | Specifies the maximum number of concurrent consumers when consuming from JMS (not for request/reply over JMS). See also the maxMessagesPerTask option to control dynamic scaling up/down of threads. When doing request/reply over JMS then the option replyToMaxConcurrentConsumers is used to control number of concurrent consumers on the reply message listener. |  | int |
+| **concurrentConsumers** (consumer) | Specifies the default number of concurrent consumers when consuming from JMS (not for request/reply over JMS). See also the maxMessagesPerTask option to control dynamic scaling up/down of threads. When doing request/reply over JMS then the option replyToConcurrentConsumers is used to control number of concurrent consumers on the reply message listener. On a topic, each consumer has its own subscription and receives every message, unless subscriptionShared is enabled. | 1 | int |
+| **maxConcurrentConsumers** (consumer) | Specifies the maximum number of concurrent consumers when consuming from JMS (not for request/reply over JMS). See also the maxMessagesPerTask option to control dynamic scaling up/down of threads. When doing request/reply over JMS then the option replyToMaxConcurrentConsumers is used to control number of concurrent consumers on the reply message listener. On a topic, each consumer has its own subscription and receives every message, unless subscriptionShared is enabled. |  | int |
 | **replyToDeliveryPersistent** (consumer) | Specifies whether to use persistent delivery by default for replies. | true | boolean |
 | **selector** (consumer) | Sets the JMS selector to use. |  | String |
 | **subscriptionDurable** (consumer) | Set whether to make the subscription durable. The durable subscription name to be used can be specified through the subscriptionName property. Default is false. Set this to true to register a durable subscription, typically in combination with a subscriptionName value (unless your message listener class name is good enough as subscription name). Only makes sense when listening to a topic (pub-sub domain), therefore this method switches the pubSubDomain flag as well. | false | boolean |
@@ -1747,6 +1747,44 @@ You can configure this option in one of the following ways:
     
 -   By invoking `setConcurrentConsumers()` directly on the `JmsEndpoint`.
     
+
+#### Concurrent Consuming from a topic
+
+On a topic, each concurrent consumer is a subscriber of its own and receives every message. With `concurrentConsumers=3` on a topic, each message is processed three times. This is also the case when `concurrentConsumers` or `maxConcurrentConsumers` is set on the component (for its queues) and a route of that component consumes from a topic. Camel logs a WARN when such a consumer starts.
+
+To have several consumers share the messages of a topic, so each message is processed once, use a shared subscription (requires a JMS 2.0 broker) with `subscriptionShared=true` and a `subscriptionName`. Add `subscriptionDurable=true` to keep the messages sent while no consumer is connected:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("jms:topic:SomeTopic?concurrentConsumers=5&subscriptionShared=true&subscriptionName=myApp")
+  .bean(MyClass.class);
+```
+
+```xml
+<route>
+  <from uri="jms:topic:SomeTopic?concurrentConsumers=5&amp;subscriptionShared=true&amp;subscriptionName=myApp"/>
+  <to uri="bean:MyClass"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: jms:topic:SomeTopic
+      parameters:
+        concurrentConsumers: 5
+        subscriptionShared: true
+        subscriptionName: myApp
+      steps:
+        - to:
+            uri: bean:MyClass
+```
 
 #### Concurrent Consuming with async consumer
 

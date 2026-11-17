@@ -14,7 +14,7 @@ The following table summarizes the configuration options available for the `jira
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **jiraUrl** | Jira URL | **Required** The URL of your instance of Jira. | string |  | http://my\_jira.com:8081 |
-| **jql** | JQL | A query to filter issues. | string |  | project=MyProject |
+| **jql** | JQL | **Required** A query to filter issues. | string |  | project=MyProject |
 | **password** | Password | The password to access Jira. | string |  |  |
 | **personal-token** | Personal Token | Personal Token. | string |  |  |
 | **username** | Username | The username to access Jira. | string |  |  |

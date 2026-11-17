@@ -94,7 +94,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **operation** (producer) | 
-**Required** Operation to perform.
+**Required** The operation that the producer performs. The CamelAlibabaSmsOperation header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option.
 
 Enum values:
 
@@ -112,18 +112,18 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **endpoint** (producer) | SMS endpoint URL. Carries higher precedence than region based client initialization. |  | String |
-| **outId** (producer) | Out id for the SMS. |  | String |
-| **phoneNumbers** (producer) | Phone numbers to send SMS to. |  | String |
-| **region** (producer) | **Required** Alibaba Cloud region. |  | String |
-| **signName** (producer) | SMS sign name. |  | String |
-| **templateCode** (producer) | SMS template code. |  | String |
-| **templateParam** (producer) | SMS template parameters as JSON. |  | String |
+| **endpoint** (producer) | The endpoint of Short Message Service, which is a host name without http:// or https://. The producer sends requests to it over HTTPS. If not set, the region option determines the endpoint, and one of the two is required. Not used when the smsClient option is set or autowired. |  | String |
+| **outId** (producer) | The external transaction ID of the SMS message. The CamelAlibabaSmsOutId header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no external transaction ID to the request. |  | String |
+| **phoneNumbers** (producer) | The phone numbers of the recipients, which are separated by commas. Short Message Service accepts at most 1000 phone numbers. The CamelAlibabaSmsPhoneNumbers header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required. |  | String |
+| **region** (producer) | The region ID of Short Message Service, for example cn-hangzhou. Only used when the endpoint option is not set, to determine the endpoint of Short Message Service. One of the two options is required. Not used when the smsClient option is set or autowired. |  | String |
+| **signName** (producer) | The sign name of the SMS message. The value must be an approved sign name. The CamelAlibabaSmsSignName header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required. |  | String |
+| **templateCode** (producer) | The template code of the SMS message. The value must be the code of an approved template. The CamelAlibabaSmsTemplateCode header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required. |  | String |
+| **templateParam** (producer) | The template parameters of the SMS message as a JSON string. The JSON string must provide a value for each variable of the template. The CamelAlibabaSmsTemplateParam header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no template parameters to the request. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **smsClient** (advanced) | **Autowired** Autowire an existing SMS client instance. |  | Client |
-| **accessKey** (security) | Access key for the cloud user. |  | String |
-| **secretKey** (security) | Secret key for the cloud user. |  | String |
-| **serviceKeys** (security) | Configuration object for cloud service authentication. |  | ServiceKeys |
+| **smsClient** (advanced) | **Autowired** To use a custom com.aliyun.dysmsapi20170525.Client. The producer sends its requests with this client, and the region, endpoint, accessKey, secretKey and serviceKeys options are not used. If no client is set or autowired, the Camel endpoint creates a client from these options. It creates this client when the producer processes its first message. |  | Client |
+| **accessKey** (security) | The AccessKey ID of the AccessKey pair for the requests that the producer sends to Short Message Service. If not set, the accessKey of the serviceKeys option is used, and one of the two is required. Not used when the smsClient option is set or autowired. |  | String |
+| **secretKey** (security) | The AccessKey secret of the AccessKey pair for the requests that the producer sends to Short Message Service. If not set, the secretKey of the serviceKeys option is used, and one of the two is required. Not used when the smsClient option is set or autowired. |  | String |
+| **serviceKeys** (security) | The AccessKey pair as an org.apache.camel.component.alibaba.common.models.ServiceKeys. Its accessKey is the AccessKey ID and its secretKey is the AccessKey secret. Each of the two is used when the option of the same name is not set. Not used when the smsClient option is set or autowired. |  | ServiceKeys |
 
 ## Message Headers
 
@@ -132,12 +132,13 @@ The Alibaba Short Message Service (SMS) component supports the following message
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaSmsPhoneNumbers** (producer) Constant: [`PHONE_NUMBERS`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#PHONE_NUMBERS) | Phone numbers to send SMS to. |  | String |
-| **CamelAlibabaSmsSignName** (producer) Constant: [`SIGN_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#SIGN_NAME) | SMS sign name. |  | String |
-| **CamelAlibabaSmsTemplateCode** (producer) Constant: [`TEMPLATE_CODE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#TEMPLATE_CODE) | SMS template code. |  | String |
-| **CamelAlibabaSmsTemplateParam** (producer) Constant: [`TEMPLATE_PARAM`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#TEMPLATE_PARAM) | SMS template parameters as JSON. |  | String |
-| **CamelAlibabaSmsOutId** (producer) Constant: [`OUT_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#OUT_ID) | Out id for the SMS. |  | String |
-| **CamelAlibabaSmsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#REQUEST_ID) | Alibaba Cloud request id. |  | String |
+| **CamelAlibabaSmsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option. |  | String |
+| **CamelAlibabaSmsPhoneNumbers** (producer) Constant: [`PHONE_NUMBERS`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#PHONE_NUMBERS) | The phone numbers of the recipients, which are separated by commas. Short Message Service accepts at most 1000 phone numbers. This header replaces the phoneNumbers option. If this header is not set, an exchange property of the same name replaces the phoneNumbers option. |  | String |
+| **CamelAlibabaSmsSignName** (producer) Constant: [`SIGN_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#SIGN_NAME) | The sign name of the SMS message. The value must be an approved sign name. This header replaces the signName option. If this header is not set, an exchange property of the same name replaces the signName option. |  | String |
+| **CamelAlibabaSmsTemplateCode** (producer) Constant: [`TEMPLATE_CODE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#TEMPLATE_CODE) | The template code of the SMS message. The value must be the code of an approved template. This header replaces the templateCode option. If this header is not set, an exchange property of the same name replaces the templateCode option. |  | String |
+| **CamelAlibabaSmsTemplateParam** (producer) Constant: [`TEMPLATE_PARAM`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#TEMPLATE_PARAM) | The template parameters of the SMS message as a JSON string. The JSON string must provide a value for each variable of the template. This header replaces the templateParam option. If this header is not set, an exchange property of the same name replaces the templateParam option. |  | String |
+| **CamelAlibabaSmsOutId** (producer) Constant: [`OUT_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#OUT_ID) | The external transaction ID of the SMS message. This header replaces the outId option. If this header is not set, an exchange property of the same name replaces the outId option. |  | String |
+| **CamelAlibabaSmsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#REQUEST_ID) | The request ID that Short Message Service returns in the response to the operation. The producer sets it, unless the exchange fails. |  | String |
 
 ## Message Body
 

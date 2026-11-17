@@ -414,6 +414,79 @@ The message body at each side of the Azure ServiceBus component: _Consumer_ is t
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Deterministic simulation tests
+
+The consumer of the Azure ServiceBus component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `ServiceBusWorld`
+Fake: FakeServiceBus: a queue in peek-lock mode (lock duration, delivery count, dead-letter queue) behind the processor and receiver clients of ServiceBusClientFactory
+
+Tests: `ServiceBusConsumerDstTest`
+
+ | 
+
+**Covers:**
+
+-   the lock renewer of the consumer (PEEK\_LOCK, maxAutoLockRenewDuration) with an asynchronous route
+    
+-   processing that takes longer than the lock duration
+    
+-   complete, abandon and dead-letter, also after the lock was lost
+    
+-   maxConcurrentCalls of one to three (with the asynchronous route it bounds the processMessage calls)
+    
+-   route stop and start while messages are processed
+    
+
+**Faults:**
+
+-   a lock renewal fails
+    
+-   a lock renewal takes long
+    
+-   a settlement fails
+    
+-   processing fails
+    
+-   processing is slower than the lock duration
+    
+
+**Invariants:**
+
+-   no lock is lost and no message is delivered again while the consumer holds it, unless a renewal failed less than one renewer run before the lock expired, the route was stopped or maxAutoLockRenewDuration passed
+    
+-   the message of a completed exchange is completed, unless its settlement failed, its lock was lost as excused above, or a forced stop closed the client first
+    
+-   a message is completed only after its exchange completed
+    
+-   a message is abandoned or dead-lettered only after its exchange failed
+    
+-   every message is completed or dead-lettered once the faults cleared
+    
+-   the consumer settles a delivery at most once and renews only what it holds, through an open client
+    
+
+
+
+
+
+ | [CAMEL-25701](https://issues.apache.org/jira/browse/CAMEL-25701)
+
+[CAMEL-26956](https://issues.apache.org/jira/browse/CAMEL-26956)
+
+[CAMEL-26969](https://issues.apache.org/jira/browse/CAMEL-26969)
+
+[CAMEL-26970](https://issues.apache.org/jira/browse/CAMEL-26970)
+
+[CAMEL-27066](https://issues.apache.org/jira/browse/CAMEL-27066)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
+
 ## Usage
 
 ### Consumer and Producer

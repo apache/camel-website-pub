@@ -459,7 +459,47 @@ The Docling component supports the following message header(s), which is/are lis
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelDoclingOperation** (common) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#OPERATION) | The operation to perform. |  | DoclingOperations |
+| **CamelDoclingOperation** (common) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#OPERATION) | 
+The operation to perform.
+
+Enum values:
+
+-   CONVERT\_TO\_MARKDOWN
+    
+-   CONVERT\_TO\_HTML
+    
+-   CONVERT\_TO\_JSON
+    
+-   EXTRACT\_TEXT
+    
+-   EXTRACT\_STRUCTURED\_DATA
+    
+-   SUBMIT\_ASYNC\_CONVERSION
+    
+-   CHECK\_CONVERSION\_STATUS
+    
+-   BATCH\_CONVERT\_TO\_MARKDOWN
+    
+-   BATCH\_CONVERT\_TO\_HTML
+    
+-   BATCH\_CONVERT\_TO\_JSON
+    
+-   BATCH\_EXTRACT\_TEXT
+    
+-   BATCH\_EXTRACT\_STRUCTURED\_DATA
+    
+-   EXTRACT\_METADATA
+    
+-   CHUNK\_HYBRID
+    
+-   CHUNK\_HIERARCHICAL
+    
+
+
+
+
+
+ |  | DoclingOperations |
 | **CamelDoclingOutputFormat** (common) Constant: [`OUTPUT_FORMAT`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#OUTPUT_FORMAT) | The output format for conversion. |  | String |
 | **CamelDoclingInputFilePath** (common) Constant: [`INPUT_FILE_PATH`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#INPUT_FILE_PATH) | The input file path or content. |  | String |
 | **CamelDoclingOutputFilePath** (common) Constant: [`OUTPUT_FILE_PATH`](https://javadoc.io/doc/org.apache.camel/camel-docling/latest/org/apache/camel/component/docling/DoclingHeaders.html#OUTPUT_FILE_PATH) | The output file path for saving result. |  | String |

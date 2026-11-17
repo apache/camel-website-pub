@@ -27,7 +27,7 @@ Maven users will need to add the following dependency to their `pom.xml`.
 
 openfga:operation\[?options\]
 
-Where `operation` is one of `check`, `batchCheck`, `listObjects`, `listRelations`, `listUsers`, `readTuples`, `readChanges`, `expand`, `writeTuples` or `deleteTuples`.
+Where `operation` is one of `check`, `batchCheck`, `listObjects`, `listRelations`, `listUsers`, `readTuples`, `readChanges`, `expand`, `writeTuples`, `deleteTuples` or `write`.
 
 ## Configuring Options
 
@@ -122,6 +122,38 @@ Enum values:
 | **continuationToken** (producer) | The page to read from, for readTuples and readChanges. Evaluated as a Simple expression against the exchange, so a route can feed back the token the previous page returned - $\\{header.CamelOpenFgaContinuationToken} - and page through without the token being configured statically. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **object** (producer) | The object being accessed, as an OpenFGA object identifier such as document:budget. Evaluated as a Simple expression against each exchange, so document:$\\{header.documentId} names the resource the message is about. Unlike the subject, taking the object from a header is normal and safe: the caller is entitled to say which resource it wants, and the check is what decides whether it may have it. |  | String |
+| **onDuplicate** (producer) | 
+
+How writeTuples and write handle an existing relationship: error (the default) fails the operation, while ignore leaves that relationship unchanged and continues. The ignore mode requires OpenFGA 1.10.0 or later.
+
+Enum values:
+
+-   error
+    
+-   ignore
+    
+
+
+
+
+
+ | error | OpenFgaWriteConflictMode |
+| **onMissing** (producer) | 
+
+How deleteTuples and write handle an absent relationship: error (the default) fails the operation, while ignore skips that deletion and continues. The ignore mode requires OpenFGA 1.10.0 or later.
+
+Enum values:
+
+-   error
+    
+-   ignore
+    
+
+
+
+
+
+ | error | OpenFgaWriteConflictMode |
 | **pageSize** (producer) | How many entries a readTuples or readChanges page returns. Left unset, OpenFGA’s own default applies. A page is one request: this bounds the answer, not the number of requests a route makes. |  | Integer |
 | **relation** (producer) | The relation to demand, such as reader or owner. Evaluated as a Simple expression against each exchange, though a literal is what you usually want. The relation is the permission being demanded, so resolving it from an inbound header lets the caller pick the weakest one the model defines. Keep it literal, or derive it from something the route controls such as $\\{header.CamelHttpMethod}. |  | String |
 | **relations** (producer) | Comma-separated list of relations the listRelations operation asks about, for example reader,writer,owner. Only the ones the subject actually holds come back. |  | String |
@@ -187,6 +219,8 @@ Enum values:
     
 -   deleteTuples
     
+-   write
+    
 
 
 
@@ -238,6 +272,38 @@ Enum values:
 | **contextualTuples** (producer) | Relationship tuples supplied for the duration of one check and never stored, as semicolon-separated user,relation,object triples - for example user:$\\{exchangeProperty.authenticatedSubject},member,team:eng. Each part is evaluated as a Simple expression against the exchange, exactly as user and object are, and applies to check, batchCheck, listObjects, listRelations and listUsers. This is how a route hands OpenFGA a relationship the stored graph does not hold - a group membership that lives in the token rather than in the store, or a fact about the request such as which network it arrived on. A contextual tuple grants. It is read exactly like a stored tuple, so user:anne,owner,document:secret makes check(user:anne, owner, document:secret) answer true whatever the store contains. That is why this option is endpoint-only and is never taken from the message: a tuple the caller could choose would let it assert the very relationship being checked. By the same token, an expression here that reads an inbound header hands the caller that power anyway - keep these literal, or derive them from something the route established rather than from what it received. A part that resolves to blank denies the exchange rather than being dropped: the route asked for a tuple it did not get, and continuing without it would answer a different question than the one configured. |  | String |
 | **continuationToken** (producer) | The page to read from, for readTuples and readChanges. Evaluated as a Simple expression against the exchange, so a route can feed back the token the previous page returned - $\\{header.CamelOpenFgaContinuationToken} - and page through without the token being configured statically. |  | String |
 | **object** (producer) | The object being accessed, as an OpenFGA object identifier such as document:budget. Evaluated as a Simple expression against each exchange, so document:$\\{header.documentId} names the resource the message is about. Unlike the subject, taking the object from a header is normal and safe: the caller is entitled to say which resource it wants, and the check is what decides whether it may have it. |  | String |
+| **onDuplicate** (producer) | 
+
+How writeTuples and write handle an existing relationship: error (the default) fails the operation, while ignore leaves that relationship unchanged and continues. The ignore mode requires OpenFGA 1.10.0 or later.
+
+Enum values:
+
+-   error
+    
+-   ignore
+    
+
+
+
+
+
+ | error | OpenFgaWriteConflictMode |
+| **onMissing** (producer) | 
+
+How deleteTuples and write handle an absent relationship: error (the default) fails the operation, while ignore skips that deletion and continues. The ignore mode requires OpenFGA 1.10.0 or later.
+
+Enum values:
+
+-   error
+    
+-   ignore
+    
+
+
+
+
+
+ | error | OpenFgaWriteConflictMode |
 | **pageSize** (producer) | How many entries a readTuples or readChanges page returns. Left unset, OpenFGA’s own default applies. A page is one request: this bounds the answer, not the number of requests a route makes. |  | Integer |
 | **relation** (producer) | The relation to demand, such as reader or owner. Evaluated as a Simple expression against each exchange, though a literal is what you usually want. The relation is the permission being demanded, so resolving it from an inbound header lets the caller pick the weakest one the model defines. Keep it literal, or derive it from something the route controls such as $\\{header.CamelHttpMethod}. |  | String |
 | **relations** (producer) | Comma-separated list of relations the listRelations operation asks about, for example reader,writer,owner. Only the ones the subject actually holds come back. |  | String |
@@ -277,8 +343,8 @@ The OpenFGA component supports the following message header(s), which is/are lis
 | **CamelOpenFgaRelation** (producer) Constant: [`RELATION`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#RELATION) | The relation that was checked. Set for observability; it is not read as an input and cannot be used to demand a weaker permission than the endpoint configured. |  | String |
 | **CamelOpenFgaStoreId** (producer) Constant: [`STORE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#STORE_ID) | The identifier of the OpenFGA store that was consulted, so an audit trail records which relationship graph produced the verdict. |  | String |
 | **CamelOpenFgaContinuationToken** (producer) Constant: [`CONTINUATION_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#CONTINUATION_TOKEN) | The continuation token the page came back with. Feed it back through the continuationToken option to read on. The two operations end differently: readTuples returns no token on its last page, so the header is absent once the read is done, whereas readChanges always returns a token - an empty body is what says the log has been read up to date, and that last token is what lets the next poll resume instead of replaying the whole log. |  | String |
-| **CamelOpenFgaWrittenTuples** (producer) Constant: [`WRITTEN_TUPLES`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#WRITTEN_TUPLES) | How many relationship tuples the writeTuples operation wrote. |  | Integer |
-| **CamelOpenFgaDeletedTuples** (producer) Constant: [`DELETED_TUPLES`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#DELETED_TUPLES) | How many relationship tuples the deleteTuples operation deleted. |  | Integer |
+| **CamelOpenFgaWrittenTuples** (producer) Constant: [`WRITTEN_TUPLES`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#WRITTEN_TUPLES) | How many relationship tuples a successful writeTuples or write operation submitted. Ignored duplicate writes are included in this count. |  | Integer |
+| **CamelOpenFgaDeletedTuples** (producer) Constant: [`DELETED_TUPLES`](https://javadoc.io/doc/org.apache.camel/camel-openfga/latest/org/apache/camel/component/openfga/OpenFgaConstants.html#DELETED_TUPLES) | How many relationship tuples a successful deleteTuples or write operation submitted for deletion. Ignored missing deletes are included in this count. |  | Integer |
 
 ## Message Body
 
@@ -287,12 +353,14 @@ The message body at each side of the OpenFGA component: _Consumer_ is the body o
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | batchCheck: the objects to check, as a List or comma-separated text. writeTuples and deleteTuples: a Map with user, relation and object, a ClientTupleKey, or a List of them, used only when none of user, relation and object is configured; text fails, unmarshal JSON first. The other operations do not read the body.
+| **Producer input** | `any` | batchCheck: the objects to check, as a List or comma-separated text. writeTuples and deleteTuples: a Map with user, relation and object, a ClientTupleKey, or a List of them, used only when none of user, relation and object is configured; text fails, unmarshal JSON first. write: a Map containing writes/deletes collections of Maps with exactly user, relation and object entries. Other operations do not read the body.
 -   With `operation=batchCheck`: `list`, `text`, `bytes`, `stream` or `file`
     
 -   With `operation=writeTuples`: `map`, `list` or `pojo`
     
 -   With `operation=deleteTuples`: `map`, `list` or `pojo`
+    
+-   With `operation=write`: `map`
     
 
 Not known when `object` is set.
@@ -300,7 +368,7 @@ Not known when `object` is set.
  |
 | **Producer output** | `unknown` | 
 
-check, writeTuples and deleteTuples keep the body: the verdict is in the CamelOpenFgaAllowed header, the count in CamelOpenFgaWrittenTuples or CamelOpenFgaDeletedTuples. batchCheck: the allowed objects of the body; the list operations: a List of String identifiers; readTuples and readChanges: a List of Maps with user, relation, object and timestamp (and operation for a change); expand: the UsersetTree, or null when the object or relation does not resolve.
+check, writeTuples, deleteTuples and write keep the body: the verdict is in the CamelOpenFgaAllowed header, the count in CamelOpenFgaWrittenTuples or CamelOpenFgaDeletedTuples. batchCheck: the allowed objects of the body; the list operations: a List of String identifiers; readTuples and readChanges: a List of Maps with user, relation, object and timestamp (and operation for a change); expand: the UsersetTree, or null when the object or relation does not resolve.
 
 -   With `operation=check`: `unchanged`
     
@@ -321,6 +389,8 @@ check, writeTuples and deleteTuples keep the body: the verdict is in the CamelOp
 -   With `operation=writeTuples`: `unchanged`
     
 -   With `operation=deleteTuples`: `unchanged`
+    
+-   With `operation=write`: `unchanged`
     
 
 
@@ -581,6 +651,25 @@ A `writeTuples` body may also set a relationship condition on a tuple: a `Client
 > A partly configured triple is treated as a mistake rather than an invitation to fill the rest in from the message: the producer fails and names the part that is missing.
 
 A typed wildcard — `user:*`, OpenFGA’s "everyone" — is accepted here, because writing that tuple is how a resource is shared publicly and is a deliberate act by the route. It is **refused** as the subject of a check; see below.
+
+### Mutation conflicts and atomic updates
+
+By default, `onDuplicate=error` makes an existing relationship fail a write, and `onMissing=error` makes an absent relationship fail a delete. On OpenFGA 1.10.0 or later, select `onDuplicate=ignore` or `onMissing=ignore` explicitly for reconciliation routes that should leave an already-satisfied operation unchanged. These options apply to `writeTuples` and `deleteTuples`, respectively, and both apply to `write`.
+
+Use `write` to grant and revoke relationships in one atomic request. With no configured `user`/`relation`/`object`, the body is a Map containing `writes` and/or `deletes` collections. Each entry is an ordinary Map with `user`, `relation` and `object`; a `timestamp` entry, as `readTuples` returns it, is ignored, so a page of `readTuples` can be revoked as it is. A `condition` entry is written through on a write and ignored on a delete. Other body shapes or entry fields are rejected. For example:
+
+```java
+Map<String, Object> changes = Map.of(
+    "writes", List.of(Map.of("user", "user:anne", "relation", "writer", "object", "document:budget")),
+    "deletes", List.of(Map.of("user", "user:anne", "relation", "reader", "object", "document:budget")));
+template.requestBody("openfga:write?storeId={{fga.store}}&authorizationModelId={{fga.model}}", changes);
+```
+
+The component requires at least one tuple and rejects an all-empty write, and the sum of writes and deletes cannot exceed 100. It rejects larger transactions before calling OpenFGA and never splits this atomic update into independently committed requests. A failed transaction remains a failure even when `failOpen=true`. The component applies an endpoint-configured model revision to the transaction. A server configured with a lower tuple limit can reject a request within the component’s limit.
+
+The configured-tuple precedence also applies to `write`: when any of `user`/`relation`/`object` is configured, that triple supplies one write, the body is ignored, and no deletes are taken from it. A missing configured part fails rather than falling back to the body.
+
+Successful mutations preserve the input body. `CamelOpenFgaWrittenTuples` and `CamelOpenFgaDeletedTuples` report the number of submitted operations, including any that the selected ignore mode skipped; they do not report the number of rows changed in storage. The combined `write` operation sets both counters, including zero for an omitted side.
 
 ## Security
 

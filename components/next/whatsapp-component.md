@@ -140,8 +140,8 @@ The WhatsApp component supports the following message header(s), which is/are li
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelWhatsAppPhoneNumberId** (producer) Constant: [`WHATSAPP_PHONE_NUMBER_ID`](https://javadoc.io/doc/org.apache.camel/camel-whatsapp/latest/org/apache/camel/component/whatsapp/WhatsAppConstants.html#WHATSAPP_PHONE_NUMBER_ID) | Phone Number ID taken from WhatsApp Meta for Developers Dashboard. |  | Object |
-| **CamelWhatsAppRecipientPhoneNumberId** (producer) Constant: [`WHATSAPP_RECIPIENT_PHONE_NUMBER_ID`](https://javadoc.io/doc/org.apache.camel/camel-whatsapp/latest/org/apache/camel/component/whatsapp/WhatsAppConstants.html#WHATSAPP_RECIPIENT_PHONE_NUMBER_ID) | Recipient phone number associated with Phone Number ID. |  | Object |
+| **CamelWhatsAppPhoneNumberId** (producer) Constant: [`WHATSAPP_PHONE_NUMBER_ID`](https://javadoc.io/doc/org.apache.camel/camel-whatsapp/latest/org/apache/camel/component/whatsapp/WhatsAppConstants.html#WHATSAPP_PHONE_NUMBER_ID) | **Deprecated** Phone Number ID taken from WhatsApp Meta for Developers Dashboard. Deprecation note: Never read by the component: the phone number ID comes from the endpoint URI, as the phoneNumberId path parameter. |  | Object |
+| **CamelWhatsAppRecipientPhoneNumberId** (producer) Constant: [`WHATSAPP_RECIPIENT_PHONE_NUMBER_ID`](https://javadoc.io/doc/org.apache.camel/camel-whatsapp/latest/org/apache/camel/component/whatsapp/WhatsAppConstants.html#WHATSAPP_RECIPIENT_PHONE_NUMBER_ID) | **Deprecated** Recipient phone number associated with Phone Number ID. Deprecation note: Never read by the component: the recipient comes from the to field of the BaseMessage the body is converted to. |  | Object |
 
 ## Message Body
 
