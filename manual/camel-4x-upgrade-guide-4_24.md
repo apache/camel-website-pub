@@ -89,6 +89,10 @@ A `throwException` step given an exception instance (`throwException(new MyExcep
 
 A `to` resolves its endpoint once, when the route starts, so `to("jms:queue:${header.queue}")` sends every message to one queue named by the text of the expression. Camel now logs a WARN for such a `to` when it creates the route, and the WARN says to use `toD`. The route works as before. Only the endpoint path is checked, not the options after the `?`. The components that evaluate their path for each message are left alone: `language`, the `:#${…​}` parameters of `sql`, and the components whose path option is marked `supportSimpleExpression` in their metadata, which now includes the template of `sql-stored` and the bucket name of `aws2-s3`.
 
+### camel-core - Rest DSL binding mode json fails at startup without a JSON data format
+
+A Rest DSL service with `bindingMode` `json` or `json_xml` whose JSON data format (`jackson` unless `jsonDataFormat` names another) is not on the classpath now fails when Camel creates the route, with `JSON DataFormat jackson not found (the jackson data format is in camel-jackson3; add camel-jackson3 to the classpath).` Before, the route started and every request failed with `Cannot bind to json as message body is not json compatible`. This is what `xml` binding already did without its XML data format. Add the JSON data format, such as `camel-jackson3` (or `camel-jackson` for Jackson 2), or set `bindingMode` to `off`. With `bindingMode` `auto`, a route that finds neither a JSON nor an XML data format still starts, and logs a WARN as it binds nothing.
+
 ### camel-core-model - doTry keeps doCatch and doFinally in its outputs
 
 `doCatch` and `doFinally` written as properties of `doTry` in the YAML DSL are now kept in the outputs of the `TryDefinition`, as the clauses of the Java and XML DSLs always were, after the steps whatever the order of the YAML keys. Code that walks `getOutputs()` (route dumps, tooling) now sees them, and `getCatchClauses()`, `getFinallyClause()` and `getOutputsWithoutCatches()` are derived from the outputs on each call: a clause removed from the outputs, for example with advice-with, is no longer used, and changing the list returned by `getCatchClauses()` no longer changes the doTry. Use `setCatchClauses` and `setFinallyClause`, or the outputs, instead.
@@ -319,11 +323,21 @@ The `sftp` component now gives the password to the server once per connection, a
 
 The WARN that a consumer of the `ftp`, `ftps`, `sftp` and `mina-sftp` components logs when it cannot connect, `Cannot connect/login to: …​ Will skip this poll.`, now gives the reason before `Will skip this poll.`, such as `due to: Auth fail for methods 'publickey,password'`, on one line. When the consumer connects but cannot create its starting directory (`autoCreate=true`), it now logs `Cannot auto-create starting directory <directory> at: …​ due to: …​ Will skip this poll.` instead. See the [SFTP component](../components/4.22.x/sftp-component.md).
 
+### camel-ftp - sftp failures give the status of the server, and preferredAuthentications is not case-sensitive
+
+When the server refuses a request, the `GenericFileOperationFailedException` of the `sftp` component now gives the status of the server after its message, such as `Cannot list directory: inbox: SSH_FX_NO_SUCH_FILE: No such file`, and `getCode()` and `getReason()` return the SFTP status code and its text, as for `ftp`. Before, the status was only in the cause, and `getCode()` was `0`. The messages start as before, except when the attributes of a file cannot be read: the message starts with `Cannot get the attributes of: <name>` (or `Cannot list directory: <directory>`) instead of the status. A failed change to a relative directory, with `sftp`, `ftp` and `ftps`, also gives the current directory, such as `. The path is relative to the current directory: /home/admin`. Update code that compares the whole message.
+
+The `preferredAuthentications` option of `sftp` now takes the method names in any case, and with spaces around them. Before, JSch skipped a name such as `Password`, as it compares the names with the lower-case names of the server, and the login failed with `Auth fail for methods '…​'`. A name that JSch does not know is logged at WARN when the endpoint starts. See the [SFTP component](../components/4.22.x/sftp-component.md).
+
 ### camel-smb - a starting directory that cannot be created
 
 When the server refuses to create the starting directory of the `smb` consumer as the route starts (`autoCreate=true`), such as `STATUS_ACCESS_DENIED` on a read-only share, the route now starts and the consumer tries again on each poll, as the [Camel 4.13 upgrade guide](camel-4x-upgrade-guide-4_13.html#_camel_file_camel_ftp_camel_smb_camel_azure_files) describes. Before, the route failed to start. `SmbOperations.buildDirectory` now throws a `GenericFileOperationFailedException` with the smbj exception as its cause, as the ftp and sftp operations do. The producer and the moves that create a directory get this exception type too, and still fail as before when the server refuses to create it. An `onException` or `doCatch` for the smbj exception still matches it, as the cause.
 
 When the `smb` consumer connects but cannot create its starting directory (`autoCreate=true`), it now logs `Cannot auto-create starting directory <directory> at: …​ due to: …​ Will skip this poll.`, once. Before, it logged `Cannot connect/login to: …​ Will skip this poll.`, or nothing when an earlier poll had already logged that it could not connect. The `Cannot connect/login to: …​ Will skip this poll.` WARN now gives the reason before `Will skip this poll.`, such as `due to: Connection refused`, on one line.
+
+### camel-azure-files - a starting directory that cannot be created, or a refused connection, no longer fails the route start
+
+When the share refuses to create the starting directory of the `azure-files` consumer as the route starts (`autoCreate=true`), such as `403 AuthorizationPermissionMismatch`, or refuses the connection, such as `403 AuthenticationFailed`, the route now starts and the consumer tries again on each poll, as the [Camel 4.13 upgrade guide](camel-4x-upgrade-guide-4_13.html#_camel_file_camel_ftp_camel_smb_camel_azure_files) describes. Before, the route failed to start. `FilesOperations.connect` and `FilesOperations.buildDirectory` now throw a `GenericFileOperationFailedException` with the `ShareStorageException` of the Azure SDK as its cause, as the ftp and sftp operations do with the error of their client. The producer and the moves that connect or create a directory get this exception type too, and still fail as before when the share refuses; an `onException(ShareStorageException.class)` still matches it, as the cause.
 
 ### camel-kafka - exactlyOnce: a rejected send that a doCatch catches skips the record
 
@@ -364,6 +378,10 @@ With `eagerLoadingOfProperties=true`, a poison message (one whose payload or pro
 ### camel-jms - a topic consumer with several concurrent consumers and no shared subscription logs a WARN
 
 A consumer on a topic with `concurrentConsumers` or `maxConcurrentConsumers` greater than 1 and without `subscriptionShared=true` now logs a WARN when it starts. Each of its consumers has its own subscription, so every message is processed once per consumer; this is unchanged. This also applies when the option is set on the component and the route consumes from a topic, and to camel-activemq, camel-activemq6 and camel-amqp. To process each message once, set `subscriptionShared=true` with a `subscriptionName`, or use a single consumer on the topic.
+
+### camel-jms - the exceptionHandler of a consumer gets the JMS exceptions of its listener container
+
+A consumer with the `exceptionHandler` option now gives that handler the JMS exceptions of its listener container, such as a connection to the broker that cannot be established or is lost (the consumer tries again every `recoveryInterval`). Before, the option was not used. When `exceptionListener` is set too, it still gets each exception, before the handler. This also applies to camel-activemq, camel-activemq6 and camel-amqp.
 
 ### camel-sjms, camel-sjms2 - pollEnrich and ConsumerTemplate read the message before they close the session
 
@@ -3574,6 +3592,14 @@ The `alibaba-mns` consumer now deletes the message with the receipt handle it re
 
 The consumers now call `processCommit(Exchange, String)` with the name of the object or the receipt handle. A subclass of `GoogleCloudStorageConsumer`, `MinioConsumer` or `MNSConsumer` that overrides `processCommit(Exchange)` must override the new method instead. `processCommit(Exchange)` is deprecated.
 
+### camel-mongodb - connectionUriString without hosts creates the client of the endpoint
+
+An endpoint that sets `connectionUriString` without `hosts` now creates its client from the connection string. Before, the connection string was not used: the endpoint used the `MongoClient` of the component (autowired when the registry holds exactly one) or else the `MongoClient` bean named by the endpoint path, and failed to start when there was none. To keep using a client bean, remove `connectionUriString` from the endpoint.
+
+Each endpoint with `connectionUriString` or `hosts` creates its own client and connection pool, also when other endpoints (for example with another collection or operation) use the same connection string. To share one client between endpoints, bind a `MongoClient` and have the endpoints use it (the endpoint path or the `mongoConnection` option) instead of `connectionUriString` or `hosts`.
+
+The endpoint now closes the client it created when it stops, for example when its route is removed or reloaded, or when the `CamelContext` stops, and creates a new one when it is started again. Before, a client created from `hosts` stayed open. A client the endpoint did not create (the `mongoConnection` option, the client of the component, or the bean named by the endpoint path) is not closed.
+
 ### camel-mongodb-gridfs - the consumer routes a file once, offers the file of a failed exchange again and sets CamelFileName, and an unknown operation fails
 
 With the `TimeStamp` (default) and `PersistentTimestamp` query strategies, the `mongodb-gridfs` consumer routed every file uploaded since the consumer started again at each poll (every `delay`, 500 ms by default). The upload date of the newest routed file is now kept between the polls, so a file is routed once. A route that relied on receiving the same file repeatedly now receives it once. These two strategies now skip a file whose upload date is older than that of a file already routed (as they did before Camel 3.13), for example a file from a second uploader, or from a client with another clock, that becomes visible later: GridFS sets the upload date on the client. Use `TimeStampAndFileAttribute` or `PersistentTimestampAndFileAttribute` if such files must be routed: these strategies keep the start date in their query, as before, and mark each file so that it is routed once.
@@ -4409,6 +4435,10 @@ With `useIterator=true` (the default), the producer now splits a Jackson JSON no
 ### camel-kafka - breakOnFirstError while the consumer is paused
 
 With `breakOnFirstError=true`, a failed record now creates a new Kafka consumer also when the consumer is paused in the same poll, for example by a `ThrottlingExceptionRoutePolicy` that suspends the route on the failed exchange. The new consumer stays paused until the route is resumed, and then polls each partition from its committed offset, or from `autoOffsetReset` when it has none, as on a break without a pause. Before, a partition without a committed offset resumed after the failed record. The new consumer leaves and rejoins the consumer group, so each such break is now a rebalance of the group, also when the partition has a committed offset. There is no option to keep the previous behaviour.
+
+### camel-kafka - breakOnFirstError: a failed commit before the break goes to the exception handler
+
+With `breakOnFirstError=true`, the commit before the break on a failed record can fail or time out (for example a `TimeoutException` of `commitSync` with the `SyncCommitManager`). The consumer now reports that failure to its `ExceptionHandler` and still breaks out, polling again from the last committed offset. Before, the commit failure went to the `pollOnError` strategy. With `ERROR_HANDLER` (the default), `DISCARD` or `RETRY`, the failed record and the rest of the poll were skipped. The failure no longer reaches the error handler of the route (such as an `onException` that caught commit timeouts) unless `bridgeErrorHandler=true`. With `pollOnError=STOP`, the consumer now reconnects in this case instead of stopping.
 
 ### camel-kafka - the Kafka idempotent and key-value repositories use the acks of the Kafka client
 
@@ -5309,6 +5339,14 @@ ThymeleafEndpoint endpoint = context.getEndpoint("thymeleaf:greeting.html?resolv
 endpoint.setJakartaServletWebApplication(
         JakartaServletWebApplication.buildApplication(servletContext));
 ```
+
+### camel-ibm-watsonx-ai - a Map or a POJO body fails where it was read as its toString()
+
+The operations that read the message body as text now fail with an `IllegalArgumentException` for a `Map` or a POJO body: the prompt of `textGeneration`, `textGenerationStreaming`, `tokenize`, `detect` and `deploymentGenerate`, the user message of `chat`, `chatStreaming` and `deploymentChat`, the one text of `embedding` and `rerank`, and the file path, job id or file name of the text extraction and classification operations that do not upload. Before, Camel had no conversion for such a body other than the `toString()` of the object, so the model was asked about a map written in Java notation, and the extraction and classification requests named that text as their file.
+
+Text, a `byte[]`, a stream, a file, and any other body that Camel converts to its text, such as a `char[]` or a `ByteBuffer`, are read as before. So are the `List` bodies of `chat`, `embedding` and `rerank`, a `ChatMessage` body of the chat operations, a single value such as a number, and a value whose text is its `toString()`: a `UUID`, a `URI`, a `URL`, a `java.time` value or a `Date`.
+
+The rule is the text itself: a body is rejected when the text Camel gives for it is no more than its `toString()`. Marshal such a body first, for example with `marshal().json()`, set the body to the text, or, when the `toString()` of the object is the text to send, say so with `convertBodyTo(String.class)` before the endpoint.
 
 ### camel-alibaba-kms - a Map or a POJO in the plaintext header fails, and only generateDataKey reads numberOfBytes
 

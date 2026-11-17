@@ -14,7 +14,11 @@ Where `directoryName` represents the underlying file directory.
 
 **Only directories**
 
-Camel supports only endpoints configured with a starting directory. So the `directoryName` **must be** a directory. If you want to consume a single file only, you can use the `fileName` option, e.g., by setting `fileName=thefilename`. Also, the starting directory must not contain dynamic expressions with `${ }` placeholders. Again use the `fileName` option to specify the dynamic part of the filename.
+Camel supports only endpoints configured with a starting directory. So the `directoryName` **must be** a directory. If you want to consume a single file only, you can use the `fileName` option, e.g., by setting `fileName=thefilename`. Also, the starting directory must not contain dynamic expressions with `${ }` placeholders. Again use the `fileName` option to specify the dynamic part of the filename. The directory is fixed when the endpoint is created: to write to a dynamic directory use `toD`, and to read from one use `pollEnrich` with a simple expression (`pollEnrich().simple("…​")` in Java), as `pollEnrich("…​")` uses the uri as is.
+
+The `fileName` option of a consumer is a file name, not a pattern: `fileName=*.csv` only consumes a file named `*.csv`. To consume the files that match a pattern use `antInclude` (wildcards such as `*.csv`), `include` (a regular expression such as `.*\.csv`) or `includeExt` (file extensions such as `csv`). The consumer logs a WARN when a fixed `fileName` has the wildcards `*` or `?`.
+
+The directory is a directory of the file system: `file:classpath:data` is a directory named `classpath:data` in the working directory, not a directory of the classpath. To read a classpath resource use the [Language](language-component.md) component, such as `language:constant:resource:classpath:data/order.json`. The file component logs a WARN when the directory starts with `classpath:` or `resource:`.
 
 > **Warning**
 > **Avoid reading files currently being written by another application**
@@ -101,7 +105,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **charset** (common) | This option is used to specify the encoding of the file. You can use this on the consumer, to specify the encodings of the files, which allow Camel to know the charset it should load the file content in case the file content is being accessed. Likewise when writing a file, you can use this option to specify which charset to write the file as well. Do mind that when writing the file Camel may have to read the message content into memory to be able to convert the data into the configured charset, so do not use this if you have big messages. |  | String |
 | **doneFileName** (common) | Producer: If provided, then Camel will write a 2nd done file when the original file has been written. The done file will be empty. This option configures what file name to use. Either you can specify a fixed name. Or you can use dynamic placeholders. The done file will always be written in the same folder as the original file. Consumer: If provided, Camel will only consume files if a done file exists. This option configures what file name to use. Either you can specify a fixed name. Or you can use dynamic placeholders.The done file is always expected in the same folder as the original file. Only $\\{file.name} and $\\{file.name.next} is supported as dynamic placeholders. |  | String |
-| **fileName** (common) | Use Expression such as File Language to dynamically set the filename. For consumers, it’s used as a filename filter. For producers, it’s used to evaluate the filename to write. If an expression is set, it take precedence over the CamelFileName header. (Note: The header itself can also be an Expression). The expression options support both String and Expression types. If the expression is a String type, it is always evaluated using the File Language. If the expression is an Expression type, the specified Expression type is used - this allows you, for instance, to use OGNL expressions. For the consumer, you can use it to filter filenames, so you can for instance consume today’s file using the File Language syntax: mydata-$\\{date:now:yyyyMMdd}.txt. The producers support the CamelOverruleFileName header which takes precedence over any existing CamelFileName header; the CamelOverruleFileName is a header that is used only once, and makes it easier as this avoids to temporary store CamelFileName and have to restore it afterwards. |  | String |
+| **fileName** (common) | Use Expression such as File Language to dynamically set the filename. For consumers, it’s used as a filename filter: only a file with exactly this name is consumed, as the name is not a pattern (use antInclude or include to consume the files that match a pattern). For producers, it’s used to evaluate the filename to write. If an expression is set, it take precedence over the CamelFileName header. (Note: The header itself can also be an Expression). The expression options support both String and Expression types. If the expression is a String type, it is always evaluated using the File Language. If the expression is an Expression type, the specified Expression type is used - this allows you, for instance, to use OGNL expressions. For the consumer, you can use it to filter filenames, so you can for instance consume today’s file using the File Language syntax: mydata-$\\{date:now:yyyyMMdd}.txt. The producers support the CamelOverruleFileName header which takes precedence over any existing CamelFileName header; the CamelOverruleFileName is a header that is used only once, and makes it easier as this avoids to temporary store CamelFileName and have to restore it afterwards. |  | String |
 | **jailStartingDirectory** (common) | Used for jailing (restricting) writing files to the starting directory (and sub) only. This is enabled by default to not allow Camel to write files to outside directories (to be more secured out of the box). You can turn this off to allow writing files to directories outside the starting directory, such as parent or root folders. For consumers that use a localWorkDirectory, this also restricts the downloaded files to stay within the configured localWorkDirectory. | true | boolean |
 | **delete** (consumer) | If true, the file will be deleted after it is processed successfully. | false | boolean |
 | **moveFailed** (consumer) | Sets the move failure expression based on Simple language. For example, to move files into a .error subdirectory use: .error. Note: When moving the files to the fail location Camel will handle the error and will not pick up the file again. |  | String |
@@ -253,7 +257,7 @@ Enum values:
 | **antFilterCaseSensitive** (filter) | Sets case sensitive flag on ant filter. | true | boolean |
 | **antInclude** (filter) | Ant style filter inclusion. Multiple inclusions may be specified in comma-delimited format. |  | String |
 | **eagerMaxMessagesPerPoll** (filter) | Allows for controlling whether the limit from maxMessagesPerPoll is eager or not. If eager then the limit is during the scanning of files, and the file, sftp, mina-sftp and smb consumers stop reading the directory once the limit is hit, unless preSort or doneFileName is used, as they need the whole directory. Where as false would scan all files, and then perform sorting. Setting this option to false allows for sorting all files first, and then limit the poll. Mind that this requires a higher memory usage as all file details are in memory to perform the sorting. | true | boolean |
-| **exclude** (filter) | Is used to exclude files, if filename matches the regex pattern (matching is case in-sensitive). Notice if you use symbols such as plus sign and others you would need to configure this using the RAW() syntax if configuring this as an endpoint uri. See more details at configuring endpoint uris. |  | String |
+| **exclude** (filter) | Is used to exclude files, if filename matches the regex pattern (matching is case in-sensitive). The pattern is a regular expression, not a wildcard: use antExclude for wildcards, or excludeExt to exclude files by extension. Notice if you use symbols such as plus sign and others you would need to configure this using the RAW() syntax if configuring this as an endpoint uri. See more details at configuring endpoint uris. |  | String |
 | **excludeExt** (filter) | Is used to exclude files matching file extension name (case insensitive). For example to exclude bak files, then use excludeExt=bak. Multiple extensions can be separated by comma, for example to exclude bak and dat files, use excludeExt=bak,dat. Note that the file extension includes all parts, for example having a file named mydata.tar.gz will have extension as tar.gz. For more flexibility then use the include/exclude options. |  | String |
 | **filter** (filter) | Pluggable filter as a org.apache.camel.component.file.GenericFileFilter class. Will skip files if filter returns false in its accept() method. |  | GenericFileFilter |
 | **filterDirectory** (filter) | Filters the directory based on Simple language. For example to filter on current date, you can use a simple date pattern such as $\\{date:now:yyyMMdd}. |  | String |
@@ -262,7 +266,7 @@ Enum values:
 | **idempotentEager** (filter) | Sets whether to eagerly add the filename to the idempotent repository or wait until the exchange is complete. Does not apply with an idempotent read lock (readLock=idempotent, idempotent-changed or idempotent-rename), which adds the filename when it acquires the lock. | true | Boolean |
 | **idempotentKey** (filter) | To use a custom idempotent key. By default the absolute path of the file is used. You can use the File Language, for example to use the file name and file size, you can do: idempotentKey=$\\{file:name}-$\\{file:size}. It is used only with idempotent=true (noop=true turns it on), or by an idempotent read lock (readLock=idempotent, idempotent-changed or idempotent-rename) of the file component. |  | String |
 | **idempotentRepository** (filter) | A pluggable repository org.apache.camel.spi.IdempotentRepository which by default use MemoryIdempotentRepository if none is specified and idempotent is true. It is used only with idempotent=true (noop=true turns it on), or by an idempotent read lock (readLock=idempotent, idempotent-changed or idempotent-rename) of the file component. Set without them, it does not skip any file. |  | IdempotentRepository |
-| **include** (filter) | Is used to include files, if filename matches the regex pattern (matching is case in-sensitive). Notice if you use symbols such as plus sign and others you would need to configure this using the RAW() syntax if configuring this as an endpoint uri. See more details at configuring endpoint uris. |  | String |
+| **include** (filter) | Is used to include files, if filename matches the regex pattern (matching is case in-sensitive). The pattern is a regular expression, not a wildcard: use antInclude for wildcards, or includeExt to include files by extension. Notice if you use symbols such as plus sign and others you would need to configure this using the RAW() syntax if configuring this as an endpoint uri. See more details at configuring endpoint uris. |  | String |
 | **includeExt** (filter) | Is used to include files matching file extension name (case insensitive). For example to include txt files, then use includeExt=txt. Multiple extensions can be separated by comma, for example to include txt and xml files, use includeExt=txt,xml. Note that the file extension includes all parts, for example having a file named mydata.tar.gz will have extension as tar.gz. For more flexibility then use the include/exclude options. |  | String |
 | **maxDepth** (filter) | The maximum depth to traverse when recursively processing a directory. | 2147483647 | int |
 | **maxMessagesPerPoll** (filter) | To define a maximum messages to gather per poll. By default no maximum is set. Can be used to set a limit of e.g. 1000 to avoid when starting up the server that there are thousands of files. Set a value of 0 or negative to disabled it. Notice: If this option is in use then the File and FTP components will limit before any sorting. For example if you have 100000 files and use maxMessagesPerPoll=500, then only the first 500 files will be picked up, and then sorted. You can use the eagerMaxMessagesPerPoll option and set this to false to allow to scan all files first and then sort afterwards. |  | int |
@@ -491,6 +495,9 @@ from("file://inbox?delete=true").to("bean:handleOrder");
         - to:
             uri: bean:handleOrder
 ```
+
+> **Note**
+> `noop=true` leaves the files in place, so it does not go with `delete=true` or `move`. With `delete=true` the files are deleted (delete wins), and with `move` they are not moved (noop wins); the consumer logs a WARN for both. `delete=true` with `move` fails when the consumer is created.
 
 > **Note**
 > There is a sample [showing reading from a directory and the default move operation](#File2-ReadingFromADirectoryAndTheDefaultMoveOperation) below.
@@ -1315,9 +1322,45 @@ DEBUG FileConsumer is idempotent and the file has been consumed before. Will ski
 
 #### Using a file-based idempotent repository
 
-In this section we will use the file-based idempotent repository `org.apache.camel.processor.idempotent.FileIdempotentRepository` instead of the in-memory one that is used as default. This repository uses a first level cache to avoid reading the file repository. It will only use the file repository to store the content of the first level cache. Thereby, the repository can survive server restarts. It will load the content of the file into the first level cache upon startup. The file structure is basic as it stores the key in separate lines in the file. By default, the file store has a size limit of 1mb. When the file grows larger, Camel will truncate the file store, rebuilding the content by flushing the first level cache into a fresh empty file.
+In this section we will use the file-based idempotent repository `org.apache.camel.support.processor.idempotent.FileIdempotentRepository` instead of the in-memory one that is used as default. This repository uses a first level cache to avoid reading the file repository. It will only use the file repository to store the content of the first level cache. Thereby, the repository can survive server restarts. It will load the content of the file into the first level cache upon startup. The file structure is basic as it stores the key in separate lines in the file. By default, the file store has a size limit of 32mb. When the file grows larger, Camel drops the oldest entries from the file store (1000 by default) to make room for new ones.
 
-We configure our repository using Spring XML creating our file idempotent repository and define our file consumer to use our repository with the `idempotentRepository` using `#` sign to indicate Registry lookup:
+We declare the repository as a bean with the name of its file (`fileName`), and define our file consumer to use the repository with the `idempotentRepository` option, using `#bean:` to look it up in the Registry. After a restart, the files that were read before are skipped, and only the new files are read:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+@BindToRegistry("readFiles")
+public IdempotentRepository readFiles() {
+    return FileIdempotentRepository.fileIdempotentRepository("/var/data/read-files.dat");
+}
+
+@Override
+public void configure() {
+    from("file:/var/data/in?noop=true&idempotentRepository=#bean:readFiles")
+        .log("${header.CamelFileName}");
+}
+```
+
+```yaml
+- beans:
+    - name: readFiles
+      type: "#class:org.apache.camel.support.processor.idempotent.FileIdempotentRepository"
+      properties:
+        fileName: /var/data/read-files.dat
+- route:
+    from:
+      uri: file:/var/data/in
+      parameters:
+        noop: true
+        idempotentRepository: "#bean:readFiles"
+      steps:
+        - log: "${header.CamelFileName}"
+```
+
+The `fileName` property of the repository takes the file name as plain text. Use `fileStore` instead when you have a `java.io.File`.
 
 #### Using a JPA based idempotent repository
 
@@ -1390,6 +1433,8 @@ from("file://inbox?idempotent=true&idempotentRepository=#jpaStore")
 ### Filtering Strategies
 
 Camel supports pluggable filtering strategies. They are described below.
+
+The `include` and `exclude` options are regular expressions matched against the file name (case-insensitive), such as `include=.*\.xml`. A wildcard such as `*.xml` is not a valid regular expression, and the endpoint fails with a message that says so. Use `antInclude` and `antExclude` for wildcards, or `includeExt` and `excludeExt` for file extensions.
 
 #### Filter using the `GenericFilter`
 

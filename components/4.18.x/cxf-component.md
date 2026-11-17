@@ -580,7 +580,9 @@ We can then create the simplest CXF service (note we didn’t specify the `POJO`
 
 The Camel CXF endpoint producer is based on the [CXF client API](https://github.com/apache/cxf/blob/master/core/src/main/java/org/apache/cxf/endpoint/Client.java). First, you need to specify the operation name in the message header, then add the method parameters to a list, and initialize the message with this parameter list. The response message’s body is a messageContentsList, you can get the result from that list.
 
-If you don’t specify the operation name in the message header, `CxfProducer` will try to use the `defaultOperationName` from `CxfEndpoint`, if there is no `defaultOperationName` set on `CxfEndpoint`, it will pick up the first operationName from the Operation list.
+If you don’t specify the operation name in the message header, `CxfProducer` will try to use the `defaultOperationName` from `CxfEndpoint`, if there is no `defaultOperationName` set on `CxfEndpoint`, it invokes the first operation that CXF returns for the service, in an order that is not the order of the WSDL or of the service class. When the service has more than one operation, the producer logs a WARN once in this case.
+
+The `CamelCxfOperationName` and `CamelCxfOperationNamespace` headers replaced the `operationName` and `operationNamespace` headers. The producer does not read the former names: it logs a WARN once when one of them is set without its replacement, and does not send them to the service as HTTP headers.
 
 If you want to get the object array from the message body, you can get the body using `message.getBody(Object[].class)`, as shown in [CxfProducerRouterTest.testInvokingSimpleServerWithParams](https://github.com/apache/camel/blob/main/components/camel-cxf/camel-cxf-soap/src/test/java/org/apache/camel/component/cxf/jaxws/CxfProducerRouterTest.java#L117):
 

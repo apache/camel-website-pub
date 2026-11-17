@@ -27,7 +27,7 @@ Maven users will need to add the following dependency to their `pom.xml`.
 
 openfga:operation\[?options\]
 
-Where `operation` is one of `check`, `batchCheck`, `listObjects`, `listRelations`, `listUsers`, `readTuples`, `readChanges`, `expand`, `writeTuples`, `deleteTuples` or `write`.
+Where `operation` is one of `check`, `batchCheck`, `listObjects`, `streamedListObjects`, `listRelations`, `listUsers`, `readTuples`, `readChanges`, `expand`, `writeTuples`, `deleteTuples` or `write`.
 
 ## Configuring Options
 
@@ -162,12 +162,15 @@ Enum values:
 | **type** (producer) | The object type to enumerate for the listObjects operation, for example document. This is a type name from the authorization model, so it is taken literally rather than evaluated. |  | String |
 | **user** (producer) | The subject to authorize, as an OpenFGA user identifier such as user:anne. Evaluated as a Simple expression against each exchange, so a literal is used as-is and user:$\\{exchangeProperty.CamelKeycloakTokenSubject} resolves whatever an earlier step established. Read it from an exchange property rather than a header wherever you can. An exchange property is set by the route itself - by the step that verified the caller - and nothing outside the route can set one. A header, by contrast, is often whatever the caller sent, and an endpoint configured as user:$\\{header.userId} lets the caller choose who to be. camel-keycloak’s KeycloakSecurityPolicy already follows that reasoning: it reads the subject from the CamelKeycloakTokenSubject exchange property in preference to the header of the same name, its preferPropertyOverHeader option defaulting to true. Nothing in Camel sets the property for you, so the step that validates the token has to record it - but recording it under that name lets one identity serve both. An expression that resolves to blank, or to a bare user: prefix, denies the exchange: an exchange carrying no identity is not authorized, and failOpen does not apply to it. |  | String |
 | **userFilters** (producer) | Comma-separated list of user filters for the listUsers operation, naming which kinds of subject to return. An entry is either a type, user, or a type and a relation, team#member, to return the usersets holding the relation rather than the individual subjects. Defaults to user. |  | String |
+| **streamingClient** (producer (advanced)) | **Autowired** Transport for streamedListObjects. Required with an injected OpenFgaClient, whose HTTP configuration is opaque. The caller owns this transport’s lifecycle. storeId and readTimeout remain required for streaming. |  | OpenFgaStreamingClient |
+| **streamMaxLineLength** (producer (advanced)) | Maximum characters in one streamed JSON record; must be positive. | 65536 | int |
+| **streamMaxResults** (producer (advanced)) | Maximum streamed objects before iteration fails; must be positive. No partial answer is silently truncated. | 10000 | int |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **connectTimeout** (advanced) | How long to wait for the connection to OpenFGA to be established. The component applies this itself rather than through the SDK’s own connectTimeout setting, which as of openfga-sdk 0.10.1 is accepted and then never read, leaving the connect phase bounded only by the operating system. | 10000 | long |
 | **maxBatchSize** (advanced) | Maximum number of checks per native server BatchCheck request, from 1 to 50. Applies only when batchCheckMode=server; the SDK splits larger input lists into requests of at most this size. 50 is the default per-request limit of an OpenFGA server (max-checks-per-batch-check). | 50 | int |
 | **maxParallelRequests** (advanced) | How many HTTP requests a batchCheck may have in flight at once. In client mode each request checks one object; in server mode each request checks up to maxBatchSize objects. | 10 | int |
 | **maxRetries** (advanced) | How many times the SDK retries a request that failed in a way worth retrying, such as a rate limit or a 5xx. Set it to 0 to disable retries; the overall wait a routing thread can spend on one exchange grows with it. | 3 | int |
-| **openFgaClient** (advanced) | **Autowired** An existing OpenFgaClient to use. When set, every option describing how to reach the server - apiUrl, storeId, the credentials, the timeouts and sslContextParameters - is ignored, because they are baked into the client that was handed over. |  | OpenFgaClient |
+| **openFgaClient** (advanced) | **Autowired** An existing OpenFgaClient to use. When set, every option describing how to reach the server - apiUrl, storeId, the credentials, the timeouts and sslContextParameters - is ignored, because they are baked into the client that was handed over. streamedListObjects additionally needs an explicit streamingClient, a storeId and a positive readTimeout. |  | OpenFgaClient |
 | **readTimeout** (advanced) | How long to wait for one request to OpenFGA to complete once connected. A request that times out is a failure to obtain a verdict rather than a deny, so it fails closed - or proceeds when failOpen is set. | 10000 | long |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
@@ -204,6 +207,8 @@ Enum values:
 -   batchCheck
     
 -   listObjects
+    
+-   streamedListObjects
     
 -   listRelations
     
@@ -313,11 +318,14 @@ Enum values:
 | **user** (producer) | The subject to authorize, as an OpenFGA user identifier such as user:anne. Evaluated as a Simple expression against each exchange, so a literal is used as-is and user:$\\{exchangeProperty.CamelKeycloakTokenSubject} resolves whatever an earlier step established. Read it from an exchange property rather than a header wherever you can. An exchange property is set by the route itself - by the step that verified the caller - and nothing outside the route can set one. A header, by contrast, is often whatever the caller sent, and an endpoint configured as user:$\\{header.userId} lets the caller choose who to be. camel-keycloak’s KeycloakSecurityPolicy already follows that reasoning: it reads the subject from the CamelKeycloakTokenSubject exchange property in preference to the header of the same name, its preferPropertyOverHeader option defaulting to true. Nothing in Camel sets the property for you, so the step that validates the token has to record it - but recording it under that name lets one identity serve both. An expression that resolves to blank, or to a bare user: prefix, denies the exchange: an exchange carrying no identity is not authorized, and failOpen does not apply to it. |  | String |
 | **userFilters** (producer) | Comma-separated list of user filters for the listUsers operation, naming which kinds of subject to return. An entry is either a type, user, or a type and a relation, team#member, to return the usersets holding the relation rather than the individual subjects. Defaults to user. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **streamingClient** (producer (advanced)) | **Autowired** Transport for streamedListObjects. Required with an injected OpenFgaClient, whose HTTP configuration is opaque. The caller owns this transport’s lifecycle. storeId and readTimeout remain required for streaming. |  | OpenFgaStreamingClient |
+| **streamMaxLineLength** (producer (advanced)) | Maximum characters in one streamed JSON record; must be positive. | 65536 | int |
+| **streamMaxResults** (producer (advanced)) | Maximum streamed objects before iteration fails; must be positive. No partial answer is silently truncated. | 10000 | int |
 | **connectTimeout** (advanced) | How long to wait for the connection to OpenFGA to be established. The component applies this itself rather than through the SDK’s own connectTimeout setting, which as of openfga-sdk 0.10.1 is accepted and then never read, leaving the connect phase bounded only by the operating system. | 10000 | long |
 | **maxBatchSize** (advanced) | Maximum number of checks per native server BatchCheck request, from 1 to 50. Applies only when batchCheckMode=server; the SDK splits larger input lists into requests of at most this size. 50 is the default per-request limit of an OpenFGA server (max-checks-per-batch-check). | 50 | int |
 | **maxParallelRequests** (advanced) | How many HTTP requests a batchCheck may have in flight at once. In client mode each request checks one object; in server mode each request checks up to maxBatchSize objects. | 10 | int |
 | **maxRetries** (advanced) | How many times the SDK retries a request that failed in a way worth retrying, such as a rate limit or a 5xx. Set it to 0 to disable retries; the overall wait a routing thread can spend on one exchange grows with it. | 3 | int |
-| **openFgaClient** (advanced) | **Autowired** An existing OpenFgaClient to use. When set, every option describing how to reach the server - apiUrl, storeId, the credentials, the timeouts and sslContextParameters - is ignored, because they are baked into the client that was handed over. |  | OpenFgaClient |
+| **openFgaClient** (advanced) | **Autowired** An existing OpenFgaClient to use. When set, every option describing how to reach the server - apiUrl, storeId, the credentials, the timeouts and sslContextParameters - is ignored, because they are baked into the client that was handed over. streamedListObjects additionally needs an explicit streamingClient, a storeId and a positive readTimeout. |  | OpenFgaClient |
 | **readTimeout** (advanced) | How long to wait for one request to OpenFGA to complete once connected. A request that times out is a failure to obtain a verdict rather than a deny, so it fails closed - or proceeds when failOpen is set. | 10000 | long |
 | **apiAudience** (security) | The audience to request the access token for in the client-credentials flow. |  | String |
 | **apiToken** (security) | Pre-shared token sent to OpenFGA in the Authorization header, for a server started with --authn-method preshared. |  | String |
@@ -368,13 +376,15 @@ Not known when `object` is set.
  |
 | **Producer output** | `unknown` | 
 
-check, writeTuples, deleteTuples and write keep the body: the verdict is in the CamelOpenFgaAllowed header, the count in CamelOpenFgaWrittenTuples or CamelOpenFgaDeletedTuples. batchCheck: the allowed objects of the body; the list operations: a List of String identifiers; readTuples and readChanges: a List of Maps with user, relation, object and timestamp (and operation for a change); expand: the UsersetTree, or null when the object or relation does not resolve.
+check, writeTuples, deleteTuples and write keep the body: the verdict is in the CamelOpenFgaAllowed header, the count in CamelOpenFgaWrittenTuples or CamelOpenFgaDeletedTuples. batchCheck: the allowed objects of the body; listObjects, listRelations and listUsers: a List of String identifiers; streamedListObjects: a closeable OpenFgaObjectIterator; readTuples and readChanges: a List of Maps with user, relation, object and timestamp (and operation for a change); expand: the UsersetTree, or null when the object or relation does not resolve.
 
 -   With `operation=check`: `unchanged`
     
 -   With `operation=batchCheck`: `list` (`java.util.List<java.lang.String>`)
     
 -   With `operation=listObjects`: `list` (`java.util.List<java.lang.String>`)
+    
+-   With `operation=streamedListObjects`: `pojo` (`org.apache.camel.component.openfga.OpenFgaObjectIterator`)
     
 -   With `operation=listRelations`: `list` (`java.util.List<java.lang.String>`)
     
@@ -604,6 +614,56 @@ to("openfga:listObjects?storeId={{fga.store}}&relation=reader"
 
 `listRelations` and `listUsers` round this out: what a subject may do with one object, and who may do something with it. Both replace the body with a `List<String>`.
 
+### Streaming object queries
+
+`streamedListObjects` uses OpenFGA’s streamed object query and returns an `OpenFgaObjectIterator`, implementing `Iterator<String>` and `java.io.Closeable`. It opens the response lazily on first iteration and reads as the caller advances, without collecting the full result list or adding a producer queue. A bounded reader buffer provides pull backpressure. Ordinary `listObjects` still returns a complete list; neither operation offers continuation-token pagination.
+
+Use a streaming splitter to process each object incrementally:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:enumerate")
+    .to("openfga:streamedListObjects?storeId={{fga.store}}"
+        + "&authorizationModelId={{fga.model}}&relation=reader"
+        + "&user=user:${exchangeProperty.subject}&type=document")
+    .split(body()).streaming()
+        .to("direct:processObject")
+    .end();
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:enumerate
+      steps:
+        - to:
+            uri: openfga:streamedListObjects
+            parameters:
+              storeId: "{{fga.store}}"
+              authorizationModelId: "{{fga.model}}"
+              relation: reader
+              user: "user:${exchangeProperty.subject}"
+              type: document
+        - split:
+            simple: "${body}"
+            streaming: true
+            steps:
+              - to:
+                  uri: direct:processObject
+```
+
+For `ProducerTemplate.requestBody`, consume the returned `OpenFgaObjectIterator` in a try-with-resources block. It remains usable after the exchange completes. Always close it when abandoning iteration. The streaming splitter closes a `Closeable` iterator; exhaustion, failure and producer stop also close the response.
+
+`isComplete()` becomes true only after iteration observes the end of the response. Closing early leaves it false. Server errors, malformed records, timeouts and connection errors throw from `hasNext()` or `next()`, including after earlier objects have been delivered. Treat those earlier objects as partial results. `failOpen` does not suppress streaming query failures. The component does not retry this stream automatically, because replay could repeat objects already delivered.
+
+`streamMaxResults` defaults to 10000 and fails iteration if another object arrives; it never silently truncates the answer. `streamMaxLineLength` defaults to 65536 characters and bounds one JSON record. Both must be positive. `readTimeout` bounds waiting for response headers and each blocking attempt to read the next record; it does not limit time spent processing an object between calls. Closing the iterator cancels an in-flight request and closes an active response body.
+
+The operation preserves `authorizationModelId`, `consistency`, `conditionContext` and configured contextual tuples. With the component-created client it uses the SDK’s authentication, serialization and TLS configuration. SDK 0.11 does not expose a cancellable response-body handle from an injected `OpenFgaClient`. Therefore an injected SDK client requires an explicit `streamingClient` implementing `OpenFgaStreamingClient`, plus `storeId` and a positive `readTimeout`. This SPI must return the actual cancellable request future and its closeable response body; the application owns the SPI client’s lifecycle. Endpoint credentials are not used to guess the configuration of an injected SDK client.
+
 ### Granting and revoking access
 
 A route that creates a resource usually has to grant access to it too. `writeTuples` takes its tuple from the endpoint’s `user`/`relation`/`object` when they are configured, and from the body only when none of them is — the configured tuple is the shape that reads best right after a resource was created:
@@ -771,7 +831,7 @@ to("openfga:check?storeId={{fga.store}}&relation=reader"
               contextualTuples: "user:${exchangeProperty.CamelKeycloakTokenSubject},member,team:${exchangeProperty.tokenTeam}"
 ```
 
-It applies to `check`, `batchCheck`, `listObjects`, `listRelations` and `listUsers`. On `batchCheck` the context goes on **every** item in either client or server mode, so each object is judged against the same facts.
+It applies to `check`, `batchCheck`, `listObjects`, `streamedListObjects`, `listRelations` and `listUsers`. On `batchCheck` the context goes on **every** item in either client or server mode, so each object is judged against the same facts.
 
 `OpenFgaSecurityPolicy` takes both options as well, through `setContextualTuples` and `setConditionContext`. They are no more dangerous on the policy than on an endpoint and no less: either way the value comes from whoever configured the route, never from the message.
 

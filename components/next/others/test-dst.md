@@ -143,7 +143,7 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 
 
- | CAMEL-25313, CAMEL-25756 |
+ | CAMEL-25313, CAMEL-25756, CAMEL-26967 |
 | camel-kafka-share | `KafkaShareWorld` (`KafkaShareConsumerDstTest`) | FakeShareGroup: a share group (KIP-932) of one topic with one partition, behind ShareConsumer | 
 
 -   explicit acknowledgement with onFailure RELEASE or REJECT
@@ -166,6 +166,24 @@ These worlds are in the Camel code base and are the examples to copy. Each world
 
 
  | CAMEL-25872, CAMEL-25910 |
+| camel-mongodb | `MongoDbChangeStreamsWorld` (`MongoDbChangeStreamsDstTest`) | FakeMongo: a MongoDB collection and its change stream (resumeAfter, startAfter, drop and invalidate events, the resume of the driver), behind the MongoClient of the connectionBean option | 
+
+-   the change streams consumer with a store of its resume token (changeStreamTokenRepository)
+    
+-   a dropped collection, made again by an insert
+    
+-   a server that cannot be reached for a while: the cursor cannot be opened, a getMore fails
+    
+-   route restarts (the consumer thread interrupted, then the route stopped and started), resuming after the stored token
+    
+-   the fullDocument option and cursorRegenerationDelay
+    
+
+
+
+
+
+ | CAMEL-25679, CAMEL-25946, CAMEL-26992 |
 | camel-nats | `NatsWorld` (`NatsConsumerDstTest`) | FakeJetStream: a server with one JetStream stream and its pull consumers (AckWait, MaxDeliver, Nak), behind a jnats Connection given with the connection option | 
 
 -   the JetStream pull consumer with explicit acks and naks, ephemeral or durable
@@ -568,14 +586,15 @@ EH=components/camel-azure/camel-azure-eventhubs
 SLACK=components/camel-slack
 SHARE=components/camel-kafka-share
 PULSAR=components/camel-pulsar
+MONGODB=components/camel-mongodb
 MVN="./mvnw -B -Papache-snapshots test -Dsurefire.failIfNoSpecifiedTests=false -Dsurefire.rerunFailingTestsCount=0"
 
 # the harness self-tests
 $MVN -pl $DST -Dtest='Dst*Test'
 
 # the worlds, 1000 seeds each, then 5000 seeds without stopping at the first failing one
-$MVN -pl $DST,$SQS,$KINESIS,$EH,$SLACK,$SHARE,$PULSAR -Dtest='*DstTest'
-$MVN -pl $DST,$SQS,$KINESIS,$EH,$SLACK,$SHARE,$PULSAR -Dtest='*DstTest' -Ddst.seeds=5000 -Ddst.maxFailures=100000
+$MVN -pl $DST,$SQS,$KINESIS,$EH,$SLACK,$SHARE,$PULSAR,$MONGODB -Dtest='*DstTest'
+$MVN -pl $DST,$SQS,$KINESIS,$EH,$SLACK,$SHARE,$PULSAR,$MONGODB -Dtest='*DstTest' -Ddst.seeds=5000 -Ddst.maxFailures=100000
 
 # the self-check: revert the main code of a past fix locally (do not commit), run the world, restore
 git show d09593b4a584 -- $SQS/src/main | git apply -R          # CAMEL-25700
@@ -588,6 +607,8 @@ cp $SQS/target/dst/SqsVisibilityDstTest.*/seed-8.trace /tmp/seed-8.first
 $MVN -pl $DST,$SQS -Dtest=SqsVisibilityDstTest -Ddst.seed=8
 diff /tmp/seed-8.first $SQS/target/dst/SqsVisibilityDstTest.*/seed-8.trace && echo identical
 ```
+
+For camel-mongodb (`MongoDbChangeStreamsDstTest`) the past fixes are the main code of 5f10c225652e (CAMEL-25946) and of 3af2c90d63ad (CAMEL-25679), reverted by hand. Its world also found CAMEL-26992 (fixed by 1eb59175e600): a cursor that the consumer opened again before any exchange completed started at the current time and skipped the events in between.
 
 The past fixes of the other worlds are 83aaa80754f9 (CAMEL-25683, Event Hubs), 68329f0919bc (CAMEL-25684, Slack), the main code of b62e90ddb2d9 (CAMEL-25869, Pulsar), the main code of 20c94435789e (CAMEL-25872, Kafka share, whose world was also checked with planted faults), and the main code of 043ac9ec84ab (CAMEL-25569) and of 847ee9affb4c (CAMEL-25942) for Kinesis (`KinesisConsumerDstTest`). Some system properties belong to a world rather than to the harness: `dst.sqs.visibilityTimeouts` (the visibility timeouts the SQS world picks from, default `2,3,5,10`; `1` shows CAMEL-25737), `dst.replayCheckSeed` (the seed of the in-JVM replay test of the Event Hubs world, default 1), `dst.share.pollOnError` (the pollOnError strategies the Kafka share world picks from) and `dst.pulsar.subscribeFailRates` (the subscribe failure rates of the Pulsar world, `0` runs without subscribe failures).
 

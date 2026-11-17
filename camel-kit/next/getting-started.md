@@ -9,7 +9,7 @@ Camel Kit runs as a standalone command-line tool installed with JBang, or as a p
 | --- | --- | --- |
 | Java 17 or later | Runtime for Camel Kit, Camel JBang and the generated projects | SDKMAN, Adoptium or your package manager |
 | [JBang](https://www.jbang.dev/) | Launcher for Camel Kit and for the MCP servers it configures | See the installation commands below |
-| [Camel JBang](../../manual/camel-jbang.md) | `camel run` and `camel run --check` for route execution and validation | `jbang app install camel@apache/camel` |
+| [Camel JBang](../../manual/camel-jbang.md) | `camel run` for route execution and runtime verification | `jbang app install camel@apache/camel` |
 | Camel JBang test plugin | `camel test run` for the Citrus integration tests in the verification loop | `camel plugin add test` |
 | Docker (conditional) | Environment probes for external services and full Citrus/Testcontainers verification | Docker Engine or Docker Desktop |
 

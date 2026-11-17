@@ -85,6 +85,8 @@ The application properties work with routes in any DSL (YAML, XML or Java) on Ca
 
 When the registry has exactly one `ConnectionFactory`, the component uses it without the `connectionFactory` option (`allowAutoWiredConnectionFactory`, which is on by default). The example has two, the one of the client and the pool, so it sets the pool on the component.
 
+When no connection factory is set, the endpoints fail with `connectionFactory must be specified`. The message names the endpoint and says why the component did not autowire one: the registry has no `ConnectionFactory`, or several, which it names.
+
 `camel run` downloads the client libraries of these classes. In a Maven project, add `org.apache.artemis:artemis-jakarta-client` and `org.messaginghub:pooled-jms`.
 
 Other brokers work the same way, with the `ConnectionFactory` of their client library, for example `com.ibm.mq.jakarta.jms.MQConnectionFactory` for IBM MQ (with `hostName`, `port`, `channel`, `queueManager`, and `transportType` set to `1` for a client connection). For ActiveMQ Classic, the [ActiveMQ](activemq-component.md) component sets up the connection factory from a `brokerURL`.
@@ -1705,6 +1707,19 @@ If you are using a J2EE container, you might need to look up JNDI to find the JM
 
 See [The jee schema](http://static.springsource.org/spring/docs/3.0.x/spring-framework-reference/html/xsd-config.html#xsd-config-body-schemas-jee) in the Spring reference documentation for more details about JNDI lookup.
 
+### Connection errors of the consumer
+
+A consumer that cannot connect to the broker, or loses its connection, does not stop its route: it tries again every `recoveryInterval` (5 seconds by default), and logs each failure. With `testConnectionOnStartup=true`, the route fails to start when the consumer cannot connect.
+
+To act on these errors, set an option on the consumer:
+
+-   `exceptionListener`: a `jakarta.jms.ExceptionListener`, which gets each `JMSException`.
+    
+-   `exceptionHandler`: an `org.apache.camel.spi.ExceptionHandler`, which gets the same exceptions, after the `exceptionListener` if both are set.
+    
+
+The `bridgeErrorHandler` option is not supported: a message that fails already goes to the error handler of the route.
+
 ### Concurrent Consuming
 
 A common requirement with JMS is to consume messages concurrently in multiple threads to make an application more responsive. You can set the `concurrentConsumers` option to specify the number of threads servicing the JMS endpoint, as follows:
@@ -2078,7 +2093,35 @@ template.send("activemq:queue:dummy", exchange -> {
 
 ### Using a request timeout
 
-In the sample below we send a Request Reply style message Exchange (we use the `requestBody` method = `InOut`) to the slow queue for further processing in Camel, and we wait for a return reply:
+A producer that sends an `InOut` exchange waits for the reply up to `requestTimeout` (20 seconds by default), and then fails the exchange with an `ExchangeTimedOutException`. The `CamelJmsRequestTimeout` header sets the timeout of one message.
+
+An exchange is `InOut` when the consumer of the route answers its caller, such as an HTTP, REST or platform-http consumer, or a JMS consumer that receives a message with a `JMSReplyTo`, or when it comes from a `request` method of a `ProducerTemplate`. Then a `to("jms:queue:orders")` sends the message as a request and waits for a reply, also when no consumer of `orders` sends one. When no reply is expected, send the message `InOnly`, with the `exchangePattern` option:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("platform-http:/orders")
+  .to("jms:queue:orders?exchangePattern=InOnly")
+  .setBody(constant("Accepted"));
+```
+
+```yaml
+- route:
+    from:
+      uri: platform-http:/orders
+      steps:
+        - to:
+            uri: jms:queue:orders
+            parameters:
+              exchangePattern: InOnly
+        - setBody:
+            constant: Accepted
+```
+
+The option `disableReplyTo=true` also sends the message without waiting for a reply.
 
 ### Sending an InOnly message and keeping the JMSReplyTo header
 

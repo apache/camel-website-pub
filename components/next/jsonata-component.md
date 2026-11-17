@@ -139,6 +139,15 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **frameBinding** (advanced) | To configure the Jsonata frame binding. Allows custom functions to be added. |  | JsonataFrameBinding |
 
+## Message Headers
+
+The JSONata component supports the following message header(s), which is/are listed below:
+
+   
+| Name | Description | Default | Type |
+| --- | --- | --- | --- |
+| **CamelJsonataResourceUri** (producer) Constant: [`JSONATA_RESOURCE_URI`](https://javadoc.io/doc/org.apache.camel/camel-jsonata/latest/org/apache/camel/component/jsonata/JsonataConstants.html#JSONATA_RESOURCE_URI) | A URI for the template resource to load and use instead of the endpoint configured. |  | String |
+
 ## Message Body
 
 The message body at each side of the JSONata component: _Consumer_ is the body of the messages the consumer creates, _Consumer reply_ the bodies a consumer that answers its caller can reply with, _Producer input_ the bodies the producer can send or write, and _Producer output_ the body after the producer.

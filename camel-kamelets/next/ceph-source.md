@@ -10,7 +10,7 @@ Use it to process files that another system drops into a Ceph bucket, such as up
 
 Output: the body is the content of the file, as bytes. The headers give the bucket name, the key (the path of the file in the bucket, `CamelAwsS3Key`), the content type and the ETag of the file.
 
-Good to know: files are deleted from the bucket after they are read, unless `deleteAfterRead` is set to false; then the same files are read again on every poll. Files in folders are read too. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address, so the gateway must accept that style of address.
+Good to know: files are deleted from the bucket after they are read, unless `deleteAfterRead` is set to false; then the same files are read again on every poll. Files in folders are read too. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address; set `forcePathStyle` to true when the DNS of the gateway has no wildcard name for its buckets.
 
 ## Configuration Options
 
@@ -27,6 +27,7 @@ The following table summarizes the configuration options available for the `ceph
 | **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist yet. If false, every poll fails while the bucket does not exist. | boolean | false |  |
 | **delay** | Delay | How long to wait between two polls of the bucket, in milliseconds. | integer | 500 |  |
 | **deleteAfterRead** | Auto-delete Objects | If true, each file is deleted from the bucket after it has been read. Set it to false to keep the files; they are then read again on every poll. | boolean | true |  |
+| **forcePathStyle** | Force Path Style | If true, the bucket name is put in the path of the address (`[http://ceph-rgw.example.com:7480/my-bucket/key](http://ceph-rgw.example.com:7480/my-bucket/key)`) instead of in the host name (`[http://my-bucket.ceph-rgw.example.com:7480/key](http://my-bucket.ceph-rgw.example.com:7480/key)`). The Ceph Object Gateway always accepts the path style; the host name style works only when the gateway has a wildcard DNS name for its buckets. | boolean | false |  |
 | **ignoreBody** | Ignore Body | If true, the content of the file is not read, and the body is empty; only the headers describe the file. It takes precedence over `includeBody`. | boolean | false |  |
 | **includeBody** | Include Body | If true, the body is the content of the file, as bytes. If false, the body is a stream of the content, which suits large files. | boolean | true |  |
 | **prefix** | Prefix | Read only the files whose key starts with this text, such as a folder name followed by `/`. When it is not set, all the files of the bucket are read. | string |  | folder/ |

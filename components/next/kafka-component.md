@@ -753,6 +753,8 @@ Tests: `KafkaConsumerDstTest`
 
 [CAMEL-25756](https://issues.apache.org/jira/browse/CAMEL-25756)
 
+[CAMEL-26967](https://issues.apache.org/jira/browse/CAMEL-26967)
+
  |
 
 The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).

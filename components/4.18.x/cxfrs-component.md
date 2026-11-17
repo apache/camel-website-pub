@@ -396,7 +396,9 @@ public interface CustomerServiceResource {
 
 ### How to invoke the REST service through camel-cxfrs producer
 
-The [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md) implements [a proxy-based client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-Proxy-basedAPI), with this API you can invoke the remote REST service through a proxy. The `camel-cxfrs` producer is based on this [proxy API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-Proxy-basedAPI). You need to specify the operation name in the message header and prepare the parameter in the message body, the camel-cxfrs producer will generate the right REST request for you.
+The [CXF JAXRS front end](http://cxf.apache.org/docs/jax-rs.md) implements [a proxy-based client API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-Proxy-basedAPI), with this API you can invoke the remote REST service through a proxy. The `camel-cxfrs` producer is based on this [proxy API](http://cxf.apache.org/docs/jax-rs-client-api.html#JAX-RSClientAPI-Proxy-basedAPI). You need to specify the operation name in the message header and prepare the parameter in the message body, the camel-cxfrs producer will generate the right REST request for you. Without the `CamelCxfOperationName` header, the producer fails with a `NoSuchMethodException` that names it.
+
+The `CamelCxfOperationName` header replaced the `operationName` header. The producer does not read the former name, and the default header filter strategy does not send it to the service as an HTTP header.
 
 Here is an example:
 

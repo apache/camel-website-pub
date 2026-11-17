@@ -132,6 +132,40 @@ The message body at each side of the Direct component: _Consumer_ is the body of
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
+## Usage
+
+The route that consumes from a direct endpoint runs in the thread of the producer, and the producer continues with the message as that route leaves it. A direct endpoint is therefore called like a method: from Java code, call a route with `requestBody` of a [ProducerTemplate](../../manual/producertemplate.md) to get its reply:
+
+```java
+String reply = template.requestBody("direct:processOrder", order, String.class);
+```
+
+### One route per endpoint
+
+Only one route can consume from a direct endpoint. A second route that consumes from the same endpoint fails to start with `Multiple consumers for the same endpoint is not allowed: direct://processOrder`. To send a message to several routes, use the [Multicast](eips/multicast-eip.md) or [Recipient List](eips/recipientList-eip.md) EIP, or the [SEDA](seda-component.md) component with `multipleConsumers=true`.
+
+### When no route consumes from the endpoint
+
+When no started route consumes from the endpoint, the producer waits up to `timeout` milliseconds (30 seconds by default) for one to start, for example while Camel starts or reloads routes. Then the exchange fails with `DirectConsumerNotAvailableException`. Its message starts with `No consumers available on endpoint:`, and says which route consumes from the endpoint and its status, or that no route does (with a similar endpoint name when there is one), and how long the producer waited.
+
+Set `block=false` to fail without waiting, or `failIfNoConsumers=false` to drop the message (logged at `DEBUG`) instead of failing.
+
+The common causes are:
+
+-   The route is not loaded. With Spring Boot, the `RouteBuilder` class must be a Spring bean, for example annotated with `@Component`. With Camel Quarkus, a `RouteBuilder` class from another jar is only found when that jar has a Jandex index. XML and YAML routes must be in the files Camel loads routes from.
+    
+-   The producer and the route use a different name, for example because of a typo.
+    
+-   The route is stopped or suspended, or it did not start because of `autoStartup=false`.
+    
+-   The route is in another CamelContext: a direct endpoint only reaches the routes of its own CamelContext.
+    
+-   With the [Rest DSL](../../manual/rest-dsl.md), a direct route that only one REST service calls is inlined into that service (the `inlineRoutes` option, enabled by default), so other routes cannot call it.
+    
+
+> **Note**
+> A `ProducerTemplate` sends only once the CamelContext has started. Sending earlier, for example from a Spring `@PostConstruct` method, fails with another exception, before any direct endpoint is called.
+
 ## Examples
 
 In the route below, we use the direct component to link the two routes together:
@@ -145,7 +179,7 @@ In the route below, we use the direct component to link the two routes together:
 
 ```java
 from("activemq:queue:order.in")
-    .to("bean:orderServer?method=validate")
+    .to("bean:orderService?method=validate")
     .to("direct:processOrder");
 
 from("direct:processOrder")

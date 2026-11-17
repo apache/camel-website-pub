@@ -132,7 +132,7 @@ from("direct:start")
                   uri: mock:result
 ```
 
-The memory repository forgets the ids when the application stops. To keep them, use `FileIdempotentRepository` or one of the repositories listed above.
+The memory repository forgets the ids when the application stops. To keep them, use `FileIdempotentRepository` or one of the repositories listed above. `FileIdempotentRepository` keeps the ids in a file, which you name with its `fileName` property, such as when you declare the repository as a bean in YAML. The [File](../file-component.html#_using_a_file_based_idempotent_repository) component has an example.
 
 ### Handling the duplicates in the route
 

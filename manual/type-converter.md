@@ -170,6 +170,22 @@ The following code shows snippet of the source code generated bulk class. As you
             }
 ```
 
+### Discovering Type Converters by scanning the classpath
+
+Converter classes without a generated loader can be listed in a `META-INF/services/org/apache/camel/TypeConverter` file, with one package or class name per line. Camel reads this file only when scanning the classpath for type converters is turned on, which is off by default:
+
+```properties
+camel.main.loadTypeConverters = true
+```
+
+When scanning is off and Camel finds such a file, it logs a WARN on startup with the location of the file. Prefer `@Converter(generateLoader = true)`, which needs no scanning.
+
+### Type Converters in a fat jar
+
+Each Camel JAR has its own `META-INF/services/org/apache/camel/TypeConverterLoader` file. A fat jar (such as one built with `maven-assembly-plugin`) keeps only one of these files unless the build merges them. The core type converters of `camel-base` are then not loaded, and conversions such as `String` to `Integer` or `Duration` fail. Camel logs a WARN on startup when no loader file lists the core converters.
+
+Build the fat jar with the `camel:prepare-fatjar` goal of the [Camel Maven Plugin](camel-maven-plugin.md), which writes one file that lists the type converter loaders of all the JARs.
+
 ### Returning null values
 
 By default, when using a method in a POJO annotation with `@Converter` returning `null` is not a valid response. If null is returned, then Camel will regard that type converter as a _miss_, and prevent from using it in the future. If `null` should be allowed as a valid response, then you must specify this in the annotation (via `allowNull`) as shown:

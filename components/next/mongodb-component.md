@@ -30,6 +30,20 @@ Maven users will need to add the following dependency to their `pom.xml` for thi
 
 mongodb:connectionBean?database=databaseName&collection=collectionName&operation=operationName\[&moreOptions...\]
 mongodb:dummy?hosts=hostnames&database=databaseName&collection=collectionName&operation=operationName\[&moreOptions...\]
+mongodb:dummy?connectionUriString=RAW(mongodb://host:port)&database=databaseName&collection=collectionName&operation=operationName\[&moreOptions...\]
+
+The endpoint uses the first client it finds in this order:
+
+1.  the client set with the `mongoConnection` endpoint option
+    
+2.  a client the endpoint creates from the `connectionUriString` or `hosts` option
+    
+3.  the `mongoConnection` client of the component, which is autowired when the registry holds exactly one `MongoClient`
+    
+4.  the `MongoClient` bean named by the endpoint path (`connectionBean`)
+    
+
+A client the endpoint creates from `connectionUriString` or `hosts` belongs to that endpoint: each such endpoint has its own client and connection pool, and closes it when it stops (for example when its route is removed or reloaded, or when the CamelContext stops). The endpoint never closes a client it did not create. To share one client between endpoints, bind a `MongoClient` and have the endpoints use it instead of `connectionUriString` or `hosts`.
 
 ## Configuring Options
 
@@ -83,7 +97,7 @@ The MongoDB component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **mongoConnection** (common) | **Autowired** Shared client used for connection. All endpoints generated from the component will share this connection client. |  | MongoClient |
+| **mongoConnection** (common) | **Autowired** Shared client used for connection. All endpoints generated from the component will share this connection client, except the endpoints that set hosts or connectionUriString, which create their own client. |  | MongoClient |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
@@ -102,7 +116,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **connectionBean** (common) | **Required** Sets the connection bean reference used to lookup a client for connecting to a database if no hosts parameter is present. |  | String |
+| **connectionBean** (common) | **Required** Sets the connection bean reference used to lookup a client for connecting to a database if neither the hosts nor the connectionUriString parameter is present. |  | String |
 
 ### Query Parameters
 
@@ -111,7 +125,7 @@ With the following _path_ and _query_ parameters:
 | --- | --- | --- | --- |
 | **collection** (common) | Sets the name of the MongoDB collection to bind to this endpoint. |  | String |
 | **collectionIndex** (common) | Sets the collection index (JSON FORMAT : \\{ field1 : order1, field2 : order2}). |  | String |
-| **connectionUriString** (common) | Set the whole Connection String/Uri for mongodb endpoint. |  | String |
+| **connectionUriString** (common) | Set the whole Connection String/Uri for mongodb endpoint. When set, the endpoint creates its client from it, instead of using the client of the component or the connectionBean. |  | String |
 | **createCollection** (common) | Create the collection during initialisation if it doesn’t exist. Default is true. | true | boolean |
 | **database** (common) | Sets the name of the MongoDB database to target. |  | String |
 | **hosts** (common) | Host address of mongodb server in \[host\]:\[port\] format. It’s possible to also use more than one address, as a comma separated list of hosts: \[host1\]:\[port1\],\[host2\]:\[port2\]. If this parameter is specified, the provided connectionBean is ignored. |  | String |
@@ -433,6 +447,79 @@ Not known when `outputType` or `writeResultAsHeader` is set.
  |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
+
+## Deterministic simulation tests
+
+The consumer of the MongoDB component is tested with [deterministic simulation tests](others/test-dst.md): the real consumer runs under a seeded virtual-time scheduler against a fake of the external system, which injects faults while the tests check invariants. A failing seed can be replayed. These are the fake worlds of the component:
+
+  
+| World | What it checks | Issues |
+| --- | --- | --- |
+| `MongoDbChangeStreamsWorld`
+Fake: FakeMongo: a MongoDB collection and its change stream (resumeAfter, startAfter, drop and invalidate events, the resume of the driver), behind the MongoClient of the connectionBean option
+
+Tests: `MongoDbChangeStreamsDstTest`
+
+ | 
+
+**Covers:**
+
+-   the change streams consumer with a store of its resume token (changeStreamTokenRepository)
+    
+-   a dropped collection, made again by an insert
+    
+-   a server that cannot be reached for a while: the cursor cannot be opened, a getMore fails
+    
+-   route restarts (the consumer thread interrupted, then the route stopped and started), resuming after the stored token
+    
+-   the fullDocument option and cursorRegenerationDelay
+    
+
+**Faults:**
+
+-   the collection is dropped
+    
+-   the server cannot be reached
+    
+-   a getMore fails
+    
+-   the server answers slowly
+    
+-   processing fails
+    
+-   processing is slow
+    
+
+**Invariants:**
+
+-   the consumer uses the client as documented
+    
+-   the route starts once the collection exists and the server can be reached
+    
+-   the consumer thread runs as long as the route is started
+    
+-   a resume token is stored only after its exchange completed
+    
+-   a stored resume token never passes an event that was not routed
+    
+-   every exchange carries a resume token
+    
+-   every event is routed once the faults cleared
+    
+
+
+
+
+
+ | [CAMEL-25679](https://issues.apache.org/jira/browse/CAMEL-25679)
+
+[CAMEL-25946](https://issues.apache.org/jira/browse/CAMEL-25946)
+
+[CAMEL-26992](https://issues.apache.org/jira/browse/CAMEL-26992)
+
+ |
+
+The worlds and their tests are in the test sources of the component. How to run them, replay a seed and write a world is described in [Running the tests](others/test-dst.html#_running_the_tests) and [Writing a fake world](others/test-dst.html#_writing_a_fake_world_a_guide_for_ai_agents_and_humans).
 
 ## Usage
 

@@ -484,7 +484,7 @@ The message body at each side of the IBM watsonx.ai component: _Consumer_ is the
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `any` | 
-The prompt or text for textGeneration, tokenize, detect and deploymentGenerate, the file path, ID or file name for the text extraction and classification operations that do not upload, read as text unless a header such as CamelIBMWatsonxAiInput gives it: a Map or a POJO is sent as its toString(). chat, chatStreaming and deploymentChat take the user message, read as text the same way, a ChatMessage, or the conversation as a List of ChatMessage in which a String is a user message (any other element fails); embedding and rerank take one text, read as text the same way, or a List of Strings. The upload operations take a file, a stream or bytes, with the CamelIBMWatsonxAiFileName header unless it is a file. runTool takes a Map (structured) or a String; forecast a TimeSeriesRequest unless the CamelIBMWatsonxAiForecastInputSchema and CamelIBMWatsonxAiForecastData headers give it.
+The prompt or text for textGeneration, tokenize, detect and deploymentGenerate, the file path, ID or file name for the text extraction and classification operations that do not upload, read as text unless a header such as CamelIBMWatsonxAiInput gives it: a Map or a POJO fails, as Camel reads it only as its toString(). chat, chatStreaming and deploymentChat take the user message, read as text the same way, a ChatMessage, or the conversation as a List of ChatMessage in which a String is a user message (any other element fails); embedding and rerank take one text, read as text the same way, or a List of Strings. The upload operations take a file, a stream or bytes, with the CamelIBMWatsonxAiFileName header unless it is a file. runTool takes a Map (structured) or a String; forecast a TimeSeriesRequest unless the CamelIBMWatsonxAiForecastInputSchema and CamelIBMWatsonxAiForecastData headers give it.
 
 -   With `operation=chat`: `text`, `bytes`, `stream` or `list`
     
@@ -762,6 +762,14 @@ Text Classification operations:
     
 
 If you don’t specify an operation explicitly, you must set it via the `operation` parameter.
+
+### Message body read as text
+
+Many operations read the message body as text: the prompt of `textGeneration`, `textGenerationStreaming`, `tokenize`, `detect` and `deploymentGenerate`, the user message of the chat operations, the texts of `embedding` and `rerank`, and the file path, job id or file name of the extraction and classification operations that do not upload.
+
+Such a body can be a `String`, a `byte[]`, a stream, a file, anything else Camel converts to its text, such as a `char[]` or a `ByteBuffer`, or a value whose text is its `toString()`: a `UUID`, a `URI`, a `URL`, a `java.time` value or a `Date`.
+
+Any other body, such as a `Map` or a POJO, fails with an `IllegalArgumentException`, since Camel reads it only as its `toString()`, which is a dump of its fields rather than a prompt. The rule is the text itself: a body is rejected when the text Camel gives for it is no more than its `toString()`. Marshal such a body first, for example with `marshal().json()`, set the body to the text, or, when the `toString()` of the object is the text to send, say so with `convertBodyTo(String.class)` before the endpoint.
 
 ### Common Use Cases
 

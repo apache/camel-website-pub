@@ -12,7 +12,7 @@ Input: the body is the content of the file, as text, bytes or a stream. The key 
 
 Output: the body is unchanged.
 
-Good to know: a file with the same key is overwritten, so with `keyName` set and no `file` header each message replaces the previous one. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address, so the gateway must accept that style of address.
+Good to know: a file with the same key is overwritten, so with `keyName` set and no `file` header each message replaces the previous one. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address; set `forcePathStyle` to true when the DNS of the gateway has no wildcard name for its buckets.
 
 ## Configuration Options
 
@@ -27,6 +27,7 @@ The following table summarizes the configuration options available for the `ceph
 | **secretKey** | Secret Key | **Required** The S3 secret key that goes with `accessKey`. | string |  |  |
 | **zoneGroup** | Bucket Zone Group | **Required** The name of the zone group of the Ceph Object Gateway, used as the region of the requests. A Ceph cluster that was not set up with several zone groups uses `default`. | string |  | default |
 | **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist yet. If false, the bucket must already exist. | boolean | false |  |
+| **forcePathStyle** | Force Path Style | If true, the bucket name is put in the path of the address (`[http://ceph-rgw.example.com:7480/my-bucket/key](http://ceph-rgw.example.com:7480/my-bucket/key)`) instead of in the host name (`[http://my-bucket.ceph-rgw.example.com:7480/key](http://my-bucket.ceph-rgw.example.com:7480/key)`). The Ceph Object Gateway always accepts the path style; the host name style works only when the gateway has a wildcard DNS name for its buckets. | boolean | false |  |
 | **keyName** | Key Name | The key to store the files under, with its folder if any, used when a message has no `file` or `ce-file` header. When it is not set either, each file gets a generated unique name. | string |  | reports/latest.csv |
 
 ## Dependencies
