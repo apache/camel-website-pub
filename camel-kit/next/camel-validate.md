@@ -34,7 +34,7 @@ Validation is at least as strict as generation: a construct that Camel Kit refus
 
 ## Report
 
-Pipeline-scoped validation writes `docs/camel-kit/<pipeline-id>/validation-report.md`; project-scoped validation writes `docs/validation-report-YYYY-MM-DD_HH-mm.md`. The report records the project, runtime and Camel version, a summary table with pass, fail and warn counts per category, the findings, the constitution rule results, and the recommendations: priority fixes for the failures, suggested improvements for the warnings.
+Pipeline-scoped validation writes `docs/camel-kit/<pipeline-id>/validation-report.md`; project-scoped validation writes `docs/validation-report-YYYY-MM-DD_HH-mm.md`. The report records the project, runtime and Camel version, a summary table with pass, fail and warn counts per category, the findings, the constitution rule results, and the recommendations: priority fixes for the failures, suggested improvements for the warnings. A separate Documentation Consistency section compares current docs and active ADRs with code and actual checks, including pending decisions, changed review inputs and unavailable evidence. An unchanged fingerprint alone is insufficient. Validation reports these findings to the execute parent; standalone output names documentation-only reconciliation as the finalizer. Report semantic consistency (`PASS`, `FAIL` or `UNVERIFIED`), recorded input state (`unchanged`, `stale` or `unverified`) and finalization separately. A stale/missing receipt is expected for changed docs awaiting the execute parent; this alone does not fail semantic consistency. Missing docs or unavailable checks still prevent a consistency pass. The parent emits its later finalization result separately. Validation never rewrites docs/ADRs or records a receipt.
 
     
 | Category | Pass | Fail | Warn | Total |
@@ -47,3 +47,7 @@ Pipeline-scoped validation writes `docs/camel-kit/<pipeline-id>/validation-repor
 | Constitution compliance | . | . | . | . |
 
 The report carries provenance metadata from `camel-kit doc init`, linked to the execution report when one exists. Fixing the findings is a separate step: edit the routes, or amend the design and rerun the affected stages, then validate again.
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

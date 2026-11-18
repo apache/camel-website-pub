@@ -132,3 +132,7 @@ The agent stops and asks before proceeding, suggesting alternatives (for example
 Verification fails
 
 A migrated route may carry a wrong endpoint, authentication, secret reference, transformation or dependency. Read the failure details, compare the route with the original flow, verify the endpoint and the validated secret reference, and run the generated Citrus test in isolation with `camel test run <path>.camel.it.yaml`. Use `/camel-debug` in the agent for a structured diagnosis. If the cause is environmental, for example a missing database, record it in the verification section of `execution-report.md` before deciding how to proceed.
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

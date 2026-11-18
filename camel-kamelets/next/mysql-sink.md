@@ -12,7 +12,7 @@ Input: the body is one JSON object, as text, such as `{"username":"oscerd","city
 
 Output: the body afterwards is the JSON object as a Map, and the `CamelSqlUpdateCount` header holds the number of rows the statement changed. When `query` is a SELECT, the body is instead a List of the rows found, each a Map, and the `CamelSqlRowCount` header holds their number.
 
-Good to know: a message fails when its body is not a JSON object (a JSON array or plain text, for example), or when it has no value for a parameter of `query`. The values are sent to the database apart from the SQL text, so the content of a message cannot change the statement. Do not write `?` in `query`, not even in a quoted string: the Kamelet then fails to start. The JDBC driver of MySQL is not included: add `mvn:com.mysql:mysql-connector-j` to the dependencies of the integration. Camel JBang (`camel run`) adds it by itself.
+Good to know: a message fails when its body is not a JSON object (a JSON array or plain text, for example), or when it has no value for a parameter of `query`. The values are sent to the database apart from the SQL text, so the content of a message cannot change the statement. Do not write `?` in `query`, not even in a quoted string: the Kamelet then fails to start. The JDBC driver of MySQL is not included: add `mvn:com.mysql:mysql-connector-j` to the dependencies of the integration. Camel JBang (`camel run`) adds it by itself. Without `connectionProperties`, the connection uses TLS only when the server offers it, and the certificate of the server is not checked: set `sslMode=REQUIRED` in `connectionProperties` to insist on TLS.
 
 ## Configuration Options
 
@@ -26,6 +26,7 @@ The following table summarizes the configuration options available for the `mysq
 | **query** | Query | **Required** The SQL statement to run for each message, such as an INSERT, UPDATE or DELETE. Write `:#name` where the value of the field `name` of the JSON body goes. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
 | **serverName** | Server Name | **Required** The host name or IP address of the MySQL server, without the port. | string |  | db.example.com |
 | **username** | Username | **Required** The database user to log in as. It needs the rights to run the queries of this Kamelet on their tables. | string |  |  |
+| **connectionProperties** | Connection Properties | Extra settings for the MySQL JDBC driver (Connector/J), as `name=value` pairs separated by `;`, such as `sslMode=REQUIRED;connectTimeout=10000`. Use it for TLS: `sslMode=REQUIRED` makes the connection use TLS, and `sslMode=DISABLED` turns TLS off. When it is not set, the driver uses TLS when the server offers it, without checking the certificate. The value is not hidden like a password, and it can show in the log when the integration starts, so do not put a password in it. | string |  | sslMode=REQUIRED |
 | **serverPort** | Server Port | The port the MySQL server listens on. MySQL uses 3306 unless it was set up otherwise. | string | 3306 |  |
 
 ## Dependencies
@@ -95,6 +96,14 @@ Uses Apache Commons DBCP2 for efficient database connection pooling. This provid
 ### Authentication and Security
 
 Requires username and password authentication for database access.
+
+### Connecting with TLS
+
+Set `connectionProperties` to pass settings to the MySQL JDBC driver (Connector/J), as `name=value` pairs separated by `;`. Without it, the driver uses TLS only when the server offers it, and does not check the certificate of the server. Set `sslMode=REQUIRED` to always use TLS.
+
+```yaml
+connectionProperties: "sslMode=REQUIRED"
+```
 
 ## Kamelet source file
 

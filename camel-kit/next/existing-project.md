@@ -244,7 +244,7 @@ You have an existing Camel 4.8.0 Spring Boot application with:
 **Goal:** Add a new REST endpoint `/api/orders` that follows the same pattern as the existing `/api/users` endpoint.
 
 > **Note**
-> This example is based on the fixture at `kit/camel-kit-core/src/test/resources/fixtures/existing-project-spring-boot`.
+> This example is based on the fixture at `kit/camel-kit-core/src/test/resources/fixtures/existing-project-spring-boot`. The outputs below illustrate the workflow on that Camel 4.8.0 fixture. They are not the record of the live workflow run, which used a different version combination; see [Recorded Evidence](#recorded-evidence).
 
 ### Step-by-Step
 
@@ -355,14 +355,49 @@ You have an existing Camel 4.8.0 Spring Boot application with:
    
 | Runtime | Camel Versions | DSL | Status |
 | --- | --- | --- | --- |
-| Spring Boot | 4.8.x | YAML | Tested (fixture) |
-| Spring Boot | 4.4.x - 4.7.x | YAML | Expected to work (not tested) |
-| Quarkus | 3.15.x (Camel 4.8.x) | YAML | Expected to work (not tested) |
+| Spring Boot 4.1.1 | 4.22.1 | YAML | Live workflow recorded (design → approval → plan → execute → validate), outcome `COMPLETE_WITH_LIMITATIONS` |
+| Spring Boot 3.3.4 | 4.8.0 | YAML | Fixture tests only. No live workflow acceptance; see [Runtime Catalog Version](#catalog-limitation) |
+| Spring Boot | 4.4.x - 4.7.x | YAML | Expected to work (not tested); see [Runtime Catalog Version](#catalog-limitation) |
+| Quarkus | 3.15.x (Camel 4.8.x) | YAML | Expected to work (not tested); see [Runtime Catalog Version](#catalog-limitation) |
 | Camel Main | 4.8.x | YAML | Expected to work (not tested) |
 | Karaf (`camel-blueprint`), or no YAML routes | Any | Any | Not supported (reported as `project.unsupportedCombination`) |
 | Camel 3.x | Any | Any | Not supported (use `/camel-migrate` first) |
 
+### Recorded Evidence
+
+Two separate evidence sets stand behind the table above. They used different versions and must not be combined.
+
+  
+|  | Fixture tests | Live workflow run |
+| --- | --- | --- |
+| Combination | Camel 4.8.0, Spring Boot 3.3.4, YAML | Camel 4.22.1, Spring Boot 4.1.1, YAML, Temurin 21.0.8 |
+| What ran | The seven application tests of the checked-in fixture and worked example: three existing-route tests and four tests for the added endpoint | The installed workflow from design through explicit human approval, plan, execute and validate, on 2026-11-13, adding `GET /api/orders/{orderId}` backed by an HTTP service |
+| Result | The fixture’s tests pass. No agent-driven workflow was accepted on this combination | 3 of 3 baseline tests and 16 of 16 final tests passed, 17 of 17 HTTP probes passed against the running application, and the file, dependency-version and reinitialization preservation checks passed |
+| Outcome | Fixture-level only | `COMPLETE_WITH_LIMITATIONS` |
+
+The live run is summarized in the [acceptance summary on issue #167](https://github.com/apache/camel-kit/issues/167#issuecomment-6874292688). It was a local run of one example. It is not a production certification, and its limits are part of the result:
+
+-   Static-analysis results from before the edits were not available, so the run does not show that static-analysis findings were unchanged.
+    
+-   Some commands named in the workflow guides were not supported in that environment. The schema and endpoint checks were recorded with working alternatives: checks against the pinned schema and MCP catalog, and checks against the running application.
+    
+-   Other runtimes and version combinations, other DSLs, and the end-to-end workflow across multiple modules were outside the run. Nothing in it measures them.
+    
+
 ## Limitations
+
+### Runtime Catalog Version
+
+Camel Kit starts the Camel MCP server at the version pinned by `camel.mcp.version` in `distribution.properties`, which was 4.22.1 when this page was last checked (2026-11-17). With that runner, a Spring Boot or Quarkus catalog request for a Camel version other than the server’s own can be answered with the server’s version, combining component metadata of the requested target with newer EIP and model metadata ([CAMEL-26926](https://issues.apache.org/jira/browse/CAMEL-26926)). The recorded live run was not exposed to this, because the application and the MCP server were both on 4.22.1.
+
+When a catalog response reports a Camel version that differs from the one requested, or from the version recorded in `project.camelVersion`:
+
+-   Stop the version-bound validation and report the affected checks as unverified. Do not accept the result as evidence for your project’s version.
+    
+-   Do not upgrade the application to match the MCP server. Camel Kit never changes the versions of an existing project, and a version upgrade belongs to `/camel-migrate`.
+    
+
+CAMEL-26926 is fixed in the Camel source, with the fix assigned to Camel 4.18.6, 4.22.3 and 4.24.0. That does not change the runner Camel Kit installs, and it does not establish end-to-end acceptance for older-target Spring Boot or Quarkus applications. Before relying on a fixed combination, confirm that the MCP artifact is published, that Camel Kit pins it, and that a catalog request for your target version returns that version.
 
 ### Version 1 Scope
 
@@ -494,3 +529,8 @@ The new route may have accidentally removed a shared bean. Review the execution 
 -   [Route validation](camel-validate.md)
     
 -   [Runtime verification](verification.md)
+    
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

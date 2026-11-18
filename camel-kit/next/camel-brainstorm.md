@@ -110,3 +110,8 @@ Before presenting the specification the agent reviews it for placeholders, contr
 -   **Fire-and-forget.** Accept with HTTP 202 and process in the background: two flows joined by an in-memory queue.
     
 -   **Multi-system with compensation.** Parallel writes to several systems that must all succeed or be rolled back: several flows coordinated with the Saga pattern.
+    
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

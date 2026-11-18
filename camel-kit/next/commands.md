@@ -4,6 +4,10 @@ Camel Kit has two command surfaces: the CLI, run in a terminal, and the skills, 
 
 ## CLI commands
 
+Development builds use Aesh for one-shot execution. Use `-h`/`--help` on the root, `init`, `doctor` or `ship`, and the `help` subcommand for `doc`, `graph` and `plan`. Use `-V`/`--version` at the CLI root for the Kit version. See [development host compatibility](getting-started.html#cli-host). `init -p one=1 two=2` accepts several property values; Ship’s `-p` consumes one value per occurrence. Commas in property values are preserved.
+
+Argument files are supported by standalone commands except direct `camel-kit ship` invocations, where `@` values are literal. The Camel plugin host expands argument files before loading Kit: use `@@literal` to pass `@literal`, or an attached value such as `--text=@literal`. Shell quoting alone does not disable argument-file expansion. This is a plugin syntax change in the development version; see [Ship literal context](ship.html#literal-context).
+
 ### init
 
 Creates a project, or adds Camel Kit to the current directory with `--here`. See [Create a project](getting-started.html#init) for what is generated.
@@ -41,7 +45,7 @@ Validates a generated workspace and prints `PASS`, `WARN` and `FAIL` findings wi
 
 camel-kit doctor \[--project-dir <path>\] \[--json\]
 
-It checks `.camel-kit/config.properties`, the command stubs where the target uses them, the skill directories and manifests, the registered workspace templates, the exposure of user-invocable commands, the MCP filtering and permission fields the runtime supports, graph availability, the command prefix, the prerequisites and common stale references in generated files. Target specifics: for Codex it parses `.codex/config.toml`, the exact MCP allowlists, the prompt approval modes and the required fields of every custom-agent file; for Bob 2 it fails each public skill hidden by `user-invocable: false`; for Qwen it checks `includeTools` and `trust`; for OpenCode it evaluates all configuration layers as one and names the file that defines each rule. Configurations that predate the current filter and permission fields produce upgrade warnings; malformed current ones fail. Internal skills must exist as skills but must not be exposed as command stubs.
+It checks `.camel-kit/config.properties`, the command stubs where the target uses them, the skill directories and manifests, the registered workspace templates, the exposure of user-invocable commands, the MCP filtering and permission fields the runtime supports, graph availability, the command prefix, the prerequisites and common stale references in generated files. Target specifics: for Codex it parses `.codex/config.toml`, the exact MCP allowlists, the prompt approval modes and the required fields of every custom-agent file; for Bob 2 it fails each public skill hidden by `user-invocable: false`; for Claude Code it accepts the legacy `agent.folder=.claude/commands` of a workspace that has not been regenerated yet; for Qwen it checks `includeTools` and `trust`; for OpenCode it evaluates all configuration layers as one and names the file that defines each rule. Configurations that predate the current filter and permission fields produce upgrade warnings; malformed current ones fail. Internal skills must exist as skills but must not be exposed as command stubs.
 
 In the development snapshot, Citrus MCP configuration is optional. When the project has not opted in, `doctor` accepts a missing `citrus` entry; when opted in, a missing entry is a failure. Any existing Citrus entry is validated, including the tool filtering and permission fields supported by the target. An invalid entry produces a `FAIL` finding and exit code 1 even when the project has not opted in. These checks inspect configuration without starting the Citrus server or testing its availability. For compatibility, projects with `citrus.mcp.version` but no `citrus.mcp.enabled` are treated as opted in.
 
@@ -61,11 +65,15 @@ Exit code 1 means an invalid slug or a directory that could not be created.
 Manages the provenance and staleness of pipeline artifacts through YAML front matter.
 
 camel-kit doc init --by <skill> \[--from <source>\] <file>
-camel-kit doc check <file>
+camel-kit doc check <file> \[--project <root>\]
+camel-kit doc snapshot --project <root> --source <path> \[--source <path> ...\]
+camel-kit doc record <file> --project <root> --snapshot <json> --evidence <report> --result <complete|partial|failed>
 camel-kit doc stale --reason "..." \[--cascade\] <file>
 camel-kit doc unstale <file>
 
-Each artifact carries two blocks: `generated` (when, by which skill, from which upstream artifact; written once by `doc init`, which is idempotent) and `staleness` (written by `doc stale` and `doc unstale`). `doc check` prints the state as JSON and exits 0 whether or not the file is stale; a file without front matter reports `stale: false`. Every subcommand exits 1 on a missing file, an I/O failure or invalid arguments such as a blank `--reason`. `doc stale` always marks its target; with `--cascade` it also walks the sibling files whose `generated.from` names the target and marks them stale, recursively. After amending a design, mark each direct child separately (the implementation plan, and the migration runbook for migration pipelines) rather than the fresh design itself.
+With `--project`, `doc check` also checks the source-bound review receipt and reports `unchanged`, `stale` or `unverified`, with `reconciliation.changedPaths` identifying changed inputs. Without it, the legacy behavior below is preserved. `snapshot` captures review inputs; `record` binds a review result to unchanged sources, document and evidence without editing the document. They do not perform semantic review. See [the lifecycle and worked example](documentation.md) for scope, limits and status semantics.
+
+Each pipeline artifact carries two blocks: `generated` (when, by which skill, from which upstream artifact; written once by `doc init`, which is idempotent) and `staleness` (written by `doc stale` and `doc unstale`). `doc check` prints the state as JSON and exits 0 whether or not the file is stale; a file without front matter reports `stale: false`. Every subcommand exits 1 on a missing file, an I/O failure or invalid arguments such as a blank `--reason`. `doc stale` always marks its target; with `--cascade` it also walks the sibling files whose `generated.from` names the target and marks them stale, recursively. After amending a design, mark each direct child separately (the implementation plan, and the migration runbook for migration pipelines) rather than the fresh design itself.
 
 ```bash
 camel-kit doc init --by camel-plan --from design-spec.md \

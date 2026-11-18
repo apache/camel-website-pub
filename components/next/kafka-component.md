@@ -173,7 +173,7 @@ Enum values:
 
  |  | SeekPolicy |
 | **sessionTimeoutMs** (consumer) | The timeout used to detect failures when using Kafka’s group management facilities. | 45000 | Integer |
-| **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). | false | boolean |
+| **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, it is set under the property of the vendor (for apicurio apicurio.registry.use-specific-avro-reader, for aws-glue avroRecordType=SPECIFIC\_RECORD). | false | boolean |
 | **topicIsPattern** (consumer) | Whether the topic is a pattern (regular expression). This can be used to subscribe to dynamic number of topics matching the pattern. | false | boolean |
 | **valueDeserializer** (consumer) | Deserializer class for value that implements the Deserializer interface. | org.apache.kafka.common.serialization.StringDeserializer | String |
 | **createConsumerBackoffInterval** (consumer (advanced)) | The delay in millis seconds to wait before trying again to create the kafka consumer (kafka-client). | 5000 | long |
@@ -275,7 +275,45 @@ Enum values:
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
 | **interceptorClasses** (monitoring) | Sets interceptors for producer or consumers. Producer interceptors have to be classes implementing org.apache.kafka.clients.producer.ProducerInterceptor Consumer interceptors have to be classes implementing org.apache.kafka.clients.consumer.ConsumerInterceptor Note that if you use Producer interceptor on a consumer it will throw a class cast exception in runtime. |  | String |
-| **schemaRegistryURL** (schema) | URL of the schema registry servers to use. The format is host1:port1,host2:port2. This is known as schema.registry.url in multiple Schema registries documentation. This option is only available externally (not standard Apache Kafka). |  | String |
+| **schemaFormat** (schema) | 
+
+The format of the record values in the schema registry, which selects the serializer and deserializer of the schemaRegistryVendor. Not every vendor supports every format: azure supports only avro. Only used when schemaRegistryVendor is set.
+
+Enum values:
+
+-   avro
+    
+-   json
+    
+-   protobuf
+    
+
+
+
+
+
+ | avro | String |
+| **schemaRegistryURL** (schema) | URL of the schema registry servers to use. The format is host1:port1,host2:port2. This is known as schema.registry.url in multiple Schema registries documentation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, the URL is set under the property of the vendor: schema.registry.url for confluent, apicurio.registry.url for apicurio (the URL of the registry API, such as [http://localhost:8080/apis/registry/v3](http://localhost:8080/apis/registry/v3)), schema.registry.url for azure (the fully qualified namespace, such as my-namespace.servicebus.windows.net), and endpoint for aws-glue (optional, as Glue is addressed by the AWS region). |  | String |
+| **schemaRegistryVendor** (schema) | 
+
+The schema registry vendor, which sets up the value serializer (producer), the value deserializer (consumer) and the registry properties of the vendor for the schemaFormat, so that you do not need to know the class names or the property names of the vendor. The schemaRegistryURL is set as the registry URL of the vendor. A valueSerializer or valueDeserializer other than the default, and additionalProperties, take precedence. The serde jars of the vendor must be on the classpath, as Camel does not include them. Leave it unset to configure the serializer, deserializer and registry properties yourself.
+
+Enum values:
+
+-   confluent
+    
+-   apicurio
+    
+-   aws-glue
+    
+-   azure
+    
+
+
+
+
+
+ |  | String |
 | **kerberosBeforeReloginMinTime** (security) | Login thread sleep time between refresh attempts. | 60000 | Integer |
 | **kerberosConfigLocation** (security) | Location of the kerberos config file. |  | String |
 | **kerberosInitCmd** (security) | Kerberos kinit command path. Default is /usr/bin/kinit. | /usr/bin/kinit | String |
@@ -455,7 +493,7 @@ Enum values:
 
  |  | SeekPolicy |
 | **sessionTimeoutMs** (consumer) | The timeout used to detect failures when using Kafka’s group management facilities. | 45000 | Integer |
-| **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). | false | boolean |
+| **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, it is set under the property of the vendor (for apicurio apicurio.registry.use-specific-avro-reader, for aws-glue avroRecordType=SPECIFIC\_RECORD). | false | boolean |
 | **topicIsPattern** (consumer) | Whether the topic is a pattern (regular expression). This can be used to subscribe to dynamic number of topics matching the pattern. | false | boolean |
 | **valueDeserializer** (consumer) | Deserializer class for value that implements the Deserializer interface. | org.apache.kafka.common.serialization.StringDeserializer | String |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -565,7 +603,45 @@ Enum values:
 | **kafkaClientFactory** (advanced) | Factory to use for creating org.apache.kafka.clients.consumer.KafkaConsumer and org.apache.kafka.clients.producer.KafkaProducer instances. This allows to configure a custom factory to create instances with logic that extends the vanilla Kafka clients. |  | KafkaClientFactory |
 | **synchronous** (advanced) | Sets whether synchronous processing should be strictly used. | false | boolean |
 | **interceptorClasses** (monitoring) | Sets interceptors for producer or consumers. Producer interceptors have to be classes implementing org.apache.kafka.clients.producer.ProducerInterceptor Consumer interceptors have to be classes implementing org.apache.kafka.clients.consumer.ConsumerInterceptor Note that if you use Producer interceptor on a consumer it will throw a class cast exception in runtime. |  | String |
-| **schemaRegistryURL** (schema) | URL of the schema registry servers to use. The format is host1:port1,host2:port2. This is known as schema.registry.url in multiple Schema registries documentation. This option is only available externally (not standard Apache Kafka). |  | String |
+| **schemaFormat** (schema) | 
+
+The format of the record values in the schema registry, which selects the serializer and deserializer of the schemaRegistryVendor. Not every vendor supports every format: azure supports only avro. Only used when schemaRegistryVendor is set.
+
+Enum values:
+
+-   avro
+    
+-   json
+    
+-   protobuf
+    
+
+
+
+
+
+ | avro | String |
+| **schemaRegistryURL** (schema) | URL of the schema registry servers to use. The format is host1:port1,host2:port2. This is known as schema.registry.url in multiple Schema registries documentation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, the URL is set under the property of the vendor: schema.registry.url for confluent, apicurio.registry.url for apicurio (the URL of the registry API, such as [http://localhost:8080/apis/registry/v3](http://localhost:8080/apis/registry/v3)), schema.registry.url for azure (the fully qualified namespace, such as my-namespace.servicebus.windows.net), and endpoint for aws-glue (optional, as Glue is addressed by the AWS region). |  | String |
+| **schemaRegistryVendor** (schema) | 
+
+The schema registry vendor, which sets up the value serializer (producer), the value deserializer (consumer) and the registry properties of the vendor for the schemaFormat, so that you do not need to know the class names or the property names of the vendor. The schemaRegistryURL is set as the registry URL of the vendor. A valueSerializer or valueDeserializer other than the default, and additionalProperties, take precedence. The serde jars of the vendor must be on the classpath, as Camel does not include them. Leave it unset to configure the serializer, deserializer and registry properties yourself.
+
+Enum values:
+
+-   confluent
+    
+-   apicurio
+    
+-   aws-glue
+    
+-   azure
+    
+
+
+
+
+
+ |  | String |
 | **kerberosBeforeReloginMinTime** (security) | Login thread sleep time between refresh attempts. | 60000 | Integer |
 | **kerberosConfigLocation** (security) | Location of the kerberos config file. |  | String |
 | **kerberosInitCmd** (security) | Kerberos kinit command path. Default is /usr/bin/kinit. | /usr/bin/kinit | String |
@@ -1496,6 +1572,187 @@ camel.component.kafka.sasl-jaas-config = org.apache.kafka.common.security.oauthb
   oauth.ssl.truststore.password="changeit" \
   oauth.token.endpoint.uri="https://keycloak:8443/realms/demo/protocol/openid-connect/token" ;
 camel.component.kafka.additional-properties[sasl.login.callback.handler.class]=io.strimzi.kafka.oauth.client.JaasClientOauthLoginCallbackHandler
+```
+
+### Schema registry
+
+A schema registry stores the schemas (Avro, JSON Schema or Protobuf) of the records in a topic, and the serializer and deserializer of the registry vendor write and read the records with them. The `schemaRegistryVendor` and `schemaFormat` options set up the value serializer (producer), the value deserializer (consumer) and the registry properties of the vendor, so that you do not need to know the class names or the property names of the vendor. The `schemaRegistryURL` option is set as the registry URL of the vendor.
+
+  
+| schemaRegistryVendor | schemaFormat | What Camel sets |
+| --- | --- | --- |
+| `confluent` | `avro, json, protobuf` | The `KafkaAvroSerializer`, `KafkaJsonSchemaSerializer` or `KafkaProtobufSerializer` (and the matching deserializer) of Confluent, and `schema.registry.url`. The producer registers the schemas (the Confluent default). Several registries implement the Confluent registry API, such as Karapace, the Redpanda schema registry and the Confluent compatible API of Apicurio Registry, so `confluent` works for them too. |
+| `apicurio` | `avro, json, protobuf` | The `AvroKafkaSerializer`, `JsonSchemaKafkaSerializer` or `ProtobufKafkaSerializer` (and the matching deserializer) of Apicurio Registry 3.x, `apicurio.registry.url`, and on the producer `apicurio.registry.auto-register=true`. |
+| `aws-glue` | `avro, json, protobuf` | The `GlueSchemaRegistryKafkaSerializer` and `GlueSchemaRegistryKafkaDeserializer`, `dataFormat`, on the producer `schemaAutoRegistrationEnabled=true`, and on the consumer of Avro `avroRecordType=GENERIC_RECORD`. The `schemaRegistryURL` is optional and is set as `endpoint` (to override the endpoint of the Glue service). |
+| `azure` | `avro` | The `KafkaAvroSerializer` and `KafkaAvroDeserializer` of the Azure Schema Registry, `schema.registry.url` (the fully qualified namespace of the Event Hubs namespace), `use.azure.credential=true`, and on the producer `auto.register.schemas=true`. |
+
+The `schemaFormat` is `avro` by default. A format that the vendor does not support, such as `azure` with `protobuf`, fails when the producer or consumer starts. The `specificAvroReader` option is set under the property of the vendor.
+
+What you set yourself takes precedence: a `valueSerializer` or `valueDeserializer` other than the default, and any `additionalProperties`, such as a property of the vendor that Camel also sets. A `valueSerializer` or `valueDeserializer` set to the default (`StringSerializer` or `StringDeserializer`) cannot be told apart from the default, so the vendor replaces it. When the vendor is set on the component, and one endpoint must send or receive plain strings, such as a dead letter topic, set an empty `schemaRegistryVendor` on that endpoint, for example `kafka:dlq?schemaRegistryVendor=`. The producer converts the message body for the value serializer that the Kafka producer gets, also when it is set with the `value.serializer` additional property. The key serializer and deserializer are not changed: the keys stay strings unless you set `keySerializer` and `keyDeserializer`. Leave `schemaRegistryVendor` unset to configure the serializer, deserializer and registry properties yourself, as before.
+
+The body of the message to send must be a value that the serializer of the vendor accepts, such as an Avro `GenericRecord` or a class generated from the Avro schema.
+
+> **Important**
+> Camel does not include the serde libraries of the vendors: add the serde jar of the vendor and format to your application (Camel JBang downloads it, see below). The Confluent serde jars are not in Maven Central: add the Confluent Maven repository `[https://packages.confluent.io/maven/](https://packages.confluent.io/maven/)`, or have the jars in a repository of your own.
+
+ 
+| schemaRegistryVendor | Serde jars (Maven groupId:artifactId) |
+| --- | --- |
+| `confluent` | `io.confluent:kafka-avro-serializer`, `io.confluent:kafka-json-schema-serializer` or `io.confluent:kafka-protobuf-serializer`, from `[https://packages.confluent.io/maven/](https://packages.confluent.io/maven/)` |
+| `apicurio` | `io.apicurio:apicurio-registry-avro-serde-kafka`, `io.apicurio:apicurio-registry-jsonschema-serde-kafka` or `io.apicurio:apicurio-registry-protobuf-serde-kafka` (version 3.x) |
+| `aws-glue` | `software.amazon.glue:schema-registry-serde` |
+| `azure` | `com.microsoft.azure:azure-schemaregistry-kafka-avro` |
+
+For example with Maven, for Confluent and Avro:
+
+```xml
+<repositories>
+  <repository>
+    <id>confluent</id>
+    <url>https://packages.confluent.io/maven/</url>
+  </repository>
+</repositories>
+
+<dependency>
+  <groupId>io.confluent</groupId>
+  <artifactId>kafka-avro-serializer</artifactId>
+  <version>8.3.3</version>
+</dependency>
+```
+
+Camel JBang downloads the serde jar of the vendor and format when the producer or consumer starts, so you do not add it with `--dep`. The Confluent serde jars are not in Maven Central, so add the Confluent Maven repository with `--repos=confluent` (Camel JBang knows the `confluent` repository by name):
+
+```bash
+camel run MyRoute.java --repos=confluent
+```
+
+When the serializer or deserializer of the vendor cannot be loaded (the jar is not on the classpath, or Camel JBang cannot download it, such as a Confluent jar without `--repos=confluent`), the producer or consumer fails to start with a message that names the Maven artifact to add.
+
+**Confluent Schema Registry**
+
+> **Note**
+> Supports Avro, JSON Schema and Protobuf. The serde jars are only in the Confluent Maven repository, not in Maven Central. The Avro serde and the registry client are licensed under the Apache License 2.0; the JSON Schema and Protobuf serdes are also listed under the Confluent Community License, so check their license for your use. Registries that implement the Confluent registry API, such as Karapace and Redpanda, work with `confluent` too.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("kafka:orders?brokers=localhost:9092&schemaRegistryVendor=confluent&schemaRegistryURL=http://localhost:8081")
+    .log("Received ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:orders
+      parameters:
+        brokers: "localhost:9092"
+        schemaRegistryVendor: confluent
+        schemaRegistryURL: "http://localhost:8081"
+      steps:
+        - log: "Received ${body}"
+```
+
+**Apicurio Registry**
+
+> **Note**
+> Supports Avro, JSON Schema and Protobuf, with the serdes of Apicurio Registry 3.x. The 2.x serdes have other artifact names and property names, and are not set up by `apicurio`.
+
+The URL is the URL of the registry API of Apicurio Registry 3.x, which ends with `/apis/registry/v3`.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("kafka:orders?brokers=localhost:9092&schemaRegistryVendor=apicurio&schemaFormat=protobuf"
+        + "&schemaRegistryURL=http://localhost:8080/apis/registry/v3")
+    .log("Received ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:orders
+      parameters:
+        brokers: "localhost:9092"
+        schemaRegistryVendor: apicurio
+        schemaFormat: protobuf
+        schemaRegistryURL: "http://localhost:8080/apis/registry/v3"
+      steps:
+        - log: "Received ${body}"
+```
+
+**AWS Glue Schema Registry**
+
+> **Note**
+> Supports Avro, JSON Schema and Protobuf, through one serializer and deserializer whose `dataFormat` Camel sets from `schemaFormat`. There is no local emulator of AWS Glue: test against AWS.
+
+AWS Glue is addressed by the AWS region and the name of the registry, not by a URL. The region is taken from the AWS default region provider chain (such as the `AWS_REGION` environment variable), or set with the `region` additional property. The registry is `default-registry` unless you set the `registry.name` additional property. The AWS credentials are taken from the AWS default credentials provider chain.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("kafka:orders?brokers=localhost:9092&schemaRegistryVendor=aws-glue&schemaFormat=json"
+        + "&additionalProperties.region=eu-west-1&additionalProperties.registry.name=my-registry")
+    .log("Received ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:orders
+      parameters:
+        brokers: "localhost:9092"
+        schemaRegistryVendor: aws-glue
+        schemaFormat: json
+        additionalProperties.region: eu-west-1
+        additionalProperties.registry.name: my-registry
+      steps:
+        - log: "Received ${body}"
+```
+
+**Azure Schema Registry**
+
+> **Note**
+> Supports Avro only. Azure has no released JSON Schema serde (only a beta) and no Protobuf serde, so `azure` with `json` or `protobuf` fails when the producer or consumer starts.
+
+The `schemaRegistryURL` is the fully qualified namespace of the Event Hubs namespace, such as `my-namespace.servicebus.windows.net`. A producer needs the schema group, which you set with the `schema.group` additional property. Camel sets `use.azure.credential=true`, so that the serde authenticates with the `DefaultAzureCredential` of the Azure Identity library (environment variables, managed identity, Azure CLI and so on). To use another credential, bind a `com.azure.core.credential.TokenCredential` bean and set it as the `schema.registry.credential` additional property, which takes precedence. The Azure serde reads `auto.register.schemas`, `use.azure.credential` and `specific.avro.reader` as `Boolean`: when you set them as additional properties, such as `additionalProperties.auto.register.schemas=false` to turn off the registration of schemas, Camel converts the `true` or `false` string to a `Boolean`.
+
+The dependencies of `azure-schemaregistry-kafka-avro` ask for different versions of `com.azure:azure-core`, and Maven picks the older one, which lacks `TokenRequestContext.isCaeEnabled()` that Azure Identity calls: the first send then fails with a `NoSuchMethodError`. Add a recent `com.azure:azure-core` next to the serde, or import the `com.azure:azure-sdk-bom`. Camel JBang downloads the `com.azure:azure-core` of the Azure SDK BOM together with the serde. The options to connect to Event Hubs with the Kafka protocol are left out of the example.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("direct:orders")
+    .to("kafka:orders?brokers=my-namespace.servicebus.windows.net:9093"
+        + "&schemaRegistryVendor=azure&schemaRegistryURL=my-namespace.servicebus.windows.net"
+        + "&additionalProperties.schema.group=my-group"
+        + "&additionalProperties.schema.registry.credential=#bean:myCredential");
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:orders
+      steps:
+        - to:
+            uri: kafka:orders
+            parameters:
+              brokers: "my-namespace.servicebus.windows.net:9093"
+              schemaRegistryVendor: azure
+              schemaRegistryURL: my-namespace.servicebus.windows.net
+              additionalProperties.schema.group: my-group
+              additionalProperties.schema.registry.credential: "#bean:myCredential"
 ```
 
 ### Batching Consumer

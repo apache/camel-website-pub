@@ -46,7 +46,7 @@ You approve explicitly, or ask for changes and the agent revises and presents ag
 
 ## Pipeline files and standalone stages
 
-A pipeline is a numbered directory created with `camel-kit nextId <slug>` (for example `001-order-processing`); `.camel-kit/pipeline.json` records the active one. Each stage reads its input from the previous artifact and writes its own next to it, with provenance metadata in the file’s front matter maintained by `camel-kit doc`.
+A pipeline is a numbered directory created with `camel-kit nextId <slug>` (for example `001-order-processing`); `.camel-kit/pipeline.json` records the active one. Each stage reads its input from the previous artifact and writes its own next to it, with provenance metadata in the file’s front matter maintained by `camel-kit doc`. Project-wide current docs and ADRs complement these per-change artifacts; the default paths are `docs/camel-kit/system-design.md` and `docs/adr/`. Reuse existing conventions. File existence alone does not prove approval, verification or current documentation; see [Current system documentation and ADRs](documentation.md).
 
 Every stage can also be invoked standalone with a pipeline ID, for example `/camel-plan 001-order-processing`. It then reads its input from disk, checks that the input is not stale, writes its artifact and stops without invoking the next stage. Running `/camel-brainstorm` with the ID of an existing design enters amend mode: the design is revised and approved again, and its dependent artifacts are marked stale so that the following stages are rerun. A standalone stage that finds a stale or unverified input stops and asks whether to regenerate it, abort, or proceed with that exact revision. See [Command reference](commands.md) for `nextId`, `doc check` and `doc stale`.
 
@@ -84,3 +84,7 @@ Where the agent supports subagents these skills run in isolated contexts; single
 ## Two utilities outside the pipeline
 
 `/camel-debug` diagnoses and repairs a broken route outside a pipeline run with a stop, preserve, diagnose, fix and guard sequence (see [camel-debug](camel-debug.md)). `/camel-knowledge` answers Apache Camel documentation questions through the Knowledge MCP server without changing the pipeline state (see [Knowledge MCP](knowledge.md)). Both can be used at any time.
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

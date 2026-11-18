@@ -10,7 +10,7 @@ Use it to pick up the rows that another application adds to a table, such as new
 
 Output: the body is one row as JSON text, an object with the column names as keys, such as `{"id":1,"username":"oscerd","city":"Rome"}`. The `Content-Type` header is `application/json`.
 
-Good to know: the query runs again `delay` milliseconds after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again. A query that finds no rows sends nothing. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version. The JDBC driver of MariaDB is not included: add `mvn:org.mariadb.jdbc:mariadb-java-client` to the dependencies of the integration. Camel JBang (`camel run`) adds it by itself.
+Good to know: the query runs again `delay` milliseconds after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again. A query that finds no rows sends nothing. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version. The JDBC driver of MariaDB is not included: add `mvn:org.mariadb.jdbc:mariadb-java-client` to the dependencies of the integration. Camel JBang (`camel run`) adds it by itself. Whether the connection uses TLS when `connectionProperties` is not set depends on the version of the MariaDB driver: set `sslMode=trust` in `connectionProperties` to insist on TLS.
 
 ## Configuration Options
 
@@ -24,6 +24,7 @@ The following table summarizes the configuration options available for the `mari
 | **query** | Query | **Required** The SQL query to run on each poll, usually a SELECT. Each row it returns becomes a message. | string |  | SELECT \* FROM accounts WHERE processed = false |
 | **serverName** | Server Name | **Required** The host name or IP address of the MariaDB server, without the port. | string |  | db.example.com |
 | **username** | Username | **Required** The database user to log in as. It needs the rights to run the queries of this Kamelet on their tables. | string |  |  |
+| **connectionProperties** | Connection Properties | Extra settings for the MariaDB JDBC driver (MariaDB Connector/J), as `name=value` pairs separated by `;`, such as `sslMode=trust;connectTimeout=10000`. Use it for TLS: `sslMode=trust` makes the connection use TLS without checking the certificate of the server, and `sslMode=disable` turns TLS off. When it is not set, the default of the driver applies, and it depends on its version: Connector/J 3 connects without TLS, Connector/J 4 with TLS. The value is not hidden like a password, and it can show in the log when the integration starts, so do not put a password in it. | string |  | sslMode=trust |
 | **consumedQuery** | Consumed Query | An SQL statement to run after each row has been sent on, to mark the row as read or to delete it, so that `query` does not return it again. Write `:#column` where the value of a column of that row goes, such as `:#id`. When it is not set, nothing is changed, and the same rows are read on every poll. | string |  | UPDATE accounts SET processed = true WHERE id = :#id |
 | **delay** | Delay | How long to wait after one run of `query` before the next, in milliseconds. | integer | 500 |  |
 | **serverPort** | Server Port | The port the MariaDB server listens on. MariaDB uses 3306 unless it was set up otherwise. | string | 3306 |  |
@@ -99,6 +100,8 @@ The Kamelet requires database connection parameters:
     
 -   `consumedQuery` (optional): an SQL statement run for each row once it is sent, to mark the row as read or delete it, such as `UPDATE accounts SET processed = true WHERE id = :#id`
     
+-   `connectionProperties` (optional): extra settings for the MariaDB JDBC driver, such as `sslMode=trust` to always use TLS
+    
 
 ### Usage example
 
@@ -118,6 +121,14 @@ The route below logs each account that is not processed yet, and marks it as pro
       steps:
         - to:
             uri: "kamelet:log-sink"
+```
+
+### Connecting with TLS
+
+Set `connectionProperties` to pass settings to the MariaDB JDBC driver (MariaDB Connector/J), as `name=value` pairs separated by `;`. Without it, the default of the driver applies, and it depends on its version: Connector/J 3 connects without TLS, Connector/J 4 with TLS. Set `sslMode=trust` to always use TLS, without checking the certificate of the server.
+
+```yaml
+connectionProperties: "sslMode=trust"
 ```
 
 ## Kamelet source file

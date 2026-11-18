@@ -42,3 +42,7 @@ Files changed:  pom.xml
 Guard:          Add a dependency resolution step to the CI build
 
 A diagnosis-only run ends with the root cause and the proposed fix, no changed files and no guard suggested.
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

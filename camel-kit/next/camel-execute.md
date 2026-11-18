@@ -52,9 +52,9 @@ The loop is automatic: one line per completed task, no mid-plan summaries, no "s
 
 ## Cross-cutting review, verification and report
 
-After the last task the code quality reviewer checks all routes together: endpoint contracts, shared properties, error-channel wiring, naming and observability across the project. Then the internal `camel-verify` skill runs once for the complete application, because Camel loads all routes at startup and per-task verification would fail on routes that depend on others. Its outcome (`PASS`, `PARTIAL`, `FAIL` or `NOT_RUN`) is informational and does not block completion; see [Runtime verification](verification.md).
+After the last task the code quality reviewer checks all routes together: endpoint contracts, shared properties, error-channel wiring, naming and observability across the project. Then the internal `camel-verify` skill runs once for the complete application, because Camel loads all routes at startup and per-task verification would fail on routes that depend on others. Its outcome (`PASS`, `PARTIAL`, `FAIL` or `NOT_RUN`) is informational and does not block the execution report; unavailable or failing verification prevents claiming complete documentation review. See [Runtime verification](verification.md).
 
-The completion summary lists the tasks, the generated files, the review results, the cross-cutting review and the full verification report, and is saved as `execution-report.md` with provenance metadata; the downstream validation report is marked stale. In chained mode the pipeline then continues to `/camel-validate`.
+The completion summary lists the tasks, the generated files, the review results, the cross-cutting review and the full verification report, and is saved as `execution-report.md` with provenance metadata; the downstream validation report is marked stale. The execute parent drafts current-system docs and reconciles approved ADR metadata after implementation. In chained mode the pipeline continues to `/camel-validate`, then the parent finalizes documentation using its findings. Standalone execution records missing validation as partial and stops; documentation-only reconciliation owns finalization after a later standalone validation. Report documentation status and evidence separately from implementation completion. The initial execution report uses pending/partial/failed documentation status. After chained finalization, emit the final documentation result with its report and receipt paths separately; keep the earlier execution and validation reports as evidence of their stage.
 
 ## Generated artifacts
 
@@ -87,3 +87,7 @@ Error handling in the generated routes is a global `onException` before the firs
 ## Rerun after a failure
 
 If execution stops mid-plan, correct the cause through the owning path (implementation, test or re-plan) and rerun `/camel-execute <pipeline-id>`. There is no task-level resume: the rerun executes the plan from the beginning.
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

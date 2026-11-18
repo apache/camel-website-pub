@@ -12,7 +12,7 @@ Input: the body is a JSON object, as JSON text, such as `{"username":"alice","ci
 
 Output: when it is used inside a route, the body afterwards is the JSON object parsed as a Map, and the `CamelSqlUpdateCount` header holds the number of rows changed.
 
-Good to know: a body that is not a JSON object fails, and so does a body that lacks a field named in `query` when no header has that name either. It logs in with a database user and password, not with AWS keys, and connects with the Amazon Redshift JDBC driver, which uses TLS by default.
+Good to know: a body that is not a JSON object fails, and so does a body that lacks a field named in `query` when no header has that name either. It logs in with a database user and password, not with AWS keys, and connects with the Amazon Redshift JDBC driver, which uses TLS by default. Other settings of the driver go in `connectionProperties`.
 
 ## Configuration Options
 
@@ -26,6 +26,7 @@ The following table summarizes the configuration options available for the `aws-
 | **query** | Query | **Required** The SQL statement to run for each message. Write `:#name` where the value of the field `name` of the body goes; the values are passed as parameters, never pasted into the SQL text. | string |  | INSERT INTO accounts (username,city) VALUES (:#username,:#city) |
 | **serverName** | Server Name | **Required** The host name of the Redshift cluster: its endpoint, as shown in the Redshift console, without the port and the database name. | string |  | my-cluster.abc123xyz789.eu-west-1.redshift.amazonaws.com |
 | **username** | Username | **Required** The database user to log in as, such as the admin user of the cluster. This is a user of the database, not an AWS access key. | string |  |  |
+| **connectionProperties** | Connection Properties | Extra settings for the Amazon Redshift JDBC driver, as `name=value` pairs separated by `;`, such as `loginTimeout=30`. When it is not set, the driver connects with TLS, as it does by default. The value is not hidden like a password, and it can show in the log when the integration starts, so do not put a password in it. | string |  | loginTimeout=30 |
 | **serverPort** | Server Port | The port of the cluster. Redshift uses 5439 unless it was changed when the cluster was created. | string | 5439 |  |
 
 ## Dependencies

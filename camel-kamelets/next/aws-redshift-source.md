@@ -10,7 +10,7 @@ Use it to pick up records from a Redshift data warehouse, such as new orders or 
 
 Output: one message per row. The body is the row as a JSON object, in JSON text, with the column names as field names, such as `{"id":1,"username":"alice","city":"Rome"}`. The `Content-Type` header is `application/json`.
 
-Good to know: the query runs again every `delay` milliseconds, and returns the same rows each time unless they change; set `consumedQuery` to mark or delete each row once it has been sent. It logs in with a database user and password, not with AWS keys, and connects with the Amazon Redshift JDBC driver, which uses TLS by default.
+Good to know: the query runs again every `delay` milliseconds, and returns the same rows each time unless they change; set `consumedQuery` to mark or delete each row once it has been sent. It logs in with a database user and password, not with AWS keys, and connects with the Amazon Redshift JDBC driver, which uses TLS by default. Other settings of the driver go in `connectionProperties`.
 
 ## Configuration Options
 
@@ -24,6 +24,7 @@ The following table summarizes the configuration options available for the `aws-
 | **query** | Query | **Required** The SQL query to run at each poll. Each row of the result becomes a message. | string |  | SELECT \* FROM orders WHERE exported = false |
 | **serverName** | Server Name | **Required** The host name of the Redshift cluster: its endpoint, as shown in the Redshift console, without the port and the database name. | string |  | my-cluster.abc123xyz789.eu-west-1.redshift.amazonaws.com |
 | **username** | Username | **Required** The database user to log in as, such as the admin user of the cluster. This is a user of the database, not an AWS access key. | string |  |  |
+| **connectionProperties** | Connection Properties | Extra settings for the Amazon Redshift JDBC driver, as `name=value` pairs separated by `;`, such as `loginTimeout=30`. When it is not set, the driver connects with TLS, as it does by default. The value is not hidden like a password, and it can show in the log when the integration starts, so do not put a password in it. | string |  | loginTimeout=30 |
 | **consumedQuery** | Consumed Query | An SQL statement to run after each row has been sent, to mark it as done or delete it, so that it is not read again. Write `:#name` where the value of the column `name` of the row goes. | string |  | UPDATE orders SET exported = true WHERE id = :#id |
 | **delay** | Delay | How long to wait between two runs of the query, in milliseconds. | integer | 500 |  |
 | **serverPort** | Server Port | The port of the cluster. Redshift uses 5439 unless it was changed when the cluster was created. | string | 5439 |  |

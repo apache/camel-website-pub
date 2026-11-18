@@ -7,11 +7,13 @@ Camel Kit runs as a standalone command-line tool installed with JBang, or as a p
   
 | Requirement | Purpose | Install |
 | --- | --- | --- |
-| Java 17 or later | Runtime for Camel Kit, Camel JBang and the generated projects | SDKMAN, Adoptium or your package manager |
+| Java 21 or later | Runtime for development Kit, Knowledge and the Aesh-based Camel JBang host | SDKMAN, Adoptium or your package manager |
 | [JBang](https://www.jbang.dev/) | Launcher for Camel Kit and for the MCP servers it configures | See the installation commands below |
 | [Camel JBang](../../manual/camel-jbang.md) | `camel run` for route execution and runtime verification | `jbang app install camel@apache/camel` |
 | Camel JBang test plugin | `camel test run` for the Citrus integration tests in the verification loop | `camel plugin add test` |
 | Docker (conditional) | Environment probes for external services and full Citrus/Testcontainers verification | Docker Engine or Docker Desktop |
+
+Released Kit 0.4.1 and Knowledge 0.0.2 still support Java 17. Generated integrations have their own Java requirements, determined by their selected Camel runtime.
 
 Camel JBang and its test plugin are needed for the complete execution and verification loops. When Docker is not available, the checks that need containers are reported as skipped; design, planning and the container-free checks still work. `camel-kit init` checks Java, JBang, Camel JBang and the test plugin and reports missing tools as warnings without stopping.
 
@@ -79,7 +81,7 @@ cd camel-kit
 jbang app install --name camel-kit --force \
   kit/camel-kit-main/src/main/jbang/main/CamelKit.java
 
-# Or install the matching Camel JBang plugin from the local Maven repository
+# With an Aesh-based Camel host, install the matching plugin from the local Maven repository
 camel plugin add kit \
   --gav org.apache.camel:camel-jbang-plugin-kit:0.4.2-SNAPSHOT \
   --description "Design Apache Camel Integrations with AI"
@@ -99,6 +101,12 @@ Source-built Knowledge uses `org.apache.camel` Maven coordinates and Java packag
 
 > **Note**
 > The released 0.4.1 artifacts are published under the JBang catalog `luigidemasi/camel-kit` and the Maven coordinate `io.github.luigidemasi:camel-jbang-plugin-kit`. Development snapshots built from `apache/camel-kit` use the `org.apache.camel` group. The first release from the Apache repository will change the release coordinates; this page is updated with it.
+
+## Development CLI host compatibility
+
+The development CLI uses Aesh in both entry points. The plugin requires the Aesh-based Camel 4.24.0 line; the current build is tested against `4.24.0-SNAPSHOT`. This host requires Java 21 or later. Use that development host for source/snapshot testing. Kit release validation rejects a snapshot `camel.cli.version`; a released Camel 4.24.0 host must be verified before releasing this Kit version. Older Picocli-based hosts cannot load the new plugin. These requirements do not change the released 0.4.1 plugin.
+
+The standalone `camel-kit` launcher and source-built Knowledge also require Java 21 or later. Standalone Kit supplies its own parser and does not require a Camel host to parse commands. The existing JLine/TamboUI rendering remains in place. The host pin `camel.cli.version` is independent of `camel.main.version`, so upgrading the CLI host does not change the defaults or supported versions of generated integrations. All pins live in `distribution.properties`.
 
 ## Upgrading
 
@@ -169,7 +177,7 @@ Camel Kit records the hash of each tracked file it wrote in `.camel-kit/managed-
     
 -   `AGENTS.md`, or the agent’s equivalent entry file, with the routing table for the skills.
     
--   The agent-native skills and entry points, for example `.claude/commands/` and `.claude/skills/` for Claude Code, or `.agents/skills/` for Codex.
+-   The agent-native skills and entry points, for example `.claude/skills/` for Claude Code or `.agents/skills/` for Codex. The released 0.4.1 also writes command stubs to `.claude/commands/`; see [upgrading a Claude Code workspace](agents.html#claude-upgrade).
     
 -   `docs/constitution.md`, the architecture rules every generated route must follow (see [Constitution](constitution.md)).
     

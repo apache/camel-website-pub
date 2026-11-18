@@ -10,7 +10,7 @@ Use it to react as soon as a file is uploaded to or removed from a Ceph bucket, 
 
 Output: the body is the notification as JSON text, unchanged: a `Records` array that gives the event name (such as `ObjectCreated:Put`), the bucket name and the key of the file. The headers `ceph-event-id`, `ceph-opaque-data`, `ceph-object-metadata` and `ceph-object-tags` give the fields Ceph adds to the event; metadata and tags are a List of entries with a `key` and a `val`. Each header is also set with a `ce-` name, such as `ce-cepheventid`. With `getObject` true, the body of an `ObjectCreated` event is the content of the file instead, as a stream, with its content type in `CamelAwsS3ContentType`, and the other events come out as parsed JSON (a Jackson `JsonNode`), not as text.
 
-Good to know: the notification and its Kafka topic are set up on the Ceph side; this Kamelet only reads the topic. A record that is not a Ceph notification (without a `Records` array) fails. It connects to Kafka with no login and no TLS unless `saslAuthType` says otherwise. Without `consumerGroup`, each start uses a new group, so with the default `autoOffsetReset` of `latest` the events sent while it was stopped are not read.
+Good to know: the notification and its Kafka topic are set up on the Ceph side; this Kamelet only reads the topic. A record that is not a Ceph notification (without a `Records` array) fails. `saslAuthType` has no default and must be set; `NONE` connects to Kafka with no login and no TLS. Without `consumerGroup`, each start uses a new group, so with the default `autoOffsetReset` of `latest` the events sent while it was stopped are not read.
 
 ## Configuration Options
 
@@ -20,13 +20,13 @@ The following table summarizes the configuration options available for the `ceph
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **bootstrapServers** | Bootstrap Servers | **Required** The address of one or more Kafka brokers to connect to first, as `host:port`, separated by commas. | string |  | broker1:9092,broker2:9092 |
+| **saslAuthType** | Authentication Type | **Required** How to log in to Kafka. It has no default and must be set. `NONE` connects with no login and no TLS, as a local Kafka expects; `PLAIN`, `SCRAM_SHA_256` and `SCRAM_SHA_512` log in with `saslUsername` and `saslPassword`. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string |  |  |
 | **topic** | Topic Name | **Required** The Kafka topic that the Ceph Object Gateway sends the bucket notifications to, as set in the push endpoint of the Ceph topic. | string |  | ceph-bucket-notifications |
 | **accessKey** | Access Key | The S3 access key of a Ceph Object Gateway user that can read the bucket. Required when `getObject` is true. | string |  |  |
 | **autoOffsetReset** | Auto Offset Reset | Where to start when the consumer group has not read the topic before. `latest` reads only the events sent from now on, `earliest` reads the topic from its start, and `none` fails. Enum values: \* latest \* earliest \* none | string | latest |  |
 | **cephUrl** | Ceph URL | The address of the Ceph Object Gateway (RGW) to read the files from, as a URL with the scheme and the port. Required when `getObject` is true. | string |  | http://ceph-rgw:8080 |
 | **consumerGroup** | Consumer Group | The name of the Kafka consumer group. Kafka remembers how far the group has read, so a restart continues where it stopped. When it is not set, a new group is used at each start. | string |  | my-group-id |
 | **getObject** | Get Object | If true, for each `ObjectCreated` event the file is read from Ceph and becomes the body, instead of the notification. It needs `cephUrl`, `accessKey`, `secretKey` and `zoneGroup`. | boolean | false |  |
-| **saslAuthType** | Authentication Type | How to log in to Kafka. `NONE` connects with no login and no TLS, as a local Kafka expects; `PLAIN`, `SCRAM_SHA_256` and `SCRAM_SHA_512` log in with `saslUsername` and `saslPassword`. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string | NONE |  |
 | **saslPassword** | Password | The password of `saslUsername`. Required when `saslAuthType` is `PLAIN`, `SCRAM_SHA_256` or `SCRAM_SHA_512`. | string |  |  |
 | **saslUsername** | Username | The user to log in to Kafka as. Required when `saslAuthType` is `PLAIN`, `SCRAM_SHA_256` or `SCRAM_SHA_512`. | string |  |  |
 | **secretKey** | Secret Key | The S3 secret key that goes with `accessKey`. Required when `getObject` is true. | string |  |  |

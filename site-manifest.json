@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1794935884714,
+  "generated": 1794993721783,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -8275,6 +8275,12 @@
               "path": "contributing.adoc",
               "url": "/camel-kit/next/contributing.html",
               "title": "Contributing and releasing"
+            },
+            {
+              "module": "ROOT",
+              "path": "documentation.adoc",
+              "url": "/camel-kit/next/documentation.html",
+              "title": "Current system documentation and ADRs"
             },
             {
               "module": "ROOT",

@@ -2,11 +2,11 @@
 
 **Provided by: "Apache Software Foundation"**
 
-**Support Level for this Kamelet is: "Stable"**
+**Support Level for this Kamelet is: "Deprecated"**
 
-Sends each message as an Avro record to a topic in Apache Kafka, with the schema kept in an Apicurio Registry, and no login or TLS to either.
+Deprecated, to be removed in a later release: sends each message as an Avro record to a topic in Apache Kafka, with the schema kept in an Apicurio Registry, and no login or TLS to either.
 
-Use it to publish records that other applications read with the schema of the registry, on a Kafka and a registry that need no login, such as in development. When the registry is secured with Keycloak use `kafka-not-secured-apicurio-registry-sink`; for records without a schema use `kafka-sink`.
+Use it to publish records that other applications read with the schema of the registry, on a Kafka and a registry that need no login, such as in development. When the registry is secured with Keycloak use `kafka-not-secured-apicurio-registry-sink`; for records without a schema use `kafka-sink`. This Kamelet is deprecated and will be removed in a later release, as the Kafka Kamelets are reduced to a few.
 
 Input: the body must be an Avro object, such as an Avro `GenericRecord` or an object of a class generated from the schema; it is written as Avro binary. A body of text is written as an Avro string, and so fails unless the schema is a string. The optional `key` header (or `ce-key`) becomes the key of the record, and the optional `partition-key` header (or `ce-partitionkey`) is the number of the partition to write to. The other headers of the message, except the Camel ones, are sent as record headers.
 
@@ -72,6 +72,9 @@ camel run route.yaml
 ```
 
 ## Kafka Not Secured with Apicurio Registry Sink Kamelet Description
+
+> **Note**
+> This Kamelet is deprecated and will be removed in a later release, as the Kafka Kamelets are reduced to a few.
 
 ### Schema Registry Integration
 

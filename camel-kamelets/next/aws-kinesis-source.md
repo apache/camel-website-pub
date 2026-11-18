@@ -10,7 +10,7 @@ Use it to process a stream of events that other applications write to Kinesis, s
 
 Output: the body is the data of the record, as bytes. The headers give the partition key, the sequence number, the shard ID and the arrival time of the record.
 
-Good to know: it reads the stream from its oldest record, and again from the oldest record each time the integration starts: it does not remember where it stopped, so records are read again after a restart. Records are not removed: Kinesis keeps them for the retention period of the stream. With `useKclConsumers` it reads through the Kinesis Client Library instead, and the body is a `ByteBuffer` rather than bytes.
+Good to know: by default it reads the stream from its oldest record, and again from the oldest record each time the integration starts: it does not remember where it stopped, so records are read again after a restart. Set `iteratorType` to `LATEST` to read only the records written after it started; the records written while it was stopped are then not read. `iteratorType` can also start at a sequence number or at a time, again on each start. Records are not removed: Kinesis keeps them for the retention period of the stream. With `useKclConsumers` it reads through the Kinesis Client Library instead, which keeps where it stopped in a DynamoDB table and does not use `iteratorType`, and the body is a `ByteBuffer` rather than bytes.
 
 ## Configuration Options
 
@@ -24,10 +24,13 @@ The following table summarizes the configuration options available for the `aws-
 | **accessKey** | Access Key | The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. Leave both out when `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` is true. | string |  |  |
 | **asyncClient** | Async Client | If true, it uses the asynchronous Kinesis client of the AWS SDK. `useKclConsumers` needs it. | boolean | false |  |
 | **delay** | Delay | How long to wait between two polls of the stream, in milliseconds. | integer | 500 |  |
+| **iteratorType** | Start Position | Where in the stream it starts reading each time the integration starts. `TRIM_HORIZON` starts at the oldest record the stream still keeps, so the records are read again after each restart. `LATEST` reads only the records written after it started. `AT_SEQUENCE_NUMBER` and `AFTER_SEQUENCE_NUMBER` start at, or just after, the record whose sequence number is in `sequenceNumber`. `AT_TIMESTAMP` starts at the first record that arrived at or after the time in `messageTimestamp`. Not used when `useKclConsumers` is true. Enum values: \* TRIM\_HORIZON \* LATEST \* AT\_SEQUENCE\_NUMBER \* AFTER\_SEQUENCE\_NUMBER \* AT\_TIMESTAMP | string | TRIM\_HORIZON |  |
 | **kclDisableCloudwatchMetricsExport** | KCL Disable CloudWatch Metrics | If true, the Kinesis Client Library does not send its metrics to CloudWatch. Only used when `useKclConsumers` is true. | boolean | false |  |
+| **messageTimestamp** | Start Time | The time to start reading at, either as an ISO 8601 date and time in UTC, such as `2026-11-17T08:00:00Z`, or as milliseconds since 1970-01-01 UTC, such as `1794902400000`. It starts at the first record that arrived in the stream at or after this time. Required, and only used, when `iteratorType` is `AT_TIMESTAMP`. | string |  | 2026-11-17T08:00:00Z |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
 | **secretKey** | Secret Key | The secret access key that belongs to `accessKey`. The AWS console shows it only once, when the access key is created. | string |  |  |
+| **sequenceNumber** | Sequence Number | The sequence number of the record to start at, as Kinesis gives it, such as the value of the `CamelAwsKinesisSequenceNumber` header of a record read earlier. Required, and only used, when `iteratorType` is `AT_SEQUENCE_NUMBER` or `AFTER_SEQUENCE_NUMBER`. | string |  | 49655467183424123548936502291338416434578112145614569474 |
 | **sessionToken** | Session Token | The session token of temporary credentials, which comes with their access key and secret key, for example from AWS STS when you assume an IAM role. Only used when `useSessionCredentials` is true. | string |  |  |
 | **uriEndpointOverride** | Overwrite Endpoint URI | The address to connect to instead of AWS, as a URL such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
 | **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found in the environment instead of in `accessKey` and `secretKey`: the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the `~/.aws/credentials` file, or the IAM role of the EC2 instance, ECS task or Kubernetes pod the integration runs on. | boolean | false |  |
@@ -121,6 +124,26 @@ You could consume the stream content directly
         - to:
             uri: "kamelet:log-sink"
 ```
+
+### Where it starts reading
+
+By default (`iteratorType` is `TRIM_HORIZON`) the Kamelet reads the stream from its oldest record each time the integration starts, so the records are read again after a restart. To read only the records written after the integration started, set `iteratorType` to `LATEST`:
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:aws-kinesis-source"
+      parameters:
+        useDefaultCredentialsProvider: true
+        region: "eu-west-1"
+        stream: "kamelets"
+        iteratorType: "LATEST"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+The records written while the integration was stopped are then not read. To start at a given record, set `iteratorType` to `AT_SEQUENCE_NUMBER` or `AFTER_SEQUENCE_NUMBER` and `sequenceNumber` to its sequence number; to start at a given time, set `iteratorType` to `AT_TIMESTAMP` and `messageTimestamp` to the time, such as `2026-11-17T08:00:00Z`. The Kamelet does not remember where it stopped: it starts at the same place on each start. The KCL consumer below does not use `iteratorType`.
 
 ### Usage example with KCL Consumer
 

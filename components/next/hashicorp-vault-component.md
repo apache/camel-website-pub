@@ -171,7 +171,25 @@ The HashiCorp Vault component supports the following message header(s), which is
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelHashicorpVaultProducerOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-hashicorp-vault/latest/org/apache/camel/component/hashicorp/vault/HashicorpVaultConstants.html#OPERATION) | Overrides the desired operation to be used in the producer. |  | String |
+| **CamelHashicorpVaultProducerOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-hashicorp-vault/latest/org/apache/camel/component/hashicorp/vault/HashicorpVaultConstants.html#OPERATION) | 
+Overrides the desired operation to be used in the producer.
+
+Enum values:
+
+-   createSecret
+    
+-   getSecret
+    
+-   deleteSecret
+    
+-   listSecrets
+    
+
+
+
+
+
+ |  | HashicorpVaultOperation |
 | **CamelHashicorpVaultSecretPath** (producer) Constant: [`SECRET_PATH`](https://javadoc.io/doc/org.apache.camel/camel-hashicorp-vault/latest/org/apache/camel/component/hashicorp/vault/HashicorpVaultConstants.html#SECRET_PATH) | Set the desired secret path as header. |  | String |
 | **CamelHashicorpVaultSecretVersion** (producer) Constant: [`SECRET_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-hashicorp-vault/latest/org/apache/camel/component/hashicorp/vault/HashicorpVaultConstants.html#SECRET_VERSION) | Set the desired secret version as header. |  | String |
 

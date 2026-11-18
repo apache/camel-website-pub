@@ -12,7 +12,7 @@ Input: the body becomes the value of the record, as text. Turn structured data s
 
 Output: the message is unchanged.
 
-Good to know: with the default `saslAuthType` of `NONE`, it connects with no login and no TLS, as a local Kafka expects. A managed Kafka service needs one of the other types.
+Good to know: `saslAuthType` has no default and must be set; `NONE` connects with no login and no TLS, as a local Kafka expects. A managed Kafka service needs one of the other types.
 
 ## Configuration Options
 
@@ -22,12 +22,12 @@ The following table summarizes the configuration options available for the `kafk
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **bootstrapServers** | Bootstrap Servers | **Required** The address of one or more Kafka brokers to connect to first, as `host:port`, separated by commas. The other brokers of the cluster are found from them. | string |  | broker1:9092,broker2:9092 |
+| **saslAuthType** | Authentication Type | **Required** How to log in to Kafka. It has no default and must be set. `NONE` connects with no login and no TLS, as a local Kafka expects; `PLAIN`, `SCRAM_SHA_256` and `SCRAM_SHA_512` log in with `saslUsername` and `saslPassword`; `SSL` connects over TLS and logs in with the client certificate in `sslKeystoreLocation`, when set; `OAUTH` logs in with the `oauth` options; `AWS_MSK_IAM` (Amazon MSK) and `KERBEROS` take their credentials from the environment the integration runs in. All types except `NONE` connect over TLS. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string |  |  |
 | **topic** | Topic Name | **Required** The name of the topic to write the records to. | string |  | orders |
 | **oauthClientId** | OAuth Client ID | OAuth client ID. Required when saslAuthType is OAUTH. | string |  |  |
 | **oauthClientSecret** | OAuth Client Secret | OAuth client secret. Required when saslAuthType is OAUTH. | string |  |  |
 | **oauthScope** | OAuth Scope | OAuth scope. Optional when saslAuthType is OAUTH. | string |  |  |
 | **oauthTokenEndpointUri** | OAuth Token Endpoint | OAuth token endpoint URI. Required when saslAuthType is OAUTH. | string |  |  |
-| **saslAuthType** | Authentication Type | Authentication type to use. Use NONE for no authentication, PLAIN or SCRAM\_SHA\_256/SCRAM\_SHA\_512 for username/password, SSL for certificate-based, OAUTH for OAuth 2.0, AWS\_MSK\_IAM for MSK, or KERBEROS for Kerberos. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string | NONE |  |
 | **saslPassword** | Password | Password for SASL authentication. Required when saslAuthType is PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. | string |  |  |
 | **saslUsername** | Username | Username for SASL authentication. Required when saslAuthType is PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. | string |  |  |
 | **sslKeyPassword** | SSL Key Password | The password of the private key in the key store file. | string |  |  |
@@ -87,7 +87,7 @@ The `saslAuthType` option chooses how the Kamelet logs in to Kafka. The options 
  
 | `saslAuthType` | Options to set |
 | --- | --- |
-| `NONE` (default) | None. No login and no TLS, as a local Kafka expects. |
+| `NONE` | None. No login and no TLS, as a local Kafka expects. |
 | `PLAIN`, `SCRAM_SHA_256`, `SCRAM_SHA_512` | `saslUsername` and `saslPassword`. |
 | `SSL` | `sslTruststoreLocation` and `sslTruststorePassword`; for mutual TLS also `sslKeystoreLocation`, `sslKeystorePassword` and `sslKeyPassword`. |
 | `OAUTH` | `oauthClientId`, `oauthClientSecret` and `oauthTokenEndpointUri`; `oauthScope` when the provider asks for one. |
@@ -115,6 +115,7 @@ The route below sends a JSON order every ten seconds to the `orders` topic, with
             parameters:
               bootstrapServers: "localhost:9092"
               topic: orders
+              saslAuthType: NONE
 ```
 
 ## Kamelet source file

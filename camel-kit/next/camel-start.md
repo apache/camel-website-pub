@@ -4,7 +4,9 @@
 
 ## Routing
 
-The router answers these questions in order; the first "yes" wins.
+Documentation-only requests are handled first: `/camel-start reconcile documentation` consolidates the current system description from source and existing artifacts, without allocating a pipeline or changing code. See [Current system documentation and ADRs](documentation.md) for evidence and ADR handling.
+
+For implementation work, the router answers these questions in order; the first "yes" wins.
 
   
 | # | Request state | Route |
@@ -26,7 +28,7 @@ Both pipelines share plan, execute and validate; only the design entry differs. 
   
 | Tier | Skills | Role |
 | --- | --- | --- |
-| Entry | `camel-start` | Routes to the right pipeline stage |
+| Entry | `camel-start` | Routes to the right pipeline stage or reconciles documentation directly |
 | Pipeline | `camel-brainstorm`, `camel-migrate`, `camel-plan`, `camel-execute`, `camel-validate` | Five skills for the four stages; brainstorm and migrate are the alternative design entries |
 | Utilities | `camel-ship`, `camel-knowledge`, `camel-debug` | Standalone, usable at any time without changing the active pipeline state |
 | Internal | `camel-design`, `camel-implement`, `camel-test`, `camel-verify` | Dispatched by the pipeline skills; not user-invocable |
@@ -46,3 +48,7 @@ Both pipelines share plan, execute and validate; only the design entry differs. 
 | `/camel-knowledge` | Implementation, code generation, route validation, design work |
 
 Use a stage directly when the destination is already known, for example `/camel-plan` with an approved design or `/camel-debug` for a broken route. Use `/camel-start` when the request is new or its current stage is uncertain.
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

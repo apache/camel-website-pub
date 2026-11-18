@@ -128,7 +128,31 @@ The IBM Secrets Manager component supports the following message header(s), whic
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelIbmSecretsManagerProducerOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-secrets-manager/latest/org/apache/camel/component/ibm/secrets/manager/IBMSecretsManagerConstants.html#OPERATION) | Overrides the desired operation to be used in the producer. |  | String |
+| **CamelIbmSecretsManagerProducerOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-secrets-manager/latest/org/apache/camel/component/ibm/secrets/manager/IBMSecretsManagerConstants.html#OPERATION) | 
+Overrides the desired operation to be used in the producer.
+
+Enum values:
+
+-   createArbitrarySecret
+    
+-   createKVSecret
+    
+-   getSecret
+    
+-   deleteSecret
+    
+-   listSecrets
+    
+-   updateSecret
+    
+-   listSecretVersions
+    
+
+
+
+
+
+ |  | IBMSecretsManagerOperation |
 | **CamelIbmSecretsManagerSecretName** (producer) Constant: [`SECRET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-ibm-secrets-manager/latest/org/apache/camel/component/ibm/secrets/manager/IBMSecretsManagerConstants.html#SECRET_NAME) | Set the desired secret name as header. |  | String |
 | **CamelIbmSecretsManagerSecretVersion** (producer) Constant: [`SECRET_VERSION`](https://javadoc.io/doc/org.apache.camel/camel-ibm-secrets-manager/latest/org/apache/camel/component/ibm/secrets/manager/IBMSecretsManagerConstants.html#SECRET_VERSION) | Set the desired secret version as header. |  | String |
 | **CamelIbmSecretsManagerSecretId** (producer) Constant: [`SECRET_ID`](https://javadoc.io/doc/org.apache.camel/camel-ibm-secrets-manager/latest/org/apache/camel/component/ibm/secrets/manager/IBMSecretsManagerConstants.html#SECRET_ID) | Set the desired secret ID as header. |  | String |

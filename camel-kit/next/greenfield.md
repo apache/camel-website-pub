@@ -169,3 +169,8 @@ To change an approved design, run `/camel-brainstorm 001-order-processing`. When
 -   **A route breaks later.** Run `/camel-debug` for a structured diagnosis outside the pipeline; failures during `/camel-execute` are handled by its own verification loop.
     
 -   **Rules too strict.** Edit `docs/constitution.md` before running the pipeline; the eight rules are per project.
+    
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

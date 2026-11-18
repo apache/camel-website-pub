@@ -2,11 +2,11 @@
 
 **Provided by: "Apache Software Foundation"**
 
-**Support Level for this Kamelet is: "Preview"**
+**Support Level for this Kamelet is: "Deprecated"**
 
-Receives each Avro record from topics in Apache Kafka, with the schema kept in an Apicurio Registry secured with Keycloak.
+Deprecated, to be removed in a later release: receives each Avro record from topics in Apache Kafka, with the schema kept in an Apicurio Registry secured with Keycloak.
 
-Use it to read Avro records, as written by `kafka-not-secured-apicurio-registry-sink`, when the registry needs a Keycloak login and Kafka needs none. For JSON Schema records use `kafka-not-secured-apicurio-registry-json-source`; for batches use `kafka-batch-apicurio-registry-source`.
+Use it to read Avro records, as written by `kafka-not-secured-apicurio-registry-sink`, when the registry needs a Keycloak login and Kafka needs none. For JSON Schema records use `kafka-not-secured-apicurio-registry-json-source`; for batches use `kafka-batch-apicurio-registry-source`. This Kamelet is deprecated and will be removed in a later release, as the Kafka Kamelets are reduced to a few.
 
 Output: the body is the value of the record as an Avro `GenericRecord`, whose text form is JSON. The `kafka-topic`, `kafka-key`, `kafka-partition`, `kafka-offset` and `kafka-timestamp` (in milliseconds since 1970) headers say where the record came from. They are also set as `ce-kafkatopic`, `ce-kafkakey` and so on, and as the `CamelKafka*` headers that the Kafka actions read. The record headers become message headers, as text unless `deserializeHeaders` is false.
 
@@ -84,6 +84,9 @@ camel run route.yaml
 ```
 
 ## Kafka-not-secured-apicurio-registry-source Kamelet Description
+
+> **Note**
+> This Kamelet is deprecated and will be removed in a later release, as the Kafka Kamelets are reduced to a few.
 
 ### Authentication methods
 

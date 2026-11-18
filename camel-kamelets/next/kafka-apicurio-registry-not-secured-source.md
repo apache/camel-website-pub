@@ -2,11 +2,11 @@
 
 **Provided by: "Apache Software Foundation"**
 
-**Support Level for this Kamelet is: "Preview"**
+**Support Level for this Kamelet is: "Deprecated"**
 
-Receives each record written with a JSON Schema from topics in Apache Kafka, with the schema kept in an Apicurio Registry, and no login or TLS to either.
+Deprecated, to be removed in a later release: receives each record written with a JSON Schema from topics in Apache Kafka, with the schema kept in an Apicurio Registry, and no login or TLS to either.
 
-Use it to read JSON records that other applications write with a JSON Schema of the registry, on a Kafka and a registry that need no login, such as in development. For Avro records use `kafka-batch-apicurio-registry-not-secured-source`; when the registry is secured with Keycloak use `kafka-not-secured-apicurio-registry-json-source`; for records without a schema use `kafka-source`.
+Use it to read JSON records that other applications write with a JSON Schema of the registry, on a Kafka and a registry that need no login, such as in development. For Avro records use `kafka-batch-apicurio-registry-not-secured-source`; when the registry is secured with Keycloak use `kafka-not-secured-apicurio-registry-json-source`; for records without a schema use `kafka-source`. This Kamelet is deprecated and will be removed in a later release, as the Kafka Kamelets are reduced to a few.
 
 Output: the body is the value of the record as parsed JSON. The `kafka-topic`, `kafka-key`, `kafka-partition`, `kafka-offset` and `kafka-timestamp` (in milliseconds since 1970) headers say where the record came from. They are also set as `ce-kafkatopic`, `ce-kafkakey` and so on, and as the `CamelKafka*` headers that the Kafka actions read. The record headers become message headers, as text unless `deserializeHeaders` is false.
 
@@ -77,6 +77,9 @@ camel run route.yaml
 ```
 
 ## Kafka Apicurio Registry Not Secured Source Kamelet Description
+
+> **Note**
+> This Kamelet is deprecated and will be removed in a later release, as the Kafka Kamelets are reduced to a few.
 
 ### Authentication methods
 

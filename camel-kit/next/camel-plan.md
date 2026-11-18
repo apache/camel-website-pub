@@ -101,3 +101,7 @@ Every implementation task ends with a review section for Iron Law 4: spec compli
 After saving the plan the skill adds the provenance metadata, marks existing downstream artifacts stale with `camel-kit doc stale --cascade`, and then either invokes `/camel-execute` (chained mode) or prints the next command and stops (standalone mode). Agent traits can replace the default handoff, for example Claude Code stays out of its native plan mode so that no second approval appears.
 
 The plan stays valid while its design is unchanged. After a transient environment failure, fix the environment and rerun `/camel-execute <pipeline-id>`; execution restarts from the first task because there is no task-level resume. If the design changes, amend it with `/camel-brainstorm <pipeline-id>` and regenerate the stale plan before executing again.
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

@@ -173,7 +173,7 @@ Enum values:
  | ERROR\_HANDLER | PollOnError |
 | **pollTimeoutMs** (consumer) | The timeout used when polling the share consumer. | 5000 | Long |
 | **preValidateHostAndPort** (consumer) | Whether to eager validate that broker host:port is valid and can be DNS resolved to known host during starting this consumer. If the validation fails, then an exception is thrown, which makes Camel fail fast. Disabling this will postpone the validation after the consumer is started, and Camel will keep re-connecting in case of validation or DNS resolution error. | true | boolean |
-| **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). | false | boolean |
+| **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, it is set under the property of the vendor (for apicurio apicurio.registry.use-specific-avro-reader, for aws-glue avroRecordType=SPECIFIC\_RECORD). | false | boolean |
 | **valueDeserializer** (consumer) | Deserializer class for value that implements the Deserializer interface. | org.apache.kafka.common.serialization.StringDeserializer | String |
 | **acquireMode** (consumer (advanced)) | 
 
@@ -198,7 +198,45 @@ Enum values:
 | **kafkaShareClientFactory** (advanced) | **Autowired** Factory to use for creating org.apache.kafka.clients.consumer.KafkaShareConsumer instances. This allows configuring a custom factory to create instances with logic that extends the vanilla Kafka clients. |  | KafkaShareClientFactory |
 | **healthCheckConsumerEnabled** (health) | Used for enabling or disabling all consumer based health checks from this component. | true | boolean |
 | **healthCheckProducerEnabled** (health) | Used for enabling or disabling all producer based health checks from this component. Notice: Camel has by default disabled all producer based health-checks. You can turn on producer checks globally by setting camel.health.producersEnabled=true. | true | boolean |
-| **schemaRegistryURL** (schema) | URL of the schema registry servers to use. The format is host1:port1,host2:port2. This is known as schema.registry.url in multiple Schema registries documentation. This option is only available externally (not standard Apache Kafka). |  | String |
+| **schemaFormat** (schema) | 
+
+The format of the record values in the schema registry, which selects the serializer and deserializer of the schemaRegistryVendor. Not every vendor supports every format: azure supports only avro. Only used when schemaRegistryVendor is set.
+
+Enum values:
+
+-   avro
+    
+-   json
+    
+-   protobuf
+    
+
+
+
+
+
+ | avro | String |
+| **schemaRegistryURL** (schema) | URL of the schema registry servers to use. The format is host1:port1,host2:port2. This is known as schema.registry.url in multiple Schema registries documentation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, the URL is set under the property of the vendor: schema.registry.url for confluent, apicurio.registry.url for apicurio (the URL of the registry API, such as [http://localhost:8080/apis/registry/v3](http://localhost:8080/apis/registry/v3)), schema.registry.url for azure (the fully qualified namespace, such as my-namespace.servicebus.windows.net), and endpoint for aws-glue (optional, as Glue is addressed by the AWS region). |  | String |
+| **schemaRegistryVendor** (schema) | 
+
+The schema registry vendor, which sets up the value serializer (producer), the value deserializer (consumer) and the registry properties of the vendor for the schemaFormat, so that you do not need to know the class names or the property names of the vendor. The schemaRegistryURL is set as the registry URL of the vendor. A valueSerializer or valueDeserializer other than the default, and additionalProperties, take precedence. The serde jars of the vendor must be on the classpath, as Camel does not include them. Leave it unset to configure the serializer, deserializer and registry properties yourself.
+
+Enum values:
+
+-   confluent
+    
+-   apicurio
+    
+-   aws-glue
+    
+-   azure
+    
+
+
+
+
+
+ |  | String |
 | **kerberosBeforeReloginMinTime** (security) | Login thread sleep time between refresh attempts. | 60000 | Integer |
 | **kerberosConfigLocation** (security) | Location of the kerberos config file. |  | String |
 | **kerberosInitCmd** (security) | Kerberos kinit command path. Default is /usr/bin/kinit. | /usr/bin/kinit | String |
@@ -365,7 +403,7 @@ Enum values:
  | ERROR\_HANDLER | PollOnError |
 | **pollTimeoutMs** (consumer) | The timeout used when polling the share consumer. | 5000 | Long |
 | **preValidateHostAndPort** (consumer) | Whether to eager validate that broker host:port is valid and can be DNS resolved to known host during starting this consumer. If the validation fails, then an exception is thrown, which makes Camel fail fast. Disabling this will postpone the validation after the consumer is started, and Camel will keep re-connecting in case of validation or DNS resolution error. | true | boolean |
-| **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). | false | boolean |
+| **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, it is set under the property of the vendor (for apicurio apicurio.registry.use-specific-avro-reader, for aws-glue avroRecordType=SPECIFIC\_RECORD). | false | boolean |
 | **valueDeserializer** (consumer) | Deserializer class for value that implements the Deserializer interface. | org.apache.kafka.common.serialization.StringDeserializer | String |
 | **acquireMode** (consumer (advanced)) | 
 
@@ -402,7 +440,45 @@ Enum values:
 
  |  | ExchangePattern |
 | **kafkaShareClientFactory** (advanced) | Factory to use for creating org.apache.kafka.clients.consumer.KafkaShareConsumer instances. This allows configuring a custom factory to create instances with logic that extends the vanilla Kafka clients. |  | KafkaShareClientFactory |
-| **schemaRegistryURL** (schema) | URL of the schema registry servers to use. The format is host1:port1,host2:port2. This is known as schema.registry.url in multiple Schema registries documentation. This option is only available externally (not standard Apache Kafka). |  | String |
+| **schemaFormat** (schema) | 
+
+The format of the record values in the schema registry, which selects the serializer and deserializer of the schemaRegistryVendor. Not every vendor supports every format: azure supports only avro. Only used when schemaRegistryVendor is set.
+
+Enum values:
+
+-   avro
+    
+-   json
+    
+-   protobuf
+    
+
+
+
+
+
+ | avro | String |
+| **schemaRegistryURL** (schema) | URL of the schema registry servers to use. The format is host1:port1,host2:port2. This is known as schema.registry.url in multiple Schema registries documentation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, the URL is set under the property of the vendor: schema.registry.url for confluent, apicurio.registry.url for apicurio (the URL of the registry API, such as [http://localhost:8080/apis/registry/v3](http://localhost:8080/apis/registry/v3)), schema.registry.url for azure (the fully qualified namespace, such as my-namespace.servicebus.windows.net), and endpoint for aws-glue (optional, as Glue is addressed by the AWS region). |  | String |
+| **schemaRegistryVendor** (schema) | 
+
+The schema registry vendor, which sets up the value serializer (producer), the value deserializer (consumer) and the registry properties of the vendor for the schemaFormat, so that you do not need to know the class names or the property names of the vendor. The schemaRegistryURL is set as the registry URL of the vendor. A valueSerializer or valueDeserializer other than the default, and additionalProperties, take precedence. The serde jars of the vendor must be on the classpath, as Camel does not include them. Leave it unset to configure the serializer, deserializer and registry properties yourself.
+
+Enum values:
+
+-   confluent
+    
+-   apicurio
+    
+-   aws-glue
+    
+-   azure
+    
+
+
+
+
+
+ |  | String |
 | **kerberosBeforeReloginMinTime** (security) | Login thread sleep time between refresh attempts. | 60000 | Integer |
 | **kerberosConfigLocation** (security) | Location of the kerberos config file. |  | String |
 | **kerberosInitCmd** (security) | Kerberos kinit command path. Default is /usr/bin/kinit. | /usr/bin/kinit | String |

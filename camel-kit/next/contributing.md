@@ -4,7 +4,7 @@ Camel Kit is developed at [apache/camel-kit](https://github.com/apache/camel-kit
 
 ## Building
 
-You need Java 17 or later, JBang, and Git; Maven comes with the wrapper. Always build with the wrapper, from the repository root.
+You need Java 21 or later for Kit and Knowledge, JBang, and Git; Maven comes with the wrapper. Always build with the wrapper, from the repository root.
 
 ```bash
 ./mvnw clean install                                      # all modules
@@ -16,6 +16,8 @@ You need Java 17 or later, JBang, and Git; Maven comes with the wrapper. Always 
 # run the CLI from source
 jbang kit/camel-kit-main/src/main/jbang/main/CamelKit.java --help
 ```
+
+The standalone JBang launcher enables native access for its terminal libraries. When invoking `org.apache.camel.kit.CamelKitMain` directly with `java`, include `--enable-native-access=ALL-UNNAMED` before the main class, as the launcher does.
 
  
 | Module | Content |
@@ -29,6 +31,8 @@ jbang kit/camel-kit-main/src/main/jbang/main/CamelKit.java --help
 Install the shared parent once with `./mvnw -B -N install`, then build one product with `./mvnw -B -f kit/pom.xml clean install` or `./mvnw -B -f knowledge/pom.xml clean install`. The Knowledge reactor contains `schema`, `embedding`, `indexer`, `index` and `mcp`; ordinary builds use the committed index. All Java packages use `org.apache.camel.kit`, and Maven modules use `org.apache.camel`.
 
 `distribution.properties` at the repository root is the single source of truth for every version pin; it is copied into the JAR and never duplicated by hand. `tools/sync_distribution_mirrors.py` copies the few literals Maven needs into `kit/pom.xml` and checks them with `--check`.
+
+The CLI uses Aesh’s tokenized, one-shot argv API. Keep option binding in commands and business logic in services/controllers; preserve usage-error exit code 2 and stdout/stderr separation. `KitOptionParser` preserves strict scalar options and token-based list values; Ship additionally records context order. The standalone runner does not acquire an Aesh interactive terminal. JLine/TamboUI still own standalone rendering, while the plugin uses the host’s terminal. `camel.cli.version` and `aesh.version` pin the CLI host/parser separately from `camel.main.version`, which controls generated integration defaults. See [host compatibility](getting-started.html#cli-host).
 
 ## Definition of done
 
@@ -61,7 +65,7 @@ This site is built from `docs/antora.yml` and `docs/modules/` in the repository 
 
 ## Releasing
 
-The shared parent, Kit and Knowledge have independent versions and release schedules. A product release references a published, released shared parent. Use the corresponding POM (`pom.xml` with `-N`, `kit/pom.xml`, or `knowledge/pom.xml`) when preparing or staging a release; never deploy the root reactor to release one product.
+The shared parent, Kit and Knowledge have independent versions and release schedules. A product release references a published, released shared parent. All release jobs use Java 21. Kit release validation also requires a released `camel.cli.version` and a synchronized Maven mirror; snapshot and prerelease host pins cannot be staged. Verify the released Aesh-based host with the CLI compatibility suite. Use the corresponding POM (`pom.xml` with `-N`, `kit/pom.xml`, or `knowledge/pom.xml`) when preparing or staging a release; never deploy the root reactor to release one product.
 
 Tags are `camel-kit-parent-X.Y.Z`, `camel-kit-X.Y.Z` and `camel-kit-knowledge-X.Y.Z`. `tools/release_target.py` validates the selected target, its module versions and its tag. The manually dispatched `Stage Maven Release` workflow checks the exact tag and reviewed commit SHA, tests and signs that target, and uploads a validated staging deployment. Automatic promotion is disabled.
 

@@ -2,11 +2,11 @@
 
 **Provided by: "Apache Software Foundation"**
 
-**Support Level for this Kamelet is: "Preview"**
+**Support Level for this Kamelet is: "Deprecated"**
 
-Receives Avro records from topics in Apache Kafka in batches, with the schema kept in an Apicurio Registry, and no login or TLS to either.
+Deprecated, to be removed in a later release: receives Avro records from topics in Apache Kafka in batches, with the schema kept in an Apicurio Registry, and no login or TLS to either.
 
-Use it to read many Avro records at once, as written by `kafka-apicurio-registry-not-secured-sink`, on a Kafka and a registry that need no login, such as in development. When the registry is secured with Keycloak use `kafka-batch-apicurio-registry-source`.
+Use it to read many Avro records at once, as written by `kafka-apicurio-registry-not-secured-sink`, on a Kafka and a registry that need no login, such as in development. When the registry is secured with Keycloak use `kafka-batch-apicurio-registry-source`. This Kamelet is deprecated and will be removed in a later release, as the Kafka Kamelets are reduced to a few.
 
 Output: the body is a List with one entry per record, up to `batchSize`. Each entry is a message of its own, with the value of the record as its body (an Avro `GenericRecord`, whose text form is JSON), and the key, offset and timestamp of the record in its `CamelKafkaKey`, `CamelKafkaOffset` and `CamelKafkaTimestamp` headers. The record headers are in the entries too, as bytes. The message itself has the `CamelKafkaTopic` and `CamelKafkaPartition` headers. The `kafka-topic`, `kafka-key` and other headers of `kafka-source` are not set.
 
@@ -82,6 +82,9 @@ camel run route.yaml
 ```
 
 ## Kafka Batch Apicurio Registry Not Secured Source Kamelet Description
+
+> **Note**
+> This Kamelet is deprecated and will be removed in a later release, as the Kafka Kamelets are reduced to a few.
 
 ### Authentication methods
 

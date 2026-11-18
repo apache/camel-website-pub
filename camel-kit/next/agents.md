@@ -20,7 +20,35 @@ The pipeline skills delegate independent implementation and review tasks to fres
 
 ## Anthropic Claude Code
 
-`init` writes `CLAUDE.md` (which points to `AGENTS.md`), the slash commands under `.claude/commands/`, the skills under `.claude/skills/`, project settings in `.claude/settings.json` and the MCP servers in `.mcp.json`. Start with `/camel-start`. During `/camel-execute`, independent tasks of the same wave are dispatched to parallel subagents with isolated context windows.
+`init` writes `CLAUDE.md` (which points to `AGENTS.md`), the skills under `.claude/skills/`, project settings in `.claude/settings.json` and the MCP servers in `.mcp.json`. Start with `/camel-start`. During `/camel-execute`, independent tasks of the same wave are dispatched to parallel subagents with isolated context windows.
+
+### Native skill discovery _(development snapshot only)_
+
+Claude Code discovers the skills directly from `.claude/skills/<skill>/SKILL.md`; `init` no longer generates a second set of command files under `.claude/commands/`. The released 0.4.1 still writes those command stubs next to the skills.
+
+-   The nine public skills (`camel-start`, `camel-brainstorm`, `camel-migrate`, `camel-plan`, `camel-execute`, `camel-validate`, `camel-ship`, `camel-knowledge` and `camel-debug`) carry `user-invocable: true` in the generated copy, so each one is available as `/camel-*`.
+    
+-   Each public skill has a `description` that states when to use it. Claude Code may use that description to select a skill from the conversation, but the selection is the model’s decision and is not guaranteed; invoke the skill by name when you need a specific stage.
+    
+-   The four internal skills (`camel-design`, `camel-implement`, `camel-test` and `camel-verify`) carry `user-invocable: false` and `disable-model-invocation: true`. They are not listed as commands and the model does not select them on its own. The pipeline skills still reach their guides by reading the files.
+    
+
+### Upgrading an existing workspace _(development snapshot only)_
+
+Regenerate a workspace created by an earlier Camel Kit from the project root, then restart Claude Code:
+
+```bash
+camel-kit init --here --ai claude --force
+```
+
+Commit or back up your own edits to generated files first: the `camel-*` skills are rewritten on every run.
+
+-   Regeneration removes only the command files Camel Kit itself used to generate in `.claude/commands/`: one `<command>.md` for each of the nine public commands. Every other file in that directory is preserved, including your own commands and custom files whose names start with `camel-`.
+    
+-   `init` stops before it writes anything when `.claude`, one of the Claude directories it manages or the legacy `.claude/commands` path is a symbolic link. The error names the link; replace it with a real directory and run `init` again.
+    
+-   `camel-kit doctor` accepts a configuration that still records `agent.folder=.claude/commands`, so a workspace that has not been regenerated yet is not reported as broken for that reason.
+    
 
 ## IBM Bob 2
 

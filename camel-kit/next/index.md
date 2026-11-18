@@ -62,7 +62,7 @@ See [Stages, approval gate and Iron Laws](pipeline.md) for the stages, the appro
    
 | Agent | Init flag | Primary generated assets | MCP configuration |
 | --- | --- | --- | --- |
-| Anthropic Claude Code | `--ai claude` | `CLAUDE.md`, `.claude/commands/`, `.claude/skills/` | `.mcp.json` |
+| Anthropic Claude Code | `--ai claude` | `CLAUDE.md`, `.claude/skills/`, `.claude/agents/`, `.claude/settings.json` | `.mcp.json` |
 | IBM Bob 2 (default) | `--ai bob2` | `.bob/custom_modes.yaml`, rules, `.bob/skills/`, `.bob/agents/`, `.bob/personas/` | `.bob/mcp.json` |
 | Google Antigravity | `--ai antigravity` | `AGENTS.md`, `.agents/skills/`, `.agents/agents/`, `.agents/camel-kit-personas/` | `.agents/mcp_config.json` |
 | OpenAI Codex CLI | `--ai codex` | `AGENTS.md`, `.agents/skills/`, `.codex/agents/` | `.codex/config.toml` |

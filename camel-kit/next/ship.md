@@ -22,6 +22,8 @@ Use it when you want one resumable run from requirements to validated, published
 
 Ship targets Camel Main at the configured `camel.main.version`: a `-p camel.main.version=…​` override, then the `-c` file or `~/.camel-kit/config.properties`, then the bundled default.
 
+After guarded publication, the invoking parent reconciles current project docs and ADRs through [the documentation-only workflow](documentation.md). Ship’s `COMPLETED` state and Stamp cover the controller’s checks, not that separate review. Direct CLI use prints the follow-up (on stderr with `--json`, preserving its schema). Status and abort authorize no documentation writes. Pending/interrupted reconciliation remains explicit.
+
 ## Command and options
 
 camel-kit ship \[--text TEXT\]... \[--document PATH\]... \[--ask always|smart|never\]
@@ -30,6 +32,10 @@ camel-kit ship --resume RUN\_ID | --status RUN\_ID | --abort RUN\_ID
 camel-kit ship --submit RUN\_ID --result PATH \[--json\]
 
 Context is optional: a bare `camel-kit ship` starts a short discovery conversation. Text and documents are added to the discovery input before any question, and open points come back as grouped unresolved questions.
+
+### Literal context and argument files
+
+Text and document occurrences keep their original order, including mixed repeated options. Standalone `camel-kit ship --text '@note'` passes `@note` literally and never expands argument files. With the Aesh-based development plugin, the Camel host expands `@file` before Kit runs. Write `camel kit ship --text '@@note'` or `camel kit ship --text=@note` to pass the same literal text. For a document whose filename starts with `@`, use `--document '@@notes.md'` or `--document=@notes.md`. To pass two leading `@` characters as a separate plugin value, supply three. Quoting preserves shell tokens but does not suppress the host’s argument-file processing. An unescaped `@missing-file` fails with `Argument file not found` and exit code 2 before Kit runs, including when supplied as Ship context. Other Camel commands retain the host’s normal policy.
 
   
 | Option | Default | Description |
@@ -121,7 +127,7 @@ Recovery is shared. After an interruption inspect `--status --json`, wait for a 
 
 ## Entry points per agent
 
--   **Claude Code** and **GitHub Copilot CLI** expose `/camel-ship` through their skill directories and relay eligible runs to their read-only worker; Claude Code’s compatibility command stub only points at the skill.
+-   **Claude Code** and **GitHub Copilot CLI** expose `/camel-ship` through their skill directories and relay eligible runs to their read-only worker. Claude Code has no generated command file in the development snapshot; the compatibility command stub of the released 0.4.1 only points at the skill.
     
 -   **IBM Bob 2** exposes the native skill as `$camel-ship` in Bob Shell and `/camel-ship` in Bob IDE.
     
@@ -174,3 +180,7 @@ $camel-ship --document requirements.md
 | Runtimes | Camel Main, Spring Boot, Quarkus | Camel Main with YAML DSL |
 
 Maintainers run the Pi live gate manually with the `linux-ship-certification` Maven profile and the `CAMEL_KIT_SHIP_LIVE_PI` and `CAMEL_KIT_SHIP_LIVE_NODE` variables; it is not part of CI and not something users run.
+
+## Current documentation and decisions
+
+See [current system documentation and ADRs](documentation.md) for the shared lifecycle, stage ownership, documentation-only reconciliation, source-bound review evidence and verification limits.

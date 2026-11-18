@@ -163,6 +163,22 @@ With the embedded HTTP server (Camel Main and Camel JBang), a request on `/mcp` 
 
 Starting in Camel 4.24, `ai-resource` rejects a fixed `resourceUri` containing `{` or `}` at route startup. The MCP SDK interprets those characters as URI-template expressions. Routes that intend variable path segments must use `uriTemplate` instead, for example `ai-resource:customer?uriTemplate=camel:///customers/{id}`. If the braces are literal URI characters, percent-encode them as `%7B` and `%7D`.
 
+### camel-ai-observability - token counts are numbers and Micrometer Observations carry usage
+
+The GenAI spans recorded through `camel-opentelemetry2` now set `gen_ai.usage.input_tokens` and `gen_ai.usage.output_tokens` as numbers (long attributes) instead of strings, as the OpenTelemetry GenAI semantic conventions define them. A query or dashboard in the tracing backend that compared them as strings must compare them as numbers.
+
+When GenAI observations go through a Micrometer `ObservationRegistry` (for example on Spring Boot), the token usage, the response model and the finish reason are now added as high-cardinality key values, as Spring AI does. They reach the traces, so the LLM calls recorded by Camel show their token usage there. They are not metric tags: the `gen_ai.client.operation` and `gen_ai.client.token.usage` metrics are unchanged.
+
+### camel-ai-observability - calls traced by Spring AI, quarkus-langchain4j or the OpenTelemetry agent are recorded once
+
+When a `spring-ai-chat` model is built with an `ObservationRegistry` (as Spring Boot does when observation support is enabled), or a `langchain4j-chat` / `langchain4j-agent` model traces its calls (quarkus-langchain4j with `quarkus-opentelemetry`, or the `langchain4j-observation` listener), or the OpenTelemetry Java agent traces the `openai-java` calls of `camel-openai`, Camel no longer records its own GenAI span and metrics for those model calls: the framework already records them, and both together counted every call and its tokens twice. Set `camel.aiObservability.deferToFramework=false` to keep the previous behavior.
+
+At the default level `basic`, this also removes the span that a `langchain4j-agent` run on such a model had, which summed the tokens of the whole tool loop and carried the `camel.component` tag: the framework’s spans record each model call instead. At level `detailed` the run keeps its own `invoke_agent` span.
+
+### camel-ai-observability - GenAI spans go through camel-opentelemetry2 when it is in use
+
+When both `camel-opentelemetry2` and a Micrometer `ObservationRegistry` are present (for example on Spring Boot with the Actuator), the GenAI spans are now created through `camel-opentelemetry2`, in the same tree as the route spans, instead of as Micrometer Observations. The `gen_ai.client.operation` timer is then recorded directly through the `MeterRegistry` rather than by the Observation’s meter handler, so it has no `error` tag and no `gen_ai.client.operation.active` long task timer. Applications that trace through Micrometer only, or with `camel-micrometer-observability`, keep the Observations.
+
 ### camel-micrometer, camel-opentelemetry-metrics - tags and attributes from headers are used as given
 
 The `micrometer` and `opentelemetry-metrics` producers now use the tags of the `CamelMetricsTags` header and the attributes of the `CamelMetricsAttributes` header as given. Before, their keys and values were evaluated as Simple expressions, in the same way as the `tags` and `attributes` URI options. The URI options are still evaluated per exchange, and a tag or attribute from the header still overrides one from the URI with the same key.
@@ -389,7 +405,9 @@ A consumer with the `exceptionHandler` option now gives that handler the JMS exc
 
 ### camel-keycloak - Keycloak 26.8.2 requires the kc-admin-api client scope
 
-This is a change in Keycloak, not in Camel: from Keycloak 26.8.2 the Admin REST API accepts only access tokens that carry the built-in `kc-admin-api` client scope, and rejects other tokens with `401 Unauthorized`. The Keycloak upgrade assigns the scope to `admin-cli` and `security-admin-console` only. When the `keycloak` producer authenticates with `clientId` and `clientSecret` of your own client, assign `kc-admin-api` to that client as a default client scope; a pre-obtained `accessToken` must be issued with that scope too. Username and password authentication uses `admin-cli` and keeps working. The integration tests of camel-keycloak now run against Keycloak 26.8.2.
+This is a change in Keycloak, not in Camel: from Keycloak 26.8.2 the Admin REST API accepts only access tokens that carry the built-in `kc-admin-api` client scope, and rejects other tokens with `401 Unauthorized`. The Keycloak upgrade assigns the scope to `admin-cli` and `security-admin-console` only. When the `keycloak` producer authenticates with `clientId` and `clientSecret` of your own client, assign `kc-admin-api` to that client as a default client scope; a pre-obtained `accessToken` must be issued with that scope too. Username and password authentication uses `admin-cli` and keeps working. The integration tests of camel-keycloak now run against Keycloak 26.8.2 on amd64 and against Keycloak 26.0.5 on ppc64le.
+
+The `createOrganization` operation no longer sends the `autoRedirect` and `identityProviderAlias` fields of the organization domain, which the Keycloak 26.8 client library serializes (`autoRedirect` with the value `false`) and a Keycloak 26.0 server rejects with `400 Bad Request`. The producer never set these fields, so nothing changes for a Keycloak 26.8 server.
 
 ### camel-kubernetes - the context reload on a secret or config map update lists the resources
 
@@ -1661,6 +1679,15 @@ The `Struct` to `Map` type converter now also converts a `Struct` inside a list 
 Debezium has been upgraded to 3.7.0.Final, which maps a signed MySQL `TINYINT` column to the Kafka Connect `INT8` type instead of `INT16` (debezium/dbz#2235). In the `Struct` of the message body, and in the `Map` it converts to, the value of such a column is now a `Byte` instead of a `Short`. Code that casts the value to `Short` must read it as a `Number` (or a `Byte`) instead. A `TINYINT UNSIGNED` column is still a `Short`.
 
 The new Debezium options of 3.7 are available on all `debezium-*` components. The `ddlParserType` option of `debezium-mysql` is kept, although Debezium 3.7 no longer lists it in the configuration of its MySQL connector.
+
+Debezium 3.7.1.Final removed two options, so Camel removed them too, and an endpoint that still sets one fails to start with an unknown option:
+
+-   `databaseServerIdOffset` (`database.server.id.offset`) of `debezium-mysql`
+    
+-   `snapshotDatabaseErrorsMaxRetries` (`snapshot.database.errors.max.retries`) of `debezium-oracle`
+    
+
+The `debezium-mysql` component has the new `unavailableValuePlaceholder` option.
 
 ### camel-docker - the streaming operations give their result, and their failures fail the exchange
 
@@ -3354,9 +3381,15 @@ The `invokeFunction` operation of `alibaba-fc` now sends a stream or a file body
 
 A body that does not convert to bytes, such as a `Map` or a POJO, is no longer sent as its `toString()`: it now fails with an `InvalidPayloadException`. Marshal such a body first, for example to JSON with `marshal().json()`.
 
-### camel-alibaba-fc - region is no longer marked as required
+### camel-alibaba-fc - endpoint is marked as required instead of region
 
-The `region` option of `alibaba-fc` is no longer marked as required. To create the client, the Camel endpoint needs the `region` or the `endpoint` option. It needs neither when the `fcClient` option is set or autowired. So the endpoint validation of the catalog no longer reports a URI without `region` as missing a required option. The behavior of the component at runtime does not change. A URI with neither option still fails at the first message with `Region or endpoint is required`, unless the `fcClient` option is set or autowired.
+The `endpoint` option of `alibaba-fc` is now marked as required, and the `region` option no longer is. The endpoint of Function Compute contains the ID of the Alibaba Cloud account, as in `12345.cn-hangzhou.fc.aliyuncs.com`, so the region does not determine it.
+
+A URI with `region` and without `endpoint` now fails at the first message with `Endpoint is required`, unless the `fcClient` option is set or autowired. Before, the client of the SDK chose the host from the region. For a region in its own map of regions, the host was `account-id.<region>.fc.aliyuncs.com`, and Function Compute took the text `account-id` as the account ID. For a region outside this map, the host was `fc-open.<region>.aliyuncs.com`.
+
+The endpoint validation of the catalog now reports a URI without `endpoint` as missing a required option. Before, it reported a URI without `region`. It also reports a URI without `endpoint` when the `fcClient` option is set or autowired. Such a route still runs, because the producer then uses neither option.
+
+The `region` option is deprecated, because the producer no longer uses it.
 
 ### camel-dropbox - search and get read every page of the result
 

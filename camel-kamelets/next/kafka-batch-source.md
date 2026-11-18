@@ -10,7 +10,7 @@ Use it to handle many records at once, for example to write them to a database i
 
 Output: the body is a List with one entry per record, up to `batchSize`. Each entry is a message of its own, with the value of the record as its body (text), and the key, offset and timestamp of the record in its `CamelKafkaKey`, `CamelKafkaOffset` and `CamelKafkaTimestamp` headers. The record headers are in the entries too, as bytes. The message itself has the `CamelKafkaTopic` and `CamelKafkaPartition` headers. The `kafka-topic`, `kafka-key` and other headers of `kafka-source` are not set.
 
-Good to know: with the default `saslAuthType` of `NONE`, it connects with no login and no TLS. To save the position in Kafka only once a batch was handled, set `allowManualCommit` to true and `autoCommitEnable` to false, and end the flow with `kafka-batch-manual-commit-action`. A new consumer group starts at the newest records, unless `autoOffsetReset` is `earliest`. Without `consumerGroup`, every start uses a new group, so the records sent while the integration was stopped are skipped.
+Good to know: `saslAuthType` has no default and must be set; `NONE` connects with no login and no TLS. To save the position in Kafka only once a batch was handled, set `allowManualCommit` to true and `autoCommitEnable` to false, and end the flow with `kafka-batch-manual-commit-action`. A new consumer group starts at the newest records, unless `autoOffsetReset` is `earliest`. Without `consumerGroup`, every start uses a new group, so the records sent while the integration was stopped are skipped.
 
 ## Configuration Options
 
@@ -20,6 +20,7 @@ The following table summarizes the configuration options available for the `kafk
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **bootstrapServers** | Bootstrap Servers | **Required** The address of one or more Kafka brokers to connect to first, as `host:port`, separated by commas. The other brokers of the cluster are found from them. | string |  | broker1:9092,broker2:9092 |
+| **saslAuthType** | Authentication Type | **Required** How to log in to Kafka. It has no default and must be set. `NONE` connects with no login and no TLS, as a local Kafka expects; `PLAIN`, `SCRAM_SHA_256` and `SCRAM_SHA_512` log in with `saslUsername` and `saslPassword`; `SSL` connects over TLS and logs in with the client certificate in `sslKeystoreLocation`, when set; `OAUTH` logs in with the `oauth` options; `AWS_MSK_IAM` (Amazon MSK) and `KERBEROS` take their credentials from the environment the integration runs in. All types except `NONE` connect over TLS. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string |  |  |
 | **topic** | Topic Names | **Required** The topics to read from, separated by commas. When `topicIsPattern` is true, a regular expression that the names of the topics must match instead. | string |  | orders |
 | **allowManualCommit** | Allow Manual Commit | If true, each message carries what `kafka-batch-manual-commit-action` needs to save the position of its records in Kafka. Set `autoCommitEnable` to false too, or the position is also saved automatically. | boolean | false |  |
 | **autoCommitEnable** | Auto Commit | If true, the position reached in each partition (the offset) is saved in Kafka automatically every 5 seconds, so that a restarted integration goes on from there. Set it to false together with `allowManualCommit` true to save the position yourself with `kafka-batch-manual-commit-action`. | boolean | true |  |
@@ -35,7 +36,6 @@ The following table summarizes the configuration options available for the `kafk
 | **oauthTokenEndpointUri** | OAuth Token URL | The URL of the OAuth 2.0 provider where the Kamelet gets its access token. Required when `saslAuthType` is `OAUTH`. | string |  | https://auth.example.com/oauth2/token |
 | **pollOnError** | Poll On Error Behavior | What to do when reading from Kafka fails: `ERROR_HANDLER` logs the error and goes on with the next records, `DISCARD` skips the records that failed, `RECONNECT` connects again and retries, `RETRY` reads the same records again, and `STOP` stops reading until the integration is restarted. Enum values: \* DISCARD \* ERROR\_HANDLER \* RECONNECT \* RETRY \* STOP | string | ERROR\_HANDLER |  |
 | **pollTimeout** | Poll Timeout | How long one read from Kafka waits for new records, in milliseconds. | integer | 5000 |  |
-| **saslAuthType** | Authentication Type | How to log in to Kafka. The default `NONE` connects with no login and no TLS, as a local Kafka expects; `PLAIN`, `SCRAM_SHA_256` and `SCRAM_SHA_512` log in with `saslUsername` and `saslPassword`; `SSL` connects over TLS and logs in with the client certificate in `sslKeystoreLocation`, when set; `OAUTH` logs in with the `oauth` options; `AWS_MSK_IAM` (Amazon MSK) and `KERBEROS` take their credentials from the environment the integration runs in. All types except `NONE` connect over TLS. Enum values: \* NONE \* PLAIN \* SCRAM\_SHA\_256 \* SCRAM\_SHA\_512 \* SSL \* OAUTH \* AWS\_MSK\_IAM \* KERBEROS | string | NONE |  |
 | **saslPassword** | Password | The password of `saslUsername`. Required when `saslAuthType` is `PLAIN`, `SCRAM_SHA_256` or `SCRAM_SHA_512`. | string |  |  |
 | **saslUsername** | Username | The user name to log in to Kafka with. Required when `saslAuthType` is `PLAIN`, `SCRAM_SHA_256` or `SCRAM_SHA_512`. | string |  |  |
 | **sslKeyPassword** | SSL Key Password | The password of the private key in the key store file in `sslKeystoreLocation`. | string |  |  |
@@ -92,7 +92,7 @@ camel run route.yaml
 
 ### Authentication methods
 
-The `saslAuthType` option chooses how the Kamelet logs in to Kafka, as for `kafka-source`. The default `NONE` connects with no login and no TLS, as a local Kafka expects.
+The `saslAuthType` option chooses how the Kamelet logs in to Kafka, as for `kafka-source`. It has no default and must be set; `NONE` connects with no login and no TLS, as a local Kafka expects.
 
 ### Output format
 

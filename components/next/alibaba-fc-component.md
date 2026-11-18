@@ -114,13 +114,13 @@ Enum values:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **endpoint** (producer) | The endpoint of Function Compute, which is a host name without http:// or https://. The producer sends requests to it over HTTPS. If not set, the region option determines the endpoint, and one of the two is required. Not used when the fcClient option is set or autowired. |  | String |
+| **endpoint** (producer) | **Required** The endpoint of Function Compute, which is a host name without http:// or https://. It contains the ID of the Alibaba Cloud account, as in 12345.cn-hangzhou.fc.aliyuncs.com. The producer sends requests to it over HTTPS. The region option does not determine the endpoint, so this option is required. Not used when the fcClient option is set or autowired. |  | String |
 | **functionName** (producer) | The name of the function. The CamelAlibabaFcFunctionName header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required. |  | String |
 | **qualifier** (producer) | The version or alias of the service. The CamelAlibabaFcQualifier header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no version or alias to the request. |  | String |
-| **region** (producer) | The region ID of Function Compute, for example cn-hangzhou. Only used when the endpoint option is not set, to build the endpoint of Function Compute. Not used when the fcClient option is set or autowired. |  | String |
+| **region** (producer) | **Deprecated** The region ID of Function Compute, for example cn-hangzhou. The producer does not use it. Deprecation note: Use the endpoint option, which contains the region. |  | String |
 | **serviceName** (producer) | The name of the service that contains the function. The CamelAlibabaFcServiceName header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **fcClient** (advanced) | **Autowired** To use a custom com.aliyun.fc\_open20210406.Client. The producer sends its requests with this client, and the region, endpoint, accessKey, secretKey and serviceKeys options are not used. If no client is set or autowired, the Camel endpoint creates a client from these options. It creates this client when the producer processes its first message. |  | Client |
+| **fcClient** (advanced) | **Autowired** To use a custom com.aliyun.fc\_open20210406.Client. The producer sends its requests with this client, and the endpoint, accessKey, secretKey and serviceKeys options are not used. If no client is set or autowired, the Camel endpoint creates a client from these options. It creates this client when the producer processes its first message. |  | Client |
 | **accessKey** (security) | The AccessKey ID of the AccessKey pair for the requests that the producer sends to Function Compute. If not set, the accessKey of the serviceKeys option is used, and one of the two is required. Not used when the fcClient option is set or autowired. |  | String |
 | **secretKey** (security) | The AccessKey secret of the AccessKey pair for the requests that the producer sends to Function Compute. If not set, the secretKey of the serviceKeys option is used, and one of the two is required. Not used when the fcClient option is set or autowired. |  | String |
 | **serviceKeys** (security) | The AccessKey pair as an org.apache.camel.component.alibaba.common.models.ServiceKeys. Its accessKey is the AccessKey ID and its secretKey is the AccessKey secret. Each of the two is used when the option of the same name is not set. Not used when the fcClient option is set or autowired. |  | ServiceKeys |
@@ -176,6 +176,10 @@ The component supports the following operations:
 
 The message body is the payload of the function. A `String` is sent in UTF-8, and a `byte[]`, an `InputStream` or a file is sent as its bytes, so binary data is kept. Without a body the function is invoked with an empty payload. A `Map` or a POJO does not convert to bytes and fails with an `InvalidPayloadException`, so marshal it first, for example to JSON with `marshal().json()`.
 
+### Endpoint of Function Compute
+
+The `endpoint` option is the endpoint of Function Compute for your Alibaba Cloud account and region. The public endpoint has the form `<account ID>.<region ID>.fc.aliyuncs.com`, for example `12345.cn-hangzhou.fc.aliyuncs.com` for the account ID 12345 and the region cn-hangzhou. The internal endpoint has the form `<account ID>.<region ID>-internal.fc.aliyuncs.com`.
+
 ### Producer example
 
 -   Java
@@ -186,7 +190,7 @@ The message body is the payload of the function. A `String` is sent in UTF-8, an
 ```java
 from("direct:start")
     .setBody(constant("{\"name\":\"camel\"}"))
-    .to("alibaba-fc:invokeFunction?serviceName=my-service&functionName=my-function&region=cn-hangzhou&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
+    .to("alibaba-fc:invokeFunction?serviceName=my-service&functionName=my-function&endpoint=12345.cn-hangzhou.fc.aliyuncs.com&accessKey=RAW(accessKey)&secretKey=RAW(secretKey)");
 ```
 
 ```yaml
@@ -203,7 +207,7 @@ from("direct:start")
             parameters:
               serviceName: my-service
               functionName: my-function
-              region: cn-hangzhou
+              endpoint: 12345.cn-hangzhou.fc.aliyuncs.com
               accessKey: "{{alibaba.access-key}}"
               secretKey: "{{alibaba.secret-key}}"
 ```

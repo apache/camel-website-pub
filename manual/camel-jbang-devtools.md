@@ -243,7 +243,7 @@ Use `stream:in?readLine=false` for raw mode.
 
 ## Editing code in an IDE
 
-Use `jbang edit` to set up a project with resolved dependencies for IDEA, VSCode, or Eclipse. Declare dependencies with [JBang `//DEPS` comments](https://www.jbang.dev/documentation/guide/latest/dependencies.md) in Java source files:
+Use `jbang edit` to set up a project with resolved dependencies for IDEA, VSCode, or Eclipse. Declare dependencies with [JBang `//DEPS` comments](https://www.jbang.dev/documentation/jbang/latest/dependencies.md) in Java source files:
 
 > **Tip**
 > In YAML DSL, use `\#//DEPS` (YAML comment prefix).

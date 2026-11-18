@@ -10,7 +10,7 @@ Use it to pick up the rows that another application adds to a table, such as new
 
 Output: the body is one row as JSON text, an object with the column names as keys, such as `{"id":1,"username":"oscerd","city":"Rome"}`. The `Content-Type` header is `application/json`.
 
-Good to know: the query runs again `delay` milliseconds after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again. A query that finds no rows sends nothing. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version. The JDBC driver of MySQL is not included: add `mvn:com.mysql:mysql-connector-j` to the dependencies of the integration. Camel JBang (`camel run`) adds it by itself.
+Good to know: the query runs again `delay` milliseconds after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again. A query that finds no rows sends nothing. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version. The JDBC driver of MySQL is not included: add `mvn:com.mysql:mysql-connector-j` to the dependencies of the integration. Camel JBang (`camel run`) adds it by itself. Without `connectionProperties`, the connection uses TLS only when the server offers it, and the certificate of the server is not checked: set `sslMode=REQUIRED` in `connectionProperties` to insist on TLS.
 
 ## Configuration Options
 
@@ -24,6 +24,7 @@ The following table summarizes the configuration options available for the `mysq
 | **query** | Query | **Required** The SQL query to run on each poll, usually a SELECT. Each row it returns becomes a message. | string |  | SELECT \* FROM accounts WHERE processed = false |
 | **serverName** | Server Name | **Required** The host name or IP address of the MySQL server, without the port. | string |  | db.example.com |
 | **username** | Username | **Required** The database user to log in as. It needs the rights to run the queries of this Kamelet on their tables. | string |  |  |
+| **connectionProperties** | Connection Properties | Extra settings for the MySQL JDBC driver (Connector/J), as `name=value` pairs separated by `;`, such as `sslMode=REQUIRED;connectTimeout=10000`. Use it for TLS: `sslMode=REQUIRED` makes the connection use TLS, and `sslMode=DISABLED` turns TLS off. When it is not set, the driver uses TLS when the server offers it, without checking the certificate. The value is not hidden like a password, and it can show in the log when the integration starts, so do not put a password in it. | string |  | sslMode=REQUIRED |
 | **consumedQuery** | Consumed Query | An SQL statement to run after each row has been sent on, to mark the row as read or to delete it, so that `query` does not return it again. Write `:#column` where the value of a column of that row goes, such as `:#id`. When it is not set, nothing is changed, and the same rows are read on every poll. | string |  | UPDATE accounts SET processed = true WHERE id = :#id |
 | **delay** | Delay | How long to wait after one run of `query` before the next, in milliseconds. | integer | 500 |  |
 | **serverPort** | Server Port | The port the MySQL server listens on. MySQL uses 3306 unless it was set up otherwise. | string | 3306 |  |
@@ -101,6 +102,8 @@ The MySQL Source Kamelet supports the following configurations:
     
 -   **Consumed Query**: An SQL statement run for each row once it is sent, to mark the row as read or delete it, so that it is not read again
     
+-   **Connection Properties**: Extra settings for the MySQL JDBC driver, such as `sslMode=REQUIRED` to always use TLS
+    
 
 ### Output Format
 
@@ -164,6 +167,14 @@ The Kamelet sends one message per row of the query result. Each row is a JSON ob
 ### Connection Management
 
 The kamelet manages database connections automatically, including connection pooling and reconnection on failures. Query execution is scheduled at the specified interval.
+
+### Connecting with TLS
+
+Set `connectionProperties` to pass settings to the MySQL JDBC driver (Connector/J), as `name=value` pairs separated by `;`. Without it, the driver uses TLS only when the server offers it, and does not check the certificate of the server. Set `sslMode=REQUIRED` to always use TLS.
+
+```yaml
+connectionProperties: "sslMode=REQUIRED"
+```
 
 ## Kamelet source file
 

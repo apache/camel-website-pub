@@ -12,7 +12,7 @@ Input: the body is JSON text: an object for one document, such as `{"id": "order
 
 Output: when it is used inside a route, the body afterwards is the answer of Solr, as a Map-like object with its `responseHeader`.
 
-Good to know: a body that is not JSON fails the message. With `autocommit` false, the default, the documents become searchable only when Solr commits them, as set in the configuration of the collection. It connects with plain HTTP.
+Good to know: a body that is not JSON fails the message. With `autocommit` false, the default, the documents become searchable only when Solr commits them, as set in the configuration of the collection. It connects with plain HTTP by default; set `enableSSL` to true for a Solr that is reached with HTTPS, and give the certificate in `certificate` when Solr uses a self-signed certificate.
 
 ## Configuration Options
 
@@ -24,6 +24,8 @@ The following table summarizes the configuration options available for the `solr
 | **collection** | Collection | **Required** The name of the Solr collection, or of the core on a Solr server that does not run in SolrCloud mode, to add the documents to. | string |  | products |
 | **servers** | Servers | **Required** The address of the Solr server, as `host:port`, without `http://` and without the `/solr` path. The port of Solr is 8983 by default. | string |  | solr.example.com:8983 |
 | **autocommit** | Autocommit | If true, Solr commits after each message, so the documents can be searched at once. Commits are costly, so leave it false for many messages and let Solr commit on its own schedule. | boolean | false |  |
+| **certificate** | Certificate | The certificate of Solr, or of the certificate authority (CA) that signed it, as a PEM or DER file encoded in base64 on one line, such as the output of `base64 -w0 solr.crt` (`base64 -i solr.crt` on macOS). Needed when Solr uses a self-signed certificate, or one that Java does not trust. When it is not set, the certificates that Java trusts are used. Only used when `enableSSL` is true. | string |  |  |
+| **enableSSL** | Enable SSL | If true, it connects with HTTPS. Leave it false for a Solr that is reached with plain HTTP. | boolean | false |  |
 | **password** | Password | The password of the Solr user in `username`. | string |  |  |
 | **username** | Username | The Solr user to log in as, with Basic authentication. Leave it out for a Solr without login. | string |  |  |
 
