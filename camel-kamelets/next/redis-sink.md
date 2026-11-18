@@ -12,7 +12,7 @@ Input: the body is the value, as text. The `key` header (or `ce-key`) gives the 
 
 Output: when it is used inside a route, the body afterwards is what Redis answered, such as the value for `GET` or the new length of the list for `RPUSH`; for `SET` the body is unchanged.
 
-Good to know: the default `command` is `GET`, which reads and stores nothing, so set it to the command you need. A body that is not text, such as a Map, fails the message; turn it into JSON text first, for example with `json-serialize-action`. It connects with no password and no TLS.
+Good to know: the default `command` is `GET`, which reads and stores nothing, so set it to the command you need. A body that is not text, such as a Map, fails the message; turn it into JSON text first, for example with `json-serialize-action`. By default it connects with no password and no TLS, to database 0: set `password` (and `username` for an ACL user) for a Redis server that asks for a login, and `ssl` for one that needs TLS.
 
 ## Configuration Options
 
@@ -25,7 +25,11 @@ The following table summarizes the configuration options available for the `redi
 | **redisHost** | Redis Host | **Required** The host name or IP address of the Redis server. | string |  | redis.example.com |
 | **redisPort** | Redis Port | **Required** The port of the Redis server, usually 6379. | integer |  | 6379 |
 | **channels** | Channels | The channel that `PUBLISH` sends to when the message has no `channel` or `ce-channel` header. | string | one |  |
+| **database** | Database | The number of the Redis database to use, from 0 to 15 on a Redis server with the default settings. The commands run on this database. | integer | 0 | 1 |
+| **password** | Password | The password to log in to Redis with, the one set with `requirepass` or the password of the user in `username`. Leave it empty for a Redis server that does not ask for a password. | string |  |  |
 | **serializer** | Serializer | The full Java class name of the Spring Data Redis serializer that turns the values and keys into the bytes Redis stores. The default stores them as text. | string | org.springframework.data.redis.serializer.StringRedisSerializer |  |
+| **ssl** | Use TLS | Whether to connect with TLS (SSL), for a Redis server that offers TLS on `redisPort`. The certificate of the server is checked: it must be trusted by Java, as one from a public certificate authority is, and name `redisHost`. | boolean | false |  |
+| **username** | Username | The Redis user to log in as, for a Redis server with access control lists (ACL, Redis 6 and later). Leave it empty to log in with `password` alone, as the `default` user. | string |  |  |
 
 ## Dependencies
 

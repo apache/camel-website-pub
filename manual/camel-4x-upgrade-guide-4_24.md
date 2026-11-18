@@ -235,6 +235,10 @@ Additionally: - A `ShiroSecurityPolicy` created with the no-arg constructor must
 
 Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
 
+### camel-ai-tool - suspending a route no longer stops it, and tool calls in flight complete when the route stops
+
+Suspending an `ai-tool` route, with `suspendRoute` or `context.suspend()`, now suspends the route instead of stopping it: the tool is deregistered, tool calls in flight complete, a new call to the suspended tool is refused, and resuming the route registers the tool again. When an `ai-tool` route is stopped, or Camel shuts down gracefully, tool calls in flight now complete instead of failing.
+
 ### camel-wordpress - each endpoint uses its own site URL and credentials
 
 Each WordPress endpoint now has a client of its own, set up from the `url`, `apiVersion`, `user` and `password` options of that endpoint, and the producers and consumers of the endpoint use that client. The endpoints no longer initialise the `WordpressServiceProvider.getInstance()` singleton, which is deprecated together with its `init` methods. Code that read services from `WordpressServiceProvider.getInstance()` after Camel created a WordPress endpoint must now use `WordpressEndpoint.getServiceProvider()`, or create a provider with `WordpressServiceProvider.create(WordpressAPIConfiguration)`.
@@ -1403,7 +1407,7 @@ With the default `confirm=auto`, an InOnly producer now also waits for the publi
 
 The `verifySsl` and `certificatePath` options of the `cyberark-vault` endpoint, and the `camel.vault.cyberark.verifySsl` and `camel.vault.cyberark.certificatePath` properties of the CyberArk Conjur Vault Property Function, now apply to the HTTPS connections to CyberArk Conjur. Before, they were ignored, and the default trust store of the JVM was always used.
 
--   With `certificatePath`, the certificates in that file (PEM or DER) are trusted instead of the default trust store of the JVM, and the endpoint or the function fails to start when the file cannot be read. Remove `certificatePath` to keep the default trust store of the JVM.
+-   With `certificatePath`, the certificates in that file (PEM or DER) are trusted instead of the default trust store of the JVM, and the endpoint or the function fails to start when the file cannot be read. Remove `certificatePath` to keep the default trust store of the JVM. The file is a path of the file system, or a resource with the `classpath:` or `file:` prefix. Other prefixes, such as `http:`, are rejected.
     
 -   With `verifySsl=false`, neither the certificate nor the host name of the server is checked. The option is now marked as an insecure SSL setting, so the security policy reports `camel.component.cyberark-vault.verifySsl=false`, which fails the startup with `camel.main.profile=prod`. Set `certificatePath` to the certificate of the server or of its CA instead.
     

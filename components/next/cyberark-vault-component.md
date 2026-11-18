@@ -98,7 +98,7 @@ Enum values:
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **apiKey** (security) | The API key for authentication with CyberArk Conjur. |  | String |
 | **authToken** (security) | Pre-authenticated token to use for CyberArk Conjur. |  | String |
-| **certificatePath** (security) | Path of a file with the SSL certificate to trust when connecting to CyberArk Conjur, for example the certificate of a private CA, in PEM or DER format. The certificates in the file are trusted instead of the default trust store of the JVM. Not used when verifySsl is false. |  | String |
+| **certificatePath** (security) | Path of a file with the SSL certificate to trust when connecting to CyberArk Conjur, for example the certificate of a private CA, in PEM or DER format. The certificates in the file are trusted instead of the default trust store of the JVM. A path of the file system, or a resource with the file: or classpath: prefix, for example classpath:conjur-ca.pem. Other prefixes, such as http:, are not supported. Not used when verifySsl is false. |  | String |
 | **password** (security) | The password for authentication with CyberArk Conjur. |  | String |
 | **username** (security) | The username for authentication with CyberArk Conjur. |  | String |
 | **verifySsl** (security) | Whether to verify the SSL certificate and the host name of the CyberArk Conjur server. Setting it to false trusts any server, so use it only for testing. | true | boolean |
@@ -145,7 +145,7 @@ Enum values:
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **apiKey** (security) | The API key for authentication with CyberArk Conjur. |  | String |
 | **authToken** (security) | Pre-authenticated token to use for CyberArk Conjur. |  | String |
-| **certificatePath** (security) | Path of a file with the SSL certificate to trust when connecting to CyberArk Conjur, for example the certificate of a private CA, in PEM or DER format. The certificates in the file are trusted instead of the default trust store of the JVM. Not used when verifySsl is false. |  | String |
+| **certificatePath** (security) | Path of a file with the SSL certificate to trust when connecting to CyberArk Conjur, for example the certificate of a private CA, in PEM or DER format. The certificates in the file are trusted instead of the default trust store of the JVM. A path of the file system, or a resource with the file: or classpath: prefix, for example classpath:conjur-ca.pem. Other prefixes, such as http:, are not supported. Not used when verifySsl is false. |  | String |
 | **password** (security) | The password for authentication with CyberArk Conjur. |  | String |
 | **username** (security) | The username for authentication with CyberArk Conjur. |  | String |
 | **verifySsl** (security) | Whether to verify the SSL certificate and the host name of the CyberArk Conjur server. Setting it to false trusts any server, so use it only for testing. | true | boolean |
@@ -680,6 +680,14 @@ When the server has a certificate of a private CA, or a self-signed certificate,
 ```properties
 camel.vault.cyberark.certificatePath=/path/to/cert.pem
 ```
+
+The file can also be a resource with the `classpath:` or `file:` prefix, for example a certificate packaged with the application:
+
+```properties
+camel.vault.cyberark.certificatePath=classpath:conjur-ca.pem
+```
+
+Other prefixes, such as `http:`, are not supported, as the certificates to trust should not come from the network.
 
 You can disable the verification for testing purposes, which trusts any server (not recommended for production):
 
