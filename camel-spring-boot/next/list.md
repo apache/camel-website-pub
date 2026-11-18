@@ -892,7 +892,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Alibaba Message Service (MNS)](../../components/next/alibaba-mns-component.md) | camel-alibaba-mns-starter | Preview | 4.23 | Send and receive messages to/from Alibaba Cloud Message Service (MNS). |
 | [Alibaba Object Storage Service (OSS)](../../components/next/alibaba-oss-component.md) | camel-alibaba-oss-starter | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
 | [Alibaba Short Message Service (SMS)](../../components/next/alibaba-sms-component.md) | camel-alibaba-sms-starter | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
-| [Alibaba Simple Log Service (SLS)](../../components/next/alibaba-sls-component.md) | camel-alibaba-sls-starter | Preview | 4.23 | Manage logs on Alibaba Cloud Simple Log Service (SLS). |
+| [Alibaba Simple Log Service (SLS)](../../components/next/alibaba-sls-component.md) | camel-alibaba-sls-starter | Preview | 4.23 | Write logs, query logs, and list Logstores on Alibaba Cloud Simple Log Service (SLS). |
 | [Alibaba Tablestore (OTS)](../../components/next/alibaba-ots-component.md) | camel-alibaba-ots-starter | Preview | 4.23 | Perform row operations on Alibaba Cloud Tablestore (OTS). |
 | [AMQP](../../components/next/amqp-component.md) | camel-amqp-starter | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
 | [Apicurio Registry](../../components/next/apicurio-registry-component.md) | camel-apicurio-registry-starter | Preview | 4.24 | Manage artifacts, versions, and groups in Apicurio Registry v3. |
@@ -1178,12 +1178,12 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [OpenShift Build Config](../../components/next/openshift-build-configs-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Build Configs. |
 | [OpenShift Builds](../../components/next/openshift-builds-component.md) | camel-kubernetes-starter | Stable | 2.17 | Perform operations on OpenShift Builds. |
 | [OpenShift Deployment Configs](../../components/next/openshift-deploymentconfigs-component.md) | camel-kubernetes-starter | Stable | 3.18 | Perform operations on OpenShift Deployment Configs and get notified on Deployment Config changes. |
-| [OpenStack Cinder](../../components/next/openstack-cinder-component.md) | camel-openstack-starter | Stable | 2.19 | Access data in OpenStack Cinder block storage. |
-| [OpenStack Glance](../../components/next/openstack-glance-component.md) | camel-openstack-starter | Stable | 2.19 | Manage VM images and metadata definitions in OpenStack Glance. |
-| [OpenStack Keystone](../../components/next/openstack-keystone-component.md) | camel-openstack-starter | Stable | 2.19 | Access OpenStack Keystone for API client authentication, service discovery and distributed multi-tenant authorization. |
-| [OpenStack Neutron](../../components/next/openstack-neutron-component.md) | camel-openstack-starter | Stable | 2.19 | Access OpenStack Neutron for network services. |
-| [OpenStack Nova](../../components/next/openstack-nova-component.md) | camel-openstack-starter | Stable | 2.19 | Access OpenStack to manage compute resources. |
-| [OpenStack Swift](../../components/next/openstack-swift-component.md) | camel-openstack-starter | Stable | 2.19 | Access OpenStack Swift object/blob store. |
+| [OpenStack Cinder](../../components/next/openstack-cinder-component.md) | camel-openstack-starter | Stable-deprecated | 2.19 | Access data in OpenStack Cinder block storage. |
+| [OpenStack Glance](../../components/next/openstack-glance-component.md) | camel-openstack-starter | Stable-deprecated | 2.19 | Manage VM images and metadata definitions in OpenStack Glance. |
+| [OpenStack Keystone](../../components/next/openstack-keystone-component.md) | camel-openstack-starter | Stable-deprecated | 2.19 | Access OpenStack Keystone for API client authentication, service discovery and distributed multi-tenant authorization. |
+| [OpenStack Neutron](../../components/next/openstack-neutron-component.md) | camel-openstack-starter | Stable-deprecated | 2.19 | Access OpenStack Neutron for network services. |
+| [OpenStack Nova](../../components/next/openstack-nova-component.md) | camel-openstack-starter | Stable-deprecated | 2.19 | Access OpenStack to manage compute resources. |
+| [OpenStack Swift](../../components/next/openstack-swift-component.md) | camel-openstack-starter | Stable-deprecated | 2.19 | Access OpenStack Swift object/blob store. |
 | [OpenTelemetry Metrics](../../components/next/opentelemetry-metrics-component.md) | camel-opentelemetry-metrics-starter | Stable | 4.17 | Camel metrics based on the Camel Telemetry spec |
 | [OptaPlanner](../../components/next/optaplanner-component.md) | camel-optaplanner-starter | Stable | 2.13 | Solve planning problems with OptaPlanner. |
 | [Paho](../../components/next/paho-component.md) | camel-paho-starter | Stable-deprecated | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |

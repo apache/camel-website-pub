@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 397 in 324 JAR artifacts (4 deprecated)
+Number of Non-Core Components: 397 in 324 JAR artifacts (10 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -65,7 +65,7 @@ Number of Non-Core Components: 397 in 324 JAR artifacts (4 deprecated)
 | [Alibaba Message Service (MNS)](alibaba-mns-component.md) | camel-alibaba-mns | Preview | 4.23 | Send and receive messages to/from Alibaba Cloud Message Service (MNS). |
 | [Alibaba Object Storage Service (OSS)](alibaba-oss-component.md) | camel-alibaba-oss | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
 | [Alibaba Short Message Service (SMS)](alibaba-sms-component.md) | camel-alibaba-sms | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
-| [Alibaba Simple Log Service (SLS)](alibaba-sls-component.md) | camel-alibaba-sls | Preview | 4.23 | Manage logs on Alibaba Cloud Simple Log Service (SLS). |
+| [Alibaba Simple Log Service (SLS)](alibaba-sls-component.md) | camel-alibaba-sls | Preview | 4.23 | Write logs, query logs, and list Logstores on Alibaba Cloud Simple Log Service (SLS). |
 | [Alibaba Tablestore (OTS)](alibaba-ots-component.md) | camel-alibaba-ots | Preview | 4.23 | Perform row operations on Alibaba Cloud Tablestore (OTS). |
 | [AMQP](amqp-component.md) | camel-amqp | Stable | 1.2 | Messaging with AMQP protocol using Apache Qpid Client. |
 | [Apicurio Registry](apicurio-registry-component.md) | camel-apicurio-registry | Preview | 4.24 | Manage artifacts, versions, and groups in Apicurio Registry v3. |
@@ -344,12 +344,12 @@ Number of Non-Core Components: 397 in 324 JAR artifacts (4 deprecated)
 | [OpenShift Builds](openshift-builds-component.md) | camel-kubernetes | Stable | 2.17 | Perform operations on OpenShift Builds. |
 | [OpenShift Deployment Configs](openshift-deploymentconfigs-component.md) | camel-kubernetes | Stable | 3.18 | Perform operations on OpenShift Deployment Configs and get notified on Deployment Config changes. |
 | [OpenStack](openstack-summary.md) | camel-openstack |  | 2.19 |  |
-| [OpenStack Cinder](openstack-cinder-component.md) | camel-openstack | Stable | 2.19 | Access data in OpenStack Cinder block storage. |
-| [OpenStack Glance](openstack-glance-component.md) | camel-openstack | Stable | 2.19 | Manage VM images and metadata definitions in OpenStack Glance. |
-| [OpenStack Keystone](openstack-keystone-component.md) | camel-openstack | Stable | 2.19 | Access OpenStack Keystone for API client authentication, service discovery and distributed multi-tenant authorization. |
-| [OpenStack Neutron](openstack-neutron-component.md) | camel-openstack | Stable | 2.19 | Access OpenStack Neutron for network services. |
-| [OpenStack Nova](openstack-nova-component.md) | camel-openstack | Stable | 2.19 | Access OpenStack to manage compute resources. |
-| [OpenStack Swift](openstack-swift-component.md) | camel-openstack | Stable | 2.19 | Access OpenStack Swift object/blob store. |
+| [OpenStack Cinder](openstack-cinder-component.md) | camel-openstack | Stable-deprecated | 2.19 | Access data in OpenStack Cinder block storage. |
+| [OpenStack Glance](openstack-glance-component.md) | camel-openstack | Stable-deprecated | 2.19 | Manage VM images and metadata definitions in OpenStack Glance. |
+| [OpenStack Keystone](openstack-keystone-component.md) | camel-openstack | Stable-deprecated | 2.19 | Access OpenStack Keystone for API client authentication, service discovery and distributed multi-tenant authorization. |
+| [OpenStack Neutron](openstack-neutron-component.md) | camel-openstack | Stable-deprecated | 2.19 | Access OpenStack Neutron for network services. |
+| [OpenStack Nova](openstack-nova-component.md) | camel-openstack | Stable-deprecated | 2.19 | Access OpenStack to manage compute resources. |
+| [OpenStack Swift](openstack-swift-component.md) | camel-openstack | Stable-deprecated | 2.19 | Access OpenStack Swift object/blob store. |
 | [OpenTelemetry Metrics](opentelemetry-metrics-component.md) | camel-opentelemetry-metrics | Stable | 4.17 | Camel metrics based on the Camel Telemetry spec |
 | [OptaPlanner](optaplanner-component.md) | camel-optaplanner | Stable | 2.13 | Solve planning problems with OptaPlanner. |
 | [Paho](paho-component.md) | camel-paho | Stable-deprecated | 2.16 | Communicate with MQTT message brokers using Eclipse Paho MQTT Client. |

@@ -237,10 +237,6 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![hoist field action](_images/kamelets/hoist-field-action.svg) Hoist Field Action](hoist-field-action.html)
 
- [![http secured sink](_images/kamelets/http-secured-sink.svg) Secured HTTP Sink](http-secured-sink.html)
-
- [![http secured source](_images/kamelets/http-secured-source.svg) HTTP Secured Source](http-secured-source.html)
-
  [![http sink](_images/kamelets/http-sink.svg) HTTP Sink](http-sink.html)
 
  [![http source](_images/kamelets/http-source.svg) HTTP Source](http-source.html)
@@ -284,10 +280,6 @@ Consult the Kamelets User Guide for information about how to use these.
  [![jms ibm mq sink](_images/kamelets/jms-ibm-mq-sink.svg) JMS - IBM MQ Sink](jms-ibm-mq-sink.html)
 
  [![jms ibm mq source](_images/kamelets/jms-ibm-mq-source.svg) JMS - IBM MQ Source](jms-ibm-mq-source.html)
-
- [![jms pooled apache artemis sink](_images/kamelets/jms-pooled-apache-artemis-sink.svg) JMS Pooled - Apache Artemis Sink](jms-pooled-apache-artemis-sink.html)
-
- [![jms pooled apache artemis source](_images/kamelets/jms-pooled-apache-artemis-source.svg) JMS Pooled - Apache Artemis Source](jms-pooled-apache-artemis-source.html)
 
  [![jolt transformation action](_images/kamelets/jolt-transformation-action.svg) Jolt Transformation Action](jolt-transformation-action.html)
 

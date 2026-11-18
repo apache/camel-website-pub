@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795000670468,
+  "generated": 1795007898007,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4314,18 +4314,6 @@
             },
             {
               "module": "ROOT",
-              "path": "http-secured-sink.adoc",
-              "url": "/camel-kamelets/next/http-secured-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/http-secured-sink.svg\" alt=\"http secured sink\"></span> Secured HTTP Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "http-secured-source.adoc",
-              "url": "/camel-kamelets/next/http-secured-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/http-secured-source.svg\" alt=\"http secured source\"></span> HTTP Secured Source"
-            },
-            {
-              "module": "ROOT",
               "path": "http-sink.adoc",
               "url": "/camel-kamelets/next/http-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/http-sink.svg\" alt=\"http sink\"></span> HTTP Sink"
@@ -4461,18 +4449,6 @@
               "path": "jms-ibm-mq-source.adoc",
               "url": "/camel-kamelets/next/jms-ibm-mq-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-ibm-mq-source.svg\" alt=\"jms ibm mq source\"></span> JMS - IBM MQ Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "jms-pooled-apache-artemis-sink.adoc",
-              "url": "/camel-kamelets/next/jms-pooled-apache-artemis-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-pooled-apache-artemis-sink.svg\" alt=\"jms pooled apache artemis sink\"></span> JMS Pooled - Apache Artemis Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "jms-pooled-apache-artemis-source.adoc",
-              "url": "/camel-kamelets/next/jms-pooled-apache-artemis-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-pooled-apache-artemis-source.svg\" alt=\"jms pooled apache artemis source\"></span> JMS Pooled - Apache Artemis Source"
             },
             {
               "module": "ROOT",

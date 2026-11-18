@@ -1,5 +1,8 @@
 # OpenStack Glance
 
+> **Warning**
+> **Deprecated:** This openstack-glance is deprecated and may be removed in a future release.
+
 **Since Camel 2.19**
 
 **Only producer is supported**

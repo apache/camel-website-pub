@@ -64,6 +64,10 @@ The `camel-observability-services` component has been promoted from _Preview_ to
 
 The `camel-lra` component has been promoted from _Preview_ to _Stable_ support level.
 
+### camel-openstack - deprecated
+
+The `camel-openstack` components (`openstack-cinder`, `openstack-glance`, `openstack-keystone`, `openstack-neutron`, `openstack-nova` and `openstack-swift`) are deprecated. The openstack4j library they are based on has had no release or commit since May 2024, and is based on Jackson 2 with no clear path to Jackson 3.
+
 ### KeyValueRepository and State Store - namespace partitioning on shared backends
 
 In Camel 4.23, `state-store` endpoints stored keys directly into the underlying `KeyValueRepository` without namespacing. When a single `KeyValueRepository` was shared between multiple state stores, the Cache EIP, or repository adapters (such as `KeyValueAggregationRepository` or `KeyValueIdempotentRepository`), operations on one store (such as `clear()`) or key collisions could affect entries of another component or pattern.
@@ -264,6 +268,10 @@ The configured list replaces the loopback default. The allowed-origin entries fo
 ### camel-oauth - the scp claim is included in scope checks
 
 JWT validation and token introspection now read scopes from both the standard `scope` claim and the `scp` claim used by some identity providers. String values are split on whitespace; array values are read as individual scopes. When both claims are present their values are combined and duplicate scopes are removed. Consequently, a token that has a required scope only in `scp` can now pass an `OAuthTokenValidationResult.hasScope(…​)` check where it did not pass before. Review authorization rules that intentionally relied on ignoring `scp`.
+
+### camel-cassandraql - a Map body binds the named markers
+
+The `cql` producer binds a `Map` body by name: each named marker of the statement, such as `:login`, takes the value of the `Map` entry of that name. Before, a `Map` body was bound as the value of a single marker. To keep that, such as for a column of type `map`, wrap the `Map` in a `List`.
 
 ### camel-mina-sftp - checking whether a file exists takes one lstat request
 

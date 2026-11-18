@@ -92,6 +92,8 @@ The AI Tool component supports the following options which are listed below.
 | **tags** (consumer) | Comma-separated list of tags used to group tools. Producers filter the registry by these tags to select which tools to expose to the LLM. When omitted, the tool goes into a default pool available to all producers. |  | String |
 | **title** (consumer) | Optional display title for MCP tool listings. Advisory hint for MCP clients only. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
+| **allowedRoles** (security) | Comma-separated list of the roles a caller needs to call the tool, for example finance,controlling. Any one of them is enough unless allRolesRequired is set. The roles are checked before the route runs, against the caller’s roles in the exchange property CamelAiToolSecurityPrincipalRoles: a call without that property is refused. A value that is set but names no role refuses every call. Set it on the component as the default of every tool route, or per endpoint to replace it. |  | String |
+| **allRolesRequired** (security) | Whether the caller needs all the roles in allowedRoles, rather than any one of them. Has no effect when allowedRoles is not set. | false | boolean |
 | **authorizationPolicy** (security) | Reference to an org.apache.camel.spi.AuthorizationPolicy used to authorize tool calls before the route runs. Set it on the component to guard every tool route by construction, or per endpoint to override. The policy authorizes on trustworthy input only: the tool name comes from the route (never from model output), and the caller identity is carried as an exchange property set before the agent ran (for example by camel-spiffe or camel-keycloak), which the model cannot set. Authorize on exchange properties or validated tokens only, never on message headers (on a tool route the headers carry the model-controlled tool arguments). A denied call surfaces to the model as a short refusal rather than a stack trace. |  | AuthorizationPolicy |
 
 ## Endpoint Options
@@ -145,6 +147,8 @@ Enum values:
 
 
  |  | ExchangePattern |
+| **allowedRoles** (security) | Comma-separated list of the roles a caller needs to call the tool, for example finance,controlling. Any one of them is enough unless allRolesRequired is set. The roles are checked before the route runs, against the caller’s roles in the exchange property CamelAiToolSecurityPrincipalRoles: a call without that property is refused. A value that is set but names no role refuses every call. Set it on the component as the default of every tool route, or per endpoint to replace it. |  | String |
+| **allRolesRequired** (security) | Whether the caller needs all the roles in allowedRoles, rather than any one of them. Has no effect when allowedRoles is not set. | false | boolean |
 | **authorizationPolicy** (security) | Reference to an org.apache.camel.spi.AuthorizationPolicy used to authorize tool calls before the route runs. Set it on the component to guard every tool route by construction, or per endpoint to override. The policy authorizes on trustworthy input only: the tool name comes from the route (never from model output), and the caller identity is carried as an exchange property set before the agent ran (for example by camel-spiffe or camel-keycloak), which the model cannot set. Authorize on exchange properties or validated tokens only, never on message headers (on a tool route the headers carry the model-controlled tool arguments). A denied call surfaces to the model as a short refusal rather than a stack trace. |  | AuthorizationPolicy |
 
 ## Message Headers
@@ -529,6 +533,8 @@ All route-tool runtimes build the tool exchange the same way, so an authorizatio
 
 A tool call is a security boundary: an AI model decides, from its own output, which `ai-tool` route to invoke. Set an `authorizationPolicy` — a reference to an `org.apache.camel.spi.AuthorizationPolicy` bean — to authorize every call before the route runs. Set it on the **component** to guard every tool route by construction, or on a single endpoint to override.
 
+When the rule is which roles the caller needs, the `allowedRoles` option states it on the endpoint and no policy bean is needed: see [Authorizing by role](#_authorizing_by_role) below.
+
 -   Java
     
 -   YAML
@@ -573,8 +579,59 @@ Which runtimes carry the caller identity:
 
 -   `camel-langchain4j-agent`, `camel-openai` and `camel-spring-ai-chat` all copy the calling exchange (see [The calling exchange](#_the_calling_exchange) above), so the identity property reaches the tool route.
     
--   Over the [MCP server](others/mcp-server.md) the authenticated transport caller is carried onto the tool exchange as the `CamelMcpSecurityPrincipal` property (the raw transport principal — for the Vert.x streamable HTTP server, an `io.vertx.ext.auth.User`). Alongside it the server stamps a runtime-neutral view derived from that principal — `CamelMcpSecurityPrincipalName` (a `String`) and `CamelMcpSecurityPrincipalRoles` (a `Collection<String>`) — so a tool route or a policy can authorize on a stable name and roles without knowing the runtime type. Only the Vert.x streamable HTTP server (Camel Main / JBang) populates these today. There the name is the user subject (or the `username`/`sub` claim), and the roles come from the authenticated token’s `roles`, Keycloak `realm_access.roles`, or `groups` claim (JWT/OIDC); a basic-auth caller (camel-main property-file auth) carries no roles in its principal, so `CamelMcpSecurityPrincipalRoles` is not set for it. Each property is set only when the server could determine it, so treat a missing name or roles as unauthorized. Camel’s shipped identity/token policies (Keycloak, Spring Security, Shiro) do not consume these automatically yet, so MCP authorization still needs a policy (or route guard) that inspects `CamelMcpSecurityPrincipalName`/`CamelMcpSecurityPrincipalRoles` or the raw `CamelMcpSecurityPrincipal`.
+-   Over the [MCP server](others/mcp-server.md) the authenticated transport caller is carried onto the tool exchange as the `CamelMcpSecurityPrincipal` property (the raw transport principal — for the Vert.x streamable HTTP server, an `io.vertx.ext.auth.User`). Alongside it the server stamps a runtime-neutral view derived from that principal — `CamelAiToolSecurityPrincipalName` (a `String`) and `CamelAiToolSecurityPrincipalRoles` (a `Collection<String>`) — so a tool route or a policy can authorize on a stable name and roles without knowing the runtime type. Only the Vert.x streamable HTTP server (Camel Main / JBang) populates these today. There the name is the user subject (or the `username`/`sub` claim), and the roles come from the first of the authenticated token’s `roles`, Keycloak `realm_access.roles`, or `groups` claim that is an array (JWT/OIDC); a basic-auth caller (camel-main property-file auth) carries no roles in its principal, so `CamelAiToolSecurityPrincipalRoles` is not set for it. Each property is set only when the server could determine it, so treat a missing name or roles as unauthorized. The `allowedRoles` option checks `CamelAiToolSecurityPrincipalRoles` (see [Authorizing by role](#_authorizing_by_role) below), so authorizing an MCP caller by role needs no code. Camel’s shipped identity/token policies (Keycloak, Spring Security, Shiro) do not consume these properties automatically yet, so any other rule over MCP, for example on the caller’s name or on a claim, still needs a policy (or route guard) that inspects `CamelAiToolSecurityPrincipalName`/`CamelAiToolSecurityPrincipalRoles` or the raw `CamelMcpSecurityPrincipal`.
     
+
+### Authorizing by role
+
+Set `allowedRoles` on a tool to name the roles its caller needs, as a comma-separated list. The check needs no Java code. The caller needs one of the roles; with `allRolesRequired=true` the caller needs all of them. A role name is compared exactly.
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("ai-tool:orderCosts?tags=erp&description=Costs of a production order&allowedRoles=finance,controlling")
+    .to("bean:costs");
+
+// ...or as the default of every ai-tool route, which an endpoint replaces with its own value
+AiToolComponent ai = context.getComponent("ai-tool", AiToolComponent.class);
+ai.getConfiguration().setAllowedRoles("finance,controlling");
+```
+
+```yaml
+- route:
+    from:
+      uri: ai-tool:orderCosts
+      parameters:
+        tags: erp
+        description: "Costs of a production order"
+        allowedRoles: finance,controlling
+      steps:
+        - to:
+            uri: bean:costs
+```
+
+The caller’s roles are read only from the exchange property `CamelAiToolSecurityPrincipalRoles` (a `Collection<String>`). A role named in a message header or in a tool argument never counts: on a tool route the headers carry the tool arguments, which the model controls. A call without that property is refused.
+
+-   Over the [MCP server](others/mcp-server.md) the server sets the property from the roles of the authenticated caller. That page says which claim of the token the roles are read from. A caller without roles, such as a basic-auth caller, is refused. Over stdio, or on an MCP server without authentication, no caller has roles, so a tool with `allowedRoles` refuses every call. The same holds on a runtime whose MCP engine does not set the property.
+    
+-   With `camel-langchain4j-agent`, `camel-openai` and `camel-spring-ai-chat` the calling route sets the same property before the agent runs, from the identity it has authenticated. The tool exchange is a copy of the calling exchange (see [The calling exchange](#_the_calling_exchange) above), so the property reaches the tool route:
+    
+    ```java
+    from("platform-http:/assistant")
+        // the roles of the caller this route has authenticated: here a bean reads them from the validated token
+        .setProperty("CamelAiToolSecurityPrincipalRoles", method("callerIdentity", "roles"))
+        .to("langchain4j-agent:assistant?agentConfiguration=#myConfig&tags=erp");
+    ```
+    
+
+When a call is refused, the model gets the same short refusal as for a denial by an `authorizationPolicy`, and the denial is logged and published as described in [Observing denials](#_observing_denials) below. The log entry names the tool, the roles it asks for and, when the `CamelAiToolSecurityPrincipalName` property is set, the caller. The model is told none of this.
+
+`allowedRoles` and `authorizationPolicy` can be set on the same tool, and then both must pass. The roles are checked first, and a call that fails them does not reach the policy. This combines a role with a rule that needs more than a role, for example a [Cedar](cedar-component.md) or [OPA](opa-component.md) policy over attributes.
+
+Set on the **component**, `allowedRoles` and `allRolesRequired` are the default of every tool route, and an endpoint’s own value replaces the component’s. An endpoint can therefore replace the component’s roles, but it cannot remove the check: a value that names no role, such as an empty one, refuses every call. The route still starts, and a `WARN` at its start names the tool. Only an option that is not set takes the component’s value; that includes an optional placeholder (`{{?name}}`) whose property is absent.
 
 ### Observing denials
 
@@ -582,7 +639,7 @@ Because the guard runs in front of the route, a denied call is caught before the
 
 -   logged at `WARN`, and
     
--   published as an `org.apache.camel.component.ai.tool.AiToolAuthorizationDeniedEvent` — an `org.apache.camel.ai.AiEvent.ToolCallDeniedEvent` (a `CamelEvent` of type `Ai`) carrying the denied tool name, the tool exchange (for correlation), and the `CamelAuthorizationException` the policy raised.
+-   published as an `org.apache.camel.component.ai.tool.AiToolAuthorizationDeniedEvent` — an `org.apache.camel.ai.AiEvent.ToolCallDeniedEvent` (a `CamelEvent` of type `Ai`) carrying the denied tool name, the tool exchange (for correlation), and the `CamelAuthorizationException` that refused the call. For a call that the `allowedRoles` check refused, its `getPolicyId()` returns `allowedRoles`.
     
 
 Register an `EventNotifier` to count, log or alert on denials — for example to drive a micrometer counter — without changing what the model sees (still the short refusal). Match on the shared `AiEvent.ToolCallDeniedEvent` interface so the notifier does not depend on this component:
@@ -604,7 +661,7 @@ The event is emitted best-effort: when no `EventNotifier` is registered nothing 
 
 `searchable` controls whether a route tool is sent to the model immediately or only after a producer with tool search enabled finds it. The default is `false`, so the tool stays directly visible. `searchable=true` omits the tool from the initial model request and makes it eligible for search together with remote MCP tools.
 
-Searchability is a visibility policy. It does not authorize the call. An `authorizationPolicy` on the tool is still applied when the model invokes it. With tool search disabled on the producer, `searchable` has no effect and the tool is exposed as before.
+Searchability is a visibility policy. It does not authorize the call. The `allowedRoles` and the `authorizationPolicy` of the tool are still applied when the model invokes it. With tool search disabled on the producer, `searchable` has no effect and the tool is exposed as before.
 
 ```yaml
 - route:

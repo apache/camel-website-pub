@@ -1,5 +1,8 @@
 # OpenStack Nova
 
+> **Warning**
+> **Deprecated:** This openstack-nova is deprecated and may be removed in a future release.
+
 **Since Camel 2.19**
 
 **Only producer is supported**

@@ -48,8 +48,9 @@ The presence of this dependency will provide the following components:
     
 -   camel-opentelemetry2
     
--   camel-ai-observability (GenAI spans and metrics of the Camel AI components, see [AI Observability](ai-observability.md))
-    
+
+> **Note**
+> the GenAI spans and metrics of the Camel AI components are not included. Add `camel-ai-observability` to the application when you want them, see [AI Observability](ai-observability.md).
 
 > **Note**
 > mind that we’re using the `camel-opentelemetry2` implementation which has slight differences from `camel-opentelemetry`.
