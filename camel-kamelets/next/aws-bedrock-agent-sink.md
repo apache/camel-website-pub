@@ -12,7 +12,7 @@ Input: the body is not used. For `getIngestionJob`, the `CamelAwsBedrockAgentIng
 
 Output: when it is used inside a route, the body afterwards depends on the operation: for `startIngestionJob` the ID of the new job, as text; for `listIngestionJobs` a List of job summaries; for `getIngestionJob` the job, an object of the AWS SDK for Java, with its status, such as `IN_PROGRESS`, `COMPLETE` or `FAILED`, also in the `CamelAwsBedrockAgentIngestionJobStatus` header.
 
-Good to know: an ingestion job runs in the background, and `startIngestionJob` returns at once; to follow it, copy the ID from the body into the `CamelAwsBedrockAgentIngestionJobId` header and use `getIngestionJob`. The operation, the knowledge base and the data source come only from the options; headers cannot change them.
+Good to know: an ingestion job runs in the background, and `startIngestionJob` returns at once; to follow it, copy the ID from the body into the `CamelAwsBedrockAgentIngestionJobId` header and use `getIngestionJob`. The operation, the knowledge base and the data source come only from the options; headers cannot change them. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -28,6 +28,9 @@ The following table summarizes the configuration options available for the `aws-
 | **operation** | Operation | What to do: `startIngestionJob` starts loading the documents of the data source into the knowledge base; `listIngestionJobs` lists the ingestion jobs of the data source; `getIngestionJob` looks up the job whose ID is in the `CamelAwsBedrockAgentIngestionJobId` header. Enum values: \* startIngestionJob \* listIngestionJobs \* getIngestionJob | string | startIngestionJob |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
+| **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
+| **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
 | **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
 | **uriEndpointOverride** | Overwrite Endpoint URI | The address to send the requests to instead of the usual AWS address, such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
@@ -93,6 +96,25 @@ This Kamelet manages the data source ingestion jobs of a knowledge base. The ope
 ### Job Id
 
 For the `getIngestionJob` operation the job id is taken from the `CamelAwsBedrockAgentIngestionJobId` header, which is the one input this Kamelet deliberately reads from the message. Every other `CamelAwsBedrockAgent*` header is removed before the call, so an inbound message cannot change the operation, the knowledge base or the data source.
+
+### Through an HTTP Proxy
+
+Where AWS can be reached only through an HTTP proxy, as in many company networks, set `proxyHost` and `proxyPort` to the proxy. `proxyProtocol` is how the Kamelet talks to the proxy itself, not to AWS: it is `HTTPS` when it is not set, so set it to `HTTP` for a proxy that takes plain HTTP, such as Squid. The calls to AWS stay encrypted, as the proxy only passes them on. The Kamelet has no option for a proxy user or password.
+
+The step that sends to the Kamelet, in a route:
+
+```yaml
+- to:
+    uri: "kamelet:aws-bedrock-agent-sink"
+    parameters:
+      knowledgeBaseId: "AB12CD34EF"
+      dataSourceId: "GH56IJ78KL"
+      region: "eu-west-1"
+      useDefaultCredentialsProvider: true
+      proxyHost: "proxy.example.com"
+      proxyPort: 3128
+      proxyProtocol: "HTTP"
+```
 
 ## Kamelet source file
 

@@ -14,6 +14,10 @@ Output: the message is unchanged.
 
 Good to know: the shared access policy of the connection string needs the Send right.
 
+A queue created with sessions enabled accepts only messages with a session ID: without one, the send fails. A topic accepts them, but each of its subscriptions with sessions enabled moves them to its dead-letter queue. Set `sessionId` to send every message with that session ID; a reader of the queue or subscription then receives the messages of the session in the order they were sent. The session ID is fixed for the Kamelet: the `CamelAzureServiceBusSessionId` header is not read, so messages that must go to different sessions need one sink for each session ID.
+
+To log in with an Azure identity instead of a connection string, set `credentialType` to `AZURE_IDENTITY` and `fullyQualifiedNamespace`, and leave `connectionString` unset.
+
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `azure-servicebus-sink` Kamelet:
@@ -21,10 +25,12 @@ The following table summarizes the configuration options available for the `azur
      
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
-| **connectionString** | Connection String | **Required** The connection string of the Service Bus namespace, from the Azure portal: the namespace, then Settings, Shared access policies, a policy, Primary Connection String. It starts with `Endpoint=sb://`. | string |  |  |
 | **topicOrQueueName** | Topic or Queue Name | **Required** The name of the queue, or of the topic, to send the messages to. For a topic, set `serviceBusType` to `topic`. | string |  | orders |
-| **credentialType** | Credential Type | How to log in to Service Bus. Keep `CONNECTION_STRING`, the default, which uses `connectionString`. `AZURE_IDENTITY` and `TOKEN_CREDENTIAL` also need the `fullyQualifiedNamespace` of the Camel component, which this Kamelet does not set. Enum values: \* AZURE\_IDENTITY \* CONNECTION\_STRING \* TOKEN\_CREDENTIAL | string | CONNECTION\_STRING |  |
+| **connectionString** | Connection String | The connection string of the Service Bus namespace, from the Azure portal: the namespace, then Settings, Shared access policies, a policy, Primary Connection String. It starts with `Endpoint=sb://`. Required with the default `credentialType`, `CONNECTION_STRING`. | string |  |  |
+| **credentialType** | Credential Type | How to log in to Service Bus. `CONNECTION_STRING`, the default, uses `connectionString`. `AZURE_IDENTITY` uses the Azure identity of the environment, such as the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` environment variables, a managed identity or the Azure CLI login, and needs `fullyQualifiedNamespace`. `TOKEN_CREDENTIAL` also needs `fullyQualifiedNamespace`, and a `com.azure.core.credential.TokenCredential` bean in the Camel registry. Enum values: \* AZURE\_IDENTITY \* CONNECTION\_STRING \* TOKEN\_CREDENTIAL | string | CONNECTION\_STRING |  |
+| **fullyQualifiedNamespace** | Fully Qualified Namespace | The host name of the Service Bus namespace, such as `my-namespace.servicebus.windows.net`, without `sb://` or `https://`. Required with `credentialType` `AZURE_IDENTITY` or `TOKEN_CREDENTIAL`; not used with `CONNECTION_STRING`, where the connection string names the namespace. | string |  | my-namespace.servicebus.windows.net |
 | **serviceBusType** | Service Bus Type | Whether `topicOrQueueName` is a `queue` or a `topic`. Enum values: \* queue \* topic | string | queue |  |
+| **sessionId** | Session ID | The session ID to send every message with, up to 128 characters, kept as written. Required to send to a queue, or to a topic subscription, with sessions enabled; a reader receives the messages of one session in the order they were sent. A queue without sessions accepts the session ID too, and ignores it. | string |  | customer-42 |
 
 ## Dependencies
 
@@ -102,7 +108,30 @@ For more information, see the [Azure Identity documentation](https://learn.micro
 
 For `TOKEN_CREDENTIAL` type, you’ll need to add `com.azure.core.credential.TokenCredential` instance in the Camel registry.
 
-`AZURE_IDENTITY` and `TOKEN_CREDENTIAL` also need the fully qualified namespace of Service Bus, which this Kamelet does not set: configure the `fullyQualifiedNamespace` option of the Camel `azure-servicebus` component, or use `CONNECTION_STRING`.
+`AZURE_IDENTITY` and `TOKEN_CREDENTIAL` also need **fullyQualifiedNamespace**, the host name of the Service Bus namespace, such as `my-namespace.servicebus.windows.net`. Leave **connectionString** unset with them.
+
+### Example with a Session ID
+
+A queue created with sessions enabled accepts only messages with a session ID; without one, the send fails with `The SessionId was not set on a message`. A topic accepts them, but each of its subscriptions with sessions enabled moves them to its dead-letter queue. Set **sessionId** to send every message with that session ID:
+
+```yaml
+- route:
+    from:
+      uri: "timer:tick"
+      parameters:
+        period: 60000
+      steps:
+        - setBody:
+            constant: "order-1"
+        - to:
+            uri: "kamelet:azure-servicebus-sink"
+            parameters:
+              topicOrQueueName: "orders"
+              connectionString: "{{servicebus.connection-string}}"
+              sessionId: "customer-42"
+```
+
+A reader of the queue receives the messages of a session in the order they were sent. The session ID is fixed for the Kamelet; the `CamelAzureServiceBusSessionId` header is not read. To spread messages over several sessions, use one sink for each session ID, for example behind a content-based router.
 
 ## Kamelet source file
 

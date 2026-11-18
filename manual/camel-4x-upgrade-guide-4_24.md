@@ -129,6 +129,14 @@ The following user-visible changes take effect in 4.24:
 
 The `flowable` producer now parses the event of an inbound channel of type `camel` with `deserializerType` set to `xml` with the XML parser settings that Camel uses, which are also the settings of Flowable 8: external DTDs are not loaded, external general and parameter entities are not included, entity references are kept as entity reference nodes, and XInclude is not processed. Before, the Flowable 7 deserializer parsed the event with the JDK defaults. An event that relies on an external DTD or an external entity no longer gets their content. A channel that sets `deserializerDelegateExpression` keeps its own deserializer, which can parse such events.
 
+### camel-jaxb - the part class and namespace headers are used only when allowed
+
+The JAXB data format has a new option `allowPartClassFromHeader` (default `false`). The `CamelJaxbPartClass` and `CamelJaxbPartNamespace` headers are now used only when this option is `true`; otherwise they are ignored, and the `partClass` and `partNamespace` options of the data format apply. Before, the headers were always used, and took precedence over these options.
+
+Routes that set these headers to choose the part class or namespace per message must enable the option, for example `jaxb.setAllowPartClassFromHeader(true)` in Java, `allowPartClassFromHeader="true"` on `<jaxb>` in XML, or `allowPartClassFromHeader: true` in YAML. With REST binding, set the data format property `xml.out.allowPartClassFromHeader=true` on the REST configuration for a REST service (the response), or `xml.in.allowPartClassFromHeader=true` for the `rest` producer (the request). The REST binding does not take this option from the JAXB data format configured on the CamelContext (such as `camel.dataformat.jaxb.*` in Camel Main).
+
+The SOAP data format (camel-soap) is built on the JAXB data format, and always ignores these headers.
+
 ### camel-jpa - query parameters from CamelJpaParameters header are bound literally
 
 In previous versions, string values supplied in the `CamelJpaParameters` header map were evaluated as Simple expressions by the JPA producer.
@@ -239,9 +247,9 @@ Additionally: - A `ShiroSecurityPolicy` created with the no-arg constructor must
 
 Required tool arguments whose names start with `camel` or `org.apache.camel.` (case-insensitive) now reject the invocation before the tool route runs. Previously, these arguments could pass the required-argument check and then be discarded by the reserved-name filter, leaving the route without a required value. Rename these parameters and update their `parameter.*` or `argSchema` declarations.
 
-### camel-ai-tool - suspending a route no longer stops it, and tool calls in flight complete when the route stops
+### camel-ai-tool, camel-ai-resource - suspending a route no longer stops it, and calls in flight complete when the route stops
 
-Suspending an `ai-tool` route, with `suspendRoute` or `context.suspend()`, now suspends the route instead of stopping it: the tool is deregistered, tool calls in flight complete, a new call to the suspended tool is refused, and resuming the route registers the tool again. When an `ai-tool` route is stopped, or Camel shuts down gracefully, tool calls in flight now complete instead of failing.
+Suspending an `ai-tool` or `ai-resource` route, with `suspendRoute` or `context.suspend()`, now suspends the route instead of stopping it: the tool or resource is deregistered, tool calls and resource reads in flight complete, a new call to the suspended tool or read of the suspended resource is refused, and resuming the route registers the tool or resource again. When an `ai-tool` or `ai-resource` route is stopped, or Camel shuts down gracefully, tool calls and resource reads in flight now complete instead of failing.
 
 ### camel-wordpress - each endpoint uses its own site URL and credentials
 
@@ -264,6 +272,12 @@ camel.mcp-server.allowed-origins = https://app.example.com, http://localhost:*
 ```
 
 The configured list replaces the loopback default. The allowed-origin entries follow the same rules as on Camel Main: the wildcard entry `*` and entries not of the form `scheme://host[:port]` fail startup. An application-provided Spring AI transport provider must configure its own `Origin` validator. This Spring Boot transport change does not affect the Quarkus engine.
+
+### camel-mcp-server - MCP protocol version 2026-07-28 is served on /mcp
+
+On Camel Main and Camel JBang, the streamable HTTP MCP endpoint now also serves clients of MCP protocol version 2026-07-28, next to the protocol versions that open with an `initialize` handshake, and chooses for each request from the protocol version it carries. A client that opens with `initialize` is served as before, with a session. A client of 2026-07-28 has no session: a restart of the application, or a request reaching another instance, does not end it. Clients that try 2026-07-28 first and fall back to `initialize` (for example the client of the MCP Python SDK) now use 2026-07-28.
+
+Serving 2026-07-28 is a preview, built on an API of the MCP Java SDK that may still change. Set the new option `camel.server.mcp-protocol-era = legacy` to serve only the protocol versions that open with `initialize`, as before; `modern` serves only 2026-07-28. The new option `camel.server.mcp-stateless = true` also serves the clients that open with `initialize` without a session. The MCP Java SDK is upgraded to 2.2.0.
 
 ### camel-oauth - the scp claim is included in scope checks
 
@@ -894,7 +908,7 @@ A Camel Main application that fails to start now logs why, at ERROR: `Error star
 
 ### camel-main - the camel.dataformat options apply to the Rest DSL binding
 
-With Camel Main and Camel JBang, the `camel.dataformat.<name>.*` options (such as `camel.dataformat.jackson.include`) now also apply to the data formats that the Rest DSL binding creates for `json` and `xml` binding, as they already did to the data formats of the routes. The request and response bodies of a REST service can therefore change, for instance null fields are left out. The `camel.rest.dataFormatProperties` (`json.in.`, `json.out.`, `xml.in.` and `xml.out.`) still take precedence. The `objectMapper`, `xmlMapper`, `allowUnmarshallType`, `allowJmsType`, `unmarshalType`, `useList`, `collectionType` and `partClass` options are not taken over: the body type comes from the `type` and `outType` of the verb, and the other options can be set with `camel.rest.dataFormatProperties` when the binding needs them.
+With Camel Main and Camel JBang, the `camel.dataformat.<name>.*` options (such as `camel.dataformat.jackson.include`) now also apply to the data formats that the Rest DSL binding creates for `json` and `xml` binding, as they already did to the data formats of the routes. The request and response bodies of a REST service can therefore change, for instance null fields are left out. The `camel.rest.dataFormatProperties` (`json.in.`, `json.out.`, `xml.in.` and `xml.out.`) still take precedence. The `objectMapper`, `xmlMapper`, `allowUnmarshallType`, `allowJmsType`, `unmarshalType`, `useList`, `collectionType`, `partClass` and `allowPartClassFromHeader` options are not taken over: the body type comes from the `type` and `outType` of the verb, and the other options can be set with `camel.rest.dataFormatProperties` when the binding needs them.
 
 ### camel-support - API components use one thread pool per CamelContext
 

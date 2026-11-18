@@ -12,7 +12,7 @@ Input: the body becomes the text of the notification, as text. The optional `gro
 
 Output: the message is unchanged. The `CamelAwsSnsMessageId` header gives the ID of the published message.
 
-Good to know: the name of the topic ends in `.fifo`. With `contentBasedDeduplication` false, the default, each message gets a unique deduplication ID, so SNS drops only a message sent twice by a retry; set it to true to drop messages with the same body, which the topic must allow.
+Good to know: the name of the topic ends in `.fifo`. With `contentBasedDeduplication` false, the default, each message gets a unique deduplication ID, so SNS drops only a message sent twice by a retry; set it to true to drop messages with the same body, which the topic must allow. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -28,6 +28,9 @@ The following table summarizes the configuration options available for the `aws-
 | **contentBasedDeduplication** | Content-Based Deduplication | If true, SNS finds duplicates by the content of the body: a message with the same body as one published in the last 5 minutes is dropped. The topic must have content-based deduplication turned on. If false, each message gets a unique deduplication ID, so only a message that is sent again by a retry is dropped. | boolean | false |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
+| **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
+| **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
+| **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
 | **secretKey** | Secret Key | The secret access key that belongs to `accessKey`. The AWS console shows it only once, when the access key is created. | string |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which comes with their access key and secret key, for example from AWS STS when you assume an IAM role. Only used when `useSessionCredentials` is true. | string |  |  |
 | **uriEndpointOverride** | Overwrite Endpoint URI | The address to connect to instead of AWS, as a URL such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
@@ -112,6 +115,24 @@ In the Kamelet you can optionally set the following header:
     
 -   `group` / `ce-group`: the message group ID. If you do not set it, each message gets a group of its own.
     
+
+### Through an HTTP Proxy
+
+Where AWS can be reached only through an HTTP proxy, as in many company networks, set `proxyHost` and `proxyPort` to the proxy. `proxyProtocol` is how the Kamelet talks to the proxy itself, not to AWS: it is `HTTPS` when it is not set, so set it to `HTTP` for a proxy that takes plain HTTP, such as Squid. The calls to AWS stay encrypted, as the proxy only passes them on. The Kamelet has no option for a proxy user or password.
+
+The step that sends to the Kamelet, in a route:
+
+```yaml
+- to:
+    uri: "kamelet:aws-sns-fifo-sink"
+    parameters:
+      topicNameOrArn: "order-events.fifo"
+      region: "eu-west-1"
+      useDefaultCredentialsProvider: true
+      proxyHost: "proxy.example.com"
+      proxyPort: 3128
+      proxyProtocol: "HTTP"
+```
 
 ## Kamelet source file
 

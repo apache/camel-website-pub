@@ -10,7 +10,7 @@ Use it to process work or events that other applications publish to RabbitMQ. Us
 
 Output: the body is text when the content type of the message starts with `text`, and bytes otherwise. The headers of the RabbitMQ message become headers, along with `CamelSpringRabbitmqExchangeName`, `CamelSpringRabbitmqRoutingKey` and `CamelSpringRabbitmqContentType`.
 
-Good to know: with `autoDeclare` false, the default, the queue must exist already, bound to the exchange; until it does, the source keeps trying again. With `autoDeclare` true, it creates the exchange as a `direct` exchange, the queue in `queues` and the binding with `routingKey`. Without `queues`, it reads from a new queue with a generated name. A message whose processing fails is tried 5 times, one second apart, and then dropped, or sent to the dead letter exchange of the queue when RabbitMQ has one. It connects with no TLS unless `protocol` is `amqps`.
+Good to know: with `autoDeclare` false, the default, the queue must exist already, bound to the exchange; until it does, the source keeps trying again. With `autoDeclare` true, it creates the exchange as a `direct` exchange, the queue in `queues` and the binding with `routingKey`. Without `queues`, it reads from a new queue with a generated name. A message whose processing fails is tried 5 times, one second apart, and then dropped, or sent to the dead letter exchange of the queue when RabbitMQ has one. It connects with no TLS unless `protocol` is `amqps`. With `amqps`, the certificate of the broker must be trusted by Java, or by the trust store in `sslTruststoreLocation`, and must name the host in `host`; otherwise it cannot connect.
 
 ## Configuration Options
 
@@ -24,9 +24,11 @@ The following table summarizes the configuration options available for the `spri
 | **port** | Server Port | **Required** The port of the RabbitMQ broker: usually 5672, or 5671 for `amqps`. | integer |  | 5672 |
 | **autoDeclare** | Create Exchange and Queue | If true, the source creates the exchange (as a `direct` exchange) and the queue in `queues`, and binds them with `routingKey`, when it starts. If false, they must exist already. | boolean | false |  |
 | **password** | Password | The password to log in to RabbitMQ with, for the user `username`. | string |  |  |
-| **protocol** | Protocol | `amqp` for a plain connection, or `amqps` for a connection encrypted with TLS. Enum values: \* amqp \* amqps | string | amqp |  |
+| **protocol** | Protocol | `amqp` for a plain connection, or `amqps` for a connection encrypted with TLS, which checks the certificate of the broker and its host name. Enum values: \* amqp \* amqps | string | amqp |  |
 | **queues** | Queue Name | The queue to receive the messages from. When it is not set, a new queue with a generated name is used, which only makes sense with `autoDeclare` true. | string |  | orders |
 | **routingKey** | Routing Key | The routing key that binds the queue to the exchange, when `autoDeclare` is true. A `direct` exchange then routes to the queue the messages sent with this key. | string |  | new-order |
+| **sslTruststoreLocation** | SSL Truststore Location | The location of a trust store, in JKS or PKCS12 format, with the certificate of the authority that signed the certificate of the broker, such as `file:/etc/rabbitmq/truststore.p12`, or `classpath:truststore.p12` for one on the classpath. A path without `file:` is looked up on the classpath. Needed only with `amqps` when the broker uses a certificate that Java does not trust by default, such as one from a private or self-signed authority. Not used with `amqp`. | string |  | file:/etc/rabbitmq/truststore.p12 |
+| **sslTruststorePassword** | SSL Truststore Password | The password of the trust store in `sslTruststoreLocation`. | string |  |  |
 | **username** | Username | The user name to log in to RabbitMQ with. When it is not set, `guest` is used. | string |  |  |
 | **vhost** | Virtual Host | The virtual host of the broker to connect to, which holds the exchanges and queues. RabbitMQ has the virtual host `/` from the start. | string | / |  |
 

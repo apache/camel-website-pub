@@ -6,11 +6,11 @@
 
 Receives each record from one or more topics in Apache Kafka, or in a Kafka-compatible service such as Amazon MSK, Confluent Cloud or Redpanda.
 
-Use it to react to events or data that other applications publish, such as orders, sensor readings or changes from a database. To get many records in one message use `kafka-batch-source`. When the records are written with a schema kept in a schema registry, use one of the `kafka-**-registry-**` sources instead.
+Use it to react to events or data that other applications publish, such as orders, sensor readings or changes from a database. To get many records in one message use `kafka-batch-source`. When the records are written with a schema kept in a schema registry, such as Confluent Schema Registry, Redpanda or Apicurio Registry, set `schemaRegistryVendor`.
 
-Output: the body is the value of the record, as text. A record without a value (a tombstone) gives a message with no body. The `kafka-topic`, `kafka-key`, `kafka-partition`, `kafka-offset` and `kafka-timestamp` (in milliseconds since 1970) headers say where the record came from. They are also set as `ce-kafkatopic`, `ce-kafkakey` and so on, and as the `CamelKafka*` headers that the Kafka actions read. The record headers become message headers, as text unless `deserializeHeaders` is false.
+Output: the body is the value of the record, as text. With `schemaRegistryVendor`, the value is read with its schema from the registry and the body is JSON text, such as `{"id": 7, "item": "camel"}` for an Avro record. A record without a value (a tombstone) gives a message with no body. The `kafka-topic`, `kafka-key`, `kafka-partition`, `kafka-offset` and `kafka-timestamp` (in milliseconds since 1970) headers say where the record came from. They are also set as `ce-kafkatopic`, `ce-kafkakey` and so on, and as the `CamelKafka*` headers that the Kafka actions read. The record headers become message headers, as text unless `deserializeHeaders` is false.
 
-Good to know: `saslAuthType` has no default and must be set; `NONE` connects with no login and no TLS. A new consumer group starts at the newest records, unless `autoOffsetReset` is `earliest`. Without `consumerGroup`, every start uses a new group, so the records sent while the integration was stopped are skipped.
+Good to know: `saslAuthType` has no default and must be set; `NONE` connects with no login and no TLS. A new consumer group starts at the newest records, unless `autoOffsetReset` is `earliest`. Without `consumerGroup`, every start uses a new group, so the records sent while the integration was stopped are skipped. With `schemaRegistryVendor`, the integration needs the serde jars of the vendor, which Camel JBang downloads by itself; for `confluent` add the Confluent Maven repository, as in `camel run --repos=confluent`. With `aws-glue` and `azure`, the serde logs in with the credentials of the environment the integration runs in: the AWS default credentials chain, or the Azure `DefaultAzureCredential` (such as the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` variables). A `confluent` or `apicurio` registry that requires a login is not supported yet.
 
 ## Configuration Options
 
@@ -34,6 +34,11 @@ The following table summarizes the configuration options available for the `kafk
 | **pollOnError** | Poll On Error Behavior | What to do when reading from Kafka fails: `ERROR_HANDLER` logs the error and goes on with the next records, `DISCARD` skips the records that failed, `RECONNECT` connects again and retries, `RETRY` reads the same records again, and `STOP` stops reading until the integration is restarted. Enum values: \* DISCARD \* ERROR\_HANDLER \* RECONNECT \* RETRY \* STOP | string | ERROR\_HANDLER |  |
 | **saslPassword** | Password | The password of `saslUsername`. Required when `saslAuthType` is `PLAIN`, `SCRAM_SHA_256` or `SCRAM_SHA_512`. | string |  |  |
 | **saslUsername** | Username | The user name to log in to Kafka with. Required when `saslAuthType` is `PLAIN`, `SCRAM_SHA_256` or `SCRAM_SHA_512`. | string |  |  |
+| **schemaFormat** | Schema Format | The format of the record values in the schema registry: `avro` or `json` (JSON Schema). With `apicurio` and `azure`, use `avro`. Only used when `schemaRegistryVendor` is set. Enum values: \* avro \* json | string | avro |  |
+| **schemaRegistryName** | Schema Registry Name | The name of the registry in AWS Glue. When not set, it is `default-registry`. Only used when `schemaRegistryVendor` is `aws-glue`. | string |  |  |
+| **schemaRegistryRegion** | Schema Registry Region | The AWS region of the AWS Glue Schema Registry, such as `eu-west-1`. When not set, the region is taken from the environment, such as the `AWS_REGION` variable. Only used when `schemaRegistryVendor` is `aws-glue`. | string |  |  |
+| **schemaRegistryUrl** | Schema Registry URL | The URL of the schema registry: for `confluent` such as `[http://localhost:8081](http://localhost:8081)`; for `apicurio` the URL of the registry API, such as `[http://localhost:8080/apis/registry/v3](http://localhost:8080/apis/registry/v3)`; for `azure` the fully qualified name of the Event Hubs namespace, such as `my-namespace.servicebus.windows.net`. Required when `schemaRegistryVendor` is set, except for `aws-glue`, where it can override the endpoint of the Glue service. | string |  |  |
+| **schemaRegistryVendor** | Schema Registry Vendor | The schema registry that holds the schemas of the record values: `confluent`, also for registries with the Confluent API such as Redpanda and Karapace; `apicurio` (Apicurio Registry 3.x); `aws-glue` (AWS Glue Schema Registry); or `azure` (Azure Schema Registry of Event Hubs). It sets the value deserializer and the registry properties, and its jars must be added to the integration (see below). Leave it unset when the records do not use a schema registry. Enum values: \* confluent \* apicurio \* aws-glue \* azure | string |  |  |
 | **sslKeyPassword** | SSL Key Password | The password of the private key in the key store file in `sslKeystoreLocation`. | string |  |  |
 | **sslKeystoreLocation** | SSL Keystore Location | The path of a key store file, in JKS format, with the certificate and private key of the client. Needed only to log in with a client certificate (mutual TLS), usually with `saslAuthType` `SSL`. | string |  | /etc/kafka/keystore.jks |
 | **sslKeystorePassword** | SSL Keystore Password | The password of the key store file in `sslKeystoreLocation`. | string |  |  |
@@ -45,6 +50,8 @@ The following table summarizes the configuration options available for the `kafk
 
 At runtime, the `kafka-source` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:jackson3
+    
 -   camel:kafka
     
 -   camel:kamelet
@@ -133,6 +140,8 @@ Resolve credentials through a Camel vault rather than plaintext properties where
     
 -   **topicIsPattern**: Treat `topic` as a regular expression rather than a literal list, default `false`
     
+-   **schemaRegistryVendor** / **schemaRegistryUrl** / **schemaFormat** / **schemaRegistryRegion** / **schemaRegistryName**: Read the records with their schema from a schema registry, see below
+    
 
 ### Output Format
 
@@ -150,6 +159,35 @@ The body is the Kafka record value. The record metadata is surfaced as headers u
     
 
 The `CamelKafka*` headers are left on the exchange as well, so consumers already reading them keep working. The Kafka record headers are passed through separately, controlled by the `deserializeHeaders` property.
+
+### Schema registry
+
+When the records are written with a schema kept in a schema registry, set `schemaRegistryVendor`, `schemaRegistryUrl` and, for JSON Schema, `schemaFormat: json` (the default is `avro`). The Kamelet reads each value with its schema and turns it into JSON text, so the next step gets text as without a registry: an Avro record becomes, for example, `{"id": 7, "item": "camel"}`.
+
+  
+| `schemaRegistryVendor` | `schemaFormat` | Registry |
+| --- | --- | --- |
+| `confluent` | `avro`, `json` | Confluent Schema Registry, and the registries with the same API, such as the one of Redpanda and Karapace. `schemaRegistryUrl` is the URL of the registry, such as `[http://localhost:8081](http://localhost:8081)`. |
+| `apicurio` | `avro` | Apicurio Registry 3.x. `schemaRegistryUrl` is the URL of the registry API, such as `[http://localhost:8080/apis/registry/v3](http://localhost:8080/apis/registry/v3)`. |
+| `aws-glue` | `avro`, `json` | AWS Glue Schema Registry. Set `schemaRegistryRegion`, unless the environment has the region (such as `AWS_REGION`), and `schemaRegistryName`, unless the registry is `default-registry`. `schemaRegistryUrl` is not needed. The AWS credentials are taken from the AWS default credentials chain. |
+| `azure` | `avro` | Azure Schema Registry of Event Hubs. `schemaRegistryUrl` is the fully qualified name of the namespace, such as `my-namespace.servicebus.windows.net`. The sink needs `schemaGroup`. The credentials are taken by the Azure `DefaultAzureCredential`, such as from the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` variables. |
+
+The serde jars of the vendor are not part of the Kamelet. Camel JBang downloads them by itself; the Confluent jars are in the Confluent Maven repository, not in Maven Central, so run with `--repos=confluent`. In a Maven project, add the jar of the vendor and format, such as `io.confluent:kafka-avro-serializer`, and for Confluent the repository `[https://packages.confluent.io/maven/](https://packages.confluent.io/maven/)`. A `confluent` or `apicurio` registry that requires a login is not supported yet.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:kafka-source"
+      parameters:
+        topic: orders
+        bootstrapServers: "localhost:9092"
+        saslAuthType: NONE
+        schemaRegistryVendor: confluent
+        schemaRegistryUrl: "http://localhost:8081"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
 
 ### Usage Example
 

@@ -40,6 +40,7 @@ Enum values:
 | **fragment** (advanced) | `false` | `Boolean` | To turn on marshalling XML fragment trees. This is useful when generated code does not have XmlRootElement annotation and you need to unmarshall only part of the tree. |
 | **partClass** (advanced) |  | `String` | Name of class used for fragment parsing. |
 | **partNamespace** (advanced) |  | `String` | XML namespace to use for fragment parsing. |
+| **allowPartClassFromHeader** (advanced) | `false` | `Boolean` | Whether the CamelJaxbPartClass and CamelJaxbPartNamespace headers are used, when set, instead of the partClass and partNamespace options when marshalling and unmarshalling. Enable it only when the route sets these headers itself, not on routes that receive them from external systems. |
 | **namespacePrefix** (advanced) |  | `Object` | When marshalling using JAXB or SOAP then the JAXB implementation will automatically assign namespace prefixes, such as ns2, ns3, ns4 etc. To control this mapping, Camel allows you to refer to a map which contains the desired mapping. |
 | **xmlStreamWriterWrapper** (advanced) |  | `String` | To use a custom xml stream writer. |
 | **schemaLocation** (common) |  | `String` | To define the location of the schema. |
@@ -114,16 +115,32 @@ It is possible to use this data format with more than one context path. You can 
 
 JAXB 2 supports marshalling and unmarshalling XML tree fragments. By default, JAXB looks for the `@XmlRootElement` annotation on a given class to operate on the whole XML tree. This is useful, but not always. Sometimes the generated code does not have the `@XmlRootElement` annotation, and sometimes you need to unmarshall only part of the tree.
 
-In that case, you can use partial unmarshalling. To enable this behavior, you need set property `partClass` on the `JaxbDataFormat`. Camel will pass this class to the JAXB unmarshaller. If `CamelJaxbPartClass` is set as one of the exchange headers, its value is used to override the `partClass` property on the `JaxbDataFormat`.
+In that case, you can use partial unmarshalling. To enable this behavior, you need set property `partClass` on the `JaxbDataFormat`. Camel will pass this class to the JAXB unmarshaller.
 
 For marshalling you have to add the `partNamespace` attribute with the `QName` of the destination namespace.
 
-If `CamelJaxbPartNamespace` is set as one of the exchange headers, its value is used to override the `partNamespace` property on the `JaxbDataFormat`.
+#### Choosing the part class with headers
+
+To choose the part class and namespace per message, enable the `allowPartClassFromHeader` option (default `false`). Then the following exchange headers, when set, are used instead of the `partClass` and `partNamespace` options on the `JaxbDataFormat`:
+
+-   `CamelJaxbPartClass`: the class name used instead of `partClass`, when marshalling and unmarshalling.
+    
+-   `CamelJaxbPartNamespace`: the namespace used instead of `partNamespace`, when marshalling.
+    
+
+When `allowPartClassFromHeader` is `false`, these headers are ignored.
 
 While setting `partNamespace` through the `CamelJaxbPartNamespace` header, please note that you need to specify its value in the format `{namespaceUri}localPart`, as per the example below.
 
 ```java
-.setHeader("CamelJaxbPartNamespace", constant("{http://www.camel.apache.org/jaxb/example/address/1}address"));
+JaxbDataFormat jaxb = new JaxbDataFormat("com.mycompany.model");
+jaxb.setAllowPartClassFromHeader(true);
+
+from("direct:start")
+    .setHeader("CamelJaxbPartClass", constant("com.mycompany.model.Address"))
+    .setHeader("CamelJaxbPartNamespace", constant("{http://www.camel.apache.org/jaxb/example/address/1}address"))
+    .marshal(jaxb)
+    .to("mock:result");
 ```
 
 ### Fragment

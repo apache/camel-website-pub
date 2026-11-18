@@ -12,7 +12,7 @@ Input: the body is the payload, as text or bytes. Text is sent with the content 
 
 Output: the message is unchanged.
 
-Good to know: it does not create the exchange, unless `autoDeclareProducer` is true. A message sent to an exchange that does not exist is lost without an error, unless publisher confirms are on (`publisherConfirmType` and `confirm`), and RabbitMQ drops a message that no queue is bound to take. It connects with no TLS unless `protocol` is `amqps`. It does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does.
+Good to know: it does not create the exchange, unless `autoDeclareProducer` is true. A message sent to an exchange that does not exist is lost without an error, unless publisher confirms are on (`publisherConfirmType` and `confirm`), and RabbitMQ drops a message that no queue is bound to take. It connects with no TLS unless `protocol` is `amqps`. With `amqps`, the certificate of the broker must be trusted by Java, or by the trust store in `sslTruststoreLocation`, and must name the host in `host`; otherwise it cannot connect. It does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does.
 
 ## Configuration Options
 
@@ -28,10 +28,12 @@ The following table summarizes the configuration options available for the `spri
 | **confirm** | Confirm | Whether the sink waits for RabbitMQ to confirm each message: `enabled` always waits, `disabled` never waits, and `auto` waits when `publisherConfirmType` turns confirms on. A message that is not confirmed fails, such as one sent to an exchange that does not exist. Enum values: \* auto \* enabled \* disabled | string | auto |  |
 | **confirmTimeout** | Confirm Timeout | How long to wait for RabbitMQ to confirm a message, in milliseconds. A negative value waits forever. | string | 5000 |  |
 | **password** | Password | The password to log in to RabbitMQ with, for the user `username`. | string |  |  |
-| **protocol** | Protocol | `amqp` for a plain connection, or `amqps` for a connection encrypted with TLS. Enum values: \* amqp \* amqps | string | amqp |  |
+| **protocol** | Protocol | `amqp` for a plain connection, or `amqps` for a connection encrypted with TLS, which checks the certificate of the broker and its host name. Enum values: \* amqp \* amqps | string | amqp |  |
 | **publisherConfirmType** | Publisher Confirm Type | Whether RabbitMQ confirms each message it takes: `NONE` turns confirms off, `SIMPLE` or `CORRELATED` turns them on. Use it with `confirm`. Enum values: \* NONE \* SIMPLE \* CORRELATED | string | NONE |  |
 | **queues** | Queue Name | The queue to create and bind to the exchange with `routingKey` when `autoDeclareProducer` is true. Not used otherwise. | string |  | orders |
 | **routingKey** | Routing Key | The routing key of each message, which the exchange uses to choose the queues that get it. With a `direct` exchange, a queue gets the message when it is bound with the same key. | string |  | new-order |
+| **sslTruststoreLocation** | SSL Truststore Location | The location of a trust store, in JKS or PKCS12 format, with the certificate of the authority that signed the certificate of the broker, such as `file:/etc/rabbitmq/truststore.p12`, or `classpath:truststore.p12` for one on the classpath. A path without `file:` is looked up on the classpath. Needed only with `amqps` when the broker uses a certificate that Java does not trust by default, such as one from a private or self-signed authority. Not used with `amqp`. | string |  | file:/etc/rabbitmq/truststore.p12 |
+| **sslTruststorePassword** | SSL Truststore Password | The password of the trust store in `sslTruststoreLocation`. | string |  |  |
 | **username** | Username | The user name to log in to RabbitMQ with. When it is not set, `guest` is used. | string |  |  |
 | **vhost** | Virtual Host | The virtual host of the broker to connect to, which holds the exchanges and queues. RabbitMQ has the virtual host `/` from the start. | string | / |  |
 

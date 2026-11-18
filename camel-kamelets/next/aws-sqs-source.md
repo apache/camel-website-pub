@@ -10,7 +10,7 @@ Use it to process work that other systems put in a queue, such as orders, jobs o
 
 Output: the body is the body of the SQS message, as text. The headers give the message ID (`CamelAwsSqsMessageId`), the receipt handle and the MD5 checksum of the body. The message attributes, which the sender sets on a message, are read only when `messageAttributeNames` names them, and the system attributes of SQS, such as `SentTimestamp`, only when `attributeNames` names them. Each attribute that is read becomes a header of the same name, except a message attribute whose name starts with `Camel`.
 
-Good to know: a message is deleted only after it has been processed without error; a message that fails stays in the queue and is received again when its visibility timeout ends. With `deleteAfterRead` set to false, the messages stay in the queue and are received again and again. Without `queueURL`, the queue is looked up by listing the queues, which needs the `sqs:ListQueues` permission.
+Good to know: a message is deleted only after it has been processed without error; a message that fails stays in the queue and is received again when its visibility timeout ends. With `deleteAfterRead` set to false, the messages stay in the queue and are received again and again. Without `queueURL`, the queue is looked up by listing the queues, which needs the `sqs:ListQueues` permission. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -33,6 +33,9 @@ The following table summarizes the configuration options available for the `aws-
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
 | **protocol** | Protocol | `https` or `http`. Only used when `amazonAWSHost` is not `amazonaws.com`. | string | https | http |
+| **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
+| **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
+| **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
 | **queueURL** | Queue URL | The full address of the queue, as the SQS console shows it. When it is set, it is used as it is, and the queue is not looked up by name, which needs the permission to list the queues. | string |  | https://sqs.eu-west-1.amazonaws.com/123456789012/orders |
 | **secretKey** | Secret Key | The secret access key that belongs to `accessKey`. The AWS console shows it only once, when the access key is created. | string |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which comes with their access key and secret key, for example from AWS STS when you assume an IAM role. Only used when `useSessionCredentials` is true. | string |  |  |
@@ -141,6 +144,26 @@ queueNameOrArn: orders
 region: eu-west-1
 messageAttributeNames: All
 attributeNames: SentTimestamp
+```
+
+### Through an HTTP Proxy
+
+Where AWS can be reached only through an HTTP proxy, as in many company networks, set `proxyHost` and `proxyPort` to the proxy. `proxyProtocol` is how the Kamelet talks to the proxy itself, not to AWS: it is `HTTPS` when it is not set, so set it to `HTTP` for a proxy that takes plain HTTP, such as Squid. The calls to AWS stay encrypted, as the proxy only passes them on. The Kamelet has no option for a proxy user or password.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:aws-sqs-source"
+      parameters:
+        queueNameOrArn: "orders"
+        region: "eu-west-1"
+        useDefaultCredentialsProvider: true
+        proxyHost: "proxy.example.com"
+        proxyPort: 3128
+        proxyProtocol: "HTTP"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

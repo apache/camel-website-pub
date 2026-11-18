@@ -12,7 +12,7 @@ Input: the body is the text to speak, as plain text, or as SSML when `textType` 
 
 Output: when it is used inside a route, the body afterwards is the audio, as a stream in the format of `outputFormat`, and the `CamelAwsPollyContentType` header holds its content type, such as `audio/mpeg`.
 
-Good to know: the stream can be read only once, so write it to a file or a bucket right away. A voice that is not available with the chosen `engine` fails the message.
+Good to know: the stream can be read only once, so write it to a file or a bucket right away. A voice that is not available with the chosen `engine` fails the message. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -28,6 +28,9 @@ The following table summarizes the configuration options available for the `aws-
 | **outputFormat** | Output Format | The format of the audio: `MP3`, `OggVorbis`, `Pcm` (raw audio), or `Json` for speech marks, which give the timing of the words instead of audio. Enum values: \* MP3 \* OggVorbis \* Pcm \* Json | string | MP3 |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
+| **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
+| **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
 | **sampleRate** | Sample Rate | The sample rate of the audio, in hertz, such as `22050` for MP3 or `16000` for PCM. When it is not set, Polly uses the default of the format. | string |  | 22050 |
 | **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
@@ -144,6 +147,23 @@ The following output formats are supported:
 ### SSML Support
 
 Set the `textType` parameter to `SSML` to use Speech Synthesis Markup Language for fine-grained control over pronunciation, volume, pitch, and speech rate.
+
+### Through an HTTP Proxy
+
+Where AWS can be reached only through an HTTP proxy, as in many company networks, set `proxyHost` and `proxyPort` to the proxy. `proxyProtocol` is how the Kamelet talks to the proxy itself, not to AWS: it is `HTTPS` when it is not set, so set it to `HTTP` for a proxy that takes plain HTTP, such as Squid. The calls to AWS stay encrypted, as the proxy only passes them on. The Kamelet has no option for a proxy user or password.
+
+The step that sends to the Kamelet, in a route:
+
+```yaml
+- to:
+    uri: "kamelet:aws-polly-sink"
+    parameters:
+      region: "eu-west-1"
+      useDefaultCredentialsProvider: true
+      proxyHost: "proxy.example.com"
+      proxyPort: 3128
+      proxyProtocol: "HTTP"
+```
 
 ## Kamelet source file
 

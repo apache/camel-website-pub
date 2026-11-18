@@ -10,7 +10,7 @@ Use it to react when data changes in a table, for example to copy new orders to 
 
 Output: the body is a JSON object, as JSON text, that describes one change: `eventName` is `INSERT`, `MODIFY` or `REMOVE`, and `dynamodb` holds the key of the item (`keys`) and, depending on the view type of the stream, the item before (`oldImage`) and after (`newImage`) the change, with the type of each attribute. The headers give the ID and the name of the event.
 
-Good to know: DynamoDB Streams must be enabled on the table, with the view type that holds the images you need, such as new and old images. By default it reads only the changes made after it starts.
+Good to know: DynamoDB Streams must be enabled on the table, with the view type that holds the images you need, such as new and old images. By default it reads only the changes made after it starts. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -25,6 +25,9 @@ The following table summarizes the configuration options available for the `aws-
 | **delay** | Delay | How long to wait between two reads of the stream, in milliseconds. | integer | 500 |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
+| **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
+| **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
 | **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
 | **streamIteratorType** | Stream Iterator Type | Where to start reading: `FROM_LATEST` receives only the changes made after the Kamelet starts; `FROM_START` first receives all the changes still kept in the stream, which can take a while before it catches up. Enum values: \* FROM\_LATEST \* FROM\_START | string | FROM\_LATEST |  |
@@ -104,6 +107,26 @@ You can also use the Profile Credentials Provider, by setting the `useProfileCre
 Only one of access key/secret key or default credentials provider could be used
 
 For more information, see the [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### Through an HTTP Proxy
+
+Where AWS can be reached only through an HTTP proxy, as in many company networks, set `proxyHost` and `proxyPort` to the proxy. `proxyProtocol` is how the Kamelet talks to the proxy itself, not to AWS: it is `HTTPS` when it is not set, so set it to `HTTP` for a proxy that takes plain HTTP, such as Squid. The calls to AWS stay encrypted, as the proxy only passes them on. The Kamelet has no option for a proxy user or password.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:aws-ddb-streams-source"
+      parameters:
+        table: "orders"
+        region: "eu-west-1"
+        useDefaultCredentialsProvider: true
+        proxyHost: "proxy.example.com"
+        proxyPort: 3128
+        proxyProtocol: "HTTP"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
 
 ## Kamelet source file
 

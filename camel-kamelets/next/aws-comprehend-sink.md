@@ -12,7 +12,7 @@ Input: the body is the text to analyze.
 
 Output: when it is used inside a route, the body afterwards is what was found, as objects of the AWS SDK for Java (not JSON text): a List for most operations, such as the languages with their scores for `detectDominantLanguage` or the entities for `detectEntities`, and the sentiment with its scores for `detectSentiment`. Headers give the main result: `CamelAwsComprehendDetectedLanguage` with its score, or `CamelAwsComprehendDetectedSentiment` with its scores.
 
-Good to know: every operation except `detectDominantLanguage` needs `languageCode`, and a message fails without it. `classifyDocument` needs `endpointArn`.
+Good to know: every operation except `detectDominantLanguage` needs `languageCode`, and a message fails without it. `classifyDocument` needs `endpointArn`. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -28,6 +28,9 @@ The following table summarizes the configuration options available for the `aws-
 | **operation** | Operation | What to find in the text: `detectDominantLanguage` (its language), `detectSentiment` (positive, negative, neutral or mixed), `detectEntities` (people, places, organizations, dates, …​), `detectKeyPhrases`, `detectSyntax` (the part of speech of each word), `detectPiiEntities` and `containsPiiEntities` (personal data, such as names and addresses), `detectToxicContent`, or `classifyDocument` (the classes of a custom classifier). Enum values: \* detectDominantLanguage \* detectEntities \* detectKeyPhrases \* detectSentiment \* detectSyntax \* detectPiiEntities \* detectToxicContent \* classifyDocument \* containsPiiEntities | string | detectDominantLanguage |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
+| **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
+| **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
+| **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
 | **secretKey** | Secret Key | The secret access key that goes with `accessKey`. AWS shows it only once, when the access key is created. | string |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which AWS gives together with their access key and secret key. Only used when `useSessionCredentials` is true. | string |  |  |
 | **uriEndpointOverride** | Overwrite Endpoint URI | The address to send the requests to instead of the usual AWS address, such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
@@ -134,6 +137,23 @@ The `languageCode` parameter is required for all operations except `detectDomina
 ### Document Classification
 
 For the `classifyDocument` operation, you must provide the `endpointArn` parameter pointing to your custom classifier endpoint.
+
+### Through an HTTP Proxy
+
+Where AWS can be reached only through an HTTP proxy, as in many company networks, set `proxyHost` and `proxyPort` to the proxy. `proxyProtocol` is how the Kamelet talks to the proxy itself, not to AWS: it is `HTTPS` when it is not set, so set it to `HTTP` for a proxy that takes plain HTTP, such as Squid. The calls to AWS stay encrypted, as the proxy only passes them on. The Kamelet has no option for a proxy user or password.
+
+The step that sends to the Kamelet, in a route:
+
+```yaml
+- to:
+    uri: "kamelet:aws-comprehend-sink"
+    parameters:
+      region: "eu-west-1"
+      useDefaultCredentialsProvider: true
+      proxyHost: "proxy.example.com"
+      proxyPort: 3128
+      proxyProtocol: "HTTP"
+```
 
 ## Kamelet source file
 
