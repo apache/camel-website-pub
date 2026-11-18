@@ -33,7 +33,7 @@ The following table summarizes the configuration options available for the `post
 
 At runtime, the `postgresql-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:kamelet
     

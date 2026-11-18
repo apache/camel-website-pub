@@ -37,7 +37,7 @@ At runtime, the `azure-cosmosdb-source` Kamelet relies upon the presence of the 
     
 -   camel:kamelet
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

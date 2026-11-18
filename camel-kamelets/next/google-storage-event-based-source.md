@@ -38,7 +38,7 @@ At runtime, the `google-storage-event-based-source` Kamelet relies upon the pres
     
 -   camel:google-storage
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

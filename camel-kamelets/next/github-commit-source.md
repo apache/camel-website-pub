@@ -30,7 +30,7 @@ The following table summarizes the configuration options available for the `gith
 
 At runtime, the `github-commit-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:github2
     

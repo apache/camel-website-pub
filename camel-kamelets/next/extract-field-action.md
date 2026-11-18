@@ -33,7 +33,7 @@ At runtime, the `extract-field-action` Kamelet relies upon the presence of the f
 
 -   camel:kamelet
     
--   camel:jackson
+-   camel:jackson3
     
 -   camel:kafka
     

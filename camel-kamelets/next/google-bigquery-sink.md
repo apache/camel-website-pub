@@ -34,7 +34,7 @@ At runtime, the `google-bigquery-sink` Kamelet relies upon the presence of the f
     
 -   camel:google-bigquery
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

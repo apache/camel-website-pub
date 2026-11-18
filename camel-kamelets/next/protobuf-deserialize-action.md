@@ -29,7 +29,7 @@ At runtime, the `protobuf-deserialize-action` Kamelet relies upon the presence o
 
 -   camel:kamelet
     
--   camel:jackson-protobuf
+-   camel:jackson3-protobuf
     
 
 ## Camel JBang usage

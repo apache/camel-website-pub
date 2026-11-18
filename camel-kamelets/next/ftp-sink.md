@@ -12,7 +12,7 @@ Input: the body is the content of the file, as text, bytes or a stream. The name
 
 Output: the message is unchanged. The `CamelFileNameProduced` header is set to the path of the file on the server.
 
-Good to know: a file with the same name is replaced, unless `fileExist` says otherwise. The connection and the login are not encrypted. A file name that points outside `directoryName` fails the message. Files are sent in ASCII (text) mode unless `binary` is true.
+Good to know: a file with the same name is replaced, unless `fileExist` says otherwise. A file is uploaded under its real name from the start, so a reader that polls the directory can pick it up half-written. To prevent that, set `tempPrefix` to upload it under a temporary name and rename it once it is complete, or `doneFileName` to write an empty done file next to it once it is complete. The connection and the login are not encrypted. A file name that points outside `directoryName` fails the message. Files are sent in ASCII (text) mode unless `binary` is true.
 
 ## Configuration Options
 
@@ -28,8 +28,10 @@ The following table summarizes the configuration options available for the `ftp-
 | **username** | Username | **Required** The user to log in to the FTP server as. | string |  |  |
 | **autoCreate** | Autocreate Missing Directories | If true, `directoryName`, and any subdirectory in the `CamelFileName` header, is created on the server when it does not exist. | boolean | true |  |
 | **binary** | Binary Mode | If true, files are transferred in binary mode, byte for byte. When false, they are transferred in ASCII mode, which is meant for text. Set it to true for files that are not text, such as images, archives or PDF files. | boolean | false |  |
+| **doneFileName** | Done File Name | The name of an empty file to write next to each file once the file is complete, so that a reader knows the file can be read. `$\\{file:name}` stands for the name of the file and `$\\{file:name.noext}` for the name without its extension, so `$\\{file:name}.done` writes `orders.csv.done`, and `$\\{file:name.noext}.ready` writes `orders.ready`. A fixed name, such as `ready`, is written again after each file. No other `$\\{…​}` is allowed, and with one the file is uploaded but then the message fails. With `tempPrefix`, the done file is written after the file has its real name. When it is not set, no done file is written. | string |  | ${file:name}.done |
 | **fileExist** | If File Exists | What to do when a file with the same name is already in the directory. `Override` replaces it, `Append` adds the new content at its end, `Fail` fails the message, and `Ignore` keeps the old file and drops the new content without an error. Enum values: \* Override \* Append \* Fail \* Ignore | string | Override |  |
 | **passiveMode** | Passive Mode | If true, the transfers use passive mode, in which the integration opens all the connections to the server. Set it to true when the integration or the server is behind a firewall or NAT, where the default active mode often fails. | boolean | false |  |
+| **tempPrefix** | Temporary Name Prefix | A prefix for the name a file is uploaded under. Once the upload is complete, the file is renamed to its real name, so a reader that skips the names with this prefix never picks up a half-written file. `ftp-source`, like other readers built with Camel, skips the names that start with a dot, so a prefix such as `.tmp-`, which uploads `orders.csv` as `.tmp-orders.csv`, works with it as it is. A prefix that ends with `/`, such as `.inprogress/`, uploads the file into that subdirectory first, and the subdirectory is created when it does not exist, unless `autoCreate` is false. When it is not set, a file is uploaded under its real name from the start. With `fileExist` `Override`, a file of the same name is deleted when the upload starts, not when it ends. It cannot be combined with `fileExist` `Append`, and every message fails when both are set. `username` must be allowed to rename files. | string |  | .tmp- |
 
 ## Dependencies
 
@@ -93,6 +95,10 @@ Requires: - Connection host (FTP server hostname) - Connection port (defaults to
     
 -   **Auto-create Directories**: Automatically creates missing directories (enabled by default)
     
+-   **Temporary Name Prefix**: Upload each file under a temporary name, such as `.tmp-orders.csv`, and rename it to its real name once it is complete (not set by default)
+    
+-   **Done File Name**: Write an empty done file next to each file once it is complete, such as `orders.csv.done` (not set by default)
+    
 
 ### Optional Headers
 
@@ -101,6 +107,35 @@ In the header, you can optionally set the `file` / `ce-file` property to specify
 If you do not set the property in the header, the Kamelet uses a default naming convention.
 
 The value is reduced to a single file name before use: any directory component is dropped, so `reports/2026/data.csv` is stored as `data.csv`. The file is always written inside the configured directory.
+
+### Example with a Temporary Name and a Done File
+
+By default a file is uploaded under its real name from the start, so a reader that polls the directory can pick it up half-written. Set **tempPrefix**, **doneFileName**, or both, to prevent that:
+
+```yaml
+- route:
+    from:
+      uri: "timer:tick"
+      parameters:
+        period: 60000
+      steps:
+        - setBody:
+            constant: "order-1,42"
+        - setHeader:
+            name: file
+            constant: "orders.csv"
+        - to:
+            uri: "kamelet:ftp-sink"
+            parameters:
+              connectionHost: "ftp.example.com"
+              username: "ftpuser"
+              password: "ftppass"
+              directoryName: "/incoming"
+              tempPrefix: ".tmp-"
+              doneFileName: "${file:name}.done"
+```
+
+Each file is uploaded as `.tmp-orders.csv` and renamed to `orders.csv` once the upload is complete, and then an empty `orders.csv.done` is written next to it. The FTP Source Kamelet, like other readers built with Camel, skips the names that start with a dot, so it never reads a half-written file; another reader can wait for the `.done` file. In **doneFileName**, `${file:name}` stands for the name of the file and `${file:name.noext}` for the name without its extension; no other `${…​}` is allowed. The user needs the right to rename files on the server. **tempPrefix** cannot be combined with **fileExist** set to `Append`, and with `Override` a file of the same name is deleted when the upload starts.
 
 ## Kamelet source file
 

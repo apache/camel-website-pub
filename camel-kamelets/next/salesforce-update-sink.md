@@ -38,7 +38,7 @@ At runtime, the `salesforce-update-sink` Kamelet relies upon the presence of the
 
 -   camel:jsonpath
     
--   camel:jackson
+-   camel:jackson3
     
 -   camel:salesforce
     

@@ -40,7 +40,7 @@ At runtime, the `ceph-event-based-source` Kamelet relies upon the presence of th
     
 -   camel:jsonpath
     
--   camel:jackson
+-   camel:jackson3
     
 -   camel:kamelet
     

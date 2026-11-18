@@ -27,7 +27,7 @@ The following table summarizes the configuration options available for the `fhir
 | **accessToken** | Access Token | An OAuth access token, sent as a Bearer token, for a server that uses OAuth, such as SMART on FHIR. Use it instead of `username` and `password`. | string |  |  |
 | **encoding** | Encoding | How the resources are written: `JSON` or `XML`. The body must be in this format. | string | JSON | XML |
 | **fhirVersion** | FHIR Version | The version of the FHIR standard that the server and the resources use. Most servers today use `R4`. Enum values: \* DSTU2 \* DSTU2\_HL7ORG \* DSTU2\_1 \* DSTU3 \* R4 \* R5 | string | R4 |  |
-| **lazyStartProducer** | Lazy Start Producer | If true, the connection to the server is set up at the first message instead of when the integration starts, so that the integration can start while the server is not reachable. The first message then takes a little longer. | boolean | false |  |
+| **lazyStart** | Lazy Start | If true, the connection to the server is set up at the first message instead of when the integration starts, so that the integration can start while the server is not reachable. The first message then takes a little longer. | boolean | false |  |
 | **log** | Log | If true, every request to the server and every response is written to the log, for troubleshooting. | boolean | false |  |
 | **password** | Password | The password of `username`, for Basic authentication. | string |  |  |
 | **prettyPrint** | Pretty Print | If true, the resources sent to the server are indented, which is easier to read in logs. | boolean | false |  |

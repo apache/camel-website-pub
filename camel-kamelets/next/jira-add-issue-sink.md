@@ -30,13 +30,13 @@ The following table summarizes the configuration options available for the `jira
 
 At runtime, the `jira-add-issue-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:jira
     
 -   camel:kamelet
     
--   mvn:com.fasterxml.jackson.datatype:jackson-datatype-joda:2.12.5
+-   mvn:tools.jackson.datatype:jackson-datatype-joda:3.2.4
     
 
 ## Camel JBang usage

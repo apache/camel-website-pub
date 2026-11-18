@@ -29,7 +29,7 @@ At runtime, the `protobuf-serialize-action` Kamelet relies upon the presence of 
 
 -   camel:kamelet
     
--   camel:jackson-protobuf
+-   camel:jackson3-protobuf
     
 
 ## Camel JBang usage

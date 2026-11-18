@@ -32,10 +32,10 @@ The following table summarizes the configuration options available for the `ibm-
 | **destinationBucketSuffix** | Destination Bucket Suffix | Text put after the name of each moved file in `destinationBucket`, such as `.done`. Only used when `moveAfterRead` is true. | string |  | .done |
 | **includeBody** | Include Body | If true, the body is the content of the file. If false, there is no body and only the headers describe the file. | boolean | true |  |
 | **includeFolders** | Include Folders | If true, folder markers (empty objects whose key ends with `/`) are read as messages too. Set it to false to skip them. | boolean | true |  |
-| **location** | Location | The region of the bucket, such as `us-south` or `eu-gb`. It is information only; the region used is the one of `endpointUrl`. | string |  | us-south |
 | **maxMessagesPerPoll** | Max Messages Per Poll | The most files to read at each poll. Use 0 or a negative number for no limit. | integer | 10 |  |
 | **moveAfterRead** | Move Objects After Read | If true, each file is moved to `destinationBucket` after it has been read, that is copied there and deleted from this bucket, whatever `deleteAfterRead` says. | boolean | false |  |
 | **prefix** | Prefix | Only read the files whose key starts with this text, such as a folder followed by `/`. | string |  | inbox/ |
+| **region** | Region | The region of the bucket, such as `us-south` or `eu-gb`. It is information only, shown with the services the integration calls; the region used is the one of `endpointUrl`. | string |  | us-south |
 
 ## Dependencies
 
@@ -110,7 +110,7 @@ You can consume objects from an IBM COS bucket and delete them after processing:
         apiKey: "{{ibm.api.key}}"
         serviceInstanceId: "{{ibm.service.instance.id}}"
         endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-        location: "us-south"
+        region: "us-south"
       steps:
         - to:
             uri: "kamelet:log-sink"
@@ -131,7 +131,7 @@ To consume objects without deleting them, set `deleteAfterRead` to false:
         apiKey: "{{ibm.api.key}}"
         serviceInstanceId: "{{ibm.service.instance.id}}"
         endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-        location: "us-south"
+        region: "us-south"
         deleteAfterRead: false
       steps:
         - to:
@@ -151,7 +151,7 @@ Instead of deleting objects, you can move them to another bucket:
         apiKey: "{{ibm.api.key}}"
         serviceInstanceId: "{{ibm.service.instance.id}}"
         endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-        location: "us-south"
+        region: "us-south"
         deleteAfterRead: false
         moveAfterRead: true
         destinationBucket: "archive-bucket"
@@ -174,7 +174,7 @@ You can filter objects using a prefix:
         apiKey: "{{ibm.api.key}}"
         serviceInstanceId: "{{ibm.service.instance.id}}"
         endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-        location: "us-south"
+        region: "us-south"
         prefix: "inbox/"
       steps:
         - to:
@@ -196,7 +196,7 @@ To consume only object metadata without the body, set `includeBody` to false:
         apiKey: "{{ibm.api.key}}"
         serviceInstanceId: "{{ibm.service.instance.id}}"
         endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-        location: "us-south"
+        region: "us-south"
         includeBody: false
       steps:
         - to:

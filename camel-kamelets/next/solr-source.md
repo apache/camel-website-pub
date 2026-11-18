@@ -37,7 +37,7 @@ At runtime, the `solr-source` Kamelet relies upon the presence of the following 
     
 -   camel:timer
     
--   camel:jackson
+-   camel:jackson3
     
 -   camel:kamelet
     

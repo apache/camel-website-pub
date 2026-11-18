@@ -24,7 +24,7 @@ At runtime, the `json-deserialize-action` Kamelet relies upon the presence of th
 
 -   camel:kamelet
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

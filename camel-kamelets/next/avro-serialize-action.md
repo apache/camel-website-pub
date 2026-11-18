@@ -30,7 +30,7 @@ At runtime, the `avro-serialize-action` Kamelet relies upon the presence of the 
 
 -   camel:kamelet
     
--   camel:jackson-avro
+-   camel:jackson3-avro
     
 
 ## Camel JBang usage

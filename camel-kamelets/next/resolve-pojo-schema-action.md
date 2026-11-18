@@ -32,9 +32,9 @@ At runtime, the `resolve-pojo-schema-action` Kamelet relies upon the presence of
 
 -   camel:kamelet
     
--   camel:jackson-avro
+-   camel:jackson3-avro
     
--   camel:jackson-protobuf
+-   camel:jackson3-protobuf
     
 
 ## Camel JBang usage

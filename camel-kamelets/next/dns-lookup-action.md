@@ -22,7 +22,7 @@ The `dns-lookup-action` Kamelet does not specify any configuration options.
 
 At runtime, the `dns-lookup-action` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:dns
     

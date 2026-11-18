@@ -1,6 +1,6 @@
 # Alibaba Simple Log Service (SLS)
 
-Manage logs on Alibaba Cloud Simple Log Service (SLS).
+Write logs, query logs, and list Logstores on Alibaba Cloud Simple Log Service (SLS).
 
 ## What’s inside
 

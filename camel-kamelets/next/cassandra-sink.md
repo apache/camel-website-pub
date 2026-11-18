@@ -12,7 +12,7 @@ Input: the body is a JSON array, as text, with one value for each `?` in `query`
 
 Output: the body afterwards is an empty List for an INSERT, UPDATE or DELETE.
 
-Good to know: with `jsonPayload` true, the default, a message fails when its body is not a JSON array, such as a JSON object. The values are sent apart from the statement, so the content of a message cannot change it. `ANY`, the default `consistencyLevel`, is the weakest level: a write counts as done even before a replica has stored it.
+Good to know: with `jsonPayload` true, the default, a message fails when its body is not a JSON array, such as a JSON object. The values are sent apart from the statement, so the content of a message cannot change it. `ANY`, the default `consistencyLevel`, is the weakest level: a write counts as done even before a replica has stored it. When the datacenter of the cluster is not called `datacenter1`, set `datacenter` to its name, or the Kamelet fails to start with `No node was available to execute the query`. The Kamelet connects without TLS, so a cluster that accepts only TLS connections refuses it.
 
 ## Configuration Options
 
@@ -26,6 +26,7 @@ The following table summarizes the configuration options available for the `cass
 | **keyspace** | Keyspace | **Required** The keyspace (the Cassandra name for a database) that holds the tables of `query`. | string |  | customers |
 | **query** | Query | **Required** The CQL statement to run for each message, such as an INSERT, UPDATE or DELETE. Write `?` for each value that comes from the body. | string |  | INSERT INTO accounts (id, username, city) VALUES (?, ?, ?) |
 | **consistencyLevel** | Consistency Level | How many replicas must store a write before it counts as done. `ANY` is the fastest and the least safe; `QUORUM` or `LOCAL_QUORUM` waits for a majority of the replicas. Enum values: \* ANY \* ONE \* TWO \* THREE \* QUORUM \* ALL \* LOCAL\_QUORUM \* EACH\_QUORUM \* LOCAL\_ONE | string | ANY |  |
+| **datacenter** | Local Datacenter | The name of the Cassandra datacenter that the nodes in `connectionHost` belong to, as the `Datacenter` line of `nodetool status` shows it. The Kamelet runs the statements only on the nodes of this datacenter. When it is not set, `datacenter1` is used, the name a Cassandra installed with its default settings uses. A name that does not match makes the Kamelet fail to start with `No node was available to execute the query`, or each message fail with it when `prepareStatements` is false. | string |  | dc-east |
 | **extraTypeCodecs** | Extra Type Codecs | An extra conversion between Cassandra and Java types to turn on, such as `TIMESTAMP_UTC` or `BLOB_TO_ARRAY`. Needed only when a column type does not map to a value of the body by default. Enum values: \* BLOB\_TO\_ARRAY \* BOOLEAN\_LIST\_TO\_ARRAY \* BYTE\_LIST\_TO\_ARRAY \* SHORT\_LIST\_TO\_ARRAY \* INT\_LIST\_TO\_ARRAY \* LONG\_LIST\_TO\_ARRAY \* FLOAT\_LIST\_TO\_ARRAY \* DOUBLE\_LIST\_TO\_ARRAY \* TIMESTAMP\_UTC \* TIMESTAMP\_MILLIS\_SYSTEM \* TIMESTAMP\_MILLIS\_UTC \* ZONED\_TIMESTAMP\_SYSTEM \* ZONED\_TIMESTAMP\_UTC \* ZONED\_TIMESTAMP\_PERSISTED \* LOCAL\_TIMESTAMP\_SYSTEM \* LOCAL\_TIMESTAMP\_UTC | string |  |  |
 | **jsonPayload** | JSON Array Body | If true, the body is read as a JSON array that holds the values of the `?` markers. If false, the body is passed as it is, as the one value of `query`. | boolean | true |  |
 | **password** | Password | The password of the Cassandra user `username`. | string |  |  |
@@ -36,7 +37,7 @@ The following table summarizes the configuration options available for the `cass
 
 At runtime, the `cassandra-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:kamelet
     
@@ -81,6 +82,24 @@ camel run route.yaml
 ### Authentication methods
 
 The Kamelet supports username/password authentication.
+
+The Kamelet has no TLS option. It connects without TLS, so a cluster that accepts only TLS connections refuses it.
+
+### The local datacenter
+
+The Kamelet connects to the nodes in `connectionHost` as members of one datacenter, the local datacenter, and runs the statements only on the nodes of that datacenter. It is `datacenter1` unless `datacenter` says otherwise, the name a Cassandra installed with its default settings uses. When the datacenter of the cluster has another name, set `datacenter` to it, or the Kamelet fails to start with `No node was available to execute the query` (with `prepareStatements` false, it starts and each message fails with that error instead).
+
+The name of the datacenter is on the `Datacenter:` line of `nodetool status`, or in the `data_center` column of `SELECT data_center FROM system.local` in `cqlsh`.
+
+For example, for a cluster whose datacenter is called `dc-east`:
+
+```yaml
+connectionHost: cassandra1.example.com,cassandra2.example.com
+connectionPort: 9042
+keyspace: customers
+datacenter: dc-east
+query: INSERT INTO accounts (id, username, city) VALUES (?, ?, ?)
+```
 
 ### Payload
 

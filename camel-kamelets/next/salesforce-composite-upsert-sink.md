@@ -40,7 +40,7 @@ At runtime, the `salesforce-composite-upsert-sink` Kamelet relies upon the prese
 
 -   camel:jsonpath
     
--   camel:jackson
+-   camel:jackson3
     
 -   camel:salesforce
     

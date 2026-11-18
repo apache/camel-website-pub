@@ -33,7 +33,7 @@ At runtime, the `google-pubsub-sink` Kamelet relies upon the presence of the fol
     
 -   camel:google-pubsub
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

@@ -36,7 +36,7 @@ The following table summarizes the configuration options available for the `goog
 
 At runtime, the `google-sheets-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:kamelet
     

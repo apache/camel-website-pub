@@ -29,7 +29,7 @@ The following table summarizes the configuration options available for the `nats
 
 At runtime, the `nats-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:nats
     

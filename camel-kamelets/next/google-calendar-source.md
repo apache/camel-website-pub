@@ -34,7 +34,7 @@ The following table summarizes the configuration options available for the `goog
 
 At runtime, the `google-calendar-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:google-calendar
     

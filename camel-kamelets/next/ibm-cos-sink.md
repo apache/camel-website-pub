@@ -27,9 +27,9 @@ The following table summarizes the configuration options available for the `ibm-
 | **serviceInstanceId** | Service Instance ID | **Required** The CRN (Cloud Resource Name) of the Cloud Object Storage instance, shown in the details of the instance in the IBM Cloud console. It starts with `crn:v1:bluemix:public:cloud-object-storage:`. | string |  |  |
 | **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist yet. | boolean | false |  |
 | **keyName** | Key Name | The name of the file in the bucket, the same for every message, so each message overwrites the previous file. When it is not set, the name comes from the `file` or `ce-file` header, or is generated. A `CamelIBMCOSKey` header on the message, as `ibm-cos-source` sets, is used instead of it. | string |  | reports/latest.csv |
-| **location** | Location | The region of the bucket, such as `us-south` or `eu-gb`. It is information only; the region used is the one of `endpointUrl`. | string |  | us-south |
 | **multiPartUpload** | Multi-Part Upload | If true, a file larger than `partSize` is uploaded in several parts, which suits large files. | boolean | false |  |
 | **partSize** | Part Size | The size of each part of a multi-part upload, in bytes. For example, 26214400 is 25 MB. Only used when `multiPartUpload` is true. | integer | 26214400 |  |
+| **region** | Region | The region of the bucket, such as `us-south` or `eu-gb`. It is information only, shown with the services the integration calls; the region used is the one of `endpointUrl`. | string |  | us-south |
 | **storageClass** | Storage Class | The storage class to store the files with, such as `STANDARD`, `VAULT`, `COLD` or `FLEX`. | string |  | STANDARD |
 
 ## Dependencies
@@ -113,7 +113,7 @@ Upload data to an IBM COS bucket:
               apiKey: "{{ibm.api.key}}"
               serviceInstanceId: "{{ibm.service.instance.id}}"
               endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-              location: "us-south"
+              region: "us-south"
 ```
 
 #### Auto-creating buckets
@@ -132,7 +132,7 @@ The Kamelet can automatically create the bucket if it doesn’t exist:
               apiKey: "{{ibm.api.key}}"
               serviceInstanceId: "{{ibm.service.instance.id}}"
               endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-              location: "us-south"
+              region: "us-south"
               autoCreateBucket: true
 ```
 
@@ -152,7 +152,7 @@ You can specify a fixed key name for all uploaded objects:
               apiKey: "{{ibm.api.key}}"
               serviceInstanceId: "{{ibm.service.instance.id}}"
               endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-              location: "us-south"
+              region: "us-south"
               keyName: "data/myfile.txt"
 ```
 
@@ -172,7 +172,7 @@ For large files, you can enable multi-part upload:
               apiKey: "{{ibm.api.key}}"
               serviceInstanceId: "{{ibm.service.instance.id}}"
               endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-              location: "us-south"
+              region: "us-south"
               multiPartUpload: true
               partSize: 52428800
 ```
@@ -195,7 +195,7 @@ You can specify different storage classes for cost optimization:
               apiKey: "{{ibm.api.key}}"
               serviceInstanceId: "{{ibm.service.instance.id}}"
               endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
-              location: "us-south"
+              region: "us-south"
               storageClass: "STANDARD"
 ```
 

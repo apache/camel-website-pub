@@ -35,7 +35,7 @@ At runtime, the `solr-sink` Kamelet relies upon the presence of the following de
 
 -   camel:solr
     
--   camel:jackson
+-   camel:jackson3
     
 -   camel:kamelet
     

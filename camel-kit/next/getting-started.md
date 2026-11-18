@@ -67,10 +67,7 @@ camel plugin add kit \
 camel kit init my-integration --ai claude
 ```
 
-```bash
-# Latest deployed 0.4.2-SNAPSHOT
-jbang app install --force camel-kit@luigidemasi/camel-kit
-```
+Apache snapshot artifacts are not yet published. To use the latest development version `0.4.2-SNAPSHOT`, see the "Build from source" section below.
 
 ```bash
 git clone https://github.com/apache/camel-kit.git

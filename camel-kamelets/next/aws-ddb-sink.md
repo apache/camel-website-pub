@@ -38,7 +38,7 @@ The following table summarizes the configuration options available for the `aws-
 
 At runtime, the `aws-ddb-sink` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson
+-   camel:jackson3
     
 -   camel:aws2-ddb
     

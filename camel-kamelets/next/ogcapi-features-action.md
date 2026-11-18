@@ -38,7 +38,7 @@ At runtime, the `ogcapi-features-action` Kamelet relies upon the presence of the
     
 -   camel:jsonpath
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

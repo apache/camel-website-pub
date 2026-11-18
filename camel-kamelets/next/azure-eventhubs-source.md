@@ -10,7 +10,7 @@ Use it to process event streams, such as telemetry or changes, that other applic
 
 Output: the body is the body of the event, as bytes. The headers give its partition (`CamelAzureEventHubsPartitionId`), offset, sequence number and the time it was enqueued, and `CamelAzureEventHubsMetadata` holds the custom properties of the event.
 
-Good to know: when no position has been saved yet, it starts with the events that arrive after it starts, not the older ones. It reads as the `$Default` consumer group. It saves its position (a checkpoint) in `blobContainerName` every 500 events or every 5 seconds, so after a restart some events can be read again.
+Good to know: when no position has been saved yet, it starts with the events that arrive after it starts, not the older ones. It reads as the `$Default` consumer group, or as the one in `consumerGroupName`, and each consumer group has its own saved position. It saves its position (a checkpoint) in `blobContainerName` every 500 events or every 5 seconds, so after a restart some events can be read again.
 
 ## Configuration Options
 
@@ -24,6 +24,7 @@ The following table summarizes the configuration options available for the `azur
 | **blobContainerName** | Checkpoint Container Name | **Required** The name of the blob container, in `blobAccountName`, for the checkpoints. | string |  | eventhub-checkpoints |
 | **eventhubName** | Event Hub Name | **Required** The name of the event hub in the namespace to receive the events from. | string |  | orders |
 | **namespaceName** | Event Hubs Namespace | **Required** The name of the Event Hubs namespace, the first part of its address `<namespaceName>.servicebus.windows.net`. | string |  | my-namespace |
+| **consumerGroupName** | Consumer Group | The consumer group to read as. Each consumer group receives every event of the event hub and has its own saved position, so two integrations that read the same event hub with different consumer groups both receive every event. The consumer group must exist: create it in the Azure portal, under the event hub, then Entities, Consumer groups. With a consumer group that does not exist, the integration starts but receives nothing, and logs a warning that the messaging entity could not be found. When not set, it reads as `$Default`, the consumer group every event hub has. | string |  | billing |
 | **credentialType** | Credential Type | How to log in to Event Hubs. `CONNECTION_STRING`, the default, uses `sharedAccessName` and `sharedAccessKey`. `AZURE_IDENTITY` uses the Azure identity of the environment, such as the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` environment variables, a managed identity or the Azure CLI login. Enum values: \* CONNECTION\_STRING \* AZURE\_IDENTITY | string | CONNECTION\_STRING |  |
 | **sharedAccessKey** | Shared Access Key | The primary or secondary key of the shared access policy named in `sharedAccessName`. | string |  |  |
 | **sharedAccessName** | Shared Access Name | The name of a shared access policy of the namespace or of the event hub, such as `RootManageSharedAccessKey`, from the Azure portal: the namespace or the event hub, then Settings, Shared access policies. Used when `credentialType` is `CONNECTION_STRING`, the default. | string |  | RootManageSharedAccessKey |
@@ -36,7 +37,7 @@ At runtime, the `azure-eventhubs-source` Kamelet relies upon the presence of the
     
 -   camel:kamelet
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage
@@ -102,6 +103,30 @@ The order of evaluation for `AZURE_IDENTITY` is the following:
     
 
 For more information, see the [Azure Identity documentation](https://learn.microsoft.com/en-us/java/api/overview/azure/identity-readme)
+
+### Reading with your own consumer group
+
+By default the Kamelet reads as the `$Default` consumer group. To read the same event hub from several integrations, each receiving every event, create a consumer group for each of them in the Azure portal (the event hub, then Entities, Consumer groups) and set it in `consumerGroupName`:
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:azure-eventhubs-source"
+      parameters:
+        namespaceName: "my-namespace"
+        eventhubName: "orders"
+        sharedAccessName: "RootManageSharedAccessKey"
+        sharedAccessKey: "{{eventhubs.key}}"
+        blobAccountName: "mystorageaccount"
+        blobAccessKey: "{{storage.key}}"
+        blobContainerName: "eventhub-checkpoints"
+        consumerGroupName: "billing"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+Each consumer group has its own saved position in `blobContainerName`, so the integrations can share the container. A consumer group without a saved position starts with the events that arrive after the integration starts. With a consumer group that does not exist, the integration starts but receives nothing, and logs a warning that the messaging entity could not be found.
 
 ## Kamelet source file
 

@@ -349,7 +349,7 @@ spec:
             properties:
               # ...
           dependencies: (6)
-            - "camel:jackson"
+            - "camel:jackson3"
         text-plain:
           description: Output type as plain text
           mediaType: text/plain
@@ -896,6 +896,9 @@ spec:
 
 > **Tip**
 > In other scenarios, you might want to refer to non-required parameters in the Kamelet’s `spec.template` using the `{{?optionalParam}}` syntax; that might be helpful for those cases where the non-required parameter does not define a default value in the Kamelet’s `spec.definition.properties`. For more information, you can refer to the using Camel property placeholder syntax in the Camel Core project documentation.
+
+> **Important**
+> Do not give a Kamelet parameter the name of an option of the `kamelet:` component: `templateId`, `routeId`, `location`, `uuid`, `block`, `timeout`, `failIfNoConsumers`, `noErrorHandler`, `advancedOptions`, `bridgeErrorHandler`, `exceptionHandler`, `exchangePattern` or `lazyStartProducer`. In `kamelet:my-sink?location=us-south` the component takes `location` for itself, as the place to load the Kamelet from, and the template never sees it; the others configure the `kamelet:` endpoint instead of the Kamelet. Use another name, such as `region` or `lazyStart`, and map it to the option of the wrapped component in the template (`location: "{{region}}"`). The build fails on such a name.
 
 ### Step 7: add metadata and sugar
 

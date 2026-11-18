@@ -46,7 +46,7 @@ At runtime, the `aws-s3-event-based-source` Kamelet relies upon the presence of 
     
 -   camel:kamelet
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

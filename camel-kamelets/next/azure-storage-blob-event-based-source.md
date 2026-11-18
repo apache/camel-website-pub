@@ -44,7 +44,7 @@ At runtime, the `azure-storage-blob-event-based-source` Kamelet relies upon the 
     
 -   camel:jsonpath
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

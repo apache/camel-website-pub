@@ -8,7 +8,7 @@ Receives the messages of an Amazon SQS queue, one message each, and by default d
 
 Use it to process work that other systems put in a queue, such as orders, jobs or notifications, or the events that SNS, S3 or EventBridge send to a queue. For the events of an S3 bucket, `aws-s3-event-based-source` can also fetch the files.
 
-Output: the body is the body of the SQS message, as text. The headers give the message ID (`CamelAwsSqsMessageId`), the receipt handle and the MD5 checksum of the body. The message attributes of the SQS message are not read.
+Output: the body is the body of the SQS message, as text. The headers give the message ID (`CamelAwsSqsMessageId`), the receipt handle and the MD5 checksum of the body. The message attributes, which the sender sets on a message, are read only when `messageAttributeNames` names them, and the system attributes of SQS, such as `SentTimestamp`, only when `attributeNames` names them. Each attribute that is read becomes a header of the same name, except a message attribute whose name starts with `Camel`.
 
 Good to know: a message is deleted only after it has been processed without error; a message that fails stays in the queue and is received again when its visibility timeout ends. With `deleteAfterRead` set to false, the messages stay in the queue and are received again and again. Without `queueURL`, the queue is looked up by listing the queues, which needs the `sqs:ListQueues` permission.
 
@@ -23,11 +23,13 @@ The following table summarizes the configuration options available for the `aws-
 | **region** | AWS Region | **Required** The AWS region of the queue, as a region code such as `eu-west-1` or `us-east-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
 | **accessKey** | Access Key | The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. Leave both out when `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` is true. | string |  |  |
 | **amazonAWSHost** | AWS Host | The host name of AWS. Leave it as `amazonaws.com` for AWS. Any other value is the address to connect to instead, as `host:port`, together with `protocol`; `uriEndpointOverride` does the same. | string | amazonaws.com |  |
+| **attributeNames** | System Attribute Names | Which of the system attributes that SQS keeps for each message to read: `All`, or a comma-separated list of names from `SenderId`, `SentTimestamp`, `ApproximateReceiveCount`, `ApproximateFirstReceiveTimestamp`, `SequenceNumber`, `MessageDeduplicationId`, `MessageGroupId`, `AWSTraceHeader` and `DeadLetterQueueSourceArn`. A name that is not one of these is ignored, with a warning in the log. Each attribute that is read becomes a header of the same name, as text; the timestamps are in milliseconds since 1970. When it is not set, no system attribute is read. | string |  | SentTimestamp,ApproximateReceiveCount |
 | **autoCreateQueue** | Autocreate Queue | If true, the queue is created when it does not exist. A name that ends in `.fifo` creates a FIFO queue. The credentials need the permission to create queues. | boolean | false |  |
 | **delay** | Delay | How long to wait between two polls of the queue, in milliseconds. | integer | 500 |  |
 | **deleteAfterRead** | Auto-delete Messages | If true, each message is deleted from the queue once it has been processed. Set it to false to keep the messages; they are then received again each time the visibility timeout ends. | boolean | true |  |
 | **greedy** | Greedy Scheduler | If true, it polls again right away when the last poll received messages, instead of waiting for `delay`. | boolean | false |  |
 | **maxMessagesPerPoll** | Max Messages Per Poll | The most messages to receive in one request to SQS, from 1 to 10. SQS may return fewer. | integer | 1 |  |
+| **messageAttributeNames** | Message Attribute Names | The message attributes to read: `All`, or a comma-separated list of names, such as `customer,priority`. A name that ends in `.`**, such as `trace.`**, reads the attributes whose names start with `trace.`. Each attribute that is read becomes a header of the same name: a String attribute as text, a Number attribute as text, or as a number when its type has a label such as `Number.int`, and a Binary attribute as bytes (an AWS SDK `SdkBytes`). A message attribute whose name starts with `Camel` is not made a header. When it is not set, no message attribute is read. | string |  | All |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
 | **protocol** | Protocol | `https` or `http`. Only used when `amazonAWSHost` is not `amazonaws.com`. | string | https | http |
@@ -110,6 +112,36 @@ You can also use the Profile Credentials Provider, by setting the `useProfileCre
 Only one of access key/secret key or default credentials provider could be used
 
 For more information, see the [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### Reading the attributes of a message
+
+By default the Kamelet reads only the body of each message. Two options ask SQS for the attributes too:
+
+-   **Message Attribute Names** (`messageAttributeNames`): the message attributes, which the sender sets on a message. Use `All`, a comma-separated list of names, or a name that ends in `.` **for all the names with that start, such as `trace.`**.
+    
+-   **System Attribute Names** (`attributeNames`): the attributes that SQS keeps for each message, such as `SentTimestamp` (in milliseconds since 1970) and `ApproximateReceiveCount`. Use `All` or a comma-separated list of names.
+    
+
+Each attribute that is read becomes a header of the same name, so the next steps can use it as `customer` or `SentTimestamp`. The values are:
+
+ 
+| Attribute | Header value |
+| --- | --- |
+| String | Text. |
+| Number | Text, such as `5`. With a type label such as `Number.int`, a number. |
+| Binary | Bytes, as an AWS SDK `SdkBytes`. |
+| System attribute | Text. |
+
+A message attribute whose name starts with `Camel` does not become a header. It is still in the `CamelAwsSqsMessageAttributes` header, a Map from each name to an AWS SDK `MessageAttributeValue`.
+
+For example, to read all the message attributes and the time each message was sent:
+
+```yaml
+queueNameOrArn: orders
+region: eu-west-1
+messageAttributeNames: All
+attributeNames: SentTimestamp
+```
 
 ## Kamelet source file
 

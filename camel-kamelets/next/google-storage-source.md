@@ -34,7 +34,7 @@ At runtime, the `google-storage-source` Kamelet relies upon the presence of the 
     
 -   camel:google-storage
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

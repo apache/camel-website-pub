@@ -33,7 +33,7 @@ At runtime, the `google-storage-sink` Kamelet relies upon the presence of the fo
     
 -   camel:google-storage
     
--   camel:jackson
+-   camel:jackson3
     
 
 ## Camel JBang usage

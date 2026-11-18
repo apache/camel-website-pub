@@ -12,7 +12,7 @@ Input: the body is the payload, as text or bytes. A Map fails: turn it into JSON
 
 Output: the message is unchanged.
 
-Good to know: it connects with no TLS and no login, unless `serviceUrl` starts with `pulsar+ssl://` and `authenticationClass` is set. It connects when the integration starts, and the integration fails to start when Pulsar cannot be reached, unless `lazyStartProducer` is true.
+Good to know: it connects with no TLS and no login, unless `serviceUrl` starts with `pulsar+ssl://` and `authenticationClass` is set. It connects when the integration starts, and the integration fails to start when Pulsar cannot be reached, unless `lazyStart` is true.
 
 ## Configuration Options
 
@@ -34,7 +34,7 @@ The following table summarizes the configuration options available for the `puls
 | **blockIfQueueFull** | Block If Queue Full | What happens when `maxPendingMessages` messages are already waiting for Pulsar to confirm them: if true, sending waits until there is room; if false, the message fails. | boolean | false |  |
 | **compressionType** | Compression Type | How to compress the messages on the way to Pulsar. The readers decompress them by themselves. Enum values: \* NONE \* LZ4 \* ZLIB \* ZSTD \* SNAPPY | string | NONE |  |
 | **initialSequenceId** | Initial Sequence ID | The sequence ID to count from: the first message gets this number plus one. With the default, -1, the first message gets 0. Pulsar uses sequence IDs to drop duplicates when deduplication is on. | integer | \-1 |  |
-| **lazyStartProducer** | Lazy Start | If true, the connection to Pulsar is made when the first message is sent, not when the integration starts. The integration then starts even when Pulsar cannot be reached, and the first message takes longer. | boolean | false |  |
+| **lazyStart** | Lazy Start | If true, the connection to Pulsar is made when the first message is sent, not when the integration starts. The integration then starts even when Pulsar cannot be reached, and the first message takes longer. | boolean | false |  |
 | **maxPendingMessages** | Maximum Pending Messages | The most messages that can wait at the same time for Pulsar to confirm them. See `blockIfQueueFull` for what happens to more. | integer | 1000 |  |
 | **messageRoutingMode** | Message Routing Mode | How messages are spread over the partitions of a partitioned topic: `RoundRobinPartition` spreads them in turn, `SinglePartition` sends them all to one partition, and in both a message with a key always goes to the partition of its key. `CustomPartition` needs a custom router, which this Kamelet cannot set. Enum values: \* SinglePartition \* RoundRobinPartition \* CustomPartition | string | RoundRobinPartition |  |
 | **producerName** | Producer Name | The name of this sender in Pulsar, shown in the topic statistics and set on each message. When it is not set, Pulsar picks a unique name. | string |  |  |
