@@ -79,7 +79,7 @@ The sink path maps Kafka record headers whose key starts with `CamelHeader.` int
 
 #### Information disclosure of configuration secrets by CKC code
 
-CKC code that writes connector-configuration secrets to a log, an event, or a produced Kafka record. CKC masks keys flagged sensitive by Camel’s `SensitiveUtils` in its one startup "initial properties" log line; a path that bypasses that masking, or that leaks a secret value through a record or SMT, is in scope.
+CKC code that writes connector-configuration secrets to a log, an event, or a produced Kafka record. CKC masks keys flagged sensitive by Camel’s `SensitiveUtils`, and the options the connector defines with the Kafka `ConfigDef.Type.PASSWORD` type, in its one startup "initial properties" log line; a path that bypasses that masking, or that leaks a secret value through a record or SMT, is in scope.
 
 #### Deserialization or external-resource parsing added by the glue
 
@@ -120,7 +120,7 @@ These are CKC characteristics that can look like vulnerabilities at first glance
     
 -   **Connectors inherit the security posture and CVE exposure of the wrapped component and Kamelet.** A connector built on a component that defaults to a permissive setting carries that setting. The fix for such a case lands in Apache Camel or the Kamelets catalog and is consumed by CKC on the next dependency bump; it is not separately re-mediated in CKC.
     
--   **Secrets live in the connector configuration.** CKC masks sensitive keys only in its own startup log line. Everything else about secret handling - the config topic, the REST API, externalisation - is Kafka Connect’s model.
+-   **Secrets live in the connector configuration.** CKC masks sensitive keys and `PASSWORD` type options only in its own startup log line. Everything else about secret handling - the config topic, the REST API, externalisation - is Kafka Connect’s model.
     
 
 ## Deployment hardening

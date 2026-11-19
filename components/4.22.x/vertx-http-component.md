@@ -439,6 +439,8 @@ The Vert.x HTTP component supports SSL/TLS configuration through the [Camel JSSE
 
 It is also possible to configure SSL options by providing a custom `WebClientOptions`.
 
+An `https://` address is always called with TLS. When no `sslContextParameters` is configured, the server certificate is checked with the default trust store of the JVM.
+
 ### Session Management
 
 Session management can be enabled via the `sessionManagement` URI option. When enabled, an in-memory cookie store is used to track cookies. This can be overridden by providing a custom `CookieStore` via the `cookieStore` URI option.
