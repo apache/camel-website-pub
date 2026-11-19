@@ -248,6 +248,8 @@ To plug in a security provider for endpoint authentication, implement SPI interf
 
 Undertow component locates all implementations of `UndertowSecurityProvider` using Java SPI (Service Provider Interfaces). If there is an object passed to the component as parameter `securityConfiguration` and provider accepts it. Provider will be used for authentication of all requests.
 
+Once the security provider has authenticated a request, the `Authorization` header is removed from the message, so it is not passed on to the route. The headers that the provider adds with `addHeader` are set after that.
+
 Property `requireServletContext` of security providers forces the Undertow server to run with servlet context, as soon as an endpoint that uses such a provider, configured on the endpoint or on the component, is started. There will be no servlet actually handled. This feature is meant only for use with servlet filters, which needs servlet context for their functionality.
 
 #### WebSocket endpoints

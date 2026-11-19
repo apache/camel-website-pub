@@ -10,7 +10,7 @@ Use it to protect sensitive data, such as personal or payment details, before it
 
 Input: text or bytes.
 
-Output: the body is the encrypted data, as bytes (a stream), a little longer than the input. It is not text: to send it where only text fits, encode it, for example in Base64. The headers are kept.
+Output: the body is the encrypted data, as bytes, a little longer than the input, and the `Content-Type` header is set to `application/octet-stream`. It is not text: to send it where only text fits, encode it, for example in Base64. The other headers are kept.
 
 Good to know: the key is a secret; anyone who has it can decrypt the data, so keep it in a vault or a secret, not in plain configuration. The encrypted data carries a check value, so `crypto-decrypt-action` fails on data that was changed or decrypted with another key. A key of the wrong length fails each message, not the start. Set `mode` to `CBC`: without it, AES encrypts in ECB mode, where equal parts of the data give equal encrypted bytes. Data encrypted without `mode` is decrypted only without `mode`, so set it on both actions at the same time.
 

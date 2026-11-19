@@ -12,7 +12,7 @@ Input: the body is the payload, as text or bytes. A Map fails: turn it into JSON
 
 Output: the message is unchanged.
 
-Good to know: it connects with no TLS and no login, unless `serviceUrl` starts with `pulsar+ssl://` and `authenticationClass` is set. Over TLS, the certificate of Pulsar must be signed by an authority that the Java trust store of the integration trusts; for a private one, point `javax.net.ssl.trustStore` at a trust store with it, as the Kamelet has no trust store option. It connects when the integration starts, and the integration fails to start when Pulsar cannot be reached, unless `lazyStart` is true. Headers that start with `CamelPulsar`, except `CamelPulsarProducerMessageKey` and `CamelPulsarProducerMessageProperties`, are removed from the message first, so they cannot change what the Kamelet does.
+Good to know: it connects with no TLS and no login, unless `serviceUrl` starts with `pulsar+ssl://` and `authenticationClass` is set. Over TLS, the certificate of Pulsar must be signed by an authority that the Java trust store of the integration trusts, or by one in the PEM file of `tlsTrustCertsFilePath`, such as a private one, and it must be issued for the host name in `serviceUrl`. It connects when the integration starts, and the integration fails to start when Pulsar cannot be reached, unless `lazyStart` is true. Headers that start with `CamelPulsar`, except `CamelPulsarProducerMessageKey` and `CamelPulsarProducerMessageProperties`, are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -39,6 +39,7 @@ The following table summarizes the configuration options available for the `puls
 | **messageRoutingMode** | Message Routing Mode | How messages are spread over the partitions of a partitioned topic: `RoundRobinPartition` spreads them in turn, `SinglePartition` sends them all to one partition, and in both a message with a key always goes to the partition of its key. `CustomPartition` needs a custom router, which this Kamelet cannot set. Enum values: \* SinglePartition \* RoundRobinPartition \* CustomPartition | string | RoundRobinPartition |  |
 | **producerName** | Producer Name | The name of this sender in Pulsar, shown in the topic statistics and set on each message. When it is not set, Pulsar picks a unique name. | string |  |  |
 | **sendTimeoutMs** | Send Timeout | How long Pulsar may take to confirm a message before the message fails, in milliseconds. For example, 30000 is 30 seconds. | integer | 30000 |  |
+| **tlsTrustCertsFilePath** | TLS Trust Certificates File | The path of a PEM file with the certificates of the authorities to trust for a `pulsar+ssl://` broker, such as a private one, instead of the Java trust store. Only used with `pulsar+ssl://`. | string |  | /etc/pulsar/ca.pem |
 
 ## Dependencies
 

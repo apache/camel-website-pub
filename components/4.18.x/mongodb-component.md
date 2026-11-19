@@ -316,7 +316,7 @@ Enum values:
 | **streamFilter** (changeStream) | Filter condition for change streams consumer. |  | String |
 | **authSource** (security) | The database name associated with the user’s credentials. |  | String |
 | **password** (security) | User password for mongodb connection. |  | String |
-| **tls** (security) | Specifies that all communication with MongoDB instances should use TLS. Supersedes the ssl option. Default: false. | false | boolean |
+| **tls** (security) | Specifies that all communication with MongoDB instances should use TLS. Supersedes the ssl option. Applies to the client the endpoint creates when hosts is set. Default: false. | false | boolean |
 | **tlsAllowInvalidHostnames** (security) | Specifies that the driver should allow invalid hostnames in the certificate for TLS connections. Supersedes sslInvalidHostNameAllowed. Has the same effect as tlsInsecure by setting tlsAllowInvalidHostnames to true. Default: false. | false | boolean |
 | **username** (security) | Username for mongodb connection. |  | String |
 

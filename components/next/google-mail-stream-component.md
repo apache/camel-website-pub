@@ -255,7 +255,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ## Usage
 
-The consumer polls the mailbox for the messages that match `query`, and marks them as read. `is:unread` and `markAsRead` are the defaults. The headers carry the sender, the subject and the other fields:
+The consumer polls the mailbox for the messages that match `query`, and marks them as read. `is:unread` and `markAsRead` are the defaults. The consumer marks as read the message it consumed, whatever the route does with the `CamelGoogleMailId` header. The headers carry the sender, the subject and the other fields:
 
 ```yaml
 - route:

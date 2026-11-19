@@ -269,6 +269,8 @@ Enum values:
 | **autoConfiguration** (advanced) | The pulsar auto configuration. |  | AutoConfiguration |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **pulsarClient** (advanced) | **Autowired** The pulsar client. |  | PulsarClient |
+| **hostnameVerification** (security) | Whether to check that the certificate of the broker matches the host Camel connects to, with pulsarssl://. When disabled, any certificate trusted by the client is accepted, whatever host it was issued for. Not used when a pulsarClient is given. | true | boolean |
+| **tlsTrustCertsFilePath** (security) | The path of a PEM file with the certificates of the certificate authorities to trust, for a broker on pulsarssl:// whose certificate is not signed by an authority that the JVM trusts. Not used when a pulsarClient is given. |  | String |
 
 ## Endpoint Options
 
@@ -517,6 +519,8 @@ Enum values:
 | **producerName** (producer) | Name of the producer. If unset, lets Pulsar select a unique identifier. |  | String |
 | **sendTimeoutMs** (producer) | Send timeout in milliseconds. | 30000 | int |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **hostnameVerification** (security) | Whether to check that the certificate of the broker matches the host Camel connects to, with pulsarssl://. When disabled, any certificate trusted by the client is accepted, whatever host it was issued for. Not used when a pulsarClient is given. | true | boolean |
+| **tlsTrustCertsFilePath** (security) | The path of a PEM file with the certificates of the certificate authorities to trust, for a broker on pulsarssl:// whose certificate is not signed by an authority that the JVM trusts. Not used when a pulsarClient is given. |  | String |
 
 ## Message Headers
 

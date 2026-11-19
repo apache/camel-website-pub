@@ -13,7 +13,7 @@
         .transform().simple("""
             {
               "roll": ${jq(.id)},
-              "country": "${jq(.country // constant(sweden))}",
+              "country": "${jq(.country // constant("sweden"))}",
               "fullname": "${jq(.name)}"
             }""")
         .to("log:data");</code></pre> </div> </div> </div> <div id="_tabs_2_xml--panel" class="tabpanel" aria-labelledby="_tabs_2_xml"> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;route&gt;
@@ -21,7 +21,7 @@
   &lt;transform&gt;
     &lt;simple&gt;{
               "roll": ${jq(.id)},
-              "country": "${jq(.country // constant(sweden))}",
+              "country": "${jq(.country // constant("sweden"))}",
               "fullname": "${jq(.name)}"
             }&lt;/simple&gt;
   &lt;/transform&gt;
@@ -34,7 +34,7 @@
             simple: |-
               {
                 "roll": ${jq(.id)},
-                "country": "${jq(.country // constant(sweden))}",
+                "country": "${jq(.country // constant("sweden"))}",
                 "fullname": "${jq(.name)}"
               }
         - to:

@@ -110,6 +110,10 @@ If a deployment genuinely wants signature and expiry validation only, set `camel
 
 The same options are available on the management server as `camel.management.jwtIssuer`, `camel.management.jwtAudience` and `camel.management.jwtAllowMissingIssuerAndAudience`.
 
+## The Authorization header
+
+When the server authenticates a request (`camel.server.authenticationEnabled=true`, with basic or JWT authentication), the `Authorization` header of the request is not passed on to the route: it is removed from the message once the credential has been checked. A request to a path that is not under `authenticationPath` keeps the header as sent.
+
 ## See More
 
 -   [Platform HTTP Vert.x](platform-http-vertx.md)

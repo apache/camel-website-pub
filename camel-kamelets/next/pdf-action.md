@@ -10,7 +10,7 @@ Use it to produce a simple printable document, such as a receipt, a report or a 
 
 Input: the body is the text to write, as text. Each line of the text starts a new line in the PDF, and a new page starts when a page is full.
 
-Output: the body is the PDF document, as bytes. The headers are kept as they are; a `Content-Type` header set before is not changed to PDF.
+Output: the body is the PDF document, as bytes, and the `Content-Type` header is set to `application/octet-stream`. The other headers are kept.
 
 Good to know: long lines are not wrapped; they run past the right edge of the page. Set `font` to one of the names its description lists, such as `HELVETICA`, the default. Headers that start with `CamelPdf` are removed from the message first, so they cannot change what the Kamelet does.
 

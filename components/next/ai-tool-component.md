@@ -633,6 +633,21 @@ When a call is refused, the model gets the same short refusal as for a denial by
 
 Set on the **component**, `allowedRoles` and `allRolesRequired` are the default of every tool route, and an endpoint’s own value replaces the component’s. An endpoint can therefore replace the component’s roles, but it cannot remove the check: a value that names no role, such as an empty one, refuses every call. The route still starts, and a `WARN` at its start names the tool. Only an option that is not set takes the component’s value; that includes an optional placeholder (`{{?name}}`) whose property is absent.
 
+### With a configuration bean
+
+The options can also come from an `AiToolConfiguration` bean, given as the `configuration` option of the component or of an endpoint. The bean combines with the options set beside it, so `authorizationPolicy` and `allowedRoles` apply whether they are set as an option or in the bean:
+
+-   On the component, an option set on the component wins over the value of the bean, in whatever order the two are set. An option that is not set takes the value of the bean.
+    
+-   On an endpoint, an option set on the endpoint wins over the value of the bean. An option that neither the endpoint nor the bean sets takes the value of the component. An endpoint with `configuration=#toolDefaults` is therefore still guarded by the `authorizationPolicy` and the `allowedRoles` of the component, unless the bean or the endpoint sets its own.
+    
+
+```properties
+camel.component.ai-tool.configuration = #toolDefaults
+# kept, and applied to every tool route
+camel.component.ai-tool.authorization-policy = #myAuthorizationPolicy
+```
+
 ### Observing denials
 
 Because the guard runs in front of the route, a denied call is caught before the route’s unit of work and so fires no exchange-lifecycle event or route span. Every denial is instead:

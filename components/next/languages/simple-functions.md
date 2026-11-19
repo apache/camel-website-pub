@@ -551,7 +551,7 @@ from("direct:map")
         .transform().simple("""
             {
               "roll": ${jq(.id)},
-              "country": "${jq(.country // constant(sweden))}",
+              "country": "${jq(.country // constant("sweden"))}",
               "fullname": "${jq(.name)}"
             }""")
         .to("log:data");
@@ -563,7 +563,7 @@ from("direct:map")
   <transform>
     <simple>{
               "roll": ${jq(.id)},
-              "country": "${jq(.country // constant(sweden))}",
+              "country": "${jq(.country // constant("sweden"))}",
               "fullname": "${jq(.name)}"
             }</simple>
   </transform>
@@ -580,7 +580,7 @@ from("direct:map")
             simple: |-
               {
                 "roll": ${jq(.id)},
-                "country": "${jq(.country // constant(sweden))}",
+                "country": "${jq(.country // constant("sweden"))}",
                 "fullname": "${jq(.name)}"
               }
         - to:

@@ -10,7 +10,7 @@ Use it to map the JSON of one system to the JSON another system expects, for exa
 
 Input: JSON text, bytes or a stream. The transformation sees the body as `.` and a header as `$headers.name`, for example `{"customer": .name, "items": size(.items), "source": $headers.origin}`.
 
-Output: the body is the result as JSON text. The headers are kept.
+Output: the body is the result as JSON text in bytes, and the `Content-Type` header is set to `application/json`. The other headers are kept.
 
 Good to know: parsed JSON (a Map or a JsonNode, such as the output of `json-deserialize-action`) fails the message: give the JSON as text. A field whose value is missing, such as a header that is not set, is left out of the result. The transformation is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message. Headers that start with `CamelJslt` are removed from the message first, so they cannot change what the Kamelet does.
 
@@ -27,6 +27,8 @@ The following table summarizes the configuration options available for the `jslt
 
 At runtime, the `jslt-action` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:jackson3
+    
 -   camel:jslt
     
 -   camel:kamelet

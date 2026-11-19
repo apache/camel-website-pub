@@ -10,7 +10,7 @@ Use it to nest the whole message under one name, for example to turn `{"id":1}` 
 
 Input: any body. JSON is nested as a JSON object or array when it is parsed JSON (a Map or a Jackson `JsonNode`), or JSON text with the `Content-Type` header `application/json`. Any other text, including JSON text with another `Content-Type`, becomes a text value: `hello` gives `{"order":"hello"}`.
 
-Output: the body is the new JSON object, as JSON text, and the `Content-Type` header is set to `application/json`.
+Output: the body is the new JSON object, as JSON text in bytes, and the `Content-Type` header is set to `application/json`.
 
 ## Configuration Options
 

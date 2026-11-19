@@ -293,25 +293,11 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![jsonata action](_images/kamelets/jsonata-action.svg) Jsonata Action](jsonata-action.html)
 
- [![kafka apicurio registry not secured sink](_images/kamelets/kafka-apicurio-registry-not-secured-sink.svg) Kafka Not Secured with Apicurio Registry Sink](kafka-apicurio-registry-not-secured-sink.html)
-
- [![kafka apicurio registry not secured source](_images/kamelets/kafka-apicurio-registry-not-secured-source.svg) Kafka Not Secured with Apicurio Registry Source](kafka-apicurio-registry-not-secured-source.html)
-
- [![kafka batch apicurio registry not secured source](_images/kamelets/kafka-batch-apicurio-registry-not-secured-source.svg) Kafka Batch Not Secured with Apicurio Registry Source](kafka-batch-apicurio-registry-not-secured-source.html)
-
- [![kafka batch apicurio registry source](_images/kamelets/kafka-batch-apicurio-registry-source.svg) Kafka Batch with Apicurio Registry secured with Keycloak Source](kafka-batch-apicurio-registry-source.html)
-
  [![kafka batch manual commit action](_images/kamelets/kafka-batch-manual-commit-action.svg) Kafka Batch Manual Commit Action](kafka-batch-manual-commit-action.html)
 
  [![kafka batch source](_images/kamelets/kafka-batch-source.svg) Kafka Batch Source](kafka-batch-source.html)
 
  [![kafka manual commit action](_images/kamelets/kafka-manual-commit-action.svg) Kafka Manual Commit Action](kafka-manual-commit-action.html)
-
- [![kafka not secured apicurio registry json source](_images/kamelets/kafka-not-secured-apicurio-registry-json-source.svg) Kafka not secured with Apicurio Registry secured with Keycloak for JSON schema support Source](kafka-not-secured-apicurio-registry-json-source.html)
-
- [![kafka not secured apicurio registry sink](_images/kamelets/kafka-not-secured-apicurio-registry-sink.svg) Kafka Not Secured with Apicurio Registry secured with Keycloak Sink](kafka-not-secured-apicurio-registry-sink.html)
-
- [![kafka not secured apicurio registry source](_images/kamelets/kafka-not-secured-apicurio-registry-source.svg) Kafka not secured with Apicurio Registry secured with Keycloak Source](kafka-not-secured-apicurio-registry-source.html)
 
  [![kafka sink](_images/kamelets/kafka-sink.svg) Kafka Sink](kafka-sink.html)
 
@@ -346,10 +332,6 @@ Consult the Kamelets User Guide for information about how to use these.
  [![mongodb sink](_images/kamelets/mongodb-sink.svg) MongoDB Sink](mongodb-sink.html)
 
  [![mongodb source](_images/kamelets/mongodb-source.svg) MongoDB Source](mongodb-source.html)
-
- [![mqtt sink](_images/kamelets/mqtt-sink.svg) MQTT Sink](mqtt-sink.html)
-
- [![mqtt source](_images/kamelets/mqtt-source.svg) MQTT Source](mqtt-source.html)
 
  [![mqtt5 sink](_images/kamelets/mqtt5-sink.svg) MQTT v5 Sink](mqtt5-sink.html)
 

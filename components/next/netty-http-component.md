@@ -337,7 +337,7 @@ Enum values:
 | **maxHeaderSize** (consumer (advanced)) | The maximum length of all headers. If the sum of the length of each header exceeds this value, a io.netty.handler.codec.TooLongFrameException will be raised. | 8192 | int |
 | **maxInitialLineLength** (consumer (advanced)) | The maximum length of the initial line (e.g. GET / HTTP/1.0 or HTTP/1.0 200 OK) If the length of the initial line exceeds this value, a TooLongFrameException will be raised. See io.netty.handler.codec.http.HttpObjectDecoder. | 4096 | int |
 | **nettyServerBootstrapFactory** (consumer (advanced)) | To use a custom NettyServerBootstrapFactory. |  | NettyServerBootstrapFactory |
-| **nettySharedHttpServer** (consumer (advanced)) | To use a shared Netty HTTP server. See Netty HTTP Server Example for more details. |  | NettySharedHttpServer |
+| **nettySharedHttpServer** (consumer (advanced)) | **Deprecated** To use a shared Netty HTTP server, so that several applications in one JVM can use the same port. Deprecation note: The shared Netty HTTP server was added for OSGi/Karaf, so that several applications in one JVM could use the same port. Use a netty-http consumer per port, where several routes can use the same port, or the platform-http component. |  | NettySharedHttpServer |
 | **serverClosedChannelExceptionCaughtLogLevel** (consumer (advanced)) | 
 
 If the server (NettyConsumer) catches an java.nio.channels.ClosedChannelException then its logged using this logging level. This is used to avoid logging the closed channel exceptions, as clients can disconnect abruptly and then cause a flood of closed exceptions in the Netty server.
@@ -625,6 +625,8 @@ from("netty-http:http://0.0.0.0:{{port}}/foo?securityConfiguration.realm=someRea
 ```
 
 The realm name is mandatory to enable basic authentication. By default, the JAAS based authenticator is used, which will use the realm name specified (`_someRealm_` in the example above) and use the JAAS realm and the `JAAS \{{LoginModule}}s` of this realm for authentication.
+
+Once the credential of a request has been checked, the `Authorization` header is removed from the message, so it is not passed on to the route. The `CamelHttpAuthentication` header is still set to `Basic`. A request to a resource that the security constraint does not restrict keeps the header as sent.
 
 #### Specifying ACL on web resources
 
@@ -997,6 +999,15 @@ from("netty-http:http://0.0.0.0:{{port}}/beer?bootstrapConfiguration=#nettyHttpB
         - to:
             uri: direct:beer
 ```
+
+### Using a shared Netty HTTP server (deprecated)
+
+> **Warning**
+> The shared Netty HTTP server is deprecated, and will be removed in a future release. This covers the `nettySharedHttpServer` option and the `NettySharedHttpServer`, `DefaultNettySharedHttpServer`, `NettySharedHttpServerBootstrapConfiguration` and `HttpServerSharedInitializerFactory` classes.
+>
+> It was added for OSGi/Karaf, so that several applications (bundles) in one JVM could use the same port. Camel Main, Spring Boot and Quarkus applications run one application per JVM: use a `netty-http` consumer per port, where several routes can use the same port (see [Using multiple routes with same port](#_using_multiple_routes_with_same_port)), or the [Platform HTTP](platform-http-component.md) component, which uses the HTTP server of the runtime.
+
+A `DefaultNettySharedHttpServer` is a Netty HTTP server that is configured with a `NettySharedHttpServerBootstrapConfiguration` and started on its own. The consumers that refer to it with the `nettySharedHttpServer` option use its port and its pipeline, instead of the server that the component creates.
 
 ### Implementing a reverse proxy
 

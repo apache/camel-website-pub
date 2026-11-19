@@ -132,6 +132,7 @@ Enum values:
 | **jetstreamAsync** (advanced) | Sets whether to operate JetStream requests asynchronously. | true | boolean |
 | **traceConnection** (advanced) | Whether or not connection trace messages should be printed to standard out for fine grained debugging of connection issues. | false | boolean |
 | **credentialsFilePath** (security) | If we use useCredentialsFile to true we’ll need to set the credentialsFilePath option. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
+| **hostnameVerification** (security) | Whether to check that the certificate of the NATS server matches the host Camel connects to, when TLS is used. The client then keeps the host name of a server for TLS, and connects to the fastest of its IP addresses. A server that is given, or that the cluster announces, by its IP address needs a certificate that names that address. When disabled, any certificate trusted by the JVM, or by the sslContextParameters, is accepted, whatever host it was issued for. | true | boolean |
 | **secure** (security) | Set secure option indicating TLS is required. | false | boolean |
 | **sslContextParameters** (security) | To configure security using SSLContextParameters. |  | SSLContextParameters |
 | **useGlobalSslContextParameters** (security) | Enable usage of global SSL context parameters. | false | boolean |
@@ -228,6 +229,7 @@ Enum values:
 | **jetstreamAsync** (advanced) | Sets whether to operate JetStream requests asynchronously. | true | boolean |
 | **traceConnection** (advanced) | Whether or not connection trace messages should be printed to standard out for fine grained debugging of connection issues. | false | boolean |
 | **credentialsFilePath** (security) | If we use useCredentialsFile to true we’ll need to set the credentialsFilePath option. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
+| **hostnameVerification** (security) | Whether to check that the certificate of the NATS server matches the host Camel connects to, when TLS is used. The client then keeps the host name of a server for TLS, and connects to the fastest of its IP addresses. A server that is given, or that the cluster announces, by its IP address needs a certificate that names that address. When disabled, any certificate trusted by the JVM, or by the sslContextParameters, is accepted, whatever host it was issued for. | true | boolean |
 | **secure** (security) | Set secure option indicating TLS is required. | false | boolean |
 | **sslContextParameters** (security) | To configure security using SSLContextParameters. |  | SSLContextParameters |
 

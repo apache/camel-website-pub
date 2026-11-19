@@ -39,7 +39,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ### Message body types
 
-Camel JQ leverages `camel-jackson` for type conversion. To enable camel-jackson POJO type conversion, refer to the Camel Jackson documentation.
+Camel JQ leverages `camel-jackson3` (Jackson 3) for type conversion. To enable POJO type conversion, refer to the Camel Jackson 3 documentation. When the registry holds exactly one `tools.jackson` `ObjectMapper`, such as the `JsonMapper` of Spring Boot 4, the type converters use it, so its settings apply to how jq reads the input and converts the results.
 
 ### Using header as input
 
@@ -273,7 +273,7 @@ The `header`, `property` and `variable` functions also support returning a defau
 ```java
 from("direct:start")
     .transform()
-        .jq(".foo = header(\"MyHeader\", \"MyDefaultValue\")")
+        .jq(".foo = header(\"MyHeader\"; \"MyDefaultValue\")")
     .to("mock:result");
 ```
 
@@ -281,7 +281,7 @@ from("direct:start")
 <route>
   <from uri="direct:start"/>
   <transform>
-    <jq>.foo = header("MyHeader", "MyDefaultValue")</jq>
+    <jq>.foo = header("MyHeader"; "MyDefaultValue")</jq>
   </transform>
   <to uri="mock:result"/>
 </route>
@@ -295,7 +295,7 @@ from("direct:start")
         - transform:
             expression:
               jq:
-                expression: '.foo = header("MyHeader", "MyDefaultValue")'
+                expression: '.foo = header("MyHeader"; "MyDefaultValue")'
         - to:
             uri: mock:result
 ```

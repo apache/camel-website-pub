@@ -12,7 +12,7 @@ Input: the body is the request body, such as JSON text, and is sent with the con
 
 Output: when it is used inside a route, the body afterwards is the response of the API, as bytes, with the headers of the response and its status code in `CamelHttpResponseCode`.
 
-Good to know: a missing path parameter is not an error; the request is sent with `{petId}` in the path, unless `clientRequestValidation` is true. The address of the API is taken from the `servers` of the specification, unless `host` or `basePath` is set. The Kamelet has no login options. The Kamelet does not start when the specification has no operation with the ID in `operation`. Headers that start with `CamelHttp` or `CamelRestHttp` are removed from the message first, so they cannot change what the Kamelet does.
+Good to know: a missing path parameter is not an error; the request is sent with `{petId}` in the path, unless `clientRequestValidation` is true. The address of the API is taken from the `servers` of the specification, unless `host` or `basePath` is set. The login comes only from the options: an `Authorization` or `Proxy-Authorization` header on the message is removed, so a credential that came with the message is not sent on. Log in either with `authUsername` and `authPassword`, sent with Basic login after the service answers 401, or with a static token in `authBearerToken`, sent as a Bearer token on every request. The Kamelet does not start when the specification has no operation with the ID in `operation`. Headers that start with `CamelHttp` or `CamelRestHttp` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -23,6 +23,9 @@ The following table summarizes the configuration options available for the `rest
 | --- | --- | --- | --- | --- | --- |
 | **operation** | Operation ID | **Required** The `operationId` of the operation to call, exactly as it is written in the specification. | string |  | getOrderById |
 | **specification** | Specification URI | **Required** Where to load the OpenAPI document of the API from. It starts with `https://` or `http://` for a URL, `file://` for a file, or `classpath://` for a resource in the application. | string |  | https://api.example.com/openapi.json |
+| **authBearerToken** | Bearer Token | A static token, such as an API key, sent on every request in the `Authorization` header as `Bearer` followed by the token. The header is removed from the message after the call. | string |  |  |
+| **authPassword** | Authentication Password | The password of `authUsername`. | string |  |  |
+| **authUsername** | Authentication Username | The user to log in as with Basic login, together with `authPassword`. They are sent only after the service answers 401 and asks for them, which takes a second request. | string |  |  |
 | **basePath** | Base Path | The path that comes before the paths of the operations, in place of the one in the specification. | string |  | /v3 |
 | **clientRequestValidation** | Client Request Validation | If true, each request is checked against the specification before it is sent. A request that does not match it, such as one without a required parameter, fails the message and is not sent. | boolean | false |  |
 | **consumes** | Accepted Response Types | The content types of the response to ask the API for, sent as the `Accept` header, in place of the ones the specification lists for the responses of the operation. Separate several types with commas, without spaces, such as `application/json,text/csv`. An `Accept` header on the message is sent instead. | string |  | application/json |

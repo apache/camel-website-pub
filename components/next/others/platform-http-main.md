@@ -118,6 +118,10 @@ Vert.x only uses the keys of the JWT keystore whose alias is the name of a JWT a
 keytool -changealias -alias keycloak -destalias RS256 -keystore keycloak-realm.p12 -storetype PKCS12
 ```
 
+## The Authorization header
+
+When the server authenticates a request (`camel.server.authenticationEnabled=true`, with basic or JWT authentication), the `Authorization` header of the request is not passed on to the route: it is removed from the message once the credential has been checked. A request to a path that is not under `authenticationPath` keeps the header as sent.
+
 ## See More
 
 -   [Platform HTTP Vert.x](platform-http-vertx.md)

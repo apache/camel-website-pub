@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795080287228,
+  "generated": 1795105438835,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4488,30 +4488,6 @@
             },
             {
               "module": "ROOT",
-              "path": "kafka-apicurio-registry-not-secured-sink.adoc",
-              "url": "/camel-kamelets/next/kafka-apicurio-registry-not-secured-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-apicurio-registry-not-secured-sink.svg\" alt=\"kafka apicurio registry not secured sink\"></span> Kafka Not Secured with Apicurio Registry Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "kafka-apicurio-registry-not-secured-source.adoc",
-              "url": "/camel-kamelets/next/kafka-apicurio-registry-not-secured-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-apicurio-registry-not-secured-source.svg\" alt=\"kafka apicurio registry not secured source\"></span> Kafka Not Secured with Apicurio Registry Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "kafka-batch-apicurio-registry-not-secured-source.adoc",
-              "url": "/camel-kamelets/next/kafka-batch-apicurio-registry-not-secured-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-batch-apicurio-registry-not-secured-source.svg\" alt=\"kafka batch apicurio registry not secured source\"></span> Kafka Batch Not Secured with Apicurio Registry Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "kafka-batch-apicurio-registry-source.adoc",
-              "url": "/camel-kamelets/next/kafka-batch-apicurio-registry-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-batch-apicurio-registry-source.svg\" alt=\"kafka batch apicurio registry source\"></span> Kafka Batch with Apicurio Registry secured with Keycloak Source"
-            },
-            {
-              "module": "ROOT",
               "path": "kafka-batch-manual-commit-action.adoc",
               "url": "/camel-kamelets/next/kafka-batch-manual-commit-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-batch-manual-commit-action.svg\" alt=\"kafka batch manual commit action\"></span> Kafka Batch Manual Commit Action"
@@ -4527,24 +4503,6 @@
               "path": "kafka-manual-commit-action.adoc",
               "url": "/camel-kamelets/next/kafka-manual-commit-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-manual-commit-action.svg\" alt=\"kafka manual commit action\"></span> Kafka Manual Commit Action"
-            },
-            {
-              "module": "ROOT",
-              "path": "kafka-not-secured-apicurio-registry-json-source.adoc",
-              "url": "/camel-kamelets/next/kafka-not-secured-apicurio-registry-json-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-not-secured-apicurio-registry-json-source.svg\" alt=\"kafka not secured apicurio registry json source\"></span> Kafka not secured with Apicurio Registry secured with Keycloak for JSON schema support Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "kafka-not-secured-apicurio-registry-sink.adoc",
-              "url": "/camel-kamelets/next/kafka-not-secured-apicurio-registry-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-not-secured-apicurio-registry-sink.svg\" alt=\"kafka not secured apicurio registry sink\"></span> Kafka Not Secured with Apicurio Registry secured with Keycloak Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "kafka-not-secured-apicurio-registry-source.adoc",
-              "url": "/camel-kamelets/next/kafka-not-secured-apicurio-registry-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-not-secured-apicurio-registry-source.svg\" alt=\"kafka not secured apicurio registry source\"></span> Kafka not secured with Apicurio Registry secured with Keycloak Source"
             },
             {
               "module": "ROOT",
@@ -4647,18 +4605,6 @@
               "path": "mongodb-source.adoc",
               "url": "/camel-kamelets/next/mongodb-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/mongodb-source.svg\" alt=\"mongodb source\"></span> MongoDB Source"
-            },
-            {
-              "module": "ROOT",
-              "path": "mqtt-sink.adoc",
-              "url": "/camel-kamelets/next/mqtt-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/mqtt-sink.svg\" alt=\"mqtt sink\"></span> MQTT Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "mqtt-source.adoc",
-              "url": "/camel-kamelets/next/mqtt-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/mqtt-source.svg\" alt=\"mqtt source\"></span> MQTT Source"
             },
             {
               "module": "ROOT",
