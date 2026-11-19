@@ -8,11 +8,11 @@ Sends each message to a web service or REST API as an HTTP or HTTPS request, for
 
 Use it to push data to any service that accepts HTTP calls, such as a webhook, a REST API or a serverless function.
 
-Input: the body is sent as the request body, as text, bytes or a stream. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The `Content-Type` header is sent as the content type of the request, and the other headers of the message, except the Camel ones, are sent as HTTP headers.
+Input: the body is sent as the request body, as text, bytes or a stream. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The `Content-Type` header is sent as the content type of the request, and the other headers of the message, except the Camel ones and `Authorization` and `Proxy-Authorization`, are sent as HTTP headers.
 
 Output: when it is used inside a route, the body afterwards is the response of the service.
 
-Good to know: a response with a status code outside `okStatusCodeRange`, which is `200-299` when it is not set, fails the message. The address and the method come only from the options; headers on the message cannot change where it is sent. Log in either with `authUsername` and `authPassword`, with a static token in `authBearerToken`, or with `oauth2ClientId`, `oauth2ClientSecret` and `oauth2TokenEndpoint`: the Kamelet then gets a token from that URL and sends it as a Bearer token. Without `authenticationPreemptive`, the user and password, or the static token, are sent only after the service asks for them with a 401 response. The certificate of an `https://` service is checked against the certificate authorities that Java trusts. To trust a private one with Camel JBang or Camel Main, set the application properties `camel.ssl.enabled=true`, `camel.ssl.trustStore`, `camel.ssl.trustStorePassword` and `camel.component.https.useGlobalSslContextParameters=true`: that trust store then replaces the one of Java for every `https://` call of the application.
+Good to know: a response with a status code outside `okStatusCodeRange`, which is `200-299` when it is not set, fails the message. The address, the method and the proxy come only from the options; headers on the message cannot change where it is sent. The login comes only from the options too: an `Authorization` or `Proxy-Authorization` header on the message is removed, so a credential that came with the message, such as the one of the caller of `webhook-source`, is not sent on. For a token that differs for each message, use the `http` component instead. Log in either with `authUsername` and `authPassword`, with a static token in `authBearerToken`, or with `oauth2ClientId`, `oauth2ClientSecret` and `oauth2TokenEndpoint`: the Kamelet then gets a token from that URL and sends it as a Bearer token. Without `authenticationPreemptive`, the user and password, or the static token, are sent only after the service asks for them with a 401 response. To go through an HTTP proxy, set `proxyHost` and `proxyPort`, and `proxyUser` and `proxyPassword` when the proxy asks for a login; an `https://` address goes through the proxy too. The certificate of an `https://` service is checked against the certificate authorities that Java trusts. To trust a private one with Camel JBang or Camel Main, set the application properties `camel.ssl.enabled=true`, `camel.ssl.trustStore`, `camel.ssl.trustStorePassword` and `camel.component.https.useGlobalSslContextParameters=true`: that trust store then replaces the one of Java for every `https://` call of the application.
 
 ## Configuration Options
 
@@ -27,12 +27,17 @@ The following table summarizes the configuration options available for the `http
 | **authPassword** | Authentication Password | The password of `authUsername`. | string |  |  |
 | **authUsername** | Authentication Username | The user to log in as, together with `authPassword`. | string |  |  |
 | **authenticationPreemptive** | Authentication Preemptive | If true, `authUsername` and `authPassword` are sent with Basic login, or `authBearerToken` as a Bearer token, on the first request. If false, they are sent only after the service answers 401 and asks for them, which takes a second request. | boolean | false |  |
+| **followRedirects** | Follow Redirects | If true, a redirect, a response with a status code such as 301, 302 or 307, is followed to the address in its `Location` header. A `POST` answered with 301, 302 or 303 goes on as a `GET` without the body; 307 and 308 keep the method and the body. When it is not set, the redirect is not followed, and its status code fails the message unless it is in `okStatusCodeRange`. | boolean |  |  |
 | **method** | Method | The HTTP method of the request. Most APIs expect `POST` to create something and `PUT` to replace it. Enum values: \* GET \* POST \* PUT \* DELETE \* HEAD \* OPTIONS \* TRACE \* PATCH | string | POST |  |
 | **oauth2ClientId** | OAuth2 Client ID | The client ID of the application, as registered with the OAuth 2.0 provider. With `oauth2ClientSecret`, it is used to get a token from `oauth2TokenEndpoint` (client credentials grant). | string |  |  |
 | **oauth2ClientSecret** | OAuth2 Client Secret | The client secret of the application, as given by the OAuth 2.0 provider. | string |  |  |
 | **oauth2Scope** | OAuth2 Scope | The scope to ask for in the token request, when the OAuth 2.0 provider needs one. | string |  | orders.write |
 | **oauth2TokenEndpoint** | OAuth2 Token URL | The URL to get the tokens from, as given by the OAuth 2.0 provider. The Kamelet logs in to it with `oauth2ClientId` and `oauth2ClientSecret`. | string |  | https://login.example.com/oauth2/token |
 | **okStatusCodeRange** | OK Status Codes | The status codes of a response that do not fail the message, as ranges such as `200-299` and single codes, separated by commas without spaces. When it is not set, it is `200-299`. List the 2xx codes too, for example `200-299,404` to also accept 404. | string |  | 200-299,404 |
+| **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the requests through, without the port. Use it with `proxyPort`; the proxy is used only when both are set. | string |  | proxy.example.com |
+| **proxyPassword** | Proxy Password | The password of `proxyUser` for the HTTP proxy. | string |  |  |
+| **proxyPort** | Proxy Port | The port of the HTTP proxy in `proxyHost`. | integer |  | 3128 |
+| **proxyUser** | Proxy User | The user to log in to the HTTP proxy as, when the proxy asks for a login. Use it with `proxyPassword`. | string |  |  |
 
 ## Dependencies
 
@@ -132,6 +137,27 @@ A response with a status code outside `okStatusCodeRange` fails the message. Whe
 
 The response code is then in the `CamelHttpResponseCode` header, and the body is the response of the service. Setting only `409` would make a 200 response fail.
 
+### Going Through a Proxy
+
+To send the requests through an HTTP proxy, set `proxyHost` and `proxyPort`. The proxy is used only when both are set. When the proxy asks for a login, also set `proxyUser` and `proxyPassword`: they are sent after the proxy answers 407 and asks for them.
+
+```yaml
+- to:
+    uri: "kamelet:http-sink"
+    parameters:
+      url: "https://api.example.com/v1/events"
+      proxyHost: proxy.example.com
+      proxyPort: 3128
+      proxyUser: "{{proxy.user}}"
+      proxyPassword: "{{proxy.password}}"
+```
+
+An `https://` address goes through the proxy too, in a tunnel: the proxy sees the host name, not the request.
+
+### Following Redirects
+
+A redirect, a response with a status code such as 301, 302 or 307, is not followed when `followRedirects` is not set: its status code fails the message, unless it is in `okStatusCodeRange`. With `followRedirects: true`, the request goes on to the address in the `Location` header of the response. A `POST` answered with 301, 302 or 303 goes on as a `GET` without the body; 307 and 308 keep the method and the body.
+
 ### Trusting a Private Certificate Authority
 
 The certificate of an `https://` service is checked against the certificate authorities that Java trusts. A service whose certificate is signed by a private certificate authority fails with `PKIX path building failed`.
@@ -149,7 +175,7 @@ That trust store then replaces the one of Java for every `https://` call of the 
 
 ### Headers
 
-The Kamelet sets the HTTP method from the `method` option, and removes the headers that could change where the message is sent, such as `CamelHttpUri`. The other headers of the message are sent as HTTP headers.
+The Kamelet sets the HTTP method from the `method` option, and removes the headers that could change where the message is sent, such as `CamelHttpUri`. The proxy comes only from the options. The other headers of the message are sent as HTTP headers.
 
 ## Kamelet source file
 

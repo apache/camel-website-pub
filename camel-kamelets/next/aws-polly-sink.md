@@ -12,7 +12,7 @@ Input: the body is the text to speak, as plain text, or as SSML when `textType` 
 
 Output: when it is used inside a route, the body afterwards is the audio, as a stream in the format of `outputFormat`, and the `CamelAwsPollyContentType` header holds its content type, such as `audio/mpeg`.
 
-Good to know: the stream can be read only once, so write it to a file or a bucket right away. A voice that is not available with the chosen `engine` fails the message. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: the stream can be read only once, so write it to a file or a bucket right away. A voice that is not available with the chosen `engine` fails the message. To change how words are pronounced, such as an abbreviation or a product name, store a pronunciation lexicon in Polly and name it in `lexiconNames`. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsPolly`, except `CamelAwsPollyVoiceId`, are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -25,6 +25,7 @@ The following table summarizes the configuration options available for the `aws-
 | **accessKey** | Access Key | The access key ID of an IAM user, which AWS gives when you create an access key for the user (in the AWS console: IAM, Users, Security credentials). Use it together with `secretKey`, or leave both empty and set `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` instead. | string |  |  |
 | **engine** | Engine | The kind of voice: `standard`, `neural` (more natural), `long-form` (for long texts such as articles) or `generative`. Not every voice is available with every engine. When it is not set, Polly uses its default engine. Enum values: \* standard \* neural \* long-form \* generative | string |  |  |
 | **languageCode** | Language Code | The language to speak in, such as `en-IN` or `hi-IN`. Only needed for a bilingual voice, such as `Aditi`, to choose one of its two languages. | string |  | en-IN |
+| **lexiconNames** | Lexicon Names | The names of pronunciation lexicons to apply, separated by commas, such as `w3c,acronyms`. A lexicon says how to pronounce given words, for example to say `W3C` as `World Wide Web Consortium`; you store it in Polly beforehand, in the PLS format, under a name of letters and digits only. When it is not set, no lexicon is applied. | string |  | w3c |
 | **outputFormat** | Output Format | The format of the audio: `MP3`, `OggVorbis`, `Pcm` (raw audio), or `Json` for speech marks, which give the timing of the words instead of audio. Enum values: \* MP3 \* OggVorbis \* Pcm \* Json | string | MP3 |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
@@ -147,6 +148,20 @@ The following output formats are supported:
 ### SSML Support
 
 Set the `textType` parameter to `SSML` to use Speech Synthesis Markup Language for fine-grained control over pronunciation, volume, pitch, and speech rate.
+
+### Pronunciation Lexicons
+
+A pronunciation lexicon says how to pronounce given words, for example to say `W3C` as `World Wide Web Consortium`. Store the lexicon in Polly beforehand, in the PLS format, and name it in `lexiconNames`; several names are separated by commas.
+
+```yaml
+- to:
+    uri: "kamelet:aws-polly-sink"
+    parameters:
+      region: "eu-west-1"
+      useDefaultCredentialsProvider: true
+      voiceId: "Joanna"
+      lexiconNames: "w3c"
+```
 
 ### Through an HTTP Proxy
 

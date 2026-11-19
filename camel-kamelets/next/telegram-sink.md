@@ -12,7 +12,7 @@ Input: the body is the text of the message, as text; another kind of body is tur
 
 Output: when it is used inside a route, the body afterwards is the answer of Telegram as JSON text, with the message that was sent.
 
-Good to know: a message fails when no chat is given, neither in a header nor in `chatId`, and when Telegram refuses it, for example because the bot is not a member of the group or the person never started a chat with the bot.
+Good to know: a message fails when no chat is given, neither in a header nor in `chatId`, and when Telegram refuses it, for example because the bot is not a member of the group or the person never started a chat with the bot. Headers that start with `CamelTelegram` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

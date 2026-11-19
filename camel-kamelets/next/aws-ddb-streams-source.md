@@ -10,7 +10,7 @@ Use it to react when data changes in a table, for example to copy new orders to 
 
 Output: the body is a JSON object, as JSON text, that describes one change: `eventName` is `INSERT`, `MODIFY` or `REMOVE`, and `dynamodb` holds the key of the item (`keys`) and, depending on the view type of the stream, the item before (`oldImage`) and after (`newImage`) the change, with the type of each attribute. The headers give the ID and the name of the event.
 
-Good to know: DynamoDB Streams must be enabled on the table, with the view type that holds the images you need, such as new and old images. By default it reads only the changes made after it starts. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: DynamoDB Streams must be enabled on the table, with the view type that holds the images you need, such as new and old images. By default it reads only the changes made after it starts, up to 100 in one poll; set `maxResultsPerRequest` to read fewer at a time. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -23,6 +23,7 @@ The following table summarizes the configuration options available for the `aws-
 | **table** | Table Name | **Required** The name of the DynamoDB table to receive the changes of. DynamoDB Streams must be enabled on the table. | string |  | orders |
 | **accessKey** | Access Key | The access key ID of an IAM user, which AWS gives when you create an access key for the user (in the AWS console: IAM, Users, Security credentials). Use it together with `secretKey`, or leave both empty and set `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` instead. | string |  |  |
 | **delay** | Delay | How long to wait between two reads of the stream, in milliseconds. | integer | 500 |  |
+| **maxResultsPerRequest** | Max Changes Per Poll | The most changes it reads in one poll, from 1 to 1000. The number is shared between the shards of the stream that it reads, at least 1 each. When it is not set, it is 100. With a lower number, a burst of changes takes more polls, `delay` apart, to read. | integer |  | 50 |
 | **overrideEndpoint** | Endpoint Overwrite | If true, the requests go to the address in `uriEndpointOverride` instead of AWS, for example to test against LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
 | **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
@@ -107,6 +108,25 @@ You can also use the Profile Credentials Provider, by setting the `useProfileCre
 Only one of access key/secret key or default credentials provider could be used
 
 For more information, see the [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### Fewer Changes in One Poll
+
+The Kamelet reads up to 100 changes in one poll, and polls again `delay` milliseconds later. To read fewer at a time, for example so that a slow route behind it is not handed a large burst at once, set `maxResultsPerRequest`. The number is shared between the shards of the stream. Here a burst of 1000 changes is read 50 at a time, one poll a second:
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:aws-ddb-streams-source"
+      parameters:
+        table: "orders"
+        region: "eu-west-1"
+        useDefaultCredentialsProvider: true
+        maxResultsPerRequest: 50
+        delay: 1000
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
 
 ### Through an HTTP Proxy
 

@@ -12,7 +12,7 @@ Input: the body is the content of the file, as text, bytes or a stream. The key 
 
 Output: the body is unchanged.
 
-Good to know: a file with the same key is overwritten, so with `keyName` set and no `file` header each message replaces the previous one. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address; set `forcePathStyle` to true when the DNS of the gateway has no wildcard name for its buckets.
+Good to know: a file with the same key is overwritten, so with `keyName` set and no `file` header each message replaces the previous one. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address; set `forcePathStyle` to true when the DNS of the gateway has no wildcard name for its buckets. Headers that start with `CamelAwsS3` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

@@ -12,7 +12,7 @@ Input: any body. The template sees the body as `${body}` and a header as `${head
 
 Output: the body is the text the template produced. The headers are kept.
 
-Good to know: a value the template uses that is missing, such as a header that is not set, fails the message; give a default with `${headers.customer!""}`. A template file that cannot be found fails the message too. The template is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message.
+Good to know: a value the template uses that is missing, such as a header that is not set, fails the message; give a default with `${headers.customer!""}`. A template file that cannot be found fails the message too. The template is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message. Headers that start with `CamelFreemarker` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

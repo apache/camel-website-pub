@@ -8,11 +8,11 @@ Publishes each message to an Amazon SNS topic, which delivers it to every subscr
 
 Use it to fan out an event to many receivers at once, or to send notifications such as alerts by email or SMS through a topic. For a FIFO topic use `aws-sns-fifo-sink`; to send to a single queue use `aws-sqs-sink`.
 
-Input: the body becomes the text of the notification, as text. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The optional `subject` header (or `ce-subject`) is the subject, which email subscribers see as the subject line. The other headers of the message, except the Camel ones, are sent as SNS message attributes.
+Input: the body becomes the text of the notification, as text. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The optional `subject` header (or `ce-subject`) is the subject, which email subscribers see as the subject line; it takes precedence over the `subject` option. The other headers of the message, except the Camel ones, are sent as SNS message attributes.
 
 Output: the message is unchanged. The `CamelAwsSnsMessageId` header gives the ID of the published message.
 
-Good to know: to reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: with `messageStructure` set to `json`, the body is a JSON object with a text for each kind of subscriber. `serverSideEncryptionEnabled` and `kmsMasterKeyId` apply only to a topic that `autoCreateTopic` creates. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsSns` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -25,13 +25,17 @@ The following table summarizes the configuration options available for the `aws-
 | **topicNameOrArn** | Topic Name | **Required** The name of the topic, such as `order-events`, or its ARN (Amazon Resource Name), such as `arn:aws:sns:eu-west-1:123456789012:order-events`. | string |  | order-events |
 | **accessKey** | Access Key | The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. Leave both out when `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` is true. | string |  |  |
 | **autoCreateTopic** | Autocreate Topic | If true, the topic is created when it does not exist. The credentials need the permission to create topics. | boolean | false |  |
+| **kmsMasterKeyId** | KMS Key ID | The key of AWS KMS for a new topic to encrypt its messages with, as its key ID, such as `1234abcd-12ab-34cd-56ef-1234567890ab`, an alias, such as `alias/aws/sns`, or its ARN. Only used when `serverSideEncryptionEnabled` and `autoCreateTopic` are true and the topic does not exist yet. | string |  | alias/aws/sns |
+| **messageStructure** | Message Structure | Set it to `json` to send a different text to each kind of subscriber. The body is then a JSON object with a `default` text for all subscribers and, optionally, a text for each protocol, such as `\{"default": "Order 42 received", "email": "Your order 42 was received."}`; SNS rejects a body without `default`. When it is not set, the body is the text for all subscribers. Enum values: \* json | string |  |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
 | **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
 | **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
 | **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
 | **secretKey** | Secret Key | The secret access key that belongs to `accessKey`. The AWS console shows it only once, when the access key is created. | string |  |  |
+| **serverSideEncryptionEnabled** | Server-Side Encryption | If true, a topic that `autoCreateTopic` creates is created to encrypt its messages with the key of AWS KMS in `kmsMasterKeyId`, which is then required. It does not change a topic that exists already. | boolean |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which comes with their access key and secret key, for example from AWS STS when you assume an IAM role. Only used when `useSessionCredentials` is true. | string |  |  |
+| **subject** | Subject | The subject of every notification, which email subscribers see as the subject line, and an SQS queue subscribed to the topic gets in the `Subject` field of the notification. A `subject` or `ce-subject` header on the message takes precedence. It is ASCII text without line breaks; a subject longer than 100 characters is cut to 100. When it is not set, only the messages with a header have a subject. | string |  | Order received |
 | **uriEndpointOverride** | Overwrite Endpoint URI | The address to connect to instead of AWS, as a URL such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
 | **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found in the environment instead of in `accessKey` and `secretKey`: the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the `~/.aws/credentials` file, or the IAM role of the EC2 instance, ECS task or Kubernetes pod the integration runs on. | boolean | false |  |
 | **useProfileCredentialsProvider** | Profile Credentials Provider | If true, the credentials are read from a named profile in the AWS credentials file (`~/.aws/credentials`), as the AWS CLI does. Name the profile in `profileCredentialsName`. | boolean | false |  |
@@ -110,8 +114,38 @@ For more information, see the [AWS credentials documentation](https://docs.aws.a
 
 In the Kamelet you can optionally set the following header:
 
--   `subject` / `ce-subject`: the subject of the message
+-   `subject` / `ce-subject`: the subject of the message. It takes precedence over the `subject` option.
     
+
+### The Subject
+
+The `subject` option sets the subject of every notification. A `subject` or `ce-subject` header on a message takes precedence over it. Email subscribers see the subject as the subject line, and an SQS queue subscribed to the topic gets it in the `Subject` field of the JSON notification. A subject is ASCII text without line breaks; a longer one than 100 characters is cut to 100.
+
+### A Text for Each Kind of Subscriber
+
+With `messageStructure` set to `json`, the body is a JSON object with a `default` text for all subscribers and, optionally, a text for each protocol, such as `sqs`, `email` or `sms`. SNS rejects a body without `default`. For example, the body
+
+```json
+{"default": "Order 42 received", "email": "Your order 42 was received.", "sqs": "{\"orderId\": 42}"}
+```
+
+sends `{"orderId": 42}` to the SQS queues subscribed to the topic, and `Your order 42 was received.` to the email addresses.
+
+### Encrypting a New Topic
+
+`serverSideEncryptionEnabled` and `kmsMasterKeyId` apply only to a topic that `autoCreateTopic` creates: the topic is then created to encrypt its messages with that key of AWS KMS. With `serverSideEncryptionEnabled` and no `kmsMasterKeyId`, the integration does not start when the topic must be created. They do not change a topic that exists already.
+
+For example:
+
+```yaml
+- to:
+    uri: "kamelet:aws-sns-sink"
+    parameters:
+      topicNameOrArn: "order-events"
+      region: "eu-west-1"
+      subject: "Order received"
+      messageStructure: "json"
+```
 
 ### Through an HTTP Proxy
 

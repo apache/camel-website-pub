@@ -12,7 +12,7 @@ Input: the body is the text to write, as text. Each line of the text starts a ne
 
 Output: the body is the PDF document, as bytes. The headers are kept as they are; a `Content-Type` header set before is not changed to PDF.
 
-Good to know: long lines are not wrapped; they run past the right edge of the page. Set `font` to one of the names its description lists, such as `HELVETICA`, the default.
+Good to know: long lines are not wrapped; they run past the right edge of the page. Set `font` to one of the names its description lists, such as `HELVETICA`, the default. Headers that start with `CamelPdf` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

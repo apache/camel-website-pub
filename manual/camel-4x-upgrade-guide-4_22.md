@@ -499,6 +499,10 @@ The `cxf` producer also logs a WARN once when neither the `CamelCxfOperationName
 
 The `cxfrs` producer does not read the former `operationName` header either. With the proxy-based client API (`httpClientAPI=false`) it still fails when `CamelCxfOperationName` is not set. The `NoSuchMethodException` now names that header, and says when `operationName` is set, in place of `Cannot find method with name: null`. The default `CxfRsHeaderFilterStrategy` filters a header named `operationName` again, as it did before the rename. The producer no longer sends it as an HTTP header, with either client API. The `SimpleConsumer` binding no longer returns it as a response header.
 
+### camel-kafka - breakOnFirstError: a failed commit before the break goes to the exception handler
+
+With `breakOnFirstError=true`, the commit before the break on a failed record can fail or time out (for example a `TimeoutException` of `commitSync` with the `SyncCommitManager`). The consumer now reports that failure to its `ExceptionHandler` and still breaks out, polling again from the last committed offset. Before, the commit failure went to the `pollOnError` strategy. With `ERROR_HANDLER` (the default), `DISCARD` or `RETRY`, the failed record and the rest of the poll were skipped. The failure no longer reaches the error handler of the route (such as an `onException` that caught commit timeouts) unless `bridgeErrorHandler=true`. With `pollOnError=STOP`, the consumer now reconnects in this case instead of stopping.
+
 ## Upgrading from 4.22.1 to 4.22.2
 
 ### camel-lra - only an LRA hosted by the configured coordinator is joined

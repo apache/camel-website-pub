@@ -119,6 +119,17 @@ A coding agent or IDE is configured with the same URL, e.g. in an `mcp.json`\-st
 
 The tools are served over streamable HTTP only. The stdio transport, used by MCP clients that launch the server as a subprocess, is not supported by this extension.
 
+### MCP protocol versions
+
+The quarkus-mcp-server extension serves two kinds of MCP clients on the same endpoint, and the Camel routes reach both without any Camel configuration:
+
+-   clients of the protocol versions that open with an `initialize` handshake (2025-11-25 and earlier) get a session, kept in memory by the application;
+    
+-   clients of protocol version 2026-07-28 have no session: each request carries its protocol version and is served on its own, so such a client keeps working when the application restarts, and any instance can answer its requests. They are told about changed tool or resource lists through a `subscriptions/listen` request.
+    
+
+Clients that open with `initialize` always get a session; serving them without one is not offered by this extension.
+
 ### Mixing with quarkus-mcp-server annotated tools
 
 Camel tools coexist with tools defined natively with quarkus-mcp-server — both are served by the same MCP server and appear in the same `tools/list`. For example, a `@Tool`\-annotated business method:

@@ -12,7 +12,7 @@ Input: the body is one JSON object, as text, such as `{"username":"oscerd","city
 
 Output: the body afterwards is the JSON object as a Map, and the `CamelSqlUpdateCount` header holds the number of rows the statement changed. When `query` is a SELECT, the body is instead a List of the rows found, each a Map, and the `CamelSqlRowCount` header holds their number.
 
-Good to know: a message fails when its body is not a JSON object (a JSON array or plain text, for example), or when it has no value for a parameter of `query`. The values are sent to the database apart from the SQL text, so the content of a message cannot change the statement. Do not write `?` in `query`, not even in a quoted string: the Kamelet then fails to start. Log in with `password`, or with a key pair in `privateKey` or `privateKeyFile`: a Snowflake user of type SERVICE, meant for applications, cannot log in with a password. When a key is set, the password is not used.
+Good to know: a message fails when its body is not a JSON object (a JSON array or plain text, for example), or when it has no value for a parameter of `query`. The values are sent to the database apart from the SQL text, so the content of a message cannot change the statement. Do not write `?` in `query`, not even in a quoted string: the Kamelet then fails to start. Log in with `password`, or with a key pair in `privateKey` or `privateKeyFile`: a Snowflake user of type SERVICE, meant for applications, cannot log in with a password. When a key is set, the password is not used. `warehouse`, `schema` and `role` choose what the session uses; when they are not set, the defaults of the user apply, and a user with no default warehouse cannot run a query that needs one. Each message logs in to Snowflake anew, as the Kamelet keeps no connection open between messages.
 
 ## Configuration Options
 
@@ -29,6 +29,9 @@ The following table summarizes the configuration options available for the `snow
 | **privateKey** | Private Key | The private key to log in with instead of a password: the key file in PEM format, encoded in base64 on a single line, such as the output of `base64 -w0 rsa_key.p8`. The PEM text itself, which starts with `-----BEGIN`, is not accepted. The matching public key must be set on the user with `ALTER USER …​ SET RSA_PUBLIC_KEY`. Set this or `privateKeyFile`, not both: with both, every connection fails. | string |  |  |
 | **privateKeyFile** | Private Key File | The path of the private key file to log in with instead of a password, in PEM format, such as `rsa_key.p8` made as the Snowflake guide to key-pair authentication shows. In Kubernetes, mount the Secret that holds the key as a file. The matching public key must be set on the user with `ALTER USER …​ SET RSA_PUBLIC_KEY`. A path that does not exist makes every connection fail with `Invalid parameter value null`. | string |  | /etc/snowflake/rsa\_key.p8 |
 | **privateKeyPassphrase** | Private Key Passphrase | The passphrase of the key in `privateKey` or `privateKeyFile`, when the key is encrypted: its PEM text then starts with `-----BEGIN ENCRYPTED PRIVATE KEY-----`. Without it, or with a wrong one, every connection fails. | string |  |  |
+| **role** | Role | The Snowflake role to run the statements as, which must be granted to the user `username`. When it is not set, the default role of the user is used, as set with `ALTER USER …​ SET DEFAULT_ROLE`. | string |  | LOADER |
+| **schema** | Schema | The schema of `databaseName` that holds the tables `query` names, such as `PUBLIC`. When it is not set, the default of the user applies. A table of another schema can still be named in full in `query`, as `SCHEMA.TABLE`. | string |  | SALES |
+| **warehouse** | Warehouse | The Snowflake virtual warehouse that runs the statements. When it is not set, the default warehouse of the user `username` is used, as set with `ALTER USER …​ SET DEFAULT_WAREHOUSE`. With neither, a statement that needs a warehouse, such as an INSERT, fails. | string |  | COMPUTE\_WH |
 
 ## Dependencies
 
@@ -104,6 +107,37 @@ The Kamelet logs in to Snowflake as the Snowflake user `username`, either with `
     
 
 Snowflake’s guide to [key-pair authentication](https://docs.snowflake.com/en/user-guide/key-pair-auth) shows how to make the key pair, such as with `openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out rsa_key.p8 -nocrypt`, and how to set the public key on the user with `ALTER USER …​ SET RSA_PUBLIC_KEY`.
+
+### Warehouse, Schema and Role
+
+The Kamelet sends these with each login, so the session starts with them:
+
+-   `warehouse`: the virtual warehouse that runs the statements, such as `COMPUTE_WH`.
+    
+-   `schema`: the schema of `databaseName` that holds the tables, such as `SALES`.
+    
+-   `role`: the role to run the statements as. It must be granted to the user.
+    
+
+When one is not set, the default of the user applies, as set with `ALTER USER …​ SET DEFAULT_WAREHOUSE`, `DEFAULT_NAMESPACE` or `DEFAULT_ROLE`. A user with no default warehouse needs `warehouse`, since an INSERT, an UPDATE or a DELETE needs a running warehouse.
+
+```yaml
+- to:
+    uri: "kamelet:snowflake-sink"
+    parameters:
+      instanceUrl: "myorg-myaccount.snowflakecomputing.com"
+      username: "ORDERS_SERVICE"
+      privateKey: "{{snowflake.private.key}}"
+      databaseName: "SHOP"
+      schema: "SALES"
+      warehouse: "LOAD_WH"
+      role: "ORDERS_LOADER"
+      query: "INSERT INTO orders (id,customer) VALUES (:#id,:#customer)"
+```
+
+### Connections
+
+The Kamelet keeps no connection to Snowflake open between messages: each message logs in again, and starts a new session.
 
 ### Data Processing
 

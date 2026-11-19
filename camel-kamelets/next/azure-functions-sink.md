@@ -12,7 +12,7 @@ Input: the body is sent as the request body, as text, bytes or a stream. Turn st
 
 Output: when it is used inside a route, the body afterwards is the response of the function, and the `CamelHttpResponseCode` header its status code.
 
-Good to know: a response with a status code outside 200 to 299 fails the message. The `key` is sent as the `code` query parameter of the request.
+Good to know: a response with a status code outside 200 to 299 fails the message. The `key` is sent in the `x-functions-key` header, not in the address of the request, so error messages and access logs do not show it. The header is removed from the message after the call, also when the call fails. Headers that start with `CamelHttp` or `CamelRestHttp` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -22,7 +22,7 @@ The following table summarizes the configuration options available for the `azur
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **url** | URL | **Required** The address of the function, which starts with `https://`, from the Azure portal: the function, then Get function URL. Leave out the `?code=` part: put the key in `key`. | string |  | https://azure-function-demo-12234.azurewebsites.net/api/httpexample |
-| **key** | Key | A function key, or the master key, from the Azure portal: the function, then Function Keys. Needed when the authorization level of the function is `function` or `admin`; leave it empty for `anonymous`. | string |  |  |
+| **key** | Key | A function key, or the master key, from the Azure portal: the function, then Function Keys. Needed when the authorization level of the function is `function` or `admin`; leave it empty for `anonymous`. It is sent in the `x-functions-key` header. | string |  |  |
 | **method** | Method | The HTTP method of the request, which must be one that the function accepts. Enum values: \* GET \* POST \* PUT \* DELETE \* HEAD \* OPTIONS \* TRACE \* PATCH | string | POST |  |
 
 ## Dependencies
@@ -72,6 +72,22 @@ camel run route.yaml
 ### Authentication methods
 
 In this Kamelet you should access the function on Azure through a key token in the key parameter.
+
+The key is sent in the `x-functions-key` header, so the address of the request, which error messages and access logs show, does not hold it. The header is removed from the message after the call, also when the call fails:
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:timer-source"
+      parameters:
+        message: "hello"
+      steps:
+        - to:
+            uri: "kamelet:azure-functions-sink"
+            parameters:
+              url: "https://azure-function-demo-12234.azurewebsites.net/api/httpexample"
+              key: "{{function.key}}"
+```
 
 ## Kamelet source file
 

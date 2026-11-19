@@ -12,7 +12,7 @@ Input: any body. The template sees the body as `<body>` and a header as `<header
 
 Output: the body is the text the template produced. The headers are kept, and a `CamelStringTemplateResourceUri` header is added with the location of the template.
 
-Good to know: a header the template uses that is not set gives nothing in the text. A template file that cannot be found fails the message. The template is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message.
+Good to know: a header the template uses that is not set gives nothing in the text. A template file that cannot be found fails the message. The template is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message. Headers that start with `CamelStringTemplate` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

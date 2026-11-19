@@ -12,7 +12,7 @@ Input: the body is the fields of the new record as JSON text, with the API names
 
 Output: when it is used inside a route, the body afterwards is the answer of Salesforce as JSON text, with the `id` of the new record, `success` and `errors`.
 
-Good to know: a record that Salesforce refuses, for example because a required field is missing or a validation rule fails, fails the message. `sObjectName` must be set, or the Kamelet does not start.
+Good to know: a record that Salesforce refuses, for example because a required field is missing or a validation rule fails, fails the message. `sObjectName` must be set, or the Kamelet does not start. Headers that start with `CamelSalesforce` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

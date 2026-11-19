@@ -12,7 +12,7 @@ Input: the body is the content of the file, as text, bytes, a stream or a file. 
 
 Output: the message is unchanged. The `CamelAwsS3Key` and `CamelAwsS3ETag` headers give the key and the ETag of the uploaded file.
 
-Good to know: a file with the same key is replaced without warning. When `keyName` is set, the `file` header is ignored and every message replaces the same file. To copy files from `aws-s3-source` under their own names, set the `file` header from its `CamelAwsS3Key` header first. It also works with S3-compatible storage, such as MinIO, through `overrideEndpoint`, `uriEndpointOverride` and `forcePathStyle`. To encrypt the files with a key of AWS KMS, as a bucket policy may require, set `useAwsKMS` and `awsKMSKeyId`; `storageClass` sets their storage class. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: a file with the same key is replaced without warning, unless `conditionalWritesEnabled` is true: then the upload of a key that exists already fails. When `keyName` is set, the `file` header is ignored and every message replaces the same file. To copy files from `aws-s3-source` under their own names, set the `file` header from its `CamelAwsS3Key` header first. It also works with S3-compatible storage, such as MinIO, through `overrideEndpoint`, `uriEndpointOverride` and `forcePathStyle`. To encrypt the files with a key of AWS KMS, as a bucket policy may require, set `useAwsKMS` and `awsKMSKeyId`; `storageClass` sets their storage class. One upload takes at most 5 GB; for larger files, set `multiPartUpload` to true, and each file of `partSize` or more is uploaded in parts. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsS3`, except `CamelAwsS3ContentType` and `CamelAwsS3StorageClass`, are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -26,9 +26,12 @@ The following table summarizes the configuration options available for the `aws-
 | **accessKey** | Access Key | The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. Leave both out when `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` is true. | string |  |  |
 | **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist. The credentials need the permission to create buckets. | boolean | false |  |
 | **awsKMSKeyId** | AWS KMS Key ID | The KMS key to encrypt the files with, as its key ID, such as `1234abcd-12ab-34cd-56ef-1234567890ab`, or its ARN, such as `arn:aws:kms:eu-west-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`. Use the ARN for a key of another AWS account. Only used when `useAwsKMS` is true. | string |  | arn:aws:kms:eu-west-1:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab |
+| **conditionalWritesEnabled** | Conditional Writes | If true, a file is uploaded only when its key does not exist yet in the bucket (`If-None-Match`), so an existing file is never replaced. The upload of a key that exists fails with `PreconditionFailed` (status 412), and the message fails. Together with `keyName`, only the first message is stored. When it is not set, an existing file is replaced. | boolean |  |  |
 | **forcePathStyle** | Force Path Style | If true, the bucket name is put in the path of the address (`[https://host/my-bucket/key](https://host/my-bucket/key)`) instead of in the host name (`[https://my-bucket.host/key](https://my-bucket.host/key)`). S3-compatible storage such as MinIO often needs it. | boolean | false |  |
 | **keyName** | Key Name | The key (the path of the file in the bucket) to write every message to, such as `reports/latest.csv`. When it is set, the `file` header is not used and each message replaces the file of the previous one. When it is not set, the key comes from the `file` header, or is a generated unique ID. | string |  | reports/latest.csv |
+| **multiPartUpload** | Multipart Upload | If true, a file of `partSize` bytes or more is uploaded in parts (an S3 multipart upload), one request per part, and S3 joins the parts into one file. Smaller files are uploaded in one request, as without it. Use it for files over 5 GB, which S3 does not take in one request. If the upload fails, it is aborted, so that S3 discards the parts sent so far, and the message fails. When it is not set, every file is uploaded in one request. | boolean |  |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack, or for S3-compatible storage such as MinIO. | boolean | false |  |
+| **partSize** | Part Size | The size of each part of a multipart upload, in bytes, such as `104857600` for 100 MB; the last part takes the rest. It is also the size from which a file is uploaded in parts. S3 takes parts of at least 5 MB (`5242880`), except the last one: with smaller parts, all the parts are sent and the upload then fails with `EntityTooSmall`. S3 takes at most 10,000 parts per file. Only used when `multiPartUpload` is true. When it is not set, it is 25 MB (`26214400`). | integer |  | 104857600 |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
 | **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
 | **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
@@ -145,6 +148,31 @@ A bucket policy can require every file to be encrypted with a given key of AWS K
 ```
 
 The credentials need the permission to use the key (`kms:GenerateDataKey`), and whoever reads the files the permission to decrypt with it (`kms:Decrypt`). Without **awsKMSKeyId**, **useAwsKMS** has no effect. To ask for the encryption with keys that S3 manages (SSE-S3) instead, as some bucket policies require, set **useSSES3** to `true`. The storage class can be any class of S3, such as `STANDARD_IA`, `INTELLIGENT_TIERING` or `GLACIER_IR`; a file in `GLACIER` or `DEEP_ARCHIVE` must be restored before it can be read. A `CamelAwsS3StorageClass` header on the message takes precedence over **storageClass**.
+
+### Example with Multipart Uploads and Conditional Writes
+
+S3 takes at most 5 GB in one upload. With **multiPartUpload** set to `true`, a file of **partSize** bytes or more is uploaded in parts, one request per part, and S3 joins them into one file; smaller files are still uploaded in one request. **partSize** is 25 MB (`26214400`) when it is not set. S3 takes parts of at least 5 MB (`5242880`), except the last one, and at most 10,000 parts per file, so for a file of 500 GB the parts must be at least 50 MB. An upload that fails is aborted, so that S3 discards the parts sent so far.
+
+With **conditionalWritesEnabled** set to `true`, a file is stored only when its key does not exist yet in the bucket. The upload of an existing key fails with `PreconditionFailed` (status 412), and the message fails; the file in the bucket is not changed. Use it when a file must never be replaced, such as received documents kept as they came.
+
+```yaml
+- route:
+    from:
+      uri: "file:/data/outbox"
+      steps:
+        - setHeader:
+            name: file
+            simple: "archive/$\{header.CamelFileName}"
+        - to:
+            uri: "kamelet:aws-s3-sink"
+            parameters:
+              bucketNameOrArn: "my-bucket"
+              region: "eu-west-1"
+              useDefaultCredentialsProvider: true
+              multiPartUpload: true
+              partSize: 104857600
+              conditionalWritesEnabled: true
+```
 
 ### Through an HTTP Proxy
 

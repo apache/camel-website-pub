@@ -12,7 +12,7 @@ Input: the body is the text to analyze, as text. With `operation` set to `analyz
 
 Output: when it is used inside a route, the body afterwards is the results as JSON text (bytes), with the `Content-Type` header set to `application/json`. The `CamelIBMWatsonLanguageSentimentLabel` and `CamelIBMWatsonLanguageSentimentScore` headers give the sentiment of the whole text, and `CamelIBMWatsonLanguageLanguage` its language.
 
-Good to know: it logs in with the API key of a Natural Language Understanding instance in IBM Cloud; set `serviceUrl` when the instance is not in the US South region.
+Good to know: it logs in with the API key of a Natural Language Understanding instance in IBM Cloud; set `serviceUrl` when the instance is not in the US South region. Headers that start with `CamelIBMWatsonLanguage`, except `CamelIBMWatsonLanguageText` and `CamelIBMWatsonLanguageUrl`, are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

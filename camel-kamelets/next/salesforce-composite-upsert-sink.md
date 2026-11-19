@@ -12,7 +12,7 @@ Input: the body is JSON text with a `records` list. Each record gives its kind i
 
 Output: when it is used inside a route, the body afterwards is a List with one result per record, in the same order, each with `id`, `success`, `created` (true for a new record) and `errors`.
 
-Good to know: a record that Salesforce refuses does not fail the message, and the other records are still saved: check `success` in the results.
+Good to know: a record that Salesforce refuses does not fail the message, and the other records are still saved: check `success` in the results. Headers that start with `CamelSalesforce` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

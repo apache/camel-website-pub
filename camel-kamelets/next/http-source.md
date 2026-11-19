@@ -4,13 +4,13 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Fetches a web address with an HTTP GET request at a regular interval, and sends each response as a message.
+Fetches a web address with an HTTP request, a GET unless `method` says otherwise, at a regular interval, and sends each response as a message.
 
 Use it to poll a REST API, a feed or a status page for its current data, for example fetch the state of the orders every minute. To receive the requests that other systems send instead, use `webhook-source`.
 
 Output: the body is the body of the response, as bytes. The headers of the response, such as `Content-Type`, are copied to the message, and `CamelHttpResponseCode` holds the status code.
 
-Good to know: it fetches the address every `period` and sends a message for each response, even when the data has not changed. A response with a status code outside `okStatusCodeRange`, which is `200-299` when it is not set, sends no message: the error is logged, and the address is fetched again at the next period. Log in either with `authUsername` and `authPassword`, with a static token in `authBearerToken`, or with `oauth2ClientId`, `oauth2ClientSecret` and `oauth2TokenEndpoint`: the Kamelet then gets a token from that URL and sends it as a Bearer token. The certificate of an `https://` service is checked against the certificate authorities that Java trusts. To trust a private one with Camel JBang or Camel Main, set the application properties `camel.ssl.enabled=true`, `camel.ssl.trustStore`, `camel.ssl.trustStorePassword` and `camel.component.https.useGlobalSslContextParameters=true`: that trust store then replaces the one of Java for every `https://` call of the application.
+Good to know: it fetches the address every `period` and sends a message for each response, even when the data has not changed. A response with a status code outside `okStatusCodeRange`, which is `200-299` when it is not set, sends no message: the error is logged, and the address is fetched again at the next period. Log in either with `authUsername` and `authPassword`, with a static token in `authBearerToken`, or with `oauth2ClientId`, `oauth2ClientSecret` and `oauth2TokenEndpoint`: the Kamelet then gets a token from that URL and sends it as a Bearer token. To go through an HTTP proxy, set `proxyHost` and `proxyPort`, and `proxyUser` and `proxyPassword` when the proxy asks for a login; an `https://` address goes through the proxy too. The certificate of an `https://` service is checked against the certificate authorities that Java trusts. To trust a private one with Camel JBang or Camel Main, set the application properties `camel.ssl.enabled=true`, `camel.ssl.trustStore`, `camel.ssl.trustStorePassword` and `camel.component.https.useGlobalSslContextParameters=true`: that trust store then replaces the one of Java for every `https://` call of the application.
 
 ## Configuration Options
 
@@ -26,12 +26,18 @@ The following table summarizes the configuration options available for the `http
 | **authUsername** | Authentication Username | The user to log in as, together with `authPassword`. | string |  |  |
 | **authenticationPreemptive** | Authentication Preemptive | If true, `authUsername` and `authPassword` are sent with Basic login, or `authBearerToken` as a Bearer token, on the first request. If false, they are sent only after the service answers 401 and asks for them, which takes a second request. | boolean | false |  |
 | **contentType** | Content Type | The value of the `Accept` header of the request, which tells the service the kind of response you want, such as `application/json` or `text/csv`. | string | application/json | text/csv |
+| **followRedirects** | Follow Redirects | If true, a redirect, a response with a status code such as 301, 302 or 307, is followed to the address in its `Location` header, and the response from there is sent as the message. When it is not set, the redirect is not followed, so it sends no message unless its status code is in `okStatusCodeRange`. | boolean |  |  |
+| **method** | Method | The HTTP method of the request, such as `POST` for an API that expects one to return data. When it is not set, it is `GET`. The request has no body. Enum values: \* GET \* POST \* PUT \* DELETE \* HEAD \* OPTIONS \* TRACE \* PATCH | string |  | POST |
 | **oauth2ClientId** | OAuth2 Client ID | The client ID of the application, as registered with the OAuth 2.0 provider. With `oauth2ClientSecret`, it is used to get a token from `oauth2TokenEndpoint` (client credentials grant). | string |  |  |
 | **oauth2ClientSecret** | OAuth2 Client Secret | The client secret of the application, as given by the OAuth 2.0 provider. | string |  |  |
 | **oauth2Scope** | OAuth2 Scope | The scope to ask for in the token request, when the OAuth 2.0 provider needs one. | string |  | orders.write |
 | **oauth2TokenEndpoint** | OAuth2 Token URL | The URL to get the tokens from, as given by the OAuth 2.0 provider. The Kamelet logs in to it with `oauth2ClientId` and `oauth2ClientSecret`. | string |  | https://login.example.com/oauth2/token |
 | **okStatusCodeRange** | OK Status Codes | The status codes of a response that is sent as a message, as ranges such as `200-299` and single codes, separated by commas without spaces. When it is not set, it is `200-299`. List the 2xx codes too, for example `200-299,404` to also send the 404 responses. | string |  | 200-299,404 |
 | **period** | Period between Updates | How long to wait between two requests, in milliseconds. The default, 10000, is ten seconds. | integer | 10000 | 60000 |
+| **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the requests through, without the port. Use it with `proxyPort`; the proxy is used only when both are set. | string |  | proxy.example.com |
+| **proxyPassword** | Proxy Password | The password of `proxyUser` for the HTTP proxy. | string |  |  |
+| **proxyPort** | Proxy Port | The port of the HTTP proxy in `proxyHost`. | integer |  | 3128 |
+| **proxyUser** | Proxy User | The user to log in to the HTTP proxy as, when the proxy asks for a login. Use it with `proxyPassword`. | string |  |  |
 
 ## Dependencies
 
@@ -89,6 +95,8 @@ The HTTP Source Kamelet periodically fetches data from an HTTP endpoint. It supp
 -   **Period**: The interval between fetches in milliseconds (default: 10000)
     
 -   **Content Type**: The Accept header content type for the request (default: "application/json")
+    
+-   **Method**: The HTTP method of the request (default: GET)
     
 
 ### Logging In
@@ -189,6 +197,48 @@ Only a response with a status code in `okStatusCodeRange` is sent as a message. 
 ```
 
 The `CamelHttpResponseCode` header of the message then tells a 404 from a 200. Setting only `404` would stop the 200 responses.
+
+### Method
+
+The request is a `GET` when `method` is not set. Some APIs return data only for a `POST`; set `method: POST` for them. The request has no body.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:http-source"
+      parameters:
+        url: "https://api.example.com/v1/reports/search"
+        method: POST
+        period: 60000
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+### Going Through a Proxy
+
+To fetch the address through an HTTP proxy, set `proxyHost` and `proxyPort`. The proxy is used only when both are set. When the proxy asks for a login, also set `proxyUser` and `proxyPassword`: they are sent after the proxy answers 407 and asks for them.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:http-source"
+      parameters:
+        url: "https://api.example.com/v1/orders/status"
+        proxyHost: proxy.example.com
+        proxyPort: 3128
+        proxyUser: "{{proxy.user}}"
+        proxyPassword: "{{proxy.password}}"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+An `https://` address goes through the proxy too, in a tunnel.
+
+### Following Redirects
+
+A redirect, a response with a status code such as 301, 302 or 307, is not followed when `followRedirects` is not set: it sends no message, the error is logged, and the address is fetched again at the next period. With `followRedirects: true`, the address in the `Location` header of the response is fetched, and its response is sent as the message.
 
 ### Trusting a Private Certificate Authority
 

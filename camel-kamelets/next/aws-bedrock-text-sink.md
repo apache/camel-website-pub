@@ -12,7 +12,7 @@ Input: the body is the request of the model, as JSON text in the format of the c
 
 Output: when it is used inside a route, the body afterwards is the answer, in a form that depends on the model: for Titan the response as JSON text, with the generated text in `results`; for Claude 3 the response as parsed JSON, with the generated text in `content`; for the older Claude models only the generated text, as text.
 
-Good to know: the request and response formats are those of the model provider, described for each model in the Amazon Bedrock documentation; a body in another format fails. Each message is one call of the model. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: the request and response formats are those of the model provider, described for each model in the Amazon Bedrock documentation; a body in another format fails. Each message is one call of the model. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsBedrock` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

@@ -12,7 +12,7 @@ Input: the body must be an Avro object, such as an Avro `GenericRecord` or an ob
 
 Output: the message is unchanged.
 
-Good to know: The schema must already be in the registry, as the artifact `<topic>-value` (such as `orders-value`) in the default group: the Kamelet does not register it, and a message whose schema is not found fails with `ArtifactNotFoundException`. Neither Kafka nor the registry is secured: there is no login and no TLS.
+Good to know: The schema must already be in the registry, as the artifact `<topic>-value` (such as `orders-value`) in the default group: the Kamelet does not register it, and a message whose schema is not found fails with `ArtifactNotFoundException`. Neither Kafka nor the registry is secured: there is no login and no TLS. Headers that start with `CamelKafka`, except `CamelKafkaKey` and `CamelKafkaOverrideTopic`, are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

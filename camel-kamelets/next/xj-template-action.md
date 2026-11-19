@@ -12,7 +12,7 @@ Input: XML or JSON as text, bytes or a stream, as `direction` says. With `JSON2X
 
 Output: the body is JSON text or XML text. With `XML2JSON` the stylesheet must write that same form, which becomes JSON: `<object xj:type="object"><object xj:name="qty" xj:type="int">2</object></object>` gives `{"qty":2}`. The prefix `xj` stands for the namespace `[http://camel.apache.org/component/xj](http://camel.apache.org/component/xj)`. The headers are kept.
 
-Good to know: the stylesheet is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message.
+Good to know: the stylesheet is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message. Headers that start with `CamelXslt` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

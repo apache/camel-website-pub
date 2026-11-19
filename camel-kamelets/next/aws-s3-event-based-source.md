@@ -10,7 +10,7 @@ Use it to react to new files in a bucket as soon as they arrive, without listing
 
 Output: the body is the EventBridge event, as JSON text: `detail-type` says what happened (such as `Object Created` or `Object Deleted`), `detail.bucket.name` is the bucket and `detail.object.key` the key of the file. With `getObject` set to true, the event of a file uploaded with a simple upload (PutObject) carries the content of the file instead, as a stream, with the `CamelAwsS3ProducedBucketName` and `CamelAwsS3ProducedKey` headers; the other events then come as parsed JSON (a Jackson `JsonNode`).
 
-Good to know: it needs a setup in AWS. In the properties of the bucket, turn on sending events to Amazon EventBridge; then create an EventBridge rule for the events of source `aws.s3` and that bucket, with the queue as its target. Each event is deleted from the queue once it has been processed, unless `deleteAfterRead` is false. The files stay in the bucket. `getObject` skips files created by a multipart upload or a copy, and never connects through `uriEndpointOverride`. It logs in to the queue and, with `getObject`, to the bucket with `accessKey` and `secretKey`, or without keys, through the IAM role or the AWS profile of the environment, with `useDefaultCredentialsProvider` or `useProfileCredentialsProvider`. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: it needs a setup in AWS. In the properties of the bucket, turn on sending events to Amazon EventBridge; then create an EventBridge rule for the events of source `aws.s3` and that bucket, with the queue as its target. Each event is deleted from the queue once it has been processed, unless `deleteAfterRead` is false; an event that fails stays in the queue and is received again when its visibility timeout (`visibilityTimeout`) ends. The files stay in the bucket. `getObject` skips files created by a multipart upload or a copy, and never connects through `uriEndpointOverride`. It logs in to the queue and, with `getObject`, to the bucket with `accessKey` and `secretKey`, or without keys, through the IAM role or the AWS profile of the environment, with `useDefaultCredentialsProvider` or `useProfileCredentialsProvider`. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -28,6 +28,7 @@ The following table summarizes the configuration options available for the `aws-
 | **deleteAfterRead** | Auto-delete Messages | If true, each event is deleted from the queue once it has been processed. Set it to false to keep the events; they are then received again each time the visibility timeout of the queue ends. | boolean | true |  |
 | **getObject** | Get Object | If true, for an event of a file uploaded with a simple upload (PutObject), it fetches the file and sends its content instead of the event. It connects to S3 with the same credentials as the queue and with `region`, not with `uriEndpointOverride`. | boolean | false |  |
 | **greedy** | Greedy Scheduler | If true, it polls again right away when the last poll received messages, instead of waiting for `delay`. | boolean | false |  |
+| **maxMessagesPerPoll** | Max Messages Per Poll | The most events to receive in one request to SQS, from 1 to 10. SQS may return fewer. When it is not set, it is 10. | integer |  | 5 |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to SQS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
 | **protocol** | Protocol | `https` or `http`. Only used when `amazonAWSHost` is not `amazonaws.com`. | string | https | http |
@@ -41,6 +42,8 @@ The following table summarizes the configuration options available for the `aws-
 | **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found in the environment instead of in `accessKey` and `secretKey`: the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the `~/.aws/credentials` file, or the IAM role of the EC2 instance, ECS task or Kubernetes pod the integration runs on. | boolean |  |  |
 | **useProfileCredentialsProvider** | Profile Credentials Provider | If true, the credentials are read from a named profile in the AWS credentials file (`~/.aws/credentials`), as the AWS CLI does. Name the profile in `profileCredentialsName`. | boolean |  |  |
 | **useSessionCredentials** | Session Credentials | If true, it logs in with temporary credentials: `accessKey`, `secretKey` and `sessionToken`, such as the ones AWS STS gives when you assume an IAM role. | boolean |  |  |
+| **visibilityTimeout** | Visibility Timeout | How long a received event stays hidden from other readers, in seconds. If it is not deleted by then, it is received again. Set it longer than processing one event takes, such as fetching a large file with `getObject`. When it is not set, the visibility timeout of the queue is used (30 seconds for a new queue). | integer |  | 120 |
+| **waitTimeSeconds** | Wait Time | How long one request waits for an event to arrive when the queue is empty, in seconds, from 0 to 20 (long polling). It saves requests, and so cost, on a queue that is often empty. When it is not set, the wait time of the queue is used. | integer |  | 20 |
 
 ## Dependencies
 
@@ -142,6 +145,29 @@ On Kubernetes, with an IAM role given to the pod through IRSA or EKS Pod Identit
 ```
 
 The role needs the permission to receive and delete the messages of the queue and, with `getObject`, to read the files of the bucket.
+
+### Example with Long Polling and a Longer Visibility Timeout
+
+By default, the Kamelet asks the queue for events every `delay` milliseconds, and each request returns at once, even when the queue is empty. With **waitTimeSeconds**, a request waits up to that many seconds for an event to arrive, so an empty queue costs far fewer requests, and a new event is still received as soon as it arrives. **maxMessagesPerPoll** is the most events received in one request (1 to 10; 10 when it is not set). **visibilityTimeout** is how long a received event stays hidden from other readers: set it longer than processing one event takes, such as fetching a large file with `getObject`, or the event is received a second time while it is still being processed. An event that fails stays in the queue and is received again when this time ends.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:aws-s3-event-based-source"
+      parameters:
+        queueNameOrArn: "s3-events"
+        region: "eu-west-1"
+        useDefaultCredentialsProvider: true
+        getObject: true
+        waitTimeSeconds: 20
+        maxMessagesPerPoll: 5
+        visibilityTimeout: 300
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+When they are not set, the wait time and the visibility timeout of the queue are used.
 
 ### Required Setup
 

@@ -12,7 +12,7 @@ Input: the body is the content of the file, as text, bytes or a stream. When `ke
 
 Output: the body is unchanged. The `CamelMinioObjectName` header holds the name the file was stored under, unless `keyName` is set.
 
-Good to know: a file with the same name is overwritten, so with `keyName` set each message replaces the previous one. When `keyName` is set, the `file` and `ce-file` headers are ignored.
+Good to know: a file with the same name is overwritten, so with `keyName` set each message replaces the previous one. When `keyName` is set, the `file` and `ce-file` headers are ignored. Headers that start with `CamelMinio` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

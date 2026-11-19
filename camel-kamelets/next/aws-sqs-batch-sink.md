@@ -12,7 +12,7 @@ Input: the body is text that `batchSeparator` splits, such as `one,two,three` wi
 
 Output: when it is used inside a route, the body afterwards is the response of SQS, and the `CamelAwsSqsSuccessfulMessageCount` and `CamelAwsSqsFailedMessageCount` headers say how many parts were sent and how many failed.
 
-Good to know: the queue is looked up by listing the queues, which needs the `sqs:ListQueues` permission besides `sqs:SendMessage`. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: unless `queueURL`, `queueOwnerAWSAccountId` or an ARN in `queueNameOrArn` gives the address of the queue, the queue is looked up by listing the queues, which needs the `sqs:ListQueues` permission besides `sqs:SendMessage`. `delaySeconds` keeps each message hidden for a while after it is sent. `serverSideEncryptionEnabled` with `kmsMasterKeyId` changes the queue itself when the integration starts, so that SQS encrypts its messages with that KMS key. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsSqs` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -27,13 +27,19 @@ The following table summarizes the configuration options available for the `aws-
 | **accessKey** | Access Key | The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. Leave both out when `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` is true. | string |  |  |
 | **amazonAWSHost** | AWS Host | The host name of AWS. Leave it as `amazonaws.com` for AWS. Any other value is the address to connect to instead, as `host:port`, together with `protocol`; `uriEndpointOverride` does the same. | string | amazonaws.com |  |
 | **autoCreateQueue** | Autocreate Queue | If true, the queue is created when it does not exist. A name that ends in `.fifo` creates a FIFO queue. The credentials need the permission to create queues. | boolean | false |  |
+| **delaySeconds** | Delay Seconds | How long SQS keeps each message hidden after it is sent, before a reader can receive it, in seconds, from 0 to 900 (15 minutes). Use it to process a message later, such as a retry in a minute. When it is not set, the delay of the queue is used, which is 0 for a new queue. | integer |  | 60 |
+| **kmsMasterKeyId** | KMS Key ID | The key of AWS KMS for the queue to encrypt its messages with, as its key ID, such as `1234abcd-12ab-34cd-56ef-1234567890ab`, an alias, such as `alias/aws/sqs`, or its ARN. Only used when `serverSideEncryptionEnabled` is true. | string |  | alias/aws/sqs |
+| **messageHeaderExceededLimit** | Too Many Headers | What to do when a message has more than 10 headers to send as message attributes, the most that SQS takes: `WARN` sends 10 of them and logs a warning for each other one, `WARN_ONCE` sends 10 and logs one warning for each part, `IGNORE` sends 10 without a warning, and `FAIL` fails the message, which is not sent. The 10 that are sent are the first 10 in the order the headers were set on the message. When it is not set, it is `WARN`. Enum values: \* WARN \* WARN\_ONCE \* IGNORE \* FAIL | string |  | FAIL |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
 | **protocol** | Protocol | `https` or `http`. Only used when `amazonAWSHost` is not `amazonaws.com`. | string | https | http |
 | **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
 | **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
 | **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
+| **queueOwnerAWSAccountId** | Queue Owner AWS Account ID | The 12-digit ID of the AWS account that owns the queue, such as `123456789012`. When it is set, the address of the queue is built from the account, `region` and the queue name, and the queue is not looked up by listing the queues. Use it for a queue of another AWS account, or when the credentials may not list the queues. An ARN in `queueNameOrArn` gives the account too. | string |  | 123456789012 |
+| **queueURL** | Queue URL | The full address of the queue, as the SQS console shows it. When it is set, the messages are sent to it, and the queue is not looked up by listing the queues, which needs the `sqs:ListQueues` permission. | string |  | https://sqs.eu-west-1.amazonaws.com/123456789012/orders |
 | **secretKey** | Secret Key | The secret access key that belongs to `accessKey`. The AWS console shows it only once, when the access key is created. | string |  |  |
+| **serverSideEncryptionEnabled** | Server-Side Encryption | If true, the queue is set to encrypt its messages with the key of AWS KMS in `kmsMasterKeyId` (SSE-KMS). It changes the queue itself: when the integration starts, an existing queue is updated, which needs the `sqs:SetQueueAttributes` permission, and a queue that `autoCreateQueue` creates is created with it. Without `kmsMasterKeyId`, it has no effect. | boolean |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which comes with their access key and secret key, for example from AWS STS when you assume an IAM role. Only used when `useSessionCredentials` is true. | string |  |  |
 | **uriEndpointOverride** | Overwrite Endpoint URI | The address to connect to instead of AWS, as a URL such as `[http://localhost:4566](http://localhost:4566)` for LocalStack. Only used when `overrideEndpoint` is true. | string |  | http://localhost:4566 |
 | **useDefaultCredentialsProvider** | Default Credentials Provider | If true, the credentials are found in the environment instead of in `accessKey` and `secretKey`: the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables, the `~/.aws/credentials` file, or the IAM role of the EC2 instance, ECS task or Kubernetes pod the integration runs on. | boolean | false |  |
@@ -108,6 +114,42 @@ You can also use the Profile Credentials Provider, by setting the `useProfileCre
 Only one of access key/secret key or default credentials provider could be used
 
 For more information, see the [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### Delaying the Messages
+
+`delaySeconds` keeps each message hidden for that many seconds after it is sent, up to 900 (15 minutes), before a reader can receive it. Use it to process a message later, such as a retry in a minute.
+
+### Without Permission to List the Queues
+
+By default the Kamelet finds the address of the queue by listing the queues, which needs the `sqs:ListQueues` permission. It does not list the queues when it is given the address:
+
+-   **Queue URL** (`queueURL`): the full address of the queue, as the SQS console shows it.
+    
+-   **Queue Owner AWS Account ID** (`queueOwnerAWSAccountId`): the 12-digit ID of the account that owns the queue. The address is then built from the account, the region and the queue name. Use it for a queue of another AWS account too.
+    
+-   An ARN in **Queue Name** (`queueNameOrArn`), which holds the account.
+    
+
+### Too Many Headers
+
+An SQS message takes at most 10 message attributes. The headers of the message are sent with each part. When a message has more than 10 headers to send, the first 10 are sent with each part, and `messageHeaderExceededLimit` sets what happens to the others: `WARN` (the default) logs a warning for each one, `WARN_ONCE` logs one warning for each part, `IGNORE` logs nothing, and `FAIL` fails the message, which is then not sent.
+
+### Encrypting the Queue
+
+`serverSideEncryptionEnabled` and `kmsMasterKeyId` set the queue to encrypt its messages with a key of AWS KMS (SSE-KMS). They change the queue itself, not only the messages of this Kamelet: when the integration starts, an existing queue is updated, which needs the `sqs:SetQueueAttributes` permission, and a queue that `autoCreateQueue` creates is created with the key. `serverSideEncryptionEnabled` without `kmsMasterKeyId` has no effect.
+
+For example, to send to a queue without listing the queues, with each part delayed by one minute:
+
+```yaml
+- to:
+    uri: "kamelet:aws-sqs-batch-sink"
+    parameters:
+      queueNameOrArn: "orders"
+      region: "eu-west-1"
+      queueURL: "https://sqs.eu-west-1.amazonaws.com/123456789012/orders"
+      batchSeparator: ","
+      delaySeconds: 60
+```
 
 ### Through an HTTP Proxy
 

@@ -12,7 +12,7 @@ Input: the body becomes the data of the record, as text, bytes or a stream. The 
 
 Output: the message is unchanged. The `CamelAwsKinesisSequenceNumber` and `CamelAwsKinesisShardId` headers give the sequence number and the shard of the record.
 
-Good to know: the stream must exist. The other headers are not sent: a Kinesis record has only data and a partition key. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: the stream must exist. The other headers are not sent: a Kinesis record has only data and a partition key. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsKinesis` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

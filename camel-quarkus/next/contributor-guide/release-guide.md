@@ -192,6 +192,23 @@ git commit -am "Next is $NEXT_SNAPSHOT"
 # Send a pull request
 ```
 
+## Update generated files in the LTS release branch
+
+The following steps apply only after a patch release from a Long Term Support (LTS) release branch. They can be skipped for major / minor releases.
+
+After `release:prepare`, some generated files in the release branch need to be regenerated to reflect the new SNAPSHOT version.
+
+```shell
+export BRANCH=3.20.x # The LTS maintenance branch you released from
+export VERSION=... # The version you just released, e.g. 3.20.1
+git checkout "$BRANCH"
+git reset --hard upstream/$BRANCH
+mvn cq:sync-versions -N
+mvn clean install -DskipTests -Dquarkus.build.skip # to regen the Qute Camel component metadata + flattened boms
+git commit -am "Update generated files after $VERSION release"
+# Send a pull request targeting $BRANCH
+```
+
 ## Close the upstream vote
 
 After at least 72 hours has past, close the vote. There are plenty of mails on the dev mailing list to get [inspiration](https://lists.apache.org/thread/shyfw2ltrxknnzb26nf71bc406lxvsp4) from. For instance, one could search mail with subject:

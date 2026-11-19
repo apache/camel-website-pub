@@ -12,7 +12,7 @@ Input: the body is not used. The `query` header (or `ce-query`) is the SQL query
 
 Output: when it is used inside a route, the body afterwards is the answer of AWS, a `QueryResponse` object of the AWS SDK for Java (not JSON text), with the columns and the rows of the first page of the result.
 
-Good to know: the query is run as it is written in the header, so never build it from untrusted data. Only the first page of a large result is returned. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: the query is run as it is written in the header, so never build it from untrusted data. Only the first page of a large result is returned. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsTimestream` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

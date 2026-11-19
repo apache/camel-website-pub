@@ -10,7 +10,7 @@ Use it to react to activity in an AWS account, for example to raise an alert whe
 
 Output: the body is the CloudTrail record of the event, as JSON text. The headers give the ID, the name (such as `GetSecretValue`), the source (such as `secretsmanager.amazonaws.com`) and the user name of the event.
 
-Good to know: it looks up the management events that CloudTrail keeps for the region, which go back 90 days, so when it starts it also reads events from before. It remembers which events it read only while it runs: after a restart it reads them again. Nothing is removed from CloudTrail. An event can be looked up only some minutes after it happened. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: it looks up the management events that CloudTrail keeps for the region, and reads the events that happen after it starts. It remembers where it is only while it runs: the events that happen while it is stopped are not read. Nothing is removed from CloudTrail. An event can be looked up only some minutes after it happened, and sometimes after a newer event: every `lookBackInterval` it looks up the last `lookBackWindow` again, and reads the events it missed. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -22,6 +22,8 @@ The following table summarizes the configuration options available for the `aws-
 | **region** | AWS Region | **Required** The AWS region of the events to read, as a region code such as `eu-west-1` or `us-east-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
 | **accessKey** | Access Key | The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. Leave both out when `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` is true. | string |  |  |
 | **eventSource** | Event Source | Read only the events of this AWS service, given as its address, such as `s3.amazonaws.com` or `secretsmanager.amazonaws.com`. When it is not set, the events of all services are read. | string |  | secretsmanager.amazonaws.com |
+| **lookBackInterval** | Look Back Interval | How often it looks up the `lookBackWindow` again, in milliseconds. A late event is read at most this long after it became visible. When it is not set, it is 60000, one minute. It must be above 0 unless `lookBackWindow` is 0, or the integration does not start. Needs Camel 4.24 or later. | integer |  | 60000 |
+| **lookBackWindow** | Look Back Window | How far back it looks up the events again, in milliseconds, to read the events that CloudTrail made visible after a newer one. When it is not set, it is 600000, ten minutes. 0 turns the second lookup off, and then such a late event is not read. Needs Camel 4.24 or later. | integer |  | 600000 |
 | **maxResults** | Max Results | How many events to fetch in one request to CloudTrail, from 1 to 50. Depending on the Camel version, a poll reads one such page of the newest events, or all new events page by page. | integer | 1 |  |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
@@ -104,6 +106,24 @@ You can also use the Profile Credentials Provider, by setting the `useProfileCre
 Only one of access key/secret key or default credentials provider could be used
 
 For more information, see the [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### Events That Become Visible Late
+
+The Kamelet reads the events that happen after it starts. CloudTrail can make an event visible some minutes after it happened, and after a newer event, which the Kamelet has then already read past. So every `lookBackInterval` (one minute when it is not set) the Kamelet looks up the last `lookBackWindow` (ten minutes when it is not set) again, and reads the events it has not read yet. Set `lookBackWindow` to 0 to turn this off, or set a shorter `lookBackInterval` to read a late event sooner, at the cost of more lookups. Both options need Camel 4.24 or later.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:aws-cloudtrail-source"
+      parameters:
+        region: "eu-west-1"
+        useDefaultCredentialsProvider: true
+        lookBackWindow: 900000
+        lookBackInterval: 30000
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
 
 ### Through an HTTP Proxy
 

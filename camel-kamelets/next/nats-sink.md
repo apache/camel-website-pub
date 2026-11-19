@@ -12,7 +12,7 @@ Input: the body is the payload, as text or bytes. A Map is sent as its Java text
 
 Output: the message is unchanged.
 
-Good to know: a plain NATS subject stores nothing: only the receivers subscribed at that moment get the message. With `jetstreamEnabled`, the message is stored in the stream `jetstreamName`, which must exist already, for example created by `nats-source`; otherwise sending fails. It connects with TLS when `secure` is true. The certificate of the server is checked against the certificate authorities that Java trusts. To trust a private one with Camel JBang or Camel Main, set the application properties `camel.ssl.enabled=true`, `camel.ssl.trustStore`, `camel.ssl.trustStorePassword` and `camel.component.nats.useGlobalSslContextParameters=true`: that trust store then replaces the one of Java for every NATS connection of the application that has `secure` set. The integration fails to start when no server can be reached, or when the server refuses the login. It publishes the message and does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does.
+Good to know: a plain NATS subject stores nothing: only the receivers subscribed at that moment get the message, unless a JetStream stream takes in the subject. With `jetstreamEnabled`, the sink waits until the stream that takes in the subject has stored the message, and sending fails with `503 No Responders Available For Request` when no stream takes it in. The stream must exist already, for example created by `nats-source`. On a server without JetStream, `jetstreamEnabled` is ignored and the message is published as plain NATS. It connects with TLS when `secure` is true. The certificate of the server is checked against the certificate authorities that Java trusts. To trust a private one with Camel JBang or Camel Main, set the application properties `camel.ssl.enabled=true`, `camel.ssl.trustStore`, `camel.ssl.trustStorePassword` and `camel.component.nats.useGlobalSslContextParameters=true`: that trust store then replaces the one of Java for every NATS connection of the application that has `secure` set. The integration fails to start when no server can be reached, or when the server refuses the login. It publishes the message and does not wait for a reply, even when the incoming message expects one, as one from `webhook-source` does. Headers that start with `CamelNats` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -24,9 +24,9 @@ The following table summarizes the configuration options available for the `nats
 | **servers** | Servers | **Required** The addresses of one or more NATS servers, as `host:port` or `nats://host:port`, separated by commas. The usual NATS port is 4222. For a server that needs a login, put the user and password in the address, as `nats://user:password@host:4222`, or a token, as `nats://token@host:4222`. To log in with a NATS credentials file instead, use `credentialsFilePath`. | string |  | nats://localhost:4222 |
 | **topic** | Subject | **Required** The NATS subject to publish the messages to. | string |  | orders.created |
 | **credentialsFilePath** | Credentials File | A NATS credentials file (`.creds`) to log in with, which holds a user JWT and the NKey seed of the user. Servers with decentralized authentication, such as Synadia Cloud, use it. Start it with `file:` followed by the path of the file, or with `classpath:`, `http:` or `https:`. The `nsc generate creds` command makes one. A file that does not exist makes the integration fail to start, and a user that the server does not know is refused with `Authorization Violation`. | string |  | file:/etc/nats/user.creds |
-| **jetstreamAsync** | JetStream Async | If true, JetStream calls are made without blocking a thread while waiting for the server to answer. Only used when `jetstreamEnabled` is true. | boolean | true |  |
-| **jetstreamEnabled** | JetStream Enabled | If true, each message is published to the JetStream stream `jetstreamName`, which stores it, instead of to plain NATS. The stream must exist and take in the subject in `topic`. | boolean | false |  |
-| **jetstreamName** | JetStream Stream Name | The name of the JetStream stream that stores the messages. Only used when `jetstreamEnabled` is true. | string |  | ORDERS |
+| **jetstreamAsync** | JetStream Async | How the sink waits for JetStream to confirm that it stored a message. Either way it waits before it sends the next message. When the server does not answer, sending fails after about 2 seconds when false, and after 2 to 8 seconds when true. Only used when `jetstreamEnabled` is true. | boolean | true |  |
+| **jetstreamEnabled** | JetStream Enabled | If true, each message is published to JetStream, and the sink waits until the stream that takes in the subject in `topic` has stored it. Sending fails when no stream takes in the subject, or when the server does not answer within a few seconds. | boolean | false |  |
+| **jetstreamName** | JetStream Stream Name | Not used by the sink: the message is stored by the stream that takes in the subject in `topic`, whatever its name. | string |  | ORDERS |
 | **secure** | Secure (TLS) | If true, it connects with TLS, which a server with TLS in its configuration requires; without it, such a server refuses the connection with `SSL required by server`. The certificate of the server is checked against the certificate authorities that Java trusts, or against the trust store set in the `camel.ssl` application properties when `camel.component.nats.useGlobalSslContextParameters` is true. An address that starts with `tls://` also connects with TLS, but uses that trust store only when `secure` is true. When not set, it connects with TLS only to a `tls://` address. | boolean |  |  |
 
 ## Dependencies
@@ -144,6 +144,32 @@ That trust store then replaces the one of Java for every NATS connection of the 
               topic: "orders.created"
               secure: true
               credentialsFilePath: "file:/etc/nats/app-user.creds"
+```
+
+### JetStream
+
+A plain NATS subject stores nothing: only the receivers subscribed at that moment get the message. A JetStream stream stores the messages of the subjects it takes in. With `jetstreamEnabled: true`, the Kamelet waits until that stream has stored each message, and sending fails with `503 No Responders Available For Request` when no stream takes in the subject in `topic`. The stream must exist already: create it with `nats-source` and `jetstreamEnabled`, or with the `nats` command line tool:
+
+```bash
+nats stream add ORDERS --subjects "orders.created" --defaults
+```
+
+The sink does not use `jetstreamName`: the message goes to the stream that takes in the subject, whatever its name.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:timer-source"
+      parameters:
+        message: "hello"
+        period: 5000
+      steps:
+        - to:
+            uri: "kamelet:nats-sink"
+            parameters:
+              servers: "nats://localhost:4222"
+              topic: "orders.created"
+              jetstreamEnabled: true
 ```
 
 ## Kamelet source file

@@ -10,7 +10,7 @@ Use it to process files that another system drops into a bucket, such as uploade
 
 Output: the body is the content of the file, as a stream. The headers give the bucket name (`CamelIBMCOSBucketName`), the key, that is the path of the file in the bucket (`CamelIBMCOSKey`), the content type, the size and the ETag of the file.
 
-Good to know: files are deleted from the bucket after they are read, unless `deleteAfterRead` is set to false; then the same files are read again on every poll. `moveAfterRead` moves them to another bucket instead. A file whose processing fails is kept, and read again on the next poll. It logs in with an IBM Cloud API key.
+Good to know: files are deleted from the bucket after they are read, unless `deleteAfterRead` is set to false; then the same files are read again on every poll. `moveAfterRead` moves them to another bucket instead. To read one file only, set `fileName`. A file whose processing fails is kept, and read again on the next poll. It logs in with an IBM Cloud API key.
 
 ## Configuration Options
 
@@ -30,6 +30,7 @@ The following table summarizes the configuration options available for the `ibm-
 | **destinationBucket** | Destination Bucket | The bucket to move the files to. Only used when `moveAfterRead` is true. | string |  | my-archive-bucket |
 | **destinationBucketPrefix** | Destination Bucket Prefix | Text put before the name of each moved file in `destinationBucket`, such as a folder followed by `/`. Only used when `moveAfterRead` is true. | string |  | processed/ |
 | **destinationBucketSuffix** | Destination Bucket Suffix | Text put after the name of each moved file in `destinationBucket`, such as `.done`. Only used when `moveAfterRead` is true. | string |  | .done |
+| **fileName** | File Name | The key of one file to read, such as `inbox/orders.csv`, instead of all the files of the bucket; `prefix` and `delimiter` are then not used. With `deleteAfterRead` true, the default, the file is read once and deleted, and each later poll logs a warning that the key does not exist, until a file with that key is uploaded again. With `deleteAfterRead` false, the same file is read again on every poll. | string |  | inbox/orders.csv |
 | **includeBody** | Include Body | If true, the body is the content of the file. If false, there is no body and only the headers describe the file. | boolean | true |  |
 | **includeFolders** | Include Folders | If true, folder markers (empty objects whose key ends with `/`) are read as messages too. Set it to false to skip them. | boolean | true |  |
 | **maxMessagesPerPoll** | Max Messages Per Poll | The most files to read at each poll. Use 0 or a negative number for no limit. | integer | 10 |  |
@@ -182,6 +183,27 @@ You can filter objects using a prefix:
 ```
 
 This consumes only objects with keys starting with `inbox/`.
+
+#### Reading one file
+
+To read one file of the bucket instead of all of them, set `fileName` to its key. With `deleteAfterRead` false, the same file is read again on every poll; with the default `deleteAfterRead`, it is read once and deleted, and each later poll logs a warning that the key does not exist, until a file with that key is uploaded again.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:ibm-cos-source"
+      parameters:
+        bucketName: "my-bucket"
+        apiKey: "{{ibm.api.key}}"
+        serviceInstanceId: "{{ibm.service.instance.id}}"
+        endpointUrl: "https://s3.us-south.cloud-object-storage.appdomain.cloud"
+        fileName: "config/prices.csv"
+        deleteAfterRead: false
+        delay: 60000
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
 
 #### Consuming only metadata
 

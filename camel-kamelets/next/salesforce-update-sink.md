@@ -12,7 +12,7 @@ Input: the body is JSON text with three fields: `sObjectName`, the API name of t
 
 Output: when it is used inside a route, the body afterwards is the `payload` as JSON text.
 
-Good to know: a message without `sObjectName` or `sObjectId`, for a record that does not exist, or with a change that Salesforce refuses, fails. The message decides which record is changed, so place this sink only after a source you trust.
+Good to know: a message without `sObjectName` or `sObjectId`, for a record that does not exist, or with a change that Salesforce refuses, fails. The message decides which record is changed, so place this sink only after a source you trust. Headers that start with `CamelSalesforce` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

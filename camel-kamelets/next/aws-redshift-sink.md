@@ -27,6 +27,9 @@ The following table summarizes the configuration options available for the `aws-
 | **serverName** | Server Name | **Required** The host name of the Redshift cluster: its endpoint, as shown in the Redshift console, without the port and the database name. | string |  | my-cluster.abc123xyz789.eu-west-1.redshift.amazonaws.com |
 | **username** | Username | **Required** The database user to log in as, such as the admin user of the cluster. This is a user of the database, not an AWS access key. | string |  |  |
 | **connectionProperties** | Connection Properties | Extra settings for the Amazon Redshift JDBC driver, as `name=value` pairs separated by `;`, such as `loginTimeout=30`. When it is not set, the driver connects with TLS, as it does by default. The value is not hidden like a password, and it can show in the log when the integration starts, so do not put a password in it. | string |  | loginTimeout=30 |
+| **maxIdle** | Max Idle Connections | The most unused connections to keep open for later. A connection that is given back when this many are unused already is closed. When it is not set, up to 8 are kept open. | integer |  | 2 |
+| **maxTotal** | Max Connections | The most connections to the database that the Kamelet opens at the same time. When all of them are in use, the next message waits for one to be free, as long as `maxWaitMillis` allows. When it is not set, the limit is 8. | integer |  | 20 |
+| **maxWaitMillis** | Max Wait | How long to wait for a free connection when `maxTotal` connections are in use, in milliseconds. After that, the message fails. When it is not set, it waits as long as it takes. | integer |  | 5000 |
 | **serverPort** | Server Port | The port of the cluster. Redshift uses 5439 unless it was changed when the cluster was created. | string | 5439 |  |
 
 ## Dependencies
@@ -95,6 +98,23 @@ Here is example input for the example query:
 
 ```json
 { "username":"oscerd", "city":"Rome"}
+```
+
+### Connection Pool
+
+The Kamelet keeps a pool of connections to the database:
+
+-   `maxTotal`: the most connections it opens at the same time, 8 when not set.
+    
+-   `maxIdle`: the most unused connections it keeps open, 8 when not set.
+    
+-   `maxWaitMillis`: how long a message waits for a free connection when `maxTotal` are in use, in milliseconds, before it fails. When not set, it waits as long as it takes.
+    
+
+```yaml
+maxTotal: 4
+maxIdle: 2
+maxWaitMillis: 5000
 ```
 
 ## Kamelet source file

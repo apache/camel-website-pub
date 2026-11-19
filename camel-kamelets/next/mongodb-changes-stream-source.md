@@ -10,7 +10,7 @@ Use it to react to changes in MongoDB, for example to copy new orders to another
 
 Output: the body is JSON text. For an insert or a replace, it is the whole new document. For an update, it is the whole document as it is when the change is sent, read again from the collection, so it can already hold later changes, and it is the text `null` when the document was deleted meanwhile; `fullDocument` changes this. For a delete, it is an object with only the `_id` of the deleted document. The `CamelMongoDbStreamOperationType` header says what happened (`insert`, `update`, `replace` or `delete`), and the `_id` header holds the `_id` of the document.
 
-Good to know: only changes made after the Kamelet starts are sent. Reading the document again costs MongoDB one more read for each update; set `fullDocument` to `default` to send `null` for an update instead. MongoDB offers change streams only on a replica set or a sharded cluster, not on a single standalone server. Set either `hosts` or `connectionString`. With `hosts`, it connects with TLS by default; set `ssl` to false for a MongoDB without TLS, such as a local one. With `connectionString`, such as the `mongodb+srv://` string of MongoDB Atlas, it connects only as that string says, and `hosts`, `username`, `password`, `ssl` and `sslValidationEnabled` are not used. For a user defined in a database other than `admin`, use `connectionString` with `authSource`.
+Good to know: only changes made after the Kamelet starts are sent. It does not save where it stopped, so the changes made while it is stopped, such as during a restart, are never sent. The collection must exist when the Kamelet starts; otherwise it fails to start with `Collection …​ does not exist on the database`. Reading the document again costs MongoDB one more read for each update; set `fullDocument` to `default` to send `null` for an update instead. MongoDB offers change streams only on a replica set or a sharded cluster, not on a single standalone server. Set either `hosts` or `connectionString`. With `hosts`, it connects with TLS by default; set `ssl` to false for a MongoDB without TLS, such as a local one. With `connectionString`, such as the `mongodb+srv://` string of MongoDB Atlas, it connects only as that string says, and `hosts`, `username`, `password`, `ssl` and `sslValidationEnabled` are not used. For a user defined in a database other than `admin`, use `connectionString` with `authSource`.
 
 ## Configuration Options
 
@@ -91,6 +91,12 @@ This Kamelet connects to MongoDB with:
 The Kamelet watches a collection with a MongoDB change stream, and sends one message for each change made after it starts, as JSON text: the new document for an insert or a replace, the whole document for an update (see below), and an object with the `_id` for a delete. The `CamelMongoDbStreamOperationType` header says which kind of change it is.
 
 Change streams need a replica set or a sharded cluster.
+
+### Restarts
+
+The Kamelet does not save where it stopped. Each time it starts, it sends only the changes made from then on, so the changes made while it is stopped, such as during a restart or an upgrade, are never sent. A system that must not miss a change has to catch up from the collection itself after a restart.
+
+The collection must exist when the Kamelet starts. Otherwise the Kamelet fails to start with `Collection …​ does not exist on the database and createCollection is false`.
 
 ### The document of an update
 

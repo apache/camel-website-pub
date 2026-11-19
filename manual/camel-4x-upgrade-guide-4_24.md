@@ -161,6 +161,12 @@ On every database, an entity that another consumer has deleted (`consumeDelete=t
 
 Other JPA providers, and the optimistic lock modes, are not affected.
 
+### camel-vertx-http - an https:// address always uses TLS
+
+A `vertx-http` endpoint with an `https://` address now always calls it with TLS, also when no `sslContextParameters` is configured. The server certificate is then checked with the default trust store of the JVM, and the host name is verified. Before, the request was sent without TLS unless TLS was turned on by `sslContextParameters`, global SSL settings or custom `WebClientOptions`. This applied to `https://` addresses with an explicit port, and since 4.21 to all `https://` addresses.
+
+A route that called an `https://` address of a server that only speaks plain HTTP now fails; use an `http://` address for such a server. An `http://` address with `sslContextParameters` is not changed.
+
 ### camel-openfga - writeTuples and the read operations carry a relationship condition
 
 `writeTuples` now honours a relationship condition set on a tuple in the message body: a `ClientTupleKey` built with `.condition(..)`, or a `Map` whose `condition` entry is a map of a `name` and an optional `context`. Before, only the `user`, `relation` and `object` of a tuple were written and any condition was dropped, so a conditioned grant was stored unconditioned. A tuple with no condition is still written unconditioned, and `deleteTuples` still deletes by identity and ignores a condition.
@@ -370,6 +376,12 @@ The WARN that a consumer of the `ftp`, `ftps`, `sftp` and `mina-sftp` components
 When the server refuses a request, the `GenericFileOperationFailedException` of the `sftp` component now gives the status of the server after its message, such as `Cannot list directory: inbox: SSH_FX_NO_SUCH_FILE: No such file`, and `getCode()` and `getReason()` return the SFTP status code and its text, as for `ftp`. Before, the status was only in the cause, and `getCode()` was `0`. The messages start as before, except when the attributes of a file cannot be read: the message starts with `Cannot get the attributes of: <name>` (or `Cannot list directory: <directory>`) instead of the status. A failed change to a relative directory, with `sftp`, `ftp` and `ftps`, also gives the current directory, such as `. The path is relative to the current directory: /home/admin`. Update code that compares the whole message.
 
 The `preferredAuthentications` option of `sftp` now takes the method names in any case, and with spaces around them. Before, JSch skipped a name such as `Password`, as it compares the names with the lower-case names of the server, and the login failed with `Auth fail for methods '…​'`. A name that JSch does not know is logged at WARN when the endpoint starts. See the [SFTP component](../components/4.22.x/sftp-component.md).
+
+### camel-ftp - ftps checks the server certificate against the JVM trust store when no trust store is configured
+
+An `ftps` endpoint configured with neither `sslContextParameters` nor the `ftpClient.trustStore.` options now checks the certificate of the server against the default trust store of the JVM (the `cacerts` file of the JDK, or the trust store set with the `javax.net.ssl.trustStore` system property). Before, such an endpoint accepted any server certificate within its validity dates, without checking who signed it.
+
+A server certificate signed by a public certificate authority works as before. For an FTPS server with a self-signed certificate, or a certificate signed by your own certificate authority, the connection now fails in the TLS handshake: put that certificate (or the certificate of the authority) in a trust store, and configure it with the `ftpClient.trustStore.file`, `ftpClient.trustStore.password` and `ftpClient.trustStore.type` options, or with `sslContextParameters`. A custom `ftpClient` keeps the trust manager it was created with. See [FTPS component default trust store](../components/4.22.x/ftp-component.html#_ftps_component_default_trust_store).
 
 ### camel-smb - a starting directory that cannot be created
 
@@ -3433,6 +3445,12 @@ A body that does not convert to bytes, such as a `Map` or a POJO, is no longer e
 
 The `region` option of `alibaba-sms` is no longer marked as required. To create the client, the Camel endpoint needs the `region` or the `endpoint` option. It needs neither when the `smsClient` option is set or autowired. So the endpoint validation of the catalog no longer reports a URI without `region` as missing a required option. The behavior of the component at runtime does not change.
 
+### camel-alibaba-sls - the header of listLogStores is named CamelAlibabaSlsListLogStoreName
+
+The header with the name of the Logstore for `listLogStores` is now `CamelAlibabaSlsListLogStoreName`. Before, it was `CamelAlibabaSlsLogstoreName`. That name differs from `CamelAlibabaSlsLogStoreName`, the Logstore of `putLogs` and `getLogs`, only in the case of one letter. Camel header names are case-insensitive by default, so the two names were one header. A header set for `putLogs` or `getLogs` also limited a later `listLogStores` to the Logstores whose name contains the value. A header set for `listLogStores` also replaced the `logStoreName` option of a later `putLogs` or `getLogs`.
+
+Routes that use the constant `AlibabaSlsHeaders.LOGSTORE_NAME` work without changes, as only its value changed. Routes that use the header or the exchange property by its literal name must use the new name. By default, the producer now reads a header with the previous name only as the Logstore of `putLogs` and `getLogs`. The producer no longer reads an exchange property with the previous name. The Endpoint DSL method `alibabaSlsLogstoreName()` is now `alibabaSlsListLogStoreName()`.
+
 ### camel-pqc - a configured KeyGenerator or KeyAgreement is used by one exchange at a time
 
 When Camel creates the instance itself, the KEM operations of the `pqc` component (including the hybrid KEM operations) and the PQC data format now use a new `KeyGenerator`, and for the hybrid operations a new `KeyAgreement`, for every operation. A configured instance is still shared: a registry bean, which is autowired into every `pqc` endpoint, a `KeyGenerator` set on the data format, or the default material used when no key material is configured. Each operation now holds its lock from `init` until the result is returned, so concurrent exchanges that use it run one at a time.
@@ -5414,3 +5432,22 @@ A `Map` or a POJO in the `CamelAlibabaKmsPlaintext` header, or in the exchange p
 The `CamelAlibabaKmsNumberOfBytes` header and the exchange property of the same name are now read only by `generateDataKey`, which is the only operation that sends the value. Before, every exchange resolved them, so a value that is not a number failed `encrypt` and `decrypt` too, with a `TypeConversionException` from the conversion of the header. Such a value now fails `generateDataKey` alone, with an `IllegalArgumentException` that names the header, and an empty value counts as unset.
 
 The `region` option is no longer marked as required in the catalog, since `region` or `endpoint` is required and the `kmsClient` option replaces both. The producer still fails with "Region or endpoint is required" when it has to create a client and neither is set.
+
+### camel-nats - the host name of the server is verified over TLS
+
+When the connection uses TLS (`secure=true`, or a `tls://` server address), camel-nats now checks that the certificate of the NATS server matches the host it connects to, with the same rules as an HTTPS client. Before, any certificate trusted by the trust store was accepted, whatever host the certificate was issued for. To keep the host name for TLS, the client connects to the fastest of the IP addresses of a host name (the happy eyeballs mode of jnats), instead of replacing the host name by its IP addresses first.
+
+A connection to a host name or an IP address that the certificate does not list now fails the TLS handshake; an IP address must be listed as a subject alternative name of the certificate. This also applies to the servers that the NATS cluster announces, which are often IP addresses.
+
+> **Warning**
+> The servers announced by the cluster are used only when the client reconnects, so a certificate without the IP addresses that the cluster announces still connects at startup, and fails only when the client fails over to another server. Before upgrading, check that the certificate of each server lists the host names or IP addresses that the cluster announces (the `connect_urls` in the `INFO` of the servers, set with their `client_advertise` option).
+
+Use certificates that match the hosts, or set the new `hostnameVerification` option to `false` to keep the previous behaviour. An `opentls://` server address still trusts any certificate and is not checked.
+
+### camel-pulsar - the host name of the broker is verified with pulsar+ssl
+
+When the endpoint creates its own Pulsar client, a `pulsar+ssl://` connection now checks that the certificate of the broker matches the host it connects to, with the same rules as an HTTPS client. Before, the client kept the default of the Pulsar client, which accepts any certificate trusted by the trust store, whatever host the certificate was issued for.
+
+A connection to a host name or an IP address that the certificate does not list now fails the TLS handshake; this also applies to the brokers that a lookup returns (their advertised listeners). Use certificates that match the hosts, or set the new `hostnameVerification` option to `false` to keep the previous behaviour. A `pulsarClient` that is given to the component or the endpoint is used as it is.
+
+The new `tlsTrustCertsFilePath` option sets a PEM file with the certificates of the certificate authorities to trust, for a broker whose certificate is not signed by an authority that the JVM trusts.

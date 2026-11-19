@@ -10,7 +10,7 @@ Use it to process work that other systems put in a queue, such as orders, jobs o
 
 Output: the body is the body of the SQS message, as text. The headers give the message ID (`CamelAwsSqsMessageId`), the receipt handle and the MD5 checksum of the body. The message attributes, which the sender sets on a message, are read only when `messageAttributeNames` names them, and the system attributes of SQS, such as `SentTimestamp`, only when `attributeNames` names them. Each attribute that is read becomes a header of the same name, except a message attribute whose name starts with `Camel`.
 
-Good to know: a message is deleted only after it has been processed without error; a message that fails stays in the queue and is received again when its visibility timeout ends. With `deleteAfterRead` set to false, the messages stay in the queue and are received again and again. Without `queueURL`, the queue is looked up by listing the queues, which needs the `sqs:ListQueues` permission. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: a message is deleted only after it has been processed without error; a message that fails stays in the queue and is received again when its visibility timeout ends. With `deleteAfterRead` set to false, the messages stay in the queue and are received again and again. A message that takes longer to process than the visibility timeout is received a second time, by this or another reader: set `extendMessageVisibility` to keep it hidden for as long as it is processed. By default one message is processed at a time; `concurrentConsumers` processes several in parallel. Without `queueURL`, `queueOwnerAWSAccountId` or an ARN in `queueNameOrArn`, the queue is looked up by listing the queues, which needs the `sqs:ListQueues` permission. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
 ## Configuration Options
 
@@ -25,8 +25,10 @@ The following table summarizes the configuration options available for the `aws-
 | **amazonAWSHost** | AWS Host | The host name of AWS. Leave it as `amazonaws.com` for AWS. Any other value is the address to connect to instead, as `host:port`, together with `protocol`; `uriEndpointOverride` does the same. | string | amazonaws.com |  |
 | **attributeNames** | System Attribute Names | Which of the system attributes that SQS keeps for each message to read: `All`, or a comma-separated list of names from `SenderId`, `SentTimestamp`, `ApproximateReceiveCount`, `ApproximateFirstReceiveTimestamp`, `SequenceNumber`, `MessageDeduplicationId`, `MessageGroupId`, `AWSTraceHeader` and `DeadLetterQueueSourceArn`. A name that is not one of these is ignored, with a warning in the log. Each attribute that is read becomes a header of the same name, as text; the timestamps are in milliseconds since 1970. When it is not set, no system attribute is read. | string |  | SentTimestamp,ApproximateReceiveCount |
 | **autoCreateQueue** | Autocreate Queue | If true, the queue is created when it does not exist. A name that ends in `.fifo` creates a FIFO queue. The credentials need the permission to create queues. | boolean | false |  |
+| **concurrentConsumers** | Concurrent Consumers | How many threads poll the queue and process its messages at the same time. When it is not set, one thread does, and the messages are processed one after the other. With more, they are processed in parallel, in no particular order. | integer |  | 5 |
 | **delay** | Delay | How long to wait between two polls of the queue, in milliseconds. | integer | 500 |  |
 | **deleteAfterRead** | Auto-delete Messages | If true, each message is deleted from the queue once it has been processed. Set it to false to keep the messages; they are then received again each time the visibility timeout ends. | boolean | true |  |
+| **extendMessageVisibility** | Extend Message Visibility | If true, a message is kept hidden from other readers for as long as it is processed, so a message that takes longer than the visibility timeout is not received a second time. It needs `visibilityTimeout`, without which the integration does not start. Every half of `visibilityTimeout`, the visibility timeout of the messages being processed is extended by `visibilityTimeout` seconds; the credentials need the `sqs:ChangeMessageVisibility` permission. | boolean |  |  |
 | **greedy** | Greedy Scheduler | If true, it polls again right away when the last poll received messages, instead of waiting for `delay`. | boolean | false |  |
 | **maxMessagesPerPoll** | Max Messages Per Poll | The most messages to receive in one request to SQS, from 1 to 10. SQS may return fewer. | integer | 1 |  |
 | **messageAttributeNames** | Message Attribute Names | The message attributes to read: `All`, or a comma-separated list of names, such as `customer,priority`. A name that ends in `.`**, such as `trace.`**, reads the attributes whose names start with `trace.`. Each attribute that is read becomes a header of the same name: a String attribute as text, a Number attribute as text, or as a number when its type has a label such as `Number.int`, and a Binary attribute as bytes (an AWS SDK `SdkBytes`). A message attribute whose name starts with `Camel` is not made a header. When it is not set, no message attribute is read. | string |  | All |
@@ -36,6 +38,7 @@ The following table summarizes the configuration options available for the `aws-
 | **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
 | **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
 | **proxyProtocol** | Proxy Protocol | How to talk to the proxy itself: `HTTP` or `HTTPS`. It is not the protocol of the calls to AWS, which stay encrypted, as the proxy only passes them on. When it is not set, it is `HTTPS`, which needs a proxy that takes TLS connections. Most company proxies, such as Squid, take plain HTTP: set `HTTP` for them. With the wrong one, every call fails, for example with `Unsupported or unrecognized SSL message`. Enum values: \* HTTP \* HTTPS | string |  | HTTP |
+| **queueOwnerAWSAccountId** | Queue Owner AWS Account ID | The 12-digit ID of the AWS account that owns the queue, such as `123456789012`. When it is set, the address of the queue is built from the account, `region` and the queue name, and the queue is not looked up by listing the queues. Use it for a queue of another AWS account, or when the credentials may not list the queues. An ARN in `queueNameOrArn` gives the account too. | string |  | 123456789012 |
 | **queueURL** | Queue URL | The full address of the queue, as the SQS console shows it. When it is set, it is used as it is, and the queue is not looked up by name, which needs the permission to list the queues. | string |  | https://sqs.eu-west-1.amazonaws.com/123456789012/orders |
 | **secretKey** | Secret Key | The secret access key that belongs to `accessKey`. The AWS console shows it only once, when the access key is created. | string |  |  |
 | **sessionToken** | Session Token | The session token of temporary credentials, which comes with their access key and secret key, for example from AWS STS when you assume an IAM role. Only used when `useSessionCredentials` is true. | string |  |  |
@@ -144,6 +147,41 @@ queueNameOrArn: orders
 region: eu-west-1
 messageAttributeNames: All
 attributeNames: SentTimestamp
+```
+
+### Slow Messages and Parallel Processing
+
+A received message stays hidden from other readers for its visibility timeout, 30 seconds for a new queue. A message that takes longer to process is received again, by this or another reader, and processed twice. Set `extendMessageVisibility` to true, together with `visibilityTimeout`, to keep each message hidden for as long as it is processed: every half of `visibilityTimeout`, its visibility timeout is extended by `visibilityTimeout` seconds.
+
+By default one thread polls the queue, and the messages are processed one after the other. `concurrentConsumers` sets how many threads poll and process at the same time.
+
+For example, to process up to five slow messages at a time, without receiving any of them twice:
+
+```yaml
+queueNameOrArn: orders
+region: eu-west-1
+concurrentConsumers: 5
+visibilityTimeout: 60
+extendMessageVisibility: true
+```
+
+### Without Permission to List the Queues
+
+By default the Kamelet finds the address of the queue by listing the queues, which needs the `sqs:ListQueues` permission. It does not list the queues when it is given the address:
+
+-   **Queue URL** (`queueURL`): the full address of the queue, as the SQS console shows it.
+    
+-   **Queue Owner AWS Account ID** (`queueOwnerAWSAccountId`): the 12-digit ID of the account that owns the queue. The address is then built from the account, the region and the queue name. Use it for a queue of another AWS account too.
+    
+-   An ARN in **Queue Name** (`queueNameOrArn`), which holds the account.
+    
+
+For example, for the queue `orders` of the account `123456789012`:
+
+```yaml
+queueNameOrArn: orders
+region: eu-west-1
+queueOwnerAWSAccountId: "123456789012"
 ```
 
 ### Through an HTTP Proxy

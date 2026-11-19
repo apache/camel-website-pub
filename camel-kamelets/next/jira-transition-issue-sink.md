@@ -12,7 +12,7 @@ Input: the `ce-issueKey` header (the key of the issue, such as `SHOP-42`) and th
 
 Output: the message is unchanged.
 
-Good to know: a message without one of the two headers fails, and so does a transition that the workflow does not allow from the current status of the issue. Jira lists the transitions possible for an issue, with their IDs, at `<jiraUrl>/rest/api/2/issue/<key>/transitions`. Log in either with `username` and `password`, or with `personal-token`.
+Good to know: a message without one of the two headers fails, and so does a transition that the workflow does not allow from the current status of the issue. Jira lists the transitions possible for an issue, with their IDs, at `<jiraUrl>/rest/api/2/issue/<key>/transitions`. Log in either with `username` and `password`, or with `personal-token`. Headers that start with `CamelJira` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

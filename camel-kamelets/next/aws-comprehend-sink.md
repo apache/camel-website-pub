@@ -12,7 +12,7 @@ Input: the body is the text to analyze.
 
 Output: when it is used inside a route, the body afterwards is what was found, as objects of the AWS SDK for Java (not JSON text): a List for most operations, such as the languages with their scores for `detectDominantLanguage` or the entities for `detectEntities`, and the sentiment with its scores for `detectSentiment`. Headers give the main result: `CamelAwsComprehendDetectedLanguage` with its score, or `CamelAwsComprehendDetectedSentiment` with its scores.
 
-Good to know: every operation except `detectDominantLanguage` needs `languageCode`, and a message fails without it. `classifyDocument` needs `endpointArn`. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: every operation except `detectDominantLanguage` needs `languageCode`, and a message fails without it. `classifyDocument` needs `endpointArn`. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsComprehend` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

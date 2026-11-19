@@ -10,7 +10,7 @@ Use it to react to files that another program writes into a directory on the sam
 
 Output: the body is the file that changed, which the next step can read as text or bytes; a deleted file or a directory has no content to read. The `CamelFileEventType` header is `CREATE`, `MODIFY` or `DELETE`, `CamelFileName` is the path of the file relative to the watched directory, and `CamelFileAbsolutePath` is its full path.
 
-Good to know: it watches the subdirectories too, new ones included. It never changes or deletes the files. Only changes made while it runs are sent, not the files that are already there when it starts. The path must be a directory, not a single file; it is created when it does not exist. On Kubernetes, mount the directory into the pod as a volume.
+Good to know: it watches the subdirectories too, new ones included, unless `recursive` is false. To send only the changes of some files, set `antInclude`. It never changes or deletes the files. Only changes made while it runs are sent, not the files that are already there when it starts. The path must be a directory, not a single file; it is created when it does not exist. On Kubernetes, mount the directory into the pod as a volume.
 
 ## Configuration Options
 
@@ -20,7 +20,9 @@ The following table summarizes the configuration options available for the `file
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **events** | Events | **Required** The kinds of change to send, as a comma-separated list of `CREATE`, `MODIFY` and `DELETE`. For example, `CREATE` sends only the new files. | string | CREATE,MODIFY,DELETE | CREATE |
-| **filePath** | Directory to Watch | **Required** The full path of the local directory to watch. It must be a directory, not a single file: to follow one file, watch its directory. Changes in its subdirectories are sent too. | string |  | /data/incoming |
+| **filePath** | Directory to Watch | **Required** The full path of the local directory to watch. It must be a directory, not a single file: to follow one file, watch its directory. Changes in its subdirectories are sent too, unless `recursive` is false. | string |  | /data/incoming |
+| **antInclude** | Include Files (Wildcards) | A wildcard pattern that the path of a file must match for its changes to be sent, such as `**/**.csv****`****. The path is relative to `filePath`, such as `2026/orders.csv`.** matches any part of a name, and** any number of directories: `**.csv**` **matches the CSV files in `filePath` only, and** `*/*.csv` those in the subdirectories too. Upper and lower case differ. When it is not set, the changes of all the files are sent. | string |  | **\*/**.csv |
+| **recursive** | Recursive | If true, the changes in the subdirectories of `filePath` are sent too, new subdirectories included. If false, only the changes of the files and directories directly in `filePath` are sent. | boolean | true |  |
 
 ## Dependencies
 
@@ -75,6 +77,10 @@ The File Watch Source Kamelet monitors files or directories for changes and emit
     
 -   **Events**: The types of filesystem events to watch for (default: "CREATE,MODIFY,DELETE")
     
+-   **Include Files (Wildcards)**: A wildcard pattern for the path of the files whose changes to send, such as `***/**.csv` (not set by default: all files)
+    
+-   **Recursive**: Whether the changes in the subdirectories are sent too (default: true)
+    
 
 ### Event Types
 
@@ -91,7 +97,7 @@ You can specify multiple events by separating them with commas.
 
 ### Output Format
 
-The body of each message is the file that changed. The `CamelFileEventType` header holds the kind of event (`CREATE`, `MODIFY` or `DELETE`), `CamelFileName` the path relative to the watched directory, and `CamelFileAbsolutePath` the full path. Subdirectories are watched too. A deleted file, or a directory, has no content to read.
+The body of each message is the file that changed. The `CamelFileEventType` header holds the kind of event (`CREATE`, `MODIFY` or `DELETE`), `CamelFileName` the path relative to the watched directory, and `CamelFileAbsolutePath` the full path. Subdirectories are watched too, unless **Recursive** is false. A deleted file, or a directory, has no content to read.
 
 ### Volume Mounting
 
@@ -142,6 +148,23 @@ This example only monitors for modifications of the files in the `/var/log/myapp
 ```
 
 This example monitors for file creation and deletion events in the documents directory.
+
+### Example with a File Pattern
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:file-watch-source"
+      parameters:
+        filePath: "/data/incoming"
+        events: "CREATE"
+        antInclude: "**/*.csv"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+This sends a message for each new CSV file in `/data/incoming` and its subdirectories, and for no other file or directory. The pattern matches the path below `filePath`, such as `2026/orders.csv`: **matches any part of a name and** `*` any number of directories, so `*.csv` alone matches only the files directly in `/data/incoming`. Upper and lower case differ. With `recursive: false`, only the changes directly in `filePath` are sent, which includes a new subdirectory itself but not the files in it.
 
 ## Kamelet source file
 

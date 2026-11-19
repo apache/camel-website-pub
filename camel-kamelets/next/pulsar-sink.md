@@ -8,11 +8,11 @@ Sends each message to a topic in Apache Pulsar, named by its tenant, namespace a
 
 Use it to publish events or data for other applications to read from Pulsar, such as orders or sensor readings. Use `pulsar-source` to read them.
 
-Input: the body is the payload, as text or bytes. A Map fails: turn it into JSON text first, for example with `json-serialize-action`. The headers of the message are not sent as Pulsar properties; to set properties, put a Map in the `CamelPulsarProducerMessageProperties` header. The optional `CamelPulsarProducerMessageKey` header becomes the key of the message.
+Input: the body is the payload, as text or bytes. A Map fails: turn it into JSON text first, for example with `json-serialize-action`. The headers of the message are not sent as Pulsar properties; to set properties, put a Map in the `CamelPulsarProducerMessageProperties` header. The optional `key` header becomes the key of the message, as the `key` header that `pulsar-source` sets; the `CamelPulsarProducerMessageKey` header takes precedence over it.
 
 Output: the message is unchanged.
 
-Good to know: it connects with no TLS and no login, unless `serviceUrl` starts with `pulsar+ssl://` and `authenticationClass` is set. It connects when the integration starts, and the integration fails to start when Pulsar cannot be reached, unless `lazyStart` is true.
+Good to know: it connects with no TLS and no login, unless `serviceUrl` starts with `pulsar+ssl://` and `authenticationClass` is set. Over TLS, the certificate of Pulsar must be signed by an authority that the Java trust store of the integration trusts; for a private one, point `javax.net.ssl.trustStore` at a trust store with it, as the Kamelet has no trust store option. It connects when the integration starts, and the integration fails to start when Pulsar cannot be reached, unless `lazyStart` is true. Headers that start with `CamelPulsar`, except `CamelPulsarProducerMessageKey` and `CamelPulsarProducerMessageProperties`, are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -28,7 +28,7 @@ The following table summarizes the configuration options available for the `puls
 | **topicType** | Topic Type | **Required** Whether the topic is `persistent`, which stores the messages until they are read, or `non-persistent`, which stores nothing and drops the messages that no one is subscribed to. Enum values: \* persistent \* non-persistent | string |  |  |
 | **authenticationClass** | Authentication Class | The Java class of the Pulsar authentication plugin to log in with, such as `org.apache.pulsar.client.impl.auth.AuthenticationToken` for a token. Leave it empty for a Pulsar without login. | string |  | org.apache.pulsar.client.impl.auth.AuthenticationToken |
 | **authenticationParams** | Authentication Params | The settings of the plugin in `authenticationClass`, in the form that plugin expects: for `AuthenticationToken`, `token:` followed by the token. | string |  |  |
-| **batchingEnabled** | Enable Batching | If true, messages sent close together are grouped and sent to Pulsar in one batch. | boolean | true |  |
+| **batchingEnabled** | Enable Batching | If true, messages sent close together are grouped and sent to Pulsar in one batch. A batch goes to one receiver of a `KEY_SHARED` subscription as a whole, whatever the keys of its messages; set it to false to have the keys spread over the receivers. | boolean | true |  |
 | **batchingMaxMessages** | Batching Maximum Messages | The most messages in one batch. Only used when `batchingEnabled` is true. | integer | 1000 |  |
 | **batchingMaxPublishDelayMicros** | Batch Publish Delay | How long to wait for more messages to fill a batch before sending it, in microseconds. For example, 1000 is one millisecond. Only used when `batchingEnabled` is true. | integer | 1000 |  |
 | **blockIfQueueFull** | Block If Queue Full | What happens when `maxPendingMessages` messages are already waiting for Pulsar to confirm them: if true, sending waits until there is room; if false, the message fails. | boolean | false |  |
@@ -116,6 +116,37 @@ Designed for cloud-native deployments with:
     
 -   Serverless computing integration
     
+
+### Message Key
+
+The optional `key` header becomes the key of the message. Pulsar keeps the messages with the same key in order on one partition, and a `KEY_SHARED` subscription hands them to the same receiver. `pulsar-source` sets the `key` header, so the key is kept when one Kamelet feeds the other. The `CamelPulsarProducerMessageKey` header takes precedence over `key`.
+
+A batch of messages goes to one receiver of a `KEY_SHARED` subscription as a whole, whatever the keys in it. Set `batchingEnabled` to `false` to have the keys spread over the receivers.
+
+### Usage example
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:timer-source"
+      parameters:
+        message: "order placed"
+      steps:
+        - setHeader:
+            name: key
+            constant: "customer-7"
+        - to:
+            uri: "kamelet:pulsar-sink"
+            parameters:
+              serviceUrl: "pulsar://localhost:6650"
+              topicType: "persistent"
+              tenant: "public"
+              namespaceName: "default"
+              topic: "orders"
+              batchingEnabled: false
+```
+
+For TLS, use a `pulsar+ssl://` address in `serviceUrl`. The Kamelet has no trust store option: the certificate of Pulsar is checked against the Java trust store of the integration, which `javax.net.ssl.trustStore` can point at.
 
 ## Kamelet source file
 

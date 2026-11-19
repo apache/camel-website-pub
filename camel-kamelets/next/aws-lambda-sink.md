@@ -12,7 +12,7 @@ Input: the body is the event given to the function, as JSON text, such as `{"ord
 
 Output: when it is used inside a route, the body afterwards is what the function returned, as text (JSON text for most functions). The `CamelAwsLambdaStatusCode` header holds the status code of the call.
 
-Good to know: an error raised inside the function does not fail the message: the body is then the error that the function reported, and the `CamelAwsLambdaFunctionError` header is set, for example to `Unhandled`. A function that does not exist fails the message. Each call waits until the function ends. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: an error raised inside the function does not fail the message: the body is then the error that the function reported, and the `CamelAwsLambdaFunctionError` header is set, for example to `Unhandled`. A function that does not exist fails the message. Each call waits until the function ends; the function cannot be called asynchronously (invocation type `Event`). Set `operation` to read the settings, versions or aliases of the function instead of calling it, or to publish a new version; the body afterwards is then the answer of AWS, an object of the AWS SDK for Java, such as a `GetFunctionConfigurationResponse` (not JSON text). To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsLambda` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -24,6 +24,7 @@ The following table summarizes the configuration options available for the `aws-
 | **function** | Function Name | **Required** The name of the Lambda function to call, as shown in the Lambda console. The ARN of the function also works. | string |  | my-function |
 | **region** | AWS Region | **Required** The AWS region of the function, such as `eu-west-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
 | **accessKey** | Access Key | The access key ID of an IAM user, which AWS gives when you create an access key for the user (in the AWS console: IAM, Users, Security credentials). Use it together with `secretKey`, or leave both empty and set `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` instead. | string |  |  |
+| **operation** | Operation | What to do with each message: `invokeFunction` calls the function; `getFunction` and `getFunctionConfiguration` read the settings of the function, such as its runtime, memory and timeout (`getFunction` adds the location of its code and its tags); `listVersions` and `listAliases` list its published versions and aliases; `publishVersion` publishes the current code and settings as a new version; `listFunctions` lists all the functions of the region. Only `invokeFunction` uses the body. When it is not set, the function is called. Enum values: \* invokeFunction \* getFunction \* getFunctionConfiguration \* listVersions \* listAliases \* publishVersion \* listFunctions | string |  | getFunctionConfiguration |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile to use from the AWS credentials file. Only used when `useProfileCredentialsProvider` is true. | string |  |  |
 | **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
 | **proxyPort** | Proxy Port | The port of the proxy in `proxyHost`, such as `3128` for Squid. Used only together with `proxyHost`. | integer |  | 3128 |
@@ -102,6 +103,35 @@ You can also use the Profile Credentials Provider, by setting the `useProfileCre
 Only one of access key/secret key or default credentials provider could be used
 
 For more information, see the [AWS credentials documentation](https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/credentials.md)
+
+### Reading the Settings of a Function or Publishing a Version
+
+By default, the Kamelet calls the function for each message and waits for its result. Set `operation` to do something else with the function named in `function`:
+
+-   `getFunction` and `getFunctionConfiguration`: read the settings of the function, such as its runtime, memory and timeout; `getFunction` adds the location of its code and its tags.
+    
+-   `listVersions` and `listAliases`: list the published versions and the aliases of the function.
+    
+-   `publishVersion`: publish the current code and settings of the function as a new version.
+    
+-   `listFunctions`: list all the functions of the region.
+    
+
+These operations do not use the body. The body afterwards is the answer of AWS, an object of the AWS SDK for Java, such as a `GetFunctionConfigurationResponse`, not JSON text.
+
+The function cannot be called asynchronously (invocation type `Event`): each call waits until the function ends.
+
+The step that sends to the Kamelet, in a route, to publish a new version of the function:
+
+```yaml
+- to:
+    uri: "kamelet:aws-lambda-sink"
+    parameters:
+      function: "my-function"
+      region: "eu-west-1"
+      useDefaultCredentialsProvider: true
+      operation: "publishVersion"
+```
 
 ### Through an HTTP Proxy
 

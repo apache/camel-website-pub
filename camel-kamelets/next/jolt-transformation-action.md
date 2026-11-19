@@ -12,7 +12,7 @@ Input: parsed JSON, a Map (or a List). Since Camel 4.24, JSON text, bytes and a 
 
 Output: the body is the result as parsed JSON, a Map (or a List), not JSON text. Add `json-serialize-action` after it to get JSON text. The headers are kept.
 
-Good to know: the specification cannot read headers, only the body. It is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message.
+Good to know: the specification cannot read headers, only the body. It is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message. Headers that start with `CamelJolt` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

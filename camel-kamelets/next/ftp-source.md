@@ -10,7 +10,7 @@ Use it to collect the files that a partner or a legacy system drops on an FTP se
 
 Output: the body is the content of the file, as a stream. The `file` and `ce-file` headers hold the name of the file, with its path below `directoryName` when `recursive` is true, such as `2026/orders.csv`. `CamelFileName` holds the same name, and `CamelFileLength` the size of the file in bytes.
 
-Good to know: files are not deleted or moved after they are read, unless `delete` is true or `move` is set. A file is read only once while the integration runs (`idempotent`), but the files left on the server are all read again after a restart; to read each file only once, also across restarts, set `move` to a directory such as `.done`, set `delete` to true, or keep the list of the files read in a file with `idempotentRepository`. The connection and the login are not encrypted. Files are transferred in ASCII (text) mode unless `binary` is true.
+Good to know: files are not deleted or moved after they are read, unless `delete` is true or `move` is set. A file is read only once while the integration runs (`idempotent`), but the files left on the server are all read again after a restart; to read each file only once, also across restarts, set `move` to a directory such as `.done`, set `delete` to true, or keep the list of the files read in a file with `idempotentRepository`. To read only some of the files, set `include`, `exclude` or `antInclude`. To leave a file alone while another program is still writing it, set `readLock`. The connection and the login are not encrypted. Files are transferred in ASCII (text) mode unless `binary` is true.
 
 ## Configuration Options
 
@@ -24,15 +24,29 @@ The following table summarizes the configuration options available for the `ftp-
 | **directoryName** | Directory Name | **Required** The directory on the server to read the files from. A path without a leading `/` is relative to the home directory of the user. | string |  | outgoing/orders |
 | **password** | Password | **Required** The password of `username` on the FTP server. | string |  |  |
 | **username** | Username | **Required** The user to log in to the FTP server as. | string |  |  |
+| **antInclude** | Include Files (Wildcards) | Wildcard patterns, separated by commas, that the path of a file must match to be read, such as `**.csv,**.xml`. The path is relative to `directoryName`, such as `2026/orders.csv` when `recursive` is true. **matches any part of a name and **any number of directories, so** `.csv` matches the CSV files in `directoryName` only, and** `/*.csv` those in the subdirectories too. Upper and lower case differ. When it is not set, all the files are read. | string |  | **\*/**.csv |
 | **autoCreate** | Autocreate Missing Directories | If true, `directoryName` is created on the server when it does not exist. | boolean | true |  |
 | **binary** | Binary Mode | If true, files are transferred in binary mode, byte for byte. When false, they are transferred in ASCII mode, which is meant for text. Set it to true for files that are not text, such as images, archives or PDF files. | boolean | false |  |
+| **connectTimeout** | Connect Timeout | How long to wait for the connection to the FTP server, in milliseconds, and then for its first answer. A connection that fails is tried 3 times before the poll is skipped. When it is not set, 10000. | integer |  | 10000 |
+| **dataTimeout** | Data Timeout | How long to wait for data while a file or the list of the files is transferred, in milliseconds, before the poll fails. When it is not set, 30000. | integer |  | 30000 |
+| **delay** | Poll Interval | How long to wait between two polls of the directory, in milliseconds. For example, 60000 polls once a minute. When it is not set, 500. | integer |  | 60000 |
 | **delete** | Delete | If true, each file is deleted from the server once it has been read and handed on successfully. Use it to read each file only once, also across restarts. To keep the files, set `move` instead. | boolean | false |  |
+| **exclude** | Exclude Files | A regular expression for the names of the files not to read, such as `.*\.(tmp|part)`. The whole name must match, upper and lower case count as the same, and only the name is matched, not its directory. A file it matches is not read, even when `include` or `antInclude` matches it too. | string |  | .\*\\.(tmp|part) |
 | **idempotent** | Skip Files Already Read | If true, a file is read only once while the integration runs, even when it stays on the server. The list of the files read is kept in memory, so after a restart the files still on the server are read again, unless `move` or `delete` takes them away, or `idempotentRepository` keeps the list elsewhere. If false, and neither `delete` nor `move` is set, the same files are read again on every poll. | boolean | true |  |
 | **idempotentRepository** | Files Read Store | The name of a bean that keeps the list of the files read, so that the files left on the server are not read again after a restart, such as a `FileIdempotentRepository` that keeps the list in a file. Declare the bean in the integration, for example under `beans` in YAML. Only used when `idempotent` is true. When it is not set, the list is kept in memory. | string |  | readFiles |
+| **include** | Include Files | A regular expression that the name of a file must match to be read, such as `.*\.csv` for the CSV files. The whole name must match, upper and lower case count as the same, and only the name is matched, not its directory. The other files stay on the server. When it is not set, all the files are read. | string |  | .\*\\.csv |
+| **maxMessagesPerPoll** | Max Files Per Poll | The largest number of files to read in one poll, such as 100. The other files are read at the next polls. The poll takes the first files the server lists, and `sortBy` sorts only these. When it is not set, or 0, all the files found are read. | integer |  | 100 |
 | **move** | Move After Read | Where to move each file on the server once it has been read and handed on successfully, so that it is not read again, also after a restart. A directory name, such as `.done`, is relative to the directory of the file. A path that ends with the name of the file, such as `done/$\\{date:now:yyyyMMdd}/$\\{file:name}`, is relative to `directoryName`, where `$\\{file:name}` is the name of the file and `$\\{date:now:yyyyMMdd}` today’s date. A directory whose name starts with a dot is never read, which matters when `recursive` is true. Missing directories are created, so `username` must be allowed to create directories and to rename files. When it is not set, files stay where they are. When `delete` is true too, the integration fails to start. | string |  | .done |
 | **moveFailed** | Move Failed Files To | Where to move a file on the server when it could not be handed on, for example because the next step failed, so that it is not read over and over. The same format as `move`, such as `.error`. When it is not set, a file that fails stays where it is and is read again at every poll. It can be set together with `delete` or `move`. | string |  | .error |
 | **passiveMode** | Passive Mode | If true, the transfers use passive mode, in which the integration opens all the connections to the server. Set it to true when the integration or the server is behind a firewall or NAT, where the default active mode often fails. | boolean | false |  |
+| **preMove** | Move Before Read | Where to move each file on the server before it is read, so that another reader of the same directory does not take it too. The same format as `move`, such as `.inprogress`, a directory next to the file. `move`, `moveFailed` and `delete` then act on the file in its new place, so with `move` set to `.done` the file ends up in `.inprogress/.done`. When it is not set, a file is read where it is. | string |  | .inprogress |
+| **readLock** | Wait Until Written | How to make sure that another program has finished writing a file before it is read. `changed` reads a file once its size and modification time have not changed between two checks 5 seconds apart, or, with `readLockMinAge`, once the file is that old. A file still changing after 20 seconds is skipped until the next poll, and while a file is checked the other files wait. `changed` never reads an empty file. `rename` reads a file once it can be renamed. `none` reads the files as they are. When it is not set, `none`. Enum values: \* none \* changed \* rename | string |  | changed |
+| **readLockMinAge** | Minimum File Age | Only used when `readLock` is `changed`: how old a file must be, in milliseconds, before it is read, counted from its modification time on the server. For example, 60000 leaves a file alone until it has not been changed for one minute. A file that is not old enough is skipped until the next poll, after 20 seconds of checks. The clocks of the server and of the integration must agree. FTP servers give the modification time only to the minute, and in their own time zone: when that is not the time zone of the integration, files look older or younger by the difference, so a server on UTC seen from an integration on Central European Time makes every file look one hour older, and it is read at once. | integer |  | 60000 |
 | **recursive** | Recursive | If true, the files in the subdirectories of `directoryName` are read too. | boolean | false |  |
+| **socketTimeout** | Socket Timeout | How long to wait for the answer of the server to a command, in milliseconds, before the poll fails. When it is not set, 300000 (5 minutes). | integer |  | 60000 |
+| **sortBy** | Sort By | The order in which the files of a poll are read. `file:name` sorts them by name, `file:modified` by modification time and `file:length` by size. Put `reverse:` before it for the reverse order, such as `reverse:file:modified` for the newest first. Separate several sorts with `;`, such as `file:modified;file:name`. FTP servers give the modification time only to the minute, so files changed in the same minute keep the order of the server. When it is not set, the files are read in the order the server lists them. | string |  | file:modified |
+| **stepwise** | Change Directory Stepwise | If true, the integration changes into the directory of a file, one level at a time, to read it. If false, it uses the full path of the file instead, which some servers need. It must be false when `streamDownload` is true. When it is not set, true. | boolean |  |  |
+| **streamDownload** | Stream Download | If true, each file is read from the server while it is handed on, instead of being downloaded into memory first, and the body is a stream. Use it for files too large for memory. It saves memory only when the integration does not keep the stream in memory either: set `camel.main.streamCachingSpoolEnabled=true`, which writes large bodies to a temporary file, or turn stream caching off. It needs `stepwise` set to false, or every file fails. When it is not set, false. | boolean |  |  |
 
 ## Dependencies
 
@@ -112,6 +126,34 @@ The FTP Source Kamelet supports the following configurations:
 -   **Move**: Where to move each file on the server after it has been read, such as `.done`, so that it is not read again, also after a restart (not set by default). It cannot be combined with **Delete**
     
 -   **Move Failed**: Where to move a file on the server when it could not be handed on, such as `.error` (not set by default). When not set, a file that fails is read again at every poll
+    
+-   **Include Files**: A regular expression that the name of a file must match to be read, such as `.*\.csv`; upper and lower case count as the same (not set by default)
+    
+-   **Exclude Files**: A regular expression for the names of the files not to read; it wins over **Include Files** and **Include Files (Wildcards)** (not set by default)
+    
+-   **Include Files (Wildcards)**: Wildcard patterns for the path below the directory, such as `**.csv**` **or** `*/*.csv`; upper and lower case differ (not set by default)
+    
+-   **Move Before Read**: Where to move each file before it is read, such as `.inprogress` (not set by default)
+    
+-   **Wait Until Written**: `changed` reads a file only once it has stopped changing, `rename` once it can be renamed (default: none)
+    
+-   **Minimum File Age**: With `changed`, how old a file must be before it is read, in milliseconds (not set by default)
+    
+-   **Poll Interval**: How long to wait between two polls, in milliseconds (default: 500)
+    
+-   **Max Files Per Poll**: The largest number of files read in one poll (not set by default: all)
+    
+-   **Sort By**: The order of the files in a poll, such as `file:modified` or `reverse:file:name` (not set by default: the order of the server)
+    
+-   **Stream Download**: Read each file from the server while it is handed on, instead of into memory first (default: false)
+    
+-   **Change Directory Stepwise**: Change into the directory of a file one level at a time; must be false with **Stream Download** (default: true)
+    
+-   **Connect Timeout**: How long to wait for the connection, in milliseconds (default: 10000)
+    
+-   **Socket Timeout**: How long to wait for the answer to a command, in milliseconds (default: 300000)
+    
+-   **Data Timeout**: How long to wait for data while a file or a listing is transferred, in milliseconds (default: 30000)
     
 
 ### Output Format
@@ -221,6 +263,97 @@ The file must be on storage that survives a restart of the integration, such as 
 ```
 
 This example deletes files after processing and disables idempotency to allow re-processing of files with the same name.
+
+### Example with File Filters and Files Still Being Written
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:ftp-source"
+      parameters:
+        connectionHost: "ftp.example.com"
+        username: "ftpuser"
+        password: "ftppass"
+        directoryName: "/incoming"
+        recursive: true
+        antInclude: "**/*.csv"
+        exclude: "draft-.*"
+        readLock: "changed"
+        sortBy: "file:modified"
+        maxMessagesPerPoll: 100
+        delay: 60000
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+Once a minute, this reads the CSV files in `/incoming` and its subdirectories, except those whose names start with `draft-`, at most 100 of them in each poll, the oldest first. **Include Files (Wildcards)** matches the path below the directory, and upper and lower case differ: `*.csv` alone would match only the files directly in `/incoming`. **Include Files** and **Exclude Files** are regular expressions that match the name of the file alone, whatever the case. With **Max Files Per Poll**, a poll takes the first files the server lists and sorts only these.
+
+`readLock: changed` reads a file only once its size and modification time have not changed for 5 seconds, so a file that another program is still uploading is left alone. It never reads an empty file, and while it checks a file the other files wait. With **Minimum File Age**, a file is read only once it is that old instead. FTP servers list the modification time only to the minute and in their own time zone, so use **Minimum File Age** only when the server and the integration are in the same time zone; otherwise every file looks older or younger by the difference. **Sort By** `file:modified` is also only to the minute.
+
+The files a poll reads can be moved out of the way first with **Move Before Read**, so that a second integration reading the same directory does not take them too:
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:ftp-source"
+      parameters:
+        connectionHost: "ftp.example.com"
+        username: "ftpuser"
+        password: "ftppass"
+        directoryName: "/incoming"
+        preMove: ".inprogress"
+        move: ".done"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+Each file is moved to `.inprogress` before it is read, and from there to `.done` once it has been handed on, so it ends up in `/incoming/.inprogress/.done`.
+
+### Example with Large Files
+
+By default each file is downloaded into memory before it is handed on. For files too large for that, set **Stream Download**:
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:ftp-source"
+      parameters:
+        connectionHost: "ftp.example.com"
+        username: "ftpuser"
+        password: "ftppass"
+        directoryName: "/exports"
+        streamDownload: true
+        stepwise: false
+        binary: true
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+Camel keeps a message body that is a stream in memory too, unless told otherwise, so also set `camel.main.streamCachingSpoolEnabled=true` in the application properties: large bodies are then written to a temporary file. In a test with 256 MB of memory, a 400 MB file failed with an out of memory error without **Stream Download**, and with it but without spooling, and was read with both. **Stream Download** needs **Change Directory Stepwise** set to false, or every file fails.
+
+### Example with Timeouts
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:ftp-source"
+      parameters:
+        connectionHost: "ftp.example.com"
+        username: "ftpuser"
+        password: "ftppass"
+        directoryName: "/incoming"
+        connectTimeout: 5000
+        socketTimeout: 60000
+        dataTimeout: 30000
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+**Connect Timeout** is how long to wait for the connection and the first answer of the server; a connection that fails is tried 3 times before the poll is skipped. **Socket Timeout** is how long to wait for the answer to a command, 5 minutes by default, and **Data Timeout** how long to wait for data while a file or the list of the files is transferred. When one of them runs out, the poll fails and the next poll connects again.
 
 ## Kamelet source file
 

@@ -12,7 +12,7 @@ Input: the body is the content of the file, as text, bytes or a stream. The name
 
 Output: the message is unchanged. The `CamelFileNameProduced` header is set to the path of the file on the server.
 
-Good to know: a file with the same name is replaced, unless `fileExist` says otherwise. A file is uploaded under its real name from the start, so a reader that polls the directory can pick it up half-written. To prevent that, set `tempPrefix` to upload it under a temporary name and rename it once it is complete, or `doneFileName` to write an empty done file next to it once it is complete. It uses explicit TLS: it connects to the normal FTP port, usually 21, and then switches to TLS. A server that only accepts implicit TLS, usually on port 990, is not supported. A file name that points outside `directoryName` fails the message. Files are sent in ASCII (text) mode unless `binary` is true.
+Good to know: a file with the same name is replaced, unless `fileExist` says otherwise. A file is uploaded under its real name from the start, so a reader that polls the directory can pick it up half-written. To prevent that, set `tempPrefix` to upload it under a temporary name and rename it once it is complete, or `doneFileName` to write an empty done file next to it once it is complete. By default it uses explicit TLS: it connects to the normal FTP port, usually 21, and then switches to TLS. For a server that uses implicit TLS, usually on port 990, set `implicit` to true. A file name that points outside `directoryName` fails the message. Files are sent in ASCII (text) mode unless `binary` is true. Headers that start with `CamelFile` or `CamelOverruleFile`, except `CamelFileName`, are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -22,7 +22,7 @@ The following table summarizes the configuration options available for the `ftps
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **connectionHost** | Connection Host | **Required** The host name or IP address of the FTPS server, without `ftps://` and without a port. | string |  | ftps.example.com |
-| **connectionPort** | Connection Port | **Required** The port of the FTPS server, usually 21. The Kamelet connects with explicit TLS, so use the normal FTP port, not the implicit TLS port 990. | string | 21 |  |
+| **connectionPort** | Connection Port | **Required** The port of the FTPS server, usually 21, or 990 when `implicit` is true. | string | 21 |  |
 | **directoryName** | Directory Name | **Required** The directory on the server to write the files to. A path without a leading `/` is relative to the home directory of the user. It is created when it does not exist, unless `autoCreate` is false. | string |  | upload/orders |
 | **password** | Password | **Required** The password of `username` on the FTPS server. | string |  |  |
 | **username** | Username | **Required** The user to log in to the FTPS server as. | string |  |  |
@@ -30,6 +30,7 @@ The following table summarizes the configuration options available for the `ftps
 | **binary** | Binary Mode | If true, files are transferred in binary mode, byte for byte. When false, they are transferred in ASCII mode, which is meant for text. Set it to true for files that are not text, such as images, archives or PDF files. | boolean | false |  |
 | **doneFileName** | Done File Name | The name of an empty file to write next to each file once the file is complete, so that a reader knows the file can be read. `$\\{file:name}` stands for the name of the file and `$\\{file:name.noext}` for the name without its extension, so `$\\{file:name}.done` writes `orders.csv.done`, and `$\\{file:name.noext}.ready` writes `orders.ready`. A fixed name, such as `ready`, is written again after each file. No other `$\\{…​}` is allowed, and with one the file is uploaded but then the message fails. With `tempPrefix`, the done file is written after the file has its real name. When it is not set, no done file is written. | string |  | ${file:name}.done |
 | **fileExist** | If File Exists | What to do when a file with the same name is already in the directory. `Override` replaces it, `Append` adds the new content at its end, `Fail` fails the message, and `Ignore` keeps the old file and drops the new content without an error. Enum values: \* Override \* Append \* Fail \* Ignore | string | Override |  |
+| **implicit** | Implicit TLS | If true, the connection uses implicit TLS: it is encrypted from the start, usually on port 990. If false, it uses explicit TLS: it connects to the normal FTP port, usually 21, and then switches to TLS. Use the mode the server expects; the other one fails to connect. When it is not set, false. | boolean |  |  |
 | **passiveMode** | Passive Mode | If true, the transfers use passive mode, in which the integration opens all the connections to the server. Set it to true when the integration or the server is behind a firewall or NAT, where the default active mode often fails. | boolean | false |  |
 | **tempPrefix** | Temporary Name Prefix | A prefix for the name a file is uploaded under. Once the upload is complete, the file is renamed to its real name, so a reader that skips the names with this prefix never picks up a half-written file. `ftps-source`, like other readers built with Camel, skips the names that start with a dot, so a prefix such as `.tmp-`, which uploads `orders.csv` as `.tmp-orders.csv`, works with it as it is. A prefix that ends with `/`, such as `.inprogress/`, uploads the file into that subdirectory first, and the subdirectory is created when it does not exist, unless `autoCreate` is false. When it is not set, a file is uploaded under its real name from the start. With `fileExist` `Override`, a file of the same name is deleted when the upload starts, not when it ends. It cannot be combined with `fileExist` `Append`, and every message fails when both are set. `username` must be allowed to rename files. | string |  | .tmp- |
 
@@ -87,7 +88,7 @@ FTPS provides secure file transfer over encrypted connections using SSL/TLS prot
 
 ### Connection Configuration
 
-Requires: - Connection host (FTPS server hostname) - Connection port (defaults to 21) - Username and password credentials - Directory name for file operations
+Requires: - Connection host (FTPS server hostname) - Connection port (defaults to 21; usually 990 with implicit TLS) - Username and password credentials - Directory name for file operations
 
 ### File Transfer Options
 
@@ -102,6 +103,8 @@ Requires: - Connection host (FTPS server hostname) - Connection port (defaults t
 -   **Temporary Name Prefix**: Upload each file under a temporary name, such as `.tmp-orders.csv`, and rename it to its real name once it is complete (not set by default)
     
 -   **Done File Name**: Write an empty done file next to each file once it is complete, such as `orders.csv.done` (not set by default)
+    
+-   **Implicit TLS**: Use implicit TLS, usually on port 990, instead of explicit TLS on the normal FTP port (default: false)
     
 
 ### Optional Headers
@@ -140,6 +143,29 @@ By default a file is uploaded under its real name from the start, so a reader th
 ```
 
 Each file is uploaded as `.tmp-orders.csv` and renamed to `orders.csv` once the upload is complete, and then an empty `orders.csv.done` is written next to it. The FTPS Source Kamelet, like other readers built with Camel, skips the names that start with a dot, so it never reads a half-written file; another reader can wait for the `.done` file. In **doneFileName**, `${file:name}` stands for the name of the file and `${file:name.noext}` for the name without its extension; no other `${…​}` is allowed. The user needs the right to rename files on the server. **tempPrefix** cannot be combined with **fileExist** set to `Append`, and with `Override` a file of the same name is deleted when the upload starts.
+
+### Example with Implicit TLS
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:timer-source"
+      parameters:
+        message: "Hello"
+      steps:
+        - to:
+            uri: "kamelet:ftps-sink"
+            parameters:
+              connectionHost: "ftps.example.com"
+              connectionPort: "990"
+              username: "ftpsuser"
+              password: "ftpspass"
+              directoryName: "/upload"
+              implicit: true
+              passiveMode: true
+```
+
+By default the Kamelet uses explicit TLS: it connects to the normal FTP port, usually 21, and then switches to TLS. A server that uses implicit TLS, usually on port 990, expects an encrypted connection from the start: set **Implicit TLS** for it.
 
 ## Kamelet source file
 

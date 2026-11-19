@@ -12,6 +12,8 @@ Input: XML or JSON as text, bytes or a stream, as `direction` says. Parsed JSON,
 
 Output: the body is JSON text or XML text. From XML, the root element is dropped, its attributes and child elements become fields, repeated elements become an array, and all values are text: `<order id="7"><qty>2</qty></order>` gives `{"id":"7","qty":"2"}`. To XML, each JSON value becomes an `object` element that keeps its name and type in `xj:name` and `xj:type` attributes, such as `<object xj:name="qty" xj:type="int">2</object>`. The headers are kept.
 
+Good to know: Headers that start with `CamelXslt` are removed from the message first, so they cannot change what the Kamelet does.
+
 ## Configuration Options
 
 The following table summarizes the configuration options available for the `xj-identity-action` Kamelet:

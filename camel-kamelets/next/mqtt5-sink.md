@@ -12,7 +12,7 @@ Input: the body is the payload, as text or bytes, and is sent as it is. Turn str
 
 Output: the message is unchanged.
 
-Good to know: messages are published with quality of service 2 (exactly once) unless `qos` is set, and the broker does not keep them for clients that subscribe later unless `retained` is true. It connects with no TLS unless `brokerUrl` starts with `ssl://`. With TLS it checks the certificate and the host name of the broker, and trusts the certificate authorities that Java trusts by default, or instead the ones in `sslTruststoreLocation`. It connects when the integration starts, and the integration fails to start when the broker cannot be reached or fails these checks.
+Good to know: messages are published with quality of service 2 (exactly once) unless `qos` is set, and the broker does not keep them for clients that subscribe later unless `retained` is true. It connects with no TLS unless `brokerUrl` starts with `ssl://`. With TLS it checks the certificate and the host name of the broker, and trusts the certificate authorities that Java trusts by default, or instead the ones in `sslTruststoreLocation`. It connects when the integration starts, and the integration fails to start when the broker cannot be reached or fails these checks. Headers that start with `CamelPaho` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

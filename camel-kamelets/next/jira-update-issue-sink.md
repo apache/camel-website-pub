@@ -12,7 +12,7 @@ Input: the body becomes the new description of the issue, as text, and replaces 
 
 Output: the message is unchanged.
 
-Good to know: a message with a body always replaces the description, even when it also has the `ce-issueDescription` header. An issue type or a priority whose name Jira does not know is ignored. A message without `ce-issueKey` fails. Log in either with `username` and `password`, or with `personal-token`.
+Good to know: a message with a body always replaces the description, even when it also has the `ce-issueDescription` header. An issue type or a priority whose name Jira does not know is ignored. A message without `ce-issueKey` fails. Log in either with `username` and `password`, or with `personal-token`. Headers that start with `CamelJira` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

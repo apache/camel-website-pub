@@ -10,7 +10,7 @@ Use it to watch a Solr collection on a schedule, for example to send the documen
 
 Output: the body is JSON text, the answer of Solr: `responseHeader`, and under `response` the list of the documents found, each with its fields. The `Content-Type` header is `application/json`.
 
-Good to know: every query returns all the matching documents again, not only the new ones; filter on a date in the query to get only new documents. Each query returns only the first documents found: as many as `size`, or 10 with the usual Solr settings when `size` is not set. It connects with plain HTTP by default; set `enableSSL` to true for a Solr that is reached with HTTPS, and give the certificate in `certificate` when Solr uses a self-signed certificate.
+Good to know: every query returns all the matching documents again, not only the new ones; filter on a date in the query to get only new documents. Each query returns only the first documents found: as many as `size`, or 10 with the usual Solr settings when `size` is not set. It connects with plain HTTP by default; set `enableSSL` to true for a Solr that is reached with HTTPS, and give the certificate in `certificate` when Solr uses a self-signed certificate. The query runs on the `/select` handler of the collection, or on the one in `requestHandler`. When Solr does not answer, the query fails only after 10 minutes; set `requestTimeout` to fail sooner. A query that fails is logged, and the next one runs at the next period.
 
 ## Configuration Options
 
@@ -24,8 +24,11 @@ The following table summarizes the configuration options available for the `solr
 | **query** | Query | **Required** The query to run, in the Solr query syntax, as given in the `q` parameter of a Solr search, such as `**:**` for every document or `status_s:new`. | string |  | status\_s:new |
 | **servers** | Servers | **Required** The address of the Solr server, as `host:port`, without `http://` and without the `/solr` path. The port of Solr is 8983 by default. | string |  | solr.example.com:8983 |
 | **certificate** | Certificate | The certificate of Solr, or of the certificate authority (CA) that signed it, as a PEM or DER file encoded in base64 on one line, such as the output of `base64 -w0 solr.crt` (`base64 -i solr.crt` on macOS). Needed when Solr uses a self-signed certificate, or one that Java does not trust. When it is not set, the certificates that Java trusts are used. Only used when `enableSSL` is true. | string |  |  |
+| **connectionTimeout** | Connection Timeout | How long to wait for the connection to Solr, in milliseconds. When it is not set, it is 60000, which is one minute. | integer |  | 5000 |
 | **enableSSL** | Enable SSL | If true, it connects with HTTPS. Leave it false for a Solr that is reached with plain HTTP. | boolean | false |  |
 | **password** | Password | The password of the Solr user in `username`. | string |  |  |
+| **requestHandler** | Request Handler | The path of the search handler of the collection that runs the query, such as `/query` or `/newOrders`, a handler defined in the configuration of the collection, for example with its own defaults or filters. When it is not set, `/select` is used. | string |  | /query |
+| **requestTimeout** | Request Timeout | How long to wait for the answer of Solr to each query, in milliseconds. When Solr has not answered in time, the query fails, the error is logged, and the next query runs at the next period. When it is not set, it is 600000, which is 10 minutes. | integer |  | 30000 |
 | **size** | Maximum Documents | The most documents each query returns, as the `rows` parameter of a Solr search. When it is not set, Solr decides, which is 10 with the usual Solr settings. | integer |  | 100 |
 | **username** | Username | The Solr user to log in as, with Basic authentication. Leave it out for a Solr without login. | string |  |  |
 
@@ -101,7 +104,13 @@ The Kamelet requires the following properties:
 -   `period`: the time between two queries, in milliseconds
     
 
-Optional properties include `size` (the most documents each query returns), `enableSSL` and `certificate` (HTTPS), and `username` and `password` (Basic authentication).
+Optional properties include `size` (the most documents each query returns), `requestHandler` (the search handler that runs the query), `connectionTimeout` and `requestTimeout`, `enableSSL` and `certificate` (HTTPS), and `username` and `password` (Basic authentication).
+
+### Request handler and timeouts
+
+The query runs on the `/select` handler of the collection. To run it on another search handler, defined in the configuration of the collection, for example with its own defaults or filters, give its path in `requestHandler`, such as `/query`.
+
+When Solr does not answer, the query fails only after 10 minutes. `requestTimeout` is how long to wait for the answer of Solr to each query, and `connectionTimeout` how long to wait for the connection, both in milliseconds. A query that fails is logged, and the next one runs at the next period.
 
 ### Usage example
 
@@ -114,6 +123,24 @@ Optional properties include `size` (the most documents each query returns), `ena
         collection: "products"
         query: "status_s:new"
         period: 60000
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+### Example with more than 10 documents and a timeout
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:solr-source"
+      parameters:
+        servers: "solr.example.com:8983"
+        collection: "orders"
+        query: "status_s:new"
+        period: 60000
+        size: 500
+        requestTimeout: 30000
       steps:
         - to:
             uri: "kamelet:log-sink"

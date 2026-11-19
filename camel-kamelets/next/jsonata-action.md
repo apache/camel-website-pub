@@ -12,7 +12,7 @@ Input: parsed JSON, such as a Map, a List, or the output of `json-deserialize-ac
 
 Output: the body is the result of the expression, as parsed JSON (a Jackson `JsonNode`), not as text: add `json-serialize-action` after it to get JSON text. The headers are kept.
 
-Good to know: put `json-deserialize-action` before it when the body is JSON text, as depending on the Camel version the expression sees JSON text as one string rather than as an object, and bytes or a stream fail. The expression is loaded from the `template` location; it cannot come from the message.
+Good to know: put `json-deserialize-action` before it when the body is JSON text, as depending on the Camel version the expression sees JSON text as one string rather than as an object, and bytes or a stream fail. The expression is loaded from the `template` location; it cannot come from the message. Headers that start with `CamelJsonata` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

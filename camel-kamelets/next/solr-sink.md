@@ -12,7 +12,7 @@ Input: the body is JSON text: an object for one document, such as `{"id": "order
 
 Output: when it is used inside a route, the body afterwards is the answer of Solr, as a Map-like object with its `responseHeader`.
 
-Good to know: a body that is not JSON fails the message. With `autocommit` false, the default, the documents become searchable only when Solr commits them, as set in the configuration of the collection. It connects with plain HTTP by default; set `enableSSL` to true for a Solr that is reached with HTTPS, and give the certificate in `certificate` when Solr uses a self-signed certificate.
+Good to know: a body that is not JSON fails the message. With `autocommit` false, the default, the documents become searchable only when Solr commits them, as set in the configuration of the collection. It connects with plain HTTP by default; set `enableSSL` to true for a Solr that is reached with HTTPS, and give the certificate in `certificate` when Solr uses a self-signed certificate. Headers that start with `CamelSolr` are removed from the message first, so they cannot change what the Kamelet does. The documents go to the `/update` handler of the collection, or to the one in `requestHandler`. When Solr does not answer, a message fails only after 10 minutes, and the first one over plain HTTP after twice as long; set `requestTimeout` to fail sooner.
 
 ## Configuration Options
 
@@ -25,8 +25,11 @@ The following table summarizes the configuration options available for the `solr
 | **servers** | Servers | **Required** The address of the Solr server, as `host:port`, without `http://` and without the `/solr` path. The port of Solr is 8983 by default. | string |  | solr.example.com:8983 |
 | **autocommit** | Autocommit | If true, Solr commits after each message, so the documents can be searched at once. Commits are costly, so leave it false for many messages and let Solr commit on its own schedule. | boolean | false |  |
 | **certificate** | Certificate | The certificate of Solr, or of the certificate authority (CA) that signed it, as a PEM or DER file encoded in base64 on one line, such as the output of `base64 -w0 solr.crt` (`base64 -i solr.crt` on macOS). Needed when Solr uses a self-signed certificate, or one that Java does not trust. When it is not set, the certificates that Java trusts are used. Only used when `enableSSL` is true. | string |  |  |
+| **connectionTimeout** | Connection Timeout | How long to wait for the connection to Solr, in milliseconds. When it is not set, it is 60000, which is one minute. Over plain HTTP, the first message can wait twice as long, as the Solr client first checks the server with a `HEAD` request. | integer |  | 5000 |
 | **enableSSL** | Enable SSL | If true, it connects with HTTPS. Leave it false for a Solr that is reached with plain HTTP. | boolean | false |  |
 | **password** | Password | The password of the Solr user in `username`. | string |  |  |
+| **requestHandler** | Request Handler | The path of the request handler of the collection to send the documents to, such as `/update/catalog`, a handler defined in the configuration of the collection, for example with its own defaults or update chain. When it is not set, `/update` is used. | string |  | /update/catalog |
+| **requestTimeout** | Request Timeout | How long to wait for the answer of Solr to each message, in milliseconds. When Solr has not answered in time, the message fails. When it is not set, it is 600000, which is 10 minutes. Over plain HTTP, the first message can wait twice as long, as the Solr client first checks the server with a `HEAD` request. | integer |  | 30000 |
 | **username** | Username | The Solr user to log in as, with Basic authentication. Leave it out for a Solr without login. | string |  |  |
 
 ## Dependencies
@@ -118,6 +121,32 @@ Solr provides advanced search features including:
     
 -   Analytics and aggregations
     
+
+### Request Handler and Timeouts
+
+The documents are sent to the `/update` handler of the collection. To send them to another update handler, defined in the configuration of the collection, for example with its own update chain, give its path in `requestHandler`.
+
+When Solr does not answer, a message fails only after 10 minutes. `requestTimeout` is how long to wait for the answer of Solr to each message, and `connectionTimeout` how long to wait for the connection, both in milliseconds. Over plain HTTP, the Solr client first checks the server with a `HEAD` request, so the first message can wait twice as long.
+
+### Example
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:timer-source"
+      parameters:
+        message: '{"id": "order-42", "status_s": "shipped"}'
+        contentType: application/json
+      steps:
+        - to:
+            uri: "kamelet:solr-sink"
+            parameters:
+              servers: "solr.example.com:8983"
+              collection: "orders"
+              requestHandler: "/update/orders"
+              connectionTimeout: 5000
+              requestTimeout: 30000
+```
 
 ## Kamelet source file
 

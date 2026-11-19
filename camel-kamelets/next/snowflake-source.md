@@ -10,7 +10,7 @@ Use it to pick up the rows that another application adds to a table, such as new
 
 Output: the body is one row as JSON text, an object with the column names as keys, such as `{"id":1,"username":"oscerd","city":"Rome"}`. The `Content-Type` header is `application/json`.
 
-Good to know: the query runs again `delay` milliseconds after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again. A query that finds no rows sends nothing. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version. Log in with `password`, or with a key pair in `privateKey` or `privateKeyFile`: a Snowflake user of type SERVICE, meant for applications, cannot log in with a password. When a key is set, the password is not used.
+Good to know: the query runs again `delay` milliseconds after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again. A query that finds no rows sends nothing. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version. Log in with `password`, or with a key pair in `privateKey` or `privateKeyFile`: a Snowflake user of type SERVICE, meant for applications, cannot log in with a password. When a key is set, the password is not used. `warehouse`, `schema` and `role` choose what the session uses; when they are not set, the defaults of the user apply, and a user with no default warehouse cannot run a query that needs one. Each poll logs in to Snowflake anew, as the Kamelet keeps no connection open between polls.
 
 ## Configuration Options
 
@@ -29,6 +29,9 @@ The following table summarizes the configuration options available for the `snow
 | **privateKey** | Private Key | The private key to log in with instead of a password: the key file in PEM format, encoded in base64 on a single line, such as the output of `base64 -w0 rsa_key.p8`. The PEM text itself, which starts with `-----BEGIN`, is not accepted. The matching public key must be set on the user with `ALTER USER …​ SET RSA_PUBLIC_KEY`. Set this or `privateKeyFile`, not both: with both, every connection fails. | string |  |  |
 | **privateKeyFile** | Private Key File | The path of the private key file to log in with instead of a password, in PEM format, such as `rsa_key.p8` made as the Snowflake guide to key-pair authentication shows. In Kubernetes, mount the Secret that holds the key as a file. The matching public key must be set on the user with `ALTER USER …​ SET RSA_PUBLIC_KEY`. A path that does not exist makes every connection fail with `Invalid parameter value null`. | string |  | /etc/snowflake/rsa\_key.p8 |
 | **privateKeyPassphrase** | Private Key Passphrase | The passphrase of the key in `privateKey` or `privateKeyFile`, when the key is encrypted: its PEM text then starts with `-----BEGIN ENCRYPTED PRIVATE KEY-----`. Without it, or with a wrong one, every connection fails. | string |  |  |
+| **role** | Role | The Snowflake role to run the queries as, which must be granted to the user `username`. When it is not set, the default role of the user is used, as set with `ALTER USER …​ SET DEFAULT_ROLE`. | string |  | READER |
+| **schema** | Schema | The schema of `databaseName` that holds the tables `query` names, such as `PUBLIC`. When it is not set, the default of the user applies. A table of another schema can still be named in full in `query`, as `SCHEMA.TABLE`. | string |  | SALES |
+| **warehouse** | Warehouse | The Snowflake virtual warehouse that runs the queries. When it is not set, the default warehouse of the user `username` is used, as set with `ALTER USER …​ SET DEFAULT_WAREHOUSE`. With neither, a query that needs a warehouse fails. | string |  | COMPUTE\_WH |
 
 ## Dependencies
 
@@ -106,6 +109,8 @@ The Kamelet requires database connection parameters:
     
 -   `databaseName` (optional): the Snowflake database that holds the tables
     
+-   `schema`, `warehouse` and `role` (optional): the schema of `databaseName` that holds the tables, the virtual warehouse that runs the queries, and the role to run them as. See below.
+    
 -   `username`: the Snowflake user to log in as, with `password`, or with a key pair in `privateKey` or `privateKeyFile`
     
 -   `query`: the SQL query to run, such as `SELECT * FROM accounts WHERE processed = false`
@@ -132,6 +137,42 @@ The route below logs each account that is not processed yet, and marks it as pro
         - to:
             uri: "kamelet:log-sink"
 ```
+
+### Warehouse, Schema and Role
+
+The Kamelet sends these with each login, so the session starts with them:
+
+-   `warehouse`: the virtual warehouse that runs the queries, such as `COMPUTE_WH`.
+    
+-   `schema`: the schema of `databaseName` that holds the tables, such as `SALES`.
+    
+-   `role`: the role to run the queries as. It must be granted to the user.
+    
+
+When one is not set, the default of the user applies, as set with `ALTER USER …​ SET DEFAULT_WAREHOUSE`, `DEFAULT_NAMESPACE` or `DEFAULT_ROLE`. A user with no default warehouse needs `warehouse` for a query that reads a table.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:snowflake-source"
+      parameters:
+        instanceUrl: "myorg-myaccount.snowflakecomputing.com"
+        username: "ORDERS_SERVICE"
+        privateKeyFile: "/etc/snowflake/rsa_key.p8"
+        databaseName: "SHOP"
+        schema: "SALES"
+        warehouse: "REPORTING_WH"
+        role: "ORDERS_READER"
+        query: "SELECT * FROM accounts WHERE processed = false"
+        consumedQuery: "UPDATE accounts SET processed = true WHERE id = :#id"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+### Connections
+
+The Kamelet keeps no connection to Snowflake open between polls: each poll logs in again, and starts a new session.
 
 ### Example with a Key Pair
 

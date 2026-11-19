@@ -4,15 +4,15 @@
 
 **Support Level for this Kamelet is: "Stable"**
 
-Sends one data point of a custom metric to Amazon CloudWatch for each message, with the name, the value and the unit of the metric taken from headers.
+Sends one data point of a custom metric to Amazon CloudWatch for each message, with the name, the value and the unit of the metric taken from headers or options.
 
 Use it to record business or technical numbers from an integration, such as orders processed, items in stock or processing time, and to graph them or set alarms on them in CloudWatch.
 
-Input: the body is not used. The `metric-name` header (or `ce-metricname`) is the name of the metric, and is required. The optional `metric-value` header (or `ce-metricvalue`) is the value, a number, 1 when it is not set. The optional `metric-unit` header (or `ce-metricunit`) is the unit, such as `Count`, `Seconds`, `Bytes` or `Percent`, `Count` when it is not set. The optional `metric-dimension-name` and `metric-dimension-value` headers (or `ce-metricdimensionname` and `ce-metricdimensionvalue`) add one dimension, such as `Region` and `eu`. The optional `metric-timestamp` header (or `ce-metrictimestamp`) is the time of the data point.
+Input: the body is not used. The `metric-name` header (or `ce-metricname`) is the name of the metric; it is required unless the `metricName` option is set. The optional `metric-value` header (or `ce-metricvalue`) is the value, a number; when it is not set, the value is `metricValue`, or 1. The optional `metric-unit` header (or `ce-metricunit`) is the unit, such as `Count`, `Seconds`, `Bytes` or `Percent`; when it is not set, the unit is `metricUnit`, or `Count`. A header wins over the option. The optional `metric-dimension-name` and `metric-dimension-value` headers (or `ce-metricdimensionname` and `ce-metricdimensionvalue`) add one dimension, such as `Region` and `eu`. The optional `metric-timestamp` header (or `ce-metrictimestamp`) is the time of the data point.
 
 Output: the message is unchanged.
 
-Good to know: a message without a metric name, or with a value that is not a number, fails. The time in `metric-timestamp` must be a Java `Instant` or `Date`: text is ignored, and then the data point gets the time it is sent. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
+Good to know: a message without a metric name, when `metricName` is not set either, fails, and so does a value that is not a number or a unit that CloudWatch does not know. Set the options to send the same metric for every message, for example `metricName` `OrdersProcessed` to count the messages. The time in `metric-timestamp` must be a Java `Instant` or `Date`: text is ignored, and then the data point gets the time it is sent. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsCw` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -24,6 +24,9 @@ The following table summarizes the configuration options available for the `aws-
 | **cwNamespace** | CloudWatch Namespace | **Required** The namespace that groups your metrics in CloudWatch, such as `MyApp/Orders`. It must not start with `AWS/`, which is kept for the metrics of AWS services. | string |  | MyApp/Orders |
 | **region** | AWS Region | **Required** The AWS region of the metrics, as a region code such as `eu-west-1` or `us-east-1`. Enum values: \* ap-south-1 \* eu-south-1 \* us-gov-east-1 \* me-central-1 \* ca-central-1 \* eu-central-1 \* us-iso-west-1 \* us-west-1 \* us-west-2 \* af-south-1 \* eu-north-1 \* eu-west-3 \* eu-west-2 \* eu-west-1 \* ap-northeast-3 \* ap-northeast-2 \* ap-northeast-1 \* me-south-1 \* sa-east-1 \* ap-east-1 \* cn-north-1 \* us-gov-west-1 \* ap-southeast-1 \* ap-southeast-2 \* us-iso-east-1 \* ap-southeast-3 \* us-east-1 \* us-east-2 \* cn-northwest-1 \* us-isob-east-1 \* aws-global \* aws-cn-global \* aws-us-gov-global \* aws-iso-global \* aws-iso-b-global | string |  | eu-west-1 |
 | **accessKey** | Access Key | The access key ID of an IAM user, which you create in the AWS console under IAM, Users, Security credentials. Use it together with `secretKey`. Leave both out when `useDefaultCredentialsProvider` or `useProfileCredentialsProvider` is true. | string |  |  |
+| **metricName** | Metric Name | The name of the metric, such as `OrdersProcessed`, for the messages without a `metric-name` header. Up to 255 characters, which can be letters, digits, spaces and punctuation. When neither is set, the message fails. | string |  | OrdersProcessed |
+| **metricUnit** | Metric Unit | The unit of the value, for the messages without a `metric-unit` header. When neither is set, the unit is `Count`. Enum values: \* Seconds \* Microseconds \* Milliseconds \* Bytes \* Kilobytes \* Megabytes \* Gigabytes \* Terabytes \* Bits \* Kilobits \* Megabits \* Gigabits \* Terabits \* Percent \* Count \* Bytes/Second \* Kilobytes/Second \* Megabytes/Second \* Gigabytes/Second \* Terabytes/Second \* Bits/Second \* Kilobits/Second \* Megabits/Second \* Gigabits/Second \* Terabits/Second \* Count/Second \* None | string |  | Milliseconds |
+| **metricValue** | Metric Value | The value of the data point, a number, for the messages without a `metric-value` header. When neither is set, the value is 1. | number |  | 1 |
 | **overrideEndpoint** | Endpoint Overwrite | If true, it connects to the address in `uriEndpointOverride` instead of to AWS. Use it for a local stand-in of AWS such as LocalStack. | boolean | false |  |
 | **profileCredentialsName** | Profile Credentials Name | The name of the profile in the AWS credentials file. Only used when `useProfileCredentialsProvider` is true; when it is not set, the default profile is used. | string |  | production |
 | **proxyHost** | Proxy Host | The host name or IP address of an HTTP proxy to send the calls to AWS through, such as the proxy of a company network. Used only together with `proxyPort`. When it is not set, the calls go straight to AWS. | string |  | proxy.example.com |
@@ -121,6 +124,22 @@ In this Kamelet you could use the following headers for metrics:
     
 -   `metric-dimension-value` / `ce-metricdimensionvalue` for the dimension value.
     
+
+### The Same Metric for Every Message
+
+To send the same metric for every message, set `metricName`, and `metricValue` and `metricUnit` if needed, instead of the headers. A header wins over the option, so a message can still send another metric. Without a value, the value is 1, and without a unit, the unit is `Count`: with only `metricName`, the metric counts the messages.
+
+The step that sends to the Kamelet, in a route:
+
+```yaml
+- to:
+    uri: "kamelet:aws-cloudwatch-sink"
+    parameters:
+      cwNamespace: "MyApp/Orders"
+      region: "eu-west-1"
+      useDefaultCredentialsProvider: true
+      metricName: "OrdersProcessed"
+```
 
 ### Through an HTTP Proxy
 

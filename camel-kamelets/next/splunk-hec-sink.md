@@ -12,7 +12,7 @@ Input: the body is the event, as text or as structured data such as a Map, which
 
 Output: the message is unchanged.
 
-Good to know: when `index`, `source` and `sourceType` are not set, the events go to the index `camel` with the source and source type `camel`, so set them for your Splunk. The `host` field of the event is the IP address of the machine that runs the integration, unless `hostPayload` is set. It connects with HTTPS and checks the certificate of the server, unless `https` or `skipTlsVerify` say otherwise.
+Good to know: when `index`, `source` and `sourceType` are not set, the events go to the index `camel` with the source and source type `camel`, so set them for your Splunk. The `host` field of the event is the IP address of the machine that runs the integration, unless `hostPayload` is set. It connects with HTTPS and checks the certificate of the server, unless `https` or `skipTlsVerify` say otherwise. Headers that start with `CamelSplunkHEC` are removed from the message first, so they cannot change what the Kamelet does. It sends to the event endpoint `/services/collector/event`; with `splunkEndpoint` set to `/services/collector/raw`, Splunk stores the whole JSON object as raw text instead, and `index`, `source` and `sourceType` no longer apply. A response other than 200, such as a wrong path, fails the message.
 
 ## Configuration Options
 
@@ -31,6 +31,7 @@ The following table summarizes the configuration options available for the `splu
 | **skipTlsVerify** | Skip TLS Verification | If true, the certificate of the Splunk server is not checked. Use it only for tests with a self-signed certificate. | boolean | false |  |
 | **source** | Source | The value of the `source` field of every event, which tells where the events come from. When it is not set, `camel` is used. | string |  | shop-orders |
 | **sourceType** | Source Type | The value of the `sourcetype` field of every event, which tells Splunk how to read the events, such as `_json`. When it is not set, `camel` is used. | string |  | \_json |
+| **splunkEndpoint** | Splunk Endpoint | The path of the HTTP Event Collector endpoint to send to, starting with `/`, optionally followed by query parameters. When it is not set, it is `/services/collector/event`. With `/services/collector/raw`, Splunk stores the whole JSON object that the Kamelet sends as the text of the event, and takes the index, source and source type from the token and from query parameters, not from `index`, `source` and `sourceType`, such as `/services/collector/raw?index=main&sourcetype=_json`. | string |  | /services/collector/raw |
 | **time** | Time | The time of every event, as the number of seconds since 1 January 1970 (UTC). When it is not set, Splunk uses the time the event arrives. | string |  | 1700000000 |
 
 ## Dependencies
@@ -136,6 +137,26 @@ Ideal for sending various types of data to Splunk for:
     
 -   Machine learning and anomaly detection
     
+
+### Event and Raw Endpoints
+
+By default the Kamelet sends to the event endpoint, `/services/collector/event`, and Splunk takes the index, the source and the source type of each event from `index`, `source` and `sourceType`. With `splunkEndpoint` set to `/services/collector/raw`, Splunk stores the whole JSON object that the Kamelet sends as the raw text of the event. The index, the source and the source type then come from the token, or from query parameters on the path:
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:timer-source"
+      parameters:
+        period: 10000
+        message: "hello"
+      steps:
+        - to:
+            uri: "kamelet:splunk-hec-sink"
+            parameters:
+              splunkUrl: "my_server.splunkcloud.com:8088"
+              token: "12345678-1234-1234-1234-123456789012"
+              splunkEndpoint: "/services/collector/raw?index=main&sourcetype=_json"
+```
 
 ## Kamelet source file
 

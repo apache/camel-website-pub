@@ -12,7 +12,7 @@ Input: JSON text, bytes or a stream. The transformation sees the body as `.` and
 
 Output: the body is the result as JSON text. The headers are kept.
 
-Good to know: parsed JSON (a Map or a JsonNode, such as the output of `json-deserialize-action`) fails the message: give the JSON as text. A field whose value is missing, such as a header that is not set, is left out of the result. The transformation is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message.
+Good to know: parsed JSON (a Map or a JsonNode, such as the output of `json-deserialize-action`) fails the message: give the JSON as text. A field whose value is missing, such as a header that is not set, is left out of the result. The transformation is loaded from a file, the classpath or a URL given by the `template` option; it cannot come from the message. Headers that start with `CamelJslt` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

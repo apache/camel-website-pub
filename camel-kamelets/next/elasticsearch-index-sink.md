@@ -12,7 +12,7 @@ Input: the body is the document, as JSON text, such as `{"order": 42, "status": 
 
 Output: when it is used inside a route, the body afterwards is the id of the document, as text.
 
-Good to know: a body that is not JSON fails the message, and so does a message with no index, from the option or the header. It connects with TLS by default (`enableSSL`); for a server with a self-signed certificate, give its certificate in `certificate`.
+Good to know: a body that is not JSON fails the message, and so does a message with no index, from the option or the header. It connects with TLS by default (`enableSSL`). For a cluster whose certificate is self-signed, or signed by a private certificate authority (CA), give the certificate of that CA in `certificate`; without it, the message fails with `PKIX path building failed`. When Elasticsearch does not answer, the message fails after 30 seconds; `connectionTimeout` and `socketTimeout` change that. Headers that start with `CamelElasticsearch` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -23,10 +23,12 @@ The following table summarizes the configuration options available for the `elas
 | --- | --- | --- | --- | --- | --- |
 | **clusterName** | ElasticSearch Cluster Name | **Required** The name of the Elasticsearch cluster. Required, but not checked against the cluster. | string |  | quickstart |
 | **hostAddresses** | Host Addresses | **Required** The address of the Elasticsearch HTTP API, as `host:port`, or several nodes separated by commas. The port is 9200 by default. | string |  | quickstart-es-http:9200 |
-| **certificate** | Certificate | The certificate of the certificate authority (CA) that signed the certificate of the cluster, such as the `http_ca.crt` file of Elasticsearch, as PEM text encoded in base64. Needed when the cluster uses a self-signed certificate. | string |  |  |
+| **certificate** | Certificate | The certificate of the certificate authority (CA) that signed the certificate of the cluster, such as the `http_ca.crt` file that Elasticsearch generates, as a PEM or DER file encoded in base64 on one line, such as the output of `base64 -w0 http_ca.crt` (`base64 -i http_ca.crt` on macOS). Needed when the cluster uses a self-signed certificate, or one signed by a private CA. When it is set, only this CA is trusted; when it is not set, the certificates that Java trusts are used. | string |  |  |
+| **connectionTimeout** | Connection Timeout | How long to wait for the connection to Elasticsearch, in milliseconds. When it is not set, it is 30000, which is 30 seconds. | integer |  | 5000 |
 | **enableSSL** | Enable SSL | If true, it connects with HTTPS. Set it to false for a cluster that is reached with plain HTTP. | boolean | true |  |
 | **indexName** | Index in ElasticSearch | The name of the index to store the documents in. Elasticsearch creates it when it does not exist. The `indexName` header of a message takes precedence. | string |  | orders |
 | **password** | Password | The password of the Elasticsearch user in `user`. | string |  |  |
+| **socketTimeout** | Socket Timeout | How long to wait for data from Elasticsearch, in milliseconds. When Elasticsearch sends nothing for this long, during the TLS handshake or while it stores the document, the message fails with a `SocketTimeoutException`. When it is not set, it is 30000, which is 30 seconds. | integer |  | 10000 |
 | **user** | Username | The Elasticsearch user to log in as, such as `elastic`. Leave it out for a cluster without security. | string |  |  |
 
 ## Dependencies
@@ -87,9 +89,40 @@ This Kamelet expects JSON-formatted data as input and outputs plain text respons
 
 This Kamelet supports username and password authentication for connecting to ElasticSearch clusters.
 
-### SSL Configuration
+### Trusting a Private Certificate Authority
 
-SSL connection is enabled by default. You can provide a base64-encoded certificate for secure connections to your ElasticSearch cluster.
+The Kamelet connects with HTTPS by default (`enableSSL`). The certificate of the cluster is checked against the certificate authorities (CA) that Java trusts, so a cluster whose certificate is self-signed, or signed by a private CA, fails with `PKIX path building failed`.
+
+Give the certificate of that CA in `certificate`, as a PEM or DER file encoded in base64 on one line. Elasticsearch generates such a CA when it starts with security on, in `config/certs/http_ca.crt`. Encode it with `base64 -w0 http_ca.crt` (`base64 -i http_ca.crt` on macOS). Only this CA is trusted then.
+
+### Timeouts
+
+When Elasticsearch does not answer, the message fails after 30 seconds. `connectionTimeout` is how long to wait for the connection, and `socketTimeout` how long to wait for data from Elasticsearch, both in milliseconds.
+
+### Example
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:timer-source"
+      parameters:
+        message: '{"order": 42, "status": "shipped"}'
+        contentType: application/json
+      steps:
+        - to:
+            uri: "kamelet:elasticsearch-index-sink"
+            parameters:
+              hostAddresses: "es.example.com:9200"
+              clusterName: "quickstart"
+              indexName: "orders"
+              user: "elastic"
+              password: "{{search.password}}"
+              certificate: "{{search.ca}}"
+              connectionTimeout: 5000
+              socketTimeout: 10000
+```
+
+Here `search.ca` is an application property that holds the certificate of the CA, encoded in base64.
 
 ### Index Configuration
 

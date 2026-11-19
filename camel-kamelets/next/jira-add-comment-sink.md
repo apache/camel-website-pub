@@ -12,7 +12,7 @@ Input: the body is the text of the comment, as text. The `ce-issueKey` header, t
 
 Output: the message is unchanged.
 
-Good to know: a message without `ce-issueKey`, or for an issue that does not exist or that the user cannot see, fails. The comment is written in the name of the account the Kamelet logs in with. Log in either with `username` and `password`, or with `personal-token`.
+Good to know: a message without `ce-issueKey`, or for an issue that does not exist or that the user cannot see, fails. The comment is written in the name of the account the Kamelet logs in with. Log in either with `username` and `password`, or with `personal-token`. Headers that start with `CamelJira` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 

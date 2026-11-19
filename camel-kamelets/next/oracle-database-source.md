@@ -8,9 +8,9 @@ Runs an SQL query in an Oracle Database database again and again, and sends each
 
 Use it to pick up the rows that another application adds to a table, such as new orders or events, and pass them on to another system. To write rows, use `oracle-database-sink`.
 
-Output: the body is one row as JSON text, an object with the column names as keys, such as `{"ID":1,"USERNAME":"oscerd","CITY":"Rome"}` (Oracle gives the names in upper case). The `Content-Type` header is `application/json`.
+Output: the body is one row as JSON text, an object with the column names as keys, such as `{"ID":1,"USERNAME":"oscerd","CITY":"Rome"}` (Oracle gives the names in upper case). When `useIterator` is false, the body is instead one JSON array with all the rows of a poll. The `Content-Type` header is `application/json`.
 
-Good to know: the query runs again half a second after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again. A query that finds no rows sends nothing. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version. The JDBC driver of Oracle Database is not included: add `mvn:com.oracle.database.jdbc:ojdbc17` to the dependencies of the integration. Camel JBang (`camel run`) adds it by itself.
+Good to know: the query runs again `delay` milliseconds after the previous run, so the same rows are sent again and again, unless `consumedQuery` marks or deletes each row once it is sent and `query` leaves such rows out: for example `SELECT * FROM accounts WHERE processed = false` with `UPDATE accounts SET processed = true WHERE id = :#id`. When the next step fails for a row, `consumedQuery` is not run for it, and the row is read again, unless `onConsumeFailed` marks it. A query that finds no rows sends nothing. `maxMessagesPerPoll` limits how many rows one poll sends. `query` cannot contain `?`. The format of date and time columns in the JSON depends on the Camel version. The JDBC driver of Oracle Database is not included: add `mvn:com.oracle.database.jdbc:ojdbc17` to the dependencies of the integration. Camel JBang (`camel run`) adds it by itself.
 
 ## Configuration Options
 
@@ -25,7 +25,17 @@ The following table summarizes the configuration options available for the `orac
 | **serverName** | Server Name | **Required** The host name or IP address of the Oracle Database server, without the port. | string |  | db.example.com |
 | **username** | Username | **Required** The database user to log in as. It needs the rights to run the queries of this Kamelet on their tables. | string |  |  |
 | **consumedQuery** | Consumed Query | An SQL statement to run after each row has been sent on, to mark the row as read or to delete it, so that `query` does not return it again. Write `:#column` where the value of a column of that row goes, such as `:#id`. When it is not set, nothing is changed, and the same rows are read on every poll. | string |  | UPDATE accounts SET processed = true WHERE id = :#id |
+| **delay** | Delay | How long to wait after one run of `query` before the next, in milliseconds. | integer | 500 |  |
+| **initialDelay** | Initial Delay | How long to wait after the start before the first run of `query`, in milliseconds. When it is not set, the first run is one second after the start. | integer |  | 10000 |
+| **maxIdle** | Max Idle Connections | The most unused connections to keep open for later. A connection that is given back when this many are unused already is closed. When it is not set, up to 8 are kept open. | integer |  | 2 |
+| **maxMessagesPerPoll** | Max Rows Per Poll | The most rows to read in one poll. The other rows are read by the next polls, as long as `consumedQuery` marks the rows that were sent and `query` leaves them out. When it is not set, every row that `query` returns is sent. | integer |  | 100 |
+| **maxTotal** | Max Connections | The most connections to the database that the Kamelet opens at the same time. While it sends the rows of a poll, the Kamelet keeps one connection, and `consumedQuery`, `onConsumeFailed` and `onConsumeBatchComplete` each need a second one, so do not set it to 1 when you use them. When all of them are in use, the next message waits for one to be free, as long as `maxWaitMillis` allows. When it is not set, the limit is 8. | integer |  | 20 |
+| **maxWaitMillis** | Max Wait | How long to wait for a free connection when `maxTotal` connections are in use, in milliseconds. After that, the message fails. When it is not set, it waits as long as it takes. | integer |  | 5000 |
+| **onConsumeBatchComplete** | Poll Complete Query | An SQL statement to run once after all the rows of one poll have been sent on, such as an UPDATE that marks them all at once. It cannot use `:#column`. It does not run when the query finds no rows. A row added after `query` ran is not sent in this poll, so make sure the statement does not mark it. | string |  | UPDATE poll\_status SET last\_poll = CURRENT\_TIMESTAMP |
+| **onConsumeFailed** | Failed Row Query | An SQL statement to run instead of `consumedQuery` when the next step fails for a row, to mark the row as failed so that `query` leaves it out. Write `:#column` where the value of a column of that row goes, such as `:#id`. When it is not set, nothing is changed for a failed row, and it is read again on the next poll. | string |  | UPDATE accounts SET failed = true WHERE id = :#id |
+| **routeEmptyResultSet** | Send Empty Result | Whether to send a message with an empty JSON array, `[]`, when `query` finds no rows. Only used when `useIterator` is false. When it is not set, nothing is sent when no rows are found. | boolean |  |  |
 | **serverPort** | Server Port | The port of the Oracle listener on the server. Oracle uses 1521 unless it was set up otherwise. | string | 1521 |  |
+| **useIterator** | One Message Per Row | Whether to send each row as a message of its own. When false, all the rows of one poll are sent as one message, a JSON array of objects, such as `[\{"id":1},\{"id":2}]`. `consumedQuery` and `onConsumeFailed` then cannot use `:#column`, but `onConsumeBatchComplete` can mark all the rows at once. When it is not set, each row is a message. | boolean |  |  |
 
 ## Dependencies
 
@@ -82,7 +92,7 @@ This Kamelet connects to Oracle Database with the user name and password of a da
 
 ### Output format
 
-The Kamelet runs `query` again every half second, and sends each row it returns as a message: a JSON object with the column names as keys. Without `consumedQuery`, the same rows are read again on every run.
+The Kamelet runs `query` again `delay` milliseconds after the previous run (half a second when not set), and sends each row it returns as a message: a JSON object with the column names as keys. Without `consumedQuery`, the same rows are read again on every run.
 
 ### Configuration
 
@@ -97,6 +107,8 @@ The Kamelet requires database connection parameters:
 -   `query`: the SQL query to run, such as `SELECT * FROM accounts WHERE processed = false`
     
 -   `consumedQuery` (optional): an SQL statement run for each row once it is sent, to mark the row as read or delete it, such as `UPDATE accounts SET processed = true WHERE id = :#id`
+    
+-   `delay` (optional): how long to wait after one run of `query` before the next, in milliseconds (500 by default)
     
 
 ### Usage example
@@ -117,6 +129,70 @@ The route below logs each account that is not processed yet, and marks it as pro
       steps:
         - to:
             uri: "kamelet:log-sink"
+```
+
+### Reading Rows in Batches
+
+`maxMessagesPerPoll` limits how many rows one poll sends. The other rows are read by the next polls, because `consumedQuery` marks the rows that were sent and `query` leaves them out. `onConsumeFailed` marks a row when the next step fails for it, so that it is not read again and again. `initialDelay` sets how long to wait before the first poll, in milliseconds (one second when not set).
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:oracle-database-source"
+      parameters:
+        serverName: "db.example.com"
+        username: "dbuser"
+        password: "dbpass"
+        databaseName: "ORCLPDB1"
+        query: "SELECT * FROM accounts WHERE processed = 0 AND failed = 0"
+        consumedQuery: "UPDATE accounts SET processed = 1 WHERE id = :#id"
+        onConsumeFailed: "UPDATE accounts SET failed = 1 WHERE id = :#id"
+        maxMessagesPerPoll: 100
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+### All the Rows of a Poll in One Message
+
+With `useIterator` set to false, each poll that finds rows sends one message: a JSON array with all of them. Set `routeEmptyResultSet` to true to also get a message, `[]`, from a poll that finds none.
+
+`consumedQuery` and `onConsumeFailed` cannot use `:#column` in this mode. `onConsumeBatchComplete` runs once after the message is sent, and can mark all the rows at once. A row added after `query` ran is not in the message, so such a statement must not mark it: the example below is only safe when nothing adds rows while the Kamelet polls.
+
+```yaml
+- route:
+    from:
+      uri: "kamelet:oracle-database-source"
+      parameters:
+        serverName: "db.example.com"
+        username: "dbuser"
+        password: "dbpass"
+        databaseName: "ORCLPDB1"
+        query: "SELECT * FROM accounts WHERE processed = 0"
+        useIterator: false
+        onConsumeBatchComplete: "UPDATE accounts SET processed = 1 WHERE processed = 0"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
+```
+
+### Connection Pool
+
+The Kamelet keeps a pool of connections to the database:
+
+-   `maxTotal`: the most connections it opens at the same time, 8 when not set.
+    
+-   `maxIdle`: the most unused connections it keeps open, 8 when not set.
+    
+-   `maxWaitMillis`: how long a message waits for a free connection when `maxTotal` are in use, in milliseconds, before it fails. When not set, it waits as long as it takes.
+    
+
+While it sends the rows of a poll, the source keeps one connection, and `consumedQuery`, `onConsumeFailed` and `onConsumeBatchComplete` each need a second one. Do not set `maxTotal` to 1 when you use them: they then wait for a connection for ever, or fail after `maxWaitMillis`.
+
+```yaml
+maxTotal: 4
+maxIdle: 2
+maxWaitMillis: 5000
 ```
 
 ## Kamelet source file

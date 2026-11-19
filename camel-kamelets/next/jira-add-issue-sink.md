@@ -12,7 +12,7 @@ Input: the body is the description of the issue, as text. The other fields come 
 
 Output: when it is used inside a route, the body afterwards is the issue that was created.
 
-Good to know: a message without a project key, an issue type or a summary fails. Log in either with `username` and `password`, or with `personal-token`.
+Good to know: a message without a project key, an issue type or a summary fails. Log in either with `username` and `password`, or with `personal-token`. Headers that start with `CamelJira` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
