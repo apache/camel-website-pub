@@ -159,6 +159,7 @@ Enum values:
 | **overrideEndpoint** (producer) | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | boolean |
 | **pojoRequest** (producer) | If we want to use a POJO request as body or not. | false | boolean |
 | **profileCredentialsName** (producer) | If using a profile credentials provider, this parameter will set the profile name. |  | String |
+| **queryAllPages** (producer) | For the query operation: read all the pages of the result, and give all the rows in one QueryResponse. Without it, the body is one page, and the CamelAwsTimestreamQueryNextToken header gives the token of the next page. Not used with pojoRequest. | false | boolean |
 | **region** (producer) | 
 
 The region in which the Timestream client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example, ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id().
@@ -386,6 +387,7 @@ Enum values:
 | **overrideEndpoint** (producer) | Set the need for overriding the endpoint. This option needs to be used in combination with the uriEndpointOverride option. | false | boolean |
 | **pojoRequest** (producer) | If we want to use a POJO request as body or not. | false | boolean |
 | **profileCredentialsName** (producer) | If using a profile credentials provider, this parameter will set the profile name. |  | String |
+| **queryAllPages** (producer) | For the query operation: read all the pages of the result, and give all the rows in one QueryResponse. Without it, the body is one page, and the CamelAwsTimestreamQueryNextToken header gives the token of the next page. Not used with pojoRequest. | false | boolean |
 | **region** (producer) | 
 
 The region in which the Timestream client needs to work. When using this parameter, the configuration will expect the lowercase name of the region (for example, ap-east-1) You’ll need to use the name Region.EU\_WEST\_1.id().
@@ -547,7 +549,8 @@ The AWS Timestream component supports the following message header(s), which is/
 | **CamelAwsTimestreamQueryString** (producer) Constant: [`QUERY_STRING`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#QUERY_STRING) | The query string to run. |  | String |
 | **CamelAwsTimestreamQueryId** (producer) Constant: [`QUERY_ID`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#QUERY_ID) | ID of query. |  | String |
 | **CamelAwsTimestreamQueryValidateOnly** (producer) Constant: [`QUERY_VALIDATE_ONLY`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#QUERY_VALIDATE_ONLY) | Validates the prepared query, but does not store for later execution. |  | Boolean |
-| **CamelAwsTimestreamQueryMaxRows** (producer) Constant: [`QUERY_MAX_ROWS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#QUERY_MAX_ROWS) | The total number of rows to be returned in the Query output. |  | Integer |
+| **CamelAwsTimestreamQueryMaxRows** (producer) Constant: [`QUERY_MAX_ROWS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#QUERY_MAX_ROWS) | The maximum number of rows in a page of the Query output. |  | Integer |
+| **CamelAwsTimestreamQueryNextToken** (producer) Constant: [`QUERY_NEXT_TOKEN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#QUERY_NEXT_TOKEN) | The token of a page of a query result. As input, the query operation reads the page of this token; as output, it is the token of the next page, and it is removed after the last page. Set the same query string to read the next page. |  | String |
 | **CamelAwsTimestreamMaxResults** (producer) Constant: [`MAX_RESULTS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#MAX_RESULTS) | Max Results to be returned in output. |  | Integer |
 | **CamelAwsTimestreamScheduleExpression** (producer) Constant: [`SCHEDULE_EXPRESSION`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#SCHEDULE_EXPRESSION) | The schedule expression for the query. |  | String |
 | **CamelAwsTimestreamNotificationTopicArn** (producer) Constant: [`NOTIFICATION_TOPIC_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-timestream/latest/org/apache/camel/component/aws2/timestream/Timestream2Constants.html#NOTIFICATION_TOPIC_ARN) | Notification Topic Arn for the scheduled query. |  | String |
@@ -576,7 +579,7 @@ Not used: the operations of both client types take their input from headers, suc
 
 
  |
-| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the WriteRecordsResponse of writeRecords, or the QueryResponse of query with one page of rows: the next page needs a QueryRequest with its nextToken and pojoRequest=true. |
+| **Producer output** | `pojo` | The response of the AWS SDK for the operation, such as the WriteRecordsResponse of writeRecords, or the QueryResponse of query with one page of rows: the CamelAwsTimestreamQueryNextToken header gives the next page, and queryAllPages=true gives the rows of all the pages. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
@@ -779,6 +782,19 @@ from("direct:query")
             parameters:
               awsTimestreamQueryClient: "#awsTimestreamQueryClient"
               operation: query
+```
+
+### Paging the query results
+
+Timestream returns the result of a query in pages. The body of the `query` operation is one page (a `QueryResponse`), and when more pages follow, the `CamelAwsTimestreamQueryNextToken` header holds the token of the next page. Send the same query again with this header to read the next page; after the last page, the header is removed. A page can be empty while the query still runs, so loop on the header, not on the number of rows. `CamelAwsTimestreamQueryMaxRows` sets the maximum number of rows of a page.
+
+With `queryAllPages=true`, the producer reads all the pages and the body is one `QueryResponse` with the rows of all the pages. Use it only for results that fit in memory.
+
+```java
+from("direct:query")
+    .setHeader(Timestream2Constants.QUERY_STRING, constant("SELECT * FROM testDb.testTable"))
+    .to("aws2-timestream://query:test?operation=query&queryAllPages=true")
+    .log("${body.rows.size} rows");
 ```
 
 ### Using a POJO as body

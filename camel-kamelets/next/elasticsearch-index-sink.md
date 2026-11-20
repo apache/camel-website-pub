@@ -10,7 +10,7 @@ Use it to make records searchable, such as orders, log entries or products, or t
 
 Input: the body is the document, as JSON text, such as `{"order": 42, "status": "shipped"}`. The optional `indexId` header (or `ce-indexid`) is the id of the document: a document with the same id is replaced. Without it, Elasticsearch makes up a new id, so each message adds a new document. The optional `indexName` header (or `ce-indexname`) is the index to write to, instead of the `indexName` option.
 
-Output: when it is used inside a route, the body afterwards is the id of the document, as text.
+Output: when it is used inside a route, the body afterwards is the id of the document, as text. The `Content-Type` header is set to `application/json`.
 
 Good to know: a body that is not JSON fails the message, and so does a message with no index, from the option or the header. It connects with TLS by default (`enableSSL`). For a cluster whose certificate is self-signed, or signed by a private certificate authority (CA), give the certificate of that CA in `certificate`; without it, the message fails with `PKIX path building failed`. When Elasticsearch does not answer, the message fails after 30 seconds; `connectionTimeout` and `socketTimeout` change that. Headers that start with `CamelElasticsearch` are removed from the message first, so they cannot change what the Kamelet does.
 

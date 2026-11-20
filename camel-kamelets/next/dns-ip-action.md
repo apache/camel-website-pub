@@ -10,7 +10,7 @@ Use it to turn a host name into an address for a later step, or to check that a 
 
 Input: the name to look up, taken from the `domain` header, else from the `ce-domain` header, else from the body as text.
 
-Output: the body is one IP address, as text, such as `151.101.2.132`.
+Output: the body is one IP address, as text, such as `151.101.2.132`, and the `Content-Type` header is set to `text/plain`.
 
 Good to know: when a name has several addresses, only one of them is given. A name the DNS does not know fails the message with an unknown host error. The headers are `domain` and `ce-domain`, not `domain-name` as for `dns-lookup-action` and `dns-dig-action`. The Kamelet has no options; it uses the name resolution of the machine it runs on. Headers that start with `CamelDns` are removed from the message first, so they cannot change what the Kamelet does.
 

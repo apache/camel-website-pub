@@ -545,6 +545,10 @@ The FTP consumer (with the same endpoint) does not support concurrency (the back
 
 The FTP producer does **not** have this issue, it supports concurrency.
 
+### File and directory names with a line break
+
+The FTP control connection sends one command per line, so a remote file or directory name with a carriage return or a line feed cannot be sent as the argument of one command. The `ftp` and `ftps` components refuse such a name with a `GenericFileOperationFailedException` before they send any command for it, for example when the producer writes a file whose `CamelFileName` header has a line break. Remove or replace these characters in the name before the producer.
+
 ### Default when consuming files
 
 The FTP consumer will by default leave the consumed files untouched on the remote FTP server. You have to configure it explicitly if you want it to delete the files or move them to another location. For example, you can use `delete=true` to delete the files, or use `move=.done` to move the files into a hidden done subdirectory.

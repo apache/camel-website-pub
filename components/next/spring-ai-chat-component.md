@@ -141,16 +141,18 @@ Enum values:
  | KEYWORD | AiToolSearchStrategy |
 | **userMessage** (producer) | Default user message text for multimodal requests. Can be combined with media data in the message body. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **advisors** (advanced) | List of custom advisors to add to the ChatClient. These advisors will be added after the built-in advisors (SimpleLogger, SafeGuard, ChatMemory, QuestionAnswer) in the order they are provided in the list. |  | List |
-| **chatMemory** (advanced) | **Autowired** ChatMemory instance for maintaining conversation history across requests. When provided, conversation context will be automatically managed using MessageChatMemoryAdvisor. |  | ChatMemory |
-| **chatMemoryVectorStore** (advanced) | VectorStore instance for maintaining conversation history using semantic search. When provided, conversation context will be automatically managed using VectorStoreChatMemoryAdvisor. This is an alternative to chatMemory that uses vector embeddings for long-term memory with semantic retrieval. |  | VectorStore |
+| **advisors** (advanced) | List of custom advisors to add to the ChatClient. These advisors will be added after the built-in advisors (SimpleLogger, SafeGuard, QuestionAnswer) in the order they are provided in the list. When the list has a memory advisor, such as the session advisors, the endpoint adds no memory advisor of its own (sessionService, chatMemory or chatMemoryVectorStore). |  | List |
+| **chatMemory** (advanced) | **Autowired** **Deprecated** ChatMemory instance for maintaining conversation history across requests. When provided, conversation context will be automatically managed using MessageChatMemoryAdvisor. Deprecation note: Spring AI 2.1 deprecates ChatMemory for removal in Spring AI 3.0. Use sessionService. |  | ChatMemory |
+| **chatMemoryVectorStore** (advanced) | VectorStore instance for maintaining conversation history using semantic search. When provided, conversation context will be automatically managed using VectorStoreChatMemoryAdvisor. This is an alternative to sessionService and chatMemory that uses vector embeddings for long-term memory with semantic retrieval. When sessionService or chatMemory is set, it is used instead. |  | VectorStore |
 | **entityClass** (advanced) | The Java class to use for entity response conversion using ChatClient.entity(Class). When specified, the response will be automatically converted to this type instead of returning a String. |  | Class |
 | **maxFileSize** (advanced) | Maximum file size in bytes for multimodal content (images, audio, PDFs, etc.). Files exceeding this size will be rejected with an exception. Default is 1048576 bytes (1MB). Set to 0 to disable size checking (not recommended). | 1048576 | long |
 | **maxTokens** (advanced) | Maximum tokens in the response. |  | Integer |
-| **mcpServer** (advanced) | MCP server configurations. Define servers using prefix notation: mcpServer..transportType=stdio|sse, mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
+| **mcpServer** (advanced) | MCP server configurations. Define servers using prefix notation: mcpServer..transportType=streamableHttp|stdio|sse (sse is deprecated), mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (streamableHttp/sse), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **mcpTimeout** (advanced) | Timeout in seconds for MCP operations including tool execution and initialization. | 20 | int |
 | **outputClass** (advanced) | The Java class to use for BEAN output format conversion. Required when outputFormat is BEAN. |  | Class |
 | **outputFormat** (advanced) | The output format for structured output conversion (BEAN, MAP, LIST). Used in conjunction with outputClass for BEAN format. |  | String |
+| **sessionMessageWindow** (advanced) | The number of the newest messages of the session that sessionService sends to the model, extended back to the start of their turn, so that a tool call is never sent without its result. The session keeps every message. 0 sends the whole session. | 20 | int |
+| **sessionService** (advanced) | **Autowired** Spring AI SessionService for keeping the conversation history across requests, in a session. The CamelSpringAiChatConversationId header selects the session, which is created on first use. Without the header, no memory is used. When it is set, sessionService is used instead of chatMemory and chatMemoryVectorStore. |  | SessionService |
 | **structuredOutputConverter** (advanced) | **Autowired** A StructuredOutputConverter for converting the chat response to structured output (e.g., BeanOutputConverter, MapOutputConverter, ListOutputConverter). When provided, the converter will be used to transform the response into the desired format. |  | StructuredOutputConverter |
 | **structuredOutputValidation** (advanced) | Enable structured output validation with automatic retry on validation failure. When enabled, the StructuredOutputValidationAdvisor validates the response against a JSON Schema and re-prompts the LLM with validation errors if the output is invalid. | false | boolean |
 | **structuredOutputValidationMaxAttempts** (advanced) | Maximum number of retry attempts for structured output validation. | 3 | int |
@@ -200,9 +202,33 @@ The Spring AI Chat component supports the following message header(s), which is/
 | **CamelSpringAiChatEntityClass** (producer) Constant: [`ENTITY_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#ENTITY_CLASS) | The Java class to use for entity response conversion. |  | Class |
 | **CamelSpringAiChatUserMetadata** (producer) Constant: [`USER_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#USER_METADATA) | Metadata to attach to user messages. |  | Map |
 | **CamelSpringAiChatSystemMetadata** (producer) Constant: [`SYSTEM_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#SYSTEM_METADATA) | Metadata to attach to system messages. |  | Map |
-| **CamelSpringAiChatConversationId** (producer) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#CONVERSATION_ID) | Conversation ID for managing separate conversation contexts in chat memory. |  | String |
+| **CamelSpringAiChatConversationId** (producer) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#CONVERSATION_ID) | The conversation ID. It selects the session (sessionService) or the conversation (chatMemory, chatMemoryVectorStore), and is passed to every memory advisor, also to those of the advisors option or of a configured chatClient. Session advisors require it. |  | String |
 | **CamelSpringAiChatMaxFileSize** (producer) Constant: [`MAX_FILE_SIZE`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#MAX_FILE_SIZE) | Maximum file size in bytes for multimodal content. Overrides endpoint configuration. |  | Long |
 | **CamelSpringAiChatFinishReason** (producer) Constant: [`FINISH_REASON`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#FINISH_REASON) | The reason why the chat response generation stopped (e.g., STOP, LENGTH, TOOL\_CALLS). |  | String |
+| **CamelSpringAiChatFinishReasonCategory** (producer) Constant: [`FINISH_REASON_CATEGORY`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#FINISH_REASON_CATEGORY) | 
+The category of the finish reason, the same for every provider: COMPLETED, TRUNCATED (a token or length limit), TOOL\_CALL, FILTERED (a content filter, or a refusal of the SafeGuard advisor), OTHER or UNSPECIFIED.
+
+Enum values:
+
+-   COMPLETED
+    
+-   TRUNCATED
+    
+-   TOOL\_CALL
+    
+-   FILTERED
+    
+-   OTHER
+    
+-   UNSPECIFIED
+    
+
+
+
+
+
+ |  | String |
+| **CamelSpringAiChatReasoning** (producer) Constant: [`REASONING`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#REASONING) | The reasoning of the model for its reply (thinking, thoughts or reasoning content), when the model returns it as text. |  | String |
 | **CamelSpringAiChatModelName** (producer) Constant: [`MODEL_NAME`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#MODEL_NAME) | The name of the AI model used to generate the response. |  | String |
 | **CamelSpringAiChatResponseId** (producer) Constant: [`RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#RESPONSE_ID) | The unique ID of the chat response. |  | String |
 | **CamelSpringAiChatResponseMetadata** (producer) Constant: [`RESPONSE_METADATA`](https://javadoc.io/doc/org.apache.camel/camel-spring-ai-chat/latest/org/apache/camel/component/springai/chat/SpringAiChatConstants.html#RESPONSE_METADATA) | Full response metadata as a Map containing all available metadata fields. |  | Map |
@@ -252,7 +278,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 The component requires a Spring AI `ChatModel` to be configured. The component automatically creates a `ChatClient` internally and handles all the advanced features for you, including:
 
--   **ChatMemory**: Automatic conversation history management via MessageChatMemoryAdvisor or VectorStoreChatMemoryAdvisor
+-   **Memory**: Automatic conversation history management via session memory (SessionAdvisors), VectorStoreChatMemoryAdvisor, or the deprecated MessageChatMemoryAdvisor
     
 -   **VectorStore RAG**: Automatic context retrieval from vector databases via QuestionAnswerAdvisor
     
@@ -525,7 +551,11 @@ The following headers are set after each chat operation:
 
 **Response Metadata Headers:**
 
--   `CamelSpringAiChatFinishReason` - Why the generation stopped (e.g., "STOP", "LENGTH", "TOOL\_CALLS")
+-   `CamelSpringAiChatFinishReason` - Why the generation stopped, as the provider names it (e.g., "STOP", "end\_turn", "LENGTH", "TOOL\_CALLS")
+    
+-   `CamelSpringAiChatFinishReasonCategory` - The category of the finish reason, the same for every provider: `COMPLETED`, `TRUNCATED`, `TOOL_CALL`, `FILTERED`, `OTHER` or `UNSPECIFIED`
+    
+-   `CamelSpringAiChatReasoning` - The reasoning of the model for its reply (thinking, thoughts or reasoning content), when the model returns it as text
     
 -   `CamelSpringAiChatModelName` - The name of the AI model used for the response
     
@@ -536,6 +566,21 @@ The following headers are set after each chat operation:
 
 > **Note**
 > Not all AI models provide all metadata fields. The availability of specific metadata depends on the underlying model and provider. Most models provide at least finish reason and token counts.
+
+The finish reason is named differently by each provider: `stop`, `end_turn` and `STOP` all mean that the model finished its answer. Check `CamelSpringAiChatFinishReasonCategory` instead, so that a route works with any model. For example, an answer cut by the token limit is `TRUNCATED`, and a reply blocked by a content filter, or refused by the SafeGuard advisor (`safeguardSensitiveWords`), is `FILTERED`:
+
+```java
+from("direct:chat")
+    .to("spring-ai-chat:test?chatModel=#chatModel")
+    .choice()
+        .when(header("CamelSpringAiChatFinishReasonCategory").isEqualTo("TRUNCATED"))
+            .log("The answer was cut by the token limit")
+        .when(header("CamelSpringAiChatFinishReasonCategory").isEqualTo("FILTERED"))
+            .log("The reply was filtered or refused")
+    .end();
+```
+
+`CamelSpringAiChatReasoning` holds the text of the reasoning parts of the reply, such as the thinking of Anthropic and Bedrock models, the thoughts of Gemini models, or the `reasoning_content` of DeepSeek and OpenAI-compatible servers. A part with only a summary gives its summary, and a redacted part is left out. The header is not set, and is removed if an earlier call set it, when the reply has no reasoning.
 
 ### Message Metadata
 
@@ -625,20 +670,90 @@ from("direct:chat")
 
 ### Conversation Memory
 
-The component provides automatic conversation memory management via Spring AI’s ChatClient and ChatMemory. Two memory strategies are supported:
+The component provides automatic conversation memory management via Spring AI’s ChatClient and its memory advisors. Three memory strategies are supported:
 
--   **MessageChatMemoryAdvisor** - Traditional message-based memory using ChatMemory implementations
+-   **Session memory** (`sessionService`) - The conversation is a Spring AI session, kept by `SessionAdvisors`
     
--   **VectorStoreChatMemoryAdvisor** - Vector-based semantic memory using VectorStore for long-term retrieval
+-   **VectorStoreChatMemoryAdvisor** (`chatMemoryVectorStore`) - Vector-based semantic memory using VectorStore for long-term retrieval
+    
+-   **MessageChatMemoryAdvisor** (`chatMemory`, deprecated) - Message-based memory using ChatMemory implementations
     
 
-> **Important**
-> Do not configure both `chatMemory` and `chatMemoryVectorStore` on the same endpoint. If both are provided, `chatMemory` (MessageChatMemoryAdvisor) will take precedence.
+One memory is used per endpoint: `sessionService`, else `chatMemory`, else `chatMemoryVectorStore`. When `chatMemoryVectorStore` is set with one of the others, it is not used, and a warning is logged. When the `advisors` option has a memory advisor of its own, none of the three is used.
 
 > **Note**
-> Chat memory is only activated when the `CamelSpringAiChatConversationId` header is set on the exchange. Without this header, the memory advisor is not applied, even if `chatMemory` or `chatMemoryVectorStore` is configured. This allows you to selectively enable memory on a per-request basis.
+> Memory is only activated when the `CamelSpringAiChatConversationId` header is set on the exchange. Without this header, the memory advisor of the endpoint is not applied, even if `sessionService`, `chatMemory` or `chatMemoryVectorStore` is configured. This allows you to selectively enable memory on a per-request basis. This applies to the memory of the endpoint only: session advisors passed with the `advisors` option need the header on every exchange (see below).
 
-#### Message-based Memory (ChatMemory)
+> **Important**
+> The conversation id decides whose history is read and appended to, and a session is created for any id on first use, without an access check. Derive it from an authenticated identity, such as the user of the request, and not from a raw field of the request that a caller can choose.
+
+#### Session Memory (SessionService)
+
+Spring AI 2.1 replaces `ChatMemory` with session memory. A session keeps the conversation as a log of events, and the prompt is built from it. Configure a Spring AI `SessionService` with the `sessionService` option. The `CamelSpringAiChatConversationId` header is the session id. A session is created on first use.
+
+_Java-only: programmatic Spring AI `SessionService` setup and ProducerTemplate usage_
+
+```java
+// Create the session service on an in-memory repository
+SessionService sessionService = DefaultSessionService.builder()
+    .sessionRepository(InMemorySessionRepository.builder().build())
+    .build();
+
+context.getRegistry().bind("sessionService", sessionService);
+
+// Configure endpoint with session memory
+from("direct:chat")
+    .to("spring-ai-chat:memory?chatModel=#chatModel&sessionService=#sessionService");
+
+// Conversation ID for isolation: it is the session id
+template.requestBodyAndHeader("direct:chat", "My name is Alice",
+    SpringAiChatConstants.CONVERSATION_ID, "user-123", String.class);
+
+template.requestBodyAndHeader("direct:chat", "What's my name?",
+    SpringAiChatConstants.CONVERSATION_ID, "user-123", String.class); // Will remember: "Alice"
+```
+
+`InMemorySessionRepository` is for tests and demos. Its sessions are lost on restart.
+
+In Spring Boot, add `spring-ai-starter-model-session-jdbc`. With a `DataSource`, it creates a `SessionService` on a `JdbcSessionRepository`, and the component autowires it. The `sessionService` option is then used instead of the `ChatMemory` bean that the Spring AI model starters create.
+
+The `sessionMessageWindow` option sets how many of the newest messages of the session go into the prompt. It is 20 by default, as for a `MessageWindowChatMemory`. The window is extended back to the start of its turn, so a tool result is never sent without its tool call. The session keeps every message, only the prompt is windowed. `0` sends the whole session.
+
+A session keeps every event, while a `MessageWindowChatMemory` kept the last 20 messages of a conversation; compaction only changes what the prompt is built from. A `DefaultSessionService` gives a session a time to live of 60 days (`spring.ai.session.time-to-live` in Spring Boot), but expired sessions are only removed when `SessionService.deleteExpiredSessions(Instant)` is called, so plan for the growth of a JDBC store, for example with a route:
+
+_Java-only: remove expired sessions every hour_
+
+```java
+from("timer:expiredSessions?period=3600000")
+    .process(exchange -> sessionService.deleteExpiredSessions(Instant.now()));
+```
+
+The component does not compact the session. To compact it, build the session advisors yourself and pass them with the `advisors` option. The component then adds no memory advisor of its own, and `sessionService` is not used.
+
+_Java-only: session advisors with compaction_
+
+```java
+List<Advisor> sessionAdvisors = SessionAdvisors.builder(sessionService)
+    .compaction(new TurnCountTrigger(20), WindowCompactionStrategy.builder().lastTurns(10).build())
+    .build();
+
+context.getRegistry().bind("sessionAdvisors", sessionAdvisors);
+
+from("direct:chat")
+    .to("spring-ai-chat:memory?chatModel=#chatModel&advisors=#sessionAdvisors");
+```
+
+The `CamelSpringAiChatConversationId` header is passed to every memory advisor as the conversation id (`MemoryAdvisor.CONVERSATION_ID`, the key that `SessionAdvisors.session` sets). This includes the advisors of the `advisors` option and of a `chatClient` you configure.
+
+Session advisors need the header: without it they fail the exchange with `IllegalStateException: No session ID found in advisor context`. A `MessageChatMemoryAdvisor` instead uses a default conversation id.
+
+The component looks for a memory advisor in the `advisors` option only, not in the default advisors of a `chatClient` you configure. When such a `chatClient` has its own memory advisor, and a `SessionService` or `ChatMemory` bean is autowired (in Spring Boot, the model starters create a `ChatMemory` bean), the endpoint adds its own memory advisor as well, and the conversation is stored twice. Pass the memory advisor with the `advisors` option instead, or turn off autowiring with `autowiredEnabled=false` on the component.
+
+See the [Spring AI Session Memory](https://docs.spring.io/spring-ai/reference/2.1/api/session.md) documentation.
+
+#### Message-based Memory (ChatMemory, deprecated)
+
+Spring AI 2.1 deprecates `ChatMemory`, `MessageWindowChatMemory` and `MessageChatMemoryAdvisor` for removal in Spring AI 3.0. The `chatMemory` option is deprecated, and works until then. Use `sessionService` instead. The conversations stored in a `ChatMemory` are not moved to a session: a session starts empty.
 
 Configure a `ChatMemory` on the endpoint for automatic conversation tracking using traditional message window approach. This strategy keeps a configurable number of recent messages in memory.
 
@@ -1156,7 +1271,7 @@ _Java-only: programmatic `ChatClient` builder configuration_
 
 ```java
 ChatClient chatClient = ChatClient.builder(chatModel)
-    .defaultAdvisors(new MessageChatMemoryAdvisor(chatMemory))
+    .defaultAdvisors(new SimpleLoggerAdvisor())
     .defaultSystem("You are a helpful assistant")
     .build();
 
@@ -1401,7 +1516,53 @@ The advisor requires `outputClass` or `entityClass` to be set so it can generate
 
 The component supports connecting to MCP servers, enabling the LLM to use tools provided by external MCP-compatible services. This follows the same pattern as the [OpenAI component](openai-component.md)'s MCP support.
 
-Configure MCP servers using the `mcpServer.<name>.<property>` prefix notation:
+Configure MCP servers using the `mcpServer.<name>.<property>` prefix notation. The `transportType` property selects how the component connects to the server:
+
+-   `streamableHttp`: the Streamable HTTP transport of the MCP specification, for remote servers such as the ones served by [Camel MCP Server](others/mcp-server.md). Requires `url`.
+    
+-   `stdio`: starts the server as a local process and talks to it over standard input and output. Requires `command`, and optionally `args`.
+    
+-   `sse` (deprecated): the HTTP+SSE transport, for servers that do not support Streamable HTTP yet. Requires `url`.
+    
+
+#### Streamable HTTP Transport
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+// Connect to an MCP server via Streamable HTTP
+from("direct:chat")
+    .to("spring-ai-chat:chat?chatModel=#chatModel"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=http://mcp-server:8080/mcp");
+```
+
+```xml
+<route>
+  <from uri="direct:chat"/>
+  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.api.transportType=streamableHttp&amp;mcpServer.api.url=http://mcp-server:8080/mcp"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:chat
+      steps:
+        - to:
+            uri: spring-ai-chat:chat
+            parameters:
+              chatModel: "#chatModel"
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: "http://mcp-server:8080/mcp"
+```
+
+The `url` is the URL of the MCP endpoint of the server, path included, for example `[http://mcp-server:8080/mcp](http://mcp-server:8080/mcp)` or `[https://example.com/api/mcp](https://example.com/api/mcp)`. When the URL has no path, such as `[http://mcp-server:8080](http://mcp-server:8080)`, the component uses `/mcp`.
 
 #### Stdio Transport
 
@@ -1442,7 +1603,10 @@ from("direct:chat")
               mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
 ```
 
-#### SSE Transport
+#### SSE Transport (Deprecated)
+
+> **Note**
+> The HTTP+SSE transport is deprecated: the MCP specification 2025-03-26 replaced it by Streamable HTTP. Prefer `transportType=streamableHttp` when the server supports it.
 
 -   Java
     
@@ -1494,14 +1658,14 @@ from("direct:chat")
         + "&mcpServer.fs.transportType=stdio"
         + "&mcpServer.fs.command=npx"
         + "&mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp"
-        + "&mcpServer.weather.transportType=sse"
-        + "&mcpServer.weather.url=http://weather-mcp:3001/sse");
+        + "&mcpServer.weather.transportType=streamableHttp"
+        + "&mcpServer.weather.url=http://weather-mcp:8080/mcp");
 ```
 
 ```xml
 <route>
   <from uri="direct:chat"/>
-  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.fs.transportType=stdio&amp;mcpServer.fs.command=npx&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp&amp;mcpServer.weather.transportType=sse&amp;mcpServer.weather.url=http://weather-mcp:3001/sse"/>
+  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.fs.transportType=stdio&amp;mcpServer.fs.command=npx&amp;mcpServer.fs.args=-y,@modelcontextprotocol/server-filesystem,/tmp&amp;mcpServer.weather.transportType=streamableHttp&amp;mcpServer.weather.url=http://weather-mcp:8080/mcp"/>
 </route>
 ```
 
@@ -1517,13 +1681,13 @@ from("direct:chat")
               mcpServer.fs.transportType: stdio
               mcpServer.fs.command: npx
               mcpServer.fs.args: "-y,@modelcontextprotocol/server-filesystem,/tmp"
-              mcpServer.weather.transportType: sse
-              mcpServer.weather.url: "http://weather-mcp:3001/sse"
+              mcpServer.weather.transportType: streamableHttp
+              mcpServer.weather.url: "http://weather-mcp:8080/mcp"
 ```
 
 #### OAuth Authentication for MCP Servers
 
-For MCP servers requiring authentication, configure an OAuth profile per server. This requires `camel-oauth` on the classpath:
+For MCP servers requiring authentication, configure an OAuth profile per server. The component sends the token in the `Authorization` header of the `streamableHttp` and `sse` transports. This requires `camel-oauth` on the classpath:
 
 -   Java
     
@@ -1535,15 +1699,15 @@ For MCP servers requiring authentication, configure an OAuth profile per server.
 ```java
 from("direct:chat")
     .to("spring-ai-chat:chat?chatModel=#chatModel"
-        + "&mcpServer.api.transportType=sse"
-        + "&mcpServer.api.url=http://secure-mcp:3001/sse"
+        + "&mcpServer.api.transportType=streamableHttp"
+        + "&mcpServer.api.url=https://secure-mcp/mcp"
         + "&mcpServer.api.oauthProfile=keycloak");
 ```
 
 ```xml
 <route>
   <from uri="direct:chat"/>
-  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.api.transportType=sse&amp;mcpServer.api.url=http://secure-mcp:3001/sse&amp;mcpServer.api.oauthProfile=keycloak"/>
+  <to uri="spring-ai-chat:chat?chatModel=#chatModel&amp;mcpServer.api.transportType=streamableHttp&amp;mcpServer.api.url=https://secure-mcp/mcp&amp;mcpServer.api.oauthProfile=keycloak"/>
 </route>
 ```
 
@@ -1556,8 +1720,8 @@ from("direct:chat")
             uri: spring-ai-chat:chat
             parameters:
               chatModel: "#chatModel"
-              mcpServer.api.transportType: sse
-              mcpServer.api.url: "http://secure-mcp:3001/sse"
+              mcpServer.api.transportType: streamableHttp
+              mcpServer.api.url: "https://secure-mcp/mcp"
               mcpServer.api.oauthProfile: keycloak
 ```
 

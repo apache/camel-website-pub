@@ -73,8 +73,42 @@ The AWS Lambda component supports the following options which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **configuration** (producer) | Component configuration. |  | Lambda2Configuration |
+| **invocationType** (producer) | 
+How invokeFunction invokes the function. RequestResponse waits until the function has finished and gives its result. Event queues the event for an asynchronous invocation and answers at once with status code 202 and an empty body. DryRun only checks that the function can be invoked (status code 204). The CamelAwsLambdaInvocationType header overrides it per message. Not used with pojoRequest.
+
+Enum values:
+
+-   RequestResponse
+    
+-   Event
+    
+-   DryRun
+    
+
+
+
+
+
+ | RequestResponse | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **logType** (producer) | 
+
+Set to Tail to get the last 4 KB of the execution log of a RequestResponse invocation in the CamelAwsLambdaLogResult header (base64-encoded). The CamelAwsLambdaLogType header overrides it per message. Not used with pojoRequest.
+
+Enum values:
+
+-   None
+    
+-   Tail
+    
+
+
+
+
+
+ | None | String |
 | **operation** (producer) | 
+
 The operation to perform. See the list of available operations in the component documentation.
 
 Enum values:
@@ -297,7 +331,41 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **invocationType** (producer) | 
+How invokeFunction invokes the function. RequestResponse waits until the function has finished and gives its result. Event queues the event for an asynchronous invocation and answers at once with status code 202 and an empty body. DryRun only checks that the function can be invoked (status code 204). The CamelAwsLambdaInvocationType header overrides it per message. Not used with pojoRequest.
+
+Enum values:
+
+-   RequestResponse
+    
+-   Event
+    
+-   DryRun
+    
+
+
+
+
+
+ | RequestResponse | String |
+| **logType** (producer) | 
+
+Set to Tail to get the last 4 KB of the execution log of a RequestResponse invocation in the CamelAwsLambdaLogResult header (base64-encoded). The CamelAwsLambdaLogType header overrides it per message. Not used with pojoRequest.
+
+Enum values:
+
+-   None
+    
+-   Tail
+    
+
+
+
+
+
+ | None | String |
 | **operation** (producer) | 
+
 The operation to perform. See the list of available operations in the component documentation.
 
 Enum values:
@@ -539,9 +607,11 @@ The AWS Lambda component supports the following message header(s), which is/are 
 | **CamelAwsLambdaMaxItems** (listFunctions listVersions listAliases listEventSourceMapping) Constant: [`MAX_ITEMS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#MAX_ITEMS) | The maximum number of results to return. |  | Integer |
 | **CamelAwsLambdaIsTruncated** (listFunctions listVersions listAliases listEventSourceMapping) Constant: [`IS_TRUNCATED`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#IS_TRUNCATED) | Whether the response has more results (is truncated). |  | Boolean |
 | **CamelAwsLambdaFunctionArn** (createFunction getFunction publishVersion createAlias getAlias) Constant: [`FUNCTION_ARN`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_ARN) | The Amazon Resource Name (ARN) of the function. |  | String |
-| **CamelAwsLambdaStatusCode** (invokeFunction) Constant: [`STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#STATUS_CODE) | The HTTP status code of the function invocation. |  | Integer |
+| **CamelAwsLambdaStatusCode** (invokeFunction) Constant: [`STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#STATUS_CODE) | The HTTP status code of the function invocation: 200 for RequestResponse, 202 for Event and 204 for DryRun. |  | Integer |
 | **CamelAwsLambdaFunctionError** (invokeFunction) Constant: [`FUNCTION_ERROR`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_ERROR) | If present, indicates that an error occurred during function execution. The exchange does not fail: the body is the JSON of the error. |  | String |
-| **CamelAwsLambdaLogResult** (invokeFunction) Constant: [`LOG_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#LOG_RESULT) | The last 4 KB of the execution log. |  | String |
+| **CamelAwsLambdaLogResult** (invokeFunction) Constant: [`LOG_RESULT`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#LOG_RESULT) | The last 4 KB of the execution log, base64-encoded. Lambda returns it only when the log type is Tail (the logType option or the CamelAwsLambdaLogType header). |  | String |
+| **CamelAwsLambdaInvocationType** (invokeFunction) Constant: [`INVOCATION_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#INVOCATION_TYPE) | How to invoke the function: RequestResponse, Event or DryRun. Overrides the invocationType option. |  | String |
+| **CamelAwsLambdaLogType** (invokeFunction) Constant: [`LOG_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#LOG_TYPE) | Set to Tail to get the last 4 KB of the execution log in the CamelAwsLambdaLogResult header, or None. Overrides the logType option. |  | String |
 | **CamelAwsLambdaFunctionUrlAuthType** (createFunctionUrlConfig updateFunctionUrlConfig) Constant: [`FUNCTION_URL_AUTH_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_URL_AUTH_TYPE) | **Required** The type of authentication that the function URL uses. Set to AWS\_IAM to restrict access to authenticated users only. Set to NONE to bypass IAM authentication and allow any user to invoke the function. |  | String |
 | **CamelAwsLambdaFunctionUrlQualifier** (createFunctionUrlConfig updateFunctionUrlConfig getFunctionUrlConfig deleteFunctionUrlConfig) Constant: [`FUNCTION_URL_QUALIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_URL_QUALIFIER) | The alias name or $LATEST for the function URL. |  | String |
 | **CamelAwsLambdaFunctionUrlCorsAllowCredentials** (createFunctionUrlConfig updateFunctionUrlConfig) Constant: [`FUNCTION_URL_CORS_ALLOW_CREDENTIALS`](https://javadoc.io/doc/org.apache.camel/camel-aws2-lambda/latest/org/apache/camel/component/aws2/lambda/Lambda2Constants.html#FUNCTION_URL_CORS_ALLOW_CREDENTIALS) | The cross-origin resource sharing (CORS) settings for the function URL. |  | String |
@@ -769,6 +839,13 @@ The code of the function is the zip file of the `CamelAwsLambdaZipFile` header, 
 The body is sent as the payload: a `byte[]` or a stream as it is, any other body as text in UTF-8. Without a body the function is invoked without a payload. The body of the reply is the payload the function returned, as a String.
 
 An error of the function does not fail the exchange: the body is the JSON of the error that the function returned, and the `CamelAwsLambdaFunctionError` header is set (for example to `Unhandled`). Check this header, for example with a filter or a choice, to handle the error.
+
+By default, `invokeFunction` waits until the function has finished (invocation type `RequestResponse`). Set `invocationType=Event` to invoke the function asynchronously: Lambda queues the event and answers at once, with the `CamelAwsLambdaStatusCode` header set to `202` and an empty body; the result of the function is not returned. Set `invocationType=DryRun` to only check that the function can be invoked (status code `204`). With `logType=Tail`, the `CamelAwsLambdaLogResult` header holds the last 4 KB of the execution log of a `RequestResponse` invocation, base64-encoded. The `CamelAwsLambdaInvocationType` and `CamelAwsLambdaLogType` headers override the options per message. With `pojoRequest=true`, the `InvokeRequest` in the body is sent as it is.
+
+```java
+from("direct:start")
+    .to("aws2-lambda://GetHelloWithName?operation=invokeFunction&invocationType=Event");
+```
 
 ### Function URL Operations
 

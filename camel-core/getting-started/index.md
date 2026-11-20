@@ -42,7 +42,7 @@ The Javadoc API that are the most relevant for Camel end users are in the follow
 
 ## Creating your first project
 
-We’ll start this guide by creating a simple integration. You need to have [Apache Maven](https://maven.apache.org/) 3.9.6 or greater and a [JDK](https://adoptium.net/temurin/) version 17 or greater installed on your system.
+We’ll start this guide by creating a simple integration. You need to have [Apache Maven](https://maven.apache.org/) 3.9.12 or greater and a [JDK](https://adoptium.net/temurin/) version 17 or greater installed on your system.
 
 > **Note**
 > We strongly recommend you use an LTS version of Java (i.e., 17 or 21). We regularly test Camel in our continuous integration (CI) environment using Java’s LTS versions.

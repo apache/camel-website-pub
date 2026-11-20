@@ -6,8 +6,15 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 13 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Nov 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Wanaku 0.3.0: Semantic Routing with Apache Camel</title>
+      <link>https://camel.apache.org/blog/2026/11/wanaku-0.3.0/</link>
+      <pubDate>Fri, 20 Nov 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/11/wanaku-0.3.0/</guid>
+      <description>Apache Camel connects applications, services, and data. As AI agents become another client of those integrations, developers need a way to expose business actions and control how agents call them.&#xA;Wanaku 0.3.0 brings the first stable release using its new routing engine based on Praxis. For Camel developers, a central addition is the workflow around the Wanaku Semantic Router (WSR): build actions with Kamelets, route messages by meaning, and expose the resulting Camel integration through the Model Context Protocol (MCP).</description>
+    </item>
     <item>
       <title>Camel Quarkus 3.33.4 Released</title>
       <link>https://camel.apache.org/blog/2026/11/camel-quarkus-3.33.4/</link>

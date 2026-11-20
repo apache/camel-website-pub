@@ -184,7 +184,7 @@ Enum values:
 | **pulsarMessageReceiptFactory** (consumer (advanced)) | Provide a factory to create an alternate implementation of PulsarMessageReceipt. |  | PulsarMessageReceiptFactory |
 | **batcherBuilder** (producer) | 
 
-Control batching method used by the producer.
+Control batching method used by the producer. DEFAULT batches the messages together regardless of their key. KEY\_BASED batches the messages of each key separately, so that a Key\_Shared subscription spreads the keys over its consumers. A custom BatcherBuilder can be given as a bean reference.
 
 Enum values:
 
@@ -438,7 +438,7 @@ Enum values:
  |  | ExchangePattern |
 | **batcherBuilder** (producer) | 
 
-Control batching method used by the producer.
+Control batching method used by the producer. DEFAULT batches the messages together regardless of their key. KEY\_BASED batches the messages of each key separately, so that a Key\_Shared subscription spreads the keys over its consumers. A custom BatcherBuilder can be given as a bean reference.
 
 Enum values:
 

@@ -10,7 +10,7 @@ Use it to turn the addresses in orders, customer records or events into latitude
 
 Input: the place name or address to look up, as text.
 
-Output: the body is JSON text: an array with the best match, with its coordinates, its full address and its kind of place, or an empty array when nothing matches. The headers give the same answer in short: `CamelGeoCoderLat` and `CamelGeoCoderLng` (the coordinates), `CamelGeoCoderAddress` (the full address found), `CamelGeoCoderCity`, `CamelGeoCoderCountryLong`, `CamelGeoCoderPostalCode` and `CamelGeoCoderStatus`, which is `OK` when a place was found and `ZERO_RESULTS` when none was.
+Output: the body is JSON text, as bytes, with `Content-Type: application/json`: an array with the best match, with its coordinates, its full address and its kind of place, or an empty array when nothing matches. The headers give the same answer in short: `CamelGeoCoderLat` and `CamelGeoCoderLng` (the coordinates), `CamelGeoCoderAddress` (the full address found), `CamelGeoCoderCity`, `CamelGeoCoderCountryLong`, `CamelGeoCoderPostalCode` and `CamelGeoCoderStatus`, which is `OK` when a place was found and `ZERO_RESULTS` when none was.
 
 Good to know: a place that is not found does not fail the message; check `CamelGeoCoderStatus`. The public server `[https://nominatim.openstreetmap.org](https://nominatim.openstreetmap.org)` limits how often it may be called; for many lookups, run your own Nominatim server. Headers that start with `CamelGeoCoder` are removed from the message first, so they cannot change what the Kamelet does.
 

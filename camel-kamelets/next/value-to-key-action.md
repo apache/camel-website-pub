@@ -10,7 +10,7 @@ Use it to take the key of the record from the data, before `kafka-sink`, for exa
 
 Input: a JSON object as JSON text, with the `Content-Type` header set to `application/json`.
 
-Output: the same JSON object, as JSON text in a stream, with `Content-Type` set to `application/json`. The `CamelKafkaKey` header, which `kafka-sink` uses as the key of the record, is set to a Map of the fields named in `fields` and their values.
+Output: the same JSON object, as JSON text in bytes, with `Content-Type` set to `application/json`. The `CamelKafkaKey` header, which `kafka-sink` uses as the key of the record, is set to a Map of the fields named in `fields` and their values.
 
 Good to know: `kafka-sink` writes the key as text such as `{id=7, customer=acme}`, not as JSON, and not necessarily with the fields in the order of `fields`. A field that is not in the body is left out of the key.
 

@@ -149,7 +149,31 @@ The Google Storage component supports the following options which are listed bel
 | **configuration** (common) | The component configuration. |  | GoogleCloudStorageConfiguration |
 | **objectName** (common) | The Object name inside the bucket. |  | String |
 | **serviceAccountKey** (common) | The Service account key that can be used as credentials for the Storage client. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
-| **storageClass** (common) | The Cloud Storage class to use when creating the new buckets. | STANDARD | StorageClass |
+| **storageClass** (common) | 
+The Cloud Storage class to use when creating the new buckets.
+
+Enum values:
+
+-   STANDARD
+    
+-   NEARLINE
+    
+-   COLDLINE
+    
+-   ARCHIVE
+    
+-   REGIONAL
+    
+-   MULTI\_REGIONAL
+    
+-   DURABLE\_REDUCED\_AVAILABILITY
+    
+
+
+
+
+
+ | STANDARD | StorageClass |
 | **storageClient** (common) | **Autowired** The storage client. |  | Storage |
 | **storageLocation** (common) | The Cloud Storage location to use when creating the new buckets. | US-EAST1 | String |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -162,7 +186,34 @@ The Google Storage component supports the following options which are listed bel
 | **moveAfterRead** (consumer) | Move objects from the origin bucket to a different bucket after they have been retrieved. To accomplish the operation the destinationBucket option must be set. The copy bucket operation is only performed if the Exchange is committed. If a rollback occurs, the object is not moved. | false | boolean |
 | **prefix** (consumer) | The prefix which is used in the BlobListOptions to only consume objects we are interested in. |  | String |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
+| **objectStorageClass** (producer) | 
+
+The Cloud Storage class of the objects that the producer uploads. When not set, an object gets the default storage class of its bucket. The CamelGoogleCloudStorageStorageClass header overrides it per message.
+
+Enum values:
+
+-   STANDARD
+    
+-   NEARLINE
+    
+-   COLDLINE
+    
+-   ARCHIVE
+    
+-   REGIONAL
+    
+-   MULTI\_REGIONAL
+    
+-   DURABLE\_REDUCED\_AVAILABILITY
+    
+
+
+
+
+
+ |  | StorageClass |
 | **operation** (producer) | 
+
 Set the operation for the producer.
 
 Enum values:
@@ -217,7 +268,31 @@ With the following _path_ and _query_ parameters:
 | **autoCreateBucket** (common) | Setting the autocreation of the bucket bucketName. | true | boolean |
 | **objectName** (common) | The Object name inside the bucket. |  | String |
 | **serviceAccountKey** (common) | The Service account key that can be used as credentials for the Storage client. It can be loaded by default from classpath, but you can prefix with classpath:, file:, or http: to load the resource from different systems. |  | String |
-| **storageClass** (common) | The Cloud Storage class to use when creating the new buckets. | STANDARD | StorageClass |
+| **storageClass** (common) | 
+The Cloud Storage class to use when creating the new buckets.
+
+Enum values:
+
+-   STANDARD
+    
+-   NEARLINE
+    
+-   COLDLINE
+    
+-   ARCHIVE
+    
+-   REGIONAL
+    
+-   MULTI\_REGIONAL
+    
+-   DURABLE\_REDUCED\_AVAILABILITY
+    
+
+
+
+
+
+ | STANDARD | StorageClass |
 | **storageClient** (common) | **Autowired** The storage client. |  | Storage |
 | **storageLocation** (common) | The Cloud Storage location to use when creating the new buckets. | US-EAST1 | String |
 | **deleteAfterRead** (consumer) | Delete objects from the bucket after they have been retrieved. The delete is only performed if the Exchange is committed. If a rollback occurs, the object is not deleted. If this option is false, then the same objects will be retrieve over and over again on the polls. | true | boolean |
@@ -232,6 +307,7 @@ With the following _path_ and _query_ parameters:
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
+
 Sets the exchange pattern when the consumer creates an exchange.
 
 Enum values:
@@ -247,6 +323,32 @@ Enum values:
 
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
+| **objectStorageClass** (producer) | 
+
+The Cloud Storage class of the objects that the producer uploads. When not set, an object gets the default storage class of its bucket. The CamelGoogleCloudStorageStorageClass header overrides it per message.
+
+Enum values:
+
+-   STANDARD
+    
+-   NEARLINE
+    
+-   COLDLINE
+    
+-   ARCHIVE
+    
+-   REGIONAL
+    
+-   MULTI\_REGIONAL
+    
+-   DURABLE\_REDUCED\_AVAILABILITY
+    
+
+
+
+
+
+ |  | StorageClass |
 | **operation** (producer) | 
 
 Set the operation for the producer.
@@ -396,7 +498,7 @@ Enum values:
 | **CamelGoogleCloudStorageKmsKeyName** (common) Constant: [`METADATA_KMS_KEY_NAME`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#METADATA_KMS_KEY_NAME) | The KMS key name. |  | String |
 | **CamelGoogleCloudStorageMediaLink** (common) Constant: [`METADATA_MEDIA_LINK`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#METADATA_MEDIA_LINK) | The media link. |  | String |
 | **CamelGoogleCloudStorageMetageneration** (common) Constant: [`METADATA_METAGENERATION`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#METADATA_METAGENERATION) | The metageneration of the object. |  | Long |
-| **CamelGoogleCloudStorageStorageClass** (common) Constant: [`METADATA_STORAGE_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#METADATA_STORAGE_CLASS) | The storage class of the object. |  | StorageClass |
+| **CamelGoogleCloudStorageStorageClass** (common) Constant: [`METADATA_STORAGE_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#METADATA_STORAGE_CLASS) | The storage class of the object. When uploading an object, it sets the storage class of the object, and takes precedence over the objectStorageClass option; a name such as NEARLINE can be given. |  | StorageClass |
 | **CamelGoogleCloudStorageCreateTime** (common) Constant: [`METADATA_CREATE_TIME`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#METADATA_CREATE_TIME) | The creation time of the object. |  | Long |
 | **CamelGoogleCloudStorageLastUpdate** (common) Constant: [`METADATA_LAST_UPDATE`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#METADATA_LAST_UPDATE) | The last update of the object. |  | Date |
 | **CamelGoogleCloudStorageOverrideBucketName** (common) Constant: [`OVERRIDE_BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-google-storage/latest/org/apache/camel/component/google/storage/GoogleCloudStorageConstants.html#OVERRIDE_BUCKET_NAME) | The bucket Name to override which this object will be stored or which will be used for the current operation or in which this object is contained. |  | String |
@@ -894,6 +996,19 @@ This operation will return a download link url for the file OBJECT\_NAME in the 
 ### Bucket Auto creation
 
 With the option `autoCreateBucket` users are able to avoid the autocreation of a Bucket in case it doesn’t exist. The default for this option is `true`. If set to false, any operation on a not-existent bucket won’t be successful and an error will be returned.
+
+### Storage class
+
+The `storageClass` option sets the storage class of a bucket that the component creates (see `autoCreateBucket`). The objects in a bucket get the default storage class of the bucket.
+
+To upload an object with another storage class, for example an archive file as `COLDLINE` into a `STANDARD` bucket, set the producer option `objectStorageClass`, or the `CamelGoogleCloudStorageStorageClass` header for each message. The header takes precedence over the option.
+
+```java
+from("direct:archive")
+    .to("google-storage://myCamelBucket?objectStorageClass=COLDLINE");
+```
+
+The consumer and the `getObject` operation set the `CamelGoogleCloudStorageStorageClass` header to the storage class of the object they read. A route that copies objects from one bucket to another with the producer therefore keeps the storage class of each object. Remove the header to use the `objectStorageClass` option or the default of the destination bucket instead.
 
 ### MoveAfterRead consumer option
 

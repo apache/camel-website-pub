@@ -102,7 +102,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **headersOnly** (producer) | Whether to only enrich the Exchange with headers, and leave the body as-is. | false | boolean |
-| **language** (producer) | The language to use. | en | String |
+| **language** (producer) | The language of the answer (such as the address, the country and the city), as a language code such as en, de or fr. It is sent as the accept-language parameter to Nominatim and as the language parameter to Google. | en | String |
 | **serverUrl** (producer) | URL to the geocoder server. Mandatory for Nominatim server. |  | String |
 | **type** (producer) | 
 Type of GeoCoding server. Supported Nominatim and Google.

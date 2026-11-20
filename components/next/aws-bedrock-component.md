@@ -604,7 +604,7 @@ The AWS Bedrock component supports the following message header(s), which is/are
 | **CamelAwsBedrockCompletionReason** (producer) Constant: [`STREAMING_COMPLETION_REASON`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#STREAMING_COMPLETION_REASON) | The completion reason for streaming response. |  | String |
 | **CamelAwsBedrockTokenCount** (producer) Constant: [`STREAMING_TOKEN_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#STREAMING_TOKEN_COUNT) | The number of tokens generated in streaming response. |  | Integer |
 | **CamelAwsBedrockChunkCount** (producer) Constant: [`STREAMING_CHUNK_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#STREAMING_CHUNK_COUNT) | The number of chunks received in streaming response. |  | Integer |
-| **CamelAwsBedrockConverseMessages** (producer) Constant: [`CONVERSE_MESSAGES`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_MESSAGES) | The conversation messages for Converse API. |  | List |
+| **CamelAwsBedrockConverseMessages** (producer) Constant: [`CONVERSE_MESSAGES`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_MESSAGES) | The conversation messages for Converse API. When not set, the body as text is sent as one user message. |  | List |
 | **CamelAwsBedrockConverseSystem** (producer) Constant: [`CONVERSE_SYSTEM`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_SYSTEM) | The system prompts for Converse API. |  | List |
 | **CamelAwsBedrockConverseInferenceConfig** (producer) Constant: [`CONVERSE_INFERENCE_CONFIG`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_INFERENCE_CONFIG) | The inference configuration for Converse API. |  | InferenceConfiguration |
 | **CamelAwsBedrockConverseToolConfig** (producer) Constant: [`CONVERSE_TOOL_CONFIG`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_TOOL_CONFIG) | The tool configuration for Converse API. |  | ToolConfiguration |
@@ -614,7 +614,7 @@ The AWS Bedrock component supports the following message header(s), which is/are
 | **CamelAwsBedrockConverseOutputMessage** (producer) Constant: [`CONVERSE_OUTPUT_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#CONVERSE_OUTPUT_MESSAGE) | The output message from Converse API response (converse only). |  | Message |
 | **CamelAwsBedrockGuardrailConfig** (producer) Constant: [`GUARDRAIL_CONFIG`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONFIG) | The guardrail configuration to apply to the request. converseStream also takes a GuardrailStreamConfiguration. |  | GuardrailConfiguration |
 | **CamelAwsBedrockGuardrailIdentifier** (producer) Constant: [`GUARDRAIL_IDENTIFIER`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_IDENTIFIER) | The guardrail identifier to use for the ApplyGuardrail operation. |  | String |
-| **CamelAwsBedrockGuardrailContent** (producer) Constant: [`GUARDRAIL_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONTENT) | The content blocks for ApplyGuardrail operation. |  | List |
+| **CamelAwsBedrockGuardrailContent** (producer) Constant: [`GUARDRAIL_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_CONTENT) | The content blocks for ApplyGuardrail operation. When not set, the body as text is checked. |  | List |
 | **CamelAwsBedrockGuardrailSource** (producer) Constant: [`GUARDRAIL_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_SOURCE) | The source type for ApplyGuardrail operation (INPUT or OUTPUT). |  | String |
 | **CamelAwsBedrockGuardrailOutput** (producer) Constant: [`GUARDRAIL_OUTPUT`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_OUTPUT) | The output content of the ApplyGuardrail response. |  | List |
 | **CamelAwsBedrockGuardrailTrace** (producer) Constant: [`GUARDRAIL_TRACE`](https://javadoc.io/doc/org.apache.camel/camel-aws-bedrock/latest/org/apache/camel/component/aws2/bedrock/runtime/BedrockConstants.html#GUARDRAIL_TRACE) | The trace information from guardrail evaluation. |  | GuardrailTraceAssessment |
@@ -629,13 +629,13 @@ The message body at each side of the AWS Bedrock component: _Consumer_ is the bo
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `text`, `bytes`, `stream`, `file` or `map` | 
-The request of the model as JSON text for the invoke operations, which also need the CamelAwsBedrockContentType and CamelAwsBedrockAcceptContentType headers. Bytes, a stream or a file are sent as they are, and a Map or a Jackson JsonNode is marshalled to JSON: marshal another POJO to JSON first. No body fails. converse, converseStream and applyGuardrail take their input from headers, such as CamelAwsBedrockConverseMessages. With pojoRequest=true an InvokeModelRequest of the AWS SDK: another body fails.
+The request of the model as JSON text for the invoke operations, which also need the CamelAwsBedrockContentType and CamelAwsBedrockAcceptContentType headers. Bytes, a stream or a file are sent as they are, and a Map or a Jackson JsonNode is marshalled to JSON: marshal another POJO to JSON first. No body fails. converse and converseStream take the messages of the CamelAwsBedrockConverseMessages header, or else the body as text as one user message; applyGuardrail takes the CamelAwsBedrockGuardrailContent header, or else the body as text. With pojoRequest=true an InvokeModelRequest of the AWS SDK: another body fails.
 
--   With `operation=converse`: `any`
+-   With `operation=converse`: `text`
     
--   With `operation=converseStream`: `any`
+-   With `operation=converseStream`: `text`
     
--   With `operation=applyGuardrail`: `any`
+-   With `operation=applyGuardrail`: `text`
     
 
 
@@ -806,7 +806,7 @@ aws-bedrock://label?operation=converseStream&modelId=anthropic.claude-3-sonnet-2
 
 Converse API uses message headers for configuration:
 
--   `CamelAwsBedrockConverseMessages` (required): List of Message objects representing the conversation
+-   `CamelAwsBedrockConverseMessages`: List of Message objects representing the conversation. When the header is not set, the message body as text is sent as one user message, so a route in YAML or XML (or a Kamelet) can call `converse` with a text prompt. Without the header and without a body, the exchange fails.
     
 -   `CamelAwsBedrockConverseSystem`: List of SystemContentBlock for system-level instructions
     
@@ -818,6 +818,19 @@ Converse API uses message headers for configuration:
     
 
 For streaming operations, you can also use: - `CamelAwsBedrockStreamOutputMode`: Set to "complete" (default) or "chunks"
+
+For example, the same prompt for every model, with a guardrail, from a text body:
+
+```yaml
+- route:
+    from:
+      uri: timer:t?repeatCount=1
+      steps:
+        - setBody:
+            constant: "What is Apache Camel?"
+        - to: aws-bedrock:label?operation=converse&modelId=anthropic.claude-3-haiku-20240307-v1:0&region=us-east-1&guardrailIdentifier=abc123&guardrailVersion=1
+        - log: "${body}"
+```
 
 #### Converse Response Headers
 
@@ -907,7 +920,7 @@ aws-bedrock://label?operation=converseStream&modelId=anthropic.claude-3-sonnet-2
     &guardrailIdentifier=abc123xyz&guardrailVersion=DRAFT
 ```
 
-**applyGuardrail**: Standalone operation to validate content against a guardrail without invoking a model
+**applyGuardrail**: Standalone operation to validate content against a guardrail without invoking a model. The content is the `CamelAwsBedrockGuardrailContent` header, or else the message body as text.
 
 ```none
 aws-bedrock://label?operation=applyGuardrail&guardrailIdentifier=abc123xyz

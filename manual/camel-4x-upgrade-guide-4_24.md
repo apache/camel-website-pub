@@ -41,6 +41,16 @@ The options `camel.server.jwtKeystorePassword`, `camel.management.jwtKeystorePas
 
 The `camel.security.secretPolicy` check now also reports these options when they are configured as plain text, including a value set through an environment variable: a warning by default, and the startup fails with `camel.main.profile=prod`. Configure them with a property placeholder or a vault reference instead. A file location in `camel.vault.gcp.serviceAccountKey`, such as `file:/etc/gcp/sa.json`, is also reported. It can go behind a property placeholder too.
 
+### camel-main - the security policy checks the beans that route files define
+
+With camel-main and the Camel CLI, the security policy now also checks the properties of the beans that route files define (the `beans` section of a YAML or XML DSL file, and the beans of a Spring XML or Blueprint XML file), as it checks a bean configured from `camel.beans.*` properties. A property is reported under the key `camel.beans.<name>.<property>`, such as `camel.beans.opaPolicy.failOpen`.
+
+A bean in a route file that sets an insecure option or a plain-text secret is now reported: a warning by default, and the startup fails with `camel.main.profile=prod`. Configure a secret with a property placeholder or a vault reference instead, or add the key to `camel.security.allowedProperties` to allow it.
+
+The secrets include the user name: `user` and `username` are secret keys, like `password`. So a `DataSource` bean in a route file with `username: sa` now logs a warning with `camel run`, and fails the startup with `camel.main.profile=prod`, as `camel.beans.myDataSource.username=sa` in `application.properties` already does. Use a property placeholder instead, such as `username: "{{db.username}}"`.
+
+The options are matched by their name, as for `camel.beans.*` properties. So a bean option named `ssl` or `tls` that is set to `false`, such as the `ssl` option of a `DataSource`, is reported as an insecure SSL setting, as `camel.beans.myDataSource.ssl=false` already is. To keep such a connection without TLS, add the key to `camel.security.allowedProperties`.
+
 ### camel-main - more options are reported by the insecure:dev security policy
 
 These camel-main options are flagged `insecure:dev`, and the `camel.security.insecureDevPolicy` check now reports them when they are set to `true`: a warning by default, and the startup fails with `camel.main.profile=prod`.
@@ -55,6 +65,20 @@ These camel-main options are flagged `insecure:dev`, and the `camel.security.ins
     
 
 To keep one of them enabled in production, set `camel.security.insecureDevPolicy=allow`, or add the key to `camel.security.allowedProperties`.
+
+### Spring Boot 4.2
+
+Camel is upgraded to Spring Boot 4.2 and Spring Framework 7.1.
+
+#### camel-spring-rabbitmq-starter - the RabbitMQ connection factory comes from spring-boot-rabbitmq
+
+In Spring Boot 4.2 the RabbitMQ (AMQP 0.9.1) auto-configuration moved from `spring-boot-amqp` to the new `spring-boot-rabbitmq` module (`org.springframework.boot.rabbitmq.autoconfigure.RabbitAutoConfiguration`), and `spring-boot-starter-amqp` now brings the generic AMQP 1.0 client instead. An application that relied on `spring-boot-starter-amqp` for the `ConnectionFactory` of the `spring-rabbitmq` component no longer gets one.
+
+`camel-spring-rabbitmq-starter` now depends on `spring-boot-rabbitmq`, so the `ConnectionFactory` and `AmqpAdmin` used by the component are auto-configured from the `spring.rabbitmq.*` properties. Remove `spring-boot-starter-amqp` if it was only added for that, or replace it with `spring-boot-starter-rabbitmq`.
+
+#### camel-spring-ws - Spring Web Services 5.1
+
+Spring Web Services 5.1 removed the deprecated `WebServiceMessageSender.supports(URI)`. A custom `WebServiceMessageSender` configured on the `spring-ws` component must implement `supports(URI, WebServiceMessageSender.UriSource)` instead.
 
 ### camel-observability-services - promoted to Stable
 
@@ -124,6 +148,18 @@ A `RAW(…​)` option value of an endpoint whose uri is computed from the curre
 
 A Rest DSL service with `bindingMode` `json` or `json_xml` whose JSON data format (`jackson` unless `jsonDataFormat` names another) is not on the classpath now fails when Camel creates the route, with `JSON DataFormat jackson not found (the jackson data format is in camel-jackson3; add camel-jackson3 to the classpath).` Before, the route started and every request failed with `Cannot bind to json as message body is not json compatible`. This is what `xml` binding already did without its XML data format. Add the JSON data format, such as `camel-jackson3` (or `camel-jackson` for Jackson 2), or set `bindingMode` to `off`. With `bindingMode` `auto`, a route that finds neither a JSON nor an XML data format still starts, and logs a WARN as it binds nothing.
 
+### camel-kamelet - the output data type of a source Kamelet is applied before the consuming route
+
+A source Kamelet that declares a default output data type (`spec.dataTypes.out.default`) now gives the message that type when it hands it on with `kamelet:sink`, so the route that consumes from the Kamelet gets it. Before, the type was applied only when the route of the Kamelet completed, after the consuming route had run: the consuming route never saw it, and an exchange failed at the end when the consuming route left a body that could not be converted to the type, such as a `Map` for `binary`. This applies to Kamelets labelled `camel.apache.org/kamelet.type: source`, such as `aws-sqs-source` (`text`), `slack-source` (`json`) or `azure-eventhubs-source` (`binary`) of the Kamelet catalog: the first step of the consuming route now gets a `String`, JSON or a `byte[]` with the matching `Content-Type` header, where it used to get the body of the component. When no transformer for the type is on the classpath, such as `json` with neither `camel-jackson` nor `camel-jackson3`, the message is handed on unchanged, as before, and a WARN is logged once.
+
+### camel-core - the binary data type keeps a stream cache or a file body
+
+The `application-octet-stream` (`binary`) data type transformer keeps a body that is a stream cache, a `java.io.File`, a `Path` or a `WrappedFile` (such as the `GenericFile` of the file and FTP consumers) as it is, and only sets the `Content-Type` header to `application/octet-stream`. Before, it read the body into a `byte[]`. These bodies are binary already and can be read again, and they may be large: a source Kamelet such as `aws-s3-source` or `azure-storage-blob-source` declares `binary` and gives the object as a stream, and a file can be uploaded without reading it into memory. Any other body, including an `InputStream` that is not a stream cache (stream caching turned off), is still converted to a `byte[]`.
+
+### camel-kamelet - each Kamelet EIP has a Kamelet route of its own
+
+Kamelet EIPs (`kamelet` with nested steps) with the same name and options used to share one Kamelet route, and with it the steps to continue with: the messages of one route ran the nested steps of the last such EIP that was created, and a `to("kamelet:…​")` with the same name and options also ran them. Each Kamelet EIP now creates a Kamelet route of its own and continues with its own steps. An application with several Kamelet EIPs with the same name and options therefore has one Kamelet route per EIP (for example `my-action-1`, `my-action-2`) where it had one before. When a route with a Kamelet EIP is removed while the context runs, its Kamelet route is removed with it.
+
 ### camel-core-model - doTry keeps doCatch and doFinally in its outputs
 
 `doCatch` and `doFinally` written as properties of `doTry` in the YAML DSL are now kept in the outputs of the `TryDefinition`, as the clauses of the Java and XML DSLs always were, after the steps whatever the order of the YAML keys. Code that walks `getOutputs()` (route dumps, tooling) now sees them, and `getCatchClauses()`, `getFinallyClause()` and `getOutputsWithoutCatches()` are derived from the outputs on each call: a clause removed from the outputs, for example with advice-with, is no longer used, and changing the list returned by `getCatchClauses()` no longer changes the doTry. Use `setCatchClauses` and `setFinallyClause`, or the outputs, instead.
@@ -131,6 +167,10 @@ A Rest DSL service with `bindingMode` `json` or `json_xml` whose JSON data forma
 ### camel-core-model - EIP options given an expression in the Java DSL keep its language
 
 In the Java DSL, `completionSize`, `completionTimeout` and `completionPredicate` of the Aggregate EIP, and `handled`, `continued` and `retryWhile` of `onException`, keep an expression made with `simple(…​)`, `header(…​)` or another expression builder as its language and text, as the EIPs that take an expression directly do. Each route created from a route template now has its own copy of the expression, so a template parameter in it, such as `completionSize(simple("{{size}}"))`, takes the value of that route: before, every route used the value of the first route created from the template. Route dumps and the JMX attributes of the aggregator (`CompletionSizeExpression`, `CompletionSizeExpressionLanguage` and the others) now show the language and the expression.
+
+### camel-seda - a discarded request-reply message fails at once
+
+When the SEDA producer waits for the reply (`InOut` messages, or `waitForTaskToComplete=Always`) and discards the message, because of `discardIfNoConsumers` with no consumer, or `discardWhenFull` with a full queue, the exchange now fails at once with a `java.util.concurrent.RejectedExecutionException` (the same exception as for a message discarded when the queue is purged). Before, the producer waited for a reply that never came: until the `timeout` (30 seconds by default), and then failed with an `ExchangeTimedOutException`, or for ever when the `timeout` was 0 or less. A discarded `InOnly` message is still dropped without an error.
 
 ### camel-ehcache - shared CacheManager and changed defaults
 
@@ -155,6 +195,10 @@ The following user-visible changes take effect in 4.24:
 ### camel-flowable - xml inbound channels parse the event with the Camel XML settings
 
 The `flowable` producer now parses the event of an inbound channel of type `camel` with `deserializerType` set to `xml` with the XML parser settings that Camel uses, which are also the settings of Flowable 8: external DTDs are not loaded, external general and parameter entities are not included, entity references are kept as entity reference nodes, and XInclude is not processed. Before, the Flowable 7 deserializer parsed the event with the JDK defaults. An event that relies on an external DTD or an external entity no longer gets their content. A channel that sets `deserializerDelegateExpression` keeps its own deserializer, which can parse such events.
+
+### camel-grpc - a producer with streamRepliesTo fails the exchange of a failed call
+
+A gRPC producer with `streamRepliesTo` and the SIMPLE producer strategy (the default) completed the exchange of a call that failed (server not reachable, deadline exceeded, an error status) as a success, unless `forwardOnError=true` routed the error to the replies endpoint. The exchange now fails with the error (an `io.grpc.StatusRuntimeException`), so the error handler of the route handles it. With `forwardOnError=true` the error is routed to the replies endpoint as before, and the exchange completes.
 
 ### camel-jaxb - the part class and namespace headers are used only when allowed
 
@@ -350,6 +394,12 @@ JWT validation and token introspection now read scopes from both the standard `s
 ### camel-cassandraql - a Map body binds the named markers
 
 The `cql` producer binds a `Map` body by name: each named marker of the statement, such as `:login`, takes the value of the `Map` entry of that name. Before, a `Map` body was bound as the value of a single marker. To keep that, such as for a column of type `map`, wrap the `Map` in a `List`.
+
+### camel-cassandraql - the repositories and the cql endpoint no longer close the session they are given
+
+`CassandraIdempotentRepository`, `CassandraAggregationRepository` and `CassandraKeyValueRepository` (and their `Named` variants) no longer close the `CqlSession` they are given when they stop, such as when their route is removed or the CamelContext stops. Other repositories and cql endpoints can use the same session, and a repository that is stopped can be started again with it. The application closes the session when it is done with it, as for any session it creates. For the same reason, `org.apache.camel.utils.cassandra.CassandraSessionHolder` built with its one-argument constructor no longer closes the session in `stop()`; use the constructor `CassandraSessionHolder(session, false)` for a session that `stop()` closes.
+
+A cql endpoint no longer closes a session given with `session` or `beanRef` when it stops, such as when the route that uses it is removed. It still closes a session it creates from its `hosts`, and creates a new one when it is started again. The application closes a session it gives to the endpoint, such as with a destroy method of its bean.
 
 ### camel-mina-sftp - checking whether a file exists takes one lstat request
 
@@ -1495,6 +1545,27 @@ The cached keys are refreshed on a request once they are older than `jwksRefresh
 The producer now sends a byte array, an `InputStream`, a `Reader` or a file body (`File`, `Path` or the file of the file consumer) as text in the event. Before, a byte array was sent as a base64 string, a `File` as its path, and a stream failed after part of the request had already been sent.
 
 The JSON of the event is now written before the request is sent, with a `Content-Length` instead of a chunked request body. A body or a header that cannot be written as JSON fails the exchange without sending anything to Splunk.
+
+### camel-spring-ai - Spring AI 2.1.0
+
+The Spring AI components use Spring AI 2.1.0, which is built on Spring Boot 4.2 and Spring Framework 7.1. See the [Spring AI upgrade notes](https://docs.spring.io/spring-ai/reference/2.1/upgrade-notes.md). The changes that show through Camel are:
+
+-   The Anthropic chat model ignores the `temperature`, `topP` and `topKSampling` options of `spring-ai-chat`, and their headers, and logs a warning (Anthropic Java SDK 3.x). It sends the API key in the `Authorization: Bearer` header instead of `X-Api-Key`, which matters for a proxy that filters headers.
+    
+-   The chat models return one generation, whose message holds the reply in ordered parts. The body of `spring-ai-chat` is the text of the first generation, so with Google GenAI and `includeThoughts` it was the first thought, and with Bedrock Converse a reply of several text blocks gave only the first one. The body is now the whole answer.
+    
+-   With an `entityClass` (option or `CamelSpringAiChatEntityClass` header), a request that the SafeGuard advisor (`safeguardSensitiveWords`) refuses no longer fails the exchange with a JSON parsing error of the refusal text. The body is now `null` and the `CamelSpringAiChatFinishReason` header is `guardrailRefusal`. A response that the provider filtered and that cannot be converted gives a `null` body too. Check the finish reason header where the route handled the exception.
+    
+
+### camel-spring-ai-chat - the chatMemory option is deprecated, use sessionService
+
+Spring AI 2.1 deprecates `ChatMemory`, `MessageWindowChatMemory` and `MessageChatMemoryAdvisor` for removal in Spring AI 3.0, in favour of session memory. The `chatMemory` option of `spring-ai-chat` is deprecated, and works as before. Use the new `sessionService` option, which takes a Spring AI `SessionService`. The `CamelSpringAiChatConversationId` header selects the session, as it selected the chat memory conversation.
+
+Nothing changes at runtime unless the application has a `SessionService` bean. The new option is autowired, and when both options are set, `sessionService` is used. In Spring Boot, the Spring AI model starters create a `ChatMemory` bean, and `spring-ai-starter-model-session-jdbc` creates a `SessionService` bean, so with that starter the endpoints use session memory. The conversations stored in a `ChatMemory` are not moved to a session. The new `sessionMessageWindow` option sends the newest 20 messages of the session to the model by default, as a `MessageWindowChatMemory` keeps the last 20 messages by default. `0` sends the whole session.
+
+The `CamelSpringAiChatConversationId` header is now passed as the conversation id (`MemoryAdvisor.CONVERSATION_ID`) also when the endpoint has no memory, so the memory advisors of the `advisors` option and of a configured `chatClient` get it, and the Spring AI `ChatClient` observation records it. When the `advisors` option has a memory advisor, such as session advisors with compaction, the endpoint adds no memory advisor of its own. Before, an autowired `chatMemory` added a second memory advisor to the request. This check covers the `advisors` option only: a configured `chatClient` whose default advisors include a memory advisor still gets the memory advisor of the endpoint on top, as with an autowired `chatMemory` before, and now also when a `SessionService` bean appears, for example with `spring-ai-starter-model-session-jdbc`. Pass the memory advisor with the `advisors` option instead, or set `autowiredEnabled=false` on the component.
+
+A session keeps every event of the conversation, while a `MessageWindowChatMemory` kept the last 20 messages. Expired sessions (60 days by default) are only removed when `SessionService.deleteExpiredSessions` is called.
 
 ### camel-spring-ai-embeddings - a List body always gives a List of vectors, and a Map or POJO body fails
 
@@ -3600,6 +3671,12 @@ The `serverSideEncryption` and `serverSideEncryptionCustomerKey` endpoint option
 
 The `getEnterpriseEvents` operation of the `event-logs` API now returns all the events between `after` and `before`. Previously it returned only the first chunk of the event log (at most 500 events), and the rest was dropped without any sign. A wide `after`/`before` window now returns every event in one list: that is one request per 500 events plus one that finds the end of the log, and more memory. Narrow the window when the event log is large.
 
+### camel-box - the events consumer routes only events, and listens again after the event stream fails
+
+A route that reads from `box:events/listen` no longer gets an exchange with a `null` body at every poll of the consumer (every 500 ms by default), besides the events. A route that counted or filtered those exchanges, or used them as a heartbeat, gets only the exchanges of the Box events now.
+
+When the event stream fails (such as when Box cannot be reached for a while), the Box SDK stops it for good, and the consumer stayed started without receiving any event. The consumer now listens again after 1 second, doubled after each failure up to 60 seconds, and back to 1 second once the stream receives events again. It continues from the position after the last events it received, or from the `startingPosition` of the endpoint (from now when it has none) when it received no event yet. Each failure of the stream still goes to the exception handler of the consumer (a WARN log by default).
+
 ### camel-aws2-eventbridge - the consumer keeps one target for a queue given with queueUrl
 
 A consumer that uses its own queue (`queueUrl`) added a target with a new random id to the EventBridge rule at every start, and removed it on stop. Two consumers that share the queue, or a restart after a consumer was not stopped cleanly, left two targets for the queue, and EventBridge put every event on the queue twice. The target now has an id derived from the queue ARN, and stays on the rule when the consumer stops, so the queue also collects the events of the rule while no consumer runs. Remove the target from the rule yourself when you no longer use the queue, and remove targets with ids `camel-eb-` plus 8 characters that an earlier version left for the queue. An auto-created queue is not affected. During a rolling upgrade from an earlier version, events can be put on the queue twice until the last instance on the earlier version stops.
@@ -5629,3 +5706,13 @@ When the endpoint creates its own Pulsar client, a `pulsar+ssl://` connection no
 A connection to a host name or an IP address that the certificate does not list now fails the TLS handshake; this also applies to the brokers that a lookup returns (their advertised listeners). Use certificates that match the hosts, or set the new `hostnameVerification` option to `false` to keep the previous behaviour. A `pulsarClient` that is given to the component or the endpoint is used as it is.
 
 The new `tlsTrustCertsFilePath` option sets a PEM file with the certificates of the certificate authorities to trust, for a broker whose certificate is not signed by an authority that the JVM trusts.
+
+### camel-geocoder - the language option is used
+
+The `language` option (default `en`) is now sent with each request: as the `accept-language` parameter to Nominatim and as the `language` parameter to Google. Before, the option was ignored, so Nominatim answered in the local language of the place (for example `Deutschland` for Germany) and Google in its own default language. The address, country, city and region headers and the body now come in English unless `language` is set to another language code. Set `language` to an empty value to get the previous answers.
+
+### camel-google-storage - uploaded objects get the storage class of the CamelGoogleCloudStorageStorageClass header
+
+When the producer uploads an object, it now sets the storage class of the object from the `CamelGoogleCloudStorageStorageClass` header, or else from the new `objectStorageClass` option. Before, the header was not used for an upload, and every object got the default storage class of its bucket.
+
+The consumer and the `getObject` operation set this header to the storage class of the object they read. So a route that reads objects from one bucket and uploads them to another now keeps the storage class of each object, where before the objects got the default of the destination bucket. To keep the previous behaviour, remove the header before the upload, for example with `removeHeader("CamelGoogleCloudStorageStorageClass")`.

@@ -10,7 +10,7 @@ Use it to spread the records over one topic per day or per month by a date in th
 
 Input: a JSON object as JSON text, with the `Content-Type` header set to `application/json`. The name of the topic is read from the `CamelKafkaTopic` header, which `kafka-source` sets.
 
-Output: the same JSON object, as JSON text in a stream, with `Content-Type` set to `application/json`. When one of the `timestampKeys` fields is found, the `CamelKafkaOverrideTopic` header is set to the new name, and `kafka-sink` writes the record to that topic instead of its own `topic`.
+Output: the same JSON object, as JSON text in bytes, with `Content-Type` set to `application/json`. When one of the `timestampKeys` fields is found, the `CamelKafkaOverrideTopic` header is set to the new name, and `kafka-sink` writes the record to that topic instead of its own `topic`.
 
 Good to know: a field value that cannot be read as a date with `timestampKeyFormat` makes the message fail. The default `topicFormat` of `topic-$[timestamp]` gives names such as `topic-20240703`, without the original name: set it to `$[topic]-$[timestamp]` to keep it. The date is in UTC.
 

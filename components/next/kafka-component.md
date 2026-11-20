@@ -357,6 +357,12 @@ Enum values:
 | **saslMechanism** (security) | The Simple Authentication and Security Layer (SASL) Mechanism used. For the valid values see [http://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml](http://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml). | GSSAPI | String |
 | **saslPassword** (security) | Password for SASL authentication. Used when saslAuthType is set to PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. |  | String |
 | **saslUsername** (security) | Username for SASL authentication. Used when saslAuthType is set to PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. |  | String |
+| **schemaRegistryOauthClientId** (security) | The OAuth2 client id to log in to the schema registry with client credentials. Used with schemaRegistryVendor confluent and apicurio. |  | String |
+| **schemaRegistryOauthClientSecret** (security) | The OAuth2 client secret to log in to the schema registry with client credentials. |  | String |
+| **schemaRegistryOauthScope** (security) | The OAuth2 scope to ask for when logging in to the schema registry with client credentials (optional). |  | String |
+| **schemaRegistryOauthTokenEndpoint** (security) | The token endpoint of the OAuth2 server to log in to the schema registry with client credentials, with schemaRegistryOauthClientId and schemaRegistryOauthClientSecret. Used with schemaRegistryVendor confluent (bearer.auth.issuer.endpoint.url) and apicurio (apicurio.registry.auth.service.token.endpoint, such as the token endpoint of a Keycloak realm). |  | String |
+| **schemaRegistryPassword** (security) | The password to log in to the schema registry with basic auth, with schemaRegistryUsername. For Confluent Cloud, the API secret. |  | String |
+| **schemaRegistryUsername** (security) | The username to log in to the schema registry with basic auth, with schemaRegistryPassword. Used with schemaRegistryVendor confluent (basic.auth.user.info, which is the API key for Confluent Cloud) and apicurio (apicurio.registry.auth.username). The azure and aws-glue vendors log in with the credentials of the environment instead. |  | String |
 | **securityProtocol** (security) | Protocol used to communicate with brokers. SASL\_PLAINTEXT, PLAINTEXT, SASL\_SSL and SSL are supported. | PLAINTEXT | String |
 | **sslCipherSuites** (security) | A list of cipher suites. This is a named combination of authentication, encryption, MAC and key exchange algorithm used to negotiate the security settings for a network connection using TLS or SSL network protocol. By default, all the available cipher suites are supported. |  | String |
 | **sslContextParameters** (security) | SSL configuration using a Camel SSLContextParameters object. If configured, it’s applied before the other SSL endpoint parameters. NOTE: Kafka only supports loading keystore from file locations, so prefix the location with file: in the KeyStoreParameters.resource option. |  | SSLContextParameters |
@@ -685,6 +691,12 @@ Enum values:
 | **saslMechanism** (security) | The Simple Authentication and Security Layer (SASL) Mechanism used. For the valid values see [http://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml](http://www.iana.org/assignments/sasl-mechanisms/sasl-mechanisms.xhtml). | GSSAPI | String |
 | **saslPassword** (security) | Password for SASL authentication. Used when saslAuthType is set to PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. |  | String |
 | **saslUsername** (security) | Username for SASL authentication. Used when saslAuthType is set to PLAIN, SCRAM\_SHA\_256, or SCRAM\_SHA\_512. |  | String |
+| **schemaRegistryOauthClientId** (security) | The OAuth2 client id to log in to the schema registry with client credentials. Used with schemaRegistryVendor confluent and apicurio. |  | String |
+| **schemaRegistryOauthClientSecret** (security) | The OAuth2 client secret to log in to the schema registry with client credentials. |  | String |
+| **schemaRegistryOauthScope** (security) | The OAuth2 scope to ask for when logging in to the schema registry with client credentials (optional). |  | String |
+| **schemaRegistryOauthTokenEndpoint** (security) | The token endpoint of the OAuth2 server to log in to the schema registry with client credentials, with schemaRegistryOauthClientId and schemaRegistryOauthClientSecret. Used with schemaRegistryVendor confluent (bearer.auth.issuer.endpoint.url) and apicurio (apicurio.registry.auth.service.token.endpoint, such as the token endpoint of a Keycloak realm). |  | String |
+| **schemaRegistryPassword** (security) | The password to log in to the schema registry with basic auth, with schemaRegistryUsername. For Confluent Cloud, the API secret. |  | String |
+| **schemaRegistryUsername** (security) | The username to log in to the schema registry with basic auth, with schemaRegistryPassword. Used with schemaRegistryVendor confluent (basic.auth.user.info, which is the API key for Confluent Cloud) and apicurio (apicurio.registry.auth.username). The azure and aws-glue vendors log in with the credentials of the environment instead. |  | String |
 | **securityProtocol** (security) | Protocol used to communicate with brokers. SASL\_PLAINTEXT, PLAINTEXT, SASL\_SSL and SSL are supported. | PLAINTEXT | String |
 | **sslCipherSuites** (security) | A list of cipher suites. This is a named combination of authentication, encryption, MAC and key exchange algorithm used to negotiate the security settings for a network connection using TLS or SSL network protocol. By default, all the available cipher suites are supported. |  | String |
 | **sslContextParameters** (security) | SSL configuration using a Camel SSLContextParameters object. If configured, it’s applied before the other SSL endpoint parameters. NOTE: Kafka only supports loading keystore from file locations, so prefix the location with file: in the KeyStoreParameters.resource option. |  | SSLContextParameters |
@@ -1487,6 +1499,9 @@ from("kafka:my-topic?brokers=localhost:9092&saslAuthType=OAUTH&oauthClientId=my-
             uri: log:received
 ```
 
+> **Important**
+> Since Kafka 4.0, the client only calls an OAuth token endpoint that is listed in the JVM system property `org.apache.kafka.sasl.oauthbearer.allowed.urls` (a comma-separated list of URLs). Without it, the producer or consumer fails to start with `The URL cannot be accessed due to restrictions. Update the system property 'org.apache.kafka.sasl.oauthbearer.allowed.urls' to allow the URL to be accessed`. Set it to the `oauthTokenEndpointUri`, for example with `-Dorg.apache.kafka.sasl.oauthbearer.allowed.urls=https://auth.example.com/oauth/token`, or with Camel JBang `camel run --jvm-args=-Dorg.apache.kafka.sasl.oauthbearer.allowed.urls=https://auth.example.com/oauth/token`.
+
 **AWS MSK IAM Authentication**
 
 When using AWS MSK with IAM authentication, ensure the `aws-msk-iam-auth` library is on the classpath:
@@ -1753,6 +1768,62 @@ from("direct:orders")
               schemaRegistryURL: my-namespace.servicebus.windows.net
               additionalProperties.schema.group: my-group
               additionalProperties.schema.registry.credential: "#bean:myCredential"
+```
+
+**Logging in to the schema registry**
+
+A registry that requires a login is reached with the login of its vendor:
+
+ 
+| schemaRegistryVendor | How it logs in |
+| --- | --- |
+| `confluent` | Basic auth with `schemaRegistryUsername` and `schemaRegistryPassword`, set as `basic.auth.credentials.source=USER_INFO` and `basic.auth.user.info`. For Confluent Cloud, the username is the API key of the Schema Registry and the password its API secret. Or OAuth2 client credentials with `schemaRegistryOauthClientId`, `schemaRegistryOauthClientSecret`, `schemaRegistryOauthTokenEndpoint` and the optional `schemaRegistryOauthScope`, set as `bearer.auth.credentials.source=OAUTHBEARER` and the `bearer.auth.*` properties. |
+| `apicurio` | Basic auth with `schemaRegistryUsername` and `schemaRegistryPassword`, set as `apicurio.registry.auth.username` and `apicurio.registry.auth.password`. Or OAuth2 client credentials, such as with Keycloak, with `schemaRegistryOauthTokenEndpoint` (the token endpoint of the realm), `schemaRegistryOauthClientId`, `schemaRegistryOauthClientSecret` and the optional `schemaRegistryOauthScope`, set as the `apicurio.registry.auth.*` properties. |
+| `aws-glue` | The AWS default credentials provider chain: the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables (and `AWS_SESSION_TOKEN`), a profile in `~/.aws/credentials` (with `AWS_PROFILE`), or the role of the EC2 instance, ECS task or EKS service account. The login options are not used: setting one fails when the producer or consumer starts. |
+| `azure` | The `DefaultAzureCredential` of the Azure Identity library, as Camel sets `use.azure.credential=true`: the `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_CLIENT_SECRET` environment variables of a service principal, a managed identity, a workload identity, or the Azure CLI login. Another `TokenCredential` can be given as the `schema.registry.credential` additional property, as shown above. The login options are not used: setting one fails when the producer or consumer starts. |
+
+`schemaRegistryPassword` and `schemaRegistryOauthClientSecret` are secret options, which Camel masks in logs. In an endpoint URI, give a secret that has characters such as `&` or `+` in `RAW()`, or set it from a property placeholder or a vault. What you set in `additionalProperties`, such as `basic.auth.credentials.source=SASL_INHERIT` to use the SASL login of the Kafka connection, takes precedence. With OAuth2 and `confluent`, the Confluent client checks `schemaRegistryOauthTokenEndpoint` against the JVM system property `org.apache.kafka.sasl.oauthbearer.allowed.urls`, just as the Kafka client does for the SASL OAuth login. List the token endpoint in this property, or the producer or consumer fails to start with `The URL cannot be accessed due to restrictions`.
+
+For example, Confluent Cloud with the API key of its Schema Registry:
+
+-   Java
+    
+-   YAML
+    
+
+```java
+from("kafka:orders?schemaRegistryVendor=confluent&schemaRegistryURL=https://psrc-123.eu-central-1.aws.confluent.cloud"
+     + "&schemaRegistryUsername={{registry.key}}&schemaRegistryPassword=RAW({{registry.secret}})")
+    .log("Received ${body}");
+```
+
+```yaml
+- route:
+    from:
+      uri: kafka:orders
+      parameters:
+        schemaRegistryVendor: confluent
+        schemaRegistryURL: https://psrc-123.eu-central-1.aws.confluent.cloud
+        schemaRegistryUsername: "{{registry.key}}"
+        schemaRegistryPassword: "RAW({{registry.secret}})"
+      steps:
+        - log: "Received ${body}"
+```
+
+And Apicurio Registry with a Keycloak client:
+
+```yaml
+- route:
+    from:
+      uri: kafka:orders
+      parameters:
+        schemaRegistryVendor: apicurio
+        schemaRegistryURL: http://registry:8080/apis/registry/v3
+        schemaRegistryOauthTokenEndpoint: http://keycloak:8080/realms/registry/protocol/openid-connect/token
+        schemaRegistryOauthClientId: orders-consumer
+        schemaRegistryOauthClientSecret: "RAW({{registry.client.secret}})"
+      steps:
+        - log: "Received ${body}"
 ```
 
 ### Batching Consumer

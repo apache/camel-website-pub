@@ -131,6 +131,7 @@ Enum values:
 | **umask** (common) | umask permission for file. |  | String |
 | **userPrincipalNameReturned** (common) | whether or not to use upn. | false | Boolean |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **deleteAfterRead** (consumer) | Delete a file from the file system once its exchange has completed. When the exchange fails, the file is not deleted, so it is consumed again at the next poll. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **operation** (producer) | 
 
@@ -251,6 +252,7 @@ Enum values:
 | **timeout** (common) | Timeout for operation. |  | Duration |
 | **umask** (common) | umask permission for file. |  | String |
 | **userPrincipalNameReturned** (common) | whether or not to use upn. | false | Boolean |
+| **deleteAfterRead** (consumer) | Delete a file from the file system once its exchange has completed. When the exchange fails, the file is not deleted, so it is consumed again at the next poll. | false | boolean |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
@@ -836,6 +838,13 @@ from("azure-storage-datalake:cameltesting/filesystem?accountKey=yourAccountKey&f
       steps:
         - to:
             uri: mock:results
+```
+
+The consumer reads every file of the file system (or of `path`) at every poll. To consume each file once, set `deleteAfterRead=true`: the file is deleted once its exchange has completed. When the exchange fails, the file is kept and consumed again at the next poll. A file that is already gone is ignored, and a failure to delete goes to the exception handler of the consumer.
+
+```java
+from("azure-storage-datalake:cameltesting/filesystem?accountKey=yourAccountKey&path=inbox&deleteAfterRead=true")
+    .to("mock:results");
 ```
 
 ### Producer Examples

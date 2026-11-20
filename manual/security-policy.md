@@ -16,6 +16,10 @@ The framework checks four categories of security concerns:
 
 The insecure options are the component, data format and language options that are marked with a security category in their metadata. A property that configures a component, data format or language (such as `camel.component.netty.ssl`) is only checked against the options of that component, data format or language, so an option that merely has the same name as an insecure option of another component (such as the `ssl` option of camel-hivemq) is not flagged. Any other property (such as `camel.ssl.trustAllCertificates`) is checked by the option name.
 
+With camel-main and the Camel CLI, the properties of the beans that route files define (the `beans` section of a YAML or XML DSL file, and the beans of a Spring XML or Blueprint XML file) are checked once the routes are loaded, under the key of a bean configured from properties: `camel.beans.<name>.<property>`, such as `camel.beans.opaPolicy.failOpen`. The same key goes in `camel.security.allowedProperties` to allow one of them. Camel Spring Boot checks the configuration properties only, not the beans of route files.
+
+The security policy does not check the options set in the endpoint URIs of the routes, so an insecure option there, such as `failOpen=true` in `opa:authz/allow?failOpen=true`, is not reported.
+
 ## Policy levels
 
 Each category can be set to one of three enforcement levels:
