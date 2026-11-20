@@ -10,7 +10,7 @@ Use it to remove records from Salesforce when they are removed in another system
 
 Input: the body is JSON text with two fields: `sObjectName`, the API name of the kind of record (such as `Contact`), and `sObjectId`, the ID of the record. For example `{"sObjectName": "Contact", "sObjectId": "003XXXXXXXXXXXXXXX"}`. Other fields are ignored.
 
-Output: when it is used inside a route, the body afterwards is empty.
+Output: when it is used inside a route, the body afterwards is empty, and the `Content-Type` header is `application/json`.
 
 Good to know: Salesforce moves the deleted record to its Recycle Bin. A message without `sObjectName` or `sObjectId`, or for a record that does not exist, fails. The message decides which record is deleted, so place this sink only after a source you trust. Headers that start with `CamelSalesforce` are removed from the message first, so they cannot change what the Kamelet does.
 
@@ -36,6 +36,8 @@ The following table summarizes the configuration options available for the `sale
 
 At runtime, the `salesforce-delete-sink` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:jackson3
+    
 -   camel:salesforce
     
 -   camel:kamelet

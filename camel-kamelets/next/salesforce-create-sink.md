@@ -10,7 +10,7 @@ Use it to add to Salesforce what happens in other systems, for example a contact
 
 Input: the body is the fields of the new record as JSON text, with the API names of the fields, such as `{"LastName": "Lovelace", "Email": "[ada@example.com](mailto:ada@example.com)"}`. It is sent to Salesforce as it is. The kind of record comes from `sObjectName`.
 
-Output: when it is used inside a route, the body afterwards is the answer of Salesforce as JSON text, with the `id` of the new record, `success` and `errors`.
+Output: when it is used inside a route, the body afterwards is the answer of Salesforce as JSON text, with the `id` of the new record, `success` and `errors`. The `Content-Type` header is `application/json`.
 
 Good to know: a record that Salesforce refuses, for example because a required field is missing or a validation rule fails, fails the message. `sObjectName` must be set, or the Kamelet does not start. Headers that start with `CamelSalesforce` are removed from the message first, so they cannot change what the Kamelet does.
 
@@ -37,6 +37,8 @@ The following table summarizes the configuration options available for the `sale
 
 At runtime, the `salesforce-create-sink` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:jackson3
+    
 -   camel:salesforce
     
 -   camel:kamelet

@@ -8,7 +8,7 @@ Reads values, such as uptime or interface counters, from a network device over S
 
 Use it to monitor routers, switches, printers or servers that speak SNMP, for example to store their counters over time, or to forward their alarms (traps) to a ticketing or chat system.
 
-Output: the body is XML text with one `entry` per value, each with its `oid` (the identifier of the value, such as `1.3.6.1.2.1.1.3.0` for the uptime) and its `value`, inside an `snmp` element. For a trap, the `peerAddress` header is the address of the device that sent it.
+Output: the body is XML text with one `entry` per value, each with its `oid` (the identifier of the value, such as `1.3.6.1.2.1.1.3.0` for the uptime) and its `value`, inside an `snmp` element. The `Content-Type` header is `text/plain`. For a trap, the `peerAddress` header is the address of the device that sent it.
 
 Good to know: with `type` set to `TRAP`, `host` and `port` are the address to listen on, not a device; traps are usually sent to port 162, but `port` is 161 by default, and a port below 1024 needs administrator rights on most systems. A device that does not answer a poll gives no message: it is sent again `retries` times, each time after waiting `snmpTimeout` for the answer; when they are not set, that is 2 more times, after 1.5 seconds each. SNMP v1 and v2c send the community string in clear text; prefer v3 when the device supports it.
 

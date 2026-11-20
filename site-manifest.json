@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795203618540,
+  "generated": 1795212917808,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4338,12 +4338,6 @@
             },
             {
               "module": "ROOT",
-              "path": "ibm-watson-language-sink.adoc",
-              "url": "/camel-kamelets/next/ibm-watson-language-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/ibm-watson-language-sink.svg\" alt=\"ibm watson language sink\"></span> IBM Watson Natural Language Understanding Sink"
-            },
-            {
-              "module": "ROOT",
               "path": "index.adoc",
               "url": "/camel-kamelets/next/index.html",
               "title": "Kamelet Catalog"
@@ -4575,18 +4569,6 @@
               "path": "message-timestamp-router-action.adoc",
               "url": "/camel-kamelets/next/message-timestamp-router-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/message-timestamp-router-action.svg\" alt=\"message timestamp router action\"></span> Message Timestamp Router Action"
-            },
-            {
-              "module": "ROOT",
-              "path": "minio-sink.adoc",
-              "url": "/camel-kamelets/next/minio-sink.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/minio-sink.svg\" alt=\"minio sink\"></span> Minio Sink"
-            },
-            {
-              "module": "ROOT",
-              "path": "minio-source.adoc",
-              "url": "/camel-kamelets/next/minio-source.html",
-              "title": "<span class=\"image\"><img src=\"_images/kamelets/minio-source.svg\" alt=\"minio source\"></span> Minio Source"
             },
             {
               "module": "ROOT",

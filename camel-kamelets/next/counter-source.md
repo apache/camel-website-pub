@@ -8,7 +8,7 @@ Sends a message with a number that counts up by one, such as 1, 2, 3, at a regul
 
 Use it to try out a sink or an action with messages that are each different and easy to follow, or to make ordered test data. For the same fixed message every time use `timer-source`, and for a calendar schedule such as "every weekday at 9:00" use `cron-source`.
 
-Output: the body is the number, as an Integer (a whole number, not text). The `Content-Type` header is `text/plain`.
+Output: the body is the number, as text, such as `42`. The `Content-Type` header is `text/plain`.
 
 Good to know: it keeps sending until the integration is stopped, unless `numbers` is set. The count starts again from `start` when the integration restarts.
 

@@ -245,8 +245,6 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![ibm cos source](_images/kamelets/ibm-cos-source.svg) IBM Cloud Object Storage Source](ibm-cos-source.html)
 
- [![ibm watson language sink](_images/kamelets/ibm-watson-language-sink.svg) IBM Watson Natural Language Understanding Sink](ibm-watson-language-sink.html)
-
  [![infinispan sink](_images/kamelets/infinispan-sink.svg) Infinispan Sink](infinispan-sink.html)
 
  [![infinispan source](_images/kamelets/infinispan-source.svg) Infinispan Source](infinispan-source.html)
@@ -322,10 +320,6 @@ Consult the Kamelets User Guide for information about how to use these.
  [![mask field action](_images/kamelets/mask-field-action.svg) Mask Fields Action](mask-field-action.html)
 
  [![message timestamp router action](_images/kamelets/message-timestamp-router-action.svg) Message Timestamp Router Action](message-timestamp-router-action.html)
-
- [![minio sink](_images/kamelets/minio-sink.svg) Minio Sink](minio-sink.html)
-
- [![minio source](_images/kamelets/minio-source.svg) Minio Source](minio-source.html)
 
  [![mongodb changes stream source](_images/kamelets/mongodb-changes-stream-source.svg) MongoDB Changes Stream Source](mongodb-changes-stream-source.html)
 

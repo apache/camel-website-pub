@@ -8,7 +8,7 @@ Runs a command on a remote server over SSH again and again, at a regular interva
 
 Use it to watch a server without installing anything on it, for example check the free disk space, the state of a service or the last lines of a log file every minute. To run a command for each incoming message instead, use `ssh-sink`.
 
-Output: the body is what the command printed on its standard output, as text. The `CamelSshExitValue` header holds the exit code of the command, and `CamelSshStderr` what it printed on its standard error, as a stream.
+Output: the body is what the command printed on its standard output, as text, and the `Content-Type` header is set to `text/plain`. The `CamelSshExitValue` header holds the exit code of the command, and `CamelSshStderr` what it printed on its standard error, as a stream.
 
 Good to know: it runs `pollCommand` with the rights of `username`, so log in with an account that may do only what is needed. It runs it every half second by default; set `delay` to how often you need it. A command that fails still sends a message, with its exit code in `CamelSshExitValue`. Log in with `password`, or with a private key in `privateKeyResource` when the server does not take passwords; when a key is set, the password is not used. The key of the server is checked only when `knownHostsResource` is set; without it, any server is accepted. A server that is not listed in that file is still accepted, unless `failOnUnknownHost` is true.
 

@@ -8,7 +8,7 @@ Reads the events that AWS CloudTrail records in an AWS account, such as API call
 
 Use it to react to activity in an AWS account, for example to raise an alert when a secret is read, a security group is changed or someone signs in to the console. Set `eventSource` to read the events of one AWS service only.
 
-Output: the body is the CloudTrail record of the event, as JSON text. The headers give the ID, the name (such as `GetSecretValue`), the source (such as `secretsmanager.amazonaws.com`) and the user name of the event.
+Output: the body is the CloudTrail record of the event, as JSON text in bytes, and the `Content-Type` header is `application/json`. The headers give the ID, the name (such as `GetSecretValue`), the source (such as `secretsmanager.amazonaws.com`) and the user name of the event.
 
 Good to know: it looks up the management events that CloudTrail keeps for the region, and reads the events that happen after it starts. It remembers where it is only while it runs: the events that happen while it is stopped are not read. Nothing is removed from CloudTrail. An event can be looked up only some minutes after it happened, and sometimes after a newer event: every `lookBackInterval` it looks up the last `lookBackWindow` again, and reads the events it missed. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid.
 
@@ -41,6 +41,8 @@ The following table summarizes the configuration options available for the `aws-
 
 At runtime, the `aws-cloudtrail-source` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:jackson3
+    
 -   camel:aws-cloudtrail
     
 -   camel:kamelet

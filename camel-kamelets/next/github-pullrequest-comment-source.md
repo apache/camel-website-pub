@@ -8,7 +8,7 @@ Receives each new comment written on the open pull requests of a GitHub reposito
 
 Use it to react to the discussion on pull requests, for example to answer a command written in a comment, such as `/retest`, or to forward the comments to a chat channel. To receive the pull requests themselves, use `github-pullrequest-source`.
 
-Output: the body is the comment as JSON text. The `CamelGitHubPullRequest` header gives the number of the pull request it was written on.
+Output: the body is the comment as JSON text, an object with the fields of the GitHub API that say what it is: `id`, `body` (the text of the comment), `html_url` (its web address), `user.login` (its author), `author_association` (the role of the author in the repository, such as `OWNER` or `CONTRIBUTOR`), `created_at` and `updated_at`. The `CamelGitHubPullRequest` header gives the number of the pull request it was written on.
 
 Good to know: only the comments written after the start are sent, and only on pull requests that are still open. These are the comments of the conversation of a pull request, not the review comments on lines of code. It works with github.com, not with GitHub Enterprise Server. Once a minute by default (`delay`), it asks GitHub for the open pull requests and for the comments of each of them, and every request counts against the API rate limit of the token.
 
@@ -28,9 +28,9 @@ The following table summarizes the configuration options available for the `gith
 
 At runtime, the `github-pullrequest-comment-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson3
-    
 -   camel:github2
+    
+-   camel:jq
     
 -   camel:kamelet
     

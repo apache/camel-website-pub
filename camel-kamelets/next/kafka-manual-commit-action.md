@@ -22,6 +22,8 @@ The `kafka-manual-commit-action` Kamelet does not specify any configuration opti
 
 At runtime, the `kafka-manual-commit-action` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:kafka
+    
 -   camel:kamelet
     
 

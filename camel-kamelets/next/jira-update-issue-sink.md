@@ -10,7 +10,7 @@ Use it to keep a ticket in step with another system, for example to assign an is
 
 Input: the body becomes the new description of the issue, as text, and replaces the old one. When the body is empty, the `ce-issueDescription` header gives the description instead. The `ce-issueKey` header (the key of the issue, such as `SHOP-42`) is required. The other fields come from optional headers, and a field without a header is left as it is: `ce-issueSummary` (the title), `ce-issueTypeName` (such as `Bug`), `ce-issueAssignee`, `ce-issuePriorityName` (such as `High`) and `ce-issueComponents` (a comma-separated list, which replaces the components).
 
-Output: the message is unchanged.
+Output: the body afterwards is the description, as text, and the `Content-Type` header is `text/plain`.
 
 Good to know: a message with a body always replaces the description, even when it also has the `ce-issueDescription` header. An issue type or a priority whose name Jira does not know is ignored. A message without `ce-issueKey` fails. Log in either with `username` and `password`, or with `personal-token`. Headers that start with `CamelJira` are removed from the message first, so they cannot change what the Kamelet does.
 

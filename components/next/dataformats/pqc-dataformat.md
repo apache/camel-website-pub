@@ -265,7 +265,7 @@ from("direct:encrypt")
 
 -   BIKE - Bit Flipping Key Encapsulation
     
--   CMCE - Classic McEliece
+-   CMCE - Classic McEliece (deprecated: believed to be unsafe to use, and will be removed in a future release)
     
 -   HQC - Hamming Quasi-Cyclic
     

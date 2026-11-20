@@ -10,7 +10,7 @@ Use it to copy a batch of customers, products or orders from another system into
 
 Input: the body is JSON text with a `records` list. Each record gives its kind in `attributes`, such as `{"attributes": {"type": "Contact"}, "External_Id__c": "C-1", "LastName": "Lovelace"}`, and holds the external ID field named by `sObjectIdName` with its value, and the fields to set. Salesforce accepts up to 200 records in one call.
 
-Output: when it is used inside a route, the body afterwards is a List with one result per record, in the same order, each with `id`, `success`, `created` (true for a new record) and `errors`.
+Output: when it is used inside a route, the body afterwards is a List with one result per record, in the same order, each with `id`, `success`, `created` (true for a new record) and `errors`. The `Content-Type` header is `application/json`.
 
 Good to know: a record that Salesforce refuses does not fail the message, and the other records are still saved: check `success` in the results. Headers that start with `CamelSalesforce` are removed from the message first, so they cannot change what the Kamelet does.
 

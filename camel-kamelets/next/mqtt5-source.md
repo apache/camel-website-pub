@@ -8,7 +8,7 @@ Receives each message published to a topic on an MQTT broker, such as Eclipse Mo
 
 Use it to collect readings and events from IoT devices and other MQTT clients, when the broker or the clients use MQTT 5. A topic with wildcards, such as `sensors/#`, receives from many topics at once. The broker must support MQTT 5.
 
-Output: the body is the payload, as bytes. The `CamelMqttTopic` header is the topic the message was published to, `CamelMqttQoS` its quality of service, and `CamelPahoMqtt5MsgProperties` holds the MQTT 5 properties of the message, such as its user properties.
+Output: the body is the payload, as bytes, and the `Content-Type` header is `application/octet-stream`, whatever content type the publisher gave in the MQTT 5 properties. The `CamelMqttTopic` header is the topic the message was published to, `CamelMqttQoS` its quality of service, and `CamelPahoMqtt5MsgProperties` holds the MQTT 5 properties of the message, such as its user properties.
 
 Good to know: it receives only the messages published while it is connected, plus, when it subscribes, the last retained message of each matching topic. It subscribes with quality of service 2 (exactly once) unless `qos` is set. Each running copy needs its own `clientId`: two clients with the same ID keep pushing each other off the broker and lose messages. When it is not set, a unique one is generated. It connects with no TLS unless `brokerUrl` starts with `ssl://`. With TLS it checks the certificate and the host name of the broker, and trusts the certificate authorities that Java trusts by default, or instead the ones in `sslTruststoreLocation`. The integration fails to start when the broker cannot be reached or fails these checks.
 

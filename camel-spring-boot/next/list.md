@@ -1068,7 +1068,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [IBM Cloud Object Storage](../../components/next/ibm-cos-component.md) | camel-ibm-cos-starter | Stable | 4.16 | Store and retrieve objects from IBM Cloud Object Storage. |
 | [IBM Secrets Manager](../../components/next/ibm-secrets-manager-component.md) | camel-ibm-secrets-manager-starter | Stable | 4.11 | Manage secrets in IBM Secrets Manager Service |
 | [IBM Watson Discovery](../../components/next/ibm-watson-discovery-component.md) | camel-ibm-watson-discovery-starter | Stable | 4.16 | Perform document understanding and search using IBM Watson Discovery |
-| [IBM Watson Language](../../components/next/ibm-watson-language-component.md) | camel-ibm-watson-language-starter | Stable | 4.16 | Perform natural language processing using IBM Watson Natural Language Understanding |
+| [IBM Watson Language](../../components/next/ibm-watson-language-component.md) | camel-ibm-watson-language-starter | Stable-deprecated | 4.16 | Perform natural language processing using IBM Watson Natural Language Understanding |
 | [IBM Watson Speech to Text](../../components/next/ibm-watson-speech-to-text-component.md) | camel-ibm-watson-speech-to-text-starter | Stable | 4.17 | Convert speech audio to text using IBM Watson Speech to Text |
 | [IBM Watson Text to Speech](../../components/next/ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech-starter | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
 | [IBM watsonx.ai](../../components/next/ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai-starter | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |

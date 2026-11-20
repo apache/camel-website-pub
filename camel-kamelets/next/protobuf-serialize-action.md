@@ -8,11 +8,11 @@ Turns each message, a JSON object, into Protobuf binary data that follows the Pr
 
 Use it to send records in Protocol Buffers (Protobuf), a compact binary format described by a schema, to a system that expects it, such as a Kafka topic whose readers decode Protobuf. To turn Protobuf back into JSON, use `protobuf-deserialize-action`; for Avro, use `avro-serialize-action`.
 
-Input: parsed JSON (a Map or a Jackson `JsonNode`) whose fields match the schema. Put `json-deserialize-action` before this action when the body is JSON text.
+Input: parsed JSON (a Map or a Jackson `JsonNode`) whose fields match the schema. JSON text fails: put `json-deserialize-action` before this action to parse it.
 
-Output: the body is the Protobuf binary data, as bytes, and the `Content-Type` header is set to `application/protobuf`.
+Output: the body is the Protobuf binary data, as a stream, and the `Content-Type` header is set to `application/protobuf`.
 
-Good to know: JSON text is not turned into Protobuf: it is passed on as it is, yet the `Content-Type` header is set to `application/protobuf`. A message fails when it has a field the schema does not know or a value of the wrong type; a field of the schema that the message lacks is left out, even when it is marked `required`. When `schema` is not set, the schema found by an earlier `resolve-pojo-schema-action` is used.
+Good to know: a message fails when it has a field the schema does not know or a value of the wrong type; a field of the schema that the message lacks is left out, even when it is marked `required`. When `schema` is not set, the schema found by an earlier `resolve-pojo-schema-action` is used.
 
 ## Configuration Options
 

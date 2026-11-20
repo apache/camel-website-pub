@@ -212,8 +212,16 @@ Features:
     
 -   **Error highlighting** — failed spans (status ERROR) are highlighted in red
     
+-   **AI agent runs** — GenAI spans are labelled in the waterfall: an agent run (◆), a model call (●) with its tokens and finish reason, and a tool call (⚙) with its arguments. The detail panel of an agent run shows its model and provider, the number of model and tool calls, the tokens, how its time splits into model calls, tool calls and the rest, and the steps one by one. Agent runs are recorded from the GenAI observability level `detailed` on (`camel.aiObservability.level=detailed`).
+    
+-   **AI conversations** — on a GenAI span (a model call, an agent run or a tool call), press **t** to read its conversation: the system instructions, the user and assistant messages, and each tool call with its arguments and result. An agent run shows the input and output of its last model call, which hold the whole run. The messages are recorded at the GenAI observability level `full` (`camel.aiObservability.level=full`); at a lower level the detail panel says so
+    
 
 This is especially useful for understanding latency in multi-route integrations and for correlating Camel processing with external service calls (HTTP, database, messaging).
+
+![An agent run in the waterfall: two model calls and a tool call](_images/jbang/camel-tui-spans-agent-run.png)
+
+![The conversation of an agent run: the question](_images/jbang/camel-tui-spans-conversation.png)
 
 ## Process Information
 

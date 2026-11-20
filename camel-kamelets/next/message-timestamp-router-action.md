@@ -8,7 +8,7 @@ Changes the topic that `kafka-sink` writes a record to, to a name made of the or
 
 Use it to spread the records over one topic per day or per month by a date in the data, such as the date of an order, in a flow from `kafka-source` to `kafka-sink`. To use the time the record was written to Kafka instead use `timestamp-router-action`.
 
-Input: a JSON object as JSON text, with the `Content-Type` header set to `application/json`. The name of the topic is read from the `CamelKafkaTopic` header, which `kafka-source` sets.
+Input: a JSON object, as JSON text, as bytes, as a Map or as parsed JSON (a Jackson `JsonNode`). The `Content-Type` header is not needed. The name of the topic is read from the `CamelKafkaTopic` header, which `kafka-source` sets.
 
 Output: the same JSON object, as JSON text in bytes, with `Content-Type` set to `application/json`. When one of the `timestampKeys` fields is found, the `CamelKafkaOverrideTopic` header is set to the new name, and `kafka-sink` writes the record to that topic instead of its own `topic`.
 

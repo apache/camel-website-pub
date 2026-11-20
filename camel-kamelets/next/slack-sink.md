@@ -8,7 +8,7 @@ Posts each message as a text message to a Slack channel, through an incoming web
 
 Use it to tell a team in Slack when something happens, such as a monitoring alert, a failed build, a new order or a daily report. To read the messages of a channel instead, use `slack-source`.
 
-Input: the body is the text of the Slack message, as text; another kind of body is turned into text first. JSON text is posted as it is, as the text of the message, not as a Slack message structure. The text can use Slack’s own formatting, such as `**bold**`. Headers are not read.
+Input: the body is the text of the Slack message, as text; another kind of body is turned into text first. JSON text is posted as it is, as the text of the message, not as a Slack message structure. The text can use Slack’s own formatting, such as `**bold**`. A `Message` object of the Slack API for Java (`com.slack.api.model.Message`) is posted as it is, with its blocks and attachments. Headers are not read.
 
 Output: the message is unchanged.
 

@@ -10,7 +10,7 @@ Use it to keep tickets in step with what happens elsewhere, for example to close
 
 Input: the `ce-issueKey` header (the key of the issue, such as `SHOP-42`) and the `ce-issueTransitionId` header (the ID number of the transition, such as `31`, not the name of the status) are required. The body, as text, is added to the issue as a comment after the transition.
 
-Output: the message is unchanged.
+Output: the body afterwards is the comment, as text, and the `Content-Type` header is `text/plain`.
 
 Good to know: a message without one of the two headers fails, and so does a transition that the workflow does not allow from the current status of the issue. Jira lists the transitions possible for an issue, with their IDs, at `<jiraUrl>/rest/api/2/issue/<key>/transitions`. Log in either with `username` and `password`, or with `personal-token`. Headers that start with `CamelJira` are removed from the message first, so they cannot change what the Kamelet does.
 

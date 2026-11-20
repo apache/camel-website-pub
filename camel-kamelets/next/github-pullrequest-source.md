@@ -8,9 +8,9 @@ Receives each new pull request opened in a GitHub repository, one message per pu
 
 Use it to react when someone proposes a change, for example to announce the pull request in a chat channel, open a review ticket or start a check. To receive the comments on pull requests, use `github-pullrequest-comment-source`.
 
-Output: the body is the pull request as JSON text. The `CamelGitHubPullRequest` header gives its number, and `CamelGitHubPullRequestHeadCommitSha` the SHA of its latest commit.
+Output: the body is the pull request as JSON text, an object with the fields of the GitHub API that say what it is: `number`, `title`, `body` (its description), `state`, `draft`, `html_url` (its web address), `user.login` (its author), `head` and `base` (the branch it comes from and the branch it goes to, each with `ref`, `sha` and `label`), `labels` (each with its `name`), `created_at` and `updated_at`. The `CamelGitHubPullRequest` header gives its number, and `CamelGitHubPullRequestHeadCommitSha` the SHA of its latest commit.
 
-Good to know: only the pull requests opened after the start are sent, once each; updates, merges and closes are not. It works with github.com, not with GitHub Enterprise Server. It asks GitHub for new pull requests once a minute by default (`delay`), and every request counts against the API rate limit of the token.
+Good to know: only the pull requests opened after the start are sent, once each; updates, merges and closes are not. The body holds only what GitHub gives in its list of pull requests, so no more requests are made per pull request; the size of the change, such as its additions or commits, and whether it can be merged are not in it. It works with github.com, not with GitHub Enterprise Server. It asks GitHub for new pull requests once a minute by default (`delay`), and every request counts against the API rate limit of the token.
 
 ## Configuration Options
 
@@ -28,9 +28,9 @@ The following table summarizes the configuration options available for the `gith
 
 At runtime, the `github-pullrequest-source` Kamelet relies upon the presence of the following dependencies:
 
--   camel:jackson3
-    
 -   camel:github2
+    
+-   camel:jq
     
 -   camel:kamelet
     

@@ -47,7 +47,7 @@ Number of Core Components: 29 in 26 JAR artifacts (0 deprecated)
 
 Below is the list of non-core components that are provided by Apache Camel.
 
-Number of Non-Core Components: 397 in 324 JAR artifacts (10 deprecated)
+Number of Non-Core Components: 397 in 324 JAR artifacts (11 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -236,7 +236,7 @@ Number of Non-Core Components: 397 in 324 JAR artifacts (10 deprecated)
 | [IBM Cloud Object Storage](ibm-cos-component.md) | camel-ibm-cos | Stable | 4.16 | Store and retrieve objects from IBM Cloud Object Storage. |
 | [IBM Secrets Manager](ibm-secrets-manager-component.md) | camel-ibm-secrets-manager | Stable | 4.11 | Manage secrets in IBM Secrets Manager Service |
 | [IBM Watson Discovery](ibm-watson-discovery-component.md) | camel-ibm-watson-discovery | Stable | 4.16 | Perform document understanding and search using IBM Watson Discovery |
-| [IBM Watson Language](ibm-watson-language-component.md) | camel-ibm-watson-language | Stable | 4.16 | Perform natural language processing using IBM Watson Natural Language Understanding |
+| [IBM Watson Language](ibm-watson-language-component.md) | camel-ibm-watson-language | Stable-deprecated | 4.16 | Perform natural language processing using IBM Watson Natural Language Understanding |
 | [IBM Watson Speech to Text](ibm-watson-speech-to-text-component.md) | camel-ibm-watson-speech-to-text | Stable | 4.17 | Convert speech audio to text using IBM Watson Speech to Text |
 | [IBM Watson Text to Speech](ibm-watson-text-to-speech-component.md) | camel-ibm-watson-text-to-speech | Stable | 4.17 | Convert text to natural-sounding speech using IBM Watson Text to Speech |
 | [IBM watsonx.ai](ibm-watsonx-ai-component.md) | camel-ibm-watsonx-ai | Stable | 4.18 | Interact with IBM watsonx.ai foundation models for text generation, chat, embeddings, and more. |

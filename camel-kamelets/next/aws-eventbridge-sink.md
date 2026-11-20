@@ -8,9 +8,9 @@ Sends each message as an event to an Amazon EventBridge event bus, where rules r
 
 Use it to publish business events, such as `Order Shipped`, for other applications and AWS services to react to through EventBridge rules.
 
-Input: the body is the detail of the event, as JSON text that holds a JSON object, such as `{"orderId": "A-1"}`. The `detail-type` header (or `ce-detail-type`) is the detail type, such as `Order Shipped`; the `event-source` header (or `ce-event-source`, or `ce-source`) is the source, such as `com.example.shop`; and the `resources-arn` header (or `ce-resources-arn`) is the ARN (Amazon Resource Name) of the resource the event is about, or several separated by commas. Each header falls back on its option: `detailType`, `eventSource` and `resourcesArn`.
+Input: the body is the detail of the event, as JSON text that holds a JSON object, such as `{"orderId": "A-1"}`, or as a Map, which is written as JSON. The `detail-type` header (or `ce-detail-type`) is the detail type, such as `Order Shipped`; the `event-source` header (or `ce-event-source`, or `ce-source`) is the source, such as `com.example.shop`; and the `resources-arn` header (or `ce-resources-arn`) is the ARN (Amazon Resource Name) of the resource the event is about, or several separated by commas. Each header falls back on its option: `detailType`, `eventSource` and `resourcesArn`.
 
-Output: when it is used inside a route, the body afterwards is the response of EventBridge, and the `CamelAwsEventbridgeFailedEntryCount` header is 1 when EventBridge rejected the event, 0 otherwise.
+Output: when it is used inside a route, the body afterwards is the response of EventBridge, and the `CamelAwsEventbridgeFailedEntryCount` header is 1 when EventBridge rejected the event, 0 otherwise. The `Content-Type` header is `application/json`.
 
 Good to know: a message fails when it has no detail type, no source or no resource ARN, from a header or an option. `eventSourcePrefix` is put before every source. An event that EventBridge rejects, such as one whose body is not a JSON object, is not delivered; depending on the Camel version the message then fails, or it only sets `CamelAwsEventbridgeFailedEntryCount` to 1. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsEventbridge` are removed from the message first, so they cannot change what the Kamelet does.
 
@@ -44,6 +44,8 @@ The following table summarizes the configuration options available for the `aws-
 
 At runtime, the `aws-eventbridge-sink` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:jackson3
+    
 -   camel:aws2-eventbridge
     
 -   camel:kamelet

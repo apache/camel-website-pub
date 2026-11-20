@@ -10,7 +10,7 @@ Use it to record on a ticket what happened elsewhere, for example a deployment, 
 
 Input: the body is the text of the comment, as text. The `ce-issueKey` header, the key of the issue such as `SHOP-42`, is required. Set it before this sink, for example with `insert-header-action`.
 
-Output: the message is unchanged.
+Output: the body afterwards is the text of the comment, as text, and the `Content-Type` header is `text/plain`.
 
 Good to know: a message without `ce-issueKey`, or for an issue that does not exist or that the user cannot see, fails. The comment is written in the name of the account the Kamelet logs in with. Log in either with `username` and `password`, or with `personal-token`. Headers that start with `CamelJira` are removed from the message first, so they cannot change what the Kamelet does.
 

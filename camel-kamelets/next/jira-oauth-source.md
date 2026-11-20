@@ -8,9 +8,9 @@ Receives each new Jira issue that matches a JQL query, such as every new bug of 
 
 Use it to react to new tickets of a Jira Server or Data Center where an administrator has set up an application link with OAuth for your integration, for example to tell a team chat about a new bug. To log in with a user and an API token or a personal access token, which is simpler, use `jira-source`.
 
-Output: the body is the issue as JSON text (a stream), with fields such as `key`, `summary`, `description`, `status`, `issueType`, `project`, `reporter`, `assignee` and `priority`.
+Output: the body is the issue as JSON text in bytes, with fields such as `key`, `summary`, `description`, `status`, `issueType`, `project`, `reporter`, `assignee` and `priority`. The `Content-Type` header is `application/json`.
 
-Good to know: only the issues created after the Kamelet starts are sent; the issues that already exist are not, and neither are changes to an issue. It checks every 6 seconds. The four OAuth values come from the OAuth 1.0a authorization of the application link, see each option.
+Good to know: only the issues created after the Kamelet starts are sent; the issues that already exist are not, and neither are changes to an issue. It checks every 6 seconds. The four OAuth values come from the OAuth 1.0a authorization of the application link, see each option. Atlassian has deprecated OAuth 1.0a for the REST API of Jira Cloud; for Jira Cloud, use `jira-source` with an API token instead.
 
 ## Configuration Options
 

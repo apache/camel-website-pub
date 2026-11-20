@@ -824,7 +824,7 @@ Values are the BouncyCastle parameter-set names, resolved case-insensitively. Th
 | `SNTRUPrime` | `sntrup761`, …​ (see `SNTRUPrimeParameterSpec`) |
 | `BIKE` | `bike128`, `bike192`, `bike256` |
 | `HQC` | `hqc128`, `hqc192`, `hqc256` |
-| `CMCE` | `mceliece460896` (lifecycle manager default), `mceliece8192128f` (component default), …​ (see `org.bouncycastle.jcajce.spec.CMCEParameterSpec`) |
+| `CMCE` (deprecated) | `mceliece460896` (lifecycle manager default), `mceliece8192128f` (component default), …​ (see `org.bouncycastle.jcajce.spec.CMCEParameterSpec`) |
 | `FRODO` | `frodokem976aes` (default), `frodokem1344shake`, …​ (see `org.bouncycastle.jcajce.spec.FrodoKEMParameterSpec`) |
 | `SABER` | `lightsaberkem128r3`, …​ (see `SABERParameterSpec`) |
 
@@ -1087,7 +1087,7 @@ Experimental and non-standardized
 
 -   BIKE
     
--   CMCE
+-   CMCE (deprecated: Classic McEliece is believed to be unsafe to use, and will be removed in a future release)
     
 -   HQC
     

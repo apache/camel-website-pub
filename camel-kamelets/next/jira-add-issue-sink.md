@@ -10,7 +10,7 @@ Use it to open a ticket automatically when something happens, for example when a
 
 Input: the body is the description of the issue, as text. The other fields come from headers. `ce-projectKey` (the key of the project, such as `SHOP`), `ce-issueTypeName` (such as `Bug` or `Task`) and `ce-issueSummary` (the title) are required. `ce-issueAssignee`, `ce-issuePriorityName` (such as `High`) and `ce-issueComponents` (a comma-separated list) are optional. Set them before this sink, for example with `insert-header-action`.
 
-Output: when it is used inside a route, the body afterwards is the issue that was created.
+Output: when it is used inside a route, the body afterwards is the issue that was created, as an object of the Jira client for Java, not JSON text. The `Content-Type` header is `text/plain`, from the description.
 
 Good to know: a message without a project key, an issue type or a summary fails. Log in either with `username` and `password`, or with `personal-token`. Headers that start with `CamelJira` are removed from the message first, so they cannot change what the Kamelet does.
 

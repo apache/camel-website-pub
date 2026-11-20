@@ -461,6 +461,8 @@ spec:
 
 <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>A <code>headers</code> block with no <code>types</code> and no <code>default</code>. Nothing is transformed; this only describes what the Kamelet emits.</td></tr></tbody></table>
 
+A sink or an action that leaves the body as it is also declares the data type `application-x-unchanged` as its `default`, next to its headers, so the YAML validator knows that the body after it is the body before it. See [Documenting a Kamelet](documenting.html#documenting-unchanged).
+
 A source declares the headers it emits under `out`; a sink or action declares the ones it consumes under `in`.
 
 Declaring them is worth the few lines for two reasons:

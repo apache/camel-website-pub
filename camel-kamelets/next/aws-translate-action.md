@@ -10,7 +10,7 @@ Use it to translate customer messages, support tickets or product descriptions, 
 
 Input: the body is the text to translate.
 
-Output: the body is the translated text.
+Output: the body is the translated text, and the `Content-Type` header is `text/plain`.
 
 Good to know: the target language is fixed by `targetLanguage`. The source language is fixed by `sourceLanguage`, or, with `autodetectSourceLanguage`, Amazon Translate detects it in each message. Only the listed language codes can be chosen, although Amazon Translate knows more languages. With `terminologyNames`, your own translations of terms, such as product and brand names, are applied. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsTranslate` are removed from the message first, so they cannot change what the Kamelet does.
 

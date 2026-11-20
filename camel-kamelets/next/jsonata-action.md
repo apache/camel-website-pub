@@ -27,6 +27,8 @@ The following table summarizes the configuration options available for the `json
 
 At runtime, the `jsonata-action` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:jackson3
+    
 -   camel:jsonata
     
 -   camel:kamelet

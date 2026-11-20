@@ -80,6 +80,22 @@ In Spring Boot 4.2 the RabbitMQ (AMQP 0.9.1) auto-configuration moved from `spri
 
 Spring Web Services 5.1 removed the deprecated `WebServiceMessageSender.supports(URI)`. A custom `WebServiceMessageSender` configured on the `spring-ws` component must implement `supports(URI, WebServiceMessageSender.UriSource)` instead.
 
+### Bouncy Castle 1.87
+
+Camel is upgraded to Bouncy Castle 1.87.
+
+Bouncy Castle 1.87 removed the LMS/HSS and XMSS implementations under `org.bouncycastle.pqc.crypto.lms` and `org.bouncycastle.pqc.crypto.xmss`, which 1.86 had deprecated. Application code that builds LMS or HSS keys, for example for the `pqc` component, must import `LMSigParameters` and `LMOtsParameters` from `org.bouncycastle.crypto.params`. The LMS and XMSS JCE classes in `org.bouncycastle.pqc.jcajce.spec` and `org.bouncycastle.pqc.jcajce.interfaces` are deprecated in favour of the same classes in `org.bouncycastle.jcajce.spec` and `org.bouncycastle.jcajce.interfaces`. Keys and signatures keep the same encoding.
+
+#### camel-pqc - HQC, NTRU, NTRU LPRime and SNTRU Prime key encapsulation
+
+HQC now follows the specification of the HQC team of 2026-10-12. HQC keys, encapsulations and shared secrets made with an earlier Camel release cannot be used with this release. This includes HQC keys stored by a key lifecycle manager, which must be generated again.
+
+The `generateSecretKeyEncapsulation` and `extractSecretKeyEncapsulation` operations of the NTRU, NTRU LPRime and SNTRU Prime algorithms now derive the secret key with the key derivation function of the encapsulation spec, where earlier Bouncy Castle releases used the raw shared secret. An encapsulation made with an earlier Camel release gives a different secret key when it is extracted with this release, so both sides of an exchange must be upgraded together.
+
+#### camel-pqc - CMCE is deprecated
+
+Bouncy Castle deprecated Classic McEliece, as it is now believed to be unsafe to use, and will remove it in a future release. The `CMCE` key encapsulation algorithm of the `pqc` component and the `pqc` data format is deprecated too, and an endpoint or a data format that uses it logs a WARN at startup. Use `MLKEM` instead.
+
 ### camel-observability-services - promoted to Stable
 
 The `camel-observability-services` component has been promoted from _Preview_ to _Stable_ support level.
@@ -91,6 +107,10 @@ The `camel-lra` component has been promoted from _Preview_ to _Stable_ support l
 ### camel-openstack - deprecated
 
 The `camel-openstack` components (`openstack-cinder`, `openstack-glance`, `openstack-keystone`, `openstack-neutron`, `openstack-nova` and `openstack-swift`) are deprecated. The openstack4j library they are based on has had no release or commit since May 2024, and is based on Jackson 2 with no clear path to Jackson 3.
+
+### camel-ibm-watson-language - deprecated
+
+The `camel-ibm-watson-language` component is deprecated and will be removed in a future release. IBM deprecated Watson Natural Language Understanding, the service this component calls, on 31 July 2026, and removes it from IBM Cloud on 31 January 2028. IBM recommends migrating to Watson Natural Language Processing in watsonx.ai Studio.
 
 ### KeyValueRepository and State Store - namespace partitioning on shared backends
 
@@ -5748,3 +5768,9 @@ The `language` option (default `en`) is now sent with each request: as the `acce
 When the producer uploads an object, it now sets the storage class of the object from the `CamelGoogleCloudStorageStorageClass` header, or else from the new `objectStorageClass` option. Before, the header was not used for an upload, and every object got the default storage class of its bucket.
 
 The consumer and the `getObject` operation set this header to the storage class of the object they read. So a route that reads objects from one bucket and uploads them to another now keeps the storage class of each object, where before the objects got the default of the destination bucket. To keep the previous behaviour, remove the header before the upload, for example with `removeHeader("CamelGoogleCloudStorageStorageClass")`.
+
+### camel-http-common, camel-netty-http, camel-http - a form field without =, and a header whose name is not a token
+
+A consumer that maps the fields of an `application/x-www-form-urlencoded` request to headers (camel-servlet, platform-http on Spring Boot and the other components that use `DefaultHttpBinding`, and camel-netty-http) now reads a field without `=` as a header with an empty value, as browsers and Vert.x do, and skips an empty field, as in `a=1&&b=2`. It also keeps a `%` that is not followed by two hex digits as it is, as in `Save 50% now`. Before, such a request failed with an `IllegalArgumentException` ("Invalid parameter, expected to be a pair", or "Illegal hex characters in escape (%) pattern") before the route ran: a 500 response, or a closed connection with camel-netty-http. A text body that a client sends as form data, as `curl -d "some text"` does, now reaches the route, with the text as the name of a header.
+
+These consumers, and the camel-netty-http and camel-http producers, now leave out a message header whose name is not a valid HTTP header name (an RFC 9110 token, for example a name with a space, a comma or a colon) when they write the response or the request, and log it at DEBUG level. Before, camel-netty-http failed to write the response or the request, the other consumers passed the name on to the servlet container, and camel-http sent it, which a server may reject with a 400. Headers with a valid name are written as before. A route that needs such a value in the response or in the request must set it in a header with a valid name.

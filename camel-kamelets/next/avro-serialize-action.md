@@ -10,7 +10,7 @@ Use it to send records in Avro, a compact binary format described by a schema, t
 
 Input: parsed JSON (a Map or a Jackson `JsonNode`) whose fields match the schema. JSON text fails: put `json-deserialize-action` before this action to parse it.
 
-Output: the body is the Avro binary data, as bytes, and the `Content-Type` header is set to `application/avro`.
+Output: the body is the Avro binary data, as a stream, and the `Content-Type` header is set to `application/avro`.
 
 Good to know: the schema is not written into the data, so whoever reads it needs the same schema. A message fails when it lacks a field of the schema, has a field the schema does not know, or has a value of the wrong type. When `schema` is not set, the schema found by an earlier `resolve-pojo-schema-action` is used.
 

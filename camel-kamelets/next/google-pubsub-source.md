@@ -8,7 +8,7 @@ Receives the messages of a Google Cloud Pub/Sub subscription, one message per Pu
 
 Use it to react to events that other applications publish to a Pub/Sub topic, such as orders, uploads or alerts. To publish messages, use `google-pubsub-sink`. To react to new files in a Cloud Storage bucket through Pub/Sub notifications, use `google-storage-event-based-source`.
 
-Output: the body is the data of the Pub/Sub message, as bytes. The `CamelGooglePubsubMessageId` and `CamelGooglePubsubPublishTime` headers give the ID and the publish time of the message, `CamelGooglePubsubAttributes` gives its attributes as a Map, and each attribute is also set as a header of its own.
+Output: the body is the data of the Pub/Sub message, as bytes, and the `Content-Type` header is `application/octet-stream`. The `CamelGooglePubsubMessageId` and `CamelGooglePubsubPublishTime` headers give the ID and the publish time of the message, `CamelGooglePubsubAttributes` gives its attributes as a Map, and each attribute is also set as a header of its own, except a `Content-Type` attribute, which is only in `CamelGooglePubsubAttributes`.
 
 Good to know: the subscription must already exist; for one that does not, it logs an error and receives nothing. A message whose processing fails is not acknowledged, so Pub/Sub delivers it again. With `ackMode` `NONE`, the route acknowledges each message itself, through the `CamelGooglePubsubAcknowledge` header. On a subscription with a dead-letter topic, `maxDeliveryAttempts` stops a message that keeps failing from being processed again. Without `serviceAccountKey`, it logs in with the Application Default Credentials of the environment where it runs.
 

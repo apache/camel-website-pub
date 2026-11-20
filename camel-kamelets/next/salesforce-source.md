@@ -8,7 +8,7 @@ Receives an event each time a Salesforce record that matches a SOQL query is cre
 
 Use it to react to changes in Salesforce, for example to copy each new contact to a mailing tool or to alert a team when an opportunity is won. For Platform Events and Change Data Capture through the newer Pub/Sub API, use `salesforce-pubsub-source`.
 
-Output: the body is the record as JSON text, with the fields that the query selects. The `CamelSalesforceEventType` header says what happened: `created`, `updated`, `deleted` or `undeleted`. The `CamelSalesforceReplayId` header identifies the event.
+Output: the body is the record as JSON text in bytes, with the fields that the query selects, and the `Content-Type` header is `application/json`. The `CamelSalesforceEventType` header says what happened: `created`, `updated`, `deleted` or `undeleted`. The `CamelSalesforceReplayId` header identifies the event.
 
 Good to know: when it starts, it creates the PushTopic `topicName` in Salesforce with `query` and the notify options, or updates it when it exists, so the user needs the permission to create PushTopics. By default only new records send an event; turn on `notifyForOperationUpdate` and the others for more. Only the events after the start are received, unless `replayId` is set.
 

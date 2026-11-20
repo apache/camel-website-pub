@@ -8,7 +8,7 @@ Sends the same fixed message on a calendar schedule, written as a cron expressio
 
 Use it to start a flow at set times, such as a report every morning or a clean-up every night. For a message every few seconds or minutes, `timer-source` is simpler, and for a message that counts up use `counter-source`.
 
-Output: the body is the `message` option as text, the same on every message. Headers about the schedule are set too, such as `fireTime` (the time of this message) and `nextFireTime`.
+Output: the body is the `message` option as text, the same on every message. The `Content-Type` header is `text/plain`, also when the message is JSON or XML. Headers about the schedule are set too, such as `fireTime` (the time of this message) and `nextFireTime`.
 
 Good to know: the times are in the time zone of the machine it runs on. It keeps sending until the integration is stopped.
 

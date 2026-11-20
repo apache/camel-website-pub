@@ -8,9 +8,9 @@ Inserts each message as one or more rows into a table in Google BigQuery.
 
 Use it to load events or records into BigQuery for analytics and reports, such as orders, page views or sensor readings, as they happen.
 
-Input: the body is JSON text: a JSON object for one row, or a JSON array of objects for several rows. The names of the fields are the names of the columns of the table, such as `{"id": 1, "item": "book"}`.
+Input: the body is a JSON object for one row, or a JSON array of objects for several rows, as JSON text, or as a Map or a List of Maps, which is written as JSON. The names of the fields are the names of the columns of the table, such as `{"id": 1, "item": "book"}`.
 
-Output: when it is used inside a route, the body afterwards is the parsed JSON: a Map for one row, or a List of Maps.
+Output: when it is used inside a route, the body afterwards is the parsed JSON: a Map for one row, or a List of Maps, and the `Content-Type` header is `application/json`.
 
 Good to know: the table must exist with its columns. A message with a field that is not a column of the table, or with a body that is not JSON, fails, and none of its rows are inserted. Headers that start with `CamelGoogleBigQuery` are removed from the message first, so they cannot change what the Kamelet does. A message that is sent again, for example after a failure, adds its rows again, unless `useAsInsertId` names a field that identifies each row.
 

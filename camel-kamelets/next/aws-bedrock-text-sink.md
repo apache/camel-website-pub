@@ -8,9 +8,9 @@ Sends a prompt to a text model in Amazon Bedrock, such as Amazon Titan or Anthro
 
 Use it to summarize, classify, translate or write text with a large language model, for example to summarize support tickets or draft replies. To answer questions from your own documents in a Bedrock knowledge base, use `aws-bedrock-agent-runtime-sink`.
 
-Input: the body is the request of the model, as JSON text in the format of the chosen model, not the bare prompt. For Amazon Titan, for example `{"inputText":"Summarize: …​","textGenerationConfig":{"maxTokenCount":500}}`. For Claude 3, the Messages format, for example `{"anthropic_version":"bedrock-2023-05-31","max_tokens":500,"messages":[{"role":"user","content":"Summarize: …​"}]}`.
+Input: the body is the request of the model, as JSON text in the format of the chosen model, not the bare prompt, or as a Map, which is written as JSON. For Amazon Titan, for example `{"inputText":"Summarize: …​","textGenerationConfig":{"maxTokenCount":500}}`. For Claude 3, the Messages format, for example `{"anthropic_version":"bedrock-2023-05-31","max_tokens":500,"messages":[{"role":"user","content":"Summarize: …​"}]}`.
 
-Output: when it is used inside a route, the body afterwards is the answer, in a form that depends on the model: for Titan the response as JSON text, with the generated text in `results`; for Claude 3 the response as parsed JSON, with the generated text in `content`; for the older Claude models only the generated text, as text.
+Output: when it is used inside a route, the body afterwards is the answer, in a form that depends on the model: for Titan the response as JSON text, with the generated text in `results`; for Claude 3 the response as parsed JSON, with the generated text in `content`; for the older Claude models only the generated text, as text. The `Content-Type` header stays `application/json`, from the request.
 
 Good to know: the request and response formats are those of the model provider, described for each model in the Amazon Bedrock documentation; a body in another format fails. Each message is one call of the model. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsBedrock` are removed from the message first, so they cannot change what the Kamelet does.
 
@@ -40,6 +40,8 @@ The following table summarizes the configuration options available for the `aws-
 
 At runtime, the `aws-bedrock-text-sink` Kamelet relies upon the presence of the following dependencies:
 
+-   camel:jackson3
+    
 -   camel:aws-bedrock
     
 -   camel:kamelet

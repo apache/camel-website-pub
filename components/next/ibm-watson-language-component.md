@@ -1,5 +1,8 @@
 # IBM Watson Language
 
+> **Warning**
+> **Deprecated:** This ibm-watson-language is deprecated and may be removed in a future release.
+
 **Since Camel 4.16**
 
 **Only producer is supported**

@@ -1203,7 +1203,7 @@ The lifecycle manager provides sensible defaults for all algorithms:
 | FRODO | frodokem976aes |
 | BIKE | bike128 |
 | HQC | hqc128 |
-| CMCE | mceliece460896 |
+| CMCE (deprecated) | mceliece460896 |
 
 ## Best Practices
 

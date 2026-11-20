@@ -8,9 +8,9 @@ Writes each message as a record to an Amazon Kinesis data stream.
 
 Use it to feed a stream of events, such as clicks, logs or sensor readings, to the applications that read the stream, for example with `aws-kinesis-source`. To deliver data to S3 or a data warehouse without writing a reader, use `aws-kinesis-firehose-sink`.
 
-Input: the body becomes the data of the record, as text, bytes or a stream. The optional `partition` header (or `ce-partition`) is the partition key: the records with the same key go to the same shard, in order. Without it, the key is a unique ID, so the records spread over the shards. The optional `sequence-number` header (or `ce-sequencenumber`) is the sequence number of the record that must come before this one, for a strict order within a partition key.
+Input: the body becomes the data of the record, as text, bytes or a stream. A Map, a List or a number fails: turn structured data into JSON text first, for example with `json-serialize-action`. The optional `partition` header (or `ce-partition`) is the partition key: the records with the same key go to the same shard, in order. Without it, the key is a unique ID, so the records spread over the shards. The optional `sequence-number` header (or `ce-sequencenumber`) is the sequence number of the record that must come before this one, for a strict order within a partition key.
 
-Output: the message is unchanged. The `CamelAwsKinesisSequenceNumber` and `CamelAwsKinesisShardId` headers give the sequence number and the shard of the record.
+Output: the body afterwards is the data of the record, as bytes (a stream stays a stream), and the `Content-Type` header is `application/octet-stream`. The `CamelAwsKinesisSequenceNumber` and `CamelAwsKinesisShardId` headers give the sequence number and the shard of the record.
 
 Good to know: the stream must exist. The other headers are not sent: a Kinesis record has only data and a partition key. To reach AWS through an HTTP proxy, set `proxyHost` and `proxyPort`, and set `proxyProtocol` to `HTTP` for a proxy that takes plain HTTP, such as Squid. Headers that start with `CamelAwsKinesis` are removed from the message first, so they cannot change what the Kamelet does.
 
