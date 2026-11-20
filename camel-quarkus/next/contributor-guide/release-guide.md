@@ -13,7 +13,7 @@ Here, just a sketch of the repeating part, after you have performed the initial 
 
 For new major / minor version releases:
 
--   When releasing after a recent Quarkus release, check for new releases of third party Quarkus extensions we depend on. They are listed in the [Primary dependencies](https://github.com/apache/camel-quarkus/blob/main/pom.xml#L48-L61) section of the top level `pom.xml`. If there are new releases, upgrade the versions accordingly and run `mvn cq:sync-versions -N` from the root directory of the source tree. Note that some of the versions are mandated by quarkus, so camel-quarkus should use the same values as the quarkus-platform bom.
+-   When releasing after a recent Quarkus release, check for new releases of third party Quarkus extensions we depend on. They are listed in the [Primary dependencies](https://github.com/apache/camel-quarkus/blob/main/pom.xml) section of the top level `pom.xml`. If there are new releases, upgrade the versions accordingly and run `mvn cq:sync-versions -N` from the root directory of the source tree. Note that some of the versions are mandated by quarkus, so camel-quarkus should use the same values as the quarkus-platform bom.
     
 -   Close the GitHub release [milestone](https://github.com/apache/camel-quarkus/milestones) and assign any remaining issues that aren’t covered by the release to the next milestone
     
@@ -40,7 +40,7 @@ git checkout -b $BRANCH
 For patch releases where a release maintenance branch already exists:
 
 ```shell
-export BRANCH=3.20.x # The maintenance branch you want to release from
+export BRANCH=3.40.x # The maintenance branch you want to release from
 git checkout $BRANCH
 git reset --hard upstream/$BRANCH
 export VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed 's|-SNAPSHOT||') # the version you are releasing, e.g. 0.1.0
@@ -199,8 +199,8 @@ The following steps apply only after a patch release from a Long Term Support (L
 After `release:prepare`, some generated files in the release branch need to be regenerated to reflect the new SNAPSHOT version.
 
 ```shell
-export BRANCH=3.20.x # The LTS maintenance branch you released from
-export VERSION=... # The version you just released, e.g. 3.20.1
+export BRANCH=3.40.x # The LTS maintenance branch you released from
+export VERSION=... # The version you just released, e.g. 3.40.1
 git checkout "$BRANCH"
 git reset --hard upstream/$BRANCH
 mvn cq:sync-versions -N
@@ -315,9 +315,9 @@ You can proceed with upgrading Camel Quarkus in Quarkus Platform once the newly 
     git clone git@github.com:quarkusio/quarkus-platform.git
     ```
     
--   For patch releases `git checkout` the appropriate platform maintenance branch (e.g 3.20).
+-   For patch releases `git checkout` the appropriate platform maintenance branch (e.g. 3.40).
     
--   Change `camel-quarkus.version` property in the Quarkus platform top level `[pom.xml](https://github.com/quarkusio/quarkus-platform/blob/main/pom.xml#L54)` to the newly released version:
+-   Change `camel-quarkus.version` property in the Quarkus platform top level `[pom.xml](https://github.com/quarkusio/quarkus-platform/blob/main/pom.xml)` to the newly released version:
     
     ```shell
     cd quarkus-platform
@@ -385,7 +385,7 @@ The following needs to be done:
 -   In addition, you can add links to blog posts if required. e.g. something like
     
     ```markdown
-    Check the full [release announcement](https://camel.apache.org/blog/2021/06/camel-quarkus-release-2.0.0/)
+    Check the full [release announcement](https://camel.apache.org/blog/<year>/<month>/camel-quarkus-release-<version>/)
     ```
     
 -   Click the green "Publish release" button at the bottom
@@ -407,14 +407,14 @@ You may also want to clean up the Markdown, for instance:
 This section needs to be executed only when a Quarkus Platform release has been published. It should be the case most of the time. In this case, right after the newest Quarkus Platform becomes available on [Maven Central](https://repo1.maven.org/maven2/io/quarkus/platform/quarkus-bom/):
 
 > **Note**
-> For patch releases, the instructions that follow are mostly the same. Except that you must `git checkout` the desired maintenance branch (E.g 3.20.x), perform any updates on there and send PRs to the same upstream maintenance branch. There is no need to interact with the `camel-quarkus-main` branch in this case.
+> For patch releases, the instructions that follow are mostly the same. Except that you must `git checkout` the desired maintenance branch (e.g. 3.40.x), perform any updates on there and send PRs to the same upstream maintenance branch. There is no need to interact with the `camel-quarkus-main` branch in this case.
 
 -   Make sure all [PRs](https://github.com/apache/camel-quarkus-examples/pulls) against `camel-quarkus-main` branch are merged.
     
 -   The examples should use Quarkus Platform BOMs in the `main` branch. To set it do the following:
     
     ```shell
-    NEW_PLATFORM_VERSION=... # E.g. 2.2.0.Final
+    NEW_PLATFORM_VERSION=... # e.g. 4.0.0
     git fetch upstream
     git checkout camel-quarkus-main
     git reset --hard upstream/camel-quarkus-main
@@ -435,7 +435,7 @@ This section needs to be executed only when a Quarkus Platform release has been 
 -   Once the PR is merged, tag the `main` branch with the `$NEW_CQ_VERSION`:
     
     ```shell
-    NEW_CQ_VERSION=... # the recent release of Camel Quarkus; e.g. 2.2.0
+    NEW_CQ_VERSION=... # the recent release of Camel Quarkus; e.g. 4.0.0
     git checkout main
     git fetch upstream
     git reset --hard upstream/main

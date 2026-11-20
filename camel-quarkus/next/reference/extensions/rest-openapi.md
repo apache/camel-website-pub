@@ -34,6 +34,8 @@ A `RestProducerFactory` implementation must be available when using the rest-ope
 
 -   camel-quarkus-http
     
+-   camel-quarkus-vertx-http
+    
 -   camel-quarkus-netty-http
     
 
@@ -95,7 +97,7 @@ The contract files in `src/main/openapi` need to be added in the classpath, sinc
 </build>
 ```
 
-When running in the native mode, the contract files must be added to the native image via the `quarkus.native.resources.include` configuration property.
+When running in the native mode, the contract files must be added to the native image via the `quarkus.native.resources.includes` configuration property.
 
 ```properties
 quarkus.native.resources.includes=contract.json

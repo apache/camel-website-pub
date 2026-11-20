@@ -8,7 +8,7 @@ Receives the messages published on one or more Redis channels, one message per p
 
 Use it to react to events that other applications publish on Redis, such as notifications, cache invalidations or status changes. To publish on a channel, use `redis-sink` with the `PUBLISH` command.
 
-Output: the body is the published message, as text. The `CamelRedis.Channel` header is the channel it was published on.
+Output: the body is the published message, as text. The `CamelRedis.Channel` header is the channel it was published on, and the `CamelRedis.Pattern` header, as bytes, is the channel or pattern of `channels` that it matched.
 
 Good to know: only the messages published while the integration runs are received; Redis does not keep them for later. By default it connects with no password and no TLS: set `password` (and `username` for an ACL user) for a Redis server that asks for a login, and `ssl` for one that needs TLS. The channels are shared by all the databases of a Redis server, so there is no database to choose.
 

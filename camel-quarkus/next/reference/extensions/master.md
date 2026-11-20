@@ -28,8 +28,10 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Additional Camel Quarkus configuration
 
-This extension can be used in conjunction with extensions below:
+This extension requires a cluster service. Use it in conjunction with one of the extensions below:
 
--   [Camel Quarkus File](file.md)
+-   [Camel Quarkus File Cluster Service](file-cluster-service.md)
     
--   [Camel Quarkus Kubernetes](kubernetes.md)
+-   [Camel Quarkus Infinispan Cluster Service](infinispan-cluster-service.md)
+    
+-   [Camel Quarkus Kubernetes Cluster Service](kubernetes-cluster-service.md)

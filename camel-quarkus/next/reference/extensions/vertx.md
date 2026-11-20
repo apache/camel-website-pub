@@ -28,4 +28,4 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Additional Camel Quarkus configuration
 
-The extension leverages [Quarkus Vert.x](https://quarkus.io/guides/vertx). Various aspects of the Vert.x runtime can be configured via the options outlined in the [configuration guide](https://quarkus.io/guides/all-config#quarkus-vertx-core_quarkus-vertx-core).
+The extension leverages [Quarkus Vert.x](https://quarkus.io/guides/vertx). Various aspects of the Vert.x runtime can be configured via the options outlined in the [configuration guide](https://quarkus.io/guides/vertx-reference#customizing-the-vert-x-configuration).

@@ -89,7 +89,7 @@ quarkus.kubernetes-client.master-url=https://my.k8s.host
 quarkus.kubernetes-client.namespace=my-namespace
 ```
 
-The full set of configuration options are documented in the [Quarkus Kubernetes Client guide](https://quarkus.io/guides/kubernetes-client#quarkus-kubernetes-client_configuration).
+The full set of configuration options are documented in the [Quarkus Kubernetes Client guide](https://quarkus.io/guides/kubernetes-client#configuration-reference).
 
 If you want to suppress this behavior, you can disable autowiring and all configuration will be driven from the documented component and endpoint options.
 
@@ -110,9 +110,9 @@ from("direct:pods")
 
 When using any of the OpenShift specific components:
 
--   `openenshift-build-configs`
+-   `openshift-build-configs`
     
--   `openenshift-builds`
+-   `openshift-builds`
     
 -   `openshift-deploymentconfigs`
     

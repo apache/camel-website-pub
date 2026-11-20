@@ -259,7 +259,7 @@ Add the loopback origins explicitly to the list when you still need local browse
 
 If Camel tags or Origin settings are configured while the Spring AI protocol is unset or uses SSE, the Camel HTTP transport is not installed. The starter logs a warning because Origin validation and caller-context extraction are not active in that configuration. Select `spring.ai.mcp.server.protocol=STREAMABLE` (or `STATELESS` or `MODERN`) when those protections are required.
 
-With the Spring AI 2.0.2 WebMVC transport, an Origin rejection currently returns HTTP 403 with a plain-text `Invalid Origin header` response body. The rejection occurs before MCP request dispatch, but this response body is not the JSON-RPC error envelope returned by the Camel Main HTTP engine. Treat the HTTP status and pre-dispatch rejection as the enforced transport security boundary; the response-envelope difference remains a runtime parity limitation of the current Spring AI WebMVC transport.
+With the Spring AI 2.1 WebMVC transports (`STREAMABLE`, `STATELESS` and `MODERN`), an Origin rejection returns HTTP 403 with a plain-text `Invalid Origin header` response body. The rejection occurs before MCP request dispatch, but this response body is not the JSON-RPC error envelope returned by the Camel Main HTTP engine. Treat the HTTP status and pre-dispatch rejection as the enforced transport security boundary; the response-envelope difference remains a runtime parity limitation of the Spring AI WebMVC transports.
 
 Origin validation is independent of CORS. Configure CORS separately when a browser client needs cross-origin response access; CORS response headers do not replace the server-side Origin check.
 

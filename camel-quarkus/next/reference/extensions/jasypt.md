@@ -66,7 +66,7 @@ public class MySecureRoute extends RouteBuilder {
 ```
 
 > **Tip**
-> You can use the ability to mask security sensitive configuration in Camel by suffixing property values with `.secret`. You can also disable the startup configuration summary with the configuration `camel.main.autoConfigurationLogSummary = false`.
+> You can use the ability to mask security sensitive configuration in Camel by suffixing property names with `.secret`. You can also disable the startup configuration summary with the configuration `camel.main.autoConfigurationLogSummary = false`.
 
 ### Injecting encrypted configuration
 
@@ -75,7 +75,7 @@ You can use the `@ConfigProperty` annotation to inject encrypted configuration i
 ```java
 @ApplicationScoped
 public class MySecureRoute extends RouteBuilder {
-    @ConfigInject("my.secret")
+    @ConfigProperty(name = "my.secret")
     String mySecret;
 
     @Override
@@ -108,7 +108,7 @@ import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
 import org.jasypt.iv.RandomIvGenerator;
 import org.jasypt.salt.RandomSaltGenerator;
 
-public class JasyptConfigurationCustomizer implements JasyptConfigurationCustomizer {
+public class MyJasyptEncryptorCustomizer implements JasyptConfigurationCustomizer {
     public void customize(EnvironmentStringPBEConfig config) {
         // Custom algorithms
         config.setAlgorithm("PBEWithHmacSHA256AndAES_256");

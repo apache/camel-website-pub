@@ -46,10 +46,6 @@ Or add the coordinates to your existing project:
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
 
-## SSL in native mode
-
-This extension auto-enables SSL support in native mode. Hence you do not need to add `quarkus.ssl.native=true` to your `application.properties` yourself. See also [Quarkus SSL guide](https://quarkus.io/guides/native-and-ssl).
-
 ## Additional Camel Quarkus configuration
 
 This extension leverages [Hazelcast Client for Quarkus](https://github.com/hazelcast/quarkus-hazelcast-client). The configuration of the HazelcastInstance is managed by the extension. To configure Hazelcast Instance, check the [Hazelcast Client for Quarkus](https://github.com/hazelcast/quarkus-hazelcast-client) guide.
@@ -73,7 +69,7 @@ To use the `HazelcastInstance` bean in the Hazelcast component, you should confi
         hazelcastComponent.setHazelcastInstance(hazelcastInstance);
         (2)
         hazelcastComponent.setHazelcastMode(HazelcastConstants.HAZELCAST_CLIENT_MODE);
-        return getHazelcastComponent(hazelcastComponent);
+        return hazelcastComponent;
     }
 ```
 

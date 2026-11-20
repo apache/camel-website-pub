@@ -30,4 +30,4 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Usage
 
-If you want to read SQL scripts from the classpath with `google-bigquery-sql` in native mode, then you will need to ensure that they are added to the native image via the `quarkus.native.resources.includes` configuration property. Please check [Quarkus documentation](https://quarkus.io/guides/building-native-image#quarkus-native-pkg-native-config_quarkus.native.resources.includes) for more details.
+If you want to read SQL scripts from the classpath with `google-bigquery-sql` in native mode, then you will need to ensure that they are added to the native image via the `quarkus.native.resources.includes` configuration property. Please check [Quarkus documentation](https://quarkus.io/guides/building-native-image#quarkus-core_quarkus-native-resources-includes) for more details.

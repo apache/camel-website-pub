@@ -131,7 +131,7 @@ Enum values:
 | **fileDir** (common) | The file directory where the downloaded blobs will be saved to, this can be used in both, producer and consumer. |  | String |
 | **leaseBlob** (common) | Sets whether a lease should be acquired when accessing the blob. When set to true, the component will acquire a lease before performing blob operations that require exclusive access. | false | boolean |
 | **leaseDurationInSeconds** (common) | Sets the lease duration in seconds. Use -1 for infinite or a value between 15 and 60 for fixed leases. | 60 | Integer |
-| **maxResultsPerPage** (common) | Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxResultsPerPage or specifies a value greater than 5,000, the server will return up to 5,000 items. |  | Integer |
+| **maxResultsPerPage** (common) | Specifies the maximum number of blobs to return per listing page, including all BlobPrefix elements. If not set or greater than 5,000, Azure Storage returns up to 5,000 items per page. |  | Integer |
 | **maxRetryRequests** (common) | Specifies the maximum number of additional HTTP Get requests that will be made while reading the data from a response body. | 0 | int |
 | **prefix** (common) | Filters the results to return only blobs whose names begin with the specified prefix. May be null to return all blobs. |  | String |
 | **regex** (common) | Filters the results to return only blobs whose names match the specified regular expression. May be null to return all if both prefix and regex are set, regex takes the priority and prefix is ignored. |  | String |
@@ -144,6 +144,7 @@ Enum values:
 | **destinationBlobPrefix** (consumer) | Define the destination blob prefix to use when a blob must be moved, and moveAfterRead is set to true. |  | String |
 | **destinationBlobSuffix** (consumer) | Define the destination blob suffix to use when a blob must be moved, and moveAfterRead is set to true. |  | String |
 | **destinationContainer** (consumer) | Define the destination container where a blob must be moved when moveAfterRead is set to true. |  | String |
+| **maxMessagesPerPoll** (consumer) | Maximum number of blobs to retrieve during one consumer polling cycle. A value of 0 or less means unlimited. | 0 | int |
 | **moveAfterRead** (consumer) | Move blobs from the container to a different container after they have been retrieved. To accomplish the operation, the destinationContainer option must be set. The copy blob operation is only performed if the Exchange is committed. If a rollback occurs, the blob is not moved. | false | boolean |
 | **removePrefixOnMove** (consumer) | Remove the contents of the prefix configuration string from the new blob name before moving. For example, if prefix is set to 'notify/' and the destinationBlobPrefix is set to 'archive/', a blob with a name of 'notify/example.txt' will be moved to 'archive/example.txt', rather than the default behavior where the new name is 'archive/notify/example.txt'. Only applicable when moveAfterRead is true. | false | boolean |
 | **blobSequenceNumber** (producer) | A user-controlled value that you can use to track requests. The value of the sequence number must be between 0 and 263 - 1.The default value is 0. | 0 | Long |
@@ -329,7 +330,7 @@ Enum values:
 | **fileDir** (common) | The file directory where the downloaded blobs will be saved to, this can be used in both, producer and consumer. |  | String |
 | **leaseBlob** (common) | Sets whether a lease should be acquired when accessing the blob. When set to true, the component will acquire a lease before performing blob operations that require exclusive access. | false | boolean |
 | **leaseDurationInSeconds** (common) | Sets the lease duration in seconds. Use -1 for infinite or a value between 15 and 60 for fixed leases. | 60 | Integer |
-| **maxResultsPerPage** (common) | Specifies the maximum number of blobs to return, including all BlobPrefix elements. If the request does not specify maxResultsPerPage or specifies a value greater than 5,000, the server will return up to 5,000 items. |  | Integer |
+| **maxResultsPerPage** (common) | Specifies the maximum number of blobs to return per listing page, including all BlobPrefix elements. If not set or greater than 5,000, Azure Storage returns up to 5,000 items per page. |  | Integer |
 | **maxRetryRequests** (common) | Specifies the maximum number of additional HTTP Get requests that will be made while reading the data from a response body. | 0 | int |
 | **prefix** (common) | Filters the results to return only blobs whose names begin with the specified prefix. May be null to return all blobs. |  | String |
 | **regex** (common) | Filters the results to return only blobs whose names match the specified regular expression. May be null to return all if both prefix and regex are set, regex takes the priority and prefix is ignored. |  | String |
@@ -341,6 +342,7 @@ Enum values:
 | **destinationBlobPrefix** (consumer) | Define the destination blob prefix to use when a blob must be moved, and moveAfterRead is set to true. |  | String |
 | **destinationBlobSuffix** (consumer) | Define the destination blob suffix to use when a blob must be moved, and moveAfterRead is set to true. |  | String |
 | **destinationContainer** (consumer) | Define the destination container where a blob must be moved when moveAfterRead is set to true. |  | String |
+| **maxMessagesPerPoll** (consumer) | Maximum number of blobs to retrieve during one consumer polling cycle. A value of 0 or less means unlimited. | 0 | int |
 | **moveAfterRead** (consumer) | Move blobs from the container to a different container after they have been retrieved. To accomplish the operation, the destinationContainer option must be set. The copy blob operation is only performed if the Exchange is committed. If a rollback occurs, the blob is not moved. | false | boolean |
 | **removePrefixOnMove** (consumer) | Remove the contents of the prefix configuration string from the new blob name before moving. For example, if prefix is set to 'notify/' and the destinationBlobPrefix is set to 'archive/', a blob with a name of 'notify/example.txt' will be moved to 'archive/example.txt', rather than the default behavior where the new name is 'archive/notify/example.txt'. Only applicable when moveAfterRead is true. | false | boolean |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |

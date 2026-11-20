@@ -44,7 +44,7 @@ For example when using any of the following:
 `MyPojo.class` can be registered for reflection as follows.
 
 ```java
-package org.acme.MyPojo;
+package org.acme;
 
 @RegisterForReflection
 public class MyPojo {

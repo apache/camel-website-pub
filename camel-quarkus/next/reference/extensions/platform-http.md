@@ -60,7 +60,7 @@ Then you can use the Camel REST DSL:
 ```java
 rest()
     .get("/my-get-endpoint")
-        .to("direct:handleGetRequest");
+        .to("direct:handleGetRequest")
 
     .post("/my-post-endpoint")
         .to("direct:handlePostRequest");
@@ -104,7 +104,7 @@ from("platform-http:/secure")
     });
 ```
 
-Also check the `quarkus.http.body.*` configuration options in [Quarkus documentation](https://quarkus.io/guides/all-config#quarkus-vertx-http_quarkus-vertx-http-eclipse-vert.x-http), esp. `quarkus.http.body.handle-file-uploads`, `quarkus.http.body.uploads-directory` and `quarkus.http.body.delete-uploaded-files-on-end`.
+Also check the `quarkus.http.body.*` configuration options in [Quarkus documentation](https://quarkus.io/guides/http-reference), esp. `quarkus.http.body.handle-file-uploads`, `quarkus.http.body.uploads-directory` and `quarkus.http.body.delete-uploaded-files-on-end`.
 
 ### Implementing a reverse proxy
 
@@ -161,7 +161,7 @@ Note that care should be taken when modifying the router configuration when exte
 
 ### Platform HTTP server configuration
 
-Configuration of the platform HTTP server is managed by Quarkus. Refer to the [Quarkus HTTP configuration guide](https://quarkus.io/guides/all-config#quarkus-vertx-http_quarkus-vertx-http-eclipse-vert.x-http) for the full list of configuration options.
+Configuration of the platform HTTP server is managed by Quarkus. Refer to the [Quarkus HTTP configuration guide](https://quarkus.io/guides/http-reference) for the full list of configuration options.
 
 To configure SSL for the Platform HTTP server, follow the [secure connections with SSL guide](https://quarkus.io/guides/http-reference#ssl). Note that configuring the server for SSL with `SSLContextParameters` is not currently supported.
 

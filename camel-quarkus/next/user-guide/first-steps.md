@@ -12,9 +12,9 @@ This guide outlines various ways to create a new Camel Quarkus application.
     
 -   Apache Maven 3.8.2+ (3.9.16 is recommended)
     
--   GraalVM with the `native-image` command installed and the `GRAALVM_HOME` environment variable set. See [Building a native executable](https://quarkus.io/guides/building-native-image-guide) section of the Quarkus documentation.
+-   GraalVM with the `native-image` command installed and the `GRAALVM_HOME` environment variable set. See [Building a native executable](https://quarkus.io/guides/building-native-image) section of the Quarkus documentation.
     
--   If you are on Linux, `docker` is sufficient for the native mode too. Use `-Pnative,docker` instead of `-Pnative` if you choose this option.
+-   Alternatively, a container runtime such as Docker or Podman can be used to build native executables without a local GraalVM installation. Add `-Dquarkus.native.container-build=true` to the native build command if you choose this option.
     
 
 ## code.quarkus.io
@@ -62,9 +62,9 @@ The following plugins provide support for content assist when editing Camel rout
 
 -   [VS Code Language support for Camel](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-apache-camel) - a part of the [Camel extension pack](https://marketplace.visualstudio.com/items?itemName=redhat.apache-camel-extension-pack)
     
--   [Eclipse Desktop Language Support for Camel](https://marketplace.eclipse.org/content/language-support-apache-camel) - a part of [Jboss Tools](https://tools.jboss.org/) and [CodeReady Studio](https://developers.redhat.com/products/codeready-studio)
+-   [Eclipse Desktop Language Support for Camel](https://marketplace.eclipse.org/content/language-support-apache-camel)
     
--   [Apache Camel IDEA plugin](https://plugins.jetbrains.com/plugin/9371-apache-camel-idea-plugin) (not always up to date)
+-   [Apache Camel IDEA plugin](https://plugins.jetbrains.com/plugin/9371-apache-camel) (not always up to date)
     
 -   Users of other [IDEs supporting Language Server Protocol](https://microsoft.github.io/language-server-protocol/implementors/tools/) may choose to install and configure [Camel Language Server](https://github.com/camel-tooling/camel-language-server) manually
     
@@ -97,16 +97,20 @@ The main branch is always aligned with the latest Camel Quarkus release.
 
 #### Explore the application code
 
-The application has two compile dependencies:
+The application has three compile dependencies:
 
 ```xml
 <dependency>
     <groupId>org.apache.camel.quarkus</groupId>
-    <artifactId>camel-quarkus-platform-http</artifactId>
+    <artifactId>camel-quarkus-jackson</artifactId>
 </dependency>
 <dependency>
     <groupId>org.apache.camel.quarkus</groupId>
-    <artifactId>camel-quarkus-jackson</artifactId>
+    <artifactId>camel-quarkus-rest</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.apache.camel.quarkus</groupId>
+    <artifactId>camel-quarkus-direct</artifactId>
 </dependency>
 ```
 
@@ -143,15 +147,11 @@ The JVM mode tests are run by `maven-surefire-plugin` in the `test` Maven phase:
 mvn clean test
 ```
 
-This should take about 15 seconds.
-
 The native mode tests are verified by `maven-failsafe-plugin` in the `verify` phase. Pass the `native` property to activate the profile that runs them:
 
 ```shell
-mvn clean verify -Pnative
+mvn clean verify -Dnative
 ```
-
-This takes about 2.5 minutes (once you have all dependencies cached).
 
 #### Package and run the application
 
@@ -161,21 +161,13 @@ This takes about 2.5 minutes (once you have all dependencies cached).
 
 ```shell
 mvn clean package
-ls -lh target/quarkus-app
-...
--rw-r--r--. 1 ppalaga ppalaga 238K Oct 11 18:55  quarkus-run.jar
-...
 ```
 
-You can run it as follows:
+The runnable `quarkus-run.jar` is created in the `target/quarkus-app` directory. You can run it as follows:
 
 ```shell
 java -jar target/quarkus-app/quarkus-run.jar
-...
-[io.quarkus] (main) Quarkus started in 1.163s. Listening on: http://[::]:8080
 ```
-
-Notice the boot time around a second.
 
 The thin `jar` contains just the application code. To run it, the dependencies in `target/quarkus-app/lib` are required too.
 
@@ -184,34 +176,19 @@ The thin `jar` contains just the application code. To run it, the dependencies i
 To prepare a native executable using GraalVM, run the following command:
 
 ```shell
-mvn clean package -Pnative
-ls -lh target
-...
--rwxr-xr-x. 1 ppalaga ppalaga  46M Oct 11 18:57  my-app-0.0.1-SNAPSHOT-runner
-...
+mvn clean package -Dnative
 ```
 
-Note that the `runner` in the listing above has no `.jar` extension and has the `x` (executable) permission set. Thus, it can be run directly:
+The native executable is created in the `target` directory. Its name ends with `-runner`, it has no `.jar` extension, and it has the `x` (executable) permission set. Thus, it can be run directly:
 
 ```shell
 ./target/*-runner
-...
-[io.quarkus] (main) Quarkus started in 0.013s. Listening on: http://[::]:8080
-...
 ```
 
-Check how fast it started and check how little memory it consumes:
-
-```shell
-ps -o rss,command -p $(pgrep my-app)
-  RSS COMMAND
-34916 ./target/my-app-0.0.1-SNAPSHOT-runner
-```
-
-That’s under 35 MB of RAM!
+Compare how quickly it starts and how little memory it consumes with the JVM mode application.
 
 > **Tip**
-> [Quarkus Native executable guide](https://quarkus.io/guides/building-native-image-guide.md) contains more details including [steps for creating a container image](https://quarkus.io/guides/building-native-image-guide.html#creating-a-container).
+> [Quarkus Native executable guide](https://quarkus.io/guides/building-native-image) contains more details including [steps for creating a container image](https://quarkus.io/guides/building-native-image#creating-a-container).
 
 ## What’s next?
 

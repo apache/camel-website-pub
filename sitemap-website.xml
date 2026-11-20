@@ -17,7 +17,16 @@
     <loc>https://camel.apache.org/blog/2026/11/wanaku-0.3.0/</loc>
     <lastmod>2026-11-20T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://camel.apache.org/blog/2026/11/camel-quarkus-3.40.1/</loc>
+    <lastmod>2026-11-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/q-3.40.1/</loc>
+    <lastmod>2026-11-16T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://camel.apache.org/categories/Community/</loc>
+    <lastmod>2026-11-16T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-11-16T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/blog/2026/11/camel-core-ci-improvements/</loc>
@@ -27,9 +36,6 @@
     <lastmod>2026-11-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/q-3.33.4/</loc>
-    <lastmod>2026-11-13T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://camel.apache.org/releases/</loc>
     <lastmod>2026-11-13T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://camel.apache.org/releases/kamelets-4.22.2/</loc>

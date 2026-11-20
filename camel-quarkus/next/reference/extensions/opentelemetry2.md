@@ -58,7 +58,7 @@ Quarkus OpenTelemetry defaults to the standard OTLP exporter defined in OpenTele
 
 ### Tracing CDI bean method execution
 
-When instrumenting the execution of CDI bean methods from Camel routes, you should annotate such methods with `io.opentelemetry.extension.annotations.WithSpan`. Methods annotated with `@WithSpan` will create a new Span and establish any required relationships with the current Trace context.
+When instrumenting the execution of CDI bean methods from Camel routes, you should annotate such methods with `io.opentelemetry.instrumentation.annotations.WithSpan`. Methods annotated with `@WithSpan` will create a new Span and establish any required relationships with the current Trace context.
 
 For example, to instrument a CDI bean from a Camel route, first ensure the appropriate methods are annotated with `@WithSpan`.
 
@@ -88,7 +88,7 @@ public class MyRoutes extends RouteBuilder {
 }
 ```
 
-There is more information about CDI instrumentation in the [Quarkus OpenTelemetry guide](https://quarkus.io/guides/opentelemetry#cdi).
+There is more information about CDI instrumentation in the [Quarkus OpenTelemetry guide](https://quarkus.io/guides/opentelemetry-tracing#cdi).
 
 ## Additional Camel Quarkus configuration
 

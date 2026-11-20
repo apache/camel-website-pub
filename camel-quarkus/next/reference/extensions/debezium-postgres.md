@@ -32,6 +32,8 @@ While you can use any of the available Kafka offset stores in JVM mode, only the
 
 -   `org.apache.kafka.connect.storage.FileOffsetBackingStore`
     
+-   `org.apache.kafka.connect.storage.KafkaOffsetBackingStore`
+    
 -   `org.apache.kafka.connect.storage.MemoryOffsetBackingStore`
     
 

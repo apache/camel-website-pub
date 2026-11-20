@@ -30,13 +30,6 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Usage
 
-### Security Provider
-
-This extension requires a BouncyCastle security provider to be [registered](https://quarkus.io/guides/security-customization#registering-security-providers) and also utilizes the quarkus security extension.
-
-> **Note**
-> If no BouncyCastle provider is registered via the `quarkus.security.security-providers` configuration property, then a default `BC` provider is registered automatically.
-
 ### FIPS
 
 When running the `crypto` extension on a FIPS enabled system, a FIPS-compliant Java Security Provider (such as `BCFIPS`) has to be used.

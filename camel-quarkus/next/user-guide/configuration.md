@@ -37,7 +37,7 @@ import org.apache.camel.component.log.LogComponent;
 import org.apache.camel.support.processor.DefaultExchangeFormatter;
 
 @ApplicationScoped
-public static class EventHandler {
+public class EventHandler {
     public void onComponentAdd(@Observes ComponentAddEvent event) {
         if (event.getComponent() instanceof LogComponent) {
             /* Perform some custom configuration of the component */
@@ -60,9 +60,9 @@ Alternatively, you can create and configure the component yourself in a `@Named`
 >
 > Camel Quarkus extensions may do one or more of the following:
 >
-> -   Pass custom subtype of the default Camel component type. See the [Vert.x WebSocket extension](https://github.com/apache/camel-quarkus/blob/main/extensions/vertx-websocket/runtime/src/main/java/org/apache/camel/quarkus/component/vertx/websocket/VertxWebsocketRecorder.java#L42) example.
+> -   Pass custom subtype of the default Camel component type. See the [Vert.x WebSocket extension](https://github.com/apache/camel-quarkus/blob/main/extensions/vertx-websocket/runtime/src/main/java/org/apache/camel/quarkus/component/vertx/websocket/VertxWebsocketRecorder.java) example.
 >     
-> -   Perform some Quarkus specific customization of the component. See the [JPA extension](https://github.com/apache/camel-quarkus/blob/main/extensions/jpa/runtime/src/main/java/org/apache/camel/quarkus/component/jpa/CamelJpaRecorder.java#L35) example.
+> -   Perform some Quarkus specific customization of the component. See the [JPA extension](https://github.com/apache/camel-quarkus/blob/main/extensions/jpa/runtime/src/main/java/org/apache/camel/quarkus/component/jpa/CamelJpaRecorder.java) example.
 >     
 >
 > These actions are not performed when you produce your own component instance, therefore, configuring components in an observer method is the recommended method.
@@ -106,7 +106,7 @@ You can pass `autowiredEnabled=false` to disable it.
 In case autowiring is performed for some component option, you should see a similar INFO-level message in the application log:
 
 ```shell
-Autowired property: exchangeFormatter on component: log as exactly one instance of type: software.amazon.org.apache.camel.spi.ExchangeFormatter (org.apache.camel.support.processor.DefaultExchangeFormatter) found in the registry
+Autowired property: exchangeFormatter on component: log as exactly one instance of type: org.apache.camel.spi.ExchangeFormatter (org.apache.camel.support.processor.DefaultExchangeFormatter) found in the registry
 ```
 
 ### Default beans and Camel component autowiring

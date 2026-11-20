@@ -2,7 +2,7 @@
 
 CDI plays a central role in Quarkus and Camel Quarkus offers a first class support for it too.
 
-You may use `@Inject`, `@ConfigProperty` and similar annotations e.g. to inject beans and configuration values to your Camel `RouteBuilder`. Here is the `RouteBuilder` from our `timer-log-cdi` [example](examples.md):
+You may use `@Inject`, `@ConfigProperty` and similar annotations e.g. to inject beans and configuration values to your Camel `RouteBuilder`. For example:
 
 ```java
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,10 +28,10 @@ public class TimerRoute extends RouteBuilder {
 }
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>The <code>@ApplicationScoped</code> annotation is required for <code>@Inject</code> and <code>@ConfigProperty</code> to work in a <code>RouteBuilder</code>. Note that the <code>@ApplicationScoped</code> beans are managed by the CDI container and their life cycle is thus a bit more complex than the one of the plain <code>RouteBuilder</code>. In other words, using <code>@ApplicationScoped</code> in <code>RouteBuilder</code> comes with some boot time penalty, and you should therefore only annotate your <code>RouteBuilder</code> with <code>@ApplicationScoped</code> when you really need it.</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>The value for the <code>timer.period</code> property is defined in <code>src/main/resources/application.properties</code> of the example project.</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>The <code>@ApplicationScoped</code> annotation is required for <code>@Inject</code> and <code>@ConfigProperty</code> to work in a <code>RouteBuilder</code>. Note that the <code>@ApplicationScoped</code> beans are managed by the CDI container and their life cycle is thus a bit more complex than the one of the plain <code>RouteBuilder</code>. In other words, using <code>@ApplicationScoped</code> in <code>RouteBuilder</code> comes with some boot time penalty, and you should therefore only annotate your <code>RouteBuilder</code> with <code>@ApplicationScoped</code> when you really need it.</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>The value for the <code>timer.period</code> property can be defined in <code>src/main/resources/application.properties</code>.</td></tr></tbody></table>
 
 > **Tip**
-> Please refer to the [Quarkus Dependency Injection guide](https://quarkus.io/blog/quarkus-dependency-injection) for more details.
+> Please refer to the [Quarkus Dependency Injection guide](https://quarkus.io/guides/cdi-reference) for more details.
 
 ## Accessing `CamelContext`
 
@@ -43,6 +43,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import java.util.stream.Collectors;
 import java.util.List;
 import org.apache.camel.CamelContext;
+import org.apache.camel.Route;
 
 @ApplicationScoped
 public class MyBean {
@@ -124,6 +125,7 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.FluentProducerTemplate;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
+import org.apache.camel.component.direct.DirectEndpoint;
 
 @ApplicationScoped
 class MyBean {
@@ -168,7 +170,7 @@ class MyProduceBean {
     ProduceInterface produceInterface;
 
     void doSomething() {
-        produceInterface.sayHello("Kermit")
+        produceInterface.sayHello("Kermit");
     }
 
 }

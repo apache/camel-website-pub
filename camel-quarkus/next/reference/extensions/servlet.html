@@ -11,7 +11,8 @@ quarkus.camel.servlet.my-servlet-b.url-patterns = /custom/b/*</code></pre> </div
     .setBody().constant("Hello World");
 
 from("servlet://goodbye?servletName=my-custom-b")
-    .setBody().constant("Goodbye World");</code></pre> </div> </div> <div class="paragraph"> <p><strong>Finer control of Servlet configuration</strong></p> </div> <div class="paragraph"> <p>If you need more control of the Servlet configuration, for example to configure custom init parameters, then you can do this with a custom Servlet class through the <code>jakarta.servlet.annotation.WebServlet</code> annotation options.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import jakarta.servlet.annotation.WebServlet;
+    .setBody().constant("Goodbye World");</code></pre> </div> </div> <div class="paragraph"> <p><strong>Finer control of Servlet configuration</strong></p> </div> <div class="paragraph"> <p>If you need more control of the Servlet configuration, for example to configure custom init parameters, then you can do this with a custom Servlet class through the <code>jakarta.servlet.annotation.WebServlet</code> annotation options.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-java hljs" data-lang="java">import jakarta.servlet.annotation.WebInitParam;
+import jakarta.servlet.annotation.WebServlet;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 
 @WebServlet(

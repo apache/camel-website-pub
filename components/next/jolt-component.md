@@ -176,7 +176,7 @@ The message body at each side of the JOLT component: _Consumer_ is the body of t
 | Side | Body | Description |
 | --- | --- | --- |
 | **Producer input** | `map`, `list`, `text`, `bytes`, `stream` or `file`, as json | 
-Parsed JSON (a Map or a List), or JSON as text, bytes, a stream or a file, which is parsed. Text that does not start with { or \[ reaches the spec as it is. With inputType=JsonString the body is always parsed as JSON.
+Parsed JSON (a Map or a List), or JSON as text, bytes, a stream, a file or a Jackson JsonNode, which is parsed. Text that does not start with { or \[ reaches the spec as it is. With inputType=JsonString the body is always parsed as JSON.
 
 -   With `inputType=JsonString`: `text`, `bytes`, `stream` or `file`
     
@@ -211,12 +211,14 @@ With the default `inputType`, `Hydrated`, the body can be:
     
 -   bytes, an `InputStream` (including a stream cache) or a file (`java.io.File`, `java.nio.file.Path` or the file of the [File](file-component.md) component), which is parsed as JSON. The text is decoded in the charset of the exchange (`Exchange.CHARSET_NAME`) when one is set; otherwise the JSON parser detects the encoding;
     
+-   a Jackson `JsonNode` (Jackson 3 or Jackson 2), such as the body of the `application-x-struct` data type or of the JSON data format with `unmarshalType` set to `JsonNode`, which is converted to a `Map` or a `List` from its JSON text;
+    
 -   a `Map` or a `List` (hydrated JSON), which is used as it is.
     
 
 Text that does not start with `{` or `[` is passed to the specification as it is. Text that starts with `{` or `[` but is not valid JSON fails with the parse error.
 
-With `inputType=JsonString`, the body is always parsed as JSON.
+With `inputType=JsonString`, the body is always parsed as JSON, and a Jackson `JsonNode` is converted the same way.
 
 The output is hydrated JSON (a `Map` or a `List`) by default; set `outputType=JsonString` to get a JSON `String`.
 

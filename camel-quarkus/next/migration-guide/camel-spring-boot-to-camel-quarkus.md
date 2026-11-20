@@ -78,7 +78,7 @@ In case, the Camel Spring XML DSL was used, it needs to be migrated. Please see 
 
 Tests annotated with `@CamelSpringBootTest`, `@CamelSpringTest` and `@SpringBootTest` must use `@QuarkusTest` instead.
 
-In case of tests which extends `CamelSpringBootTestSupport`, it must be replaced by `CamelQuarkusTestsSupport` from `camel-quarkus-junit` dependency (to add to the pom). Note that this solution is working only for JVM mode.
+In case of tests which extends `CamelSpringBootTestSupport`, it must be replaced by `CamelQuarkusTestSupport` from `camel-quarkus-junit` dependency (to add to the pom). Note that this solution is working only for JVM mode.
 
 As a reminder and in case of specific cases, see [Camel Quarkus Testing User guide](../user-guide/testing.md).
 

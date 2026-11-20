@@ -51,7 +51,7 @@ public class Routes extends RouteBuilder {
         JacksonDataFormat dataFormat = new JacksonDataFormat();
         dataFormat.setObjectMapper(mapper);
         // Use the dataFormat instance in a route definition
-        from("direct:my-direct").marshal(dataFormat)
+        from("direct:my-direct").marshal(dataFormat);
     }
 }
 ```
@@ -70,7 +70,7 @@ public class Routes extends RouteBuilder {
         // Make JacksonDataFormat discover the Quarkus Jackson `ObjectMapper` from the Camel registry
         dataFormat.setAutoDiscoverObjectMapper(true);
         // Use the dataFormat instance in a route definition
-        from("direct:my-direct").marshal(dataFormat)
+        from("direct:my-direct").marshal(dataFormat);
     }
 }
 ```
@@ -127,7 +127,7 @@ public class Routes extends RouteBuilder {
         JacksonDataFormat dataFormat = new JacksonDataFormat();
         dataFormat.setObjectMapper(mapper);
         // Use the dataFormat instance in a route definition
-        from("direct:my-direct").marshal(dataFormat)
+        from("direct:my-direct").marshal(dataFormat);
     }
 }
 ```

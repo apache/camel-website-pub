@@ -26,19 +26,6 @@ Or add the coordinates to your existing project:
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
 
-## Usage
-
-### Micrometer metrics support
-
-If you wish to enable the collection of Micrometer metrics for the Reactor Netty transports, then you should declare a dependency on `quarkus-micrometer` to ensure that they are available via the Quarkus metrics HTTP endpoint.
-
-```xml
-<dependency>
-    <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-micrometer</artifactId>
-</dependency>
-```
-
 ## SSL in native mode
 
 This extension auto-enables SSL support in native mode. Hence you do not need to add `quarkus.ssl.native=true` to your `application.properties` yourself. See also [Quarkus SSL guide](https://quarkus.io/guides/native-and-ssl).

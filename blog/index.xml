@@ -16,6 +16,13 @@
       <description>Apache Camel connects applications, services, and data. As AI agents become another client of those integrations, developers need a way to expose business actions and control how agents call them.&#xA;Wanaku 0.3.0 brings the first stable release using its new routing engine based on Praxis. For Camel developers, a central addition is the workflow around the Wanaku Semantic Router (WSR): build actions with Kamelets, route messages by meaning, and expose the resulting Camel integration through the Model Context Protocol (MCP).</description>
     </item>
     <item>
+      <title>Camel Quarkus 3.40.1 Released</title>
+      <link>https://camel.apache.org/blog/2026/11/camel-quarkus-3.40.1/</link>
+      <pubDate>Mon, 16 Nov 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/11/camel-quarkus-3.40.1/</guid>
+      <description>Camel Quarkus 3.40.1 release</description>
+    </item>
+    <item>
       <title>Scaling the Apache Camel Core CI: From a Few Green Builds a Year to Reliable Faster Feedback</title>
       <link>https://camel.apache.org/blog/2026/11/camel-core-ci-improvements/</link>
       <pubDate>Mon, 16 Nov 2026 00:00:00 +0000</pubDate>

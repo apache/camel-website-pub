@@ -30,7 +30,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 This extension leverages [Quarkus Micrometer](https://quarkus.io/guides/micrometer). Quarkus supports a variety of Micrometer metric registry implementations.
 
-Your application should declare the following dependency or one of the dependencies listed in the [quarkiverse documentation](https://quarkiverse.github.io/quarkiverse-docs/quarkus-micrometer-registry/dev/index.md), depending on the monitoring solution you want to work with.
+Your application should declare the following dependency or one of the dependencies listed in the [quarkiverse documentation](https://docs.quarkiverse.io/quarkus-micrometer-registry/dev/index.md), depending on the monitoring solution you want to work with.
 
 ```xml
 <dependency>

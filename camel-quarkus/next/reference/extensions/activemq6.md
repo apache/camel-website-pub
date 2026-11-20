@@ -38,7 +38,7 @@ When sending JMS message payloads as `jakarta.jms.ObjectMessage`, you must annot
 
 ## Camel Quarkus limitations
 
-ActiveMQ [XPath selectors](https://activemq.apache.org/selectors.md) are disabled in native mode as the functionality depends on `activemq-broker`. This dependency is excluded from the dependency tree, since none of the ActiveMQ broker functionality is supported in native mode.
+ActiveMQ [XPath selectors](https://activemq.apache.org/components/classic/documentation/selectors) are disabled in native mode as the functionality depends on `activemq-broker`. This dependency is excluded from the dependency tree, since none of the ActiveMQ broker functionality is supported in native mode.
 
 ## SSL in native mode
 

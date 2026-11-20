@@ -25,7 +25,3 @@ Or add the coordinates to your existing project:
 ```
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
-
-## Camel Quarkus limitations
-
-Only Producer mode is supported on Camel Quarkus at this stage.

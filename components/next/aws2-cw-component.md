@@ -423,7 +423,7 @@ The message body at each side of the AWS CloudWatch component: _Consumer_ is the
   
 | Side | Body | Description |
 | --- | --- | --- |
-| **Producer input** | `any` | putMetricData sends a body that is a MetricDatum of the AWS SDK or a collection or an array of them, and one with another element fails; with another body the metric comes from the CamelAwsCwMetric\* headers or the name, value and unit options. The other operations do not use the body. |
+| **Producer input** | `any` | putMetricData sends a body that is a MetricDatum of the AWS SDK or a collection or an array of them, and an empty one or one with another element fails; with another body the metric comes from the CamelAwsCwMetric\* headers or the name, value and unit options. The other operations do not use the body. |
 | **Producer output** | `unchanged` | 
 Unchanged after putMetricData, the default. The response of the AWS SDK for listMetrics, describeAlarms and describeAlarmsForMetric.
 
@@ -569,6 +569,6 @@ exchange.getIn().setHeader(Cw2Constants.METRIC_UNIT, "Count");
 
 ### The metric data of putMetricData
 
-The `putMetricData` operation sends the body when it is a `MetricDatum`, or a collection or an array of `MetricDatum` (each element must be a `MetricDatum`, otherwise the exchange fails). For any other body, the metric is built from the headers and the options: `CamelAwsCwMetricName` or the `name` option, `CamelAwsCwMetricValue` or the `value` option (1 by default), `CamelAwsCwMetricUnit` or the `unit` option (`Count` by default), and `CamelAwsCwMetricTimestamp` or the `timestamp` option.
+The `putMetricData` operation sends the body when it is a `MetricDatum`, or a collection or an array of `MetricDatum` (each element must be a `MetricDatum`, otherwise the exchange fails; an empty collection or array fails the exchange too, as there is no metric to put). For any other body, the metric is built from the headers and the options: `CamelAwsCwMetricName` or the `name` option, `CamelAwsCwMetricValue` or the `value` option (1 by default), `CamelAwsCwMetricUnit` or the `unit` option (`Count` by default), and `CamelAwsCwMetricTimestamp` or the `timestamp` option.
 
 The unit is the name of a `StandardUnit` of the AWS SDK, such as `Count`, `Bytes` or `Kilobytes/Second`, in any case; an unknown unit fails the exchange. The timestamp header is an `Instant` or a `java.util.Date`.

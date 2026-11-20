@@ -30,7 +30,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Additional Camel Quarkus configuration
 
-Please refer to [Quarkus MyBatis](https://quarkiverse.github.io/quarkiverse-docs/quarkus-mybatis/dev/index.md) for configuration. It must enable the following options
+Please refer to [Quarkus MyBatis](https://docs.quarkiverse.io/quarkus-mybatis/dev/index.md) for configuration. It must enable the following options
 
 ```properties
 quarkus.mybatis.xmlconfig.enable=true

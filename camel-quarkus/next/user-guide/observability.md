@@ -13,9 +13,7 @@ All configured checks are available on the standard MicroProfile Health endpoint
 -   [http://localhost:8080/q/health/ready](http://localhost:8080/q/health/ready)
     
 
-There’s an example project which demonstrates health checks: [https://github.com/apache/camel-quarkus-examples/tree/main/health](https://github.com/apache/camel-quarkus-examples/tree/main/health)
-
-Note that the `/q` path prefix was added in Camel Quarkus 2.0.0. Refer to the [migration guide](../migration-guide/2.0.0.md) for more information.
+There’s an example project which demonstrates health checks: [https://github.com/apache/camel-quarkus-examples/tree/main/observability](https://github.com/apache/camel-quarkus-examples/tree/main/observability)
 
 ## Metrics
 
@@ -30,7 +28,7 @@ Metrics are available on the standard Quarkus metrics endpoint:
 
 ## Tracing
 
-[Camel Quarkus OpenTelemetry extension](../reference/extensions/opentelemetry.md) and [Camel Quarkus OpenTelemetry2 extension](../reference/extensions/opentelemetry.md) integrate with the [Quarkus OpenTelemetry extension](https://quarkus.io/guides/opentelemetry). All you need to do is set up the required [configuration](https://quarkus.io/guides/opentelemetry#create-the-configuration) properties and an `OpenTelemetryTracer` will get automatically added to the registry for Camel to use.
+[Camel Quarkus OpenTelemetry extension](../reference/extensions/opentelemetry.md) and [Camel Quarkus OpenTelemetry2 extension](../reference/extensions/opentelemetry2.md) integrate with the [Quarkus OpenTelemetry extension](https://quarkus.io/guides/opentelemetry). All you need to do is set up the required [configuration](https://quarkus.io/guides/opentelemetry#create-the-configuration) properties and an `OpenTelemetryTracer` will get automatically added to the registry for Camel to use.
 
 There’s an example project demonstrating the above features here: [https://github.com/apache/camel-quarkus-examples/tree/main/observability](https://github.com/apache/camel-quarkus-examples/tree/main/observability)
 

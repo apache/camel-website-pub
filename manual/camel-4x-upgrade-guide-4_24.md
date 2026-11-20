@@ -148,13 +148,20 @@ A `RAW(…​)` option value of an endpoint whose uri is computed from the curre
 
 A Rest DSL service with `bindingMode` `json` or `json_xml` whose JSON data format (`jackson` unless `jsonDataFormat` names another) is not on the classpath now fails when Camel creates the route, with `JSON DataFormat jackson not found (the jackson data format is in camel-jackson3; add camel-jackson3 to the classpath).` Before, the route started and every request failed with `Cannot bind to json as message body is not json compatible`. This is what `xml` binding already did without its XML data format. Add the JSON data format, such as `camel-jackson3` (or `camel-jackson` for Jackson 2), or set `bindingMode` to `off`. With `bindingMode` `auto`, a route that finds neither a JSON nor an XML data format still starts, and logs a WARN as it binds nothing.
 
-### camel-kamelet - the output data type of a source Kamelet is applied before the consuming route
+### camel-kamelet - the output data type of a Kamelet is applied when it hands the message on
 
-A source Kamelet that declares a default output data type (`spec.dataTypes.out.default`) now gives the message that type when it hands it on with `kamelet:sink`, so the route that consumes from the Kamelet gets it. Before, the type was applied only when the route of the Kamelet completed, after the consuming route had run: the consuming route never saw it, and an exchange failed at the end when the consuming route left a body that could not be converted to the type, such as a `Map` for `binary`. This applies to Kamelets labelled `camel.apache.org/kamelet.type: source`, such as `aws-sqs-source` (`text`), `slack-source` (`json`) or `azure-eventhubs-source` (`binary`) of the Kamelet catalog: the first step of the consuming route now gets a `String`, JSON or a `byte[]` with the matching `Content-Type` header, where it used to get the body of the component. When no transformer for the type is on the classpath, such as `json` with neither `camel-jackson` nor `camel-jackson3`, the message is handed on unchanged, as before, and a WARN is logged once.
+A Kamelet that declares a default output data type (`spec.dataTypes.out.default`) now gives the message that type when it hands it on with `kamelet:sink`. Before, the type was applied only when the route of the Kamelet completed:
+
+-   For a source Kamelet, that was after the route that consumes from the Kamelet had run: the consuming route never saw the type, and an exchange failed at the end when the consuming route left a body that could not be converted to the type, such as a `Map` for `binary`. Sources of the Kamelet catalog such as `aws-sqs-source` (`text`), `slack-source` (`json`) or `azure-eventhubs-source` (`binary`) now give the first step of the consuming route a `String`, JSON or a `byte[]` with the matching `Content-Type` header, where it used to get the body of the component. A source with the `binary` type keeps a stream body as it is, also an `InputStream` that is not a stream cache (stream caching turned off), and only sets the `Content-Type` header, so a large object or file (such as `aws-s3-source`, or an FTP source with `streamDownload`) is not read into memory, and the consuming route gets the stream as before.
+    
+-   For an action or a sink Kamelet called with the Kamelet EIP (`kamelet: name: …​` in YAML, `.kamelet("…​")` in Java), that was after the steps that follow the EIP had run, so these steps got the body before the type was applied. They now get the body of the type, as the steps after a `to("kamelet:…​")` already did.
+    
+
+The message also gets the type as its data type, so the input data type of the next Kamelet is converted from it. A message that does not reach `kamelet:sink`, such as one an action Kamelet filters out, no longer gets the type. When no transformer for the type is on the classpath, such as `json` with neither `camel-jackson` nor `camel-jackson3`, the message is handed on unchanged, as before, and a WARN is logged once.
 
 ### camel-core - the binary data type keeps a stream cache or a file body
 
-The `application-octet-stream` (`binary`) data type transformer keeps a body that is a stream cache, a `java.io.File`, a `Path` or a `WrappedFile` (such as the `GenericFile` of the file and FTP consumers) as it is, and only sets the `Content-Type` header to `application/octet-stream`. Before, it read the body into a `byte[]`. These bodies are binary already and can be read again, and they may be large: a source Kamelet such as `aws-s3-source` or `azure-storage-blob-source` declares `binary` and gives the object as a stream, and a file can be uploaded without reading it into memory. Any other body, including an `InputStream` that is not a stream cache (stream caching turned off), is still converted to a `byte[]`.
+The `application-octet-stream` (`binary`) data type transformer keeps a body that is a stream cache, a `java.io.File`, a `Path` or a `WrappedFile` (such as the `GenericFile` of the file and FTP consumers) as it is, and only sets the `Content-Type` header to `application/octet-stream`. Before, it read the body into a `byte[]`. These bodies are binary already and can be read again, and they may be large: a source Kamelet such as `aws-s3-source` or `azure-storage-blob-source` declares `binary` and gives the object as a stream, and a file can be uploaded without reading it into memory. Any other body, including an `InputStream` that is not a stream cache (stream caching turned off), is still converted to a `byte[]`, as it may be read only once; only the `binary` output type of a source Kamelet keeps such a stream (see above).
 
 ### camel-kamelet - each Kamelet EIP has a Kamelet route of its own
 
@@ -582,6 +589,14 @@ With a `saxonConfiguration` bean, the `xslt-saxon` component now applies `secure
 ### camel-servlet - Rest DSL consumers use the endpoint options
 
 The Rest DSL consumers of camel-servlet now apply the `attachmentMultipartBinding`, `fileNameExtWhitelist`, `logException` and `mapHttpMessageBody` options set with `restConfiguration().endpointProperty(…​)`, or as component options, as `servlet:` routes do. Before, these options were ignored: with `attachmentMultipartBinding=true` the uploaded parts were not bound as attachments, and the request body was always read. A custom `httpBinding` set on the component is now used by the Rest DSL consumers when it extends `ServletRestHttpBinding`. Any other binding set on the component is still used only by `servlet:` routes, as it does not map the path placeholders such as `{id}` to headers.
+
+### camel-platform-http-vertx - a route with an asynchronous step no longer holds a worker thread
+
+A `platform-http` route with an asynchronous step, such as a `vertx-http` call, no longer holds a Vert.x worker thread while it waits for that step. So the size of the worker pool no longer limits how many requests of such a route are in flight at the same time. A route that is synchronous to its end runs as before.
+
+This is the default (`false`) of the new `synchronous` option of the `platform-http` endpoint and component. It is the default because a route that calls an asynchronous producer on the same Vert.x as the HTTP server (such as `vertx-http` in Camel Quarkus, or with a Vert.x instance in the registry) could otherwise stop answering for good once there were as many requests in flight as worker threads. Camel 3.x up to 4.1 also routed this way; from Camel 4.2 to 4.23 the worker thread waited until the route was complete.
+
+To keep the behaviour of Camel 4.2 to 4.23, where the worker thread waits until the route is complete and the worker pool bounds the requests in flight, set `synchronous=true` on the endpoint, or `camel.component.platform-http.synchronous=true` for all of them. A route that stays in the asynchronous mode and needs a bound sets one itself, for example with `throttle(n).concurrentRequestsMode().asyncDelayed()`: with `asyncDelayed`, a request that waits for a permit does not hold a worker thread either.
 
 ### camel-http - authMethod=Bearer and authMethod=NTLM are applied
 
@@ -1239,6 +1254,19 @@ A circuit breaker in the steps of a `doTry` no longer ends that `doTry` for the 
 
 To have those steps use the error handler of the route, move them out of the `doTry` block.
 
+### camel-resilience4j - the timeouts of the asynchronous mode run on a thread pool of their own, and a stopped route keeps its thread pools
+
+A Circuit Breaker with `asynchronous` and `timeoutEnabled` ran its calls and its timeouts on the same thread pool, so a timeout could not fire while every thread of that pool was blocked in a call. The thread names and thread counts in thread dumps and JMX change:
+
+-   Each such Circuit Breaker has one more scheduled thread pool, `CircuitBreakerTimeout`, that runs the timeouts. It has the size of the default thread pool profile (10 threads by default).
+    
+-   A thread pool given with `timeoutExecutorService` now runs only the calls, not the timeouts. A thread pool that was sized to cover both can be made smaller.
+    
+-   After a timeout, the fallback and the rest of the route after the Circuit Breaker run on a `CircuitBreakerTimeout` thread. Keep them non-blocking, or give that thread pool enough threads (see the Resilience4j EIP page).
+    
+-   A Circuit Breaker with `timeoutEnabled` (asynchronous or not) keeps the thread pools that Camel created for it while its route is stopped, and shuts them down when the route is removed or the CamelContext stops. Before, stopping the route shut the thread pool of the calls down, and after the route was started again, the calls through the Circuit Breaker no longer ran: in synchronous mode each call timed out (into the fallback, when there is one), and in asynchronous mode the exchange never completed.
+    
+
 ### camel-jbang - camel cmd send without a name sends to the integration that runs
 
 `camel cmd send` without an integration name started a Camel of its own, without routes, and sent from there. That is still so for an endpoint of a system outside the integrations (such as `kafka:topic`). Without `--endpoint`, the message went nowhere and was reported as sent. An endpoint that only an integration has (`direct:`, `seda:`, `stub:`, a route id) waited for the timeout. Now both go to the integration that runs. With none running, or several, the command exits with `3` and says what to give. A send without an endpoint to an integration without routes is now an error, rather than reported as sent.
@@ -1600,6 +1628,10 @@ The `raw` operation now fails with an `InvalidPayloadException` when the body ca
 ### camel-spring-rabbitmq - confirm=auto waits for simple publisher confirms
 
 With the default `confirm=auto`, an InOnly producer now also waits for the publisher confirm when the connection factory has publisher confirms of type `SIMPLE` (for example `spring.rabbitmq.publisher-confirm-type=simple`), as it did for type `CORRELATED`. Before, it sent such messages without waiting, so a message that RabbitMQ negatively acknowledged, or did not confirm, was lost without an error. Each send now waits up to `confirmTimeout` (5 seconds by default). It fails with a `java.util.concurrent.TimeoutException` when RabbitMQ negatively acknowledges the message, and with an `org.springframework.amqp.AmqpTimeoutException` when RabbitMQ does not confirm it within `confirmTimeout`. Set `confirm=disabled` to send without waiting, as before.
+
+### camel-stream - a scanning consumer keeps going after the stream cannot be opened or read
+
+A `stream` consumer with `scanStream=true` no longer ends its reading thread when the stream cannot be opened (for example a `stream:http` server that is down or answers 503) or a read fails (the connection is lost). Before, the route stayed started but read nothing until it was restarted. Now the first failure in a row goes to the exception handler of the consumer (a WARN by default) and the next ones are logged at DEBUG, until data is read again. With `retry=true` the stream is opened again, at least one second after the failure (or after `scanStreamDelay`, if longer). In raw mode (`readLine=false`) a read that fails is reported in the same way; before, it was ignored.
 
 ### camel-cyberark-vault - verifySsl and certificatePath are applied, and getSecret no longer sets the CamelCyberArkVaultSecretValue header
 

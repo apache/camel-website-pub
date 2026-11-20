@@ -79,4 +79,4 @@ quarkus.camel.native.reflection.include-patterns = org.apache.camel.spi.RouteCon
 
 ### Statistics
 
-The `stats` action is not available in native mode as JMX is not supported on GraalVM. Therefore, attempting to build a native image with the `camel-quarkus-management` extension on the classpath will result in a build failure.
+The `stats` action requires JMX, which is provided by the [Management](management.md) extension. JMX support in native mode is experimental, so some statistics may not be available.

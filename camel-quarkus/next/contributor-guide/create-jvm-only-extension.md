@@ -4,9 +4,9 @@
 
 Quarkus applications can be built and run in two modes: JVM and native. While native mode is clearly superior when it comes to application start time, memory consumption and size on disk, the JVM mode may still be a valid option. Here is why:
 
-First, Quarkus works really well on stock JVMs, such as OpenJDK. While the memory consumption and start times are not as good as in native mode, they are still very good when [compared](https://quarkus.io/blog/runtime-performance/#application-start-time) to traditional JVM stacks.
+First, Quarkus works really well on stock JVMs, such as OpenJDK. While the memory consumption and start times are not as good as in native mode, they are still very good when [compared](https://quarkus.io/blog/runtime-performance/#_application_start_time) to traditional JVM stacks.
 
-Second, JVM mode beats native mode in [peak throughput](https://quarkus.io/blog/runtime-performance/#throughput-reqsec) and [response latency](https://quarkus.io/blog/runtime-performance/#response-times-ms). You should prefer JVM mode if these metrics matter to you.
+Second, JVM mode beats native mode in [peak throughput](https://quarkus.io/blog/runtime-performance/#_throughput_reqsec) and [response latency](https://quarkus.io/blog/runtime-performance/#_response_times_ms). You should prefer JVM mode if these metrics matter to you.
 
 And third, creating a Quarkus extension that works well both in JVM and native mode requires some time and [expertise](create-new-extension.md). In case some extension is needed quickly and the native support is dispensable, relying on JVM-only extensions may make a lot of sense.
 

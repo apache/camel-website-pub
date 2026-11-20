@@ -2,7 +2,7 @@
 
 ## Testcontainers
 
-Sometimes your application needs to access an external service such as a message broker, database, etc. If a container image is available for the service of interest, [Testcontainers](https://www.testcontainers.org/) can be used to start and stop these services for testing.
+Sometimes your application needs to access an external service such as a message broker, database, etc. If a container image is available for the service of interest, [Testcontainers](https://testcontainers.com/) can be used to start and stop these services for testing.
 
 For the application to work properly, it is often essential to pass the connection configuration data (host, port, user, password, etc. of the remote service) to the application before it starts. In the Quarkus ecosystem, `QuarkusTestResourceLifecycleManager` serves this purpose.
 
@@ -10,11 +10,11 @@ You can start one or more containers in the `start()` method and return the conn
 
 ```java
 import java.util.Map;
-import java.util.HashMap;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.utility.DockerImageName;
 
 public class MyTestResource implements QuarkusTestResourceLifecycleManager {
 
@@ -23,7 +23,7 @@ public class MyTestResource implements QuarkusTestResourceLifecycleManager {
     @Override
     public Map<String, String> start() {
         // Start the needed container(s)
-        myContainer = new GenericContainer(DockerImageName.parse("my/image:1.0.0"))
+        myContainer = new GenericContainer<>(DockerImageName.parse("my/image:1.0.0"))
                 .withExposedPorts(1234)
                 .waitingFor(Wait.forListeningPort());
 
@@ -31,10 +31,9 @@ public class MyTestResource implements QuarkusTestResourceLifecycleManager {
 
         // Pass the configuration to the application under test
         // You can also pass camel component property names / values to automatically configure Camel components
-        return new HashMap<>() {{
-                put("my-container.host", container.getHost());
-                put("my-container.port", "" + container.getMappedPort(1234));
-        }};
+        return Map.of(
+                "my-container.host", myContainer.getHost(),
+                "my-container.port", String.valueOf(myContainer.getMappedPort(1234)));
     }
 
     @Override
@@ -64,9 +63,9 @@ More information can be found in the [Quarkus testing guide](https://quarkus.io/
 
 It is sometimes useful to stub HTTP interactions with third party services & APIs so that tests do not have to connect to live endpoints, as this can incur costs and the service may not always be 100% available or reliable.
 
-An excellent tool for mocking & recording HTTP interactions is [WireMock](http://wiremock.org/). It is used extensively throughout the Camel Quarkus test suite for various component extensions. Here follows a typical workflow for setting up WireMock.
+An excellent tool for mocking & recording HTTP interactions is [WireMock](https://wiremock.org/). It is used extensively throughout the Camel Quarkus test suite for various component extensions. Here follows a typical workflow for setting up WireMock.
 
-First set up the WireMock server. Note that it is important to configure the Camel component under test to pass any HTTP interactions through the WireMock proxy. This is usually achieved by configuring a component property that determines the API endpoint URL. Sometimes things are less straightforward and some extra work is required to configure the API client library, as was the case for [Twilio](https://github.com/apache/camel-quarkus/blob/main/integration-tests/twilio/src/main/java/org/apache/camel/quarkus/component/twilio/it/TwilioResource.java#L83).
+First set up the WireMock server. Note that it is important to configure the Camel component under test to pass any HTTP interactions through the WireMock proxy. This is usually achieved by configuring a component property that determines the API endpoint URL. Sometimes things are less straightforward and some extra work is required to configure the API client library, as was the case for [Twilio](https://github.com/apache/camel-quarkus/blob/main/integration-tests/twilio/src/main/java/org/apache/camel/quarkus/component/twilio/it/TwilioResource.java).
 
 ```java
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;

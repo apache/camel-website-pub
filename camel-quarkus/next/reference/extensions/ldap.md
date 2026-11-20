@@ -52,7 +52,7 @@ For more details, refer to the dirContext [Javadoc](https://docs.oracle.com/en/j
 If you need to specify an option that is not listed above, use the following property format:
 
 ```properties
-quarkus.camel.ldap.dr-contexts."your_name".additional-options."not-listed_option_name"
+quarkus.camel.ldap.dir-contexts."your_name".additional-options."not-listed_option_name"
 ```
 
 Here is an example of configuration of a dirContext named `your_context` using SSL.

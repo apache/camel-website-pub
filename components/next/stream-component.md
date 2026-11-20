@@ -310,6 +310,8 @@ from("stream:file?fileName=/server/logs/server.log&scanStream=true&scanStreamDel
               method: parseLogLine
 ```
 
+When a scanned stream cannot be opened or read (such as a `stream:http` server that is down, or a lost connection), the first failure in a row goes to the exception handler and the next ones are logged at DEBUG until data is read again, and with `retry` the stream is opened again, at least one second after the failure.
+
 ### Reading HTTP server side streaming
 
 The camel-stream component has basic support for connecting to a remote HTTP server and read streaming data (chunk of data separated by new-line).

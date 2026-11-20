@@ -42,9 +42,9 @@ In JVM mode, templates are compiled at runtime and `quarkus.camel.xslt.sources` 
 
 Compiling more than one template requires the native build to run on JDK 21.0.8 or newer.
 
-`<xsl:include>` is supported in native mode when the including stylesheet is listed in `quarkus.camel.xslt.sources` and included stylesheets are classpath-relative. Nested classpath includes are resolved at build time. `<xsl:messaging>` XSLT elements are supported in JVM mode only right now.
+`<xsl:include>` is supported in native mode when the including stylesheet is listed in `quarkus.camel.xslt.sources` and included stylesheets are classpath-relative. Nested classpath includes are resolved at build time. `<xsl:message>` XSLT elements are supported in JVM mode only right now.
 
-If `aggregate` DSL is used, `XsltSaxonAggregationStrategy` has to be used such as
+If `aggregate` DSL is used, `XsltSaxonAggregationStrategy` from the `camel-quarkus-xslt-saxon` extension has to be used such as
 
 ```java
 from("file:src/test/resources?noop=true&sortBy=file:name&antInclude=*.xml")

@@ -30,7 +30,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 The extension leverages the [Quarkus MongoDB Client](https://quarkus.io/guides/mongodb) extension. The Mongo client can be configured via the Quarkus MongoDB Client [configuration options](https://quarkus.io/guides/mongodb#configuration-reference).
 
-The Camel Quarkus MongoDB extension automatically registers a MongoDB client bean named `camelMongoClient`. This can be referenced in the mongodb endpoint URI `connectionBean` path parameter. For example:
+This extension automatically registers a MongoDB client bean named `camelMongoClient`. This can be referenced in the mongodb endpoint URI `connectionBean` path parameter. For example:
 
 ```java
 from("direct:start")

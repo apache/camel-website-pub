@@ -2,8 +2,8 @@
 
 If you used Camel standalone or on other runtimes before, you may know `CamelTestSupport` already. The original `CamelTestSupport` class is not well suited to Quarkus, so there’s an extended Quarkus friendly version called `CamelQuarkusTestSupport`.
 
-> > **Important**
-> > `CamelQuarkusTestSupport` only works in JVM mode. If you need to test in native mode, then use one of the alternate test strategies described in the [Testing](../testing.md) guide.
+> **Important**
+> `CamelQuarkusTestSupport` only works in JVM mode. If you need to test in native mode, then use one of the alternate test strategies described in the [Testing](../testing.md) guide.
 
 To use `CamelQuarkusTestSupport`, you must add `camel-quarkus-junit` as a test scoped dependency to your application.
 
@@ -17,19 +17,19 @@ To use `CamelQuarkusTestSupport`, you must add `camel-quarkus-junit` as a test s
 
 ## Customizing the `CamelContext` for testing
 
-You can customize the `CamelContext` for testing with [configuration profiles](https://quarkus.io/guides/config-reference#profiles), CDI beans, observers, [mocks](https://quarkus.io/guides/getting-started-testing#mock-support) etc. You can also override the `createCamelContext` method and interact directly with the `CamelContext`.
+You can customize the `CamelContext` for testing with [configuration profiles](https://quarkus.io/guides/config-reference#profiles), CDI beans, observers, [mocks](https://quarkus.io/guides/getting-started-testing#mock-support) etc. You can also override the `camelContextSupplier` method and interact directly with the `CamelContext`.
 
 > **Important**
-> When using `createCamelContext` you **MUST NOT** instantiate and return a new `CamelContext`. Instead, invoke `super.createCamelContext()` and modify the returned `CamelContext` as needed. Failing to follow this rule will result in an exception being thrown.
+> When overriding `camelContextSupplier` you **MUST NOT** instantiate and return a new `CamelContext`. Instead, invoke `super.camelContextSupplier()` and modify the returned `CamelContext` as needed. Failing to follow this rule will cause your tests to fail.
 
 ```java
 @QuarkusTest
 class SimpleTest extends CamelQuarkusTestSupport {
 
     @Override
-    protected CamelContext createCamelContext() throws Exception {
+    protected CamelContext camelContextSupplier() throws Exception {
         // Must call super to get a handle on the application scoped CamelContext
-        CamelContext context = super.createCamelContext();
+        CamelContext context = super.camelContextSupplier();
         // Apply customizations
         context.setTracing(true);
         // Return the modified CamelContext
@@ -93,8 +93,7 @@ This can potentially have some unintended side effects for your tests. If you ne
 For example, to define a test profile:
 
 ```java
-@QuarkusTest
-class MyTestProfile implements QuarkusTestProfile {
+public class MyTestProfile implements QuarkusTestProfile {
     ...
 }
 ```
@@ -304,9 +303,9 @@ Advice modifications are automatically cleaned up between test methods to preven
 
 ## Limitations
 
-### Test lifecycle methods inherited from `CamelTestSupport`
+### Test lifecycle methods from `CamelTestSupport`
 
-`CamelQuarkusTestSupport` inherits some test lifecycle methods from `CamelTestSupport`. However, they should not be used and instead are replaced with equivalent methods in `CamelQuarkusTestSupport`.
+The JUnit lifecycle methods of `CamelTestSupport` are not available in `CamelQuarkusTestSupport`. If you are migrating tests from `CamelTestSupport`, use the equivalent methods in `CamelQuarkusTestSupport` instead.
 
  
 | CamelTestSupport lifecycle methods | CamelQuarkusTestSupport equivalent |
@@ -318,7 +317,7 @@ Advice modifications are automatically cleaned up between test methods to preven
 
 ### Creating a custom Camel registry is not supported
 
-The `CamelQuarkusTestSupport` implementation of `createCamelRegistry` will throw `UnsupportedOperationException`.
+`CamelQuarkusTestSupport` always uses the Camel registry of the application under test. Unlike `CamelTestSupport`, there is no `createCamelRegistry` method to override.
 
 If you need to bind or unbind objects to the Camel registry, then you can do it by one of the following methods.
 
@@ -334,7 +333,18 @@ If you need to bind or unbind objects to the Camel registry, then you can do it 
     }
     ```
     
--   Override `createCamelContext` (see example above) and invoke `camelContext.getRegistry().bind("foo", fooBean)`
+-   Override `bindToRegistry` and invoke `registry.bind("foo", fooBean)`
+    
+    ```java
+    @QuarkusTest
+    class SimpleTest extends CamelQuarkusTestSupport {
+        @Override
+        protected void bindToRegistry(Registry registry) throws Exception {
+            super.bindToRegistry(registry);
+            registry.bind("myBean", new MyBean());
+        }
+    }
+    ```
     
 -   Use the `@BindToRegistry` annotation
     

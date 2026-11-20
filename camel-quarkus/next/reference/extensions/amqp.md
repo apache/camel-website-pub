@@ -40,7 +40,7 @@ When sending JMS message payloads as `jakarta.jms.ObjectMessage`, you must annot
 
 ### Connection Pooling
 
-You can use the `quarkus-pooled-jms` extension to get pooling support for the connections. Refer to the [quarkus-pooled-jms](https://quarkiverse.github.io/quarkiverse-docs/quarkus-pooled-jms/dev/index.md) extension documentation for more information.
+You can use the `quarkus-pooled-jms` extension to get pooling support for the connections. Refer to the [quarkus-pooled-jms](https://docs.quarkiverse.io/quarkus-pooled-jms/dev/index.md) extension documentation for more information.
 
 Just add the following dependency to your `pom.xml`:
 

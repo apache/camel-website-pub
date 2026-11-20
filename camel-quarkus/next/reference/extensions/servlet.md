@@ -93,6 +93,7 @@ from("servlet://goodbye?servletName=my-custom-b")
 If you need more control of the Servlet configuration, for example to configure custom init parameters, then you can do this with a custom Servlet class through the `jakarta.servlet.annotation.WebServlet` annotation options.
 
 ```java
+import jakarta.servlet.annotation.WebInitParam;
 import jakarta.servlet.annotation.WebServlet;
 import org.apache.camel.component.servlet.CamelHttpTransportServlet;
 

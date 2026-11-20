@@ -44,4 +44,4 @@ If you choose to not name the datasource, you can resolve the default `DataSourc
 
 #### Zero configuration with Quarkus Dev Services
 
-In dev and test mode you can take advantage of [Configuration Free Databases](https://quarkus.io/guides/datasource#dev-services-configuration-free-databases). All you need to do is reference the default database in your routes. E.g `to("jdbc:default")`.
+In dev and test mode you can take advantage of [Configuration Free Databases](https://quarkus.io/guides/datasource#dev-services). All you need to do is reference the default database in your routes. E.g `to("jdbc:default")`.

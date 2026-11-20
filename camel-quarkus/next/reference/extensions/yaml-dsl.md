@@ -30,7 +30,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ### Native mode
 
-The following constructs when defined within Camel YAML DSL markup, require you to register classes for reflection. Refer to the [Native mode](../../user-guide/native-mode.html#reflection) guide for details.
+Some constructs defined within Camel YAML DSL markup require classes to be registered for reflection. Refer to the [Native mode](../../user-guide/native-mode.html#reflection) guide for details.
 
 #### Bean definitions
 
@@ -60,74 +60,4 @@ public class GreetingBean {
 
 #### Exception handling
 
-Camel provides various methods of handling exceptions. Some of these require that any exception classes referenced in their DSL definitions are registered for reflection.
-
-`**on-exception**`
-
-```yaml
-- on-exception:
-    handled:
-      constant: "true"
-    exception:
-      - "org.acme.MyHandledException"
-    steps:
-      - transform:
-          constant: "Sorry something went wrong"
-```
-
-```java
-@RegisterForReflection
-public class MyHandledException {
-}
-```
-
-`**throw-exception**`
-
-```yaml
-- route:
-    id: "my-yaml-route"
-    from:
-      uri: "direct:start"
-      steps:
-        - choice:
-            when:
-              - simple: "${body} == 'bad value'"
-                steps:
-                  - throw-exception:
-                      exception-type: "org.acme.ForcedException"
-                      message: "Forced exception"
-            otherwise:
-              steps:
-                - to: "log:end"
-```
-
-```java
-@RegisterForReflection
-public class ForcedException {
-}
-```
-
-`**do-catch**`
-
-```yaml
-- route:
-    id: "my-yaml-route2"
-    from:
-      uri: "direct:tryCatch"
-      steps:
-        - do-try:
-            steps:
-              - to: "direct:readFile"
-            do-catch:
-              - exception:
-                  - "java.io.FileNotFoundException"
-                steps:
-                  - transform:
-                      constant: "do-catch caught an exception"
-```
-
-```java
-@RegisterForReflection(targets = FileNotFoundException.class)
-public class MyClass {
-}
-```
+Exception classes referenced by `onException`, `doCatch` and `throwException` in YAML routes are detected at build time and registered for reflection automatically. You only need to register exception classes for reflection yourself if they are referenced in a way that cannot be detected at build time.

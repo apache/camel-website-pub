@@ -123,7 +123,7 @@ A String body becomes one MCP `user` message. A List body can return multiple me
 
 ### Tool annotation hints
 
-`ai-tool` routes can declare optional MCP `ToolAnnotations` hints (`title`, `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`). The bridge passes them through to the MCP engine. See [MCP Tool Annotation Hints](../ai-tool-component.html#_mcp_tool_annotation_hints) for configuration examples. Hints are advisory UX metadata only — not authorization.
+`ai-tool` routes can declare optional MCP `ToolAnnotations` hints (`title`, `readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`, `returnDirect`). The bridge passes them through to the MCP engine. See [MCP Tool Annotation Hints](../ai-tool-component.html#_mcp_tool_annotation_hints) for configuration examples. Hints are advisory UX metadata only — not authorization.
 
 On Camel Main and Camel JBang no code is needed — like Jolokia or Prometheus, the server starts from configuration properties alone.
 

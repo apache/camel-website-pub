@@ -8,7 +8,7 @@ Uploads each message as a file (object) to a bucket in IBM Cloud Object Storage.
 
 Use it to store data for later use or for other systems, such as exported reports, archived events or files received from another system. To read the files of a bucket, use `ibm-cos-source`.
 
-Input: the body is the content of the file, as text, bytes, a stream or a file. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The name of the file (its key) is `keyName` when it is set; otherwise the optional `file` header (or `ce-file`), with its folders, such as `reports/2024-06-01.csv`; otherwise a generated unique name.
+Input: the body is the content of the file, as text, bytes, a stream or a file. Turn structured data such as a Map into JSON text first, for example with `json-serialize-action`. The name of the file (its key) is `keyName` when it is set, or then a `CamelIBMCOSKey` header; otherwise the optional `file` header (or `ce-file`), with its folders, such as `reports/2024-06-01.csv`; otherwise a generated unique name.
 
 Output: the message is unchanged, with the ETag of the uploaded file in the `CamelIBMCOSETag` header.
 
@@ -27,7 +27,7 @@ The following table summarizes the configuration options available for the `ibm-
 | **serviceInstanceId** | Service Instance ID | **Required** The CRN (Cloud Resource Name) of the Cloud Object Storage instance, shown in the details of the instance in the IBM Cloud console. It starts with `crn:v1:bluemix:public:cloud-object-storage:`. | string |  |  |
 | **autoCreateBucket** | Autocreate Bucket | If true, the bucket is created when it does not exist yet. | boolean | false |  |
 | **deleteAfterWrite** | Delete Local File | If true and the body is a local file, such as the file of `file-watch-source`, the file is deleted from the local disk once it has been uploaded. A body that is not a file, such as text or bytes, is uploaded and nothing is deleted. A reader that moves the file itself after the upload, such as the Camel file component by default, then logs a warning that it cannot move the file. When it is not set, it is false. | boolean |  |  |
-| **keyName** | Key Name | The name of the file in the bucket, the same for every message, so each message overwrites the previous file. When it is not set, the name comes from the `file` or `ce-file` header, or is generated. A `CamelIBMCOSKey` header on the message, as `ibm-cos-source` sets, is used instead of it. | string |  | reports/latest.csv |
+| **keyName** | Key Name | The name of the file in the bucket, the same for every message, so each message overwrites the previous file. When it is set, a `CamelIBMCOSKey` header on the message, as `ibm-cos-source` sets, is used instead of it. When it is not set, the name comes from the `file` or `ce-file` header, or is generated, and a `CamelIBMCOSKey` header is ignored. | string |  | reports/latest.csv |
 | **multiPartUpload** | Multi-Part Upload | If true, a file larger than `partSize` is uploaded in several parts, which suits large files. | boolean | false |  |
 | **partSize** | Part Size | The size of each part of a multi-part upload, in bytes. For example, 26214400 is 25 MB. Only used when `multiPartUpload` is true. | integer | 26214400 |  |
 | **region** | Region | The region of the bucket, such as `us-south` or `eu-gb`. It is information only, shown with the services the integration calls; the region used is the one of `endpointUrl`. | string |  | us-south |

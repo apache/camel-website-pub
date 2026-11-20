@@ -30,7 +30,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ### JDK 25+
 
-Due to an [issue](https://issues.apache.org/jira/browse/FOP-3275) with Apache FOP encountered with JDK 25+, [`Saxon-HE`](https://www.saxonica.com/documentation12/documentation.xml) is required to avoid reentrant XML parsing problems.
+Due to an [issue](https://issues.apache.org/jira/browse/FOP-3275) with Apache FOP encountered with JDK 25+, [`Saxon-HE`](https://www.saxonica.com/documentation12/documentation.md) is required to avoid reentrant XML parsing problems.
 
 `Saxon-HE` can be added to your application as follows.
 

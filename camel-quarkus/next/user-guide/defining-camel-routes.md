@@ -56,20 +56,16 @@ In order to configure Camel routes, rests or templates in XML, you must add the 
 With Camel Main, you can set a property that points to the location of XML files such as routes, [REST DSL](../../../manual/rest-dsl.md) and [Route templates](../../../manual/route-template.md):
 
 ```properties
-camel.main.routes-include-pattern = routes/routes.xml, file:src/main/routes/rests.xml, file:src/main/rests/route-template.xml
+camel.main.routes-include-pattern = routes/routes.xml, rests/rests.xml, templates/route-template.xml
 ```
 
 > **Note**
-> Path globbing like `camel.main.routes-include-pattern = *./routes.xml` currently does not work in native mode.
+> By default, routes are loaded from `classpath:camel/`**, `classpath:camel-template/`** and `classpath:camel-rest/`**. Setting `camel.main.routes-include-pattern` replaces these defaults. Patterns may contain wildcards, e.g. `classpath:routes/`**`.xml`.
 
 Route
 
 ```xml
-<routes xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-        xmlns="https://camel.apache.org/schema/spring"
-        xsi:schemaLocation="
-            https://camel.apache.org/schema/spring
-            https://camel.apache.org/schema/spring/camel-spring.xsd">
+<routes xmlns="http://camel.apache.org/schema/xml-io">
 
     <route id="xml-route">
         <from uri="timer:from-xml?period=1000"/>
@@ -90,7 +86,7 @@ The route XML should be in the simplified version like:
 Rest DSL
 
 ```xml
-<rests xmlns="https://camel.apache.org/schema/spring">
+<rests xmlns="http://camel.apache.org/schema/xml-io">
     <rest id="greeting" path="/greeting">
         <get path="/hello">
             <to uri="direct:greet"/>
@@ -102,7 +98,7 @@ Rest DSL
 Route Templates
 
 ```xml
-<routeTemplates xmlns="https://camel.apache.org/schema/spring">
+<routeTemplates xmlns="http://camel.apache.org/schema/xml-io">
     <routeTemplate id="myTemplate">
         <templateParameter name="name"/>
         <templateParameter name="greeting"/>
@@ -130,7 +126,7 @@ To configure routes with YAML, you must add the `camel-quarkus-yaml-dsl` depende
 With Camel Main, you can set a property that points to the location of YAML files containing routes, [REST DSL](../../../manual/rest-dsl.md) and [Route templates](../../../manual/route-template.md) definitions:
 
 ```properties
-camel.main.routes-include-pattern = routes/routes.yaml, routes/rests.yaml, rests/route-template.yaml
+camel.main.routes-include-pattern = routes/routes.yaml, rests/rests.yaml, templates/route-template.yaml
 ```
 
 Route
@@ -141,7 +137,7 @@ Route
     from:
       uri: "timer:from-yaml?period=1000"
       steps:
-        - set-body:
+        - setBody:
             constant: "Hello YAML!"
         - to: "log:from-yaml"
 ```
@@ -159,14 +155,14 @@ Rest DSL
     from:
       uri: "direct:greet"
       steps:
-        - set-body:
+        - setBody:
             constant: "Hello YAML!"
 ```
 
 Route Templates
 
 ```yaml
-- route-template:
+- routeTemplate:
     id: "myTemplate"
     parameters:
       - name: "name"
@@ -177,13 +173,13 @@ Route Templates
     from:
       uri: "timer:{{name}}?period={{myPeriod}}"
       steps:
-      - set-body:
+      - setBody:
           expression:
             simple: "{{greeting}} ${body}"
       - log: "${body}"
 
-- templated-route:
-    route-template-ref: "myTemplate"
+- templatedRoute:
+    routeTemplateRef: "myTemplate"
     parameters:
       - name: "name"
         value: "tick"

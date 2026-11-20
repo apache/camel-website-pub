@@ -41,13 +41,13 @@ Alternatively you can pass some Java options to the runnable application JAR or 
 In JVM mode the application runnable JAR can be executed as follows.
 
 ```shell
-java -XX:+FlightRecorder -XX:StartFlightRecording=filename=recording.jfr -jar quarkus-run.jar
+java -XX:StartFlightRecording=filename=recording.jfr -jar quarkus-run.jar
 ```
 
 In native mode, the native executable can be executed as follows.
 
 ```shell
-./my-application-runner -XX:+FlightRecorder -XX:StartFlightRecording=filename=recording.jfr
+./my-application-runner -XX:StartFlightRecording=filename=recording.jfr
 ```
 
 ## Additional Camel Quarkus configuration
