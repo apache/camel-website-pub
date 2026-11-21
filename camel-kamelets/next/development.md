@@ -465,6 +465,16 @@ A sink or an action that leaves the body as it is also declares the data type `a
 
 A source declares the headers it emits under `out`; a sink or action declares the ones it consumes under `in`.
 
+Every Kamelet declares its own side: `out` for a source, `in` for a sink, and both for an action. The build fails when one is missing. A side that has nothing to transform and no headers to list is an empty `headers: {}`, with a comment that says why there is no `default`, so that leaving the default out is a decision and not an accident:
+
+```yaml
+  dataTypes:
+    # No 'default:' here on purpose: the Content-Type header is sent as the content type of the
+    # request, and a default would replace it on every message. See #3117.
+    in:
+      headers: {}
+```
+
 Declaring them is worth the few lines for two reasons:
 
 -   `KameletsCatalog.getKameletSupportedHeaders` answers from the declaration wherever there is one, and falls back to the headers of the underlying Camel component only where there is not. The component list answers a different question — everything that component can emit — so it both over-reports headers a template never surfaces and misses the ones the template sets itself.
