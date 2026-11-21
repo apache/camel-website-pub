@@ -184,7 +184,15 @@ Complete the following steps to create a new Camel release:
     $ git checkout BRANCH\_NAME
     $ git checkout -b release/NEW-VERSION
     
-2.  Perform a license check with [Apache Rat](http://creadur.apache.org/rat/apache-rat-plugin):
+2.  Make sure the catalog has the latest Apache Camel security advisories and known releases of camel-website, as the release ships them (the CVE audit of the Camel CLI and the Camel Maven plugins reads them). Run the [Sync catalog with camel-website](https://github.com/apache/camel/actions/workflows/sync-catalog-website.yml) workflow (**Run workflow**) and merge the PR it opens for the branch, if any, before you go on. It also runs every Monday. Or sync locally and commit the changes:
+    
+    $ ./mvnw -Dquickly install -pl tooling/maven/camel-package-maven-plugin -am
+    $ ./mvnw -pl catalog/camel-catalog camel-package:update-security-advisories camel-package:update-camel-releases
+    
+    -   On an LTS branch older than 4.24, run only `camel-package:update-camel-releases`: those branches have no advisories in the catalog.
+        
+    
+3.  Perform a license check with [Apache Rat](http://creadur.apache.org/rat/apache-rat-plugin):
     
     ./mvnw -e org.apache.rat:apache-rat-plugin:check
     grep -e ' !?????' target/rat.txt
@@ -192,7 +200,7 @@ Complete the following steps to create a new Camel release:
     -   The latter command will provide a list of all files without valid license headers. Ideally this list is empty, otherwise fix the issues by adding valid license headers and rerun the above commands before proceeding with the next step.
         
     
-3.  Do a release dry run to check for problems:
+4.  Do a release dry run to check for problems:
     
     ./mvnw release:prepare -DdryRun -Prelease
     
@@ -213,7 +221,7 @@ Complete the following steps to create a new Camel release:
         gpg: Good signature from "Aurélien Pupier <apupier@apache.org>" \[ultimate\]
         
     
-4.  Prepare the release:
+5.  Prepare the release:
     
     -   First clean up the dry run results:
         
@@ -237,11 +245,11 @@ Complete the following steps to create a new Camel release:
             
         
     
-5.  Perform the release and publish to the Apache staging repository:
+6.  Perform the release and publish to the Apache staging repository:
     
     $ ./mvnw release:perform -Prelease
     
-6.  Stage the WinGet payload in the Apache development distribution repository:
+7.  Stage the WinGet payload in the Apache development distribution repository:
     
     -   `release:perform` builds the non-attached WinGet ZIP in its release checkout. Prepare the candidate with the same candidate number used in the vote:
         
@@ -254,12 +262,12 @@ Complete the following steps to create a new Camel release:
     -   The script prints the candidate’s SHA-512 digest. **Include it in the vote email**: promotion requires it, because the candidate number on its own cannot distinguish the approved candidate from a superseded one (each RC directory carries its own self-consistent `.sha512` and `.asc`).
         
     
-7.  Close the Apache staging repository:
+8.  Close the Apache staging repository:
     
     -   Login to [https://repository.apache.org](https://repository.apache.org) using your Apache LDAP credentials. Click on "Staging Repositories". Then select "org.apache.camel-xxx" in the list of repositories, where xxx represents your username and ip. Click "Close" on the toolbar above. This will close the repository from future deployments and make it available for others to view. If you are staging multiple releases together, skip this step until you have staged everything. Enter the name and version of the artifact being released in the "Description" field and then click "Close". This will make it easier to identify it later.
         
     
-8.  Verify staged artifacts:
+9.  Verify staged artifacts:
     
     -   If you click on your repository, a tree view will appear below. You can then browse the contents to ensure the artifacts are as you expect them. Pay particular attention to the existence of \*.asc (signature) files. If you don’t like the content of the repository, right-click your repository and choose "Drop". You can then roll back your release and repeat the process. Note the repository URL, you will need this in your vote email.
         

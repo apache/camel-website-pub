@@ -55,6 +55,8 @@ An option is applied only when its value differs from its default, and then it o
 
 These options cannot change a `MongoClient` the endpoint did not create (set with `mongoConnection`, on the component, or from the registry). Configure such a client with its own `MongoClientSettings`. In that case the endpoint logs a WARN that lists the options it does not use.
 
+The `org.apache.camel.component.mongodb.SslAwareMongoClient` client, which the MongoDB Kamelets create as a bean, has the properties `hosts`, `username`, `password` (of a user defined in the `admin` database), `ssl`, `sslValidationEnabled` and `readPreference` (the same values as the endpoint option). The username and password are given as they are: the client percent-encodes them.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:

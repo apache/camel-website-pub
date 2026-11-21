@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795277679295,
+  "generated": 1795299641198,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4713,6 +4713,12 @@
               "path": "protobuf-deserialize-action.adoc",
               "url": "/camel-kamelets/next/protobuf-deserialize-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/protobuf-deserialize-action.svg\" alt=\"protobuf deserialize action\"></span> Protobuf Deserialize Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "protobuf-message-action.adoc",
+              "url": "/camel-kamelets/next/protobuf-message-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/protobuf-message-action.svg\" alt=\"protobuf message action\"></span> Protobuf Message Action"
             },
             {
               "module": "ROOT",
@@ -36247,6 +36253,12 @@
               "path": "jbang-commands/camel-jbang-dependency-list.adoc",
               "url": "/manual/jbang-commands/camel-jbang-dependency-list.html",
               "title": "camel dependency list"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-dependency-outdated.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-dependency-outdated.html",
+              "title": "camel dependency outdated"
             },
             {
               "module": "ROOT",

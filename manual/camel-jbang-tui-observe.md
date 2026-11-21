@@ -352,6 +352,25 @@ Each vulnerability shows the CVE ID, its CVSS score, the affected artifact, the 
 
 Press `g` to group the table by artifact: one row per vulnerable JAR with its number of CVEs and the version that fixes all of them, which is what to upgrade. Press `/` to filter the rows by CVE, artifact, summary or a dependency of the chain. Results are cached globally — switching integrations that share JARs is instant. When OSV.dev cannot be reached, the title says so and only the Camel advisories were checked; press `r` to scan again.
 
+By default the coordinates of the JARs are sent to the OSV.dev API. With **OSV Database** in the [Settings](camel-jbang-tui-settings.md) set to `default`, the tab uses the offline OSV database instead, as `camel dependency audit --osv-database` does: the export of all the Maven vulnerabilities of OSV.dev, downloaded once a day into `~/.camel/osv` and matched locally, so no coordinates leave the machine. The title then says `offline OSV database, updated <date>`. A URL downloads the export from a mirror, such as the repository manager of the company, and a path reads a ZIP file on disk.
+
+### Maven Dependencies
+
+The Maven Dependencies tab (under More > Project) lists the dependencies the integration declares, and with `t` the ones they bring in, with the dependency that brings each (VIA column). Above the table, a line tells where the Camel version stands: LTS or not, its end of life, the latest patch release of the same line, the latest LTS release and the latest release. The Camel JARs move together, so they have no newer versions of their own.
+
+Each dependency is checked against the Camel dependencies:
+
+-   **CAMEL** is the version the Camel dependencies bring of the library, empty when Camel does not bring it.
+    
+-   **STATUS** is `conflict` when the JAR is loaded in more than one version or in another version than the one declared (a declared old version of a library Camel also brings ends up next to Camel’s version), `mixed` for a Camel JAR of another Camel version, `override` when the project declares another version than the one Camel brings, `managed` when it is the version Camel brings, and `camel` for a Camel JAR.
+    
+
+Press `u` to look up the newer releases in the Maven repositories of your Maven settings: **NEWER** is the latest release of the same major.minor line, and **LATEST** the latest release, marked `(major)` when it is another major version. `u` also runs the CVE Audit, whose findings fill the **CVES** column; `v` opens the CVE Audit on the selected dependency. Nothing is looked up before you press `u`. `f` cycles the scope, and `outdated` keeps the dependencies worth a look. `Shift+F8` asks the AI which dependencies to upgrade, and whether that is safe with this Camel version.
+
+![The Maven Dependencies tab: camel-zipfile 4.18.0 among the Camel 4.24 JARs is mixed](_images/jbang/camel-tui-observe-maven-dependencies.png)
+
+The same check is a command, `camel dependency outdated` (see [Checking for outdated dependencies](camel-jbang-projects.html#_checking_for_outdated_dependencies)).
+
 ### Kafka
 
 The Kafka tab (under More > Data) provides a dedicated view for Kafka consumers and their connectivity status. It shows consumer group details, topic assignments, partition offsets, and reconnection state. When a broker connection drops, the Recovery Tasks tab shows the reconnection task with its Waiting/Attempting status, retry count, and error details.

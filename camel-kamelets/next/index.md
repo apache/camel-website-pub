@@ -369,6 +369,8 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![protobuf deserialize action](_images/kamelets/protobuf-deserialize-action.svg) Protobuf Deserialize Action](protobuf-deserialize-action.html)
 
+ [![protobuf message action](_images/kamelets/protobuf-message-action.svg) Protobuf Message Action](protobuf-message-action.html)
+
  [![protobuf serialize action](_images/kamelets/protobuf-serialize-action.svg) Protobuf Serialize Action](protobuf-serialize-action.html)
 
  [![pulsar sink](_images/kamelets/pulsar-sink.svg) Pulsar Sink](pulsar-sink.html)

@@ -8,9 +8,9 @@ Receives the change notifications of a Google Cloud Storage bucket from a Pub/Su
 
 Use it to react as soon as a file is uploaded to, changed in or deleted from a bucket, without reading the whole bucket over and over. It needs a Pub/Sub notification on the bucket, created for example with `gcloud storage buckets notifications create gs://my-bucket --topic=my-topic`, and a subscription on that topic. To read and delete the files of a bucket instead, use `google-storage-source`.
 
-Output: by default, the body is the notification as JSON text (bytes): the metadata of the file, such as its name, size and content type. The `eventType` header says what happened (`OBJECT_FINALIZE` for a new or replaced file, `OBJECT_DELETE` for a deleted one), and the `objectId` and `bucketId` headers give the name of the file and of its bucket. With `getObject` set to true, the body of a new file in `bucketNameOrArn` is the content of the file, as bytes, with the `CamelGoogleCloudStorage…​` headers of the file, such as `CamelGoogleCloudStorageContentType`; its name and its bucket are only in the `objectId` and `bucketId` headers.
+Output: by default, the body is the notification as JSON text (bytes): the metadata of the file, such as its name, size and content type. The `eventType` header says what happened (`OBJECT_FINALIZE` for a new or replaced file, `OBJECT_DELETE` for a deleted one), and the `objectId` and `bucketId` headers give the name of the file and of its bucket. With `getObject` set to true, the body of a new file in `bucketNameOrArn` is the content of the file, as bytes, with the `CamelGoogleCloudStorage…​` headers of the file, such as `CamelGoogleCloudStorageContentType`; its name and its bucket are only in the `objectId` and `bucketId` headers. In both cases, the `google-storage-event-id` header identifies the change.
 
-Good to know: every notification of the subscription comes out, also for other events and other buckets; `bucketNameOrArn` is only used to choose which new files to download. Downloading does not delete the file. A notification whose processing fails is not acknowledged, so Pub/Sub delivers it again. With `ackMode` `NONE`, the route acknowledges each notification itself, through the `CamelGooglePubsubAcknowledge` header. On a subscription with a dead-letter topic, `maxDeliveryAttempts` stops a notification that keeps failing from being processed again.
+Good to know: every notification of the subscription comes out, also for other events and other buckets; `bucketNameOrArn` is only used to choose which new files to download. Downloading does not delete the file. A notification whose processing fails is not acknowledged, so Pub/Sub delivers it again. Cloud Storage also sends its notifications at least once, so the same change can come twice, in two Pub/Sub messages with different IDs; `google-storage-event-id` is the same in both. To process each change once, put the steps after the Kamelet in an `idempotentConsumer` step on `${header[google-storage-event-id]}`. A `MemoryIdempotentRepository` remembers the changes of one process, until it restarts; with more than one replica, use a shared repository, such as the ones of `camel-infinispan` or `camel-sql`. With `ackMode` `NONE`, the route acknowledges each notification itself, through the `CamelGooglePubsubAcknowledge` header. On a subscription with a dead-letter topic, `maxDeliveryAttempts` stops a notification that keeps failing from being processed again.
 
 ## Configuration Options
 
@@ -41,6 +41,8 @@ At runtime, the `google-storage-event-based-source` Kamelet relies upon the pres
 -   camel:google-storage
     
 -   camel:jackson3
+    
+-   camel:jsonpath
     
 
 ## Camel JBang usage

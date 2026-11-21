@@ -243,8 +243,88 @@ The options:
     
 -   `--offline` checks only the Apache Camel security advisories, without OSV.dev.
     
+-   `--osv-database` checks with the offline OSV database instead of the OSV.dev API, see below.
+    
 
-The command exits with 1 when it finds a vulnerability of the `--fail-on` severity or worse (default `low`: any), so a CI job fails; `--fail-on=none` always exits with 0. The CVE Audit screen of the [Camel TUI](camel-jbang-tui.md) shows the same for a running integration, and explains a vulnerability with AI.
+The command exits with 1 when it finds a vulnerability of the `--fail-on` severity or worse (default `low`: any), so a CI job fails; `--fail-on=none` always exits with 0. When OSV.dev (or the OSV database) cannot be used, the command warns and checks the Apache Camel security advisories only; with `--fail-on-error` it exits with 1 then, so a CI job does not pass without the check. The CVE Audit screen of the [Camel TUI](camel-jbang-tui.md) shows the same for a running integration, and explains a vulnerability with AI. For a Maven build in a CI/CD pipeline, the [camel-report:audit](camel-report-maven-plugin.html#_camel_reportaudit) goal does the same checks on the dependencies Maven resolved, fails the build on a severity, and writes a SARIF report.
+
+### The offline OSV database
+
+By default, the command sends the coordinates (`groupId:artifactId:version`) of every dependency to the OSV.dev API, including those of the internal libraries of a company. With `--osv-database` it does not: it downloads the export of all the Maven vulnerabilities of OSV.dev (one ZIP file of about 10 MB, updated every day by OSV.dev) and matches the versions locally, so no coordinates leave the machine:
+
+```bash
+camel dependency audit --osv-database
+```
+
+The ZIP is kept in `~/.camel/osv` and downloaded again once a day, and only when it changed (`If-Modified-Since`). When the download fails, the copy of the day before is used, with a warning.
+
+A build machine without internet access can download the ZIP from the repository manager of the company: a raw repository of Nexus or a generic remote repository of Artifactory that proxies `[https://osv-vulnerabilities.storage.googleapis.com/Maven/all.zip](https://osv-vulnerabilities.storage.googleapis.com/Maven/all.zip)`, or a file on disk:
+
+```bash
+camel dependency audit --osv-database-url=https://nexus.corp.com/repository/osv/Maven/all.zip
+camel dependency audit --osv-database-url=/opt/osv/all.zip
+```
+
+The offline database and the OSV.dev API give the same vulnerabilities: OSV.dev matches the versions with the same data.
+
+### Proxy
+
+The command reaches OSV.dev (or the URL of `--osv-database-url`) through a proxy, which is taken from, in order:
+
+1.  the active proxy of the Maven settings: `~/.m2/settings.xml`, or the file of `--maven-settings`, with its username, its password (encrypted with `settings-security.xml` or not) and its `nonProxyHosts`;
+    
+2.  the `HTTPS_PROXY` (or `HTTP_PROXY`) and `NO_PROXY` environment variables, as CI runners set them, such as `HTTPS_PROXY=http://user:secret@proxy.corp.com:3128`;
+    
+3.  the proxy settings of the JVM, such as `JAVA_OPTS="-Dhttps.proxyHost=proxy.corp.com -Dhttps.proxyPort=3128"`.
+    
+
+The JDK does not send a username and password to a proxy with Basic authentication when it tunnels HTTPS through it (`jdk.http.auth.tunneling.disabledSchemes=Basic`); the command allows it when the proxy has a username, unless the property is set already. When OSV.dev cannot be reached, the command checks the Apache Camel security advisories only, and says why.
+
+## Checking for outdated dependencies
+
+List the dependencies with a newer release, and those whose version does not fit the Camel version:
+
+```bash
+camel dependency outdated
+Camel 4.24.0-SNAPSHOT (not released)
+
+ ARTIFACT                         VERSION  CAMEL  STATUS    NEWER  LATEST
+ org.apache.commons:commons-text  1.9                              1.15.0
+ org.snakeyaml:snakeyaml-engine   2.9      3.2    override         3.2 (major)
+ org.yaml:snakeyaml               1.33                             2.7 (major)
+
+3 of 8 dependencies of the project to look at (1 override, 3 with a newer release)
+```
+
+The first line tells where the Camel version stands, from the known releases in the Camel catalog. On Camel 4.18.1 it reads:
+
+```text
+Camel 4.18.1 LTS, end of life 2027-02-16 · newer on this line: 4.18.5 · latest LTS: 4.22.2 · latest: 4.23.0
+```
+
+The Camel JARs move together, so they are not listed with newer versions of their own: upgrade Camel instead.
+
+-   **CAMEL** is the version the Camel dependencies bring of the library; empty when Camel does not bring it.
+    
+-   **STATUS** is `override` when the project declares another version than the one Camel brings, `conflict` when the JAR is loaded in more than one version or in another version than declared (with `--integration`), `mixed` for a Camel JAR of another Camel version, and `managed` when it is the version Camel brings.
+    
+-   **NEWER** is the latest release of the same major.minor line, and **LATEST** the latest release, marked `(major)` when it is another major version. A version newer than the one Camel brings, or another major version, may not work with this Camel version.
+    
+
+The newer versions come from the Maven repositories of your Maven settings (Maven Central, mirrors). The options:
+
+-   `--integration=<name or pid>` checks the JARs a running integration loaded, which finds the ones loaded twice.
+    
+-   `--transitive` also lists the dependencies the declared ones bring in, with the one that brings each (VIA).
+    
+-   `--all` lists all dependencies, not only those with something to report.
+    
+-   `--offline` does not look up newer versions: only the versions Camel brings.
+    
+-   `--json` prints one JSON document, for a script or an AI agent.
+    
+
+The command exits with 1 when a dependency is outdated, so a CI job fails. `--fail-on` sets what counts: `any` (the default) a status to act on or any newer release, `patch` a status to act on or a newer release of the same line, `status` only a status to act on, and `none` never. The Maven Dependencies screen of the [Camel TUI](camel-jbang-tui.md) shows the same, with the CVEs of each dependency.
 
 ### Copying dependency JARs
 
