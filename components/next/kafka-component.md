@@ -1633,7 +1633,7 @@ For example with Maven, for Confluent and Avro:
 <dependency>
   <groupId>io.confluent</groupId>
   <artifactId>kafka-avro-serializer</artifactId>
-  <version>8.3.3</version>
+  <version>8.4.1</version>
 </dependency>
 ```
 

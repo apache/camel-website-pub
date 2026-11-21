@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 109 in 73 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 110 in 74 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -83,6 +83,7 @@ Number of Miscellaneous Components: 109 in 73 JAR artifacts (3 deprecated)
 | [Platform Http Vertx](platform-http-vertx.md) | camel-platform-http-vertx | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [PQC Hybrid Cryptography](pqc-hybrid.md) |  |  |  |  |
 | [PQC Key Lifecycle Management](pqc-key-lifecycle.md) |  |  |  |  |
+| [Protobuf Schema](protobuf-schema.md) | camel-protobuf-schema | Preview | 4.24 | Protobuf schemas as .proto text for the protobuf data format, without generated classes |
 | [Reactor](reactor.md) | camel-reactor | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](redis.md) | camel-redis | Stable | 3.5 | Aggregation repository using Redis as datastore |
 | [Resilience4j](resilience4j.md) | camel-resilience4j | Stable | 3.0 | Circuit Breaker EIP using Resilience4j |

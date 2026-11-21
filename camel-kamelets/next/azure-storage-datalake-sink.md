@@ -8,9 +8,9 @@ Uploads each message as a file to a file system in Azure Data Lake Storage Gen2,
 
 Use it to land data for analytics, such as exports, events or reports, in a data lake. For plain blob containers, use `azure-storage-blob-sink`.
 
-Input: the body is the content of the file: text, bytes or a stream. A Map fails: turn it into JSON text first, for example with `json-serialize-action`. The optional `file` header (or `ce-file`) is the name of the file, such as `sales-2026-05.csv`. Without it, the file gets a generated unique name.
+Input: the body is the content of the file: text, bytes or a stream. Text is turned into bytes before the upload, and the `Content-Type` header is set to `application/octet-stream`. A file is passed on as it is, and so is a stream, unless stream caching is turned off. A Map fails: turn it into JSON text first, for example with `json-serialize-action`. The optional `file` header (or `ce-file`) is the name of the file, such as `sales-2026-05.csv`. Without it, the file gets a generated unique name.
 
-Output: the body afterwards is `true`.
+Output: the body afterwards is `true`, and the `Content-Type` header is `application/octet-stream`.
 
 Good to know: the file is written at the top of the file system, or in `directoryName`. By default it logs in as an app registration, with `clientId`, `clientSecret` and `tenantId`, so that app needs a role on the account that allows writing, such as Storage Blob Data Contributor. Headers that start with `CamelAzureStorageDataLake` are removed from the message first, so they cannot change what the Kamelet does. It can log in with an account key (`accountKey`) or a SAS token (`sasSignature`) instead.
 

@@ -37,7 +37,7 @@ include the MDC service and additionally instruct the Camel application to treat
 Depending on the logging technology used, you can now include the MDC parameters you want to trace in your logging configuration. For example, in `log4j2` configuration you can include them as shown below:
 
 ```text
-... [%X{camel.contextId}, %X{camel.routeId}, %X{camel.exchangeId}, %X{camel.messageId}, %X{customHead}, %X{customProp}]
+... [%X{camel.contextId}, %X{camel.routeId}, %X{camel.exchangeId}, %X{camel.messageId}, %X{myCustomMDCKey}]
 ```
 
 During the execution you can verify the output of the log to see the traces appended to your logger.

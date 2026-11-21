@@ -25,6 +25,7 @@ camel get [options]
 | [endpoint](camel-jbang-get-endpoint.md) | Get usage of Camel endpoints |
 | [error](camel-jbang-get-error.md) | Get captured routing errors of Camel integrations |
 | [event](camel-jbang-get-event.md) | Get latest events of Camel integrations |
+| [genai](camel-jbang-get-genai.md) | Display the model calls, agent runs and tool calls of the Camel AI components |
 | [groovy](camel-jbang-get-groovy.md) | Groovy Sources used of Camel integrations |
 | [group](camel-jbang-get-group.md) | Get status of Camel route groups |
 | [health](camel-jbang-get-health.md) | Get health check status of running Camel integrations |

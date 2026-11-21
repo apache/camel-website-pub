@@ -876,7 +876,7 @@ from("imaps://mymailseerver?username=foo&password=secret&searchTerm.subjectOrBod
 Notice we use the `"searchTerm.subjectOrBody"` as a parameter key to indicate that we want to search on mail subject or body, to contain the word "Camel".  
 The class `org.apache.camel.component.mail.SimpleSearchTerm` has a number of options you can configure:
 
-Or to get the new unseen emails going 24 hours back in time, you can do. Notice the "now-24h" syntax. See the table below for more details.
+Or to get the new unseen emails going 24 hours back in time, you can do. Notice the "now-24h" syntax. The `fromSentDate`, `toSentDate`, `fromReceivedDate` and `toReceivedDate` options take either `now`, with an optional offset such as `-24h`, or a fixed date in the `yyyy-MM-dd HH:mm:ss` format, such as `2026-11-18 14:30:45`.
 
 -   Java
     

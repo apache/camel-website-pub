@@ -45,6 +45,16 @@ The endpoint uses the first client it finds in this order:
 
 A client the endpoint creates from `connectionUriString` or `hosts` belongs to that endpoint: each such endpoint has its own client and connection pool, and closes it when it stops (for example when its route is removed or reloaded, or when the CamelContext stops). The endpoint never closes a client it did not create. To share one client between endpoints, bind a `MongoClient` and have the endpoints use it instead of `connectionUriString` or `hosts`.
 
+### Client options
+
+The client options of the endpoint (`replicaSet`, `readPreference`, `readPreferenceTags`, `maxStalenessSeconds`, `appName`, `compressors`, `zlibCompressionLevel`, `connectTimeoutMS`, `socketTimeoutMS`, `serverSelectionTimeoutMS`, `localThresholdMS`, `heartbeatFrequencyMS`, `maxIdleTimeMS`, `maxLifeTimeMS`, `minPoolSize`, `maxPoolSize`, `maxConnecting`, `waitQueueTimeoutMS`, `srvServiceName`, `srvMaxHosts`, `retryWrites`, `retryReads`, `directConnection` and `loadBalanced`) configure the client the endpoint creates from `hosts` or `connectionUriString`. For example, a tailable consumer that reads from the secondaries of a replica set:
+
+mongodb:dummy?hosts=host1:27017,host2:27017,host3:27017&replicaSet=rs0&readPreference=SECONDARY&database=shop&collection=events&consumerType=tailable&tailTrackIncreasingField=seq
+
+An option is applied only when its value differs from its default, and then it overrides the same option in `connectionUriString`. An option left at its default keeps the value of the connection string, so `connectionUriString=RAW(mongodb://host/?readPreference=nearest)` reads from the nearest member. The read preference is made of `readPreference`, `readPreferenceTags` and `maxStalenessSeconds` together: when any of them is set, the three replace the read preference of the connection string.
+
+These options cannot change a `MongoClient` the endpoint did not create (set with `mongoConnection`, on the component, or from the registry). Configure such a client with its own `MongoClientSettings`. In that case the endpoint logs a WARN that lists the options it does not use.
+
 ## Configuring Options
 
 Camel components are configured on two separate levels:
@@ -293,7 +303,7 @@ Enum values:
 
 
  | PRIMARY | String |
-| **readPreferenceTags** (advanced) | A representation of a tag set as a comma-separated list of colon-separated key-value pairs, e.g. dc:ny,rack:1. Spaces are stripped from the beginning and end of all keys and values. To specify a list of tag sets, using multiple readPreferenceTags, e.g., readPreferenceTags=dc:ny,rack:1;readPreferenceTags=dc:ny;readPreferenceTags= Note the empty value for the last one, which means match any secondary as a last resort. Order matters when using multiple readPreferenceTags. |  | String |
+| **readPreferenceTags** (advanced) | A representation of a tag set as a comma-separated list of colon-separated key-value pairs, e.g. dc:ny,rack:1. Spaces are stripped from the beginning and end of all keys and values. To specify a list of tag sets, separate them with semicolons, e.g. dc:ny,rack:1;dc:ny; (the form dc:ny,rack:1;readPreferenceTags=dc:ny;readPreferenceTags= of a connection string is accepted too). Note the empty tag set at the end, which means match any secondary as a last resort. Order matters when using multiple tag sets. The tag sets need a readPreference other than PRIMARY. |  | String |
 | **replicaSet** (advanced) | Specifies that the connection string provided includes multiple hosts. When specified, the driver attempts to find all members of that set. |  | String |
 | **retryReads** (advanced) | Specifies that the driver must retry supported read operations if they fail due to a network error. Default: true. | true | boolean |
 | **retryWrites** (advanced) | Specifies that the driver must retry supported write operations if they fail due to a network error. Default: true. | true | boolean |

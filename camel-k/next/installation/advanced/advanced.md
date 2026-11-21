@@ -27,6 +27,8 @@ There is a default liveness service that is available at the operator Pod _/heal
 
 There is a default metrics service as well available at the operator Pod _/metrics_ endpoint on port _8080_. The port can be also changed. In this case you only need to change the Deployment container operator, changing the _\--monitoring-port_ value to the port you want the operator to expose.
 
+By default, the metrics endpoint is served over HTTP. To enable HTTPS, mount a Kubernetes TLS `Secret` (containing `tls.crt` and `tls.key`) into the operator Pod and set the `METRICS_CERT_DIR` environment variable on the operator Deployment to the mount directory.
+
 The service exposed on the _/metrics_ endpoint is compatible with Prometheus. You can learn more about [how to monitor Camel K Operator](../../observability/monitoring/operator.md).
 
 ## Logging
@@ -46,6 +48,7 @@ The following environment variables can be configured on the operator Deployment
 | `KAMEL_OPERATOR_ID` | `camel-k` | The operator ID used to identify which operator instance manages specific resources. Can also be set via `OPERATOR_ID`. |
 | `KAMEL_BASE_IMAGE` | `eclipse-temurin:17-jdk@sha256:<digest>` | The base image used for building Integration images. Can also be set via `RELATED_IMAGE_BASE`. |
 | `CAMEL_MONITOR_OPERATOR_LABEL` | `camel.apache.org/monitor` | If it exists, the operator add this label beside regular Camel K labels in order to let the Camel Monitor operator discover and monitor the application. |
+| `METRICS_CERT_DIR` | _empty_ | Directory containing `tls.crt` and `tls.key` for the operator metrics endpoint. When set, the metrics endpoint is served over HTTPS; when not set or empty, it falls back to HTTP. |
 | `LOG_LEVEL` | `info` | The log level for the operator. Valid values: `debug`, `info`, `warn`, `error`. |
 | `KAMELET_CATALOG_DIR` | `/tmp/kamelets/` | Directory where Kamelet catalog files are extracted during installation. |
 | `INTEGRATION_MAX_CONCURRENT_RECONCILES` | `1` | The maximum number of concurrent reconciliations executed by the Integration controller. |

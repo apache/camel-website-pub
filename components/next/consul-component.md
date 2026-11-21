@@ -73,7 +73,7 @@ The Consul component supports the following options which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **connectTimeout** (common) | Connect timeout. |  | Duration |
-| **key** (common) | The default key. Can be overridden by CamelConsulKey. |  | String |
+| **key** (common) | The key (kv) or event name (event) that the consumer watches or that the producer acts on; the other APIs do not use it. In a producer, a CamelConsulKey header overrides it, unless the header still holds the key that a consul consumer received (the CamelConsulReceivedKey exchange property). |  | String |
 | **pingInstance** (common) | Configure if the AgentClient should attempt a ping before returning the Consul instance. | true | boolean |
 | **readTimeout** (common) | Read timeout. |  | Duration |
 | **tags** (common) | Set tags. You can separate multiple tags by comma. |  | String |
@@ -217,7 +217,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **connectTimeout** (common) | Connect timeout. |  | Duration |
-| **key** (common) | The default key. Can be overridden by CamelConsulKey. |  | String |
+| **key** (common) | The key (kv) or event name (event) that the consumer watches or that the producer acts on; the other APIs do not use it. In a producer, a CamelConsulKey header overrides it, unless the header still holds the key that a consul consumer received (the CamelConsulReceivedKey exchange property). |  | String |
 | **pingInstance** (common) | Configure if the AgentClient should attempt a ping before returning the Consul instance. | true | boolean |
 | **readTimeout** (common) | Read timeout. |  | Duration |
 | **tags** (common) | Set tags. You can separate multiple tags by comma. |  | String |
@@ -624,6 +624,8 @@ A consumer of the `kv` endpoint watches a key with a blocking query of `blockSec
         - log:
             message: "${header.CamelConsulKey} is now ${body}"
 ```
+
+The `kv` and `event` consumers set the `CamelConsulKey` header to the key (or event name) they received. While the header still holds that key, a producer that has a `key` of its own uses its `key`, so a route from one key to another (`from("consul:kv?key=a").to("consul:kv?key=b&action=PUT")`) writes `b`, not `a`. A key header set by the route is used, and a producer without `key` acts on the received key, for example to delete each key of a recursive watch once it is processed. To act on the received key with a producer that has a `key`, remove the `CamelConsulReceivedKey` exchange property (which the consumers set to the received key) before the producer, such as with `.removeProperty(ConsulConstants.CONSUL_RECEIVED_KEY)`.
 
 The client connects to the Consul agent at `[http://localhost:8500](http://localhost:8500)`, unless you set the `url` option, for example with `camel.component.consul.url` in `application.properties`.
 

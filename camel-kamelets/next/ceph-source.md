@@ -8,7 +8,7 @@ Reads the files (objects) in a bucket of a Ceph Object Gateway, one message per 
 
 Use it to process files that another system drops into a Ceph bucket, such as uploaded documents, exported reports or log files. To react to the bucket notifications of Ceph instead of reading the bucket over and over, use `ceph-event-based-source`.
 
-Output: the body is the content of the file, as bytes. The headers give the bucket name, the key (the path of the file in the bucket, `CamelAwsS3Key`), the content type and the ETag of the file.
+Output: the body is the content of the file, as bytes, and the `Content-Type` header is `application/octet-stream`. The headers give the bucket name, the key (the path of the file in the bucket, `CamelAwsS3Key`), the content type and the ETag of the file.
 
 Good to know: files are deleted from the bucket after they are read, unless `deleteAfterRead` is set to false; then the same files are read again on every poll. Files in folders are read too. The bucket is addressed as part of the host name (such as `my-bucket.ceph.example.com`) unless `cephUrl` uses an IP address; set `forcePathStyle` to true when the DNS of the gateway has no wildcard name for its buckets.
 

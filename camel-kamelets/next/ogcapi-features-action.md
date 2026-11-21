@@ -12,7 +12,7 @@ Input: the body, when it is not empty, is added to the query of the request, as 
 
 Output: the body is a GeoJSON feature collection, as JSON text in bytes, with at most `limit` features. The headers of the HTTP response, such as `Content-Type`, are set as headers.
 
-Good to know: `split` gives each feature as a message of its own, as JSON text in bytes with the `Content-Type` `application/json`, only when the Kamelet is called with the `kamelet` EIP. Called with `to`, as in a Pipe, the next step still gets the whole collection, once per message, as text. An HTTP error from the server, such as an unknown collection, fails the message. Headers that start with `CamelHttp` or `CamelRestHttp` are removed from the message first, so they cannot change what the Kamelet does. The login comes only from the options: an `Authorization` or `Proxy-Authorization` header on the message is removed, so a credential that came with the message is not sent on. Log in either with `authUsername` and `authPassword`, with a static token in `authBearerToken`, or with `oauth2ClientId`, `oauth2ClientSecret` and `oauth2TokenEndpoint`: the Kamelet then gets a token from that URL and sends it as a Bearer token. Without `authenticationPreemptive`, the user and password, or the static token, are sent only after the service asks for them with a 401 response. A service that cannot be reached within `connectTimeout`, or does not answer within `responseTimeout`, fails the message; when they are not set, it waits up to 3 minutes.
+Good to know: to handle each feature as a message of its own, add a `split` step after the Kamelet with the JSONPath `$.features[*]`. An HTTP error from the server, such as an unknown collection, fails the message. Headers that start with `CamelHttp` or `CamelRestHttp` are removed from the message first, so they cannot change what the Kamelet does. The login comes only from the options: an `Authorization` or `Proxy-Authorization` header on the message is removed, so a credential that came with the message is not sent on. Log in either with `authUsername` and `authPassword`, with a static token in `authBearerToken`, or with `oauth2ClientId`, `oauth2ClientSecret` and `oauth2TokenEndpoint`: the Kamelet then gets a token from that URL and sends it as a Bearer token. Without `authenticationPreemptive`, the user and password, or the static token, are sent only after the service asks for them with a 401 response. A service that cannot be reached within `connectTimeout`, or does not answer within `responseTimeout`, fails the message; when they are not set, it waits up to 3 minutes.
 
 ## Configuration Options
 
@@ -37,7 +37,6 @@ The following table summarizes the configuration options available for the `ogca
 | **oauth2TokenEndpoint** | OAuth2 Token URL | The URL to get the tokens from, as given by the OAuth 2.0 provider. The Kamelet logs in to it with `oauth2ClientId` and `oauth2ClientSecret`. | string |  | https://login.example.com/oauth2/token |
 | **query** | Query | More query parameters for every request, in the form `name=value`, separated by `&`, such as filters on the properties of the features that the service supports. | string |  | property1=1&property2=dos |
 | **responseTimeout** | Response Timeout | How long to wait for the answer of the service once the request is sent, in milliseconds. When it is not set, it is 180000 (3 minutes). A service that does not answer in time fails the message. | integer |  | 30000 |
-| **split** | Split by Feature | Gives each feature as a message of its own when the Kamelet is called with the `kamelet` EIP. Called with `to`, as in a Pipe, it does not change what the next step receives: the whole feature collection. | boolean | false |  |
 
 ## Dependencies
 
@@ -46,8 +45,6 @@ At runtime, the `ogcapi-features-action` Kamelet relies upon the presence of the
 -   camel:http
     
 -   camel:kamelet
-    
--   camel:jsonpath
     
 -   camel:jackson3
     

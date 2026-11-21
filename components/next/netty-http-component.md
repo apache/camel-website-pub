@@ -12,6 +12,8 @@ The Netty HTTP component is an extension to [Netty](netty-component.md) componen
 > Netty HTTP reads the entire request into memory using `io.netty.handler.codec.http.HttpObjectAggregator` to build the entire full http message. The consumer gives the request body as a Camel stream cache, which can be read multiple times, and the producer gives the response body as a byte array.
 >
 > With `disableStreamCache=true` the body is the raw Netty `ByteBuf` instead (or an `InputStream` for a chunked message), which you can only read **once**. If you find a situation where the message body then appears to be empty, or you need to access the data multiple times (eg: doing multicasting, or redelivery error handling), convert the message body to a `String` or a `byte[]` which is safe to be re-read multiple times.
+>
+> On the consumer, the body of a chunked request is an `InputStream` only when the route runs on the executor service (`usingExecutorService=true`, the default), as the body cannot be received while the route waits for it on the I/O thread; otherwise the request is aggregated as any other. The stream is closed when the exchange is done, and the part of the body that the route did not read is discarded. When the reply is streamed (its body is an `InputStream`), the stream is closed once the reply is written instead, as the reply may read it (the request body sent back, as it is or in another stream); such a reply reads it on the I/O thread, so the body must be received already.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component:
 
@@ -1007,7 +1009,7 @@ from("netty-http:http://0.0.0.0:{{port}}/beer?bootstrapConfiguration=#nettyHttpB
 >
 > It was added for OSGi/Karaf, so that several applications (bundles) in one JVM could use the same port. Camel Main, Spring Boot and Quarkus applications run one application per JVM: use a `netty-http` consumer per port, where several routes can use the same port (see [Using multiple routes with same port](#_using_multiple_routes_with_same_port)), or the [Platform HTTP](platform-http-component.md) component, which uses the HTTP server of the runtime.
 
-A `DefaultNettySharedHttpServer` is a Netty HTTP server that is configured with a `NettySharedHttpServerBootstrapConfiguration` and started on its own. The consumers that refer to it with the `nettySharedHttpServer` option use its port and its pipeline, instead of the server that the component creates.
+A `DefaultNettySharedHttpServer` is a Netty HTTP server that is configured with a `NettySharedHttpServerBootstrapConfiguration` and started on its own. The consumers that refer to it with the `nettySharedHttpServer` option use its port and its pipeline, instead of the server that the component creates. The routes run on the I/O threads of the shared server, so it aggregates each request, also a chunked one, before the route is called (the `chunked` option of `NettySharedHttpServerBootstrapConfiguration` is not used).
 
 ### Implementing a reverse proxy
 

@@ -1499,6 +1499,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [Platform Http Vertx](../../components/next/others/platform-http-vertx.md) | camel-platform-http-vertx-starter | Stable | 3.2 | Implementation of the Platform HTTP Engine based on Vert.x Web |
 | [PQC Hybrid Cryptography](../../components/next/others/pqc-hybrid.md) | undefined-starter |  |  |  |
 | [PQC Key Lifecycle Management](../../components/next/others/pqc-key-lifecycle.md) | undefined-starter |  |  |  |
+| [Protobuf Schema](../../components/next/others/protobuf-schema.md) | camel-protobuf-schema-starter | Preview | 4.24 | Protobuf schemas as .proto text for the protobuf data format, without generated classes |
 | [Reactor](../../components/next/others/reactor.md) | camel-reactor-starter | Stable | 2.20 | Reactor based back-end for Camel’s reactive streams component |
 | [Redis](../../components/next/others/redis.md) | camel-redis-starter | Stable | 3.5 | Aggregation repository using Redis as datastore |
 | [Resilience4j](../../components/next/others/resilience4j.md) | camel-resilience4j-starter | Stable | 3.0 | Circuit Breaker EIP using Resilience4j |

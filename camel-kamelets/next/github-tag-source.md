@@ -8,7 +8,7 @@ Receives each new tag created in a GitHub repository, one message per tag, by as
 
 Use it to react to a new version, for example to announce a release, update a changelog or start a deployment. To receive every commit instead, use `github-commit-source`.
 
-Output: the body is the tag as JSON text, an object with its `name`, such as `v1.0.0`, and `commit.sha`, the SHA of the commit it points to.
+Output: the body is the tag as JSON text in bytes, an object with its `name`, such as `v1.0.0`, and `commit.sha`, the SHA of the commit it points to. The `Content-Type` header is `application/json`.
 
 Good to know: only the tags created after the start are sent; the tags that exist when it starts are skipped. GitHub lists a tag without its date or the message of an annotated tag, so they are not in the body. It works with github.com, not with GitHub Enterprise Server. It asks GitHub for the tags once a minute by default (`delay`), and every request counts against the API rate limit of the token.
 

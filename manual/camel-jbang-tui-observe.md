@@ -166,7 +166,7 @@ The Log tab has the same key. **Shift+F8** asks the AI about the ERROR on the sc
 
 ![Shift+F8 in the Log tab with two different ERRORs on the screen](_images/jbang/camel-tui-log-fix-with-ai-pick.png)
 
-The Routes, SQL Trace, Health and Circuit Breaker tabs have the key too:
+The Routes, SQL Trace, Health, Circuit Breaker, Kafka and CVE Audit tabs have the key too:
 
 -   **Routes**: **Shift+F8** on a route whose exchanges fail asks the AI to fix it, with the steps they fail at, their source lines and the last error of the route. On a route without failures, it asks the AI to explain where the time goes, with its slowest steps.
     
@@ -175,6 +175,10 @@ The Routes, SQL Trace, Health and Circuit Breaker tabs have the key too:
 -   **Health**: **Shift+F8** asks the AI to fix the checks that are not UP (in the table, the selected one). The question has the message of the check and what being DOWN means for the integration (taken out of service, or restarted). It also has the details of the check, such as the route and endpoint, the source line of its route, and the stack trace of the error. The AI tells whether the cause is in the project, and fixes it there, or outside the integration, such as a broker that is not running.
     
 -   **Circuit Breaker**: **Shift+F8** asks the AI to explain the selected circuit breaker when it is open or half open, or its calls failed, timed out or were rejected. The question has its state and counters, its configuration, its line in the source and the last error of its route. An open circuit breaker is often the breaker doing its job, so the AI explains and suggests, and changes no file unless you agree.
+    
+-   **Kafka**: **Shift+F8** asks the AI to fix the selected consumer when it has an error, or is not running or paused. The question has its state and last error, its endpoint and consumer group, where it last read (topic, partition, offset), the line of its route in the source and the last error of the route. The AI fixes the cause in the routes or configuration (brokers, topic, group, deserializers, security), or says how to fix it when it is outside the integration, such as a broker that is not running.
+    
+-   **CVE Audit**: **Shift+F8** asks the AI to explain the selected vulnerability, or all the vulnerabilities of the selected artifact when the tab is grouped by artifact: the severity, the artifacts with the version that fixes each and the dependency chain that brings each in, whether the routes use them, the Apache Camel advisory and the description, with the change that fixes each (the fixed version to declare with `camel.jbang.dependencies` or `//DEPS`, or the Camel release to upgrade to). The AI tells whether the integration uses the vulnerable part of the library, offers the change, and changes no file unless you agree.
     
 
 The Log tab shows the log in one of three views, and **c** goes to the next one:
@@ -342,9 +346,11 @@ Press **L** to start an exploration by hand, on the integration you look at: pic
 
 ### CVE Audit
 
-The CVE Audit tab (under More > Project) scans all Maven dependencies on your integration’s classpath against the [OSV.dev](https://osv.dev) vulnerability database. It queries every JAR using the OSV batch API and displays known vulnerabilities grouped by severity (Critical, High, Medium, Low).
+The CVE Audit tab (under More > Project) scans all Maven dependencies on your integration’s classpath against the [OSV.dev](https://osv.dev) vulnerability database, and the Camel JARs against the Apache Camel security advisories that ship with the Camel catalog. It queries every JAR using the OSV batch API and displays known vulnerabilities grouped by severity (Critical, High, Medium, Low).
 
-Each vulnerability shows the CVE ID, affected artifact, the direct dependency that pulls it in (VIA column), and a summary. Select a CVE to see full details including CVSS vector, published date, fixed versions, and aliases. Results are cached globally — switching integrations that share JARs is instant.
+Each vulnerability shows the CVE ID, its CVSS score, the affected artifact, the version that fixes it (FIX column: the fix of the line the artifact’s version is in, or the Camel release to upgrade to for a Camel advisory), the dependency chain that brings it in (VIA column, such as `camel-kafka > kafka-clients`), whether the routes use it (USED column: `yes` when the routes have an endpoint of the Camel component that brings it in, `no` when they have none, empty when no component brings it in), and a summary. Select a CVE to see full details including CVSS vector, published date, the Camel advisory with its mitigation, and aliases.
+
+Press `g` to group the table by artifact: one row per vulnerable JAR with its number of CVEs and the version that fixes all of them, which is what to upgrade. Press `/` to filter the rows by CVE, artifact, summary or a dependency of the chain. Results are cached globally — switching integrations that share JARs is instant. When OSV.dev cannot be reached, the title says so and only the Camel advisories were checked; press `r` to scan again.
 
 ### Kafka
 

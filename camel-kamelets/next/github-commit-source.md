@@ -8,7 +8,7 @@ Receives each new commit on a branch of a GitHub repository, one message per com
 
 Use it to start a flow when code is pushed, for example to post the commit message to a chat channel or to trigger a build or a deployment.
 
-Output: the body is the commit message as JSON text (a stream), that is a quoted JSON string such as `"Fix the login page"`. The `CamelGitHubCommitSha` header gives the SHA of the commit, `CamelGitHubCommitUrl` its web address, and `CamelGitHubCommitAuthor` and `CamelGitHubCommitCommitter` the names of its author and committer.
+Output: the body is the commit message as JSON text in bytes, that is a quoted JSON string such as `"Fix the login page"`, and the `Content-Type` header is `application/json`. The `CamelGitHubCommitSha` header gives the SHA of the commit, `CamelGitHubCommitUrl` its web address, and `CamelGitHubCommitAuthor` and `CamelGitHubCommitCommitter` the names of its author and committer.
 
 Good to know: with the default `startingSha` of `last`, only the commits made after the start are sent. It works with github.com, not with GitHub Enterprise Server. It asks GitHub for new commits once a minute by default (`delay`), and every request counts against the API rate limit of the token.
 

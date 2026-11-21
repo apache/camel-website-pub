@@ -12,7 +12,7 @@ Input: the place name or address to look up, as text.
 
 Output: the body is JSON text, as bytes, with `Content-Type: application/json`: an array with the best match, with its coordinates, its full address and its kind of place, or an empty array when nothing matches. The headers give the same answer in short: `CamelGeoCoderLat` and `CamelGeoCoderLng` (the coordinates), `CamelGeoCoderAddress` (the full address found), `CamelGeoCoderCity`, `CamelGeoCoderCountryLong`, `CamelGeoCoderPostalCode` and `CamelGeoCoderStatus`, which is `OK` when a place was found and `ZERO_RESULTS` when none was.
 
-Good to know: a place that is not found does not fail the message; check `CamelGeoCoderStatus`. The public server `[https://nominatim.openstreetmap.org](https://nominatim.openstreetmap.org)` limits how often it may be called; for many lookups, run your own Nominatim server. Headers that start with `CamelGeoCoder` are removed from the message first, so they cannot change what the Kamelet does.
+Good to know: a place that is not found does not fail the message; check `CamelGeoCoderStatus`. The address, the city and the country are in English, unless `language` asks for another language. The public server `[https://nominatim.openstreetmap.org](https://nominatim.openstreetmap.org)` limits how often it may be called; for many lookups, run your own Nominatim server. Headers that start with `CamelGeoCoder` are removed from the message first, so they cannot change what the Kamelet does.
 
 ## Configuration Options
 
@@ -22,6 +22,7 @@ The following table summarizes the configuration options available for the `nomi
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **serverUrl** | Server URL | **Required** The address of the Nominatim server, starting with `https://`, without a path. Use the public OpenStreetMap server for a few lookups, or your own server. | string |  | https://nominatim.openstreetmap.org |
+| **language** | Language | The language of the answer, such as of the address, the city and the country, as a language code such as `en`, `de` or `fr`. It is sent to Nominatim as `accept-language`. When not set, the answer is in English. | string |  | de |
 
 ## Dependencies
 

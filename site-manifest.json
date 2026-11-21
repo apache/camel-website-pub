@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795212917808,
+  "generated": 1795267592470,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -23898,6 +23898,12 @@
             },
             {
               "module": "others",
+              "path": "protobuf-schema.adoc",
+              "url": "/components/next/others/protobuf-schema.html",
+              "title": "Protobuf Schema"
+            },
+            {
+              "module": "others",
               "path": "reactor.adoc",
               "url": "/components/next/others/reactor.html",
               "title": "Reactor"
@@ -36226,6 +36232,12 @@
             },
             {
               "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-dependency-audit.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-dependency-audit.html",
+              "title": "camel dependency audit"
+            },
+            {
+              "module": "ROOT",
               "path": "jbang-commands/camel-jbang-dependency-copy.adoc",
               "url": "/manual/jbang-commands/camel-jbang-dependency-copy.html",
               "title": "camel dependency copy"
@@ -36397,6 +36409,12 @@
               "path": "jbang-commands/camel-jbang-get-event.adoc",
               "url": "/manual/jbang-commands/camel-jbang-get-event.html",
               "title": "camel get event"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-get-genai.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-get-genai.html",
+              "title": "camel get genai"
             },
             {
               "module": "ROOT",

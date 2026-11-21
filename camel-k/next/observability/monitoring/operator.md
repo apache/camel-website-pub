@@ -19,6 +19,17 @@ kubectl apply -k github.com/apache/camel-k/install/base/config/prometheus?ref=v2
 > **Important**
 > The provided Prometheus configuration does not create a `NetworkPolicy`. As a post-installation step, cluster administrators should [configure a network policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) that only allows the Prometheus scraper to access the operator metrics port. Adapt the namespace and pod selectors to your Prometheus deployment, and verify that the cluster networking solution supports `NetworkPolicy` resources.
 
+## Security configuration
+
+By default, the operator metrics endpoint is served over HTTP. To enable HTTPS, mount a Kubernetes TLS `Secret` (containing `tls.crt` and `tls.key`) into the operator Pod and set the `METRICS_CERT_DIR` environment variable on the operator Deployment to the mount directory:
+
+  
+| Variable | Default | Description |
+| --- | --- | --- |
+| `METRICS_CERT_DIR` | _empty_ | Directory containing `tls.crt` and `tls.key` used to serve the `/metrics` endpoint over HTTPS. When empty, the endpoint falls back to HTTP. |
+
+When `METRICS_CERT_DIR` is configured, update the `PodMonitor` endpoint to use `scheme: https` and configure `tlsConfig` to verify the certificate used by the operator.
+
 However, most of the time you want to probably configure and add different thresholds and KPIs in order to monitor in a properly manner your installation.
 
 ## Metrics
