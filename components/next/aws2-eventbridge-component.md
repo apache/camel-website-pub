@@ -211,7 +211,7 @@ Enum values:
 | **uriEndpointOverride** (common) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **autoCreateQueue** (consumer) | Whether to auto-create an SQS queue and wire it as an EventBridge rule target. | true | boolean |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
-| **deleteQueueOnShutdown** (consumer) | Whether to delete the auto-created SQS queue and remove the EventBridge target on shutdown. | true | boolean |
+| **deleteQueueOnShutdown** (consumer) | Whether to delete the auto-created SQS queue and remove the EventBridge target on shutdown. When false, the queue and its target are kept, so the queue collects the events while the consumer is stopped, and the queue name is derived from the event bus and the rule name, so the next start reuses the queue. | true | boolean |
 | **maxMessagesPerPoll** (consumer) | The maximum number of messages to receive per poll from SQS. | 10 | int |
 | **queueUrl** (consumer) | The URL of an existing SQS queue to use as EventBridge target. If not specified, a queue is auto-created when autoCreateQueue is true. |  | String |
 | **ruleName** (consumer) | The EventBridge rule name to consume events from. Required for consumer. |  | String |
@@ -403,7 +403,7 @@ Enum values:
  |  | String |
 | **uriEndpointOverride** (common) | Set the overriding uri endpoint. This option needs to be used in combination with overrideEndpoint option. |  | String |
 | **autoCreateQueue** (consumer) | Whether to auto-create an SQS queue and wire it as an EventBridge rule target. | true | boolean |
-| **deleteQueueOnShutdown** (consumer) | Whether to delete the auto-created SQS queue and remove the EventBridge target on shutdown. | true | boolean |
+| **deleteQueueOnShutdown** (consumer) | Whether to delete the auto-created SQS queue and remove the EventBridge target on shutdown. When false, the queue and its target are kept, so the queue collects the events while the consumer is stopped, and the queue name is derived from the event bus and the rule name, so the next start reuses the queue. | true | boolean |
 | **maxMessagesPerPoll** (consumer) | The maximum number of messages to receive per poll from SQS. | 10 | int |
 | **queueUrl** (consumer) | The URL of an existing SQS queue to use as EventBridge target. If not specified, a queue is auto-created when autoCreateQueue is true. |  | String |
 | **ruleName** (consumer) | The EventBridge rule name to consume events from. Required for consumer. |  | String |
@@ -1112,7 +1112,7 @@ AWS EventBridge is an event router, not a message queue — it does not provide 
 
 1.  On startup the consumer creates an SQS queue (unless you provide one via `queueUrl`).
     
-2.  It sets an SQS queue policy that allows EventBridge to send messages.
+2.  It sets an SQS queue policy that allows only the EventBridge rule given by `ruleName` to send messages (an `aws:SourceArn` condition with the ARN of the rule, which the consumer gets with `DescribeRule`). A queue given with `queueUrl` keeps its own policy.
     
 3.  It adds the queue as a target of the EventBridge rule specified by `ruleName`.
     
@@ -1123,6 +1123,8 @@ AWS EventBridge is an event router, not a message queue — it does not provide 
 6.  On shutdown the target of an auto-created queue is removed and the queue is deleted (configurable). A queue given with `queueUrl` keeps its target, so it collects the events while no consumer runs, and all the consumers that share it use the same target (its id is derived from the queue ARN).
     
 
+An auto-created queue has a random part in its name, so every consumer has its own queue, which is deleted on shutdown. With `deleteQueueOnShutdown=false`, the consumer creates a durable queue instead: its name is `camel-eventbridge-<rule name>-<hash of the event bus and the rule name>`, so the next start reuses the queue (SQS `CreateQueue` returns the existing queue), and the queue keeps its target on shutdown, like a queue given with `queueUrl`. The queue collects the events while the consumer is stopped, and the consumers of the rule that use `deleteQueueOnShutdown=false` share one queue (they compete for the events instead of each getting a copy). Delete the queue yourself when the route is no longer used.
+
 ### Consumer Configuration Options
 
    
@@ -1131,7 +1133,7 @@ AWS EventBridge is an event router, not a message queue — it does not provide 
 | `ruleName` |  | String | **Required.** The EventBridge rule name to consume events from. |
 | `queueUrl` |  | String | URL of an existing SQS queue to use. If omitted, a queue is auto-created. |
 | `autoCreateQueue` | `true` | boolean | Whether to auto-create an SQS queue and wire it as the rule target. |
-| `deleteQueueOnShutdown` | `true` | boolean | Whether to delete the auto-created queue and remove the EventBridge target on shutdown. |
+| `deleteQueueOnShutdown` | `true` | boolean | Whether to delete the auto-created queue and remove the EventBridge target on shutdown. When `false`, the queue has a name derived from the event bus and the rule name, the next start reuses it, and its target stays on the rule. |
 | `maxMessagesPerPoll` | `10` | int | Maximum number of SQS messages to receive per poll cycle. |
 | `waitTimeSeconds` | `20` | int | SQS long-polling wait time in seconds. |
 | `visibilityTimeout` | `30` | int | Seconds that received messages are hidden from subsequent polls. |
@@ -1283,6 +1285,8 @@ from("aws2-eventbridge://default?ruleName=my-rule&delay=2000")
 The consumer’s IAM principal needs the following permissions:
 
 -   `events:PutTargets` and `events:RemoveTargets` on the EventBridge rule
+    
+-   `events:DescribeRule` on the EventBridge rule (if auto-creating)
     
 -   `sqs:CreateQueue`, `sqs:DeleteQueue`, `sqs:SetQueueAttributes`, `sqs:GetQueueAttributes` (if auto-creating)
     

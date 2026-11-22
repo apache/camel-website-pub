@@ -243,8 +243,12 @@ Enum values:
 | **autoCreate** (advanced) | Automatically create missing directories in the file’s pathname. For the file consumer, that means creating the starting directory. For the file producer, it means the directory the files should be written to. | true | boolean |
 | **browseLimit** (advanced) | Maximum number of messages to keep in memory available for browsing. Use 0 for unlimited. | 100 | int |
 | **bufferSize** (advanced) | Buffer size in bytes used for writing files (or in case of FTP for downloading and uploading files). | 131072 | int |
+| **connectTimeout** (advanced) | The timeout for establishing the TCP connection to the server. | 5000 | int |
 | **copyAndDeleteOnRenameFail** (advanced) | Whether to fall back and do a copy and delete file, in case the file could not be renamed directly. | false | boolean |
-| **smbConfig** (advanced) | **Autowired** An optional SMB client configuration, can be used to configure client specific configurations, like timeouts. |  | SmbConfig |
+| **readTimeout** (advanced) | The timeout for the server to answer a read of file content. | 60000 | int |
+| **smbConfig** (advanced) | **Autowired** An optional SMB client configuration, can be used to configure client specific configurations, like timeouts. Cannot be combined with the encryptData, connectTimeout, readTimeout, writeTimeout and transactTimeout options: set them on the SmbConfig instead. |  | SmbConfig |
+| **transactTimeout** (advanced) | The timeout for the server to answer the other requests, such as listing a directory, opening, closing, renaming and deleting a file, and logging off. | 60000 | int |
+| **writeTimeout** (advanced) | The timeout for the server to answer a write of file content. | 60000 | int |
 | **antExclude** (filter) | Ant style filter exclusion. If both antInclude and antExclude are used, antExclude takes precedence over antInclude. Multiple exclusions may be specified in comma-delimited format. |  | String |
 | **antFilterCaseSensitive** (filter) | Sets case sensitive flag on ant filter. | true | boolean |
 | **antInclude** (filter) | Ant style filter inclusion. Multiple inclusions may be specified in comma-delimited format. |  | String |
@@ -376,6 +380,7 @@ Enum values:
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 | **domain** (security) | The user domain. |  | String |
+| **encryptData** (security) | Whether to encrypt the messages to and from the server (SMB 3 encryption), so the file content is not sent in the clear. A share that requires encryption (for Samba, smb encrypt = required) refuses the connection with STATUS\_ACCESS\_DENIED unless this option is enabled. The server must support SMB 3 encryption. | false | boolean |
 | **password** (security) | The password to access the share. |  | String |
 | **username** (security) | The username required to access the share. |  | String |
 | **shuffle** (sort) | To shuffle the list of files (sort in random order). | false | boolean |
@@ -564,6 +569,34 @@ public void configure() {
 > Beware that the File object provided is not a `java.io.File` instance, but, instead a `org.apache.camel.component.smb.SmbFile` instance that extends Camel’s `GenericFile`. Relying on the underlying implementation may make your code more susceptible to problems between version upgrades of the library used to implement this component.
 >
 > To maintain backward compatibility, a new Camel Header `CamelSmbUncPath` has been introduced that provides the full absolute path when a File is consumed from the SMB server.
+
+## Login
+
+The component logs in with the `username`, `password` and `domain` options. A `username` without a `password` logs in with an empty password, so `username=Guest` without a password is a guest login, when the server allows guest access (for Samba: `map to guest` and `guest ok = yes` on the share).
+
+The `username` is required: an anonymous login (no username) is not supported, and the connection fails with a message that no username is set.
+
+## Encryption and timeouts
+
+A share that requires encryption (for Samba `smb encrypt = required`) refuses the connection with `STATUS_ACCESS_DENIED` unless `encryptData=true` is set. With `encryptData=true` the messages to and from the server, including the file content, are encrypted with SMB 3 encryption, also on a share that does not require it.
+
+The timeouts of the SMB client are the `connectTimeout` (5 seconds by default), `readTimeout` and `writeTimeout` (of the file content, 60 seconds by default) and `transactTimeout` options (of the other requests, such as listing a directory, opening, renaming or deleting a file, 60 seconds by default):
+
+```yaml
+- route:
+    from:
+      uri: smb:myserver/myshare/inbox
+      parameters:
+        username: "{{smb.username}}"
+        password: "{{smb.password}}"
+        encryptData: true
+        transactTimeout: 10s
+      steps:
+        - to:
+            uri: log:files
+```
+
+For the other settings of the SMB client, configure a `com.hierynomus.smbj.SmbConfig` bean in the `smbConfig` option (a single `SmbConfig` bean in the registry is used automatically). The `SmbConfig` is then used as it is, so it cannot be combined with the `encryptData`, `connectTimeout`, `readTimeout`, `writeTimeout` and `transactTimeout` options: the endpoint fails to start when one of them is set as well. Set them on the `SmbConfig` instead (`withEncryptData`, `withSocketFactory(new ProxySocketFactory(connectTimeout))`, `withReadTimeout`, `withWriteTimeout` and `withTransactTimeout`).
 
 ## Permissions
 

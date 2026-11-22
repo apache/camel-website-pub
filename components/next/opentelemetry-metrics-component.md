@@ -773,6 +773,8 @@ context.addRoutePolicyFactory(new OpenTelemetryRoutePolicyFactory());
 > **Note**
 > You can define a dedicated `OpenTelemetryRoutePolicy` per route you want to instrument in case you only want to instrument a few selected routes.
 
+The `OpenTelemetryRoutePolicy` cannot be combined with the `MicrometerRoutePolicy` of the [Micrometer](../4.22.x/micrometer-component.md) component: a route that has both fails to start.
+
 Camel specific metrics that are available via the `OpenTelemetryRoutePolicy`:
 
   

@@ -6,7 +6,7 @@ Index of Camel data formats.
 
 Below is the list of data formats that are provided by Apache Camel.
 
-Number of Data Formats: 58 in 52 JAR artifacts (0 deprecated)
+Number of Data Formats: 59 in 53 JAR artifacts (0 deprecated)
 
     
 | Data Format | Artifact | Support Level | Since | Description |
@@ -66,6 +66,7 @@ Number of Data Formats: 58 in 52 JAR artifacts (0 deprecated)
 | [uniVocity Fixed Length](univocityFixed-dataformat.md) | camel-univocity-parsers | Stable | 2.15 | Marshal and unmarshal Java objects from and to fixed length records using UniVocity Parsers |
 | [uniVocity TSV](univocityTsv-dataformat.md) | camel-univocity-parsers | Stable | 2.15 | Marshal and unmarshal Java objects from and to TSV (Tab-Separated Values) records using UniVocity Parsers |
 | [XML Security](xmlSecurity-dataformat.md) | camel-xmlsecurity | Stable | 2.0 | Encrypt and decrypt XML payloads using Apache Santuario |
+| [XSD JSON](xsdJson-dataformat.md) | camel-xsd-json | Preview | 4.24 | Unmarshal XML to JSON and marshal JSON to XML, driven by an XML Schema (an XSD, or the types of a WSDL), which gives the types, arrays, order and namespaces. |
 | [YAML SnakeYAML](snakeYaml-dataformat.md) | camel-snakeyaml | Stable | 2.17 | Marshal and unmarshal Java objects to and from YAML using SnakeYAML |
 | [Zip Deflater](zipDeflater-dataformat.md) | camel-zip-deflater | Stable | 2.12 | Compress and decompress streams using java.util.zip.Deflater and java.util.zip.Inflater |
 | [Zip File](zipFile-dataformat.md) | camel-zipfile | Stable | 2.11 | Compression and decompress streams using java.util.zip.Zip\*Stream |

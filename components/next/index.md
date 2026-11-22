@@ -62,7 +62,7 @@ Number of Non-Core Components: 397 in 324 JAR artifacts (11 deprecated)
 | [Alibaba EventBridge](alibaba-eventbridge-component.md) | camel-alibaba-eventbridge | Preview | 4.23 | Publish events to Alibaba Cloud EventBridge. |
 | [Alibaba Function Compute (FC)](alibaba-fc-component.md) | camel-alibaba-fc | Preview | 4.23 | Invoke serverless functions on Alibaba Cloud Function Compute (FC). |
 | [Alibaba Key Management Service (KMS)](alibaba-kms-component.md) | camel-alibaba-kms | Preview | 4.23 | Encrypt and decrypt data using Alibaba Cloud Key Management Service (KMS). |
-| [Alibaba Message Service (MNS)](alibaba-mns-component.md) | camel-alibaba-mns | Preview | 4.23 | Send and receive messages to/from Alibaba Cloud Message Service (MNS). |
+| [Alibaba Message Service (MNS)](alibaba-mns-component.md) | camel-alibaba-mns | Preview | 4.23 | Send and receive messages using Alibaba Cloud Simple Message Queue (SMQ, formerly MNS). |
 | [Alibaba Object Storage Service (OSS)](alibaba-oss-component.md) | camel-alibaba-oss | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
 | [Alibaba Short Message Service (SMS)](alibaba-sms-component.md) | camel-alibaba-sms | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
 | [Alibaba Simple Log Service (SLS)](alibaba-sls-component.md) | camel-alibaba-sls | Preview | 4.23 | Write logs, query logs, and list Logstores on Alibaba Cloud Simple Log Service (SLS). |

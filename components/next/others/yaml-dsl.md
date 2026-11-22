@@ -291,6 +291,27 @@ In this example the _tags_ options is of Map type and can be configured using YA
 > **Important**
 > To use map values for parameters, then the `uri` must only refer to the name of the component, ie `plc4x` and not `plc4x:foo`
 
+### Option names in dash form
+
+An option under `parameters` can be written in dash form, such as `service-class`, which Camel uses as `serviceClass`. This is not done for the keys of a map option, because Camel passes them on as they are written.
+
+A key can start with the prefix of a map option, such as `properties.` of the CXF component or `scheduler.` of a polling consumer. Then only the prefix is turned into camelCase, and the rest of the key is kept. The keys of a map value are kept as they are written as well.
+
+```yaml
+- route:
+    from:
+      uri: "direct:orders"
+      steps:
+        - to:
+            uri: "cxf://http://localhost:8080/orders"
+            parameters:
+              serviceClass: "com.foo.OrderService"
+              properties.ws-security.username: "alice"
+              properties.security.callback-handler: "#myHandler"
+```
+
+Here CXF gets the properties `ws-security.username` and `security.callback-handler` as they are written.
+
 ## Defining beans
 
 In addition to the general support for creating beans provided by [Camel Main](main.html#_specifying_custom_beans), the YAML DSL provides a convenient syntax to define and configure them:

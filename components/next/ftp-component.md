@@ -848,8 +848,6 @@ CDUP
 200 CDUP successful. "/one/two" is current directory.
 CWD /
 250 CWD successful. "/" is current directory.
-PWD
-257 "/" is current directory.
 CWD one
 250 CWD successful. "/one" is current directory.
 CWD two
@@ -861,8 +859,6 @@ RETR foo.txt
 226 Transfer OK
 CWD /
 250 CWD successful. "/" is current directory.
-PWD
-257 "/" is current directory.
 CWD one
 250 CWD successful. "/one" is current directory.
 CWD two
@@ -876,8 +872,6 @@ RETR a.txt
 226 Transfer OK
 CWD /
 250 CWD successful. "/" is current directory.
-PWD
-257 "/" is current directory.
 CWD one
 250 CWD successful. "/one" is current directory.
 CWD two
@@ -889,13 +883,11 @@ PORT 127,0,0,1,17,99
 RETR b.txt
 150 Opening data channel for file transfer.
 226 Transfer OK
-CWD /
-250 CWD successful. "/" is current directory.
 QUIT
 221 Goodbye
 disconnected.
 
-As you can see when stepwise is enabled, it will traverse the directory structure using CD xxx.
+As you can see when stepwise is enabled, it will traverse the directory structure using CD xxx. The current directory is asked for only when the connection does not know it, usually once per connection, and after a download the connection stays in the directory of the file: the next file in the same directory is downloaded without changing directory, and the connection changes back only before an operation that needs the starting directory.
 
 Using `stepwise=false`
 

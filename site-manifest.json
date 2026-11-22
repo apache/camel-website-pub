@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795306674950,
+  "generated": 1795367707298,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -3762,6 +3762,12 @@
             },
             {
               "module": "ROOT",
+              "path": "aws-eventbridge-source.adoc",
+              "url": "/camel-kamelets/next/aws-eventbridge-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/aws-eventbridge-source.svg\" alt=\"aws eventbridge source\"></span> AWS Eventbridge Source"
+            },
+            {
+              "module": "ROOT",
               "path": "aws-kinesis-firehose-sink.adoc",
               "url": "/camel-kamelets/next/aws-kinesis-firehose-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/aws-kinesis-firehose-sink.svg\" alt=\"aws kinesis firehose sink\"></span> AWS Kinesis Firehose Sink"
@@ -4047,6 +4053,18 @@
               "path": "crypto-encrypt-action.adoc",
               "url": "/camel-kamelets/next/crypto-encrypt-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/crypto-encrypt-action.svg\" alt=\"crypto encrypt action\"></span> Crypto Encrypt Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "csv-deserialize-action.adoc",
+              "url": "/camel-kamelets/next/csv-deserialize-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/csv-deserialize-action.svg\" alt=\"csv deserialize action\"></span> CSV Deserialize Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "csv-serialize-action.adoc",
+              "url": "/camel-kamelets/next/csv-serialize-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/csv-serialize-action.svg\" alt=\"csv serialize action\"></span> CSV Serialize Action"
             },
             {
               "module": "ROOT",
@@ -4422,6 +4440,18 @@
             },
             {
               "module": "ROOT",
+              "path": "jms-apache-activemq-sink.adoc",
+              "url": "/camel-kamelets/next/jms-apache-activemq-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-apache-activemq-sink.svg\" alt=\"jms apache activemq sink\"></span> JMS - Apache ActiveMQ Classic Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "jms-apache-activemq-source.adoc",
+              "url": "/camel-kamelets/next/jms-apache-activemq-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-apache-activemq-source.svg\" alt=\"jms apache activemq source\"></span> JMS - Apache ActiveMQ Classic Source"
+            },
+            {
+              "module": "ROOT",
               "path": "jms-apache-artemis-sink.adoc",
               "url": "/camel-kamelets/next/jms-apache-artemis-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/jms-apache-artemis-sink.svg\" alt=\"jms apache artemis sink\"></span> JMS - Apache Artemis Sink"
@@ -4497,6 +4527,12 @@
               "path": "kafka-manual-commit-action.adoc",
               "url": "/camel-kamelets/next/kafka-manual-commit-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-manual-commit-action.svg\" alt=\"kafka manual commit action\"></span> Kafka Manual Commit Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "kafka-share-source.adoc",
+              "url": "/camel-kamelets/next/kafka-share-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/kafka-share-source.svg\" alt=\"kafka share source\"></span> Kafka Share Source"
             },
             {
               "module": "ROOT",
@@ -4878,6 +4914,18 @@
             },
             {
               "module": "ROOT",
+              "path": "smb-sink.adoc",
+              "url": "/camel-kamelets/next/smb-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/smb-sink.svg\" alt=\"smb sink\"></span> SMB Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "smb-source.adoc",
+              "url": "/camel-kamelets/next/smb-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/smb-source.svg\" alt=\"smb source\"></span> SMB Source"
+            },
+            {
+              "module": "ROOT",
               "path": "smpp-sink.adoc",
               "url": "/camel-kamelets/next/smpp-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/smpp-sink.svg\" alt=\"smpp sink\"></span> SMPP Sink"
@@ -4905,6 +4953,18 @@
               "path": "snowflake-source.adoc",
               "url": "/camel-kamelets/next/snowflake-source.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/snowflake-source.svg\" alt=\"snowflake source\"></span> Snowflake Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "soap-action.adoc",
+              "url": "/camel-kamelets/next/soap-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/soap-action.svg\" alt=\"soap action\"></span> SOAP Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "soap-source.adoc",
+              "url": "/camel-kamelets/next/soap-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/soap-source.svg\" alt=\"soap source\"></span> SOAP Source"
             },
             {
               "module": "ROOT",
@@ -5037,6 +5097,18 @@
               "path": "xj-template-action.adoc",
               "url": "/camel-kamelets/next/xj-template-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/xj-template-action.svg\" alt=\"xj template action\"></span> XJ Template Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "xml-schema-validator-action.adoc",
+              "url": "/camel-kamelets/next/xml-schema-validator-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/xml-schema-validator-action.svg\" alt=\"xml schema validator action\"></span> XML Schema Validator Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "xslt-action.adoc",
+              "url": "/camel-kamelets/next/xslt-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/xslt-action.svg\" alt=\"xslt action\"></span> XSLT Action"
             }
           ]
         },
@@ -19472,6 +19544,12 @@
             },
             {
               "module": "ROOT",
+              "path": "starters/xsd-json.adoc",
+              "url": "/camel-spring-boot/next/starters/xsd-json.html",
+              "title": "XSD JSON"
+            },
+            {
+              "module": "ROOT",
               "path": "starters/xslt-saxon.adoc",
               "url": "/camel-spring-boot/next/starters/xslt-saxon.html",
               "title": "XSLT Saxon"
@@ -22539,6 +22617,12 @@
               "path": "xmlSecurity-dataformat.adoc",
               "url": "/components/next/dataformats/xmlSecurity-dataformat.html",
               "title": "XML Security"
+            },
+            {
+              "module": "dataformats",
+              "path": "xsdJson-dataformat.adoc",
+              "url": "/components/next/dataformats/xsdJson-dataformat.html",
+              "title": "XSD JSON"
             },
             {
               "module": "dataformats",
@@ -36355,6 +36439,12 @@
               "path": "jbang-commands/camel-jbang-generate-schema.adoc",
               "url": "/manual/jbang-commands/camel-jbang-generate-schema.html",
               "title": "camel generate schema"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-generate-wsdl.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-generate-wsdl.html",
+              "title": "camel generate wsdl"
             },
             {
               "module": "ROOT",

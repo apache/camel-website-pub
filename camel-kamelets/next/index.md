@@ -57,6 +57,8 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![aws eventbridge sink](_images/kamelets/aws-eventbridge-sink.svg) AWS Eventbridge Sink](aws-eventbridge-sink.html)
 
+ [![aws eventbridge source](_images/kamelets/aws-eventbridge-source.svg) AWS Eventbridge Source](aws-eventbridge-source.html)
+
  [![aws kinesis firehose sink](_images/kamelets/aws-kinesis-firehose-sink.svg) AWS Kinesis Firehose Sink](aws-kinesis-firehose-sink.html)
 
  [![aws kinesis sink](_images/kamelets/aws-kinesis-sink.svg) AWS Kinesis Sink](aws-kinesis-sink.html)
@@ -152,6 +154,10 @@ Consult the Kamelets User Guide for information about how to use these.
  [![crypto decrypt action](_images/kamelets/crypto-decrypt-action.svg) Crypto Decrypt Action](crypto-decrypt-action.html)
 
  [![crypto encrypt action](_images/kamelets/crypto-encrypt-action.svg) Crypto Encrypt Action](crypto-encrypt-action.html)
+
+ [![csv deserialize action](_images/kamelets/csv-deserialize-action.svg) CSV Deserialize Action](csv-deserialize-action.html)
+
+ [![csv serialize action](_images/kamelets/csv-serialize-action.svg) CSV Serialize Action](csv-serialize-action.html)
 
  [![data type action](_images/kamelets/data-type-action.svg) Data Type Action](data-type-action.html)
 
@@ -271,6 +277,10 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![jms amqp 10 source](_images/kamelets/jms-amqp-10-source.svg) JMS - AMQP 1.0 Source](jms-amqp-10-source.html)
 
+ [![jms apache activemq sink](_images/kamelets/jms-apache-activemq-sink.svg) JMS - Apache ActiveMQ Classic Sink](jms-apache-activemq-sink.html)
+
+ [![jms apache activemq source](_images/kamelets/jms-apache-activemq-source.svg) JMS - Apache ActiveMQ Classic Source](jms-apache-activemq-source.html)
+
  [![jms apache artemis sink](_images/kamelets/jms-apache-artemis-sink.svg) JMS - Apache Artemis Sink](jms-apache-artemis-sink.html)
 
  [![jms apache artemis source](_images/kamelets/jms-apache-artemis-source.svg) JMS - Apache Artemis Source](jms-apache-artemis-source.html)
@@ -296,6 +306,8 @@ Consult the Kamelets User Guide for information about how to use these.
  [![kafka batch source](_images/kamelets/kafka-batch-source.svg) Kafka Batch Source](kafka-batch-source.html)
 
  [![kafka manual commit action](_images/kamelets/kafka-manual-commit-action.svg) Kafka Manual Commit Action](kafka-manual-commit-action.html)
+
+ [![kafka share source](_images/kamelets/kafka-share-source.svg) Kafka Share Source](kafka-share-source.html)
 
  [![kafka sink](_images/kamelets/kafka-sink.svg) Kafka Sink](kafka-sink.html)
 
@@ -421,6 +433,10 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![slack source](_images/kamelets/slack-source.svg) Slack Source](slack-source.html)
 
+ [![smb sink](_images/kamelets/smb-sink.svg) SMB Sink](smb-sink.html)
+
+ [![smb source](_images/kamelets/smb-source.svg) SMB Source](smb-source.html)
+
  [![smpp sink](_images/kamelets/smpp-sink.svg) SMPP Sink](smpp-sink.html)
 
  [![smpp source](_images/kamelets/smpp-source.svg) SMPP Source](smpp-source.html)
@@ -430,6 +446,10 @@ Consult the Kamelets User Guide for information about how to use these.
  [![snowflake sink](_images/kamelets/snowflake-sink.svg) Snowflake Sink](snowflake-sink.html)
 
  [![snowflake source](_images/kamelets/snowflake-source.svg) Snowflake Source](snowflake-source.html)
+
+ [![soap action](_images/kamelets/soap-action.svg) SOAP Action](soap-action.html)
+
+ [![soap source](_images/kamelets/soap-source.svg) SOAP Source](soap-source.html)
 
  [![solr sink](_images/kamelets/solr-sink.svg) Solr Sink](solr-sink.html)
 
@@ -474,6 +494,10 @@ Consult the Kamelets User Guide for information about how to use these.
  [![xj identity action](_images/kamelets/xj-identity-action.svg) XJ Identity Action](xj-identity-action.html)
 
  [![xj template action](_images/kamelets/xj-template-action.svg) XJ Template Action](xj-template-action.html)
+
+ [![xml schema validator action](_images/kamelets/xml-schema-validator-action.svg) XML Schema Validator Action](xml-schema-validator-action.html)
+
+ [![xslt action](_images/kamelets/xslt-action.svg) XSLT Action](xslt-action.html)
 
 [Kamelets Developer Guide](development.md)
 

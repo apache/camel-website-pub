@@ -10,7 +10,7 @@ If this section appears in the (failed) website build, there is a mismatch betwe
 :camel-spring-boot-name: springdoc
 ```
 
-There are 422 spring boot starter json files.
+There are 423 spring boot starter json files.
 
 Of these 0 are used in components, dataformats, etc.
 
@@ -847,6 +847,8 @@ xmpp
 
 xpath
 
+xsd-json
+
 xslt-saxon
 
 xslt
@@ -889,7 +891,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Alibaba EventBridge](../../components/next/alibaba-eventbridge-component.md) | camel-alibaba-eventbridge-starter | Preview | 4.23 | Publish events to Alibaba Cloud EventBridge. |
 | [Alibaba Function Compute (FC)](../../components/next/alibaba-fc-component.md) | camel-alibaba-fc-starter | Preview | 4.23 | Invoke serverless functions on Alibaba Cloud Function Compute (FC). |
 | [Alibaba Key Management Service (KMS)](../../components/next/alibaba-kms-component.md) | camel-alibaba-kms-starter | Preview | 4.23 | Encrypt and decrypt data using Alibaba Cloud Key Management Service (KMS). |
-| [Alibaba Message Service (MNS)](../../components/next/alibaba-mns-component.md) | camel-alibaba-mns-starter | Preview | 4.23 | Send and receive messages to/from Alibaba Cloud Message Service (MNS). |
+| [Alibaba Message Service (MNS)](../../components/next/alibaba-mns-component.md) | camel-alibaba-mns-starter | Preview | 4.23 | Send and receive messages using Alibaba Cloud Simple Message Queue (SMQ, formerly MNS). |
 | [Alibaba Object Storage Service (OSS)](../../components/next/alibaba-oss-component.md) | camel-alibaba-oss-starter | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
 | [Alibaba Short Message Service (SMS)](../../components/next/alibaba-sms-component.md) | camel-alibaba-sms-starter | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
 | [Alibaba Simple Log Service (SLS)](../../components/next/alibaba-sls-component.md) | camel-alibaba-sls-starter | Preview | 4.23 | Write logs, query logs, and list Logstores on Alibaba Cloud Simple Log Service (SLS). |
@@ -1362,6 +1364,7 @@ Number of Camel data formats: 0 in 0 JAR artifacts (0 deprecated)
 | [uniVocity Fixed Length](../../components/next/dataformats/univocityFixed-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to fixed length records using UniVocity Parsers |
 | [uniVocity TSV](../../components/next/dataformats/univocityTsv-dataformat.md) | camel-univocity-parsers-starter | Stable | 2.15 | Marshal and unmarshal Java objects from and to TSV (Tab-Separated Values) records using UniVocity Parsers |
 | [XML Security](../../components/next/dataformats/xmlSecurity-dataformat.md) | camel-xmlsecurity-starter | Stable | 2.0 | Encrypt and decrypt XML payloads using Apache Santuario |
+| [XSD JSON](../../components/next/dataformats/xsdJson-dataformat.md) | camel-xsd-json-starter | Preview | 4.24 | Unmarshal XML to JSON and marshal JSON to XML, driven by an XML Schema (an XSD, or the types of a WSDL), which gives the types, arrays, order and namespaces. |
 | [YAML SnakeYAML](../../components/next/dataformats/snakeYaml-dataformat.md) | camel-snakeyaml-starter | Stable | 2.17 | Marshal and unmarshal Java objects to and from YAML using SnakeYAML |
 | [Zip Deflater](../../components/next/dataformats/zipDeflater-dataformat.md) | camel-zip-deflater-starter | Stable | 2.12 | Compress and decompress streams using java.util.zip.Deflater and java.util.zip.Inflater |
 | [Zip File](../../components/next/dataformats/zipFile-dataformat.md) | camel-zipfile-starter | Stable | 2.11 | Compression and decompress streams using java.util.zip.Zip\*Stream |

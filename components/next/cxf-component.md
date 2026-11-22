@@ -32,6 +32,10 @@ cxf://someAddress\[?options\]
 
 Where `someAddress` specifies the CXF endpoint’s address. With this URI format, most of the endpoint details are specified using options.
 
+A producer can leave out the address when it has a `wsdlURL`: it then sends the requests to the address that the WSDL gives for the port (the `location` of its `soap:address`). Set `serviceName` and `portName` when the WSDL has more than one service or port:
+
+cxf://?wsdlURL=classpath:wsdl/orders.wsdl&serviceName={http://example.com/orders}OrderService&portName={http://example.com/orders}OrderPort&dataFormat=PAYLOAD
+
 For either style above, you can append options to the URI as follows:
 
 cxf:bean:cxfEndpoint?wsdlURL=wsdl/hello\_world.wsdl&dataFormat=PAYLOAD
@@ -110,7 +114,7 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **beanId** (common) | The id of a CxfEndpoint bean in the registry to use as this endpoint. Written in the path of the endpoint URI in place of the service address, with the prefix bean:, for example bean:orderEndpoint. The component sets the options of the endpoint URI on that bean, so endpoint URIs with different options must not share one bean instance. |  | String |
-| **address** (service) | The service address, for example [http://localhost:9000/orders](http://localhost:9000/orders). The consumer receives requests at this address, and the producer sends requests to it. The CamelDestinationOverrideUrl header replaces this address for a request that the producer sends over HTTP. |  | String |
+| **address** (service) | The service address, for example [http://localhost:9000/orders](http://localhost:9000/orders). The consumer receives requests at this address, and the producer sends requests to it. A producer with no address sends requests to the address that the WSDL (see wsdlURL) gives for the port. The CamelDestinationOverrideUrl header replaces this address for a request that the producer sends over HTTP. |  | String |
 
 ### Query Parameters
 
@@ -183,6 +187,26 @@ Enum values:
 | **skipFaultLogging** (logging) | Whether to skip the log entry that the PhaseInterceptorChain writes when an interceptor throws an exception, for example the exception of a failed exchange of the consumer. Sets the CXF property org.apache.cxf.logging.FaultListener to a FaultListener that skips this log entry. | false | boolean |
 | **password** (security) | The password for HTTP Basic authentication. The producer puts it, together with the user name, in the protocol header Authorization of its HTTP requests. Only used when the username option is set. Not used for reading the WSDL that wsdlURL points to. The consumer does not use it. |  | String |
 | **username** (security) | The user name for HTTP Basic authentication. The producer puts it, together with the password, in the protocol header Authorization of its HTTP requests. Only used when the password option is set. Not used for reading the WSDL that wsdlURL points to. The consumer does not use it. |  | String |
+| **wsSecurityCallbackHandler** (security) | To use a custom javax.security.auth.callback.CallbackHandler for the WS-Security UsernameToken. CXF calls it with an org.apache.wss4j.common.ext.WSPasswordCallback that names the user, and the handler sets the password of that user. The producer uses it instead of wsSecurityPassword. The consumer uses it to look up the password of any user, for example from a vault, instead of wsSecurityUsername, wsSecurityPassword and wsSecurityCredentials. |  | CallbackHandler |
+| **wsSecurityCredentials** (security) | A map of user name to password with the users that the consumer accepts in a WS-Security UsernameToken, as a reference to a java.util.Map bean, for example #bean:users. Used instead of wsSecurityUsername and wsSecurityPassword to accept more than one user without Java code. Not used when wsSecurityCallbackHandler is set. The producer does not use it. |  | Map |
+| **wsSecurityPassword** (security) | The password of a WS-Security UsernameToken. The producer sends it in the UsernameToken, and the consumer requires it for the user of the wsSecurityUsername option. |  | String |
+| **wsSecurityPasswordType** (security) | 
+
+The type of the password in a WS-Security UsernameToken: Text for PasswordText, or Digest for PasswordDigest. The producer sends this type, and the consumer requires it. Not used when the WSDL of the service has a WS-SecurityPolicy, which then decides the type. Digest is no replacement for HTTPS: it uses SHA-1, and the consumer needs the plain password.
+
+Enum values:
+
+-   Text
+    
+-   Digest
+    
+
+
+
+
+
+ | Text | String |
+| **wsSecurityUsername** (security) | The user name of a WS-Security UsernameToken. The producer sends a UsernameToken with this user name in the SOAP header of its requests. The consumer accepts only this user, with the password of the wsSecurityPassword option, unless wsSecurityCallbackHandler or wsSecurityCredentials is set. Needs the org.apache.cxf:cxf-rt-ws-security dependency. Send a UsernameToken with a plain text password over HTTPS only. |  | String |
 | **bindingId** (service) | The id of the CXF binding, which is a namespace URI, for example [http://cxf.apache.org/bindings/xformat](http://cxf.apache.org/bindings/xformat) for the XML binding without a SOAP envelope. If not set, CXF uses the binding of the wsdl:port. The id [http://schemas.xmlsoap.org/wsdl/soap12/](http://schemas.xmlsoap.org/wsdl/soap12/) selects SOAP 1.2 when there is no WSDL. |  | String |
 | **portName** (service) | The WSDL port, which is the name attribute of the wsdl:port element. Written as a QName in the form {namespaceURI}localPart, for example \\{http://example.org/orders}OrderPort. |  | String |
 | **publishedEndpointUrl** (service) | The address to publish in the WSDL that the consumer serves at the service address followed by ?wsdl. It replaces the location of the address element in the wsdl:port. Use it when clients reach the service through another address, for example when the service is behind a proxy. |  | String |
@@ -321,6 +345,72 @@ Using CXF with Spring Boot or Quarkus comes automatic integrated with the embedd
 
 See more details in the [CXF Transport](https://cxf.apache.org/docs/http-transport.md) documentation.
 
+## WS-Security UsernameToken
+
+The `wsSecurity` options set up a WS-Security UsernameToken without Java code. The producer sends a UsernameToken in the SOAP header of its requests, and the consumer rejects a request without a valid UsernameToken with a SOAP fault. The options need the `org.apache.cxf:cxf-rt-ws-security` dependency, which `camel-cxf-soap` does not bring by itself.
+
+> **Note**
+> The `username` and `password` options are for HTTP Basic authentication, not for WS-Security.
+
+  
+| Option | Producer | Consumer |
+| --- | --- | --- |
+| `wsSecurityUsername` | The user name to send. | The one user that is accepted. |
+| `wsSecurityPassword` | The password to send. | The password of that user. |
+| `wsSecurityPasswordType` | `Text` (default) sends a PasswordText, `Digest` a PasswordDigest. Not used when the WSDL has a WS-SecurityPolicy. | The password type that is required. Not used when the WSDL has a WS-SecurityPolicy. |
+| `wsSecurityCredentials` | Not used. | A `java.util.Map` bean of user name to password, to accept more than one user. The map is copied when the consumer starts: use `wsSecurityCallbackHandler` for users that change at runtime. |
+| `wsSecurityCallbackHandler` | A `CallbackHandler` bean that sets the password, instead of `wsSecurityPassword`. | A `CallbackHandler` bean that looks up the password of any user, for example from a vault. |
+
+When the WSDL of the service has a WS-SecurityPolicy, the policy decides how the UsernameToken is sent and checked, including the password type, and the options give the user name, the password and the callback handler to the policy. When the WSDL has no WS-SecurityPolicy, or there is no WSDL, the endpoint adds the CXF `WSS4JOutInterceptor` (producer) or `WSS4JInInterceptor` (consumer) for the UsernameToken.
+
+The consumer sets the authenticated user in the `CamelAuthentication` header, as a `javax.security.auth.Subject`.
+
+The options are not supported with `dataFormat=RAW`, as CXF does not process the SOAP envelope in this mode.
+
+> **Warning**
+> A UsernameToken with a plain text password must only be sent over HTTPS. `Digest` is no replacement for HTTPS: it uses SHA-1, and the consumer needs the plain password to check it.
+
+A consumer that accepts two users with a PasswordDigest:
+
+```yaml
+- beans:
+    - name: users
+      type: java.util.HashMap
+      properties:
+        alice: "{{alice.password}}"
+        bob: "{{bob.password}}"
+- route:
+    from:
+      uri: cxf://https://0.0.0.0:8443/orders
+      parameters:
+        wsdlURL: classpath:orders.wsdl
+        dataFormat: PAYLOAD
+        wsSecurityCredentials: "#bean:users"
+        wsSecurityPasswordType: Digest
+      steps:
+        - log: "Order request from ${header.CamelAuthentication}"
+```
+
+A producer that calls this service:
+
+```yaml
+- route:
+    from:
+      uri: direct:getOrder
+      steps:
+        - to:
+            uri: cxf://https://orders.example.com/orders
+            parameters:
+              wsdlURL: classpath:orders.wsdl
+              dataFormat: PAYLOAD
+              defaultOperationName: getOrder
+              wsSecurityUsername: alice
+              wsSecurityPassword: "{{alice.password}}"
+              wsSecurityPasswordType: Digest
+```
+
+Other WS-Security features, such as a Timestamp, a signature or encryption, are set up with the CXF properties in `properties.`**, or with CXF interceptors or a `cxfConfigurer` in Java code. A value of `properties.`** that is a `#bean:name` reference is resolved from the registry, for example `properties.security.callback-handler=#bean:myCallbackHandler`. A plain `#name` is not resolved.
+
 ## Usage
 
 ### RAW Mode
@@ -435,6 +525,54 @@ The same configuration in Spring XML:
     </cxf:properties>
 </cxf:cxfEndpoint>
 ```
+
+### HTTP headers of the reply
+
+The `cxf` consumer returns the headers of the reply message as HTTP response headers, except the ones the `headerFilterStrategy` filters, such as the `Camel*` headers. The headers of the request stay on the message unless the route removes them, so the consumer also leaves out the common HTTP request headers, such as `Authorization`, `Cookie`, `Host`, `User-Agent` and the `Accept` and `If-*` headers (the same list as `platform-http`), compared without regard to case.
+
+The other headers are returned, both the ones the route set for the reply and the other headers of the request, such as a custom `X-` header, as well as the headers that a producer in the route received, for example from a backend service. A route that should not return them removes them before the reply, for example with `removeHeaders`:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("cxf:bean:serviceEndpoint")
+    .to("cxf:bean:backendEndpoint")
+    .removeHeaders("X-*")
+    .setHeader("X-Reply", constant("done"));
+```
+
+```xml
+<route>
+    <from uri="cxf:bean:serviceEndpoint"/>
+    <to uri="cxf:bean:backendEndpoint"/>
+    <removeHeaders pattern="X-*"/>
+    <setHeader name="X-Reply">
+        <constant>done</constant>
+    </setHeader>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: cxf:bean:serviceEndpoint
+      steps:
+        - to:
+            uri: cxf:bean:backendEndpoint
+        - removeHeaders:
+            pattern: "X-*"
+        - setHeader:
+            name: X-Reply
+            constant:
+              expression: done
+```
+
+To return one of the common request headers anyway, set it under another name, or set the `cxfBinding` option to a subclass of `DefaultCxfBinding` that overrides `isHttpRequestHeader`. The `cxf` producer sends the headers of the message to the service, the common request headers such as `Authorization` included.
 
 ### Description of CxfHeaderFilterStrategy options
 
@@ -903,6 +1041,21 @@ _Java-only: setting a SOAP fault as the message body_
 
 ```java
 from(routerEndpointURI).process(exchange -> exchange.getMessage().setBody(SOAP_FAULT));
+```
+
+In the `PAYLOAD` data format, the route can also reply with the SOAP Fault element itself, as a `String`, a DOM `Document` or `Element`, or a `CxfPayload`. A `Fault` element in the SOAP 1.1 or SOAP 1.2 envelope namespace is sent to the client as a SOAP fault (HTTP status 500), with its fault code, fault string (or reason) and detail:
+
+```yaml
+- route:
+    from:
+      uri: cxf://http://localhost:9000/orders
+      parameters:
+        wsdlURL: classpath:wsdl/orders.wsdl
+        dataFormat: PAYLOAD
+      steps:
+        - setBody:
+            constant:
+              expression: '<soap:Fault xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><faultcode>soap:Client</faultcode><faultstring>No such order</faultstring></soap:Fault>'
 ```
 
 If your CXF endpoint is working in the `RAW` data format, you could set the SOAP Fault message in the message body and set the response code in the message header as demonstrated by [CxfMessageStreamExceptionTest](https://github.com/apache/camel/blob/main/components/camel-cxf/camel-cxf-soap/src/test/java/org/apache/camel/component/cxf/jaxws/CxfMessageStreamExceptionTest.java#L43):

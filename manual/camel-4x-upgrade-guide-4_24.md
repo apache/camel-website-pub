@@ -302,6 +302,16 @@ A route that called an `https://` address of a server that only speaks plain HTT
 
 With the embedded HTTP server (Camel Main and Camel JBang), a request on `/mcp` that fails before it reaches the MCP session (wrong `Content-Type`, a message that cannot be parsed, a missing or unknown `Mcp-Session-Id`) is answered with the same HTTP status as before, and a body that is a JSON-RPC error response without an `id`: `{"jsonrpc":"2.0","error":{"code":-32600,"message":"Session not found"}}`. The messages are short and fixed. The error code is `-32700` (parse error) for a message that cannot be parsed, and `-32600` (invalid request) otherwise; before, a missing header or session id gave `-32601` and an unknown session `-32603`.
 
+### camel-ftp, camel-sftp - fewer directory changes with stepwise and autoCreate
+
+No option or default changes. With the default `stepwise=true`, an upload, a download or (ftp) a delete no longer changes back to the directory it started from after each file: the connection stays in the directory of the file, so the next download or delete in that directory needs no change of directory. The connection changes back before an operation that uses names relative to the starting directory, such as a rename, a listing, an existence check, a read lock check, a site command, (sftp) a delete, or an upload or download into another directory. An ftp upload changes back and into the directory of its file each time, as some servers (such as vsftpd) keep the directory itself rather than its path, and would store the file in a directory that was renamed or replaced since. The ftp component asks for the current directory only when the connection does not know it, usually once per connection, instead of sending `PWD` for each file.
+
+With the default `autoCreate=true`, the producer no longer checks that a directory exists before each upload into a directory where it already stored a file on the same connection; it remembers the 100 most recently used directories per connection. When such a directory is removed while the connection is open, the first attempt to upload into it fails; the producer then creates the directory again and uploads the file once more, and logs this at INFO level. It does not try again when the message body is a stream (other than a stream cache, which is the default for streams with stream caching enabled) or a reader, or with `fileExist=Append`: that upload fails, and the next one checks the directory. The directories that a consumer moves files into (`move`, `preMove`, `moveFailed`) are still checked each time.
+
+With the default `sendNoop=true`, the ftp producer no longer sends a `NOOP` before an upload when the server completed an upload, a download or a `NOOP` on that connection less than a second before. A connection that the server closed within that second is then found by the upload, which fails, instead of by the `NOOP`, after which the producer would have connected again; the next upload connects again. The consumer still sends a `NOOP` before each poll, and the health check before each check.
+
+The absolute paths that the SFTP server sees do not change. The FTP server sees fewer `CWD` and `PWD` commands, and its current directory between two uploads is the directory of the last file, not the starting directory. `FtpOperations` `getClient()` changes back to the starting directory before it returns the client; code that keeps the `FTPClient` (for example the one set with the `ftpClient` option) and sends commands with relative names between two operations of Camel must change directory itself.
+
 ### camel-ai-resource - fixed resourceUri cannot contain braces
 
 Starting in Camel 4.24, `ai-resource` rejects a fixed `resourceUri` containing `{` or `}` at route startup. The MCP SDK interprets those characters as URI-template expressions. Routes that intend variable path segments must use `uriTemplate` instead, for example `ai-resource:customer?uriTemplate=camel:///customers/{id}`. If the braces are literal URI characters, percent-encode them as `%7B` and `%7D`.
@@ -327,6 +337,10 @@ When both `camel-opentelemetry2` and a Micrometer `ObservationRegistry` are pres
 The `micrometer` and `opentelemetry-metrics` producers now use the tags of the `CamelMetricsTags` header and the attributes of the `CamelMetricsAttributes` header as given. Before, their keys and values were evaluated as Simple expressions, in the same way as the `tags` and `attributes` URI options. The URI options are still evaluated per exchange, and a tag or attribute from the header still overrides one from the URI with the same key.
 
 A route that relied on a Simple expression in a header tag or attribute should use the `tags` / `attributes` URI option instead (for example `tags.customer=${header.customerId}`), or compute the value in the route before setting the header.
+
+### camel-micrometer, camel-opentelemetry-metrics - a route cannot have both route policies
+
+A route that has both the `MicrometerRoutePolicy` and the `OpenTelemetryRoutePolicy` now fails to start, with an error that names both policies. Before, the route started, but the two policies kept their timers in the same exchange property, so most of the timings were lost and a `ClassCastException` was logged for every exchange. Use the route policy of only one of the two components. With Camel Main, `camel.metrics.enabled=true`, which camel-observability-services also sets, adds the Micrometer route policy to every route; `camel.metrics.enableRoutePolicy=false` keeps the other Micrometer metrics without it.
 
 ### camel-elasticsearch-rest-client - the document id and the index name are each sent as one path segment
 
@@ -535,6 +549,10 @@ When the server refuses to create the starting directory of the `smb` consumer a
 
 When the `smb` consumer connects but cannot create its starting directory (`autoCreate=true`), it now logs `Cannot auto-create starting directory <directory> at: …​ due to: …​ Will skip this poll.`, once. Before, it logged `Cannot connect/login to: …​ Will skip this poll.`, or nothing when an earlier poll had already logged that it could not connect. The `Cannot connect/login to: …​ Will skip this poll.` WARN now gives the reason before `Will skip this poll.`, such as `due to: Connection refused`, on one line.
 
+### camel-smb - delete=true with move fails at startup
+
+An `smb` consumer with both `delete=true` and `move` now fails to start with `You cannot set both delete=true and move options`, as the `file`, `ftp` and `sftp` consumers do. Before, it started, deleted the files and ignored `move`. Remove `move` to keep deleting the files, or `delete=true` to move them.
+
 ### camel-azure-files - a starting directory that cannot be created, or a refused connection, no longer fails the route start
 
 When the share refuses to create the starting directory of the `azure-files` consumer as the route starts (`autoCreate=true`), such as `403 AuthorizationPermissionMismatch`, or refuses the connection, such as `403 AuthenticationFailed`, the route now starts and the consumer tries again on each poll, as the [Camel 4.13 upgrade guide](camel-4x-upgrade-guide-4_13.html#_camel_file_camel_ftp_camel_smb_camel_azure_files) describes. Before, the route failed to start. `FilesOperations.connect` and `FilesOperations.buildDirectory` now throw a `GenericFileOperationFailedException` with the `ShareStorageException` of the Azure SDK as its cause, as the ftp and sftp operations do with the error of their client. The producer and the moves that connect or create a directory get this exception type too, and still fail as before when the share refuses; an `onException(ShareStorageException.class)` still matches it, as the cause.
@@ -667,6 +685,12 @@ The `CamelCxfOperationName` and `CamelCxfOperationNamespace` headers replaced th
 The `cxf` producer also logs a WARN once when neither the `CamelCxfOperationName` header nor the `defaultOperationName` option selects the operation of a service with more than one operation. It then invokes the first operation that CXF returns, which is not the first one of the WSDL.
 
 The `cxfrs` producer does not read the former `operationName` header either. With the proxy-based client API (`httpClientAPI=false`) it still fails when `CamelCxfOperationName` is not set. The `NoSuchMethodException` now names that header, and says when `operationName` is set, in place of `Cannot find method with name: null`. The default `CxfRsHeaderFilterStrategy` filters a header named `operationName` again, as it did before the rename. The producer no longer sends it as an HTTP header, with either client API. The `SimpleConsumer` binding no longer returns it as a response header.
+
+### camel-cxf - the consumer does not return the common HTTP request headers as response headers
+
+The `cxf` consumer returns the headers of the reply message as HTTP response headers. As the headers of the request stay on the message unless the route removes them, the request headers were sent back with the response. The consumer now leaves out the common HTTP request headers, such as `Authorization`, `Cookie`, `Host`, `User-Agent` and the `Accept` and `If-*` headers, compared without regard to case. This is the same list as `platform-http`, which keeps these headers off its responses too. Other headers of the request, such as custom `X-` headers, are still returned unless the route removes them. The `cxf` producer is not changed, and still sends these headers to the service.
+
+A route that relied on one of these headers being returned can return it under another name, or set the `cxfBinding` option to a subclass of `DefaultCxfBinding` that overrides `isHttpRequestHeader` and returns `false` for the header.
 
 ### camel-snmp - the trap consumer receives only the traps of its snmpVersion
 
@@ -1346,6 +1370,16 @@ The new option `kclStopCheckpointOnFailure` (default `false`) keeps the checkpoi
 When the body is an `Iterable`, the producer now splits the batch into `PutRecords` requests of at most 500 records and 10 MiB (the data and partition keys of the records). Before, only the number of records was limited, and a request above 10 MiB was rejected by Kinesis. A record above 10 MiB now fails the exchange with an `IllegalArgumentException` before any request is sent.
 
 When some records of a request are not written, the producer now sends only those records again, up to 3 times with a delay of 100 to 400 milliseconds (plus a random part of up to a quarter of it), and then sends the next requests of the batch. Before, the exchange failed at once and the next requests were not sent. If records are still not written, the exchange fails after the last request, with a `RuntimeCamelException` (a `RuntimeException`, as before) whose message gives the number of records written and not written. The `CamelAwsKinesisRecordCount` and `CamelAwsKinesisFailedRecordCount` headers are now also set when the exchange fails, including when a `PutRecords` call throws: the exchange then fails with the exception of the call, as before, and the records of that call and of the requests that were not sent are counted as not written. Because of the retries, a batch whose records all fail now blocks the caller longer before it fails (700 to 875 milliseconds per request, 14 to 17.5 seconds for 10,000 records), and a record that is sent again is written after the next records of its request. A redelivery of the exchange still sends the whole batch again: see the Batch Producer section of [AWS Kinesis](../components/4.22.x/aws2-kinesis-component.md).
+
+### camel-aws2-eventbridge - the queue the consumer creates accepts only the events of its rule
+
+With `autoCreateQueue` (the default when no `queueUrl` is given), the policy of the SQS queue the consumer creates now allows `sqs:SendMessage` only for the EventBridge rule of the consumer (an `aws:SourceArn` condition with the rule ARN). Before, the policy allowed `events.amazonaws.com` without a condition, so any EventBridge rule could send to the queue.
+
+To get the rule ARN, the consumer calls `DescribeRule` before it creates the queue, so the IAM principal of the consumer now also needs `events:DescribeRule` on the rule. A rule that does not exist now fails the consumer start before a queue is created. A queue given with `queueUrl` keeps its own policy, as before.
+
+### camel-aws2-eventbridge - with deleteQueueOnShutdown=false the consumer reuses its queue
+
+With `deleteQueueOnShutdown=false`, the queue the consumer creates now has a name without a random part (`camel-eventbridge-<rule name>-<hash of the event bus and the rule name>`), so the next start reuses it. Before, every start created another queue and left the previous one behind. The queue now also keeps its target on the rule on shutdown (as the option description already said), so it collects the events while the consumer is stopped, and the consumers of the rule with `deleteQueueOnShutdown=false` share one queue. The queues that earlier versions left behind (with a random part in the name) are not used any more and can be deleted.
 
 ### camel-azure-storage-blob - copyBlob validates the source account and container name
 
@@ -2887,6 +2921,12 @@ In addition, both the strategy and the `xslt-saxon` endpoint now parse a message
 
 On the `xslt-saxon` endpoint, `secureProcessing` now controls both: setting `secureProcessing=false` (for example so a Saxon PE/EE stylesheet can call Java extension functions) also restores the previous, unrestricted parsing of a `Source` body. The option is marked as a security knob (`security=insecure:dev`, `insecureValue=false`), so `camel.main.profile=prod` reports it when it is turned off. `XsltSaxonAggregationStrategy` has no switch for the `Source` parsing: `setTransformerFactory(…​)` replaces the factory, but the strategy’s `XsltSaxonBuilder` keeps `secureProcessing=true`, so the body is still parsed with the restricted reader.
 
+### camel-xslt-saxon - unparsed-text() and json-doc() honour the same restriction as document()
+
+Since Camel 4.23 the `document()` function refuses an external `http:`, `https:`, `ftp:` or `file:` URI at transform time unless the transformer factory’s `ACCESS_EXTERNAL_STYLESHEET` permits the protocol; the `xslt-saxon` endpoint sets it to the empty (deny-all) value. Saxon does not read the resources of the XSLT 3.0 functions `unparsed-text()`, `unparsed-text-lines()`, `unparsed-text-available()` and `json-doc()` through the resolver installed on the transformer, so these functions still read such a URI. They now honour the same restriction as `document()`, also in a stylesheet run with `fn:transform()`: a refused URI fails the transform (and the reason is logged as a warning), and `unparsed-text-available()` returns `false`. As with `document()`, this includes a relative URI when the stylesheet was loaded from `file:`. (`collection()` and `uri-collection()` were already restricted by Saxon.)
+
+Camel’s `classpath:`, `ref:` and `bean:` schemes are not affected, nor are `xsl:include` and `xsl:import`. A route that needs these functions to read an external resource supplies a `TransformerFactory` through the `transformerFactory` option whose `ACCESS_EXTERNAL_STYLESHEET` permits the protocols (a comma-separated list such as `file` or `http,https`, or `all`).
+
 ### camel-ical - each unmarshal parses with its own calendar builder
 
 The `ical` data format used one ical4j `CalendarBuilder` for all exchanges. Two exchanges that were unmarshalled at the same time could get the events of each other, or the calendar of the other exchange. Each unmarshal now uses its own builder.
@@ -2910,6 +2950,10 @@ A stream body is now cached by `crypto:sign` and `crypto:verify`, so the next st
 When no `header` is set (or `headerDisabled=true`), marshalling a `List<Map<String, Object>>` wrote the values of each map in the iteration order of that map, so a row whose map had its keys in another order, or had no entry for one of the keys, put its values in the wrong columns. Within one message body, each key now keeps its column: the columns are the keys of the first map, followed by the keys of later maps that the first one does not have, in the order they first appear (the rows written before such a key appears have fewer fields). A map without one of these keys gets a null value in its column (an empty field, or the `nullString` when it is set), where before the following values moved one column to the left. Each message body starts again with no columns, as before. Set `header` (with `headerDisabled=false`) to get a fixed set and order of columns.
 
 This also changes the output of a body that mixes record types on purpose, such as a header row `{type=H, date=d}`, detail rows `{type=D, sku=s, qty=q}` and a trailer row `{type=T, count=n}` (common in flat-file exchanges): it was written as `H,d`, `D,s,q` and `T,n`, and is now written as `H,d`, `D,,s,q` and `T,,,,n`. To keep the previous output, convert the rows to `List` before marshalling, or set a custom `marshallerFactory` (`marshallerFactoryRef` in XML and YAML) whose `CsvMarshaller` returns the values of each map. Every row now has all the columns seen so far in the body, so rows that each have keys of their own (sparse or pivoted data) give about N²/2 fields for N rows, where the output was linear in the input before.
+
+### camel-csv - the names of the header option are trimmed
+
+The names of the `header` option are now trimmed, so `header=id, name` gives the columns `id` and `name`. Before, the second column was named \` name\`: marshalling a `Map` with the key `name` wrote an empty field, and unmarshalling with `useMaps=true` gave maps with the key \` name\`.
 
 ### camel-cxf - message bodies of the POJO producer and of CXF\_MESSAGE, and replies that do not convert
 
@@ -3000,7 +3044,13 @@ A `MiloClientConnection` created outside an endpoint needs a `CamelContext`, set
 
 The mllp producer now converts a body that is not a `String` or a `byte[]`, such as an `InputStream` or a file, to a `byte[]` with the type converter, and encodes a `CharSequence` such as a `StringBuilder` in the `charsetName` charset. A body that cannot be converted, such as a `Map`, fails the exchange with a `MllpInvalidMessageException`. Before, such a body was sent as an empty MLLP message: with `InOut` the exchange then failed with a `MllpAcknowledgementTimeoutException` after the receive timeout, and with `InOnly` it completed without an error.
 
-After sending a `String` body, the `CamelCharsetName` exchange property is now the charset the message was sent in. Before, it was set to `charsetName` even when the charset of the exchange was used to encode the message.
+### camel-mllp - the charset of a message is MSH-18, then charsetName, and no longer the CamelCharsetName exchange property
+
+The mllp producer now encodes a `String` body in the charset named in MSH-18 of the message, and in its `charsetName` when the message has no MSH-18 (or MSH-18 names a charset that is not supported), as the mllp consumer already decoded it. The `CamelCharsetName` header and exchange property no longer choose the charset of the producer, and the producer no longer sets the `CamelCharsetName` exchange property after sending. Before, the producer ignored MSH-18 and used the `CamelCharsetName` header, then the exchange property, then `charsetName`: a message marked `UNICODE UTF-8` in MSH-18 was sent in ISO-8859-1, and in a route from an mllp consumer to an mllp producer the `charsetName` of the producer was ignored. A text body of another type, such as a `Reader`, is converted in `charsetName` too. To send a message in a charset that is not its MSH-18, send it as a `byte[]`.
+
+The mllp consumer no longer sets the `CamelCharsetName` exchange property for a `String` body (the default, `stringPayload=true`), so its charset (ISO-8859-1 by default) is no longer used by the later steps of the route that turn text into bytes. With `stringPayload=false`, it sets the property to the charset of the `byte[]` body: the charset of MSH-18, and `charsetName` when the message has no MSH-18. Before, the property was always the `charsetName` of the consumer. An acknowledgement given as a `String` in the `CamelMllpAcknowledgement` or `CamelMllpAcknowledgementString` exchange property is encoded in the charset of its MSH-18, and else in the charset of the exchange, or `charsetName`.
+
+The `CamelMllpCharset` header of the consumer now holds the MSH-18 value of the message (such as `UNICODE UTF-8`), as documented. Before, it held the `charsetName` of the consumer (`ISO_8859_1` by default) whenever the message had an MSH-18.
 
 ### camel-lra - only an LRA hosted by the configured coordinator is joined
 
@@ -4615,6 +4665,10 @@ A PUT of a `Map` body on `ignite-cache` with the `CamelIgniteCacheKey` header no
 The `RUN` and `AFFINITY_RUN` execution types of `ignite-compute` have no result, and now keep the body (the job) when `propagateIncomingBodyIfNoReturnValue` is `true` (the default). Before, the body was `null`. Set `propagateIncomingBodyIfNoReturnValue=false` to keep the previous behaviour.
 
 The `ignite-cache`, `ignite-idgen`, `ignite-queue` and `ignite-set` producers now fail with an `IllegalArgumentException` that names the `operation` option and the operation header when neither sets the operation. A missing body now fails with an `InvalidPayloadException` that names what the operation needs: the job for `ignite-compute` (except `EXECUTE` with the `taskName` option, which now runs the task with the `CamelIgniteComputeParameters` header), the number to add for `ADD_AND_GET` and `GET_AND_ADD` of `ignite-idgen`, and the element for `ADD`, `CONTAINS`, `REMOVE` and `RETAIN_ALL` of `ignite-queue` and `ignite-set` and for `OFFER` and `PUT` of `ignite-queue`. Before, these failed with a `NullPointerException`. The `GET`, `GET_AND_INCREMENT` and `INCREMENT_AND_GET` operations of `ignite-idgen` no longer fail on a body that is not a number, as they do not use it.
+
+### camel-ignite - a route from one ignite-messaging topic to another sends to the topic of the producer
+
+The `ignite-messaging` producer sent to the topic named in the `CamelIgniteMessagingTopic` header, which the `ignite-messaging` consumer sets to the topic it received the message on. So a route from one topic to another (`from("ignite-messaging:orders").to("ignite-messaging:audit")`) sent each message back to the first topic, where the consumer received it again, for ever. The producer now sends to the topic of its endpoint while the header still holds the topic the message was received on (the consumer sets the new `CamelIgniteMessagingReceivedTopic` exchange property to that topic); a topic header set by the route is still used. To send a received message back to its topic through the header, remove the `CamelIgniteMessagingReceivedTopic` property before the producer.
 
 ### camel-couchbase - the document id, the operation option and the bodies of CCB\_PUT
 

@@ -4,10 +4,11 @@ Export your Camel CLI integrations to production-ready Maven projects, manage de
 
 ## Creating Projects
 
-Export your Camel CLI integration to a Maven-based project for Spring Boot, Quarkus, or standalone Camel Main.
+Export your Camel CLI integration to a Maven-based project for Spring Boot (JAR or WAR packaging), Quarkus, or standalone Camel Main.
 
 ```bash
 camel export --runtime=spring-boot --gav=com.foo:acme:1.0-SNAPSHOT
+camel export --runtime=spring-boot --packaging=war --gav=com.foo:acme:1.0-SNAPSHOT
 camel export --runtime=quarkus --gav=com.foo:acme:1.0-SNAPSHOT
 camel export --runtime=camel-main --gav=com.foo:acme:1.0-SNAPSHOT
 ```
@@ -30,6 +31,41 @@ Notes:
     
 -   For Spring Boot, you can override versions with `--camel-spring-boot-version`.
     
+
+### Packaging a Spring Boot application as a WAR
+
+Use `--packaging=war` with `--runtime=spring-boot` to generate a Spring Boot application packaged as a WAR. The default packaging remains `jar`.
+
+Spring Boot 4.x targets Tomcat 11. Spring Boot 3.x targets Tomcat 10.1 and requires a compatible Camel Spring Boot BOM. Camel Spring Boot 4.19 moved to Spring Boot 4, so select the latest compatible 4.18.x release explicitly with `--camel-spring-boot-version`.
+
+For a Spring Boot 4.x WAR:
+
+```bash
+camel export --runtime=spring-boot --packaging=war --gav=com.foo:acme:1.0-SNAPSHOT
+./mvnw clean package
+cp target/acme-1.0-SNAPSHOT.war "$CATALINA_BASE/webapps/"
+```
+
+To run the WAR through the Spring Boot Maven plugin with embedded Tomcat:
+
+```bash
+camel run --runtime=spring-boot --packaging=war
+```
+
+For Spring Boot 3.x / Tomcat 10.1, specify a compatible Camel Spring Boot version explicitly:
+
+```bash
+# Set CAMEL_SPRING_BOOT_VERSION to the latest compatible 4.18.x release.
+: "${CAMEL_SPRING_BOOT_VERSION:?Set CAMEL_SPRING_BOOT_VERSION first}"
+camel export --runtime=spring-boot --packaging=war --spring-boot-version=3.5.0 \
+    --camel-spring-boot-version="${CAMEL_SPRING_BOOT_VERSION}" --gav=com.foo:acme:1.0-SNAPSHOT
+```
+
+The generated main class extends `SpringBootServletInitializer`, the project uses WAR packaging, and the embedded Tomcat starter is declared with `provided` scope. The WAR can be deployed to an external Tomcat server or run with `camel run --runtime=spring-boot --packaging=war`.
+
+Tomcat deploys the application using the WAR file name as its context path. Rename the WAR to `ROOT.war` to deploy it at `/`.
+
+Docker and Jib files are not generated for WAR packaging. WAR packaging is supported only with the Spring Boot runtime.
 
 ### Exporting with a parent POM
 
@@ -212,7 +248,7 @@ Defaults to CycloneDX format (`sbom.json`) with `camel-main` runtime.
 
 ## Checking dependencies for known vulnerabilities
 
-Check the dependencies of your integration, with the ones they bring in, for known vulnerabilities (CVEs). Every JAR is checked against [OSV.dev](https://osv.dev), and the Camel JARs against the Apache Camel security advisories that ship with the Camel catalog:
+Check the dependencies of your integration, with the ones they bring in, for known vulnerabilities (CVEs). Every JAR is checked against [OSV.dev](https://osv.dev), and the Camel JARs against the Apache Camel security advisories:
 
 ```bash
 camel dependency audit
@@ -247,6 +283,18 @@ The options:
     
 
 The command exits with 1 when it finds a vulnerability of the `--fail-on` severity or worse (default `low`: any), so a CI job fails; `--fail-on=none` always exits with 0. When OSV.dev (or the OSV database) cannot be used, the command warns and checks the Apache Camel security advisories only; with `--fail-on-error` it exits with 1 then, so a CI job does not pass without the check. The CVE Audit screen of the [Camel TUI](camel-jbang-tui.md) shows the same for a running integration, and explains a vulnerability with AI. For a Maven build in a CI/CD pipeline, the [camel-report:audit](camel-report-maven-plugin.html#_camel_reportaudit) goal does the same checks on the dependencies Maven resolved, fails the build on a severity, and writes a SARIF report.
+
+### The Apache Camel security advisories
+
+The Apache Camel security advisories that ship with the Camel catalog are those published up to the release of the CLI. The command also checks them online, in the camel-website repository on GitHub where they are published ([content/security](https://github.com/apache/camel-website/tree/main/content/security)), and merges both, so an older CLI knows the advisories published after its release. They are checked once a day and kept in `~/.camel/advisories`; a check downloads only the advisories that are new or changed, and sends no coordinates of the project. When GitHub cannot be reached, the copy of the day before is used, else those of the catalog, with a warning. The `--json` document says how many came online (`camelAdvisories`).
+
+A machine without access to GitHub can read them from a mirror: a JSON file in the format of the catalog (`camel-security-advisories.json`), such as one kept on the repository manager of the company, or a file on disk:
+
+```bash
+camel dependency audit --advisories-url=https://nexus.corp.com/repository/camel/camel-security-advisories.json
+```
+
+With `--offline`, only those of the catalog are checked. Set the `GITHUB_TOKEN` environment variable when a shared CI runner hits the rate limit of the GitHub API.
 
 ### The offline OSV database
 
@@ -353,7 +401,7 @@ The plugins of the Apache Camel project:
 | `kubernetes` | `camel kubernetes`: deploy to Kubernetes, see [Kubernetes Plugin](camel-jbang-kubernetes.md) |
 | `test` | `camel test`: Citrus tests, see [Testing Plugin](camel-jbang-test.md) |
 | `validate` | `camel validate`: check source files, see [Validation](camel-jbang-validation.md) |
-| `generate` | `camel generate`: REST DSL and DTOs from OpenAPI, JSON schemas (see below) |
+| `generate` | `camel generate`: REST DSL and DTOs from OpenAPI, cxf routes from a WSDL, JSON schemas (see below) |
 | `tui` | `camel tui`: the [Camel TUI](camel-jbang-tui.md) |
 | `mcp` | `camel mcp`: the [Camel CLI MCP Server](camel-jbang-mcp.md) |
 | `edit` | `camel edit`: edit a Camel file in the terminal with suggestions and diagnostics |
@@ -473,6 +521,47 @@ camel generate rest --input=petstore.yaml --dto --runtime=quarkus --package=com.
 ```
 
 `--routes` also generates a route for each operation (YAML only), and `--dto` generates Java data objects for the schemas of the specification. Each generated route has a `log` step that says it is not implemented yet: the routes run as they are (`camel run petstore-rest.yaml`), and you replace that step with the implementation.
+
+### SOAP routes from a WSDL
+
+List the services, ports and operations of a WSDL 1.1 document (a file or a http(s) URL) with SOAP 1.1 or SOAP 1.2 bindings:
+
+```bash
+camel generate wsdl orders.wsdl
+camel generate wsdl http://localhost:8080/orders?wsdl --json
+```
+
+The listing has a block per port (the service, port, binding, SOAP version, style, address and namespace), and a row per operation with its SOAP action, request and response elements, and faults:
+
+```text
+SERVICE    OrderService
+PORT       OrderPort
+BINDING    OrderSoapBinding
+SOAP       1.1
+STYLE      document/literal
+ADDRESS    http://localhost:18081/orders
+NAMESPACE  http://example.com/orders
+
+ OPERATION   SOAP ACTION                           INPUT       OUTPUT              FAULTS
+ getOrder    http://example.com/orders/getOrder    getOrder    getOrderResponse    orderNotFound
+ placeOrder  http://example.com/orders/placeOrder  placeOrder  placeOrderResponse
+```
+
+With `--json`, each port also has the values of the [CXF](../components/4.22.x/cxf-component.md) endpoint options (`serviceName`, `portName`, `wsdlURL`, `address` and `defaultOperationNamespace`), ready to copy into a route or a Kamelet. The user info of an address (`user:password@`) is masked.
+
+`--route` scaffolds a YAML route in `PAYLOAD` mode, which needs no generated Java classes:
+
+```bash
+camel generate wsdl orders.wsdl --route=consumer --output=orders-service.camel.yaml
+camel generate wsdl orders.wsdl --route=producer --operation=getOrder --output=orders-client.camel.yaml
+```
+
+-   `consumer` is a SOAP service: a `cxf:` consumer with schema validation, and a `choice` with a `when` per operation (on the `CamelCxfOperationName` header) that logs the request and returns a placeholder response element. The response is validated against the schema too, so until you fill in the placeholder the caller gets a SOAP fault that names the first element it misses. With `--runtime=camel-main` (the default) the consumer listens on `0.0.0.0` and the port and path of the address of the WSDL, so `camel run` serves it as it is; with `spring-boot` or `quarkus` it uses the path, which the CXF servlet of the runtime serves.
+    
+-   `producer` is a SOAP client: a route `direct:<operation>` per operation, which takes the request element (XML) as the body and returns the response element. It removes the `Camel*` headers and the CXF operation headers first, so a caller cannot choose another operation or address (such as with `CamelDestinationOverrideUrl`).
+    
+
+When the WSDL has more than one port, choose one with `--service` and `--port`. A local WSDL may only import files, and a remote one only documents on its own host, over http or https (not from https down to http). A redirect is only followed to the same scheme, host and port; for another one the command names the new location, so you can use it if you trust it. The rpc style is listed but not scaffolded, and WSDL 2.0 and bindings that are not SOAP (such as HTTP GET) are not supported.
 
 ### JSON schema
 

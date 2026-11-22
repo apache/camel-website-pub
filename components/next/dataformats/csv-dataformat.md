@@ -51,6 +51,7 @@ Enum values:
 | **escape** (advanced) |  | `String` | Sets the escape character to use. |
 | **headerDisabled** (common) | `false` | `Boolean` | Whether to disable headers. |
 | **header** (common) |  | `String` | To configure the CSV headers. Multiple headers can be separated by comma. |
+| **headerFromMapKeys** (common) | `false` | `Boolean` | When marshalling a Map, or a List of Maps, and no header is configured, whether to write a header line with the keys of the first Map. The keys of the first Map are then the columns of all the rows, as with the header option: a key that only later rows have is not written. |
 | **allowMissingColumnNames** (common) | `false` | `Boolean` | Whether to allow missing column names. |
 | **ignoreEmptyLines** (common) | `false` | `Boolean` | Whether to ignore empty lines. |
 | **ignoreSurroundingSpaces** (common) | `false` | `Boolean` | Whether to ignore surrounding spaces. |
@@ -252,11 +253,71 @@ for (List<String> line : data) {
 
 If you have multiple rows of data you want to be marshalled into CSV format, you can now store the message payload as a `List<Map<String, Object>>` object where the list contains a Map for each row.
 
-When `header` is set (and `headerDisabled` is false), its names are the columns, in that order. Otherwise, the columns are the keys of the first Map, followed by the keys of later Maps that the first one does not have, in the order they first appear (the rows written before such a key appears have fewer fields). A Map without one of these keys gets a null value in that column, and no header line is written.
+When `header` is set (and `headerDisabled` is false), its names are the columns, in that order (the names are trimmed, so `id, name` gives the columns `id` and `name`). Otherwise, the columns are the keys of the first Map, followed by the keys of later Maps that the first one does not have, in the order they first appear (the rows written before such a key appears have fewer fields). A Map without one of these keys gets a null value in that column, and no header line is written.
 
 So a body that mixes record types, such as a header row `{type=H, date=d}`, detail rows `{type=D, sku=s, qty=q}` and a trailer row `{type=T, count=n}`, is written as `H,d`, `D,,s,q` and `T,,,,n`. To write each row with only its own fields, in the order of its Map, convert the rows to Lists first, or set a custom `marshallerFactory` (`marshallerFactoryRef` in XML and YAML) whose `CsvMarshaller` returns the values of each Map from `getMapRecordValues`.
 
 Every row is written with all the columns seen so far, so the output grows with the number of rows times the number of distinct keys. A body of rows that each have keys of their own (such as sparse or pivoted data) gives about N²/2 fields for N rows; for such data, convert the rows to Lists, or set `header` to only the columns you need.
+
+#### Writing a header line from the keys of the first Map
+
+**Since Camel 4.24**
+
+Set `headerFromMapKeys` to write a header line with the keys of the first Map when no `header` is configured, such as when turning JSON rows into CSV:
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+CsvDataFormat csv = new CsvDataFormat();
+csv.setHeaderFromMapKeys(true);
+
+from("direct:start")
+    .unmarshal().json()
+    .marshal(csv)
+    .to("file:out?fileName=rows.csv");
+```
+
+```xml
+<route>
+    <from uri="direct:start"/>
+    <unmarshal>
+        <json/>
+    </unmarshal>
+    <marshal>
+        <csv headerFromMapKeys="true"/>
+    </marshal>
+    <to uri="file:out?fileName=rows.csv"/>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:start
+      steps:
+        - unmarshal:
+            json: {}
+        - marshal:
+            csv:
+              headerFromMapKeys: true
+        - to:
+            uri: file:out
+            parameters:
+              fileName: rows.csv
+```
+
+The JSON `[{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]` is then written as:
+
+id,name
+1,Alice
+2,Bob
+
+The keys of the first Map are the columns of all the rows, as if they were given with `header`: a row without one of these keys gets an empty field, and a key that only later rows have is not written. A body whose first row is not a Map (such as a List of Lists) gets no header line, and `skipHeaderRecord` leaves the header line out.
 
 ### File Poller of CSV, then unmarshaling
 

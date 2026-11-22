@@ -17,7 +17,7 @@ The component supports the following:
 -   A Camel producer using a TCP Client
     
 
-The MLLP consumer gives the HL7 payload as a `String` by default (`stringPayload=true`), or as a `byte[]` with `stringPayload=false`. The MLLP producer sends a `String` (or another `CharSequence`) or a `byte[]` body, with text encoded in the `charsetName` charset. Another body, such as an `InputStream` or a file, is converted to a `byte[]` with the Camel type converter. A body that cannot be converted fails the exchange with a `MllpInvalidMessageException`.
+The MLLP consumer gives the HL7 payload as a `String` by default (`stringPayload=true`), or as a `byte[]` with `stringPayload=false`. The MLLP producer sends a `String` (or another `CharSequence`) or a `byte[]` body, with text encoded in the charset of MSH-18, or `charsetName` (see [Character set](#_character_set)). Another body, such as an `InputStream` or a file, is converted to a `byte[]` with the Camel type converter. A body that cannot be converted fails the exchange with a `MllpInvalidMessageException`.
 
 Maven users will need to add the following dependency to their pom.xml for this component:
 
@@ -83,11 +83,11 @@ The MLLP component supports the following options which are listed below.
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **autoAck** (common) | Enable/Disable the automatic generation of a MLLP Acknowledgement MLLP Consumers only. | true | boolean |
-| **charsetName** (common) | Sets the default charset to use. |  | String |
+| **charsetName** (common) | The charset of an HL7 message that has no MSH-18. The consumer decodes, and the producer encodes, a message in the charset named in MSH-18 of the message, and in this charset when the message has no MSH-18, or MSH-18 names a charset that is not supported. The CamelCharsetName header and exchange property are not used. The default is the defaultCharset of the component (ISO-8859-1). |  | String |
 | **configuration** (common) | Sets the default configuration to use when creating MLLP endpoints. |  | MllpConfiguration |
 | **hl7Headers** (common) | Enable/Disable the automatic generation of message headers from the HL7 Message MLLP Consumers only. | true | boolean |
 | **requireEndOfData** (common) | Enable/Disable strict compliance to the MLLP standard. The MLLP standard specifies \[START\_OF\_BLOCK\]hl7 payload\[END\_OF\_BLOCK\]\[END\_OF\_DATA\], however, some systems do not send the final END\_OF\_DATA byte. This setting controls whether or not the final END\_OF\_DATA byte is required or optional. | true | boolean |
-| **stringPayload** (common) | Enable/Disable converting the payload to a String. If enabled, HL7 Payloads received from external systems will be validated converted to a String. If the charsetName property is set, that character set will be used for the conversion. If the charsetName property is not set, the value of MSH-18 will be used to determine th appropriate character set. If MSH-18 is not set, then the default ISO-8859-1 character set will be use. | true | boolean |
+| **stringPayload** (common) | Enable/Disable converting the payload to a String. If enabled, HL7 Payloads received from external systems will be validated converted to a String. The value of MSH-18 is used to determine the character set for the conversion. If MSH-18 is not set, or names a character set that is not supported, the charsetName character set is used (ISO-8859-1 by default). | true | boolean |
 | **validatePayload** (common) | Enable/Disable the validation of HL7 Payloads If enabled, HL7 Payloads received from external systems will be validated (see Hl7Util.generateInvalidPayloadExceptionMessage for details on the validation). If and invalid payload is detected, a MllpInvalidMessageException (for consumers) or a MllpInvalidAcknowledgementException will be thrown. | false | boolean |
 | **acceptTimeout** (consumer) | Timeout (in milliseconds) while waiting for a TCP connection TCP Server Only. | 60000 | int |
 | **backlog** (consumer) | The maximum queue length for incoming connection indications (a request to connect) is set to the backlog parameter. If a connection indication arrives when the queue is full, the connection is refused. | 5 | Integer |
@@ -169,10 +169,10 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **autoAck** (common) | Enable/Disable the automatic generation of a MLLP Acknowledgement MLLP Consumers only. | true | boolean |
-| **charsetName** (common) | Sets the default charset to use. |  | String |
+| **charsetName** (common) | The charset of an HL7 message that has no MSH-18. The consumer decodes, and the producer encodes, a message in the charset named in MSH-18 of the message, and in this charset when the message has no MSH-18, or MSH-18 names a charset that is not supported. The CamelCharsetName header and exchange property are not used. The default is the defaultCharset of the component (ISO-8859-1). |  | String |
 | **hl7Headers** (common) | Enable/Disable the automatic generation of message headers from the HL7 Message MLLP Consumers only. | true | boolean |
 | **requireEndOfData** (common) | Enable/Disable strict compliance to the MLLP standard. The MLLP standard specifies \[START\_OF\_BLOCK\]hl7 payload\[END\_OF\_BLOCK\]\[END\_OF\_DATA\], however, some systems do not send the final END\_OF\_DATA byte. This setting controls whether or not the final END\_OF\_DATA byte is required or optional. | true | boolean |
-| **stringPayload** (common) | Enable/Disable converting the payload to a String. If enabled, HL7 Payloads received from external systems will be validated converted to a String. If the charsetName property is set, that character set will be used for the conversion. If the charsetName property is not set, the value of MSH-18 will be used to determine th appropriate character set. If MSH-18 is not set, then the default ISO-8859-1 character set will be use. | true | boolean |
+| **stringPayload** (common) | Enable/Disable converting the payload to a String. If enabled, HL7 Payloads received from external systems will be validated converted to a String. The value of MSH-18 is used to determine the character set for the conversion. If MSH-18 is not set, or names a character set that is not supported, the charsetName character set is used (ISO-8859-1 by default). | true | boolean |
 | **validatePayload** (common) | Enable/Disable the validation of HL7 Payloads If enabled, HL7 Payloads received from external systems will be validated (see Hl7Util.generateInvalidPayloadExceptionMessage for details on the validation). If and invalid payload is detected, a MllpInvalidMessageException (for consumers) or a MllpInvalidAcknowledgementException will be thrown. | false | boolean |
 | **acceptTimeout** (consumer) | Timeout (in milliseconds) while waiting for a TCP connection TCP Server Only. | 60000 | int |
 | **backlog** (consumer) | The maximum queue length for incoming connection indications (a request to connect) is set to the backlog parameter. If a connection indication arrives when the queue is full, the connection is refused. | 5 | Integer |
@@ -278,7 +278,7 @@ The HL7 message without the MLLP envelope, as a String in the charset of MSH-18 
 
  |
 | **Consumer reply** | `any` | The body is not sent back: the acknowledgement is the CamelMllpAcknowledgement or CamelMllpAcknowledgementString exchange property, or with autoAck an HL7 ACK (AA, or AE when the exchange failed). |
-| **Producer input** | `text`, `bytes`, `stream` or `file` | The HL7 message as a String (in the charset of charsetName) or a byte array. Another body, such as a stream or a file, is converted to a byte array; no body, or a body that cannot be converted, fails. |
+| **Producer input** | `text`, `bytes`, `stream` or `file` | The HL7 message as a String (encoded in the charset of MSH-18, or charsetName) or a byte array. Another body, such as a stream or a file, is converted to a byte array; no body, or a body that cannot be converted, fails. |
 | **Producer output** | `unchanged` | The body is left as it was: with InOut the acknowledgement is in the CamelMllpAcknowledgement (byte array) and CamelMllpAcknowledgementString headers. |
 
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
@@ -304,6 +304,17 @@ The MLLP Producer supports sending MLLP-framed messages and receiving HL7 Acknow
 The state of the TCP Socket can be controlled by these properties on the Camel exchange:
 
 <table class="tableblock frame-all grid-all stretch"><colgroup><col> <col> <col></colgroup><tbody><tr><td class="tableblock halign-left valign-top"><strong>Key</strong></td><td class="tableblock halign-left valign-top"><strong>Type</strong></td><td class="tableblock halign-left valign-top"><strong>Description</strong></td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpCloseConnectionBeforeSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be closed before sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpResetConnectionBeforeSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be reset before sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpCloseConnectionAfterSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be closed immediately after sending data</td></tr><tr><td class="tableblock halign-left valign-top"><code>CamelMllpResetConnectionAfterSend</code></td><td class="tableblock halign-left valign-top"><code>Boolean</code></td><td class="tableblock halign-left valign-top">If true, the Socket will be reset immediately after sending any data</td></tr></tbody></table>
+
+### Character set
+
+The character set of an HL7 message is named in MSH-18 (for example `UNICODE UTF-8` or `8859/1`), and the `charsetName` option is the character set of a message that has no MSH-18, or whose MSH-18 names a character set that Java does not support. It is `ISO-8859-1` by default, from the `defaultCharset` option of the component.
+
+-   The consumer decodes the message into a `String` body in the character set of MSH-18, else `charsetName`. The `CamelMllpCharset` header holds the MSH-18 value of the message.
+    
+-   The producer encodes a `String` body in the character set of MSH-18, else `charsetName`, so a message keeps the character set it declares when a route relays it from an MLLP consumer to an MLLP producer. A `byte[]` body is sent as it is.
+    
+
+The `CamelCharsetName` header and exchange property do not choose the character set of the MLLP producer, as they may come from another endpoint of the route. The MLLP consumer sets the `CamelCharsetName` exchange property only with `stringPayload=false`, to the character set of the `byte[]` body, for converting it to text later in the route.
 
 ### Example
 

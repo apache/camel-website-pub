@@ -105,16 +105,16 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **queueName** (common) | **Required** Queue name, or topic name when using the topic URI syntax. |  | String |
+| **queueName** (common) | **Required** The name of the queue, or of the topic for a topic endpoint such as alibaba-mns:topic:myTopic. The CamelAlibabaMnsQueueName exchange property replaces the name of the queue for sendMessage and deleteMessage. |  | String |
 
 ### Query Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **accountEndpoint** (common) | **Required** MNS account endpoint, for example [https://123456.mns.cn-hangzhou.aliyuncs.com](https://123456.mns.cn-hangzhou.aliyuncs.com). |  | String |
+| **accountEndpoint** (common) | **Required** The endpoint of Simple Message Queue for the Alibaba Cloud account, for example [https://123456.mns.cn-hangzhou.aliyuncs.com](https://123456.mns.cn-hangzhou.aliyuncs.com). The value must start with http:// or https://. |  | String |
 | **operation** (common) | 
-Operation to perform by the producer. The consumer does not use it: it receives the messages of the queue.
+The operation that the producer performs. If not set, the producer performs publishMessage for a topic endpoint and sendMessage otherwise. The CamelAlibabaMnsOperation header replaces this option, and an exchange property of the same name replaces both.
 
 Enum values:
 
@@ -130,11 +130,11 @@ Enum values:
 
 
  |  | String |
-| **region** (common) | **Required** Alibaba Cloud region. |  | String |
-| **topicName** (common) | Topic name for publishMessage operations. |  | String |
-| **waitSeconds** (common) | Long polling wait time in seconds when receiving messages. | 0 | int |
-| **deleteAfterRead** (consumer) | Delete message from the queue after it has been processed. | true | boolean |
-| **maxMessagesPerPoll** (consumer) | Maximum number of messages to receive per poll. | 1 | int |
+| **region** (common) | **Required** The region ID of Simple Message Queue, for example cn-hangzhou. |  | String |
+| **topicName** (common) | The name of the topic for publishMessage. If not set, a topic endpoint takes the name of the topic from its URI. The CamelAlibabaMnsTopicName header replaces this option, and an exchange property of the same name replaces both. |  | String |
+| **waitSeconds** (common) | The long polling wait time in seconds when the consumer receives messages. If 0 or less, the PollingWaitSeconds of the queue applies. Simple Message Queue accepts a value of at most 30. | 0 | int |
+| **deleteAfterRead** (consumer) | Whether to delete the message from the queue after it is processed successfully. | true | boolean |
+| **maxMessagesPerPoll** (consumer) | The maximum number of messages that the consumer receives in one poll. Simple Message Queue accepts a value of at most 16. The consumer treats a value of 0 or less as 1. | 1 | int |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
@@ -156,7 +156,7 @@ Enum values:
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **mnsClient** (advanced) | **Autowired** Autowire an existing MNSClient instance. |  | MNSClient |
+| **mnsClient** (advanced) | **Autowired** To use a custom com.aliyun.mns.client.MNSClient. When this option is set or autowired, the region and accountEndpoint options are not used. The Camel endpoint does not close a client that is set or autowired. |  | MNSClient |
 | **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffIdleThreshold** (scheduler) | The number of subsequent idle polls that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
@@ -220,9 +220,9 @@ Enum values:
 
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
-| **accessKey** (security) | Access key for the cloud user. |  | String |
-| **secretKey** (security) | Secret key for the cloud user. |  | String |
-| **serviceKeys** (security) | Configuration object for cloud service authentication. |  | ServiceKeys |
+| **accessKey** (security) | The AccessKey ID of the AccessKey pair for Simple Message Queue. If not set, the accessKey of the serviceKeys option is used. |  | String |
+| **secretKey** (security) | The AccessKey secret of the AccessKey pair for Simple Message Queue. If not set, the secretKey of the serviceKeys option is used. |  | String |
+| **serviceKeys** (security) | The AccessKey pair as an org.apache.camel.component.alibaba.common.models.ServiceKeys. Its accessKey and its secretKey are each used when the option of the same name is not set. |  | ServiceKeys |
 
 ## Message Headers
 
@@ -231,14 +231,14 @@ The Alibaba Message Service (MNS) component supports the following message heade
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaMnsMessageId** (common) Constant: [`MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#MESSAGE_ID) | The MNS message id. |  | String |
-| **CamelAlibabaMnsReceiptHandle** (common) Constant: [`RECEIPT_HANDLE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#RECEIPT_HANDLE) | The MNS receipt handle. |  | String |
+| **CamelAlibabaMnsMessageId** (common) Constant: [`MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#MESSAGE_ID) | The ID of the message. |  | String |
+| **CamelAlibabaMnsReceiptHandle** (common) Constant: [`RECEIPT_HANDLE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#RECEIPT_HANDLE) | The receipt handle of the message for deleteMessage. The consumer sets it for a received message. If this header is not set, the producer uses an exchange property of the same name. |  | String |
 | **CamelAlibabaMnsMessageBodyMd5** (common) Constant: [`MESSAGE_BODY_MD5`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#MESSAGE_BODY_MD5) | The MD5 digest of the message body. |  | String |
-| **CamelAlibabaMnsDelaySeconds** (producer) Constant: [`DELAY_SECONDS`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#DELAY_SECONDS) | Delay in seconds before the message becomes visible. |  | Integer |
-| **CamelAlibabaMnsPriority** (producer) Constant: [`PRIORITY`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#PRIORITY) | Message priority. |  | Integer |
-| **CamelAlibabaMnsMessageTag** (producer) Constant: [`MESSAGE_TAG`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#MESSAGE_TAG) | Message tag for topic publish operations. |  | String |
-| **CamelAlibabaMnsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#OPERATION) | The operation to invoke, overriding the operation the endpoint resolves. The exchange property of the same name takes precedence over this header. |  | String |
-| **CamelAlibabaMnsTopicName** (producer) Constant: [`TOPIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#TOPIC_NAME) | The name of the topic to publish to, overriding the one the endpoint resolves. The exchange property of the same name takes precedence over this header. |  | String |
+| **CamelAlibabaMnsDelaySeconds** (producer) Constant: [`DELAY_SECONDS`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#DELAY_SECONDS) | The delay in seconds for sendMessage before the message becomes visible. The value must be from 0 to 604800. If this header is not set, the DelaySeconds of the queue applies. |  | Integer |
+| **CamelAlibabaMnsPriority** (producer) Constant: [`PRIORITY`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#PRIORITY) | The priority of the message for sendMessage. The consumer sets it for a received message. |  | Integer |
+| **CamelAlibabaMnsMessageTag** (producer) Constant: [`MESSAGE_TAG`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#MESSAGE_TAG) | The tag of the message for publishMessage. Simple Message Queue accepts at most 16 characters. |  | String |
+| **CamelAlibabaMnsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option, and an exchange property of the same name replaces both. |  | String |
+| **CamelAlibabaMnsTopicName** (producer) Constant: [`TOPIC_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#TOPIC_NAME) | The name of the topic for publishMessage. This header replaces the topicName option, and an exchange property of the same name replaces both. |  | String |
 | **CamelAlibabaMnsDequeueCount** (consumer) Constant: [`DEQUEUE_COUNT`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#DEQUEUE_COUNT) | Number of times the message has been dequeued. |  | Integer |
 | **CamelAlibabaMnsEnqueueTime** (consumer) Constant: [`ENQUEUE_TIME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#ENQUEUE_TIME) | Time when the message was enqueued. |  | Date |
 | **CamelAlibabaMnsNextVisibleTime** (consumer) Constant: [`NEXT_VISIBLE_TIME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-mns/latest/org/apache/camel/component/alibaba/mns/constants/MNSHeaders.html#NEXT_VISIBLE_TIME) | Next time the message becomes visible. |  | Date |

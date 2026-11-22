@@ -173,6 +173,7 @@ Enum values:
  | ERROR\_HANDLER | PollOnError |
 | **pollTimeoutMs** (consumer) | The timeout used when polling the share consumer. | 5000 | Long |
 | **preValidateHostAndPort** (consumer) | Whether to eager validate that broker host:port is valid and can be DNS resolved to known host during starting this consumer. If the validation fails, then an exception is thrown, which makes Camel fail fast. Disabling this will postpone the validation after the consumer is started, and Camel will keep re-connecting in case of validation or DNS resolution error. | true | boolean |
+| **shareAutoOffsetReset** (consumer) | Sets the group configuration share.auto.offset.reset of the share group when the consumer starts, through the Kafka Admin client: earliest, latest, or by\_duration: followed by an ISO-8601 duration (such as by\_duration:PT1H). It decides where a share-partition starts when the group first consumes it, so earliest lets a new share group read the records already in the topic (a new share group starts at the latest records). It is a setting of the group, so it applies to all the consumers of the group, and it does not move a share-partition that the group already consumes. The principal of the consumer needs the ALTER\_CONFIGS permission on the group, and the consumer fails to start when the configuration cannot be set. When not set, the group configuration is left as it is. |  | String |
 | **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, it is set under the property of the vendor (for apicurio apicurio.registry.use-specific-avro-reader, for aws-glue avroRecordType=SPECIFIC\_RECORD). | false | boolean |
 | **valueDeserializer** (consumer) | Deserializer class for value that implements the Deserializer interface. | org.apache.kafka.common.serialization.StringDeserializer | String |
 | **acquireMode** (consumer (advanced)) | 
@@ -409,6 +410,7 @@ Enum values:
  | ERROR\_HANDLER | PollOnError |
 | **pollTimeoutMs** (consumer) | The timeout used when polling the share consumer. | 5000 | Long |
 | **preValidateHostAndPort** (consumer) | Whether to eager validate that broker host:port is valid and can be DNS resolved to known host during starting this consumer. If the validation fails, then an exception is thrown, which makes Camel fail fast. Disabling this will postpone the validation after the consumer is started, and Camel will keep re-connecting in case of validation or DNS resolution error. | true | boolean |
+| **shareAutoOffsetReset** (consumer) | Sets the group configuration share.auto.offset.reset of the share group when the consumer starts, through the Kafka Admin client: earliest, latest, or by\_duration: followed by an ISO-8601 duration (such as by\_duration:PT1H). It decides where a share-partition starts when the group first consumes it, so earliest lets a new share group read the records already in the topic (a new share group starts at the latest records). It is a setting of the group, so it applies to all the consumers of the group, and it does not move a share-partition that the group already consumes. The principal of the consumer needs the ALTER\_CONFIGS permission on the group, and the consumer fails to start when the configuration cannot be set. When not set, the group configuration is left as it is. |  | String |
 | **specificAvroReader** (consumer) | This enables the use of a specific Avro reader for use with the in multiple Schema registries documentation with Avro Deserializers implementation. This option is only available externally (not standard Apache Kafka). When schemaRegistryVendor is set, it is set under the property of the vendor (for apicurio apicurio.registry.use-specific-avro-reader, for aws-glue avroRecordType=SPECIFIC\_RECORD). | false | boolean |
 | **valueDeserializer** (consumer) | Deserializer class for value that implements the Deserializer interface. | org.apache.kafka.common.serialization.StringDeserializer | String |
 | **acquireMode** (consumer (advanced)) | 
@@ -681,7 +683,27 @@ Share groups need the `share.version` feature of the cluster at level 1. It is e
 
 The broker setting `group.share.delivery.count.limit` (default 5) limits how many times a record is delivered, and `group.share.record.lock.duration.ms` (default 30 seconds) limits how long a consumer can hold a record before the broker makes it available to another consumer.
 
-A new share group starts with the records produced after it is created. To consume the records already in the topic, set the group configuration `share.auto.offset.reset` to `earliest` before the group first consumes, for example with `kafka-configs.sh --entity-type groups --entity-name my-group --alter --add-config share.auto.offset.reset=earliest`.
+### Where a new share group starts
+
+A new share group starts with the records produced after it is created. To consume the records already in the topic, the group configuration `share.auto.offset.reset` must be `earliest` before the group first consumes. It is a configuration of the group on the broker, not a client property, so the consumer can set it with the `shareAutoOffsetReset` option:
+
+```java
+from("kafka-share:orders?brokers=localhost:9092&groupId=order-workers&shareAutoOffsetReset=earliest")
+    .to("log:orders");
+```
+
+When the consumer starts, before its share consumers subscribe, it sets `share.auto.offset.reset` of the group with the Kafka Admin client (`incrementalAlterConfigs` on the `GROUP` resource). The admin client gets the same brokers, security and additional properties as the share consumer. The values are:
+
+-   `earliest`: a share-partition starts at the earliest record of the partition;
+    
+-   `latest`: a share-partition starts at the next record produced (the default of Kafka);
+    
+-   `by_duration:<duration>`: a share-partition starts at the records produced within the ISO-8601 duration before now, such as `by_duration:PT1H` for the last hour.
+    
+
+The setting decides where a share-partition starts when the group first consumes it: it does not move a share group that already consumes the topic. It is a setting of the group, so it applies to all the consumers of the group, and the last consumer to start wins when they are configured differently. When the option is not set, the group configuration is left as it is.
+
+The principal of the consumer needs the `ALTER_CONFIGS` permission on the group (with ACLs: `kafka-acls.sh --add --allow-principal User:camel --operation AlterConfigs --group order-workers`), and the consumer fails to start, with an error naming the group, when the configuration cannot be set, such as when the principal is not authorized or the brokers cannot be reached within `consumerRequestTimeoutMs`. Without that permission, set the group configuration once with `kafka-configs.sh`: `kafka-configs.sh --bootstrap-server <broker> --entity-type groups --entity-name order-workers --alter --add-config share.auto.offset.reset=earliest`.
 
 ### Acknowledgements
 
@@ -803,7 +825,7 @@ Use the [Idempotent Consumer](eips/idempotentConsumer-eip.md) where duplicates m
 
 ### Differences from the Kafka component
 
-The options of the Kafka component that are about offsets, consumer group membership and ordering do not apply to a share group: `seekTo`, `autoOffsetReset`, `autoCommitEnable`, `allowManualCommit`, `breakOnFirstError`, `partitionAssignor`, `groupProtocol`, `groupInstanceId`, `topicIsPattern`, `isolationLevel`, `offsetRepository` and `batching`. A share consumer cannot be paused, so suspending a route stops its consumer. The brokers, security, deserializer, header and additional properties options are the same as the Kafka component.
+The options of the Kafka component that are about offsets, consumer group membership and ordering do not apply to a share group: `seekTo`, `autoOffsetReset` (see `shareAutoOffsetReset` instead), `autoCommitEnable`, `allowManualCommit`, `breakOnFirstError`, `partitionAssignor`, `groupProtocol`, `groupInstanceId`, `topicIsPattern`, `isolationLevel`, `offsetRepository` and `batching`. A share consumer cannot be paused, so suspending a route stops its consumer. The brokers, security, deserializer, header and additional properties options are the same as the Kafka component.
 
 The client properties that a share consumer rejects (`auto.offset.reset`, `enable.auto.commit`, `group.instance.id`, `isolation.level`, `partition.assignment.strategy`, `interceptor.classes`, `session.timeout.ms`, `heartbeat.interval.ms`, `group.protocol` and `group.remote.assignor`) make the consumer fail to start, with an error naming them, when they are set as `additionalProperties`.
 

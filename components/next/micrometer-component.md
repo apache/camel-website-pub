@@ -757,6 +757,8 @@ from("direct:in")
 > **Note**
 > Instead of using the `MicrometerRoutePolicyFactory` you can define a dedicated `MicrometerRoutePolicy` per route you want to instrument, in case you only want to instrument a few selected routes.
 
+The `MicrometerRoutePolicy` cannot be combined with the `OpenTelemetryRoutePolicy` of the [OpenTelemetry Metrics](../4.22.x/opentelemetry-metrics-component.md) component: a route that has both fails to start.
+
 From Java, you add the factory to the `CamelContext` as shown below:
 
 _Java-only: adding MicrometerRoutePolicyFactory to the CamelContext_

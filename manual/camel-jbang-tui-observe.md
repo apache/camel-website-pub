@@ -346,7 +346,7 @@ Press **L** to start an exploration by hand, on the integration you look at: pic
 
 ### CVE Audit
 
-The CVE Audit tab (under More > Project) scans all Maven dependencies on your integration’s classpath against the [OSV.dev](https://osv.dev) vulnerability database, and the Camel JARs against the Apache Camel security advisories that ship with the Camel catalog. It queries every JAR using the OSV batch API and displays known vulnerabilities grouped by severity (Critical, High, Medium, Low).
+The CVE Audit tab (under More > Project) scans all Maven dependencies on your integration’s classpath against the [OSV.dev](https://osv.dev) vulnerability database, and the Camel JARs against the Apache Camel security advisories: those that ship with the Camel catalog, merged with those published on camel-website, checked online once a day as `camel dependency audit` does (when that fails, the title says which are used). It queries every JAR using the OSV batch API and displays known vulnerabilities grouped by severity (Critical, High, Medium, Low).
 
 Each vulnerability shows the CVE ID, its CVSS score, the affected artifact, the version that fixes it (FIX column: the fix of the line the artifact’s version is in, or the Camel release to upgrade to for a Camel advisory), the dependency chain that brings it in (VIA column, such as `camel-kafka > kafka-clients`), whether the routes use it (USED column: `yes` when the routes have an endpoint of the Camel component that brings it in, `no` when they have none, empty when no component brings it in), and a summary. Select a CVE to see full details including CVSS vector, published date, the Camel advisory with its mitigation, and aliases.
 
