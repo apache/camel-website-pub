@@ -321,6 +321,10 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![message timestamp router action](_images/kamelets/message-timestamp-router-action.svg) Message Timestamp Router Action](message-timestamp-router-action.html)
 
+ [![mllp sink](_images/kamelets/mllp-sink.svg) MLLP Sink](mllp-sink.html)
+
+ [![mllp source](_images/kamelets/mllp-source.svg) MLLP Source](mllp-source.html)
+
  [![mongodb changes stream source](_images/kamelets/mongodb-changes-stream-source.svg) MongoDB Changes Stream Source](mongodb-changes-stream-source.html)
 
  [![mongodb sink](_images/kamelets/mongodb-sink.svg) MongoDB Sink](mongodb-sink.html)

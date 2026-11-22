@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795299641198,
+  "generated": 1795306674950,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -4569,6 +4569,18 @@
               "path": "message-timestamp-router-action.adoc",
               "url": "/camel-kamelets/next/message-timestamp-router-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/message-timestamp-router-action.svg\" alt=\"message timestamp router action\"></span> Message Timestamp Router Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "mllp-sink.adoc",
+              "url": "/camel-kamelets/next/mllp-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/mllp-sink.svg\" alt=\"mllp sink\"></span> MLLP Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "mllp-source.adoc",
+              "url": "/camel-kamelets/next/mllp-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/mllp-source.svg\" alt=\"mllp source\"></span> MLLP Source"
             },
             {
               "module": "ROOT",
