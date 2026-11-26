@@ -1,13 +1,15 @@
-urls[952]{loc,lastmod}:
+urls[954]{loc,lastmod}:
+  https://camel.apache.org/blog/,2026-11-26T00:00:00+00:00
+  https://camel.apache.org/,2026-11-26T00:00:00+00:00
+  https://camel.apache.org/releases/release-4.22.3/,2026-11-26T00:00:00+00:00
+  https://camel.apache.org/blog/2026/11/RELEASE-4.22.3/,2026-11-26T00:00:00+00:00
+  https://camel.apache.org/categories/Releases/,2026-11-26T00:00:00+00:00
+  https://camel.apache.org/releases/,2026-11-26T00:00:00+00:00
   https://camel.apache.org/categories/AI/,2026-11-20T00:00:00+00:00
-  https://camel.apache.org/blog/,2026-11-20T00:00:00+00:00
-  https://camel.apache.org/,2026-11-20T00:00:00+00:00
-  https://camel.apache.org/categories/Releases/,2026-11-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/11/wanaku-0.3.0/,2026-11-20T00:00:00+00:00
   https://camel.apache.org/blog/2026/11/camel-quarkus-3.40.1/,2026-11-16T00:00:00+00:00
   https://camel.apache.org/releases/q-3.40.1/,2026-11-16T00:00:00+00:00
   https://camel.apache.org/categories/Community/,2026-11-16T00:00:00+00:00
-  https://camel.apache.org/releases/,2026-11-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/11/camel-core-ci-improvements/,2026-11-16T00:00:00+00:00
   https://camel.apache.org/blog/2026/11/camel-quarkus-3.33.4/,2026-11-13T00:00:00+00:00
   https://camel.apache.org/releases/q-3.33.4/,2026-11-13T00:00:00+00:00

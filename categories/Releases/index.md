@@ -2,7 +2,8 @@
 
 Release feed for Apache Camel and related projects.
 
-releases[125]{title,link,pubDate,description}:
+releases[126]{title,link,pubDate,description}:
+  RELEASE 4.22.3|https://camel.apache.org/blog/2026/11/RELEASE-4.22.3/index.md|Thu, 26 Nov 2026 00:00:00 +0000|The Camel community announces the immediate availability of the Camel 4.22.3 LTS release with 154 bug fixes and improvements. The artifacts are published and ready for you to download from the Central
   Wanaku 0.3.0: Semantic Routing with Apache Camel|https://camel.apache.org/blog/2026/11/wanaku-0.3.0/index.md|Fri, 20 Nov 2026 00:00:00 +0000|Apache Camel connects applications, services, and data. As AI agents become another client of those integrations, developers need a way to expose business actions and control how agents call them. Wan
   Camel Quarkus 3.40.1 Released|https://camel.apache.org/blog/2026/11/camel-quarkus-3.40.1/index.md|Mon, 16 Nov 2026 00:00:00 +0000|Camel Quarkus 3.40.1 release
   Camel Quarkus 3.33.4 Released|https://camel.apache.org/blog/2026/11/camel-quarkus-3.33.4/index.md|Fri, 13 Nov 2026 00:00:00 +0000|Camel Quarkus 3.33.4 release

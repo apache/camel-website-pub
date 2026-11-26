@@ -6,8 +6,15 @@
     <description>Recent content in Releases on Apache Camel</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 20 Nov 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 26 Nov 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://camel.apache.org/categories/Releases/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RELEASE 4.22.3</title>
+      <link>https://camel.apache.org/blog/2026/11/RELEASE-4.22.3/</link>
+      <pubDate>Thu, 26 Nov 2026 00:00:00 +0000</pubDate>
+      <guid>https://camel.apache.org/blog/2026/11/RELEASE-4.22.3/</guid>
+      <description>The Camel community announces the immediate availability of the Camel 4.22.3 LTS release with 154 bug fixes and improvements.&#xA;The artifacts are published and ready for you to download from the Central Maven repository. For more details please take a look at the release notes.&#xA;Many thanks to all who made this release possible.&#xA;On behalf of the Camel PMC,&#xA;Gregor Zurowski</description>
+    </item>
     <item>
       <title>Wanaku 0.3.0: Semantic Routing with Apache Camel</title>
       <link>https://camel.apache.org/blog/2026/11/wanaku-0.3.0/</link>
