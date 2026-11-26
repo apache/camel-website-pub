@@ -892,7 +892,7 @@ Number of Camel components: 0 in 0 JAR artifacts (0 deprecated)
 | [Alibaba Function Compute (FC)](../../components/next/alibaba-fc-component.md) | camel-alibaba-fc-starter | Preview | 4.23 | Invoke serverless functions on Alibaba Cloud Function Compute (FC). |
 | [Alibaba Key Management Service (KMS)](../../components/next/alibaba-kms-component.md) | camel-alibaba-kms-starter | Preview | 4.23 | Encrypt and decrypt data using Alibaba Cloud Key Management Service (KMS). |
 | [Alibaba Message Service (MNS)](../../components/next/alibaba-mns-component.md) | camel-alibaba-mns-starter | Preview | 4.23 | Send and receive messages using Alibaba Cloud Simple Message Queue (SMQ, formerly MNS). |
-| [Alibaba Object Storage Service (OSS)](../../components/next/alibaba-oss-component.md) | camel-alibaba-oss-starter | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
+| [Alibaba Object Storage Service (OSS)](../../components/next/alibaba-oss-component.md) | camel-alibaba-oss-starter | Preview | 4.23 | Store and retrieve objects in Alibaba Cloud Object Storage Service (OSS). |
 | [Alibaba Short Message Service (SMS)](../../components/next/alibaba-sms-component.md) | camel-alibaba-sms-starter | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
 | [Alibaba Simple Log Service (SLS)](../../components/next/alibaba-sls-component.md) | camel-alibaba-sls-starter | Preview | 4.23 | Write logs, query logs, and list Logstores on Alibaba Cloud Simple Log Service (SLS). |
 | [Alibaba Tablestore (OTS)](../../components/next/alibaba-ots-component.md) | camel-alibaba-ots-starter | Preview | 4.23 | Perform row operations on Alibaba Cloud Tablestore (OTS). |
@@ -1445,6 +1445,7 @@ Number of miscellaneous extensions: 0 in 0 JAR artifacts (0 deprecated)
 | [CLI Connector](../../components/next/others/cli-connector.md) | camel-cli-connector-starter | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
 | [CLI Debug](../../components/next/others/cli-debug.md) | camel-cli-debug-starter | Stable | 4.17 | Remote CLI debugger |
 | [Cloudevents](../../components/next/others/cloudevents.md) | camel-cloudevents-starter | Stable | 3.15 | Camel support for the CloudEvents specification |
+| [CXF Platform HTTP](../../components/next/others/cxf-platform-http.md) | camel-cxf-platform-http-starter | Preview | 4.24 | Serve the SOAP services of cxf consumers on the platform-http server (Vert.x) in Camel Main and Camel JBang |
 | [CXF Transport](../../components/next/others/cxf-transport.md) | camel-cxf-transport-starter | Stable | 2.8 | Camel Transport for Apache CXF |
 | [Debug](../../components/next/others/debug.md) | camel-debug-starter | Stable | 3.15 | Enables Camel Route Debugging |
 | [Diagram](../../components/next/others/diagram.md) | camel-diagram-starter | Stable | 4.21 | Camel Route Diagram rendering |

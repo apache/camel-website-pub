@@ -41,6 +41,7 @@ Enum values:
 | **logNamespaces** (advanced) | `false` | `Boolean` | Whether to log namespaces which can assist during troubleshooting. |
 | **threadSafety** (advanced) | `false` | `Boolean` | Whether to enable thread-safety for the returned result of the xpath expression. This applies to when using NODESET as the result type, and the returned set has multiple elements. |
 | **preCompile** (advanced) | `true` | `Boolean` | Whether to enable pre-compiling the xpath expression during initialization phase. pre-compile is enabled by default. |
+| **namespaceMappings** (common) |  | `String` | The XML Namespaces of prefix to uri mappings in one string, such as p1=uri1,p2=uri2. The mappings are separated by commas or new lines, and the prefix and the uri by the first =. This allows to configure several namespaces from one property placeholder. |
 | **namespacesRef** (advanced) |  | `String` | Reference to a org.apache.camel.support.builder.Namespaces bean in the registry to use for the XML Namespaces of prefix to uri mappings. |
 | **source** (common) |  | `String` | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |
 | **resultType** (common) |  | `String` | The class of the result type (type from output). |
@@ -189,6 +190,48 @@ Each prefix is configured as a `namespaces[prefix]` property on the bean, with t
 If an expression declares namespaces inline as well, then the inline namespaces win and `namespacesRef` is ignored.
 
 The `namespacesRef` option is also available on the [XQuery](xquery-language.md) and [XML Tokenize](xtokenize-language.md) languages.
+
+### Several namespaces in one string
+
+The `namespaceMappings` option takes the namespaces inline, as one string of `prefix=uri` mappings separated by commas or new lines. The prefix ends at the first `=`. As one string, it can come from a property placeholder, such as a Kamelet option:
+
+-   XML
+    
+-   YAML
+    
+
+```xml
+<filter>
+  <xpath namespaceMappings="c=http://acme.com/cheese,w=http://acme.com/wine">/c:order/w:wine = 'Rioja'</xpath>
+  <to uri="mock:rioja"/>
+</filter>
+```
+
+```yaml
+- route:
+    from:
+      uri: "direct:start"
+      steps:
+        - filter:
+            expression:
+              xpath:
+                expression: "/c:order/w:wine = 'Rioja'"
+                namespaceMappings: "{{namespaces}}"
+            steps:
+              - to: "mock:rioja"
+```
+
+The mappings are read when the route is created, after the property placeholders are resolved, and a mapping without a prefix or a URI fails the route. When `namespace` entries are given as well, an entry wins over a mapping for the same prefix. `namespacesRef` is only used when neither is given.
+
+To share the mappings of one string between several expressions, a `Namespaces` bean can be created from the same string, and referred to with `namespacesRef`:
+
+```yaml
+- beans:
+    - name: myNamespaces
+      type: org.apache.camel.support.builder.Namespaces
+      constructors:
+        0: "{{namespaces}}"
+```
 
 ## Variables
 

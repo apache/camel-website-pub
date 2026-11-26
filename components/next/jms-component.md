@@ -91,6 +91,26 @@ When no connection factory is set, the endpoints fail with `connectionFactory mu
 
 Other brokers work the same way, with the `ConnectionFactory` of their client library, for example `com.ibm.mq.jakarta.jms.MQConnectionFactory` for IBM MQ (with `hostName`, `port`, `channel`, `queueManager`, and `transportType` set to `1` for a client connection). For ActiveMQ Classic, the [ActiveMQ](activemq-component.md) component sets up the connection factory from a `brokerURL`.
 
+### Rotated credentials
+
+When a vault detects that a secret changed and Camel reloads the context, the JMS component uses the new value of the `username` and `password` options:
+
+-   set in an endpoint URI, such as `jms:queue:orders?username=camel&password=RAW({{aws:jms/password}})`: the routes and their endpoints are created again, with the new value. Keep `RAW()` around the placeholder: Camel resolves it before it parses the URI, and a generated secret can contain `+`, `&` or `%`, which would change the password or break the URI after a rotation.
+    
+-   set with a placeholder on the component, such as `camel.component.jms.password = {{aws:jms/password}}` on Camel Main: the component is created again with the new value, and the endpoints of the reloaded routes use it.
+    
+
+With a new password the component wraps its connection factory in a new `UserCredentialsConnectionFactoryAdapter`, so the new connections authenticate with it. A pool that keys its connections by username and password, such as pooled-jms, then opens new connections for the new password, and no longer hands out the ones opened with the old one.
+
+The connection factory bean is not reloaded, and the component does not create it, so it cannot authenticate it again:
+
+-   A connection factory of the broker client keeps the `user` and `password` it was created with, also when they are set with a placeholder such as `camel.beans.artemisCF.password = {{aws:jms/password}}`: a reload does not change a bean that exists already.
+    
+-   A pool, or a Spring `CachingConnectionFactory`, keeps the connections it has open, authenticated with the credentials of the connection factory it wraps. A `CachingConnectionFactory` cannot take `username` and `password` from the component, as it does not support credentials per connection.
+    
+
+So when the credentials rotate, set them on the component or the endpoints, not on the connection factory. Otherwise the connection factory must be created again by the application, or the application restarted.
+
 ## URI format
 
 jms:\[queue:|topic:\]destinationName\[?options\]
@@ -467,7 +487,7 @@ Enum values:
 | **disableTimeToLive** (producer (advanced)) | Use this option to force disabling time to live. For example when you do request/reply over JMS, then Camel will by default use the requestTimeout value as time to live on the message being sent. The problem is that the sender and receiver systems have to have their clocks synchronized, so they are in sync. This is not always so easy to archive. So you can use disableTimeToLive=true to not set a time to live value on the sent message. Then the message will not expire on the receiver system. See below in section About time to live for more details. | false | boolean |
 | **forceSendOriginalMessage** (producer (advanced)) | When using mapJmsMessage=false Camel will create a new JMS message to send to a new JMS destination if you touch the headers (get or set) during the route. Set this option to true to force Camel to send the original JMS message that was received. | false | boolean |
 | **includeSentJMSMessageID** (producer (advanced)) | Only applicable when sending to JMS destination using InOnly (eg fire and forget). Enabling this option will enrich the Camel Exchange with the actual JMSMessageID that was used by the JMS client when the message was sent to the JMS destination. | false | boolean |
-| **replyCorrelationProperty** (producer (advanced)) | When using InOut exchange pattern use this JMS property instead of JMSCorrelationID JMS property to correlate reply message. Difference between this and 'correlationProperty' is that 'correlationProperty' tells which request property holds the correlation id value and it does not affect the selector for the reply (JMSCorrelationID=<correlation id>), while 'replyCorrelationProperty' tells which reply property will hold the correlation id value and it does affect the selector for the reply (<replyCorrelationProperty>=<correlation id>). |  | String |
+| **replyCorrelationProperty** (producer (advanced)) | When using InOut exchange pattern use this JMS property instead of JMSCorrelationID JMS property to correlate reply message. Difference between this and 'correlationProperty' is that 'correlationProperty' tells which request property holds the correlation id value and it does not affect the selector for the reply (the selector matches the JMSCorrelationID with the correlation id), while 'replyCorrelationProperty' tells which reply property will hold the correlation id value and it does affect the selector for the reply (the selector matches the replyCorrelationProperty property with the correlation id). |  | String |
 | **replyToCacheLevelName** (producer (advanced)) | 
 
 Sets the cache level by name for the reply consumer when doing request/reply over JMS. This option only applies when using fixed reply queues (not temporary). Camel will by default use: CACHE\_CONSUMER for exclusive or shared w/ replyToSelectorName. And CACHE\_SESSION for shared without replyToSelectorName. Some JMS brokers such as IBM WebSphere may require to set the replyToCacheLevelName=CACHE\_NONE to work. Note: If using temporary queues then CACHE\_NONE is not allowed, and you must use a higher value such as CACHE\_CONSUMER or CACHE\_SESSION.
@@ -526,7 +546,7 @@ Enum values:
 
  |  | JmsKeyFormatStrategy |
 | **mapJmsMessage** (advanced) | Specifies whether Camel should auto map the received JMS message to a suited payload type, such as jakarta.jms.TextMessage to a String etc. | true | boolean |
-| **maxMessagesPerTask** (advanced) | The number of messages per task. -1 is unlimited. If you use a range for concurrent consumers (eg min max), then this option can be used to set a value to eg 100 to control how fast the consumers will shrink when less work is required. | \-1 | int |
+| **maxMessagesPerTask** (advanced) | The number of messages per task. -1 is unlimited. If you use a range for concurrent consumers (eg the minimum is lower than the maximum), then this option can be used to set a value to eg 100 to control how fast the consumers will shrink when less work is required. | \-1 | int |
 | **messageConverter** (advanced) | To use a custom Spring org.springframework.jms.support.converter.MessageConverter so you can be in control how to map to/from a jakarta.jms.Message. |  | MessageConverter |
 | **messageCreatedStrategy** (advanced) | To use the given MessageCreatedStrategy which are invoked when Camel creates new instances of jakarta.jms.Message objects when Camel is sending a JMS message. |  | MessageCreatedStrategy |
 | **messageIdEnabled** (advanced) | When sending, specifies whether message IDs should be added. This is just an hint to the JMS broker. If the JMS provider accepts this hint, these messages must have the message ID set to null; if the provider ignores the hint, the message ID must be set to its normal unique value. | true | boolean |
@@ -862,7 +882,7 @@ Enum values:
 | **forceSendOriginalMessage** (producer (advanced)) | When using mapJmsMessage=false Camel will create a new JMS message to send to a new JMS destination if you touch the headers (get or set) during the route. Set this option to true to force Camel to send the original JMS message that was received. | false | boolean |
 | **includeSentJMSMessageID** (producer (advanced)) | Only applicable when sending to JMS destination using InOnly (eg fire and forget). Enabling this option will enrich the Camel Exchange with the actual JMSMessageID that was used by the JMS client when the message was sent to the JMS destination. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **replyCorrelationProperty** (producer (advanced)) | When using InOut exchange pattern use this JMS property instead of JMSCorrelationID JMS property to correlate reply message. Difference between this and 'correlationProperty' is that 'correlationProperty' tells which request property holds the correlation id value and it does not affect the selector for the reply (JMSCorrelationID=<correlation id>), while 'replyCorrelationProperty' tells which reply property will hold the correlation id value and it does affect the selector for the reply (<replyCorrelationProperty>=<correlation id>). |  | String |
+| **replyCorrelationProperty** (producer (advanced)) | When using InOut exchange pattern use this JMS property instead of JMSCorrelationID JMS property to correlate reply message. Difference between this and 'correlationProperty' is that 'correlationProperty' tells which request property holds the correlation id value and it does not affect the selector for the reply (the selector matches the JMSCorrelationID with the correlation id), while 'replyCorrelationProperty' tells which reply property will hold the correlation id value and it does affect the selector for the reply (the selector matches the replyCorrelationProperty property with the correlation id). |  | String |
 | **replyToCacheLevelName** (producer (advanced)) | 
 
 Sets the cache level by name for the reply consumer when doing request/reply over JMS. This option only applies when using fixed reply queues (not temporary). Camel will by default use: CACHE\_CONSUMER for exclusive or shared w/ replyToSelectorName. And CACHE\_SESSION for shared without replyToSelectorName. Some JMS brokers such as IBM WebSphere may require to set the replyToCacheLevelName=CACHE\_NONE to work. Note: If using temporary queues then CACHE\_NONE is not allowed, and you must use a higher value such as CACHE\_CONSUMER or CACHE\_SESSION.
@@ -917,7 +937,7 @@ Enum values:
 
  |  | JmsKeyFormatStrategy |
 | **mapJmsMessage** (advanced) | Specifies whether Camel should auto map the received JMS message to a suited payload type, such as jakarta.jms.TextMessage to a String etc. | true | boolean |
-| **maxMessagesPerTask** (advanced) | The number of messages per task. -1 is unlimited. If you use a range for concurrent consumers (eg min max), then this option can be used to set a value to eg 100 to control how fast the consumers will shrink when less work is required. | \-1 | int |
+| **maxMessagesPerTask** (advanced) | The number of messages per task. -1 is unlimited. If you use a range for concurrent consumers (eg the minimum is lower than the maximum), then this option can be used to set a value to eg 100 to control how fast the consumers will shrink when less work is required. | \-1 | int |
 | **messageConverter** (advanced) | To use a custom Spring org.springframework.jms.support.converter.MessageConverter so you can be in control how to map to/from a jakarta.jms.Message. |  | MessageConverter |
 | **messageCreatedStrategy** (advanced) | To use the given MessageCreatedStrategy which are invoked when Camel creates new instances of jakarta.jms.Message objects when Camel is sending a JMS message. |  | MessageCreatedStrategy |
 | **messageIdEnabled** (advanced) | When sending, specifies whether message IDs should be added. This is just an hint to the JMS broker. If the JMS provider accepts this hint, these messages must have the message ID set to null; if the provider ignores the hint, the message ID must be set to its normal unique value. | true | boolean |

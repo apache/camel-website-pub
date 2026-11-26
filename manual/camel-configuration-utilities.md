@@ -142,6 +142,8 @@ KeyManagersParameters contain the following elements:
     
 -   algorithm (attribute)
     
+-   keyManager (attribute)
+    
 -   keyStore (element)
     
     keyPassword
@@ -155,6 +157,10 @@ KeyManagersParameters contain the following elements:
     algorithm
     
     The optional algorithm name for the KeyManagerFactory used to create the KeyManager represented by this object’s configuration. See the [Java Secure Socket Extension Reference Guide](https://docs.oracle.com/en/java/javase/11/security/java-secure-socket-extension-jsse-reference-guide.md) for information about standard algorithm names.
+    
+    keyManager
+    
+    Reference to an existing KeyManager bean in the registry, to use instead of using KeyManagerFactory to get the KeyManager. This is useful when key material is managed outside Camel, for example by a runtime that exposes it as an `X509KeyManager`. When set, the keyPassword, provider, algorithm and keyStore are not used. The certAlias of the SSLContextParameters, if set, still applies to an `X509KeyManager`. Components that load the key store themselves, such as Kafka and CoAP over DTLS, do not support it and fail at startup.
     
     keyStore
     

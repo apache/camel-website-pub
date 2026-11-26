@@ -585,7 +585,7 @@ The camel.vault.cyberark supports 9 options, which are listed below.
 | `camel.vault.cyberark.secrets` | Specify the secret names (or pattern) to check for updates. Multiple secrets can be separated by comma. |  | String |
 | `camel.vault.cyberark.url` | The CyberArk Conjur instance URL |  | String |
 | `camel.vault.cyberark.username` | The username for authentication |  | String |
-| `camel.vault.cyberark.verifySsl` | Whether to verify SSL certificates | false | boolean |
+| `camel.vault.cyberark.verifySsl` | Whether to verify SSL certificates | true | boolean |
 
 ### Camel OpenTelemetry configurations
 

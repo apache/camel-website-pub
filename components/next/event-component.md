@@ -118,7 +118,7 @@ Enum values:
 
 
  | Block | BackpressurePolicy |
-| **batchSize** (consumer) | Enables event batching. When set to a value greater than 1, events are collected into a java.util.List and dispatched as a single exchange when the batch is full or the batchTimeout expires. The exchange body will be a List. | 0 | int |
+| **batchSize** (consumer) | Enables event batching. When set to a value greater than 1, events are collected into a java.util.List and dispatched as a single exchange when the batch is full or the batchTimeout expires. The exchange body will be a list of CamelEvent objects. | 0 | int |
 | **batchTimeout** (consumer) | The maximum time in milliseconds to wait for a batch to fill before dispatching a partial batch. Only used when batchSize is greater than 1. | 1000 | long |
 | **customEventClass** (consumer) | Fully qualified class name of a custom event class to filter on. When set, only events that are instances of the specified class will be accepted. This is useful for subscribing to custom user-defined events. |  | String |
 | **exclude** (consumer) | Comma-separated list of route IDs to exclude. For route events, this excludes by route ID. For exchange events, this excludes by the route ID of the exchange. Events matching any of the specified route IDs will be rejected. This option can be used together with the include option. |  | String |

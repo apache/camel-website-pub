@@ -6,6 +6,8 @@ The Idempotent Consumer essentially acts like a [Message Filter](filter-eip.md) 
 
 Camel will add the message id eagerly to the repository to detect duplication also for [Exchange](../../../manual/exchange.md)'s' currently in progress. On completion Camel will remove the message id from the repository if the [Exchange](../../../manual/exchange.md) failed, otherwise it stays there. An Exchange marked with `markRollbackOnly()` or `markRollbackOnlyLast()` counts as failed too, even without an exception. Set `removeOnFailure=false` to keep the message id of a failed Exchange.
 
+The message id of a failed Exchange is removed when the Exchange is done (unless `completionEager` is `true`). If the error handler of a calling route redelivers an Exchange that failed inside the idempotent consumer, the redelivered Exchange is processed again: it is not a duplicate of itself. This happens when a route calls a sub route with `to("direct:sub")` and the sub route uses `noErrorHandler` (to retry the entire sub route), or when the exception escapes a `doTry` block of the sub route. The same holds when a `doCatch` of the calling route sends the failed Exchange to the sub route again. An Exchange that failed after the idempotent consumer does not run the idempotent consumer again on the redelivery, and with `removeOnFailure=false` the redelivery is a duplicate.
+
 ## Options
 
 The Idempotent Consumer eip supports the following options which are listed below.

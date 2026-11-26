@@ -231,6 +231,7 @@ The Google Calendar Stream component supports the following message header(s), w
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **CamelGoogleCalendarEventId** (consumer) Constant: [`EVENT_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-calendar/latest/org/apache/camel/component/google/calendar/stream/GoogleCalendarStreamConstants.html#EVENT_ID) | The calendar event id. |  | String |
+| **CamelGoogleCalendarCalendarId** (consumer) Constant: [`CALENDAR_ID`](https://javadoc.io/doc/org.apache.camel/camel-google-calendar/latest/org/apache/camel/component/google/calendar/stream/GoogleCalendarStreamConstants.html#CALENDAR_ID) | The id of the calendar the event was read from. |  | String |
 
 ## Message Body
 

@@ -375,7 +375,7 @@ camel-cassandraql: Upgrade java-driver dependencies to 4.18.x
 
 camel-cxf-common jakarta dependencies not alligned with cxf transports
 
-### Improvement (86)
+### Improvement (87)
 
 [CAMEL-21728](https://issues.apache.org/jira/browse/CAMEL-21728)
 
@@ -692,6 +692,10 @@ camel-smb - Based on camel-file to have many more features
 [CAMEL-21325](https://issues.apache.org/jira/browse/CAMEL-21325)
 
 camel-jbang - Kubernetes run should cleanup old temp folders
+
+[CAMEL-21278](https://issues.apache.org/jira/browse/CAMEL-21278)
+
+Camel-Jbang Kubernetes Plugin: clean-up to new trait model and the tests
 
 [CAMEL-21274](https://issues.apache.org/jira/browse/CAMEL-21274)
 

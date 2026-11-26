@@ -94,20 +94,19 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **bucketName** (common) | Name of bucket to perform operation on. |  | String |
+| **bucketName** (common) | The name of the bucket, or of the destination bucket for copyObject. The CamelAlibabaOssBucketName exchange property replaces this option for the producer, and a header of the same name replaces both. |  | String |
 
 ### Query Parameters
 
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **endpoint** (common) | OSS endpoint URL. Carries higher precedence than region based client initialization. |  | String |
-| **objectName** (common) | Name of object to perform operation with. |  | String |
-| **region** (common) | **Required** OSS service region. |  | String |
-| **deleteAfterRead** (consumer) | Determines if objects should be deleted after they have been retrieved. | false | boolean |
+| **endpoint** (common) | The endpoint of Object Storage Service, for example oss-cn-hangzhou.aliyuncs.com. If not set, the SDK builds it from the region option. |  | String |
+| **prefix** (common) | The prefix of the names of the objects to list, for the consumer and for listObjects. The CamelAlibabaOssPrefix exchange property replaces this option for the producer, and a header of the same name replaces both. |  | String |
+| **region** (common) | The region ID of Object Storage Service, for example cn-hangzhou. The SDK uses it to sign requests, and to build the endpoint when the endpoint option is not set. |  | String |
+| **deleteAfterRead** (consumer) | Whether to delete the object from the bucket after it is processed successfully. If false, the consumer consumes the object again in a later poll. | false | boolean |
 | **includeBody** (consumer) | If true, the content of each consumed object is read into a byte array, which is the body. If false, the body is the stream of the content of the object, which is closed when the exchange is done. For large objects, also disable stream caching for the route, or let stream caching spool to disk, so that an object is not read into memory. | true | boolean |
-| **maxMessagesPerPoll** (consumer) | The maximum number of messages to poll at each polling. | 10 | int |
-| **prefix** (consumer) | The object name prefix used for filtering objects to be listed. |  | String |
+| **maxMessagesPerPoll** (consumer) | The maximum number of objects that the consumer lists in one poll. Object Storage Service accepts a value of at most 1000. The consumer treats a value of 0 or less as 10. | 10 | int |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
@@ -127,10 +126,11 @@ Enum values:
 
  |  | ExchangePattern |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
-| **maxKeys** (producer) | The maximum number of keys returned when listing objects. |  | Integer |
+| **maxKeys** (producer) | The maximum number of objects that the producer returns for listObjects, or all of them if no value is set. Object Storage Service accepts a value of at most 1000. The CamelAlibabaOssMaxKeys exchange property replaces this option, and a header of the same name replaces both. |  | Integer |
+| **objectName** (producer) | The name of the object for the producer, or of the destination object for copyObject. The CamelAlibabaOssObjectName exchange property replaces this option, and a header of the same name replaces both. |  | String |
 | **operation** (producer) | 
 
-Operation to be performed.
+The operation that the producer performs. The CamelAlibabaOssOperation exchange property replaces this option, and a header of the same name replaces both.
 
 Enum values:
 
@@ -155,7 +155,7 @@ Enum values:
 
  |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **ossClient** (advanced) | **Autowired** An autowired OSS client. |  | OSSClient |
+| **ossClient** (advanced) | **Autowired** To use a custom com.aliyun.sdk.service.oss2.OSSClient. When this option is set or autowired, the region, endpoint, accessKey, secretKey, and serviceKeys options are not used. The Camel endpoint does not close a client that is set or autowired. |  | OSSClient |
 | **backoffErrorThreshold** (scheduler) | The number of subsequent error polls (failed due some error) that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffIdleThreshold** (scheduler) | The number of subsequent idle polls that should happen before the backoffMultipler should kick-in. |  | int |
 | **backoffMultiplier** (scheduler) | To let the scheduled polling consumer backoff if there has been a number of subsequent idles/errors in a row. The multiplier is then the number of polls that will be skipped before the next actual attempt is happening again. When this option is in use then backoffIdleThreshold and/or backoffErrorThreshold must also be configured. |  | int |
@@ -219,9 +219,9 @@ Enum values:
 
  | MILLISECONDS | TimeUnit |
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
-| **accessKey** (security) | **Required** Access key for the cloud user. |  | String |
-| **secretKey** (security) | **Required** Secret key for the cloud user. |  | String |
-| **serviceKeys** (security) | Configuration object for cloud service authentication. |  | ServiceKeys |
+| **accessKey** (security) | The AccessKey ID of the AccessKey pair for Object Storage Service. If not set, the accessKey of the serviceKeys option is used. |  | String |
+| **secretKey** (security) | The AccessKey secret of the AccessKey pair for Object Storage Service. If not set, the secretKey of the serviceKeys option is used. |  | String |
+| **serviceKeys** (security) | The AccessKey pair as an org.apache.camel.component.alibaba.common.models.ServiceKeys. Its accessKey and its secretKey are each used when the option of the same name is not set. |  | ServiceKeys |
 
 ## Message Headers
 
@@ -230,15 +230,45 @@ The Alibaba Object Storage Service (OSS) component supports the following messag
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaOssBucketName** (consumer) Constant: [`BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#BUCKET_NAME) | Name of the bucket where object is contained. |  | String |
-| **CamelAlibabaOssObjectKey** (consumer) Constant: [`OBJECT_KEY`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#OBJECT_KEY) | The key that the object is stored under. |  | String |
-| **CamelAlibabaOssLastModified** (consumer) Constant: [`LAST_MODIFIED`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#LAST_MODIFIED) | The date and time that the object was last modified. |  | String |
-| **CamelAlibabaOssETag** (consumer) Constant: [`ETAG`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#ETAG) | The 128-bit MD5 digest of the object content. |  | String |
-| **CamelAlibabaOssContentMD5** (consumer) Constant: [`CONTENT_MD5`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#CONTENT_MD5) | The 128-bit Base64-encoded digest of the object. |  | String |
-| **CamelAlibabaOssObjectType** (consumer) Constant: [`OBJECT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#OBJECT_TYPE) | Shows whether the object is a file or a folder. |  | String |
-| **CamelAlibabaOssContentLength** (consumer) Constant: [`CONTENT_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#CONTENT_LENGTH) | The size of the object body in bytes. |  | Long |
-| **CamelAlibabaOssContentType** (consumer) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#CONTENT_TYPE) | The type of content stored in the object. |  | String |
-| **CamelFileName** (consumer) Constant: [`FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#FILE_NAME) | Name of the object with which the operation is to be performed. |  | String |
+| **CamelAlibabaOssOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#OPERATION) | 
+The operation that the producer performs. An exchange property of the same name replaces the operation option, and this header replaces both.
+
+Enum values:
+
+-   listBuckets
+    
+-   listObjects
+    
+-   putObject
+    
+-   getObject
+    
+-   deleteObject
+    
+-   copyObject
+    
+-   headObject
+    
+
+
+
+
+
+ |  | String |
+| **CamelAlibabaOssBucketName** (common) Constant: [`BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#BUCKET_NAME) | The name of the bucket. The consumer sets it for a consumed object, and the producer for getObject. An exchange property of the same name replaces the bucketName option for the producer, and this header replaces both. |  | String |
+| **CamelAlibabaOssObjectName** (producer) Constant: [`OBJECT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#OBJECT_NAME) | The name of the object, or of the destination object for copyObject. An exchange property of the same name replaces the objectName option, and this header replaces both. |  | String |
+| **CamelAlibabaOssSourceBucketName** (producer) Constant: [`SOURCE_BUCKET_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#SOURCE_BUCKET_NAME) | The name of the source bucket for copyObject, which requires it. If this header is not set, the producer uses an exchange property of the same name. |  | String |
+| **CamelAlibabaOssSourceObjectName** (producer) Constant: [`SOURCE_OBJECT_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#SOURCE_OBJECT_NAME) | The name of the source object for copyObject, which requires it. If this header is not set, the producer uses an exchange property of the same name. |  | String |
+| **CamelAlibabaOssPrefix** (producer) Constant: [`PREFIX`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#PREFIX) | The prefix of the names of the objects that listObjects returns. An exchange property of the same name replaces the prefix option for the producer, and this header replaces both. |  | String |
+| **CamelAlibabaOssMaxKeys** (producer) Constant: [`MAX_KEYS`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#MAX_KEYS) | The maximum number of objects that listObjects returns. An exchange property of the same name replaces the maxKeys option, and this header replaces both. |  | Integer |
+| **CamelAlibabaOssObjectKey** (common) Constant: [`OBJECT_KEY`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#OBJECT_KEY) | The key that the object is stored under. |  | String |
+| **CamelAlibabaOssLastModified** (common) Constant: [`LAST_MODIFIED`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#LAST_MODIFIED) | The date and time that the object was last modified. |  | String |
+| **CamelAlibabaOssETag** (common) Constant: [`ETAG`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#ETAG) | The entity tag (ETag) of the object, which identifies its content. It is the MD5 hash of the content only for an object created by PutObject. |  | String |
+| **CamelAlibabaOssContentMD5** (common) Constant: [`CONTENT_MD5`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#CONTENT_MD5) | The 128-bit Base64-encoded digest of the object. |  | String |
+| **CamelAlibabaOssObjectType** (common) Constant: [`OBJECT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#OBJECT_TYPE) | Shows whether the object is a file or a folder. |  | String |
+| **CamelAlibabaOssContentLength** (common) Constant: [`CONTENT_LENGTH`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#CONTENT_LENGTH) | The size of the object body in bytes. |  | Long |
+| **CamelAlibabaOssContentType** (common) Constant: [`CONTENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#CONTENT_TYPE) | The type of content stored in the object. |  | String |
+| **CamelFileName** (common) Constant: [`FILE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-oss/latest/org/apache/camel/component/alibaba/oss/constants/OSSHeaders.html#FILE_NAME) | The name of the object. The consumer sets it for a consumed object, and the producer for getObject. |  | String |
 
 ## Message Body
 
@@ -290,21 +320,6 @@ A Map of the result for putObject, deleteObject, copyObject and headObject, such
 The bodies are the ones with the default options. A side that is not listed is not known, and tooling does not guess it. The carriers, the sides and the tools that use them are described in [Message Body Types](../../manual/body-types.md).
 
 ## Usage
-
-### Message headers evaluated by the OSS producer
-
-  
-| Header | Type | Description |
-| --- | --- | --- |
-| `CamelAlibabaOssOperation` | `String` | Name of operation to invoke |
-| `CamelAlibabaOssBucketName` | `String` | Bucket name to invoke operation on (overrides the URI path bucket name) |
-| `CamelAlibabaOssObjectName` | `String` | Name of the object to be used in operation |
-| `CamelAlibabaOssSourceBucketName` | `String` | Source bucket name for copy operations |
-| `CamelAlibabaOssSourceObjectName` | `String` | Source object name for copy operations |
-| `CamelAlibabaOssPrefix` | `String` | Prefix filter when listing objects |
-| `CamelAlibabaOssMaxKeys` | `Integer` | Maximum number of keys returned when listing objects |
-
-If any of the above headers are set, they will override their corresponding query parameter or URI path value.
 
 ### List of Supported OSS Operations
 

@@ -2,7 +2,11 @@
 
 **Since Camel 2.9**
 
-The PGP Data Format integrates the Java Cryptographic Extension into Camel, allowing simple and flexible encryption and decryption of messages using Camel’s familiar marshal and unmarshal formatting mechanism. It assumes marshalling to mean encryption to ciphertext and unmarshalling to mean decryption back to the original plaintext. This data format implements only symmetric (shared-key) encryption and decryption.
+The PGP Data Format integrates the Java Cryptographic Extension into Camel, allowing simple and flexible encryption and decryption of messages using Camel’s familiar marshal and unmarshal formatting mechanism. It assumes marshalling to mean encryption to ciphertext and unmarshalling to mean decryption back to the original plaintext.
+
+PGP uses public-key encryption: the message is encrypted with a random session key and a symmetric cipher, and the session key is encrypted with the public key of each recipient, so only the holder of a matching private key can decrypt the message. Optionally the message is signed with the private key of the sender and the signature is verified with the public key of the sender.
+
+When decrypting, the message must be integrity protected by default (`requireIntegrityProtection`). Both a symmetrically encrypted integrity protected data packet and an AEAD encrypted packet, such as the OCB encrypted data packet that GnuPG 2.4 and later writes, are integrity protected.
 
 ## PGPDataFormat Options
 
@@ -21,9 +25,9 @@ The PGP (Pretty Good Privacy Cryptographic) dataformat supports the following op
 | **armored** (common) | `false` | `Boolean` | This option will cause PGP to base64 encode the encrypted text, making it available for copy/paste, etc. |
 | **integrity** (common) | `true` | `Boolean` | Adds an integrity check/sign into the encryption file. |
 | **provider** (common) |  | `String` | Java Cryptography Extension (JCE) provider, default is Bouncy Castle (BC). Alternatively you can use, for example, the IAIK JCE provider. |
-| **algorithm** (common) |  | `Integer` | Symmetric key encryption algorithm; possible values are defined in org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags. Only relevant for encrypting. |
+| **algorithm** (common) | `9` | `Integer` | Symmetric key encryption algorithm; possible values are defined in org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags; for example 9 (= AES\_256), 8 (= AES\_192), 7 (= AES\_128), 3 (= CAST5). Only relevant for encrypting. |
 | **compressionAlgorithm** (common) |  | `Integer` | Compression algorithm; possible values are defined in org.bouncycastle.bcpg.CompressionAlgorithmTags. Only relevant for encrypting. |
-| **hashAlgorithm** (common) |  | `Integer` | Signature hash algorithm; possible values are defined in org.bouncycastle.bcpg.HashAlgorithmTags. Only relevant for signing. |
+| **hashAlgorithm** (common) | `8` | `Integer` | Signature hash algorithm; possible values are defined in org.bouncycastle.bcpg.HashAlgorithmTags; for example 8 (= SHA256), 9 (= SHA384), 10 (= SHA512), 11 (= SHA224), 2 (= SHA1). Only relevant for signing. |
 | **signatureVerificationOption** (common) |  | `String` | Controls the behavior for verifying the signature during unmarshaling. Possible values: optional, required, ignore, no\_signature\_allowed. |
 | **requireIntegrityProtection** (common) | `true` | `Boolean` | Whether a message must be integrity protected in order to be decrypted. The legacy symmetrically encrypted data packet carries no modification detection code, and the packet type is chosen by whoever produced the message, so accepting it lets the sender decide whether the integrity check applies. Set to false only to interoperate with a sender that still emits the legacy packet. |
 

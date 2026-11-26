@@ -84,6 +84,7 @@ The OpenSearch component supports the following options which are listed below.
 | **openSearchClient** (advanced) | **Autowired** To use a custom configured OpenSearchClient instance. When set, this takes precedence over the RestClient-based client option. |  | OpenSearchClient |
 | **sniffAfterFailureDelay** (advanced) | The delay of a sniff execution scheduled after a failure (in milliseconds). | 60000 | int |
 | **snifferInterval** (advanced) | The interval between consecutive ordinary sniff executions in milliseconds. Will be honoured when sniffOnFailure is disabled or when there are no failures between consecutive sniff executions. | 300000 | int |
+| **apiKey** (security) | API key to authenticate with, sent in the Authorization header instead of a user and password: the token OpenSearch returns when the key is created (it starts with os\_), as is. API keys need OpenSearch 3.7 or newer. The key is only sent to the configured hosts and the nodes found by the sniffer. |  | String |
 | **enableSSL** (security) | Enable SSL. | false | boolean |
 | **password** (security) | Password for authenticating. |  | String |
 | **sslContextParameters** (security) | To configure security using SSLContextParameters. When configured, this takes precedence over the certificatePath option. |  | SSLContextParameters |
@@ -334,6 +335,21 @@ opensearchComponent.setPassword("secure!!");
 
 camelContext.addComponent("opensearch", opensearchComponent);
 ```
+
+### Authenticate with an API key
+
+Since OpenSearch 3.7, the Security plugin has API keys. Instead of a user and password, the component can log in with one: set the `apiKey` option to the token OpenSearch returns when the key is created (it starts with `os_`). Camel sends it as the `Authorization: ApiKey …​` header.
+
+```properties
+camel.component.opensearch.host-addresses=myopensearchhost:9200
+camel.component.opensearch.enable-ssl=true
+camel.component.opensearch.api-key={{opensearch.api-key}}
+```
+
+The key is only sent to the hosts of `hostAddresses` and to the nodes the sniffer finds, never to another host, such as the target of a redirect. Setting `apiKey` together with `user` and `password` fails when the endpoint is created; a `user` without a `password` is not used, and the `apiKey` is sent. When the component uses a client set with the `client` or `openSearchClient` option, the `apiKey` option is not used, as for `user` and `password`.
+
+> **Note**
+> A key to index documents needs the `indices:data/write/bulk` cluster permission, besides its index permissions: OpenSearch runs the index of a single document as a bulk request.
 
 ### Custom clients per endpoint
 

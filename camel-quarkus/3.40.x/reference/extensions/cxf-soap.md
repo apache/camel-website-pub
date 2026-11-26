@@ -103,7 +103,7 @@ public interface CalculatorService {
 }
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>NOTE: JAX-WS annotations are required. The Simple CXF Frontend is not supported. Complex parameter types require JAXB annotations to work in properly in native mode.</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>NOTE: JAX-WS annotations are required. The Simple CXF Frontend is not supported. Complex parameter types require JAXB annotations to work properly in native mode.</td></tr></tbody></table>
 
 > **Tip**
 > You can test this client application against the [quay.io/l2x6/calculator-ws:1.2](https://quay.io/repository/l2x6/calculator-ws) container that implements this service endpoint interface:
@@ -181,6 +181,7 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.cxf.ext.logging.LoggingFeature;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
 @ApplicationScoped

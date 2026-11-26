@@ -235,7 +235,7 @@ order.vm
 Dear ${headers.name}. You ordered item $variables.esc.xml(${headers.item}) on $variables.esc.xml(${body}).
 ```
 
-With a body of `Monday & Tuesday` the template renders `Monday & Tuesday`. The same works with `$variables.esc.html(…​)`, `$variables.esc.json(…​)`, `$variables.esc.sql(…​)`, and `$variables.esc.url(…​)`.
+With a body of `Monday & Tuesday` the template renders `Monday &amp; Tuesday`. The same works with `$variables.esc.html(…​)`, `$variables.esc.json(…​)`, `$variables.esc.sql(…​)`, and `$variables.esc.url(…​)`.
 
 > **Tip**
 > A message header works the same way (`setHeader("esc", constant(new EscapeTool()))` and `$headers.esc` in the template), but a variable keeps the tool out of the message, so it is not sent along to the next endpoint.

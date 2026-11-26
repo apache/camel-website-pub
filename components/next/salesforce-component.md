@@ -192,11 +192,11 @@ Enum values:
 
 
  |  | NotifyForFieldsEnum |
-| **notifyForOperationCreate** (common) | Notify for create operation, defaults to false (API version >= 29.0). |  | Boolean |
-| **notifyForOperationDelete** (common) | Notify for delete operation, defaults to false (API version >= 29.0). |  | Boolean |
+| **notifyForOperationCreate** (common) | Notify for create operation, defaults to false (API version 29.0 or later). |  | Boolean |
+| **notifyForOperationDelete** (common) | Notify for delete operation, defaults to false (API version 29.0 or later). |  | Boolean |
 | **notifyForOperations** (common) | 
 
-Notify for operations, options are ALL, CREATE, EXTENDED, UPDATE (API version < 29.0).
+Notify for operations, options are ALL, CREATE, EXTENDED, UPDATE (API versions before 29.0).
 
 Enum values:
 
@@ -214,8 +214,8 @@ Enum values:
 
 
  |  | NotifyForOperationsEnum |
-| **notifyForOperationUndelete** (common) | Notify for un-delete operation, defaults to false (API version >= 29.0). |  | Boolean |
-| **notifyForOperationUpdate** (common) | Notify for update operation, defaults to false (API version >= 29.0). |  | Boolean |
+| **notifyForOperationUndelete** (common) | Notify for un-delete operation, defaults to false (API version 29.0 or later). |  | Boolean |
+| **notifyForOperationUpdate** (common) | Notify for update operation, defaults to false (API version 29.0 or later). |  | Boolean |
 | **objectMapper** (common) | Custom Jackson ObjectMapper to use when serializing/deserializing Salesforce objects. |  | ObjectMapper |
 | **packages** (common) | In what packages are the generated DTO classes. Typically the classes would be generated using camel-salesforce-maven-plugin. Set it if using the generated DTOs to gain the benefit of using short SObject names in parameters/header values. Multiple packages can be separated by comma. |  | String |
 | **pkChunking** (common) | Use PK Chunking. Only for use in original Bulk API. Bulk 2.0 API performs PK chunking automatically, if necessary. | false | Boolean |
@@ -530,7 +530,7 @@ Enum values:
 
 
  |  | OperationName |
-| **topicName** (producer) | The name of the topic/channel to use. |  | String |
+| **topicName** (common) | The name of the topic/channel to use. |  | String |
 
 ### Query Parameters
 
@@ -628,11 +628,11 @@ Enum values:
 
 
  |  | NotifyForFieldsEnum |
-| **notifyForOperationCreate** (common) | Notify for create operation, defaults to false (API version >= 29.0). |  | Boolean |
-| **notifyForOperationDelete** (common) | Notify for delete operation, defaults to false (API version >= 29.0). |  | Boolean |
+| **notifyForOperationCreate** (common) | Notify for create operation, defaults to false (API version 29.0 or later). |  | Boolean |
+| **notifyForOperationDelete** (common) | Notify for delete operation, defaults to false (API version 29.0 or later). |  | Boolean |
 | **notifyForOperations** (common) | 
 
-Notify for operations, options are ALL, CREATE, EXTENDED, UPDATE (API version < 29.0).
+Notify for operations, options are ALL, CREATE, EXTENDED, UPDATE (API versions before 29.0).
 
 Enum values:
 
@@ -650,8 +650,8 @@ Enum values:
 
 
  |  | NotifyForOperationsEnum |
-| **notifyForOperationUndelete** (common) | Notify for un-delete operation, defaults to false (API version >= 29.0). |  | Boolean |
-| **notifyForOperationUpdate** (common) | Notify for update operation, defaults to false (API version >= 29.0). |  | Boolean |
+| **notifyForOperationUndelete** (common) | Notify for un-delete operation, defaults to false (API version 29.0 or later). |  | Boolean |
+| **notifyForOperationUpdate** (common) | Notify for update operation, defaults to false (API version 29.0 or later). |  | Boolean |
 | **objectMapper** (common) | Custom Jackson ObjectMapper to use when serializing/deserializing Salesforce objects. |  | ObjectMapper |
 | **pkChunking** (common) | Use PK Chunking. Only for use in original Bulk API. Bulk 2.0 API performs PK chunking automatically, if necessary. | false | Boolean |
 | **pkChunkingChunkSize** (common) | Chunk size for use with PK Chunking. If unspecified, salesforce default is 100,000. Maximum size is 250,000. |  | Integer |

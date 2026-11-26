@@ -84,6 +84,7 @@ The Elasticsearch component supports the following options which are listed belo
 | **enableSniffer** (advanced) | Enable automatically discover nodes from a running Elasticsearch cluster. If this option is used in conjunction with Spring Boot, then it’s managed by the Spring Boot configuration (see: Disable Sniffer in Spring Boot). | false | boolean |
 | **sniffAfterFailureDelay** (advanced) | The delay of a sniff execution scheduled after a failure (in milliseconds). | 60000 | int |
 | **snifferInterval** (advanced) | The interval between consecutive ordinary sniff executions in milliseconds. Will be honoured when sniffOnFailure is disabled or when there are no failures between consecutive sniff executions. | 300000 | int |
+| **apiKey** (security) | API key to authenticate with, sent in the Authorization header instead of a user and password. Either the encoded key as Elasticsearch shows it when the key is created, or the id and the key separated by a colon (id:key). The key is only sent to the configured hosts and the nodes found by the sniffer. |  | String |
 | **certificatePath** (security) | The path of the self-signed certificate to use to access to Elasticsearch. |  | String |
 | **enableSSL** (security) | Enable SSL. | false | boolean |
 | **password** (security) | Password for authenticating. |  | String |
@@ -337,6 +338,18 @@ elasticsearchComponent.setCertificatePath(certPath);
 
 camelContext.addComponent("elasticsearch", elasticsearchComponent);
 ```
+
+### Authenticate with an API key
+
+Instead of a user and password, the component can log in with an Elasticsearch API key, which is what Elastic recommends, also on Elastic Cloud. Set the `apiKey` option to the encoded key as Elasticsearch shows it when the key is created (the `encoded` field of the response), or to the id and the key separated by a colon (`id:key`). Camel sends it as the `Authorization: ApiKey …​` header.
+
+```properties
+camel.component.elasticsearch.host-addresses=myelkhost:9200
+camel.component.elasticsearch.enable-ssl=true
+camel.component.elasticsearch.api-key={{elasticsearch.api-key}}
+```
+
+The key is only sent to the hosts of `hostAddresses` and to the nodes the sniffer finds, never to another host, such as the target of a redirect. Setting `apiKey` together with `user` and `password` fails when the endpoint is created; a `user` without a `password` is not used, and the `apiKey` is sent. When the component uses a client set with the `client` option, the `apiKey` option is not used, as for `user` and `password`.
 
 ### Document type
 

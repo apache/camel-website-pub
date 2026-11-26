@@ -132,7 +132,21 @@ The Alibaba Function Compute (FC) component supports the following message heade
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaFcOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option. |  | String |
+| **CamelAlibabaFcOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#OPERATION) | 
+The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option.
+
+Enum values:
+
+-   invokeFunction
+    
+-   getFunction
+    
+
+
+
+
+
+ |  | String |
 | **CamelAlibabaFcServiceName** (producer) Constant: [`SERVICE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#SERVICE_NAME) | The name of the service that contains the function. This header replaces the serviceName option. If this header is not set, an exchange property of the same name replaces the serviceName option. |  | String |
 | **CamelAlibabaFcFunctionName** (producer) Constant: [`FUNCTION_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#FUNCTION_NAME) | The name of the function. This header replaces the functionName option. If this header is not set, an exchange property of the same name replaces the functionName option. |  | String |
 | **CamelAlibabaFcQualifier** (producer) Constant: [`QUALIFIER`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-fc/latest/org/apache/camel/component/alibaba/fc/constants/FCHeaders.html#QUALIFIER) | The version or alias of the service. This header replaces the qualifier option. If this header is not set, an exchange property of the same name replaces the qualifier option. |  | String |

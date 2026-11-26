@@ -408,16 +408,17 @@ The plugins of the Apache Camel project:
 
 The plugins of the Apache Camel project are installed on first use: the first `camel tui` installs the tui plugin. The Camel CLI launcher, as installed by the install script or a package manager such as Homebrew, has kubernetes, test, validate, tui and mcp in it, and downloads generate and edit from Maven Central the first time they are used.
 
-Add, list installed, and remove plugins:
+Add, list installed, update and remove plugins:
 
 ```bash
 camel plugin add generate
 camel plugin add forage
 camel plugin get
+camel plugin update
 camel plugin delete <plugin-name>
 ```
 
-`camel plugin add` checks that a plugin it does not know (neither a plugin of the Apache Camel project nor a known community plugin) can be loaded before it stores it: a name such as `kubernets` exits with code `3` and the plugins of a similar name. Give `--gav` for a plugin of your own. A stored plugin that cannot be loaded no longer fails `camel run` and `camel export`: they warn and go on without it. This includes a plugin built for another Camel version, whose classes (or only those of its exporter or run customizer) do not link with this Camel CLI: the warning says so, and the plugin’s own command fails with the same reason. Run `camel plugin add <plugin-name>` to select a release built for this Camel version, or remove the plugin with `camel plugin delete <plugin-name>`.
+`camel plugin add` checks that a plugin it does not know (neither a plugin of the Apache Camel project nor a known community plugin) can be loaded before it stores it: a name such as `kubernets` exits with code `3` and the plugins of a similar name. Give `--gav` for a plugin of your own. A stored plugin that cannot be loaded no longer fails `camel run` and `camel export`: they warn and go on without it. This includes a plugin built for another Camel version, whose classes (or only those of its exporter or run customizer) do not link with this Camel CLI: the warning says so, and the plugin’s own command fails with the same reason. Run `camel plugin update <plugin-name>` to select the release built for this Camel version (or `camel plugin add <plugin-name>` for a plugin whose release `camel plugin add` did not select, see [Updating plugins](#_updating_plugins)), or remove the plugin with `camel plugin delete <plugin-name>`.
 
 ### Custom plugin configuration
 
@@ -440,7 +441,7 @@ camel plugin get
 The resolution order is: `--plugin-config` option > `CAMEL_CLI_PLUGIN_CONFIG` environment variable > default `~/.camel-jbang-plugins.json`.
 
 > **Note**
-> The `--plugin-config` option only applies to the `plugin` subcommands (`add`, `get`, `delete`, `list`). Running a plugin’s own command (e.g. `camel kubernetes …​`) discovers plugins only through the environment variable or the default file. So a plugin added with `camel plugin add --plugin-config X` is not seen unless `CAMEL_CLI_PLUGIN_CONFIG` is also set.
+> The `--plugin-config` option only applies to the `plugin` subcommands (`add`, `get`, `delete`, `list`, `update`). Running a plugin’s own command (e.g. `camel kubernetes …​`) discovers plugins only through the environment variable or the default file. So a plugin added with `camel plugin add --plugin-config X` is not seen unless `CAMEL_CLI_PLUGIN_CONFIG` is also set.
 
 ### Plugin versions
 
@@ -465,7 +466,7 @@ The releases are grouped by release line of the plugin (its major and minor vers
 
 A SNAPSHOT build of the CLI is compared without `-SNAPSHOT`. The `--camel-version` option of the commands is not used for this: it is the version of the installed CLI that counts.
 
-`camel plugin add` downloads the selected release before it saves the configuration, and stores the exact version in `~/.camel-jbang-plugins.json`, together with the Camel versions it supports. The plugin therefore stays at that version: run `camel plugin add <name>` again to select the newest matching release, for example after a new patch release of the plugin. When the CLI is upgraded to a Camel version that the stored release does not support, the CLI warns when the plugin is loaded, and tells to run `camel plugin add <name>` again. Plugins added with an older CLI are not checked.
+`camel plugin add` downloads the selected release before it saves the configuration, and stores the exact version in `~/.camel-jbang-plugins.json`, together with the Camel versions it supports. The plugin therefore stays at that version until `camel plugin update` selects the newest matching release, for example after a new patch release of the plugin (see [Updating plugins](#_updating_plugins)). `camel self-update` runs it after installing a new version of the CLI. When the CLI is a Camel version that the stored release does not support, the CLI warns when the plugin is loaded, and tells to run `camel plugin update <name>`. Plugins added with an older CLI are not checked.
 
 The CLI selects the newest release of the first line that supports its version. When no release read supports it:
 
@@ -490,6 +491,42 @@ Older versions of the CLI do not select a release, and use the newest one. With 
 ```bash
 camel plugin add forage --gav io.kaoto.forage:camel-jbang-plugin-forage:1.4.2
 ```
+
+### Updating plugins
+
+`camel plugin update` selects the release of the plugins again, for the version of the installed CLI, as `camel plugin add` does (see [Plugin versions](#_plugin_versions)), and changes a plugin when another release is selected: a new patch release of the plugin, or the release built for the Camel version of a new CLI. `camel plugin update <name>` updates one plugin.
+
+```bash
+$ camel plugin update
+forage 1.6.2 -> 1.7.0 (built for Camel 4.23.0)
+kit 0.4.0 is kept: camel plugin add did not select this release (such as one given with --version or --gav)
+```
+
+The selected release is downloaded before the configuration is saved: when it cannot be downloaded, the plugin keeps its release, and the command exits with code `1`. A plugin already on the selected release is left as it is, a release built for the CLI is never replaced by an older one, and the configuration file is only written when a plugin changes.
+
+Only the plugins whose release `camel plugin add` selected (it stores the Camel versions the release supports) are changed. The other plugins are reported, and kept as they are:
+
+-   a plugin added with `--version` or `--gav` stays at that release
+    
+-   a plugin of the Apache Camel project always uses the version of the CLI
+    
+-   a plugin added as `LATEST`, by an older CLI or when `camel plugin add` could not select a release: run `camel plugin add <name>` to select the release built for the CLI
+    
+
+A plugin may publish its release for a new Camel version some time after the Camel release. Until then, when the CLI is newer than the Camel versions of all the releases of the plugin, `camel plugin update` keeps the current release (a release built for another Camel version gains nothing) and warns, and the CLI reminds to run `camel plugin update` again each time the plugin is loaded:
+
+```bash
+$ camel plugin update forage
+WARN: No release of forage is built for Camel CLI 4.24.0 yet (the newest, 1.7.0, is built for Camel 4.23.0). Keeping forage 1.6.2: run 'camel plugin update forage' again once a release built for this Camel version is published.
+```
+
+When the releases cannot be read (for example, when offline), or the CLI is older than the Camel versions of all the releases, `camel plugin update` warns and keeps the plugin as it is too. When the CLI is between the Camel versions of the releases, it selects the newest release for the nearest older Camel version, and warns, as `camel plugin add` does.
+
+A plugin added with `--version`, as the warnings suggest to use one of the releases found, is not updated any more: `camel plugin update` and `camel self-update` keep that version. To select the releases again, add the plugin again without `--version`: `camel plugin add <name>` for a known community plugin, or with its `--groupId` and `--artifactId` (and `--repo`, if any) for another one.
+
+`camel plugin update --dry-run` reports what would change, without downloading the plugins or changing anything.
+
+`camel self-update` runs `camel plugin update` with the new CLI once it is installed, see [Upgrading and switching versions](camel-jbang-launcher-install.html#_upgrading_and_switching_versions).
 
 ### Building custom plugins
 
@@ -556,10 +593,21 @@ camel generate wsdl orders.wsdl --route=consumer --output=orders-service.camel.y
 camel generate wsdl orders.wsdl --route=producer --operation=getOrder --output=orders-client.camel.yaml
 ```
 
--   `consumer` is a SOAP service: a `cxf:` consumer with schema validation, and a `choice` with a `when` per operation (on the `CamelCxfOperationName` header) that logs the request and returns a placeholder response element. The response is validated against the schema too, so until you fill in the placeholder the caller gets a SOAP fault that names the first element it misses. With `--runtime=camel-main` (the default) the consumer listens on `0.0.0.0` and the port and path of the address of the WSDL, so `camel run` serves it as it is; with `spring-boot` or `quarkus` it uses the path, which the CXF servlet of the runtime serves.
+-   `consumer` is a SOAP service: a `cxf:` consumer with schema validation, and a `choice` with a `when` per operation (on the `CamelCxfOperationName` header) that logs the request and returns a placeholder response element. The response is validated against the schema too, so until you fill in the placeholder the caller gets a SOAP fault that names the first element it misses. The address of the consumer is the path of the address of the WSDL, such as `cxf:/orders` for `http://localhost:8080/orders`. Camel Main (with `camel run`), Spring Boot and Quarkus all serve it on their HTTP server under `/services`, so the same route runs on each of them, at `http://localhost:8080/services/orders` with the default port. See [CXF Platform HTTP](../components/next/others/cxf-platform-http.md).
     
 -   `producer` is a SOAP client: a route `direct:<operation>` per operation, which takes the request element (XML) as the body and returns the response element. It removes the `Camel*` headers and the CXF operation headers first, so a caller cannot choose another operation or address (such as with `CamelDestinationOverrideUrl`).
     
+
+`--samples` writes a sample request, response and faults of each operation (or those of `--operation`), to call a SOAP service from a route, or to test a SOAP service that a route serves:
+
+```bash
+camel generate wsdl orders.wsdl --samples --operation=getOrder
+camel generate wsdl orders.wsdl --samples --output=samples
+```
+
+Each message is written as XML, and as JSON in the form that the [XSD JSON](../components/next/dataformats/xsdJson-dataformat.md) data format reads and writes. The request is also written in a SOAP envelope of the SOAP version of the port, with a `curl` command that posts it to the address of the WSDL, with the SOAP action in the `SOAPAction` header (SOAP 1.1) or the content type (SOAP 1.2). Every element and attribute has a value of its type: the first value of an enumeration, a date for `xs:date`, `1` for `xs:int`, and so on. A repeating element has one item, and of an `xs:choice` only the first member is filled in. A value does not follow the other facets of its type, such as a pattern or a length.
+
+Without `--output` the samples are printed. With `--output=<dir>` they are written as files, such as `getOrder-request.xml`, `getOrder-request.json`, `getOrder-request.soap.xml`, `getOrder-response.json` and `getOrder-fault-orderNotFound.xml`, and the `curl` commands, which post the `.soap.xml` files, are printed. With `--json` the samples are in the listing, per operation. The XML schema is the `xs:schema` in the `wsdl:types` of the WSDL and what it imports; of a remote WSDL, it is read with the same rules as an import of the WSDL (see below).
 
 When the WSDL has more than one port, choose one with `--service` and `--port`. A local WSDL may only import files, and a remote one only documents on its own host, over http or https (not from https down to http). A redirect is only followed to the same scheme, host and port; for another one the command names the new location, so you can use it if you trust it. The rpc style is listed but not scaffolded, and WSDL 2.0 and bindings that are not SOAP (such as HTTP GET) are not supported.
 

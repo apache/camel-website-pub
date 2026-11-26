@@ -4,11 +4,11 @@
 
 -   `git`
     
--   GraalVM with `native-image` command installed and `GRAALVM_HOME` environment variable set, see [Building a native executable](https://quarkus.io/guides/building-native-image-guide) section of the Quarkus documentation.
+-   GraalVM with `native-image` command installed and `GRAALVM_HOME` environment variable set, see [Building a native executable](https://quarkus.io/guides/building-native-image) section of the Quarkus documentation.
     
--   If you are on Linux, `docker` or `podman` is sufficient for the native mode too. Use `-Pnative,docker` instead of `-Pnative` if you choose this option.
+-   If you are on Linux, `docker` or `podman` is sufficient for the native mode too. Add `-Ddocker` to the native build command if you choose this option.
     
--   Java 17 or higher (Java 11 is only for Camel Quarkus < 3.0.0).
+-   Java 17 or higher.
     
 -   Maven 3.8.2+ (unless you use the Maven Wrapper, a.k.a. `mvnw` available in the source tree).
     
@@ -37,11 +37,11 @@ mvn clean install
 A build with integration tests in both the JVM mode and the native mode:
 
 ```shell
-mvn clean install -Pnative
+mvn clean install -Dnative
 ```
 
 > **Tip**
-> You may want to install and use [`mvnd` - the Maven Daemon](https://github.com/mvndaemon/mvnd) for faster builds. When using `mvnd` on macOS, make sure the mvnd version matches your installed Maven version (`mvn`) to avoid compilation failures due to missing dependencies.
+> You may want to install and use [`mvnd` - the Maven Daemon](https://github.com/apache/maven-mvnd) for faster builds. When using `mvnd` on macOS, make sure the mvnd version matches your installed Maven version (`mvn`) to avoid compilation failures due to missing dependencies.
 
 > **Tip**
 > For building native images on macOS, you usually **do not need** to use `-Dquarkus.native.container-build`. This option is primarily intended for Linux systems, where the native image build runs inside a Docker container. On macOS, GraalVM can typically generate the native image directly, so omitting this option simplifies the build and avoids unnecessary errors.

@@ -1,12 +1,12 @@
 # Graph intelligence
 
-Camel Kit can build a property graph of an integration project: nodes for classes, routes, endpoints, beans, Maven artifacts and configuration properties, edges for inheritance, injection, route flow, bean references and configuration bindings. The graph feeds migration analysis, impact analysis, project-aware validation and retirement-candidate reporting. It is optional: every skill works without it, uses it when it is available, and skips the graph-enhanced steps silently when the CLI is unavailable. The graph enhances the agent; it never gates it.
+Camel Kit can build a property graph of an integration project: nodes for classes, routes, endpoints, beans, Maven artifacts and configuration properties, edges for inheritance, injection, route flow, bean references and configuration bindings. The graph feeds migration analysis, impact analysis, project-aware validation and retirement-candidate reporting. The standard skills use it for optional acceleration and can continue with source inspection when it is unavailable. A migration pack can require a particular parser for one of its steps.
 
 ![Graph visualization of a MuleSoft project: nodes are flows, connectors, Maven artifacts and configuration properties](_images/graph-visualize.png)
 
 ## How the graph is built
 
-`camel-kit graph generate` runs nine content parsers and two post-processors and persists the result at `.camel-kit/project-graph.json` (another path with `--output`; queries take `--graph-file`). `PomParser` runs first and synchronously, because the other parsers need the Maven artifacts for runtime detection and for the dependency allowlist; the eight others then run in parallel on parser-local fragments that are merged in a fixed order, so the result does not depend on completion timing. Parser diagnostics record the scanned files, warnings, failures, timeouts and produced counts.
+In the default distribution, `camel-kit graph generate` runs nine content parsers and two post-processors. It writes the graph to `.camel-kit/project-graph.json`. Use `--output` to choose another path and `--graph-file` to query that graph. `PomParser` runs first because the other parsers use its Maven artifacts for runtime detection and the dependency allowlist. The other eight parsers run in parallel. Kit merges their fragments in a fixed order so the result is independent of completion timing. Parser diagnostics record the scanned files, warnings, failures, timeouts and produced counts.
 
   
 | Parser | Purpose | Files |
@@ -23,12 +23,38 @@ Camel Kit can build a property graph of an integration project: nodes for classe
 
 The post-processors run on the assembled graph: `CrossLinker` links producer and consumer routes through `direct` and `seda` endpoints, maps component usage to Maven artifacts, binds configuration to endpoints and creates the interface shortcuts described below; `PropertyBindingParser` then reads the property values for Camel’s `PropertyBindingSupport` syntax. Mule and BizTalk files are detected by their namespaces and extensions, so no configuration is needed; `init --source-platform` only hints the platform for unusual layouts. `camel-kit graph visualize` writes an interactive page to `.camel-kit/project-graph.html`.
 
+## Migration parser providers
+
+The distribution catalog identifies migration parsers by `provider/<id>`. The default catalog includes `provider/mule-xml`. Excluding this provider removes Mule XML parsing. DataWeave and BizTalk remain built in. To inventory a Mule project, run these commands from its source directory.
+
+```shell
+camel-kit graph generate --require-parser mule-xml
+camel-kit graph find --type mule:flow
+```
+
+The first command checks that the named parser is available and builds the graph with all selected parsers. The second lists flow nodes and their source-relative `file` properties. A directory without Mule XML yields zero Mule flows. A malformed Mule document produces a warning naming the file while valid flows from other documents remain available. A missing provider or incompatible API produces an error and exit code 1 before the CLI writes a graph. A workflow that requires the parser must check that exit code before using the output.
+
+Kit loads a fresh provider instance for each CLI graph build. Migration providers merge in catalog ID order between the Camel XML and DataWeave fragments. If two migration providers produce different nodes with the same ID, the later provider replaces the earlier node and the build reports a warning naming both providers. The [worked parser pack](contributing.html#migration-parser) adds a file format and a private source model through the same interface.
+
+## Reading a saved graph
+
+Kit writes JSON format `1.1` and reads both `1.0` and `1.1`. A node’s object key is its ID. An edge records its `from` and `to` IDs. Both records have a `type` and may have a `properties` object containing string values. IDs must contain a non-whitespace character. An edge can point to an external ID, such as a superclass outside the project. Duplicate JSON keys, malformed records and unsupported versions produce a diagnostic. Older Kit versions that only read `1.0` need a graph generated with that version.
+
+Common types keep their existing names, including `CAMEL_ROUTE` and `ROUTES_TO`. Migration types use a provider namespace, for example `mule:flow`, `mule:flow-contains` or `biztalk:orchestration`. The core pack supplies the Mule and BizTalk adapters in stock and custom distributions. They map old names in saved graphs and query filters to the same types. For example, `graph find --type MULE_FLOW` and `graph find --type mule:flow` return the same nodes with canonical types.
+
+```shell
+camel-kit graph analyze mule --graph-file .camel-kit/project-graph.json
+```
+
+`analyze` returns the adapter’s summary, or `matched: false` when its rules find no matching project. If the adapter is missing, the command identifies the unavailable provider and exits with status 1. If its summary fails, the command names the provider, reports the cause and exits with status 1. A workflow that requires this analysis must leave its step incomplete. Generic commands such as `find`, `neighbors`, `stats` and `visualize` still work with the recorded type names. A library caller can read, traverse, write and reload such a graph, including its properties and relationships. A type filter accepts registered names and types present in the loaded graph. A misspelling returns an error with the valid names. Unmapped legacy names retain their spelling until a reader has the corresponding adapter. See [registering a graph adapter](contributing.html#graph-adapter).
+
 ## Commands
 
  
 | Command | Purpose |
 | --- | --- |
 | **Analysis** |
+| `analyze <namespace>` | Run the migration pack’s graph summary |
 | `stats` | `available`, node and edge totals, nodes by type |
 | `find` | Nodes by type, with a regular expression on the name or fully qualified name, falling back to the node ID |
 | `neighbors` | Incoming, outgoing or both directions, optionally filtered by edge type and depth |

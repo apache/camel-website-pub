@@ -951,6 +951,10 @@ camel.metrics.enableMessageHistory=true
 camel.metrics.binders=processor,jvm-info,file-descriptor
 ```
 
+### Authorization observations
+
+See [Authorization observations](../../manual/authorization-observability.md) for optional decision events, low-cardinality metrics and verified-identity composition examples. Observations preserve the component’s existing decision headers and error handling.
+
 ### Using Camel Micrometer with Spring Boot
 
 When you use `camel-micrometer-starter` with Spring Boot, then Spring Boot autoconfiguration will automatically enable metrics capture if a `io.micrometer.core.instrument.MeterRegistry` is available.

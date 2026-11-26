@@ -118,7 +118,21 @@ Enum values:
 | --- | --- | --- | --- |
 | **endpoint** (producer) | The endpoint of KMS, which is a host name without http:// or https://. The producer sends requests to it over HTTPS. If not set, the region option determines the endpoint, and one of the two is required. Not used when the kmsClient option is set or autowired. |  | String |
 | **keyId** (producer) | The ID, alias or ARN of the KMS key for encrypt and generateDataKey. The CamelAlibabaKmsKeyId header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. One of the three is required for encrypt and generateDataKey. |  | String |
-| **keySpec** (producer) | The key spec of the data key for generateDataKey. The value must be AES\_256 or AES\_128. KMS does not use it when the number of bytes is set as well. The CamelAlibabaKmsKeySpec header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no key spec to the request. |  | String |
+| **keySpec** (producer) | 
+The key spec of the data key for generateDataKey. The value must be AES\_256 or AES\_128. KMS does not use it when the number of bytes is set as well. The CamelAlibabaKmsKeySpec header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no key spec to the request.
+
+Enum values:
+
+-   AES\_256
+    
+-   AES\_128
+    
+
+
+
+
+
+ |  | String |
 | **numberOfBytes** (producer) | The number of bytes of the data key for generateDataKey. The value must be from 1 to 1024. The CamelAlibabaKmsNumberOfBytes header replaces this option for a request that the producer sends. If that header is not set, an exchange property of the same name replaces this option. If none of the three is set, the producer adds no number of bytes to the request. |  | Integer |
 | **region** (producer) | The region ID of KMS, for example cn-hangzhou. Only used when the endpoint option is not set, to build the endpoint of KMS. One of the two is required, unless the kmsClient option is set or autowired, which uses neither. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
@@ -136,11 +150,42 @@ The Alibaba Key Management Service (KMS) component supports the following messag
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaKmsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#OPERATION) | The operation that the producer performs, which replaces the operation of the endpoint. If this header is not set, an exchange property of the same name replaces it. |  | String |
+| **CamelAlibabaKmsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#OPERATION) | 
+The operation that the producer performs, which replaces the operation of the endpoint. If this header is not set, an exchange property of the same name replaces it.
+
+Enum values:
+
+-   encrypt
+    
+-   decrypt
+    
+-   generateDataKey
+    
+
+
+
+
+
+ |  | String |
 | **CamelAlibabaKmsKeyId** (producer) Constant: [`KEY_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#KEY_ID) | The ID, alias or ARN of the KMS key for encrypt and generateDataKey. This header replaces the keyId option. If this header is not set, an exchange property of the same name replaces the keyId option. |  | String |
 | **CamelAlibabaKmsPlaintext** (producer) Constant: [`PLAINTEXT`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#PLAINTEXT) | The plaintext for encrypt. The producer encodes it in UTF-8 and sends it to KMS in Base64. This header replaces the plaintext option. If this header is not set, an exchange property of the same name replaces the plaintext option. A Map or a POJO fails, as it does in the message body, since Camel reads it only as its toString(). |  | String |
 | **CamelAlibabaKmsCiphertextBlob** (producer) Constant: [`CIPHERTEXT_BLOB`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#CIPHERTEXT_BLOB) | The ciphertext blob for decrypt, for example from the response to encrypt or generateDataKey. This header replaces the ciphertextBlob option. If this header is not set, an exchange property of the same name replaces the ciphertextBlob option. |  | String |
-| **CamelAlibabaKmsKeySpec** (producer) Constant: [`KEY_SPEC`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#KEY_SPEC) | The key spec of the data key for generateDataKey. The value must be AES\_256 or AES\_128. KMS does not use it when the number of bytes is set as well. This header replaces the keySpec option. If this header is not set, an exchange property of the same name replaces the keySpec option. |  | String |
+| **CamelAlibabaKmsKeySpec** (producer) Constant: [`KEY_SPEC`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#KEY_SPEC) | 
+
+The key spec of the data key for generateDataKey. The value must be AES\_256 or AES\_128. KMS does not use it when the number of bytes is set as well. This header replaces the keySpec option. If this header is not set, an exchange property of the same name replaces the keySpec option.
+
+Enum values:
+
+-   AES\_256
+    
+-   AES\_128
+    
+
+
+
+
+
+ |  | String |
 | **CamelAlibabaKmsNumberOfBytes** (producer) Constant: [`NUMBER_OF_BYTES`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#NUMBER_OF_BYTES) | The number of bytes of the data key for generateDataKey. The value must be from 1 to 1024. This header replaces the numberOfBytes option. If this header is not set, an exchange property of the same name replaces the numberOfBytes option. Only generateDataKey reads it, and a value that is not a number fails that operation alone. |  | Integer |
 | **CamelAlibabaKmsRequestId** (producer) Constant: [`REQUEST_ID`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-kms/latest/org/apache/camel/component/alibaba/kms/constants/KMSHeaders.html#REQUEST_ID) | The request ID that KMS returns in the response to the operation. The producer sets it, unless the exchange fails. |  | String |
 

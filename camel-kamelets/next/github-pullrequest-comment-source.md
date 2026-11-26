@@ -98,25 +98,16 @@ The Kamelet requires the following parameters:
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: github-pullrequest-comment-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: github-pullrequest-comment-source
-    properties:
-      repoName: "my-repository"
-      repoOwner: "my-organization"
-      oauthToken: "{{oauth-token}}"
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:github-pullrequest-comment-source"
+      parameters:
+        repoName: "my-repository"
+        repoOwner: "my-organization"
+        oauthToken: "{{oauth-token}}"
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ## Kamelet source file

@@ -110,25 +110,25 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **type** (consumer) | 
-The endpoint mapping type, which names the part of a request that is compared with lookupKey to select the requests for the consumer. rootqname: the qualified name of the root element of the payload. soapaction: the SOAP action. uri: the URI of the request. uripath: the path of the URI of the request. xpathresult: the result of the XPath expression of the expression option for the request. action: the WS-Addressing Action header. to: the WS-Addressing To header. beanname: no part of the request, because lookupKey names a CamelEndpointDispatcher bean and an existing Spring-WS endpoint mapping maps requests to that bean. The endpoint URI takes the type as written here, without the underscore of the enum constant, and ignores its case.
+The endpoint mapping type, which names the part of a request that is compared with lookupKey to select the requests for the consumer. rootqname: the qualified name of the root element of the payload. soapaction: the SOAP action. uri: the URI of the request. uripath: the path of the URI of the request. xpathresult: the result of the XPath expression of the expression option for the request. action: the WS-Addressing Action header. to: the WS-Addressing To header. beanname: no part of the request, because lookupKey names a CamelEndpointDispatcher bean and an existing Spring-WS endpoint mapping maps requests to that bean. The endpoint URI ignores the case of the type.
 
 Enum values:
 
--   ROOT\_QNAME
+-   rootqname
     
--   ACTION
+-   action
     
--   TO
+-   to
     
--   SOAP\_ACTION
+-   soapaction
     
--   XPATHRESULT
+-   xpathresult
     
--   URI
+-   uri
     
--   URI\_PATH
+-   uripath
     
--   BEANNAME
+-   beanname
     
 
 
@@ -147,6 +147,7 @@ Enum values:
 | **headerFilterStrategy** (common) | To use a custom HeaderFilterStrategy to filter headers mapped to and from the Camel message. By default the internal Camel and camel header namespace (case-insensitive) is filtered out from inbound SOAP headers, and the default message filter does not write it into outbound SOAP headers. |  | HeaderFilterStrategy |
 | **messageFilter** (common) | Option to provide a custom MessageFilter. For example when you want to process your headers or attachments by your own. |  | MessageFilter |
 | **messageIdStrategy** (common) | Option to provide a custom MessageIdStrategy to control generation of WS-Addressing unique message ids. |  | MessageIdStrategy |
+| **messageSender** (common) | To use a custom org.springframework.ws.transport.WebServiceMessageSender, for example to perform authentication or to use another transport. The producer sends its requests with it, in place of the message senders of the WebServiceTemplate. With a WSACamelEndpointMapping, Spring-WS sends the response of the consumer with it when the response goes to the WS-Addressing ReplyTo or FaultTo address of the request instead of the connection of the request. |  | WebServiceMessageSender |
 | **endpointDispatcher** (consumer) | The org.apache.camel.component.spring.ws.bean.CamelEndpointDispatcher that passes requests to the consumer. An existing Spring-WS endpoint mapping, such as a PayloadRootQNameEndpointMapping or a SoapActionEndpointMapping, maps requests to this bean. When type is beanname, the component sets this option to the CamelEndpointDispatcher bean in the registry whose name is lookupKey. |  | CamelEndpointDispatcher |
 | **endpointMapping** (consumer) | The org.apache.camel.component.spring.ws.bean.CamelSpringWSEndpointMapping bean that maps requests to the consumer. Required for every type except beanname. Use a CamelEndpointMapping for the types rootqname, soapaction, uri, uripath and xpathresult, and a WSACamelEndpointMapping for the types action and to. The consumer registers itself with the bean when it starts, so one bean can serve all consumers of its types. The MessageDispatcher of Spring-WS must use the same bean, which it does by default for each EndpointMapping bean in its ApplicationContext. |  | CamelSpringWSEndpointMapping |
 | **expression** (consumer) | The XPath expression to use when option type=xpathresult. Then this option is required to be configured. |  | String |
@@ -173,7 +174,6 @@ Enum values:
 | **allowResponseHeaderOverride** (producer) | Whether to copy the SOAP header of the response to the Camel message. If true, the producer sets the CamelSpringWebserviceSoapHeader header to the SOAP header of the response, and sets a Camel header for each attribute and each element of that SOAP header. The name of each of these Camel headers is the local part of the name of the attribute or element, and they replace Camel headers of the same name. The names of the SOAP response header attributes and elements are filtered using the headerFilterStrategy, which by default filters out the internal Camel and camel header namespace (case-insensitive). | false | boolean |
 | **faultTo** (producer) | The address of the WS-Addressing FaultTo header of the request that the producer sends. Only used when the wsAddressingAction option or the CamelSpringWebserviceAddressingAction header is set. The CamelSpringWebserviceAddressingFaultTo header replaces this option for a request that the producer sends. |  | URI |
 | **messageFactory** (producer) | Option to provide a custom WebServiceMessageFactory. |  | WebServiceMessageFactory |
-| **messageSender** (producer) | To use a custom org.springframework.ws.transport.WebServiceMessageSender, for example to perform authentication or to use another transport. The producer sends its requests with it, in place of the message senders of the WebServiceTemplate. With a WSACamelEndpointMapping, Spring-WS sends the response of the consumer with it when the response goes to the WS-Addressing ReplyTo or FaultTo address of the request instead of the connection of the request. |  | WebServiceMessageSender |
 | **replyTo** (producer) | The address of the WS-Addressing ReplyTo header of the request that the producer sends. Only used when the wsAddressingAction option or the CamelSpringWebserviceAddressingAction header is set. The CamelSpringWebserviceAddressingReplyTo header replaces this option for a request that the producer sends. |  | URI |
 | **soapAction** (producer) | The SOAP action of the request that the producer sends. The CamelSpringWebserviceSoapAction header replaces this option for a request that the producer sends. |  | String |
 | **timeout** (producer) | The socket read timeout in milliseconds for the requests that the producer sends. Only applied to a message sender of the WebServiceTemplate whose class is exactly HttpUrlConnectionMessageSender, which is the default message sender, or exactly HttpComponentsMessageSender. For any other message sender, the producer logs a warning and does not apply it, so set the timeout on the message sender itself. If not set, the read timeout of the message sender applies. Use 0 for no timeout. |  | int |
@@ -191,7 +191,7 @@ The Spring WebService component supports the following message header(s), which 
 | --- | --- | --- | --- |
 | **CamelSpringWebserviceEndpointUri** (producer) Constant: [`SPRING_WS_ENDPOINT_URI`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#SPRING_WS_ENDPOINT_URI) | The address that the producer sends the request to. This header replaces the webServiceEndpointUri option, and the default URI of the WebServiceTemplate of the webServiceTemplate option. |  | String |
 | **CamelSpringWebserviceSoapAction** (producer) Constant: [`SPRING_WS_SOAP_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#SPRING_WS_SOAP_ACTION) | The SOAP action of the request that the producer sends. This header replaces the soapAction option. |  | String |
-| **CamelSpringWebserviceSoapHeader** (producer) Constant: [`SPRING_WS_SOAP_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#SPRING_WS_SOAP_HEADER) | The SOAP header as XML. The consumer sets it to the SOAP header of the request, as a javax.xml.transform.Source of the soap:Header element. The producer converts it to a Source and adds the XML to the content of the SOAP header of the request that it sends. When allowResponseHeaderOverride is true, the producer sets it to the SOAP header of the response. |  | Source |
+| **CamelSpringWebserviceSoapHeader** (common) Constant: [`SPRING_WS_SOAP_HEADER`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#SPRING_WS_SOAP_HEADER) | The SOAP header as XML. The consumer sets it to the SOAP header of the request, as a javax.xml.transform.Source of the soap:Header element. The producer converts it to a Source and adds the XML to the content of the SOAP header of the request that it sends. When allowResponseHeaderOverride is true, the producer sets it to the SOAP header of the response. |  | Source |
 | **CamelSpringWebserviceAddressingAction** (producer) Constant: [`SPRING_WS_ADDRESSING_ACTION`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#SPRING_WS_ADDRESSING_ACTION) | The WS-Addressing 1.0 Action header of the request that the producer sends. This header replaces the wsAddressingAction option. |  | URI |
 | **CamelSpringWebserviceAddressingFaultTo** (producer) Constant: [`SPRING_WS_ADDRESSING_PRODUCER_FAULT_TO`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#SPRING_WS_ADDRESSING_PRODUCER_FAULT_TO) | The address of the WS-Addressing FaultTo header of the request that the producer sends. Only used when the wsAddressingAction option or the CamelSpringWebserviceAddressingAction header is set. This header replaces the faultTo option. |  | URI |
 | **CamelSpringWebserviceAddressingReplyTo** (producer) Constant: [`SPRING_WS_ADDRESSING_PRODUCER_REPLY_TO`](https://javadoc.io/doc/org.apache.camel/camel-spring-ws/latest/org/apache/camel/component/spring/ws/SpringWebserviceConstants.html#SPRING_WS_ADDRESSING_PRODUCER_REPLY_TO) | The address of the WS-Addressing ReplyTo header of the request that the producer sends. Only used when the wsAddressingAction option or the CamelSpringWebserviceAddressingAction header is set. This header replaces the replyTo option. |  | URI |

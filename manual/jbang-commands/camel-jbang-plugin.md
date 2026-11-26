@@ -17,6 +17,7 @@ camel plugin [options]
 | [delete](camel-jbang-plugin-delete.md) | Removes a plugin |
 | [get](camel-jbang-plugin-get.md) | Get installed plugins |
 | [list](camel-jbang-plugin-list.md) | List all available plugins |
+| [update](camel-jbang-plugin-update.md) | Update the community plugins to the releases built for this Camel CLI |
 
 ## Options
 

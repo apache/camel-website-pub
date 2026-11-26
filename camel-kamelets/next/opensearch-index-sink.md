@@ -22,7 +22,8 @@ The following table summarizes the configuration options available for the `open
 | Property | Name | Description | Type | Default | Example |
 | --- | --- | --- | --- | --- | --- |
 | **clusterName** | OpenSearch Cluster Name | **Required** The name of the OpenSearch cluster. Required, but not checked against the cluster. | string |  | quickstart |
-| **hostAddresses** | Host Addresses | **Required** The address of the OpenSearch HTTP API, as `host:port`, or several nodes separated by commas. The port is 9200 by default. | string |  | quickstart-es-http:9200 |
+| **hostAddresses** | Host Addresses | **Required** The address of the OpenSearch HTTP API, as `host:port`, or several nodes separated by commas. The port is 9200 by default. | string |  | opensearch-cluster-master:9200 |
+| **apiKey** | API Key | An API key to log in with, instead of `user` and `password`. It is the token, which starts with `os_`, that OpenSearch gives when the API token is created (OpenSearch 3.7 or later). It is sent in the `Authorization` header, only to the nodes of the cluster. Set either `apiKey` or `user`, not both. | string |  | os\_my-token |
 | **certificate** | Certificate | The certificate of the certificate authority (CA) that signed the certificate of the cluster, such as the `root-ca.pem` file of the OpenSearch demo configuration, as a PEM or DER file encoded in base64 on one line, such as the output of `base64 -w0 root-ca.pem` (`base64 -i root-ca.pem` on macOS). Needed when the cluster uses a self-signed certificate, or one signed by a private CA. When it is set, only this CA is trusted; when it is not set, the certificates that Java trusts are used. | string |  |  |
 | **connectionTimeout** | Connection Timeout | How long to wait for the connection to OpenSearch, in milliseconds. When it is not set, it is 30000, which is 30 seconds. | integer |  | 5000 |
 | **enableSSL** | Enable SSL | If true, it connects with HTTPS. Set it to false for a cluster that is reached with plain HTTP. | boolean | true |  |
@@ -41,8 +42,6 @@ At runtime, the `opensearch-index-sink` Kamelet relies upon the presence of the 
 -   camel:kamelet
     
 -   camel:opensearch
-    
--   camel:gson
     
 -   camel:bean
     

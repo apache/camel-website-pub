@@ -228,7 +228,7 @@ Enum values:
 | **additionalBodyProperty** (common) | Additional JSON properties to include in the request body (e.g. additionalBodyProperty.traceId=123). This is a multi-value option with prefix: additionalBodyProperty. |  | Map |
 | **additionalHeader** (common) | Additional HTTP request headers to send with every API call (e.g. additionalHeader.OpenAI-Organization=my-org or additionalHeader.api-key=secret). Values may contain secrets. This is a multi-value option with prefix: additionalHeader. |  | Map |
 | **additionalResponseHeader** (common) | Map additional fields from the response message to Camel headers. The key is the field name in the API response, the value is the Camel header name (e.g. additionalResponseHeader.reasoning\_content=MyReasoningHeader). This is a multi-value option with prefix: additionalResponseHeader. |  | Map |
-| **apiKey** (common) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. |  | String |
+| **apiKey** (common) | OpenAI API key. Can also be set via OPENAI\_API\_KEY environment variable. Optional for a server that checks no key, such as a local Ollama, vLLM or LM Studio (with baseUrl): without a key (and no oauthProfile), the requests are sent without an Authorization header. |  | String |
 | **audioChunkingStrategy** (common) | 
 Chunking strategy for diarized transcription models such as gpt-4o-transcribe-diarize.
 
@@ -278,7 +278,7 @@ Enum values:
  | json | String |
 | **audioTemperature** (common) | Sampling temperature for transcription (0.0 to 1.0). |  | Double |
 | **audioTimestampGranularities** (common) | Comma-separated timestamp granularities: 'word', 'segment', or 'word,segment'. Only applicable with verbose\_json response format. |  | String |
-| **autoToolExecution** (common) | When true and MCP servers are configured, automatically execute tool calls and loop back to the model. When false, tool calls are returned as the message body for manual handling. | true | boolean |
+| **autoToolExecution** (common) | When true, run the tool calls the model asks for, both MCP tools (mcpServer.\*) and route tools (tags), and send the results back to the model until it answers. When false, the tool calls are returned as the message body for the route to handle. | true | boolean |
 | **background** (common) | Run the model response in the background (Responses API only). The exchange completes as soon as the response is queued, with an empty body and the CamelOpenAIResponseStatus header, and the response is stored so that it can be retrieved later. Cannot be combined with automatic tool execution. | false | boolean |
 | **baseUrl** (common) | Base URL for OpenAI API. Defaults to OpenAI’s official endpoint. Can be used for local or third-party providers. | [https://api.openai.com/v1](https://api.openai.com/v1) | String |
 | **batchEndpoint** (common) | 
@@ -498,7 +498,8 @@ Enum values:
 
  |  | String |
 | **jsonSchema** (common) | JSON schema for structured output validation. |  | String |
-| **maxAgenticTokens** (common) | Maximum cumulative prompt plus completion tokens allowed across the MCP agentic loop. When 0 or negative, no token budget is enforced. Enforcement runs after each API call that requests further tool execution, so actual spend may exceed the configured budget by up to one call (typically the largest, as the prompt grows each iteration). A final text response is returned even when cumulative usage exceeds the budget. | 0 | long |
+| **jsonSchemaStrict** (common) | Whether the model must follow jsonSchema exactly (strict structured outputs): sets strict to true in the JSON schema response format of chat-completion, the Responses API and batch. OpenAI then only accepts a schema that meets its rules, every property of each object listed in required and additionalProperties false on every object, and rejects any other with HTTP 400. Without it, OpenAI takes the schema as a hint, and the answer can miss required fields or have others. Other OpenAI-compatible servers may ignore it. | false | boolean |
+| **maxAgenticTokens** (common) | Maximum cumulative prompt plus completion tokens allowed across the tool loop. When 0 or negative, no token budget is enforced. Enforcement runs after each API call that requests further tool execution, so actual spend may exceed the configured budget by up to one call (typically the largest, as the prompt grows each iteration). A final text response is returned even when cumulative usage exceeds the budget. | 0 | long |
 | **maxHistoryMessages** (common) | When conversationMemory is enabled, retain at most this many messages in the exchange conversation history. System and developer messages are prepended separately and are not stored in history. Assistant tool-call blocks are kept intact and may retain slightly more than this limit to preserve tool result pairing. When 0, no message limit is applied. | 0 | int |
 | **maxHistoryTokens** (common) | When conversationMemory is enabled, trim conversation history using a token estimate (character count / 4, including image payload size for multi-modal user messages). Oldest segments are dropped first until the estimated tokens are within this limit. Assistant tool-call blocks are removed as a unit with their tool results. The most recent segment is always retained, even when it alone exceeds this limit. When 0, no token limit is applied. | 0 | int |
 | **maxRetries** (common) | Maximum number of times the OpenAI SDK client retries failed requests. The SDK retry is rate-limit aware (honors Retry-After on 429). | 2 | int |
@@ -506,7 +507,7 @@ Enum values:
 | **maxToolIterations** (common) | Maximum number of tool call loop iterations to prevent infinite loops. | 50 | int |
 | **mcpProtocolVersions** (common) | Comma-separated list of MCP protocol versions to advertise when connecting to MCP servers using Streamable HTTP transport. When not set, the SDK default is used. Example: 2024-11-05,2025-03-26,2025-06-18. |  | String |
 | **mcpReconnect** (common) | Automatically reconnect to MCP servers when a tool call fails due to a transport error, and retry the call once. | true | boolean |
-| **mcpServer** (common) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation: mcpServer..transportType=stdio|sse|streamableHttp, (Note that sse is deprecated) mcpServer..command= (stdio), mcpServer..args= (stdio), mcpServer..url= (sse/streamableHttp), mcpServer..oauthProfile= (OAuth profile for HTTP auth, requires camel-oauth), mcpServer..toolNames= (optional include list to restrict which tools are registered from this server). This is a multi-value option with prefix: mcpServer. |  | Map |
+| **mcpServer** (common) | MCP (Model Context Protocol) server configurations. Define servers using prefix notation, where myServer stands for the name of the server: mcpServer.myServer.transportType=stdio|sse|streamableHttp (sse is deprecated), mcpServer.myServer.command=npx (stdio), mcpServer.myServer.args=arg1,arg2 (stdio, comma-separated), mcpServer.myServer.url=http://localhost:8080/mcp (sse/streamableHttp, the URL of the endpoint of the server, path included, such as [http://localhost:8080/sse](http://localhost:8080/sse) for sse), mcpServer.myServer.oauthProfile=myProfile (OAuth profile for HTTP auth, requires camel-oauth), mcpServer.myServer.toolNames=tool1,tool2 (optional comma-separated include list to restrict which tools are registered from this server). This is a multi-value option with prefix: mcpServer. |  | Map |
 | **mcpTimeout** (common) | Timeout in seconds for MCP tool call requests. Applies to all MCP operations including tool execution and initialization. | 20 | int |
 | **mcpToolRefresh** (common) | Refresh the advertised tool list when an MCP server notifies that its tools changed. Set to false to keep the tool list fixed to what was listed when the endpoint started, for deployments that require a deterministic set of tools. | true | boolean |
 | **model** (common) | The model to use for the selected operation. |  | String |
@@ -547,9 +548,9 @@ Enum values:
 | **speechVoice** (common) | The voice to use for text-to-speech (e.g., alloy, echo, fable, onyx, nova, shimmer). See the OpenAI documentation for the full list of supported voices. | alloy | String |
 | **storeFullResponse** (common) | Store the full SDK response in non-streaming mode: chat-completion uses exchange property 'CamelOpenAIResponse'; responses uses 'CamelOpenAIResponsesResponse'; moderation uses 'CamelOpenAIModerationResponse'; image-generation and image-edit use 'CamelOpenAIImageResponse'; embeddings uses 'CamelOpenAIEmbeddingsResponse'; audio transcription uses 'CamelOpenAIAudioTranscriptionResponse'; audio translation uses 'CamelOpenAIAudioTranslationResponse'. | false | boolean |
 | **streaming** (common) | Enable streaming responses. | false | boolean |
-| **stripThinking** (common) | Strip …​ blocks from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
+| **stripThinking** (common) | Strip the think blocks (from the opening to the closing think tag) from model responses (used by reasoning models like Qwen3, DeepSeek-R1). The thinking content is stored in the CamelOpenAIThinkingContent header. | false | boolean |
 | **systemMessage** (common) | System message to prepend. When set and conversationMemory is enabled, the conversation history is reset. |  | String |
-| **tags** (common) | Comma-separated tags for discovering route-based tools registered via the ai-tool component. When set, matching tools from the shared AiToolRegistry are exposed to the model alongside MCP tools. |  | String |
+| **tags** (common) | Comma-separated tags for discovering route-based tools registered via the ai-tool component. When set, matching tools from the shared AiToolRegistry are exposed to the model alongside MCP tools, and run in the same tool loop (see autoToolExecution). No MCP server is needed for route tools. |  | String |
 | **temperature** (common) | Temperature for response generation (0.0 to 2.0). |  | Double |
 | **toolExecutionErrorStrategy** (common) | 
 
@@ -612,7 +613,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used instead of apiKey. Requires camel-oauth on the classpath. The profile properties are resolved from camel.oauth..client-id, camel.oauth..client-secret, and camel.oauth..token-endpoint. |  | String |
+| **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used instead of apiKey. Requires camel-oauth on the classpath. The profile properties are resolved from camel.oauth.myProfile.client-id, camel.oauth.myProfile.client-secret, and camel.oauth.myProfile.token-endpoint, where myProfile is the profile name. |  | String |
 | **sslContextParameters** (security) | SSLContextParameters to use for configuring SSL/TLS. When set, takes precedence over the individual sslTruststore\*, sslKeystore\*, and sslProtocol options. |  | SSLContextParameters |
 | **sslEndpointAlgorithm** (security) | The endpoint identification algorithm to validate the server hostname using the server certificate. Set to an empty string or 'none' to disable hostname verification. | https | String |
 | **sslKeymanagerAlgorithm** (security) | The algorithm used by the key manager factory for SSL connections. | SunX509 | String |
@@ -650,9 +651,10 @@ The OpenAI component supports the following message header(s), which is/are list
 | **CamelOpenAIStreaming** (common) Constant: [`STREAMING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STREAMING) | Whether to stream the response back incrementally. |  | Boolean |
 | **CamelOpenAIOutputClass** (common) Constant: [`OUTPUT_CLASS`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#OUTPUT_CLASS) | The Java class name (FQCN) to use for structured output parsing. |  | String |
 | **CamelOpenAIJsonSchema** (common) Constant: [`JSON_SCHEMA`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA) | The JSON schema to use for structured output validation. |  | String |
-| **CamelOpenAIStripThinking** (common) Constant: [`STRIP_THINKING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STRIP_THINKING) | Whether to strip …​ blocks from the response body. |  | Boolean |
+| **CamelOpenAIJsonSchemaStrict** (common) Constant: [`JSON_SCHEMA_STRICT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#JSON_SCHEMA_STRICT) | Whether the model must follow the JSON schema exactly (strict structured outputs), in place of the jsonSchemaStrict option. |  | Boolean |
+| **CamelOpenAIStripThinking** (common) Constant: [`STRIP_THINKING`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#STRIP_THINKING) | Whether to strip the think blocks (from the opening to the closing think tag) from the response body. |  | Boolean |
 | **CamelOpenAIMediaType** (common) Constant: [`MEDIA_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#MEDIA_TYPE) | The MIME type of the message body when sending a file or binary content (File, WrappedFile, byte\[\] or InputStream) to the model. Takes precedence over component content-type headers and automatic MIME type detection. |  | String |
-| **CamelOpenAIThinkingContent** (common) Constant: [`THINKING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#THINKING_CONTENT) | The thinking content extracted from …​ blocks in the model response. |  | String |
+| **CamelOpenAIThinkingContent** (common) Constant: [`THINKING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#THINKING_CONTENT) | The thinking content extracted from the think blocks (from the opening to the closing think tag) in the model response. |  | String |
 | **CamelOpenAIReasoningContent** (common) Constant: [`REASONING_CONTENT`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#REASONING_CONTENT) | The reasoning content from the model response reasoning\_content field, used by thinking models like Qwen3 and DeepSeek-R1. |  | String |
 | **CamelOpenAIResponseModel** (common) Constant: [`RESPONSE_MODEL`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_MODEL) | The model used for the completion response. |  | String |
 | **CamelOpenAIResponseId** (common) Constant: [`RESPONSE_ID`](https://javadoc.io/doc/org.apache.camel/camel-openai/latest/org/apache/camel/component/openai/OpenAIConstants.html#RESPONSE_ID) | The unique identifier for the completion response. The responses-retrieve and responses-cancel operations read the id of the response to act on from this header. |  | String |
@@ -774,7 +776,7 @@ The prompt of chat-completion and responses: text, or a file, bytes or a stream 
  |
 | **Producer output** | `text` | 
 
-The answer of chat-completion as text, also with outputClass or jsonSchema, where it is JSON text: unmarshal it to read its fields. With streaming, an Iterator of the chunks (text when MCP tools run in a loop). With autoToolExecution=false, the tool calls the model asks for: an Optional of the List of tool calls, or a List of the function calls for responses. embeddings gives a vector (a List of Float), or a List of vectors for a List of texts; image-generation and image-edit the image as bytes or its URL as text, a List for several; batch-results an Iterator of the result lines as Maps. batch and moderation keep the body and set headers, and tool-execution clears it when it runs tool calls.
+The answer of chat-completion as text, also with outputClass or jsonSchema, where it is JSON text: unmarshal it to read its fields. With streaming, an Iterator of the chunks (text when tools run in a loop). With autoToolExecution=false, the tool calls the model asks for: an Optional of the List of tool calls, or a List of the function calls for responses. embeddings gives a vector (a List of Float), or a List of vectors for a List of texts; image-generation and image-edit the image as bytes or its URL as text, a List for several; batch-results an Iterator of the result lines as Maps. batch and moderation keep the body and set headers, and tool-execution clears it when it runs tool calls.
 
 -   With `streaming=true`: `iterator`
     
@@ -839,7 +841,7 @@ API key resolution order:
     
 
 > **Note**
-> The API key can be omitted if using OpenAI-compatible providers that don’t require authentication (e.g., some local LLM servers).
+> The API key can be omitted for an OpenAI-compatible server that checks no key, such as a local Ollama, vLLM or LM Studio: when none of the above is set (and no `oauthProfile`), the requests are sent without an `Authorization` header. A server that needs a key then answers with HTTP 401 (`UnauthorizedException`).
 
 #### OAuth Authentication
 
@@ -1277,7 +1279,7 @@ from("direct:structured")
 
 ### Structured Output with JSON Schema
 
-The `jsonSchema` option instructs the model to return JSON that conforms to the provided schema. The response will be valid JSON but is not automatically validated against the schema:
+The `jsonSchema` option instructs the model to return JSON that conforms to the provided schema. The response will be valid JSON but is not automatically validated against the schema (see `jsonSchemaStrict` below to have the model follow it exactly):
 
 -   Java
     
@@ -1508,6 +1510,29 @@ The model is instructed to return JSON matching the specified class, but the res
 The `jsonSchema` option instructs the model to return JSON conforming to the provided schema. The response will be valid JSON but is not automatically validated against the schema. For full schema validation, integrate with the `camel-json-validator` component after receiving the response.
 
 The JSON schema must be a valid JSON object. Invalid schema strings will result in an `IllegalArgumentException`.
+
+#### Strict schema (jsonSchemaStrict)
+
+Without more, OpenAI takes the schema as a hint: the answer is JSON, but it can miss required fields or have others. With `jsonSchemaStrict=true`, the JSON schema response format of `chat-completion`, `responses` and `batch` has `strict: true` (strict structured outputs), and the model follows the schema exactly. OpenAI then only accepts a schema that meets its rules, and answers any other with HTTP 400 (`BadRequestException`):
+
+-   every property of each object is listed in `required` (an optional field is a required one whose type allows `null`, such as `"type": ["string", "null"]`)
+    
+-   every object has `"additionalProperties": false`
+    
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "price": { "type": ["number", "null"] }
+  },
+  "required": ["name", "price"],
+  "additionalProperties": false
+}
+```
+
+The option is off by default, and then `strict` is not sent. The `CamelOpenAIJsonSchemaStrict` header sets it per message, as `CamelOpenAIJsonSchema` does for the schema. Other OpenAI-compatible servers may ignore it. With `outputClass`, the openai-java SDK builds a strict schema from the class itself.
 
 ## Conversation Memory
 
@@ -2007,7 +2032,7 @@ The `streaming=true` option returns an `Iterator<ChatCompletionChunk>` that can 
 For user-facing scenarios that require Server-Sent Events (SSE) or WebSocket delivery to a browser, see [LLM Integration Guide — Streaming responses](ai-llm-integration-guide.html#_streaming_responses) for platform-http patterns and when to stream through Camel vs. a dedicated handler.
 
 > **Note**
-> When MCP tools with `autoToolExecution` are active, streaming automatically falls back to non-streaming to allow the agentic tool-calling loop to function. See [MCP Tool Calling](others/openai-mcp.md) for details.
+> When tools (MCP tools or route tools from `tags`) with `autoToolExecution` are active, streaming automatically falls back to non-streaming to allow the agentic tool-calling loop to function. See [MCP Tool Calling](others/openai-mcp.md) for details.
 
 ## Sub-Pages
 

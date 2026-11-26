@@ -31,7 +31,7 @@ For example, if you wanted to add a page for the Camel console `foo`, you would 
     
     export class QwcCamelFoo extends QwcCamelCore { (1)
         constructor() {
-            super('route', {}); (2)
+            super('foo', {}); (2)
         }
     
         render() {

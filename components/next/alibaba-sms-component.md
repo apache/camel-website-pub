@@ -132,7 +132,19 @@ The Alibaba Short Message Service (SMS) component supports the following message
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaSmsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option. |  | String |
+| **CamelAlibabaSmsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#OPERATION) | 
+The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option.
+
+Enum values:
+
+-   sendSms
+    
+
+
+
+
+
+ |  | String |
 | **CamelAlibabaSmsPhoneNumbers** (producer) Constant: [`PHONE_NUMBERS`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#PHONE_NUMBERS) | The phone numbers of the recipients, which are separated by commas. Short Message Service accepts at most 1000 phone numbers. This header replaces the phoneNumbers option. If this header is not set, an exchange property of the same name replaces the phoneNumbers option. |  | String |
 | **CamelAlibabaSmsSignName** (producer) Constant: [`SIGN_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#SIGN_NAME) | The sign name of the SMS message. The value must be an approved sign name. This header replaces the signName option. If this header is not set, an exchange property of the same name replaces the signName option. |  | String |
 | **CamelAlibabaSmsTemplateCode** (producer) Constant: [`TEMPLATE_CODE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sms/latest/org/apache/camel/component/alibaba/sms/constants/SMSHeaders.html#TEMPLATE_CODE) | The template code of the SMS message. The value must be the code of an approved template. This header replaces the templateCode option. If this header is not set, an exchange property of the same name replaces the templateCode option. |  | String |

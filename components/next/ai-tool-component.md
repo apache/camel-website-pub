@@ -75,7 +75,7 @@ The AI Tool component supports the following options which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **argSchema** (consumer) | Raw JSON Schema for tool input parameters. Supports inline JSON and resource references (classpath:, file:, resource:). Mutually exclusive with the parameter multi-value options. Use for nested objects, arrays, oneOf, and other complex schemas. |  | String |
+| **argSchema** (consumer) | Raw JSON Schema for tool input parameters. Supports inline JSON and resource references (classpath:, file:, resource:). Mutually exclusive with the parameter multi-value options. Use for nested objects, arrays, oneOf, and other complex schemas. When the schema does not set additionalProperties, Camel adds additionalProperties: false, so a client that validates the input (such as the MCP server) refuses an undeclared argument. |  | String |
 | **argumentsAsBody** (consumer) | Whether to populate the message body with the tool arguments as a JSON string, excluding undeclared arguments and reserved names. Declared argument headers remain available. When disabled, the message body is left unchanged. | false | boolean |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **configuration** (consumer) | The component configuration. |  | AiToolConfiguration |
@@ -116,7 +116,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **argSchema** (consumer) | Raw JSON Schema for tool input parameters. Supports inline JSON and resource references (classpath:, file:, resource:). Mutually exclusive with the parameter multi-value options. Use for nested objects, arrays, oneOf, and other complex schemas. |  | String |
+| **argSchema** (consumer) | Raw JSON Schema for tool input parameters. Supports inline JSON and resource references (classpath:, file:, resource:). Mutually exclusive with the parameter multi-value options. Use for nested objects, arrays, oneOf, and other complex schemas. When the schema does not set additionalProperties, Camel adds additionalProperties: false, so a client that validates the input (such as the MCP server) refuses an undeclared argument. |  | String |
 | **argumentsAsBody** (consumer) | Whether to populate the message body with the tool arguments as a JSON string, excluding undeclared arguments and reserved names. Declared argument headers remain available. When disabled, the message body is left unchanged. | false | boolean |
 | **description** (consumer) | Human-readable description of what this tool does. Passed verbatim to the LLM; be precise and action-oriented. When omitted, defaults to the tool name. |  | String |
 | **destructiveHint** (consumer) | MCP hint that the tool may perform destructive or irreversible updates. Advisory for MCP clients; not enforced by Camel. |  | Boolean |
@@ -158,7 +158,7 @@ The AI Tool component supports the following message header(s), which is/are lis
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAiToolCallId** (consumer) Constant: [`TOOL_CALL_ID`](https://javadoc.io/doc/org.apache.camel/camel-ai-tool/latest/org/apache/camel/component/ai/tool/AiToolConstants.html#TOOL_CALL_ID) | The tool invocation identifier supplied by the calling framework. Absent when the framework does not supply one. |  | String |
+| **CamelAiToolCallId** (consumer) Constant: [`TOOL_CALL_ID`](https://javadoc.io/doc/org.apache.camel/camel-ai-tool/latest/org/apache/camel/component/ai/tool/AiToolConstants.html#TOOL_CALL_ID) | The tool invocation identifier supplied by the calling framework. Set when an in-process producer (such as openai or langchain4j-agent) calls the tool. Absent when the framework does not supply one, such as for a call over MCP, where the bridge has no tool call id. |  | String |
 | **CamelAiToolConversationId** (consumer) Constant: [`CONVERSATION_ID`](https://javadoc.io/doc/org.apache.camel/camel-ai-tool/latest/org/apache/camel/component/ai/tool/AiToolConstants.html#CONVERSATION_ID) | The conversation identifier supplied by the calling framework. Absent when the framework does not supply one. |  | String |
 
 ## Message Body
@@ -314,7 +314,7 @@ Top-level schema properties are exposed as exchange headers. Nested values are p
 
 `argSchema` also supports Camel resource references such as `classpath:schemas/create-order.json`.
 
-The root schema must be a JSON Schema object with a top-level `properties` map. Camel always allowlists top-level property names when invoking the tool route, even if the schema sets `additionalProperties: true`. Nested fields are not flattened into headers; only top-level properties become exchange headers (Map/List/primitive values).
+The root schema must be a JSON Schema object with a top-level `properties` map. When the schema does not set `additionalProperties`, Camel adds `additionalProperties: false` to the schema it lists and validates. This is the same as for the schema generated from `parameter.*`. A client that validates the input, such as the MCP server, then refuses a call with an undeclared (for example misspelled) argument. Camel no longer drops that argument with a warning. A schema that sets `additionalProperties` itself is kept as written. Camel always allowlists top-level property names when invoking the tool route, even if the schema sets `additionalProperties: true`. Nested fields are not flattened into headers; only top-level properties become exchange headers (Map/List/primitive values).
 
 ### Structured Tool Output (outputSchema)
 
@@ -446,7 +446,7 @@ Tool routes receive `CamelAiToolCallId` and `CamelAiToolConversationId` when the
     
 -   Spring AI Chat supplies the `CamelSpringAiChatConversationId` from the calling exchange. Its tool callback does not supply a call ID.
     
--   MCP server tool callbacks currently do not propagate these identifiers.
+-   A call over MCP (`camel-mcp-server`) has neither: the MCP bridge has no tool call ID, so `CamelAiToolCallId` is not set. `CamelAiToolCallId` is set only when an in-process producer such as `openai` or `langchain4j-agent` calls the tool.
     
 
 For example, use `${header.CamelAiToolCallId}` to correlate route processing with a particular tool invocation. Several calls in the same conversation can share `CamelAiToolConversationId` while having different call IDs.

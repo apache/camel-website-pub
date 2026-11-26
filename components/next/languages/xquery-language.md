@@ -14,6 +14,7 @@ The XQuery language supports the following options which are listed below.
 | Name | Default | Java Type | Description |
 | --- | --- | --- | --- |
 | **configurationRef** (advanced) |  | `String` | Reference to a saxon configuration instance in the registry to use for xquery (requires camel-saxon). |
+| **namespaceMappings** (common) |  | `String` | The XML Namespaces of prefix to uri mappings in one string, such as p1=uri1,p2=uri2. The mappings are separated by commas or new lines, and the prefix and the uri by the first =. This allows to configure several namespaces from one property placeholder. |
 | **namespacesRef** (advanced) |  | `String` | Reference to a org.apache.camel.support.builder.Namespaces bean in the registry to use for the XML Namespaces of prefix to uri mappings. |
 | **source** (common) |  | `String` | Source to use, instead of message body. You can prefix with variable:, header:, or property: to specify kind of source. Otherwise, the source is assumed to be a variable. Use empty or null to use default source, which is the message body. |
 | **resultType** (common) |  | `String` | The class of the result type (type from output). |
@@ -227,6 +228,8 @@ _XML-only:_
 ```
 
 This namespace uses `foo` as prefix, so the `<xquery>` expression uses `foo:` to use this namespace.
+
+Several namespaces can also be given inline in one string, with the `namespaceMappings` option, such as `namespaceMappings: "c=http://acme.com/cheese,w=http://acme.com/wine"`. See the [XPath](xpath-language.html#_several_namespaces_in_one_string) language for the syntax.
 
 ### Sharing namespaces via a registry bean
 

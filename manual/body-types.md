@@ -193,11 +193,13 @@ An EIP with steps of its own also says what they start with. The steps of a `spl
 
 ### Data type transformers
 
-A data type transformer, which `transformDataType` runs for its `toType`, has body types as well. `application-json` writes any object as JSON bytes, and the CloudEvent transformers of the components only set headers:
+A data type transformer, which `transformDataType` runs for its `toType`, has body types as well. `application-json` takes text, bytes, a stream, a Map, a List, a POJO or null, and writes Json bytes. Text that is not a Json object or array becomes a Json string, and bytes and a stream are read as text. The CloudEvent transformers of the components only set headers. The catalog entry of `application-json` (the descriptions shortened):
 
 ```json
-"transformerIn": { "carriers": [ "any" ] },
-"transformerOut": { "carriers": [ "bytes" ], "javaType": "byte[]", "format": "json" }
+"transformerIn": { "carriers": [ "text", "bytes", "stream", "map", "list", "pojo", "null" ],
+  "description": "A Json object or array as text, bytes or a stream, a Map, a List, a JsonNode or a POJO; other text ... becomes a Json string ..." },
+"transformerOut": { "carriers": [ "bytes" ], "javaType": "byte[]", "format": "json",
+  "description": "Json as bytes, with the Content-Type application/json, or the +json media type the message had ..." }
 ```
 
 `transformDataType` takes its body from them, by the name of its `toType`: `aws2-s3:application-cloudevents` is the transformer `aws2-s3-application-cloudevents` of the catalog.

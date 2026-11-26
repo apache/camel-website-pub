@@ -46,6 +46,8 @@ The Language extension only handles the passing of an Exchange to a script for e
     
 -   Tokenize
     
+-   Variable
+    
 
 To use any other language, you must add the corresponding dependency. Consult the [Languages Guide](../languages.md) for details.
 

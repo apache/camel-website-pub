@@ -38,7 +38,7 @@ When sending JMS message payloads as `jakarta.jms.ObjectMessage`, you must annot
 
 ### Support for Connection pooling and X/Open XA distributed transactions
 
-You can use the `quarkus-pooled-jms` extension to get pooling and XA support for JMS connections. Refer to the [quarkus-pooled-jms](https://quarkiverse.github.io/quarkiverse-docs/quarkus-pooled-jms/dev/index.md) extension documentation for more information. Currently, it can work with `quarkus-artemis-jms`, `quarkus-qpid-jms` and `ibmmq-client`. Just add the dependency to your `pom.xml`:
+You can use the `quarkus-pooled-jms` extension to get pooling and XA support for JMS connections. Refer to the [quarkus-pooled-jms](https://docs.quarkiverse.io/quarkus-pooled-jms/dev/index.md) extension documentation for more information. Currently, it can work with `quarkus-artemis-jms`, `quarkus-qpid-jms` and `ibmmq-client`. Just add the dependency to your `pom.xml`:
 
 ```xml
 <dependency>

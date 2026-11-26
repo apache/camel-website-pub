@@ -105,28 +105,19 @@ Optional parameters: - `serviceAccountKey`: The service account key to use as cr
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: google-pubsub-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: google-pubsub-source
-    properties:
-      projectId: "my-gcp-project"
-      subscriptionName: "my-subscription"
-      serviceAccountKey: "{{service-account-key-base64}}"
-      synchronousPull: true
-      maxMessagesPerPoll: 10
-      concurrentConsumers: 2
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:google-pubsub-source"
+      parameters:
+        projectId: "my-gcp-project"
+        subscriptionName: "my-subscription"
+        serviceAccountKey: "{{service-account-key-base64}}"
+        synchronousPull: true
+        maxMessagesPerPoll: 10
+        concurrentConsumers: 2
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ### Acknowledging Messages

@@ -34,7 +34,7 @@ You can configure Camel Infinispan in one of two ways.
 
 1.  Using the relevant Camel Infinispan [component & endpoint options](../../../../components/4.22.x/infinispan-component.html#_component_options)
     
-2.  Using the [Quarkus Infinispan extension configuration properties](https://quarkus.io/guides/infinispan-client#configuration-reference).
+2.  Using the [Quarkus Infinispan extension configuration properties](https://quarkus.io/guides/infinispan-client-reference#configuration-reference).
     
 
 More details about these two configuration methods is described below.
@@ -66,7 +66,7 @@ quarkus.infinispan-client.devservices.port=31222
 
 ### Quarkus Infinispan configuration
 
-When using the [Quarkus Infinispan extension configuration properties](https://quarkus.io/guides/infinispan-client#configuration-reference), the Quarkus Infinispan extensions creates and manages a `RemoteCacheManager` bean.
+When using the [Quarkus Infinispan extension configuration properties](https://quarkus.io/guides/infinispan-client-reference#configuration-reference), the Quarkus Infinispan extensions creates and manages a `RemoteCacheManager` bean.
 
 The bean will get automatically autowired into the Camel Infinispan component on application startup.
 

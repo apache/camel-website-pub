@@ -11,7 +11,9 @@ The Debezium SQL Server component is wrapper around [Debezium](https://debezium.
 >
 > Before the engine starts polling, the consumer health check reports the configured initial state (`DOWN` by default). It reports `UP` once the connector tasks have started and the engine enters its polling phase, even if no change events have arrived. This does not indicate that an initial snapshot has completed.
 >
-> If the embedded engine stops with an error, for example because the connector cannot reach the database or the offset store cannot be read, it is not restarted: the route stays started but receives no further events. The failure is reported to the consumer exception handler and turns the route health check `DOWN`, so it can be picked up by a readiness probe.
+> The consumer starts when the engine has started the connector tasks, which is before an initial snapshot is done, so a long snapshot does not delay the start. If the engine fails while it starts, for example because the connector cannot reach the database, the database is not set up for change data capture, or the offset store cannot be read, the consumer fails to start, and so does the route, with the error of Debezium as the cause. Debezium gives each task `internal.task.management.timeout.ms` (40 seconds by default, set with `additionalProperties.internal.task.management.timeout.ms`) to start, and the start waits that long for each task and once more for the connector; if the engine has not reported back by then, the route starts anyway, with a `WARN` in the log.
+>
+> If the embedded engine stops with an error later, it is not restarted: the route stays started but receives no further events. The failure is reported to the consumer exception handler (with `bridgeErrorHandler=true`, to the error handler of the route) and turns the route health check `DOWN`, so it can be picked up by a readiness probe.
 
 Maven users will need to add the following dependency to their `pom.xml` for this component.
 
@@ -99,7 +101,7 @@ The Debezium SQL Server Connector component supports the following options which
 | **columnIncludeList** (sqlserver) | Regular expressions matching columns to include in change events. |  | String |
 | **columnPropagateSourceType** (sqlserver) | A comma-separated list of regular expressions matching fully-qualified names of columns that adds the columns original type and original length as parameters to the corresponding field schemas in the emitted change records. |  | String |
 | **connectionValidationTimeoutMs** (sqlserver) | The maximum time in milliseconds to wait for connection validation to complete. Defaults to 60 seconds. | 1m | long |
-| **converters** (sqlserver) | Optional list of custom converters that would be used instead of default ones. The converters are defined using '.type' config option and configured using options '.'. |  | String |
+| **converters** (sqlserver) | Optional list of custom converters that would be used instead of default ones. The converters are defined using '\\{converter.prefix}.type' config option and configured using options '\\{converter.prefix}.{option}'. |  | String |
 | **customMetricTags** (sqlserver) | A comma-separated list of key-value pairs that are appended to the MBean object name. Keys must be valid JMX ObjectName property keys. For example: k1=v1,k2=v2. |  | String |
 | **customSanitizePattern** (sqlserver) | Regular expression identifying configuration keys whose values should be masked. When set, this custom pattern replaces Debeziums default password masking pattern. | .\*secret$|.\*password$|.\*sasl\\.jaas\\.config$|.\*basic\\.auth\\.user\\.info|.\*registry\\.auth\\.client-secret|.\*credentials\\.json$|.\*connectionstring$|.\*connection\\.string$ | String |
 | **databaseExcludeList** (sqlserver) | A comma-separated list of regular expressions that match database names to be excluded from monitoring. |  | String |
@@ -114,7 +116,7 @@ The Debezium SQL Server Connector component supports the following options which
 | **dataQueryMode** (sqlserver) | Controls how the connector queries CDC data. The default is 'direct', which makes the connector to query the change tables directly. The value of 'function' means the data is queried by means of calling cdc.\[fn\_cdc\_get\_all\_changes\_#\] function. | direct | String |
 | **datatypePropagateSourceType** (sqlserver) | A comma-separated list of regular expressions matching the database-specific data type names that adds the data type’s original type and original length as parameters to the corresponding field schemas in the emitted change records. |  | String |
 | **decimalHandlingMode** (sqlserver) | Specify how DECIMAL and NUMERIC columns should be represented in change events, including: 'precise' (the default) uses java.math.BigDecimal to represent values, which are encoded in the change events using a binary representation and Kafka Connect’s 'org.apache.kafka.connect.data.Decimal' type; 'string' uses string to represent values; 'double' represents values using Java’s 'double', which may not offer the precision but will be far easier to use in consumers. | precise | String |
-| **errorsMaxRetries** (sqlserver) | The maximum number of retries on connection errors before failing (-1 = no limit, 0 = disabled, 0 = num of retries). | \-1 | int |
+| **errorsMaxRetries** (sqlserver) | The maximum number of retries on connection errors before failing (-1 = no limit, 0 = disabled, > 0 = num of retries). | \-1 | int |
 | **eventConvertingFailureHandlingMode** (sqlserver) | Specify how failures during converting of event should be handled, including: 'fail' throw an exception that the column of event conversion is failed with unmatched schema type, causing the connector to be stopped. it could need schema recovery to covert successfully; 'warn' (the default) the value of column of event that conversion failed will be null and be logged with warn level; 'skip' the value of column of event that conversion failed will be null and be logged with debug level. | warn | String |
 | **eventProcessingFailureHandlingMode** (sqlserver) | Specify how failures during processing of events (i.e. when encountering a corrupted event) should be handled, including: 'fail' (the default) an exception indicating the problematic event and its position is raised, causing the connector to be stopped; 'warn' the problematic event and its position will be logged and the event will be skipped; 'ignore' the problematic event will be skipped. | fail | String |
 | **executorShutdownTimeoutMs** (sqlserver) | The maximum time in milliseconds to wait for task executor to shut down. | 4s | long |
@@ -136,9 +138,9 @@ The Debezium SQL Server Connector component supports the following options which
 | **maxIterationTransactions** (sqlserver) | This property can be used to reduce the connector memory usage footprint when changes are streamed from multiple tables per database. | 500 | int |
 | **maxQueueSize** (sqlserver) | Maximum size of the queue for change events read from the database log but not yet recorded or forwarded. Defaults to 8192, and should always be larger than the maximum batch size. | 8192 | int |
 | **maxQueueSizeInBytes** (sqlserver) | Maximum size of the queue in bytes for change events read from the database log but not yet recorded or forwarded. Defaults to 0. Mean the feature is not enabled. | 0 | long |
-| **memoryManagementSchemasClass** (sqlserver) | The fully-qualified class name of the storage implementation for schema metadata. The class must implement io.debezium.relational.TableMappingStorage. Defaults to io.debezium.relational.ConcurrentMapTableMappingStorage for in-memory storage. | io.debezium.relational.ConcurrentMapTableMappingStorage | String |
-| **memoryManagementTablesClass** (sqlserver) | The fully-qualified class name of the storage implementation for table metadata. The class must implement io.debezium.relational.TableMappingStorage. Defaults to io.debezium.relational.ConcurrentMapTableMappingStorage for in-memory storage. | io.debezium.relational.ConcurrentMapTableMappingStorage | String |
-| **messageKeyColumns** (sqlserver) | A semicolon-separated list of expressions that match fully-qualified tables and column(s) to be used as message key. Each expression must match the pattern ':', where the table names could be defined as (DB\_NAME.TABLE\_NAME) or (SCHEMA\_NAME.TABLE\_NAME), depending on the specific connector, and the key columns are a comma-separated list of columns representing the custom key. For any table without an explicit key configuration the table’s primary key column(s) will be used as message key. Example: dbserver1.inventory.orderlines:orderId,orderLineId;dbserver1.inventory.orders:id. |  | String |
+| **memoryManagementSchemasClass** (sqlserver) | The fully-qualified class name of the storage implementation for schema metadata. The class must implement io.debezium.relational.TableMappingStorage of io.debezium.relational.TableSchema. Defaults to io.debezium.relational.ConcurrentMapTableMappingStorage for in-memory storage. | io.debezium.relational.ConcurrentMapTableMappingStorage | String |
+| **memoryManagementTablesClass** (sqlserver) | The fully-qualified class name of the storage implementation for table metadata. The class must implement io.debezium.relational.TableMappingStorage of io.debezium.relational.Table. Defaults to io.debezium.relational.ConcurrentMapTableMappingStorage for in-memory storage. | io.debezium.relational.ConcurrentMapTableMappingStorage | String |
+| **messageKeyColumns** (sqlserver) | A semicolon-separated list of expressions that match fully-qualified tables and column(s) to be used as message key. Each expression must match the pattern '\\{fully-qualified table name}:\\{key columns}', where the table names could be defined as (DB\_NAME.TABLE\_NAME) or (SCHEMA\_NAME.TABLE\_NAME), depending on the specific connector, and the key columns are a comma-separated list of columns representing the custom key. For any table without an explicit key configuration the table’s primary key column(s) will be used as message key. Example: dbserver1.inventory.orderlines:orderId,orderLineId;dbserver1.inventory.orders:id. |  | String |
 | **notificationEnabledChannels** (sqlserver) | List of notification channels names that are enabled. |  | String |
 | **notificationHttpAllowPrivateNetworks** (sqlserver) | When true, the SSRF guard permits notification URLs that resolve to loopback, site-local or link-local addresses (e.g. an in-cluster Service). Defaults to false so only public addresses are allowed. | false | boolean |
 | **notificationHttpRetries** (sqlserver) | Number of retries after the first failed HTTP notification delivery attempt. Terminal notifications (COMPLETED/ABORTED/SKIPPED) are always retried at least 3 times. | 2 | int |
@@ -153,7 +155,7 @@ The Debezium SQL Server Connector component supports the following options which
 | **openlineageIntegrationJobOwners** (sqlserver) | The job’s owners emitted by Debezium. A comma-separated list of key-value pairs.For example: k1=v1,k2=v2. |  | String |
 | **openlineageIntegrationJobTags** (sqlserver) | The job’s tags emitted by Debezium. A comma-separated list of key-value pairs.For example: k1=v1,k2=v2. |  | String |
 | **pollIntervalMs** (sqlserver) | Time to wait for new change events to appear after receiving no events, given in milliseconds. Defaults to 500 ms. Values will be capped at 5000 ms. | 500ms | long |
-| **postProcessors** (sqlserver) | Optional list of post processors. The processors are defined using '.type' config option and configured using options ''. |  | String |
+| **postProcessors** (sqlserver) | Optional list of post processors. The processors are defined using '\\{post.processor.prefix}.type' config option and configured using options '\\{post.processor.prefix}.{option}'. |  | String |
 | **provideTransactionMetadata** (sqlserver) | Enables transaction metadata extraction together with event counting. | false | boolean |
 | **queryFetchSize** (sqlserver) | The maximum number of records that should be loaded into memory while streaming. A value of '0' uses the default JDBC fetch size. The default value is '10000'. | 10000 | int |
 | **retriableRestartConnectorWaitMs** (sqlserver) | Time to wait before restarting connector after retriable exception occurs. Defaults to 10000ms. | 10s | long |
@@ -166,7 +168,7 @@ The Debezium SQL Server Connector component supports the following options which
 | **schemaNameAdjustmentMode** (sqlserver) | Specify how schema names should be adjusted for compatibility with the message converter used by the connector, including: 'avro' replaces the characters that cannot be used in the Avro type name with underscore; 'avro\_unicode' replaces the underscore or characters that cannot be used in the Avro type name with corresponding unicode like \_uxxxx. Note: \_ is an escape sequence like backslash in Java;'none' does not apply any adjustment (default). | none | String |
 | **signalDataCollection** (sqlserver) | The name of the data collection that is used to send signals/commands to Debezium. For multi-partition mode connectors, multiple signal data collections can be specified as a comma-separated list. Signaling is disabled when not set. |  | String |
 | **signalEmitFailureBackoffMs** (sqlserver) | Duration to sleep for after encountering an error emitting a window event, given in milliseconds. Defaults to 10 seconds. | 10s | long |
-| **signalEmitFailureMaxRetries** (sqlserver) | The maximum number of retries after encountering an error emitting a window event (-1 = no limit, 0 = disabled, 0 = num of retries). Defaults to 0. | 0 | int |
+| **signalEmitFailureMaxRetries** (sqlserver) | The maximum number of retries after encountering an error emitting a window event (-1 = no limit, 0 = disabled, > 0 = num of retries). Defaults to 0. | 0 | int |
 | **signalEnabledChannels** (sqlserver) | List of channels names that are enabled. Source channel is enabled by default. | source | String |
 | **signalPollIntervalMs** (sqlserver) | Interval for looking for new signals in registered channels, given in milliseconds. Defaults to 5 seconds. | 5s | long |
 | **skipMessagesWithoutChange** (sqlserver) | Enable to skip publishing messages when there is no change in included columns.This would essentially filter messages to be sent when there is no change in columns included as per column.include.list/column.exclude.list.For Postgres - this would require REPLICA IDENTITY of table to be FULL. | false | boolean |
@@ -253,7 +255,7 @@ Enum values:
 | **columnIncludeList** (sqlserver) | Regular expressions matching columns to include in change events. |  | String |
 | **columnPropagateSourceType** (sqlserver) | A comma-separated list of regular expressions matching fully-qualified names of columns that adds the columns original type and original length as parameters to the corresponding field schemas in the emitted change records. |  | String |
 | **connectionValidationTimeoutMs** (sqlserver) | The maximum time in milliseconds to wait for connection validation to complete. Defaults to 60 seconds. | 1m | long |
-| **converters** (sqlserver) | Optional list of custom converters that would be used instead of default ones. The converters are defined using '.type' config option and configured using options '.'. |  | String |
+| **converters** (sqlserver) | Optional list of custom converters that would be used instead of default ones. The converters are defined using '\\{converter.prefix}.type' config option and configured using options '\\{converter.prefix}.{option}'. |  | String |
 | **customMetricTags** (sqlserver) | A comma-separated list of key-value pairs that are appended to the MBean object name. Keys must be valid JMX ObjectName property keys. For example: k1=v1,k2=v2. |  | String |
 | **customSanitizePattern** (sqlserver) | Regular expression identifying configuration keys whose values should be masked. When set, this custom pattern replaces Debeziums default password masking pattern. | .\*secret$|.\*password$|.\*sasl\\.jaas\\.config$|.\*basic\\.auth\\.user\\.info|.\*registry\\.auth\\.client-secret|.\*credentials\\.json$|.\*connectionstring$|.\*connection\\.string$ | String |
 | **databaseExcludeList** (sqlserver) | A comma-separated list of regular expressions that match database names to be excluded from monitoring. |  | String |
@@ -268,7 +270,7 @@ Enum values:
 | **dataQueryMode** (sqlserver) | Controls how the connector queries CDC data. The default is 'direct', which makes the connector to query the change tables directly. The value of 'function' means the data is queried by means of calling cdc.\[fn\_cdc\_get\_all\_changes\_#\] function. | direct | String |
 | **datatypePropagateSourceType** (sqlserver) | A comma-separated list of regular expressions matching the database-specific data type names that adds the data type’s original type and original length as parameters to the corresponding field schemas in the emitted change records. |  | String |
 | **decimalHandlingMode** (sqlserver) | Specify how DECIMAL and NUMERIC columns should be represented in change events, including: 'precise' (the default) uses java.math.BigDecimal to represent values, which are encoded in the change events using a binary representation and Kafka Connect’s 'org.apache.kafka.connect.data.Decimal' type; 'string' uses string to represent values; 'double' represents values using Java’s 'double', which may not offer the precision but will be far easier to use in consumers. | precise | String |
-| **errorsMaxRetries** (sqlserver) | The maximum number of retries on connection errors before failing (-1 = no limit, 0 = disabled, 0 = num of retries). | \-1 | int |
+| **errorsMaxRetries** (sqlserver) | The maximum number of retries on connection errors before failing (-1 = no limit, 0 = disabled, > 0 = num of retries). | \-1 | int |
 | **eventConvertingFailureHandlingMode** (sqlserver) | Specify how failures during converting of event should be handled, including: 'fail' throw an exception that the column of event conversion is failed with unmatched schema type, causing the connector to be stopped. it could need schema recovery to covert successfully; 'warn' (the default) the value of column of event that conversion failed will be null and be logged with warn level; 'skip' the value of column of event that conversion failed will be null and be logged with debug level. | warn | String |
 | **eventProcessingFailureHandlingMode** (sqlserver) | Specify how failures during processing of events (i.e. when encountering a corrupted event) should be handled, including: 'fail' (the default) an exception indicating the problematic event and its position is raised, causing the connector to be stopped; 'warn' the problematic event and its position will be logged and the event will be skipped; 'ignore' the problematic event will be skipped. | fail | String |
 | **executorShutdownTimeoutMs** (sqlserver) | The maximum time in milliseconds to wait for task executor to shut down. | 4s | long |
@@ -290,9 +292,9 @@ Enum values:
 | **maxIterationTransactions** (sqlserver) | This property can be used to reduce the connector memory usage footprint when changes are streamed from multiple tables per database. | 500 | int |
 | **maxQueueSize** (sqlserver) | Maximum size of the queue for change events read from the database log but not yet recorded or forwarded. Defaults to 8192, and should always be larger than the maximum batch size. | 8192 | int |
 | **maxQueueSizeInBytes** (sqlserver) | Maximum size of the queue in bytes for change events read from the database log but not yet recorded or forwarded. Defaults to 0. Mean the feature is not enabled. | 0 | long |
-| **memoryManagementSchemasClass** (sqlserver) | The fully-qualified class name of the storage implementation for schema metadata. The class must implement io.debezium.relational.TableMappingStorage. Defaults to io.debezium.relational.ConcurrentMapTableMappingStorage for in-memory storage. | io.debezium.relational.ConcurrentMapTableMappingStorage | String |
-| **memoryManagementTablesClass** (sqlserver) | The fully-qualified class name of the storage implementation for table metadata. The class must implement io.debezium.relational.TableMappingStorage. Defaults to io.debezium.relational.ConcurrentMapTableMappingStorage for in-memory storage. | io.debezium.relational.ConcurrentMapTableMappingStorage | String |
-| **messageKeyColumns** (sqlserver) | A semicolon-separated list of expressions that match fully-qualified tables and column(s) to be used as message key. Each expression must match the pattern ':', where the table names could be defined as (DB\_NAME.TABLE\_NAME) or (SCHEMA\_NAME.TABLE\_NAME), depending on the specific connector, and the key columns are a comma-separated list of columns representing the custom key. For any table without an explicit key configuration the table’s primary key column(s) will be used as message key. Example: dbserver1.inventory.orderlines:orderId,orderLineId;dbserver1.inventory.orders:id. |  | String |
+| **memoryManagementSchemasClass** (sqlserver) | The fully-qualified class name of the storage implementation for schema metadata. The class must implement io.debezium.relational.TableMappingStorage of io.debezium.relational.TableSchema. Defaults to io.debezium.relational.ConcurrentMapTableMappingStorage for in-memory storage. | io.debezium.relational.ConcurrentMapTableMappingStorage | String |
+| **memoryManagementTablesClass** (sqlserver) | The fully-qualified class name of the storage implementation for table metadata. The class must implement io.debezium.relational.TableMappingStorage of io.debezium.relational.Table. Defaults to io.debezium.relational.ConcurrentMapTableMappingStorage for in-memory storage. | io.debezium.relational.ConcurrentMapTableMappingStorage | String |
+| **messageKeyColumns** (sqlserver) | A semicolon-separated list of expressions that match fully-qualified tables and column(s) to be used as message key. Each expression must match the pattern '\\{fully-qualified table name}:\\{key columns}', where the table names could be defined as (DB\_NAME.TABLE\_NAME) or (SCHEMA\_NAME.TABLE\_NAME), depending on the specific connector, and the key columns are a comma-separated list of columns representing the custom key. For any table without an explicit key configuration the table’s primary key column(s) will be used as message key. Example: dbserver1.inventory.orderlines:orderId,orderLineId;dbserver1.inventory.orders:id. |  | String |
 | **notificationEnabledChannels** (sqlserver) | List of notification channels names that are enabled. |  | String |
 | **notificationHttpAllowPrivateNetworks** (sqlserver) | When true, the SSRF guard permits notification URLs that resolve to loopback, site-local or link-local addresses (e.g. an in-cluster Service). Defaults to false so only public addresses are allowed. | false | boolean |
 | **notificationHttpRetries** (sqlserver) | Number of retries after the first failed HTTP notification delivery attempt. Terminal notifications (COMPLETED/ABORTED/SKIPPED) are always retried at least 3 times. | 2 | int |
@@ -307,7 +309,7 @@ Enum values:
 | **openlineageIntegrationJobOwners** (sqlserver) | The job’s owners emitted by Debezium. A comma-separated list of key-value pairs.For example: k1=v1,k2=v2. |  | String |
 | **openlineageIntegrationJobTags** (sqlserver) | The job’s tags emitted by Debezium. A comma-separated list of key-value pairs.For example: k1=v1,k2=v2. |  | String |
 | **pollIntervalMs** (sqlserver) | Time to wait for new change events to appear after receiving no events, given in milliseconds. Defaults to 500 ms. Values will be capped at 5000 ms. | 500ms | long |
-| **postProcessors** (sqlserver) | Optional list of post processors. The processors are defined using '.type' config option and configured using options ''. |  | String |
+| **postProcessors** (sqlserver) | Optional list of post processors. The processors are defined using '\\{post.processor.prefix}.type' config option and configured using options '\\{post.processor.prefix}.{option}'. |  | String |
 | **provideTransactionMetadata** (sqlserver) | Enables transaction metadata extraction together with event counting. | false | boolean |
 | **queryFetchSize** (sqlserver) | The maximum number of records that should be loaded into memory while streaming. A value of '0' uses the default JDBC fetch size. The default value is '10000'. | 10000 | int |
 | **retriableRestartConnectorWaitMs** (sqlserver) | Time to wait before restarting connector after retriable exception occurs. Defaults to 10000ms. | 10s | long |
@@ -320,7 +322,7 @@ Enum values:
 | **schemaNameAdjustmentMode** (sqlserver) | Specify how schema names should be adjusted for compatibility with the message converter used by the connector, including: 'avro' replaces the characters that cannot be used in the Avro type name with underscore; 'avro\_unicode' replaces the underscore or characters that cannot be used in the Avro type name with corresponding unicode like \_uxxxx. Note: \_ is an escape sequence like backslash in Java;'none' does not apply any adjustment (default). | none | String |
 | **signalDataCollection** (sqlserver) | The name of the data collection that is used to send signals/commands to Debezium. For multi-partition mode connectors, multiple signal data collections can be specified as a comma-separated list. Signaling is disabled when not set. |  | String |
 | **signalEmitFailureBackoffMs** (sqlserver) | Duration to sleep for after encountering an error emitting a window event, given in milliseconds. Defaults to 10 seconds. | 10s | long |
-| **signalEmitFailureMaxRetries** (sqlserver) | The maximum number of retries after encountering an error emitting a window event (-1 = no limit, 0 = disabled, 0 = num of retries). Defaults to 0. | 0 | int |
+| **signalEmitFailureMaxRetries** (sqlserver) | The maximum number of retries after encountering an error emitting a window event (-1 = no limit, 0 = disabled, > 0 = num of retries). Defaults to 0. | 0 | int |
 | **signalEnabledChannels** (sqlserver) | List of channels names that are enabled. Source channel is enabled by default. | source | String |
 | **signalPollIntervalMs** (sqlserver) | Interval for looking for new signals in registered channels, given in milliseconds. Defaults to 5 seconds. | 5s | long |
 | **skipMessagesWithoutChange** (sqlserver) | Enable to skip publishing messages when there is no change in included columns.This would essentially filter messages to be sent when there is no change in columns included as per column.include.list/column.exclude.list.For Postgres - this would require REPLICA IDENTITY of table to be FULL. | false | boolean |
@@ -400,6 +402,14 @@ With the Debezium `ExtractNewRecordState` single message transformation (`additi
 
 See below for more details.
 
+## Where the position is saved
+
+Debezium saves how far the connector got, so that after a restart it goes on from there. With the default `offsetStorage` (`org.apache.kafka.connect.storage.FileOffsetBackingStore`), the position is saved to the file of `offsetStorageFileName`. The file is created when it does not exist, but its folder must exist and be writable: the consumer fails when it starts otherwise, as without it nothing is saved and a restart sends everything again, the snapshot included. A relative name is in the folder the integration runs in, such as `data/offset-file-1.dat`.
+
+With the file schema history (`schemaHistoryInternal=io.debezium.storage.file.history.FileSchemaHistory`), the file of `schemaHistoryInternalFileFilename` is checked as well; Debezium creates its folders when they do not exist.
+
+To save the position in a Kafka topic instead, such as for an integration that has no lasting disk, set `offsetStorage` to `org.apache.kafka.connect.storage.KafkaOffsetBackingStore`, with `offsetStorageTopic`, `offsetStoragePartitions`, `offsetStorageReplicationFactor` and the Kafka brokers as `additionalProperties.bootstrap.servers`.
+
 ## Examples
 
 ### Consuming events
@@ -414,7 +424,7 @@ Here is a very simple route that you can use in order to listen to Debezium even
     
 
 ```java
-from("debezium-sqlserver:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&databaseHostname=localhost&databaseUser=debezium&databasePassword=dbz&topicPrefix=my-app-connector&schemaHistoryInternalFileFilename=/usr/history-file-1.dat")
+from("debezium-sqlserver:dbz-test-1?offsetStorageFileName=data/offset-file-1.dat&databaseHostname=localhost&databaseUser=debezium&databasePassword=dbz&topicPrefix=my-app-connector&schemaHistoryInternalFileFilename=data/history-file-1.dat")
     .log("Event received from Debezium : ${body}")
     .log("    with this identifier ${headers.CamelDebeziumIdentifier}")
     .log("    with these source metadata ${headers.CamelDebeziumSourceMetadata}")
@@ -426,7 +436,7 @@ from("debezium-sqlserver:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat
 
 ```xml
 <route>
-  <from uri="debezium-sqlserver:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat&amp;databaseHostname=localhost&amp;databaseUser=debezium&amp;databasePassword=dbz&amp;topicPrefix=my-app-connector&amp;schemaHistoryInternalFileFilename=/usr/history-file-1.dat"/>
+  <from uri="debezium-sqlserver:dbz-test-1?offsetStorageFileName=data/offset-file-1.dat&amp;databaseHostname=localhost&amp;databaseUser=debezium&amp;databasePassword=dbz&amp;topicPrefix=my-app-connector&amp;schemaHistoryInternalFileFilename=data/history-file-1.dat"/>
   <log message="Event received from Debezium : ${body}"/>
   <log message="    with this identifier ${headers.CamelDebeziumIdentifier}"/>
   <log message="    with these source metadata ${headers.CamelDebeziumSourceMetadata}"/>
@@ -442,12 +452,12 @@ from("debezium-sqlserver:dbz-test-1?offsetStorageFileName=/usr/offset-file-1.dat
     from:
       uri: debezium-sqlserver:dbz-test-1
       parameters:
-        offsetStorageFileName: /usr/offset-file-1.dat
+        offsetStorageFileName: data/offset-file-1.dat
         databaseHostname: localhost
         databaseUser: debezium
         databasePassword: dbz
         topicPrefix: my-app-connector
-        schemaHistoryInternalFileFilename: /usr/history-file-1.dat
+        schemaHistoryInternalFileFilename: data/history-file-1.dat
       steps:
         - log:
             message: "Event received from Debezium : ${body}"

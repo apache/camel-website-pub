@@ -25,7 +25,3 @@ Or add the coordinates to your existing project:
 ```
 
 Check the [User guide](../../user-guide/index.md) for more information about writing Camel Quarkus applications.
-
-## Additional Camel Quarkus configuration
-
-If you plan to run your application in native mode and the remote Git repositories it will access require SSL, you will need to set `quarkus.ssl.native=true` in your `application.properties`. See [Quarkus native and SSL guide](https://quarkus.io/guides/native-and-ssl) for more details.

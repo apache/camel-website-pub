@@ -74,6 +74,7 @@ The Vert.x WebSocket component supports the following options which are listed b
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
+| **synchronous** (consumer) | Whether the consumers route each message synchronously, as the default for the endpoints of this component. See the synchronous endpoint option. | false | boolean |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **allowOriginHeader** (advanced) | Whether the WebSocket client should add the Origin header to the WebSocket handshake request. | true | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
@@ -108,11 +109,13 @@ With the following _path_ and _query_ parameters:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **allowedOriginPattern** (consumer) | Regex pattern to match the origin header sent by WebSocket clients. |  | String |
+| **connectMessage** (consumer) | When consumeAsClient is set to true, a text message to send to the server each time the consumer connects: when it starts and after each reconnect. For example a subscribe request, for a server that only sends messages to a client that asked for them. |  | String |
 | **consumeAsClient** (consumer) | When set to true, the consumer acts as a WebSocket client, creating exchanges on each received WebSocket event. | false | boolean |
 | **fireWebSocketConnectionEvents** (consumer) | Whether the server consumer will create a message exchange when a new WebSocket peer connects or disconnects. | false | boolean |
 | **maxReconnectAttempts** (consumer) | When consumeAsClient is set to true this sets the maximum number of allowed reconnection attempts to a previously closed WebSocket. A value of 0 (the default) will attempt to reconnect indefinitely. |  | int |
 | **reconnectInitialDelay** (consumer) | When consumeAsClient is set to true this sets the initial delay in milliseconds before attempting to reconnect to a previously closed WebSocket. |  | int |
 | **reconnectInterval** (consumer) | When consumeAsClient is set to true this sets the interval in milliseconds at which reconnecting to a previously closed WebSocket occurs. | 1000 | int |
+| **synchronous** (consumer) | Whether the consumer routes each message synchronously. When true, the route runs on a thread of the Vert.x worker pool, which waits until the route is complete, so the size of the worker pool limits how many messages are routed at the same time. When false, the route starts on a worker thread with the asynchronous routing engine, and the worker thread is free as soon as the route continues on another thread (such as an asynchronous producer), so the worker pool no longer limits the messages in flight. Keep it false for a route that calls an asynchronous producer using the same Vert.x (such as vertx-http): with true, such messages can occupy every worker thread while their producers need a worker thread to complete, and then no message completes. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
 | **exceptionHandler** (consumer (advanced)) | To let the consumer use a custom ExceptionHandler. Notice if the option bridgeErrorHandler is enabled then this option is not in use. By default the consumer will deal with exceptions, that will be logged at WARN or ERROR level and ignored. |  | ExceptionHandler |
 | **exchangePattern** (consumer (advanced)) | 
@@ -130,6 +133,7 @@ Enum values:
 
 
  |  | ExchangePattern |
+| **parallelProcessing** (consumer (advanced)) | When consumeAsClient is set to true, whether the received messages are routed in parallel, on the threads of the Vert.x worker pool, in any order. By default (false), the messages of the WebSocket are routed one after the other, in the order they are received. | false | boolean |
 | **router** (consumer (advanced)) | To use an existing vertx router for the HTTP server. |  | Router |
 | **serverOptions** (consumer (advanced)) | Sets customized options for configuring the HTTP server hosting the WebSocket for the consumer. |  | HttpServerOptions |
 | **clientSubProtocols** (producer) | Comma separated list of WebSocket subprotocols that the client should use for the Sec-WebSocket-Protocol header. |  | String |
@@ -267,6 +271,24 @@ from("vertx-websocket:my.websocket.com:8080/chat?consumeAsClient=true")
             message: "Got WebSocket message ${body}"
 ```
 
+The client consumer routes the messages of its WebSocket one after the other, in the order they are received. To route them in parallel, on the threads of the Vert.x worker pool and in any order, set `parallelProcessing=true`.
+
+Some servers only send messages to a client that asked for them, such as a feed that needs a subscribe request. Set `connectMessage` to the text to send each time the consumer connects: when it starts and after each reconnect.
+
+```yaml
+- route:
+    from:
+      uri: vertx-websocket:my.websocket.com:8080/feed
+      parameters:
+        consumeAsClient: true
+        connectMessage: '{"op":"subscribe","channel":"prices"}'
+      steps:
+        - log:
+            message: "Got WebSocket message ${body}"
+```
+
+The query parameters of the URI that are not options of the component are sent to the remote server. Like any endpoint URI, Camel decodes the URI before the component reads it, so write a value that contains `+`, `&` or `%` (such as a token or a signature) as a raw value, for example `token=RAW(a+b/c=)`. It then reaches the server as written. See [raw values](../../manual/endpoint.html#_configuring_parameter_values_using_raw_values_such_as_passwords).
+
 ### Path & query parameters
 
 The WebSocket server consumer supports the configuration of parameterized paths. The path parameter value will be set as a Camel exchange header:
@@ -344,6 +366,8 @@ from("vertx-websocket:localhost:8080/chat/{user}")
         - log:
             message: "New message from ${header.user} (${header.role}) >>> ${body}"
 ```
+
+A message the producer sends completes on a Vert.x event loop thread. The route then continues on a thread of the Vert.x worker pool, so a step after the producer may block (such as an HTTP call, or another `vertx-websocket` producer that connects to a server) without stalling the WebSocket I/O of that event loop.
 
 ### Sending messages to peers connected to the vertx-websocket server consumer
 

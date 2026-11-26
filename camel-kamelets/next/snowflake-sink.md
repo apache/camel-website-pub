@@ -43,7 +43,7 @@ At runtime, the `snowflake-sink` Kamelet relies upon the presence of the followi
     
 -   camel:sql
     
--   mvn:net.snowflake:snowflake-jdbc:4.3.4
+-   mvn:net.snowflake:snowflake-jdbc:4.4.1
     
 -   mvn:org.apache.commons:commons-dbcp2:2.14.0
     

@@ -53,7 +53,7 @@ Camel Kit `init` is **safe to run over existing projects** with these protection
 | `pom.xml` | Never modified during init |
 | Maven wrapper (`mvnw`, `.mvn/`) | Skipped if exists and reported under _Existing files preserved_, with no proposed copy under `.camel-kit/conflicts/` (use `--replace-wrapper` to force replacement) |
 | `AGENTS.md` and `CLAUDE.md` | Use managed blocks - customizations preserved on reinit |
-| Skill files | Files Camel Kit ships are refreshed on reinit so they match the installed version. Edit a copy, or add your own file next to them: files Camel Kit does not ship are never touched |
+| Skill files | Reinitialization refreshes files matching their recorded hashes or known pre-ledger release content. It adopts files already equal to the new rendering and preserves local edits. Review the `.proposed` copy under `.camel-kit/conflicts/catalog/`. Use `--replace <path>` to accept a file or the selected files in a catalog directory. You can also keep your own skills and guides alongside the installed ones |
 | Existing routes | Never modified unless explicitly listed in design spec |
 
 ### Dry-Run Mode
@@ -64,7 +64,7 @@ Preview changes before writing files:
 camel-kit init --here --ai claude --dry-run
 ```
 
-The preview lists shared files with a `create`, `replace`, `merge` or `preserve` action, using the same ownership and replacement rules as initialization. It does not write files or run baseline tests, even when `--record-baseline` is also supplied. It also runs the validation of initialization: an existing MCP configuration that cannot be merged, such as a `.codex/config.toml` that is not valid TOML, is rejected by the preview with the message `init` would give. See [Existing projects](getting-started.html#existing-project) for file ownership and `--replace <path>` behavior.
+The preview lists shared and selected catalog files with a `create`, `replace`, `merge` or `preserve` action, using the same ownership and replacement rules as initialization. It summarizes unchanged catalog files and lists retired catalog files with a `remove` or `preserve` action. It does not write files or run baseline tests, even when `--record-baseline` is also supplied. It also runs the validation of initialization: an existing MCP configuration that cannot be merged, such as a `.codex/config.toml` that is not valid TOML, is rejected by the preview with the message `init` would give. See [Existing projects](getting-started.html#existing-project) for file ownership and `--replace <path>` behavior.
 
 ## Getting Started
 

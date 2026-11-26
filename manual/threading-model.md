@@ -259,6 +259,8 @@ The `rejectedPolicy` option controls what happens when a thread pool cannot acce
 | **Abort** | The task is rejected with a `RejectedExecutionException`. Use this for HTTP APIs or latency-sensitive systems where failing fast is preferred over blocking. |
 | **Block** | The caller blocks indefinitely until capacity becomes available. No timeout, no rejection. Use this for message broker consumers and batch workloads where losing a task is unacceptable and latency is less critical. |
 
+A thread pool that is shut down runs no new task, whatever the policy. This happens when a route uses a thread pool that is shut down by its owner (for example a shared pool), or when the route is removed. The EIPs then do not lose the task silently: the [Threads](../components/4.22.x/eips/threads-eip.md) and [Wire Tap](../components/4.22.x/eips/wireTap-eip.md) EIPs fail the exchange with a `RejectedExecutionException`, as with the `Abort` policy, so the error handler can react.
+
 With virtual threads, a task of the pool that submits more work to the same pool runs it at once when no permit is free, whatever the policy, instead of waiting (see [Virtual Threads](#virtual-threads)).
 
 With platform threads, these policies apply when the `ThreadPoolExecutor` work queue is full. With virtual threads, the same policies apply when the concurrency semaphore has no available permits (see [Virtual Threads](#virtual-threads)).

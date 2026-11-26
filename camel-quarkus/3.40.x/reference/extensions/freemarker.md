@@ -34,7 +34,7 @@ The `allowContextMapAll` option is not supported in native mode as it requires r
 
 ## Quarkiverse Freemarker and its configuration
 
-Camel Quarkus Freemarker uses dev/index.html\[Quarkiverse Freemarker\] under the hood. This means in particular, that the `freemarker.template.Configuration` bean produced by Quarkiverse Freemarker is used by Camel Quarkus. The bean can be configured via `quarkus.freemarker.*` properties - check [Freemarker Configuration Reference](https://quarkiverse.github.io/quarkiverse-docs/quarkus-freemarker/dev/index.md) for more details.
+Camel Quarkus Freemarker uses [Quarkiverse Freemarker](https://docs.quarkiverse.io/quarkus-freemarker/dev/index.md) under the hood. This means in particular, that the `freemarker.template.Configuration` bean produced by Quarkiverse Freemarker is used by Camel Quarkus. The bean can be configured via `quarkus.freemarker.*` properties - check [Freemarker Configuration Reference](https://docs.quarkiverse.io/quarkus-freemarker/dev/index.md) for more details.
 
 If you wish to use your custom `Configuration` bean instead of the default provided by Quarkiverse Freemarker, you can let CDI to do the required wiring:
 
@@ -62,7 +62,7 @@ public class MyRoutes extends RouteBuilder {
     @Override
     public void configure() {
         from("direct:example")
-            .to("freemarker:templates/email.ftl?configuration=myFreemarkerConfig")
+            .to("freemarker:templates/email.ftl?configuration=myFreemarkerConfig");
 
     }
 }

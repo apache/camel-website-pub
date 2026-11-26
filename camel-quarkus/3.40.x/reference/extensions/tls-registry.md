@@ -126,7 +126,7 @@ Some `quarkus.tls.*` options have no equivalent in `SSLContextParameters`, becau
 | `hostname-verification-algorithm` | Not carried over. Configure hostname verification on the consuming Camel component or endpoint instead. A warning is logged at startup when this option is set. |
 | `key-store.sni` | Not carried over. Server name indication is a Vert.x transport concern. |
 | `alpn` | Not carried over. Protocol negotiation is handled by the consuming component. |
-| `pqc-enforcement-policy` | Not carried over. Use `quarkus.tls.<name>.key-exchange-groups`, which is, to constrain the groups Camel offers. |
+| `pqc-enforcement-policy` | Not carried over. Use `quarkus.tls.<name>.key-exchange-groups`, which is carried over, to constrain the groups Camel offers. |
 
 These options continue to apply to Quarkus’s own TLS consumers as normal. Only the Camel bridge is affected.
 

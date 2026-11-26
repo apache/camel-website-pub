@@ -164,9 +164,14 @@ Once installed through `install.sh`/`install.ps1`, run:
 camel self-update                 # install the latest release, if newer than what's running
 camel self-update --version 4.23.0  # install a specific version (upgrade or downgrade)
 camel self-update --check         # report only, install nothing
+camel self-update --skip-plugins  # install the latest release, and leave the plugins as they are
 ```
 
 `camel self-update` checks whether an update is actually needed first (no network cost for the archive itself if you’re already current), then re-runs the same, published `install.sh`/ `install.ps1` installer described above, pinned to the exact version it just resolved, rather than re-implementing the download/verify/extract/activate steps a second time. The installer script itself is downloaded fresh and verified against a SHA-256 published alongside it (`install.sha256`) before it’s run.
+
+Once the new version is installed, `camel self-update` runs `camel plugin update` with it: a community plugin whose release `camel plugin add` selected moves to the release built for the new version, when the plugin has one (see [Updating plugins](camel-jbang-projects.html#_updating_plugins)). The new CLI selects the releases, as it is the one that knows the Camel version it is built for. When the plugins cannot be updated (for example, a release cannot be downloaded), `camel self-update` prints a hint to run `camel plugin update` later: the new CLI stays installed, and `camel self-update` does not fail. `--skip-plugins` leaves the plugins as they are. When `camel self-update --check` finds a newer version, it also reports what `camel plugin update` would change with it, without downloading the plugins or changing anything.
+
+Camel CLI 4.23 and older have no `camel plugin update`. When `camel self-update` installs one of them (for example `--version 4.22.3`, or `--version LTS` while the newest LTS release is 4.22.x), it says so and leaves the plugins as they are. `camel self-update` of Camel CLI 4.23 and older does not update the plugins either: after updating from such a version, run `camel plugin update` once.
 
 `camel self-update` refuses to run in two cases. If the currently running installation was not made by `install.sh`/`install.ps1` (it was installed through Homebrew, Chocolatey, WinGet, Scoop, SDKMAN, or JBang instead), the message names that manager and its own upgrade command, e.g. `brew upgrade apache-camel`. If the installation was pinned to an exact version by a user running `install.sh --version 4.22.2`/`install.ps1 -Version 4.22.2` directly (running `camel self-update --version X.Y.Z` does not create an exact pin), the message names the pin file to remove to resume tracking new releases. An installation pinned to a release line or to `LTS` moves within that selector, see [Pinning and `camel self-update`](#_pinning_and_camel_self_update).
 

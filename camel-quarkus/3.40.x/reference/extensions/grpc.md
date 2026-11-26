@@ -109,7 +109,7 @@ When using these options in native mode, you must ensure that any such resources
 This can be accomplished by adding the configuration property `quarkus.native.resources.includes` to `application.properties`. For example, to include SSL / TLS keys and certificates.
 
 ```properties
-quarkus.native.resources.includes = certs/*.pem,certs.*.key
+quarkus.native.resources.includes = certs/*.pem,certs/*.key
 ```
 
 More information about selecting resources for inclusion in the native executable can be found in the [native mode guide](../../user-guide/native-mode.html#embedding-resource-in-native-executable).

@@ -21,7 +21,7 @@ The body of the `batch` operation is either the JSONL itself (`File`, `Path`, `W
 
 For a map, the component writes the envelope of every line (`method` and the `url` of `batchEndpoint`). What the value holds decides the request body:
 
--   a String is turned into a request built from the endpoint options, for `/v1/chat/completions`, `/v1/responses`, `/v1/embeddings` and `/v1/moderations`. The request is the one the synchronous operation of that endpoint would send, so the same options and headers apply: `model`, `systemMessage`, `developerMessage`, `temperature`, `topP`, `maxTokens`, `outputClass`, `jsonSchema` and `additionalBodyProperty` for chat completions and responses, `embeddingModel` and `dimensions` for embeddings, and `moderationModel` for moderations
+-   a String is turned into a request built from the endpoint options, for `/v1/chat/completions`, `/v1/responses`, `/v1/embeddings` and `/v1/moderations`. The request is the one the synchronous operation of that endpoint would send, so the same options and headers apply: `model`, `systemMessage`, `developerMessage`, `temperature`, `topP`, `maxTokens`, `outputClass`, `jsonSchema`, `jsonSchemaStrict` and `additionalBodyProperty` for chat completions and responses, `embeddingModel` and `dimensions` for embeddings, and `moderationModel` for moderations
     
 -   a `Map` or `JsonNode` is used as the request body as it is, which is what the other endpoints need, and what lets each line use different parameters
     

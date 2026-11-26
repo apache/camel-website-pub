@@ -108,7 +108,7 @@ Enum values:
 
  | queue | ServiceBusType |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
-| **enableDeadLettering** (consumer) | Enable application level deadlettering to the subscription deadletter subqueue if deadletter related headers are set. | false | boolean |
+| **enableDeadLettering** (consumer) | Dead-letters the message of a failed exchange instead of abandoning it, with the exception as the dead-letter reason and its stack trace as the error description. The message goes to the dead-letter queue of the queue or subscription it was received from. Applies only in PEEK\_LOCK receive mode, and not when reading a sub-queue (subQueue), where the message is abandoned. | false | boolean |
 | **maxAutoLockRenewDuration** (consumer) | Sets the amount of time (millis) to continue auto-renewing the lock. Setting ZERO disables auto-renewal. For ServiceBus receive mode (RECEIVE\_AND\_DELETE RECEIVE\_AND\_DELETE), auto-renewal is disabled. | 300000 | long |
 | **maxConcurrentCalls** (consumer) | Sets maximum number of concurrent calls. | 1 | int |
 | **maxConcurrentSessions** (consumer) | Sets the maximum number of concurrent sessions to process at any given time. Only applies when sessionEnabled is true. | 1 | int |
@@ -168,7 +168,7 @@ Enum values:
 
 
  | sendMessages | ServiceBusProducerOperationDefinition |
-| **scheduledEnqueueTime** (producer) | Sets OffsetDateTime at which the message should appear in the Service Bus queue or topic. |  | OffsetDateTime |
+| **scheduledEnqueueTime** (producer) | Sets OffsetDateTime at which the message should appear in the Service Bus queue or topic. Used only by the scheduleMessages producer operation; sendMessages sends the message at once. In an endpoint URI or a property use an ISO-8601 date-time with an offset, such as 2026-11-18T22:00:00Z or 2026-11-18T23:00:00+01:00. |  | OffsetDateTime |
 | **senderClient** (producer) | **Autowired** Sets senderClient to be used in the producer. |  | ServiceBusSenderClient |
 | **serviceBusTransactionContext** (producer) | Represents transaction in service. This object just contains transaction id. |  | ServiceBusTransactionContext |
 | **sessionId** (producer) | Session ID for session-enabled queues or topics. |  | String |
@@ -250,7 +250,7 @@ Enum values:
 
 
  | queue | ServiceBusType |
-| **enableDeadLettering** (consumer) | Enable application level deadlettering to the subscription deadletter subqueue if deadletter related headers are set. | false | boolean |
+| **enableDeadLettering** (consumer) | Dead-letters the message of a failed exchange instead of abandoning it, with the exception as the dead-letter reason and its stack trace as the error description. The message goes to the dead-letter queue of the queue or subscription it was received from. Applies only in PEEK\_LOCK receive mode, and not when reading a sub-queue (subQueue), where the message is abandoned. | false | boolean |
 | **maxAutoLockRenewDuration** (consumer) | Sets the amount of time (millis) to continue auto-renewing the lock. Setting ZERO disables auto-renewal. For ServiceBus receive mode (RECEIVE\_AND\_DELETE RECEIVE\_AND\_DELETE), auto-renewal is disabled. | 300000 | long |
 | **maxConcurrentCalls** (consumer) | Sets maximum number of concurrent calls. | 1 | int |
 | **maxConcurrentSessions** (consumer) | Sets the maximum number of concurrent sessions to process at any given time. Only applies when sessionEnabled is true. | 1 | int |
@@ -327,7 +327,7 @@ Enum values:
 
 
  | sendMessages | ServiceBusProducerOperationDefinition |
-| **scheduledEnqueueTime** (producer) | Sets OffsetDateTime at which the message should appear in the Service Bus queue or topic. |  | OffsetDateTime |
+| **scheduledEnqueueTime** (producer) | Sets OffsetDateTime at which the message should appear in the Service Bus queue or topic. Used only by the scheduleMessages producer operation; sendMessages sends the message at once. In an endpoint URI or a property use an ISO-8601 date-time with an offset, such as 2026-11-18T22:00:00Z or 2026-11-18T23:00:00+01:00. |  | OffsetDateTime |
 | **senderClient** (producer) | **Autowired** Sets senderClient to be used in the producer. |  | ServiceBusSenderClient |
 | **serviceBusTransactionContext** (producer) | Represents transaction in service. This object just contains transaction id. |  | ServiceBusTransactionContext |
 | **sessionId** (producer) | Session ID for session-enabled queues or topics. |  | String |
@@ -374,6 +374,7 @@ The Azure ServiceBus component supports the following message header(s), which i
 | **CamelAzureServiceBusLockedUntil** (consumer) Constant: [`LOCKED_UNTIL`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#LOCKED_UNTIL) | Gets the datetime at which the lock of this message expires. |  | OffsetDateTime |
 | **CamelAzureServiceBusMessageId** (consumer) Constant: [`MESSAGE_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#MESSAGE_ID) | Gets the identifier for the message. |  | String |
 | **CamelAzureServiceBusPartitionKey** (consumer) Constant: [`PARTITION_KEY`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#PARTITION_KEY) | Gets the partition key for sending a message to a partitioned entity. |  | String |
+| **CamelAzureServiceBusTopicOrQueueName** (consumer) Constant: [`TOPIC_OR_QUEUE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#TOPIC_OR_QUEUE_NAME) | The name of the queue or topic the message was received from. |  | String |
 | **CamelAzureServiceBusRawAmqpMessage** (consumer) Constant: [`RAW_AMQP_MESSAGE`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#RAW_AMQP_MESSAGE) | The representation of message as defined by AMQP protocol. |  | AmqpAnnotatedMessage |
 | **CamelAzureServiceBusReplyTo** (consumer) Constant: [`REPLY_TO`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#REPLY_TO) | Gets the address of an entity to send replies to. |  | String |
 | **CamelAzureServiceBusReplyToSessionId** (consumer) Constant: [`REPLY_TO_SESSION_ID`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#REPLY_TO_SESSION_ID) | Gets or sets a session identifier augmenting the ReplyTo address. |  | String |
@@ -382,7 +383,7 @@ The Azure ServiceBus component supports the following message header(s), which i
 | **CamelAzureServiceBusSubject** (consumer) Constant: [`SUBJECT`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#SUBJECT) | Gets the subject for the message. |  | String |
 | **CamelAzureServiceBusTimeToLive** (consumer) Constant: [`TIME_TO_LIVE`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#TIME_TO_LIVE) | Gets the duration before this message expires. |  | Duration |
 | **CamelAzureServiceBusTo** (consumer) Constant: [`TO`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#TO) | Gets the to address. |  | String |
-| **CamelAzureServiceBusScheduledEnqueueTime** (common) Constant: [`SCHEDULED_ENQUEUE_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#SCHEDULED_ENQUEUE_TIME) | (producer)Overrides the OffsetDateTime at which the message should appear in the Service Bus queue or topic. (consumer) Gets the scheduled enqueue time of this message. |  | OffsetDateTime |
+| **CamelAzureServiceBusScheduledEnqueueTime** (common) Constant: [`SCHEDULED_ENQUEUE_TIME`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#SCHEDULED_ENQUEUE_TIME) | (producer) Overrides the OffsetDateTime at which the message should appear in the Service Bus queue or topic. Used only by the scheduleMessages operation. (consumer) Gets the scheduled enqueue time of this message. |  | OffsetDateTime |
 | **CamelAzureServiceBusServiceBusTransactionContext** (producer) Constant: [`SERVICE_BUS_TRANSACTION_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#SERVICE_BUS_TRANSACTION_CONTEXT) | Overrides the transaction in service. This object just contains transaction id. |  | ServiceBusTransactionContext |
 | **CamelAzureServiceBusProducerOperation** (producer) Constant: [`PRODUCER_OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-azure-servicebus/latest/org/apache/camel/component/azure/servicebus/ServiceBusConstants.html#PRODUCER_OPERATION) | 
 Overrides the desired operation to be used in the producer.
@@ -598,6 +599,13 @@ from("direct:start")
        })
   .to("azure-servicebus:test//?connectionString=test&producerOperation=scheduleMessages")
   .to("mock:result");
+```
+
+The time can also be set with the `scheduledEnqueueTime` option, or as a string in the header, as an ISO-8601 date-time with an offset, such as `2026-11-18T22:00:00Z` or `2026-11-18T23:00:00+01:00`. The option and the header are used only by `scheduleMessages`: `sendMessages` sends the message at once.
+
+```java
+from("direct:start")
+  .to("azure-servicebus:test?connectionString=test&producerOperation=scheduleMessages&scheduledEnqueueTime=2026-11-18T23:00:00+01:00");
 ```
 
 -   `receiveMessages`

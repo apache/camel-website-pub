@@ -8,7 +8,7 @@
     
 4.  Let others know that you work on the given extension by either creating a [new issue](https://github.com/apache/camel-quarkus/issues/new) or asking to assign an existing one to you.
     
-5.  Scaffold the necessary Maven modules using `quarkus-maven-plugin`. As an example let’s add a new extension for supporting an imaginary Camel component `foo-abc`:
+5.  Scaffold the necessary Maven modules using `cq-maven-plugin`. As an example let’s add a new extension for supporting an imaginary Camel component `foo-abc`:
     
     ```shell
     cd camel-quarkus
@@ -27,9 +27,7 @@
         
         -   `camel-quarkus-foo-abc-parent` is added to the `<modules>` of `camel-quarkus-extensions`
             
-        -   `camel-quarkus-foo-abc` is added to the `<dependencyManagement>` of the runtime BOM (Bill of Materials) `poms/bom/pom.xml`
-            
-        -   `camel-quarkus-foo-abc-deployment` is added to the `<dependencyManagement>` of the deployment BOM (Bill of Materials) `poms/bom-deployment/pom.xml`
+        -   `camel-quarkus-foo-abc` and `camel-quarkus-foo-abc-deployment` are added to the `<dependencyManagement>` of the BOM (Bill of Materials) `poms/bom/pom.xml`
             
         
     -   It creates a basic `FooAbcProcessor` class in the deployment module.
@@ -37,13 +35,13 @@
     -   It also creates a stub of an integration test module under `integration-tests/foo-abc`.
         
     
-6.  Add the extension name to the right category in `tooling/scripts/test-categories.yaml` file.
+6.  Add the integration test module name to the right category in `tooling/scripts/test-categories.yaml` file.
     
-    Compilation performed immediately after generating the modules should pass flawlessly but running the tests will fail because the test project needs to get finished. You need to build `poms/bom` and `poms/bom-deployment` one time first.
+    Compilation performed immediately after generating the modules should pass flawlessly but running the tests will fail because the test project needs to get finished. You need to build `poms/bom` one time first.
     
 7.  Review the generated `extensions/foo-abc/runtime/src/main/resources/META-INF/quarkus-extension.yaml` file.
     
-    The `description` comes from Camel Catalog. If it looks improper or too long due to concatenation of multiple component descriptions, you may override it by setting an explicit `<description>` in the runtime `pom.xml` of your new extension. If you think the value coming from Camel Catalog should be changed, please [file a new Camel issue](https://issues.apache.org/jira/secure/CreateIssue!default.jspa) and ask to fix the metadata for the given Camel component.
+    The `description` comes from Camel Catalog. If it looks improper or too long due to concatenation of multiple component descriptions, you may override it by setting an explicit `<description>` together with `<cq.descriptionSync>false</cq.descriptionSync>` in the runtime `pom.xml` of your new extension. If you think the value coming from Camel Catalog should be changed, please [file a new Camel issue](https://issues.apache.org/jira/secure/CreateIssue!default.jspa) and ask to fix the metadata for the given Camel component.
     
     If there is some important keyword missing in both the `name` and `description` through which your new extension should definitely be findable on [code.quarkus.io](https://code.quarkus.io), consider setting `<quarkus.metadata.keywords>` property in your runtime `pom.xml`.
     
@@ -53,7 +51,7 @@
     
 8.  Review the dependencies in the generated runtime and deployment modules. In case the given library is supported by Quarkus, you may want to add a dependency on the corresponding Quarkus extension.
     
-9.  Complete the integration test module under `integration-tests/foo-abc`, following the [Extension testing](extension-testing.md) guide. Make sure the tests are passing both in the JVM mode (`mvn test`) and in the native mode (`mvn verify -Pnative`).
+9.  Complete the integration test module under `integration-tests/foo-abc`, following the [Extension testing](extension-testing.md) guide. Make sure the tests are passing both in the JVM mode (`mvn test`) and in the native mode (`mvn verify -Dnative`).
     
 10.  In case of problems, consult the [Quarkus extension author’s guide](https://quarkus.io/guides/extension-authors-guide), ask for help in the given GitHub issue or via [Camel Quarkus chat](https://camel.zulipchat.com).
      

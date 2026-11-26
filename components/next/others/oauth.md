@@ -123,7 +123,7 @@ Scope extraction recognizes both the standard `scope` claim and the `scp` claim 
 
 HTTP consumer integrations share the same request contract. The inbound header must use `Authorization: Bearer <token>`. The token part must use the RFC 6750 `b64token` character set (`A-Z`, `a-z`, `0-9`, `-`, `.`, `_`, `~`, `+`, `/`) with optional trailing `=` padding, and is limited to 8192 characters. Malformed Bearer syntax and oversized tokens are rejected before the validation factory is called. When an HTTP transport exposes duplicate `Authorization` header values to Camel, they are also treated as malformed.
 
-HTTP integrations reject missing credentials and invalid tokens with HTTP 401. Missing credentials receive the bare `WWW-Authenticate: Bearer` challenge, while invalid tokens receive the RFC 6750 `WWW-Authenticate: Bearer error="invalid_token"` challenge. Malformed `Authorization` headers are rejected with HTTP 400 and the RFC 6750 `WWW-Authenticate: Bearer error="invalid_request"` challenge. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property and the raw `Authorization` header is removed before route processors run. Token validation is an authentication check only: scope, role, or per-operation authorization is not enforced, and route code must check scopes or claims itself from the `CamelOAuthTokenValidationResult` exchange property.
+HTTP integrations reject missing credentials and invalid tokens with HTTP 401. Missing credentials receive the bare `WWW-Authenticate: Bearer` challenge, while invalid tokens receive the RFC 6750 `WWW-Authenticate: Bearer error="invalid_token"` challenge. When a token does not meet the configured step-up requirements (see `required-acr` and `max-auth-age-seconds`), it is rejected with HTTP 401 and a `WWW-Authenticate: Bearer error="insufficient_user_authentication"` challenge including `acr_values` and/or `max_age` hints per RFC 9470. Malformed `Authorization` headers are rejected with HTTP 400 and the RFC 6750 `WWW-Authenticate: Bearer error="invalid_request"` challenge. Token validation infrastructure failures are rejected with HTTP 503. For valid tokens, the validation result is stored on the exchange as the `CamelOAuthTokenValidationResult` exchange property and the raw `Authorization` header is removed before route processors run. Token validation is an authentication check only: scope, role, or per-operation authorization is not enforced, and route code must check scopes or claims itself from the `CamelOAuthTokenValidationResult` exchange property.
 
 #### Identity-Provider Failure Behavior
 
@@ -158,6 +158,8 @@ Properties are resolved from `camel.oauth.<profileName>.*` when the HTTP endpoin
 | `camel.oauth.<profile>.allow-missing-audience` | No | Set to `true` to accept tokens without configuring accepted audiences. Default: `false`. |
 | `camel.oauth.<profile>.allow-missing-issuer` | No | Set to `true` to accept tokens without configuring an expected issuer. Default: `false`. |
 | `camel.oauth.<profile>.allow-insecure-http` | No | Set to `true` to allow plain HTTP OIDC discovery, JWKS, or introspection endpoints for local development. Default: `false`. |
+| `camel.oauth.<profile>.required-acr` | No | Comma-separated accepted `acr` (Authentication Context Class Reference) values for RFC 9470 step-up authentication. When set, tokens whose `acr` claim is missing or does not match one of the listed values are rejected with HTTP 401 and a `WWW-Authenticate: Bearer error="insufficient_user_authentication"` challenge. |
+| `camel.oauth.<profile>.max-auth-age-seconds` | No | Maximum age in seconds for the user’s authentication (RFC 9470 step-up). When positive, tokens whose `auth_time` claim is missing or indicates an authentication older than this value are rejected with HTTP 401 and a `WWW-Authenticate: Bearer error="insufficient_user_authentication"` challenge. |
 
 #### Choosing JWT Validation, OIDC Discovery, or Opaque Introspection
 
@@ -220,6 +222,21 @@ camel.oauth.myprofile.connect-timeout-seconds=5
 camel.oauth.myprofile.read-timeout-seconds=10
 ```
 
+##### RFC 9470 Step-Up Authentication
+
+Step-up authentication rejects tokens whose authentication context does not meet the required security level, prompting the client to re-authenticate with stronger assurance. Configure `required-acr` and/or `max-auth-age-seconds` on the validation profile to enforce step-up:
+
+```properties
+camel.oauth.myprofile.base-uri=https://idp.example.com/realms/main
+camel.oauth.myprofile.expected-audience=my-api
+# Require high assurance authentication context
+camel.oauth.myprofile.required-acr=high
+# Require re-authentication if the user authenticated more than 1 hour ago
+camel.oauth.myprofile.max-auth-age-seconds=3600
+```
+
+When a token fails the step-up check, the HTTP response includes a `WWW-Authenticate` challenge with `error="insufficient_user_authentication"`, and `acr_values` and/or `max_age` hints so the client can redirect the user to re-authenticate at the appropriate assurance level. Both options apply to JWT and opaque token introspection validation paths. Both options are off by default; existing profiles are unchanged.
+
 To use a runtime-specific or application-specific validator for one profile, bind an `OAuthTokenValidationFactory` bean and reference it from the profile:
 
 ```properties
@@ -234,7 +251,7 @@ Use HTTPS endpoints for OIDC discovery, JWKS, and introspection in production. P
 
 Opaque-token introspection performs a blocking outbound HTTP call for each token validation, so tune the timeout properties for the expected request rate and identity-provider latency.
 
-Validation error details are intended for logs and diagnostics. Do not return `OAuthTokenValidationResult.getError()` directly to external clients; HTTP responses should use generic messages such as `Unauthorized`. Stable error categories are available through `OAuthTokenValidationResult.getErrorCode()`: `INVALID_TOKEN`, `INACTIVE_TOKEN`, `EXPIRED_TOKEN`, `NOT_YET_VALID`, `MISSING_EXPIRATION`, `INVALID_SIGNATURE`, `NO_MATCHING_KEY`, `UNSUPPORTED_ALGORITHM`, `INVALID_ISSUER`, and `INVALID_AUDIENCE`.
+Validation error details are intended for logs and diagnostics. Do not return `OAuthTokenValidationResult.getError()` directly to external clients; HTTP responses should use generic messages such as `Unauthorized`. Stable error categories are available through `OAuthTokenValidationResult.getErrorCode()`: `INVALID_TOKEN`, `INACTIVE_TOKEN`, `EXPIRED_TOKEN`, `NOT_YET_VALID`, `MISSING_EXPIRATION`, `INVALID_SIGNATURE`, `NO_MATCHING_KEY`, `UNSUPPORTED_ALGORITHM`, `INVALID_ISSUER`, `INVALID_AUDIENCE`, and `INSUFFICIENT_USER_AUTHENTICATION`.
 
 ### Using OAuth Programmatically
 

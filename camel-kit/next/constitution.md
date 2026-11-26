@@ -46,4 +46,4 @@ The generated `docs/constitution.md` ends with commented sections through which 
 
 ## Constitution and Iron Laws
 
-The constitution says what makes a good route. The six Iron Laws say when and how the pipeline enforces quality: catalog verification, constitution compliance, no code without an approved design and a plan, spec compliance before quality, adversarial review, surgical changes. Iron Law 2 incorporates the constitution; the two sets are complementary. See [Iron Laws](pipeline.html#iron-laws).
+The constitution says what makes a good route. The seven Iron Laws say when and how the pipeline enforces quality: catalog verification, constitution compliance, no code without an approved design and a plan, spec compliance before quality, adversarial review, surgical changes, deliverables in project directory. Iron Law 2 incorporates the constitution; the two sets are complementary. See [Iron Laws](pipeline.html#iron-laws).

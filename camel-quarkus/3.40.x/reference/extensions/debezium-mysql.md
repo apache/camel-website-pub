@@ -32,7 +32,7 @@ We cannot add the MySQL JDBC driver as a compile scope dependency of this extens
 
 Therefore, you have to add the dependency to your project yourself, as long as you are able to comply with its license terms.
 
-`quarkus-bom` (transitively included by `camel-quarkus-bom` and `quarkus-camel-bom`) manages a version of `com.mysql:mysql-connector-j` compatible with Camel Quarkus. So you do not need to specify the version of the driver when importing any of the aforementioned BOMs. The following should be sufficient for Maven:
+`quarkus-bom` (which you import alongside `quarkus-camel-bom` or `camel-quarkus-bom`) manages a version of `com.mysql:mysql-connector-j` compatible with Camel Quarkus. So you do not need to specify the version of the driver when importing any of the aforementioned BOMs. The following should be sufficient for Maven:
 
 ```xml
 <dependency>
@@ -46,6 +46,8 @@ Therefore, you have to add the dependency to your project yourself, as long as y
 While you can use any of the available Kafka offset stores in JVM mode, only the following offset stores are supported in native mode:
 
 -   `org.apache.kafka.connect.storage.FileOffsetBackingStore`
+    
+-   `org.apache.kafka.connect.storage.KafkaOffsetBackingStore`
     
 -   `org.apache.kafka.connect.storage.MemoryOffsetBackingStore`
     

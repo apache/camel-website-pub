@@ -1,6 +1,6 @@
 # Alibaba Object Storage Service (OSS)
 
-Alibaba Cloud Object Storage Service (OSS) component
+Store and retrieve objects in Alibaba Cloud Object Storage Service (OSS).
 
 ## What’s inside
 

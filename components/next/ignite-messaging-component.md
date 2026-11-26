@@ -85,6 +85,7 @@ With the following _path_ and _query_ parameters:
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
+| **clusterGroupExpression** (common) | The cluster group expression. |  | ClusterGroupExpression |
 | **propagateIncomingBodyIfNoReturnValue** (common) | Sets whether to propagate the incoming body if the return type of the underlying Ignite operation is void. | true | boolean |
 | **treatCollectionsAsCacheObjects** (common) | Sets whether to treat Collections as cache objects or as Collections of items to insert/update/compute, etc. | false | boolean |
 | **bridgeErrorHandler** (consumer (advanced)) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -104,7 +105,6 @@ Enum values:
 
 
  |  | ExchangePattern |
-| **clusterGroupExpression** (producer) | The cluster group expression. |  | ClusterGroupExpression |
 | **sendMode** (producer) | 
 
 The send mode to use. Possible values: UNORDERED, ORDERED.

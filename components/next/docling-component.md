@@ -125,7 +125,7 @@ The Docling component supports the following options which are listed below.
 | **doclingServeUrl** (common) | Docling-serve API URL (e.g., [http://localhost:5001](http://localhost:5001)). | [http://localhost:5001](http://localhost:5001) | String |
 | **enableOCR** (common) | Enable OCR processing for scanned documents. | true | boolean |
 | **includeLayoutInfo** (common) | Show layout information with bounding boxes. | false | boolean |
-| **ocrLanguage** (common) | Language code for OCR processing. | en | String |
+| **ocrLanguage** (common) | Language code for OCR processing. With the docling CLI, en is used when it is not set. With docling-serve, setting it turns OCR on (do\_ocr=true) unless enableOCR or doOcr is false, and when it is not set the server uses its own default languages. |  | String |
 | **operation** (common) | 
 **Required** The operation to perform.
 
@@ -180,7 +180,7 @@ Enum values:
 | **doCodeEnrichment** (advanced) | Enable code enrichment in document processing. |  | Boolean |
 | **documentTimeout** (advanced) | Document processing timeout in seconds. |  | Long |
 | **doFormulaEnrichment** (advanced) | Enable formula enrichment in document processing. |  | Boolean |
-| **doOcr** (advanced) | Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set enableOCR to false to explicitly disable OCR. |  | Boolean |
+| **doOcr** (advanced) | Enable OCR processing in docling-serve API mode. When not set, OCR is turned on if ocrLanguage is set, and otherwise the server uses its own defaults. Set enableOCR to false to explicitly disable OCR. |  | Boolean |
 | **doPictureClassification** (advanced) | Enable picture classification in document processing. |  | Boolean |
 | **doPictureDescription** (advanced) | Enable picture description generation in document processing. |  | Boolean |
 | **doTableStructure** (advanced) | Enable table structure recognition. |  | Boolean |
@@ -260,7 +260,7 @@ With the following _path_ and _query_ parameters:
 | **doclingServeUrl** (common) | Docling-serve API URL (e.g., [http://localhost:5001](http://localhost:5001)). | [http://localhost:5001](http://localhost:5001) | String |
 | **enableOCR** (common) | Enable OCR processing for scanned documents. | true | boolean |
 | **includeLayoutInfo** (common) | Show layout information with bounding boxes. | false | boolean |
-| **ocrLanguage** (common) | Language code for OCR processing. | en | String |
+| **ocrLanguage** (common) | Language code for OCR processing. With the docling CLI, en is used when it is not set. With docling-serve, setting it turns OCR on (do\_ocr=true) unless enableOCR or doOcr is false, and when it is not set the server uses its own default languages. |  | String |
 | **operation** (common) | 
 **Required** The operation to perform.
 
@@ -333,7 +333,7 @@ Enum values:
 | **doCodeEnrichment** (advanced) | Enable code enrichment in document processing. |  | Boolean |
 | **documentTimeout** (advanced) | Document processing timeout in seconds. |  | Long |
 | **doFormulaEnrichment** (advanced) | Enable formula enrichment in document processing. |  | Boolean |
-| **doOcr** (advanced) | Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set enableOCR to false to explicitly disable OCR. |  | Boolean |
+| **doOcr** (advanced) | Enable OCR processing in docling-serve API mode. When not set, OCR is turned on if ocrLanguage is set, and otherwise the server uses its own defaults. Set enableOCR to false to explicitly disable OCR. |  | Boolean |
 | **doPictureClassification** (advanced) | Enable picture classification in document processing. |  | Boolean |
 | **doPictureDescription** (advanced) | Enable picture description generation in document processing. |  | Boolean |
 | **doTableStructure** (advanced) | Enable table structure recognition. |  | Boolean |
@@ -1408,11 +1408,12 @@ When using docling-serve API mode (`useDoclingServe=true`), the component expose
   
 | Parameter | Default | Description |
 | --- | --- | --- |
-| `doOcr` | _not set_ | Enable OCR processing in docling-serve API mode. When not set, the server uses its own defaults. Set `enableOCR` to `false` to explicitly disable OCR. |
+| `doOcr` | _not set_ | Enable OCR processing in docling-serve API mode. When not set, OCR is turned on if `ocrLanguage` is set, and otherwise the server uses its own defaults. Set `enableOCR` to `false` to explicitly disable OCR. |
+| `ocrLanguage` | _not set_ | Language for OCR. When set, it is sent as `ocr_lang` with `do_ocr=true`, unless `enableOCR` or `doOcr` is `false`. When not set, the server uses its own default languages. |
 | `forceOcr` | _not set_ | Force OCR processing even for digital documents (documents with selectable text). |
 | `ocrEngine` | _not set_ | OCR engine to use. Supported values: `AUTO`, `EASYOCR`, `OCRMAC`, `RAPIDOCR`, `TESSEROCR`, `TESSERACT`. |
 > **Note**
-> The `enableOCR` and `ocrLanguage` settings are primarily for CLI mode. In API mode, use `doOcr` to explicitly control OCR behavior. When `doOcr` is not set, the server uses its own defaults. Setting `enableOCR=false` will send `doOcr(false)` to the server to disable OCR.
+> In API mode, use `doOcr` to explicitly control OCR behavior. When `doOcr` is not set, a configured `ocrLanguage` turns OCR on, the same way as the `CamelDoclingOCRLanguage` header; otherwise the server uses its own defaults. Setting `enableOCR=false` will send `doOcr(false)` to the server to disable OCR. In CLI mode, `ocrLanguage` defaults to `en` when it is not set.
 
 ### Table and Structure Options
 

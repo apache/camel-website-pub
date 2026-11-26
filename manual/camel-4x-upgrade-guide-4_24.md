@@ -7,6 +7,10 @@ This document is for helping you upgrade your Apache Camel application from Came
 
 ## Upgrading Camel 4.23 to 4.24
 
+### camel-openapi-java - RestModelConverters is now an interface
+
+`org.apache.camel.openapi.RestModelConverters` is now an interface instead of a concrete class. Applications that previously instantiated it with `new RestModelConverters(openapi31)` must migrate to `new DefaultRestModelConverters()`. Applications that extended the old class must implement the new `RestModelConverters` interface or extend `DefaultRestModelConverters` when the default Swagger-based conversion is suitable. The default implementation selects the OpenAPI 3.0 or 3.1 converter based on the `OpenAPI` document’s specification version.
+
 ### Undertow servlet implementation
 
 `camel-undertow` now uses the Jakarta Servlet 6.1 implementation from Undertow EE, `io.undertow.ee:undertow-servlet`, instead of `io.undertow:undertow-servlet`. Undertow core continues to use `io.undertow:undertow-core` and has its own version. The Camel parent property for the servlet implementation changes from `undertow-servlet-version` to `undertow-ee-version`.
@@ -96,6 +100,23 @@ The `generateSecretKeyEncapsulation` and `extractSecretKeyEncapsulation` operati
 
 Bouncy Castle deprecated Classic McEliece, as it is now believed to be unsafe to use, and will remove it in a future release. The `CMCE` key encapsulation algorithm of the `pqc` component and the `pqc` data format is deprecated too, and an endpoint or a data format that uses it logs a WARN at startup. Use `MLKEM` instead.
 
+#### camel-pqc - Hybrid wire format v2 is now the default
+
+The hybrid signature and hybrid KEM utilities now produce **wire format v2** by default. `sign()`, `encapsulate()`, and the 2-argument `combineSignatures()` / `combineEncapsulations()` overloads all emit v2 output. A 4.24 writer paired with a pre-4.24 reader will fail with "invalid classical length" because the reader does not recognize the v2 magic header. Upgrade the readers before the writers: bring all consumers to 4.24 first, then upgrade the producers.
+
+The following `PQCAlgorithmId` constants, originally shipped in 4.19.0, have been removed because the algorithms they referred to were renamed or dropped upstream:
+
+-   `DILITHIUM` (was `0x0206`)
+    
+-   `SPHINCSPLUS` (was `0x0208`)
+    
+-   `PICNIC` (was `0x0209`)
+    
+-   `KYBER` (was `0x040A`)
+    
+
+The `HybridSignatureComponents` and `HybridEncapsulationComponents` record constructors changed from 2 arguments (`classicalBytes`, `pqcBytes`) to 5 arguments (`classicalBytes`, `pqcBytes`, `classicalAlgorithmId`, `pqcAlgorithmId`, `version`). Code that constructs these records directly must be updated.
+
 ### camel-observability-services - promoted to Stable
 
 The `camel-observability-services` component has been promoted from _Preview_ to _Stable_ support level.
@@ -129,9 +150,29 @@ Starting in 4.24:
 -   `KeyValueAggregationRepository` safely verifies entry types before unmarshalling, ignoring unexpected types gracefully instead of failing with a class cast exception.
     
 
+### camel-api - ExchangeExtension has a new method
+
+`org.apache.camel.ExchangeExtension`, the internal extension of an `Exchange`, has a new method that an implementation must implement:
+
+```java
+long nextAwaitOrder()
+```
+
+It returns a number that grows with each call for the same exchange, which the await manager uses to tell which of the threads that wait for the same exchange made its `process()` call last. Camel’s exchanges (`DefaultExchange`, `DefaultPooledExchange`) implement it; only a custom implementation of `ExchangeExtension` needs a change.
+
+The await manager now keeps one entry per blocked thread, not one per exchange. So `browse()` (JMX and the blocked console) lists one row per blocked thread, and can show two rows for one exchange when two threads wait for it (for example a nested `ProducerTemplate` call that sends the same exchange).
+
+### camel-core - Idempotent Consumer processes an exchange that a calling route redelivers
+
+When the error handler of a calling route redelivers an exchange that failed inside an Idempotent Consumer (for example `to("direct:sub")` where the sub route uses `noErrorHandler`, or an exception that escapes a `doTry` block of the sub route), the Idempotent Consumer took the redelivered exchange for a duplicate of itself, as the message id it had added was still in the repository: the message was skipped (or routed on with `CamelDuplicateMessage=true` when `skipDuplicate=false`), the exchange completed without an error, never reached a dead letter channel, and the message id stayed in the repository. The redelivered exchange is now processed again. The same applies when a `doCatch` of the calling route sends the failed exchange to the sub route again. This applies with `eager=true`, `removeOnFailure=true` and `completionEager=false` (the defaults); with `completionEager=true` the message id was already removed when the exchange failed. An exchange that failed after the Idempotent Consumer still does not run the Idempotent Consumer again, and with `removeOnFailure=false` the redelivery is still a duplicate.
+
 ### camel-core - throwException with an exception instance gets no suppressed exceptions
 
 A `throwException` step given an exception instance (`throwException(new MyException("…​"))` in Java, or a bean with `ref`) sets that one object on every message. The error handler no longer adds the previous exception of the message (such as the one an `onException` translates) to it as suppressed: the instance used to keep the exceptions of all the messages, and grew with each one. An exception from a predicate of `onException` (such as `handled`), a `doFinally`, an `onCompletion`, a saga compensation, or the completion of the aggregation strategy of a Multicast, Recipient List or Split is no longer added to it either, and is logged instead. Use `throwException(MyException.class, "…​")`, or `exceptionType` and `message`, to get a new exception for each message, with the previous exception as suppressed.
+
+### camel-support - a scheduled poll consumer is DOWN after a VirtualMachineError until the route is restarted
+
+When a poll of a scheduled poll consumer (such as `file`, `ftp` or `scheduler`) fails with a `VirtualMachineError` (such as an `OutOfMemoryError` thrown by the poll, or by the route of the polled message, which does not catch it), the consumer stops polling until the route is restarted, with any scheduler and also with `scheduler.concurrentConsumers` greater than 1. Its health check flips to DOWN, with the error, and stays DOWN until the route is restarted. Previously, with the default scheduler, the scheduled task that ran the poll stopped polling, and the health check stayed UP; the Spring and Quartz schedulers kept running the task. Another `Error` of the poll (such as a `NoClassDefFoundError` of a client library) is now a failed poll, as an exception, and the consumer polls again; previously, with the default scheduler, it also ended the scheduled task. See the section "camel-core - a VirtualMachineError fails the exchange, and Camel does not recover from it".
 
 ### camel-core - a to with an expression in its endpoint uri logs a WARN
 
@@ -179,6 +220,10 @@ The steps of a Dynamic Router or Routing Slip are wrapped in the error handler o
 -   With `ignoreInvalidEndpoints`, an endpoint whose producer cannot be created is ignored also when it is the last one of the slip. Before, the message failed with a `FailedToCreateProducerException`.
     
 
+### camel-core - String converts to OffsetDateTime, ZonedDateTime and Instant
+
+Camel now has type converters from `String` to `java.time.OffsetDateTime`, `java.time.ZonedDateTime` and `java.time.Instant`. They read ISO-8601 only, such as `2026-11-18T23:00:00+01:00`, `2026-11-18T22:00:00Z` or `2026-11-18T23:00:00+01:00[Europe/Paris]` (zone id for `ZonedDateTime` only), and an empty string converts to `null`. A space is read as `` `, as an endpoint URI decodes the ` `` of a positive offset to a space; `%2B` and `RAW(…​)` work too. Endpoint options of these types, such as `scheduledEnqueueTime` of `azure-servicebus`, `modifiedSince` of `minio` or `timestamp` of `aws2-cw`, can now be set in an endpoint URI or as a property; before, this failed with `No type converter available`. An expression such as `${headerAs(when, java.time.Instant)}` on an ISO-8601 string now gives the converted value instead of `null`, and a value that is not ISO-8601 now fails the conversion.
+
 ### camel-kamelet - the output data type of a Kamelet is applied when it hands the message on
 
 A Kamelet that declares a default output data type (`spec.dataTypes.out.default`) now gives the message that type when it hands it on with `kamelet:sink`. Before, the type was applied only when the route of the Kamelet completed:
@@ -209,6 +254,10 @@ In the Java DSL, `completionSize`, `completionTimeout` and `completionPredicate`
 ### camel-seda - a discarded request-reply message fails at once
 
 When the SEDA producer waits for the reply (`InOut` messages, or `waitForTaskToComplete=Always`) and discards the message, because of `discardIfNoConsumers` with no consumer, or `discardWhenFull` with a full queue, the exchange now fails at once with a `java.util.concurrent.RejectedExecutionException` (the same exception as for a message discarded when the queue is purged). Before, the producer waited for a reply that never came: until the `timeout` (30 seconds by default), and then failed with an `ExchangeTimedOutException`, or for ever when the `timeout` was 0 or less. A discarded `InOnly` message is still dropped without an error.
+
+### camel-seda - SedaConsumer.doRun takes the start of its polling task
+
+`SedaConsumer.doRun()` is now `doRun(int start)`. Each start of the consumer submits its own polling tasks, and a task stops polling once the consumer was stopped and started again, so that the threads of an earlier start no longer poll next to the threads of the new start. The `taskCount` arithmetic that `setupTasks` used to add threads on a restart is gone. A class that extends `SedaConsumer` and overrides `doRun()` must override `doRun(int start)` instead, and should keep the loop condition `isCurrentStart(start) && isRunAllowed()` of the default implementation. The new protected method `isCurrentStart(int start)` returns true while no later start of the consumer has happened.
 
 ### camel-ehcache - shared CacheManager and changed defaults
 
@@ -308,9 +357,33 @@ No option or default changes. With the default `stepwise=true`, an upload, a dow
 
 With the default `autoCreate=true`, the producer no longer checks that a directory exists before each upload into a directory where it already stored a file on the same connection; it remembers the 100 most recently used directories per connection. When such a directory is removed while the connection is open, the first attempt to upload into it fails; the producer then creates the directory again and uploads the file once more, and logs this at INFO level. It does not try again when the message body is a stream (other than a stream cache, which is the default for streams with stream caching enabled) or a reader, or with `fileExist=Append`: that upload fails, and the next one checks the directory. The directories that a consumer moves files into (`move`, `preMove`, `moveFailed`) are still checked each time.
 
-With the default `sendNoop=true`, the ftp producer no longer sends a `NOOP` before an upload when the server completed an upload, a download or a `NOOP` on that connection less than a second before. A connection that the server closed within that second is then found by the upload, which fails, instead of by the `NOOP`, after which the producer would have connected again; the next upload connects again. The consumer still sends a `NOOP` before each poll, and the health check before each check.
+With the default `sendNoop=true`, the ftp and sftp producers no longer send a `NOOP` before an upload when the server completed an upload, a download or a `NOOP` on that connection less than a second before. A connection that the server closed within that second is then found by the upload, which fails, instead of by the `NOOP`, after which the producer would have connected again; the next upload connects again. The consumer still sends a `NOOP` before each poll, and the health check before each check. For sftp, the noop is now an SFTP `REALPATH` round-trip (answered by the server) instead of an SSH keep-alive write (fire-and-forget), so a stale session that was idle for more than a second is detected before the next upload. This also means the sftp consumer with the default `sendNoop=true` sends one `REALPATH` request per poll.
 
 The absolute paths that the SFTP server sees do not change. The FTP server sees fewer `CWD` and `PWD` commands, and its current directory between two uploads is the directory of the last file, not the starting directory. `FtpOperations` `getClient()` changes back to the starting directory before it returns the client; code that keeps the `FTPClient` (for example the one set with the `ftpClient` option) and sends commands with relative names between two operations of Camel must change directory itself.
+
+### camel-ftp, camel-mina-sftp, camel-jsch - an absolute file name is refused when the endpoint has no directory
+
+With the default `jailStartingDirectory=true`, a producer whose endpoint has no directory (for example `sftp://user@host`, which uploads into the home directory of the login) now refuses an absolute file name: a name starting with `/` or `\`, or with a drive such as `C:/`, `C:\` or `C:` alone, which a server on Windows takes as absolute (on other servers such a name was written as a relative name). The exchange fails with an `IllegalArgumentException` stating that the filename is jailed to the starting directory. A name such as `a:b.txt` is not refused.
+
+When the endpoint has a directory, an absolute name is relative to it, as before. To write files at absolute paths from an endpoint without a directory, set `jailStartingDirectory=false` on the endpoint. This also applies to the `scp` producer, which wrote a name starting with `/` relative to the home directory: use a relative name instead.
+
+### camel-ftp - handleDirectoryParserAbsoluteResult: a recursive poll changes into a listed directory by its name
+
+With `handleDirectoryParserAbsoluteResult=true` (for a server that lists the absolute path of each entry), a recursive poll now changes into a listed sub directory by its name, relative to the directory that it lists, instead of the absolute path that the server listed, and skips a listed directory whose absolute path is not in the directory that it lists. The files of such a sub directory are now downloaded from that directory; before, their download could fail, as their path was built from the absolute path of the sub directory. A listed sub directory is matched by its name, so a hidden directory (whose name starts with a dot) is skipped, as with other servers. Listed files are matched as listed, as before.
+
+### camel-ftp, camel-mina-sftp, camel-jsch, camel-azure-files - the starting directory check resolves a name as a server does
+
+The check that a file is in the starting directory (`jailStartingDirectory=true`, the default, for a producer, and the same check of a consumer) now resolves the `.` and `..` segments of a name the way a server does, and refuses a name with a `..` segment that goes above the start of the name, also when the endpoint has no directory or its directory is the root (`/`). A name that starts like a scheme or a drive, such as `http:`, `file:` or `C:`, is resolved like any other name. The exchange fails with an `IllegalArgumentException` stating that the filename is jailed to the starting directory. Remove the `..` segments from such a name.
+
+### camel-ftp, camel-mina-sftp, camel-jsch, camel-azure-files - a file name with both a backslash and a `..` segment is refused in some configurations
+
+With `jailStartingDirectory=true` (the default), a producer now refuses a file name that has both a backslash and a `..` segment, such as `sub\..\report.txt`, when the `separator` option is `Windows` or `Auto`, when the producer writes a temp file (`tempPrefix` or `tempFileName`) or a done file (`doneFileName`), or when `checksumFileAlgorithm` is set (with `checksumWriteFile` at its default, `true`). Where such a name goes depends on the server and on the platform that Camel runs on. The exchange fails with an `IllegalArgumentException` stating that the filename is jailed to the starting directory. With the default options, the producer replaces each backslash by `/` and writes such a name as before. Remove the backslashes or the `..` segments from the name.
+
+The `scp` producer (camel-jsch) sends a name as given, so it refuses such a name whatever its options.
+
+### camel-ftp, camel-mina-sftp - a stepwise recursive poll skips a listed directory whose name is not one name
+
+A recursive consumer with `stepwise=true` (the default) changes into each sub directory by its name, and back to its parent afterwards. It now skips a directory from the listing of the server whose name is blank, `.` or `..`, or has a `/` or a `\` (other than a trailing `/`), and logs it at DEBUG level, as such a name would leave the poll in another directory than the one it lists. A backslash is a valid character in the name of a directory on a server on Linux: to poll such a directory, set `stepwise=false`. With `handleDirectoryParserAbsoluteResult=true`, a backslash always separates names, so such a directory cannot be polled.
 
 ### camel-ai-resource - fixed resourceUri cannot contain braces
 
@@ -331,6 +404,12 @@ At the default level `basic`, this also removes the span that a `langchain4j-age
 ### camel-ai-observability - GenAI spans go through camel-opentelemetry2 when it is in use
 
 When both `camel-opentelemetry2` and a Micrometer `ObservationRegistry` are present (for example on Spring Boot with the Actuator), the GenAI spans are now created through `camel-opentelemetry2`, in the same tree as the route spans, instead of as Micrometer Observations. The `gen_ai.client.operation` timer is then recorded directly through the `MeterRegistry` rather than by the Observation’s meter handler, so it has no `error` tag and no `gen_ai.client.operation.active` long task timer. Applications that trace through Micrometer only, or with `camel-micrometer-observability`, keep the Observations.
+
+### camel-openai, camel-spring-ai-chat - the path of the mcpServer url is the endpoint of the MCP server
+
+With `transportType=streamableHttp` (camel-openai) or `transportType=sse` (camel-openai and camel-spring-ai-chat), the path and the query of `mcpServer.<name>.url` are now used: the Streamable HTTP requests, and the request that opens the SSE stream, go to that URL. The SSE messages still go to the message endpoint that the server sends. Before, the MCP SDK replaced the path of the URL with `/mcp` (Streamable HTTP) or `/sse` (SSE) and dropped its query, so `url=http://host:8080/api/mcp` sent the requests to `[http://host:8080/mcp](http://host:8080/mcp)`, and an MCP server on another path could not be reached. A URL without a path, such as `[http://host:8080](http://host:8080)`, still uses `/mcp` or `/sse`.
+
+A URL whose path is not the endpoint of the server, such as `[http://host:8080/v1](http://host:8080/v1)` for a server on `/mcp`, worked because its path was ignored, and now fails: set the URL of the endpoint, here `[http://host:8080/mcp](http://host:8080/mcp)`, or remove the path. The URL must be absolute, with a scheme and a host.
 
 ### camel-micrometer, camel-opentelemetry-metrics - tags and attributes from headers are used as given
 
@@ -405,6 +484,10 @@ An `AiToolConfiguration` bean given as the `configuration` option no longer repl
 -   On an endpoint, `configuration=#myBean` gives the values that the bean sets. The other options of the endpoint win over them, and the values that the bean does not set come from the component, such as its `authorizationPolicy` and `allowedRoles`. Previously the bean replaced the options of the endpoint and the values of the component. The bean itself is no longer changed by the options of the endpoints that use it.
     
 
+### camel-ai-tool - an argSchema without additionalProperties gets additionalProperties: false
+
+When the `argSchema` of an `ai-tool` endpoint does not set `additionalProperties`, Camel now adds `additionalProperties: false` to the schema that it lists to clients and validates. This is the same as for the schema generated from `parameter.*`. A client that validates the input, such as the MCP server, now refuses a call with an undeclared argument; previously Camel accepted the call and dropped the argument with a WARN. To accept other arguments, set `additionalProperties` in the schema yourself; the route still receives only the declared top-level arguments.
+
 ### camel-docling - the CamelDoclingOutputFilePath header is a relative path unless outputBaseDirectory is set
 
 When the `outputBaseDirectory` option is not set, the `CamelDoclingOutputFilePath` header must now be a relative path that does not start with `../` once normalized, the same rule as for the custom arguments. An absolute path, or a path that leaves the working directory, fails the exchange with an `IOException`. Previously the header was only normalized and could name any directory.
@@ -453,6 +536,24 @@ The `cql` producer binds a `Map` body by name: each named marker of the statemen
 
 A cql endpoint no longer closes a session given with `session` or `beanRef` when it stops, such as when the route that uses it is removed. It still closes a session it creates from its `hosts`, and creates a new one when it is started again. The application closes a session it gives to the endpoint, such as with a destroy method of its bean.
 
+### camel-cassandraql - the key value repository writes with lightweight transactions only
+
+`CassandraKeyValueRepository` now stores and removes entries with Cassandra lightweight transactions only. Before, `put` and `delete(key)` used a plain `INSERT` and `DELETE` while `putIfAbsent`, `replace` and `delete(key, expectedValue)` used lightweight transactions. The timestamp of a plain write is generated by the client and the one of a lightweight transaction by the server, so a plain write could hide a `replace` or a `delete(key, expectedValue)` that had returned `true`. Now `put` and `delete(key)` return the value they have actually replaced or removed, also when another client writes the same key at the same time.
+
+As a lightweight transaction costs more than a plain write, `put` and `delete(key)` are slower, and the serial consistency applies to them. A multi-datacenter deployment that writes with `LOCAL_ONE` or `LOCAL_QUORUM` pays a cross-datacenter Paxos round for each of them, unless the driver uses a local serial consistency with `basic.request.serial-consistency = LOCAL_SERIAL` in its configuration. Under contention on a key, a lightweight transaction can also fail with a `WriteTimeoutException` of write type `CAS`, which a plain write never did.
+
+The protected methods `initInsertStatement`, `initInsertWithTtlStatement` and `initDeleteStatement` are removed, as the repository no longer uses these statements.
+
+Also, when the value of an entry expires (TTL) Cassandra can leave the row behind without a value, which happened for an entry stored with a TTL that replaces an existing entry or that is stored by `replace`. Such a row is now considered absent: `contains`, `keys` and `size` no longer report it, and `putIfAbsent` can store a value for it.
+
+### camel-mongodb - the change streams consumer stores the post batch resume token
+
+While no change of its collection arrives, the change streams consumer now takes the post batch resume token of the change stream after each getMore that returns no change (about once a second), and stores it in the `changeStreamTokenRepository` when it differs from the stored token. A repository is therefore also written while the collection sees no change, at most about once a second. Before, only the token of the last change whose exchange completed was stored; on a collection that sees few changes, that token could fall out of the oplog, and the change stream could then no longer be resumed.
+
+A route with a token repository that has not consumed any change yet now also resumes after a restart: it resumes after the stored post batch resume token, so the changes made while the route was stopped are routed. Before, such a route had nothing stored and started at the current time after a restart.
+
+A resume token that the oplog no longer has (MongoDB answers ChangeStreamHistoryLost), such as a token stored before the route was stopped for longer than the oplog window, or a `changeStreamToken` that old, no longer fails the start of the route, and the consumer no longer tries it again for as long as the route runs: it logs a WARN and opens the change stream at the current time, so the changes made since that token are not consumed.
+
 ### camel-mina-sftp - checking whether a file exists takes one lstat request
 
 The `mina-sftp` component now checks whether a remote file exists (`fileExist=Ignore|Fail|Move`, `tempFileName`, `tempPrefix`, a producer `doneFileName`) with an `lstat` request instead of `stat`. `readLock=changed` reads the size and modification time of the file with the same request, instead of a listing of the directory. Each check is one request, whatever the number of files in the directory, and `fastExistsCheck` no longer makes a difference for `readLock=changed`: with `fastExistsCheck=true`, the read lock is now acquired, where before the file was never consumed. The answer can differ from before in two cases:
@@ -467,6 +568,16 @@ The `mina-sftp` component now checks whether a remote file exists (`fileExist=Ig
 ### camel-mina-sftp - TCP\_NODELAY is set on the connections
 
 The `mina-sftp` component now sets `TCP_NODELAY` on its connections, as the JSch-based `sftp` component does. Apache MINA SSHD leaves it off by default, so a small request, such as one that reads the next part of a directory listing, could wait for the server to acknowledge the previous reply. The `org.apache.sshd.config.tcp-nodelay` system property no longer applies to the connections of `mina-sftp`.
+
+### camel-mina-sftp - a rejected login is not retried
+
+When the SFTP server rejects the credentials, `mina-sftp` now throws `GenericFileOperationFailedException` immediately instead of retrying the connection `maximumReconnectAttempts` times (default 3). Retrying a rejected login sends the wrong password to the server repeatedly, which may trigger an account lockout. This change aligns `mina-sftp` with the `sftp` component (see CAMEL-27019).
+
+Transient connection failures (server unreachable, network error) are still retried as before.
+
+### camel-mllp - maxConcurrentConsumers limits the connections again
+
+The MLLP consumer resets a new connection when `maxConcurrentConsumers` connections are already being served, as the option documents. Since Camel 4.18 the consumer thread pool ran such a connection on the thread that validated it instead, so the option had no effect. A client that opened more connections than `maxConcurrentConsumers` (default 5) now gets the extra ones reset. To serve more connections at the same time, set `maxConcurrentConsumers` to the number of connections the clients open. With virtual threads enabled and `maxConcurrentConsumers` above 1, the consumer pool has no limit, as before.
 
 ### camel-atmosphere-websocket - events carry the query parameters of their own connection
 
@@ -565,6 +676,10 @@ With `exactlyOnce`, a Kafka send through the source producer after an earlier se
 
 With the `DefaultKafkaManualAsyncCommitFactory`, `KafkaManualCommit.commit()` records the offset, and the consumer thread commits it before its next poll, as in Camel 4.21. In Camel 4.23 (and 4.22 before 4.22.3), the commit ran at once on the calling thread. That failed with a `ConcurrentModificationException` when the calling thread was not the consumer thread (for example, after an aggregator). A commit called after the partition was revoked from the consumer is not made. It would move back the offset that the new owner of the partition committed.
 
+### camel-kafka - with manual commits, a rebalance or a stop commits only what the route committed
+
+With `allowManualCommit=true` and the `DefaultKafkaManualCommitFactory` or the `DefaultKafkaManualAsyncCommitFactory`, a partition that is revoked from the consumer (in a rebalance, or when the consumer stops) is now committed up to the last record that the route committed with `KafkaManualCommit.commit()`. Before, it was committed up to the last record that the route processed, also when the route had not committed it, for example a record held in an aggregation group that is not complete. Such a record was not consumed again, and was lost when the application stopped before the group completed. Now the records that the route did not commit are consumed again after a rebalance or a restart, by this consumer or another one of the group, so they may be processed more than once. This includes the records that the route commits only after the partition was revoked, for example when an aggregator completes its group after the Kafka route was stopped: that commit is not made. The same applies when a pausable consumer pauses after a failed record: the failed record is no longer committed. `breakOnFirstError` is unchanged: it still commits the records before the failed one, whether the route committed them or not, so that the failed one is polled again.
+
 ### camel-kafka - each consumer of consumersCount gets its own group instance id
 
 With `groupInstanceId` (or `additionalProperties.group.instance.id`) and `consumersCount` greater than 1, the consumer with index n now joins the group with the id `<groupInstanceId>-n`, for example `pod-1-0`, `pod-1-1` and `pod-1-2`. Before, all the consumers used the same id and fenced each other in a loop (`FencedInstanceIdException`). With `consumersCount=1` the id is used as given. After the upgrade, the static member with the old id stays in the group until its session timeout (`sessionTimeoutMs`) expires.
@@ -576,6 +691,12 @@ A Kafka consumer without `groupId` now logs a WARN when it starts. It still uses
 ### camel-kafka - a consumer uses the group.id set in additionalProperties
 
 A Kafka consumer without `groupId` now uses the `group.id` set in `additionalProperties` (`additionalProperties.group.id` on the endpoint, or `camel.component.kafka.additional-properties[group.id]`). Before, the consumer replaced it with a generated group id, a new one at each start. Such a consumer now joins that group: it starts from the offsets committed by the group (or where `autoOffsetReset` says when the group has none), and the instances of the application that use the same group share the records. With `group.id` in the `additionalProperties` of the component, every consumer endpoint without `groupId` now joins that one group, where before each had a generated group of its own: routes that consume the same topic now share its records. Set `groupId` on each route that must receive every record. When both `groupId` and the `group.id` property are set, `groupId` is still used.
+
+### camel-kafka - partitionAssignor uses the Kafka default
+
+The `partitionAssignor` option of the Kafka consumer no longer defaults to `org.apache.kafka.clients.consumer.RangeAssignor`. When it is not set, Camel no longer sets `partition.assignment.strategy`, and the Kafka default applies: `RangeAssignor` and `CooperativeStickyAssignor`, in that order. The partitions are still assigned by the `RangeAssignor`, also in a consumer group where some members still run an older Camel version, so a rolling upgrade does not change the assignment. To move the group to cooperative rebalancing afterwards, do one more rolling restart with `partitionAssignor` set to `org.apache.kafka.clients.consumer.CooperativeStickyAssignor`. Set `partitionAssignor` to `org.apache.kafka.clients.consumer.RangeAssignor` to keep the old setting.
+
+With a cooperative assignor, or with `groupProtocol=consumer`, a rebalance assigns only the partitions it adds to a consumer, and the consumer keeps reading the other partitions from where it was. `seekTo`, `offsetRepository` and a resume strategy now only move the partitions that a rebalance assigned. Before, they also moved back the partitions that the consumer kept, which read their records again (`seekTo=BEGINNING`, `offsetRepository`) or skipped records (`seekTo=END`). With an eager assignor such as `RangeAssignor` every rebalance assigns all the partitions, so nothing changes there.
 
 ### camel-kafka - Kafka 4.4 needs the Confluent serializers 8.4 or newer
 
@@ -651,6 +772,12 @@ This is the default (`false`) of the new `synchronous` option of the `platform-h
 
 To keep the behaviour of Camel 4.2 to 4.23, where the worker thread waits until the route is complete and the worker pool bounds the requests in flight, set `synchronous=true` on the endpoint, or `camel.component.platform-http.synchronous=true` for all of them. A route that stays in the asynchronous mode and needs a bound sets one itself, for example with `throttle(n).concurrentRequestsMode().asyncDelayed()`: with `asyncDelayed`, a request that waits for a permit does not hold a worker thread either.
 
+### camel-knative-http, camel-vertx-websocket - a route with an asynchronous step no longer holds a worker thread
+
+A `camel-knative-http` or `camel-vertx-websocket` consumer route with an asynchronous step, such as a `vertx-http` call, no longer holds a Vert.x worker thread while it waits for that step. So the size of the worker pool no longer limits how many messages of such a route are in flight at the same time.
+
+To keep the old behaviour, where the worker thread waits until the route is complete and the worker pool bounds the messages in flight, set `synchronous=true` on the endpoint.
+
 ### camel-http - authMethod=Bearer and authMethod=NTLM are applied
 
 The endpoint options `authMethod=Bearer` and `authBearerToken` now send the token when the server asks for it. Before, only a token set in the `httpConfiguration` of the component was sent. With `authenticationPreemptive=true`, the token is now sent with the first request; before, the request failed with `IllegalStateException: Bearer token is null`.
@@ -691,6 +818,16 @@ The `cxfrs` producer does not read the former `operationName` header either. Wit
 The `cxf` consumer returns the headers of the reply message as HTTP response headers. As the headers of the request stay on the message unless the route removes them, the request headers were sent back with the response. The consumer now leaves out the common HTTP request headers, such as `Authorization`, `Cookie`, `Host`, `User-Agent` and the `Accept` and `If-*` headers, compared without regard to case. This is the same list as `platform-http`, which keeps these headers off its responses too. Other headers of the request, such as custom `X-` headers, are still returned unless the route removes them. The `cxf` producer is not changed, and still sends these headers to the service.
 
 A route that relied on one of these headers being returned can return it under another name, or set the `cxfBinding` option to a subclass of `DefaultCxfBinding` that overrides `isHttpRequestHeader` and returns `false` for the header.
+
+### camel-cxf - in Camel JBang a cxf consumer is served on the platform-http server, and its address is a path
+
+In Camel JBang (the Camel CLI), a `cxf` consumer (a SOAP service) is now served on the platform-http server, the Vert.x HTTP server that also serves REST, platform-http routes and the health checks, with its port, bind address, TLS and authentication (`camel.server.*`). Camel JBang no longer downloads `cxf-rt-transports-http-undertow` to start a separate server on the port of the address, also not when Jetty or Undertow is on the classpath.
+
+The address of a consumer is now a path, served under `/services` (option `camel.cxf.path`), the same as `cxf.path` on Spring Boot and `quarkus.cxf.path` on Quarkus. Change `cxf:http://0.0.0.0:9000/orders` to `cxf:/orders`; the service is then at `http://localhost:8080/services/orders` (with `camel.server.port`). A consumer with an address with a scheme and a host fails when the route starts. The `cxf` producer (a SOAP client) is not changed and still takes a full URL.
+
+`camel export` to Camel Main adds `camel-cxf-platform-http` and `camel-platform-http-main` for an integration with a `cxf` consumer, and turns on the HTTP server. An integration with only `cxf` producers gets neither. The export to Spring Boot and Quarkus uses their CXF starter and extension, as before, with `camel.cxf.path` mapped to `cxf.path` and `quarkus.cxf.path`.
+
+A Camel Main application is not changed: it serves a cxf consumer with the transport it brings (Jetty or Undertow), unless it adds `camel-cxf-platform-http`.
 
 ### camel-snmp - the trap consumer receives only the traps of its snmpVersion
 
@@ -840,6 +977,10 @@ When `pollEnrich` (or `poll`) times out and no `aggregationStrategy` is configur
 
 The body, or the variable, is now `null` after a timeout for these consumers too. A route that read the incoming file or payload from the body after a timed out `pollEnrich` must keep it before the `pollEnrich` instead, for example with `variableReceive`, which leaves the body as it was. To keep the body empty, the message is replaced by a plain message with the same message id, headers and attachments, so after a timeout it is no longer of the message type of the consumer (such as `GenericFileMessage` or `JmsMessage`).
 
+### camel-core - the in-memory saga answers a compensate or complete during a running finalization with its outcome
+
+With the in-memory saga service (`InMemorySagaService`), a `compensate()` or `complete()` that finds the saga already being compensated or completed (by the timeout of a step, or by another caller such as `saga:compensate`, `saga:complete` or the Saga EIP in `AUTO` mode) now waits for that compensation or completion, and fails when it fails (`Cannot compensate: status is FAILED`). Before, it reported success at once, also when the compensation then failed. The exchanges that compensate or complete a step carry the exchange property `CamelInMemorySagaFinalizing` with the id of their saga; a call for its own saga from such an exchange, or from the thread that calls the compensation or completion endpoint (also after `removeProperties("*")`), is answered at once, as before.
+
 ### camel-core - Loop EIP breakOnShutdown
 
 The Loop EIP with `breakOnShutdown` now only breaks out when the route (or Camel) is stopped, and no longer on suspend. A suspend waits for the loop like any other inflight exchange. A loop that never ends on its own (such as a `doWhile` with `breakOnShutdown`) is therefore no longer broken at once by a suspend: the suspend waits until the shutdown timeout, and the forced suspend then breaks the loop and stops the consumer of the route.
@@ -982,7 +1123,7 @@ To turn off the error handler per output of such an EIP again (no redelivery of 
 
 ### camel-core - an Error of an advice of a route, a route policy or the result processor of a send
 
-An `Error` that is not a `VirtualMachineError` (such as a `NoClassDefFoundError` of a data format), thrown by an advice of a route or of a step (such as the binding of the Rest DSL, `variableReceive`, or the debugger, for example an assertion in `debugBefore` or `debugAfter` of camel-test), by the result processor of a `ProducerTemplate` send, or by the producer of a transacted `ProducerTemplate` send, now fails the exchange (wrapped in a `CamelExecutionException`), and the advices that already ran end as for an exception (such as the end of the unit of work). As for an exception of an advice, the error handler of that route does not get it. An `Error` of a `RoutePolicy` (`onExchangeBegin`, `onExchangeDone`) is logged at WARN and ignored, as an exception already was, so an assertion inside a `RoutePolicy` no longer fails the caller. Before, the `Error` was thrown on to the code that ran the route or the send (such as the consumer, or the caller of a `ProducerTemplate`), and the exchange could stay inflight (an asynchronous send with a result processor could never complete when the endpoint answered on another thread). A `VirtualMachineError` is left as before.
+An `Error` that is not a `VirtualMachineError` (such as a `NoClassDefFoundError` of a data format), thrown by an advice of a route or of a step (such as the binding of the Rest DSL, `variableReceive`, or the debugger, for example an assertion in `debugBefore` or `debugAfter` of camel-test), by the result processor of a `ProducerTemplate` send, or by the producer of a transacted `ProducerTemplate` send, now fails the exchange (wrapped in a `CamelExecutionException`), and the advices that already ran end as for an exception (such as the end of the unit of work). As for an exception of an advice, the error handler of that route does not get it. An `Error` of a `RoutePolicy` (`onExchangeBegin`, `onExchangeDone`) is logged at WARN and ignored, as an exception already was, so an assertion inside a `RoutePolicy` no longer fails the caller. Before, the `Error` was thrown on to the code that ran the route or the send (such as the consumer, or the caller of a `ProducerTemplate`), and the exchange could stay inflight (an asynchronous send with a result processor could never complete when the endpoint answered on another thread). For a `VirtualMachineError`, see the section "camel-core - a VirtualMachineError fails the exchange, and Camel does not recover from it".
 
 ### camel-core - an AsyncProcessor that throws in a step without an error handler fails the exchange
 
@@ -1007,7 +1148,7 @@ An `Error` that is not a `VirtualMachineError` (such as an `AssertionError` or a
 -   by the watermark expression of a `split`: it fails that item, as an exception does. Before, it was thrown to the caller and the split exchange stayed inflight.
     
 
-A `VirtualMachineError` is left as before. See the next section.
+For a `VirtualMachineError`, see the section "camel-core - a VirtualMachineError fails the exchange, and Camel does not recover from it".
 
 ### camel-core - an Error thrown by a Processor fails the exchange
 
@@ -1017,15 +1158,40 @@ When a plain `Processor` (in `process(…​)`, in `bean(…​)` for a bean tha
 | Thrown by the processor | What happens |
 | --- | --- |
 | An `Error` that is not a `VirtualMachineError`, such as `AssertionError`, `LinkageError` (`NoClassDefFoundError`, `ExceptionInInitializerError`) or a custom `Error` | The exchange fails with it (wrapped in a `CamelExecutionException`), and the error handler handles it as any other failure: redelivery, `onException`, `doCatch` and a dead letter channel get it. `onException(Exception.class)` and `doCatch(Exception.class)` also match it; to treat it differently, match it on its class, such as `onException(AssertionError.class)` |
-| A `VirtualMachineError`, such as `OutOfMemoryError`, `StackOverflowError` or `InternalError` | Not changed by this entry: Camel’s error handling does not get it (the JVM may no longer be in a consistent state, so the application should not handle it). It is not set on the exchange, but thrown on after the processor’s callback was called. Depending on the error handler, the `Error` reaches the caller (and the exchange may stay inflight), or it is only logged and the route continues as if the processor had succeeded |
-
-An application with strict reliability needs should not rely on Camel to react to a `VirtualMachineError`. For an `OutOfMemoryError` that the JVM raises, it can let the JVM stop with `-XX:+ExitOnOutOfMemoryError` or `-XX:+CrashOnOutOfMemoryError` (these options do not cover a `StackOverflowError`, or an `OutOfMemoryError` that code throws itself).
+| A `VirtualMachineError`, such as `OutOfMemoryError`, `StackOverflowError` or `InternalError` | The exchange fails with it too, but Camel does not recover from it on its own: see the next section |
 
 `template.send(…​)`, `template.request(…​)` and `template.asyncSend(…​)` return the exchange (or its future) with the exception and do not throw it. `sendBody(…​)` and `requestBody(…​)` throw a `CamelExecutionException` that holds the `Error`, unless the failure was handled (such as by a dead letter channel, `onException(…​).handled(true)` or `doCatch`). A test that sends with `template.send(…​)` and asserts only inside a processor must now check the exception of the returned exchange (`exchange.getException()`), or send with `sendBody(…​)` or `requestBody(…​)`.
 
 The same now applies to an `Error` that is not a `VirtualMachineError` thrown by the expression of a `recipientList`, by the expression of a `split` with `synchronous=true` (or while a `multicast` or `recipientList` with `synchronous=true` prepares its parts), by the `AggregationStrategy` of a `split`, `multicast` or `recipientList` (also when its `timeout` is called), by the iterator of a `split` with `streaming()`, by a data type transformer (`transform` to a data type), and by the producer of a component built on the API component framework when it is not thrown by an API method called by reflection (for example when the producer creates its client, or calls a client method directly); an `Error` of an API method called by reflection already failed the exchange. Before, depending on the error handler, the route continued as if the step had succeeded, or the `Error` reached the caller. An `Error` of the `AggregationStrategy` or of the iterator of a streaming `split` (unless the EIP was `synchronous=true` or the exchange transacted, in both cases without `parallelProcessing`) reached the caller without the error handler, and the exchange stayed inflight until the CamelContext stopped; with `parallelProcessing` (or when the timeout was called) it was lost on a thread of the pool, and the caller got no answer. For the producer of an API component, the `Error` was lost on its thread. The same applies to an `Error` that is not a `VirtualMachineError` thrown by a producer injected with `@EndpointInject` or `@Produce` (or by the producer of a `@Produce` proxy) before it completes the exchange: the exchange fails with it, wrapped in a `CamelExecutionException`, and `process(exchange)` no longer throws it. Before, the `Error` reached the caller of `process(exchange)`, and the exchange stayed inflight. An `Error` of the `onPrepare` processor of a `split`, `multicast` or `recipientList` fails only the part it prepares, as an exception does, and the other parts are still sent. Before, no part was sent (for a streaming `split`, no part after it). The same applies to an `Error` that a part of a transacted `split`, `multicast` or `recipientList` (without `parallelProcessing`) throws to the EIP: before, the parts after it were not sent.
 
 There is no option for the old behaviour. See also [An Error thrown by a processor](error-handler.html#_an_error_thrown_by_a_processor).
+
+### camel-core - a VirtualMachineError fails the exchange, and Camel does not recover from it
+
+A `VirtualMachineError` (such as `OutOfMemoryError`, `StackOverflowError` or `InternalError`) thrown in a route now fails its exchange, as any other `Error`, but Camel does not recover from it on its own (CAMEL-27515). Before, it was thrown on after the callback of the step was called: the rest of the route ran later, on the next exchange of the same thread, as if the step had succeeded (or at once, with a dead letter channel, redelivery or an `onException`), the caller could get a success reply, and the exchange could stay inflight. Compared with 4.23:
+
+-   The caller gets the failure: `sendBody(…​)` and `requestBody(…​)` throw a `CamelExecutionException` caused by the `Error` (before: the raw `Error`), and `send(…​)` returns the failed exchange (before: it threw the `Error`).
+    
+-   Redelivery, a dead letter channel, the fallback of a circuit breaker, the failover of a load balancer (unless its `failover` names the error or a supertype) and the error thresholds of a split do not recover from it, also for a bean method (before: redelivery and the dead letter channel did for a bean method). A `VirtualMachineError` thrown by a dead letter route, or by an `onPrepareFailure` or `onExceptionOccurred` processor, fails the exchange, and an `onExceptionOccurred` processor cannot replace it with another exception.
+    
+-   A sequential `multicast`, `split` or `recipientList` stops at the first output that fails with it, as with `stopOnException`, and fails with it (before: the next outputs were called, and a later exception could replace it). With `parallelProcessing`, the outputs already submitted still run, and the exchange still fails with it, also when another output fails later or the aggregation strategy ignores the failures (but not when the output fails after the `multicast` or `split` has completed, such as on its `timeout`).
+    
+-   An `onException` that names it handles it without the redelivery of the error handler, and without its dead letter channel: it is redelivered only when that `onException` says so.
+    
+-   Only an `onException` or a `doCatch` that names it or a supertype handles it, as a Java `catch`: `Throwable`, `Error`, `VirtualMachineError` or its own class. `onException(Exception.class)` and `doCatch(Exception.class)` do not. To keep moving a message whose processing overflows the stack to a dead letter endpoint (as a dead letter channel did for a bean method), name the error, for example `onException(StackOverflowError.class).handled(true).to(ExchangePattern.InOnly, "jms:queue:dead")`. Name `StackOverflowError` rather than `VirtualMachineError`: while the JVM is short of memory, many messages can fail with an `OutOfMemoryError`, and each one would be moved to the dead letter endpoint.
+    
+-   `doFinally` runs, as a Java `finally`, and `onCompletion` runs as for any failed exchange (before: neither ran).
+    
+-   It is logged once at ERROR, and the `ExchangeFailedEvent` carries it.
+    
+-   A consumer that pulls work in a loop (a polling consumer, `timer`, `seda`, the hazelcast `seda` and queue consumers) stops when an exchange fails with it and the route does not catch it: it logs which route to restart, and its health check reports DOWN until the route is restarted. Before, the error ended some loops silently (a polling task, a `seda` thread, every route on a shared `timer`) and left others running. A consumer that is pushed requests (such as HTTP or `direct`) only fails that request. A route that catches the `Error` explicitly keeps its consumer going. Not yet covered: a batch consumer that does not check between the messages of a batch whether it may go on (such as `aws2-kinesis` or `couchdb`) routes the rest of the batch it has already fetched before it stops, and a `VirtualMachineError` thrown by a `RoutePolicy` fails the exchange without stopping the consumer.
+    
+-   A polling consumer whose poll throws another `Error` (such as a `NoClassDefFoundError` of a client library) treats it as a failed poll and polls again, as for an exception. Before, the poll task ended (with the default scheduler).
+    
+-   `kafka` and `kafka-share` do not stop: a record whose exchange fails with a `VirtualMachineError` is handled as any failed record (see `breakOnFirstError`). A `VirtualMachineError` of the Kafka client in the poll loop now terminates the consumer visibly, logged and with its health check DOWN, as another `Error` already did. Before, it ended the loop silently.
+    
+
+Camel does not restart a route, a pod or the JVM after such an error: that is up to the application or the platform. See [Error Handler](error-handler.md) for how to log and then shut down gracefully.
 
 ### camel-core - variableReceive into a route or group variable stores the header variables in that route or group
 
@@ -1251,6 +1417,10 @@ ADD now embeds a `List` of `String` or `TextSegment` as a batch, one entry per e
 
 REMOVE now fails when the body is not text (a `String`, bytes or a stream) or a `Collection` of `String` IDs. Before, a `Map` or a number body removed the ID made of its `toString()`, which usually removed nothing.
 
+### camel-jbang - camel run and camel export add the JDBC driver of debezium-mysql and debezium-db2
+
+The MySQL JDBC driver (`com.mysql:mysql-connector-j`, GPL) and the Db2 JDBC driver (`com.ibm.db2:jcc`, IBM International Program License Agreement) are not dependencies of `camel-debezium-mysql` and `camel-debezium-db2`, so a route with `debezium-mysql` or `debezium-db2` failed on `camel run` with a `ClassNotFoundException` unless the driver was added with `--dep`. `camel run` now downloads the driver in the version Camel manages, and `camel export` adds it, with that version, to the exported project (Camel Main, Spring Boot and Quarkus). A driver you add yourself, with `--dep`, `camel.jbang.dependencies` or in the project’s POM, is used instead. Remove the driver from the exported project if its license does not suit you.
+
 ### camel-jbang - camel run uses MariaDB Connector/J 4
 
 Camel is upgraded to MariaDB Connector/J 4.0 (`org.mariadb.jdbc:mariadb-java-client`), which is the version `camel run` downloads for a route or application that uses the MariaDB JDBC driver. The driver has these breaking changes:
@@ -1267,6 +1437,12 @@ Camel is upgraded to MariaDB Connector/J 4.0 (`org.mariadb.jdbc:mariadb-java-cli
     
 
 See the [MariaDB Connector/J changelog](https://github.com/mariadb-corporation/mariadb-connector-j/blob/main/CHANGELOG.md) for the other changes.
+
+### camel-jbang - camel run uses the Microsoft SQL Server JDBC driver 13
+
+`camel run` downloads the Microsoft SQL Server JDBC driver 13.6 (`com.microsoft.sqlserver:mssql-jdbc`), instead of 12.10, for a route or application that uses it. Since 13.2, the driver reads a column of the SQL Server `vector` type as a vector, where 12.x read it as a JSON string. Set `vectorTypeSupport=off` in the JDBC URL to keep reading it as a JSON string.
+
+See the [mssql-jdbc release notes](https://github.com/microsoft/mssql-jdbc/releases) for the other changes.
 
 ### camel-jbang - the Camel CLI uses aesh instead of picocli
 
@@ -1340,7 +1516,7 @@ A Circuit Breaker with `asynchronous` and `timeoutEnabled` ran its calls and its
     
 -   A thread pool given with `timeoutExecutorService` now runs only the calls, not the timeouts. A thread pool that was sized to cover both can be made smaller.
     
--   After a timeout, the fallback and the rest of the route after the Circuit Breaker run on a `CircuitBreakerTimeout` thread. Keep them non-blocking, or give that thread pool enough threads (see the Resilience4j EIP page).
+-   After a timeout, the fallback and the rest of the route after the Circuit Breaker run on a thread of one more thread pool of the Circuit Breaker, a cached thread pool named `CircuitBreakerFallback`, so a fallback that blocks does not hold a `CircuitBreakerTimeout` thread.
     
 -   A Circuit Breaker with `timeoutEnabled` (asynchronous or not) keeps the thread pools that Camel created for it while its route is stopped, and shuts them down when the route is removed or the CamelContext stops. Before, stopping the route shut the thread pool of the calls down, and after the route was started again, the calls through the Circuit Breaker no longer ran: in synchronous mode each call timed out (into the fallback, when there is one), and in asynchronous mode the exchange never completed.
     
@@ -1776,6 +1952,10 @@ When the change feed processor of an `azure-cosmosdb` consumer cannot start (Cos
 
 Its readiness health check (`consumer:<routeId>`, with the consumer health checks of Camel enabled, the default) is now the initial state (`camel.health.initial-state`, DOWN by default) while the first attempt to start runs, and DOWN while the change feed processor cannot start, with the failure of the last attempt; before, it was UP. To leave the check out, as before, set `camel.health.exclude-pattern=consumer:<routeId>`.
 
+### camel-vertx-websocket - a consumeAsClient consumer routes the messages in the order they are received
+
+A `vertx-websocket` consumer with `consumeAsClient=true` used to route the received messages in parallel, on the threads of the Vert.x worker pool, so they could reach the route in any order. It now routes the messages of its WebSocket one after the other, in the order they are received. To route them in parallel as before, set the new option `parallelProcessing=true`.
+
 ### camel-vertx-websocket - consumers on the same host and port must use the same SSLContextParameters
 
 All `vertx-websocket` consumers on the same host and port are served by one HTTP server, which is created from the `sslContextParameters` of the first consumer to start. A consumer started later with different `sslContextParameters` (including one with none while the server uses some, or the other way round) used to start and be served with the first consumer’s settings. Such a consumer now fails to start with an `IllegalArgumentException` naming the host and port. Give every consumer on a host and port the same `SSLContextParameters` instance (for example the same bean reference, or the global SSL context parameters), or move consumers that need other settings to another port.
@@ -1842,6 +2022,10 @@ scp sends each name on a protocol line that ends with a line feed. Before, a lin
 ### camel-file - a done file with a fixed name is kept for the files a poll left
 
 A done file with a fixed name (such as `doneFileName=ready`) is no longer deleted while a poll left files of its directory for the next poll (beyond `maxMessagesPerPoll`, or not started); before, they were left until a new done file was written. Meanwhile the polls consume every file of the directory, as they do whenever the done file is there. This also applies to `pollEnrich` and `ConsumerTemplate.receive`, which take one file per call: the done file is now kept until the last file of the directory is received, where before the first received file deleted it. This applies to camel-ftp, camel-sftp, camel-smb and camel-azure-files as well.
+
+### camel-file, camel-ftp, camel-sftp, camel-mina-sftp, camel-smb, camel-azure-files - with recursive=true the done file of each directory is deleted
+
+No option or default changes. With `recursive=true` and a done file with a fixed name (such as `doneFileName=ready`), a poll that consumes files of several directories deletes the done file of each of these directories after the last file of that directory, as documented. Before, it deleted only the done file of the directory of the last file of the poll, and the done files of the other directories stayed, so that the next files written there were consumed without a new done file. So a file of such a directory that failed in the poll before the last file of that directory (and was not moved with `moveFailed`) is now consumed again only after a new done file is written, as it already was in the directory of the last file of the poll. A done file is still kept while the poll leaves files of its directory for the next poll, and a dynamic done file name (`${file:name}.done`) is deleted for each file as before.
 
 ### camel-file - poll and pollEnrich evaluate the fileName on the current message
 
@@ -2001,6 +2185,18 @@ With the Debezium `ExtractNewRecordState` single message transformation (`Extrac
 The `debezium-mongodb` consumer no longer reads the `patch` field for an update, which Debezium removed in 2.0. The changed fields of an update are now in the new `CamelDebeziumUpdateDescription` header.
 
 The `Struct` to `Map` type converter now also converts a `Struct` inside a list or a map.
+
+### camel-debezium - the folder of the offset file must exist, and the Map keeps the order of the columns
+
+With the default file offset store, a `debezium-*` endpoint now fails to start when the folder of `offsetStorageFileName` does not exist or cannot be written, or when the file exists and cannot be written. The error names the file. Before, the consumer started, every save of its position failed with only a WARN in the log, and after a restart everything was sent again, the snapshot included. Create the folder, or use a file in a folder that exists. With the file schema history (`schemaHistoryInternal=io.debezium.storage.file.history.FileSchemaHistory`), the file of `schemaHistoryInternalFileFilename` must be writable too; its folders may be missing, as Debezium creates them.
+
+The `Struct` to `Map` type converter now gives a `LinkedHashMap` in the order of the fields of the `Struct` (the order of the columns of the table), nested `Struct` values included, so the JSON of the `Map` has the columns in that order. Before, it was a `HashMap` with no defined order.
+
+### camel-debezium - the route fails to start when the Debezium engine cannot start
+
+A `debezium-*` consumer now waits, when it starts, until the Debezium engine has started the connector tasks (which is before an initial snapshot is done), and fails to start when the engine fails meanwhile, with the error of Debezium as the cause: for example a database that cannot be reached or refuses the TLS connection, a MySQL server with `binlog_format=STATEMENT`, or a lost schema history. The route, and so the application, then fails to start (with the supervising route controller, the route is started again later). Before, the route started, was never ready, and the only sign of the failure was a WARN in the log. The start waits as long as Debezium waits for the tasks to start (`internal.task.management.timeout.ms`, 40 seconds by default, for each task and once more for the connector); if the engine has not reported back by then, the route starts as before, with a WARN in the log.
+
+A failure of the engine after it has started is still reported to the consumer exception handler (to the error handler of the route with `bridgeErrorHandler=true`) and turns the health check of the route `DOWN`.
 
 ### camel-debezium-mysql - a signed TINYINT column is a Byte
 
@@ -2427,6 +2623,10 @@ Without an interactive terminal, such as in a script, a CI job (the `CI` environ
 -   `camel transform route --format` other than `xml`, `yaml` or `java` exits with `2` (it ran the routes and printed nothing), and a route that cannot be read, such as invalid YAML, exits with `1` and the error of the parser (it failed with an internal error, `70`, and a stack trace).
     
 
+### camel-xml-jaxp - XML parse errors are no longer logged at ERROR by the type converter
+
+When a message body that is not well-formed XML is converted to a DOM `Document` (for example by `xpath`), the `XmlConverter` used to log the parse error at ERROR, with its stack trace, and then fail with the same `SAXParseException`. It now only fails with the exception, which the route can handle (`doTry`, `onException`) or which the error handler logs. Parser warnings and recoverable errors are logged at DEBUG.
+
 ### camel-xml-io, camel-yaml-io, camel-java-io - route dumps keep options set to their default value
 
 The XML, YAML and Java route dumps (`camel transform route`, `camel validate normalize`, `camel.main.dumpRoutes`, the developer console) now write these options whenever they are set, also with their documented default value: the binding options of the rest configuration, a rest and its verbs (such as `bindingMode="off"`), the options of a redelivery policy, of a `resilience4jConfiguration` and of a `faultToleranceConfiguration`, `shutdownRoute` / `shutdownRunningTask` of a route, and `apiDocs` of a rest verb. Left out, such an option took the value of the parent level when the dump was loaded (the rest configuration or the rest, the error handler, the global circuit breaker configuration, the CamelContext), so the route behaved differently, or, for `apiDocs`, a verb with `apiDocs="true"` under a rest with `apiDocs="false"` was left out of the OpenAPI document.
@@ -2848,13 +3048,9 @@ A route that needs the request body must keep `mapHttpMessageBody=true` (the def
 
 The `aws2-ddbstream` consumer now reads a closed shard to its end before it reads its child shards, and uses `streamIteratorType` only for its start position. Before, records left in a closed shard could be skipped, and after a shard rotation the consumer started again from `streamIteratorType`: with `FROM_START` it routed records of the stream again, and with `FROM_LATEST` it skipped records already written to the new shards.
 
-### camel-bean - a VirtualMachineError thrown by a bean method is no longer given to the error handler
+### camel-bean - a VirtualMachineError thrown by a bean method is only handled by a clause that names it
 
-A bean method that throws a `VirtualMachineError` (such as `OutOfMemoryError`, `StackOverflowError` or `InternalError`) is now handled as a bean that is a `Processor`: Camel’s error handling does not get it (the JVM may no longer be in a consistent state, so the application should not handle it). It is not set on the exchange, but thrown on after the callback of the bean was called. Depending on the error handler, the `Error` reaches the caller (and the exchange may stay inflight), or it is only logged and the route continues as if the bean method had succeeded.
-
-Before, the bean component set any `Error` of a bean method on the exchange, so `onException`, `doCatch`, redelivery and a dead letter channel also handled an `OutOfMemoryError` or a `StackOverflowError`. Any other `Error` of a bean method, such as an `AssertionError`, still fails the exchange and goes to the error handler, as before.
-
-An application with strict reliability needs should not rely on Camel to react to a `VirtualMachineError`. For an `OutOfMemoryError` that the JVM raises, it can let the JVM stop with `-XX:+ExitOnOutOfMemoryError` or `-XX:+CrashOnOutOfMemoryError`.
+A bean method that throws a `VirtualMachineError` (such as `OutOfMemoryError`, `StackOverflowError` or `InternalError`) fails the exchange, but redelivery and a dead letter channel no longer get it: only an `onException` or a `doCatch` that names it or a supertype (such as `Throwable`) handles it. See the section "camel-core - a VirtualMachineError fails the exchange, and Camel does not recover from it". Before, the bean component set any `Error` of a bean method on the exchange, so `onException(Exception.class)`, `doCatch(Exception.class)`, redelivery and a dead letter channel also handled an `OutOfMemoryError` or a `StackOverflowError`. Any other `Error` of a bean method, such as an `AssertionError`, still fails the exchange and goes to the error handler, as before.
 
 ### camel-beanio - BeanIOSplitter decodes files and streams with the charset of the exchange or its encoding
 
@@ -2878,7 +3074,7 @@ The producer with the HTTP centric client API (`httpClientAPI=true`) sent only t
 
 ### camel-stax - the text mode of xtokenize gives the text as an XML parser reads it
 
-With mode `t`, `xtokenize` returned the characters between the tags of the element as they are written: entity and character references were not decoded (`AT&T` instead of `AT&T`), and the content of a CDATA section was left out. The text is now decoded and includes the content of CDATA sections, so a route that decoded the entities itself must stop doing so. With a `group` greater than 1, the texts in the `<group>` element are escaped as XML text, so the group is still well-formed XML.
+With mode `t`, `xtokenize` returned the characters between the tags of the element as they are written: entity and character references were not decoded (`AT&amp;T` instead of `AT&T`), and the content of a CDATA section was left out. The text is now decoded and includes the content of CDATA sections, so a route that decoded the entities itself must stop doing so. With a `group` greater than 1, the texts in the `<group>` element are escaped as XML text, so the group is still well-formed XML.
 
 ### camel-smooks - allowExternalEntities applies to Smooks Source bodies and to a reader declared without a class
 
@@ -3579,6 +3775,16 @@ A graceful shutdown waits until the consumer has routed all the records of the p
 
 To keep the previous behaviour, set `maxResultsPerRequest=1`. See the [AWS Kinesis component](../components/4.22.x/aws2-kinesis-component.md) for how `maxResultsPerRequest`, `delay` and `greedy` relate to the Kinesis read quotas of a shard.
 
+### camel-aws2-kinesis - shardClosed=fail reports a closed shard once
+
+With `shardClosed=fail`, the consumer now reports a closed shard once: it hands a `ReachedClosedStatusException` to the exception handler of the consumer (logged as a WARN, or routed to the error handler of the route with `bridgeErrorHandler=true`), and then skips the shard, as with `silent`. The poll does not fail.
+
+Before, every poll failed with an `IllegalStateException` once a closed shard had been read to its end, for as long as the shard was listed (a closed shard stays in the shard list for the retention period of the stream, 24 hours by default). Without `shardId` the consumer read the child shards of a split or a merge all the same, so it did not stop: it logged a WARN with a stack trace on every poll, and its health check reported the failing polls.
+
+With `shardId` set, the consumer reads only that shard, so once the shard is closed it reports it once and then has nothing more to read, where before every poll failed. A route that should react to the closed shard (for example by stopping) can set `bridgeErrorHandler=true` and handle the `ReachedClosedStatusException` in its error handler.
+
+When the consumer reads all the shards (no `shardId`) and the read of a shard fails, the poll now fails only after the other shards of the poll have been read and routed, with the exception of that shard (the failures of other shards are added as suppressed exceptions). Before, the poll failed as soon as one shard failed, with the exception wrapped by the parallel stream, while the other shards were still being read.
+
 ### camel-graphql - the credentials are only sent to the authority of httpUri
 
 The `accessToken` (with its `jwtAuthorizationType`) is now added to a request only when the request goes to the scheme, host and port of `httpUri`, and the `username` and `password` are registered for that authority only. Previously neither was bound to the authority of `httpUri`. A request to another authority, including the same host with another scheme or port, is now sent without them. A route that needs to authenticate to another authority must address it in `httpUri`. When `proxyHost` is set, the `username` and `password` are no longer offered to the proxy when it asks for authentication.
@@ -3752,6 +3958,20 @@ A URI with `region` and without `endpoint` already failed at the first message, 
 
 When the consumer lists the bucket, a failure to get one of the listed objects (for example access denied, or an archived object that is not restored) no longer fails the poll, as long as another object of that listing could be got: the object is skipped, the other listed objects are consumed, and the skipped object is tried again by a later poll. The failure is given to the exception handler of the consumer, with the key in the message (by default a `WARN` with the stack trace, at every poll that lists the object). Before, the poll failed and the next poll listed the same page again, so one such object stopped the consumer from consuming any object. The poll still fails when none of the listed objects could be got, and the next poll then reads the next page of the listing.
 
+### camel-alibaba-oss - region, accessKey and secretKey are no longer marked as required
+
+The `region`, `accessKey` and `secretKey` options of `alibaba-oss` are no longer marked as required. To create the client, the Camel endpoint needs the `region` or the `endpoint` option. It takes each key of the AccessKey pair from its own option or from the `serviceKeys` option. It needs none of these options when the `ossClient` option is set or autowired. So the endpoint validation of the catalog no longer reports a URI without them as missing required options. The behavior of the component at runtime does not change.
+
+### camel-alibaba-oss - objectName and maxKeys are producer options, and prefix is also a producer option
+
+The `objectName` option of the `alibaba-oss` endpoint now has the label `producer`, as only the producer uses it. In the Endpoint DSL, `OSSEndpointConsumerBuilder` no longer has its method. So `from(alibabaOss(…​).objectName(…​))` no longer compiles. Code compiled against an earlier version that calls it on the `alibabaOss(…​)` builder must be recompiled. Remove the option from consumer endpoints, where it had no effect. The endpoint validation of the catalog now reports it in consumer-only mode.
+
+The `prefix` option no longer has the label `consumer`, as the producer uses it too for `listObjects`. The `maxKeys` option now has only the label `producer`, as the consumer does not use it. In the Endpoint DSL, `OSSEndpointProducerBuilder` now has the methods of both options. Before, it had neither, and no builder had `maxKeys`. The endpoint validation of the catalog no longer reports the two options in producer-only mode.
+
+The catalog and the Endpoint DSL now list six more headers, which only the producer reads. They are `CamelAlibabaOssOperation`, `CamelAlibabaOssObjectName`, `CamelAlibabaOssSourceBucketName`, `CamelAlibabaOssSourceObjectName`, `CamelAlibabaOssPrefix` and `CamelAlibabaOssMaxKeys`. `OSSHeaders` has a constant for each. The other nine headers now have the label `common` instead of `consumer`, as the producer sets them too for `getObject`.
+
+The behavior of the component at runtime does not change.
+
 ### camel-alibaba-fc - invokeFunction sends a stream or a file as its bytes
 
 The `invokeFunction` operation of `alibaba-fc` now sends a stream or a file body (an `InputStream`, a `java.io.File`, or a `GenericFile` from a file consumer) as its bytes, as they are. Before, it read such a body as text and sent that text in UTF-8, which changed binary data. A `String` is still sent in UTF-8, a `byte[]` as it is, and no body as an empty payload.
@@ -3817,6 +4037,18 @@ The consumer now gives the body of a message as a `byte[]` when its bytes are no
 ### camel-alibaba-mns - MNSEndpoint.initClient returns the client
 
 The public method `MNSEndpoint.initClient()` now returns the `MNSClient` that the producer and the consumer send their requests with, instead of `void`. A call that ignores the result compiles as before, but code compiled against an earlier version must be recompiled, and a subclass that overrides `initClient()` must return the client.
+
+### camel-alibaba-mns - ClientConfigurations has only the operation, the queue name and the topic name
+
+`ClientConfigurations` of `camel-alibaba-mns` no longer has the record components `accessKey`, `secretKey`, `region` and `accountEndpoint`, which no code read. Code that creates the record, or calls one of these four accessors, needs a change. The producer no longer needs an AccessKey pair when the `mnsClient` option is set or autowired.
+
+### camel-alibaba-mns - operation and topicName are producer options, and waitSeconds is a consumer option
+
+The `operation` and `topicName` options of the `alibaba-mns` endpoint now have the label `producer`, as only the producer uses them. The `waitSeconds` option now has the label `consumer`, as only the consumer uses it. In the Endpoint DSL, `MNSEndpointConsumerBuilder` no longer has the methods of `operation` and `topicName`. `MNSEndpointProducerBuilder` no longer has the methods of `waitSeconds`. So `from(alibabaMns(…​).operation(…​))` and `to(alibabaMns(…​).waitSeconds(…​))` no longer compile. Code compiled against an earlier version that calls one of the three on the `alibabaMns(…​)` builder must be recompiled.
+
+Remove `operation` and `topicName` from consumer endpoints, and `waitSeconds` from producer endpoints. They had no effect there. The endpoint validation of the catalog now reports `operation` and `topicName` in consumer-only mode, and `waitSeconds` in producer-only mode.
+
+The `CamelAlibabaMnsPriority` header now has the label `common` instead of `producer`, as the consumer sets it too. The behavior of the component at runtime does not change.
 
 ### camel-minio - a listed object that cannot be got is skipped
 
@@ -4301,6 +4533,45 @@ The `aws2-sqs:application-cloudevents` data type transformer now sets the `Camel
 
 The queue name comes from the new `CamelAwsSqsQueueName` header, which the `aws2-sqs` consumer now sets on each message. When the endpoint names the queue by its ARN, the header holds the queue name part of the ARN, and when the `queueUrl` option is set, the last part of its path, as that is the queue the consumer reads. A message without this header, such as one that does not come from the `aws2-sqs` consumer, gets no CloudEvent source from the transformer, also when it has a `CamelAwsSqsReceiptHandle` header. A route that relies on the old source can set the `CamelCloudEventSource` header itself after the transformer.
 
+### camel-azure, camel-google, camel-aws2-kinesis - the CloudEvent source is the queue, container, file system, share, topic, stream, subscription or calendar
+
+Eight `application-cloudevents` data type transformers now set the `CamelCloudEventSource` header (the `ce-source` of the CloudEvent) to the queue, container, file system, share, topic, stream, subscription or calendar the message was consumed from, as `aws2-sqs:application-cloudevents` and `aws2-s3:application-cloudevents` do. Before, most of them used a value of each message, such as its id, so most events had a source of their own, and `azure-files` used the host of the storage account, so all the shares of an account had the same source. The CloudEvent id is unchanged.
+
+  
+| Data type transformer | Source before | Source now |
+| --- | --- | --- |
+| `azure-storage-queue:application-cloudevents` | `azure.storage.queue.` and the message id | `azure.storage.queue.` and the queue name |
+| `azure-storage-blob:application-cloudevents` | `azure.storage.blob.` and the ETag of the blob | `azure.storage.blob.` and the container name |
+| `azure-storage-datalake:application-cloudevents` | `azure.storage.datalake.` and the archive status of the file | `azure.storage.datalake.` and the file system name |
+| `azure-files:application-cloudevents` | `azure.storage.files.` and the host of the storage account, such as `myaccount.file.core.windows.net` | `azure.storage.files.` and the share name |
+| `azure-servicebus:application-cloudevents` | `azure.servicebus.partition.` and the partition key of the message | `azure.servicebus.` and the queue or topic name |
+| `aws2-kinesis:application-cloudevents` | `aws.kinesis.partition.key.` and the partition key of the record | `aws.kinesis.stream.` and the stream name |
+| `google-pubsub:application-cloudevents` | `google.pubsub.` and the ack id, which only the synchronous pull sets | `google.pubsub.` and the subscription name |
+| `google-calendar-stream:application-cloudevents` | `google.calendar.stream.` and the event id | `google.calendar.stream.` and the calendar id (`primary` by default) |
+
+The name comes from a new header that the consumer now sets on each message:
+
+-   `azure-storage-queue`: `CamelAzureStorageQueueConsumedQueueName`
+    
+-   `azure-storage-blob`: `CamelAzureStorageBlobConsumedContainerName`
+    
+-   `azure-storage-datalake`: `CamelAzureStorageDataLakeConsumedFileSystemName`
+    
+-   `azure-files`: `CamelAzureFilesShareName`
+    
+-   `azure-servicebus`: `CamelAzureServiceBusTopicOrQueueName`
+    
+-   `aws2-kinesis`: `CamelAwsKinesisStreamName`, set by both the polling and the KCL consumer
+    
+-   `google-pubsub`: `CamelGooglePubsubSubscriptionName`, set by the synchronous and the asynchronous pull
+    
+-   `google-calendar-stream`: `CamelGoogleCalendarCalendarId`
+    
+
+The Azure Storage consumers do not set the existing `CamelAzureStorageQueueName`, `CamelAzureStorageBlobBlobContainerName` and `CamelAzureStorageDataLakeFileSystemName` headers, as a producer of the same component takes its queue, container or file system from them, and a route that sends the message on would then send it back where it came from.
+
+A message without the new header, such as one that does not come from the consumer, gets no CloudEvent source from the transformer, also when it has the header that the source was built from before. With `google-pubsub`, the default asynchronous pull now gets a source; before, it got none, as only the synchronous pull sets the ack id. A route that relies on the old source can set the `CamelCloudEventSource` header itself after the transformer.
+
 ### camel-aws2-sqs - the consumer receives up to 10 messages per poll
 
 The `maxMessagesPerPoll` option of the `aws2-sqs` consumer now defaults to 10, the most that SQS returns to one receive request, so each poll now takes up to 10 messages. Before, it defaulted to 0, documented as unlimited, which the consumer turned into a receive request for one message, so each poll took one message. As before, a value above 10 is split into receive requests of at most 10 messages, and 0 or a negative value receives one message per poll.
@@ -4655,6 +4926,16 @@ The `spring-ws` producer now sends a `File` body, the file of a `file` or `ftp` 
 ### camel-spring-ws - outputAction and faultAction are consumer options
 
 The `outputAction` and `faultAction` options of the `spring-ws` endpoint now have the label `consumer` instead of `producer`, as only the consumer uses them. In the Endpoint DSL, both methods moved from `SpringWebserviceEndpointProducerBuilder` to `SpringWebserviceEndpointConsumerBuilder` and return the consumer builder. A call of one of them on the producer builder no longer compiles, and neither does `to(springWs(…​).outputAction(…​))`. Code compiled against an earlier version that calls one of them must be recompiled. Remove the two options from producer endpoints: they had no effect there, and the endpoint validation of the catalog now reports them in producer-only mode. The behavior of the component at runtime does not change.
+
+### camel-spring-ws - sslContextParameters is a producer option, and messageSender is also a consumer option
+
+The `sslContextParameters` option of the `spring-ws` endpoint now has the labels `producer` and `security`, as only the producer uses it. In the Endpoint DSL, `SpringWebserviceEndpointConsumerBuilder` no longer has its methods. So `from(springWs(…​).sslContextParameters(…​))` no longer compiles. Code compiled against an earlier version that calls them on the `springWs(…​)` builder must be recompiled. Remove the option from consumer endpoints, where it had no effect. The endpoint validation of the catalog now reports it in consumer-only mode.
+
+The `messageSender` option no longer has the label `producer`, as the consumer uses it too. In the Endpoint DSL, `SpringWebserviceEndpointConsumerBuilder` now has its methods as well. The endpoint validation of the catalog no longer reports the option in consumer-only mode. The `CamelSpringWebserviceSoapHeader` header no longer has the label `producer` either, as the consumer sets it too.
+
+The catalog now lists the values of the `type` path option as the endpoint URI takes them. They are `rootqname`, `action`, `to`, `soapaction`, `xpathresult`, `uri`, `uripath` and `beanname`. It listed the names of the enum constants before. Three of them, `ROOT_QNAME`, `SOAP_ACTION` and `URI_PATH`, select no type in an endpoint URI.
+
+The behavior of the component at runtime does not change.
 
 ### camel-ignite - cache PUT of a Map, the existing query results, RUN bodies and missing operations
 
@@ -5065,6 +5346,14 @@ An error while a script runs, such as a `NameError`, now fails with `ExpressionE
 
 Used as an expression, for example in `setBody`, `setHeader` or `setProperty`, the `openfeature` language now gives the `Boolean` value of a boolean flag. Before, it evaluated every flag as a string flag, so a boolean flag gave the `defaultValue` of the endpoint as text (`false` unless set) and logged a `TYPE_MISMATCH` warning. String flags give their text as before, and number and object flags still give the `defaultValue`. Predicates are unchanged.
 
+### camel-openfeature - deadline option now applies to file-based providers
+
+The `deadline` option (default `500` ms) is now also passed to file-based (in-process) `flagd` providers (`flags` and `flagsResource`), where it controls the initialization wait timeout used internally as `deadline * 2`. Previously it was only applied to remote gRPC connections.
+
+If you use a file-based provider and see initialization timeouts under load, raise the deadline on the endpoint or component (for example `deadline=5000`).
+
+If you previously relied on the `FLAGD_DEADLINE_MS` environment variable to tune the initialization wait for file-based providers, switch to `deadline=NNNN` on the Camel endpoint or component instead, as Camel now explicitly passes `deadline` to the file-based `FlagdOptions` and the environment variable no longer takes effect for them.
+
 ### camel-datasonnet - a null result and a stream body
 
 An expression whose result is `null` now gives `null` instead of a `Document` without content, unless `resultType` is `com.datasonnet.document.Document`. A predicate whose result is `null` is false; before, it failed with a `NullPointerException`.
@@ -5178,9 +5467,17 @@ The WordPress client no longer logs every HTTP request and response it exchanges
 
 ### camel-jbang - camel plugin add selects the plugin release built for the CLI
 
-`camel plugin add <name>` no longer registers a community plugin (such as `forage` or `kit`) with the Maven `LATEST` version when no version is given. It selects the newest release of the plugin built for the version of the CLI, from the `camel.jbang.plugin.camel-versions` property in the POM of the plugin, or else from the version of its `camel-jbang-core` dependency. The exact version is stored in `~/.camel-jbang-plugins.json`, so the plugin no longer moves to newer releases on its own: run `camel plugin add <name>` again to select the newest matching release. When the CLI is between the Camel versions of the releases, it selects the newest release for the nearest older Camel version, with a warning. When the CLI is newer than all the releases, or the releases cannot be read, it warns and uses `LATEST` as before.
+`camel plugin add <name>` no longer registers a community plugin (such as `forage` or `kit`) with the Maven `LATEST` version when no version is given. It selects the newest release of the plugin built for the version of the CLI, from the `camel.jbang.plugin.camel-versions` property in the POM of the plugin, or else from the version of its `camel-jbang-core` dependency. The exact version is stored in `~/.camel-jbang-plugins.json`, so the plugin no longer moves to newer releases on its own: run `camel plugin update` to select the newest matching release. When the CLI is between the Camel versions of the releases, it selects the newest release for the nearest older Camel version, with a warning. When the CLI is newer than all the releases, or the releases cannot be read, it warns and uses `LATEST` as before.
 
 `--version` and `--gav` are used as given, with a warning when the release is built for another Camel version. Plugins registered before are not changed. See [Plugin versions](camel-jbang-projects.html#_plugin_versions).
+
+### camel-jbang - camel self-update updates the plugins
+
+After installing a new Camel CLI, `camel self-update` runs `camel plugin update` with it. This updates `~/.camel-jbang-plugins.json`: community plugins whose release `camel plugin add` selected move to the newest release built for the new version, when the plugin has one.
+
+A plugin may publish its release for a new Camel version some time after the Camel release. Until then, `camel plugin update` keeps the current release and warns, and the CLI reminds to run it again when the plugin is loaded.
+
+Plugins added with `--version` or `--gav`, the plugins of the Apache Camel project, and plugins added as `LATEST` are not changed. Use `camel self-update --skip-plugins` to leave the plugins as they are. `camel self-update` of Camel CLI 4.23 and older does not update the plugins: run `camel plugin update` once after updating. See [Updating plugins](camel-jbang-projects.html#_updating_plugins).
 
 ### camel-spring - a CamelEvent only goes to the consumers of the same name
 
@@ -5199,6 +5496,8 @@ The consumer now checks the reason code of the SUBACK. When the broker refuses t
 ### camel-wal - the unconfirmed offsets of the previous run are replayed after a restart
 
 `WriteAheadResumeStrategy` now does what it is documented to do after a restart: when the consumer starts and loads the resume cache (`loadCache()`), the strategy replays the offsets of the previous run that the wrapped resume strategy did not confirm, by calling `updateLastOffset` on the wrapped strategy. Before, `start()` truncated the log file before `loadCache()` read it, so nothing was replayed. Only the last offset of each key in the log counts: it is replayed when its entry is in state `NEW` or `FAILED`, and an earlier offset of the same key is not replayed. These entries stay in the log until the wrapped strategy confirms them through its callback; a wrapped strategy that never calls back gets the last offset of each such key again at every start. The Kafka consumer does not call `loadCache()`, so with it the entries are kept in the log but not replayed. A replay that fails, or an entry that the resume adapter cannot deserialize, is logged with a WARN and does not stop the start of the route. If the last record of the log is incomplete (the JVM stopped while writing it) or invalid, the entries before it are replayed and a WARN is logged; the route still starts. A file that is not a log of this format is replaced by a new log, as before, with a WARN.
+
+When there are entries to keep, `start()` writes the new log with them to a file in the same directory, named as the log with the suffix `.tmp`, forces it to disk and then moves it atomically over the log. So a crash, a power loss or an error during `start()` does not lose them: until the move the previous log is unchanged, and after it the new log holds them on disk. Before, `start()` truncated the log first, and such a failure left an empty log. Where the log cannot be replaced that way (the process cannot create that file in the directory of the log, the log file is itself a mount point, such as a single file mounted into a container, or the file system cannot move it atomically), a WARN names the log and the reason, and `start()` truncates and rewrites the log in place, as before, but forces the entries to disk right after writing them. A crash during that rewrite can still lose them, as before; to avoid it, keep the log in a directory the process can write to. The new log gets the permissions of the previous one, not its owner or group. Without entries to keep, the log is truncated in place, as before.
 
 The log keeps 524,288 entries; after that it rolls over and holds the newest entries before the older ones, and the file does not say which are newer. So a log that holds that many entries is not replayed, as before: a WARN names the number of unconfirmed entries, which are discarded with the log. Replaying the wrong offset of a key would make the consumer resume from an older offset. A log that rolled over and was cut short because the system stopped while the log rewrote itself after the roll-over holds fewer entries and is replayed: the last entry of a key in it can then be an older offset, so the consumer can process again the messages after that offset.
 
@@ -5417,6 +5716,10 @@ Rename the alias of the key to the algorithm of the key, for example `RS256` for
 ```bash
 keytool -changealias -alias keycloak -destalias RS256 -keystore keycloak-realm.p12 -storetype PKCS12
 ```
+
+### camel-alibaba-mns - MNSOperations.RECEIVE\_MESSAGE and MNSEndpoint.resolveConsumerOperation() are deprecated
+
+`receiveMessage` is no longer a value of the `operation` option (CAMEL-26259): the producer does not support it, and the consumer receives the messages of the queue without reading the option. The `MNSOperations.RECEIVE_MESSAGE` constant and the `MNSEndpoint.resolveConsumerOperation()` method, which nothing calls, are deprecated and will be removed in a future release.
 
 ### Jackson 3
 
@@ -5696,6 +5999,12 @@ The `CamelDoclingEnableOCR` and `CamelDoclingOCRLanguage` headers were declared 
 
 The language itself is passed to docling untouched, in both forms: it is docling’s own identifier (language codes such as `en,de`, BCP-47 tags such as `iso:zh-Hant`, or `script/Latin`), and docling validates it.
 
+### camel-docling - the ocrLanguage option is sent to docling-serve
+
+With docling-serve (`useDoclingServe=true`), the `ocrLanguage` option was only sent when `doOcr=true` was also set; otherwise it was dropped and the server used its own default languages. The option now works like the `CamelDoclingOCRLanguage` header: when it is set, the request has `do_ocr=true` and the language, unless `enableOCR` or `doOcr` is `false`. Remove `ocrLanguage` from the endpoint if OCR should stay at the server defaults.
+
+The option no longer has a default value (it was `en`). The docling CLI path still uses `en` when no language is set. On the docling-serve path, `doOcr=true` or a `CamelDoclingEnableOCR=true` header without a language no longer sends `en`: the server uses its own default languages. Set `ocrLanguage=en` to keep English.
+
 ### camel-spiffe - SpiffeSecurityPolicy reads the TLS peer from servlet, Undertow and Vert.x consumers
 
 `SpiffeSecurityPolicy` now recognizes authenticated TLS peer certificates supplied by servlet/Jetty, Undertow, Netty HTTP and Vert.x platform HTTP consumers through a typed exchange property. When that property is present, it takes precedence over `sslSessionHeader`; an unverified peer fails closed even if a legacy session header is present. Consumers without the property retain the existing session-header behavior. Mutual TLS must still be configured at the consuming server; forwarded certificate and identity headers do not establish a verified peer.
@@ -5892,6 +6201,12 @@ A connection to a host name or an IP address that the certificate does not list 
 
 Use certificates that match the hosts, or set the new `hostnameVerification` option to `false` to keep the previous behaviour. An `opentls://` server address still trusts any certificate and is not checked.
 
+### camel-nats - the JetStream producer creates the stream of jetstreamName and waits requestTimeout
+
+With `jetstreamEnabled=true`, the producer now creates the stream named by `jetstreamName` at startup, with the subject of the topic, when this stream does not exist and no other stream takes in the subject. Before, the producer did not use `jetstreamName`, and each send failed with `503 No Responders Available For Request` when no stream took in the subject. Remove `jetstreamName` from the producer endpoint to keep the previous behaviour.
+
+With `jetstreamAsync=false`, the producer now waits `requestTimeout` (20 seconds by default) for the acknowledgement of JetStream. Before, it waited the connection timeout of the NATS client (`connectionTimeout`, 2 seconds by default). Set `requestTimeout=2000` to keep the previous wait.
+
 ### camel-pulsar - the host name of the broker is verified with pulsar+ssl
 
 When the endpoint creates its own Pulsar client, a `pulsar+ssl://` connection now checks that the certificate of the broker matches the host it connects to, with the same rules as an HTTPS client. Before, the client kept the default of the Pulsar client, which accepts any certificate trusted by the trust store, whatever host the certificate was issued for.
@@ -5921,3 +6236,460 @@ These consumers, and the camel-netty-http and camel-http producers, now leave ou
 The `pinecone:embeddings` data type transformer no longer sets the `CamelPineconeIndexName` header to `embeddings` when the route does not set the header. The producer takes the header over the `indexName` option of its endpoint, so a route that configured `indexName` on the endpoint and did not set the header worked on the `embeddings` index instead of the configured one. The transformer now leaves the header unset, and the producer uses its `indexName` option.
 
 A route that relied on the `embeddings` index must set the `CamelPineconeIndexName` header to `embeddings`, or configure `indexName=embeddings` on the endpoint.
+
+### camel-aws2-sqs - extendMessageVisibility requires a visibilityTimeout of at least 2 seconds
+
+An `aws2-sqs` endpoint with `extendMessageVisibility=true` now fails to be created when `visibilityTimeout` is below 2 seconds. The task that extends the visibility runs every half of the visibility timeout, in whole seconds, and extends a message once 80% of its visibility timeout has passed. With a `visibilityTimeout` of 1 second, each extension came when the message was already visible again, so another consumer received it while the first one still processed it. With 0 or a negative value, `extendMessageVisibility` was silently ignored.
+
+The consumer also logs a warning at startup when `visibilityTimeout` is below 10 seconds, as the extension then has only 1 to 2 seconds before the message becomes visible again. Use a `visibilityTimeout` of 10 seconds or more with `extendMessageVisibility`.
+
+### camel-crypto-pgp - AES-256 and SHA-256 are the default algorithms
+
+The `pgp` data format now encrypts with AES-256 (`algorithm=9`) instead of CAST5 (`algorithm=3`), and signs with the SHA-256 hash (`hashAlgorithm=8`) instead of SHA-1 (`hashAlgorithm=2`). CAST5 is a cipher with a 64-bit block, and SHA-1 is no longer collision resistant; current OpenPGP implementations such as GnuPG prefer AES and the SHA-2 hashes.
+
+Decrypting and verifying are not affected, as the algorithms of a message are read from the message itself: messages made with CAST5 or SHA-1 are still decrypted and verified.
+
+A receiver that only supports CAST5 or SHA-1 needs the old values set on the data format that encrypts or signs, for example in Java with `setAlgorithm(SymmetricKeyAlgorithmTags.CAST5)` and `setHashAlgorithm(HashAlgorithmTags.SHA1)`, or in XML and YAML with:
+
+```xml
+<marshal>
+  <pgp keyFileName="pubring.gpg" keyUserid="alice@example.com" algorithm="3" hashAlgorithm="2"/>
+</marshal>
+```
+
+```yaml
+- marshal:
+    pgp:
+      keyFileName: pubring.gpg
+      keyUserid: alice@example.com
+      algorithm: 3
+      hashAlgorithm: 2
+```
+
+The `CamelPGPDataFormatEncryptionAlgorithm` and `CamelPGPDataFormatSignatureHashAlgorithm` headers still override these options for a single message.
+
+### camel-platform-http-vertx - a header whose name is not a valid HTTP header name is no longer written to the response
+
+platform-http on the Vert.x engine (Camel Main and Camel Quarkus) maps the fields of an `application/x-www-form-urlencoded` request, and the request’s query parameters, to message headers. When one of these names is not a valid HTTP header name (an RFC 9110 token, for example a name with a space, a comma or a colon), the response now leaves out that header and logs it at DEBUG level, instead of failing the whole response with a 500 after the route has already run. Headers with a valid name are written as before. A route that needs such a value in the response must set it in a header with a valid name.
+
+### Kamelets - removed Kamelets
+
+The Kamelet catalog (camel-kamelets 4.24) removes Kamelets that could not work on Camel 4.23 or 4.24:
+
+ 
+| Removed Kamelet | Use instead |
+| --- | --- |
+| `twitter-directmessage-source`, `twitter-search-source`, `twitter-timeline-source` | Nothing: the Twitter/X v1.1 API they call is gone or paid-only |
+| `chunk-template-action` | `mustache-template-action`, `velocity-template-action`, `freemarker-template-action` or `string-template-action` |
+| `djl-image-to-text-action` | Nothing |
+| `aws-sts-assume-role-action` | Nothing |
+| `kafka-azure-schema-registry-sink`, `kafka-azure-schema-registry-source`, `kafka-batch-azure-schema-registry-source` | The schema registry options of the Kafka Kamelets |
+| `dropbox-source`, `dropbox-sink` | The `dropbox` component |
+
+It also removes Kamelets that were little used and did not work well. Use the Camel component instead:
+
+-   `kubernetes-pods-source`, `kubernetes-nodes-source`, `kubernetes-namespaces-source`
+    
+-   `azure-storage-blob-changefeed-source`
+    
+-   `elasticsearch-search-source`, `opensearch-search-source`
+    
+-   `cassandra-source`
+    
+-   `sap-netweaver-sink`
+    
+-   `google-functions-sink`
+    
+-   `caffeine-action`
+    
+
+It removes the variants whose options the plain Kamelets now have:
+
+  
+| Removed Kamelet | Use instead | What to change |
+| --- | --- | --- |
+| `http-secured-sink`, `http-secured-source` | `http-sink`, `http-source` | Only the name. The login options are the same |
+| `jms-pooled-apache-artemis-sink` | `jms-apache-artemis-sink` | Only the name. The plain sink now pools its connections, with the same pool options |
+| `jms-pooled-apache-artemis-source` | `jms-apache-artemis-source` | The name, and remove the three pool options |
+
+The demo Kamelets `bitcoin-source`, `chuck-norris-source`, `earthquake-source` and `wttrin-source` are no longer in the catalog. They are kept as examples in the `examples/kamelets` directory of the camel-kamelets repository. To run one, use `camel run route.yaml --local-kamelet-dir=examples/kamelets`.
+
+It removes the Apicurio Registry Kafka Kamelets, which were deprecated during 4.24. `kafka-source`, `kafka-sink` and `kafka-batch-source` take a schema registry instead:
+
+  
+| Removed Kamelet | Records | Use instead |
+| --- | --- | --- |
+| `kafka-not-secured-apicurio-registry-source` | Avro | `kafka-source` with `schemaRegistryVendor: apicurio`, `schemaFormat: avro` and `schemaRegistryUrl` |
+| `kafka-apicurio-registry-not-secured-sink`, `kafka-not-secured-apicurio-registry-sink` | Avro | `kafka-sink` with `schemaRegistryVendor: apicurio`, `schemaFormat: avro` and `schemaRegistryUrl` |
+| `kafka-apicurio-registry-not-secured-source`, `kafka-not-secured-apicurio-registry-json-source` | JSON Schema | Nothing yet. Use the `kafka` component with the Apicurio serde |
+| `kafka-batch-apicurio-registry-source`, `kafka-batch-apicurio-registry-not-secured-source` | Avro, many per message | `kafka-batch-source` with `schemaRegistryVendor: apicurio`, `schemaFormat: avro` and `schemaRegistryUrl` |
+
+Before moving:
+
+-   `schemaRegistryVendor: apicurio` uses the serde of Apicurio Registry 3.x, whereas the removed Kamelets used the 2.x serde and the `/apis/registry/v2` API.
+    
+-   To log in to the registry, such as the Keycloak login of `kafka-batch-apicurio-registry-source`, set the OAuth2 client credentials `schemaRegistryOauthTokenEndpoint`, `schemaRegistryOauthClientId` and `schemaRegistryOauthClientSecret`, or `schemaRegistryUsername` and `schemaRegistryPassword`.
+    
+
+It removes `mqtt-source` and `mqtt-sink`, the MQTT 3.1.1 Kamelets on the `paho` component, which Camel has deprecated since 2.16. Use `mqtt5-source` and `mqtt5-sink` with a broker that supports MQTT 5. For a broker that only speaks MQTT 3.1.1, use the `paho` component directly, while Camel still has it.
+
+It removes the Kamelets of two services that are going away:
+
+-   `minio-source` and `minio-sink`. MinIO archived its open source project, and Camel deprecated `camel-minio` (CAMEL-24750). For MinIO or any other S3-compatible storage, use `aws-s3-source` or `aws-s3-sink` with `overrideEndpoint: true`, `uriEndpointOverride` set to the address of the storage, and `forcePathStyle: true`.
+    
+-   `ibm-watson-language-sink`. IBM deprecated Watson Natural Language Understanding on 31 July 2026, and removes it from IBM Cloud on 31 January 2028. Use the `ibm-watson-language` component directly while Camel still has it (deprecated by CAMEL-27311), or move to watsonx.ai.
+    
+
+The public `KameletPrefixSchemeEnum` of `camel-kamelets-catalog` loses the entries of these Kamelets: `dropbox`, the `twitter_*` entries, `azure_storage_blob_changefeed`, `elasticsearch_search`, `google_functions`, the `kubernetes_*` entries, `bitcoin`, `chuck_norris`, `wttrin`, `http_secured`, `kafka_apicurio`, `kafka_not_secured`, `mqtt` and `minio`.
+
+### Kamelets - renamed options
+
+These Kamelet options had the name of a parameter that the `kamelet:` component takes for itself. Given on a `kamelet:` endpoint, they never reached the Kamelet: `location` was read as the place to load the Kamelet from, so the route failed to start. Set as `camel.kamelet.<name>.<option>` properties, such as in a Camel K Pipe, they worked, so rename them:
+
+  
+| Kamelet | Old name | New name |
+| --- | --- | --- |
+| `google-vertexai-sink` | `location` | `region` (required) |
+| `ibm-cos-sink`, `ibm-cos-source` | `location` | `region` |
+| `fhir-sink`, `pulsar-sink` | `lazyStartProducer` | `lazyStart` |
+
+With the old name, `google-vertexai-sink` fails at startup because `region` is missing, and the other Kamelets ignore it.
+
+### Kamelets - Kafka Kamelets require saslAuthType
+
+`kafka-sink`, `kafka-batch-source` and `ceph-event-based-source` have no default for `saslAuthType` any more, as was already the case for `kafka-source`. Without the option, the route fails at startup:
+
+```text
+Route template kafka-sink the following mandatory parameters must be provided: saslAuthType
+```
+
+To connect without security, as before, set `saslAuthType: NONE`.
+
+### Kamelets - messaging sinks no longer wait for a reply
+
+`jms-apache-artemis-sink`, `jms-amqp-10-sink`, `jms-ibm-mq-sink`, `spring-rabbitmq-sink` and `nats-sink` now send a message without waiting for a reply, also when the message expects one, such as a message from `webhook-source`. The caller gets its own message back, instead of the answer of a receiver.
+
+Other changes to the messaging Kamelets:
+
+-   `jms-apache-artemis-sink` pools its connections: it opens one connection to the broker instead of one per message. `jms-apache-artemis-sink` and `jms-apache-artemis-source` have new `username` and `password` options.
+    
+-   The body of `nats-source` is a `byte[]` instead of a stream. The `Content-Type` of the sender is kept instead of being set to `application/json`.
+    
+-   `mqtt5-source` without a `clientId` connects with a generated client ID instead of `mqtt-source`, the old default. This matters only for broker ACLs or monitoring that use that ID.
+    
+-   `spring-rabbitmq-source` and `spring-rabbitmq-sink` with `protocol: amqps` check the certificate of the broker against the trust store of Java, and that it names the host in `host`. A broker whose certificate Java does not trust, or that is for another name, no longer connects. Add its CA to the trust store of Java, or give it with the new `sslTruststoreLocation` and `sslTruststorePassword` options. `protocol: amqp`, the default, is unchanged.
+    
+-   `pulsar-sink` also takes the message key from a plain `key` header, which `pulsar-source` sets, so a key carries over from one Kamelet to the other. When both are set, the `CamelPulsarProducerMessageKey` header wins. Messages that had a `key` header for another purpose now use it as the Pulsar key.
+    
+-   `pulsar-source` and `pulsar-sink` with a `pulsar+ssl://` address check that the certificate of the broker is issued for the host name in `serviceUrl`, as camel-pulsar now verifies the host name (CAMEL-27207, see _camel-pulsar - the host name of the broker is verified with pulsar+ssl_ above). A broker reached by an address its certificate does not name no longer connects.
+    
+-   The JMS sources `jms-apache-artemis-source`, `jms-amqp-10-source`, `jms-ibm-mq-source` and `jms-apache-activemq-source` answer only to the `JMSReplyTo` of the incoming message. They still answer a request that has a `JMSReplyTo`, to that destination, and send nothing for a message without one. They now put the incoming `JMSReplyTo` back on the answer and remove the `CamelJms*` headers after the flow, so a flow that set `JMSReplyTo` or `CamelJms*` headers no longer changes the answer. Request-reply is unchanged.
+    
+
+### Kamelets - the component headers of the incoming message are removed
+
+The sink and action Kamelets that call a Camel component now remove the headers of that component from the incoming message as their first step. This applies to 92 Kamelets, from `aws-s3-sink` and `kafka-sink` to the JMS sinks and the template actions. A header such as `CamelAwsS3Key`, `CamelJmsDestinationName` or `CamelJiraIssueKey` that comes with the message no longer changes what the Kamelet was configured to do. The headers that a Kamelet documents as input are kept, and its description names them, for example `CamelKafkaKey`, `CamelPulsarProducerMessageKey`, `CamelGooglePubsubOrderingKey` and `CamelFileName` for the FTP, SFTP and SCP sinks. A route that set such a header on purpose before a sink must now use the option of the Kamelet, or the input header it documents (such as `ce-issueKey` for the Jira sinks or `key` for `redis-sink`), or call the Camel component directly.
+
+-   `rest-openapi-sink`, `ogcapi-features-action` and `azure-functions-sink` remove the `CamelHttp*` and `CamelRestHttp*` headers, as `http-sink` already did.
+    
+-   `http-sink` no longer sends an `Authorization` or `Proxy-Authorization` header that is on the message, such as the one of the caller of `webhook-source`. Log in with the options of the Kamelet. For a token that differs for each message, use the `http` component directly.
+    
+-   `azure-functions-sink` sends the function key in the `x-functions-key` header instead of the `code` query parameter, and removes the header after the call. The key is no longer in the address of the request, nor in the logs of a proxy. Azure Functions accepts the key in either place, so the function needs no change, but a gateway in front of it must pass the header on.
+    
+-   `rest-openapi-sink`, `ogcapi-features-action` and `azure-functions-sink` no longer send an `Authorization` or `Proxy-Authorization` header that is on the message, and `azure-functions-sink` no longer sends an incoming `x-functions-key`. `rest-openapi-sink` has new `authUsername`, `authPassword` and `authBearerToken` options, and `ogcapi-features-action` the login options of `http-sink`; log in with these instead.
+    
+-   The passwords, keys and tokens that 31 Kamelets put into the address of an endpoint are passed in `RAW()`, so a value with `&`, `` ` or `=` is sent whole. Before, it was cut or changed. A value that was URL-encoded to work around this, such as `%2B` for ` ``, is now sent literally and must be changed back to the plain value.
+    
+-   `crypto-encrypt-action` and `crypto-decrypt-action` remove the `CamelCrypto*` headers from the incoming message. A `CamelCryptoKey` header set before the Kamelet no longer changes the key: use the `key` option, or the `crypto` data format directly for a key that differs for each message. The new `mode` option accepts only `CBC`.
+    
+
+### Kamelets - Jackson 3
+
+The Kamelets use Jackson 3 (`tools.jackson`), which Camel 4.24 makes the primary Jackson line (CAMEL-22857, see _Jackson 3_ above). They depend on `camel:jackson3`, `camel:jackson3-avro` and `camel:jackson3-protobuf` instead of the Jackson 2 artifacts. Where a Kamelet unmarshals to a `JsonNode`, it is now a `tools.jackson.databind.JsonNode`, so a route that reads the body of such a Kamelet as a Jackson 2 `com.fasterxml.jackson.databind.JsonNode` must move to Jackson 3.
+
+### Kamelets - default data types
+
+Most Kamelets now declare a default data type. Camel runs its transformer on every message, so it can change the Java type of the body and set the `Content-Type` header. A route that reads the body as a `String` or a stream converts it, as Camel does when asked.
+
+The action Kamelets:
+
+-   `json-serialize-action`, `hoist-field-action`, `jslt-action`, `pdf-action` and `crypto-encrypt-action` give their body as `byte[]`, instead of a stream, a `String` or a `ByteArrayOutputStream`. `jslt-action` sets `Content-Type: application/json`, and `pdf-action` and `crypto-encrypt-action` set `application/octet-stream`.
+    
+-   `json-deserialize-action`, `jslt-action`, `crypto-encrypt-action` and `crypto-decrypt-action` (`binary` in) turn text into `byte[]` before they read it. A stream is kept as it is. `jslt-action` now also accepts parsed JSON (a Jackson `JsonNode`), such as the output of `json-deserialize-action`. Before, that failed.
+    
+-   After `crypto-decrypt-action` (`binary` out, which does not change what it gives), `Content-Type` is `application/octet-stream`, also when the encrypted data came with another `Content-Type`. Set it again to the type of the original data when the next step needs it.
+    
+-   `json-deserialize-action`, `avro-deserialize-action`, `protobuf-deserialize-action` and `jsonata-action` give their parsed JSON as the `application-x-struct` data type. The body is the same Jackson 3 `JsonNode`. `jsonata-action` now depends on `camel-jackson3`.
+    
+-   `avro-serialize-action` and `protobuf-serialize-action` give the `avro-binary` and `protobuf-binary` data types. The data and the `Content-Type` are unchanged.
+    
+-   `value-to-key-action` and `message-timestamp-router-action` (`json` in and out) always read the body as JSON, so `Content-Type: application/json` is no longer needed. They give `byte[]` instead of a stream, with `Content-Type: application/json`, also for a message that came without that `Content-Type`.
+    
+-   `dns-dig-action` and `dns-ip-action` (`text` out) set `Content-Type: text/plain`. `dns-lookup-action` and `nominatim-geocode-action` (`json` out) give the JSON as `byte[]` instead of a stream.
+    
+-   `nominatim-geocode-action` and `ogcapi-features-action` (`text` in) read the body as text. Nothing else changes. `ogcapi-features-action` gives the feature collection as JSON text in bytes (it was a `String`), with the `Content-Type` of the response.
+    
+-   `docling-convert-action` (`text` out) sets `Content-Type: text/plain` on the converted document, also for `CONVERT_TO_HTML`. Before, the incoming `Content-Type`, such as `application/pdf`, was kept.
+    
+-   `tika-extract-text-action` (`text` out) sets `Content-Type: text/plain` on the text, also for `outputFormat` `html` and `xml`. Before, it set none.
+    
+-   `aws-translate-action` (`text` in and out) sets `Content-Type: text/plain` on the translated text. Before, the incoming `Content-Type` was kept.
+    
+
+The Kamelets that leave the body as it is now declare the no-op data type `application-x-unchanged` as their default: the actions `delay-action`, `throttle-action`, `drop-header-action`, `drop-headers-action`, `insert-header-action`, `has-header-filter-action`, `header-matches-filter-action`, `is-tombstone-filter-action`, `predicate-filter-action`, `simple-filter-action`, `topic-name-matches-filter-action`, `kafka-manual-commit-action`, `kafka-batch-manual-commit-action`, `regex-router-action`, `set-kafka-key-action`, `timestamp-router-action`, `log-action`, `resolve-pojo-schema-action`, `json-schema-validator-action` and `pqc-signature-action` (in and out), and the sinks `log-sink`, `aws-cloudwatch-sink`, `aws-ec2-sink`, `aws-timestream-query-sink` and `aws-bedrock-agent-sink` (in). The body, its type and the headers stay as they are, and `camel validate` now follows the body through them. The data type of the message is `application-x-unchanged` after them, so a Kamelet after one of them with an input data type runs its transformer, also when an earlier Kamelet had already given the message that type. For the `json`, `text` and `binary` data types the result is the same.
+
+The source Kamelets that declare a default output data type now give it to the route that consumes from them (CAMEL-27258, see _camel-kamelet - the output data type of a Kamelet is applied when it hands the message on_ above). Before, Camel applied it only after the consuming route had run. The first step after the source gets a `String`, JSON bytes or `byte[]`, with the matching `Content-Type`. `binary` keeps a stream cache as it is, so an object read from a bucket is not read into memory. A consuming route that leaves a body the type cannot convert, such as a `Map`, no longer fails at the end. This affects `aws-sqs-source` and `azure-storage-queue-source` (`text`); `aws-cloudtrail-source`, `aws-ddb-streams-source`, `azure-cosmosdb-source`, `google-mail-source`, `google-calendar-source`, `google-sheets-source` and `slack-source` (`json`); and `azure-eventhubs-source`, `aws-s3-source`, `azure-storage-blob-source`, `azure-storage-files-source`, `azure-storage-datalake-source`, `google-storage-source` and `ibm-cos-source` (`binary`).
+
+More source Kamelets declare a default output data type:
+
+-   `mariadb-source`, `mysql-source`, `oracle-database-source`, `postgresql-source`, `sqlserver-source`, `aws-redshift-source`, `databricks-source`, `snowflake-source`, `mongodb-source`, `solr-source`, `jira-source`, `jira-oauth-source`, `telegram-source`, `salesforce-source`, `github-commit-source`, `github-event-source`, `github-pullrequest-source`, `github-pullrequest-comment-source`, `github-tag-source` and `mongodb-changes-stream-source` (`json`) give their JSON text in a `byte[]`, where it was a stream or a `String` before. `Content-Type` stays `application/json`.
+    
+-   `fhir-source` gives the Bundle as JSON text in bytes (it was a stream), with `Content-Type: application/fhir+json` as before, and now depends on `camel-jackson3`.
+    
+-   `aws-cloudtrail-source` changes from `text` to `json`. The record is JSON in `byte[]` with `Content-Type: application/json`, instead of a `String` with `text/plain`.
+    
+-   `counter-source` (`text`) gives the number as a `String` instead of an `Integer`. Where a number is needed, convert it, for example with `convertBodyTo` to `java.lang.Integer`.
+    
+-   `cron-source` (`text`) sets `Content-Type: text/plain`, also when the `message` option is JSON or XML. Set the header after the source when another type is needed.
+    
+-   `ssh-source` (`text`) sets `Content-Type: text/plain` on the output of the command. The body is unchanged.
+    
+-   `snmp-source` (`text`) sets `Content-Type: text/plain` on the XML text.
+    
+-   `pulsar-source` and `mqtt5-source` (`binary`) set `Content-Type: application/octet-stream`. The body is `byte[]` as before. For `mqtt5-source`, the content type of the MQTT 5 publisher is still in the `CamelPahoMqtt5MsgProperties` header.
+    
+-   `azure-servicebus-source` and `google-pubsub-source` (`binary`) set `Content-Type: application/octet-stream` on the bytes. With `google-pubsub-source`, a `Content-Type` attribute set by the publisher no longer becomes the `Content-Type` header: read it from `CamelGooglePubsubAttributes`. With `azure-servicebus-source`, the content type of the sender is in `CamelAzureServiceBusContentType`, as before.
+    
+-   `aws-kinesis-source` (`binary`) sets `Content-Type: application/octet-stream`. With `useKclConsumers` the body is `byte[]` instead of a `ByteBuffer`.
+    
+-   `ceph-source` (`binary`) sets `Content-Type: application/octet-stream`, as `aws-s3-source` does. The body is still bytes.
+    
+-   `langchain4j-ingest-file-source` (`binary`) sets `Content-Type: application/octet-stream` on each file. The body is still the file. A sink that forwards `Content-Type` sends it on, also after `langchain4j-ingest-sink`.
+    
+-   `ftp-source`, `ftps-source` and `sftp-source` (`binary`) set `Content-Type: application/octet-stream` on each file. The body does not change: with `streamDownload` a large file still streams with stream caching off.
+    
+
+A sink that forwards `Content-Type`, such as `http-sink` or `kafka-sink`, now sends the `Content-Type` that these sources set, for example `application/octet-stream` where none was set before. Remove the header before the sink if that is not wanted.
+
+The sink Kamelets:
+
+-   `pulsar-sink` and `mqtt5-sink` (`binary` in) turn the body into `byte[]` before sending, and set `Content-Type: application/octet-stream`. The broker gets the same bytes as before. A route that goes on after the sink sees `byte[]` and that `Content-Type`.
+    
+-   `aws-kinesis-sink`, `aws-kinesis-firehose-sink` and `aws-s3-streaming-upload-sink` (`binary` in) turn text into `byte[]` and set `Content-Type: application/octet-stream`. A stream is kept. A `Map`, a `List` or a number now fails: turn it into JSON text first, for example with `json-serialize-action`. AWS receives the same bytes as before.
+    
+-   `aws-s3-sink`, `ceph-sink`, `ibm-cos-sink`, `google-storage-sink`, `azure-storage-blob-sink`, `azure-storage-blob-append-sink`, `azure-storage-datalake-sink`, `azure-storage-files-sink` and `scp-sink` (`binary` in) turn text into bytes before the upload. A file and a cached stream are kept as they are. With stream caching off, a stream is read into bytes first; these components already did that for a stream of unknown length. After these sinks, `Content-Type` is `application/octet-stream`, and a text body is now bytes. The content type the file is stored with does not change: these sinks never used `Content-Type`. A `Map` body now fails at the start of these sinks. It failed in the component before.
+    
+-   `ftp-sink`, `ftps-sink` and `sftp-sink` get no default data type, so large files keep streaming with stream caching off.
+    
+-   `mariadb-sink`, `mysql-sink`, `sqlserver-sink`, `oracle-database-sink`, `postgresql-sink`, `aws-redshift-sink`, `databricks-sink`, `snowflake-sink`, `solr-sink`, `elasticsearch-index-sink` and `opensearch-index-sink` (`json` in) turn their input into JSON bytes and set `Content-Type: application/json`, so they now also accept a `Map` or a `List`. After the SQL, Elasticsearch and OpenSearch sinks, `Content-Type` is `application/json`.
+    
+-   `azure-cosmosdb-sink` and `google-bigquery-sink` (`json` in) now also take a `Map` (and BigQuery a `List` of Maps), which is written as JSON. `Content-Type: application/json` stays on the message after the sink. A number fails at the start of the Kamelet.
+    
+-   `aws-lambda-sink` and `aws-eventbridge-sink` (`json` in) send JSON bytes and set `Content-Type: application/json`, which stays on the message after the sink. A `Map` or a `List` is now written as JSON. Text that is not a JSON object or array is sent as a JSON string (`hello` becomes `"hello"`). A number fails.
+    
+-   `salesforce-create-sink`, `salesforce-update-sink`, `salesforce-delete-sink` and `salesforce-composite-upsert-sink` (`json` in) turn the body into JSON bytes and set `Content-Type: application/json`, which stays on the message after the sink. Text that is not a JSON object or array is sent as a JSON string.
+    
+-   `ssh-sink`, `azure-storage-queue-sink`, `aws-bedrock-agent-runtime-sink`, `aws-comprehend-sink`, `aws-polly-sink`, `aws-secrets-manager-sink`, `aws-ses-sink`, `jira-add-comment-sink`, `jira-add-issue-sink`, `jira-transition-issue-sink` and `jira-update-issue-sink` (`text` in) read the body as a `String` and set `Content-Type: text/plain`, which stays on the message after the sink. `azure-storage-queue-sink` reads the body as UTF-8 text, and the queue receives the same text as before. After `aws-polly-sink`, `Content-Type` is not the type of the audio: use `CamelAwsPollyContentType`.
+    
+
+### Kamelets - other changes in behaviour
+
+-   `ssh-source` passes `pollCommand` as it is written: a command with `` `, `&` or `=` runs unchanged. Before, ` `` became a space and `&` broke the startup.
+    
+-   `extract-field-action` gives a text, a number or a boolean as the plain value with `Content-Type: text/plain`, such as `ORD-1` instead of `"ORD-1"`, and an object or an array as JSON text with `Content-Type: application/json`, whatever the `Content-Type` of the incoming message. A missing or `null` field gives an empty body and removes `Content-Type`. With `headerOutput`, the body is left exactly as it was. `trimField` is deprecated and ignored. A route that removed the quotes itself, or compared the body with `"ORD-1"`, must change.
+    
+-   `solr-source` gives JSON text, with `Content-Type: application/json`, instead of a SolrJ object. A route that read the fields of the object must read the JSON instead, for example with `jsonpath`.
+    
+-   The SQL Kamelets and `cassandra-sink` send a query with `+` to the database unchanged. A query that worked around this, for example with `%2B`, now sends a literal `%2B`.
+    
+-   `google-sheets-source` with `majorDimension=COLUMNS` reads columns.
+    
+-   `mongodb-changes-stream-source` sends the whole document for an update, read again from the collection, instead of `null`. Set the new `fullDocument` option to `default` for the old behaviour.
+    
+-   The `username` and `password` of `mongodb-source`, `mongodb-changes-stream-source` and `mongodb-sink` are percent-encoded by Camel (CAMEL-27346), so a password with `@`, `:`, `/`, `?` or `%` works. A password that was percent-encoded by hand to work around this must now be given as it is.
+    
+-   `redis-sink` sends a PUBLISH that has no channel header to the channels of the `channels` option (default `one`), instead of failing.
+    
+-   The GitHub source Kamelets poll every 60 seconds instead of every 500 milliseconds. Set `delay` to poll more often.
+    
+-   `github-pullrequest-source`, `github-pullrequest-comment-source` and `github-tag-source` build the body from what the poll already returned, and make no more GitHub API requests per message. Before, turning the library object into JSON called every getter, and many of them made their own requests, so a failed request (rate limit, 404, missing permission) lost the message. The body is now JSON text with the field names of the GitHub API (`html_url`, `user.login`, `head.ref`, …​), not every getter in camelCase (`htmlUrl`, …​). Data that only the extra requests gave, such as the size of a pull request, whether it can be merged and the details of the commit of a tag, is no longer in the body. The descriptions of the Kamelets list the fields.
+    
+-   `nominatim-geocode-action` answers in English, where Nominatim used to answer in the local language of the place (CAMEL-27200, see _camel-geocoder - the language option is used_ above). Set the new `language` option to ask for another language, or leave it empty for the local language.
+    
+-   `ogcapi-features-action` no longer has the `split` option. It only worked inside a Kamelet EIP; with `to`, or in a Pipe, the next step always got the whole feature collection. To process each feature as a message of its own, add a `split` EIP with the JSONPath `$.features[*]` on the body after the Kamelet, and `marshal: json` for each feature as JSON text.
+    
+-   The Jira sink Kamelets give an issue the description of the `ce-issueDescription` header when the body is empty.
+    
+-   `rest-openapi-sink` with `clientRequestValidation=true` rejects an invalid request instead of sending it.
+    
+-   In `mail-sink`, a `ce-to` or `ce-cc` header replaces only its own option. Before, either of them dropped all the recipient options, including bcc.
+    
+-   `aws-translate-action` no longer requires `sourceLanguage`. With neither it nor `autodetectSourceLanguage`, the Kamelet starts, and each message fails.
+    
+-   `scp-sink` takes a path or a `classpath:` resource in `knownHostsUri`. A `file://` or `http(s)://` value, which never worked, is rejected.
+    
+-   `header-matches-filter-action` requires `headerName`, `jira-source` requires `jql`, `salesforce-create-sink` requires `sObjectName` and `fhir-sink` requires `apiName`. These Kamelets could not start without them, and now fail with a clear error. `aws-bedrock-agent-sink` requires `dataSourceId`, and fails at startup without it instead of on every message.
+    
+
+### Kamelets - new options
+
+Many Kamelets have new options. They change nothing when they are not set:
+
+-   `http-sink` and `http-source`: the login options of the removed `http-secured-*` Kamelets, `authBearerToken` and `okStatusCodeRange`.
+    
+-   The HTTP Kamelets: a proxy and following redirects. `graphql-sink`: a query file.
+    
+-   `rest-openapi-sink`: `authUsername`, `authPassword` and `authBearerToken` (Basic is sent only when the service asks with a 401). `ogcapi-features-action`: the login options of `http-sink` (`authMethod`, Basic, Bearer and OAuth2).
+    
+-   The Ceph Kamelets: `forcePathStyle`.
+    
+-   `aws-kinesis-source`: `iteratorType`.
+    
+-   The Solr Kamelets: HTTPS.
+    
+-   `mail-sink`: STARTTLS, cc, bcc, replyTo and `contentType`. The mail sources: choosing, moving and deleting the emails they read.
+    
+-   The PostgreSQL, MySQL, MariaDB and Redshift Kamelets: `connectionProperties`.
+    
+-   The SQL Kamelets: paging and marking the rows of a poll, a JSON array of rows, and the size of the connection pool.
+    
+-   The Redis Kamelets: login and TLS.
+    
+-   The FTP and SFTP sources: `move`, `moveFailed` and `idempotentRepository`.
+    
+-   The FTP, FTPS and SFTP sinks: `tempPrefix` and `doneFileName`.
+    
+-   `ftps-source` and `ftps-sink`: `trustStoreFile`, `trustStorePassword` and `trustStoreType`, to trust a server with a self-signed or private-CA certificate for this connection only, instead of the JVM-wide `javax.net.ssl.trustStore`.
+    
+-   `ftps-source` and `ftps-sink`: `securityProtocol` (TLS Version), the newest TLS version the connection offers. When it is not set, `TLSv1.3`, as before; set `TLSv1.2` for a server whose TLS 1.3 connections fail or hang.
+    
+-   The file Kamelets: filters, waiting for complete files, streaming large files and timeouts.
+    
+-   The JMS sources: durable subscription and selector. The JMS Kamelets: transactions, priority, expiry and an AMQP login.
+    
+-   `aws-sqs-source`: `messageAttributeNames` and `attributeNames`. With them, the attributes of a message become headers.
+    
+-   `azure-eventhubs-source`: `consumerGroupName`.
+    
+-   `mqtt5-source` and `mqtt5-sink`: `qos` and a trust store for TLS. `mqtt5-sink`: `retained`.
+    
+-   `cassandra-sink`: `datacenter`.
+    
+-   `exec-sink`: `args`, `workingDir`, `commandTimeout` and `exitValues`.
+    
+-   `ssh-source` and `ssh-sink`: login with a private key, `failOnUnknownHost` and `connectTimeout`. `password` is no longer required.
+    
+-   The MongoDB Kamelets: `connectionString`. `hosts` is no longer required.
+    
+-   `mongodb-sink`: saving and updating documents. `mongodb-source`: the place of the tail tracking.
+    
+-   `mongodb-changes-stream-source`: `tokenRepository`, a `StateRepository` bean that keeps the resume token, so the source goes on after a restart where it stopped.
+    
+-   `mongodb-source` and `mongodb-changes-stream-source`: `readPreference` (`PRIMARY`, `PRIMARY_PREFERRED`, `SECONDARY`, `SECONDARY_PREFERRED` or `NEAREST`), set on the client the Kamelets build. It is not used with `connectionString`, which can carry its own `readPreference`.
+    
+-   `kafka-source` and `kafka-sink`: a schema registry, with `schemaRegistryVendor` (`confluent`, `apicurio`, `aws-glue`, `azure`), `schemaRegistryUrl`, `schemaFormat` (`avro`, `json`), `schemaRegistryRegion` and `schemaRegistryName`, and `schemaGroup` on `kafka-sink`. With a registry, `kafka-source` gives the value as JSON text.
+    
+-   `kafka-batch-source`: a schema registry, with `schemaRegistryVendor`, `schemaRegistryUrl`, `schemaFormat` and the other registry options of `kafka-source`.
+    
+-   `kafka-source`, `kafka-sink` and `kafka-batch-source`: a schema registry login for `confluent` and `apicurio`, with `schemaRegistryUsername` and `schemaRegistryPassword` (basic auth, such as the API key and secret of Confluent Cloud), or the OAuth2 client credentials `schemaRegistryOauthTokenEndpoint`, `schemaRegistryOauthClientId`, `schemaRegistryOauthClientSecret` and `schemaRegistryOauthScope`. Kafka 4 only calls an OAuth2 token endpoint that is listed in the JVM system property `org.apache.kafka.sasl.oauthbearer.allowed.urls`.
+    
+-   `kafka-source`, `kafka-sink` and `kafka-batch-source`: `schemaFormat: protobuf`, with `confluent` and `apicurio` (and `aws-glue`, untested). The sources give each Protobuf record as JSON text of the Protobuf JSON mapping, such as `{"id":7,"item":"camel"}` (field names in lowerCamelCase, 64-bit numbers as text, fields with their default value left out). The sink needs a Protobuf message object as the body, such as a `DynamicMessage`, which `protobuf-message-action` makes from JSON text; JSON text fails with a `SerializationException`. As with `avro` and `json`, Camel JBang downloads the serde of the vendor.
+    
+-   The NATS Kamelets: `secure` (TLS, with the trust store from the `camel.ssl` settings) and `credentialsFilePath`. `nats-source`: `queueName`, and a durable JetStream consumer.
+    
+-   `aws-s3-event-based-source`: default, profile and session credentials, so `accessKey` and `secretKey` are no longer required, and long polling.
+    
+-   `aws-s3-sink` and `aws-s3-streaming-upload-sink`: `useAwsKMS`, `awsKMSKeyId`, `useSSES3` and `storageClass`. `aws-s3-sink`: multipart upload and refusing to replace a file.
+    
+-   The AWS Kamelets (all but Redshift): `proxyHost`, `proxyPort` and `proxyProtocol`.
+    
+-   `aws-ses-sink`: the recipients as options.
+    
+-   `aws-bedrock-agent-runtime-sink`: retrieving passages and asking an agent. The Redshift Kamelets: the size of the connection pool.
+    
+-   The Kinesis and DynamoDB Streams sources: limiting a poll. `aws-cloudwatch-sink`: the metric as options. `aws-cloudtrail-source`: looking back for late events.
+    
+-   The SQS Kamelets: parallel processing, delayed messages and skipping ListQueues. The SNS sinks: a subject.
+    
+-   The Lambda, EC2 and Secrets Manager sinks: more operations. `aws-translate-action`: language detection and terminologies. `aws-polly-sink`: lexicons.
+    
+-   `aws-lambda-sink`: `invocationType` and `logType`. `aws-timestream-query-sink`: `queryAllPages`.
+    
+-   `aws-bedrock-text-sink`: `operation` (`invokeTextModel` or `converse`) and a guardrail.
+    
+-   `azure-servicebus-source`: `sessionEnabled`, `maxConcurrentSessions` and `subQueue`, parallel processing and dead-lettering. `azure-servicebus-sink`: `sessionId`, bytes and delayed messages. Both: `fullyQualifiedNamespace`, so `connectionString` is no longer required.
+    
+-   The Azure Blob Kamelets: a SAS token login. `azure-storage-blob-source`: filters, moving blobs and `maxMessagesPerPoll`. `azure-storage-blob-event-based-source`: reading from a topic.
+    
+-   The Azure Storage Queue, Data Lake and Files Kamelets: more component options. `clientId`, `clientSecret` and `tenantId` of the Data Lake Kamelets are no longer required. `azure-storage-datalake-source`: `deleteAfterRead`.
+    
+-   The Azure Event Hubs, Cosmos DB and Functions Kamelets: more options, including `connectionString` on the Event Hubs Kamelets.
+    
+-   The Snowflake Kamelets: login with a key pair (`privateKey`, `privateKeyFile`, `privateKeyPassphrase`), so `password` is no longer required, and the warehouse, schema and role of the session.
+    
+-   The spring-rabbitmq Kamelets: `sslTruststoreLocation` and `sslTruststorePassword`. The RabbitMQ Kamelets: scaling, retries and dead-lettering, and the content type on the sink.
+    
+-   The Couchbase Kamelets: a scope and a collection. `couchbase-sink`: deleting.
+    
+-   `pulsar-source`: `ackTimeoutMillis`. `pulsar-source` and `pulsar-sink`: `tlsTrustCertsFilePath`. `pulsar-sink`: `batcherBuilder`.
+    
+-   The Infinispan Kamelets: TLS. The Infinispan sink: removing entries and an expiry.
+    
+-   The SMPP Kamelets: delivery receipts, number types, UCS-2 text and the enquire\_link interval.
+    
+-   The Elasticsearch, OpenSearch and Solr Kamelets: timeouts. The Solr Kamelets: a request handler.
+    
+-   The Google Pub/Sub, Cloud Storage and BigQuery Kamelets: ack, ordering, move and insert ID options. `google-storage-sink`: `storageClass`, the storage class of the uploaded objects.
+    
+-   The FHIR, OGC API, Splunk HEC and SNMP Kamelets: timeouts and more endpoint options. `username` and `password` of `fhir-source` are no longer required.
+    
+-   The Google Workspace Kamelets: a service account login, so their OAuth options are no longer required. The Vertex AI and IBM COS Kamelets: more options.
+    
+-   The Tika and Docling Kamelets: the output format. Docling: a login and OCR options. The PQC actions: a key store.
+    
+-   `crypto-encrypt-action` and `crypto-decrypt-action`: `mode`. With `mode: CBC`, each message gets a random initialization vector. Without it, the actions use ECB as before. Set it on both actions together.
+    
+-   `nominatim-geocode-action`: `language`.
+    
+-   `aws-s3-event-based-source`, `azure-storage-blob-event-based-source` and `google-storage-event-based-source`: a header that is the same in each copy of an event, as S3, Azure Storage and Cloud Storage deliver events at least once: `aws-s3-event-id`, `azure-storage-blob-event-id` and `google-storage-event-id`, as `ceph-event-based-source` already has `ceph-event-id`. The header is set with `getObject` and `getBlob` too. To skip the copies, put an `idempotentConsumer` on that header after the Kamelet, with a shared repository (such as camel-infinispan or camel-sql) when several replicas run. `google-storage-event-based-source` now declares `camel:jsonpath`.
+    
+-   `elasticsearch-index-sink`: `sslContextParameters`, for TLS settings that `certificate` cannot give, such as a client certificate (mutual TLS), a trust store or a TLS version. `opensearch-index-sink` already had it.
+    
+-   `elasticsearch-index-sink` and `opensearch-index-sink`: `apiKey`, to log in with an API key instead of `user` and `password`: for Elasticsearch, the encoded key or `id:api_key`; for OpenSearch 3.7 or later, the `os_` API token. Set either `apiKey` or `user`, not both. The new search actions have it too.
+    
+
+### Kamelets - new Kamelets
+
+The Kamelet catalog 4.24 adds these Kamelets:
+
+-   `protobuf-message-action` turns JSON text into a Protobuf message (a `DynamicMessage`) of the `.proto` schema given in `schema` (the text, or a `classpath:`, `file:` or `http:` resource), with an optional `messageName`. Put it before `kafka-sink` with `schemaFormat: protobuf`. It declares `camel:protobuf` and the new `camel:protobuf-schema` (CAMEL-27329), which brings Kotlin and Guava (about 6 MB); `kafka-sink` does not.
+    
+-   `mllp-source` and `mllp-sink` receive and send HL7 v2 messages over MLLP. The source listens on `0.0.0.0` by default and acknowledges each message automatically (AA, or AE when the flow fails). The sink fails the message on a negative acknowledgement (AE or AR). TLS uses the global `camel.ssl.*` settings. The charset of a message is the one its MSH-18 field names, such as `UNICODE UTF-8` (CAMEL-27366), and `charset` is used only when MSH-18 is empty; `mllp-source` sets the header `CamelMllpCharset`.
+    
+-   `xslt-action` transforms XML with an XSLT 3.0 stylesheet (Saxon), and `xml-schema-validator-action` validates XML against an XML Schema and fails the messages that do not match. DTD external entities are not read, and entity expansion is limited by the JDK.
+    
+-   `aws-eventbridge-source` receives the events that an existing Amazon EventBridge rule matches, through an SQS queue that it adds to the rule as a target. Without `queueURL`, it creates the queue when it starts, needs `events:DescribeRule` on the rule, and lets the queue accept only the events of that rule. It deletes the queue when it stops; with `deleteQueueOnShutdown: false` the queue keeps a fixed name, collects the events while the Kamelet does not run, and is reused at the next start.
+    
+-   `smb-source` and `smb-sink` read and write files on Windows and Samba file shares (SMB). The sink drops any directory from the file name and refuses a `CamelFileName` that leaves the directory. `directoryName` and `password` are optional (the top of the share, and guest access with `username: Guest`), and there are `encryptData`, `connectTimeout`, `transactTimeout` and `readTimeout` (source) or `writeTimeout` (sink). `move` together with `delete` fails at startup.
+    
+-   `csv-deserialize-action` turns CSV text into a `List` of rows (a `Map` keyed by the column names, or a `List` of values), and `csv-serialize-action` turns a `List` of Maps or Lists, a `Map` or parsed JSON into CSV text with a header line (`Content-Type: text/csv`), on the Camel `csv` data format. Without `columns`, the keys of the first `Map` row are the columns of all the rows (CAMEL-27371): a key that only a later row has is left out, and a missing key is empty.
+    
+-   `soap-source` and `soap-action` (Preview) serve a SOAP web service from a WSDL at a `path` on the HTTP server of the integration, under `/services` (such as `[http://localhost:8080/services/orders](http://localhost:8080/services/orders)` with Camel JBang; CAMEL-27389), with the reply of the route as the response and SOAP faults from headers or a `<soap:Fault>` reply as XML text, or call an operation of a SOAP service from its WSDL (at `address`, or the address in the WSDL), with XML text in and out and no generated Java code. Requests with a DOCTYPE are refused. `wsSecurityUsername`, `wsSecurityPassword` and `wsSecurityPasswordType` send or require a WS-Security UsernameToken; Camel JBang downloads `cxf-rt-ws-security` for them (CAMEL-27395). With `bodyFormat: json` (CAMEL-27375), the route works with JSON typed by the XML schema of the WSDL (numbers, booleans, arrays for repeating elements) instead of XML text, with `ignoreUnknownFields`, and `requestElement` on `soap-action`.
+    
+-   `kafka-share-source` (Preview) reads Kafka topics through a share group (KIP-932, Kafka 4.2 or newer), so that more consumers than partitions share the records like a queue. Each record is acknowledged on its own, and one whose handling fails is delivered again (`onFailure`, `kafka-delivery-count`). `autoOffsetReset` (`earliest`, `latest` or `by_duration:<duration>`) sets where a new share group starts; it needs the `ALTER_CONFIGS` permission on the group, and the Kamelet does not start when it cannot be set.
+    
+-   `jms-apache-activemq-source` and `jms-apache-activemq-sink` send and receive messages on ActiveMQ Classic over OpenWire (`tcp://`, `ssl://` or `failover:`), with queues or topics, durable subscriptions, selectors and transactions. The sink pools its connections and removes the `CamelJms*` headers before sending.
+    
+-   `debezium-postgresql-source`, `debezium-mysql-source` and `debezium-sqlserver-source` (Preview) send the row changes of PostgreSQL, MySQL and SQL Server tables as they happen (change data capture with Debezium), one JSON message per insert, update or delete, with the `debezium-operation`, `debezium-table` and `debezium-key` headers. PostgreSQL needs `wal_level=logical`. The position (and for MySQL and SQL Server the schema history) is saved in files, whose folder must exist and be writable (CAMEL-27398), or in Kafka topics. When the Debezium engine cannot start, such as with a server not set up for it, the Kamelet fails to start. Camel JBang downloads the MySQL JDBC driver by itself.
+    
+-   `openai-chat-action` (Preview) sends the body as a question to a chat model of OpenAI or of any OpenAI-compatible server (`baseUrl`, such as Ollama, which needs no `apiKey`) and gives back the answer as text, or as JSON text that follows `jsonSchema` (with `jsonSchemaStrict: true`, the model must follow it exactly). The model cannot call tools, and the `CamelOpenAI*` headers are removed from the message first. A request that gets 408, 409, 429 or 5xx is sent again `maxRetries` times (2 by default).
+    
+-   `ai-tool-source` (Preview) offers the steps that follow it as a tool that an AI agent can call, such as an MCP client, with the arguments of each call as JSON in the body and as headers. Set `camel.server.mcp-enabled=true` and `camel.server.mcp-tags` to serve it with `camel-mcp-server` (added by Camel JBang). Only the arguments that `argSchema` declares are accepted (Camel adds `additionalProperties: false`), and the MCP endpoint has no login by default: protect it with OAuth (`camel.server.mcp-oauth-profile`) or network rules.
+    
+-   `xpath-filter-action` (Preview) keeps the XML messages that match an XPath expression and drops the others. Namespaces are declared with `namespacePrefix` and `namespaceUri`, or several at once with `namespaces` (`prefix=uri` separated by commas, CAMEL-27486). A body that is not XML, or that has a DOCTYPE, fails the message.
+    
+-   `websocket-source` and `websocket-sink` (Preview) receive the messages a WebSocket server pushes, and send messages to a WebSocket server, over `ws://` or `wss://`, with an optional `Authorization` header and reconnects. `websocket-source` passes the messages on in the order they arrive, and can send a `connectMessage`, such as a subscription, when it connects and again after each reconnect. A query value in `url` with `+`, `&` or `%`, such as a token, goes inside `RAW()`.
+    
+-   `elasticsearch-search-action` and `opensearch-search-action` (Preview) search an index of Elasticsearch or OpenSearch as a step of a route. The body is the search (Query DSL as JSON, or plain words), and the result is a JSON array of the documents found, with the number of matches in the `CamelElasticsearchTotalHits` / `CamelOpensearchTotalHits` header. Each document has its id added as `_id`. With `queryDsl: false`, every body is searched for as words, for untrusted input or AI agents. A vector (`knn`) search works too.
+    
+-   `pgp-encrypt-action` and `pgp-decrypt-action` (Preview) encrypt and sign a message body with OpenPGP, and decrypt it and check its signature, with key rings given as `file:`, `classpath:` or `base64:` resources.

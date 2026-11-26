@@ -4,7 +4,7 @@ Index of other Camel components.
 
 # Miscellaneous Components
 
-Number of Miscellaneous Components: 110 in 74 JAR artifacts (3 deprecated)
+Number of Miscellaneous Components: 111 in 75 JAR artifacts (3 deprecated)
 
     
 | Component | Artifact | Support Level | Since | Description |
@@ -26,6 +26,7 @@ Number of Miscellaneous Components: 110 in 74 JAR artifacts (3 deprecated)
 | [CLI Connector](cli-connector.md) | camel-cli-connector | Stable | 3.19 | Runtime adapter connecting with Camel CLI |
 | [CLI Debug](cli-debug.md) | camel-cli-debug | Stable | 4.17 | Remote CLI debugger |
 | [Cloudevents](cloudevents.md) | camel-cloudevents | Stable | 3.15 | Camel support for the CloudEvents specification |
+| [CXF Platform HTTP](cxf-platform-http.md) | camel-cxf-platform-http | Preview | 4.24 | Serve the SOAP services of cxf consumers on the platform-http server (Vert.x) in Camel Main and Camel JBang |
 | [CXF Transport](cxf-transport.md) | camel-cxf-transport | Stable | 2.8 | Camel Transport for Apache CXF |
 | [Debug](debug.md) | camel-debug | Stable | 3.15 | Enables Camel Route Debugging |
 | [Diagram](diagram.md) | camel-diagram | Stable | 4.21 | Camel Route Diagram rendering |

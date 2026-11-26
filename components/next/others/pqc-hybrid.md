@@ -108,7 +108,7 @@ The same pattern applies for other classical algorithms. For example, to use Ed2
 
 **Hybrid Signature Wire Format:**
 
-Since Camel 4.19, hybrid signatures use wire format v2 which includes magic bytes, version, and algorithm identifiers (see [Wire Format v2 and Algorithm Identification](#_wire_format_v2_and_algorithm_identification)). The v1 format `[4 bytes: classical sig length][classical sig][pqc sig]` is still accepted on input for backward compatibility.
+Since Camel 4.24, hybrid signatures use wire format v2 which includes magic bytes, version, and algorithm identifiers (see [Wire Format v2 and Algorithm Identification](#_wire_format_v2_and_algorithm_identification)). The v1 format `[4 bytes: classical sig length][classical sig][pqc sig]` is still accepted on input for backward compatibility.
 
 **Headers set by hybrid signature operations:**
 
@@ -231,7 +231,7 @@ The same pattern applies for other classical algorithms. For example, to use ECD
 
 **Hybrid KEM Wire Format:**
 
-Since Camel 4.19, hybrid encapsulations use wire format v2 which includes magic bytes, version, and algorithm identifiers (see [Wire Format v2 and Algorithm Identification](#_wire_format_v2_and_algorithm_identification)). The v1 format `[4 bytes: classical encap length][classical encap][pqc encap]` is still accepted on input for backward compatibility.
+Since Camel 4.24, hybrid encapsulations use wire format v2 which includes magic bytes, version, and algorithm identifiers (see [Wire Format v2 and Algorithm Identification](#_wire_format_v2_and_algorithm_identification)). The v1 format `[4 bytes: classical encap length][classical encap][pqc encap]` is still accepted on input for backward compatibility.
 
 **Headers set by hybrid KEM operations:**
 
@@ -279,10 +279,12 @@ Based on NIST recommendations for the transition period:
     
 5.  **Algorithm agility**: Design your system to allow algorithm upgrades as standards evolve.
     
+6.  **KEM combiner**: The hybrid shared secret is derived by concatenating the two component secrets and running them through HKDF. Binding the combined secret to ciphertext or public-key material (as proposed in draft-irtf-cfrg-hybrid-kem) is not yet implemented and is deferred to a future release.
+    
 
 ## Wire Format v2 and Algorithm Identification
 
-Starting with Camel 4.19, the hybrid signature, hybrid KEM, and [PQC DataFormat](../dataformats/pqc-dataformat.md) wire formats include self-describing algorithm metadata. This makes the binary output portable and verifiable without out-of-band knowledge of which algorithms were used.
+Starting with Camel 4.24, the hybrid signature and hybrid KEM wire formats include self-describing algorithm metadata. This makes the binary output portable and verifiable without out-of-band knowledge of which algorithms were used.
 
 ### PQCAlgorithmId
 
@@ -296,7 +298,7 @@ The `PQCAlgorithmId` enum maps every supported algorithm — classical signa
 | `0x0100-0x01FF` | Classical signature | SHA256withECDSA (`0x0101`), Ed25519 (`0x0104`), SHA256withRSA (`0x0106`) |
 | `0x0200-0x02FF` | Post-quantum signature | ML-DSA (`0x0201`), SLH-DSA (`0x0202`), LMS (`0x0203`), FALCON (`0x0207`) |
 | `0x0300-0x03FF` | Classical KEM / key agreement | EC (`0x0301`), X25519 (`0x0303`), X448 (`0x0305`) |
-| `0x0400-0x04FF` | Post-quantum KEM | ML-KEM (`0x0401`), BIKE (`0x0402`), NTRU (`0x0407`), KYBER (`0x040A`) |
+| `0x0400-0x04FF` | Post-quantum KEM | ML-KEM (`0x0401`), BIKE (`0x0402`), NTRU (`0x0407`) |
 | `0x0500-0x05FF` | Symmetric encryption | AES (`0x0501`), ARIA (`0x0502`), Camellia (`0x0503`) |
 
 **Lookup by JCA name:**
@@ -333,6 +335,9 @@ _Java-only: parsing and inspecting v2 hybrid signature components_
 HybridSignature.HybridSignatureComponents components = HybridSignature.parse(hybridSig);
 
 // v2 components carry algorithm identifiers
+// WARNING: these algorithm IDs are unauthenticated metadata written by the sender.
+// Do NOT use them to select which key or algorithm to use for cryptographic operations.
+// Always use the algorithm configured by the operator.
 PQCAlgorithmId classical = components.classicalAlgorithmId(); // e.g. SHA256_WITH_ECDSA
 PQCAlgorithmId pqc       = components.pqcAlgorithmId();       // e.g. ML_DSA
 int version              = components.version();              // 2
@@ -342,7 +347,7 @@ int version              = components.version();              // 2
 
 ### Wire Format v2 Layout
 
-All three output types (hybrid signature, hybrid KEM, PQC DataFormat) share the same 8-byte header:
+Both output types (hybrid signature and hybrid KEM) share the same 8-byte header:
 
 ```text
 [2 bytes: magic 0x50 0x51 ("PQ")]
@@ -362,14 +367,15 @@ All three output types (hybrid signature, hybrid KEM, PQC DataFormat) share the 
 | --- | --- | --- | --- |
 | `0x01` | Hybrid signature | Classical signature algorithm | PQC signature algorithm |
 | `0x02` | Hybrid KEM | Classical KEM algorithm | PQC KEM algorithm |
-| `0x03` | KEM DataFormat | KEM algorithm | Symmetric algorithm |
+> **Note**
+> The PQC DataFormat retains the v1 wire format for now; v2 migration for the data format is tracked in CAMEL-27548.
 
 ### Backward Compatibility
 
 Wire format v2 is fully backward-compatible with v1:
 
--   **Writing** — `sign()`, `encapsulate()`, and `marshal()` always produce v2 output.
+-   **Writing** — `sign()`, `encapsulate()`, and the 2-argument `combineSignatures()` / `combineEncapsulations()` overloads always produce v2 output.
     
--   **Reading** — `parse()`, `verify()`, `extract()`, and `unmarshal()` auto-detect the format by checking the first two bytes for the magic bytes `0x50 0x51`. If absent, they fall back to v1 parsing.
+-   **Reading** — `parse()`, `verify()`, and `extract()` auto-detect the format by checking the first two bytes for the magic bytes `0x50 0x51`. If absent, they fall back to v1 parsing.
     
 -   **Safety** — The magic bytes `0x50 0x51`, interpreted as the first two bytes of a big-endian 32-bit integer, produce values above 1.3 billion. No valid v1 payload has a classical signature or encapsulation of that size, so false positives are impossible in practice.

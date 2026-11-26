@@ -12,7 +12,7 @@ As such, you may face situations where an encoding is missing in native mode, fo
 quarkus.native.add-all-charsets = true
 ```
 
-See also [quarkus.native.add-all-charsets](https://quarkus.io/guides/all-config#quarkus-core_quarkus.native.add-all-charsets) in Quarkus documentation.
+See also [quarkus.native.add-all-charsets](https://quarkus.io/guides/all-config#quarkus-core_quarkus-native-add-all-charsets) in Quarkus documentation.
 
 ## Locale
 
@@ -42,20 +42,20 @@ quarkus.native.resources.includes = docs/*,images/*
 
 In the example above, resources named `docs/included.adoc` and `images/included.png` would be embedded in the native executable.
 
-`quarkus.native.resources.includes` is a list of comma separated Ant-path style glob patterns. Please refer to [Quarkus documentation](https://quarkus.io/guides/building-native-image#quarkus-native-pkg-native-config_quarkus.native.resources.includes) for more details.
+`quarkus.native.resources.includes` is a list of comma separated Ant-path style glob patterns. Please refer to [Quarkus documentation](https://quarkus.io/guides/building-native-image#quarkus-core_quarkus-native-resources-includes) for more details.
 
 ## Using the onException clause in native mode
 
-When using [Camel `onException` handling](../../../manual/exception-clause.md) in native mode, it is the application developers responsibility to register the exception classes for reflection.
+Exception classes referenced by [`onException`](../../../manual/exception-clause.md), `doCatch` and `throwException` in Java, XML and YAML routes are detected at build time and registered for reflection automatically.
 
-For instance, with an exception handler like this
+For instance, with an exception handler like this, `MyException` does not need any manual registration:
 
 ```java
 onException(MyException.class).handled(true);
-from("direct:route-that-could-produce-my-exception").throw(MyException.class);
+from("direct:route-that-could-produce-my-exception").throwException(new MyException());
 ```
 
-the class `MyException` should be registered for reflection, see more in [Registering classes for reflection](#reflection).
+You only need to register exception classes yourself if they are referenced in a way that cannot be detected at build time. See [Registering classes for reflection](#reflection) for more details.
 
 ## Registering classes for reflection
 
@@ -65,7 +65,7 @@ In many cases, application developers do not need to care because Quarkus extens
 
 However, in some situations, Quarkus extensions may miss some classes, and it is up to the application developer to register them. There are two ways to do that:
 
-1.  The `[@io.quarkus.runtime.annotations.RegisterForReflection](https://quarkus.io/guides/writing-native-applications-tips#alternative-with-registerforreflection)` annotation can be used to register classes on which it is used, or it can also register third party classes via its `targets` attribute.
+1.  The `[@io.quarkus.runtime.annotations.RegisterForReflection](https://quarkus.io/guides/writing-native-applications-tips#registerForReflection)` annotation can be used to register classes on which it is used, or it can also register third party classes via its `targets` attribute.
     
     ```java
     import io.quarkus.runtime.annotations.RegisterForReflection;

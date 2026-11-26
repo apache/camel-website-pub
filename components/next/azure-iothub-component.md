@@ -217,7 +217,7 @@ Enum values:
 
 
  |  | IoTHubDeliveryMode |
-| **CamelAzureIoTHubTwinProperties** (producer) Constant: [`TWIN_PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-azure-iothub/latest/org/apache/camel/component/azure/iothub/IoTHubConstants.html#TWIN_PROPERTIES) | Device twin reported properties to apply, as a Map. Used for TWIN delivery and, in BOTH mode, alongside the telemetry message body. |  | Map |
+| **CamelAzureIoTHubTwinProperties** (producer) Constant: [`TWIN_PROPERTIES`](https://javadoc.io/doc/org.apache.camel/camel-azure-iothub/latest/org/apache/camel/component/azure/iothub/IoTHubConstants.html#TWIN_PROPERTIES) | Device twin reported properties to apply, as a java.util.Map with String keys. Used for TWIN delivery and, in BOTH mode, alongside the telemetry message body. |  | Map |
 
 ## Usage
 

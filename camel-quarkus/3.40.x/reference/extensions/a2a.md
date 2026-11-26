@@ -45,3 +45,5 @@ More information about selecting resources for inclusion in the native executabl
 The [A2A component](../../../../components/4.22.x/a2a-component.md) supports two protocol bindings: `JSONRPC` and `HTTP+JSON`. Only the `JSONRPC` binding works with the default Quarkus HTTP server (Vert.x / `platform-http`).
 
 The `HTTP+JSON` binding uses A2A custom-method paths that contain colons, such as `/message:send`. Vert.x Web does not support colon characters in URI path segments, causing these routes to fail.
+
+The A2A component uses `HTTP+JSON` by default, so you must set `protocolBinding=JSONRPC` on your `a2a` endpoints. Explicitly configuring the `HTTP+JSON` (or `REST`) binding fails with an `IllegalArgumentException` when the endpoint is created.

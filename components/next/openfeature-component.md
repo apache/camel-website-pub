@@ -81,7 +81,7 @@ The OpenFeature component supports the following options which are listed below.
 | --- | --- | --- | --- |
 | **configuration** (producer) | Default configuration shared by OpenFeature endpoints. |  | OpenFeatureConfiguration |
 | **contextFromBody** (common) | When true, a Map message body is used as the evaluation context. When false (default), the body is not used as context. The CamelOpenFeatureEvaluationContext header is always used regardless of this setting. | false | boolean |
-| **deadline** (common) | Deadline in milliseconds for the remote flagd connection. | 500 | int |
+| **deadline** (common) | Deadline in milliseconds. For remote flagd connections this is the gRPC deadline. For file-based (in-process) providers this controls the initialization wait timeout (internally used as deadline \* 2). The default of 500 ms matches the flagd upstream default for remote connections; for file-based providers under load consider setting a higher value such as 5000. | 500 | int |
 | **defaultValue** (common) | Default value when flag evaluation fails. When evaluationType is not set, also determines the evaluation type: true or false (case-insensitive) selects boolean evaluation, any other value selects string evaluation. | false | String |
 | **evaluationType** (common) | 
 The evaluation type. 'boolean' and 'isEnabled' use boolean evaluation (getBooleanValue). 'variant' uses string evaluation (getStringValue). When not set, the type is inferred from defaultValue. Can also be set as a path parameter in the endpoint URI, which takes precedence.
@@ -150,7 +150,7 @@ Enum values:
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
 | **contextFromBody** (common) | When true, a Map message body is used as the evaluation context. When false (default), the body is not used as context. The CamelOpenFeatureEvaluationContext header is always used regardless of this setting. | false | boolean |
-| **deadline** (common) | Deadline in milliseconds for the remote flagd connection. | 500 | int |
+| **deadline** (common) | Deadline in milliseconds. For remote flagd connections this is the gRPC deadline. For file-based (in-process) providers this controls the initialization wait timeout (internally used as deadline \* 2). The default of 500 ms matches the flagd upstream default for remote connections; for file-based providers under load consider setting a higher value such as 5000. | 500 | int |
 | **defaultValue** (common) | Default value when flag evaluation fails. When evaluationType is not set, also determines the evaluation type: true or false (case-insensitive) selects boolean evaluation, any other value selects string evaluation. | false | String |
 | **flagKey** (common) | The feature flag key to evaluate. Can be overridden per message via the CamelOpenFeatureFlagKey header. |  | String |
 | **flags** (common) | A JSON object defining feature flags in flagd format (inline). Mutually exclusive with flagsResource. |  | String |
@@ -172,7 +172,7 @@ The OpenFeature component supports the following message header(s), which is/are
 | --- | --- | --- | --- |
 | **CamelOpenFeatureFlagKey** (producer) Constant: [`FLAG_KEY`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#FLAG_KEY) | Overrides the configured flag key for this message. |  | String |
 | **CamelOpenFeatureTargetingKey** (producer) Constant: [`TARGETING_KEY`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#TARGETING_KEY) | Sets the targeting key for the OpenFeature evaluation context. |  | String |
-| **CamelOpenFeatureEvaluationContext** (producer) Constant: [`EVALUATION_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#EVALUATION_CONTEXT) | A Map of additional evaluation context key-value pairs. |  | Map |
+| **CamelOpenFeatureEvaluationContext** (producer) Constant: [`EVALUATION_CONTEXT`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#EVALUATION_CONTEXT) | A java.util.Map with String keys of additional evaluation context key-value pairs. |  | Map |
 | **CamelOpenFeatureEvaluationType** (producer) Constant: [`EVALUATION_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#EVALUATION_TYPE) | Sets the evaluation type (boolean, variant, isEnabled) for the OpenFeature evaluation. |  | String |
 | **CamelOpenFeatureVariant** (producer) Constant: [`EVALUATION_VARIANT`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#EVALUATION_VARIANT) | The variant name returned by the provider for this evaluation. |  | String |
 | **CamelOpenFeatureReason** (producer) Constant: [`EVALUATION_REASON`](https://javadoc.io/doc/org.apache.camel/camel-openfeature/latest/org/apache/camel/component/openfeature/OpenFeatureConstants.html#EVALUATION_REASON) | The reason string returned by the provider for this evaluation. |  | String |
@@ -273,6 +273,9 @@ The examples below use flagd flag definitions in [flagd JSON format](https://fla
 ```properties
 camel.component.openfeature.flags-resource = classpath:flags.json
 ```
+
+> **Note**
+> For file-based providers (`flags` / `flagsResource`), the `deadline` option controls the initialization wait timeout (internally `deadline * 2` ms). The default of `500` ms is usually sufficient, but on heavily loaded machines or CI agents you may want to raise it (e.g. `deadline=5000`).
 
 ### Boolean flag (toggle / detour pattern)
 

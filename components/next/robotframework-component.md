@@ -77,24 +77,24 @@ The Robot Framework component supports the following options which are listed be
 | **allowContextMapAll** (common) | Sets whether the context map should allow access to all details. By default only the message body and headers can be accessed. This option can be enabled for full access to the current Exchange and CamelContext. Doing so impose a potential security risk as this opens access to the full power of CamelContext API. | false | boolean |
 | **allowTemplateFromHeader** (common) | Whether to allow to use resource template from header or not (default false). Enabling this allows to specify dynamic templates via message header. However this can be seen as a potential security vulnerability if the header is coming from a malicious user, so use this with care. | false | boolean |
 | **argumentFiles** (common) | A text String to read more arguments from. |  | String |
-| **combinedTagStats** (common) | Creates combined statistics based on tags. Use the format tags:title List. |  | String |
-| **criticalTags** (common) | Tests that have the given tags are considered critical. List. |  | String |
+| **combinedTagStats** (common) | Creates combined statistics based on tags. Use the format tags:title. Multiple values can be separated by comma. |  | String |
+| **criticalTags** (common) | Tests that have the given tags are considered critical. Multiple values can be separated by comma. |  | String |
 | **debugFile** (common) | A debug String that is written during execution. |  | String |
 | **document** (common) | Sets the documentation of the top-level tests suites. |  | String |
 | **dryrun** (common) | Sets dryrun mode on use. In the dry run mode tests are run without executing keywords originating from test libraries. Useful for validating test data syntax. | false | boolean |
-| **excludes** (common) | Selects the tests cases by tags. List. |  | String |
+| **excludes** (common) | Selects the tests cases by tags. Multiple values can be separated by comma. |  | String |
 | **exitOnFailure** (common) | Sets robot to stop execution immediately if a critical test fails. | false | boolean |
-| **includes** (common) | Selects the tests cases by tags. List. |  | String |
+| **includes** (common) | Selects the tests cases by tags. Multiple values can be separated by comma. |  | String |
 | **listener** (common) | Sets a single listener for monitoring tests execution. |  | String |
-| **listeners** (common) | Sets multiple listeners for monitoring tests execution. Use the format ListenerWithArgs:arg1:arg2 or simply ListenerWithoutArgs List. |  | String |
+| **listeners** (common) | Sets multiple listeners for monitoring tests execution. Use the format ListenerWithArgs:arg1:arg2 or simply ListenerWithoutArgs. Multiple values can be separated by comma. |  | String |
 | **log** (common) | Sets the path to the generated log String. |  | String |
 | **logLevel** (common) | Sets the threshold level for logging. |  | String |
 | **logTitle** (common) | Sets a title for the generated tests log. |  | String |
-| **metadata** (common) | Sets free metadata for the top level tests suites. comma separated list of string resulting as List. |  | String |
+| **metadata** (common) | Sets free metadata for the top level tests suites. Multiple values can be separated by comma. |  | String |
 | **monitorColors** (common) | Using ANSI colors in console. Normally colors work in unixes but not in Windows. Default is 'on'. 'on' - use colors in unixes but not in Windows 'off' - never use colors 'force' - always use colors (also in Windows). |  | String |
 | **monitorWidth** (common) | Width of the monitor output. Default is 78. | 78 | String |
 | **name** (common) | Sets the name of the top-level tests suites. |  | String |
-| **nonCriticalTags** (common) | Tests that have the given tags are not critical. List. |  | String |
+| **nonCriticalTags** (common) | Tests that have the given tags are not critical. Multiple values can be separated by comma. |  | String |
 | **noStatusReturnCode** (common) | If true, sets the return code to zero regardless of failures in test cases. Error codes are returned normally. | false | boolean |
 | **output** (common) | Sets the path to the generated output String. |  | String |
 | **outputDirectory** (common) | Configures where generated reports are to be placed. |  | String |
@@ -107,18 +107,18 @@ The Robot Framework component supports the following options which are listed be
 | **runMode** (common) | Sets the execution mode for this tests run. Note that this setting has been deprecated in Robot Framework 2.8. Use separate dryryn, skipTeardownOnExit, exitOnFailure, and randomize settings instead. |  | String |
 | **skipTeardownOnExit** (common) | Sets whether the teardowns are skipped if the test execution is prematurely stopped. | false | boolean |
 | **splitOutputs** (common) | Splits output and log files. |  | String |
-| **suites** (common) | Selects the tests suites by name. List. |  | String |
+| **suites** (common) | Selects the tests suites by name. Multiple values can be separated by comma. |  | String |
 | **suiteStatLevel** (common) | Defines how many levels to show in the Statistics by Suite table in outputs. |  | String |
 | **summaryTitle** (common) | Sets a title for the generated summary report. |  | String |
-| **tagDocs** (common) | Adds documentation to the specified tags. List. |  | String |
-| **tags** (common) | Sets the tags(s) to all executed tests cases. List. |  | String |
-| **tagStatExcludes** (common) | Excludes these tags from the Statistics by Tag and Test Details by Tag tables in outputs. List. |  | String |
-| **tagStatIncludes** (common) | Includes only these tags in the Statistics by Tag and Test Details by Tag tables in outputs. List. |  | String |
-| **tagStatLinks** (common) | Adds external links to the Statistics by Tag table in outputs. Use the format pattern:link:title List. |  | String |
-| **tests** (common) | Selects the tests cases by name. List. |  | String |
+| **tagDocs** (common) | Adds documentation to the specified tags. Multiple values can be separated by comma. |  | String |
+| **tags** (common) | Sets the tags(s) to all executed tests cases. Multiple values can be separated by comma. |  | String |
+| **tagStatExcludes** (common) | Excludes these tags from the Statistics by Tag and Test Details by Tag tables in outputs. Multiple values can be separated by comma. |  | String |
+| **tagStatIncludes** (common) | Includes only these tags in the Statistics by Tag and Test Details by Tag tables in outputs. Multiple values can be separated by comma. |  | String |
+| **tagStatLinks** (common) | Adds external links to the Statistics by Tag table in outputs. Use the format pattern:link:title. Multiple values can be separated by comma. |  | String |
+| **tests** (common) | Selects the tests cases by name. Multiple values can be separated by comma. |  | String |
 | **timestampOutputs** (common) | Adds a timestamp to all output files. | false | boolean |
-| **variableFiles** (common) | Sets variables using variables files. Use the format path:args List. |  | String |
-| **variables** (common) | Sets individual variables. Use the format name:value List. |  | String |
+| **variableFiles** (common) | Sets variables using variables files. Use the format path:args. Multiple values can be separated by comma. |  | String |
+| **variables** (common) | Sets individual variables. Use the format name:value. Multiple values can be separated by comma. |  | String |
 | **warnOnSkippedFiles** (common) | Show a warning when an invalid String is skipped. | false | boolean |
 | **xunitFile** (common) | Sets the path to the generated XUnit compatible result String, relative to outputDirectory. The String is in xml format. By default, the String name is derived from the testCasesDirectory parameter, replacing blanks in the directory name by underscores. |  | String |
 | **bridgeErrorHandler** (consumer) | Allows for bridging the consumer to the Camel routing Error Handler, which mean any exceptions (if possible) occurred while the Camel consumer is trying to pickup incoming messages, or the likes, will now be processed as a message and handled by the routing Error Handler. Important: This is only possible if the 3rd party component allows Camel to be alerted if an exception was thrown. Some components handle this internally only, and therefore bridgeErrorHandler is not possible. In other situations we may improve the Camel component to hook into the 3rd party component and make this possible for future releases. By default the consumer will use the org.apache.camel.spi.ExceptionHandler to deal with exceptions, that will be logged at WARN or ERROR level and ignored. | false | boolean |
@@ -149,24 +149,24 @@ With the following _path_ and _query_ parameters:
 | **allowContextMapAll** (common) | Sets whether the context map should allow access to all details. By default only the message body and headers can be accessed. This option can be enabled for full access to the current Exchange and CamelContext. Doing so impose a potential security risk as this opens access to the full power of CamelContext API. | false | boolean |
 | **allowTemplateFromHeader** (common) | Whether to allow to use resource template from header or not (default false). Enabling this allows to specify dynamic templates via message header. However this can be seen as a potential security vulnerability if the header is coming from a malicious user, so use this with care. | false | boolean |
 | **argumentFiles** (common) | A text String to read more arguments from. |  | String |
-| **combinedTagStats** (common) | Creates combined statistics based on tags. Use the format tags:title List. |  | String |
-| **criticalTags** (common) | Tests that have the given tags are considered critical. List. |  | String |
+| **combinedTagStats** (common) | Creates combined statistics based on tags. Use the format tags:title. Multiple values can be separated by comma. |  | String |
+| **criticalTags** (common) | Tests that have the given tags are considered critical. Multiple values can be separated by comma. |  | String |
 | **debugFile** (common) | A debug String that is written during execution. |  | String |
 | **document** (common) | Sets the documentation of the top-level tests suites. |  | String |
 | **dryrun** (common) | Sets dryrun mode on use. In the dry run mode tests are run without executing keywords originating from test libraries. Useful for validating test data syntax. | false | boolean |
-| **excludes** (common) | Selects the tests cases by tags. List. |  | String |
+| **excludes** (common) | Selects the tests cases by tags. Multiple values can be separated by comma. |  | String |
 | **exitOnFailure** (common) | Sets robot to stop execution immediately if a critical test fails. | false | boolean |
-| **includes** (common) | Selects the tests cases by tags. List. |  | String |
+| **includes** (common) | Selects the tests cases by tags. Multiple values can be separated by comma. |  | String |
 | **listener** (common) | Sets a single listener for monitoring tests execution. |  | String |
-| **listeners** (common) | Sets multiple listeners for monitoring tests execution. Use the format ListenerWithArgs:arg1:arg2 or simply ListenerWithoutArgs List. |  | String |
+| **listeners** (common) | Sets multiple listeners for monitoring tests execution. Use the format ListenerWithArgs:arg1:arg2 or simply ListenerWithoutArgs. Multiple values can be separated by comma. |  | String |
 | **log** (common) | Sets the path to the generated log String. |  | String |
 | **logLevel** (common) | Sets the threshold level for logging. |  | String |
 | **logTitle** (common) | Sets a title for the generated tests log. |  | String |
-| **metadata** (common) | Sets free metadata for the top level tests suites. comma separated list of string resulting as List. |  | String |
+| **metadata** (common) | Sets free metadata for the top level tests suites. Multiple values can be separated by comma. |  | String |
 | **monitorColors** (common) | Using ANSI colors in console. Normally colors work in unixes but not in Windows. Default is 'on'. 'on' - use colors in unixes but not in Windows 'off' - never use colors 'force' - always use colors (also in Windows). |  | String |
 | **monitorWidth** (common) | Width of the monitor output. Default is 78. | 78 | String |
 | **name** (common) | Sets the name of the top-level tests suites. |  | String |
-| **nonCriticalTags** (common) | Tests that have the given tags are not critical. List. |  | String |
+| **nonCriticalTags** (common) | Tests that have the given tags are not critical. Multiple values can be separated by comma. |  | String |
 | **noStatusReturnCode** (common) | If true, sets the return code to zero regardless of failures in test cases. Error codes are returned normally. | false | boolean |
 | **output** (common) | Sets the path to the generated output String. |  | String |
 | **outputDirectory** (common) | Configures where generated reports are to be placed. |  | String |
@@ -179,18 +179,18 @@ With the following _path_ and _query_ parameters:
 | **runMode** (common) | Sets the execution mode for this tests run. Note that this setting has been deprecated in Robot Framework 2.8. Use separate dryryn, skipTeardownOnExit, exitOnFailure, and randomize settings instead. |  | String |
 | **skipTeardownOnExit** (common) | Sets whether the teardowns are skipped if the test execution is prematurely stopped. | false | boolean |
 | **splitOutputs** (common) | Splits output and log files. |  | String |
-| **suites** (common) | Selects the tests suites by name. List. |  | String |
+| **suites** (common) | Selects the tests suites by name. Multiple values can be separated by comma. |  | String |
 | **suiteStatLevel** (common) | Defines how many levels to show in the Statistics by Suite table in outputs. |  | String |
 | **summaryTitle** (common) | Sets a title for the generated summary report. |  | String |
-| **tagDocs** (common) | Adds documentation to the specified tags. List. |  | String |
-| **tags** (common) | Sets the tags(s) to all executed tests cases. List. |  | String |
-| **tagStatExcludes** (common) | Excludes these tags from the Statistics by Tag and Test Details by Tag tables in outputs. List. |  | String |
-| **tagStatIncludes** (common) | Includes only these tags in the Statistics by Tag and Test Details by Tag tables in outputs. List. |  | String |
-| **tagStatLinks** (common) | Adds external links to the Statistics by Tag table in outputs. Use the format pattern:link:title List. |  | String |
-| **tests** (common) | Selects the tests cases by name. List. |  | String |
+| **tagDocs** (common) | Adds documentation to the specified tags. Multiple values can be separated by comma. |  | String |
+| **tags** (common) | Sets the tags(s) to all executed tests cases. Multiple values can be separated by comma. |  | String |
+| **tagStatExcludes** (common) | Excludes these tags from the Statistics by Tag and Test Details by Tag tables in outputs. Multiple values can be separated by comma. |  | String |
+| **tagStatIncludes** (common) | Includes only these tags in the Statistics by Tag and Test Details by Tag tables in outputs. Multiple values can be separated by comma. |  | String |
+| **tagStatLinks** (common) | Adds external links to the Statistics by Tag table in outputs. Use the format pattern:link:title. Multiple values can be separated by comma. |  | String |
+| **tests** (common) | Selects the tests cases by name. Multiple values can be separated by comma. |  | String |
 | **timestampOutputs** (common) | Adds a timestamp to all output files. | false | boolean |
-| **variableFiles** (common) | Sets variables using variables files. Use the format path:args List. |  | String |
-| **variables** (common) | Sets individual variables. Use the format name:value List. |  | String |
+| **variableFiles** (common) | Sets variables using variables files. Use the format path:args. Multiple values can be separated by comma. |  | String |
+| **variables** (common) | Sets individual variables. Use the format name:value. Multiple values can be separated by comma. |  | String |
 | **warnOnSkippedFiles** (common) | Show a warning when an invalid String is skipped. | false | boolean |
 | **xunitFile** (common) | Sets the path to the generated XUnit compatible result String, relative to outputDirectory. The String is in xml format. By default, the String name is derived from the testCasesDirectory parameter, replacing blanks in the directory name by underscores. |  | String |
 | **sendEmptyMessageWhenIdle** (consumer) | If the polling consumer did not poll any files, you can enable this option to send an empty message (no body) instead. | false | boolean |

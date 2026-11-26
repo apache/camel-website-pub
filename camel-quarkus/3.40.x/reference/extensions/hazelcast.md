@@ -75,7 +75,7 @@ To use the `HazelcastInstance` bean in the Hazelcast component, you should confi
         hazelcastComponent.setHazelcastInstance(hazelcastInstance);
         (2)
         hazelcastComponent.setHazelcastMode(HazelcastConstants.HAZELCAST_CLIENT_MODE);
-        return getHazelcastComponent(hazelcastComponent);
+        return hazelcastComponent;
     }
 ```
 

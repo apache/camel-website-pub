@@ -143,7 +143,11 @@ camel.server.mcp-server-icons = [{"src":"https://example.com/icon.png","mimeType
 
 Tag patterns support wildcards: use `*` to expose all tagged tools, or a prefix pattern like `crm*` to expose all tags starting with `crm`:
 
-The MCP endpoint is then served at `[http://<host>:<port>/mcp](http://\<host\>:\<port\>/mcp)` on the Camel main HTTP server. Any MCP client can connect over streamable HTTP, for example another Camel integration using the [camel-openai](../openai-component.md) MCP client:
+The MCP endpoint is then served at `[http://<host>:<port>/mcp](http://\<host\>:\<port\>/mcp)` on the Camel main HTTP server.
+
+On Camel JBang (`camel run`), `camel.server.mcp-enabled = true` turns the HTTP server on by itself, so `camel.server.enabled = true` can be left out, and `camel-mcp-server` and `camel-platform-http-main` are downloaded on demand. As `camel.server.enabled`, the `camel.server.mcp-*` options work from every property source: `application.properties`, `--prop`, JVM system properties (`-D`) and environment variables, for example `camel run tools.yaml --prop camel.server.mcp-enabled=true --mcp-tags=crm`. To keep the HTTP server off, set `camel.server.enabled = false`.
+
+On Camel Main, the HTTP server is not turned on by itself: set `camel.server.enabled = true` as shown above. Any MCP client can connect over streamable HTTP, for example another Camel integration using the [camel-openai](../openai-component.md) MCP client:
 
 ```java
 from("direct:agent")
@@ -172,9 +176,9 @@ camel run tools.yaml --mcp-stdio --mcp-tags=crm,agent
 ```
 
 > **Note**
-> `--mcp-tags` configures the ai-tool MCP server (`camel.server.mcp-tags`) and works with `--mcp-stdio` or HTTP transport when `camel.server.mcp-enabled` is set in properties. It is not used by `--mcp`, which exposes dev/diagnostics MCP tools on the management HTTP server.
+> `--mcp-tags` configures the ai-tool MCP server (`camel.server.mcp-tags`) and works with `--mcp-stdio` or HTTP transport when `camel.server.mcp-enabled` is set (in properties, with `--prop`, as a JVM system property or an environment variable). It is not used by `--mcp`, which exposes dev/diagnostics MCP tools on the management HTTP server.
 
-Logging and startup summaries are routed to stderr so stdout carries MCP JSON-RPC only. Camel JBang configures a stderr Log4j2 appender automatically when `--mcp-stdio` is used or when `camel.server.mcp-transport=stdio` is set in the profile. On Camel Main, configure logging to stderr yourself (for example using the `log4j2-mcp-stdio.properties` resource shipped in `camel-mcp-server`). Anything else written to `System.out` while the MCP server runs, such as a `stream:out` endpoint or a `System.out.println` in a bean, goes to stderr as well. When the MCP client closes stdin, Camel stops and the process exits. Configure your MCP client (for example in `mcp.json`) to launch the Camel process as a subprocess:
+Logging and startup summaries are routed to stderr so stdout carries MCP JSON-RPC only. Camel JBang configures a stderr Log4j2 appender automatically when `--mcp-stdio` is used or when `camel.server.mcp-transport=stdio` is set (in the profile, with `--prop`, as a JVM system property or an environment variable). On Camel Main, configure logging to stderr yourself (for example using the `log4j2-mcp-stdio.properties` resource shipped in `camel-mcp-server`). Anything else written to `System.out` while the MCP server runs, such as a `stream:out` endpoint or a `System.out.println` in a bean, goes to stderr as well. When the MCP client closes stdin, Camel stops and the process exits. Configure your MCP client (for example in `mcp.json`) to launch the Camel process as a subprocess:
 
 ```json
 {
@@ -342,7 +346,7 @@ camel.oauth.keycloak.allowed-jws-algorithms = RS256
 
 `camel.server.mcp-resource-uri` is the canonical, externally visible HTTPS URI of the protected MCP resource. It must not contain user-info, a query, or a fragment, and its path must exactly match `camel.server.mcp-path`. The embedded HTTP context path `camel.server.path` must remain `/` while OAuth is enabled; a non-root context path is rejected by the Vert.x engine because RFC 9728 requires the protected-resource metadata document to be discoverable from the origin root, not below the HTTP context-path prefix. Configure any public path prefix in `camel.server.mcp-path` and in the resource URI. TLS may terminate at a trusted reverse proxy, but the configured resource URI must be the URL that clients use. The OAuth profile’s `allow-insecure-http` option applies only to local authorization-server discovery/JWKS/introspection endpoints; it does not permit an HTTP MCP resource URI.
 
-The unauthenticated RFC 9728 document is served at `/.well-known/oauth-protected-resource` followed by the MCP resource path. Requests without a bearer token or with an invalid token receive HTTP 401 and a `WWW-Authenticate` challenge containing `resource_metadata`; a valid token missing a required scope receives HTTP 403 with `error="insufficient_scope"`, the required scopes, and the metadata URL. Identity-provider infrastructure failures return HTTP 503. Error responses do not expose the token, client secret, or internal validation details.
+The unauthenticated RFC 9728 document is served at `/.well-known/oauth-protected-resource` followed by the MCP resource path. Requests without a bearer token or with an invalid token receive HTTP 401 and a `WWW-Authenticate` challenge containing `resource_metadata`; a valid token missing a required scope receives HTTP 403 with `error="insufficient_scope"`, the required scopes, and the metadata URL. A valid token that does not meet the configured step-up requirements (see `required-acr` and `max-auth-age-seconds` in the OAuth profile) receives HTTP 401 with `error="insufficient_user_authentication"` and `acr_values` and/or `max_age` hints per RFC 9470. Identity-provider infrastructure failures return HTTP 503. Error responses do not expose the token, client secret, or internal validation details.
 
 When OAuth is enabled, an MCP session is bound to the validated token’s `sub` claim at initialization. Subsequent POST, GET, and DELETE requests must use a token with the same subject; requests from another subject receive the same not-found response as an unknown session ID. A token without a non-empty subject cannot initialize an OAuth-protected MCP session. This prevents a session identifier from being reused across authenticated users.
 

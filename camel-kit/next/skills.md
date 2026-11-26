@@ -2,6 +2,8 @@
 
 A skill is a directory with a manifest, `SKILL.md`, and an optional `guides/` directory of instruction files loaded on demand. Skills are not code: they are structured prompts with step-by-step procedures, catalog tool calls, conditions and shared guide imports. They live in `kit/camel-kit-core/src/main/resources/skills/` and `init` copies them, adapted to the agent, into the project.
 
+During an upgrade, `init --dry-run` lists changed and retired paths and counts the files already current. `init --force` refreshes unmodified skills and guides. For each local conflict it keeps your file and saves the proposed version under `.camel-kit/conflicts/catalog/` with a `.proposed` suffix, including the assistant’s invocation metadata and traits. See [how to compare or accept a proposed file](getting-started.html#existing-project).
+
 ## Thirteen skills in four tiers
 
    
@@ -19,6 +21,31 @@ A skill is a directory with a manifest, `SKILL.md`, and an optional `guides/` di
 
 Four internal skills are dispatched by the pipeline skills and have no command stub: `camel-design` (component selection, EIP catalog, design assembly), `camel-implement` (YAML routes, properties, Docker Compose, DataMapper), `camel-test` (Citrus integration tests) and `camel-verify` (build, test, diagnose and repair at runtime). They are the composition primitives the stages assemble. `camel-ship` is the outlier of its tier: its manifest is a short delegate that invokes the registered `camel-kit ship` command once and does not follow the guide-based structure described below.
 
+## Running a required workflow hook
+
+When an installed stage names a hook, use the CLI invocation in that step with the distribution that installed it. From the project root, write the caller’s input file with the complete list of in-scope source files, the selected target and the existing evidence file for each named artifact role. Keep the input under the caller’s control.
+
+```json
+{"sources":["routes/orders.yaml"],"target":"quarkus","artifacts":{"inventory":"coverage.tsv"}}
+```
+
+```shell
+camel-kit hook --id step/validate/report/coverage --input input.json
+```
+
+-   On `invoke-skill`, pass the emitted `request` object to the named installed skill. The `implementation` path is relative to the host’s skills directory. Submit the returned JSON using the same command with `--result result.json`. Kit dispatches a Java handler directly.
+    
+-   On `needs-input`, save the CLI’s pending output in a separate file. Ask the developer its `question`, put the confirmed answer in the input’s `answer` string and invoke the same hook with `--resume pending.json`. Keep that option when submitting the skill result. Kit checks the pending request against the current binding and includes the question and answer in the provider’s `decisions` list. Save each new pending output separately if more questions follow. If the binding changes, start a fresh request and confirm the decision for the new inputs.
+    
+-   On `failed`, inspect the named checks and their observations. Correct the source or evidence and rerun. For a missing check, return an observation for the required ID. For a stale request, obtain a fresh request and repeat the check against the current files. For an unsupported target or handler, check the distribution’s pack declaration.
+    
+-   An invalid submission writes a diagnostic to standard error identifying the missing or mismatched requirement. Echo every request field, including `decisions: []` on the first invocation. A missing source or artifact is reported relative to the project root where the command was run.
+    
+-   `invoke-skill`, `needs-input` and `failed` return exit code 1 with their JSON status on standard output. Only exit code zero with `passed` satisfies this contribution. Return the outcome to the calling skill or developer. The assistant decides when the ordinary stage’s other requirements are also complete.
+    
+
+The verifier checks the provider’s observations for completeness and binds them to the selected files. The provider performs the domain check. See [implementing a handler](contributing.html#implement-hook).
+
 ## Shared guides
 
 Guides under `skills/shared/` are loaded by several skills, so one guide serves many workflows without duplication.
@@ -26,12 +53,12 @@ Guides under `skills/shared/` are loaded by several skills, so one guide serves 
  
 | Guide | Purpose |
 | --- | --- |
-| `iron-laws.md` | The six pipeline process rules |
+| `iron-laws.md` | The seven pipeline process rules |
 | `context-authority.md` | Data versus instruction authority for every loaded context, response and handoff |
 | `camel-security-checklist.md` | Camel security rules, detection patterns and fix snippets for design, validation and review |
 | `mcp-setup.md` | MCP server configuration, version binding rules and fallback policy |
 | `forage.md` | The infrastructure configuration ladder and the Forage catalog queries |
-| `graph-availability.md` | Graph CLI detection and the "enhances, never gates" fallback |
+| `graph-availability.md` | Optional graph query fallback and required migration parser failures |
 | `pipeline-infrastructure.md` | Pipeline IDs, state, artifact provenance and staleness |
 | `discovery-completeness.md` | Discovery and completeness semantics shared by the interview and Ship discovery |
 | `datamapper-canonicalize.md` | Engine selection from schemas and field count; pre-computed XPaths for XSLT |

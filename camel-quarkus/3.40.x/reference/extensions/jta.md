@@ -37,7 +37,7 @@ from("direct:transaction")
     .transacted()
     .to("sql:INSERT INTO A TABLE ...?dataSource=#ds1")
     .to("sql:INSERT INTO A TABLE ...?dataSource=#ds2")
-    .log("All data committed to DataSources ds1 and ds2")
+    .log("All data committed to DataSources ds1 and ds2");
 ```
 
 You can use a specific transaction policy by referring to its name.
@@ -45,9 +45,9 @@ You can use a specific transaction policy by referring to its name.
 ```java
 from("direct:transaction")
     .transacted("PROPAGATION_REQUIRED")
-    .to("sql:INSERT INTO A TABLE ...?dataSource=#ds1");
+    .to("sql:INSERT INTO A TABLE ...?dataSource=#ds1")
     .to("sql:INSERT INTO A TABLE ...?dataSource=#ds2")
-    .log("All data committed to DataSources ds1 and ds2")
+    .log("All data committed to DataSources ds1 and ds2");
 ```
 
 Support is provided for the following transaction policies.

@@ -71,7 +71,7 @@ By default, these endpoints are exposed on the management port (`9876`). This va
 
 ## OpenTelemetry configuration
 
-The presence of this extension will provide the required instrumentation to enable the collection of OpenTelemetry metrics. The Camel Quarkus OpenTelemetry extension instruments your application and periodically attempts to export traces to the configured collector. This is disabled by default in order to prevent the application exporting traces when no telemetry server is available.
+The presence of this extension will provide the required instrumentation to enable the collection of OpenTelemetry traces. The Camel Quarkus OpenTelemetry2 extension instruments your application and periodically attempts to export traces to the configured collector. This is disabled by default in order to prevent the application exporting traces when no telemetry server is available.
 
 In order to enable instrumentation, you need to add the following configuration to `application.properties`.
 
@@ -85,7 +85,7 @@ To configure any aspect of OpenTelemetry, you can add the following configuratio
 quarkus.otel.exporter.otlp.traces.endpoint=http://my-otel-collector.svc:4317
 ```
 
-The full set of configuration options are documented in the [Camel Quarkus OpenTelemetry](opentelemetry.md) and [Quarkus OpenTelemetry](https://quarkus.io/guides/opentelemetry) documentation.
+The full set of configuration options are documented in the [Camel Quarkus OpenTelemetry2](opentelemetry2.md) and [Quarkus OpenTelemetry](https://quarkus.io/guides/opentelemetry) documentation.
 
 > **Note**
 > Quarkus trace exporting defaults to the gRPC protocol on port 4317.

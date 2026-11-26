@@ -1163,7 +1163,7 @@ camel-core - Remove deprecated service call EIP
 
 camel-spring-boot - Remove arquilliam based tests
 
-### Test (11)
+### Test (12)
 
 [CAMEL-23253](https://issues.apache.org/jira/browse/CAMEL-23253)
 
@@ -1204,6 +1204,10 @@ camel-jbang-it - CustomJarsITCase test is failing locally
 [CAMEL-22635](https://issues.apache.org/jira/browse/CAMEL-22635)
 
 camel-netty - LogCaptureTest cannot setup capturer due to some log4j NPE
+
+[CAMEL-22149](https://issues.apache.org/jira/browse/CAMEL-22149)
+
+Allow Camel JBang IT test to be built and launched on Windows
 
 [CAMEL-22110](https://issues.apache.org/jira/browse/CAMEL-22110)
 

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795367707298,
+  "generated": 1795680549127,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -3681,12 +3681,24 @@
           "pages": [
             {
               "module": "ROOT",
+              "path": "ai-tool-source.adoc",
+              "url": "/camel-kamelets/next/ai-tool-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/ai-tool-source.svg\" alt=\"ai tool source\"></span> AI Tool Source"
+            },
+            {
+              "module": "ROOT",
               "path": "apis/spec.adoc",
               "url": "/camel-kamelets/next/apis/spec.html",
               "title": "Camel Kamelets API",
               "attributes": {
                 "page-aliases": "camel.adoc"
               }
+            },
+            {
+              "module": "ROOT",
+              "path": "ask-your-documents.adoc",
+              "url": "/camel-kamelets/next/ask-your-documents.html",
+              "title": "Ask questions about your own documents"
             },
             {
               "module": "ROOT",
@@ -4086,6 +4098,24 @@
             },
             {
               "module": "ROOT",
+              "path": "debezium-mysql-source.adoc",
+              "url": "/camel-kamelets/next/debezium-mysql-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/debezium-mysql-source.svg\" alt=\"debezium mysql source\"></span> Debezium MySQL Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "debezium-postgresql-source.adoc",
+              "url": "/camel-kamelets/next/debezium-postgresql-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/debezium-postgresql-source.svg\" alt=\"debezium postgresql source\"></span> Debezium PostgreSQL Source"
+            },
+            {
+              "module": "ROOT",
+              "path": "debezium-sqlserver-source.adoc",
+              "url": "/camel-kamelets/next/debezium-sqlserver-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/debezium-sqlserver-source.svg\" alt=\"debezium sqlserver source\"></span> Debezium SQL Server Source"
+            },
+            {
+              "module": "ROOT",
               "path": "delay-action.adoc",
               "url": "/camel-kamelets/next/delay-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/delay-action.svg\" alt=\"delay action\"></span> Delay Action"
@@ -4149,6 +4179,12 @@
               "path": "elasticsearch-index-sink.adoc",
               "url": "/camel-kamelets/next/elasticsearch-index-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/elasticsearch-index-sink.svg\" alt=\"elasticsearch index sink\"></span> ElasticSearch Index Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "elasticsearch-search-action.adoc",
+              "url": "/camel-kamelets/next/elasticsearch-search-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/elasticsearch-search-action.svg\" alt=\"elasticsearch search action\"></span> ElasticSearch Search Action"
             },
             {
               "module": "ROOT",
@@ -4704,9 +4740,21 @@
             },
             {
               "module": "ROOT",
+              "path": "openai-chat-action.adoc",
+              "url": "/camel-kamelets/next/openai-chat-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/openai-chat-action.svg\" alt=\"openai chat action\"></span> OpenAI Chat Action"
+            },
+            {
+              "module": "ROOT",
               "path": "opensearch-index-sink.adoc",
               "url": "/camel-kamelets/next/opensearch-index-sink.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/opensearch-index-sink.svg\" alt=\"opensearch index sink\"></span> OpenSearch Index Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "opensearch-search-action.adoc",
+              "url": "/camel-kamelets/next/opensearch-search-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/opensearch-search-action.svg\" alt=\"opensearch search action\"></span> OpenSearch Search Action"
             },
             {
               "module": "ROOT",
@@ -4725,6 +4773,18 @@
               "path": "pdf-action.adoc",
               "url": "/camel-kamelets/next/pdf-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/pdf-action.svg\" alt=\"pdf action\"></span> PDF Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "pgp-decrypt-action.adoc",
+              "url": "/camel-kamelets/next/pgp-decrypt-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/pgp-decrypt-action.svg\" alt=\"pgp decrypt action\"></span> PGP Decrypt Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "pgp-encrypt-action.adoc",
+              "url": "/camel-kamelets/next/pgp-encrypt-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/pgp-encrypt-action.svg\" alt=\"pgp encrypt action\"></span> PGP Encrypt Action"
             },
             {
               "module": "ROOT",
@@ -5040,6 +5100,12 @@
             },
             {
               "module": "ROOT",
+              "path": "testing.adoc",
+              "url": "/camel-kamelets/next/testing.html",
+              "title": "Testing a Kamelet"
+            },
+            {
+              "module": "ROOT",
               "path": "throttle-action.adoc",
               "url": "/camel-kamelets/next/throttle-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/throttle-action.svg\" alt=\"throttle action\"></span> Throttle Action"
@@ -5070,6 +5136,12 @@
             },
             {
               "module": "ROOT",
+              "path": "using.adoc",
+              "url": "/camel-kamelets/next/using.html",
+              "title": "Using Kamelets"
+            },
+            {
+              "module": "ROOT",
               "path": "value-to-key-action.adoc",
               "url": "/camel-kamelets/next/value-to-key-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/value-to-key-action.svg\" alt=\"value to key action\"></span> Value to Key Action"
@@ -5088,6 +5160,18 @@
             },
             {
               "module": "ROOT",
+              "path": "websocket-sink.adoc",
+              "url": "/camel-kamelets/next/websocket-sink.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/websocket-sink.svg\" alt=\"websocket sink\"></span> WebSocket Sink"
+            },
+            {
+              "module": "ROOT",
+              "path": "websocket-source.adoc",
+              "url": "/camel-kamelets/next/websocket-source.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/websocket-source.svg\" alt=\"websocket source\"></span> WebSocket Source"
+            },
+            {
+              "module": "ROOT",
               "path": "xj-identity-action.adoc",
               "url": "/camel-kamelets/next/xj-identity-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/xj-identity-action.svg\" alt=\"xj identity action\"></span> XJ Identity Action"
@@ -5103,6 +5187,12 @@
               "path": "xml-schema-validator-action.adoc",
               "url": "/camel-kamelets/next/xml-schema-validator-action.html",
               "title": "<span class=\"image\"><img src=\"_images/kamelets/xml-schema-validator-action.svg\" alt=\"xml schema validator action\"></span> XML Schema Validator Action"
+            },
+            {
+              "module": "ROOT",
+              "path": "xpath-filter-action.adoc",
+              "url": "/camel-kamelets/next/xpath-filter-action.html",
+              "title": "<span class=\"image\"><img src=\"_images/kamelets/xpath-filter-action.svg\" alt=\"xpath filter action\"></span> XPath Filter Action"
             },
             {
               "module": "ROOT",
@@ -23646,6 +23736,12 @@
             },
             {
               "module": "others",
+              "path": "cxf-platform-http.adoc",
+              "url": "/components/next/others/cxf-platform-http.html",
+              "title": "CXF Platform HTTP"
+            },
+            {
+              "module": "others",
               "path": "cxf-transport.adoc",
               "url": "/components/next/others/cxf-transport.html",
               "title": "CXF Transport"
@@ -35116,6 +35212,12 @@
             },
             {
               "module": "ROOT",
+              "path": "authorization-observability.adoc",
+              "url": "/manual/authorization-observability.html",
+              "title": "Authorization observations"
+            },
+            {
+              "module": "ROOT",
               "path": "backlog-debugger.adoc",
               "url": "/manual/backlog-debugger.html",
               "title": "BacklogDebugger"
@@ -36829,6 +36931,12 @@
               "path": "jbang-commands/camel-jbang-plugin-list.adoc",
               "url": "/manual/jbang-commands/camel-jbang-plugin-list.html",
               "title": "camel plugin list"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-plugin-update.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-plugin-update.html",
+              "title": "camel plugin update"
             },
             {
               "module": "ROOT",

@@ -136,7 +136,19 @@ The Alibaba EventBridge component supports the following message header(s), whic
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaEventBridgeOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option. |  | String |
+| **CamelAlibabaEventBridgeOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#OPERATION) | 
+The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option.
+
+Enum values:
+
+-   putEvents
+    
+
+
+
+
+
+ |  | String |
 | **CamelAlibabaEventBridgeEventBusName** (producer) Constant: [`EVENT_BUS_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#EVENT_BUS_NAME) | The name of the event bus for a JSON text or Map body. This header replaces the eventBusName option. If this header is not set, an exchange property of the same name replaces the eventBusName option. The key eventBusName of a Map body replaces this header. |  | String |
 | **CamelAlibabaEventBridgeEventSource** (producer) Constant: [`EVENT_SOURCE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#EVENT_SOURCE) | The event source for a JSON text or Map body. The value must be a URI. This header replaces the eventSource option. If this header is not set, an exchange property of the same name replaces the eventSource option. The key eventSource or source of a Map body replaces this header. |  | String |
 | **CamelAlibabaEventBridgeEventType** (producer) Constant: [`EVENT_TYPE`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-eventbridge/latest/org/apache/camel/component/alibaba/eventbridge/constants/AlibabaEventBridgeHeaders.html#EVENT_TYPE) | The event type for a JSON text or Map body. This header replaces the eventType option. If this header is not set, an exchange property of the same name replaces the eventType option. The key eventType or type of a Map body replaces this header. |  | String |

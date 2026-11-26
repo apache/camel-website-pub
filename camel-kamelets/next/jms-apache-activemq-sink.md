@@ -42,7 +42,7 @@ At runtime, the `jms-apache-activemq-sink` Kamelet relies upon the presence of t
     
 -   camel:kamelet
     
--   mvn:org.apache.activemq:activemq-client:6.3.2
+-   mvn:org.apache.activemq:activemq-client:6.4.0
     
 -   mvn:org.messaginghub:pooled-jms:3.2.6
     

@@ -233,6 +233,13 @@ The assistant discovers components, looks up documentation, builds a YAML route,
 
 Combine both for a complete prototyping workflow: validate, scaffold, then implement routes one at a time while Camel mocks the rest.
 
+### SOAP services from a WSDL
+
+-   _"What operations does this WSDL have, and what does a getOrder request look like?"_ — uses `camel_wsdl_inspect` with `samples=true`
+    
+-   _"Write a Camel route that serves this WSDL"_ — uses `camel_wsdl_scaffold` with `route=consumer`
+    
+
 ### Runtime introspection
 
 Start a route with `camel run my-route.yaml`, then ask:
@@ -408,6 +415,16 @@ Since Camel 4.6, the recommended approach for building REST APIs from OpenAPI sp
 | `camel_openapi_validate` | Validates an OpenAPI specification for compatibility with Camel’s contract-first REST support. Reports operations without `operationId` (with the `direct:GENOPID_…​` id Camel routes them to), security schemes (Camel enforces none of them), webhooks (not served), OpenAPI 3.1 (parsed and served like 3.0) and empty paths. Returns errors, warnings, and info-level diagnostics. |
 | `camel_openapi_scaffold` | Generates a Camel YAML scaffold for contract-first OpenAPI integration. Produces a `rest:openApi` configuration block referencing the spec file and a `direct:<operationId>` route stub for each operation (an operation without `operationId` gets the id the `rest-openapi` component generates), with `Content-Type` and `CamelHttpResponseCode` headers pre-configured from the spec. Supports configuring the `missingOperation` mode (`fail`, `ignore`, or `mock`) and explains it. With `mock`, it also lists one `camel-mock/` file per path of the spec, named after the request path: a path parameter carries a sample value, such as `camel-mock/pets/1.json` for `/pets/{petId}`, which answers `/pets/1` (one file per value). It gives the example of the spec and what Camel answers without the file: the example of the `200` response for the media type of the request’s `Content-Type` or `Accept` header, otherwise HTTP 204 with an empty body. |
 
+### SOAP (WSDL)
+
+These tools do what `camel generate wsdl` does, from the content of a WSDL 1.1 document with SOAP 1.1 or 1.2 bindings. As the WSDL is given as content, they read no file and call no host: a `wsdl:import` of the WSDL is not followed but listed as a warning, and the samples of the elements in a schema that it imports are left out.
+
+ 
+| Tool | Description |
+| --- | --- |
+| `camel_wsdl_inspect` | Lists the services, ports and operations of the WSDL: the SOAP version and address of each port, with the [CXF](../components/4.22.x/cxf-component.md) endpoint options (`serviceName`, `portName`, `address`, `defaultOperationNamespace`), and the SOAP action, request, response and fault elements of each operation. With `samples=true`, each operation also has a sample request, response and faults, as XML and as JSON in the form of the [XSD JSON](../components/next/dataformats/xsdJson-dataformat.md) data format, and the request in a SOAP envelope with a `curl` command that posts it. |
+| `camel_wsdl_scaffold` | Scaffolds a YAML route for a port in `PAYLOAD` mode, with no generated classes. `route=consumer` is a SOAP service: a `cxf:` consumer with schema validation, whose address is the path of the WSDL address (such as `cxf:/orders`, served under `/services` by Camel Main, Spring Boot and Quarkus), and a `when` per operation that returns a placeholder response. `route=producer` is a SOAP client: a `direct:<operation>` route per operation. `wsdlUrl` is where the route finds the WSDL at runtime (default `classpath:service.wsdl`). |
+
 ### Migration
 
  
@@ -447,7 +464,7 @@ Since Camel 4.6, the recommended approach for building REST APIs from OpenAPI sp
 | `camel_runtime_routes` | List Camel routes with their state, uptime, messages processed, last error, and throughput statistics. With the message history on (`camel run --dev`), a route also counts its steps that have been reached with more than one body type (`variedBodyTypes`), and those reached with bodies of more than one kind (`mixedBodyKinds`), which need attention. |
 | `camel_runtime_route_source` | Get the source code of routes in the running Camel application. Supports wildcard filtering. |
 | `camel_runtime_route_dump` | Dump route definitions in XML, YAML or Java DSL format. `routeId` takes a route id or a pattern such as `orders*` (all routes when omitted). |
-| `camel_runtime_route_structure` | Show the route structure as a tree of processors, for the routes `routeId` names (a route id or a pattern, all routes when omitted). `brief=true` leaves out the options and expressions. With the message history on, each step has the body types it has been reached with (`bodyTypes`) and their kinds (`bodyKinds`: `null`, `payload`, `data` or `collection`); `varied=true` keeps only the steps reached with more than one body type. |
+| `camel_runtime_route_structure` | Show the route structure as a tree of processors, for the routes `routeId` names (a route id or a pattern, all routes when omitted). `brief=true` leaves out the options and expressions. With the message history on, each step has the body types it has been reached with (`bodyTypes`) and their kinds (`bodyKinds`: `null`, `payload`, `data` or `collection`), and the formats of the payloads from their `Content-Type` (`bodyFormats`: `json`, `xml`, `csv`, `yaml`, `text`, `binary` or the media type), to compare with the format the catalog says a step takes, and for a step that calls a Kamelet the data type the Kamelet turns the body into (`kameletInput`, with `takesBody` false when its transformer does not take the body); `varied=true` keeps only the steps reached with more than one body type or format. |
 | `camel_runtime_processor_detail` | Show the configured options of every processor in a route: each processor’s type, id, and configured options (attributes and expressions). With `includeDocs=true` each EIP option and component endpoint option is enriched with its documentation from the Camel catalog. |
 | `camel_runtime_route_control` | Control a route: start, stop, suspend, or resume it by route ID. Marked destructive for all four commands, as an MCP hint applies to a tool, not to one of its arguments, and stop and suspend take the route’s consumer offline. |
 | `camel_runtime_route_topology` | Get the inter-route topology showing how routes connect to each other and to external endpoints. Returns nodes and edges describing the route graph. |

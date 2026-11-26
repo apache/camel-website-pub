@@ -12,7 +12,7 @@ Input: the encrypted data exactly as `crypto-encrypt-action` produced it, as byt
 
 Output: the body is the original data, as bytes (a stream), and the `Content-Type` header is `application/octet-stream`. The other headers are kept.
 
-Good to know: set the `Content-Type` header again to the type of the original data when the next step needs it, for example with `insert-header-action`. Data that was changed, or a different `algorithm`, `mode` or `key` than when encrypting, fails the message with "Message authentication failed". The key is a secret; keep it in a vault or a secret, not in plain configuration.
+Good to know: set the `Content-Type` header again to the type of the original data when the next step needs it, for example with `insert-header-action`. Data that was changed, or a different `algorithm`, `mode` or `key` than when encrypting, fails the message with "Message authentication failed". The key is a secret; keep it in a vault or a secret, not in plain configuration. The algorithm, the mode and the key come only from the options: the `CamelCrypto*` headers of the incoming message, such as `CamelCryptoInitVector`, are removed first.
 
 ## Configuration Options
 
@@ -23,7 +23,7 @@ The following table summarizes the configuration options available for the `cryp
 | --- | --- | --- | --- | --- | --- |
 | **algorithm** | Algorithm | **Required** The name of the encryption algorithm the data was encrypted with, such as `AES`, or `DESede` for Triple DES. Give the name alone: a full form such as `AES/CBC/PKCS5Padding` fails each message; the mode is set with `mode`. | string |  | AES |
 | **key** | Secret Key | **Required** The secret key the data was encrypted with, as text. Its length must fit the algorithm: for `AES`, 16, 24 or 32 characters (plain ASCII characters count as one byte each), and for `DESede`, 24. | string |  |  |
-| **mode** | Mode | The block cipher mode, `CBC`: each message is then encrypted with a new random initialization vector, which is put in front of the encrypted data, so the same text gives different bytes each time. When it is not set, `AES` and `DESede` use ECB mode, in which the same text with the same key always gives the same bytes, so repeats in the data can be seen. Use the same value in `crypto-encrypt-action`. | string |  | CBC |
+| **mode** | Mode | The block cipher mode, only `CBC`: each message is then encrypted with a new random initialization vector, which is put in front of the encrypted data, so the same text gives different bytes each time. When it is not set, `AES` and `DESede` use ECB mode, in which the same text with the same key always gives the same bytes, so repeats in the data can be seen. Use the same value in `crypto-encrypt-action`. Enum values: \* CBC | string |  | CBC |
 
 ## Dependencies
 

@@ -798,6 +798,17 @@ ssh -vvv <server\_address>
 
 As of Camel 3.18.1, these values can also be set on SFTP endpoints by setting the corresponding URI parameters.
 
+### Writing files from an endpoint without a directory
+
+With `jailStartingDirectory` enabled (the default), the producer writes files within the starting directory of the endpoint. An endpoint without a directory in its URI, such as `sftp://user@host`, writes into the login directory, and an absolute file name, such as `/data/out/report.csv`, is written to that absolute path on the server.
+
+If the file name can come from untrusted input, configure a directory on the endpoint, or reduce the name to a single path segment, for example with the `flatten` option, which strips any leading path from the file name:
+
+```java
+from("direct:upload")
+    .to("sftp://user@host/upload?password=secret&flatten=true");
+```
+
 ### Symbolic links and the starting directory
 
 With `jailStartingDirectory` enabled (the default), the consumer resolves a listed file that the server reports as a symbolic link before it accepts the file. A link whose target is outside the starting directory, or cannot be resolved (such as a dangling link), is skipped and logged at WARN the first time. A link whose target contains a backslash (`\`) is skipped too, as a server may take it as a path separator or as part of a name. Links that resolve inside the starting directory, and a starting directory that is itself a link, work as usual. Set `jailStartingDirectory=false` to follow links to other directories.

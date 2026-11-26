@@ -20,24 +20,20 @@ public class TimerRoute extends RouteBuilder {
 }</code></pre> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> <div class="paragraph"> <p>Builder methods for all Camel components are available via <code>camel-quarkus-core</code>, but you still need to add the given component&#8217;s extension as a dependency for the route to work properly. In case of the above example, it would be <code>camel-quarkus-timer</code>.</p> </div> </td> </tr> </table></div> </div> <div class="paragraph"> <p>It is also possible to include Java DSL routes from other JARs by adding them as dependencies to your application. When doing this, you must ensure such JARs have a <a href="https://quarkus.io/guides/cdi-reference#how-to-generate-a-jandex-index">Jandex index</a>, so that the routes are discoverable at build time.</p> </div> </div> </div> </div> <div class="sect1"> <h2 id="_xml_dsl"><a class="anchor" href="#_xml_dsl"></a>XML DSL</h2> <div class="sectionbody"> <div class="paragraph"> <p>In order to configure Camel routes, rests or templates in XML, you must add the <code>camel-quarkus-xml-io-dsl</code> dependency to the classpath.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel.quarkus&lt;/groupId&gt;
     &lt;artifactId&gt;camel-quarkus-xml-io-dsl&lt;/artifactId&gt;
-&lt;/dependency&gt;</code></pre> </div> </div> <div class="paragraph"> <p>With Camel Main, you can set a property that points to the location of XML files such as routes, <a href="../../../manual/rest-dsl.html" class="xref page">REST DSL</a> and <a href="../../../manual/route-template.html" class="xref page">Route templates</a>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">camel.main.routes-include-pattern = routes/routes.xml, file:src/main/routes/rests.xml, file:src/main/rests/route-template.xml</code></pre> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> <div class="paragraph"> <p>Path globbing like <code>camel.main.routes-include-pattern = *./routes.xml</code> currently does not work in native mode.</p> </div> </td> </tr> </table></div> </div> <div class="listingblock"> <div class="title">Route</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;routes xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
-        xmlns="https://camel.apache.org/schema/spring"
-        xsi:schemaLocation="
-            https://camel.apache.org/schema/spring
-            https://camel.apache.org/schema/spring/camel-spring.xsd"&gt;
+&lt;/dependency&gt;</code></pre> </div> </div> <div class="paragraph"> <p>With Camel Main, you can set a property that points to the location of XML files such as routes, <a href="../../../manual/rest-dsl.html" class="xref page">REST DSL</a> and <a href="../../../manual/route-template.html" class="xref page">Route templates</a>:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">camel.main.routes-include-pattern = routes/routes.xml, rests/rests.xml, templates/route-template.xml</code></pre> </div> </div> <div class="admonitionblock note"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-note" title="Note"></i> </td> <td class="content"> <div class="paragraph"> <p>By default, routes are loaded from <code>classpath:camel/<strong></strong></code>, <code>classpath:camel-template/</code> and <code>classpath:camel-rest/<strong></strong></code>. Setting <code>camel.main.routes-include-pattern</code> replaces these defaults. Patterns may contain wildcards, e.g. <code>classpath:routes/.xml</code>.</p> </div> </td> </tr> </table></div> </div> <div class="listingblock"> <div class="title">Route</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;routes xmlns="http://camel.apache.org/schema/xml-io"&gt;
 
     &lt;route id="xml-route"&gt;
         &lt;from uri="timer:from-xml?period=1000"/&gt;
         &lt;log message="Hello XML!"/&gt;
     &lt;/route&gt;
 
-&lt;/routes&gt;</code></pre> </div> </div> <div class="admonitionblock warning"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-warning" title="Warning"></i> </td> <td class="content"> <div class="paragraph"> <p>When using XML routes with beans, it is sometime needed to refer to class name, for instance <code>beanType=org.apache.SomeClass</code>. In such cases, it might be needed to register the class for reflection in native mode. Refer to the <a href="native-mode.html#reflection" class="xref page">Native mode</a> user guide for more information.</p> </div> </td> </tr> </table></div> </div> <div class="admonitionblock warning"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-warning" title="Warning"></i> </td> <td class="content"> <div class="paragraph"> <p>Spring XML with <code>&lt;beans&gt;</code> or Blueprint XML with <code>&lt;blueprint&gt;</code> elements are not supported.</p> </div> </td> </tr> </table></div> </div> <div class="paragraph"> <p>The route XML should be in the simplified version like:</p> </div> <div class="listingblock"> <div class="title">Rest DSL</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;rests xmlns="https://camel.apache.org/schema/spring"&gt;
+&lt;/routes&gt;</code></pre> </div> </div> <div class="admonitionblock warning"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-warning" title="Warning"></i> </td> <td class="content"> <div class="paragraph"> <p>When using XML routes with beans, it is sometime needed to refer to class name, for instance <code>beanType=org.apache.SomeClass</code>. In such cases, it might be needed to register the class for reflection in native mode. Refer to the <a href="native-mode.html#reflection" class="xref page">Native mode</a> user guide for more information.</p> </div> </td> </tr> </table></div> </div> <div class="admonitionblock warning"> <div class="table-wrapper"><table> <tr> <td class="icon"> <i class="fa icon-warning" title="Warning"></i> </td> <td class="content"> <div class="paragraph"> <p>Spring XML with <code>&lt;beans&gt;</code> or Blueprint XML with <code>&lt;blueprint&gt;</code> elements are not supported.</p> </div> </td> </tr> </table></div> </div> <div class="paragraph"> <p>The route XML should be in the simplified version like:</p> </div> <div class="listingblock"> <div class="title">Rest DSL</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;rests xmlns="http://camel.apache.org/schema/xml-io"&gt;
     &lt;rest id="greeting" path="/greeting"&gt;
         &lt;get path="/hello"&gt;
             &lt;to uri="direct:greet"/&gt;
         &lt;/get&gt;
     &lt;/rest&gt;
-&lt;/rests&gt;</code></pre> </div> </div> <div class="listingblock"> <div class="title">Route Templates</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;routeTemplates xmlns="https://camel.apache.org/schema/spring"&gt;
+&lt;/rests&gt;</code></pre> </div> </div> <div class="listingblock"> <div class="title">Route Templates</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;routeTemplates xmlns="http://camel.apache.org/schema/xml-io"&gt;
     &lt;routeTemplate id="myTemplate"&gt;
         &lt;templateParameter name="name"/&gt;
         &lt;templateParameter name="greeting"/&gt;
@@ -51,12 +47,12 @@ public class TimerRoute extends RouteBuilder {
 &lt;/routeTemplates&gt;</code></pre> </div> </div> </div> </div> <div class="sect1"> <h2 id="_yaml_dsl"><a class="anchor" href="#_yaml_dsl"></a>YAML DSL</h2> <div class="sectionbody"> <div class="paragraph"> <p>To configure routes with YAML, you must add the <code>camel-quarkus-yaml-dsl</code> dependency to the classpath.</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;dependency&gt;
     &lt;groupId&gt;org.apache.camel.quarkus&lt;/groupId&gt;
     &lt;artifactId&gt;camel-quarkus-yaml-dsl&lt;/artifactId&gt;
-&lt;/dependency&gt;</code></pre> </div> </div> <div class="paragraph"> <p>With Camel Main, you can set a property that points to the location of YAML files containing routes, <a href="../../../manual/rest-dsl.html" class="xref page">REST DSL</a> and <a href="../../../manual/route-template.html" class="xref page">Route templates</a> definitions:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">camel.main.routes-include-pattern = routes/routes.yaml, routes/rests.yaml, rests/route-template.yaml</code></pre> </div> </div> <div class="listingblock"> <div class="title">Route</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
+&lt;/dependency&gt;</code></pre> </div> </div> <div class="paragraph"> <p>With Camel Main, you can set a property that points to the location of YAML files containing routes, <a href="../../../manual/rest-dsl.html" class="xref page">REST DSL</a> and <a href="../../../manual/route-template.html" class="xref page">Route templates</a> definitions:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlightjs highlight"><code class="language-properties hljs" data-lang="properties">camel.main.routes-include-pattern = routes/routes.yaml, rests/rests.yaml, templates/route-template.yaml</code></pre> </div> </div> <div class="listingblock"> <div class="title">Route</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route:
     id: "my-yaml-route"
     from:
       uri: "timer:from-yaml?period=1000"
       steps:
-        - set-body:
+        - setBody:
             constant: "Hello YAML!"
         - to: "log:from-yaml"</code></pre> </div> </div> <div class="listingblock"> <div class="title">Rest DSL</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- rest:
     get:
@@ -68,8 +64,8 @@ public class TimerRoute extends RouteBuilder {
     from:
       uri: "direct:greet"
       steps:
-        - set-body:
-            constant: "Hello YAML!"</code></pre> </div> </div> <div class="listingblock"> <div class="title">Route Templates</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- route-template:
+        - setBody:
+            constant: "Hello YAML!"</code></pre> </div> </div> <div class="listingblock"> <div class="title">Route Templates</div> <div class="content"> <pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">- routeTemplate:
     id: "myTemplate"
     parameters:
       - name: "name"
@@ -80,13 +76,13 @@ public class TimerRoute extends RouteBuilder {
     from:
       uri: "timer:{{name}}?period={{myPeriod}}"
       steps:
-      - set-body:
+      - setBody:
           expression:
             simple: "{{greeting}} ${body}"
       - log: "${body}"
 
-- templated-route:
-    route-template-ref: "myTemplate"
+- templatedRoute:
+    routeTemplateRef: "myTemplate"
     parameters:
       - name: "name"
         value: "tick"

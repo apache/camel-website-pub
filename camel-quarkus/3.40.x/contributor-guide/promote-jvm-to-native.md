@@ -17,7 +17,7 @@ The directory `extensions-jvm` contains extensions that have not been tested in 
     
     The `promote` mojo does the following for you:
     
-    -   Copies the test module from `extensions-jvm/foo/integration-test` to `integration-tests/foo`
+    -   Copies the test module from `integration-tests-jvm/foo` to `integration-tests/foo`
         
     -   Adjusts the `name` and `artifactId` of the test module
         
@@ -29,6 +29,8 @@ The directory `extensions-jvm` contains extensions that have not been tested in 
         
     -   Removes the warning build step from the processor class in the deployment module
         
+    -   Adds the `camel.quarkus.nativeSince` property to the runtime module’s `pom.xml`
+        
     
 4.  Assign the integration test to an existing or new test category in `tooling/scripts/test-categories.yaml` so that it gets executed by the CI.
     
@@ -36,7 +38,7 @@ The directory `extensions-jvm` contains extensions that have not been tested in 
     
     ```shell
     cd integration-tests/foo
-    mvn clean verify -Pnative
+    mvn clean verify -Dnative
     ```
     
     Consider shifting some tasks from runtime to build time. The [Quarkus extension author’s guide](https://quarkus.io/guides/extension-authors-guide) may be a good ally for this.

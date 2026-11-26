@@ -140,7 +140,23 @@ The Alibaba Simple Log Service (SLS) component supports the following message he
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAlibabaSlsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sls/latest/org/apache/camel/component/alibaba/sls/constants/AlibabaSlsHeaders.html#OPERATION) | The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option. |  | String |
+| **CamelAlibabaSlsOperation** (producer) Constant: [`OPERATION`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sls/latest/org/apache/camel/component/alibaba/sls/constants/AlibabaSlsHeaders.html#OPERATION) | 
+The operation that the producer performs. This header replaces the operation option. If this header is not set, an exchange property of the same name replaces the operation option.
+
+Enum values:
+
+-   putLogs
+    
+-   getLogs
+    
+-   listLogStores
+    
+
+
+
+
+
+ |  | String |
 | **CamelAlibabaSlsProject** (producer) Constant: [`PROJECT`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sls/latest/org/apache/camel/component/alibaba/sls/constants/AlibabaSlsHeaders.html#PROJECT) | The name of the project. This header replaces the project option. If this header is not set, an exchange property of the same name replaces the project option. |  | String |
 | **CamelAlibabaSlsLogStoreName** (producer) Constant: [`LOG_STORE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sls/latest/org/apache/camel/component/alibaba/sls/constants/AlibabaSlsHeaders.html#LOG_STORE_NAME) | The name of the Logstore for putLogs and getLogs. The producer writes the logs to this Logstore for putLogs, and queries its logs for getLogs. This header replaces the logStoreName option. If this header is not set, an exchange property of the same name replaces the logStoreName option. |  | String |
 | **CamelAlibabaSlsQuery** (producer) Constant: [`QUERY`](https://javadoc.io/doc/org.apache.camel/camel-alibaba-sls/latest/org/apache/camel/component/alibaba/sls/constants/AlibabaSlsHeaders.html#QUERY) | The search statement or analytic statement for getLogs. This header replaces the query option. If this header is not set, an exchange property of the same name replaces the query option. |  | String |

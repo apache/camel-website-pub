@@ -109,8 +109,10 @@ When processing calendar events, the following headers are set:
 
 -   `CamelGoogleCalendarEventId`: The calendar event id
     
+-   `CamelGoogleCalendarCalendarId`: The ID of the calendar the event is from
+    
 
-For CloudEvents output format, additional headers are set: - `CamelCloudEventID`: The Camel exchange id set as event id - `CamelCloudEventType`: The event type (default: "org.apache.camel.event.google.calendar.stream.consume") - `CamelCloudEventSource`: The event source (Calendar Event Id with prefix "google.calendar.stream.") - `CamelCloudEventSubject`: The event subject (Calendar event type) - `CamelCloudEventTime`: The exchange creation timestamp as event time
+For CloudEvents output format, additional headers are set: - `CamelCloudEventID`: The Camel exchange id set as event id - `CamelCloudEventType`: The event type (default: "org.apache.camel.event.google.calendar.stream.consume") - `CamelCloudEventSource`: The event source (the calendar ID set in `calendarId` with prefix "google.calendar.stream.") - `CamelCloudEventSubject`: The event subject (Calendar event type) - `CamelCloudEventTime`: The exchange creation timestamp as event time
 
 ### Configuration
 
@@ -150,32 +152,23 @@ Each poll asks for the events that changed least recently first. Without `syncFl
 ### Usage example
 
 ```yaml
-apiVersion: camel.apache.org/v1alpha1
-kind: KameletBinding
-metadata:
-  name: google-calendar-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1alpha1
-      name: google-calendar-source
-    properties:
-      index: "events"
-      calendarId: "primary"
-      clientId: "{{client-id}}"
-      clientSecret: "{{client-secret}}"
-      accessToken: "{{access-token}}"
-      refreshToken: "{{refresh-token}}"
-      applicationName: "My Calendar App"
-      delay: 1000
-      syncFlow: true
-      consumeFromNow: true
-  sink:
-    ref:
-      kind: Service
-      apiVersion: v1
-      name: my-service
+- route:
+    from:
+      uri: "kamelet:google-calendar-source"
+      parameters:
+        index: "events"
+        calendarId: "primary"
+        clientId: "{{client-id}}"
+        clientSecret: "{{client-secret}}"
+        accessToken: "{{access-token}}"
+        refreshToken: "{{refresh-token}}"
+        applicationName: "My Calendar App"
+        delay: 1000
+        syncFlow: true
+        consumeFromNow: true
+      steps:
+        - to:
+            uri: "kamelet:log-sink"
 ```
 
 ### Example with a Service Account

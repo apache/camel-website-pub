@@ -213,7 +213,7 @@ The Atom component supports the following message header(s), which is/are listed
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| **CamelAtomFeed** (consumer) Constant: [`ATOM_FEED`](https://javadoc.io/doc/org.apache.camel/camel-atom/latest/org/apache/camel/component/atom/AtomConstants.html#ATOM_FEED) | When consuming the List object is set to this header. |  | List |
+| **CamelAtomFeed** (consumer) Constant: [`ATOM_FEED`](https://javadoc.io/doc/org.apache.camel/camel-atom/latest/org/apache/camel/component/atom/AtomConstants.html#ATOM_FEED) | When consuming, the list of com.apptasticsoftware.rssreader.Item objects is set to this header. |  | List |
 
 ## Message Body
 

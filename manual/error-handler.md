@@ -112,9 +112,37 @@ A plain `Processor` (in `process(…​)`, in `bean(…​)` for a bean that is 
 | Thrown by the processor | What happens |
 | --- | --- |
 | An `Error` that is not a `VirtualMachineError`, such as `AssertionError`, `LinkageError` (`NoClassDefFoundError`, `ExceptionInInitializerError`) or a custom `Error` | The exchange fails with it (wrapped in a `CamelExecutionException`), and the error handler handles it as any other failure: redelivery, `onException`, `doCatch` and a dead letter channel get it. `onException(Exception.class)` and `doCatch(Exception.class)` also match it; to treat it differently, match it on its class, such as `onException(AssertionError.class)` For the `AggregationStrategy` of an `enrich` or `pollEnrich`, the exchange fails with a `CamelExchangeException` caused by the `Error` (not wrapped in a `CamelExecutionException`), as for an exception of the strategy, and the resource is released as failed |
-| A `VirtualMachineError`, such as `OutOfMemoryError`, `StackOverflowError` or `InternalError` | Camel’s error handling does not get it (the JVM may no longer be in a consistent state, so the application should not handle it). It is not set on the exchange, but thrown on after the processor’s callback was called. A `VirtualMachineError` of an `AggregationStrategy` or of the iterator of a split is thrown on from the task of the EIP. The callback is then called only when the EIP is `synchronous=true` or the exchange is transacted, in both cases without `parallelProcessing`. With `parallelProcessing`, or from the `timeout` of the strategy, the `VirtualMachineError` is lost on a thread of the pool. Depending on the error handler, the `Error` reaches the caller (and the exchange may stay inflight), or it is only logged and the route continues as if the processor had succeeded |
+| A `VirtualMachineError`, such as `OutOfMemoryError`, `StackOverflowError` or `InternalError` | The exchange fails with it too, but Camel does not recover from it on its own (the JVM may no longer be in a consistent state): there is no redelivery, a dead letter channel does not get it, a circuit breaker does not call its fallback, a load balancer does not fail over (unless its `failover` names the error or a supertype), the error thresholds of a split do not swallow it, and a sequential multicast or split stops at the output that fails with it, as with `stopOnException` (with `parallelProcessing`, the outputs already submitted still run, and the exchange still fails with it, unless the output fails after the multicast or split has completed, such as on its `timeout`). Only an `onException` or a `doCatch` that names it or a supertype handles it, as a Java `catch`: `Throwable`, `Error`, `VirtualMachineError` or its own class; `onException(Exception.class)` and `doCatch(Exception.class)` do not. Such an `onException` is redelivered only when it says so, and does not hand the exchange to the dead letter channel. `doFinally` runs, as a Java `finally`. When nothing handles it, it is logged once at ERROR, the caller gets the failure, and a consumer that pulls work in a loop (a polling consumer, `timer`, `seda`) stops until the route is restarted, with its health check DOWN (a consumer that fetches messages in batches may first route the rest of the batch it has already fetched) |
 
-An application with strict reliability needs should not rely on Camel to react to a `VirtualMachineError`. For an `OutOfMemoryError` that the JVM raises, it can let the JVM stop with `-XX:+ExitOnOutOfMemoryError` or `-XX:+CrashOnOutOfMemoryError` (these options do not cover a `StackOverflowError`, or an `OutOfMemoryError` that code throws itself).
+To move a message whose processing overflows the stack to a dead letter endpoint, and go on with the next messages, name the error:
+
+```java
+onException(StackOverflowError.class)
+    .handled(true)
+    .to(ExchangePattern.InOnly, "jms:queue:dead");
+```
+
+Name `StackOverflowError` rather than `VirtualMachineError`: while the JVM is short of memory, many messages can fail with an `OutOfMemoryError`, and each one would be moved to the dead letter endpoint.
+
+An application with strict reliability needs should not rely on Camel to react to a `VirtualMachineError`. Camel does not restart a route, a pod or the JVM after one: that is the choice of the application or of the platform it runs on. For an `OutOfMemoryError` that the JVM raises, `-XX:+ExitOnOutOfMemoryError` or `-XX:+CrashOnOutOfMemoryError` stop the JVM at once, before any Camel code runs: there is no log from Camel and no time for the inflight exchanges (these options do not cover a `StackOverflowError`, or an `OutOfMemoryError` that code throws itself). To log the error and then shut down gracefully, an application can react to the failed exchange with an event notifier:
+
+```java
+AtomicBoolean stopping = new AtomicBoolean();
+camelContext.getManagementStrategy().addEventNotifier(new EventNotifierSupport() {
+    @Override
+    public void notify(CamelEvent event) {
+        if (event instanceof CamelEvent.ExchangeFailedEvent failed
+                && ObjectHelper.getVirtualMachineError(failed.getExchange().getException()) != null
+                && stopping.compareAndSet(false, true)) {
+            // stop once, on another thread: the inflight exchanges get the shutdown timeout to complete
+            new Thread(() -> {
+                camelContext.stop();
+                System.exit(1);
+            }).start();
+        }
+    }
+});
+```
 
 `template.send(…​)`, `template.request(…​)` and `template.asyncSend(…​)` return the failed exchange (or its future) without throwing the exception; `sendBody(…​)` and `requestBody(…​)` throw a `CamelExecutionException` that holds the `Error`, unless the failure was handled (such as by a dead letter channel, `onException(…​).handled(true)` or `doCatch`).
 

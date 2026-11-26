@@ -34,7 +34,7 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 When Wasm modules are read from the classpath (the default) in native mode, you must ensure that the module(s) are added to the native image. You can do this via a configuration property in `application.properties`.
 
-For example, assuming `.wasm` files are read from a classpath location of `was/modules`.
+For example, assuming `.wasm` files are read from a classpath location of `wasm/modules`.
 
 ```properties
 quarkus.native.resources.includes = wasm/modules/*.wasm

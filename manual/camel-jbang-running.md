@@ -346,6 +346,17 @@ The lookup walks up from the class name:
 
 For an `import` in a Java or Groovy source, a Camel component is also found by its package, so importing any class of a component downloads it, not only the component class itself. For example, a route that imports `org.apache.camel.component.aws2.s3.AWS2S3Constants` for the headers of the `aws-s3-source` Kamelet gets `camel-aws2-s3` before the route is compiled. A class that is only looked up while running still needs the component class itself, so probing whether a class is present does not download a component.
 
+A few components need a library that is not one of their dependencies and load its classes without asking Camel, so no lookup would happen. Camel CLI looks up a class of the library when a route uses the component, which downloads the library in the version Camel manages, and `camel export` adds it to the exported project:
+
+-   `activemq` and `activemq6`: the JMS connection pool `org.messaginghub:pooled-jms`.
+    
+-   `debezium-mysql`: the MySQL JDBC driver `com.mysql:mysql-connector-j`, which is under the GPL.
+    
+-   `debezium-db2`: the Db2 JDBC driver `com.ibm.db2:jcc`, which is under the IBM International Program License Agreement.
+    
+
+The other Debezium components come with the JDBC driver of their database.
+
 A dependency you declare yourself, with `--dep`, `camel.jbang.dependencies`, or in the project’s POM, is on the classpath before any lookup, so it always takes precedence. Use that when a mapped library is not the one you want, for example the ActiveMQ 5 client where the mapping picks the ActiveMQ 6 client.
 
 `camel validate` and the write tools of the Camel CLI MCP server consult the same three files, so a bean whose class Camel CLI would download is not reported as missing, and the MCP tool `camel_dependency_for_class` answers the coordinates and the declaration for a class from the same mapping, with an optional Maven Central search for the rest.

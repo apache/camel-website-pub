@@ -23,12 +23,14 @@ The following table summarizes the configuration options available for the `elas
 | --- | --- | --- | --- | --- | --- |
 | **clusterName** | ElasticSearch Cluster Name | **Required** The name of the Elasticsearch cluster. Required, but not checked against the cluster. | string |  | quickstart |
 | **hostAddresses** | Host Addresses | **Required** The address of the Elasticsearch HTTP API, as `host:port`, or several nodes separated by commas. The port is 9200 by default. | string |  | quickstart-es-http:9200 |
+| **apiKey** | API Key | An API key to log in with, instead of `user` and `password`. It is the `encoded` value that Elasticsearch gives when the key is created, or its `id` and `api_key` joined with a colon (`id:api_key`). It is sent in the `Authorization` header, only to the nodes of the cluster. Set either `apiKey` or `user`, not both. | string |  | bXktaWQ6bXkta2V5 |
 | **certificate** | Certificate | The certificate of the certificate authority (CA) that signed the certificate of the cluster, such as the `http_ca.crt` file that Elasticsearch generates, as a PEM or DER file encoded in base64 on one line, such as the output of `base64 -w0 http_ca.crt` (`base64 -i http_ca.crt` on macOS). Needed when the cluster uses a self-signed certificate, or one signed by a private CA. When it is set, only this CA is trusted; when it is not set, the certificates that Java trusts are used. | string |  |  |
 | **connectionTimeout** | Connection Timeout | How long to wait for the connection to Elasticsearch, in milliseconds. When it is not set, it is 30000, which is 30 seconds. | integer |  | 5000 |
 | **enableSSL** | Enable SSL | If true, it connects with HTTPS. Set it to false for a cluster that is reached with plain HTTP. | boolean | true |  |
 | **indexName** | Index in ElasticSearch | The name of the index to store the documents in. Elasticsearch creates it when it does not exist. The `indexName` header of a message takes precedence. | string |  | orders |
 | **password** | Password | The password of the Elasticsearch user in `user`. | string |  |  |
 | **socketTimeout** | Socket Timeout | How long to wait for data from Elasticsearch, in milliseconds. When Elasticsearch sends nothing for this long, during the TLS handshake or while it stores the document, the message fails with a `SocketTimeoutException`. When it is not set, it is 30000, which is 30 seconds. | integer |  | 10000 |
+| **sslContextParameters** | SSL Context Parameters | For TLS settings that `certificate` cannot give, such as a client certificate (mutual TLS), a trust store, or a TLS version, an `SSLContextParameters` object defined in the application, as `#bean:` followed by its name. It takes precedence over `certificate`; set one or the other. | string |  | #bean:mySslContext |
 | **user** | Username | The Elasticsearch user to log in as, such as `elastic`. Leave it out for a cluster without security. | string |  |  |
 
 ## Dependencies
@@ -40,8 +42,6 @@ At runtime, the `elasticsearch-index-sink` Kamelet relies upon the presence of t
 -   camel:kamelet
     
 -   camel:elasticsearch
-    
--   camel:gson
     
 -   camel:bean
     

@@ -63,7 +63,7 @@ Number of Non-Core Components: 397 in 324 JAR artifacts (11 deprecated)
 | [Alibaba Function Compute (FC)](alibaba-fc-component.md) | camel-alibaba-fc | Preview | 4.23 | Invoke serverless functions on Alibaba Cloud Function Compute (FC). |
 | [Alibaba Key Management Service (KMS)](alibaba-kms-component.md) | camel-alibaba-kms | Preview | 4.23 | Encrypt and decrypt data using Alibaba Cloud Key Management Service (KMS). |
 | [Alibaba Message Service (MNS)](alibaba-mns-component.md) | camel-alibaba-mns | Preview | 4.23 | Send and receive messages using Alibaba Cloud Simple Message Queue (SMQ, formerly MNS). |
-| [Alibaba Object Storage Service (OSS)](alibaba-oss-component.md) | camel-alibaba-oss | Preview | 4.23 | Alibaba Cloud Object Storage Service (OSS) component |
+| [Alibaba Object Storage Service (OSS)](alibaba-oss-component.md) | camel-alibaba-oss | Preview | 4.23 | Store and retrieve objects in Alibaba Cloud Object Storage Service (OSS). |
 | [Alibaba Short Message Service (SMS)](alibaba-sms-component.md) | camel-alibaba-sms | Preview | 4.23 | Send SMS messages using Alibaba Cloud Short Message Service (SMS). |
 | [Alibaba Simple Log Service (SLS)](alibaba-sls-component.md) | camel-alibaba-sls | Preview | 4.23 | Write logs, query logs, and list Logstores on Alibaba Cloud Simple Log Service (SLS). |
 | [Alibaba Tablestore (OTS)](alibaba-ots-component.md) | camel-alibaba-ots | Preview | 4.23 | Perform row operations on Alibaba Cloud Tablestore (OTS). |

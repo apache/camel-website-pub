@@ -41,9 +41,11 @@ Regenerate a workspace created by an earlier Camel Kit from the project root, th
 camel-kit init --here --ai claude --force
 ```
 
-Commit or back up your own edits to generated files first: the `camel-*` skills are rewritten on every run.
+Run with `--dry-run` first to see which skills and commands will change. For recovery after losing the project configuration, see [Upgrading from 0.4.1 and earlier](getting-started.html#_upgrading_from_0_4_1_and_earlier).
 
--   Regeneration removes only the command files Camel Kit itself used to generate in `.claude/commands/`: one `<command>.md` for each of the nine public commands. Every other file in that directory is preserved, including your own commands and custom files whose names start with `camel-`.
+-   From 0.4.0 or 0.4.1, the command above updates stock skills and removes the nine stock command stubs. Kit removes `.claude/commands/` if deleting the last stock stub leaves it empty. A customized skill stays in place. Compare its `.proposed` file under `.camel-kit/conflicts/catalog/claude/skills/`. To accept the selected skills as a group, add `--replace .claude/skills`.
+    
+-   Kit reports edited retired stubs. Claude Code gives a skill precedence over a command with the same name. Review the old stub and move it out of `.claude/commands/` to retire it from the command inventory. See [Claude Code skill precedence](https://code.claude.com/docs/en/skills#resolve-skills-that-share-a-name).
     
 -   `init` stops before it writes anything when `.claude`, one of the Claude directories it manages or the legacy `.claude/commands` path is a symbolic link. The error names the link; replace it with a real directory and run `init` again.
     
@@ -60,7 +62,7 @@ $camel-migrate MuleSoft flows in src/main/mule
 
 Bob Shell’s native skill picker uses `$camel-*`; its `/` picker holds built-in commands and MCP prompts, so a `/camel-*` name in this documentation corresponds to a `$camel-*` skill there. Bob IDE exposes the same skills as `/camel-*`. Legacy command stubs stay installed for compatibility. The four internal helper skills are hidden.
 
-If a public skill does not appear in the picker, run `camel-kit doctor`: it reports each affected `SKILL.md` as `FAIL` with regeneration instructions. Regenerate from the project root with `camel-kit init --here --ai bob2 --force` (after committing or backing up customized generated files) and restart Bob.
+If a public skill does not appear in the picker, run `camel-kit doctor`: it reports each affected `SKILL.md` as `FAIL` with regeneration instructions. For example, to restore the generated validation skill after reviewing your local edits, run `camel-kit init --here --ai bob2 --force --replace .bob/skills/camel-validate/SKILL.md` and restart Bob.
 
 ## Google Antigravity
 

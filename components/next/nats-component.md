@@ -80,7 +80,7 @@ The Nats component supports the following options which are listed below.
 | **flushConnection** (common) | Define if we want to flush connection when stopping or not. | true | boolean |
 | **flushTimeout** (common) | Set the flush timeout (in milliseconds). | 1000 | int |
 | **jetstreamEnabled** (common) | Sets whether to enable JetStream support for this endpoint. | false | boolean |
-| **jetstreamName** (common) | Sets the name of the JetStream stream to use. |  | String |
+| **jetstreamName** (common) | The name of the JetStream stream. The consumer reads from this stream (it is required for a JetStream consumer). When the stream does not exist, the consumer creates it with the subject of the topic. The producer creates it in the same way, unless another stream already takes in the subject. The producer publishes to the subject, and the message is stored by the stream that takes in the subject, whatever its name. |  | String |
 | **maxPingsOut** (common) | maximum number of pings have not received a response allowed by the client. | 2 | int |
 | **maxReconnectAttempts** (common) | Max reconnection attempts. | 60 | int |
 | **noEcho** (common) | Turn off echo. If supported by the gnatsd version you are connecting to this flag will prevent the server from echoing messages back to the connection if it has subscriptions on the subject being published to. | false | boolean |
@@ -125,7 +125,7 @@ Enum values:
 | **consumerConfiguration** (consumer (advanced)) | Sets a custom ConsumerConfiguration object for the JetStream consumer. This is an advanced option typically used when you need to configure properties not exposed as simple Camel URI parameters. When set, this object will be used to build the final consumer subscription options. |  | ConsumerConfiguration |
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **replySubject** (producer) | the subject to which subscribers should send response. |  | String |
-| **requestTimeout** (producer) | Request timeout in milliseconds. | 20000 | long |
+| **requestTimeout** (producer) | Request timeout in milliseconds. With JetStream, the time to wait for the acknowledgement of a published message. With jetstreamAsync=true, the NATS client also gives up on the acknowledgement after requestCleanupInterval (to twice that), so a longer wait needs a longer requestCleanupInterval too. | 20000 | long |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 | **connection** (advanced) | Reference an already instantiated connection to Nats server. |  | Connection |
 | **headerFilterStrategy** (advanced) | To use a custom header filter strategy. |  | HeaderFilterStrategy |
@@ -161,7 +161,7 @@ With the following _path_ and _query_ parameters:
 | **flushConnection** (common) | Define if we want to flush connection when stopping or not. | true | boolean |
 | **flushTimeout** (common) | Set the flush timeout (in milliseconds). | 1000 | int |
 | **jetstreamEnabled** (common) | Sets whether to enable JetStream support for this endpoint. | false | boolean |
-| **jetstreamName** (common) | Sets the name of the JetStream stream to use. |  | String |
+| **jetstreamName** (common) | The name of the JetStream stream. The consumer reads from this stream (it is required for a JetStream consumer). When the stream does not exist, the consumer creates it with the subject of the topic. The producer creates it in the same way, unless another stream already takes in the subject. The producer publishes to the subject, and the message is stored by the stream that takes in the subject, whatever its name. |  | String |
 | **maxPingsOut** (common) | maximum number of pings have not received a response allowed by the client. | 2 | int |
 | **maxReconnectAttempts** (common) | Max reconnection attempts. | 60 | int |
 | **noEcho** (common) | Turn off echo. If supported by the gnatsd version you are connecting to this flag will prevent the server from echoing messages back to the connection if it has subscriptions on the subject being published to. | false | boolean |
@@ -222,7 +222,7 @@ Enum values:
 
  |  | ExchangePattern |
 | **replySubject** (producer) | the subject to which subscribers should send response. |  | String |
-| **requestTimeout** (producer) | Request timeout in milliseconds. | 20000 | long |
+| **requestTimeout** (producer) | Request timeout in milliseconds. With JetStream, the time to wait for the acknowledgement of a published message. With jetstreamAsync=true, the NATS client also gives up on the acknowledgement after requestCleanupInterval (to twice that), so a longer wait needs a longer requestCleanupInterval too. | 20000 | long |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **connection** (advanced) | Reference an already instantiated connection to Nats server. |  | Connection |
 | **headerFilterStrategy** (advanced) | To use a custom header filter strategy. |  | HeaderFilterStrategy |
@@ -247,7 +247,7 @@ The Nats component supports the following message header(s), which is/are listed
 | **CamelNatsQueueName** (common) Constant: [`NATS_QUEUE_NAME`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_QUEUE_NAME) | The Queue name of a consumed message (may be null). |  | String |
 | **CamelNatsStatusCode** (consumer) Constant: [`NATS_STATUS_CODE`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_STATUS_CODE) | Status message code. |  | int |
 | **CamelNatsStatusError** (consumer) Constant: [`NATS_STATUS_ERROR`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_STATUS_ERROR) | Status message error message. |  | String |
-| **CamelNatsDeliveryCounter** (consumer) Constant: [`NATS_DELIVERY_COUNTER`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_DELIVERY_COUNTER) | Number of times this message has been delivered (1 = first, 1 then message has been redelivered). |  | long |
+| **CamelNatsDeliveryCounter** (consumer) Constant: [`NATS_DELIVERY_COUNTER`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_DELIVERY_COUNTER) | Number of times this message has been delivered (1 = first, > 1 then message has been redelivered). |  | long |
 | **CamelNatsManualAck** (consumer) Constant: [`NATS_MANUAL_ACK`](https://javadoc.io/doc/org.apache.camel/camel-nats/latest/org/apache/camel/component/nats/NatsConstants.html#NATS_MANUAL_ACK) | The manual acknowledgment handle for JetStream messages (only set when manualAck=true). |  | NatsManualAck |
 
 ## Message Body
@@ -558,6 +558,14 @@ from("nats:mytopic?maxMessages=5&queueName=myqueue")
         - to:
             uri: mock:result
 ```
+
+### JetStream producer
+
+With `jetstreamEnabled=true`, the producer publishes each message to JetStream and waits until the stream that takes in the subject has stored it. Sending fails with `503 No Responders Available For Request` when no stream takes in the subject. On a server without JetStream, the message is published as plain NATS.
+
+When `jetstreamName` is set, the producer checks at startup that this stream exists. When it does not, and no other stream takes in the subject, the producer creates it with the subject of the topic, as the consumer does. When the stream cannot be checked or created, the producer logs a WARN and starts anyway. The message is stored by the stream that takes in the subject, whatever its name.
+
+`requestTimeout` is how long the producer waits for the acknowledgement. With `jetstreamAsync=true` (the default), the NATS client also gives up on the acknowledgement after `requestCleanupInterval` (5 seconds by default) to twice that, so set both to wait longer.
 
 ### Manual Acknowledgment (JetStream)
 

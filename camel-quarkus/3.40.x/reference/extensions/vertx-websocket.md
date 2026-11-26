@@ -2,7 +2,7 @@
 
 JVM since1.1.0 Native since1.1.0
 
-This extension enables you to create WebSocket endpoints to that act as either a WebSocket server, or as a client to connect an existing WebSocket .
+This extension enables you to create WebSocket endpoints that act as either a WebSocket server, or as a client to connect to an existing WebSocket.
 
 It is built on top of the Eclipse Vert.x HTTP server provided by the `quarkus-vertx-http` extension.
 
@@ -79,14 +79,14 @@ from("vertx-websocket:/my-websocket-path")
     .log("Got body: ${body}");
 
 from("direct:sendToWebSocket")
-    .log("vertx-websocket:/my-websocket-path");
+    .to("vertx-websocket:/my-websocket-path");
 ```
 
 Or alternatively, you can refer to the full host & port configuration for the Quarkus HTTP server.
 
 ```java
 from("direct:sendToWebSocket")
-    .log("vertx-websocket:{{quarkus.http.host}}:{{quarkus.http.port}}/my-websocket-path");
+    .to("vertx-websocket:{{quarkus.http.host}}:{{quarkus.http.port}}/my-websocket-path");
 ```
 
 When producing messages to an external WebSocket server, then you must always provide the host name and port (if required).
@@ -95,7 +95,7 @@ When producing messages to an external WebSocket server, then you must always pr
 
 ### Vert.x WebSocket server configuration
 
-Configuration of the Vert.x WebSocket server is managed by Quarkus. Refer to the [Quarkus HTTP configuration guide](https://quarkus.io/guides/all-config#quarkus-vertx-http_quarkus-vertx-http-eclipse-vert.x-http) for the full list of configuration options.
+Configuration of the Vert.x WebSocket server is managed by Quarkus. Refer to the [Quarkus HTTP configuration guide](https://quarkus.io/guides/http-reference) for the full list of configuration options.
 
 To configure SSL for the Vert.x WebSocket server, follow the [secure connections with SSL guide](https://quarkus.io/guides/http-reference#ssl). Note that configuring the server for SSL with `SSLContextParameters` is not currently supported.
 

@@ -261,7 +261,7 @@ Enum values:
 | **excludeExt** (filter) | Is used to exclude files matching file extension name (case insensitive). For example to exclude bak files, then use excludeExt=bak. Multiple extensions can be separated by comma, for example to exclude bak and dat files, use excludeExt=bak,dat. Note that the file extension includes all parts, for example having a file named mydata.tar.gz will have extension as tar.gz. For more flexibility then use the include/exclude options. |  | String |
 | **filter** (filter) | Pluggable filter as a org.apache.camel.component.file.GenericFileFilter class. Will skip files if filter returns false in its accept() method. |  | GenericFileFilter |
 | **filterDirectory** (filter) | Filters the directory based on Simple language. For example to filter on current date, you can use a simple date pattern such as $\\{date:now:yyyMMdd}. |  | String |
-| **filterFile** (filter) | Filters the file based on Simple language. For example to filter on file size, you can use $\\{file:size} 5000. |  | String |
+| **filterFile** (filter) | Filters the file based on Simple language. For example to filter on the file extension, you can use $\\{file:ext} == 'txt'. |  | String |
 | **idempotent** (filter) | Option to use the Idempotent Consumer EIP pattern to let Camel skip already processed files. Will by default use a memory based LRUCache that holds 1000 entries. If noop=true then idempotent will be enabled as well to avoid consuming the same files over and over again. Setting only idempotentRepository or idempotentKey does not turn it on. | false | Boolean |
 | **idempotentEager** (filter) | Sets whether to eagerly add the filename to the idempotent repository or wait until the exchange is complete. Does not apply with an idempotent read lock (readLock=idempotent, idempotent-changed or idempotent-rename), which adds the filename when it acquires the lock. | true | Boolean |
 | **idempotentKey** (filter) | To use a custom idempotent key. By default the absolute path of the file is used. You can use the File Language, for example to use the file name and file size, you can do: idempotentKey=$\\{file:name}-$\\{file:size}. It is used only with idempotent=true (noop=true turns it on), or by an idempotent read lock (readLock=idempotent, idempotent-changed or idempotent-rename) of the file component. |  | String |
@@ -402,7 +402,7 @@ Enum values:
 | **useFixedDelay** (scheduler) | Controls if fixed delay or fixed rate is used. See ScheduledExecutorService in JDK for details. | true | boolean |
 | **shuffle** (sort) | To shuffle the list of files (sort in random order). | false | boolean |
 | **sortBy** (sort) | Built-in sort by using the File Language. Supports nested sorts, so you can have a sort by file name and as a 2nd group sort by modified date. |  | String |
-| **sorter** (sort) | Pluggable sorter as a java.util.Comparator class. |  | Comparator |
+| **sorter** (sort) | Pluggable sorter as a java.util.Comparator class that compares org.apache.camel.component.file.GenericFile objects. |  | Comparator |
 
 ## Message Headers
 
@@ -999,7 +999,7 @@ from("file:bar?doneFileName=done");
           message: "${header.CamelFileName}"
 ```
 
-It will only consume files from the _bar_ folder if a _done file_ exists in the same directory as the target files. Camel will automatically delete the _done file_ when it’s done consuming the files. When a poll leaves files of the directory for the next poll (beyond `maxMessagesPerPoll`, or not started, for example when the read lock is not acquired), the _done file_ is kept until they are consumed; meanwhile the polls consume every file of the directory, as they do whenever the _done file_ is there.
+It will only consume files from the _bar_ folder if a _done file_ exists in the same directory as the target files. Camel will automatically delete the _done file_ when it’s done consuming the files. When a poll leaves files of the directory for the next poll (beyond `maxMessagesPerPoll`, or not started, for example when the read lock is not acquired), the _done file_ is kept until they are consumed; meanwhile the polls consume every file of the directory, as they do whenever the _done file_ is there. With `recursive=true` each directory has its own _done file_, which the last file of that directory in the poll deletes.
 
 > **Note**
 > Camel does not delete automatically the _done file_ if `noop=true` is configured.

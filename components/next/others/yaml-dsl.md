@@ -291,11 +291,11 @@ In this example the _tags_ options is of Map type and can be configured using YA
 > **Important**
 > To use map values for parameters, then the `uri` must only refer to the name of the component, ie `plc4x` and not `plc4x:foo`
 
-### Option names in dash form
+### Option names and map keys
 
-An option under `parameters` can be written in dash form, such as `service-class`, which Camel uses as `serviceClass`. This is not done for the keys of a map option, because Camel passes them on as they are written.
+Write an option under `parameters` in camelCase, as the documentation of the component lists it, such as `serviceClass`.
 
-A key can start with the prefix of a map option, such as `properties.` of the CXF component or `scheduler.` of a polling consumer. Then only the prefix is turned into camelCase, and the rest of the key is kept. The keys of a map value are kept as they are written as well.
+A key can start with the prefix of a map option, such as `properties.` of the CXF component or `scheduler.` of a polling consumer. Then the rest of the key, after the prefix, is passed on as it is written. The keys of a map value are passed on as they are written as well.
 
 ```yaml
 - route:

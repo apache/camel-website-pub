@@ -107,7 +107,7 @@ The standalone `camel-kit` launcher and source-built Knowledge also require Java
 
 ## Upgrading
 
-Reinstall the standalone CLI with `jbang app install --force` and the release alias above, or run the plugin installation again. To apply updated generated assets to an existing project, commit or back up customized generated files, then run `camel-kit init --here --ai <your-agent> --force` from the project root. This rewrites the generated assets, except shared files you changed (see [Existing projects](#existing-project)).
+Reinstall the standalone CLI with `jbang app install --force` and the release alias above, or run the plugin installation again. From the project root, preview the upgrade with `camel-kit init --here --ai <your-agent> --dry-run`, then use `--force` to apply it. Review any preserved skills, guides or commands using the procedure in [Existing projects](#existing-project).
 
 From 0.4.0
 
@@ -164,11 +164,29 @@ camel-kit init --here --ai claude --dry-run
 
 An existing MCP configuration is merged: Camel Kit adds or updates its own servers and keeps other servers and settings. This applies to the JSON files and to `.codex/config.toml`, where Camel Kit keeps its servers between `# BEGIN CAMEL-KIT MANAGED MCP SERVERS` and `# END CAMEL-KIT MANAGED MCP SERVERS`. A file that cannot be merged stops `init` before any project file is changed, and `--dry-run` rejects it with the same message: invalid JSON or TOML, and for Codex also damaged markers, a `camel`, `camel-knowledge` or `citrus` server table defined outside the managed block, an `mcp_servers` value that cannot take further tables, or a `.codex/config.toml` that is not a regular file. On reinitialization, properties you added to `.camel-kit/config.properties` are kept.
 
-Camel Kit records the hash of each tracked file it wrote in `.camel-kit/managed-files.properties`; commit it with the project. Known limits:
+Camel Kit records the hash of each tracked file it wrote in `.camel-kit/managed-files.properties`; commit it with the project.
 
--   Files Camel Kit ships under its own names, such as the `camel-*` skills, subagents, personas and `.camel-kit/templates/`, are regenerated on every run; changes to them are not preserved. Your own skills and files next to them are not touched.
+#### Upgrading from 0.4.1 and earlier
+
+If the workspace has lost its Kit configuration, restore the original from version control or a backup **before** the first upgrade. Releases 0.4.x used `.camel-kit/config.properties`. Earlier releases used `.camel-kit/config.yaml`. When both files exist, Kit reads the properties file. If the active file is malformed, both `--dry-run` and `init` report the path before writing anything. Repair or restore that file and retry. If Kit reports a permission error reading the configuration or the ledger, restore read access to the named file and retry.
+
+From the project root, run `camel-kit init --here --ai claude --force`, substituting your assistant’s name. In a shared workspace, run this command once for each assistant, in any order. Kit recognizes stock catalog files from pre-ledger releases by their installed path and content for the selected assistant. It upgrades them and removes recognized stock files the new catalog retired. A file already equal to the new rendering is recorded in place, even when its ledger entry is missing or stale. Run `camel-kit doctor` after each init to check the assistant you just updated. When adopting a project for the first time, Kit records that ownership tracking began with this init. Copies from older releases that differ from the new rendering stay in place on this and later runs.
+
+If you already ran `init` while the configuration was missing, restoring it afterward keeps the first-adoption record in effect. Review the `.proposed` files under `.camel-kit/conflicts/catalog/`, then rerun `init` with `--force --replace <path>` for the changes you accept. For Claude, `--replace .claude/skills` accepts all selected skills and guides in that directory, including locally edited ones. Review any retired stubs Doctor lists under `.claude/commands/` and move the ones you want to retire outside the assistant’s discovery directories.
+
+When upgrading from 0.3.x, also inspect any `camel-flow`, `camel-project`, and `camel-migrate-mule` folders left in your assistant’s skills directory. Doctor treats an edited `SKILL.md` without an ownership record as personal. The assistant can still discover it after Kit removes its stock guides. Keep the folder if you use it, or move it outside the skills directory to retire it.
+
+#### Reviewing catalog changes
+
+-   For each selected skill, guide, binary resource or command stub, `init` creates a missing file and refreshes a file that matches the last installation or a recognized release. Kit preserves edits and unfamiliar content. For example, compare the live validation skill with `.camel-kit/conflicts/catalog/claude/skills/camel-validate/SKILL.md.proposed`. These copies are outside assistant discovery directories. Merge changes by hand or accept the generated file with `camel-kit init --here --ai claude --force --replace .claude/skills/camel-validate/SKILL.md`. To accept every selected file under the skills directory, use `--replace .claude/skills`. A skill subdirectory is also supported. Directory replacement leaves personal files outside the selected catalog alone. If an older development build saved proposals inside a hidden assistant directory, init moves that tree into a `previous-*` directory under `.camel-kit/conflicts/` and prints its location. If an old file or directory blocks the proposal path, preview and init identify it. Review it, move it aside, and retry. Subagents, personas and `.camel-kit/templates/` are regenerated.
     
--   A workspace initialized by an earlier Camel Kit has no ledger, and a missing record never counts as ownership. On its first reinitialization the unmarked instruction files get the block appended and the other shared files are preserved and reported, even if Camel Kit generated them. Replace those you want refreshed with `--replace <path>`.
+-   When the distribution moves or drops a file, Kit removes the old copy when it matches its recorded or recognized release hash. An edited retired file stays in place and has no new version to merge. Git conversions between LF and CRLF count as the same content for the [supported text formats](contributing.html#skill-packs). Use `--dry-run` to see changed paths and a count of catalog files already current. Codex and Antigravity share `.agents/skills/`. Updating either one recognizes both assistants' stock files there and installs the selected assistant’s rendering.
+    
+-   Switching between a file and a directory requires write access to the directories holding the old files. Restore write access and retry if the preview reports a read-only directory. If an interrupted switch left a recovery directory, `init`, `--dry-run` and Doctor report its path. After any running init has finished, inspect its `previous` and `new` contents when present, move the directory outside the skills tree, and retry. If the directory cannot be inspected, restore read and search permissions first.
+    
+-   A retained `SKILL.md` or command stub can still be discovered by the assistant. Doctor reports retired entry points with an ownership record or matching release content, and recognized legacy command stubs. Review these files and move them outside the assistant’s discovery directories to retire them. An unrecorded skill with different content can keep using a historical skill name.
+    
+-   For shared files in a pre-ledger workspace, init appends the managed block to unmarked instructions and preserves unfamiliar content in the other shared files. Use `--replace <path>` to accept a shared file.
     
     What every target gets
     
@@ -239,7 +257,7 @@ camel-kit doctor
 camel-kit doctor --json   # for automation
 ```
 
-`doctor` checks the generated configuration, command stubs where the target uses them, skill files, MCP filtering and permission fields, the project graph, the command prefix, the prerequisites and common stale generated references. It prints `PASS`, `WARN` and `FAIL` findings with remediation text. Missing external tools such as JBang are warnings; broken generated workspace files are failures.
+`doctor` checks the generated configuration, command stubs where the target uses them, skill files, MCP filtering and permission fields, the project graph, the command prefix, the prerequisites and common stale generated references. It prints `PASS`, `WARN` and `FAIL` findings with remediation text. Missing external tools such as JBang are warnings; broken generated workspace files are failures. If Doctor cannot load the workspace configuration, it reports the cause and still checks the graph, prerequisites and stale references in project-level instructions.
 
 ## Run the first command
 

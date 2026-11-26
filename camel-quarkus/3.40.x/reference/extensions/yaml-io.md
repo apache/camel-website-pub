@@ -21,9 +21,9 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ## Usage
 
-This an auxiliary extension that provides support for Camel route dumping in YAML.
+This is an auxiliary extension that provides support for Camel route dumping in YAML.
 
-For example, when the application is configured to dump routes on startup with the following configuration in `application.properties`.
+For example, to dump routes in YAML on startup, add the following configuration to `application.properties`:
 
 ```properties
 camel.main.dump-routes = yaml

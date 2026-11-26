@@ -25,11 +25,11 @@ The starter supports 16 options, which are listed below.
    
 | Name | Description | Default | Type |
 | --- | --- | --- | --- |
-| camel.dataformat.pgp.algorithm | Symmetric key encryption algorithm; possible values are defined in org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags. Only relevant for encrypting. |  | Integer |
+| camel.dataformat.pgp.algorithm | Symmetric key encryption algorithm; possible values are defined in org.bouncycastle.bcpg.SymmetricKeyAlgorithmTags; for example 9 (= AES\_256), 8 (= AES\_192), 7 (= AES\_128), 3 (= CAST5). Only relevant for encrypting. | 9 | Integer |
 | camel.dataformat.pgp.armored | This option will cause PGP to base64 encode the encrypted text, making it available for copy/paste, etc. | false | Boolean |
 | camel.dataformat.pgp.compression-algorithm | Compression algorithm; possible values are defined in org.bouncycastle.bcpg.CompressionAlgorithmTags. Only relevant for encrypting. |  | Integer |
 | camel.dataformat.pgp.enabled | Whether to enable auto configuration of the pgp data format. This is enabled by default. |  | Boolean |
-| camel.dataformat.pgp.hash-algorithm | Signature hash algorithm; possible values are defined in org.bouncycastle.bcpg.HashAlgorithmTags. Only relevant for signing. |  | Integer |
+| camel.dataformat.pgp.hash-algorithm | Signature hash algorithm; possible values are defined in org.bouncycastle.bcpg.HashAlgorithmTags; for example 8 (= SHA256), 9 (= SHA384), 10 (= SHA512), 11 (= SHA224), 2 (= SHA1). Only relevant for signing. | 8 | Integer |
 | camel.dataformat.pgp.integrity | Adds an integrity check/sign into the encryption file. | true | Boolean |
 | camel.dataformat.pgp.key-file-name | Filename of the keyring; must be accessible as a classpath resource (but you can specify a location in the file system by using the file: prefix). |  | String |
 | camel.dataformat.pgp.key-userid | The user ID of the key in the PGP keyring used during encryption. Can also be only a part of a user ID. |  | String |

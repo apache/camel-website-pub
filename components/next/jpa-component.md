@@ -170,7 +170,7 @@ Enum values:
 
 
  |  | ExchangePattern |
-| **parameters** (consumer (advanced)) | This key/value mapping is used for building the query parameters. It is expected to be of the generic type java.util.Map where the keys are the named parameters of a given JPA query and the values are their corresponding effective values you want to select for. When it’s used for producer, Simple expression can be used as a parameter value. It allows you to retrieve parameter values from the message body, header and etc. . This is a multi-value option with prefix: parameters. |  | Map |
+| **parameters** (consumer (advanced)) | This key/value mapping is used for building the query parameters. It is expected to be a java.util.Map with String keys, where the keys are the named parameters of a given JPA query and the values are their corresponding effective values you want to select for. When it’s used for producer, Simple expression can be used as a parameter value. It allows you to retrieve parameter values from the message body, header and etc. . This is a multi-value option with prefix: parameters. |  | Map |
 | **pollStrategy** (consumer (advanced)) | A pluggable org.apache.camel.PollingConsumerPollingStrategy allowing you to provide your custom implementation to control error handling usually occurred during the poll operation before an Exchange have been created and being routed in Camel. |  | PollingConsumerPollStrategy |
 | **findEntity** (producer) | If enabled, then the producer will find a single entity by using the message body as a key and entityType as the class type. This can be used instead of a query to find a single entity. | false | boolean |
 | **firstResult** (producer) | Set the position of the first result to retrieve. | \-1 | int |

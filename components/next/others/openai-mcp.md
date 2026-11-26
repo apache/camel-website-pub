@@ -6,6 +6,8 @@
 
 The component supports automatic tool calling via the [Model Context Protocol (MCP)](https://modelcontextprotocol.io). When MCP servers are configured, the component acts as an MCP client: it lists available tools, converts them to OpenAI function-calling format, and runs an agentic loop — the model requests tool calls, the component executes them via MCP, feeds results back, and repeats until the model produces a final text answer.
 
+The same loop runs route tools: Camel routes that start with the [ai-tool component](../../4.22.x/ai-tool-component.md) and are selected with the `tags` option. Route tools need no MCP server, and an endpoint can use both kinds of tools together. See [Route Tools](#_route_tools).
+
 ### MCP Server Configuration
 
 MCP servers are configured inline on the endpoint URI using the `mcpServer.` prefix pattern. Each server is identified by a name, with sub-properties for transport type, command/URL, and arguments.
@@ -46,6 +48,8 @@ from("direct:chat")
               mcpServer.api.url: http://localhost:9090/mcp
 ```
 
+The `url` is the URL of the MCP endpoint of the server, path included, for example `[http://localhost:9090/mcp](http://localhost:9090/mcp)` or `[https://example.com/api/mcp](https://example.com/api/mcp)`. When the URL has no path, such as `[http://localhost:9090](http://localhost:9090)`, the component uses `/mcp`.
+
 #### SSE Transport (Deprecated)
 
 -   Java
@@ -81,6 +85,8 @@ from("direct:chat")
               mcpServer.weather.transportType: sse
               mcpServer.weather.url: http://localhost:8080
 ```
+
+The `url` is the URL of the SSE endpoint of the server, path included, for example `[http://localhost:8080/sse](http://localhost:8080/sse)` or `[https://example.com/api/sse](https://example.com/api/sse)`. When the URL has no path, such as `[http://localhost:8080](http://localhost:8080)`, the component uses `/sse`. The messages go to the endpoint that the server sends on the stream, resolved against the scheme, host and port of the URL. An absolute path, as the MCP SDK servers and quarkus-mcp-server send, works; a path-relative one such as `message?sessionId=…​` from a server on `/custom/sse` goes to `/message`, while some other clients resolve it against the SSE URL (`/custom/message`).
 
 #### Stdio Transport
 
@@ -207,7 +213,7 @@ The filter is also applied consistently on MCP server reconnection (`mcpReconnec
 
 When the model responds with tool calls, the component automatically:
 
-1.  Executes each tool call via the corresponding MCP server
+1.  Executes each tool call via the corresponding MCP server, or the route of a route tool
     
 2.  Sends the tool results back to the model
     
@@ -263,6 +269,70 @@ from("direct:chat")
         - log:
             message: "Tool calls: ${body}"
 ```
+
+### Route Tools
+
+A route that starts with `ai-tool:` is a tool the model can call. Set `tags` on the OpenAI endpoint to the tags of the tools it may use: the component sends their definitions to the model, runs the route when the model calls the tool, and sends the result back to the model in the same loop as MCP tools. No `mcpServer.*` option is needed.
+
+The tool arguments of the model arrive on the tool route as headers. What the route sets as the body is the result the model gets.
+
+-   Java
+    
+-   XML
+    
+-   YAML
+    
+
+```java
+from("direct:ask")
+    .to("openai:chat-completion?model=gpt-4o-mini&tags=shop");
+
+from("ai-tool:stock?tags=shop&description=Get the number of items in stock for a product" +
+    "&parameter.sku=string&parameter.sku.description=The product SKU&parameter.sku.required=true")
+    .setBody(simple("12 items of ${header.sku} in stock"));
+```
+
+```xml
+<route>
+  <from uri="direct:ask"/>
+  <to uri="openai:chat-completion?model=gpt-4o-mini&amp;tags=shop"/>
+</route>
+
+<route>
+  <from uri="ai-tool:stock?tags=shop&amp;description=Get the number of items in stock for a product&amp;parameter.sku=string&amp;parameter.sku.description=The product SKU&amp;parameter.sku.required=true"/>
+  <setBody>
+    <simple>12 items of ${header.sku} in stock</simple>
+  </setBody>
+</route>
+```
+
+```yaml
+- route:
+    from:
+      uri: direct:ask
+      steps:
+        - to:
+            uri: openai:chat-completion
+            parameters:
+              model: gpt-4o-mini
+              tags: shop
+- route:
+    from:
+      uri: ai-tool:stock
+      parameters:
+        tags: shop
+        description: Get the number of items in stock for a product
+        parameter.sku: string
+        parameter.sku.description: The product SKU
+        parameter.sku.required: true
+      steps:
+        - setBody:
+            expression:
+              simple:
+                expression: "12 items of ${header.sku} in stock"
+```
+
+`maxToolIterations`, `maxAgenticTokens`, `parallelToolExecution`, `returnDirect` and `autoToolExecution=false` with the `tool-execution` operation work the same for route tools as for MCP tools. See the [ai-tool component](../../4.22.x/ai-tool-component.md) for the tool parameters, argument schemas and tag-based discovery.
 
 ### Parallel Tool Execution
 
@@ -720,4 +790,4 @@ Two endpoint options control what happens when a tool call fails:
 | MCP `CallToolResult.isError()` is true | Error content is sent as tool result text to the model |
 | Tool name not found in any server | Governed by `hallucinatedToolNameStrategy`: `failExchange` (default) throws `IllegalStateException`; `repromptModel` sends a corrective tool result listing available tools |
 | Max iterations exceeded | `IllegalStateException` is thrown with the tool call log |
-| Streaming + MCP tools with autoToolExecution | Falls back to non-streaming (logged as INFO) |
+| Streaming + MCP or route tools with autoToolExecution | Falls back to non-streaming (logged as INFO) |

@@ -40,7 +40,7 @@ At runtime, the `jms-apache-activemq-source` Kamelet relies upon the presence of
     
 -   camel:kamelet
     
--   mvn:org.apache.activemq:activemq-client:6.3.2
+-   mvn:org.apache.activemq:activemq-client:6.4.0
     
 
 ## Camel JBang usage

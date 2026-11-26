@@ -4,7 +4,7 @@ Camel Kit has two command surfaces: the CLI, run in a terminal, and the skills, 
 
 ## CLI commands
 
-Development builds use Aesh for one-shot execution. Use `-h`/`--help` on the root, `init`, `doctor` or `ship`, and the `help` subcommand for `doc`, `graph` and `plan`. Use `-V`/`--version` at the CLI root for the Kit version. See [development host compatibility](getting-started.html#cli-host). `init -p one=1 two=2` accepts several property values; Ship’s `-p` consumes one value per occurrence. Commas in property values are preserved.
+Development builds use Aesh for one-shot execution. Use `-h`/`--help` on the root, `init`, `doctor`, `hook` or `ship`, and the `help` subcommand for `doc`, `graph` and `plan`. Use `-V`/`--version` at the CLI root for the Kit version. See [development host compatibility](getting-started.html#cli-host). `init -p one=1 two=2` accepts several property values; Ship’s `-p` consumes one value per occurrence. Commas in property values are preserved.
 
 Argument files are supported by standalone commands except direct `camel-kit ship` invocations, where `@` values are literal. The Camel plugin host expands argument files before loading Kit: use `@@literal` to pass `@literal`, or an attached value such as `--text=@literal`. Shell quoting alone does not disable argument-file expansion. This is a plugin syntax change in the development version; see [Ship literal context](ship.html#literal-context).
 
@@ -20,9 +20,9 @@ camel-kit init --here \[options\]
 | --- | --- | --- |
 | `--ai`, `-a` | `bob2` | Coding agent to configure: `bob2`, `antigravity`, `claude`, `codex`, `copilot`, `pi`, `qwen` or `opencode` |
 | `--here` | `false` | Initialize in the current directory |
-| `--force` | `false` | Reinitialize a project that already has `.camel-kit/`. Your content in shared files is kept; see [Existing projects](getting-started.html#existing-project) |
-| `--replace <path>` | none | Replace one existing shared file in full, such as `AGENTS.md` or `mvnw`, instead of merging or preserving it. Repeatable; a path that is not a shared file written by `init` is rejected before anything is written |
-| `--dry-run` | `false` | Show what `init` would do to each shared file (create, replace, merge or preserve) without writing anything. Runs the same validation as `init`, so an existing MCP configuration that cannot be merged is rejected here too |
+| `--force` | `false` | Reinitialize a project that already has `.camel-kit/`. Preserves edits to shared files and catalog assets. See [Existing projects](getting-started.html#existing-project) |
+| `--replace <path>` | none | Accept a shared file, a selected catalog file, or all selected files under a catalog directory. The option is repeatable. An ineligible path is rejected before generation |
+| `--dry-run` | `false` | List changed paths, previous proposal moves and the count of unchanged catalog files. Runs the same validation as `init`, so an existing MCP configuration that cannot be merged is rejected here too |
 | `--replace-wrapper` | `false` | Replace the complete Maven wrapper; use `--replace <path>` to replace only one shared file |
 | `--record-baseline` | `false` | Run the existing project’s build and tests once to record baseline results; never runs during `--dry-run` |
 | `--source-platform` | `auto` | Source platform of a migration: `mulesoft`, `biztalk`, `camel` or `auto` |
@@ -32,6 +32,10 @@ camel-kit init --here \[options\]
 | `-p`, `--property` |  | Override a configuration property, repeatable: `-p "camel.main.version=4.18.4"` |
 | `-c`, `--config` | `~/.camel-kit/config.properties` | Configuration properties file |
 | `--silent` | `false` | No banner, TUI, progress or summary, for scripted use |
+
+If a symbolic link lies on the path from the workspace to the skills directory, `init` and `init --dry-run` report the link and exit with code 1. If `init` reports `Cannot inspect`, restore read and search access on the directory named in the message.
+
+When a distribution drops a skill, guide or command stub, `init --force` removes a copy matching its ledger record or a known pre-ledger release for that assistant. Local edits stay in place. Compare the `.proposed` copy under `.camel-kit/conflicts/catalog/` or accept the generated version with `--force --replace <path>`. For example, `--replace .claude/skills` accepts the selected Claude skills and guides. Git line-ending conversion is recognized for text resources. A retired entry point can remain discoverable until you move or remove it manually. See [reinitializing existing projects](getting-started.html#existing-project).
 
 Configuration is read in three layers, the later overriding the earlier: the built-in `distribution.properties`, the user file given with `-c` or at its default path, and the `-p` flags. Any distribution property can be overridden; the common ones are `camel.main.version`, `camel.springboot.version`, `springboot.bom.version`, `camel.quarkus.version`, `quarkus.platform.version`, `camel.mcp.version`, `knowledge.mcp.group-id`, `knowledge.mcp.version`, `citrus.version` and `citrus.mcp.version`. The selected runtime and versions are persisted in `.camel-kit/config.properties`.
 
@@ -45,7 +49,7 @@ Validates a generated workspace and prints `PASS`, `WARN` and `FAIL` findings wi
 
 camel-kit doctor \[--project-dir <path>\] \[--json\]
 
-It checks `.camel-kit/config.properties`, the command stubs where the target uses them, the skill directories and manifests, the registered workspace templates, the exposure of user-invocable commands, the MCP filtering and permission fields the runtime supports, graph availability, the command prefix, the prerequisites and common stale references in generated files. Target specifics: for Codex it parses `.codex/config.toml`, the exact MCP allowlists, the prompt approval modes and the required fields of every custom-agent file; for Bob 2 it fails each public skill hidden by `user-invocable: false`; for Claude Code it accepts the legacy `agent.folder=.claude/commands` of a workspace that has not been regenerated yet; for Qwen it checks `includeTools` and `trust`; for OpenCode it evaluates all configuration layers as one and names the file that defines each rule. Configurations that predate the current filter and permission fields produce upgrade warnings; malformed current ones fail. Internal skills must exist as skills but must not be exposed as command stubs.
+It checks `.camel-kit/config.properties`, the command stubs where the target uses them, the skill directories and manifests, the supporting files selected by the catalog, the registered workspace templates, the exposure of user-invocable commands, the MCP filtering and permission fields the runtime supports, graph availability, the command prefix, the prerequisites and common stale references in generated files. Target specifics: for Codex it parses `.codex/config.toml`, the exact MCP allowlists, the prompt approval modes and the required fields of every custom-agent file; for Bob 2 it fails each public skill hidden by `user-invocable: false`; for Claude Code it accepts the legacy `agent.folder=.claude/commands` of a workspace that has not been regenerated yet; for Qwen it checks `includeTools` and `trust`; for OpenCode it evaluates all configuration layers as one and names the file that defines each rule. Configurations that predate the current filter and permission fields produce upgrade warnings; malformed current ones fail. Internal skills must exist as skills but must not be exposed as command stubs. A missing catalog-selected file produces a `FAIL` finding that names its path and an exit code of 1. Doctor also fails if a symbolic link lies on the path from the workspace to the selected assistant’s skills directory. It reports the recovery directory of an interrupted catalog update and identifies retained, recorded skill entry points and legacy command stubs. See [recovery instructions](getting-started.html#existing-project).
 
 In the development snapshot, Citrus MCP configuration is optional. When the project has not opted in, `doctor` accepts a missing `citrus` entry; when opted in, a missing entry is a failure. Any existing Citrus entry is validated, including the tool filtering and permission fields supported by the target. An invalid entry produces a `FAIL` finding and exit code 1 even when the project has not opted in. These checks inspect configuration without starting the Citrus server or testing its availability. For compatibility, projects with `citrus.mcp.version` but no `citrus.mcp.enabled` are treated as opted in.
 
@@ -86,11 +90,21 @@ camel-kit doc stale --reason "design spec was amended" --cascade \
 camel-kit doc unstale docs/camel-kit/001-order-processing/implementation-plan.md
 ```
 
+### hook
+
+Run a required assistant workflow contribution from the project root.
+
+camel-kit hook --id <step-contribution> --input <caller.json> \[--resume <pending.json>\] \[--result <skill-result.json>\]
+
+The CLI prints a JSON request for an installed skill or invokes the bundled Java provider. Only a verified `passed` result exits zero. See [responding to a question or failed check](skills.html#workflow-hooks).
+
 ### graph
 
 Builds and queries the project’s property graph, persisted at `.camel-kit/project-graph.json`.
 
+camel-kit graph analyze mule                  # summarize the graph with the Mule adapter
 camel-kit graph generate                      # build or rebuild the graph
+camel-kit graph generate --require-parser mule-xml  # require the bundled Mule parser
 camel-kit graph stats                         # availability, node and edge counts
 camel-kit graph find --type CAMEL\_ROUTE       # nodes by type, name or ID
 camel-kit graph neighbors <node-id>           # connected nodes

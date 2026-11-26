@@ -49,6 +49,10 @@ The column keeps its width, so the code does not move as the numbers grow. It wo
 
 With the message history on, such as with `camel run --dev`, the body types each step has been reached with go at the end of its line, dimmed and lined up. A step reached with bodies of more than one kind (`null`, `payload`, `data` or `collection`) needs attention, as its body depends on the path a message takes: it has a `⚠` in the gutter, and its types and kinds are in the warning color. The quick documentation of the line lists all the types, which the end of the line cuts to the room there is.
 
+A payload (text, bytes, a stream or a file) with a `Content-Type` header has its format after its type, by the names of the catalog: `byte[] · json` (`json`, `xml`, `csv`, `yaml`, `text`, `binary`, or the media type as it is). A step reached with more than one format, such as `⚠ String · xml | csv`, is marked as a step of more than one kind is.
+
+A step that calls a Kamelet (`to: kamelet:postgresql-sink`) also shows the data type the Kamelet takes: its default `in` data type, which Camel turns the body into before the Kamelet sees it. For example `LinkedHashMap → json`: `postgresql-sink` takes a JSON object, and its data type transformer (`application-json`) writes the `Map` as JSON, so the step is fine. Kamelets come from event-driven and serverless integration, where the data between the steps is JSON, which is why a SQL sink takes JSON. Before a message has reached the step, it shows what the Kamelet takes (`→ json`). A body the transformer does not take, as the Camel catalog says, is marked: `⚠ ArrayList → text (text-plain does not take it)`. The Kamelets are looked up in the project and in the Kamelet catalog the integration runs (`camel run --kamelets-version`). The quick documentation of the line says what the Kamelet takes, and why.
+
 ![The orders route in the source view: the steps after the choice are reached with a map and a stream](_images/jbang/camel-tui-source-body-types.png)
 
 The same body types are in the Routes and Diagram tabs (see [Body Types](camel-jbang-tui-diagram.html#_body_types)).

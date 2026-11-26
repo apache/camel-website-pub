@@ -116,7 +116,7 @@ Enum values:
 | **lazyStartProducer** (producer) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 | **maxResults** (producer) | Maximum number of results to return for SEARCH operation. | 5 | Integer |
 | **minScore** (producer) | Minimum similarity score threshold for SEARCH operation (0.0 to 1.0). |  | Double |
-| **returnTextContent** (producer) | When true, SEARCH returns List with text content instead of List. | false | boolean |
+| **returnTextContent** (producer) | When true, SEARCH returns a list of strings with the text content instead of a list of EmbeddingMatch objects. | false | boolean |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
 
 ## Endpoint Options
@@ -161,7 +161,7 @@ Enum values:
 | **embeddingStoreFactory** (producer) | **Autowired** The embedding store factory to use for creating embedding stores if no embeddingstore is provided. |  | EmbeddingStoreFactory |
 | **maxResults** (producer) | Maximum number of results to return for SEARCH operation. | 5 | Integer |
 | **minScore** (producer) | Minimum similarity score threshold for SEARCH operation (0.0 to 1.0). |  | Double |
-| **returnTextContent** (producer) | When true, SEARCH returns List with text content instead of List. | false | boolean |
+| **returnTextContent** (producer) | When true, SEARCH returns a list of strings with the text content instead of a list of EmbeddingMatch objects. | false | boolean |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
 
 ## Message Headers

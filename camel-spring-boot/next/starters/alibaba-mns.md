@@ -1,6 +1,6 @@
 # Alibaba Message Service (MNS)
 
-Send and receive messages to/from Alibaba Cloud Message Service (MNS).
+Send and receive messages using Alibaba Cloud Simple Message Queue (SMQ, formerly MNS).
 
 ## What’s inside
 

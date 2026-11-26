@@ -18,7 +18,7 @@ The easiest and most straightforward way to get the dependency versions right in
 All of these allow you to select extensions and scaffold a new Maven or Gradle project.
 
 > **Tip**
-> The universe of available extensions spans over Quarkus Core, Camel Quarkus and several other third party participating projects, such as Hazelcast, Cassandra, Kogito, OptaPlanner, etc.
+> The universe of available extensions spans over Quarkus Core, Camel Quarkus and several other third party participating projects, such as Hazelcast, Cassandra, OptaPlanner, etc.
 
 The generated `pom.xml` will look similar to the following:
 
@@ -63,13 +63,13 @@ The generated `pom.xml` will look similar to the following:
 ```
 
 > **Note**
-> BOM stands for "Bill of Materials" - it is a `pom.xml` whose main purpose is to manage the versions of artifacts so that end users importing the BOM in their projects do not need to care which particular versions of the artifacts are supposed to work together. In other words, having a BOM imported in the `<depependencyManagement>` section of your `pom.xml` allows you to avoid specifying versions for the dependencies managed by the given BOM.
+> BOM stands for "Bill of Materials" - it is a `pom.xml` whose main purpose is to manage the versions of artifacts so that end users importing the BOM in their projects do not need to care which particular versions of the artifacts are supposed to work together. In other words, having a BOM imported in the `<dependencyManagement>` section of your `pom.xml` allows you to avoid specifying versions for the dependencies managed by the given BOM.
 
 Which particular BOMs end up in the `pom.xml` file depends on extensions you have selected in the generator tool. The generator tools take care to select a minimal consistent set.
 
 If you choose to add an extension at a later point that is not managed by any of the BOMs in your `pom.xml` file, you do not need to search for the appropriate BOM manually. With [Quarkus CLI](https://quarkus.io/guides/cli-tooling) you can select the extension, and the tool adds the appropriate BOM as needed. Quarkus CLI also comes in handy when upgrading the BOM versions.
 
-The `io.quarkus.platform` BOMs are aligned with each other. That means that if an artifact is managed more than one BOM, it is always managed in the same version. This has the advantage that application developers do not need to care for the compatibility of the individual artifacts that may come from various independent projects. Note that not all combinations of artifacts managed by the various BOMs are tested.
+The `io.quarkus.platform` BOMs are aligned with each other. That means that if an artifact is managed by more than one BOM, it is always managed in the same version. This has the advantage that application developers do not need to care for the compatibility of the individual artifacts that may come from various independent projects. Note that not all combinations of artifacts managed by the various BOMs are tested.
 
 ## Combining with other BOMs
 
@@ -118,7 +118,7 @@ Note that if you do this, some dependencies in `camel-quarkus-bom` may not be pe
 > **Important**
 > Ensure that the major.minor version parts of `quarkus.platform.version` & `camel-quarkus.version` match. Mixing different release streams will likely result in build or runtime errors.
 
-When upgrading from one major release to another (E.g. from 2.x to 3.x). Quarkus provides an [updater tool](https://quarkus.io/guides/update-quarkus) that can apply the necessary modifications to your project and make it compatible with the new major release.
+When upgrading from one major release to another (e.g. from 3.x to 4.x), Quarkus provides an [updater tool](https://quarkus.io/guides/update-quarkus) that can apply the necessary modifications to your project and make it compatible with the new major release.
 
 In addition, Camel & Camel Quarkus publish migration guides that document potential breaking changes.
 

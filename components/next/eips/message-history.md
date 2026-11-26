@@ -384,6 +384,22 @@ The step after the choice has been reached with a `byte[]` by the high priority 
 
 When a step fails on the body, such as reading a field of text, its error says so too: `…​; other messages reached this step with data (LinkedHashMap), so the body here depends on the path a message takes`. The step is right for some messages, and a path to it, such as a branch that does not unmarshal, is what differs.
 
+### The format of the payload
+
+The Java type alone often does not tell what the data is: a `byte[]` or a stream can hold JSON, XML, CSV or a PDF. So for a payload (text, bytes, a stream or a file), Camel also keeps the format its `Content-Type` header names, by the names the catalog and the Kamelet data types use:
+
+ 
+| Format | Content-Type |
+| --- | --- |
+| `json` | `application/json`, and the `+json` types such as `application/fhir+json` |
+| `xml` | `application/xml`, `text/xml`, and the `+xml` types |
+| `csv` | `text/csv` |
+| `yaml` | `application/yaml` |
+| `text` | the other `text/*` types, such as `text/plain` |
+| `binary` | `application/octet-stream` |
+
+Any other media type, such as `application/pdf`, is kept as it is. A payload without a `Content-Type` adds no format. Data and collections have none: the `Content-Type` left on a `Map` after an unmarshal is about the payload it was made from, not about the body. The route-structure console shows the formats after the types, such as `body: byte[] · json`, and a step reached with more than one format (`body: String · xml | csv`) varied as a step reached with more than one type does.
+
 The body types of a route are forgotten when the route is removed, such as when it is reloaded in dev mode. In Java the registry is a context plugin:
 
 _Java-only: the body types of a step_
@@ -392,6 +408,7 @@ _Java-only: the body types of a step_
 BodyTypeRegistry registry = context.getCamelContextExtension().getContextPlugin(BodyTypeRegistry.class);
 List<String> types = registry.getBodyTypes("orders", "to1");
 List<BodyTypeRegistry.Kind> kinds = registry.getBodyKinds("orders", "to1");
+List<String> formats = registry.getBodyFormats("orders", "to1");
 ```
 
 The Camel CLI shows them as well, see [Camel CLI diagnostics](../../../manual/camel-jbang-diagnostics.md). And its YAML validator uses them where it cannot tell the body from the file itself, such as after an HTTP consumer, see [Camel CLI validation](../../../manual/camel-jbang-validation.md).
@@ -400,7 +417,7 @@ The Camel CLI shows them as well, see [Camel CLI diagnostics](../../../manual/ca
 
 Run the messages of the expected workload, such as in a test, and then read what each step has been reached with:
 
--   The `body-type` dev console lists the steps that a message has reached, per route, with their types and kinds. `varied=true` keeps only the steps reached with more than one type, and `filter` selects the routes.
+-   The `body-type` dev console lists the steps that a message has reached, per route, with their types, kinds and formats. `varied=true` keeps only the steps reached with more than one type or format, and `filter` selects the routes.
     
 -   Over JMX, each processor has the `BodyTypes` and `BodyKinds` attributes, and each route counts its steps reached with more than one type (`VariedBodyTypes`) and with bodies of more than one kind (`MixedBodyKinds`).
     

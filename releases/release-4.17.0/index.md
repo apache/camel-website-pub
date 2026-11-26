@@ -283,7 +283,7 @@ Upgrade Artemis to 2.43+
 
 Remove lombok from camel-milvius
 
-### Improvement (45)
+### Improvement (46)
 
 [CAMEL-22807](https://issues.apache.org/jira/browse/CAMEL-22807)
 
@@ -456,6 +456,10 @@ Undertow "null header error" on response if there is an invalid character in the
 [CAMEL-22272](https://issues.apache.org/jira/browse/CAMEL-22272)
 
 camel-jbang - Make it easier to export and have hawtio ready to use
+
+[CAMEL-22039](https://issues.apache.org/jira/browse/CAMEL-22039)
+
+camel-jbang - Using kamelets it should be possible to specify the catalog
 
 [CAMEL-20455](https://issues.apache.org/jira/browse/CAMEL-20455)
 

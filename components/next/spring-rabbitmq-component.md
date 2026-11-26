@@ -103,7 +103,7 @@ Enum values:
  | direct | String |
 | **deadLetterQueue** (consumer) | The name of the dead letter queue. |  | String |
 | **deadLetterRoutingKey** (consumer) | The routing key for the dead letter exchange. |  | String |
-| **maximumRetryAttempts** (consumer) | How many times a Rabbitmq consumer will retry the same message if Camel failed to process the message. | 5 | int |
+| **maximumRetryAttempts** (consumer) | How many times a Rabbitmq consumer will retry the same message if Camel failed to process the message. The first try is not counted, so 5 means up to 6 tries. | 5 | int |
 | **rejectAndDontRequeue** (consumer) | Whether a Rabbitmq consumer should reject the message without requeuing. This enables failed messages to be sent to a Dead Letter Exchange/Queue, if the broker is so configured. | true | boolean |
 | **retryDelay** (consumer) | Delay in msec a Rabbitmq consumer will wait before redelivering a message that Camel failed to process. | 1000 | int |
 | **concurrentConsumers** (consumer (advanced)) | The number of consumers. | 1 | int |
@@ -182,7 +182,7 @@ Enum values:
 
  | direct | String |
 | **deadLetterQueue** (common) | The name of the dead letter queue. |  | String |
-| **deadLetterRoutingKey** (common) | The routing key for the dead letter exchange. |  | String |
+| **deadLetterRoutingKey** (common) | The routing key for the dead letter exchange (the x-dead-letter-routing-key of the consumer queue). An auto-declared deadLetterQueue is bound to the dead letter exchange with this routing key: it is required for a direct or topic dead letter exchange, and not needed for a fanout or headers one. |  | String |
 | **disableReplyTo** (common) | Specifies whether Camel ignores the ReplyTo header in messages. If true, Camel does not send a reply back to the destination specified in the ReplyTo header. You can use this option if you want Camel to consume from a route and you do not want Camel to automatically send back a reply message because another component in your code handles the reply message. You can also use this option if you want to use Camel as a proxy between different message brokers and you want to route message from one system to another. | false | boolean |
 | **queues** (common) | The queue(s) to use for consuming or producing messages. Multiple queue names can be separated by comma. If none has been configured then Camel will generate an unique id as the queue name. |  | String |
 | **routingKey** (common) | The value of a routing key to use. Default is empty which is not helpful when using the default (or any direct) exchange, but fine if the exchange is a headers exchange for instance. |  | String |
@@ -229,7 +229,7 @@ Enum values:
 
  | direct | String |
 | **exclusive** (consumer) | Set to true for an exclusive consumer. | false | boolean |
-| **maximumRetryAttempts** (consumer) | How many times a Rabbitmq consumer will try the same message if Camel failed to process the message (The number of attempts includes the initial try). | 5 | int |
+| **maximumRetryAttempts** (consumer) | How many times a Rabbitmq consumer will retry the same message if Camel failed to process the message. The first try is not counted, so 5 means up to 6 tries. | 5 | int |
 | **noLocal** (consumer) | Set to true for an no-local consumer. | false | boolean |
 | **rejectAndDontRequeue** (consumer) | Whether a Rabbitmq consumer should reject the message without requeuing. This enables failed messages to be sent to a Dead Letter Exchange/Queue, if the broker is so configured. | true | boolean |
 | **retryDelay** (consumer) | Delay in millis a Rabbitmq consumer will wait before redelivering a message that Camel failed to process. | 1000 | int |

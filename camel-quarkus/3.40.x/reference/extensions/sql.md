@@ -46,7 +46,7 @@ The Camel SQL component will automatically resolve the `DataSource` bean from th
 
 #### Zero configuration with Quarkus Dev Services
 
-In dev and test mode you can take advantage of [Configuration Free Databases](https://quarkus.io/guides/datasource#dev-services-configuration-free-databases). The Camel SQL component will be automatically configured to use a `DataSource` that points to a local containerized instance of the database matching the JDBC driver type that you have selected.
+In dev and test mode you can take advantage of [Configuration Free Databases](https://quarkus.io/guides/datasource#dev-services). The Camel SQL component will be automatically configured to use a `DataSource` that points to a local containerized instance of the database matching the JDBC driver type that you have selected.
 
 ### SQL scripts
 

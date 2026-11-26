@@ -102,7 +102,14 @@ The data format does not validate the XML against the schema: use the [Validator
 
 The schema is configuration of the route and so is trusted. Even so, the schema, the WSDL and every document they import or include are parsed with DOCTYPE declarations refused and external entities and XInclude turned off. `xs:import` and `xs:include` are resolved relative to the document that has them, and are only followed to resources with the same scheme as the `schema` option: a schema loaded from `https:` cannot pull in a `file:` or `classpath:` resource.
 
-The message XML is read with StAX with DTDs and external entities turned off, and a document with a DOCTYPE is refused. Nothing from the message is evaluated. The nesting of elements is limited (512 levels, or less when the XML parser of the JVM has a lower limit). The size of a message is otherwise limited by the route.
+The message XML is read with StAX with DTDs and external entities turned off, and a document with a DOCTYPE is refused. Nothing from the message is evaluated. The size of a message is otherwise limited by the route.
+
+The nesting of the elements that the data format maps is limited to 512 levels in both directions, and a message nested deeper fails with an `IllegalArgumentException` (unknown content skipped with `ignoreUnknown` is not counted). Two other limits can be lower:
+
+-   The XML parser: the parser of the JDK stops at `jdk.xml.maxElementDepth`, which is 100 on JDK 25 (no limit on JDK 21). Woodstox, which CXF brings, allows more than 512.
+    
+-   The stack of the thread: each level of nesting takes some of it. The default stack of the JVM (1 MB or more) normally holds 512 levels, but a stack lowered with `-Xss` (such as `-Xss256k`) holds far fewer. A message nested deeper than the stack holds fails with an `IllegalArgumentException` that says the level the conversion reached.
+    
 
 ## Usage
 
@@ -244,6 +251,19 @@ from("direct:request")
         - marshal:
             xsdJson:
               schema: classpath:orders.wsdl
+```
+
+## Samples
+
+The Camel CLI writes a sample of each message of a WSDL, as XML and as JSON in the form of this data format, with `camel generate wsdl orders.wsdl --samples`. See [Camel CLI projects](../../../manual/camel-jbang-projects.md).
+
+From Java, `org.apache.camel.dataformat.xsdjson.XsdJsonSamples` gives the same samples for any global element of a schema. Every element and attribute has a value of its type (the first value of an enumeration, a date for `xs:date`, and so on), a repeating element has one item, and of an `xs:choice` only the first member is filled in. A value does not follow the other facets of its type, such as a pattern or a length.
+
+```java
+try (XsdJsonSamples samples = new XsdJsonSamples(camelContext, "classpath:orders.wsdl")) {
+    String json = samples.json("getOrder");
+    String xml = samples.xml("getOrder");
+}
 ```
 
 ## Dependencies

@@ -34,9 +34,6 @@ Check the [User guide](../../user-guide/index.md) for more information about wri
 
 ### Native mode limitations
 
-> **Important**
-> Due to an issue in GraalVM / Mandrel 23.1.x, you **must** build your native application with the [`--report-unsupported-elements-at-runtime`](https://quarkus.io/guides/all-config#quarkus-core_quarkus-native-report-errors-at-runtime) option. You can do this by adding the following configuration to `application.properties`.
-
 Compilation of Groovy expressions is made with static compilation enabled. Which means that the types used in your expressions must be known at compile time. Please refer to the [Groovy documentation for more details](https://docs.groovy-lang.org/latest/html/documentation/core-semantics.html#static-type-checking).
 
 This primarily impacts the customization of the Groovy Shell and the handling of exchange information. In native mode, customizing the Groovy Shell and accessing the following exchange variables will not function as expected.

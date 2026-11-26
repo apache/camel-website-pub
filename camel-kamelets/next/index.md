@@ -4,13 +4,19 @@ Index of Camel Kamelets documentation pages.
 
 # Kamelet Catalog
 
+## User guide
+
+A Kamelet is a ready-made piece of a route that reads from a system, writes to one, or changes the message. Read [Using Kamelets](using.md) for how to use one in a route, set its options, and add what it needs to your project.
+
 ## Kamelet specification
 
 Kamelets were originally born for Kubernetes and they have eventually moved to be used as Camel core resources. Its specification is a [Kubernetes CRD specification](apis/spec.md). You can use it in your project by using Maven dependency `org.apache.camel.kamelets:camel-kamelets-crds`.
 
 ## Development guide
 
-Kamelets are extensible components. Look at the guide and learn [how to develop a new Kamelet](development.md), and [how to document it](documenting.md) for people and AI assistants that do not know Camel.
+Kamelets are extensible components. Look at the guide and learn [how to develop a new Kamelet](development.md), [how to document it](documenting.md) for people and AI assistants that do not know Camel, and [how to test it](testing.md).
+
+To see several Kamelets work together, read how to [ask questions about your own documents](ask-your-documents.md) with Elasticsearch and an AI model.
 
 ## Compatibility Matrix
 
@@ -23,15 +29,19 @@ Compatibility between Kamelets catalog and Camel core
 
 This page contains the default Apache Camel Kamelets catalog.
 
-Consult the Kamelets User Guide for information about how to use these.
+Consult the [user guide](using.md) for information about how to use these.
 
 **We love contributions for this catalog**: you can follow the Kamelets Developer Guide for information on how to create new Kamelets and contribute them to the official [github.com/apache/camel-kamelets](https://github.com/apache/camel-kamelets/) repository.
+
+[Ask questions about your own documents](ask-your-documents.md)
 
 [Camel Kamelets API](apis/spec.md)
 
 [Camel Kamelets API](apis/spec.md)
 
 [Documenting a Kamelet](documenting.md)
+
+ [![ai tool source](_images/kamelets/ai-tool-source.svg) AI Tool Source](ai-tool-source.html)
 
  [![avro deserialize action](_images/kamelets/avro-deserialize-action.svg) Avro Deserialize Action](avro-deserialize-action.html)
 
@@ -165,6 +175,12 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![databricks source](_images/kamelets/databricks-source.svg) Databricks Source](databricks-source.html)
 
+ [![debezium mysql source](_images/kamelets/debezium-mysql-source.svg) Debezium MySQL Source](debezium-mysql-source.html)
+
+ [![debezium postgresql source](_images/kamelets/debezium-postgresql-source.svg) Debezium PostgreSQL Source](debezium-postgresql-source.html)
+
+ [![debezium sqlserver source](_images/kamelets/debezium-sqlserver-source.svg) Debezium SQL Server Source](debezium-sqlserver-source.html)
+
  [![delay action](_images/kamelets/delay-action.svg) Delay Action](delay-action.html)
 
  [![dns dig action](_images/kamelets/dns-dig-action.svg) DNS DIG Action](dns-dig-action.html)
@@ -182,6 +198,8 @@ Consult the Kamelets User Guide for information about how to use these.
  [![drop headers action](_images/kamelets/drop-headers-action.svg) Drop Headers Action](drop-headers-action.html)
 
  [![elasticsearch index sink](_images/kamelets/elasticsearch-index-sink.svg) ElasticSearch Index Sink](elasticsearch-index-sink.html)
+
+ [![elasticsearch search action](_images/kamelets/elasticsearch-search-action.svg) ElasticSearch Search Action](elasticsearch-search-action.html)
 
  [![exec sink](_images/kamelets/exec-sink.svg) Exec Sink](exec-sink.html)
 
@@ -365,13 +383,21 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![ogcapi features action](_images/kamelets/ogcapi-features-action.svg) OGC Api Feature Get Item Action](ogcapi-features-action.html)
 
+ [![openai chat action](_images/kamelets/openai-chat-action.svg) OpenAI Chat Action](openai-chat-action.html)
+
  [![opensearch index sink](_images/kamelets/opensearch-index-sink.svg) OpenSearch Index Sink](opensearch-index-sink.html)
+
+ [![opensearch search action](_images/kamelets/opensearch-search-action.svg) OpenSearch Search Action](opensearch-search-action.html)
 
  [![oracle database sink](_images/kamelets/oracle-database-sink.svg) Oracle Database Sink](oracle-database-sink.html)
 
  [![oracle database source](_images/kamelets/oracle-database-source.svg) Oracle Database Source](oracle-database-source.html)
 
  [![pdf action](_images/kamelets/pdf-action.svg) PDF Action](pdf-action.html)
+
+ [![pgp decrypt action](_images/kamelets/pgp-decrypt-action.svg) PGP Decrypt Action](pgp-decrypt-action.html)
+
+ [![pgp encrypt action](_images/kamelets/pgp-encrypt-action.svg) PGP Encrypt Action](pgp-encrypt-action.html)
 
  [![postgresql sink](_images/kamelets/postgresql-sink.svg) PostgreSQL Sink](postgresql-sink.html)
 
@@ -491,14 +517,24 @@ Consult the Kamelets User Guide for information about how to use these.
 
  [![webhook source](_images/kamelets/webhook-source.svg) Webhook Source](webhook-source.html)
 
+ [![websocket sink](_images/kamelets/websocket-sink.svg) WebSocket Sink](websocket-sink.html)
+
+ [![websocket source](_images/kamelets/websocket-source.svg) WebSocket Source](websocket-source.html)
+
  [![xj identity action](_images/kamelets/xj-identity-action.svg) XJ Identity Action](xj-identity-action.html)
 
  [![xj template action](_images/kamelets/xj-template-action.svg) XJ Template Action](xj-template-action.html)
 
  [![xml schema validator action](_images/kamelets/xml-schema-validator-action.svg) XML Schema Validator Action](xml-schema-validator-action.html)
 
+ [![xpath filter action](_images/kamelets/xpath-filter-action.svg) XPath Filter Action](xpath-filter-action.html)
+
  [![xslt action](_images/kamelets/xslt-action.svg) XSLT Action](xslt-action.html)
 
 [Kamelets Developer Guide](development.md)
 
 [Security Model](security-model.md)
+
+[Testing a Kamelet](testing.md)
+
+[Using Kamelets](using.md)

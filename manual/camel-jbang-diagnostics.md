@@ -201,7 +201,11 @@ A step reached with more than one type is a part of the route that is dynamic, s
 camel cmd route-structure myApp --varied
 ```
 
-The JSON output (`--json`) has the types and kinds of each step as `bodyTypes` and `bodyKinds`. The route console of a running integration counts them per route: `variedBodyTypes` and `mixedBodyKinds` (the steps that need attention). See [Message History](../components/4.22.x/eips/message-history.md) for what the kinds mean.
+When a payload (text, bytes, a stream or a file) has a `Content-Type` header, its format follows the type, by the names of the catalog: `json`, `xml`, `csv`, `yaml`, `text` or `binary`, or the media type as it is for any other. For example `body: byte[] · json` after a Kamelet with the `json` data type, where the type alone does not tell what the bytes hold. A step reached with more than one format, such as `body: String · xml | csv`, is shown by `--varied` too.
+
+A step that calls a Kamelet shows the data type the Kamelet takes, which Camel turns the body into before the Kamelet sees it: `body: LinkedHashMap → json` for `postgresql-sink`, whose data type transformer writes the `Map` as JSON, or `body: → json` before a message has reached it. A body the transformer does not take, as the catalog says, reads `→ text (text-plain does not take it)`. The Kamelets are looked up in the project directory, where the command runs, and in the Kamelet catalog the integration runs (`camel run --kamelets-version`).
+
+The JSON output (`--json`) has the types, kinds and formats of each step as `bodyTypes`, `bodyKinds` and `bodyFormats`, and the data type of the Kamelet a step calls as `kameletInput` (`dataType`, `transformer`, `description`, `carriers` and `takesBody`). The route console of a running integration counts them per route: `variedBodyTypes` and `mixedBodyKinds` (the steps that need attention). See [Message History](../components/4.22.x/eips/message-history.md) for what the kinds mean.
 
 ### Route dump
 

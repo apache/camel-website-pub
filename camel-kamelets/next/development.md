@@ -149,32 +149,32 @@ spec:
         type: string
         format: password
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password (4)
+        - urn:camel:group:credentials (4)
       apiKeySecret:
         title: API Key Secret
         description: The API Key Secret from the Twitter application in the developer portal
         type: string
         format: password
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password
+        - urn:camel:group:credentials
       accessToken:
         title: Access Token
         description: The Access Token from the Twitter application in the developer portal
         type: string
         format: password
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password
+        - urn:camel:group:credentials
       accessTokenSecret:
         title: Access Token Secret
         description: The Access Token Secret from the Twitter application in the developer portal
         type: string
         format: password
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password
+        - urn:camel:group:credentials
 # ...
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>General information about the Kamelet itself in textual format</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>List of required parameters</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>A specification for each one of the parameters (flat structure, no nested options allowed)</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Optional graphical customization for a specific UI (OpenShift Console)</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>General information about the Kamelet itself in textual format</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>List of required parameters</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>A specification for each one of the parameters (flat structure, no nested options allowed)</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>A secret is marked <code>format: password</code> and <code>urn:camel:group:credentials</code>, so tools hide its value and group it with the other credentials</td></tr></tbody></table>
 
 This is all you need to create a Kamelet so that other users can leverage it. There are a few things remaining, like setting information about the generated objects and other metadata (like the icon and the provider and you’re done). The final Kamelet can look like the following:
 
@@ -217,28 +217,28 @@ spec:
         type: string
         format: password
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password
+        - urn:camel:group:credentials
       apiKeySecret:
         title: API Key Secret
         description: The API Key Secret from the Twitter application in the developer portal
         type: string
         format: password
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password
+        - urn:camel:group:credentials
       accessToken:
         title: Access Token
         description: The Access Token from the Twitter application in the developer portal
         type: string
         format: password
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password
+        - urn:camel:group:credentials
       accessTokenSecret:
         title: Access Token Secret
         description: The Access Token Secret from the Twitter application in the developer portal
         type: string
         format: password
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password
+        - urn:camel:group:credentials
   dataTypes: (2)
     out:
       default: json
@@ -259,56 +259,36 @@ spec:
       - to: "kamelet:sink"
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>An icon with an appropriate license, better using svg+base64 URL encoding. You can encode icons using services like <a href="https://dopiaza.org/tools/datauri/index.php">this one</a></td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>The dataTypes section indicates that the Kamelet is going to produce JSON data as a default. The Kamelet is able to define multiple data types for in/out/error. The user will then be able to choose on of the data types in a Pipe when referencing the Kamelet.</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>The previous YAML flow</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>An icon with an appropriate license, better using svg+base64 URL encoding. You can encode icons using services like <a href="https://dopiaza.org/tools/datauri/index.php">this one</a></td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>The <code>dataTypes</code> section describes the body the Kamelet gives: JSON. See <a href="#kamelet-data-types">Kamelet data types</a>.</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>The previous YAML flow</td></tr></tbody></table>
 
-The Kamelet can be shared on the Catalog and or created on a Kubernetes cluster to let users use it.
+The Kamelet can now be shared on the catalog, or kept with the routes that use it.
 
 ### Trying it out
 
-A simple way to try it out is to apply it on a cluster, together with a simple binding. Assuming that you have a Kubernetes cluster and you’re connected to a namespace where the Camel K operator can act, just create the Kamelet:
+Write a route that uses the Kamelet, and run both files with the [Camel CLI](../../manual/camel-jbang.md). The secrets are read from `application.properties` in the same directory, so they stay out of the route:
 
-```none
-kubectl apply -f twitter-search-source.kamelet.yaml
-```
-
-Then you can create a binding like the following one to try it out:
-
-twitter-search-source-binding.yaml
+twitter-search.camel.yaml
 
 ```yaml
-apiVersion: camel.apache.org/v1
-kind: Pipe
-metadata:
-  name: twitter-search-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: twitter-search-source
-    properties:
-      keywords: "Apache Camel"
-      apiKey: "your own"
-      apiKeySecret: "your own"
-      accessToken: "your own"
-      accessTokenSecret: "your own"
-  sink:
-    uri: "log:info"
+- route:
+    from:
+      uri: kamelet:twitter-search-source
+      parameters:
+        keywords: "Apache Camel"
+        apiKey: "{{twitter.apiKey}}"
+        apiKeySecret: "{{twitter.apiKeySecret}}"
+        accessToken: "{{twitter.accessToken}}"
+        accessTokenSecret: "{{twitter.accessTokenSecret}}"
+      steps:
+        - to:
+            uri: log:info
 ```
-
-This can be created using:
 
 ```none
-kubectl apply -f twitter-search-source-binding.yaml
+camel run twitter-search.camel.yaml twitter-search-source.kamelet.yaml
 ```
 
-Once created, you can see the logs of the binding using:
-
-```none
-kamel logs twitter-search-source-binding
-```
-
-If everything goes right, you should get some tweets in the logs after the integration is created.
+A Kamelet file given on the command line is used instead of the one in the catalog of the same name. If everything goes right, you should get some tweets in the logs.
 
 ## Kamelet data types
 
@@ -316,7 +296,7 @@ A Kamelet usually encapsulates a specific functionality and serves a very opinio
 
 In order to enhance the Kamelet interoperability with other components the Kamelet may specify one to many data types for input, output and error scenarios. The declaration of supported Kamelet data types helps users to incorporate the Kamelet into their specific applications.
 
-When referencing a Kamelet users may choose from a list of supported input/output data types in order to gain best fit for the individual use case.
+A route that uses the Kamelet gets the default data type, and may convert the body into another one of the declared types.
 
 Following from that each Kamelet may declare all supported input/output data types each of them providing additional information like header names, content type, content schema and so on.
 
@@ -341,16 +321,18 @@ spec:
           description: Some specific header
       types: (4)
         application-json:
+          format: application-json (5)
           description: Output type as Json object
           mediaType: application/json
-          schema: (5)
+          schema: (6)
             type: object
             description: The Json object representing the my-sample source output
             properties:
               # ...
-          dependencies: (6)
+          dependencies: (7)
             - "camel:jackson3"
         text-plain:
+          format: text-plain
           description: Output type as plain text
           mediaType: text/plain
   template:
@@ -360,84 +342,72 @@ spec:
         - to: "kamelet:sink"
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Declared output data types of this Kamelet source</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>The output data type used by default</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Declaration of output headers with header name, type and description information</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>List of supported output types</td></tr><tr><td><i class="conum" data-value="5"></i><b>5</b></td><td>Optional Json schema describing the <code>application-json</code> data type</td></tr><tr><td><i class="conum" data-value="6"></i><b>6</b></td><td>Optional list of additional dependencies that are required by the data type.</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Declared output data types of this Kamelet source</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>The output data type used by default</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Declaration of output headers with header name, type and description information</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>List of supported output types</td></tr><tr><td><i class="conum" data-value="5"></i><b>5</b></td><td>The Camel data type that converts the body, as <code>camel catalog transformer</code> lists them. A type without a <code>format</code> converts nothing.</td></tr><tr><td><i class="conum" data-value="6"></i><b>6</b></td><td>Optional Json schema describing the <code>application-json</code> data type</td></tr><tr><td><i class="conum" data-value="7"></i><b>7</b></td><td>Optional list of additional dependencies that are required by the data type.</td></tr></tbody></table>
 
 The sample Kamelet above declares two supported output data types `application-json` and `text-plain`. Each declared data type is backed by a specific Apache Camel transformer implementation that is capable of producing the specific output. The respective transformer implementation may be provided by the Kamelet as a utility extension or by the underlying Apache Camel component.
 
-As a result the user may now choose the output data type when referencing the Kamelet in a binding.
+The default data type runs on every message: Camel converts the body of each message the source gives into `application-json` before the route gets it. A `default` is therefore not documentation, and a wrong one breaks messages; see [Documenting a Kamelet](documenting.md) for when to declare one.
 
-my-sample-source-binding.yaml
+A route that needs one of the other declared types converts the body with the `data-type-action` Kamelet, right after the source:
 
-```yaml
-apiVersion: camel.apache.org/v1
-kind: Pipe
-metadata:
-  name: my-sample-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: my-sample-source
-    data-types: (1)
-      out:
-        format: text-plain (2)
-  sink:
-    uri: "log:info"
-```
-
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Chose the output data type on the Kamelet source reference in a Pipe.</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Select <code>text-plain</code> as an output data type of the <code>my-sample-source</code> Kamelet.</td></tr></tbody></table>
-
-The very same concept of data types can also be used on Kamelet sinks and input data types. As soon as the user chooses a specific input data type for a Kamelet the Pipe processing will try to resolve a matching transformer implementation and apply its logic.
-
-> **Note**
-> by default, the operator will use a `data-type-action` Kamelet that has to be an available Kamelet in the catalog. This is provided out of the box installing bundled Apache Kamelet catalog. It will fail if the Kamelet is not available. You can also override the Kamelet action to use adding the `camel.apache.org/kamelet.data.type` annotation to the Pipe specification.
-
-You may also use the `data-type-action` Kamelet in your Pipe binding in order to apply a specific data type transformation at any step.
-
-my-sample-source-binding.yaml
+my-sample.camel.yaml
 
 ```yaml
-apiVersion: camel.apache.org/v1
-kind: Pipe
-metadata:
-  name: my-sample-source-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: my-sample-source
-    data-types:
-      out:
-        format: application-json (1)
-  steps:
-    - ref:
-        kind: Kamelet
-        apiVersion: camel.apache.org/v1
-        name: json-deserialize-action (2)
-    - ref:
-        kind: Kamelet
-        apiVersion: camel.apache.org/v1
-        name: resolve-pojo-schema-action (3)
-      properties:
-        mimeType: "avro/binary"
-        schema: >
-          { "name": "User", "type": "record", "namespace": "demo.kamelets", "fields": [{ "name": "id", "type": "string" }, { "name": "firstname", "type": "string" }, { "name": "lastname", "type": "string" }, { "name": "age", "type": "int" }] }
-    - ref:
-        kind: Kamelet
-        apiVersion: camel.apache.org/v1
-        name: data-type-action (4)
-      properties:
-        scheme: "camel"
-        format: "avro-binary"
-  sink:
-    uri: "log:info"
+- route:
+    from:
+      uri: kamelet:my-sample-source
+      steps:
+        - to:
+            uri: kamelet:data-type-action
+            parameters:
+              format: text-plain (1)
+        - to:
+            uri: log:info
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Chose the output data <code>application-json</code> type on the Kamelet source.</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Deserialize the Json object with <code>json-deserialize-action</code>.</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Declare a Avro schema</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Use the <code>data-type-action</code> Kamelet to transform the Json object into Avro using the formerly declared schema</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Convert the body into the <code>text-plain</code> data type of the <code>my-sample-source</code> Kamelet.</td></tr></tbody></table>
 
-The Pipe in the sample above uses a combination of Kamelet output data type, Json deserialization and Avro binary data type to transform the Kamelet source output.
+A data type made for one system has a scheme, such as `aws2-s3:application-cloudevents` of `aws-s3-source`. The `data-type-action` Kamelet then takes the scheme and the format apart: `scheme: aws2-s3` and `format: application-cloudevents`.
+
+The very same concept of data types can also be used on Kamelet sinks and input data types: the `in` default of a sink converts the body it receives, and a route may put `data-type-action` before the sink to convert the body into another one of its types.
+
+Data types can also be chained with action Kamelets. This route turns the JSON of a source into Avro binary data:
+
+json-to-avro.camel.yaml
+
+```yaml
+- route:
+    from:
+      uri: kamelet:timer-source
+      parameters:
+        period: 5000
+        contentType: application/json
+        message: '{"id": "1", "firstname": "Ann", "lastname": "Lee", "age": 32}'
+      steps:
+        - to:
+            uri: kamelet:json-deserialize-action (1)
+        - to:
+            uri: kamelet:resolve-pojo-schema-action (2)
+            parameters:
+              mimeType: avro/binary
+              schema: '{"name": "User", "type": "record", "namespace": "demo.kamelets", "fields": [{"name": "id", "type": "string"}, {"name": "firstname", "type": "string"}, {"name": "lastname", "type": "string"}, {"name": "age", "type": "int"}]}'
+        - to:
+            uri: kamelet:data-type-action (3)
+            parameters:
+              format: avro-binary
+        - log:
+            message: "${header.Content-Type}: ${body.length} bytes"
+```
+
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Parse the JSON text with <code>json-deserialize-action</code>.</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Declare an Avro schema.</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>Use the <code>data-type-action</code> Kamelet to turn the parsed JSON into Avro binary data, with the schema declared before.</td></tr></tbody></table>
+
+The Avro data types are in `camel-jackson3-avro`, which the Camel CLI does not add by itself here, so give it on the command line:
+
+```none
+camel run json-to-avro.camel.yaml --dep=camel:jackson3-avro
+```
+
+Each message is then logged as `avro/binary: 11 bytes`.
 
 All referenced data types are backed by a specific transformer implementation either provided by the Kamelet itself or by pure Apache Camel functionality.
 
@@ -536,7 +506,7 @@ public class Earthquake extends RouteBuilder {
 
 <table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>We do a timed poll from the API because there’s no way to consume it direcly</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>Look at <a href="https://earthquake.usgs.gov/fdsnws/event/1/" class="bare">https://earthquake.usgs.gov/fdsnws/event/1/</a> for more information about the API. We’re using the <a href="https://en.wikipedia.org/wiki/GeoJSON">GeoJSON</a> format</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>The integration ends in a "log:info" endpoint, because we just want to see if we can contact the API and get some results back</td></tr></tbody></table>
 
-In order to run the integration above, if you have a Kubernetes cluster with Camel K installed, you can rely on that using `kamel run Earthquake.java`, but there’s a simpler solution that just requires your own machine:
+Run the integration above on your own machine with the Camel CLI:
 
 ```none
 camel run Earthquake.java
@@ -1008,60 +978,36 @@ spec:
             - to: "kamelet:sink"
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Add an icon with an appropriate license, better using svg+base64 URL encoding. You can encode icons using services like <a href="https://dopiaza.org/tools/datauri/index.php">this one</a></td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>This marks the Kamelet as dependant on Quarkus since we’re specifying explicit dependencies on Quarkus artifacts in the <code>spec</code> → <code>dependencies</code> section</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>The types section indicates that the Kamelet is going to produce JSON data by default. The Kamelet is able to define multiple data types for in/out/error. The user will then be able to choose on of the data types in a Pipe when referencing the Kamelet.</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Dependencies that we previously specified in the modeline options should be expressed now in the Kamelet spec</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Add an icon with an appropriate license, better using svg+base64 URL encoding. You can encode icons using services like <a href="https://dopiaza.org/tools/datauri/index.php">this one</a></td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>This marks the Kamelet as dependant on Quarkus since we’re specifying explicit dependencies on Quarkus artifacts in the <code>spec</code> → <code>dependencies</code> section</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>The types section describes the body the Kamelet gives: JSON. See <a href="#kamelet-data-types">Kamelet data types</a>.</td></tr><tr><td><i class="conum" data-value="4"></i><b>4</b></td><td>Dependencies that we previously specified in the modeline options should be expressed now in the Kamelet spec</td></tr></tbody></table>
 
 The Kamelet is now ready to be used!
 
 ### Trying it out
 
-You can install the Kamelet on your Kubernetes instance to see if it can be picked up and used by the Camel K runtime.
+Write a route that uses the Kamelet:
 
-We assume that you’re connected to a Kubernetes cluster and working on a namespace where the Camel K operator is allowed to materialize integrations.
-
-To create the Kamelet, you can execute:
-
-```none
-kubectl apply -f earthquake-source.kamelet.yaml
-```
-
-If the Kamelet is valid, this will result in the Kamelet resource being created in the current namespace.
-
-To check if it works, you can create a simple binding:
-
-earthquake-source-binding.yaml
+earthquake.camel.yaml
 
 ```yaml
-apiVersion: camel.apache.org/v1
-kind: Pipe
-metadata:
-  name: earthquake-source-binding
-spec:
-  source:
-    ref: (1)
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: earthquake-source
-    properties:
-      period: 10000 (2)
-  sink:
-    uri: "log:info" (3)
+- route:
+    from:
+      uri: kamelet:earthquake-source
+      parameters:
+        period: 10000 (1)
+      steps:
+        - to:
+            uri: log:info (2)
 ```
 
-<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>Kubernetes reference to the previously created Kamelet</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>We redefine the period to speed it up, otherwise the default is used (60000)</td></tr><tr><td><i class="conum" data-value="3"></i><b>3</b></td><td>We just sink into "log:info", but we’re free to change it to anything else</td></tr></tbody></table>
+<table><tbody><tr><td><i class="conum" data-value="1"></i><b>1</b></td><td>We redefine the period to speed it up, otherwise the default is used (60000)</td></tr><tr><td><i class="conum" data-value="2"></i><b>2</b></td><td>We just log the events, but we’re free to send them anywhere else</td></tr></tbody></table>
 
 > **Note**
 > The developer write Camel DSL to make a Kamelet work, but the end-user uses it declaratively without any idea of the complexity of the development process behind it
 
-Creating this resource will tell the operator to materialize the binding using an integration:
+Run the route together with the Kamelet with the [Camel CLI](../../manual/camel-jbang.md):
 
 ```none
-kubectl apply -f earthquake-source-binding.yaml
-```
-
-We can check the logs of the integration using:
-
-```none
-kamel logs earthquake-source-binding
+camel run earthquake.camel.yaml earthquake-source.kamelet.yaml
 ```
 
 If everything went well, you should see the events in the log.
@@ -1118,7 +1064,7 @@ telegram.yaml
 The end-to-end integration above should be good as initial scaffolding for the integration. We can run it using the following command:
 
 ```none
-kamel run telegram.yaml -p authorizationToken=the-token-you-got-from-bot-father
+camel run telegram.yaml --prop authorizationToken=the-token-you-got-from-bot-father
 ```
 
 If everything went well, you should get a "Hello" message into your phone every 5 seconds.
@@ -1259,7 +1205,7 @@ spec:
         description: The token to access your bot on Telegram. You you can obtain it from the Telegram @botfather.
         type: string
         x-descriptors:
-        - urn:alm:descriptor:com.tectonic.ui:password
+        - urn:camel:group:credentials
       chatId:
         title: Chat ID
         description: The Chat ID where messages should be sent by default
@@ -1334,187 +1280,55 @@ spec:
 
 To try a sink Kamelet, we should feed it with some data. The best way to do it is to do it directly with another Kamelet.
 
-So, for example, to send a text message to a chat, we may create a binding like the following:
+So, for example, to send a text message to a chat, we may write a route like the following:
 
-telegram-text-binding.yaml
+telegram-text.camel.yaml
 
 ```yaml
-apiVersion: camel.apache.org/v1
-kind: Pipe
-metadata:
-  name: telegram-text-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: timer-source
-    properties:
-      period: 10000
-      message: Hello first Kamelet!
-  sink:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: telegram-sink
-    properties:
-      authorizationToken: "put-your-own"
-      chatId: "your-chat-id"
+- route:
+    from:
+      uri: kamelet:timer-source
+      parameters:
+        period: 10000
+        message: Hello first Kamelet!
+      steps:
+        - to:
+            uri: kamelet:telegram-sink
+            parameters:
+              authorizationToken: "{{telegram.authorizationToken}}"
+              chatId: "{{telegram.chatId}}"
 ```
 
-You can create the Kamelet with:
+Put the token and the chat ID in `application.properties`, and run the route with the Kamelet:
 
 ```none
-kubectl apply -f telegram-sink.kamelet.yaml
-```
-
-Then apply the binding with:
-
-```none
-kubectl apply -f telegram-text-binding.yaml
+camel run telegram-text.camel.yaml telegram-sink.kamelet.yaml
 ```
 
 If everything goes well, you should get a "Hello first Kamelet!" message in your phone every 10 seconds.
 
-To check if we can also receive pictures using the above Kamelet, we can create the following binding:
+To check if we can also send pictures using the above Kamelet, we can feed it with an image instead:
 
-telegram-text-binding.yaml
+telegram-image.camel.yaml
 
 ```yaml
-apiVersion: camel.apache.org/v1
-kind: Pipe
-metadata:
-  name: telegram-image-binding
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: http-source
-    properties:
-      url: "https://github.com/apache/camel/raw/7204aa132662ab6cb8e3c5afea8b9b0859eff0e8/docs/img/logo.png"
-      contentType: "image/png"
-      period: 10000
-  sink:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: telegram-sink
-    properties:
-      authorizationToken: "put-your-own"
-      chatId: "your-chat-id"
+- route:
+    from:
+      uri: kamelet:http-source
+      parameters:
+        url: "https://github.com/apache/camel/raw/7204aa132662ab6cb8e3c5afea8b9b0859eff0e8/docs/img/logo.png"
+        contentType: "image/png"
+        period: 10000
+      steps:
+        - to:
+            uri: kamelet:telegram-sink
+            parameters:
+              authorizationToken: "{{telegram.authorizationToken}}"
+              chatId: "{{telegram.chatId}}"
 ```
 
-This will create a new integration that forwards the Apache Camel logo to your phone every 10 seconds.
+This forwards the Apache Camel logo to your phone every 10 seconds.
 
 ## Testing
 
-The most obvious way to test a Kamelet is via an e2e tests that verifies if the Kamelet respects its specification.
-
-[Citrus](https://github.com/citrusframework/citrus) is the framework of choice for such e2e tests. Integration tests live under `tests/camel-kamelets-itest/src/test/resources/<feature>/`: each one is a Citrus `*.citrus.it.yaml` test that drives the Kamelet with [Camel CLI](../../manual/camel-jbang.md) — it runs a Camel `Pipe` that wires the Kamelet under test and then asserts the resulting behaviour.
-
-The building blocks of a test are:
-
--   a `Pipe` YAML that binds the Kamelet under test (a source is bound to a verifiable sink; a sink is fed by a source);
-    
--   a `*.citrus.it.yaml` test that runs the `Pipe` and verifies it;
-    
--   a `*IT.java` class that registers the resource folder with a Citrus test factory.
-    
-
-### A worked example
-
-The simplest sink to assert against is `log-sink`, whose output can be matched with a `logMessage`. The `log` suite tests it by feeding it with `timer-source`.
-
-First, the `Pipe` that wires the Kamelets together:
-
-log/log-sink-pipe.yaml
-
-```yaml
-apiVersion: camel.apache.org/v1
-kind: Pipe
-metadata:
-  name: log-sink-pipe
-spec:
-  source:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: timer-source
-    properties:
-      period: 10000
-      message: "{{message}}"
-  sink:
-    ref:
-      kind: Kamelet
-      apiVersion: camel.apache.org/v1
-      name: log-sink
-    properties:
-      loggerName: "test-log-sink"
-      showHeaders: false
-```
-
-Then the Citrus test that runs the `Pipe` and verifies the message reaches the sink:
-
-log/log-sink-pipe.citrus.it.yaml
-
-```yaml
-name: log-sink-pipe-test
-variables:
-  - name: "message"
-    value: "Hello from the log-sink test!"
-actions:
-  # Run the Pipe as a Camel CLI integration
-  - camel:
-      jbang:
-        run:
-          waitForRunningState: false
-          integration:
-            file: "log/log-sink-pipe.yaml"
-            systemProperties:
-              properties:
-                - name: "message"
-                  value: "${message}"
-
-  # Verify the message reaches the sink
-  - camel:
-      jbang:
-        verify:
-          integration: "log-sink-pipe"
-          logMessage: "${message}"
-```
-
-Finally, register the resource folder in a `*IT.java` factory method so JUnit runs it:
-
-CommonIT.java
-
-```java
-@CitrusTestFactory
-public Stream<DynamicTest> log() {
-    return CitrusTestFactorySupport.factory(TestLoader.YAML).packageScan("log");
-}
-```
-
-### Testing a source
-
-To test a **source**, put the Kamelet under test on the `source` side of the `Pipe` and bind it to a verifiable sink: `log-sink` when a log assertion is enough, or the Citrus HTTP server for a stricter check on the emitted payload — the `timer` and `earthquake` suites bind their source to an HTTP endpoint and assert the received request. When the source consumes from an external system (a broker, a cloud service, …​), start it with [Testcontainers](https://java.testcontainers.org/) through the matching Citrus module, as the `aws`, `kafka` and `mongodb` suites do.
-
-### Testing a sink
-
-To test a **sink**, feed it from a source that generates data — usually `timer-source` — and assert the effect the sink produced: a `logMessage`, an HTTP request received by the Citrus HTTP server, a row written into a Testcontainers database, and so on. The `log`, `http` and `slack` suites are good starting points.
-
-### Running the tests
-
-Run the whole integration suite from the repository root:
-
-```none
-mvn verify -pl :camel-kamelets-itest -Denable.integration.tests
-```
-
-or a single factory while iterating on one Kamelet:
-
-```none
-mvn verify -pl :camel-kamelets-itest -Denable.integration.tests -Dit.test=CommonIT#log
-```
-
-A Kamelet whose behaviour test passes should carry the `camel.apache.org/kamelet.verified: "true"` label.
+Every Kamelet should come with a test that runs it and checks what it does. How to write one, and how to run the tests, is in [Testing a Kamelet](testing.md).
