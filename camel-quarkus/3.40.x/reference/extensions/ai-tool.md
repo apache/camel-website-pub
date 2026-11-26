@@ -58,7 +58,7 @@ Arguments passed by the LLM are set as exchange headers (e.g. `${header.city}`).
 
 ### Schema, MCP hints and return direct
 
-Instead of `parameter.*` options, `argSchema` takes a raw JSON Schema, inline or as a resource such as `classpath:schemas/order.json`. The two are mutually exclusive. The schema needs an object root with at least one property in `properties`. Only the top-level properties are set as headers.
+Instead of `parameter.*` options, `argSchema` takes a raw JSON Schema, inline or as a resource such as `classpath:schemas/order.json`. The two are mutually exclusive. The schema needs an object root with at least one property in `properties`. Only the top-level properties are set as headers. In native mode, a `classpath:` schema must be added to the native image, e.g. `quarkus.native.resources.includes=schemas/order.json`.
 
 Further options (see the Camel `ai-tool` documentation for details):
 
@@ -68,6 +68,8 @@ Further options (see the Camel `ai-tool` documentation for details):
     
 -   `returnDirect` - AI producers that support it (such as `openai`) return the tool result to the caller without sending it back to the model. Also published as an MCP hint.
     
+
+`title` and the MCP hints are not passed to Quarkus LangChain4j AI services: their tool specification has only the name, description and parameters (`ToolSpecification.metadata()` is empty).
 
 ```java
 from("ai-tool:createOrder?tags=orders&title=Create order&returnDirect=true"
@@ -102,6 +104,8 @@ Camel agents (`langchain4j-agent` endpoints) receive registry tools only through
 -   It takes a single tag. A comma-separated list is not split.
     
 -   A blank tag fails the build (when Quarkus LangChain4j and `camel-langchain4j-agent` are present).
+    
+-   It only applies to `@RegisterAiService` interfaces. On any other class (such as a CDI bean calling the service) it has no effect and the build logs a warning.
     
 -   It has no effect on Camel agents (`langchain4j-agent` endpoints), which receive no tools from this bridge.
     

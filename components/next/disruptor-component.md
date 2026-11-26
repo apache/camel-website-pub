@@ -18,6 +18,8 @@ The Disruptor is implemented with the intention of mimicking the behavior and op
     
 -   The Disruptor requires its consumers (multicasted or otherwise) to be statically configured. Adding or removing consumers on the fly requires complete flushing of all pending exchanges in the Disruptor.
     
+-   While a Disruptor has no consumer, a reconfiguration (for example when its endpoint is added again) keeps the pending exchanges in a buffer for the first consumer. The queue can then hold more than `size` exchanges: `getRemainingCapacity()` does not count the buffered ones, and `getPendingExchangeCount()` does.
+    
 -   As a result of the reconfiguration: Data sent over a Disruptor is directly processed and 'gone' if there is at least one consumer, late joiners only get new exchanges published after they’ve joined.
     
 -   The `pollTimeout` option is not supported by the Disruptor component.

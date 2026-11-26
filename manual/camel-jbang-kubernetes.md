@@ -163,6 +163,8 @@ The application includes `camel-observability-services`, and the Deployment gets
 -   Quarkus: `/observe/health/live`, `/observe/health/ready`, `/observe/health/started`
     
 
+The metrics are at `/observe/metrics`. With the Prometheus Operator in the cluster, `--trait prometheus.enabled=true` creates a `PodMonitor` for them (see [Kubernetes Plugin Advanced Options](camel-jbang-kubernetes-advanced.html#_prometheus_trait)).
+
 ## Exposing HTTP endpoints
 
 When your routes consume HTTP (such as `platform-http` or the REST DSL), a Service is generated for the container port (`8080`) on service port `80`. To reach the application from outside the cluster, change the Service type or add an Ingress:
@@ -254,4 +256,6 @@ On Minikube the image is built with Docker straight into the Minikube Docker dae
 
 ## Advanced options
 
-[Kubernetes Plugin Advanced Options](camel-jbang-kubernetes-advanced.md) covers the trait options inherited from Camel K: the full container, Service, Ingress and OpenShift Route settings, running as a CronJob, Knative serving and eventing, the Jolokia port, mounts, and OpenAPI specs from ConfigMaps.
+`camel kubernetes traits` lists the traits, and `camel kubernetes traits <trait>` the options of one trait.
+
+[Kubernetes Plugin Advanced Options](camel-jbang-kubernetes-advanced.md) covers the trait options inherited from Camel K: the full container, Service, Ingress and OpenShift Route settings, running as a CronJob, Knative serving and eventing, the Jolokia port, Prometheus metrics, mounts, and OpenAPI specs from ConfigMaps.

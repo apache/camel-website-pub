@@ -174,6 +174,14 @@ A `throwException` step given an exception instance (`throwException(new MyExcep
 
 When a poll of a scheduled poll consumer (such as `file`, `ftp` or `scheduler`) fails with a `VirtualMachineError` (such as an `OutOfMemoryError` thrown by the poll, or by the route of the polled message, which does not catch it), the consumer stops polling until the route is restarted, with any scheduler and also with `scheduler.concurrentConsumers` greater than 1. Its health check flips to DOWN, with the error, and stays DOWN until the route is restarted. Previously, with the default scheduler, the scheduled task that ran the poll stopped polling, and the health check stayed UP; the Spring and Quartz schedulers kept running the task. Another `Error` of the poll (such as a `NoClassDefFoundError` of a client library) is now a failed poll, as an exception, and the consumer polls again; previously, with the default scheduler, it also ended the scheduled task. See the section "camel-core - a VirtualMachineError fails the exchange, and Camel does not recover from it".
 
+### camel-jms, camel-spring-rabbitmq - suspending or stopping a consumer waits at most shutdownAwaitTermination for its listener container
+
+Suspending or stopping a consumer of camel-jms (and of the components built on it, such as camel-activemq, camel-activemq6 and camel-amqp) or of camel-spring-rabbitmq now waits for its listener container to stop at most the `shutdownAwaitTermination` of the `ExecutorServiceManager` (10 seconds by default, at least 100 milliseconds), or until the waiting thread is interrupted, as the graceful shutdown does when its timeout elapses. camel-spring-rabbitmq waits the `shutdownTimeout` of the component (5 seconds by default), in which the listener container waits for the messages in progress, on top of that. camel-jms with `consumerType=Simple` and Spring’s `SyncTaskExecutor` as `taskExecutor` also waits as long as the route processes messages, as the JMS client does. Previously, it waited without bound when the broker did not answer: for the `callTimeout` of ActiveMQ Artemis (30 seconds by default), or for the `channelRpcTimeout` of the RabbitMQ client (10 minutes by default), past the shutdown timeout.
+
+When that time elapses, the consumer logs a WARN, the listener container is stopped and destroyed in the background, and the consumer creates a new listener container when it is resumed or started again. A stop that returns then no longer means that the listener container has released its connection. With camel-jms, the destroyed listener container ends its non-durable topic subscriptions: the messages published until the new listener container subscribes do not reach the consumer. A camel-jms suspend or stop from the thread that processes a message of the consumer (such as a route policy when an exchange is done) still stops the listener container on that thread, without this time limit.
+
+The stop of the listener container runs on a new thread pool of the component: `JmsStopListenerContainer` for camel-jms, and `SpringRabbitMQStopListenerContainer` for camel-spring-rabbitmq. camel-jms with `asyncStopListener=true` is unchanged. The `shutdownAwaitTermination` can be raised with `camelContext.getExecutorServiceManager().setShutdownAwaitTermination(…​)`; it is also the time that Camel waits for each thread pool to terminate when the CamelContext stops.
+
 ### camel-core - a to with an expression in its endpoint uri logs a WARN
 
 A `to` resolves its endpoint once, when the route starts, so `to("jms:queue:${header.queue}")` sends every message to one queue named by the text of the expression. Camel now logs a WARN for such a `to` when it creates the route, and the WARN says to use `toD`. The route works as before. Only the endpoint path is checked, not the options after the `?`. The components that evaluate their path for each message are left alone: `language`, the `:#${…​}` parameters of `sql`, and the components whose path option is marked `supportSimpleExpression` in their metadata, which now includes the template of `sql-stored` and the bucket name of `aws2-s3`.
@@ -251,6 +259,12 @@ Kamelet EIPs (`kamelet` with nested steps) with the same name and options used t
 
 In the Java DSL, `completionSize`, `completionTimeout` and `completionPredicate` of the Aggregate EIP, and `handled`, `continued` and `retryWhile` of `onException`, keep an expression made with `simple(…​)`, `header(…​)` or another expression builder as its language and text, as the EIPs that take an expression directly do. Each route created from a route template now has its own copy of the expression, so a template parameter in it, such as `completionSize(simple("{{size}}"))`, takes the value of that route: before, every route used the value of the first route created from the template. Route dumps and the JMX attributes of the aggregator (`CompletionSizeExpression`, `CompletionSizeExpressionLanguage` and the others) now show the language and the expression.
 
+### camel-core - throttling route policies on the same route wait for each other
+
+When a route has both `ThrottlingInflightRoutePolicy` and `ThrottlingExceptionRoutePolicy`, each of them now resumes the consumer only when the other one no longer keeps it suspended. The inflight policy no longer resumes the consumer while the circuit of the exception policy is open and the exception policy suspended that consumer when it opened the circuit, so no new messages are taken until the circuit is half open. When the circuit is half open, the exception policy does not resume a consumer that the inflight policy has suspended; the inflight policy resumes it when the number of inflight exchanges is low enough again.
+
+A custom `RoutePolicySupport` can take part by overriding `isConsumerKeptSuspended(Route)`.
+
 ### camel-seda - a discarded request-reply message fails at once
 
 When the SEDA producer waits for the reply (`InOut` messages, or `waitForTaskToComplete=Always`) and discards the message, because of `discardIfNoConsumers` with no consumer, or `discardWhenFull` with a full queue, the exchange now fails at once with a `java.util.concurrent.RejectedExecutionException` (the same exception as for a message discarded when the queue is purged). Before, the producer waited for a reply that never came: until the `timeout` (30 seconds by default), and then failed with an `ExchangeTimedOutException`, or for ever when the `timeout` was 0 or less. A discarded `InOnly` message is still dropped without an error.
@@ -258,6 +272,10 @@ When the SEDA producer waits for the reply (`InOut` messages, or `waitForTaskToC
 ### camel-seda - SedaConsumer.doRun takes the start of its polling task
 
 `SedaConsumer.doRun()` is now `doRun(int start)`. Each start of the consumer submits its own polling tasks, and a task stops polling once the consumer was stopped and started again, so that the threads of an earlier start no longer poll next to the threads of the new start. The `taskCount` arithmetic that `setupTasks` used to add threads on a restart is gone. A class that extends `SedaConsumer` and overrides `doRun()` must override `doRun(int start)` instead, and should keep the loop condition `isCurrentStart(start) && isRunAllowed()` of the default implementation. The new protected method `isCurrentStart(int start)` returns true while no later start of the consumer has happened.
+
+### camel-resilience4j - a call that times out before it starts is not started later
+
+In asynchronous mode (`asynchronous=true`) with a timeout, the `timeoutCancelRunningFuture` option (`true` by default) now has an effect, where before it had none. A call that times out while its task still waits for a thread of the timeout executor service is no longer started once a thread is free, so it no longer reaches the backend after its exchange has gone on with the timeout (or the fallback). With a bulkhead, the permit of such a call is released at the timeout, and not when a thread takes the call. In synchronous mode with a bulkhead, a call that times out while it waits for a thread is not started later either. Set `timeoutCancelRunningFuture=false` to keep the old asynchronous behaviour, where the timed out call still runs once a thread is free.
 
 ### camel-ehcache - shared CacheManager and changed defaults
 
@@ -351,6 +369,10 @@ A route that called an `https://` address of a server that only speaks plain HTT
 
 With the embedded HTTP server (Camel Main and Camel JBang), a request on `/mcp` that fails before it reaches the MCP session (wrong `Content-Type`, a message that cannot be parsed, a missing or unknown `Mcp-Session-Id`) is answered with the same HTTP status as before, and a body that is a JSON-RPC error response without an `id`: `{"jsonrpc":"2.0","error":{"code":-32600,"message":"Session not found"}}`. The messages are short and fixed. The error code is `-32700` (parse error) for a message that cannot be parsed, and `-32600` (invalid request) otherwise; before, a missing header or session id gave `-32601` and an unknown session `-32603`.
 
+### camel-ftp, camel-sftp - each producer has a health check id of its own
+
+The id of the health check of an ftp, ftps or sftp producer (producer health checks are off by default and are turned on with `camel.health.producersEnabled=true`) was `producer:ftp-` and the host, so the producers of two endpoints to the same host had the same id. Health checks are told apart by their id, so only one of them was called, and stopping one producer could remove the check of the other. The id now also names the endpoint by its id, for example `producer:ftp-myhost-endpoint7`, and ends with `-2`, `-3` and so on for the other producers of an endpoint that has more than one at a time (the producer is not a singleton). The endpoint id is a number given when the endpoint is created, so it can change when the routes change or are reloaded: a configuration that named the old id (`producer:ftp-myhost`) should use a pattern such as `producer:ftp-myhost-*`. Each started producer is now checked, so a readiness call sends one `NOOP` per producer, where it sent one per host before.
+
 ### camel-ftp, camel-sftp - fewer directory changes with stepwise and autoCreate
 
 No option or default changes. With the default `stepwise=true`, an upload, a download or (ftp) a delete no longer changes back to the directory it started from after each file: the connection stays in the directory of the file, so the next download or delete in that directory needs no change of directory. The connection changes back before an operation that uses names relative to the starting directory, such as a rename, a listing, an existence check, a read lock check, a site command, (sftp) a delete, or an upload or download into another directory. An ftp upload changes back and into the directory of its file each time, as some servers (such as vsftpd) keep the directory itself rather than its path, and would store the file in a directory that was renamed or replaced since. The ftp component asks for the current directory only when the connection does not know it, usually once per connection, instead of sending `PWD` for each file.
@@ -384,6 +406,10 @@ The `scp` producer (camel-jsch) sends a name as given, so it refuses such a name
 ### camel-ftp, camel-mina-sftp - a stepwise recursive poll skips a listed directory whose name is not one name
 
 A recursive consumer with `stepwise=true` (the default) changes into each sub directory by its name, and back to its parent afterwards. It now skips a directory from the listing of the server whose name is blank, `.` or `..`, or has a `/` or a `\` (other than a trailing `/`), and logs it at DEBUG level, as such a name would leave the poll in another directory than the one it lists. A backslash is a valid character in the name of a directory on a server on Linux: to poll such a directory, set `stepwise=false`. With `handleDirectoryParserAbsoluteResult=true`, a backslash always separates names, so such a directory cannot be polled.
+
+### camel-ftp, camel-sftp - the producer health check does not wait for an upload
+
+The health check of an ftp, ftps or sftp producer (producer health checks are off by default and are turned on with `camel.health.producersEnabled=true`) no longer waits while the producer uses its connection, such as for an upload. It waited for the whole upload before it sent its `NOOP`, so a readiness probe could time out during a long but healthy upload. While the connection is in use, the check now reports the state that its last check of the connection found (`UP` before the first one), with the detail `busy` set to `true`. The next call sends the `NOOP` again when the connection is no longer in use. An upload that hangs is reported the same way until it fails, so the check does not turn `DOWN` while it hangs (before, the readiness call waited for it).
 
 ### camel-ai-resource - fixed resourceUri cannot contain braces
 
@@ -488,6 +514,10 @@ An `AiToolConfiguration` bean given as the `configuration` option no longer repl
 
 When the `argSchema` of an `ai-tool` endpoint does not set `additionalProperties`, Camel now adds `additionalProperties: false` to the schema that it lists to clients and validates. This is the same as for the schema generated from `parameter.*`. A client that validates the input, such as the MCP server, now refuses a call with an undeclared argument; previously Camel accepted the call and dropped the argument with a WARN. To accept other arguments, set `additionalProperties` in the schema yourself; the route still receives only the declared top-level arguments.
 
+### camel-mcp-server - a tool whose schema is not a valid JSON Schema is refused
+
+The MCP server now refuses an `ai-tool` route whose input schema (`argSchema`) or output schema is not a valid JSON Schema 2020-12 document, in every protocol era. It logs an ERROR naming the tool; the route keeps running and the other tools are still served. Previously, a tool whose route started before the MCP server failed the CamelContext startup, and a tool added later was left out with a generic WARN from the tool registry, except in the `modern` protocol era, which served it without any check. The stdio transport checks the input schema only, because it does not publish output schemas.
+
 ### camel-docling - the CamelDoclingOutputFilePath header is a relative path unless outputBaseDirectory is set
 
 When the `outputBaseDirectory` option is not set, the `CamelDoclingOutputFilePath` header must now be a relative path that does not start with `../` once normalized, the same rule as for the custom arguments. An absolute path, or a path that leaves the working directory, fails the exchange with an `IOException`. Previously the header was only normalized and could name any directory.
@@ -521,6 +551,12 @@ The configured list replaces the loopback default. The allowed-origin entries fo
 On Camel Main and Camel JBang, the streamable HTTP MCP endpoint now also serves clients of MCP protocol version 2026-07-28, next to the protocol versions that open with an `initialize` handshake, and chooses for each request from the protocol version it carries. A client that opens with `initialize` is served as before, with a session. A client of 2026-07-28 has no session: a restart of the application, or a request reaching another instance, does not end it. Clients that try 2026-07-28 first and fall back to `initialize` (for example the client of the MCP Python SDK) now use 2026-07-28.
 
 Serving 2026-07-28 is a preview, built on an API of the MCP Java SDK that may still change. Set the new option `camel.server.mcp-protocol-era = legacy` to serve only the protocol versions that open with `initialize`, as before; `modern` serves only 2026-07-28. The new option `camel.server.mcp-stateless = true` also serves the clients that open with `initialize` without a session. The MCP Java SDK is upgraded to 2.2.0.
+
+### camel-mcp-server - a tool call refused by the authorization check is marked in \_meta
+
+On Camel Main and Camel JBang, the result of a tool call that the `authorizationPolicy` or `allowedRoles` check of the tool refused now carries `"org.apache.camel/authorization": "denied"` in its `_meta` field. The text and `isError` are as before.
+
+The record `McpToolCallResult` has a new component `meta` for this, and its constructors are as before. A custom `McpServerEngine` passes `meta()`, when it is not null, to the `_meta` of the result.
 
 ### camel-oauth - the scp claim is included in scope checks
 
@@ -1494,9 +1530,17 @@ The argument of `camel_runtime_heap_dump` for the file name of the dump is renam
 
 When `camel run` cannot start the integration, such as for a route that cannot be created or started, it now exits with code `1` (fix the route) instead of `70` (internal error), and prints the error as one `ERROR:` line on stderr. The stack trace is in the log of the integration, and is no longer printed a second time on stderr (add `--verbose` for it). Scripts that checked for `70` after a failed start should check for `1`.
 
+### camel-jbang - camel infra run names the connection details as properties
+
+The connection details that `camel infra run`, `camel infra get` and `camel infra ps --json` print (and that `camel infra run` writes to `~/.camel/infra-<service>-<pid>.json`) were named as the Java methods of the test-infra service, such as `getPort` and `getBootstrapServers`, often next to the same detail named as the Camel option, such as `port`. They are now named as properties: a getter loses its `get` (`getFtpRootDir` is `ftpRootDir`, `getBootstrapServers` is `bootstrapServers`), a getter of a detail that the service also names as the Camel option is left out (FTP prints `port`, not `getPort` as well), and so are the deprecated ones (`hostname` of FTP, use `host`). ClickHouse, Neo4j, OpenSearch, Pinecone, Weaviate, OPA, OpenFGA and Apicurio Registry now also print their details named as the options of their component, such as `serverUrl` of `camel-clickhouse`. A script that reads a `get…​` key should read the key without `get`, or the Camel option.
+
 ### camel-jbang - a Camel version that does not exist exits with 3
 
 A `--camel-version` that was never released, in `camel catalog`, `camel doc` and `camel validate`, now says `Camel version X not found in <repositories>` and exits with code `3` (not found) instead of `1` with "Cannot resolve dependencies". A Maven repository that cannot be reached still exits with `1`. `camel version set` checks that the version exists before it stores it: a version that does not exist exits with `3` and is not stored, and when the repositories cannot be reached the version is stored with a warning. `camel version set` without a version, `--runtime`, `--repo` or `--reset` is now a usage error (exit code `2`) instead of doing nothing.
+
+### camel-jbang - the Camel CLI runs Camel 4 only
+
+`camel run --camel-version` and `camel version set` refuse a Camel 3 version: they print that the Camel CLI runs Camel 4.0 or newer and exit with code `2` (usage). Before, the run went on with the CLI of that Camel 3 version, which does not know the options of the current CLI, and Camel 3 is no longer maintained. A Camel 3 version stored earlier with `camel version set` is refused by `camel run` as well: set a Camel 4 version, or use `camel version set --reset`.
 
 ### camel-jbang - a name of a running integration matches only that integration
 
@@ -1520,6 +1564,16 @@ A Circuit Breaker with `asynchronous` and `timeoutEnabled` ran its calls and its
     
 -   A Circuit Breaker with `timeoutEnabled` (asynchronous or not) keeps the thread pools that Camel created for it while its route is stopped, and shuts them down when the route is removed or the CamelContext stops. Before, stopping the route shut the thread pool of the calls down, and after the route was started again, the calls through the Circuit Breaker no longer ran: in synchronous mode each call timed out (into the fallback, when there is one), and in asynchronous mode the exchange never completed.
     
+
+### camel-resilience4j - a full thread pool rejects a call of the synchronous mode with a timeout
+
+A Circuit Breaker with `timeoutEnabled` and without `asynchronous` runs its calls on a thread pool that Camel creates from the default thread pool profile (10 threads, up to 20, and a queue of 1000 calls). When all its threads were busy and its queue was full, the call ran on the caller thread (the `CallerRuns` policy of the profile) before the timeout started: the call could not time out, a service that does not answer blocked the route thread for good, and the circuit breaker counted the call as successful, however long it took. Now the thread pool rejects the call: the exchange fails with a `RejectedExecutionException`, or the fallback runs, and the circuit breaker counts it as a failed call. The rejected policy of the default thread pool profile is not used for this thread pool.
+
+A call that times out while it waits in the queue now leaves the queue at once. Before, it kept its slot until a thread took it from the queue, so during a slowdown the queue filled with calls that had already timed out.
+
+With virtual threads (`camel.threads.virtual.enabled`), the thread pool runs up to 1000 calls at once (the queue size of the profile). A call over that waits for a free slot up to the keep alive time of the profile (60 seconds by default), as before, and is then rejected, where before it ran on the caller thread.
+
+A thread pool given with `timeoutExecutorService` keeps its own rejected policy. To keep the thread pool from filling up, enable the bulkhead with `bulkheadMaxConcurrentCalls` no larger than the queue size of the thread pool, or size the default thread pool profile for the load. To run such a call on the caller thread as before, give the Circuit Breaker a thread pool with the `CallerRuns` rejected policy with `timeoutExecutorService` (a thread pool bean, or the id of a thread pool profile).
 
 ### camel-jbang - camel cmd send without a name sends to the integration that runs
 
@@ -1566,6 +1620,14 @@ With `deleteQueueOnShutdown=false`, the queue the consumer creates now has a nam
 With `synchronousPull=true` and the default `ackMode`, the `google-pubsub` consumer now acks (or nacks, when the exchange failed) the message it received, with the ack id it received it with. Before, it took the ack id from the `CamelGooglePubsubMsgAckId` header as the route left it. A route that removed the headers, or replaced the message, acked nothing and logged a WARN, and a route that changed the header acked another ack id: the message was delivered again after its ack deadline, and again after each later delivery.
 
 Manual acknowledgement (`ackMode=NONE`) is unchanged: the `GooglePubsubAcknowledge` of the synchronous consumer acks the ack ids of the exchange given to `ack` or `nack`, so that an aggregated exchange acks every grouped message.
+
+### camel-google-pubsub - the consumer subscribes or pulls again after any failure, and has a health check
+
+A `google-pubsub` consumer no longer stops getting messages for good while its route stays started. Before, a subscriber loop ended after a non-retryable error (such as `PERMISSION_DENIED` while an IAM binding is changed, or `NOT_FOUND` while the subscription is created again, with the synchronous or the asynchronous pull), after credentials that could not be loaded when an asynchronous subscriber was created, and, without any log line, after an `Error` (such as a `NoClassDefFoundError` of client libraries that do not match). The consumer then received nothing until the route was restarted. Now such a failure is logged (the first one in a row at ERROR with its stack trace, the next ones in one WARN line), given to the `ExceptionHandler` (with `bridgeErrorHandler=true`, to the error handler of the route), and the loop subscribes or pulls again every 5 seconds until the cause is gone.
+
+The consumer has a readiness health check: the check of the consumer of the route (`consumer:<routeId>`, with the consumer health checks of Camel enabled, the default) is DOWN with the failure while a subscriber loop waits to subscribe or pull again. After failed attempts, an asynchronous subscriber only counts as working once it has run for 5 seconds.
+
+A `VirtualMachineError` (such as an `OutOfMemoryError`) of the consumer, or of a route of a message that it received, that the route did not catch now stops the consumer until the route is restarted, as for the other consumers that pull messages in a loop, and its health check is DOWN meanwhile.
 
 ### camel-aws2-s3, camel-azure-storage-blob, camel-aws2-sqs - the consumer deletes or moves what it consumed
 
@@ -1789,6 +1851,10 @@ Requests to Vault now time out after 5 seconds to connect, and after 15 seconds 
 The `hashicorp:` properties function now uses the `VaultTemplate` it is created with. Before, it replaced it with a client of the `camel.vault.hashicorp` configuration, and failed to start when that configuration had no token. A `hashicorp-vault` endpoint without a `vaultTemplate` now fails when it is created if its host, port or scheme is missing, or a setting of its login is missing. Before, a missing host failed only at the first request to Vault. The `camel.vault.hashicorp.token` option is no longer marked as required, as only the token login uses it.
 
 The `hashicorp-secrets` dev console now shows the login (`Token`, `AppRole`, `Kubernetes` or `JWT`) instead of `OAuth Token`.
+
+### camel-hashicorp-vault, camel-aws-secrets-manager - a failed reload after a secret update is tried again
+
+When the context reload that the secret refresh task triggers fails (for example a route cannot start), the update is no longer marked as seen: the next check of the task reloads again, up to 10 times in a row, and logs a warning each time. Each such reload stops and starts the routes, as any reload does. Before, the task did not reload again until the next update of a secret, and the routes that did not start stayed stopped. With SQS notification (`camel.vault.aws.useSqsNotification=true`), the notification of the update is deleted from the queue once the reload succeeded, instead of when it is received, so the queue delivers it again after a failed reload.
 
 ### camel-hivemq - a body that does not convert to a byte array fails the exchange
 
@@ -2833,6 +2899,10 @@ A `hazelcast-topic` consumer with `reliable=true` that fell behind the ringbuffe
 
 A `HazelcastRoutePolicy` kept the Hazelcast lock until the CamelContext stopped, also after its route was removed (with `removeRoute`, or by a route reload), so no other node could become the leader and the route ran nowhere in the cluster. The policy now releases the lock when the last route that uses it is removed, so another node takes over, and it competes for the lock again when a route that uses it is added again (with the same or a new policy instance). So a route reloaded on the leader can now move to another node.
 
+### camel-hazelcast - ReplicatedHazelcastAggregationRepository fails to start with optimistic=true
+
+A `ReplicatedHazelcastAggregationRepository` created with `optimistic=true` could never add a message to a stored group, nor complete a stored group: every such update failed with an `OptimisticLockingException` and was tried again, forever with the default retry policy of the Aggregate EIP. When two members started the same group at the same time, the first message of one of them was lost. A Hazelcast `ReplicatedMap` has no atomic compare-and-set, so the repository now fails to start with `optimistic=true` (an `IllegalArgumentException`), and so does the route that uses it. The only route that ran before with `optimistic=true` is one whose groups all complete on their first message (for example `completionSize(1)`), where the repository is never written; such a route now fails to start too, and runs again with `optimistic=false`. Use the repository with `optimistic=false` and without `optimisticLocking` on the Aggregate EIP; the [Hazelcast component](../components/4.22.x/hazelcast-summary.md) page says when that mode is safe. When the Aggregate EIP has `optimisticLocking` turned on and uses a `ReplicatedHazelcastAggregationRepository` with `optimistic=false`, each message still fails, as before, now with an `UnsupportedOperationException` that says so.
+
 ### camel-sql, camel-mybatis, camel-jooq - an exchange marked rollback only last is not consumed either
 
 The SQL, MyBatis and jOOQ consumers already left a message unconsumed when the route marked the exchange rollback only with `markRollbackOnly()`. They now leave it unconsumed when the route marks it rollback only last with `markRollbackOnlyLast()` too, as the JPA and Hazelcast SEDA consumers do: the SQL consumer runs its `onConsumeFailed` statement instead of `onConsume` (and no statement when `onConsumeFailed` is not set), the MyBatis consumer does not run its `onConsume` statement, and the jOOQ consumer does not delete the entity, so the next poll reads the row again. With `transacted=true` the SQL and MyBatis consumers break out of the batch and roll back. `markRollbackOnlyLast()` reaches the consumer only when no `transacted()` EIP has consumed the flag, so the consumer’s own transaction is the last one.
@@ -2888,6 +2958,12 @@ The `createdAt` column must allow null. The repository checks this when it start
 Another instance still takes such a key over, as it cannot tell the first instance from one that crashed: choose a `lockMaxAgeMillis` longer than the longest database outage the application must survive without processing a message twice. When an instance holds keys and its keep-alive has not refreshed them for longer than `lockMaxAgeMillis`, it now logs a WARN, and an INFO when it refreshes them again.
 
 Code that sets the `createdAt` of a key older than `lockMaxAgeMillis` and expects the repository that added the key to see it as absent, such as a test of the keep-alive, has to check the key with another repository instance.
+
+### camel-sql - JdbcOrphanLockAwareIdempotentRepository does not remove a key that another instance took over
+
+When another instance took a key over (the first instance could not refresh its lock for longer than `lockMaxAgeMillis`), `JdbcOrphanLockAwareIdempotentRepository` on the first instance no longer removes the key or keeps it alive: its remove and its keep-alive now only match the `createdAt` that the instance wrote last. Before, the remove deleted the lock of the other instance while it still processed the message, so a third instance could take the key, and the keep-alive refreshed the lock of the other instance. Such a remove now returns false and logs a WARN. A confirm still confirms the key by its key.
+
+The repository adds `AND createdAt < ?` to `deleteString` for a key that it holds, as it already does to `queryString` and to the update query. A custom `deleteString` must end with its `WHERE` condition, as a custom `queryString` already must. Keep `lockMaxAgeMillis` larger than `lockKeepAliveIntervalMillis` by a few seconds at least: an instance matches a `createdAt` earlier than halfway between the two after the one it wrote last. The keep-alive now sends one statement per key, in one transaction, instead of a batch. `getProcessorNameMessageIdSet()` now returns the key set of the map that holds the `createdAt` of each key: a key can be removed from it, but no longer added.
 
 ### camel-jta - an exchange marked rollback only last rolls back its transaction
 
@@ -3661,7 +3737,7 @@ With `streamingUploadMode=true` and `namingStrategy=random` (or `timestamp`), th
 
 ### camel-aws2-s3 - streaming upload writes concurrent exchanges one at a time
 
-With `streamingUploadMode=true` (without `timestampGroupingEnabled`), the producer now writes one exchange at a time, so exchanges sent concurrently (concurrent consumers, parallel splits, `threads()`) no longer lose objects or parts. The body of an exchange is read while the other exchanges of the same producer wait, and bodies that complete an upload of their own (`batchSize` or more, or `batchMessageNumber=1`) are no longer uploaded in parallel. To upload large bodies in parallel, use the producer without `streamingUploadMode`.
+With `streamingUploadMode=true`, the producer now writes one exchange at a time, so exchanges sent concurrently (concurrent consumers, parallel splits, `threads()`) no longer lose objects or parts. With `timestampGroupingEnabled`, the bytes of an exchange are no longer mixed with the bytes of another exchange of the same window, and the `streamingUploadTimeout` flush no longer cuts an exchange into two objects. The body of an exchange is read while the other exchanges of the same producer wait, and bodies that complete an upload of their own (`batchSize` or more, or `batchMessageNumber=1`) are no longer uploaded in parallel. To upload large bodies in parallel, use the producer without `streamingUploadMode`.
 
 ### camel-atom - sortEntries sorts by the updated date and routes the oldest entry first
 
@@ -3757,6 +3833,10 @@ With `camel.vault.aws.refreshEnabled=true` and without SQS notification, each ch
 
 Each check looks up these events from 10 minutes before the newest event seen (but not before the task started), and skips the events seen by an earlier check: CloudTrail can make an event visible after a newer one, and such an update was never read. The number of requests is as above, counted over that range.
 
+### camel-aws-secrets-manager - the calls of the refresh task time out
+
+With `camel.vault.aws.refreshEnabled=true`, each call of the refresh task to CloudTrail or SQS now times out after 10 seconds, retries included, and the task tries again at its next check. Before, a call that did not get an answer held the thread that runs all the periodic tasks of the Camel context for as long as the HTTP client waited. With SQS notification, the task no longer waits for messages: it receives with a wait time of 0 seconds, whatever receive wait time (long polling) is set on the queue.
+
 ### camel-aws2-s3 - a timestamp window uploaded more than once is stored in more than one object
 
 With `streamingUploadMode=true` and `timestampGroupingEnabled=true`, the upload of a time window is completed when it reaches `batchMessageNumber` messages (10 by default) or `batchSize` bytes, or when `streamingUploadTimeout` runs. A later message of the same window started a new upload with the same key, and S3 replaced the object of the first upload with it, so the messages of the earlier uploads were lost (unless the bucket is versioned). A later upload of a window now gets the number of the uploads of that window before it after the time range: for example `grouped-messages_20240101_0800_0800-0805.txt`, then `grouped-messages_20240101_0800_0800-0805-1.txt`, `grouped-messages_20240101_0800_0800-0805-2.txt`, and so on. The first upload of a window keeps the name it had. The first time a producer uploads a window, it lists the objects of the window in the bucket (one `ListObjectsV2` request per window), so after a restart it continues after the highest number stored; this needs the `s3:ListBucket` permission, and without it the producer logs a WARN and numbers the uploads of the window from the first one. These keys do not sort in upload order (`-1` sorts before the first upload’s name, `-10` before `-2`). Producers running at the same time with the same `keyName` still need distinct key names.
@@ -3784,6 +3864,10 @@ Before, every poll failed with an `IllegalStateException` once a closed shard ha
 With `shardId` set, the consumer reads only that shard, so once the shard is closed it reports it once and then has nothing more to read, where before every poll failed. A route that should react to the closed shard (for example by stopping) can set `bridgeErrorHandler=true` and handle the `ReachedClosedStatusException` in its error handler.
 
 When the consumer reads all the shards (no `shardId`) and the read of a shard fails, the poll now fails only after the other shards of the poll have been read and routed, with the exception of that shard (the failures of other shards are added as suppressed exceptions). Before, the poll failed as soon as one shard failed, with the exception wrapped by the parallel stream, while the other shards were still being read.
+
+### camel-aws2-kinesis - the consumer is not ready before it has listed the shards
+
+The consumer (without `useKclConsumers`) reads the shards that its shard monitor lists with `ListShards`. Until that listing has succeeded once, the consumer is no longer reported ready, and a poll fails with an `IllegalStateException` whose cause is the error of the last `ListShards` (for example an `AccessDeniedException` without the `kinesis:ListShards` permission, or a `ResourceNotFoundException` for a stream that does not exist). The consumer health check (a readiness check) is then DOWN with that error, and each poll is reported to the exception handler of the consumer (with `bridgeErrorHandler`, to the error handler of the route), as for other poll failures; `backoffErrorThreshold` and `backoffMultiplier` make the consumer poll less often meanwhile. Before, such a consumer read nothing and was reported UP, and only the shard monitor logged a WARN.
 
 ### camel-graphql - the credentials are only sent to the authority of httpUri
 
@@ -4096,6 +4180,25 @@ With `checkpointBatchTimeout`, the consumer now starts a new checkpoint window w
 
 The `CamelAzureEventHubsCheckpointUpdatedBy` header can now be `timeout`. An event that completes after the scheduled time of its window, but before the (late) timer has run, joins that window and gets `timeout`; its offset is checkpointed by that timer. Before, such an event always started a new window, so `timeout` was practically never set. Routes that read this header can now see `timeout` as well as `size`.
 
+### camel-azure-eventhubs - a checkpoint no longer passes an event that is still being processed
+
+The consumer now checkpoints a partition up to the last event below which every delivered event of the partition has been processed (successfully or not), and a checkpoint never moves the stored position back. Before, the checkpoint was the offset of the event whose exchange completed last. With an asynchronous step in the route, the exchanges of a partition complete in any order, so a checkpoint could pass an event that was still being processed, and that event was lost if the consumer stopped or the partition moved to another consumer before it completed. A late checkpoint write could also move the stored position back, so already processed events were delivered again.
+
+What you may notice:
+
+-   With an asynchronous route, the stored checkpoint can lag behind while an earlier event of the partition is still being processed. After a restart at that point, that event is delivered again together with the events completed after it (before, that event was skipped). Routes that process each event synchronously are not affected.
+    
+-   An exchange whose completion never runs holds the checkpoint of its partition until the partition is lost or the consumer is restarted, and then its event and the events after it are delivered again. Before, the next checkpoint passed such an event. This happens, for example, when a `seda` endpoint with `discardWhenFull` drops the exchange because its queue is full.
+    
+-   The `CamelAzureEventHubsCheckpointUpdatedBy` header is `size` only on the exchange whose completion actually wrote a checkpoint: when the batch size is reached while an earlier event is still being processed, the checkpoint is written by the first completion after that, or by the batch timeout.
+    
+-   A failed exchange is still not delivered again: it does not hold the checkpoint back, as before.
+    
+-   When a partition is lost to another consumer, the exchanges still in flight for it no longer write checkpoints: the new owner delivers their events again.
+    
+-   `EventHubsClientFactory` has a new `createEventProcessorClient` method with a handler for closed partitions, which the consumer now uses. Tests that mock the three-argument method to capture the event handler must mock the four-argument one.
+    
+
 ### camel-azure-functions - invokeFunction fails on an HTTP error status, and sends the body as bytes
 
 The `invokeFunction` operation now fails the exchange with an `org.apache.camel.http.base.HttpOperationFailedException` when the function answers with an HTTP status of 400 or above, as the HTTP components do. The exception holds the status, the response body and the response headers. Previously the exchange succeeded, with the error response as the body and the status in the `CamelAzureFunctionsStatusCode` header. Set the new `throwExceptionOnFailure` option to `false` to keep the previous behaviour.
@@ -4107,6 +4210,10 @@ The request body is now sent as bytes: a stream or a file is sent as its content
 When the consumer dead-letters a message after a failed route with `enableDeadLettering=true`, the reason and the error description it writes are now capped at 4096 characters, the limit the Azure SDKs apply to both fields. A value that was cut ends with `…​`. The description holds the stack trace, so a deep one is now truncated rather than sent in full and rejected by the broker.
 
 A settlement request the broker rejects is now reported through the consumer’s exception handler.
+
+### camel-azure-servicebus - the Camel lock renewer runs on a thread of its own
+
+A consumer in peek-lock mode with `maxAutoLockRenewDuration` above 0 (the default) and without sessions now renews the locks of its messages on a thread of its own, named `ServiceBusLockRenewer[<topic or queue name>]`. The thread comes from the thread pool settings of the CamelContext, starts with the consumer and ends when the consumer stops. Before, the renewer was a task of the period task scheduler of the CamelContext, on one thread shared with the other periodic tasks (such as the secret refresh tasks of the vaults): a slow task there could hold up the renewals until a lock expired, and every start of the consumer left one more task registered until the CamelContext stopped. There is now one more thread per such consumer in thread dumps and in the thread pools listed over JMX, and the renewer is no longer listed among the period tasks. Routes need no change.
 
 ### camel-azure-key-vault - the body after deleteSecret, and a Map or a POJO given to createSecret
 

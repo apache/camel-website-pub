@@ -309,6 +309,8 @@ If the route throws an exception, the exchange is marked as failed, and the comp
 
 The component acks or nacks the message it received, also when the route changed or removed the `GooglePubsubConstants.ACK_ID` header (the Acknowledgement ID of the message), or replaced the message. With manual acknowledgement and the synchronous consumer, the Acknowledgement IDs are taken from the exchange given to `ack` or `nack` (see [Manual Acknowledgement](#_manual_acknowledgement)).
 
+When the consumer cannot get messages (Pub/Sub cannot be reached, a missing permission or subscription, credentials that cannot be loaded), it logs the failure (the first one in a row at ERROR, the next ones in one WARN line), gives it to the exception handler (with `bridgeErrorHandler=true`, to the error handler of the route), and subscribes or pulls again every 5 seconds until the cause is gone. Meanwhile, with the consumer health checks of Camel enabled, the readiness check of the consumer of the route (`consumer:<routeId>`) is DOWN with the failure.
+
 ### Delivery Attempts and Dead Letter Queues
 
 When a subscription has a [dead-letter policy](https://cloud.google.com/pubsub/docs/dead-letter-topics) configured, the component exposes the delivery attempt count via the header `GooglePubsubConstants.DELIVERY_ATTEMPT`. This header contains an `Integer` representing the approximate number of times the message has been delivered. The first delivery will have a value of `1`.

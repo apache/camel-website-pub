@@ -297,6 +297,10 @@ Tests: `EventHubsCheckpointDstTest`
 
 -   every completed message is acknowledged when the partition goes quiet
     
+-   a stored checkpoint never passes an event still in flight
+    
+-   the stored checkpoint of a partition never goes back
+    
 
 
 

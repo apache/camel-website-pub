@@ -31,7 +31,7 @@ Engine resolution mirrors the platform-http engine: a bean of type `McpServerEng
 
 Resource support is opt-in on the SPI: `resourceAdded` and `resourceRemoved` default to no-ops and an engine declares `supportsResources()` when it serves fixed resources. Resource-template support is independently opt-in through `resourceTemplateAdded`, `resourceTemplateRemoved` and `supportsResourceTemplates()`. Engines that do not implement either capability remain source-compatible because the SPI methods have defaults; the bridge logs a WARN when a matching route cannot be served by the selected engine. Resource and template behaviour is covered by the MCP resource conformance tests.
 
-An engine refuses a tool, resource or prompt it cannot serve, for example a name its runtime already serves, by throwing `McpServerRefusedException` from `toolAdded`, `resourceAdded` or `promptAdded`. The bridge logs an ERROR, as for its own name clashes, and does not track the refused item as published.
+An engine refuses a tool, resource or prompt it cannot serve, for example a name its runtime already serves, by throwing `McpServerRefusedException` from `toolAdded`, `resourceAdded` or `promptAdded`. The bridge logs an ERROR, as for its own name clashes, and does not track the refused item as published. The engines of `camel-mcp-server` (HTTP and stdio) refuse that way, in every protocol era, a tool whose input or output schema fails the JSON Schema 2020-12 check of the MCP Java SDK (a schema that declares another `$schema` dialect is not checked); its route keeps running. Over stdio, which does not serve output schemas, only the input schema is checked.
 
 ## Usage
 
@@ -88,7 +88,7 @@ from("ai-resource:app_config"
     .pollEnrich("file:config?fileName=app.json&noop=true&idempotent=false", 5000);
 ```
 
-An MCP client then sees the resource in `resources/list` and fetches it with `resources/read`. A read carries no arguments: the route is invoked with an empty exchange and its body is the content. The `mimeType` decides the wire format — textual types are sent as text, everything else as a base64 blob — see [ai-resource](../ai-resource-component.md) for the details.
+An MCP client then sees the resource in `resources/list` and fetches it with `resources/read`. A read carries no arguments: the route is invoked with an empty message body and its body is the content. The `mimeType` decides the wire format — textual types are sent as text, everything else as a base64 blob — see [ai-resource](../ai-resource-component.md) for the details.
 
 Unlike `tools/call`, `resources/read` has no in-band error flag, so a failed read is returned as a JSON-RPC error with the same sanitized message the client would get from a failing tool.
 
@@ -318,6 +318,8 @@ External MCP clients are **untrusted senders** under the [Camel security model](
     
 -   **Error sanitization**: route exceptions are mapped to a generic error message; the cause is logged server-side and never sent to the client. Argument validation messages (missing or invalid parameters) are returned as-is.
     
+-   **Refused calls**: a tool call that the authorization check of the tool refuses (the `authorizationPolicy` or `allowedRoles` option of the [ai-tool](../ai-tool-component.md) route) is answered as a tool error with a short generic refusal. On Camel Main and Camel JBang the result also carries `"org.apache.camel/authorization": "denied"` in its `_meta` field, so that a client can tell a refused call from a failed one without reading the text. The entry names neither the roles, the policy nor the caller.
+    
 -   **Returned content**: the result of a tool, resource or prompt is passed to the client and the model as it is. Data that a route reads from a source outsiders can write may contain prompt injection; the route author decides what goes in.
     
 -   **Bounded execution**: every call, read and prompt request is subject to its configured timeout. A timed-out route keeps running server-side until it completes; the timeout bounds the MCP request, not the route.
@@ -350,7 +352,7 @@ The unauthenticated RFC 9728 document is served at `/.well-known/oauth-protected
 
 When OAuth is enabled, an MCP session is bound to the validated token’s `sub` claim at initialization. Subsequent POST, GET, and DELETE requests must use a token with the same subject; requests from another subject receive the same not-found response as an unknown session ID. A token without a non-empty subject cannot initialize an OAuth-protected MCP session. This prevents a session identifier from being reused across authenticated users.
 
-For an authenticated tool call, the bridge exposes the following exchange properties:
+For an authenticated tool call, resource read or prompt get, the bridge exposes the following exchange properties:
 
 -   `CamelMcpOAuthSubject`, `CamelMcpOAuthScopes`, and `CamelMcpOAuthClaims` contain the subject, scopes, and claims from the validated token.
     
@@ -358,6 +360,8 @@ For an authenticated tool call, the bridge exposes the following exchange proper
     
 -   `CamelOAuthTokenValidationResult` contains the full Camel OAuth validation result for route code that already consumes the standard HTTP OAuth exchange property.
     
+
+An `ai-resource` route, with a fixed `resourceUri` or a `uriTemplate`, and an `ai-prompt` route get the same caller properties as an `ai-tool` route, including `CamelMcpSecurityPrincipal`, the raw caller principal. This holds for every protocol version, with or without sessions, and for the `camel.server.authentication*` settings of the embedded server as well as for OAuth. A route can then check who is asking, for example before it returns the customer behind `crm://customers/{id}`. Unlike an `ai-tool` route, these routes have no `allowedRoles` or `authorizationPolicy` option: the route checks the properties itself, and to refuse it throws an exception, which the client receives as the generic read or prompt error. Check the properties only, never the headers: the template variables and the prompt arguments are headers, and they come from the client. Without an authenticated caller, as over stdio or on a server without authentication, none of these properties is set.
 
 These options configure OAuth only on the Camel Main / JBang Vert.x HTTP engine. Camel Main stdio mode has no HTTP authentication layer: it logs a warning and ignores these OAuth options. Native Spring Boot and Quarkus MCP engines own their security configuration; passing these Camel-engine OAuth options to an unsupported programmatic engine fails at bridge initialization instead of silently leaving an endpoint unprotected.
 

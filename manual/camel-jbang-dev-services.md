@@ -35,15 +35,20 @@ Some services offer multiple implementations — pass the implementation name as
 camel infra run kafka redpanda
 ```
 
-Once running, the service prints its connection details as JSON:
+Once running, the service prints its connection details as JSON. They are named as the options of the Camel component, such as `brokers` of `camel-kafka` or `host`, `port`, `username` and `password` of `camel-ftp`, so they can be set on an endpoint as they are (as `camel cmd send --infra` does):
 
 ```bash
 $ camel infra run ftp
 
 Starting service ftp
 {
-  "getPort" : 52472,
-  "getFtpRootDir" : "file://path/to/current/directory/target/ftp/..."
+  "directoryName" : "myTestDirectory",
+  "endpointUri" : "ftp:localhost:52472/myTestDirectory?username=admin&password=RAW(admin)",
+  "ftpRootDir" : "file://path/to/current/directory/target/ftp/...",
+  "host" : "localhost",
+  "password" : "admin",
+  "port" : 52472,
+  "username" : "admin"
 }
 ```
 
@@ -52,7 +57,8 @@ $ camel infra run kafka redpanda
 
 Starting service kafka with implementation redpanda
 {
-  "getBootstrapServers" : "localhost:32771"
+  "bootstrapServers" : "localhost:32771",
+  "brokers" : "localhost:32771"
 }
 ```
 
@@ -64,7 +70,8 @@ Use `--background` to run the service detached from the terminal. The command wa
 $ camel infra run kafka --background
 Running kafka in background with PID: 80093 (waiting for it to start)
 {
-  "getBootstrapServers" : "localhost:9092"
+  "bootstrapServers" : "localhost:9092",
+  "brokers" : "localhost:9092"
 }
 Log: /Users/me/.camel/80093-run.log
 ```
@@ -154,9 +161,10 @@ Retrieve connection details for a running service:
 ```bash
 $ camel infra get openldap
 {
-  "getPort" : 32774,
-  "getSslPort" : 32775,
-  "getHost" : "localhost"
+  "host" : "localhost",
+  "port" : 32774,
+  "sslPort" : 32775,
+  ...
 }
 ```
 

@@ -1,6 +1,6 @@
 {
   "version": "3-dj.1",
-  "generated": 1795680549127,
+  "generated": 1795702767158,
   "url": "https://camel.apache.org",
   "components": [
     {
@@ -36877,6 +36877,12 @@
               "path": "jbang-commands/camel-jbang-kubernetes-run.adoc",
               "url": "/manual/jbang-commands/camel-jbang-kubernetes-run.html",
               "title": "camel kubernetes run"
+            },
+            {
+              "module": "ROOT",
+              "path": "jbang-commands/camel-jbang-kubernetes-traits.adoc",
+              "url": "/manual/jbang-commands/camel-jbang-kubernetes-traits.html",
+              "title": "camel kubernetes traits"
             },
             {
               "module": "ROOT",

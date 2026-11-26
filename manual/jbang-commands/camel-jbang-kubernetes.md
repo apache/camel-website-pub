@@ -20,6 +20,7 @@ camel kubernetes [options]
 | [export](camel-jbang-kubernetes-export.md) | Export as Maven project that contains a Kubernetes deployment manifest |
 | [logs](camel-jbang-kubernetes-logs.md) | Print the logs of a Kubernetes pod |
 | [run](camel-jbang-kubernetes-run.md) | Run Camel application on Kubernetes |
+| [traits](camel-jbang-kubernetes-traits.md) | List the traits that configure the Kubernetes manifest, or the options of one trait |
 
 ## Options
 

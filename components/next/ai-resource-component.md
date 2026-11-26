@@ -25,7 +25,7 @@ ai-resource:resourceName?resourceUri=uri\[&options\]
 
 Where **resourceName** is the human-readable label shown in resource listings, and **resourceUri** is the address clients use to read the resource. The uri must be unique within the CamelContext. For a family of resources, use `uriTemplate` instead of `resourceUri`; the two options are mutually exclusive.
 
-A `uriTemplate` follows RFC 6570 level 1: each variable must occupy an entire path segment, for example `crm://customers/{id}`. Variables do not match across `/` separators. A concrete variable must use RFC 3986 `pchar` characters (including well-formed percent-encoded octets); raw query/fragment characters, controls, malformed percent escapes, and `.` or `..` dot segments do not match. Fixed resources take precedence over a matching template when the same concrete URI is read. Tagged templates in one CamelContext must not overlap, even when they belong to different tags; a conflicting route fails startup rather than depending on registration order. A fixed `resourceUri` must not contain raw `{` or `}`; use `uriTemplate` for variable paths.
+A `uriTemplate` follows RFC 6570 level 1: each variable must occupy an entire path segment, for example `crm://customers/{id}`. Variables do not match across `/` separators. A concrete variable must use RFC 3986 `pchar` characters (including well-formed percent-encoded octets); raw query/fragment characters, controls and malformed percent escapes do not match. Nor does a value that, once percent-decoded, is a `.` or `..` dot segment or contains one between `/` or `\` separators, such as `..`, `%2e%2e` or `..%2F..%2Fetc%2Fpasswd`. A segment counts up to its first `;`, because servers such as Tomcat drop path parameters before resolving dot segments, so `..;x` and `%2e%2e%3b` do not match either. The route still receives the value verbatim, percent-encoding included. Fixed resources take precedence over a matching template when the same concrete URI is read. Tagged templates in one CamelContext must not overlap, even when they belong to different tags; a conflicting route fails startup rather than depending on registration order. A fixed `resourceUri` must not contain raw `{` or `}`; use `uriTemplate` for variable paths.
 
 ## Configuring Options
 
@@ -157,7 +157,7 @@ The bodies are the ones with the default options. A side that is not listed is n
 
 ## Usage
 
-A resource read carries no arguments: the route is invoked with an empty exchange and its message body is the content returned to the client. Retrieval therefore uses whatever Camel already offers for reading on demand: a producer with a read operation (`aws2-s3` with `operation=getObject`), or `pollEnrich` for the polling components (`file`, `ftp`, `sftp`), whose producers write rather than read.
+A resource read carries no arguments: the route is invoked with an empty message body (see [Caller identity](#_caller_identity) for the exchange properties that identify the caller) and its message body is the content returned to the client. Retrieval therefore uses whatever Camel already offers for reading on demand: a producer with a read operation (`aws2-s3` with `operation=getObject`), or `pollEnrich` for the polling components (`file`, `ftp`, `sftp`), whose producers write rather than read.
 
 Always give `pollEnrich` an explicit `timeout` - it is a parameter of the EIP, not an endpoint option. It defaults to `-1`, which waits until a message is available and parks the route thread for good when the file is not there. The client is still answered - the read returns a timeout error after `camel.server.mcp-resource-timeout` - but the route stays blocked. Note also that `noop=true` implies `idempotent=true`, so `idempotent=false` is what keeps the same file readable on every request.
 
@@ -238,6 +238,10 @@ from("ai-resource:latest_report"
 ## Tags and exposure
 
 Tags group resources so that an adapter can select which ones to expose. A resource without tags goes into a default pool that `camel-mcp-server` never exposes: crossing the boundary to a remote client is an explicit per-route opt-in. See the [MCP server](others/mcp-server.md) documentation for how the tag patterns are configured.
+
+## Caller identity
+
+When the [MCP server](others/mcp-server.md) of Camel Main or Camel JBang serves a resource to an authenticated MCP client, the route receives the caller as exchange properties, as an `ai-tool` route does: `CamelAiToolSecurityPrincipalName` (the caller name), `CamelAiToolSecurityPrincipalRoles` (the caller roles, when the token carries them), `CamelMcpSecurityPrincipal` (the raw principal) and, with OAuth, `CamelMcpOAuthSubject`, `CamelMcpOAuthScopes` and `CamelMcpOAuthClaims` of the validated token. A route that serves data per caller, such as `crm://customers/{id}`, checks these properties before it reads, and throws an exception to refuse; the client then receives a generic read error. Take the caller from these properties only, never from the URI or the template variables, which come from the client. Without an authenticated caller, as over stdio, the properties are not set. The resource has no `allowedRoles` or `authorizationPolicy` option.
 
 ## Lifecycle
 
