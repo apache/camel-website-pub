@@ -174,6 +174,10 @@ A `throwException` step given an exception instance (`throwException(new MyExcep
 
 When a poll of a scheduled poll consumer (such as `file`, `ftp` or `scheduler`) fails with a `VirtualMachineError` (such as an `OutOfMemoryError` thrown by the poll, or by the route of the polled message, which does not catch it), the consumer stops polling until the route is restarted, with any scheduler and also with `scheduler.concurrentConsumers` greater than 1. Its health check flips to DOWN, with the error, and stays DOWN until the route is restarted. Previously, with the default scheduler, the scheduled task that ran the poll stopped polling, and the health check stayed UP; the Spring and Quartz schedulers kept running the task. Another `Error` of the poll (such as a `NoClassDefFoundError` of a client library) is now a failed poll, as an exception, and the consumer polls again; previously, with the default scheduler, it also ended the scheduled task. See the section "camel-core - a VirtualMachineError fails the exchange, and Camel does not recover from it".
 
+### camel-file - a file lock cluster member waits for an open of the lock file that timed out
+
+When an open of the lock file of the file lock cluster service (`FileLockClusterService`) takes longer than `clusterDataTaskTimeout`, the open keeps running, and the member no longer tries the lock with a retry meanwhile: the file of the late open, closed later by the garbage collector, released the lock of the leader. The member tries the lock again once the open has ended, and a WARN names the lock file when the wait starts. If the open never returns (for example on a hung network mount), no cluster view of that JVM tries the lock on that file until the JVM restarts, so a cluster with no member on another JVM stays without a leader. Previously the retry took the lock in that case.
+
 ### camel-jms, camel-spring-rabbitmq - suspending or stopping a consumer waits at most shutdownAwaitTermination for its listener container
 
 Suspending or stopping a consumer of camel-jms (and of the components built on it, such as camel-activemq, camel-activemq6 and camel-amqp) or of camel-spring-rabbitmq now waits for its listener container to stop at most the `shutdownAwaitTermination` of the `ExecutorServiceManager` (10 seconds by default, at least 100 milliseconds), or until the waiting thread is interrupted, as the graceful shutdown does when its timeout elapses. camel-spring-rabbitmq waits the `shutdownTimeout` of the component (5 seconds by default), in which the listener container waits for the messages in progress, on top of that. camel-jms with `consumerType=Simple` and Spring’s `SyncTaskExecutor` as `taskExecutor` also waits as long as the route processes messages, as the JMS client does. Previously, it waited without bound when the broker did not answer: for the `callTimeout` of ActiveMQ Artemis (30 seconds by default), or for the `channelRpcTimeout` of the RabbitMQ client (10 minutes by default), past the shutdown timeout.
@@ -436,6 +440,10 @@ When both `camel-opentelemetry2` and a Micrometer `ObservationRegistry` are pres
 With `transportType=streamableHttp` (camel-openai) or `transportType=sse` (camel-openai and camel-spring-ai-chat), the path and the query of `mcpServer.<name>.url` are now used: the Streamable HTTP requests, and the request that opens the SSE stream, go to that URL. The SSE messages still go to the message endpoint that the server sends. Before, the MCP SDK replaced the path of the URL with `/mcp` (Streamable HTTP) or `/sse` (SSE) and dropped its query, so `url=http://host:8080/api/mcp` sent the requests to `[http://host:8080/mcp](http://host:8080/mcp)`, and an MCP server on another path could not be reached. A URL without a path, such as `[http://host:8080](http://host:8080)`, still uses `/mcp` or `/sse`.
 
 A URL whose path is not the endpoint of the server, such as `[http://host:8080/v1](http://host:8080/v1)` for a server on `/mcp`, worked because its path was ignored, and now fails: set the URL of the endpoint, here `[http://host:8080/mcp](http://host:8080/mcp)`, or remove the path. The URL must be absolute, with a scheme and a host.
+
+### camel-ibm-watsonx-data - the OAuth token of oauthProfile is sent as a Bearer token
+
+With `oauthProfile`, the endpoint used to obtain an access token once at startup and use it as `apiKey`, so the token was posted to IBM Cloud IAM as if it were an IBM Cloud API key, which IAM rejects. The token is now sent to watsonx.data as a `Bearer` token, and asked from `camel-oauth` again for every request, so it is renewed when it expires; the endpoint fails to start when the profile gives no token. The identity provider must therefore issue tokens that watsonx.data accepts. `apiKey` is no longer marked as required in the catalog, as `oauthProfile` can take its place; an endpoint with neither still fails to start.
 
 ### camel-micrometer, camel-opentelemetry-metrics - tags and attributes from headers are used as given
 
@@ -3547,6 +3555,12 @@ The undertow producer writes the path, query and header values of the outgoing r
 On a WebSocket path whose producer applies a security provider or allowed roles, a connection could be accepted while only the producer served the path, before its consumer was started for the first time. Such a connection ran the producer checks but not the custom `handlers` the consumer configures, as those handlers run only for consumers. Once the consumer was started, the connection was still treated as having passed the consumer checks, so its messages reached the route and it kept receiving what the producer sent.
 
 Once a consumer that configures `handlers` is started on a path, a connection opened on that path before the consumer first ran is no longer served: its messages no longer reach the route and it no longer receives what the producer sends, and the connection is closed. Clients that open a connection in this window must reconnect after the consumer has started.
+
+### camel-undertow - a WebSocket message not sent within sendTimeout fails the exchange
+
+The `sendTimeout` option of a WebSocket producer (30 seconds by default) now applies to text messages, that is a `String` or `Reader` body, and to bodies converted to `String`. Before, it applied only to `byte[]` and `InputStream` bodies, so a text message to a peer that stopped reading stayed in flight, with its exchange, until the peer read it or the connection closed.
+
+A message that is not sent to a peer within `sendTimeout` now fails the exchange with a `CamelExchangeException` caused by a `TimeoutException`, and the connection to that peer is closed. Before, the timeout of a binary message only dropped the message, and the exchange completed as if it was sent. Set `sendTimeout` to `0` for no timeout.
 
 ### camel-undertow, camel-vertx-http - CamelHttpPath with a query in the endpoint uri
 

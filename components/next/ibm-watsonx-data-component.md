@@ -132,8 +132,8 @@ Enum values:
  |  | WatsonxDataOperations |
 | **schemaName** (producer) | The schema name for schema and table operations. |  | String |
 | **autowiredEnabled** (advanced) | Whether autowiring is enabled. This is used for automatic autowiring options (the option must be marked as autowired) by looking up in the registry to find if there is a single instance of matching type, which then gets configured on the component. This can be used for automatic configuring JDBC data sources, JMS connection factories, AWS Clients, etc. | true | boolean |
-| **apiKey** (security) | **Required** IBM Cloud API key for authentication. |  | String |
-| **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used as apiKey. Requires camel-oauth on the classpath. |  | String |
+| **apiKey** (security) | IBM Cloud API key for authentication, exchanged at IBM Cloud IAM for an access token. Required unless oauthProfile is set. |  | String |
+| **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token of the configured identity provider is sent to watsonx.data as a Bearer token instead of an IBM Cloud API key, and obtained again when it expires. Requires camel-oauth on the classpath. |  | String |
 
 ## Endpoint Options
 
@@ -208,8 +208,8 @@ Enum values:
  |  | WatsonxDataOperations |
 | **schemaName** (producer) | The schema name for schema and table operations. |  | String |
 | **lazyStartProducer** (producer (advanced)) | Whether the producer should be started lazy (on the first message). By starting lazy you can use this to allow CamelContext and routes to startup in situations where a producer may otherwise fail during starting and cause the route to fail being started. By deferring this startup to be lazy then the startup failure can be handled during routing messages via Camel’s routing error handlers. Beware that when the first message is processed then creating and starting the producer may take a little time and prolong the total processing time of the processing. | false | boolean |
-| **apiKey** (security) | **Required** IBM Cloud API key for authentication. |  | String |
-| **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token is acquired from the configured identity provider and used as apiKey. Requires camel-oauth on the classpath. |  | String |
+| **apiKey** (security) | IBM Cloud API key for authentication, exchanged at IBM Cloud IAM for an access token. Required unless oauthProfile is set. |  | String |
+| **oauthProfile** (security) | OAuth profile name for obtaining an access token via the OAuth 2.0 Client Credentials grant. When set, the token of the configured identity provider is sent to watsonx.data as a Bearer token instead of an IBM Cloud API key, and obtained again when it expires. Requires camel-oauth on the classpath. |  | String |
 
 ## Message Headers
 
@@ -352,7 +352,7 @@ from("direct:start")
               operation: listCatalogs
 ```
 
-OAuth 2.0 Client Credentials grant is also supported when `camel-oauth` is on the classpath:
+OAuth 2.0 Client Credentials grant is also supported when `camel-oauth` is on the classpath: set `oauthProfile` in the place of `apiKey`. The access token of the profile is sent to watsonx.data as a `Bearer` token, and asked again for every request (`camel-oauth` caches it until it expires), so a long-running route keeps working; the endpoint fails to start when the profile gives no token. The identity provider must issue tokens that watsonx.data accepts: IBM Cloud IAM itself does not offer the Client Credentials grant, so with IBM Cloud use `apiKey`. The examples read the service URL of such a deployment from the `watsonx.data.service-url` property.
 
 -   Java
     
@@ -363,13 +363,13 @@ OAuth 2.0 Client Credentials grant is also supported when `camel-oauth` is on th
 
 ```java
 from("direct:start")
-    .to("ibm-watsonx-data:myLakehouse?oauthProfile=ibm&serviceUrl=https://us-south.lakehouse.cloud.ibm.com/lakehouse/api/v2&operation=listCatalogs");
+    .to("ibm-watsonx-data:myLakehouse?oauthProfile=myidp&serviceUrl={{watsonx.data.service-url}}&operation=listCatalogs");
 ```
 
 ```xml
 <route>
   <from uri="direct:start"/>
-  <to uri="ibm-watsonx-data:myLakehouse?oauthProfile=ibm&amp;serviceUrl=https://us-south.lakehouse.cloud.ibm.com/lakehouse/api/v2&amp;operation=listCatalogs"/>
+  <to uri="ibm-watsonx-data:myLakehouse?oauthProfile=myidp&amp;serviceUrl={{watsonx.data.service-url}}&amp;operation=listCatalogs"/>
 </route>
 ```
 
@@ -381,8 +381,8 @@ from("direct:start")
         - to:
             uri: ibm-watsonx-data:myLakehouse
             parameters:
-              oauthProfile: ibm
-              serviceUrl: "https://us-south.lakehouse.cloud.ibm.com/lakehouse/api/v2"
+              oauthProfile: myidp
+              serviceUrl: "{{watsonx.data.service-url}}"
               operation: listCatalogs
 ```
 

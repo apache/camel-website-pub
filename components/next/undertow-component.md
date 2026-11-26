@@ -159,7 +159,7 @@ Enum values:
 | **securityProvider** (security) | Security provider allows plug in the provider, which will be used to secure requests. SPI approach could be used too (endpoint then finds security provider using SPI). |  | UndertowSecurityProvider |
 | **sslContextParameters** (security) | To configure security using SSLContextParameters. |  | SSLContextParameters |
 | **fireWebSocketChannelEvents** (websocket) | if true, the consumer will post notifications to the route when a new WebSocket peer connects, disconnects, etc. See UndertowConstants.EVENT\_TYPE and EventType. | false | boolean |
-| **sendTimeout** (websocket) | Timeout in milliseconds when sending to a websocket channel. The default timeout is 30000 (30 seconds). | 30000 | Integer |
+| **sendTimeout** (websocket) | Timeout in milliseconds when sending to a websocket channel. The default timeout is 30000 (30 seconds). A message that is not sent to a peer within the timeout fails the exchange, and the connection to that peer is closed. Use 0 for no timeout. | 30000 | Integer |
 | **sendToAll** (websocket) | To send to all websocket subscribers. Can be used to configure on endpoint level, instead of having to use the UndertowConstants.SEND\_TO\_ALL header on the message. | false | Boolean |
 
 ## Message Headers
